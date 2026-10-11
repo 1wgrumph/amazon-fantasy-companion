@@ -1,0 +1,34 @@
+SD-014 through SD-017 are buffered. SD-015 is still ambiguous: you said "use-jev", but the Orchestrator's list had `typesafe-ai`. I'll raise that only if the optional AI commentary feature needs it.
+
+**What I found:**
+- **Where shared skills live:** in `Alphazedehq/skills/`, linked into the Claude, Codex, `.agents` and Cursor skill folders. Muse's skill folder is empty, which is an existing gap. A new skill follows that same pattern, so no question is needed there.
+- **Actions cost:** standard GitHub-hosted runners are free for public repos ([GitHub billing](https://docs.github.com/en/billing/concepts/product-billing/github-actions)). Until you flip this repo public, it uses the GitHub Free private allowance of 2,000 minutes per month.
+- **`setup-a-repo`'s private recipe** (workflows run only on manual trigger, budgets at zero) covers `private-owner-direct` repos. Its `public-pr` profile keeps normal PR gates. Whether it applies to `1wgrumph/*` repos at all is unclear; it describes itself as AlphaZede-repo config.
+- **The existing skills already own parts of this:**
+  - `ship-pull-request`: runs each repo's gate per PR and keeps the gate table in `GATES.md`.
+  - `setup-pre-commit`: local hooks.
+  - `setup-a-repo`: repo security settings, Dependabot, CodeQL and which events trigger CI.
+  - `release-process`: releases.
+- `create-lean-skill` forbids duplicating an existing owner. The only unowned piece is **writing the CI pipeline itself**, plus making it safe for many agents working in parallel.
+
+**Recommendation: a new shared skill that owns just that unowned piece.** It would cover:
+- one gate script per repo, which both pre-commit and Actions call, so local and CI results match;
+- the workflow files that call it, with concurrency groups, path filters and stable required-check names;
+- the security setup for public repos;
+- updating that repo's row in `GATES.md`.
+
+It would call the other skills rather than repeat them.
+
+```question
+id: SD-Q11
+question: What should the new shared CI/CD skill own?
+options:
+- label: Pipeline-only skill, delegates to peers (Recommended) | description: Owns gate script + workflows + parallel/security rules; setup-a-repo, setup-pre-commit, ship-pull-request unchanged except GATES.md row.
+- label: Extend existing skills, no new skill | description: Add CI authoring to setup-a-repo and ship-pull-request; avoids a new skill, mixes concerns.
+- label: Umbrella CI/CD skill orchestrating peers | description: One entry point calling the other four; risks duplication and nested workflows.
+```
+
+developer_feedback: no new observations. Tools exercised: `ls`, `sed` and `readlink` over the skill folders, reading `setup-a-repo`, WebFetch of GitHub docs.
+
+I haven't read the bodies of `setup-pre-commit` or `release-process`, or the azedge reference workflows. Status: OWNER_DECISION_REQUIRED, 17 decisions buffered.
+exit=0

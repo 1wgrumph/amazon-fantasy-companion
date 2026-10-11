@@ -1,0 +1,24 @@
+Plans, issues and milestones going public with this repo is buffered as SD-008. Local paths must be removed from everything committed.
+
+There is still a real conflict with your cross-repo rule 3. What I found in the plan directory:
+- `specialists/` holds the full prompts each planning agent was given (`aa-prompt.md` is 42 KB, plus the intake and scope-definition prompts), plus per-turn logs. Several of these files contain `/home/...` paths.
+- `journey.json` records which harness, model and reasoning setting each planning step used, in its receipts and profile snapshot.
+- Issue #1 records personal eligibility details: your employer (AMD), your US residency, and your adult status.
+
+Your answer covered plans and process. It didn't say whether agent prompts, model choices and personal details may go public, and authorization for one category doesn't extend to another. The friction documentation is still fully public in my recommendation; only the agent internals stay out.
+
+**Recommendation:** keep `specialists/` (prompts and run logs) out of git with `.gitignore`, and record roles only in `journey.json`, with no harness or model. You would also remove the employer and eligibility lines from issue #1 before the flip.
+
+```question
+id: SD-Q9
+question: Which agent internals and personal details may go public with the repo?
+options:
+- label: Keep prompts/logs/model routes and eligibility details private (Recommended) | description: Gitignore specialists/, roles-only route records, trim issue #1 personal lines before flip.
+- label: Publish everything (paths removed) | description: Waive rule 3 for this repo; prompts, model routes, eligibility notes all public.
+- label: Publish prompts/logs, redact model routes and personal lines | description: Process transcripts public; harness/model/reasoning and eligibility details removed.
+```
+
+developer_feedback: no new observations. Tools exercised: `ls` and `grep` over the plan directory.
+
+`specialists/sd-turn13.log` is empty (0 bytes); the Orchestrator should check whether turn 13 was captured. Status: OWNER_DECISION_REQUIRED, 10 decisions buffered.
+exit=0

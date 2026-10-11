@@ -1,0 +1,31 @@
+%% MODEL-AFC-V4 — CI/CD gate flow (D4 shared capability)
+%% mode: diagram-assisted; explanatory only; sysml_claim: false
+flowchart TB
+  GH["Local git hooks: .githooks/ (pre-commit, pre-push)"]
+  GA["GitHub Actions: .github/workflows/ci.yml<br/>pull_request only (C14), stable check names, concurrency groups,<br/>path filters, SHA-pinned actions, least-privilege permissions"]
+  HH["Harness hooks: Claude Code, Codex, Muse, Cursor, AGY<br/>start only after D4 skill extensions land (C13)"]
+  SH["Shared hook script<br/>(owner's shared skills / hooks repository)"]
+
+  GATE[["tools/ci/gate.sh — one gate script per repo"]]
+  A1["android area (tv-app/)"]
+  A2["backend area (backend/)"]
+  A3["spec area (D1 spec kit)"]
+  A4["hygiene area (rule 12 / C7 local-path block)"]
+  RES{"All selected areas pass?"}
+  FAIL["Fail: same result in every entry point"]
+
+  SPR["ship-pull-request"]
+  VNV{"docs/vnv/AGENTS.md exists?"}
+  REV["vnv-review: findings join the review-and-repair round"]
+  REF["REFUSED_NO_VNV recorded — never a pass (C12)"]
+  MERGE["Merge once required checks are green (rebase or merge commit)"]
+
+  GH --> GATE
+  GA --> GATE
+  HH --> SH --> GATE
+  GATE --> A1 & A2 & A3 & A4 --> RES
+  RES -->|no| FAIL
+  RES -->|yes| SPR
+  SPR --> VNV
+  VNV -->|yes| REV -->|"after the repair round"| MERGE
+  VNV -->|no| REF -->|"typed gap stays in the gate table"| MERGE

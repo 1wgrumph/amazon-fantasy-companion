@@ -1,0 +1,36 @@
+Mostly no. For this concept, the 2018 stick (if it is the 4K 1st Gen on Fire OS 6) does not lose any feature we depend on. The real risks are practical: the stick hasn't been found, its model is unconfirmed, and provider apps on it may be older versions.
+
+**Android features on Fire OS 6 (API 25)**
+- **Starter builds as-is.** `hello-world-fire-tv` declares minSdk 21, targetSdk 34 and Compose BOM 2023.08 (checked in its `app/build.gradle.kts`). As I recall, current androidx requires minSdk 23; API 25 meets that. I did not check this against a source.
+- **Alerts work without notification channels.** Channels arrived in API 26, but Fire TV's notification doc already uses `PRIORITY_HIGH` to get a pop-up alert, which is the pre-channel method ([docs](https://developer.amazon.com/docs/fire-tv/notifications.html)).
+- **Picture-in-picture is the same on both.** On Fire OS 6 it works only inside our own app and cannot cover system screens ([Fire OS 6](https://developer.amazon.com/docs/fire-tv/fire-os-6.html)). Neither OS documents a way to resize another app's video.
+- **Background services are easier, not harder.** The tighter background-execution limits started in API 26.
+- **Unknown on Fire OS 6:** how current its WebView is, and how reliable its Wi-Fi and TLS are.
+
+**Amazon developer features**
+- Amazon's builder tools list Content Launcher, Live TV and Content Personalization for both Fire OS and Vega. They give no minimum Fire OS version and only "limited" Fire OS support ([capabilities](https://developer.amazon.com/docs/adbt/capabilities)). What actually works on Fire OS 6 is unknown.
+- Provider apps: HBO Max dropped Fire OS 5 and needs Fire OS 6 or later ([BGR](https://www.bgr.com/2166935/amazon-fire-stick-models-lost-hbo-max-support/)). Whether Prime Video, YouTube TV, NFL, Fox and ESPN still support Fire OS 6 is unknown.
+- A search summary said Amazon supports the original 4K stick until 2029-12-31. I could not find the source for that.
+
+**Hackathon fit**
+- Issue #1 says the track needs Fire OS or Vega OS evidence, with no minimum version stated. The rules page returned HTTP 403 when I tried to fetch it, so I could not confirm the wording.
+- How judges see an older target is unknown. Amazon's direction is Vega.
+
+**Recommendation:** buy the 4K Max 2nd Gen (Fire OS 8) as the main test device. Building to minSdk 25 means the 2018 stick can still run the same app if it turns up. Waiting for the stick to turn up risks the schedule; the purchase removes that risk.
+
+Buffered: SD-001 (testing on a real device) and SD-002 (a newer device is acceptable).
+
+```question
+id: SD-Q1
+question: Which real device/OS and starter should the plan target?
+options:
+- label: Buy 4K Max 2nd Gen (Fire OS 8) + hello-world-fire-tv, minSdk 25 (Recommended) | description: ~$45; documented alerts and Android provider apps; the 2018 stick becomes a bonus second device if found.
+- label: Use the 2018 stick only + hello-world-fire-tv | description: $0; must be found and confirmed first (could be Fire OS 5); provider apps may be older versions.
+- label: Buy Fire TV Stick 4K 2026 (Vega) + vega-sports-app | description: ~$30–60; Amazon's newest OS; alerts over playback and NFL/Fox handoff undocumented.
+- label: Buy both, react-native-multi-tv-app-sample | description: ~$75–105; one codebase, two integration spikes in 12 days.
+```
+
+developer_feedback: no new observations. Tools exercised: `gh api` (starter's build file), WebFetch (developer.amazon.com, BGR; the Devpost rules page returned 403), WebSearch.
+
+I did not check the androidx minSdk claim, the 2029 support date, or each provider's Fire OS 6 support. Status: OWNER_DECISION_REQUIRED, 2 decisions buffered.
+exit=0

@@ -1,0 +1,38 @@
+Yes to both. At our load each platform should stay at $0, and the hackathon itself gives no AWS credits (issue #1 says the codes ran out on 10/7).
+
+**AWS**
+- **New account on the Free plan:** you get $100 in credits, plus up to $100 more earned by trying services. You are not charged unless you upgrade to the Paid plan. The account closes after 6 months or when the credits run out, whichever comes first ([AWS Free](https://aws.amazon.com/free/)). Opened now, it lasts until about April 2027, which covers judging through 11/20.
+- **Allowances:** Lambda includes 1M requests and 400,000 GB-seconds per month ([Lambda](https://aws.amazon.com/lambda/pricing/)). DynamoDB includes 25 read and 25 write capacity units and 25 GB of storage ([DynamoDB](https://aws.amazon.com/dynamodb/pricing/on-demand/)). EventBridge Scheduler and CloudWatch allowances are unknown; I didn't fetch them.
+- **What could cost money:** only upgrading to the Paid plan, or using an existing older account. Even then, our load is under 2% of the allowances.
+
+**Cloudflare Workers Free** ([pricing](https://developers.cloudflare.com/workers/platform/pricing/), [limits](https://developers.cloudflare.com/workers/platform/limits/))
+- **Allowances:** 100,000 requests per day, 10 ms of CPU time per run, 5 scheduled triggers per account, 50 outbound fetches per run.
+- **No surprise bills:** going over a limit returns error 1027 instead of charging you.
+- **Risk:** parsing ESPN's large per-game summary JSON may exceed the 10 ms CPU cap. That is unverified; it would show up as errors, not charges.
+- **Sub-minute polling:** scheduled triggers run at most once a minute, so 10-second polling needs a workaround either way. AWS has the same constraint.
+
+| Quantity | Formula | Sunday peak/day | Month (4 weeks) |
+|---|---|---|---|
+| Game-window seconds | Sun ~10.5 h + Thu 3.5 h + Mon 3.5 h | 37,800 s | ~252,000 s |
+| Backend polling runs | window ÷ 10 s | 3,780 | 25,200 |
+| ESPN per-game fetches | game-seconds ÷ 10 s (~13 Sunday games × 3.5 h) | 16,380 | ~75,600 |
+| TV app → backend | 1 device, 12 h enabled ÷ 5 s | 8,640 | ≤259,200 |
+| Judges | assumed ≤1,000 per day, light use (unknown) | ≤1,000 | ≤30,000 |
+| Total requests | ticks + TV + judges | ~13,400 (13% of the Cloudflare daily cap) | ~315,000 (32% of Lambda's 1M) |
+| Lambda GB-seconds | runs × ~1 s × 0.125 GB, plus TV × 0.1 s × 0.125 GB | n/a | ~6,400 (1.6% of 400,000) |
+
+The recommendation is unchanged: **AWS on a new Free-plan account**. It is $0 by construction, has no CPU cap risk, and keeps the AWS Builder mini-challenge open.
+
+```question
+id: SD-Q3
+question: Where should the backend (ESPN ingest, Yahoo OAuth, matching, alert API) be hosted?
+options:
+- label: AWS serverless, new Free-plan account (Recommended) | description: $0 by construction for 6 months (covers judging); keeps AWS Builder mini-challenge open; owner creates account.
+- label: Cloudflare Workers Free | description: $0, errors instead of charges; 10 ms CPU cap may break large ESPN JSON parsing.
+- label: Owner home server/devnode + tunnel | description: $0 marginal; must stay up for judges through 2026-11-20.
+```
+
+developer_feedback: no new observations. Tools exercised: WebFetch (aws.amazon.com free-tier, Lambda and DynamoDB pages; developers.cloudflare.com pricing and limits).
+
+The game hours, viewing hours and judge use in the table are my assumptions, not measurements. I didn't fetch EventBridge, CloudWatch, API Gateway or data-transfer terms, and I didn't confirm which services the AWS Free plan includes. Status: OWNER_DECISION_REQUIRED, 4 decisions buffered.
+exit=0

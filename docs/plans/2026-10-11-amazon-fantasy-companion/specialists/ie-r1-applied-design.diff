@@ -1,0 +1,57 @@
+143,144c143,151
+<   ExoPlayer (Mode A only), OkHttp, kotlinx.serialization. Gradle wrapper
+<   checksum is verified at import.
+---
+>   ExoPlayer (Mode A only), OkHttp, kotlinx.serialization, AndroidX DataStore
+>   Preferences; test-only: JUnit 4, kotlinx-coroutines-test, AndroidX Test
+>   runner, UI Automator. Gradle wrapper checksum is verified at import. S04
+>   declares all of them, every manifest permission and component, and the
+>   `net/ApiClient.kt` interface up front (IE-F04, IE-F05).
+> - The API base URL comes from Gradle property `afcApiBaseUrl` into
+>   `buildConfigField("String", "AFC_API_BASE_URL", ...)`; empty shows "Backend
+>   not configured"; the APK build passes `-PafcApiBaseUrl=<afc-dev stack
+>   output ApiUrl>`; it carries no secret (IE-F06).
+423c430,431
+<     (AC-AFC-CI-03, AC-AFC-PATH-01). Documented rule identities:
+---
+>     (AC-AFC-CI-03, AC-AFC-PATH-01) and the gate's own tests in
+>     `tools/ci/tests/` (IE-F09). Documented rule identities:
+432c440,441
+<     private).
+---
+>     private; `tools/ci/VENDORED.md` records the source repository and the D4-A
+>     and D4-B merge commits, IE-F10).
+508,515c517,533
+< - Development strategy: `tdd` lanes split each feature into a Test
+<   Implementer slice (red, `<id>T`) and a Product Implementer slice (green);
+<   scaffold and spike slices are single Product Implementer slices
+<   (OD-AFC-04); `spec-and-docs` is `single_implementer`.
+< - Worktrees: `worktrees/amazon-fantasy-companion-<lane>` (one per lane),
+<   `worktrees/Alphazedehq-ci-cd-<topic>` and
+<   `worktrees/Alphazedehq-spec-authoring`; branches `afc/<lane>-m<n>`,
+<   `ci-cd/<topic>`, `spec-authoring/d5`; never hidden directories.
+---
+> - Development strategy (IE-F08): `tdd` lanes split each feature into a Test
+>   Implementer slice (red, `<id>T`) and a Product Implementer slice (green).
+>   The red slice ends with the CMD-RED receipt (failing output plus sha256 of
+>   each test file) taken in the shared TDD-pair worktree and leaves the tests
+>   uncommitted; the green slice continues in that worktree and, when green,
+>   commits the tests first with the Test Implementer's author identity and
+>   then the product code with its own; the gate runs on each commit;
+>   `--no-verify` is never used. Scaffold and spike slices are single Product
+>   Implementer slices (OD-AFC-04); `spec-and-docs` is `single_implementer`.
+> - Worktrees (IE-F07): one per running slice or TDD pair,
+>   `worktrees/amazon-fantasy-companion-<lane>-<slice>` on branch
+>   `afc/<lane>-m<n>-<slice>` cut from the lane branch `afc/<lane>-m<n>`; the
+>   lane integration worktree `worktrees/amazon-fantasy-companion-<lane>-m<n>`
+>   merges completed slice branches with `git merge --no-ff`;
+>   `worktrees/Alphazedehq-ci-cd-<topic>` (branch `ci-cd/<topic>`) and
+>   `worktrees/Alphazedehq-spec-authoring` (branch `spec-authoring/d5`); never
+>   hidden directories.
+517c535,538
+<   granted to one slice at a time: `fire-tv-stick` (S12..S15, S25 device
+---
+>   granted to one slice at a time (plus `alphazedehq-main-checkout`, the
+>   Alphazedehq main checkout every harness skill link resolves to:
+>   fast-forward only, between dispatches, HEAD recorded in each later packet;
+>   IE-F16): `fire-tv-stick` (S12..S15, S25 device

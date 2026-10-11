@@ -1,0 +1,33 @@
+**Status: FIT_PROPOSED**
+
+**Proposed repository**
+- Local root: `$HOME/alphazede/Hackathons/amazon-fantasy-companion`. It is the Git top-level and contains only `.git`, so there is no nested repo.
+- GitHub identity: `1wgrumph/amazon-fantasy-companion`. It is private, has size 0, default branch `main`, 0 branches and 0 milestones.
+
+**Proposed plan directory:** `docs/plans/2026-10-11-amazon-fantasy-companion/`. This follows the sibling convention `docs/plans/<YYYY-MM-DD>-<slug>/` (Base has `2026-09-25-gridmarket`).
+
+**Proposed planning checkout:** a linked worktree at `$HOME/alphazede/worktrees/amazon-fantasy-companion-planning` on branch `plan/2026-10-11-amazon-fantasy-companion`. Neither exists yet.
+
+**Typed findings**
+1. **STALE_REMOTE_URL:** `origin` still points to `https://github.com/alphazede/amazon-fantasy-companion.git`. GitHub redirects it to `1wgrumph/...`, which matches the Hackathons/AGENTS.md rule that hackathon repos go to the personal `1wgrumph` account. The remote should be updated to the canonical URL.
+2. **UNBORN_BRANCH:** local `main` has no commits and the remote has no branches. A normal worktree off `main` can't be created and a PR has no base. This needs a bootstrap step: an orphan worktree (`git worktree add --orphan`, which git 2.53 supports) plus a seed commit on remote `main` so PRs have a base. That push needs the owner's authority, because nothing may be committed on local `main`.
+3. **RULESET_UNVERIFIABLE:** the rulesets API returns 403 ("Upgrade to GitHub Pro or make this repository public") because this is a private repo on a free personal account. So "`main` is PR-only" can't be enforced or checked here. It is a gap, not something to assume.
+4. **CONTEXT_TYPO:** the dispatch named the issue `1-wgrumph/...#1`. The real path is `1wgrumph/amazon-fantasy-companion#1`. It is open and titled "Hackathon: Build, Ship, Shape — Amazon Developer — join, build, submit", which confirms the identity (Fire TV fantasy-sports alert companion).
+5. BRAN status: unavailable (no `.bran/policy.yaml`), so I used ordinary repository discovery instead.
+
+**Evidence**
+- `git rev-parse --show-toplevel` → the root above. `git symbolic-ref HEAD` → `refs/heads/main`. `git rev-parse --verify HEAD` → `fatal: Needed a single revision`. `git status` → `No commits yet on main`.
+- `gh api repos/alphazede/amazon-fantasy-companion` → `"full_name":"1wgrumph/amazon-fantasy-companion","private":true,"size":0`.
+- `.../branches` → 0. `.../milestones` → 0. `.../rulesets` → HTTP 403.
+- `ls $HOME/alphazede/worktrees/amazon-fantasy-companion*` → no such file.
+
+**Next action:** after you confirm, the Orchestrator records the fit and dispatches Architectural Alignment. That includes the remote-URL fix and the orphan bootstrap of `main`.
+
+**Owner confirmation question:** Do you confirm `1wgrumph/amazon-fantasy-companion` (local root above) as the target, with plans in `docs/plans/2026-10-11-amazon-fantasy-companion/` on branch `plan/2026-10-11-amazon-fantasy-companion`? And do you authorize seeding remote `main` with an initial bootstrap commit, given that branch protection can't be enforced on this private free-tier repo?
+
+**developer_feedback**
+- Friction: the GitHub rulesets API is paywalled for private repos on personal free accounts. This silently undercuts the "`main` is PR-only by ruleset" assumption for hackathon repos that default to `1wgrumph`.
+- Friction: the dispatch packet had an owner typo (`1-wgrumph`).
+- Positive: `gh api` follows the transfer redirect cleanly.
+- Tools used: Skill, Bash (git, gh api, find/ls/grep).
+exit=0

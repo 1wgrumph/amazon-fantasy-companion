@@ -1,0 +1,34 @@
+**Status: WORKSPACE_READY**
+
+**Written paths** (both inside my authority; nothing else was edited, and no git operations were run):
+- `docs/plans/2026-10-11-amazon-fantasy-companion/workspace.md`
+- `docs/plans/2026-10-11-amazon-fantasy-companion/repository-map.md`
+
+**Map freshness:** Fresh as of `2c13a6b`. The recorded root and plan directory match DEC-AFC-001. `git status --porcelain` shows only `?? docs/`, so the mapped inputs (`README.md`, `.gitignore`) are unmodified. The data on the 7 candidate repos is a snapshot taken 2026-10-11.
+
+**Evidence:**
+- **The repo is just the seed.** At depth 2 it holds only `README.md`, `.gitignore` and the plan directory. There is no manifest, task runner, CI, test config, source tree, repo-level `AGENTS.md`/`CLAUDE.md`, or LICENSE. So no validation commands were observed. BRAN is unavailable because the repo has no `.bran/policy.yaml`.
+- **Starter candidates.** I read all 7 via `gh repo view` and `gh api` for the README and LICENSE, without cloning or choosing one. Run commands are recorded in the map as [observed, not run]. Each `LICENSE` file reads MIT No Attribution, though GitHub shows no SPDX id.
+  - Fire OS support is stated only by `react-native-multi-tv-app-sample` (Expo SDK 54 plus Vega) and `hello-world-fire-tv` (Kotlin). The 5 `vega-*` samples are TypeScript/React Native for Vega OS only.
+  - `hello-world-fire-tv` was last pushed 2024-10-10.
+  - The samples disagree on CLI name and SDK docs version: `vega-epg-sample` uses the older `kepler` CLI and links Vega SDK 0.21 docs; the sports, video and TV-interfaces samples use `vega` and link "latest". Which SDK version they need is unverified.
+  - None of the samples shows a notification over another app's playback, a panel beside another app's video, or a provider deep link.
+- **Constraints recorded:** deadline 2026-10-23 12:00 PDT (19:00Z), Fire TV track, the 4 device reference tiers, excluded community/social features, the lightweight design with no benchmarking, owner-only publication, and the Scribe `developer_feedback` contract.
+
+**Blockers:** None for this stage.
+
+**Gaps:**
+- **No architecture exists for any of the work.** The Systems Modeler must be activated; I did not design anything.
+- **Run logs won't be committed.** `.gitignore` excludes `*.log`, so `specialists/intake-run.log` (which `journey.json` cites as evidence) and `specialists/aa-run.log` won't be committed without `-f` or a `.gitignore` change. The Orchestrator needs to decide which.
+- **Still open:** which starter repo to use, which target OS/device, backend hosting, Yahoo and NFL feed access, how to show the panel beside another app's video, provider deep-link contracts, and local tooling.
+
+**Next planning stage:** Scope Definition, which owns the starter repo and target OS/device decisions. Then the Requirements Engineer, then the Systems Modeler.
+
+**developer_feedback:**
+- **DX-AA-001** (positive): `gh repo view` and `gh api …/readme` with `Accept: application/vnd.github.raw` gave the language, license file, run commands and target OS for all 7 repos without cloning.
+- **DX-AA-002** (documentation gap, observed): GitHub detects no license (null `licenseInfo`) on all 7 repos even though each LICENSE file is MIT-0, so license checks have to read the file itself. The Amazon samples also disagree on the CLI name (`vega` vs `kepler`) and the Vega SDK docs version (0.21 vs latest). Suggestion: align the sample READMEs on one CLI name and SDK version.
+
+---
+- **Skipped:** I didn't re-fetch issue #1 (I used the packet copy), didn't re-check local tool PATH, didn't run any commands from the starter repos, and didn't extract exact run commands for `react-native-multi-tv-app-sample`.
+- **Correction made during the run:** I first wrote that `.gitignore` ignores `workspace.md`. That came from misreading my own output, and `git check-ignore` showed it is false. I fixed both files before returning.
+exit=0

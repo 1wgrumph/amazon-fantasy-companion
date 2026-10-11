@@ -1,0 +1,68 @@
+%% MODEL-AFC-V4 — Delivery tooling flow: D4 shared CI/CD gate and D5 shared spec-authoring skill
+%% mode: diagram-assisted; explanatory only; sysml_claim: false
+%% Planned design (Planning and Design node); nothing here is realized yet.
+%% Paths prefixed "Alphazedehq:" live in the private alphazede/Alphazedehq repo; all others are in this repo.
+flowchart TB
+  subgraph d4src["D4 skill sources — Alphazedehq:skills/ (extended, SD-018, SD-021)"]
+    SPC["setup-pre-commit: single gate script used locally and by Actions"]
+    SAR["setup-a-repo: workflow-authoring references"]
+    SPRS["ship-pull-request: conditional vnv-review + gate-table row"]
+  end
+
+  GH["Local git hooks: .githooks/ (pre-commit, pre-push)"]
+  GA["GitHub Actions: .github/workflows/ci.yml<br/>pull_request only, never pull_request_target (C14); forks get no secrets<br/>stable check names, concurrency groups, path filters,<br/>SHA-pinned actions, least-privilege permissions"]
+  HH["Harness pre-tool hooks: Claude Code, Codex, Muse, Cursor, AGY<br/>start only after the D4 skill extensions land (C13)<br/>Muse skills folder empty today: known gap"]
+  SH["Shared hook script: Alphazedehq:hooks/ci-gate-hook.sh"]
+
+  SPC -.->|authors| GATE
+  SPC -.->|authors| GH
+  SAR -.->|authors| GA
+  SPRS -.->|defines| SPR
+
+  GATE[["tools/ci/gate.sh AREA — one gate entrypoint per repo"]]
+  A1["android: tv-app/ (Gradle)"]
+  A2["backend: backend/ (Python 3.12, AWS SAM)"]
+  A3["spec: lint + build D1 with vendored tools/spec/"]
+  A4["hygiene: rule 12 / C7 local-path block"]
+  RES{"All selected areas pass?"}
+  FAIL["Fail: same verdict from every entry point"]
+
+  SPR["ship-pull-request"]
+  VNV{"Vnv guidance tree?<br/>docs/vnv/AGENTS.md (vnv-review also accepts Vnv/AGENTS.md)"}
+  REV["vnv-review PROFILE: findings join the one review-and-repair round"]
+  REF["REFUSED_NO_VNV recorded in the gate table: typed gap, never a pass (C12)"]
+  MERGE["Merge when required checks are green (rebase or merge commit, never squash)"]
+
+  GH --> GATE
+  GA --> GATE
+  HH --> SH --> GATE
+  GATE --> A1 & A2 & A3 & A4 --> RES
+  RES -->|no| FAIL
+  RES -->|yes| SPR
+  SPR --> VNV
+  VNV -->|"yes (this repo: docs/vnv planned, SD-014)"| REV --> MERGE
+  VNV -->|no| REF
+
+  subgraph d5["D5 shared spec-authoring skill (SD-022, supersedes SD-013)"]
+    GM["GridMarket spec kit (source, MIT): 1wgrumph/gridmarket<br/>spec/template/, tools/spec_build.py, tools/spec_lint.py, tools/azdiagram/,<br/>skills spec-author, spec-diagram, spec-lint"]
+    SA["Alphazedehq:skills/spec-authoring/<br/>SKILL.md, references/, template/,<br/>scripts/spec_build.py, scripts/spec_lint.py, scripts/azdiagram/<br/>PEP 723 inline deps via uv run --script; Graphviz dot external"]
+    VEN["tools/spec/ (this repo): vendored copy, MIT notice retained"]
+    D1["D1: spec/amazon-fantasy-companion/ built to<br/>spec/Amazon-Fantasy-Companion-Specification.md<br/>authored after integrated approval"]
+    GM -->|"generalize; nothing GridMarket-specific"| SA
+    SA -->|"documented vendor step (Alphazedehq is private; this repo goes public)"| VEN
+    VEN -->|"spec_lint + spec_build"| D1
+  end
+
+  A3 -.->|runs| VEN
+  A3 -.->|checks| D1
+
+  classDef entry fill:#ffffff,stroke:#333333
+  classDef gate fill:#e8f0fe,stroke:#1a56db,stroke-width:2px
+  classDef area fill:#eaf7ea,stroke:#2f855a
+  classDef gap fill:#fff5f5,stroke:#b91c1c
+  classDef skill fill:#fff8ec,stroke:#b7791f
+  class GH,GA,HH,SH entry
+  class GATE gate
+  class A1,A2,A3,A4 area
+  class REF,FAIL gap
+  class SPC,SAR,SPRS,SA skill

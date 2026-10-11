@@ -1,0 +1,41 @@
+## PLAN_REVIEW_READY — AFC-2026-10-11, run 2 resumed
+
+The planning package is frozen and ready for the single integrated owner review. All remaining steps ran:
+
+| Step | Route that ran | Result |
+|---|---|---|
+| Test Engineer (planning) | Claude Code / Claude Opus 5.5 / high (its primary) | **PASS**: `seit.json` is schema-valid, covers 65/65 AC rows and 16/16 RISK rows, with 126 proof cases and 75 commands. |
+| Systems Modeler mapping finalization | Claude Code / Claude Opus 5.5 / high (first approved fallback; started 23:25Z, before the Muse reset) | **READY**: 79 trace IDs, all exist; SVG checksums unchanged. |
+| Plan Integrator | Claude Code / Claude Opus 5.5 / high (first approved fallback; started 23:42Z, before the Muse reset) | **PLAN_REVIEW_READY**: 54 slices in 5 waves; all 81 requirements traced. |
+| Correction round 1 of 2 (this node) | — | Fixed TE-F03 and TE-F04 in `design.md`, rebound the digests and refroze. |
+
+I re-ran every check myself instead of relying on the specialists' reports:
+- **Freeze:** `plan-package.cjs` returns PASS with no findings. Candidate digest: `87fa24334fda312e61582c169cfe9b3c205f989ff30cd6edc7017bf4a9ee78f3`.
+- **Schemas:** `implementation.json` and `seit.json` are both valid.
+- **Manifest:** rendering wrote the HTML and the `--check` re-render matched (`sha256:93c42a72…0a56c9`).
+- **Review gate:** `evaluatePlanningReview` returns `NEEDS_MORE_EVIDENCE / review_round_pending`, the expected state before the review.
+- **Home paths:** no absolute home paths in the package files. The two `/home/` hits in `seit.json` and the one in `design.md` are path-pattern rules for the rule-12 scan, not real paths.
+
+I ran the Systems Modeler finalization in parallel with the Test Engineer rather than after it. They touch different files, and the Test Engineer recorded the final `views.json` digest.
+
+**Paths** (in `docs/plans/2026-10-11-amazon-fantasy-companion/`): `implementation.json`, `amazon-fantasy-companion-dod-manifest.html`, `seit.json`, `design.md`, `views/views.json`. Receipts are in `specialists/`: `test-engineer-receipt.md`, `systems-modeler-receipt.md` (§Mapping finalization), `plan-integrator-receipt.md`, `pd-r1-correction.md`, `pd-r1-applied-design.diff`, and `route-receipts.md`.
+
+**Open owner items for the integrated review:**
+- **OD-AFC-01..10:** as listed in the technical plan, each with a recommendation. This includes the D4 form question: my recommendation is extensions only, with an optional thin entry skill (S41).
+- **OA-AFC-A1:** the tv-app-ui lane runs on Codex, so `frontend-design` is named by path: `$HOME/.claude/plugins/cache/claude-plugins-official/frontend-design/f359d43b4060/skills/frontend-design/SKILL.md`. I took that version from the plugin registry. The newest-modified cache folder (`a9fd21643fc1`) is not the installed version.
+- **OA-AFC-A2:** the proposed lane for D4/D5 skill authoring is spec-and-docs on the tech-writing profile. That leaves the shared executable tooling (gate script, hooks, D5 scripts) with no Assurance Test Engineer pass, only the Reviewer. Alternative B moves those scripts to the backend lane (test-first) at the cost of regenerating the slice graph and V&V plan. My recommendation is A, for the deadline.
+- **Coverage and mutation thresholds (TE-F04):** backend 90% changed lines and 0.70 mutation score; TV app 80% and 60%. These are the Test Engineer's proposals.
+- **TE-F05:** where UI screenshots are stored. Committing them under `docs/evidence/visual/` exposes them in the public repo; the other option is keeping them untracked.
+
+**Not owner decisions, but still for the Orchestrator:**
+- **TE-F07:** the integration plan's deploy-identity check still names the template digest, while the V&V plan uses stack tags. It needs a small Integration Engineer correction. The S18 packet already carries the stack-tag form.
+- **TE-F08:** 14 files under `specialists/`, `superseded-run1/` and the plan root still contain absolute home paths and must be scrubbed before the planning commit.
+- **Planning review route:** if it is dispatched after 2026-10-12T00:00:00Z, it uses its Muse primary again.
+- **No commit:** the base packet forbids commits from this node, so the Orchestrator still owes the planning commit.
+
+**developer_feedback:**
+- **PD-OBS-01:** after the session limit, resuming from the files on disk worked cleanly.
+- **PD-OBS-02:** any `design.md` edit forces three manual rebinds by hand: the `seit.json` digest, the `implementation.json` digest and candidate digest, then a re-render. A rebind helper would save a correction round. Candidate enhancement for bearing-lite, not filed.
+
+I did not open the rendered HTML in a browser, and I did not run the Integration Engineer correction for TE-F07.
+exit=0

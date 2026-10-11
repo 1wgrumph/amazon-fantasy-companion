@@ -1,0 +1,44 @@
+**PLAN_REVIEW_READY.** `implementation.json` passes schema validation with 0 errors and the freeze returns `"outcome": "PASS"`. The DoD Manifest renders, and its `--check` re-render matches byte for byte.
+
+- **Candidate:** `plan/2026-10-11-amazon-fantasy-companion` at `2c13a6bf560e87d11864cc6234f48e40dd9cf529`, digest `6fd4c72e5c91784d33c27d75ff1a420cff6c45c0e43a126797f8567110fbeba7`.
+- **Changed paths:** all in the plan directory, all untracked:
+  - `implementation.json`
+  - `amazon-fantasy-companion-dod-manifest.html`
+  - `specialists/plan-integrator-receipt.md`
+
+  I did not modify `seit.json`: all three input digests still match the files, so nothing needed rebinding. I made no commit, because this packet forbids it.
+
+**Verification**
+- **Freeze:** the first run reported only the expected missing candidate digest. After binding it, the run passed with exit 0 and no findings.
+- **Render:** `RENDER_WRITE` and `RENDER_CHECK_PASS` both report `sha256:97bf373e…583a72`. All four model views are embedded and their digests match.
+- **Planning-review gate:** returns `review_round_pending`, which is the correct state before the review. The reviewer slot is set up correctly.
+- **Path scan:** none of the three written files contains an absolute home path.
+- **Counts:**
+  - 54 slices in 5 waves, with 71 dependencies and no cycles.
+  - 81 of 81 requirement rows traced (65 AC, 16 RISK).
+  - All 126 proof cases bound: 116 to slices and 10 at the lifecycle level.
+  - 125 write paths, within the 128 limit.
+  - 12 open owner items: OD-AFC-01..10, then OA-AFC-A1 and A2.
+
+**Findings for the planning review** (full table and proposed text are in the receipt):
+- **PI-F01:** S41 was marked light, but writing a new `SKILL.md` is authoring, which fails light criterion 4. I reclassified it as judgement work on the tech-writing Product Implementer route. OA-AFC-A2 already lists S41 as a skill-authoring slice.
+- **PI-F02 / PI-F03:** no proof row binds S33. Its proof is the defect gate declaration (regression test red before the fix, green after). Its write set is the bounding roots `tv-app/app/src/`, `backend/src/` and `backend/tests/`.
+- **TE-F03 and TE-F04** need design changes I'm not allowed to make. I wrote the exact proposed text for each: a `--files` mode for `check_paths.py`, and the five gate tools added to the TV and backend dependency lists. The coverage thresholds are in DoD row VV-GATES for the owner to see.
+- **TE-F05** needs an owner or Planning-node decision: where UI screenshots and dumps are stored. Both options are recorded.
+- **TE-F07** needs an Integration Engineer update to the deploy identity check (stack tags). The integration plan is copied unchanged; the S18 packet already carries the tag form.
+- **TE-F08:** the Orchestrator still has to remove absolute home paths from `specialists/` before the planning commit.
+
+**What I added mechanically:**
+- Each slice's requirement list now also includes requirements from the proof rows the Test Engineer bound to that slice; the receipt lists every addition.
+- Commands came from three sources: the slice graph, the SEIT `used_by` lists, and the Test Engineer's TE-F01 additions.
+
+**Remaining risks:**
+- If the package is approved as-is, the proofs behind TE-F03/F04/F05/F07 stay open gaps.
+- Under OA-AFC-A2 option A, the shared executable tooling in S01, S02, S03 and S06 gets no Assurance Test Engineer pass.
+- The `spec-authoring` skill path in the S19 and S35 packets doesn't exist until S06 merges.
+- If the planning review is dispatched before Muse's quota resets at 2026-10-12T00:00:00Z, it runs on the first fallback reviewer.
+
+**Blocker:** none.
+
+I didn't open the rendered HTML in a browser. The S04 and S05 goals are cut to the 512-character limit; their full stop conditions are kept unchanged.
+exit=0

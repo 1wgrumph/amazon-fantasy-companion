@@ -1,0 +1,24 @@
+ESPN's unofficial JSON is buffered as SD-Q2, with its two typed conditionals:
+- If an endpoint changes or goes down, the demo falls back to a labeled replay.
+- Whether its terms allow use in the public submission is flagged for you at submission time; I'm not deciding it.
+
+**SD-Q3: where the backend runs.** Issue #1's engineering guidance already puts the shared work on a backend: polling ESPN, Yahoo sign-in token exchange (its client secret must not sit on the TV), player/event matching, and alert fan-out. Judges also need access through 2026-11-20, so the backend has to stay up unattended until then. No AWS or Wrangler CLI is installed on this machine, and there is no `~/.aws`. A Cloudflare connector is attached to this Claude session.
+
+**Recommendation: AWS serverless (Lambda on a timer, DynamoDB, one HTTPS endpoint the TV app polls).**
+- This is an Amazon hackathon. Only an AWS backend keeps the optional AWS Builder mini-challenge open; whether to enter it is a later question.
+- Free-tier usage should cover this load. Issue #1 records that AWS credit codes ran out on 10/7, so any usage above the free tier is billed.
+- You must create or link the AWS account (credentials are owner-only), and setup takes longer than Cloudflare.
+
+```question
+id: SD-Q3
+question: Where should the backend (ESPN ingest, Yahoo OAuth, matching, alert API) be hosted?
+options:
+- label: AWS serverless (Recommended) | description: Lambda + scheduled polling + DynamoDB; Amazon-aligned, keeps AWS Builder mini-challenge open; owner sets up account.
+- label: Cloudflare Workers | description: Fastest path, account likely already connected; free tier; closes the AWS Builder option.
+- label: Owner home server/devnode + tunnel | description: $0 and full control; must stay up for judges through 2026-11-20.
+```
+
+developer_feedback: no new observations. Tools exercised: Bash (`command -v` for the cloud CLIs).
+
+Status: OWNER_DECISION_REQUIRED, 4 decisions buffered. I didn't check whether you already have an AWS account, or the current terms of the AWS Builder mini-challenge.
+exit=0

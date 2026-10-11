@@ -1,0 +1,185 @@
+{
+  "schema_version": "1",
+  "schema": "bearing-lite/authority.schema.json",
+  "id": "AUTH-AFC-2026-10-11-001",
+  "state": "proposed",
+  "subject": {
+    "lifecycle": "AFC-2026-10-11",
+    "title": "Amazon Fantasy Companion: architecture, program plan, milestones",
+    "plan_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/",
+    "deadline": "2026-10-23T19:00:00Z"
+  },
+  "repositories": [
+    {
+      "repository": "github:1wgrumph/amazon-fantasy-companion",
+      "role": "product and planning repository",
+      "landing": "PR to main; rebase or merge commit; never squash, never force-push, never commit on local main"
+    },
+    {
+      "repository": "github:alphazede/Alphazedehq",
+      "role": "shared skills and hooks (D4, D5) cross-repo write set",
+      "landing": "one PR per sub-change; rebase or merge commit; that repository's own gates apply"
+    }
+  ],
+  "baseline": {
+    "repository": "github:1wgrumph/amazon-fantasy-companion",
+    "branch": "plan/2026-10-11-amazon-fantasy-companion",
+    "revision": "2c13a6bf560e87d11864cc6234f48e40dd9cf529",
+    "package": "the five-artifact planning package in the plan directory, bound by implementation.json journey_settings.planning_review.candidate_digest"
+  },
+  "granting_owner_decisions": [
+    "DEC-AFC-001",
+    "DEC-AFC-002",
+    "DEC-AFC-SD-001",
+    "DEC-AFC-SD-002",
+    "DEC-AFC-SD-003",
+    "DEC-AFC-SD-004",
+    "DEC-AFC-SD-005",
+    "DEC-AFC-SD-006",
+    "DEC-AFC-SD-006a",
+    "DEC-AFC-SD-007",
+    "DEC-AFC-SD-008",
+    "DEC-AFC-SD-009",
+    "DEC-AFC-SD-010",
+    "DEC-AFC-SD-011",
+    "DEC-AFC-SD-012",
+    "DEC-AFC-PROFILE-001",
+    "DEC-AFC-SD-014",
+    "DEC-AFC-SD-015",
+    "DEC-AFC-SD-016",
+    "DEC-AFC-SD-017",
+    "DEC-AFC-SD-018",
+    "DEC-AFC-SD-019",
+    "DEC-AFC-SD-020",
+    "DEC-AFC-SD-021",
+    "DEC-AFC-SD-022",
+    "DEC-AFC-APPROVAL-001"
+  ],
+  "granting_owner_decisions_note": "DEC-AFC-APPROVAL-001 is the identity reserved for the owner's integrated approval of this exact package; it does not exist until the owner records it. Until then state is proposed and effective is false.",
+  "allowed": {
+    "scope": [
+      "Slices S01..S41 of implementation.json within their write sets and dependencies",
+      "D3 milestone creation in 1wgrumph/amazon-fantasy-companion (S10)",
+      "D4 and D5 pull requests in alphazede/Alphazedehq (S01, S02, S03, S06, S11T, S11, S41 if OD-AFC-01 = B)",
+      "Local harness skill links and hook configuration on the development host after a timestamped backup (S06L, S11)",
+      "Deploying merged backend work to the owner-created AWS Free-plan account through the owner-configured named CLI profile, stack afc-dev (S18 and later deploy steps)",
+      "Installing and using the Fire TV stick over adb on the owner's network (S12..S15, S25, S26, S27, S28, S31, S32, S34, S38)"
+    ],
+    "actions": [
+      "create worktrees under <workspace>/worktrees/ and branches",
+      "commit with the agent author identity",
+      "push lane branches",
+      "open pull requests",
+      "merge pull requests by rebase or merge commit after one Reviewer review, at most one repair round and a green gate",
+      "create and edit GitHub milestones in 1wgrumph/amazon-fantasy-companion",
+      "file issues through the issue-label policy tool in this repository",
+      "run scan-software-supply-chain and install scanned SDKs and tools on the development host",
+      "read ESPN public JSON",
+      "close tracked issues after their fix merges and acceptance passes"
+    ],
+    "paths": [
+      "tv-app/**",
+      "backend/**",
+      "tools/ci/**",
+      "tools/spec/**",
+      "tools/fetch-footage.sh",
+      "spec/**",
+      "spikes/**",
+      ".githooks/**",
+      ".github/workflows/**",
+      "docs/vnv/**",
+      "docs/spikes/**",
+      "docs/developer-feedback/**",
+      "docs/submission/**",
+      "docs/runbooks/**",
+      "docs/evidence/**",
+      "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/**",
+      "README.md",
+      "THIRD_PARTY_NOTICES.md",
+      ".gitignore",
+      "Alphazedehq:skills/setup-pre-commit/**",
+      "Alphazedehq:skills/setup-a-repo/**",
+      "Alphazedehq:skills/ship-pull-request/**",
+      "Alphazedehq:skills/spec-authoring/**",
+      "Alphazedehq:skills/use-requirements-system/SKILL.md (description lines only, if OD-AFC-07 approved)",
+      "Alphazedehq:skills/ci-cd/SKILL.md (only if OD-AFC-01 = B)",
+      "Alphazedehq:hooks/ci-gate-hook.sh",
+      "Alphazedehq:hooks/test-ci-gate-hook.sh",
+      "Alphazedehq:hooks/install-ci-gate-hook.py",
+      "Alphazedehq:hooks/README.md"
+    ]
+  },
+  "prohibited": {
+    "scope": [
+      "Messaging and community features",
+      "Device purchase or platform switch (C1)",
+      "Paid AWS resources or plan upgrade (C4)",
+      "Paid Actions overage (C11)",
+      "NFL broadcast footage",
+      "Alexa claims without verification (C8)",
+      "Copying the GridMarket kit as project-local skills (SD-013 superseded)"
+    ],
+    "actions": [
+      "license choice, repository visibility flip, video upload, Devpost submission, reviewer access, external feedback (C9)",
+      "AWS account creation, credential creation or reading of secret values, setting SSM parameter values",
+      "Yahoo developer application",
+      "ESPN terms decision (C3)",
+      "upstream issue or PR to any third-party project",
+      "squash merge, force-push, commit on local main, git switch, destructive git on unmerged work",
+      "route or profile change outside the frozen profiles and their fallback conditions",
+      "publication or release of either repository"
+    ],
+    "paths": [
+      ".env",
+      ".env.*",
+      "any path outside the allowed list",
+      "Alphazedehq paths outside the D4 and D5 write sets"
+    ]
+  },
+  "role_grants": [
+    {
+      "role": "Orchestrator",
+      "grant": "dispatch, leases, landing, milestone creation, owner stops"
+    },
+    {
+      "role": "Product Implementer / Test Implementer / Light Implementer",
+      "grant": "the write set of the dispatched slice only"
+    },
+    {
+      "role": "Reviewer",
+      "grant": "read-only review of one candidate with OCR delegate mode; no writes"
+    },
+    {
+      "role": "Test Engineer (assurance) and Integration Engineer (execution)",
+      "grant": "read-only assessment and evidence files named in their packets"
+    },
+    {
+      "role": "Scribe",
+      "grant": "journey.json history and docs/developer-feedback/** transcription"
+    }
+  ],
+  "effective": false,
+  "expiry_conditions": [
+    "Lifecycle closeout recorded in the DoD Manifest",
+    "owner revocation or supersession of this envelope",
+    "2026-11-20T23:59:59Z (T_judge_access) for any residual action",
+    "a change to the approved package digest without owner re-approval"
+  ],
+  "supersedes": [],
+  "approval_receipt": {
+    "status": "pending_integrated_owner_review",
+    "package": "implementation.json journey_settings.planning_review candidate"
+  },
+  "continuation": {
+    "granted": false,
+    "owner_decision_id": "DEC-AFC-APPROVAL-001",
+    "exclusions": [
+      "scope_change",
+      "budget_exhaustion",
+      "owner_hold",
+      "owner_only_actions",
+      "route_or_profile_change"
+    ],
+    "expires_at": null
+  }
+}

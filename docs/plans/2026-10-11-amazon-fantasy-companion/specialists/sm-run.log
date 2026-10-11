@@ -1,0 +1,53 @@
+**READY.** Verdict VIEW_EMITTED: all four review views, `views.json` and the placement receipt are written, and nothing blocks.
+
+- **candidate_ref:** branch `plan/2026-10-11-amazon-fantasy-companion` at `2c13a6b`, plus the untracked plan dir.
+- **External sources read via `gh api`:** hello-world-fire-tv tree `50108f4f`, gridmarket tree `99eb98e7`; Alphazedehq read locally at `47c46f2`.
+- **SD-013 is not used.** D5 is modeled as the shared, generalized spec-authoring skill (SD-022).
+
+**changed_paths** (all under PLAN; I made no commits, branch operations or GitHub changes):
+- `views/v1-context.{mmd,svg}` and `views/v3-operational-flow.{mmd,svg}`: run-1 drafts, re-checked and unchanged.
+- `views/v2-use-cases.{mmd,svg}`: run-1 draft plus one item-6 note (voice announcements only if Alexa is verified, C8).
+- `views/v4-delivery-tooling.{mmd,svg}`: new. It adds the D5 lane, the shared hook script path and the `Vnv/` fallback, and it no longer shows REFUSED_NO_VNV leading to merge.
+- `views/views.json` and `specialists/systems-modeler-receipt.md`.
+
+**Checks**
+- **Passed on all four SVGs:**
+  - sanitizer rules (tags, attributes, quoting, entities, `<title>`, under 60 KB);
+  - no forbidden markup;
+  - well-formed XML;
+  - no absolute home paths;
+  - each sha256 matches `views.json`.
+- **Not run:**
+  - visual rendering and Mermaid rendering, because no rasterizer or `mmdc` is installed;
+  - the Requirements System checker, because no model is registered and no REVIEW_READY claim is made.
+- **Retries:**
+  - One self-check failure came from my own over-broad regex, which matched the words "description" and "subscriptions". I re-ran it scoped to tags and attributes and it passed.
+  - One `views.json` write failed with `FileNotFoundError` because the shell's working directory had stayed in `views/`. I re-ran it from the plan directory and it passed.
+
+**Modeling mode:** `diagram-assisted`, `sysml_claim: false`. No decision requires a SysML v2 model, the method skill records diagram-assisted for this Journey, and the hackathon timeline and lightweight-design direction don't call for one. The work is too large for `not-applicable` (two systems, four trust boundaries, fallbacks C2/C5/C6).
+
+**Placement:** the receipt has a table for every component (TV app, backend, D4, D5/D1) with planned path, anchor or "new", and binding constraint. The starter anchors cover the app shell, build file, manifest, `Screens.kt` and the drawer. GridMarket anchors cover the three skills, the template, `spec_build.py`, `spec_lint.py`, `azdiagram` and the LICENSE.
+
+**Findings** (none blocking; for Planning and Design):
+- **F1:** the starter sets `minSdk = 21` (`app/build.gradle.kts:12`), so moving to 25 is a planned edit.
+- **F2:** the starter's `com.amazonappstore.helloworldtv` ID needs a project-owned replacement before publication.
+- **F3:** targetSdk 34 needs `<queries>` entries for AppDetector and a declared foreground-service type for AlertService. This comes from platform knowledge; I did not re-verify it.
+- **F4:** the starter's CI uses a push trigger and unpinned `@v3` actions, so `ci.yml` replaces it.
+- **F5:** `tv-app/app/build.gradle.kts`, the `AndroidManifest.xml` and `backend/template.yaml` are touched by most components, so each needs a single owner or serialized writers.
+- **F6:** PEP 723 inline dependencies work only for single-file scripts, and `azdiagram` is a package, so D5 needs an entry script. All three GridMarket scripts import `yaml`. The CI runner must install `uv` and Graphviz.
+- **F7:** GridMarket-specific text to remove is listed with file:line.
+- **F8:** `vnv-review` also accepts `Vnv/AGENTS.md`, not only `docs/vnv/AGENTS.md`.
+- **F9:** `ship-pull-request/SKILL.md` is already 82 lines, over the 60-line skill size limit, and `setup-a-repo/SKILL.md` is at exactly 60 lines. Any D4 additions to either must go into `references/`.
+- **F10:** no decision says whether merge proceeds in a repo that has no Vnv guidance tree. This repo will have one, so it is carried to the integrated review.
+- **F11:** putting the Yahoo secret into SSM is credential access, so it is owner-only.
+- **F12:** where the Mode A footage is stored (bundled in the APK or hosted) is undecided.
+
+**developer_feedback:**
+- **SM2-OBS-001 (positive):** `gh api` gave exact line anchors without cloning either repo.
+- **SM2-OBS-002 (configuration):** the `sysml-modeling` skill's relative link to the standards receipt resolves only through the symlink target. Checked from `~/.agents/skills`, it reports "No such file", which could make an agent wrongly report a missing receipt.
+- **SM2-OBS-003:** this host has no renderer for SVG or Mermaid.
+- **SM2-OBS-004:** `setup-pre-commit/SKILL.md` is still the TODO template (DX-007 is still present).
+- **SM2-OBS-005:** the shell working-directory error above.
+
+The visual layout of the SVGs is checked only by coordinates and text-width estimates, not by rendering. Requirement mappings in `views.json` are provisional until the Requirements Engineer passes.
+exit=0
