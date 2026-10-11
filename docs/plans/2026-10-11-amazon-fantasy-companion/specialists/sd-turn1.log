@@ -1,0 +1,27 @@
+**SD-Q1: target OS and starter repo.** Every later branch depends on this one: backend shape, the route for the panel beside the video, the deep-link spike, milestones, and the submission repo.
+
+**Recommendation: Vega OS, using `AmazonAppDev/vega-sports-app` as the starter, developed and demoed on the Vega Virtual Device (VVD).**
+- **Evidence without hardware.** VVD is Amazon's own simulator, and issue #1 shows this Linux x86_64 host has KVM. That meets the Fire TV track's "device/simulator evidence" rule without the unlocated ~2018 stick.
+- **Closest starting point.** It is a sports-shaped React Native app, last pushed 2026-08-06, under the MIT-0 license. That is the nearest base for a lineup panel next to video.
+- **Documented app-to-app deep linking.** Vega's `Linking` API covers this, and item 4 (Watch → correct game) needs it.
+- **Main tradeoffs:**
+  - The 2018 stick is probably Fire OS 6 and cannot run Vega builds.
+  - VVD will probably not have real provider apps (YouTube TV, Prime and so on). Proving a real "correct game/channel" handoff would then need a Vega stick (4K Select 2025 or 4K 3rd Gen) or an explicitly labeled limitation. That is a follow-up question, not this one.
+
+**Material alternatives:**
+- **Fire OS and Vega from one codebase** with `react-native-multi-tv-app-sample` (Expo SDK 54). The 2018 stick stays usable if found, but it is a heavier monorepo and needs two platform integration spikes in 12 days.
+- **Fire OS only** with `hello-world-fire-tv` (Kotlin/Compose). It has the most mature Android notification and intent mechanisms. However, Amazon publishes no official Fire OS simulator, so evidence depends on finding the stick or buying one. That starter was also last pushed 2024-10.
+
+```question
+id: SD-Q1
+question: Which target OS and starter repository should the plan be built on?
+options:
+- label: Vega OS + vega-sports-app on VVD (Recommended) | description: Vega-only React Native build from the sports sample; official simulator works on this host now; real-provider handoff may later need a Vega stick.
+- label: Fire OS + Vega via react-native-multi-tv-app-sample | description: One Expo codebase for both OSes; keeps the 2018 stick usable but doubles the integration spikes.
+- label: Fire OS only via hello-world-fire-tv | description: Native Kotlin with mature Android notifications and intents; no official simulator, so it depends on locating or buying a Fire OS stick.
+```
+
+I didn't check whether VVD ships any provider apps or whether Vega allows notifications over another app; those are development spikes in issue #1. Status: OWNER_DECISION_REQUIRED; 0 decisions buffered.
+
+developer_feedback: no new observations. Tools used: `gh api` (issue #1) and file reads of `journey.json`, `workspace.md` and `repository-map.md`.
+exit=0

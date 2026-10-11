@@ -1,0 +1,62 @@
+%% MODEL-AFC-V3 — Operational flow: alert path, panel refresh path, Mode B / Mode A branch
+%% mode: diagram-assisted; explanatory only; sysml_claim: false
+flowchart TB
+  subgraph alert["Alert path"]
+    direction TB
+    N1["EventBridge Scheduler: game window open (backend)"]
+    N2["FeedIngest: poll ESPN scoreboard / summary (backend)"]
+    ESPN[("ESPN public JSON — untrusted (TB3)")]
+    D1{"Response valid?"}
+    REPLAY["ReplaySource: recorded fixtures, labeled replay (C2)"]
+    N3["Normalize to GameEvent; dedupe; scoring corrections"]
+    LC["LineupConnector: YahooSource | ManualSource at T_yahoo (C6)"]
+    N4["Matcher: Yahoo player to ESPN athlete; relevance to starters (red zone = team context)"]
+    N5["AlertPolicy: prefs, quiet hours, spoiler delay, frequency cap, duplicate suppression, corrections"]
+    D2{"Deliver now?"}
+    SUP["Suppressed or delayed (recorded)"]
+    N6["Alert queued; /v1/alerts long-poll returns"]
+    N7["AlertService (foreground, enabled viewing periods only) receives alert (tv-app)"]
+    N8["AlertNotifier: Fire OS heads-up notification, Watch / Dismiss"]
+    D3{"Customer action?"}
+    DIS["Dismissed; nothing launched"]
+    N9["WatchLauncher: GET /v1/providers"]
+    PR["ProviderResolver: broadcast to customer-available provider to launch target (registry); unknown access stays unknown (backend)"]
+    N10["Explicit intent / deep link to allow-listed provider package (TB4)"]
+    OUT["Launch outcome: GAME_OPENED (device-observed only) | PROVIDER_DETAILS | APP_HOME | APP_ABSENT | ACCESS_UNKNOWN | PLAYBACK_DENIED"]
+
+    N1 --> N2 --> ESPN --> D1
+    D1 -->|yes| N3
+    D1 -->|"no / endpoint down"| REPLAY --> N3
+    N3 --> N4
+    LC -->|starters| N4
+    N4 --> N5 --> D2
+    D2 -->|no| SUP
+    D2 -->|yes| N6
+    N6 ==>|"TB1: HTTPS + bearer token"| N7
+    N7 --> N8 --> D3
+    D3 -->|Dismiss| DIS
+    D3 -->|Watch| N9
+    N9 <-->|TB1| PR
+    N9 --> N10 --> OUT
+  end
+
+  subgraph panel["Panel refresh path"]
+    direction TB
+    P1["LineupPanel shown: remote show / hide, team / league selection (tv-app)"]
+    P2["GET /v1/panel, periodic refresh (TB1)"]
+    P3["PanelService: box-score stats x league scoring settings; freshness timestamps (backend)"]
+    P4["Render lineup, per-player points, game status, team total; stale / unavailable marks"]
+    P1 --> P2 --> P3 --> P4
+  end
+
+  subgraph mode["Panel route (spike SP-4)"]
+    direction TB
+    DM{"SP-4 route verdict within spike_panel_max (24 h)?"}
+    MB["Mode B: panel beside provider's own video (PiP, split / multi-window, or provider integration); no overlay covering video"]
+    MA["Mode A (C5): CompanionPlayer, CC-BY / CC0 'Sample footage — not a live broadcast', fitted left of panel, aspect kept; limitation stated"]
+    NOTE["Both modes: alerts and Watch still target real provider apps"]
+    DM -->|pass| MB --> NOTE
+    DM -->|"fail or timeout"| MA --> NOTE
+  end
+
+  P4 --> DM

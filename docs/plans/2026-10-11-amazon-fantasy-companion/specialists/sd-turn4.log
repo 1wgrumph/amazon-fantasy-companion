@@ -1,0 +1,27 @@
+SD-Q1 is buffered as decided. The target is your 2018 stick on Fire OS, with no purchase, and the starter is `hello-world-fire-tv`. The typed conditional and the milestone-1 dependency are recorded as you specified.
+
+**SD-Q2: where live NFL game events come from.** This is the next open decision; the backend shape, the matching logic and the demo script all depend on it. Issue #1 already settles that replay or simulated input is allowed if it is clearly labeled. What is still open is the live source.
+
+**Recommendation: a Sportradar NFL 30-day self-serve trial, with recorded games replayed for the demo.**
+- Its data is official and licensed, and the trial carries the same data as production ([Sportradar](https://developer.sportradar.com/getting-started/docs/your-account)). That gives real player IDs for matching against Yahoo, plus scoring corrections.
+- It is self-serve, so it can be running before the Thursday 10/15 and Sunday 10/18 tests.
+
+**Tradeoffs:**
+- **Call budget may be too small.** One Sportradar page caps the trial at 1,000 calls total at 1 per second; another says 15,000. At 1,000, one full game polled every 10 seconds would not fit. All games share one ingestion, so the budget is per account, not per viewer.
+- **Evaluation only.** The trial is meant for evaluation, not production use.
+- **You must register.** The trial is a credential, which is owner-only.
+
+```question
+id: SD-Q2
+question: Which NFL live event-feed source should the plan use?
+options:
+- label: Sportradar 30-day trial + recorded replay (Recommended) | description: Official licensed play-by-play; owner registers; call cap (1,000 vs 15,000) must be confirmed at signup.
+- label: ESPN unofficial public JSON | description: Free, no key, Sunday multi-game; undocumented, no usage grant, may change without notice.
+- label: Replay/simulated only | description: Deterministic and labeled; no live-feed evidence for the Thursday/Sunday tests.
+- label: NFL developer portal | description: Sign-on required, access unverified; high schedule risk in 12 days.
+```
+
+developer_feedback: no new observations. Tools exercised: WebSearch (Sportradar).
+
+Status: OWNER_DECISION_REQUIRED, 3 decisions buffered. I did not check the terms for MySportsFeeds or ESPN, or which endpoints the Sportradar trial includes.
+exit=0

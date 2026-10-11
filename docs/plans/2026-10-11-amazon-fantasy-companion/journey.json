@@ -1,0 +1,2051 @@
+{
+  "schema_version": "1",
+  "journey": {
+    "id": "AFC-2026-10-11",
+    "title": "Amazon Fantasy Companion: architecture, program plan, milestones",
+    "status": "planning",
+    "planning_repository": "github:1wgrumph/amazon-fantasy-companion",
+    "tracking_issue": "1wgrumph/amazon-fantasy-companion#1",
+    "deadline": "2026-10-23T19:00:00Z"
+  },
+  "checkout_lease": {
+    "journey": "AFC-2026-10-11",
+    "controller": "Claude Code Orchestrator (Claude Opus 5.5)",
+    "repository": "github:1wgrumph/amazon-fantasy-companion",
+    "checkout": "$HOME/alphazede/worktrees/amazon-fantasy-companion-planning",
+    "branch": "plan/2026-10-11-amazon-fantasy-companion",
+    "candidate_revision": "2c13a6bf560e87d11864cc6234f48e40dd9cf529",
+    "acquired_at": "2026-10-11T19:21:56Z",
+    "generation": 1,
+    "state": "active"
+  },
+  "stages": {
+    "intake": "accepted",
+    "architectural_alignment": "accepted",
+    "scope_definition": "accepted",
+    "planning_and_design": "running"
+  },
+  "decisions": [
+    {
+      "id": "DEC-AFC-001",
+      "status": "confirmed",
+      "decided_at": "2026-10-11T19:21:56Z",
+      "decision": "Target repository 1wgrumph/amazon-fantasy-companion; plan directory docs/plans/2026-10-11-amazon-fantasy-companion/; planning branch plan/2026-10-11-amazon-fantasy-companion in worktree $HOME/alphazede/worktrees/amazon-fantasy-companion-planning; origin URL corrected to the 1wgrumph remote.",
+      "source": "Owner confirmation of Intake FIT_PROPOSED (specialists/intake-run.log)"
+    },
+    {
+      "id": "DEC-AFC-002",
+      "status": "confirmed",
+      "decided_at": "2026-10-11T19:21:56Z",
+      "decision": "Seed remote main with one minimal commit (README.md, .gitignore) so later work lands through PRs. Pushed as 2c13a6bf560e87d11864cc6234f48e40dd9cf529 without a local main commit.",
+      "rationale": "Repo was empty (no PR base). Branch rulesets return HTTP 403 on this private free-tier personal repo, so PR-only main is convention, not enforced.",
+      "source": "Owner answer 'Push seed commit'"
+    },
+    {
+      "id": "DEC-AFC-SD-001",
+      "status": "confirmed",
+      "decided_at": "2026-10-11T20:06:30Z",
+      "decision": "Testing must happen on a real Fire TV device.",
+      "source": "Scope Definition final batch (scope-decision-batch.md); owner answers logged in specialists/sd-qa-log.txt"
+    },
+    {
+      "id": "DEC-AFC-SD-002",
+      "status": "confirmed",
+      "decided_at": "2026-10-11T20:06:30Z",
+      "decision": "A newer device would be acceptable (context; SD-003 chose no purchase).",
+      "source": "Scope Definition final batch (scope-decision-batch.md); owner answers logged in specialists/sd-qa-log.txt"
+    },
+    {
+      "id": "DEC-AFC-SD-003",
+      "status": "confirmed",
+      "decided_at": "2026-10-11T20:06:30Z",
+      "decision": "Target: owner's 2018 stick on Fire OS, no purchase; starter AmazonAppDev/hello-world-fire-tv (Kotlin/Compose); minSdk 25 assumed until model confirmed.",
+      "source": "Scope Definition final batch (scope-decision-batch.md); owner answers logged in specialists/sd-qa-log.txt"
+    },
+    {
+      "id": "DEC-AFC-SD-004",
+      "status": "confirmed",
+      "decided_at": "2026-10-11T20:06:30Z",
+      "decision": "Live NFL feed: ESPN unofficial public JSON.",
+      "source": "Scope Definition final batch (scope-decision-batch.md); owner answers logged in specialists/sd-qa-log.txt"
+    },
+    {
+      "id": "DEC-AFC-SD-005",
+      "status": "confirmed",
+      "decided_at": "2026-10-11T20:06:30Z",
+      "decision": "Backend: AWS serverless on a new Free-plan account created by the owner; never upgraded to Paid without owner decision.",
+      "source": "Scope Definition final batch (scope-decision-batch.md); owner answers logged in specialists/sd-qa-log.txt"
+    },
+    {
+      "id": "DEC-AFC-SD-006",
+      "status": "confirmed",
+      "decided_at": "2026-10-11T20:06:30Z",
+      "decision": "Time-boxed (<=24 h) spike on panel beside provider video; on failure Mode A: panel beside our own player with labeled open-licensed footage; alerts/Watch go to real provider apps; limitation stated.",
+      "source": "Scope Definition final batch (scope-decision-batch.md); owner answers logged in specialists/sd-qa-log.txt"
+    },
+    {
+      "id": "DEC-AFC-SD-006a",
+      "status": "confirmed",
+      "decided_at": "2026-10-11T20:06:30Z",
+      "decision": "Authorized footage = CC-BY/CC0 video, credited, labeled 'Sample footage \u2014 not a live broadcast'; NFL broadcasts/highlights excluded.",
+      "source": "Scope Definition final batch (scope-decision-batch.md); owner answers logged in specialists/sd-qa-log.txt"
+    },
+    {
+      "id": "DEC-AFC-SD-007",
+      "status": "confirmed",
+      "decided_at": "2026-10-11T20:06:30Z",
+      "decision": "Owner applies for Yahoo access now; swappable lineup source; manual ESPN-roster entry if not approved by 2026-10-16T19:00:00Z.",
+      "source": "Scope Definition final batch (scope-decision-batch.md); owner answers logged in specialists/sd-qa-log.txt"
+    },
+    {
+      "id": "DEC-AFC-SD-008",
+      "status": "confirmed",
+      "decided_at": "2026-10-11T20:06:30Z",
+      "decision": "Fire TV track + AWS Builder mini challenge; no Alexa+ track, no Open Source challenge; Alexa voice only if verified.",
+      "source": "Scope Definition final batch (scope-decision-batch.md); owner answers logged in specialists/sd-qa-log.txt"
+    },
+    {
+      "id": "DEC-AFC-SD-009",
+      "status": "confirmed",
+      "decided_at": "2026-10-11T20:06:30Z",
+      "decision": "Submission repo is 1wgrumph/amazon-fantasy-companion; public open source; owner flips visibility and chooses license.",
+      "source": "Scope Definition final batch (scope-decision-batch.md); owner answers logged in specialists/sd-qa-log.txt"
+    },
+    {
+      "id": "DEC-AFC-SD-010",
+      "status": "confirmed",
+      "decided_at": "2026-10-11T20:06:30Z",
+      "decision": "Plans, issues and milestones live in this repo and go public; committed files free of local absolute paths.",
+      "source": "Scope Definition final batch (scope-decision-batch.md); owner answers logged in specialists/sd-qa-log.txt"
+    },
+    {
+      "id": "DEC-AFC-SD-011",
+      "status": "confirmed",
+      "decided_at": "2026-10-11T20:06:30Z",
+      "decision": "Publish everything (prompts, logs, model routes, eligibility notes): owner waiver of cross-repo rule 3 for this repo only; rule 12 still applies.",
+      "source": "Scope Definition final batch (scope-decision-batch.md); owner answers logged in specialists/sd-qa-log.txt"
+    },
+    {
+      "id": "DEC-AFC-SD-012",
+      "status": "confirmed",
+      "decided_at": "2026-10-11T20:06:30Z",
+      "decision": "Lifecycle deliverables: D1 architecture spec, D2 program plan with parallel lanes, D3 GitHub milestones in this repo.",
+      "source": "Scope Definition final batch (scope-decision-batch.md); owner answers logged in specialists/sd-qa-log.txt"
+    },
+    {
+      "id": "DEC-AFC-SD-013",
+      "status": "superseded",
+      "decided_at": "2026-10-11T20:06:30Z",
+      "decision": "D1 reuses 1wgrumph/gridmarket spec kit (spec/template/, skills spec-author/spec-diagram/spec-lint, tools/spec_build.py) with its MIT notice.",
+      "source": "Scope Definition final batch (scope-decision-batch.md); owner answers logged in specialists/sd-qa-log.txt",
+      "superseded_by": "DEC-AFC-SD-022"
+    },
+    {
+      "id": "DEC-AFC-PROFILE-001",
+      "status": "confirmed",
+      "decided_at": "2026-10-11T20:10:26Z",
+      "decision": "Planning profile primary. Implementation lanes: tv-app-ui=frontend, backend=primary, device-integration-spikes=heavyweight, spec-and-docs=tech-writing, defects=bug-triager.",
+      "source": "Owner answers at Planning and Design entry"
+    },
+    {
+      "id": "DEC-AFC-SD-014",
+      "status": "confirmed",
+      "decided_at": "2026-10-11T20:27:50Z",
+      "decision": "vnv-review is in scope; this repo gets a Vnv guidance tree (docs/vnv or Vnv/ AGENTS.md per lane).",
+      "source": "Scope Definition reopened branch (scope-decision-batch.md, sd-turn16..18); owner words in specialists/sd-qa-log.txt"
+    },
+    {
+      "id": "DEC-AFC-SD-015",
+      "status": "confirmed",
+      "decided_at": "2026-10-11T20:27:50Z",
+      "decision": "Drop use-jev and claude-api from the skill map (typesafe-ai use deferred to integrated review, only if AI commentary is built).",
+      "source": "Scope Definition reopened branch (scope-decision-batch.md, sd-turn16..18); owner words in specialists/sd-qa-log.txt"
+    },
+    {
+      "id": "DEC-AFC-SD-016",
+      "status": "confirmed",
+      "decided_at": "2026-10-11T20:27:50Z",
+      "decision": "Deliverable D4: shared CI/CD capability, correct and scalable for parallel CI/CD work.",
+      "source": "Scope Definition reopened branch (scope-decision-batch.md, sd-turn16..18); owner words in specialists/sd-qa-log.txt"
+    },
+    {
+      "id": "DEC-AFC-SD-017",
+      "status": "confirmed",
+      "decided_at": "2026-10-11T20:27:50Z",
+      "decision": "Free GitHub-hosted runners on public repos; private-period CI draws on the 2,000 min/month allowance.",
+      "source": "Scope Definition reopened branch (scope-decision-batch.md, sd-turn16..18); owner words in specialists/sd-qa-log.txt"
+    },
+    {
+      "id": "DEC-AFC-SD-018",
+      "status": "confirmed",
+      "decided_at": "2026-10-11T20:27:50Z",
+      "decision": "Owner answer to SD-Q11: extend existing skills rather than a new skill. Owner later said 'Just create the shared skill please'; the exact form is carried to the integrated review.",
+      "source": "Scope Definition reopened branch (scope-decision-batch.md, sd-turn16..18); owner words in specialists/sd-qa-log.txt"
+    },
+    {
+      "id": "DEC-AFC-SD-019",
+      "status": "confirmed",
+      "decided_at": "2026-10-11T20:27:50Z",
+      "decision": "CI/CD capability is repo-agnostic: every personal and organization repo the owner contributes to; no per-repo scoping.",
+      "source": "Scope Definition reopened branch (scope-decision-batch.md, sd-turn16..18); owner words in specialists/sd-qa-log.txt"
+    },
+    {
+      "id": "DEC-AFC-SD-020",
+      "status": "confirmed",
+      "decided_at": "2026-10-11T20:27:50Z",
+      "decision": "ship-pull-request runs vnv-review in any repo with a Vnv guidance tree.",
+      "source": "Scope Definition reopened branch (scope-decision-batch.md, sd-turn16..18); owner words in specialists/sd-qa-log.txt"
+    },
+    {
+      "id": "DEC-AFC-SD-021",
+      "status": "confirmed",
+      "decided_at": "2026-10-11T20:27:50Z",
+      "decision": "D4 order: shared skill work first, then harness hooks invoking it across Claude Code, Codex, Muse, Cursor, AGY.",
+      "source": "Scope Definition reopened branch (scope-decision-batch.md, sd-turn16..18); owner words in specialists/sd-qa-log.txt"
+    },
+    {
+      "id": "DEC-AFC-SD-022",
+      "status": "confirmed",
+      "decided_at": "2026-10-11T20:43:37Z",
+      "decision": "Spec authoring becomes a shared, repo-agnostic skill (deliverable D5), generalized from the GridMarket spec kit (template, build, lint, diagram tooling) and installed like the other shared skills; nothing GridMarket-specific. D1 product spec is written with that skill after integrated approval. Supersedes SD-013 (copy GridMarket kit).",
+      "source": "Owner: 'Gridmarket spec kit shouldn't be gridmarket specific and needed to be a shared skill on how to create specs'"
+    }
+  ],
+  "open_decisions": [],
+  "planning_receipts": [
+    {
+      "stage": "intake",
+      "role": "intake",
+      "host": "Claude Code headless (claude -p, Claude Opus 5.5, effort medium, BEARING_ROLE=intake)",
+      "result": "FIT_PROPOSED",
+      "accepted_by": "DEC-AFC-001",
+      "evidence": "specialists/intake-run.log"
+    },
+    {
+      "stage": "architectural_alignment",
+      "role": "architectural_alignment",
+      "host": "Claude Code headless (claude -p, Claude Opus 5.5, effort medium, BEARING_ROLE=architectural_alignment)",
+      "result": "WORKSPACE_READY",
+      "paths": [
+        "workspace.md",
+        "repository-map.md"
+      ],
+      "evidence": "specialists/aa-run.log",
+      "gaps": [
+        "No existing architecture: Systems Modeler activation required",
+        "Starter repo, target OS/device, data feeds, panel composition, deep-link contracts open for Scope Definition"
+      ],
+      "dispatch_note": "Unquoted heredoc in aa-prompt.md let the shell expand backtick spans; two gh command examples were lost from the delivered prompt. Node still completed; later prompts use quoted heredocs."
+    },
+    {
+      "stage": "scope_definition",
+      "role": "scope_definition",
+      "host": "Claude Code headless (claude -p --resume, Claude Opus 5.5, effort high, BEARING_ROLE=scope_definition), 15 turns",
+      "result": "SHARED_UNDERSTANDING_CONFIRMED",
+      "paths": [
+        "scope-decision-batch.md"
+      ],
+      "evidence": "specialists/sd-turn*.log, specialists/sd-qa-log.txt"
+    },
+    {
+      "stage": "scope_definition",
+      "role": "scope_definition",
+      "result": "SHARED_UNDERSTANDING_CONFIRMED",
+      "note": "Additive reopen for D4 (turns 16-18); 21 decisions total",
+      "evidence": "specialists/sd-turn16.log..sd-turn18.log"
+    },
+    {
+      "stage": "planning_and_design",
+      "role": "planning_and_design",
+      "host": "Claude Code headless (claude -p, Claude Opus 5.5, effort high, BEARING_ROLE=planning_and_design)",
+      "run": 2,
+      "dispatched_at": "2026-10-11T20:44:09Z",
+      "result": "pending",
+      "packet": "specialists/pd-prompt.md"
+    },
+    {
+      "stage": "planning_and_design",
+      "run": "2-resume",
+      "dispatched_at": "2026-10-11T23:25:16Z",
+      "result": "pending",
+      "packet": "specialists/pd-resume-prompt.md"
+    }
+  ],
+  "profile_selection": {
+    "status": "frozen",
+    "selected_at": "2026-10-11T20:10:26Z",
+    "catalog": "~/.agents/bearing-lite/profiles.json",
+    "owner_statement": {
+      "planning": "primary",
+      "implementation": "Owner asked for a recommendation across all profiles (not GridMarket precedent) and accepted the lane map."
+    },
+    "lane_profiles": {
+      "planning": "primary",
+      "implementation": {
+        "tv-app-ui": "frontend",
+        "backend": "primary",
+        "device-integration-spikes": "heavyweight",
+        "spec-and-docs": "tech-writing",
+        "defects": "bug-triager"
+      }
+    },
+    "observed_orchestrator": {
+      "harness": "Claude Code",
+      "model": "Claude Opus 5.5",
+      "reasoning": "session default"
+    },
+    "note": "Frozen copies; later catalog edits have no effect without an owner-confirmed dated amendment.",
+    "frozen_snapshots": {
+      "primary": {
+        "snapshot": {
+          "roles": {
+            "implementer": {
+              "enabled": true,
+              "primary": {
+                "harness": "Codex CLI",
+                "model": "GPT-6.1 Sol",
+                "reasoning": "high"
+              },
+              "ordered_fallbacks": [
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                  "harness": "Muse Code",
+                  "model": "Muse Spark 1.3",
+                  "reasoning": "max"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "Claude Code",
+                  "model": "Claude Opus 5.5",
+                  "reasoning": "medium"
+                }
+              ]
+            },
+            "test_implementer": {
+              "enabled": true,
+              "primary": {
+                "harness": "Claude Code",
+                "model": "Claude Opus 5.5",
+                "reasoning": "medium"
+              },
+              "ordered_fallbacks": [
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                  "harness": "Codex CLI",
+                  "model": "GPT-6.1 Sol",
+                  "reasoning": "high"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "Muse Code",
+                  "model": "Muse Spark 1.3",
+                  "reasoning": "max"
+                }
+              ]
+            },
+            "light_implementer": {
+              "enabled": true,
+              "primary": {
+                "harness": "Muse Code",
+                "model": "Muse Spark 1.3",
+                "reasoning": "max"
+              },
+              "ordered_fallbacks": [
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                  "harness": "AGY",
+                  "model": "Claude Sonnet 5.5",
+                  "reasoning": "medium"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "AGY",
+                  "model": "Gemini 3.8 Flash",
+                  "reasoning": "high"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "Codex CLI",
+                  "model": "GPT-6.1 Sol",
+                  "reasoning": "high"
+                }
+              ]
+            },
+            "coordinator": {
+              "enabled": true,
+              "primary": {
+                "harness": "AGY",
+                "model": "Gemini 3.8 Flash",
+                "reasoning": "medium"
+              },
+              "ordered_fallbacks": [
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                  "harness": "Claude Code",
+                  "model": "Claude Haiku 5.5",
+                  "reasoning": "high"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "Muse Code",
+                  "model": "Muse Spark 1.3",
+                  "reasoning": "xhigh"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "Deep Code CLI",
+                  "model": "DeepSeek V4.1",
+                  "reasoning": "max"
+                }
+              ]
+            },
+            "reviewer": {
+              "enabled": true,
+              "primary": {
+                "harness": "Muse Code",
+                "model": "Muse Spark 1.3",
+                "reasoning": "max"
+              },
+              "ordered_fallbacks": [
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                  "harness": "Codex CLI",
+                  "model": "GPT-6 Astra",
+                  "reasoning": "high"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "Claude Code",
+                  "model": "Fable",
+                  "reasoning": "high"
+                }
+              ],
+              "cadence": "phase"
+            },
+            "scribe": {
+              "enabled": true,
+              "primary": {
+                "harness": "Muse Code",
+                "model": "Muse Spark 1.3",
+                "reasoning": "max"
+              },
+              "ordered_fallbacks": [
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                  "harness": "Claude Code",
+                  "model": "Claude Haiku 5.5",
+                  "reasoning": "xhigh"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "AGY",
+                  "model": "Claude Sonnet 5.5",
+                  "reasoning": "medium"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "Codex CLI",
+                  "model": "GPT-6.1 Sol",
+                  "reasoning": "medium"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "AGY",
+                  "model": "Gemini 3.8 Flash",
+                  "reasoning": "high"
+                }
+              ]
+            },
+            "plan_integrator": {
+              "enabled": true,
+              "primary": {
+                "harness": "Muse Code",
+                "model": "Muse Spark 1.3",
+                "reasoning": "max"
+              },
+              "ordered_fallbacks": [
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                  "harness": "Claude Code",
+                  "model": "Claude Opus 5.5",
+                  "reasoning": "high"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "Codex CLI",
+                  "model": "GPT-6.1 Sol",
+                  "reasoning": "xhigh"
+                }
+              ]
+            },
+            "systems_modeler": {
+              "sessions": {
+                "planning": {
+                  "enabled": true,
+                  "primary": {
+                    "harness": "Muse Code",
+                    "model": "Muse Spark 1.3",
+                    "reasoning": "max"
+                  },
+                  "ordered_fallbacks": [
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                      "harness": "Claude Code",
+                      "model": "Claude Opus 5.5",
+                      "reasoning": "high"
+                    },
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                      "harness": "Codex CLI",
+                      "model": "GPT-6.1 Sol",
+                      "reasoning": "xhigh"
+                    }
+                  ]
+                }
+              }
+            },
+            "test_engineer": {
+              "sessions": {
+                "planning": {
+                  "enabled": true,
+                  "primary": {
+                    "harness": "Claude Code",
+                    "model": "Claude Opus 5.5",
+                    "reasoning": "high"
+                  },
+                  "ordered_fallbacks": [
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                      "harness": "Codex CLI",
+                      "model": "GPT-6 Astra",
+                      "reasoning": "xhigh"
+                    },
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                      "harness": "Muse Code",
+                      "model": "Muse Spark 1.3",
+                      "reasoning": "max"
+                    }
+                  ]
+                },
+                "assurance": {
+                  "enabled": true,
+                  "primary": {
+                    "harness": "Codex CLI",
+                    "model": "GPT-6.1 Sol",
+                    "reasoning": "xhigh"
+                  },
+                  "ordered_fallbacks": [
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                      "harness": "Claude Code",
+                      "model": "Claude Opus 5.5",
+                      "reasoning": "medium"
+                    },
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                      "harness": "Muse Code",
+                      "model": "Muse Spark 1.3",
+                      "reasoning": "max"
+                    }
+                  ],
+                  "cadence": "lifecycle"
+                }
+              }
+            },
+            "integration_engineer": {
+              "sessions": {
+                "planning": {
+                  "enabled": true,
+                  "primary": {
+                    "harness": "Claude Code",
+                    "model": "Claude Opus 5.5",
+                    "reasoning": "high"
+                  },
+                  "ordered_fallbacks": [
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                      "harness": "Codex CLI",
+                      "model": "GPT-6.1 Sol",
+                      "reasoning": "xhigh"
+                    },
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                      "harness": "Muse Code",
+                      "model": "Muse Spark 1.3",
+                      "reasoning": "max"
+                    }
+                  ]
+                },
+                "execution": {
+                  "enabled": true,
+                  "primary": {
+                    "harness": "Codex CLI",
+                    "model": "GPT-6.1 Sol",
+                    "reasoning": "high"
+                  },
+                  "ordered_fallbacks": [
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                      "harness": "Claude Code",
+                      "model": "Claude Opus 5.5",
+                      "reasoning": "medium"
+                    },
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                      "harness": "Muse Code",
+                      "model": "Muse Spark 1.3",
+                      "reasoning": "max"
+                    }
+                  ],
+                  "cadence": "lifecycle"
+                }
+              }
+            },
+            "requirements_engineer": {
+              "sessions": {
+                "planning": {
+                  "enabled": true,
+                  "primary": {
+                    "harness": "Muse Code",
+                    "model": "Muse Spark 1.3",
+                    "reasoning": "max"
+                  },
+                  "ordered_fallbacks": [
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                      "harness": "Codex CLI",
+                      "model": "GPT-6 Astra",
+                      "reasoning": "xhigh"
+                    },
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                      "harness": "Claude Code",
+                      "model": "Claude Opus 5.5",
+                      "reasoning": "high"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "review": {
+            "coverage_assist": {
+              "enabled": true,
+              "required": true
+            }
+          },
+          "deterministic_verification": {
+            "reverify": {
+              "enabled": true
+            }
+          }
+        },
+        "configuration_digest_sha256": "b81a141be5b9d83cbecbb34df460b0f25929c2ae0df165f16ff529acfc50bafa",
+        "development_strategy": {
+          "mode": "tdd"
+        },
+        "concurrency": {
+          "dispatch_ready_independent_work": true,
+          "preserve_order_for_dependencies_interfaces_write_overlap_and_shared_mutable_resources": true
+        },
+        "planning_to_implementation_clean_session": true
+      },
+      "frontend": {
+        "snapshot": {
+          "roles": {
+            "implementer": {
+              "enabled": true,
+              "primary": {
+                "harness": "Codex CLI",
+                "model": "GPT-6 Astra",
+                "reasoning": "high"
+              },
+              "ordered_fallbacks": [
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                  "harness": "Claude Code",
+                  "model": "Claude Opus 5.5",
+                  "reasoning": "high"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "Muse Code",
+                  "model": "Muse Spark 1.3",
+                  "reasoning": "max"
+                }
+              ]
+            },
+            "test_implementer": {
+              "enabled": true,
+              "primary": {
+                "harness": "Claude Code",
+                "model": "Claude Opus 5.5",
+                "reasoning": "medium"
+              },
+              "ordered_fallbacks": [
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                  "harness": "Muse Code",
+                  "model": "Muse Spark 1.3",
+                  "reasoning": "max"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "Codex CLI",
+                  "model": "GPT-6.1 Sol",
+                  "reasoning": "high"
+                }
+              ]
+            },
+            "light_implementer": {
+              "enabled": true,
+              "primary": {
+                "harness": "Muse Code",
+                "model": "Muse Spark 1.3",
+                "reasoning": "max"
+              },
+              "ordered_fallbacks": [
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                  "harness": "AGY",
+                  "model": "Claude Sonnet 5.5",
+                  "reasoning": "medium"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "AGY",
+                  "model": "Gemini 3.8 Flash",
+                  "reasoning": "high"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "Codex CLI",
+                  "model": "GPT-6.1 Sol",
+                  "reasoning": "high"
+                }
+              ]
+            },
+            "coordinator": {
+              "enabled": true,
+              "primary": {
+                "harness": "AGY",
+                "model": "Gemini 3.8 Flash",
+                "reasoning": "medium"
+              },
+              "ordered_fallbacks": [
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                  "harness": "Claude Code",
+                  "model": "Claude Haiku 5.5",
+                  "reasoning": "high"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "Muse Code",
+                  "model": "Muse Spark 1.3",
+                  "reasoning": "xhigh"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "Deep Code CLI",
+                  "model": "DeepSeek V4.1",
+                  "reasoning": "max"
+                }
+              ]
+            },
+            "reviewer": {
+              "enabled": true,
+              "primary": {
+                "harness": "Claude Code",
+                "model": "Claude Opus 5.5",
+                "reasoning": "high"
+              },
+              "ordered_fallbacks": [
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                  "harness": "Codex CLI",
+                  "model": "GPT-6.1 Sol",
+                  "reasoning": "high"
+                }
+              ],
+              "cadence": "phase"
+            },
+            "scribe": {
+              "enabled": true,
+              "primary": {
+                "harness": "Muse Code",
+                "model": "Muse Spark 1.3",
+                "reasoning": "max"
+              },
+              "ordered_fallbacks": [
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                  "harness": "Claude Code",
+                  "model": "Claude Haiku 5.5",
+                  "reasoning": "xhigh"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "AGY",
+                  "model": "Claude Sonnet 5.5",
+                  "reasoning": "medium"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "Codex CLI",
+                  "model": "GPT-6.1 Sol",
+                  "reasoning": "medium"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "AGY",
+                  "model": "Gemini 3.8 Flash",
+                  "reasoning": "high"
+                }
+              ]
+            },
+            "plan_integrator": {
+              "enabled": true,
+              "primary": {
+                "harness": "Muse Code",
+                "model": "Muse Spark 1.3",
+                "reasoning": "max"
+              },
+              "ordered_fallbacks": [
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                  "harness": "Claude Code",
+                  "model": "Claude Opus 5.5",
+                  "reasoning": "high"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "Codex CLI",
+                  "model": "GPT-6.1 Sol",
+                  "reasoning": "xhigh"
+                }
+              ]
+            },
+            "systems_modeler": {
+              "sessions": {
+                "planning": {
+                  "enabled": true,
+                  "primary": {
+                    "harness": "Muse Code",
+                    "model": "Muse Spark 1.3",
+                    "reasoning": "max"
+                  },
+                  "ordered_fallbacks": [
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                      "harness": "Claude Code",
+                      "model": "Claude Opus 5.5",
+                      "reasoning": "high"
+                    },
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                      "harness": "Codex CLI",
+                      "model": "GPT-6.1 Sol",
+                      "reasoning": "xhigh"
+                    }
+                  ]
+                }
+              }
+            },
+            "test_engineer": {
+              "sessions": {
+                "planning": {
+                  "enabled": true,
+                  "primary": {
+                    "harness": "Claude Code",
+                    "model": "Claude Opus 5.5",
+                    "reasoning": "high"
+                  },
+                  "ordered_fallbacks": [
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                      "harness": "Codex CLI",
+                      "model": "GPT-6 Astra",
+                      "reasoning": "xhigh"
+                    },
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                      "harness": "Muse Code",
+                      "model": "Muse Spark 1.3",
+                      "reasoning": "max"
+                    }
+                  ]
+                },
+                "assurance": {
+                  "enabled": true,
+                  "primary": {
+                    "harness": "Codex CLI",
+                    "model": "GPT-6 Astra",
+                    "reasoning": "high"
+                  },
+                  "ordered_fallbacks": [
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                      "harness": "Muse Code",
+                      "model": "Muse Spark 1.3",
+                      "reasoning": "max"
+                    },
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                      "harness": "Claude Code",
+                      "model": "Claude Opus 5.5",
+                      "reasoning": "high"
+                    }
+                  ],
+                  "cadence": "lifecycle"
+                }
+              }
+            },
+            "integration_engineer": {
+              "sessions": {
+                "planning": {
+                  "enabled": true,
+                  "primary": {
+                    "harness": "Claude Code",
+                    "model": "Claude Opus 5.5",
+                    "reasoning": "high"
+                  },
+                  "ordered_fallbacks": [
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                      "harness": "Codex CLI",
+                      "model": "GPT-6 Astra",
+                      "reasoning": "high"
+                    },
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                      "harness": "Muse Code",
+                      "model": "Muse Spark 1.3",
+                      "reasoning": "max"
+                    }
+                  ]
+                },
+                "execution": {
+                  "enabled": true,
+                  "primary": {
+                    "harness": "Claude Code",
+                    "model": "Claude Opus 5.5",
+                    "reasoning": "medium"
+                  },
+                  "ordered_fallbacks": [
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                      "harness": "Codex CLI",
+                      "model": "GPT-6.1 Sol",
+                      "reasoning": "high"
+                    },
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                      "harness": "Muse Code",
+                      "model": "Muse Spark 1.3",
+                      "reasoning": "max"
+                    }
+                  ],
+                  "cadence": "lifecycle"
+                }
+              }
+            },
+            "requirements_engineer": {
+              "sessions": {
+                "planning": {
+                  "enabled": true,
+                  "primary": {
+                    "harness": "Muse Code",
+                    "model": "Muse Spark 1.3",
+                    "reasoning": "max"
+                  },
+                  "ordered_fallbacks": [
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                      "harness": "Codex CLI",
+                      "model": "GPT-6 Astra",
+                      "reasoning": "xhigh"
+                    },
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                      "harness": "Claude Code",
+                      "model": "Claude Opus 5.5",
+                      "reasoning": "high"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "review": {
+            "coverage_assist": {
+              "enabled": true,
+              "required": true
+            }
+          },
+          "deterministic_verification": {
+            "reverify": {
+              "enabled": true
+            }
+          }
+        },
+        "configuration_digest_sha256": "8e533b92b43f463f75272e9b498b694fbf66f32825f09917506574e65534ff5a",
+        "development_strategy": {
+          "mode": "tdd"
+        },
+        "concurrency": {
+          "dispatch_ready_independent_work": true,
+          "preserve_order_for_dependencies_interfaces_write_overlap_and_shared_mutable_resources": true
+        },
+        "planning_to_implementation_clean_session": true
+      },
+      "heavyweight": {
+        "snapshot": {
+          "roles": {
+            "implementer": {
+              "enabled": true,
+              "primary": {
+                "harness": "Claude Code",
+                "model": "Claude Opus 5.5",
+                "reasoning": "high"
+              },
+              "ordered_fallbacks": [
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                  "harness": "Muse Code",
+                  "model": "Muse Spark 1.3",
+                  "reasoning": "max"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "Codex CLI",
+                  "model": "GPT-6.1 Sol",
+                  "reasoning": "xhigh"
+                }
+              ]
+            },
+            "test_implementer": {
+              "enabled": true,
+              "primary": {
+                "harness": "Codex CLI",
+                "model": "GPT-6.1 Sol",
+                "reasoning": "xhigh"
+              },
+              "ordered_fallbacks": [
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                  "harness": "AGY",
+                  "model": "Claude Opus 5.5",
+                  "reasoning": "high"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "Muse Code",
+                  "model": "Muse Spark 1.3",
+                  "reasoning": "max"
+                }
+              ]
+            },
+            "light_implementer": {
+              "enabled": true,
+              "primary": {
+                "harness": "Muse Code",
+                "model": "Muse Spark 1.3",
+                "reasoning": "max"
+              },
+              "ordered_fallbacks": [
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                  "harness": "AGY",
+                  "model": "Claude Sonnet 5.5",
+                  "reasoning": "medium"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "AGY",
+                  "model": "Gemini 3.8 Flash",
+                  "reasoning": "high"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "Codex CLI",
+                  "model": "GPT-6.1 Sol",
+                  "reasoning": "xhigh"
+                }
+              ]
+            },
+            "coordinator": {
+              "enabled": true,
+              "primary": {
+                "harness": "AGY",
+                "model": "Gemini 3.8 Flash",
+                "reasoning": "medium"
+              },
+              "ordered_fallbacks": [
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                  "harness": "Claude Code",
+                  "model": "Claude Haiku 5.5",
+                  "reasoning": "high"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "Muse Code",
+                  "model": "Muse Spark 1.3",
+                  "reasoning": "xhigh"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "Deep Code CLI",
+                  "model": "DeepSeek V4.1",
+                  "reasoning": "max"
+                }
+              ]
+            },
+            "reviewer": {
+              "enabled": true,
+              "primary": {
+                "harness": "Muse Code",
+                "model": "Muse Spark 1.3",
+                "reasoning": "max"
+              },
+              "ordered_fallbacks": [
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                  "harness": "Codex CLI",
+                  "model": "GPT-6 Astra",
+                  "reasoning": "xhigh"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "Claude Code",
+                  "model": "Claude Opus 5.5",
+                  "reasoning": "xhigh"
+                }
+              ],
+              "cadence": "phase"
+            },
+            "scribe": {
+              "enabled": true,
+              "primary": {
+                "harness": "Muse Code",
+                "model": "Muse Spark 1.3",
+                "reasoning": "max"
+              },
+              "ordered_fallbacks": [
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                  "harness": "Claude Code",
+                  "model": "Claude Haiku 5.5",
+                  "reasoning": "xhigh"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "AGY",
+                  "model": "Claude Sonnet 5.5",
+                  "reasoning": "medium"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "Codex CLI",
+                  "model": "GPT-6.1 Sol",
+                  "reasoning": "xhigh"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "AGY",
+                  "model": "Gemini 3.8 Flash",
+                  "reasoning": "high"
+                }
+              ]
+            },
+            "plan_integrator": {
+              "enabled": true,
+              "primary": {
+                "harness": "Muse Code",
+                "model": "Muse Spark 1.3",
+                "reasoning": "max"
+              },
+              "ordered_fallbacks": [
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                  "harness": "Claude Code",
+                  "model": "Claude Opus 5.5",
+                  "reasoning": "high"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "Codex CLI",
+                  "model": "GPT-6.1 Sol",
+                  "reasoning": "xhigh"
+                }
+              ]
+            },
+            "systems_modeler": {
+              "sessions": {
+                "planning": {
+                  "enabled": true,
+                  "primary": {
+                    "harness": "Muse Code",
+                    "model": "Muse Spark 1.3",
+                    "reasoning": "max"
+                  },
+                  "ordered_fallbacks": [
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                      "harness": "Claude Code",
+                      "model": "Claude Opus 5.5",
+                      "reasoning": "high"
+                    },
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                      "harness": "Codex CLI",
+                      "model": "GPT-6.1 Sol",
+                      "reasoning": "xhigh"
+                    }
+                  ]
+                }
+              }
+            },
+            "test_engineer": {
+              "sessions": {
+                "planning": {
+                  "enabled": true,
+                  "primary": {
+                    "harness": "Claude Code",
+                    "model": "Claude Opus 5.5",
+                    "reasoning": "high"
+                  },
+                  "ordered_fallbacks": [
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                      "harness": "Codex CLI",
+                      "model": "GPT-6 Astra",
+                      "reasoning": "xhigh"
+                    },
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                      "harness": "Muse Code",
+                      "model": "Muse Spark 1.3",
+                      "reasoning": "max"
+                    }
+                  ]
+                },
+                "assurance": {
+                  "enabled": true,
+                  "primary": {
+                    "harness": "Muse Code",
+                    "model": "Muse Spark 1.3",
+                    "reasoning": "max"
+                  },
+                  "ordered_fallbacks": [
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                      "harness": "AGY",
+                      "model": "Claude Sonnet 5.5",
+                      "reasoning": "medium"
+                    },
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                      "harness": "Claude Code",
+                      "model": "Claude Opus 5.5",
+                      "reasoning": "high"
+                    }
+                  ],
+                  "cadence": "lifecycle"
+                }
+              }
+            },
+            "integration_engineer": {
+              "sessions": {
+                "planning": {
+                  "enabled": true,
+                  "primary": {
+                    "harness": "Codex CLI",
+                    "model": "GPT-6 Astra",
+                    "reasoning": "xhigh"
+                  },
+                  "ordered_fallbacks": [
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                      "harness": "Muse Code",
+                      "model": "Muse Spark 1.3",
+                      "reasoning": "max"
+                    },
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                      "harness": "Claude Code",
+                      "model": "Claude Opus 5.5",
+                      "reasoning": "high"
+                    }
+                  ]
+                },
+                "execution": {
+                  "enabled": true,
+                  "primary": {
+                    "harness": "Claude Code",
+                    "model": "Claude Opus 5.5",
+                    "reasoning": "medium"
+                  },
+                  "ordered_fallbacks": [
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                      "harness": "Codex CLI",
+                      "model": "GPT-6.1 Sol",
+                      "reasoning": "xhigh"
+                    },
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                      "harness": "Muse Code",
+                      "model": "Muse Spark 1.3",
+                      "reasoning": "max"
+                    }
+                  ],
+                  "cadence": "lifecycle"
+                }
+              }
+            },
+            "requirements_engineer": {
+              "sessions": {
+                "planning": {
+                  "enabled": true,
+                  "primary": {
+                    "harness": "Muse Code",
+                    "model": "Muse Spark 1.3",
+                    "reasoning": "max"
+                  },
+                  "ordered_fallbacks": [
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                      "harness": "Codex CLI",
+                      "model": "GPT-6 Astra",
+                      "reasoning": "xhigh"
+                    },
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                      "harness": "Claude Code",
+                      "model": "Claude Opus 5.5",
+                      "reasoning": "high"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "review": {
+            "coverage_assist": {
+              "enabled": true,
+              "required": true
+            }
+          },
+          "deterministic_verification": {
+            "reverify": {
+              "enabled": true
+            }
+          }
+        },
+        "configuration_digest_sha256": "f2c555d5f1a30a855dfcce52d6361475da198af0fd79cd7dfbc7ec74845f8a73",
+        "development_strategy": {
+          "mode": "tdd"
+        },
+        "concurrency": {
+          "dispatch_ready_independent_work": true,
+          "preserve_order_for_dependencies_interfaces_write_overlap_and_shared_mutable_resources": true
+        },
+        "planning_to_implementation_clean_session": true
+      },
+      "tech-writing": {
+        "snapshot": {
+          "roles": {
+            "implementer": {
+              "enabled": true,
+              "primary": {
+                "harness": "Codex CLI",
+                "model": "GPT-6 Astra",
+                "reasoning": "medium"
+              },
+              "ordered_fallbacks": [
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                  "harness": "Claude Code",
+                  "model": "Claude Opus 5.5",
+                  "reasoning": "medium"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "Muse Code",
+                  "model": "Muse Spark 1.3",
+                  "reasoning": "max"
+                }
+              ]
+            },
+            "light_implementer": {
+              "enabled": true,
+              "primary": {
+                "harness": "Muse Code",
+                "model": "Muse Spark 1.3",
+                "reasoning": "max"
+              },
+              "ordered_fallbacks": [
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                  "harness": "AGY",
+                  "model": "Claude Sonnet 5.5",
+                  "reasoning": "medium"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "AGY",
+                  "model": "Gemini 3.8 Flash",
+                  "reasoning": "high"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "Codex CLI",
+                  "model": "GPT-6.1 Sol",
+                  "reasoning": "high"
+                }
+              ]
+            },
+            "reviewer": {
+              "enabled": true,
+              "primary": {
+                "harness": "Muse Code",
+                "model": "Muse Spark 1.3",
+                "reasoning": "max"
+              },
+              "ordered_fallbacks": [
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                  "harness": "Claude Code",
+                  "model": "Claude Opus 5.5",
+                  "reasoning": "xhigh"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "Codex CLI",
+                  "model": "GPT-6 Astra",
+                  "reasoning": "xhigh"
+                }
+              ],
+              "cadence": "phase"
+            },
+            "plan_integrator": {
+              "enabled": true,
+              "primary": {
+                "harness": "Muse Code",
+                "model": "Muse Spark 1.3",
+                "reasoning": "max"
+              },
+              "ordered_fallbacks": [
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                  "harness": "Claude Code",
+                  "model": "Claude Opus 5.5",
+                  "reasoning": "high"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "Codex CLI",
+                  "model": "GPT-6.1 Sol",
+                  "reasoning": "xhigh"
+                }
+              ]
+            },
+            "requirements_engineer": {
+              "sessions": {
+                "planning": {
+                  "enabled": true,
+                  "primary": {
+                    "harness": "Muse Code",
+                    "model": "Muse Spark 1.3",
+                    "reasoning": "max"
+                  },
+                  "ordered_fallbacks": [
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                      "harness": "Codex CLI",
+                      "model": "GPT-6 Astra",
+                      "reasoning": "xhigh"
+                    },
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                      "harness": "Claude Code",
+                      "model": "Claude Opus 5.5",
+                      "reasoning": "high"
+                    }
+                  ]
+                }
+              }
+            },
+            "test_engineer": {
+              "sessions": {
+                "planning": {
+                  "enabled": true,
+                  "primary": {
+                    "harness": "Claude Code",
+                    "model": "Claude Opus 5.5",
+                    "reasoning": "high"
+                  },
+                  "ordered_fallbacks": [
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                      "harness": "Codex CLI",
+                      "model": "GPT-6 Astra",
+                      "reasoning": "xhigh"
+                    },
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                      "harness": "Muse Code",
+                      "model": "Muse Spark 1.3",
+                      "reasoning": "max"
+                    }
+                  ]
+                },
+                "assurance": {
+                  "enabled": false,
+                  "primary": {
+                    "harness": "Muse Code",
+                    "model": "Muse Spark 1.3",
+                    "reasoning": "max"
+                  },
+                  "ordered_fallbacks": [
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                      "harness": "AGY",
+                      "model": "Claude Sonnet 5.5",
+                      "reasoning": "medium"
+                    },
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                      "harness": "Codex CLI",
+                      "model": "GPT-6.1 Sol",
+                      "reasoning": "high"
+                    }
+                  ],
+                  "cadence": "phase"
+                }
+              }
+            },
+            "systems_modeler": {
+              "sessions": {
+                "planning": {
+                  "enabled": true,
+                  "primary": {
+                    "harness": "Muse Code",
+                    "model": "Muse Spark 1.3",
+                    "reasoning": "max"
+                  },
+                  "ordered_fallbacks": [
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                      "harness": "Claude Code",
+                      "model": "Claude Opus 5.5",
+                      "reasoning": "high"
+                    },
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                      "harness": "Codex CLI",
+                      "model": "GPT-6.1 Sol",
+                      "reasoning": "xhigh"
+                    }
+                  ]
+                }
+              }
+            },
+            "scribe": {
+              "enabled": true,
+              "primary": {
+                "harness": "Muse Code",
+                "model": "Muse Spark 1.3",
+                "reasoning": "max"
+              },
+              "ordered_fallbacks": [
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                  "harness": "Claude Code",
+                  "model": "Claude Haiku 5.5",
+                  "reasoning": "xhigh"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "AGY",
+                  "model": "Claude Sonnet 5.5",
+                  "reasoning": "medium"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "Codex CLI",
+                  "model": "GPT-6.1 Sol",
+                  "reasoning": "medium"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "AGY",
+                  "model": "Gemini 3.8 Flash",
+                  "reasoning": "high"
+                }
+              ]
+            },
+            "coordinator": {
+              "enabled": true,
+              "primary": {
+                "harness": "AGY",
+                "model": "Gemini 3.8 Flash",
+                "reasoning": "medium"
+              },
+              "ordered_fallbacks": [
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                  "harness": "Claude Code",
+                  "model": "Claude Haiku 5.5",
+                  "reasoning": "high"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "Muse Code",
+                  "model": "Muse Spark 1.3",
+                  "reasoning": "xhigh"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "Deep Code CLI",
+                  "model": "DeepSeek V4.1",
+                  "reasoning": "max"
+                }
+              ]
+            },
+            "integration_engineer": {
+              "sessions": {
+                "execution": {
+                  "enabled": true,
+                  "primary": {
+                    "harness": "Claude Code",
+                    "model": "Claude Opus 5.5",
+                    "reasoning": "medium"
+                  },
+                  "ordered_fallbacks": [
+                    {
+                      "condition": "Verified usage/rate-limit exhaustion of the primary route.",
+                      "harness": "Codex CLI",
+                      "model": "GPT-6.1 Sol",
+                      "reasoning": "high"
+                    },
+                    {
+                      "condition": "Verified usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                      "harness": "Muse Code",
+                      "model": "Muse Spark 1.3",
+                      "reasoning": "max"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "review": {
+            "coverage_assist": {
+              "enabled": true,
+              "required": true
+            }
+          },
+          "deterministic_verification": {
+            "reverify": {
+              "enabled": true
+            }
+          }
+        },
+        "configuration_digest_sha256": "8a6b57450b92f5658666150c7cdcb05553016240061befb226c0ae4eb83c94ce",
+        "development_strategy": {
+          "mode": "single_implementer"
+        },
+        "concurrency": {
+          "dispatch_ready_independent_work": true,
+          "preserve_order_for_dependencies_interfaces_write_overlap_and_shared_mutable_resources": true
+        },
+        "planning_to_implementation_clean_session": true
+      },
+      "bug-triager": {
+        "snapshot": {
+          "roles": {
+            "implementer": {
+              "enabled": true,
+              "primary": {
+                "harness": "Muse Code",
+                "model": "Muse Spark 1.3",
+                "reasoning": "max"
+              },
+              "ordered_fallbacks": [
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                  "harness": "Codex CLI",
+                  "model": "GPT-6.1 Sol",
+                  "reasoning": "high"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "Claude Code",
+                  "model": "Claude Opus 5.5",
+                  "reasoning": "medium"
+                }
+              ]
+            },
+            "test_implementer": {
+              "enabled": true,
+              "primary": {
+                "harness": "Claude Code",
+                "model": "Claude Opus 5.5",
+                "reasoning": "medium"
+              },
+              "ordered_fallbacks": [
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                  "harness": "Codex CLI",
+                  "model": "GPT-6.1 Sol",
+                  "reasoning": "high"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "Muse Code",
+                  "model": "Muse Spark 1.3",
+                  "reasoning": "max"
+                }
+              ]
+            },
+            "light_implementer": {
+              "enabled": true,
+              "primary": {
+                "harness": "Muse Code",
+                "model": "Muse Spark 1.3",
+                "reasoning": "max"
+              },
+              "ordered_fallbacks": [
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                  "harness": "AGY",
+                  "model": "Claude Sonnet 5.5",
+                  "reasoning": "medium"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "AGY",
+                  "model": "Gemini 3.8 Flash",
+                  "reasoning": "high"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "Codex CLI",
+                  "model": "GPT-6.1 Sol",
+                  "reasoning": "high"
+                }
+              ]
+            },
+            "coordinator": {
+              "enabled": true,
+              "primary": {
+                "harness": "AGY",
+                "model": "Gemini 3.8 Flash",
+                "reasoning": "medium"
+              },
+              "ordered_fallbacks": [
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                  "harness": "Claude Code",
+                  "model": "Claude Haiku 5.5",
+                  "reasoning": "high"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "Muse Code",
+                  "model": "Muse Spark 1.3",
+                  "reasoning": "xhigh"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "Deep Code CLI",
+                  "model": "DeepSeek V4.1",
+                  "reasoning": "max"
+                }
+              ]
+            },
+            "reviewer": {
+              "enabled": true,
+              "primary": {
+                "harness": "Codex CLI",
+                "model": "GPT-6 Astra",
+                "reasoning": "high"
+              },
+              "ordered_fallbacks": [
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                  "harness": "Claude Code",
+                  "model": "Fable",
+                  "reasoning": "high"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "Muse Code",
+                  "model": "Muse Spark 1.3",
+                  "reasoning": "max"
+                }
+              ],
+              "cadence": "phase"
+            },
+            "scribe": {
+              "enabled": true,
+              "primary": {
+                "harness": "Muse Code",
+                "model": "Muse Spark 1.3",
+                "reasoning": "max"
+              },
+              "ordered_fallbacks": [
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                  "harness": "Claude Code",
+                  "model": "Claude Haiku 5.5",
+                  "reasoning": "xhigh"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "AGY",
+                  "model": "Claude Sonnet 5.5",
+                  "reasoning": "medium"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "Codex CLI",
+                  "model": "GPT-6.1 Sol",
+                  "reasoning": "medium"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "AGY",
+                  "model": "Gemini 3.8 Flash",
+                  "reasoning": "high"
+                }
+              ]
+            },
+            "plan_integrator": {
+              "enabled": true,
+              "primary": {
+                "harness": "Muse Code",
+                "model": "Muse Spark 1.3",
+                "reasoning": "max"
+              },
+              "ordered_fallbacks": [
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                  "harness": "Claude Code",
+                  "model": "Claude Opus 5.5",
+                  "reasoning": "high"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "Codex CLI",
+                  "model": "GPT-6.1 Sol",
+                  "reasoning": "xhigh"
+                }
+              ]
+            },
+            "systems_modeler": {
+              "sessions": {
+                "planning": {
+                  "enabled": true,
+                  "primary": {
+                    "harness": "Muse Code",
+                    "model": "Muse Spark 1.3",
+                    "reasoning": "max"
+                  },
+                  "ordered_fallbacks": [
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                      "harness": "Claude Code",
+                      "model": "Claude Opus 5.5",
+                      "reasoning": "high"
+                    },
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                      "harness": "Codex CLI",
+                      "model": "GPT-6.1 Sol",
+                      "reasoning": "xhigh"
+                    }
+                  ]
+                }
+              }
+            },
+            "test_engineer": {
+              "sessions": {
+                "planning": {
+                  "enabled": true,
+                  "primary": {
+                    "harness": "Claude Code",
+                    "model": "Claude Opus 5.5",
+                    "reasoning": "high"
+                  },
+                  "ordered_fallbacks": [
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                      "harness": "Codex CLI",
+                      "model": "GPT-6 Astra",
+                      "reasoning": "xhigh"
+                    },
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                      "harness": "Muse Code",
+                      "model": "Muse Spark 1.3",
+                      "reasoning": "max"
+                    }
+                  ]
+                },
+                "assurance": {
+                  "enabled": true,
+                  "primary": {
+                    "harness": "Codex CLI",
+                    "model": "GPT-6.1 Sol",
+                    "reasoning": "xhigh"
+                  },
+                  "ordered_fallbacks": [
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                      "harness": "Claude Code",
+                      "model": "Claude Opus 5.5",
+                      "reasoning": "medium"
+                    },
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                      "harness": "Muse Code",
+                      "model": "Muse Spark 1.3",
+                      "reasoning": "max"
+                    }
+                  ],
+                  "cadence": "lifecycle"
+                }
+              }
+            },
+            "integration_engineer": {
+              "sessions": {
+                "planning": {
+                  "enabled": true,
+                  "primary": {
+                    "harness": "Claude Code",
+                    "model": "Claude Opus 5.5",
+                    "reasoning": "high"
+                  },
+                  "ordered_fallbacks": [
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                      "harness": "Codex CLI",
+                      "model": "GPT-6.1 Sol",
+                      "reasoning": "xhigh"
+                    },
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                      "harness": "Muse Code",
+                      "model": "Muse Spark 1.3",
+                      "reasoning": "max"
+                    }
+                  ]
+                },
+                "execution": {
+                  "enabled": true,
+                  "primary": {
+                    "harness": "Codex CLI",
+                    "model": "GPT-6.1 Sol",
+                    "reasoning": "high"
+                  },
+                  "ordered_fallbacks": [
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                      "harness": "Claude Code",
+                      "model": "Claude Opus 5.5",
+                      "reasoning": "medium"
+                    },
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                      "harness": "Muse Code",
+                      "model": "Muse Spark 1.3",
+                      "reasoning": "max"
+                    }
+                  ],
+                  "cadence": "lifecycle"
+                }
+              }
+            },
+            "requirements_engineer": {
+              "sessions": {
+                "planning": {
+                  "enabled": true,
+                  "primary": {
+                    "harness": "Muse Code",
+                    "model": "Muse Spark 1.3",
+                    "reasoning": "max"
+                  },
+                  "ordered_fallbacks": [
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                      "harness": "Codex CLI",
+                      "model": "GPT-6 Astra",
+                      "reasoning": "xhigh"
+                    },
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                      "harness": "Claude Code",
+                      "model": "Claude Opus 5.5",
+                      "reasoning": "high"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "review": {
+            "coverage_assist": {
+              "enabled": true,
+              "required": true
+            }
+          },
+          "deterministic_verification": {
+            "reverify": {
+              "enabled": true
+            }
+          }
+        },
+        "configuration_digest_sha256": "6ca3ffccea9bae0e26f960b075e7a7fe2ffc01048474f1c8a70c31d8e748138b",
+        "development_strategy": {
+          "mode": "tdd"
+        },
+        "concurrency": {
+          "dispatch_ready_independent_work": true,
+          "preserve_order_for_dependencies_interfaces_write_overlap_and_shared_mutable_resources": true
+        },
+        "planning_to_implementation_clean_session": true
+      }
+    }
+  },
+  "owner_wait_tracking": true,
+  "owner_blocked_intervals": [],
+  "execution_receipts": [
+    {
+      "at": "2026-10-11T20:43:37Z",
+      "kind": "process_deviation",
+      "detail": "Orchestrator dispatched a spec Implementer before planning approval, contrary to 'dispatch only after approval'. The draft, its branch, worktree and run files were deleted on owner instruction ('remove the spec draft delete it no reference').",
+      "source": "Owner challenge 'why are you not following bearing?'"
+    },
+    {
+      "at": "2026-10-11T20:43:37Z",
+      "kind": "stage_restart",
+      "detail": "Planning and Design run 1 stopped by the Orchestrator because its packet carried superseded SD-013; partial artifacts moved to superseded-run1/. Re-dispatched with SD-022."
+    },
+    {
+      "at": "2026-10-11T20:43:37Z",
+      "kind": "fallback_activation",
+      "class": "B",
+      "detail": "Muse Code / Muse Spark 1.3 verified unavailable: API 429 'Subscription quota exhausted ... resets at 2026-10-12T00:00:00Z' (superseded-run1 evidence sm-muse-429-run.log). Muse-primary planning roles use first approved fallback until reset."
+    },
+    {
+      "at": "2026-10-11T23:25:16Z",
+      "kind": "resume",
+      "detail": "Planning and Design run 2 and Test Engineer ended on Claude session limit (reset 18:20 America/Chicago). Liveness INACTIVE (no processes). Resumed from durable state with specialists/pd-resume-prompt.md; accepted SM/RE/IE work not replayed."
+    }
+  ]
+}

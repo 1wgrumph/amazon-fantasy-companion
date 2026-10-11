@@ -1,0 +1,114 @@
+# Slice graph — AFC-2026-10-11 (Planning and Design draft for IE, TE and Plan Integrator)
+
+Source of truth for slice content is this file plus `design.md`; the Plan
+Integrator copies it into `implementation.json`. Proposed command IDs are
+finalized by the Planning Test Engineer in `seit.json`.
+
+Lanes → frozen profile (DEC-AFC-PROFILE-001): `tv-app-ui`=frontend,
+`backend`=primary, `device-integration-spikes`=heavyweight,
+`spec-and-docs`=tech-writing, `defects`=bug-triager. Role routes come from
+that profile's frozen snapshot (`journey.json`); Light Implementer slices use
+the lane profile's `light_implementer` route; Scribe slices use the planning
+profile `primary` `scribe` route.
+
+`repo` = `this` (1wgrumph/amazon-fantasy-companion) unless `Alphazedehq`
+(alphazede/Alphazedehq, cross-repo write set, own PR per slice).
+
+## Waves (scheduling groups; a slice dispatches when its dependencies and lease are satisfied)
+
+- Wave 1: S01 S02 S03 S04 S05 S06 S07 S08 S09T S09 S10 S16
+- Wave 2: S11T S11 S12 S13 S14 S15 S18 S19
+- Wave 3: S17 S20T S20 S21T S21 S22T S22 S23T S23 S24T S24 S25T S25 S26T S26 S27T S27 S28
+- Wave 4: S30T S30 S31T S31 S32T S32 S33 S34 S35 S41
+- Wave 5: S36 S37 S38 S39 S40
+
+Concurrency (impl_agent_cap = 5; Scribe not counted): Wave 1 opens with
+S01 S02 S03 S04 S05; S06 S07 S16 S09T S10 start as slots free; S09T waits for
+S01 and S02 to merge in Alphazedehq. Wave 3 queues the 16 TDD sessions in
+critical-path order: S20T S22T S25T S21T S23T first, then their greens, then
+S24 S26 S27 pairs.
+
+## Slices
+
+| ID | Lane (profile) | Role | Type / work_class | Milestone | Depends on | Requirements | Design | Write set | Lease | Commands | Stop condition |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| S01 | spec-and-docs (tech-writing) | Product Implementer | skill / judgement | M1 | — | AC-AFC-D4-01, AC-AFC-D4-05, AC-AFC-D4-06 | DES-AFC-D4, CONTRACT-AFC-GATE | Alphazedehq: `skills/setup-pre-commit/SKILL.md`, `skills/setup-pre-commit/references/gate-contract.md`, `skills/setup-pre-commit/templates/gate.sh`, `skills/setup-pre-commit/scripts/install-hooks.sh`, `skills/setup-pre-commit/tests/test-install-hooks.sh` | alphazedehq-skills (setup-pre-commit) | CMD-D4A-TEST, CMD-SKILL-SIZE, CMD-SKILL-TRIGGER | Tests and size check exit 0; PR open in Alphazedehq. |
+| S02 | spec-and-docs (tech-writing) | Product Implementer | skill / judgement | M1 | — | AC-AFC-D4-02, AC-AFC-D4-05, AC-AFC-D4-06 | DES-AFC-D4 | Alphazedehq: `skills/setup-a-repo/SKILL.md`, `skills/setup-a-repo/references/workflow-authoring.md`, `skills/setup-a-repo/templates/ci.yml`, `skills/setup-a-repo/scripts/check-workflows.py`, `skills/setup-a-repo/tests/test_check_workflows.py` | alphazedehq-skills (setup-a-repo) | CMD-D4B-TEST, CMD-SKILL-SIZE, CMD-SKILL-TRIGGER | Checker tests exit 0; template passes the checker; PR open. |
+| S03 | spec-and-docs (tech-writing) | Product Implementer | skill / judgement | M1 | — | AC-AFC-D4-03, AC-AFC-D4-05, AC-AFC-D4-06 | DES-AFC-D4 | Alphazedehq: `skills/ship-pull-request/SKILL.md`, `skills/ship-pull-request/references/GATES.md`, `skills/ship-pull-request/references/EDIT-PR.md` | alphazedehq-skills (ship-pull-request) | CMD-D4C-TEST, CMD-SKILL-SIZE, CMD-SKILL-TRIGGER | Existing `tests/edit-pr.test.sh` passes; size check exit 0; PR open. |
+| S04 | device-integration-spikes (heavyweight) | Product Implementer | scaffold / judgement | M1 | — | AC-AFC-SEC-01, AC-AFC-LW-01 | DES-AFC-TV, DES-AFC-ARCH | this: `tv-app/` (whole new directory: starter import, `afc.companion` skeleton with every component stub, manifest, Gradle files, `tv-app/LICENSE-starter`) | — | CMD-SCAN, CMD-GATE-ANDROID | Starter and Android SDK scanned PASS; `gate.sh android` exit 0 (debug APK built). |
+| S05 | backend (primary) | Product Implementer | scaffold / judgement | M1 | — | AC-AFC-SEC-02, AC-AFC-SEC-03 | DES-AFC-INFRA, CONTRACT-AFC-API, CONTRACT-AFC-EVENT, CONTRACT-AFC-ALERT, CONTRACT-AFC-LAUNCH, CONTRACT-AFC-PROVIDERS, CONTRACT-AFC-PANEL, CONTRACT-AFC-LINEUPSOURCE, CONTRACT-AFC-TABLES | this: `backend/` (new: pyproject, uv.lock, template.yaml, api/openapi.yaml, src skeleton with route stubs, contract tests, tools/check_template.py, providers/registry.json empty list) | — | CMD-SCAN, CMD-GATE-BACKEND | Contract tests and template check pass; `gate.sh backend` exit 0. |
+| S06 | spec-and-docs (tech-writing) | Product Implementer | import / judgement | M1 | — | AC-AFC-SPEC-01 | DES-AFC-SPEC | this: `spec/template/`, `tools/spec_build.py`, `tools/spec_lint.py`, `tools/azdiagram/`, `tools/tests/`, `tools/pyproject.toml`, `tools/uv.lock`, `skills/spec-author/SKILL.md`, `skills/spec-diagram/SKILL.md`, `skills/spec-lint/SKILL.md`, `THIRD_PARTY_NOTICES.md` | — | CMD-SCAN, CMD-SPEC-TOOLS-TEST | Kit tests pass under `uv run --project tools --frozen`; notice present. |
+| S07 | spec-and-docs (tech-writing) | Product Implementer | docs / judgement | M1 | — | AC-AFC-VNV-01 | DES-AFC-VNV | this: `docs/vnv/` | — | CMD-VNV-CHECK | Each area file has Scope, Tools, Review Focus, findings target. |
+| S08 | (planning primary) | Scribe | docs / judgement | M1 | — | AC-AFC-DX-01, AC-AFC-DX-02 | DES-AFC-DX | this: `docs/developer-feedback/observations.md` | — | CMD-GATE-HYGIENE | Log seeded with DX-001..DX-007 and planning observations; hygiene PASS. |
+| S09T | backend (primary) | Test Implementer | test / judgement | M1 | S01, S02 merged | AC-AFC-CI-01, AC-AFC-CI-02, AC-AFC-CI-03, AC-AFC-PATH-01 | DES-AFC-GATE, CONTRACT-AFC-GATE | this: `tools/ci/tests/` | — | CMD-RED | Named tests fail for the missing gate (red receipt). |
+| S09 | backend (primary) | Product Implementer | ci / judgement | M1 | S09T | AC-AFC-CI-01, AC-AFC-CI-02, AC-AFC-CI-03, AC-AFC-PATH-01 | DES-AFC-GATE, CONTRACT-AFC-GATE | this: `tools/ci/gate.sh`, `tools/ci/check_paths.py`, `.githooks/pre-commit`, `.githooks/pre-push`, `.github/workflows/ci.yml` | — | CMD-GATE-HYGIENE, CMD-WORKFLOW-CHECK, CMD-GATE-ALL | S09T tests green; workflow checker exit 0; PR shows `gate / <area>` checks. |
+| S10 | spec-and-docs (tech-writing) | Light Implementer | github / light | M1 | Planning PR merged | AC-AFC-PLAN-02 | DES-AFC-LANES | this: `docs/plans/2026-10-11-amazon-fantasy-companion/evidence/milestones-readback.json` | — | CMD-MILESTONES | Readback equals the M1..M5 table. |
+| S16 | backend (primary) | Product Implementer | spike / judgement | M2 | — | AC-AFC-SPIKE-02, AC-AFC-FEED-01 | DES-AFC-SPIKES, DES-AFC-FEED | this: `docs/spikes/SP-5-espn.md`, `spikes/sp5/`, `backend/fixtures/espn/` | live-game-window | CMD-ESPN-RECORD | Fixtures from 2026-10-12 and 2026-10-15 US games; verdict file. |
+| S11T | backend (primary) | Test Implementer | test / judgement | M2 | S01, S02, S03 merged | AC-AFC-D4-04 | DES-AFC-D4, CONTRACT-AFC-HOOK | Alphazedehq: `hooks/test-ci-gate-hook.sh` | — | CMD-RED | Hook tests fail before the hook exists. |
+| S11 | backend (primary) | Product Implementer | hook / judgement | M2 | S11T | AC-AFC-D4-04, AC-AFC-D4-05, AC-AFC-D4-06 | DES-AFC-D4, CONTRACT-AFC-HOOK | Alphazedehq: `hooks/ci-gate-hook.sh`, `hooks/install-ci-gate-hook.py`, `hooks/README.md` | harness-configs | CMD-HOOK-TEST, CMD-HOOK-INSTALL | Hook tests green; installer `--verify` reports per-harness wired or typed gap. |
+| S12 | device-integration-spikes (heavyweight) | Product Implementer | spike / judgement | M2 | S04; owner: stick + ADB | AC-AFC-SPIKE-01, AC-AFC-SPIKE-02 | DES-AFC-SPIKES | this: `docs/spikes/SP-1-device.md`, `spikes/sp1/` | fire-tv-stick | CMD-DEVICE-INFO, CMD-INSTALL-APK, CMD-ADB-SCREENCAP | Verdict file; C1 stop if triggered. Records first-install time (spike_panel_max clock). |
+| S13 | device-integration-spikes (heavyweight) | Product Implementer | spike / judgement | M2 | S12 | AC-AFC-SPIKE-02, AC-AFC-ALERT-04, AC-AFC-MON-03 | DES-AFC-SPIKES, DES-AFC-ALERTPATH | this: `docs/spikes/SP-2-notification.md`, `spikes/sp2/` | fire-tv-stick | CMD-INSTALL-APK, CMD-ADB-SCREENCAP | Verdict file with screencaps over provider playback. |
+| S14 | device-integration-spikes (heavyweight) | Product Implementer | spike / judgement | M2 | S13; owner: provider app signed in | AC-AFC-SPIKE-02, AC-AFC-WATCH-02 | DES-AFC-SPIKES, DES-AFC-WATCH | this: `docs/spikes/SP-3-deeplink.md`, `docs/spikes/SP-3-provider-registry.json`, `spikes/sp3/` | fire-tv-stick | CMD-ADB-SCREENCAP | Verdict per launch form; registry draft. |
+| S15 | device-integration-spikes (heavyweight) | Product Implementer | spike / judgement | M2 | S14 | AC-AFC-SPIKE-02, AC-AFC-PANEL-05 | DES-AFC-SPIKES, DES-AFC-PANEL | this: `docs/spikes/SP-4-panel.md`, `spikes/sp4/` | fire-tv-stick | CMD-ADB-SCREENCAP | Mode A or Mode B verdict within spike_panel_max of S12 first install. |
+| S18 | backend (primary) | Product Implementer | deploy / judgement | M2 | S05; owner: AWS account + `afc-dev` profile | AC-AFC-SEC-03 | DES-AFC-INFRA | this: `backend/samconfig.toml`, `docs/runbooks/deploy.md` | aws-afc-dev | CMD-SCAN, CMD-SAM-DEPLOY, CMD-SMOKE | Stack deployed; smoke returns 401 without token and 200 on link start. |
+| S19 | spec-and-docs (tech-writing) | Product Implementer | spec / judgement | M2 | S06 | AC-AFC-SPEC-02 | DES-AFC-SPEC | this: `spec/amazon-fantasy-companion/`, `spec/Amazon-Fantasy-Companion-Specification.md` | — | CMD-GATE-SPEC | Rev 0.1 builds; lint zero findings; rebuild identical. |
+| S17 | backend (primary) | Light Implementer | check / light | M3 | S18; at T_yahoo | AC-AFC-PROF-04, AC-AFC-SPIKE-02 | DES-AFC-LINEUP, DES-AFC-SPIKES | this: `docs/spikes/SP-6-yahoo.md` | aws-afc-dev | CMD-YAHOO-CHECK | Verdict Yahoo or manual default recorded at or after T_yahoo. |
+| S20T | backend (primary) | Test Implementer | test / judgement | M3 | S05, S16 | AC-AFC-MON-01, AC-AFC-MON-02, AC-AFC-FEED-01, AC-AFC-FEED-02, AC-AFC-FEED-03 | DES-AFC-FEED, CONTRACT-AFC-EVENT | this: `backend/tests/feed/` | — | CMD-RED | Red receipt. |
+| S20 | backend (primary) | Product Implementer | feature / judgement | M3 | S20T | same as S20T | DES-AFC-FEED, CONTRACT-AFC-EVENT | this: `backend/src/afc_backend/feed/`, `backend/src/afc_backend/api/ingest.py` | — | CMD-GATE-BACKEND | S20T green; gate exit 0. |
+| S21T | backend (primary) | Test Implementer | test / judgement | M3 | S05 | AC-AFC-PROF-01, AC-AFC-PROF-02, AC-AFC-PROF-04, AC-AFC-SEC-01, AC-AFC-SEC-02, AC-AFC-SEC-04 | DES-AFC-LINEUP, DES-AFC-AUTH, CONTRACT-AFC-LINEUPSOURCE | this: `backend/tests/lineup/`, `backend/tests/auth/` | — | CMD-RED | Red receipt. |
+| S21 | backend (primary) | Product Implementer | feature / judgement | M3 | S21T | same as S21T | DES-AFC-LINEUP, DES-AFC-AUTH | this: `backend/src/afc_backend/lineup/`, `backend/src/afc_backend/auth/`, `backend/src/afc_backend/api/link.py`, `backend/src/afc_backend/api/profile.py` | — | CMD-GATE-BACKEND | Green; gate exit 0. |
+| S22T | backend (primary) | Test Implementer | test / judgement | M3 | S05 | AC-AFC-ALERT-01, AC-AFC-ALERT-02, AC-AFC-ALERT-05, AC-AFC-CTRL-01 | DES-AFC-POLICY, CONTRACT-AFC-ALERT | this: `backend/tests/match/`, `backend/tests/policy/` | — | CMD-RED | Red receipt. |
+| S22 | backend (primary) | Product Implementer | feature / judgement | M3 | S22T | same as S22T | DES-AFC-POLICY | this: `backend/src/afc_backend/match/`, `backend/src/afc_backend/policy/`, `backend/src/afc_backend/api/alerts.py` | — | CMD-GATE-BACKEND | Green; gate exit 0. |
+| S23T | backend (primary) | Test Implementer | test / judgement | M3 | S05, S14 | AC-AFC-WATCH-01 | DES-AFC-WATCH, CONTRACT-AFC-LAUNCH, CONTRACT-AFC-PROVIDERS | this: `backend/tests/resolver/` | — | CMD-RED | Red receipt. |
+| S23 | backend (primary) | Product Implementer | feature / judgement | M3 | S23T | AC-AFC-WATCH-01 | DES-AFC-WATCH | this: `backend/src/afc_backend/resolver/`, `backend/providers/registry.json`, `backend/src/afc_backend/api/providers.py` | — | CMD-GATE-BACKEND | Green; gate exit 0. |
+| S24T | backend (primary) | Test Implementer | test / judgement | M3 | S05 | AC-AFC-PANEL-01 | DES-AFC-PANEL, CONTRACT-AFC-PANEL | this: `backend/tests/panel/` | — | CMD-RED | Red receipt. |
+| S24 | backend (primary) | Product Implementer | feature / judgement | M3 | S24T | AC-AFC-PANEL-01 | DES-AFC-PANEL | this: `backend/src/afc_backend/panel/`, `backend/src/afc_backend/api/panel.py` | — | CMD-GATE-BACKEND | Green; gate exit 0. |
+| S25T | device-integration-spikes (heavyweight) | Test Implementer | test / judgement | M3 | S04, S13, S14 | AC-AFC-ALERT-04, AC-AFC-MON-04, AC-AFC-WATCH-02, AC-AFC-WATCH-03 | DES-AFC-ALERTPATH, DES-AFC-WATCH | this: `tv-app/app/src/test/java/afc/companion/alerts/`, `tv-app/app/src/test/java/afc/companion/watch/`, `tv-app/app/src/androidTest/java/afc/companion/alerts/` | — | CMD-RED | Red receipt. |
+| S25 | device-integration-spikes (heavyweight) | Product Implementer | feature / judgement | M3 | S25T | same as S25T | DES-AFC-ALERTPATH, DES-AFC-WATCH | this: `tv-app/app/src/main/java/afc/companion/alerts/`, `tv-app/app/src/main/java/afc/companion/watch/`, `tv-app/app/src/main/java/afc/companion/net/` | fire-tv-stick (connected tests) | CMD-GATE-ANDROID, CMD-ANDROID-CONNECTED, CMD-ADB-SCREENCAP | Green on JVM and on the stick. |
+| S26T | tv-app-ui (frontend) | Test Implementer | test / judgement | M3 | S04 | AC-AFC-PROF-01, AC-AFC-PROF-03, AC-AFC-MON-03, AC-AFC-CTRL-01 | DES-AFC-TV | this: `tv-app/app/src/test/java/afc/companion/settings/`, `tv-app/app/src/test/java/afc/companion/link/`, `tv-app/app/src/test/java/afc/companion/detect/` | — | CMD-RED | Red receipt. |
+| S26 | tv-app-ui (frontend) | Product Implementer | feature / judgement | M3 | S26T | same as S26T | DES-AFC-TV | this: `tv-app/app/src/main/java/afc/companion/settings/`, `tv-app/app/src/main/java/afc/companion/link/`, `tv-app/app/src/main/java/afc/companion/detect/` | fire-tv-stick (visual check) | CMD-GATE-ANDROID, CMD-ADB-SCREENCAP | Green; screencaps of each screen. |
+| S27T | tv-app-ui (frontend) | Test Implementer | test / judgement | M3 | S04, S15 | AC-AFC-PANEL-01, AC-AFC-PANEL-02, AC-AFC-PANEL-03, AC-AFC-PANEL-05, AC-AFC-LW-01 | DES-AFC-PANEL | this: `tv-app/app/src/test/java/afc/companion/panel/`, `tv-app/app/src/test/java/afc/companion/player/` | — | CMD-RED | Red receipt. |
+| S27 | tv-app-ui (frontend) | Product Implementer | feature / judgement | M3 | S27T | same as S27T | DES-AFC-PANEL | this: `tv-app/app/src/main/java/afc/companion/panel/`, `tv-app/app/src/main/java/afc/companion/player/`, `tools/fetch-footage.sh` | fire-tv-stick (visual check) | CMD-GATE-ANDROID, CMD-FOOTAGE-FETCH, CMD-ADB-SCREENCAP | Green; screencaps show video uncovered and uncropped. |
+| S28 | device-integration-spikes (heavyweight) | Product Implementer | demonstration / judgement | M3 | M3 assembly complete (IE steps) | AC-AFC-ALERT-04, AC-AFC-WATCH-02, AC-AFC-PANEL-02 | DES-AFC-ALERTPATH, DES-AFC-WATCH, DES-AFC-PANEL | this: `docs/evidence/m3-live-test.md` | fire-tv-stick, aws-afc-dev, live-game-window | CMD-INSTALL-APK, CMD-ADB-SCREENCAP, CMD-SCREENRECORD | Live Sunday 2026-10-18 evidence: alert over playback, Watch outcome, panel live. |
+| S30T | backend (primary) | Test Implementer | test / judgement | M4 | S22, S24 | AC-AFC-ALERT-03, AC-AFC-PANEL-04 | DES-AFC-POLICY, DES-AFC-PANEL | this: `backend/tests/corrections/` | — | CMD-RED | Red receipt. |
+| S30 | backend (primary) | Product Implementer | feature / judgement | M4 | S30T | AC-AFC-ALERT-03, AC-AFC-PANEL-04 | DES-AFC-POLICY, DES-AFC-PANEL | this: `backend/src/afc_backend/policy/corrections.py`, `backend/src/afc_backend/panel/corrections.py` | — | CMD-GATE-BACKEND | Green. |
+| S31T | tv-app-ui (frontend) | Test Implementer | test / judgement | M4 | S26 | AC-AFC-CTRL-01, AC-AFC-CTRL-02, AC-AFC-CTRL-03 | DES-AFC-TV | this: `tv-app/app/src/test/java/afc/companion/settings/persistence/` | — | CMD-RED | Red receipt. |
+| S31 | tv-app-ui (frontend) | Product Implementer | feature / judgement | M4 | S31T | AC-AFC-CTRL-01, AC-AFC-CTRL-02, AC-AFC-CTRL-03 | DES-AFC-TV | this: `tv-app/app/src/main/java/afc/companion/settings/persistence/`, `tv-app/app/src/main/java/afc/companion/settings/screens/` | fire-tv-stick (reboot check) | CMD-GATE-ANDROID, CMD-ADB-SCREENCAP | Green; reboot persistence shown. |
+| S32T | tv-app-ui (frontend) | Test Implementer | test / judgement | M4 | S27 | AC-AFC-PANEL-01, AC-AFC-FEED-03, AC-AFC-PROF-04 | DES-AFC-PANEL, DES-AFC-ALERTPATH | this: `tv-app/app/src/test/java/afc/companion/panel/labels/` | — | CMD-RED | Red receipt. |
+| S32 | tv-app-ui (frontend) | Product Implementer | feature / judgement | M4 | S32T | AC-AFC-PANEL-01, AC-AFC-FEED-03, AC-AFC-PROF-04 | DES-AFC-PANEL | this: `tv-app/app/src/main/java/afc/companion/panel/labels/` | fire-tv-stick (visual check) | CMD-GATE-ANDROID, CMD-ADB-SCREENCAP | Green; stale, unavailable, replay, manual labels shown. |
+| S33 | defects (bug-triager) | Product Implementer | repair / judgement | M4 | M3 review findings and defect issues | per defect | per defect | this: files named in each defect's root-cause receipt, limited to `tv-app/app/src/` and `backend/src/` and their tests; dispatched only when the write-set check shows no overlap with a running slice | per defect | CMD-GATE-ALL | No open P0/P1 defect; each fix has a regression test. |
+| S34 | device-integration-spikes (heavyweight) | Product Implementer | spike / judgement (stretch) | M4 | M3 exit; OD-AFC-03 = yes | AC-AFC-SUB-04, AC-AFC-CTRL-03 | DES-AFC-SPIKES | this: `docs/spikes/SP-7-alexa.md`, `spikes/sp7/` | fire-tv-stick | CMD-ADB-SCREENCAP | Verified route or drop at 2026-10-21T12:00:00Z. |
+| S35 | spec-and-docs (tech-writing) | Product Implementer | spec / judgement | M4 | S19, S12..S17 verdicts, S28 | AC-AFC-SPEC-02, AC-AFC-SPEC-03 | DES-AFC-SPEC | this: `spec/amazon-fantasy-companion/`, `spec/Amazon-Fantasy-Companion-Specification.md` | — | CMD-GATE-SPEC | Rev 1.0 builds; lint zero; identical rebuild. |
+| S41 | spec-and-docs (tech-writing) | Light Implementer | skill / light (conditional) | M1 | OD-AFC-01 = B; S01..S03 merged | AC-AFC-D4-05, AC-AFC-D4-06 | DES-AFC-D4 | Alphazedehq: `skills/ci-cd/SKILL.md` | alphazedehq-skills (ci-cd) | CMD-SKILL-SIZE, CMD-SKILL-TRIGGER | Not dispatched unless the owner selects option B. |
+| S36 | spec-and-docs (tech-writing) | Product Implementer | docs / judgement | M5 | S35 | AC-AFC-SUB-01, AC-AFC-LW-01, AC-AFC-PANEL-05 | DES-AFC-SUB | this: `README.md`, `THIRD_PARTY_NOTICES.md` | — | CMD-GATE-HYGIENE | Setup steps run once from a clean clone (replay mode). |
+| S37 | spec-and-docs (tech-writing) | Product Implementer | docs / judgement | M5 | M4 exit | AC-AFC-SUB-02, AC-AFC-SUB-04 | DES-AFC-SUB | this: `docs/submission/checklist.md`, `docs/submission/storyboard.md` | — | CMD-GATE-HYGIENE | Every owner-only action listed with due time. |
+| S38 | device-integration-spikes (heavyweight) | Light Implementer | capture / light | M5 | S37 | AC-AFC-SUB-03 | DES-AFC-SUB | this: `docs/submission/clips/README.md` | fire-tv-stick | CMD-SCREENRECORD | One clip per storyboard segment, labels visible. |
+| S39 | (planning primary) | Scribe | docs / judgement | M5 | M4 exit | AC-AFC-DX-02, AC-AFC-DX-03 | DES-AFC-DX | this: `docs/developer-feedback/tool-summary.md`, `docs/developer-feedback/friction-log.md`, `docs/developer-feedback/observations.md` | — | CMD-GATE-HYGIENE | Coverage of every tool used; sanitized; rules checked. |
+| S40 | device-integration-spikes (heavyweight) | Light Implementer | build / light | M5 | M4 exit, S36 | AC-AFC-REV-01 | DES-AFC-TV | this: `docs/evidence/final-apk.md` | — | CMD-APK-RELEASE | APK sha256 and build commit recorded for Reverify. |
+
+## Dependencies (acyclic)
+
+S01 --> S09T; S02 --> S09T; S09T --> S09; S01 --> S11T; S02 --> S11T;
+S03 --> S11T; S11T --> S11; S04 --> S12; S12 --> S13; S13 --> S14;
+S14 --> S15; S05 --> S18; S06 --> S19; S18 --> S17; S05 --> S20T;
+S16 --> S20T; S20T --> S20; S05 --> S21T; S21T --> S21; S05 --> S22T;
+S22T --> S22; S05 --> S23T; S14 --> S23T; S23T --> S23; S05 --> S24T;
+S24T --> S24; S04 --> S25T; S13 --> S25T; S14 --> S25T; S25T --> S25;
+S04 --> S26T; S26T --> S26; S04 --> S27T; S15 --> S27T; S27T --> S27;
+S20 --> S28; S21 --> S28; S22 --> S28; S23 --> S28; S24 --> S28;
+S25 --> S28; S26 --> S28; S27 --> S28; S22 --> S30T; S24 --> S30T;
+S30T --> S30; S26 --> S31T; S31T --> S31; S27 --> S32T; S32T --> S32;
+S28 --> S33; S28 --> S34; S19 --> S35; S28 --> S35; S01 --> S41;
+S02 --> S41; S03 --> S41; S35 --> S36; S30 --> S37; S31 --> S37;
+S32 --> S37; S33 --> S37; S37 --> S38; S37 --> S39; S36 --> S40.
+
+## Owner-action entry criteria (not slices)
+
+| Needed by | Owner action |
+|---|---|
+| Planning landing | Integrated approval of this package (OD-AFC-01..06). |
+| S12 | Stick located, model confirmed, ADB debugging enabled, stick on the workstation's network. |
+| S14 | At least one provider app installed and signed in on the stick. |
+| S18 | AWS Free-plan account created; named CLI profile `afc-dev` configured on the workstation. |
+| S21 live Yahoo path | Yahoo application submitted; when approved, client id and secret placed in SSM by the owner. |
+| M5 | License choice, visibility flip, video upload, ESPN terms decision (C3), Devpost submission. |

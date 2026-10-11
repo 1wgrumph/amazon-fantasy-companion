@@ -1,0 +1,84 @@
+## Final decision batch: SHARED_UNDERSTANDING_CONFIRMED
+
+You confirmed the SD-Q10 summary on 2026-10-11 and added three deliverables, D1–D3. The spec-template question was answered from the evidence, so there was nothing more to ask you. The Scope Definition question sequence is closed with 13 decisions. Next: Planning and Design.
+
+**Numbering:** the Orchestrator's SD-008 is SD-010 here, and the Orchestrator's SD-009 is SD-011 here.
+
+### Decisions
+
+| ID | Decision | Source | Rationale | Affects |
+|---|---|---|---|---|
+| SD-001 | Testing must happen on a real Fire TV device. | Owner, SD-Q1 answer 1 | Owner intent | Track evidence, all spikes |
+| SD-002 | A newer device would be acceptable. SD-003 chose not to buy one. | Owner message | Context for SD-003 | Device |
+| SD-003 | The target is your 2018 stick on Fire OS, with no purchase. The starter is `AmazonAppDev/hello-world-fire-tv` (Kotlin/Compose, minSdk 21, so it builds for API 25). minSdk 25 is assumed until the model is confirmed. | Owner, SD-Q1 final | Owner choice; Fire OS documents heads-up alerts and runs Android provider apps | Items 1–4 and 6, panel, milestone 1 |
+| SD-004 | The live NFL feed is ESPN's unofficial public JSON. | Owner, SD-Q2 | Free, no key | Item 2–3, backend ingest |
+| SD-005 | The backend is AWS serverless on a new Free-plan account that you create. Credentials are yours only. | Owner, SD-Q3 | Costs $0 by design; keeps the AWS Builder entry open | Backend, Yahoo OAuth, alerts |
+| SD-006 | Run a time-boxed spike on showing the panel beside a provider's video. If it fails, use Mode A: the panel beside our own player, which plays labeled open-licensed footage. Alerts and Watch still go to the real provider apps, and the submission states the limitation. | Owner, SD-Q4 | Docs say Fire OS keeps picture-in-picture inside its own app, and Fire OS 7 has no split screen | Panel requirement, demo |
+| SD-006a | "Authorized footage" means CC-BY or CC0 video (e.g., Blender open films), credited in the app and the submission, with the on-screen label "Sample footage — not a live broadcast." NFL broadcasts and highlights are excluded. | Evidence-resolved; you deferred to evidence | Issue #1 allows only authorized assets | Demo, credits |
+| SD-007 | You apply for Yahoo access now. The lineup source is swappable, with a manual fallback triggered by T_yahoo. | Owner, SD-Q5 | Yahoo states no approval timeline | Item 1, panel |
+| SD-008 | Enter the Fire TV track and the AWS Builder mini challenge. No Alexa+ track and no Open Source challenge. Alexa voice ships only if verified. | Owner, SD-Q6 | AWS Builder adds almost no build work | Submission fields |
+| SD-009 | The submission repo is `1wgrumph/amazon-fantasy-companion`. It will be public and open source; you flip visibility and choose the license. | Owner, SD-Q7 | Already exists | Repo, license |
+| SD-010 | Plans, issues and milestones live in this repo and go public with it. Every committed file is free of local absolute paths. | Owner, SD-Q8 | The hackathon wants the process and friction documents visible | Plan dir, issues, milestones |
+| SD-011 | Publish everything: prompts, logs, model routes and eligibility notes. This is your waiver of rule 3 for this repo only; rule 12 (no local paths) still applies. | Owner, SD-Q9 | Owner waiver | `specialists/`, `journey.json`, issue #1 |
+| SD-012 | Lifecycle deliverables: D1 architecture spec, D2 program plan with parallel lanes, D3 GitHub milestones in this repo. | Owner, SD-Q10 | The Lifecycle's stated purpose | Planning and Design output |
+| SD-013 | D1 reuses gridmarket's spec kit: `spec/template/` (the template sections, from 01-introduction through 05.1-security), `skills/spec-author`, `skills/spec-diagram`, `skills/spec-lint`, and `tools/spec_build.py`. It is copied with the MIT notice. | Evidence: `gh api` shows `1wgrumph/gridmarket` is public and MIT; DEC-GM-019 precedent | Reuse beats rebuilding | D1, spec lane |
+
+The build tool needs `pyyaml` and its sibling `spec_lint.py`. It is run without the `--project backend` flag gridmarket used, for example `uv run --with pyyaml`. Choosing the exact form is design work.
+
+**Already decided in issue #1 (10-10), carried as-is:** experience items 1, 2, 3, 4 and 6; the panel beside unobscured video; no messaging; lightweight design with no benchmarks; the Scribe `developer_feedback` contract; you alone publish and submit; deadline 2026-10-23 12:00 PDT; replay or simulated input allowed if labeled.
+
+### Quantity definitions
+
+| Name | Formula / value | Population and denominator | Units | Source |
+|---|---|---|---|---|
+| T_deadline | Devpost submission close | Single event | Timestamp | 2026-10-23T19:00:00Z, `journey.json` and issue #1 |
+| T_yahoo | Manual-entry trigger | Single event | Timestamp | 2026-10-16T19:00:00Z (12:00 PDT), SD-007 |
+| spike_panel_max | Elapsed time from the first app install on the stick to the panel-route verdict | One spike | ≤ 24 h | SD-006 |
+| min_sdk | Lowest Android API level the app supports | One APK | API level 25 | SD-003, Fire OS 6 |
+| T_judge_access | Last date judges must still be able to reach the repo and backend | Single date | Date | 2026-11-20, issue #1 |
+| aws_free_window | Account life: the earlier of 6 months after opening or credits used up | One account | Months | aws.amazon.com/free, SD-005 |
+| impl_agent_cap | Concurrent implementation agents per orchestrating session; reviewers don't count | Per session | Count, 5 | Rule 17, D2 |
+
+### Typed conditionals
+
+| ID | Condition → outcome | Type |
+|---|---|---|
+| C1 | Stick found to be Fire OS 5, a pre-AFTMM model, or unable to run the required provider apps → return to you (class C). Never buy or switch on your behalf. | enforced_rule |
+| C2 | ESPN endpoint changes or goes down → the demo uses a labeled replay of recorded ESPN data. | expected_outcome |
+| C3 | ESPN terms of use for a public submission → flagged to you at submission; not decided by agents. | enforced_rule |
+| C4 | Any AWS upgrade from Free to Paid → only by your decision. | enforced_rule |
+| C5 | The panel-beside-provider-video spike fails, or spike_panel_max passes without a verdict → switch to Mode A and state the limitation. | expected_outcome |
+| C6 | No Yahoo approval by T_yahoo → labeled "Manual lineup — Yahoo pending" entry from ESPN rosters. | expected_outcome |
+| C7 | Any committed file containing a local absolute path → blocked until removed. | enforced_rule |
+| C8 | Alexa voice is shown only if implemented and verified; otherwise the limitation is stated. | enforced_rule |
+| C9 | Visibility flip, license, reviewer and judge access, Devpost submission, and sending feedback externally → your actions only. | enforced_rule |
+
+### Coverage ledger (zero OPEN)
+
+| Item | State | Basis |
+|---|---|---|
+| Device/OS, starter, feed, backend, Yahoo path, panel fallback, tracks, mini challenges, submission repo, publication scope, deliverables, spec kit | DECIDED | SD-001 to SD-013 |
+| Alerts over playback; provider deep link to the game; detecting installed apps and subscriptions | DECIDED as development spikes | Issue #1 (10-10) |
+| Milestone granularity and dates; lane layout | DEFERRED | Planning and Design, then your single integrated review |
+| License choice | DEFERRED | You decide before the visibility flip (SD-009) |
+| ESPN terms of use | DEFERRED | You decide at submission (C3) |
+| Stick located and model confirmed; AWS account; Yahoo application | Your-action dependencies | Milestone 1 entry criteria; not planning blockers |
+| Development strategy; profiles and routes | NOT_APPLICABLE | Recorded by the Orchestrator |
+| Messaging and community features | NOT_APPLICABLE | Excluded in issue #1 |
+| Backend language; how the spec build tool runs | NOT_APPLICABLE (design work) | Planning and Design |
+
+### developer_feedback (consolidated)
+
+- **DX-001 to DX-004** are carried from issue #1:
+  - DX-001: Builder Tools docs were a positive experience.
+  - DX-002: Yahoo's guide and access form disagree about access options.
+  - DX-003: NFL docs require sign-in.
+  - DX-004: Yahoo returned HTTP 429 to the retrieval tool.
+- **DX-005, documentation gap:** Fire TV's notifications page was last updated 2020-10-29. Vega's `expo-notifications` supports scheduling only and does not document showing over another app's playback.
+- **DX-006, research-tool limitation:** WebFetch got HTTP 403 from amazonappdev2026.devpost.com, both the rules page and the overview. Cause unverified; not a product defect. Workaround: read in a signed-in browser.
+- **Tools exercised:** `gh api` (issue #1, starter build files, gridmarket tree), `gh search code`, `gh repo view`, `gh issue list`, WebSearch, WebFetch (developer.amazon.com, aws.amazon.com, developers.cloudflare.com, sports.yahoo.com, bgr.com), and Bash read-only inventory.
+
+Next action: the Orchestrator writes this batch to Lifecycle state and starts Planning and Design for D1–D3.
+
+I did not read gridmarket's `spec_lint.py` or the contents of its skills. The Fire OS 7 split-screen claim comes from a search summary, not a page I fetched.
+exit=0

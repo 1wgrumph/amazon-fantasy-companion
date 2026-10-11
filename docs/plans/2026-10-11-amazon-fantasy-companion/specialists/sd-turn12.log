@@ -1,0 +1,29 @@
+SD-Q7 is buffered: the submission is this repo, `1wgrumph/amazon-fantasy-companion`, made public and open-source when you choose to flip it. Choosing the license can wait until before that flip; nothing in planning depends on it.
+
+**SD-Q8: where plan artifacts and private tracking live.**
+- **Issues go public too.** When the repo flips, its issues become public along with it. That includes issue #1, which holds the private concept, your employer note and local paths. GitHub milestones would be public as well.
+- **Anything committed now stays in public history.** Removing it later means rewriting history, which needs your authorization.
+- **Today's state:** the repo is private, issue #1 is its only issue, the `-plans` repo doesn't exist yet, and Alphazedehq is private.
+
+**Recommendation: create a private companion repo, `1wgrumph/amazon-fantasy-companion-plans`.** It would hold:
+- the Lifecycle artifacts and plans;
+- the private Scribe log;
+- the working issues and milestones;
+- issue #1, moved there with `gh issue transfer`. That is non-destructive and works because both repos have the same owner.
+
+The public repo keeps only the app and backend source, setup instructions, credits and the sanitized friction log. Alphazedehq is under a different owner, so issue #1 can't be transferred there, and it would mix this hackathon with HQ work. Keeping artifacts local-only leaves no backup and goes against your commit rule.
+
+```question
+id: SD-Q8
+question: Where should Lifecycle/plan artifacts, private Scribe log, issues and milestones live?
+options:
+- label: New private repo amazon-fantasy-companion-plans (Recommended) | description: Owner creates it; transfer issue #1 there; public repo holds only code, setup, credits, sanitized friction log.
+- label: Alphazedehq (private) | description: Existing repo; different owner so issue #1 can't transfer; mixes hackathon into HQ.
+- label: Local-only, uncommitted | description: Nothing pushed; no backup or history; conflicts with commit rule.
+- label: Sanitized docs here, private bits local | description: Public-safe plans committed here; private state unbacked; sanitization risk before flip.
+```
+
+developer_feedback: no new observations. Tools exercised: `gh repo view`, `gh issue list`.
+
+I haven't checked whether `gh issue transfer` keeps comments and labels, though GitHub documents that it does. Status: OWNER_DECISION_REQUIRED, 9 decisions buffered.
+exit=0

@@ -1,0 +1,24 @@
+Your SD-Q3 answer is buffered: AWS, on a new Free-plan account you create. It carries a typed `enforced_rule`: never upgrade to Paid without your decision.
+
+**SD-Q4: the right-side panel beside video.** The docs already show this is very unlikely on the 2018 stick:
+- On Fire OS 6, picture-in-picture windows can't be used outside the app that creates them ([Fire OS 6](https://developer.amazon.com/docs/fire-tv/fire-os-6.html)).
+- Fire OS 7 states split-screen isn't supported ([Fire OS 7](https://developer.amazon.com/docs/fire-tv/fire-os-7.html)).
+- Android has no API for one app to resize another app's video.
+
+So the panel can sit beside video only when our own app plays that video. Issue #1 says to bring this limitation back to you rather than work around it quietly. Deciding the fallback now means the plan doesn't stall mid-build.
+
+**Recommendation: spend at most one day on the stick testing provider apps and multi-window, and pre-approve a fallback if that fails.** The fallback puts the panel beside our own player, playing clearly labeled authorized footage, while alerts and Watch still go to the real provider apps. The submission states the limitation. This keeps the panel moment in the video without hiding the gap.
+
+```question
+id: SD-Q4
+question: If panel-beside-provider-video is infeasible on the 2018 stick, what should the plan do?
+options:
+- label: 1-day spike + pre-approved fallback (Recommended) | description: Panel beside our in-app player with labeled authorized footage; limitation stated in submission.
+- label: Spike, then ask owner | description: No pre-approval; build pauses for your decision if the spike fails.
+- label: Drop side-by-side | description: Panel becomes a full-screen companion view you switch to; changes owner-added scope.
+```
+
+developer_feedback: no new observations. Tools exercised: none new; this relies on docs fetched earlier.
+
+I did not fetch the Fire OS 7 page this turn. What footage counts as authorized is still undefined, and I'll ask about it if you choose the first option. Status: OWNER_DECISION_REQUIRED, 5 decisions buffered.
+exit=0

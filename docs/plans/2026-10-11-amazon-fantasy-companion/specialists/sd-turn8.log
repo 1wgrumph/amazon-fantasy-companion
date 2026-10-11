@@ -1,0 +1,40 @@
+**What the viewer sees in each mode**
+
+| | Mode A: inside our app | Mode B: inside a provider app |
+|---|---|---|
+| Screen | The video is shrunk to the left about 70% of the screen at its correct shape, with nothing cropped. The lineup panel takes the right side: players, points, game status and team total. | The provider's broadcast fills the whole screen. Our panel is not visible. |
+| Alerts | Appear as a banner or highlight in the panel. | A short pop-up notification at the bottom of the screen. Proving this works on the 2018 stick is the first-milestone test. |
+| Watch button | Opens the provider app full-screen at the game, which switches to Mode B. | Pressing Watch on the pop-up opens the right game or channel. |
+
+**What our player plays.** It cannot play NFL broadcasts or highlights; we have no license for them. Footage that is authorized:
+- **Clips with an open license that allows reuse**, such as Blender's open movies. They are clearly not football.
+- **Footage you record yourself**, of content you own.
+- **Amazon's sample streams** from `vega-video-sample`, which uses test-footage MP4s from a CDN. The repo itself is MIT-0, but the footage's own license is **unknown**, so it isn't safe to use until checked.
+
+`hello-world-fire-tv` has no video player, so we would add Android's standard ExoPlayer/Media3 player.
+
+**Demo and submission**
+- The demo shows the panel updating beside the labeled footage.
+- Separately, a real provider app plays, an alert appears and Watch opens the correct game.
+- The submission states: "Fire OS doesn't let one app resize another app's video, so the side panel works beside our own player only."
+
+**Middle grounds I checked**
+- **An overlay panel drawn on top of provider video** covers the broadcast, which issue #1 forbids. Whether Fire OS even allows that permission is unknown.
+- **HDMI input** exists only on Fire TV Cube, not the stick.
+- **Amazon's Live TV integration** is for apps that own their own channels, so it doesn't apply.
+
+**No real middle ground exists on this stick.**
+
+```question
+id: SD-Q4
+question: If panel-beside-provider-video is infeasible on the 2018 stick, what should the plan do?
+options:
+- label: 1-day spike + Mode A fallback (Recommended) | description: Panel beside our player with labeled open-licensed footage; real alerts and Watch to provider apps; limitation stated.
+- label: Spike, then ask owner | description: No pre-approval; build pauses for your decision if the spike fails.
+- label: Drop side-by-side | description: Panel becomes a full-screen view you switch to; changes owner-added scope.
+```
+
+developer_feedback: no new observations. Tools exercised: `gh api` and `gh search code` on `hello-world-fire-tv` and `vega-video-sample`.
+
+The license on Amazon's sample footage is unchecked. Whether Fire OS 6 allows an app to draw over other apps is also unverified. Status: OWNER_DECISION_REQUIRED, 5 decisions buffered.
+exit=0

@@ -1,0 +1,112 @@
+## Final decision batch, updated: SHARED_UNDERSTANDING_CONFIRMED
+
+Your SD-Q10 confirmation stands. SD-014 through SD-021 are directions you added afterwards, and no questions remain open.
+
+**Numbering:** the Orchestrator's earlier SD-008 is SD-010 here, and its SD-009 is SD-011 here.
+
+**Wording conflict to check at the integrated review.** In SD-Q11 you chose "Extend existing skills" (SD-018). Your latest message says "Just create the shared skill." This batch follows the Orchestrator's reading: the "shared skill" is the set of extended shared skills. It is recorded under DEFERRED in the coverage ledger, not as an open question.
+
+### Decisions
+
+| ID | Decision | Source | Affects |
+|---|---|---|---|
+| SD-001 | Testing must happen on a real Fire TV device. | Owner, SD-Q1 | All spikes, track evidence |
+| SD-002 | A newer device would be acceptable; SD-003 chose not to buy one. | Owner message | SD-003 |
+| SD-003 | The target is your 2018 stick on Fire OS, with no purchase. The starter is `AmazonAppDev/hello-world-fire-tv`. minSdk 25 is assumed until the model is confirmed. | Owner, SD-Q1 | Items 1–4 and 6, panel, milestone 1 |
+| SD-004 | The live NFL feed is ESPN's unofficial public JSON. | Owner, SD-Q2 | Ingest, alerts |
+| SD-005 | The backend is AWS serverless on a new Free-plan account that you create. | Owner, SD-Q3 | Backend, Yahoo OAuth |
+| SD-006 | Run a time-boxed spike on the panel beside a provider's video. If it fails, use Mode A: the panel beside our own player with labeled footage, while alerts and Watch still go to the real provider apps. The submission states the limitation. | Owner, SD-Q4 | Panel, demo |
+| SD-006a | Footage must be CC-BY or CC0 (e.g., Blender open films), credited, and labeled "Sample footage — not a live broadcast." No NFL footage. | Resolved from evidence; you deferred to it | Demo, credits |
+| SD-007 | You apply for Yahoo access now. The lineup source is swappable, and manual entry from ESPN rosters takes over at T_yahoo. | Owner, SD-Q5 | Item 1, panel |
+| SD-008 | Enter the Fire TV track and the AWS Builder mini challenge. Alexa voice ships only if verified. | Owner, SD-Q6 | Submission |
+| SD-009 | The submission repo is `1wgrumph/amazon-fantasy-companion`, public and open source; you flip it and choose the license. | Owner, SD-Q7 | Repo |
+| SD-010 | Plans, issues and milestones live here and go public. Nothing committed contains a local absolute path. | Owner, SD-Q8 | Plan dir, issues |
+| SD-011 | Publish everything: prompts, logs, model routes and eligibility notes, by your waiver of rule 3 for this repo. Rule 12 (no local paths) still applies. | Owner, SD-Q9 | `specialists/`, `journey.json`, issue #1 |
+| SD-012 | Deliverables D1–D3 (below), with D4 added by SD-016/021. | Owner, SD-Q10 | Planning and Design output |
+| SD-013 | D1 reuses gridmarket's spec kit: `spec/template/`, the `spec-author`, `spec-diagram` and `spec-lint` skills, and `tools/spec_build.py`. gridmarket is public and MIT, so it is copied with the license notice, and the build tool runs without gridmarket's backend-project flag. | Resolved from evidence | D1 |
+| SD-014 | `vnv-review` is in scope. This repo gets a Vnv guidance tree (`docs/vnv/AGENTS.md` plus a guidance file per area naming its Scope, Tools, Review Focus and findings target). | Owner, scope reopen | D2 lane, D4 |
+| SD-015 | `use-jev` and `claude-api` are removed from the skill map. `typesafe-ai` stays under "don't drop it if useful." | Owner, scope reopen | Lane skill map |
+| SD-016 | A shared CI/CD capability is part of this Lifecycle: correct and scalable when many agents work in parallel. | Owner, scope reopen | D4 |
+| SD-017 | Use free GitHub-hosted runners on public repos. | Owner, scope reopen; GitHub billing docs | CI |
+| SD-018 | D4 extends the existing shared skills in `Alphazedehq/skills/`, which are already linked into each harness. | Owner, SD-Q11 | D4 |
+| SD-019 | The CI/CD capability applies to every repo you contribute to, personal (`1wgrumph`) and organization (`alphazede`). No per-repo or per-owner scoping, named pilots or exclusions. | Owner, SD-Q12 reply | D4, `setup-a-repo` scope |
+| SD-020 | `ship-pull-request` runs `vnv-review` in any repo that has a Vnv guidance tree. | Owner, SD-Q12 reply | D4 |
+| SD-021 | D4, the skill work, comes first: `setup-pre-commit` becomes the single gate script used both locally and by Actions; `setup-a-repo` gains workflow-authoring references; `ship-pull-request` gains the conditional `vnv-review` and a gate-table row. Harness hooks for Claude Code, Codex, Muse, Cursor and AGY follow, and invoke it. | Owner, SD-Q12 reply | D4 |
+
+The workflow-authoring rules in SD-021 are: concurrency groups, path filters, stable check names, SHA-pinned actions, least-privilege `permissions:`, and `pull_request` rather than `pull_request_target`.
+
+**Already decided in issue #1 (10-10), carried as-is:** experience items 1, 2, 3, 4 and 6; the panel beside unobscured video; no messaging; lightweight design with no benchmarks; the Scribe `developer_feedback` contract; you alone publish and submit; deadline 10/23 12:00 PDT; labeled replay allowed.
+
+### Deliverables
+
+- **D1:** architecture specification, built with the gridmarket spec kit (SD-013).
+- **D2:** program plan to T_deadline, running independent work in parallel lanes. Lanes are ordered by dependencies and files touched, capped at impl_agent_cap. It includes the Vnv guidance tree lane (SD-014).
+- **D3:** GitHub milestones in `1wgrumph/amazon-fantasy-companion`.
+- **D4:** the shared CI/CD extensions (SD-018 to SD-021), followed by harness hooks. Every changed skill follows `create-lean-skill` (C10).
+
+### Quantity definitions
+
+| Name | Formula / value | Population / denominator | Units | Source |
+|---|---|---|---|---|
+| T_deadline | Devpost submission close | Single event | 2026-10-23T19:00:00Z | Issue #1 |
+| T_yahoo | Manual-entry trigger | Single event | 2026-10-16T19:00:00Z | SD-007 |
+| spike_panel_max | Elapsed time from first app install on the stick to the panel-route verdict | One spike | ≤ 24 h | SD-006 |
+| min_sdk | Lowest supported Android API level | One APK | API 25 | SD-003 |
+| T_judge_access | Last date judges must reach the repo and backend | Single date | 2026-11-20 | Issue #1 |
+| aws_free_window | The earlier of 6 months after opening or credits used up | One account | Months | aws.amazon.com/free |
+| impl_agent_cap | Concurrent implementation agents per orchestrating session; reviewers excluded | Per session | 5 | Rule 17 |
+| gh_private_minutes | Included GitHub Actions minutes per month for a GitHub Free account's private repos; public repos use standard runners free | Per account per month | 2,000 min | GitHub billing docs |
+| skill_size_max | Size limit for `SKILL.md`, frontmatter included | Per skill | < 60 lines and < 650 words | `create-lean-skill` |
+
+### Typed conditionals
+
+| ID | Condition → outcome | Type |
+|---|---|---|
+| C1 | Stick is Fire OS 5, an older model, or can't run the provider apps → return to you; never buy or switch on your behalf. | enforced_rule |
+| C2 | ESPN endpoint changes or goes down → labeled replay. | expected_outcome |
+| C3 | ESPN terms for a public submission → flagged to you at submission. | enforced_rule |
+| C4 | AWS Free → Paid only by your decision. | enforced_rule |
+| C5 | Panel spike fails or exceeds spike_panel_max → Mode A, limitation stated. | expected_outcome |
+| C6 | No Yahoo approval by T_yahoo → labeled manual lineup entry. | expected_outcome |
+| C7 | Any committed local absolute path → blocked until removed. | enforced_rule |
+| C8 | Alexa voice shown only if implemented and verified. | enforced_rule |
+| C9 | Visibility flip, license, reviewer access, submission and external feedback → your actions only. | enforced_rule |
+| C10 | A changed `SKILL.md` over skill_size_max → overflow moves to `references/`; no duplicate skill. | enforced_rule |
+| C11 | CI on a private repo exhausts gh_private_minutes → hosted runs stop; no paid overage without you. | enforced_rule |
+| C12 | No Vnv guidance tree in a repo → `vnv-review` is skipped as REFUSED_NO_VNV, never treated as a pass. | enforced_rule |
+| C13 | Harness hooks start only after the D4 skill extensions land. | enforced_rule |
+| C14 | Public-repo workflows use `pull_request`, never `pull_request_target`, and give forks no secrets. | enforced_rule |
+
+### Coverage ledger (zero OPEN)
+
+| Item | State | Basis |
+|---|---|---|
+| Product scope: device, feed, backend, Yahoo, panel, tracks, repo, publication | DECIDED | SD-001 to SD-011 |
+| Deliverables D1–D4, spec kit, Vnv tree, CI scope, runners, skill split | DECIDED | SD-012 to SD-021 |
+| Alert over playback; provider deep link; app and subscription detection | DECIDED as development spikes | Issue #1 |
+| "Extend existing skills" (SD-018) vs "create the shared skill" | DEFERRED | Your single integrated review |
+| `typesafe-ai` use for the optional AI commentary | DEFERRED | Your integrated review; only if commentary is built |
+| Milestone dates; lane layout; D4 file layout; hook mechanics per harness; rollout order | DEFERRED | Planning and Design, then your integrated review |
+| License choice | DEFERRED | You decide before the flip |
+| ESPN terms | DEFERRED | You decide at submission (C3) |
+| Stick located and model confirmed; AWS account; Yahoo application | Dependencies on your actions | Milestone 1 entry criteria |
+| Muse has an empty skills folder | Known gap | The D4 hooks must handle it |
+| Development strategy; profiles and routes | NOT_APPLICABLE | Orchestrator records these |
+| Messaging and community features | NOT_APPLICABLE | Excluded in issue #1 |
+
+### developer_feedback (consolidated)
+
+- **DX-001 to DX-004**, carried from issue #1:
+  - DX-001: the Builder Tools docs were a positive experience.
+  - DX-002: Yahoo's guide and its access form disagree about access options.
+  - DX-003: NFL docs require sign-in.
+  - DX-004: Yahoo returned HTTP 429 to the retrieval tool.
+- **DX-005, documentation gap:** the Fire TV notifications page was last updated 2020-10-29, and Vega's `expo-notifications` supports scheduling only, with nothing documented about showing over another app's playback.
+- **DX-006, research-tool limitation:** WebFetch got HTTP 403 from amazonappdev2026.devpost.com, both the rules page and the overview. Cause unverified.
+- **DX-007, configuration issue:** `setup-pre-commit` is linked into the Claude, Codex, `.agents` and Cursor skill folders, but its `SKILL.md` is still an empty skill-creator template, so invoking it loads `[TODO]` placeholder text. D4 fixes this.
+- **Tools exercised:** `gh api`, `gh search code`, `gh repo view`, `gh issue list`, WebSearch, WebFetch (developer.amazon.com, aws.amazon.com, developers.cloudflare.com, docs.github.com, sports.yahoo.com, bgr.com), and read-only `ls`/`sed`/`grep`/`readlink`/`wc`.
+
+Next action: the Orchestrator persists this batch and starts Planning and Design for D1–D4.
+
+I didn't read the azedge reference workflows, COE-ELSD-081..087, or the bodies of gridmarket's spec skills. Before the D4 hook work starts, the Orchestrator should confirm which you meant: extend the existing skills, or create a new shared skill.
+exit=0

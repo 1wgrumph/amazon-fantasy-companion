@@ -1,0 +1,8 @@
+Owner answer to SD-Q1 (verbatim): "I need more information to make this decision I would like to test on a real firetv device though"
+
+So: SD-Q1 is not decided. Real-device testing is now an owner requirement (record it as a buffered decision with this source). Give the owner the information needed to choose. Research with tools (web search/fetch of developer.amazon.com device specs and Vega/Fire OS docs, current Amazon retail listings for Fire TV sticks, sideload/developer-mode requirements). Cover concisely:
+1. Which current, purchasable Fire TV devices run Vega OS vs Fire OS 8 (model names, approximate US price, availability/shipping for testing before ~2026-10-16), and which OS the owner's ~2018 stick likely runs and how he can identify it (Settings > My Fire TV > About).
+2. For each OS: how to sideload/dev-deploy to a real device (Vega: `vega` CLI device install + developer mode; Fire OS: adb over network), and whether real provider apps (e.g., Prime Video, YouTube TV, NFL+, Fox Sports, ESPN) are installable there — that's what makes the real "Watch -> correct game" handoff and notification-over-playback provable.
+3. Which OS documents the platform pieces the concept needs: notification while another app plays; panel beside another app's video (PiP / split / none); app-to-app deep links to a live game/channel. Cite doc URLs; mark undocumented as unknown.
+4. Re-state the recommendation given real-device testing, including whether to buy a device and which.
+Keep it to what a decision needs (< 450 words + the question block). Then ask the (possibly revised) SD-Q1 with the same fenced question format.

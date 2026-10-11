@@ -1,0 +1,43 @@
+**PASS.** `seit.json` is written and passes the schema check with 0 errors. It covers all 65 AC-AFC rows and all 16 RISK-AFC rows, with no coverage gaps. Nothing needs a new owner decision.
+
+**Results**
+- **Size:** 126 proof cases and 75 commands. The traceability table has 126 rows, all with the 8 required columns and a stated failure case.
+- **Commands:** all 34 command IDs in the slice graph exist in `seit.json`. All 47 in the integration plan exist except `CMD-REVERIFY`, which I renamed to `CMD-REVERIFY-APK`.
+- **Reverify:** used only for the two claims about the built APK (no secrets in it, and the final S40 APK). Every other row says "Reverify: not applicable" with a reason.
+- **Other checks:** 48 red-then-green test pairs and 22 rows on the stick or the AWS dev stack. No `actor` fields, no absolute home paths in either file.
+- **Decisions:** the 26 DEC-AFC decisions are recorded, with SD-013 marked superseded. OD-AFC-01..10 are listed as open for the integrated review.
+- **Correction rounds:** one of three. The first version left 15 slices without a proof row naming them; I fixed this by recording contributing slices on existing rows and adding 5 rows. The verbatim check output is in the receipt.
+
+**Findings for the Plan Integrator (TE-F01..F10)**
+- **F01:** 26 new command IDs, plus where each must be added in the slice command lists.
+- **F02:** S28, S17 and S40 are missing proof commands; S40's APK claim relies on the Reverify run at IE-M5-3.
+- **F03:** `check_paths.py` needs a `--files` mode so the APK string dump can be scanned with the same rules.
+- **F04:** the coverage and mutation tools (coverage.py, diff-cover, mutmut, Kover, PIT) are in no dependency list. Until they are added, those gates are typed gaps.
+- **F05:** no slice has a place to store the visual-review screenshots.
+- **F06:** I fixed some unnamed inputs myself:
+  - the D4 trigger requests;
+  - the `tools/ci/tests` runner;
+  - the spike verdict headings;
+  - the S16 recorder name.
+- **F07:** the deployed-template check now uses stack tags, because SAM rewrites the template on deploy.
+- **F08:** the `specialists/` logs contain absolute home paths and must be scrubbed before the planning commit.
+- **F09:** rows waiting on owner entry actions OWN-02..05 and the release keystore are tracked as typed gaps.
+- **F10:** some rows only apply depending on OD-AFC-01 and OD-AFC-03.
+
+**Risks**
+- **Missing tools:** adb, the Android SDK, Gradle and the AWS SAM and aws CLIs are absent, so every device, Android and deploy row is a typed gap until S04 or S18 installs them. OpenJDK 21 is present, unlike what the packet said.
+- **Proposed thresholds:** the coverage and mutation thresholds are my proposals and need approval at the integrated review. They are backend 90% changed lines and 0.70 mutation score; TV app 80% and 60%.
+- **Skill-trigger checks:** these rely on a model choosing a skill, so they are evaluations, not deterministic proof.
+- **COE-ASA-001:** I confirmed only that the ID exists, not the clause text.
+
+**Developer feedback**
+- **TE-DX-01:** a JDK is installed, contrary to the packet.
+- **TE-DX-02:** the SEIT schema doesn't check command entries or traceability columns, so a scripted cross-check was needed.
+- **TE-DX-03:** "same as S20T" rows in the slice graph need special handling when parsing.
+
+Nothing was committed, per the packet.
+
+Files are in `docs/plans/2026-10-11-amazon-fantasy-companion/`:
+- `seit.json`
+- `specialists/test-engineer-receipt.md`
+exit=0

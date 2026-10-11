@@ -1,0 +1,45 @@
+%% MODEL-AFC-V2 — Use cases and outcomes (retained items 1, 2, 3, 4, 6 + right-side panel)
+%% mode: diagram-assisted; explanatory only; sysml_claim: false
+%% Mermaid has no native use-case diagram; stadium nodes stand in for use cases.
+flowchart LR
+  customer(["Customer (primary)"])
+  phone(["Customer phone browser"])
+
+  subgraph sys["Amazon Fantasy Companion (tv-app/ + backend/)"]
+    UC1(["UC-1 Configure profile and link Yahoo (item 1)"])
+    UC2(["UC-2 Monitor relevant games in enabled viewing periods (item 2)"])
+    UC3(["UC-3 Receive personalized alert (item 3)"])
+    UC4(["UC-4 Watch the game (item 4)"])
+    UC6(["UC-6 Set customer controls (item 6)"])
+    UCP(["UC-P Track lineup in right-side panel"])
+  end
+
+  O1["Profile saved: league, team, starters, favorites, detected provider apps (installed != subscribed), customer-confirmed subscriptions, local market"]
+  O2["Only relevant games tracked; observed playback kept distinct from profile assumptions"]
+  O3["Heads-up notification with Watch / Dismiss; red zone is team context, not proof the player is on the field; duplicates and corrections handled"]
+  O4["Launch outcome reported: GAME_OPENED (device-observed only) | PROVIDER_DETAILS | APP_HOME | APP_ABSENT | ACCESS_UNKNOWN | PLAYBACK_DENIED"]
+  O6["Alert types, frequency, quiet hours / game-day mode, spoiler delay, presentation, excitement, provider preference, switching confirmation, detection opt-in honored; voice announcements only if Alexa is verified (C8)"]
+  OP["Lineup, per-player points, game status, team total, stale / unavailable marks; video unobscured (Mode B) or labeled sample footage (Mode A, C5)"]
+
+  customer --- UC1 & UC2 & UC3 & UC4 & UC6 & UCP
+  phone --- UC1
+  UC3 -.->|"extend: Watch action"| UC4
+
+  UC1 --> O1
+  UC2 --> O2
+  UC3 --> O3
+  UC4 --> O4
+  UC6 --> O6
+  UCP --> OP
+
+  yahoo["Yahoo Fantasy API (ManualSource at T_yahoo, C6)"]
+  espn["ESPN public JSON (labeled replay if down, C2)"]
+  notif["Fire OS notification system"]
+  provider["Provider viewing app (SP-3)"]
+  alexa["Alexa voice (optional, C8)"]
+  UC1 --- yahoo
+  UC2 --- espn
+  UC3 --- notif
+  UC3 -.- alexa
+  UC4 --- provider
+  UCP --- provider

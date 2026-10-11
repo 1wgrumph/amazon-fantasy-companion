@@ -1,0 +1,20 @@
+SD-Q5 is buffered. A typed `enforced_rule` triggers at 2026-10-16 12:00 PDT: if Yahoo hasn't approved the app by then, the app switches to labeled manual starter entry from ESPN rosters.
+
+**SD-Q6: extra tracks and mini challenges.** Issue #1 lists the facts. The tracks are Fire TV, Alexa+, Bee and Ring. The optional mini challenges are AWS Builder, which adds AWS-integration fields, and Open Source, which requires an extra project or contribution beyond the main entry. Devpost returned HTTP 403, so a few things are unknown: prize amounts, the exact AWS Builder criteria, and whether one entry can join several tracks.
+
+**Recommendation: Fire TV track plus the AWS Builder mini challenge.** The backend is already on AWS (SD-Q3), so the extra work is close to zero; it's mostly the submission fields. Open Source would need a separate public project, and publishing anything requires your approval. The Alexa+ track would need its own Agent Skill or MCP build, which doesn't fit 12 days. Alexa stays a voice route inside the Fire TV entry, and only if the spike verifies it.
+
+```question
+id: SD-Q6
+question: Which extra track or mini challenges should the entry target?
+options:
+- label: Fire TV + AWS Builder (Recommended) | description: Near-zero added build; backend already on AWS; extra submission fields only.
+- label: Fire TV only | description: No extra entries; simplest submission.
+- label: Fire TV + AWS Builder + Open Source | description: Adds a separate public project/contribution; publication is owner-gated.
+- label: Fire TV + Alexa+ track | description: Adds an Agent Skill/MCP build; high schedule risk.
+```
+
+developer_feedback: one new observation. DX-006, research-tool limitation: WebFetch returned HTTP 403 from amazonappdev2026.devpost.com, both the rules page and the overview. The cause is unverified and is not a product defect. The workaround is to read the pages in a signed-in browser.
+
+The AWS Builder criteria and the multi-track eligibility are unverified. Status: OWNER_DECISION_REQUIRED, 7 decisions buffered.
+exit=0

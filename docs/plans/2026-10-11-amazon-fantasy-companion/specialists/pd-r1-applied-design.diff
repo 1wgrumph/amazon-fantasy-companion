@@ -1,0 +1,19 @@
+145c145,148
+<   runner, UI Automator. Gradle wrapper checksum is verified at import. S04
+---
+>   runner, UI Automator; test-only Gradle plugins Kover
+>   (`org.jetbrains.kotlinx.kover`, changed-line coverage) and PIT
+>   (`info.solidsoft.pitest`, mutation), each admitted through CMD-SCAN
+>   (TE-F04). Gradle wrapper checksum is verified at import. S04
+314a318,321
+> - Backend test dependencies `coverage`, `diff-cover` and `mutmut` are declared
+>   by S05 in `backend/pyproject.toml` and `uv.lock`, each admitted through
+>   CMD-SCAN (TE-F04); until present, coverage and mutation claims are
+>   `TOOL_MISSING` typed gaps.
+437c444,447
+<     allowed plus the D4-B workflow checker over
+---
+>     allowed; `check_paths.py --files <path>...` applies the same rule ids,
+>     with the same no-secret output, to only those files (used on the APK
+>     string dump by CMD-REVERIFY-APK; S09T adds a test for this mode, TE-F03);
+>     plus the D4-B workflow checker over

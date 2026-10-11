@@ -1,0 +1,54 @@
+**Outcome: GAPS.** The integration plan is written to `docs/plans/2026-10-11-amazon-fantasy-companion/specialists/integration-plan.md`, with one fenced `integration_plan` JSON block holding all 12 required keys.
+
+- **Verdict:** The assembly strategy is complete: 26 steps from IE-M1-1 to IE-M5-3, with cut-offs and 8 owner dependencies. Every slice except S29, which does not exist, is merged by exactly one step.
+- **What waits:** 18 slice-graph or design defects must be corrected before the affected slices dispatch. None needs an owner decision. The Plan Integrator or Planning and Design should apply the corrected text, which is in `concurrency_findings` in the file.
+- **candidate_ref:** none, since this is a planning session. The final candidate is defined as `this.final`: the IE-M5-2 merge commit, plus the APK sha256, the `afc-dev` template digest, the provider registry digest and the Alphazedehq merge commits.
+- **changed_paths:** only that file. I wrote a scratch overlap-check script in `/tmp/ie-afc/` and deleted it afterwards.
+
+**Concurrency proof.** I compared the write sets of every pair of slices that the dependency graph does not order.
+- **S05 × S16** is a real overlap: `backend/` contains `backend/fixtures/espn/`, and both are in the first five wave-1 dispatches (IE-F01).
+- **S08 × S39** never run at the same time (M1 vs M5).
+- **S33 × the M4 slices** are already guarded by S33's dispatch-time overlap check.
+- Every other pair is disjoint.
+
+The declared write sets are not the whole picture, though: the hidden overlaps and missing dependencies are the findings below.
+
+**Findings** (exact corrected text in the file):
+
+| ID | Problem | Corrected text (abridged) |
+|---|---|---|
+| IE-F01 | S05 and S16 both write under `backend/` | S05 write set becomes `` `backend/` except `backend/fixtures/` `` |
+| IE-F02 | S04/S05 stop conditions run `gate.sh`, which S09 only writes later | Use CMD-ANDROID-BUILD / CMD-BACKEND-CHECK; `gate.sh` runs at IE-M1-6 |
+| IE-F03 | S08's hygiene check needs S09 | Add `S09 --> S08` (hygiene receipt only) |
+| IE-F04 | S26/S27 read S25's `net/` with no dependency | S04 freezes `net/ApiClient.kt`; S25 implements it with unchanged signatures |
+| IE-F05 | Hot files have no owner after S04/S05 (Gradle files, Manifest, `template.yaml`, `pyproject.toml`/`uv.lock`, `store/`, `conftest.py`); DataStore is used but missing from DES-AFC-TV's dependency list | S04 and S05 stop conditions declare every dependency, permission and accessor up front |
+| IE-F06 | Nothing says how the APK learns the backend URL | Gradle property `afcApiBaseUrl` → `AFC_API_BASE_URL`, set from the `afc-dev` stack output `ApiUrl` |
+| IE-F07 | One worktree per lane, but slices in a lane run concurrently and share one git index | One worktree and branch per running slice or TDD pair |
+| IE-F08 | Once S09 and S11 land, the gate hooks block every commit of failing (red) tests | Red receipt taken uncommitted; after green, tests and code are committed separately under their own authors; never `--no-verify` |
+| IE-F09 | Nothing runs `tools/ci/tests/` | The hygiene area runs it |
+| IE-F10 | S09 vendors code with no record of its source commit | Add `tools/ci/VENDORED.md` |
+| IE-F11 | M2 is due 10-15T23:00Z, before the 10-15 game starts (~10-16T00:15Z) | M2 due becomes `2026-10-16T06:00:00Z`; S20T may start from the 10-12 capture |
+| IE-F12 | S16 is listed in M1 but its slice row says M2 | Move S16 to M2; M1 exit cites the 10-12 capture commit |
+| IE-F13 | S41 has inconsistent milestone and wave (M1 / Wave 4 / M4) | Milestone M2, Wave 2 |
+| IE-F14 | No dependency from S17 to S28 | Add `S17 --> S28` |
+| IE-F15 | S11's demonstration needs a repo with `gate.sh` | Add `S09 --> S11` |
+| IE-F16 | Merged Alphazedehq skills go live only when its main checkout is updated, and that checkout has one uncommitted entry | New lease `alphazedehq-main-checkout`; S06L waits for it |
+| IE-F17 | The footage folder and `submission-media/` are not git-ignored by any slice | S04 adds `tv-app/.gitignore`; S38 adds a `.gitignore` line |
+| IE-F18 | S01's write set omits `skills/setup-pre-commit/agents/openai.yaml` | Add it |
+
+**Remaining risks:**
+- S16 holds one of the five agent slots from 10-12 to 10-16 unless its session is closed between the two game captures.
+- Alphazedehq CI does not run the new D4/D5 tests, so their evidence is the reruns after each merge.
+- If `CMD-APK-RELEASE` needs a release keystore, creating it is your credential action. Without one, S40 records a debug-signed APK.
+- The live game kickoff times are standard slot assumptions until the ESPN scoreboard confirms them.
+
+**Blocker:** none for you. The 18 corrections must be applied before the affected slices dispatch.
+
+**Commands run:** read-only `cat`, `sed`, `grep`, `ls`, `wc` and `readlink`; `git -C` (read-only) on Alphazedehq; and `python3` for extracting routes from `journey.json`, the pairwise overlap check and validating the JSON block. BRAN was unavailable here, so I used normal file discovery.
+
+**developer_feedback:**
+- **IE-DX-01:** the frozen `tech-writing` profile's Integration Engineer execution session has no cadence field; I applied the skill default, `lifecycle`.
+- **IE-DX-02:** the owner-action rows in `slice-graph.md` start the same way as slice rows, which confuses a mechanical parser; the Plan Integrator's copy should key on column count or section.
+
+I did not check `views.json` beyond its top-level keys, and the `.gitignore` edit for OD-AFC-06 itself was outside this pass.
+exit=0

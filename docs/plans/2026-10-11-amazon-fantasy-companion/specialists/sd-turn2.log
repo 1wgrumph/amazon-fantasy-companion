@@ -1,0 +1,50 @@
+I researched the devices and platform docs; here is the comparison for SD-Q1.
+
+**Buffered decision SD-001:** testing must happen on a real Fire TV device. Source: your answer to SD-Q1, 2026-10-11.
+
+**1. Which devices run which OS** ([device specs](https://developer.amazon.com/docs/device-specs/device-specifications-fire-tv-streaming-media-player.html))
+- **Fire OS 8:** Fire TV Stick 4K Max 2nd Gen, list $84.99 and on sale around $44.99. The Fire TV Stick 4K Plus is around $38 but is being discontinued ([AFTVnews](https://www.aftvnews.com/?p=46863)).
+- **Vega OS:** Fire TV Stick 4K 2026, list $59.99 or $29.99 in the Prime Big Deal Days offer ([MobilityArena](https://mobilityarena.com/fire-tv-stick-4k-2026-price-deal-new-remote/)). The 4K Select 2025 has been replaced by it.
+- **Shipping:** Prime normally arrives in 1–2 days, so a device should be here before 10/16. I have not confirmed a delivery date.
+- **Your 2018 stick:** the only 2018 stick is the Fire TV Stick 4K 1st Gen (AFTMM, Fire OS 6). It could also be an older Fire OS 5 or 6 model. To check, go to Settings > My Fire TV > About. It cannot run Vega.
+
+**2. Deploying to a device and installing provider apps**
+- **Fire OS:** turn on ADB Debugging, then run `adb connect <ip>:5555` and install the APK ([docs](https://developer.amazon.com/docs/fire-tv/connecting-adb-to-device.html)). Provider apps are full Android apps.
+- **Vega:** you need an Amazon Developer account. Run `vega devmode enable-device --code …`, then `vega device install-app` ([docs](https://developer.amazon.com/docs/vega/0.24/developer-mode.html)). Android apps cannot be sideloaded.
+  - Prime Video and YouTube run natively on Vega.
+  - NFL and Fox Sports are streamed from Amazon's servers, not installed ([PCWorld](https://www.pcworld.com/article/3128166/the-new-fire-tv-os-is-for-amazon-not-you.html)).
+  - Whether YouTube TV and ESPN are on Vega is unknown.
+
+**3. Which OS documents the pieces the concept needs**
+
+| Need | Fire OS | Vega |
+|---|---|---|
+| Alert while another app plays | Documented: high-priority "heads-up" notifications ([docs](https://developer.amazon.com/docs/fire-tv/notifications.html), last updated 2020) | Only partly documented: `expo-notifications` supports scheduling only, no push ([docs](https://developer.amazon.com/docs/vega-api/0.24/expo-notifications)). Showing it over another app's playback is unknown. |
+| Panel beside another app's video | Not documented: picture-in-picture works only inside our own app and cannot overlay system screens ([Fire OS 6](https://developer.amazon.com/docs/fire-tv/fire-os-6.html)) | Unknown; no picture-in-picture API is documented |
+| Open a provider app at a live game | Standard Android intents; the link format is up to each provider ([launcher integration](https://developer.amazon.com/docs/catalog/integrate-with-launcher.html)) | App-to-app links are documented, but each depends on a contract with the provider app ([docs](https://developer.amazon.com/docs/vega/0.22/deep-links-vega-apps.html)). Whether cloud-streamed apps accept links is unknown. |
+
+Neither OS documents a way to show the lineup panel next to another app's video. Most likely the panel only works next to video our own app plays. That will be a separate question after this one.
+
+**4. Revised recommendation: buy a Fire TV Stick 4K Max 2nd Gen (Fire OS 8) and use the native Kotlin starter `hello-world-fire-tv`.**
+- It is the only OS that documents alerts over another app's playback.
+- It runs the real provider apps, which the Watch → correct game moment needs.
+- `adb` deploys over Wi-Fi without a developer account.
+- If the 2018 stick turns up, the same APK can run on it as a second device, provided we target API 25.
+- The cost: Amazon's builder tooling favors Vega, and this model will probably be replaced by a Vega model within about a year. That does not matter for a 12-day hackathon.
+
+```question
+id: SD-Q1
+question: Which real device/OS and starter should the plan target?
+options:
+- label: Fire OS 8 — buy 4K Max 2nd Gen + hello-world-fire-tv (Recommended) | description: ~$45; documented alerts over playback, Android provider apps, adb deploy; no Vega build.
+- label: Vega — buy Fire TV Stick 4K (2026) + vega-sports-app | description: ~$30–60; Amazon's strategic OS and sports starter; alerts over playback and NFL/Fox handoff unverified.
+- label: Both via react-native-multi-tv-app-sample | description: Buy both sticks (~$75–105); one Expo codebase, two integration spikes in 12 days.
+- label: Find the 2018 stick first | description: No purchase yet; likely Fire OS 6 (API 25), older docs, and delays the decision.
+```
+
+developer_feedback: one new observation. DX-005, documentation gap: Fire TV's notifications page was last updated 2020-10-29, and Vega documents no notification that shows over another app's playback. Tools used: WebSearch, WebFetch (developer.amazon.com, news sites), `gh api`.
+
+Status: OWNER_DECISION_REQUIRED, 1 decision buffered. I took prices from deal posts, not live Amazon listings. I did not confirm whether YouTube TV and ESPN are on Vega, or which remote comes with the 2026 stick.
+
+Sources: [device specs](https://developer.amazon.com/docs/device-specs/device-specifications-fire-tv-streaming-media-player.html) · [Vega dev mode](https://developer.amazon.com/docs/vega/0.24/developer-mode.html) · [Fire OS adb](https://developer.amazon.com/docs/fire-tv/connecting-adb-to-device.html) · [Fire TV notifications](https://developer.amazon.com/docs/fire-tv/notifications.html) · [Vega expo-notifications](https://developer.amazon.com/docs/vega-api/0.24/expo-notifications) · [Vega deep links](https://developer.amazon.com/docs/vega/0.22/deep-links-vega-apps.html) · [Fire OS 6](https://developer.amazon.com/docs/fire-tv/fire-os-6.html) · [launcher integration](https://developer.amazon.com/docs/catalog/integrate-with-launcher.html) · [PCWorld](https://www.pcworld.com/article/3128166/the-new-fire-tv-os-is-for-amazon-not-you.html) · [AFTVnews](https://www.aftvnews.com/?p=46863) · [MobilityArena](https://mobilityarena.com/fire-tv-stick-4k-2026-price-deal-new-remote/)
+exit=0

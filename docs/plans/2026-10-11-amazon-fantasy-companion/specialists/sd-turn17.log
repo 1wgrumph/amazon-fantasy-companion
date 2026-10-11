@@ -1,0 +1,27 @@
+Your choice of extending existing skills is buffered as SD-018: no new skill, and the D4 work goes into the existing shared skills.
+
+**What I found:**
+- **`setup-pre-commit` is an empty template.** It still holds the skill-creator `[TODO]` placeholder text, so nothing would be lost by rewriting it, and it is the natural home for the one shared gate script.
+- **The other two are already at or over the size limit.** `setup-a-repo` is 60 lines and `ship-pull-request` is 82, against `create-lean-skill`'s rule of under 60. New material for them goes into `references/` files, not the main skill file.
+- **`setup-a-repo` assumes an AlphaZede organization repo.** It records each repo's delivery profile as an organization custom property, and personal repos like `1wgrumph/*` don't have custom properties. Extending it to your personal repos needs your approval; the profile would be recorded in a file in the repo instead.
+- **`vnv-review` already refuses repos without a Vnv guidance tree.** As a conditional step it changes nothing for those repos. But AZM and AZS both have `Vnv/` folders, so their PRs would gain the step.
+
+**Recommendation:**
+- **`setup-pre-commit`:** rewrite it to own one gate script per repo, called by both the local hook and Actions.
+- **`setup-a-repo`:** add workflow-authoring rules in a new `references/CI-WORKFLOWS.md`, and extend its scope to `1wgrumph` repos. The rules cover concurrency groups, path filters, stable check names, SHA-pinned actions, minimal permissions, and `pull_request` rather than `pull_request_target`.
+- **`ship-pull-request`:** run `vnv-review` whenever the repo has a Vnv guidance tree, and add this repo's row to its gate table.
+- **Rollout:** pilot on this repo first. Changes to other repos come later, in separate Lifecycles.
+
+```question
+id: SD-Q12
+question: How should the CI/CD extensions be split across existing skills?
+options:
+- label: Recommended split + 1wgrumph scope + pilot here (Recommended) | description: pre-commit=gate script; setup-a-repo=workflows (extended to 1wgrumph); ship-pull-request=conditional vnv-review + GATES row.
+- label: Same split, vnv-review only in this repo | description: No ship-pull-request flow change; AZM/AZS PRs unaffected; vnv-review invoked via this repo's AGENTS.md.
+- label: Same split, keep setup-a-repo AlphaZede-only | description: 1wgrumph workflow rules live in this repo's docs, not the shared skill.
+```
+
+developer_feedback: one new observation. DX-007, a configuration issue: `setup-pre-commit` is linked into the Claude, Codex, `.agents` and Cursor skill folders, but it is still an empty skill-creator template, so invoking it loads `[TODO]` placeholder text.
+
+I haven't checked the azedge reference workflows or COE-ELSD-081..087. Status: OWNER_DECISION_REQUIRED, 18 decisions buffered.
+exit=0

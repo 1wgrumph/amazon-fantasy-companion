@@ -1,0 +1,60 @@
+%% MODEL-AFC-V1 — Context and trust boundaries
+%% mode: diagram-assisted; explanatory only; sysml_claim: false
+%% Planned design (Planning and Design node); nothing here is realized yet.
+flowchart LR
+  customer(["Customer<br/>couch viewer with remote"])
+  phone(["Customer phone browser<br/>device-code link page"])
+  owner(["Owner / operator"])
+  judges(["Hackathon judges (Devpost)"])
+
+  subgraph device["Fire TV stick — owner's 2018 device, Fire OS (shared mutable resource)"]
+    subgraph tvapp["tv-app/ — SYSTEM (Kotlin, Jetpack Compose, minSdk 25, no secrets in APK)"]
+      ProfileSettings
+      AppDetector
+      AlertService
+      AlertNotifier
+      WatchLauncher
+      LineupPanel
+      CompanionPlayer["CompanionPlayer (Mode A only)"]
+    end
+    notif["Fire OS notification system (external)"]
+    provider["Provider viewing app(s)<br/>one real provider chosen in SP-3 (external)"]
+    alexa["Alexa voice (optional, C8)"]
+  end
+
+  subgraph aws["AWS account — owner-created, Free plan (C4; shared mutable resource)"]
+    subgraph backend["backend/ — SYSTEM (Python 3.12 Lambda, API Gateway HTTP API, AWS SAM)"]
+      API["REST /v1/link /v1/profile /v1/alerts /v1/panel /v1/providers"]
+      DeviceAuth
+      FeedIngest["FeedIngest + ReplaySource"]
+      LineupConnector["LineupConnector (YahooSource | ManualSource)"]
+      Matcher
+      AlertPolicy
+      ProviderResolver["ProviderResolver + provider registry"]
+      PanelService
+      DDB[("DynamoDB on-demand")]
+      Sched["EventBridge Scheduler"]
+      SSM["SSM SecureString (Yahoo client secret)"]
+    end
+  end
+
+  espn["ESPN public JSON (unofficial)<br/>scoreboard / summary"]
+  yahoo["Yahoo Fantasy API<br/>OAuth 2.0 read-only"]
+
+  customer -->|remote| tvapp
+  phone -->|"link page, Yahoo consent"| API
+  owner -->|"creates account, deploys SAM, holds secret"| aws
+  judges -->|"demo video, repo, access until 2026-11-20"| backend
+  tvapp ==>|"TB1: HTTPS + per-device bearer token"| API
+  tvapp -->|heads-up notification| notif
+  tvapp -->|"TB4: explicit intent to allow-listed package"| provider
+  tvapp -.->|optional| alexa
+  FeedIngest -->|"TB3: poll; response untrusted, validated at ingest"| espn
+  LineupConnector -->|"TB2: OAuth tokens + client secret server-side only"| yahoo
+
+  classDef system fill:#e8f0fe,stroke:#1a56db,stroke-width:2px
+  classDef external fill:#ffffff,stroke:#555555
+  classDef optional fill:#ffffff,stroke:#999999,stroke-dasharray:5 4
+  class tvapp,backend system
+  class notif,provider,espn,yahoo external
+  class alexa optional
