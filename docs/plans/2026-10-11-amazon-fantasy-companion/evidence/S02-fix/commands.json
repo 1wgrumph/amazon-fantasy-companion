@@ -1,0 +1,39 @@
+[
+  {
+    "id": "unittest",
+    "command": "python3 -m unittest discover -s skills/setup-a-repo/tests -v",
+    "exit_code": 0,
+    "output_tail": "Skill is valid!\ntest_directory_checks_both_workflow_extensions (test_check_workflows.WorkflowContractTests.test_directory_checks_both_workflow_extensions) ... ok\ntest_empty_directory_fails (test_check_workflows.WorkflowContractTests.test_empty_directory_fails) ... ok\ntest_gate_area_must_be_positional (test_check_workflows.WorkflowContractTests.test_gate_area_must_be_positional) ... ok\ntest_creator_validation_and_repository_metadata (test_setup_a_repo.SetupARepoTests.test_creator_validation_and_repository_metadata) ... ok\ntest_trigger_classifications (test_setup_a_repo.SetupARepoTests.test_trigger_classifications) ... ok\n\n----------------------------------------------------------------------\nRan 5 tests in 0.371s\n\nOK\n"
+  },
+  {
+    "id": "obsolete-option",
+    "command": "! git grep -n -- '--area' skills/setup-a-repo",
+    "exit_code": 0,
+    "output_tail": ""
+  },
+  {
+    "id": "directory",
+    "command": "python3 skills/setup-a-repo/scripts/check-workflows.py skills/setup-a-repo/templates",
+    "exit_code": 0,
+    "output_tail": "skills/setup-a-repo/templates/ci.yml: PASS\n"
+  },
+  {
+    "id": "pytest",
+    "command": "python3 -m pytest skills/setup-a-repo/tests -q -p no:cacheprovider",
+    "exit_code": 0,
+    "output_tail": ".......................................                              [100%]\n39 passed, 4 subtests passed in 2.72s\n"
+  },
+  {
+    "id": "local-gates",
+    "command": "bash tools/ci/local-gates.sh",
+    "exit_code": 0,
+    "output_tail": "[C] PASS  diff-check          0s\n[C] PASS  secret-scan         1s\n[A] PASS  web-install         2s\n[C] PASS  git-sync            7s\n[C] PASS  plan-spec-lint      0s\n[C] PASS  sdoc-lint           1s\n[C] PASS  gate-activation     2s\n[C] PASS  standards-yaml      0s\n[A] PASS  web-build          13s\n[A] PASS  web-typecheck      14s\n[A] PASS  web-test            4s\n[C] PASS  hook-suites        31s\n[C] PASS  te-provision        5s\n[C] PASS  te-evaluator       17s\n[C] PASS  te-receipt          1s\n[C] PASS  te-ponytail        34s\n[B] PASS  visual-review     207s\n\nlane A: 33s\nlane B: 207s\nlane C: 99s\n\nPASS  diff-check          0s\nPASS  secret-scan         1s\nPASS  git-sync            7s\nPASS  web-install         2s\nPASS  web-build          13s\nPASS  web-typecheck      14s\nPASS  web-test            4s\nPASS  visual-review     207s\nPASS  plan-spec-lint      0s\nPASS  sdoc-lint           1s\nPASS  gate-activation     2s\nPASS  standards-yaml      0s\nPASS  hook-suites        31s\nPASS  te-provision        5s\nPASS  te-evaluator       17s\nPASS  te-receipt          1s\nPASS  te-ponytail        34s\n\npassed=17 failed=0 skipped=0 not-applicable=0 elapsed=207s head=ac47f0e\nno merge receipt: tracked files differ from HEAD, so this run did not test ac47f0eca149eb281e41a6bdd9d490221c7a14cf\nfailing gates: none\n"
+  },
+  {
+    "id": "local-gates-committed",
+    "command": "bash tools/ci/local-gates.sh",
+    "head_sha": "090369da140d73241b002adc95182e0744393233",
+    "exit_code": 0,
+    "output_tail": "s it)\n[C] N/A   plan-spec-lint   (no COE-lint paths changed since merge-base; --full forces it)\n[C] N/A   sdoc-lint        (no COE-lint paths changed since merge-base; --full forces it)\n[C] N/A   gate-activation  (no COE-lint paths changed since merge-base; --full forces it)\n[C] N/A   standards-yaml   (no standards-YAML paths changed since merge-base; --full forces it)\n[C] N/A   hook-suites      (no hook paths changed since merge-base; --full forces it)\n[C] N/A   te-provision     (no test-engineering paths changed since merge-base; --full forces it)\n[C] N/A   te-evaluator     (no test-engineering paths changed since merge-base; --full forces it)\n[C] N/A   te-receipt       (no test-engineering paths changed since merge-base; --full forces it)\n[C] N/A   te-ponytail      (no test-engineering paths changed since merge-base; --full forces it)\n\nlane A: 0s\nlane B: 0s\nlane C: 0s\n\nPASS  diff-check          0s\nPASS  secret-scan         0s\nN/A   git-sync         (no git-sync paths changed since merge-base; --full forces it)\nN/A   web-install      (no alphazede-web paths changed since merge-base; --full forces it)\nN/A   web-build        (no alphazede-web paths changed since merge-base; --full forces it)\nN/A   web-typecheck    (no alphazede-web paths changed since merge-base; --full forces it)\nN/A   web-test         (no alphazede-web paths changed since merge-base; --full forces it)\nN/A   visual-review    (no skill-suite paths changed since merge-base; --full forces it)\nN/A   plan-spec-lint   (no COE-lint paths changed since merge-base; --full forces it)\nN/A   sdoc-lint        (no COE-lint paths changed since merge-base; --full forces it)\nN/A   gate-activation  (no COE-lint paths changed since merge-base; --full forces it)\nN/A   standards-yaml   (no standards-YAML paths changed since merge-base; --full forces it)\nN/A   hook-suites      (no hook paths changed since merge-base; --full forces it)\nN/A   te-provision     (no test-engineering paths changed since merge-base; --full forces it)\nN/A   te-evaluator     (no test-engineering paths changed since merge-base; --full forces it)\nN/A   te-receipt       (no test-engineering paths changed since merge-base; --full forces it)\nN/A   te-ponytail      (no test-engineering paths changed since merge-base; --full forces it)\n\npassed=2 failed=0 skipped=0 not-applicable=15 elapsed=0s head=090369d\nmerge receipt: /home/spectre/.local/state/alphazede-gate-receipts/Alphazedehq/090369da140d73241b002adc95182e0744393233\nfailing gates: none\n"
+  }
+]

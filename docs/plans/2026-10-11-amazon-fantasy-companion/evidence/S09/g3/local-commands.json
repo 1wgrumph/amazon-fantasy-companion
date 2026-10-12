@@ -1,0 +1,56 @@
+[
+  {
+    "id": "CMD-GATE-HYGIENE",
+    "command": "tools/ci/gate.sh hygiene; rc=$?; echo \"exit=$rc\"; (exit $rc)",
+    "exit_code": 0,
+    "output_tail": ".github/workflows/ci.yml: PASS\ngate: hygiene: PASS checks completed\nexit=0\n.........................\n----------------------------------------------------------------------\nRan 25 tests in 4.947s\n\nOK\n",
+    "candidate_sha": "7f12bca11e61cfdd1f5d98725e6580fb5c33ab14",
+    "working_diff_sha256": "475a9b1113543b1a283ad990a740a3711a564d918d8522de3883190f4a076740",
+    "at": "2026-10-12T11:54:18.536385+00:00"
+  },
+  {
+    "id": "CMD-GATE-DOCS",
+    "command": "tools/ci/gate.sh docs; rc=$?; echo \"exit=$rc\"; (exit $rc)",
+    "exit_code": 0,
+    "output_tail": "gate: docs: PASS checks completed\nexit=0\n",
+    "candidate_sha": "7f12bca11e61cfdd1f5d98725e6580fb5c33ab14",
+    "working_diff_sha256": "475a9b1113543b1a283ad990a740a3711a564d918d8522de3883190f4a076740",
+    "at": "2026-10-12T11:54:18.624818+00:00"
+  },
+  {
+    "id": "CMD-GATE-SPEC",
+    "command": "tools/ci/gate.sh spec; rc=$?; echo \"exit=$rc\"; (exit $rc)",
+    "exit_code": 0,
+    "output_tail": "gate: spec: PASS checks completed\nexit=0\nInstalled 1 package in 0.56ms\nInstalled 1 package in 0.29ms\nInstalled 1 package in 0.53ms\n",
+    "candidate_sha": "7f12bca11e61cfdd1f5d98725e6580fb5c33ab14",
+    "working_diff_sha256": "475a9b1113543b1a283ad990a740a3711a564d918d8522de3883190f4a076740",
+    "at": "2026-10-12T11:54:19.187691+00:00"
+  },
+  {
+    "id": "CMD-WORKFLOW-CHECK",
+    "command": "python3 tools/ci/check_workflows.py .github/workflows/; rc=$?; echo \"exit=$rc\"; (exit $rc)",
+    "exit_code": 0,
+    "output_tail": ".github/workflows/ci.yml: PASS\nexit=0\n",
+    "candidate_sha": "7f12bca11e61cfdd1f5d98725e6580fb5c33ab14",
+    "working_diff_sha256": "475a9b1113543b1a283ad990a740a3711a564d918d8522de3883190f4a076740",
+    "at": "2026-10-12T11:54:19.228216+00:00"
+  },
+  {
+    "id": "CMD-GATE-ALL",
+    "command": "tools/ci/gate.sh; rc=$?; echo \"exit=$rc\"; (exit $rc)",
+    "exit_code": 0,
+    "output_tail": "gate: spec: PASS checks completed\ngate: docs: PASS checks completed\n.github/workflows/ci.yml: PASS\ngate: hygiene: PASS checks completed\nexit=0\nInstalled 1 package in 0.29ms\nInstalled 1 package in 0.31ms\nInstalled 1 package in 0.54ms\n.........................\n----------------------------------------------------------------------\nRan 25 tests in 5.032s\n\nOK\n",
+    "candidate_sha": "7f12bca11e61cfdd1f5d98725e6580fb5c33ab14",
+    "working_diff_sha256": "475a9b1113543b1a283ad990a740a3711a564d918d8522de3883190f4a076740",
+    "at": "2026-10-12T11:54:26.249166+00:00"
+  },
+  {
+    "id": "CMD-CI-VENDOR-PIN",
+    "command": "git -C /home/spectre/alphazede/Alphazedehq show 120dee00207425201aa77d1f42f3756ee6bc406e:skills/setup-a-repo/scripts/check-workflows.py | diff - tools/ci/check_workflows.py && grep -qF 448d40c3dbb6fd9dceb66d575c66ee89fb45f6e4 tools/ci/VENDORED.md && grep -qF 120dee00207425201aa77d1f42f3756ee6bc406e tools/ci/VENDORED.md; rc=$?; echo \"exit=$rc\"; (exit $rc)",
+    "exit_code": 0,
+    "output_tail": "exit=0\n",
+    "candidate_sha": "7f12bca11e61cfdd1f5d98725e6580fb5c33ab14",
+    "working_diff_sha256": "475a9b1113543b1a283ad990a740a3711a564d918d8522de3883190f4a076740",
+    "at": "2026-10-12T11:54:26.259232+00:00"
+  }
+]

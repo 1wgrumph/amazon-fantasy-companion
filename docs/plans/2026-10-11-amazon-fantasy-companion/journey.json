@@ -314,6 +314,20 @@
       "decided_at": "2026-10-12T08:16:44Z",
       "decision": "Package digest after applying DEC-AFC-SD-032 (SysON direct import, no keyed tools): a018168f575741b5f53bbe7fac4bcb13128e31f37f69d73ba2433cf8d09d5144.",
       "source": "Orchestrator receipt of owner decision DEC-AFC-SD-032"
+    },
+    {
+      "id": "DEC-AFC-SD-033",
+      "status": "confirmed",
+      "decided_at": "2026-10-12T11:20:44Z",
+      "decision": "ST-4 (D1 spec authoring) starts now in parallel with S09; its exit is unchanged: `gate.sh spec` PASS on main after S09 lands, byte-identical rebuild.",
+      "source": "Owner: 'Start now'"
+    },
+    {
+      "id": "DEC-AFC-SD-034",
+      "status": "confirmed",
+      "decided_at": "2026-10-12T11:58:20Z",
+      "decision": "spec-authoring sections read like a real specification: no printed BLUF or Who/What/Why/How/When/Where labels. The opening sentence states the section's point. An unprinted writer's checklist guides each section: Decision (what it decides/defines), Concern (driving requirement/stakeholder concern, cite UIDs), Mechanism (how it works: interfaces, dependencies), Rationale (why this option, alternatives rejected), Verification (how it is proven). Fix the shared skill (rule, template, lint, tests), then rewrite the AFC spec. Inherited from the GridMarket kit; GridMarket's own spec is not changed by this Lifecycle.",
+      "source": "Owner at ST-5 spec review: 'the 5 qs are wrong and the bluf all both should not be explicit it should read like a real spec'; chose 'Yes, use those 5'"
     }
   ],
   "open_decisions": [],
@@ -2263,6 +2277,220 @@
       "at": "2026-10-12T08:16:44Z",
       "kind": "wave_receipt",
       "detail": "Wave 1 landed in Alphazedehq: S02 #303, S01 #306, S03 #304 (repair: EOF blank line), S06 #305 (repair: agents/openai.yaml default_prompt); all reviewed PASS (Muse, OCR) and local-gates PASS on merged heads. S07 #3 merged earlier. requirements-system #532 (S06 reciprocal non-trigger): local-gates cargo-test fails on different unrelated runtime tests each run (flaky under host load); re-run pending. Spec track: ST-3d SysON import PASS (project 2a033855-6bae-4fe1-975c-00bbb9419100), 65/65 allocation."
+    },
+    {
+      "at": "2026-10-12T08:17:56Z",
+      "kind": "dispatch_record",
+      "lease_id": "S06L-g1",
+      "slice": "S06L",
+      "generation": 1,
+      "repository": "1wgrumph/amazon-fantasy-companion",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-s06l",
+      "branch": "afc/s06l-skill-links",
+      "base": "72e99989aa1b93d3afb0fbd4a3d6deb2dd7991be",
+      "base_sha": "72e99989aa1b93d3afb0fbd4a3d6deb2dd7991be",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06L/",
+      "authority": "AUTH-AFC-2026-10-11-002",
+      "package_digest": "a018168f575741b5f53bbe7fac4bcb13128e31f37f69d73ba2433cf8d09d5144",
+      "leases": [
+        "harness-configs",
+        "alphazedehq-main-checkout"
+      ]
+    },
+    {
+      "at": "2026-10-12T08:17:56Z",
+      "kind": "dispatch_record",
+      "lease_id": "S42-g1",
+      "slice": "S42",
+      "generation": 1,
+      "repository": "1wgrumph/amazon-fantasy-companion",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-s42",
+      "branch": "afc/s42-vendor-spec-tools",
+      "base": "72e99989aa1b93d3afb0fbd4a3d6deb2dd7991be",
+      "base_sha": "72e99989aa1b93d3afb0fbd4a3d6deb2dd7991be",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S42/",
+      "authority": "AUTH-AFC-2026-10-11-002",
+      "package_digest": "a018168f575741b5f53bbe7fac4bcb13128e31f37f69d73ba2433cf8d09d5144",
+      "leases": [
+        "alphazedehq-main-checkout"
+      ]
+    },
+    {
+      "at": "2026-10-12T08:17:56Z",
+      "kind": "dispatch_record",
+      "lease_id": "S11T-g1",
+      "slice": "S11T",
+      "generation": 1,
+      "repository": "alphazede/Alphazedehq",
+      "worktree": "$HOME/alphazede/worktrees/alphazedehq-afc-s11t",
+      "branch": "afc/s11t-ci-gate-hook-tests",
+      "base": "ac47f0eca149eb281e41a6bdd9d490221c7a14cf",
+      "base_sha": "ac47f0eca149eb281e41a6bdd9d490221c7a14cf",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S11T/",
+      "authority": "AUTH-AFC-2026-10-11-002",
+      "package_digest": "a018168f575741b5f53bbe7fac4bcb13128e31f37f69d73ba2433cf8d09d5144",
+      "leases": []
+    },
+    {
+      "at": "2026-10-12T08:29:19Z",
+      "kind": "dispatch_record",
+      "lease_id": "S09T-g1",
+      "slice": "S09T",
+      "generation": 1,
+      "repository": "1wgrumph/amazon-fantasy-companion",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-s09t",
+      "branch": "afc/s09t-gate-tests",
+      "base": "5e59270b8320d6085039f26b64f14897736845f6",
+      "base_sha": "5e59270b8320d6085039f26b64f14897736845f6",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S09T/",
+      "authority": "AUTH-AFC-2026-10-11-002",
+      "package_digest": "a018168f575741b5f53bbe7fac4bcb13128e31f37f69d73ba2433cf8d09d5144",
+      "leases": []
+    },
+    {
+      "at": "2026-10-12T08:35:49Z",
+      "kind": "dispatch_record",
+      "lease_id": "S09-g1",
+      "slice": "S09",
+      "generation": 1,
+      "repository": "1wgrumph/amazon-fantasy-companion",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-s09",
+      "branch": "afc/s09-gate",
+      "base": "8b4cd9dfeafa4dd1e268a1d7c1b78dc03a1b2eb7",
+      "base_sha": "8b4cd9dfeafa4dd1e268a1d7c1b78dc03a1b2eb7",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S09/",
+      "authority": "AUTH-AFC-2026-10-11-002",
+      "package_digest": "a018168f575741b5f53bbe7fac4bcb13128e31f37f69d73ba2433cf8d09d5144",
+      "leases": []
+    },
+    {
+      "at": "2026-10-12T08:42:07Z",
+      "kind": "orchestrator_defect",
+      "detail": "S02-fix g1 dispatched without a dispatch_record; returned CONTRACT_FAILURE before editing. S09-g1 CONTRACT_FAILURE: merged setup-a-repo check-workflows.py rejects directory input that CMD-WORKFLOW-CHECK and S09T require. Both D4-B defects folded into S02-fix g2."
+    },
+    {
+      "at": "2026-10-12T08:42:07Z",
+      "kind": "dispatch_record",
+      "lease_id": "S02-fix-g2",
+      "slice": "S02",
+      "generation": 2,
+      "purpose": "post-merge integration defect fix (D4-B): gate.sh --area -> positional; check-workflows.py directory input",
+      "repository": "alphazede/Alphazedehq",
+      "worktree": "$HOME/alphazede/worktrees/alphazedehq-afc-s02-fix",
+      "branch": "afc/s02-fix-gate-area",
+      "base": "ac47f0eca149eb281e41a6bdd9d490221c7a14cf",
+      "base_sha": "ac47f0eca149eb281e41a6bdd9d490221c7a14cf",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S02-fix/",
+      "authority": "AUTH-AFC-2026-10-11-002",
+      "package_digest": "a018168f575741b5f53bbe7fac4bcb13128e31f37f69d73ba2433cf8d09d5144",
+      "leases": [
+        "alphazedehq-skills/setup-a-repo"
+      ]
+    },
+    {
+      "at": "2026-10-12T11:20:44Z",
+      "kind": "dispatch_record",
+      "lease_id": "ST-4-g1",
+      "slice": "ST-4",
+      "generation": 1,
+      "repository": "1wgrumph/amazon-fantasy-companion",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-st4",
+      "branch": "afc/st4-spec",
+      "base": "5e59270b8320d6085039f26b64f14897736845f6",
+      "base_sha": "5e59270b8320d6085039f26b64f14897736845f6",
+      "evidence_dir": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/ST-4/",
+      "authority": "AUTH-AFC-2026-10-11-002",
+      "package_digest": "a018168f575741b5f53bbe7fac4bcb13128e31f37f69d73ba2433cf8d09d5144"
+    },
+    {
+      "at": "2026-10-12T11:20:44Z",
+      "kind": "dispatch_record",
+      "lease_id": "S09-g2",
+      "slice": "S09",
+      "generation": 2,
+      "repository": "1wgrumph/amazon-fantasy-companion",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-s09",
+      "branch": "afc/s09-gate",
+      "base": "8b4cd9dfeafa4dd1e268a1d7c1b78dc03a1b2eb7",
+      "base_sha": "8b4cd9dfeafa4dd1e268a1d7c1b78dc03a1b2eb7",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S09/",
+      "authority": "AUTH-AFC-2026-10-11-002",
+      "package_digest": "a018168f575741b5f53bbe7fac4bcb13128e31f37f69d73ba2433cf8d09d5144",
+      "leases": []
+    },
+    {
+      "at": "2026-10-12T11:37:56Z",
+      "kind": "wave_receipt",
+      "detail": "ST-4 PASS: spec draft PR #10 (65/65 UIDs). S09-g2 CONTRACT_FAILURE: S09T valid fixture uses `tools/ci/gate.sh <area>` but the shared contract (setup-pre-commit SKILL.md) and merged checker require `bash tools/ci/gate.sh <area>`; test defect returned to Test Implementer (S09T-g2)."
+    },
+    {
+      "at": "2026-10-12T11:37:56Z",
+      "kind": "dispatch_record",
+      "lease_id": "S09T-g2",
+      "slice": "S09T",
+      "generation": 2,
+      "repository": "1wgrumph/amazon-fantasy-companion",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-s09t",
+      "branch": "afc/s09t-gate-tests",
+      "base": "8b4cd9dfeafa4dd1e268a1d7c1b78dc03a1b2eb7",
+      "base_sha": "8b4cd9dfeafa4dd1e268a1d7c1b78dc03a1b2eb7",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S09T/",
+      "authority": "AUTH-AFC-2026-10-11-002",
+      "package_digest": "a018168f575741b5f53bbe7fac4bcb13128e31f37f69d73ba2433cf8d09d5144"
+    },
+    {
+      "at": "2026-10-12T11:44:57Z",
+      "kind": "review_receipt",
+      "detail": "ST-4 spec review (Muse, OCR): reviewer wrote PASS with one P3 finding F1 (stale file counts in evidence/ST-4/verification.txt); per workspace rule a fixable finding is REPAIR_REQUIRED; one repair round dispatched."
+    },
+    {
+      "at": "2026-10-12T11:44:57Z",
+      "kind": "dispatch_record",
+      "lease_id": "ST-4-g2",
+      "slice": "ST-4",
+      "generation": 2,
+      "purpose": "repair F1",
+      "repository": "1wgrumph/amazon-fantasy-companion",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-st4",
+      "branch": "afc/st4-spec",
+      "base": "b39553be846d7905ea4f0b0028082d6979cab402",
+      "base_sha": "b39553be846d7905ea4f0b0028082d6979cab402",
+      "evidence_dir": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/ST-4/",
+      "authority": "AUTH-AFC-2026-10-11-002"
+    },
+    {
+      "at": "2026-10-12T11:44:58Z",
+      "kind": "dispatch_record",
+      "lease_id": "S09-g3",
+      "slice": "S09",
+      "generation": 3,
+      "repository": "1wgrumph/amazon-fantasy-companion",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-s09",
+      "branch": "afc/s09-gate",
+      "base": "7f12bca11e61cfdd1f5d98725e6580fb5c33ab14",
+      "base_sha": "7f12bca11e61cfdd1f5d98725e6580fb5c33ab14",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S09/",
+      "authority": "AUTH-AFC-2026-10-11-002",
+      "package_digest": "a018168f575741b5f53bbe7fac4bcb13128e31f37f69d73ba2433cf8d09d5144",
+      "leases": []
+    },
+    {
+      "at": "2026-10-12T11:58:20Z",
+      "kind": "dispatch_record",
+      "lease_id": "S06-fix-g1",
+      "slice": "S06",
+      "generation": 5,
+      "purpose": "SD-034 section form fix in spec-authoring",
+      "repository": "alphazede/Alphazedehq",
+      "worktree": "$HOME/alphazede/worktrees/alphazedehq-afc-s06-fix",
+      "branch": "afc/s06-fix-section-prose",
+      "base": "120dee00207425201aa77d1f42f3756ee6bc406e",
+      "base_sha": "120dee00207425201aa77d1f42f3756ee6bc406e",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06-fix/",
+      "authority": "AUTH-AFC-2026-10-11-002",
+      "leases": [
+        "alphazedehq-skills/spec-authoring"
+      ]
     }
   ],
   "planning_review": {
