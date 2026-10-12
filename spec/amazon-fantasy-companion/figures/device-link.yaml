@@ -1,0 +1,48 @@
+# Derived from ST-3d model views; model digest 14fb815b78c2c6817d556c36d351b22dd3996db5f5a7e34a87251ce69bfdcfe5
+{
+  "class": "F7",
+  "title": "DeviceLink: entry unlinked",
+  "max_width": 2400,
+  "max_height": 1600,
+  "direction": "LR",
+  "nodes": [
+    {
+      "id": "unlinked",
+      "label": "unlinked"
+    },
+    {
+      "id": "codePending",
+      "label": "codePending"
+    },
+    {
+      "id": "linked",
+      "label": "linked"
+    },
+    {
+      "id": "expired",
+      "label": "expired"
+    }
+  ],
+  "edges": [
+    {
+      "from": "unlinked",
+      "to": "codePending",
+      "label": "requestCode"
+    },
+    {
+      "from": "codePending",
+      "to": "linked",
+      "label": "userConfirm"
+    },
+    {
+      "from": "codePending",
+      "to": "expired",
+      "label": "codeTimeout"
+    },
+    {
+      "from": "expired",
+      "to": "codePending",
+      "label": "requestCode"
+    }
+  ]
+}

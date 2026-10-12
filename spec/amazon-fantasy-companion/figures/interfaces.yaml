@@ -1,0 +1,92 @@
+# Derived from ST-3d model views; model digest 14fb815b78c2c6817d556c36d351b22dd3996db5f5a7e34a87251ce69bfdcfe5
+{
+  "class": "F3",
+  "title": "AFC interface boundaries",
+  "max_width": 2400,
+  "max_height": 1600,
+  "direction": "LR",
+  "nodes": [
+    {
+      "id": "tv",
+      "label": "tvApp"
+    },
+    {
+      "id": "backend",
+      "label": "backend"
+    },
+    {
+      "id": "espn",
+      "label": "externals.espn"
+    },
+    {
+      "id": "yahoo",
+      "label": "externals.yahoo"
+    },
+    {
+      "id": "provider",
+      "label": "externals.providerApps"
+    },
+    {
+      "id": "notify",
+      "label": "externals.fireOSNotify"
+    },
+    {
+      "id": "alexa",
+      "label": "externals.alexaRoute (conditional)"
+    },
+    {
+      "id": "link",
+      "label": "externals.linkConsumer"
+    },
+    {
+      "id": "ingest",
+      "label": "backend.ingest"
+    },
+    {
+      "id": "policy",
+      "label": "backend.matcher / policy"
+    }
+  ],
+  "edges": [
+    {
+      "from": "tv",
+      "to": "backend",
+      "label": "TvBackendApi"
+    },
+    {
+      "from": "backend",
+      "to": "espn",
+      "label": "BackendEspn"
+    },
+    {
+      "from": "backend",
+      "to": "yahoo",
+      "label": "BackendYahoo"
+    },
+    {
+      "from": "tv",
+      "to": "provider",
+      "label": "TvProviderLaunch"
+    },
+    {
+      "from": "tv",
+      "to": "notify",
+      "label": "TvFireOSNotify"
+    },
+    {
+      "from": "tv",
+      "to": "alexa",
+      "label": "TvAlexa: C8"
+    },
+    {
+      "from": "backend",
+      "to": "link",
+      "label": "BackendDeviceLink"
+    },
+    {
+      "from": "ingest",
+      "to": "policy",
+      "label": "IngestMatcherPolicy"
+    }
+  ]
+}
