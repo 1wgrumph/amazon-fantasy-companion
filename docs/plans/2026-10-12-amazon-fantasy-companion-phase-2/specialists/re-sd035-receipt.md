@@ -53,3 +53,25 @@ VERIFY (run in the worktree, branch afc/st4-spec):
 no new observations. Tools exercised: `read_skill` (requirements-engineering),
 file reads (register, re-st2-receipt.md, re-st2b-receipt.md), `edit_file`
 (register), `write_file` (this receipt), `git merge/commit/push`, `grep` probes.
+
+## SD-035 delta 2 — D1 closure (2026-10-12)
+
+verdict: **PASS**
+
+changed_paths (delta 2 write set):
+- `docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/requirements-register.md`
+- `docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/specialists/re-sd035-receipt.md` (this file, append only)
+
+changed rows:
+- AFC-PR-065: single default table -> customer-selectable preset of exactly two (PPR / Half-PPR); Default preset Half-PPR; full coefficient tables; Yahoo leagues under Yahoo scoring; label with selected preset; sources + SD-035 (D1)
+- AFC-PR-066: new — TV app records selected preset (PPR/Half-PPR, default Half-PPR); VCASE-AFC-PR-066; PROFILE, LINEUP; SD-035 (D1)
+- AFC-PR-039: default table -> selected preset table for manual
+- Header: 65 -> 66 requirements; D1 left open -> closed by SD-035 delta 2
+- D1: Open -> Closed by SD-035 (PPR + Half-PPR; Default Half-PPR; PR-065/066)
+
+VERIFY (delta 2, branch afc/st4-spec):
+- UID check `grep -oE 'AFC-PR-[0-9]{3}' <register> | sort -u | wc -l` -> 66; ids 001..066 all present; 66 rows; no row dups
+- `grep -n "AFC-PR-065" <register>` -> PPR, Half-PPR, Default preset Half-PPR, all coefficients, preset label, Yahoo scoring
+- rule-12 path scan `grep -nE '(/home/|/Users/)[A-Za-z0-9._-]+/' <write set>` -> no output
+
+developer_feedback (delta 2): no new observations. Tools exercised: `read_skill` (requirements-engineering), file reads (register, receipt), `edit_file` (register, receipt append), `git commit/push`, `grep` probes.
