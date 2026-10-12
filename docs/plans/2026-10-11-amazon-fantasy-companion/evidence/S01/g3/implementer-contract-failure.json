@@ -1,0 +1,61 @@
+{
+  "outcome": "CONTRACT_FAILURE",
+  "lease_id": "S01-g3",
+  "branch": "afc/s01-setup-pre-commit",
+  "head_sha": "47c46f2e16fed060482a1bf3a0e34ddcb9bc57fc",
+  "draft_pr_urls": [],
+  "changed_product_paths": [],
+  "blocker": {
+    "field": "journey.json execution_receipts S01-g3 base",
+    "actual": "origin/main",
+    "required": "full SHA the worktree was created from (implementation.json dispatch_records.fields.base)",
+    "affected_command": "CMD-D4-AGNOSTIC",
+    "reason": "The recorded mutable ref does not supply the required immutable dispatch baseline. No baseline substitution or plan edit is authorized by this packet.",
+    "recovery": "Orchestrator records the verified full creation SHA and supplies the corrected dispatch contract."
+  },
+  "commands": [
+    {
+      "command": "Initial worktree-relative BRAN runtime verification",
+      "exit_code": 1,
+      "output_tail": "/bin/bash: line 1: tools/bran/runtime/bran: No such file or directory",
+      "classification": "Resolved discovery-path failure: used trusted main-checkout runtime, as allowed by use-bran."
+    },
+    {
+      "command": "Verify trusted main-checkout BRAN SHA against pin; bran check . bran-strict; bran query . setup-pre-commit gate contract skill",
+      "exit_code": 0,
+      "output_tail": "selected_passed: true; query_outcome: grounded"
+    },
+    {
+      "command": "Read implementation.json dispatch_records and journey.json S01-g3; git rev-parse HEAD origin/main; git status --porcelain",
+      "exit_code": 0,
+      "output_tail": "Required base: full SHA; recorded base: origin/main; HEAD and origin/main: 47c46f2e16fed060482a1bf3a0e34ddcb9bc57fc; working tree clean"
+    }
+  ],
+  "proof_rows": {
+    "SEIT-AFC-D4-01.T": "NOT_RUN: stopped at dispatch-contract validation",
+    "SEIT-AFC-D4-01.S": "NOT_RUN: stopped at dispatch-contract validation",
+    "SEIT-AFC-D4-05.L": "NOT_RUN: stopped at dispatch-contract validation",
+    "SEIT-AFC-D4-05.T": "NOT_RUN: stopped at dispatch-contract validation",
+    "SEIT-AFC-D4-06": "NOT_RUN: stopped at dispatch-contract validation"
+  },
+  "bran_status": "hit",
+  "bran_refs": {
+    "coverage": "repository validation and skill retrieval",
+    "verified_paths": [
+      "skills/setup-pre-commit/SKILL.md",
+      "skills/ship-pull-request/references/GATES.md"
+    ],
+    "extra_discovery_avoided": false
+  },
+  "remaining_risks": [
+    "Implementation, prescribed candidate verification, trigger evaluation and draft PR remain outstanding."
+  ],
+  "developer_feedback": {
+    "Devpost Product Feedback": "n/a",
+    "Friction Log Entry": "Dispatch baseline is a mutable ref although its schema and verifier require the full creation SHA. Stopped before product edits.",
+    "Feature Request": "n/a",
+    "measured_cost": "unknown"
+  },
+  "review": "not performed; outside worker role",
+  "reverify": "not applicable: no compiled binary built or claimed"
+}

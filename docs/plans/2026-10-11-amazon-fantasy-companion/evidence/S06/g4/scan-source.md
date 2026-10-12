@@ -1,0 +1,69 @@
+verdict: PASS
+Date: 2026-10-12T06:57:40.633039+00:00
+Origin: https://github.com/1wgrumph/gridmarket/tree/99eb98e7b0b5d1473c8e595d825d569b567c6817
+Intended use: S06 vendoring and offline verification, after this receipt.
+CREDENTIAL FINDINGS: none; gitleaks redacted scans exit 0.
+Selected template, three skill references, build/lint/diagram source and tests; all Git blob identities verified against pinned GitHub tree. Bandit: 77 low, 3 medium, 0 high; subprocess executes discovered dot with an argv list, no shell. XML warnings concern local draw.io generated inputs; host Expat 2.7.4 has amplification protections. No credential, network, persistence or installer behavior in tool source. Tests use assertions intentionally.
+ClamAV 1.5.4, database 28150 (2026-10-11): 568 files, zero infected, exit 0.
+No dynamic analysis performed. Residual risk: scanners cannot prove absence of unknown defects.
+SHA256:
+d5e9e764a79f276d580889a978e4f2a695886e9cb54d416116d63c0fd2fd4066  1wgrumph-gridmarket-99eb98e/LICENSE
+acb7e0a60952ac9be8921f9ec8bd8c743917c685c2fe107ce8ef454689ba3420  1wgrumph-gridmarket-99eb98e/skills/spec-author/SKILL.md
+d2e0713fb6ef7f80c657ea0611396cab9e0e6547a26076d3c86eba6e9491a25e  1wgrumph-gridmarket-99eb98e/skills/spec-diagram/SKILL.md
+7b0f3bd2d9b1c9d264a1f557b2ca2fe96638a1a9f1a3d2c028115356c87c94a2  1wgrumph-gridmarket-99eb98e/skills/spec-lint/SKILL.md
+c051b644a9611ff70478348cce75bf8f91b9deafb4a79bc50026246114c17883  1wgrumph-gridmarket-99eb98e/spec/template/01-introduction.md
+3ba744aae292dac592438d740965da30779233ceaf7d1124ca03c5323cb42ddd  1wgrumph-gridmarket-99eb98e/spec/template/01.1-background.md
+88cc01fc9bf006e6b8e20daef26e2f180e65af1260cd0be7e85980ed4b995c03  1wgrumph-gridmarket-99eb98e/spec/template/01.1.1-identification.md
+556a85b24809f4d2c1f9ecfa33c7454408610cfa54552ef74772735c41d06372  1wgrumph-gridmarket-99eb98e/spec/template/01.1.2-system-context.md
+ce9cec5dbd0ddd455f2e41f053ce99da61cdb586c40559291e8b6662d497393e  1wgrumph-gridmarket-99eb98e/spec/template/01.2-baseline.md
+03ee413ac040febb8a81f8f3e675324d0d4e3d6fdbe633385beda24758935261  1wgrumph-gridmarket-99eb98e/spec/template/01.2.1-baselines.md
+0e558e32fa64b469cd436139668c086f4caa175e7e0e9dfa31dfc740bf8cd629  1wgrumph-gridmarket-99eb98e/spec/template/01.3-feature-set.md
+d7399b03b0af2b58eadd162576bdfbef004dee7213959a042c20fb330517e35f  1wgrumph-gridmarket-99eb98e/spec/template/01.4-scope.md
+0feeff5cf068f67724cfddd5f1ce44221ed42dbfe4c1c00e1b5d9d512426c510  1wgrumph-gridmarket-99eb98e/spec/template/01.4.1-purpose-and-scope.md
+c1f59aaa149881c9014dd9751bc40f938d24a9984ef579404394f8cdc183eecd  1wgrumph-gridmarket-99eb98e/spec/template/01.4.2-stakeholders.md
+580aef07209ec721924a4cc073857a1ea897a4bdc9cecb56108608ef8b1dd6ce  1wgrumph-gridmarket-99eb98e/spec/template/01.5-assumptions.md
+8e292b80e6d4cce2964f04c5a22d9a34af90f551151e4f11cbcbc0745f0ba198  1wgrumph-gridmarket-99eb98e/spec/template/01.6-terms.md
+7d02cefce0788d89f29f1f058e6cc6d3d60137abaa18292c253e3c6032cda96d  1wgrumph-gridmarket-99eb98e/spec/template/01.6.1-requirements.md
+b1abf3c255df5fe3cdbe7eace736dc4b2d0e5658db561c1723388a1c2682b655  1wgrumph-gridmarket-99eb98e/spec/template/02-open-items.md
+5efc398a6a658266548d0969c24ad237d3469e57de4c800c9cfce541d4ca586a  1wgrumph-gridmarket-99eb98e/spec/template/02.1-risks.md
+b9f2a790db316fd304a3d6ee9a3675350b9c360fb15c7d0f5eaa7c8ea2c4c4cc  1wgrumph-gridmarket-99eb98e/spec/template/03-use-model.md
+cf1a56437cdf814c5c0e1e0076d9719aab0d71fa707b5878b2bd0cf62e235ce4  1wgrumph-gridmarket-99eb98e/spec/template/03.1-operational-concept.md
+073a3392a04949171778850ea2df8479c5fbcef6c2adc00b19c172e294ebf860  1wgrumph-gridmarket-99eb98e/spec/template/04-feature-architecture.md
+20d6886f00ad860eae1198c868868b09a07f7081bac20940cfb5ec5fa722b98a  1wgrumph-gridmarket-99eb98e/spec/template/04.1-feature-decomposition.md
+f3c588dda900a363e07ca269daa28807d9ad8a3b8dfabe9fe68a586fbca97c26  1wgrumph-gridmarket-99eb98e/spec/template/04.1.1-feature.md
+4bfbfbb97c21eaf1b20d234df4a01e7152d819b710a5a43d1031bb52ac9b130e  1wgrumph-gridmarket-99eb98e/spec/template/04.1.99-allocation.md
+e47379ab170072ac0085678e045f4773e1bb008719a311a0b311f3c1323db8d0  1wgrumph-gridmarket-99eb98e/spec/template/04.2-feature-interfaces.md
+ba142609a3137503f615b0575e23a01e052f905d8a4d57d7cd7bc6e1ff65e471  1wgrumph-gridmarket-99eb98e/spec/template/04.2.1-internal-interfaces.md
+1b99921de20f0fc504cff0a1310ad57b18a52bc7e52ac3426e71e4884a5d9b5b  1wgrumph-gridmarket-99eb98e/spec/template/04.2.2-external-interfaces.md
+3bbda4446fdd1237247fcd3fb2c633644b49a9414f5faa0fe9f5620f41cba6df  1wgrumph-gridmarket-99eb98e/spec/template/04.2.3-interfaces-and-contracts.md
+879fe53446f34b722cfaa824a3fe04dfe55488cbb7c3bedf79a3508ff1aa716b  1wgrumph-gridmarket-99eb98e/spec/template/04.3-data-model.md
+e73a8b5bda57bc98a8ba1bd4f0f8b407f6ce622800f14c64000a92956bcb500c  1wgrumph-gridmarket-99eb98e/spec/template/04.4-performance.md
+27b702db2b17d63c58cebe6e123139274c1648c8d9255ba49d49abf0a279a700  1wgrumph-gridmarket-99eb98e/spec/template/04.5-fault-behavior.md
+3282fb32ed75c0a799969f8c81dce1112d94ec4521810f5b0ee4a6f795bddb8d  1wgrumph-gridmarket-99eb98e/spec/template/04.6-architecture-views.md
+562331934669ec2bcfadb018a6fdf6da67aefeedd176d6b5651adfb24bed0984  1wgrumph-gridmarket-99eb98e/spec/template/04.7-model-correspondence.md
+afe24bb09a6524a5b193bd643f51d41451b5957f39c81846c4777d1e42c00f94  1wgrumph-gridmarket-99eb98e/spec/template/04.8-rationale.md
+8d5de9b17fe22652d7dc6260317ca307e298d3cb52e216c6d93e3e025e2ff768  1wgrumph-gridmarket-99eb98e/spec/template/05-security.md
+7d8d1ad8752509388b9ccd34e7d78d880952a45fa9e30b02fe8254842761a354  1wgrumph-gridmarket-99eb98e/spec/template/05.1-security-considerations.md
+a9e57c0d559d5c4220d8823c0fb3ec9f756bb230716d62a871671de951ed6b67  1wgrumph-gridmarket-99eb98e/spec/template/05.2-security-features.md
+b6c4ef146883ddeebe2999a4c40ee2ebae3d47c89916a0c505c6fec179aca049  1wgrumph-gridmarket-99eb98e/spec/template/05.3-security-interfaces.md
+28494638f157e345d0fb0ed03e283fee8a6549e470792c35752b92afc10948a0  1wgrumph-gridmarket-99eb98e/spec/template/06-programming-model.md
+12997cf1c6a117c80d69081ce0af777ba176b0994acb30ea38b87167475bf6ca  1wgrumph-gridmarket-99eb98e/spec/template/07-verification.md
+e841e67c8f129ed2bc8ebced8b6193b3758d0fd1ad914c8b16cc4289d98e9e59  1wgrumph-gridmarket-99eb98e/spec/template/07.1-verification-approach.md
+20c1d2632db57d22541b4f45bcad948375cbe27af4f6b33ce3722d8cbb212a5e  1wgrumph-gridmarket-99eb98e/spec/template/figures/system-context.drawio
+614ccf87d05ee1d2d630b38ae6833d85b245507d030d82ebb8d79e9a49f474d3  1wgrumph-gridmarket-99eb98e/spec/template/figures/system-context.svg
+02ff4e04efc743284a9378c6b81cc06542fb17038481e306b6c94b609306a6f2  1wgrumph-gridmarket-99eb98e/spec/template/figures/system-context.yaml
+59473413329a7568d41c77eeedbad036bbf268c9a234bcfc121d2d302db586d8  1wgrumph-gridmarket-99eb98e/spec/template/spec.yaml
+04b6a88094251f131f2302417ad6871b9ca30d6a47cd37207d1349c51fc7e9ef  1wgrumph-gridmarket-99eb98e/tools/azdiagram/__init__.py
+e1806f8006eb91d98b4cc97e954bf870015998b83da9919ae348dc06e1050388  1wgrumph-gridmarket-99eb98e/tools/azdiagram/__main__.py
+cad8d8e3bd4291ea25b07248784a56e643570e8a8fb3c1eb9cf5d837f4200838  1wgrumph-gridmarket-99eb98e/tools/spec_build.py
+abdc5ec51a95b9e39fd5cbeb4eade254639902f19768aea9d7ae3e9af3844d44  1wgrumph-gridmarket-99eb98e/tools/spec_lint.py
+7eb260d0efa10632ca61d769c2d44203890abc0847508ce74fd8249ebe6fcce0  1wgrumph-gridmarket-99eb98e/tools/tests/fixtures/azdiagram/graph.yaml
+46be1a5aae34eb4f5218c6640934385fb319b384f72e706875d7b85a69c5e589  1wgrumph-gridmarket-99eb98e/tools/tests/fixtures/azdiagram/overlap.drawio
+3baf69e1867c51ea1ad3e5083a8da58e5e8ac9afd2fa82bda5fa92ba436d7b02  1wgrumph-gridmarket-99eb98e/tools/tests/fixtures/azdiagram/sequence.yaml
+f92bf5a5097ca934a57739b6f5afe63d01395106224b73458402801ec9536c89  1wgrumph-gridmarket-99eb98e/tools/tests/fixtures/azdiagram/timing.yaml
+d51370952283c82825b3fe58a04538043416daefaacae2d832e15b4ba72cb559  1wgrumph-gridmarket-99eb98e/tools/tests/fixtures/spec/conforming.md
+00c0e3ff292c3add42e777339741d0fb14cbea85019bcafdcebb71bfb11544ba  1wgrumph-gridmarket-99eb98e/tools/tests/fixtures/spec/src/01-overview.md
+d51370952283c82825b3fe58a04538043416daefaacae2d832e15b4ba72cb559  1wgrumph-gridmarket-99eb98e/tools/tests/fixtures/spec/src/02-market.md
+5b86257aacee74fbf0d5fa92f2fa4e8ee0500d6ea494f6b991d1398674895576  1wgrumph-gridmarket-99eb98e/tools/tests/fixtures/spec/src/spec.yaml
+be38292e8b99e0c0dcfa53679a1aadf09be23812af4cb70fd401e9ed6687d0d7  1wgrumph-gridmarket-99eb98e/tools/tests/test_azdiagram.py
+290c8c79dbd0350814b36183e51c41f90b00c4fc77b3973abfc620f7e942c81f  1wgrumph-gridmarket-99eb98e/tools/tests/test_spec_tools.py

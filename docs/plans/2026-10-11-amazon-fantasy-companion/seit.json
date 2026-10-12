@@ -18,12 +18,12 @@
     "planning_inputs": [
       {
         "path": "docs/plans/2026-10-11-amazon-fantasy-companion/amazon-fantasy-companion-technical-plan.md",
-        "sha256": "4dbaf7e00d1a956c329db3ce525ad0aae2f0b6cd0c37f738c64e86193991fe07",
+        "sha256": "afffae3cd7396dd0459d09baf8a9fbf67bd70da3bc0d507427b3def959439f6f",
         "binding_status": "bound"
       },
       {
         "path": "docs/plans/2026-10-11-amazon-fantasy-companion/design.md",
-        "sha256": "7c53f5eb93c8341f9db9c5f38f5740bdea1222760ef2419223b7527ef32923d3",
+        "sha256": "a872f0cbff796a87900ccc17f87b81fc178d0a8e2963532aa9d4ece2d58fc80b",
         "binding_status": "bound"
       },
       {
@@ -75,10 +75,16 @@
       "DEC-AFC-SD-025": "confirmed",
       "DEC-AFC-SD-026": "confirmed",
       "DEC-AFC-SD-027": "confirmed",
-      "DEC-AFC-SD-028": "confirmed"
+      "DEC-AFC-SD-028": "confirmed",
+      "DEC-AFC-SD-029": "confirmed",
+      "DEC-AFC-SD-030": "confirmed",
+      "DEC-AFC-SD-031": "confirmed",
+      "DEC-AFC-SD-032": "confirmed"
     },
     "superseded": {
-      "DEC-AFC-SD-013": "DEC-AFC-SD-022"
+      "DEC-AFC-SD-013": "DEC-AFC-SD-022",
+      "DEC-AFC-SD-030 (SysON parse method)": "DEC-AFC-SD-031",
+      "DEC-AFC-SD-031 (syside parse method)": "DEC-AFC-SD-032"
     },
     "open_items": [
       {
@@ -116,6 +122,10 @@
       {
         "id": "OA-AFC-A3",
         "status": "open_for_integrated_review"
+      },
+      {
+        "id": "OD-AFC-13",
+        "status": "closed_by DEC-AFC-SD-031"
       }
     ],
     "deferred_items": [
@@ -332,18 +342,21 @@
     }
   ],
   "environments_fixtures_data_simulations_support": {
-    "host": "owner workstation: uv 0.11.6, python3 (jsonschema 4.19.2), Graphviz dot, gh, jq, git, shellcheck, claude, ocr v1.12.13, reverify present; kcov, mutmut and diff-cover absent on 2026-10-11 (coverage/mutation tools are fetched by uv after CMD-SCAN; shell coverage and shell mutation are TOOL_MISSING)",
+    "host": "owner workstation: uv 0.11.6, python3 (jsonschema 4.19.2), Graphviz dot, gh, jq, git, shellcheck, claude, ocr v1.12.13, reverify present; kcov, mutmut and diff-cover absent on 2026-10-11; the packaged-default Requirements System host's SysON answering on loopback on 2026-10-12 (spec track, DEC-AFC-SD-032) (coverage/mutation tools are fetched by uv after CMD-SCAN; shell coverage and shell mutation are TOOL_MISSING)",
     "repositories": "this repository (lane worktrees under worktrees/amazon-fantasy-companion-<lane>-<slice>); alphazede/Alphazedehq slice worktrees and the leased main checkout (alphazedehq-main-checkout); alphazede/requirements-system slice worktree for S06's reciprocal non-trigger edit only (<workspace>/worktrees/requirements-system-afc-s06-nontrigger; DEC-AFC-SD-028)",
     "fixtures": "credential and path fixtures are generated at test time inside tools/ci/tests (never literal secrets committed); workflow violation fixtures per AC-AFC-CI-02 rule; a temp HOME fixture for installer tests; fixture spec/<name>/ directories created in temp dirs",
     "hermeticity": "gate and skill tests run in temp dirs without network; only CMD-PR-CHECKS, CMD-NO-MILESTONE, PROC-ACTIONS-BUDGET and CMD-MERGE-IDENTITY read GitHub; mutation runs only in the slice worktree and must leave git diff clean",
     "simulations": "none",
-    "evidence_dirs": "<evidence_dir> = the slice or step receipt directory recorded in journey.json execution_receipts; <review_dir>/<review_evidence_dir> = the Reviewer evidence store; evidence/phase2-entry-receipt.json = docs/plans/2026-10-11-amazon-fantasy-companion/evidence/phase2-entry-receipt.json (IE-P1-F08)",
-    "python_wheels": "<afc_uv_env> = UV_OFFLINE=1 UV_NO_CACHE=1 UV_FIND_LINKS=<wheel_dir> UV_PYTHON=\"$(command -v python3)\"; <wheel_dir> is a host directory outside every repository filled once by `python3 -m pip download --only-binary=:all: --dest <wheel_dir> 'pytest==9.0.3' 'pyyaml==6.0.3'` (the closure adds iniconfig, packaging, pluggy, pygments) and scanned by CMD-SCAN before first use; the scan receipt records `sha256sum <wheel_dir>/*.whl` (DEC-AFC-SD-026 item 3); offline with no cache, only <wheel_dir> satisfies a requirement, so an unscanned cached wheel can never be used (an empty or missing <wheel_dir> fails resolution, fail closed)"
+    "evidence_dirs": "<evidence_dir> = the evidence_dir/g<generation>/ of the slice's dispatch record (implementation.json dispatch_records; docs/plans/2026-10-11-amazon-fantasy-companion/evidence/<slice>/g<generation>/), or the step receipt directory an integration step records in journey.json execution_receipts; <review_dir>/<review_evidence_dir> = the Reviewer evidence store; evidence/phase2-entry-receipt.json = docs/plans/2026-10-11-amazon-fantasy-companion/evidence/phase2-entry-receipt.json (IE-P1-F08)",
+    "python_wheels": "<afc_uv_env> = UV_OFFLINE=1 UV_NO_CACHE=1 UV_FIND_LINKS=<wheel_dir> UV_PYTHON=\"$(command -v python3)\"; <wheel_dir> is a host directory outside every repository filled once by `python3 -m pip download --only-binary=:all: --dest <wheel_dir> 'pytest==9.0.3' 'pyyaml==6.0.3'` (the closure adds iniconfig, packaging, pluggy, pygments) and scanned by CMD-SCAN before first use; the scan receipt records `sha256sum <wheel_dir>/*.whl` (DEC-AFC-SD-026 item 3); offline with no cache, only <wheel_dir> satisfies a requirement, so an unscanned cached wheel can never be used (an empty or missing <wheel_dir> fails resolution, fail closed)",
+    "dispatch_base": "<base> = the full base SHA in the slice's dispatch record (implementation.json dispatch_records), the commit its worktree was created from; for the Wave 1 exit combined CMD-D4-AGNOSTIC run, the oldest base among the S01, S02 and S03 records",
+    "exit_status": "A command's own exit status is its verdict (DEC-AFC-SD-029). A command that prints `exit=<n>` ends with `; rc=$?; echo \"exit=$rc\"; (exit $rc)`, so the wrapper exits with the checked status; a trailing bare `echo \"exit=$?\"` (exit 0 always) is never used. Run each command under bash at the slice worktree root.",
+    "syson": "Spec track only (ST-3, DEC-AFC-SD-032). <syson_url> = http://127.0.0.1:<port>, where <port> is read from $XDG_RUNTIME_DIR/alphazede-requirements-system/syson.port (the writable SysON port of the packaged-default Requirements System host, never its review port). If nothing answers there, start the host with `alphazede-requirements-system start --no-browser` (cross-repo rule 14); if SysON still does not answer, the result is typed gap SYSON_UNAVAILABLE. CMD-MODEL-SYSON talks to SysON directly through SysON's own API: GraphQL `createProject` (template `blank-project`) at /api/graphql, `uploadDocument` at /api/graphql/upload with the file map exactly `{\"0\":\"variables.file\"}`, and the read-back `GET /api/rest/projects/<project>/commits/00000000-0000-0000-0000-000000000000/elements`. It never uses the Requirements System CLI, model registry, checkouts or model bindings. curl and jq are on the host; no key, licence or credential is involved. Each run leaves its own project `afc-model-parse-<run>` as evidence; no run edits or deletes any other SysON project. <run> is a new UTC timestamp per run (for example 20261012T0800Z)."
   },
   "procedures_and_commands": [
     {
       "id": "CMD-RED",
-      "command": "case <suite> in gate) python3 -m unittest discover -s tools/ci/tests -v ;; hook) bash hooks/test-ci-gate-hook.sh ;; esac; echo \"exit=$?\"; sha256sum <test_files>; git rev-parse HEAD; git status --porcelain",
+      "command": "case <suite> in gate) python3 -m unittest discover -s tools/ci/tests -v ;; hook) bash hooks/test-ci-gate-hook.sh ;; esac; rc=$?; echo \"exit=$rc\"; sha256sum <test_files>; git rev-parse HEAD; git status --porcelain; (exit $rc)",
       "pass": "Red receipt: exit non-zero; every test id named by the slice's red-expected SEIT rows is reported failed by an assertion; a collection, import or syntax error is NOT a valid red (harness defect: fix, rerun); the output records the sha256 of each test file and binds the TDD-pair worktree candidate (HEAD + porcelain status).",
       "description": "Red phase of each ci-lane tdd pair (DES-AFC-LANES). The green run is CMD-GATE-HYGIENE (suite gate) or CMD-HOOK-TEST (suite hook) over the same test ids with unchanged test-file sha256.",
       "repository": "this (suite gate) or Alphazedehq (suite hook)",
@@ -355,7 +368,7 @@
     },
     {
       "id": "CMD-GATE-ALL",
-      "command": "tools/ci/gate.sh; echo \"exit=$?\"",
+      "command": "tools/ci/gate.sh; rc=$?; echo \"exit=$rc\"; (exit $rc)",
       "pass": "exit 0 and exactly one line 'gate: <area>: PASS ...' for each of spec, docs, hygiene; any 'GAP' line or exit 3 is a typed gap (never PASS); exit 1 FAIL; exit 2 usage error (harness defect)",
       "description": "All three Phase 1 gate areas (CONTRACT-AFC-GATE). Lane-merge, main and closeout gate.",
       "repository": "this (1wgrumph/amazon-fantasy-companion)",
@@ -368,7 +381,7 @@
     },
     {
       "id": "CMD-GATE-SPEC",
-      "command": "tools/ci/gate.sh spec; echo \"exit=$?\"",
+      "command": "tools/ci/gate.sh spec; rc=$?; echo \"exit=$rc\"; (exit $rc)",
       "pass": "exit 0 and 'gate: spec: PASS'; 'GAP' or exit 3 (tools/spec missing or Graphviz dot missing) is a typed gap, never PASS; exit 1 FAIL",
       "description": "Gate area spec per DES-AFC-GATE: vendored spec lint, figure lint and byte-identical rebuild per spec/<name>/; template self-check in a temp dir while none exists (AC-AFC-CI-04).",
       "repository": "this (1wgrumph/amazon-fantasy-companion)",
@@ -380,7 +393,7 @@
     },
     {
       "id": "CMD-GATE-DOCS",
-      "command": "tools/ci/gate.sh docs; echo \"exit=$?\"",
+      "command": "tools/ci/gate.sh docs; rc=$?; echo \"exit=$rc\"; (exit $rc)",
       "pass": "exit 0 and 'gate: docs: PASS'; exit 1 FAIL with 'file:line:DOC-<rule>' lines; 'GAP' or exit 3 is a typed gap, never PASS",
       "description": "Gate area docs per DES-AFC-GATE: python3 tools/ci/check_docs.py (Vnv area headings Scope, Tools, Review Focus, Findings target; relative Markdown links resolve) (AC-AFC-CI-04).",
       "repository": "this (1wgrumph/amazon-fantasy-companion)",
@@ -392,7 +405,7 @@
     },
     {
       "id": "CMD-GATE-HYGIENE",
-      "command": "tools/ci/gate.sh hygiene; echo \"exit=$?\"",
+      "command": "tools/ci/gate.sh hygiene; rc=$?; echo \"exit=$rc\"; (exit $rc)",
       "pass": "exit 0 and 'gate: hygiene: PASS'; 'GAP' or exit 3 is a typed gap, never PASS; exit 1 FAIL with 'file:line:rule-id' lines that never contain the matched text",
       "description": "Gate area hygiene per DES-AFC-GATE: tools/ci/check_paths.py over all tracked files, the vendored workflow checker over .github/workflows/, and python3 -m unittest discover -s tools/ci/tests (the green run of the S09T test ids).",
       "repository": "this (1wgrumph/amazon-fantasy-companion)",
@@ -405,7 +418,7 @@
     },
     {
       "id": "CMD-WORKFLOW-CHECK",
-      "command": "python3 tools/ci/check_workflows.py .github/workflows/; echo \"exit=$?\"",
+      "command": "python3 tools/ci/check_workflows.py .github/workflows/; rc=$?; echo \"exit=$rc\"; (exit $rc)",
       "pass": "exit 0 on the committed workflow; each S09T negative fixture (pull_request_target trigger, unpinned action, permission wider than contents: read, secret reachable from a fork pull request, missing concurrency or cancel-in-progress, self-hosted runner, area job without a path filter) exits 1 naming its rule",
       "description": "Vendored D4-B workflow checker (AC-AFC-CI-02).",
       "repository": "this (1wgrumph/amazon-fantasy-companion)",
@@ -429,7 +442,7 @@
     },
     {
       "id": "CMD-HOOKSPATH",
-      "command": "test \"$(git config --get core.hooksPath)\" = .githooks && test -x .githooks/pre-commit && test -x .githooks/pre-push && grep -q 'tools/ci/gate.sh' .githooks/pre-commit && grep -q 'tools/ci/gate.sh' .githooks/pre-push; echo \"exit=$?\"",
+      "command": "test \"$(git config --get core.hooksPath)\" = .githooks && test -x .githooks/pre-commit && test -x .githooks/pre-push && grep -q 'tools/ci/gate.sh' .githooks/pre-commit && grep -q 'tools/ci/gate.sh' .githooks/pre-push; rc=$?; echo \"exit=$rc\"; (exit $rc)",
       "pass": "exit 0: the checkout's hooks path is .githooks (set by the D4-A installer) and both executable hooks invoke tools/ci/gate.sh",
       "description": "Local git hooks active in a checkout (AC-AFC-CI-01).",
       "repository": "this (1wgrumph/amazon-fantasy-companion)",
@@ -440,7 +453,7 @@
     },
     {
       "id": "CMD-CI-VENDOR-PIN",
-      "command": "git -C <alphazedehq_checkout> show <azhq_d4b_sha>:skills/setup-a-repo/scripts/check-workflows.py | diff - tools/ci/check_workflows.py && grep -qF <azhq_d4a_sha> tools/ci/VENDORED.md && grep -qF <azhq_d4b_sha> tools/ci/VENDORED.md; echo \"exit=$?\"",
+      "command": "git -C <alphazedehq_checkout> show <azhq_d4b_sha>:skills/setup-a-repo/scripts/check-workflows.py | diff - tools/ci/check_workflows.py && grep -qF <azhq_d4a_sha> tools/ci/VENDORED.md && grep -qF <azhq_d4b_sha> tools/ci/VENDORED.md; rc=$?; echo \"exit=$rc\"; (exit $rc)",
       "pass": "exit 0: the vendored checker equals the merged D4-B file and tools/ci/VENDORED.md names the D4-A and D4-B merge commits",
       "description": "Gate contract pin (CONTRACT-AFC-GATE consumer side).",
       "repository": "this (1wgrumph/amazon-fantasy-companion)",
@@ -452,7 +465,7 @@
     },
     {
       "id": "CMD-COVERAGE-CI",
-      "command": "uv run --no-project --with 'coverage>=7,<8' --with 'diff-cover>=9,<10' sh -c 'coverage run --branch --source=tools/ci -m unittest discover -s tools/ci/tests && coverage xml -o <evidence_dir>/coverage-ci.xml && diff-cover <evidence_dir>/coverage-ci.xml --compare-branch=origin/main --include \"tools/ci/*.py\" --exclude tools/ci/check_workflows.py --fail-under=90'; echo \"exit=$?\"",
+      "command": "uv run --no-project --with 'coverage>=7,<8' --with 'diff-cover>=9,<10' sh -c 'coverage run --branch --source=tools/ci -m unittest discover -s tools/ci/tests && coverage xml -o <evidence_dir>/coverage-ci.xml && diff-cover <evidence_dir>/coverage-ci.xml --compare-branch=origin/main --include \"tools/ci/*.py\" --exclude tools/ci/check_workflows.py --fail-under=90'; rc=$?; echo \"exit=$rc\"; (exit $rc)",
       "pass": "exit 0: >= 90 % of changed lines in tools/ci/*.py (excluding the vendored check_workflows.py) are executed by the gate tests; gate.sh shell lines have no coverage tool on this host (kcov absent): TOOL_MISSING typed gap, never PASS; a coverage/diff-cover fetch or flag failure is TOOL_MISSING with the exact error",
       "description": "Changed-line coverage claim for the S09T/S09 pair (gate_declarations.ci.tools_ci).",
       "repository": "this (1wgrumph/amazon-fantasy-companion)",
@@ -463,7 +476,7 @@
     },
     {
       "id": "CMD-MUTATION-CI",
-      "command": "uvx --from 'mutmut>=2.4,<3' mutmut run --paths-to-mutate tools/ci/check_paths.py,tools/ci/check_docs.py --tests-dir tools/ci/tests --runner 'python3 -m unittest discover -s tools/ci/tests' --no-progress; uvx --from 'mutmut>=2.4,<3' mutmut results > <evidence_dir>/mutation-ci.txt; git diff --exit-code -- tools/ci; echo \"exit=$?\"",
+      "command": "uvx --from 'mutmut>=2.4,<3' mutmut run --paths-to-mutate tools/ci/check_paths.py,tools/ci/check_docs.py --tests-dir tools/ci/tests --runner 'python3 -m unittest discover -s tools/ci/tests' --no-progress; uvx --from 'mutmut>=2.4,<3' mutmut results > <evidence_dir>/mutation-ci.txt; git diff --exit-code -- tools/ci; rc=$?; echo \"exit=$rc\"; (exit $rc)",
       "pass": "killed / (killed + survived + timeout + suspicious) >= 0.70 over the mutants of check_paths.py and check_docs.py, computed from mutation-ci.txt; the final git diff exits 0 (mutmut restored every file); a mutmut install, CLI or runner failure is TOOL_MISSING or NOT_RUN with the exact error, never PASS",
       "description": "Mutation claim for the S09T/S09 pair (gate_declarations.ci.tools_ci). Runs in the S09 TDD-pair worktree after green.",
       "repository": "this (1wgrumph/amazon-fantasy-companion)",
@@ -474,7 +487,7 @@
     },
     {
       "id": "CMD-D4A-TEST",
-      "command": "bash skills/setup-pre-commit/tests/test-install-hooks.sh; echo \"exit=$?\"",
+      "command": "bash skills/setup-pre-commit/tests/test-install-hooks.sh; rc=$?; echo \"exit=$rc\"; (exit $rc)",
       "pass": "exit 0; the tests cover: installer sets core.hooksPath .githooks; idempotent rerun; template gate.sh exit codes 0/1/2/3 and 'gate: <area>: PASS|FAIL|GAP' lines per CONTRACT-AFC-GATE; both hooks invoke the same entrypoint",
       "description": "D4-A tests (AC-AFC-D4-01).",
       "repository": "Alphazedehq (slice worktree of alphazede/Alphazedehq)",
@@ -486,7 +499,7 @@
     },
     {
       "id": "CMD-D4B-TEST",
-      "command": "env <afc_uv_env> uv run --no-project --with 'pytest==9.0.3' --with 'pyyaml==6.0.3' python -m pytest skills/setup-a-repo/tests/test_check_workflows.py -rA && python3 skills/setup-a-repo/scripts/check-workflows.py skills/setup-a-repo/templates/ci.yml; echo \"exit=$?\"",
+      "command": "env <afc_uv_env> uv run --no-project --with 'pytest==9.0.3' --with 'pyyaml==6.0.3' python -m pytest skills/setup-a-repo/tests/test_check_workflows.py -rA && python3 skills/setup-a-repo/scripts/check-workflows.py skills/setup-a-repo/templates/ci.yml; rc=$?; echo \"exit=$rc\"; (exit $rc)",
       "pass": "exit 0; the tests hold one violating fixture per AC-AFC-CI-02 rule, each exiting 1; the shipped template passes the checker",
       "description": "D4-B checker tests (AC-AFC-D4-02).",
       "repository": "Alphazedehq (slice worktree of alphazede/Alphazedehq)",
@@ -498,7 +511,7 @@
     },
     {
       "id": "CMD-D4C-TEST",
-      "command": "bash skills/ship-pull-request/tests/edit-pr.test.sh && grep -q 'REFUSED_NO_VNV' skills/ship-pull-request/SKILL.md && grep -qE 'docs/vnv/AGENTS.md|Vnv/AGENTS.md' skills/ship-pull-request/SKILL.md && grep -q -- '--scope=commits=' skills/ship-pull-request/SKILL.md && grep -q 'tools/ci/gate.sh' skills/ship-pull-request/references/GATES.md && grep -q 'amazon-fantasy-companion' skills/ship-pull-request/references/GATES.md && test -f skills/ship-pull-request/references/EDIT-PR.md; echo \"exit=$?\"",
+      "command": "bash skills/ship-pull-request/tests/edit-pr.test.sh && grep -q 'REFUSED_NO_VNV' skills/ship-pull-request/SKILL.md && grep -qE 'docs/vnv/AGENTS.md|Vnv/AGENTS.md' skills/ship-pull-request/SKILL.md && grep -q -- '--scope=commits=' skills/ship-pull-request/SKILL.md && grep -q 'tools/ci/gate.sh' skills/ship-pull-request/references/GATES.md && grep -q 'amazon-fantasy-companion' skills/ship-pull-request/references/GATES.md && test -f skills/ship-pull-request/references/EDIT-PR.md; rc=$?; echo \"exit=$rc\"; (exit $rc)",
       "pass": "exit 0",
       "description": "D4-C existing test plus gate-step text checks (AC-AFC-D4-03).",
       "repository": "Alphazedehq (slice worktree of alphazede/Alphazedehq)",
@@ -510,7 +523,7 @@
     },
     {
       "id": "CMD-SKILL-SIZE",
-      "command": "python3 -m unittest discover -s <skill_dir>/tests -t <skill_dir>/tests -p 'test_<skill_snake>.py' -k test_creator_validation_and_repository_metadata -v && test \"$(sha256sum < <alphazedehq_checkout>/tools/bran/runtime/bran | cut -d' ' -f1)\" = \"$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1]))[\"sha256\"])' <alphazedehq_checkout>/tools/bran/runtime/bran-release-pin.json)\" && <alphazedehq_checkout>/tools/bran/runtime/bran check . bran-strict; echo \"exit=$?\"",
+      "command": "python3 -m unittest discover -s <skill_dir>/tests -t <skill_dir>/tests -p 'test_<skill_snake>.py' -k test_creator_validation_and_repository_metadata -v && test \"$(sha256sum < <alphazedehq_checkout>/tools/bran/runtime/bran | cut -d' ' -f1)\" = \"$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1]))[\"sha256\"])' <alphazedehq_checkout>/tools/bran/runtime/bran-release-pin.json)\" && <alphazedehq_checkout>/tools/bran/runtime/bran check . bran-strict; rc=$?; echo \"exit=$rc\"; (exit $rc)",
       "pass": "exit 0: the per-skill unit test skills/<skill>/tests/test_<skill_snake>.py (Alphazedehq stock pattern, skills/release-process/tests/test_release_process.py) passes test_creator_validation_and_repository_metadata: SKILL.md < 60 lines and < 650 words (skill_size_max, frontmatter included; S41 router < 25 lines), no [TODO], frontmatter name equals the skill and the required HQ fields type, title, okf_status and tags are non-empty, and the installed skill-creator quick_validate.py ($HOME/.codex/skills/.system/skill-creator/scripts/quick_validate.py, run with check=True) passes on a temporary copy holding only the portable fields (name, description, license, allowed-tools, metadata) and the unchanged body; then the pinned BRAN runtime matches bran-release-pin.json and `bran check . bran-strict` exits 0 on the slice worktree, validating the complete repository document. quick_validate is never run on the repository SKILL.md itself (it rejects the required HQ fields). python3 with PyYAML is the host's installed interpreter (unchanged local tool, as the stock test uses); `import yaml` failing is typed gap TOOL_MISSING",
       "description": "Shared-skill size, metadata and portable-field validation per the Alphazedehq stock pattern (DEC-AFC-SD-026): per-skill unittest + quick_validate on a temp portable-fields copy + BRAN bran-strict.",
       "repository": "Alphazedehq (slice worktree of alphazede/Alphazedehq)",
@@ -525,7 +538,7 @@
     },
     {
       "id": "CMD-SKILL-TRIGGER",
-      "command": "e=$(mktemp -d) && cp <skill_dir>/SKILL.md <skill_dir>/tests/trigger-requests.json \"$e\"/ && (cd \"$e\" && claude --version > harness-version.txt && claude -p 'You are an independent skill-routing evaluator. Read SKILL.md and trigger-requests.json in this directory. For each request id, answer MATCH if an agent with this skill installed should use it for that request according to its description, otherwise NO_MATCH. Reply with only a JSON object mapping every request id to MATCH or NO_MATCH.' --output-format json --max-turns 5 --allowedTools Read --disallowedTools Bash,Write,Edit,WebFetch,WebSearch < /dev/null > session.json && jq -r .result session.json | python3 -c 'import json,sys; t=sys.stdin.read(); print(json.dumps(json.loads(t[t.index(\"{\"):t.rindex(\"}\")+1])))' > results.json) && cp \"$e\"/results.json <evidence_dir>/trigger-results-<skill>.json && cp \"$e\"/harness-version.txt \"$e\"/session.json <evidence_dir>/ && <SKILL_PREFIX>_TRIGGER_RESULTS=<evidence_dir>/trigger-results-<skill>.json python3 -m unittest discover -s <skill_dir>/tests -t <skill_dir>/tests -p 'test_<skill_snake>.py' -k test_trigger_classifications -v; echo \"exit=$?\"",
+      "command": "e=$(mktemp -d) && cp <skill_dir>/SKILL.md <skill_dir>/tests/trigger-requests.json \"$e\"/ && (cd \"$e\" && claude --version > harness-version.txt && claude -p 'You are an independent skill-routing evaluator. Read SKILL.md and trigger-requests.json in this directory. For each request id, answer MATCH if an agent with this skill installed should use it for that request according to its description, otherwise NO_MATCH. Reply with only a JSON object mapping every request id to MATCH or NO_MATCH.' --output-format json --max-turns 5 --allowedTools Read --disallowedTools Bash,Write,Edit,WebFetch,WebSearch < /dev/null > session.json && jq -r .result session.json | python3 -c 'import json,sys; t=sys.stdin.read(); print(json.dumps(json.loads(t[t.index(\"{\"):t.rindex(\"}\")+1])))' > results.json) && cp \"$e\"/results.json <evidence_dir>/trigger-results-<skill>.json && cp \"$e\"/harness-version.txt \"$e\"/session.json <evidence_dir>/ && <SKILL_PREFIX>_TRIGGER_RESULTS=<evidence_dir>/trigger-results-<skill>.json python3 -m unittest discover -s <skill_dir>/tests -t <skill_dir>/tests -p 'test_<skill_snake>.py' -k test_trigger_classifications -v; rc=$?; echo \"exit=$rc\"; (exit $rc)",
       "pass": "exit 0: skills/<skill>/tests/trigger-requests.json holds request_1 = the matching request and request_2 = the non-matching request of gate_declarations.spec_and_docs.trigger_requests.<skill>; a fresh evaluator session that is not the authoring session receives only SKILL.md and trigger-requests.json (never the checker) with Read as its only tool (no permission bypass, no Bash, Write, Edit or web tools; least privilege) and prints the classification, which the command extracts from session.json into the results file; test_trigger_classifications asserts the result keys equal the request keys and the results equal {request_1: MATCH, request_2: NO_MATCH}. The results file, harness version and session output are evidence, not committed (stock: <SKILL_PREFIX>_TRIGGER_RESULTS points outside the repository; <SKILL_PREFIX> is the upper-snake skill name, e.g. SETUP_PRE_COMMIT). S06 reciprocal (DEC-AFC-SD-028): the same evaluator run on the requirements-system worktree's skills/use-requirements-system/SKILL.md with spec-authoring's trigger-requests.json writes <evidence_dir>/trigger-results-use-requirements-system.json, checked by `python3 -c 'import json,sys; assert json.load(open(sys.argv[1]))=={\"request_1\":\"NO_MATCH\",\"request_2\":\"MATCH\"}' <file>`. A harness refusal or usage limit is a typed gap with the exact error",
       "description": "Recorded trigger classification per the Alphazedehq stock pattern (DEC-AFC-SD-026): tests/trigger-requests.json + an independent evaluator's results file checked by the per-skill unittest; replaces the 1-turn live harness probe (method evaluation; LLM classification is evaluated, not deterministically proven).",
       "repository": "Alphazedehq (slice worktree of alphazede/Alphazedehq); evaluator in a scratch directory, fresh session",
@@ -540,7 +553,7 @@
     },
     {
       "id": "CMD-D5-TEST",
-      "command": "env <afc_uv_env> uv run --no-project --with 'pytest==9.0.3' --with 'pyyaml==6.0.3' python -m pytest skills/spec-authoring/tests --ignore=skills/spec-authoring/tests/test_spec_authoring.py -rA; echo \"exit=$?\"",
+      "command": "env <afc_uv_env> uv run --no-project --with 'pytest==9.0.3' --with 'pyyaml==6.0.3' python -m pytest skills/spec-authoring/tests --ignore=skills/spec-authoring/tests/test_spec_authoring.py -rA; rc=$?; echo \"exit=$rc\"; (exit $rc)",
       "pass": "exit 0, 0 failed, 0 errors; the tests include: build, lint and diagram on the template; vendor.sh copy + VENDORED.md fields (source repository, commit, MIT notice) + refusal to overwrite a modified vendored copy; description names SDoc/StrictDoc/Requirements System documents as non-triggers and cites requirements-engineering by reference; test_spec_authoring.py (the stock size/trigger unittest) runs under CMD-SKILL-SIZE and CMD-SKILL-TRIGGER, not pytest",
       "description": "D5 tool and skill-contract tests (AC-AFC-D5-01..04).",
       "repository": "Alphazedehq (slice worktree of alphazede/Alphazedehq)",
@@ -552,9 +565,9 @@
     },
     {
       "id": "CMD-D5-AGNOSTIC",
-      "command": "t=$(mktemp -d) && cp -r skills/spec-authoring/template \"$t/spec\" && (cd \"$t\" && ! git rev-parse --git-dir 2>/dev/null) && env <afc_uv_env> uv run --script skills/spec-authoring/scripts/spec_build.py \"$t/spec\" \"$t/out.md\" && env <afc_uv_env> uv run --script skills/spec-authoring/scripts/spec_lint.py \"$t/spec\" && env <afc_uv_env> uv run --script skills/spec-authoring/scripts/diagram.py lint \"$t/spec\" && ! grep -rniE 'gridmarket|--project backend' skills/spec-authoring --exclude=LICENSE-gridmarket --exclude-dir=references --exclude=vendor.sh && ! grep -rnE '(/home/|/Users/)[A-Za-z0-9._-]+/|[A-Za-z]:\\\\Users\\\\' skills/spec-authoring && grep -q 'Permission is hereby granted' skills/spec-authoring/LICENSE-gridmarket; echo \"exit=$?\"",
-      "pass": "exit 0: the template builds and lints with zero findings in a non-git temp dir using only uv --script and dot; no GridMarket name, document id or --project backend in operational text, templates or tool invocation (license, attribution and provenance records excepted: LICENSE-gridmarket, references/vendoring.md provenance, vendor.sh MIT notice text); no absolute home path; MIT notice retained; diagram exit 3 (dot missing) is a typed gap",
-      "description": "D5 repo-agnostic check (AC-AFC-D5-01, AC-AFC-D5-02). The provenance exclusions are reviewed by the Reviewer: a GridMarket name inside an excluded file is allowed only in a license, attribution or provenance sentence.",
+      "command": "t=$(mktemp -d) && cp -r skills/spec-authoring/template \"$t/spec\" && (cd \"$t\" && ! git rev-parse --git-dir 2>/dev/null) && env <afc_uv_env> uv run --script skills/spec-authoring/scripts/spec_build.py \"$t/spec\" \"$t/out.md\" && env <afc_uv_env> uv run --script skills/spec-authoring/scripts/spec_lint.py \"$t/spec\" && env <afc_uv_env> uv run --script skills/spec-authoring/scripts/diagram.py lint \"$t/spec\" && d=$(git diff --name-only --diff-filter=ACMR <base>..HEAD -- skills/spec-authoring) && f=$(printf '%s\\n' \"$d\" | grep -vE '^$|\\.pyc$|(^|/)(__pycache__|build|dist)/'; true) && printf 'scanned: %s\\n' ${f:-none} && test -n \"$f\" && g=$(printf '%s\\n' \"$f\" | grep -vE '(^|/)(LICENSE-gridmarket|vendor\\.sh)$|(^|/)references/'; true) && { [ -z \"$g\" ] || { git grep -nIiE 'gridmarket|--project backend' HEAD -- $g; [ $? -eq 1 ]; }; } && { git grep -nIE '(/home/|/Users/)[A-Za-z0-9._-]+/|[A-Za-z]:\\\\Users\\\\' HEAD -- $f; [ $? -eq 1 ]; } && git grep -q 'Permission is hereby granted' HEAD -- skills/spec-authoring/LICENSE-gridmarket; rc=$?; echo \"exit=$rc\"; (exit $rc)",
+      "pass": "exit 0: the template builds and lints with zero findings in a non-git temp dir using only uv --script and dot; no GridMarket name, document id or --project backend in operational text, templates or tool invocation (license, attribution and provenance records excepted: LICENSE-gridmarket, references/vendoring.md provenance, vendor.sh MIT notice text); no absolute home path; MIT notice retained; diagram exit 3 (dot missing) is a typed gap; the wrapper's own exit status is the verdict. The name and home-path scans read only tracked files S06 changed (`git diff --name-only --diff-filter=ACMR <base>..HEAD -- skills/spec-authoring` at the exact committed candidate, <base> from the S06 dispatch record), minus generated artifacts (*.pyc, __pycache__/, build/, dist/), through `git grep ... HEAD`; bytecode that the build, lint or tests write is never scanned (DEC-AFC-SD-029). An empty scanned list is FAIL (wrong <base>); any non-zero exit other than a printed match is a typed gap",
+      "description": "D5 repo-agnostic check (AC-AFC-D5-01, AC-AFC-D5-02). The provenance exclusions are reviewed by the Reviewer: a GridMarket name inside an excluded file is allowed only in a license, attribution or provenance sentence. Scope per DEC-AFC-SD-029: only tracked files S06 changed, generated artifacts excluded.",
       "repository": "Alphazedehq (slice worktree of alphazede/Alphazedehq)",
       "used_by": [
         "S06",
@@ -564,9 +577,9 @@
     },
     {
       "id": "CMD-D4-AGNOSTIC",
-      "command": "! git grep -nIiE '1wgrumph|alphazede/|amazon-fantasy-companion|gridmarket|betbot|\\bpilot\\b|exclusion' -- <slice_paths> ':!skills/ship-pull-request/references/GATES.md'; echo \"exit=$?\"",
-      "pass": "exit 0 (no match). Per slice, <slice_paths> is that slice's own write set only: S01 skills/setup-pre-commit; S02 skills/setup-a-repo; S03 skills/ship-pull-request; S11 hooks/ci-gate-hook.sh hooks/install-ci-gate-hook.py hooks/README.md; S41 skills/ci-cd. A match in another slice's directory is that slice's finding, never this slice's failure. Combined run only at the Wave 1 exit, on the Alphazedehq main checkout after S01, S02 and S03 merge: <slice_paths> = skills/setup-pre-commit skills/setup-a-repo skills/ship-pull-request. GATES.md rows are gate data and are excluded by design (DES-AFC-D4)",
-      "description": "D4 text names no repository, owner, pilot or exclusion (AC-AFC-D4-06).",
+      "command": "d=$(git diff --name-only --diff-filter=ACMR <base>..HEAD -- <slice_paths>) && f=$(printf '%s\\n' \"$d\" | grep -vE '^$|\\.pyc$|(^|/)(__pycache__|build|dist)/|^skills/ship-pull-request/references/GATES\\.md$'; true) && printf 'scanned: %s\\n' ${f:-none} && test -n \"$f\" && { git grep -nIiE '1wgrumph|alphazede/|amazon-fantasy-companion|gridmarket|betbot|\\bpilot\\b|exclusion' HEAD -- $f; [ $? -eq 1 ]; }; rc=$?; echo \"exit=$rc\"; (exit $rc)",
+      "pass": "exit 0, and the wrapper's own exit status is the verdict (DEC-AFC-SD-029). Scope: only tracked files the slice changed, `git diff --name-only --diff-filter=ACMR <base>..HEAD -- <slice_paths>` at the exact committed candidate, minus generated artifacts (*.pyc, __pycache__/, build/, dist/) and minus GATES.md (gate data by design, DES-AFC-D4); `git grep ... HEAD` reads those files' committed content, so untracked or uncommitted files are never scanned. <base> is the base SHA in the slice's dispatch record (implementation.json dispatch_records). <slice_paths> per slice: S01 skills/setup-pre-commit; S02 skills/setup-a-repo; S03 skills/ship-pull-request; S11 hooks/ci-gate-hook.sh hooks/install-ci-gate-hook.py hooks/README.md; S41 skills/ci-cd. A reference outside the slice's diff is out of scope (owner, SD-029). Combined run only at the Wave 1 exit on the Alphazedehq main checkout after S01, S02 and S03 merge: <slice_paths> = skills/setup-pre-commit skills/setup-a-repo skills/ship-pull-request and <base> = the oldest base among the S01, S02 and S03 dispatch records. FAIL: exit 1 with a printed match, or an empty scanned list (wrong <base> or no change in <slice_paths>). Any other non-zero exit (for example 128, bad <base>) is a typed gap, never PASS",
+      "description": "D4 text the slice adds or changes names no repository, owner, pilot or exclusion (AC-AFC-D4-06; DEC-AFC-SD-029: only tracked files the slice changed).",
       "repository": "Alphazedehq (slice worktree of alphazede/Alphazedehq)",
       "used_by": [
         "S01",
@@ -580,7 +593,7 @@
     },
     {
       "id": "CMD-HOOK-TEST",
-      "command": "bash hooks/test-ci-gate-hook.sh; echo \"exit=$?\"",
+      "command": "bash hooks/test-ci-gate-hook.sh; rc=$?; echo \"exit=$rc\"; (exit $rc)",
       "pass": "exit 0; the tests cover: acts only on git commit/git push; runs gate.sh --changed when the repository's git hooks are not installed or the command carries --no-verify; blocks on a non-zero gate with its output; advisory notice without tools/ci/gate.sh; one adapter per harness event shape (Claude Code PreToolUse Bash, Codex hooks.json, Cursor beforeShellExecution); installer --verify prints one wired/typed_gap line per SD-021 harness against a temp HOME fixture",
       "description": "D4-E hook tests (green run of the S11T ids).",
       "repository": "Alphazedehq (slice worktree of alphazede/Alphazedehq)",
@@ -592,7 +605,7 @@
     },
     {
       "id": "CMD-COVERAGE-HOOK",
-      "command": "rm -f .coverage .coverage.*; AFC_HOOK_PY=\"uv run --no-project --with coverage>=7,<8 coverage run -p --branch\" bash hooks/test-ci-gate-hook.sh && uv run --no-project --with 'coverage>=7,<8' sh -c 'coverage combine && coverage report --include=hooks/install-ci-gate-hook.py --fail-under=90'; echo \"exit=$?\"",
+      "command": "rm -f .coverage .coverage.*; AFC_HOOK_PY=\"uv run --no-project --with coverage>=7,<8 coverage run -p --branch\" bash hooks/test-ci-gate-hook.sh && uv run --no-project --with 'coverage>=7,<8' sh -c 'coverage combine && coverage report --include=hooks/install-ci-gate-hook.py --fail-under=90'; rc=$?; echo \"exit=$rc\"; (exit $rc)",
       "pass": "exit 0: >= 90 % of the lines of the new hooks/install-ci-gate-hook.py (every line is a changed line) executed by the hook tests; hooks/ci-gate-hook.sh shell lines: TOOL_MISSING (kcov absent), never PASS; requires the test script to run the installer as `$AFC_HOOK_PY hooks/install-ci-gate-hook.py` with AFC_HOOK_PY defaulting to python3 (TE-P1-F04)",
       "description": "Changed-line coverage claim for the S11T/S11 pair (gate_declarations.ci.alphazedehq_hooks).",
       "repository": "Alphazedehq (slice worktree of alphazede/Alphazedehq)",
@@ -603,7 +616,7 @@
     },
     {
       "id": "CMD-MUTATION-HOOK",
-      "command": "uvx --from 'mutmut>=2.4,<3' mutmut run --paths-to-mutate hooks/install-ci-gate-hook.py --tests-dir hooks --runner 'bash hooks/test-ci-gate-hook.sh' --no-progress; uvx --from 'mutmut>=2.4,<3' mutmut results > <evidence_dir>/mutation-hook.txt; git diff --exit-code -- hooks; echo \"exit=$?\"",
+      "command": "uvx --from 'mutmut>=2.4,<3' mutmut run --paths-to-mutate hooks/install-ci-gate-hook.py --tests-dir hooks --runner 'bash hooks/test-ci-gate-hook.sh' --no-progress; uvx --from 'mutmut>=2.4,<3' mutmut results > <evidence_dir>/mutation-hook.txt; git diff --exit-code -- hooks; rc=$?; echo \"exit=$rc\"; (exit $rc)",
       "pass": "killed / (killed + survived + timeout + suspicious) >= 0.70 over the mutants of install-ci-gate-hook.py, computed from mutation-hook.txt; the final git diff exits 0; hooks/ci-gate-hook.sh has no shell mutation tool: TOOL_MISSING, never PASS; a mutmut install, CLI or runner failure is TOOL_MISSING or NOT_RUN with the exact error",
       "description": "Mutation claim for the S11T/S11 pair (gate_declarations.ci.alphazedehq_hooks).",
       "repository": "Alphazedehq (slice worktree of alphazede/Alphazedehq)",
@@ -614,7 +627,7 @@
     },
     {
       "id": "CMD-HOOK-INSTALL",
-      "command": "cd <alphazedehq_checkout> && test \"$(git rev-parse --git-dir)\" = .git && sha256sum <harness_config_files> > <evidence_dir>/hook-configs-before.txt; python3 hooks/install-ci-gate-hook.py --install && python3 hooks/install-ci-gate-hook.py --verify | sed \"s#$HOME#\\$HOME#g\" > <evidence_dir>/hook-verify.txt; sha256sum <harness_config_files> > <evidence_dir>/hook-configs-after.txt; echo \"exit=$?\"",
+      "command": "cd <alphazedehq_checkout> && test \"$(git rev-parse --git-dir)\" = .git && sha256sum <harness_config_files> > <evidence_dir>/hook-configs-before.txt; python3 hooks/install-ci-gate-hook.py --install && python3 hooks/install-ci-gate-hook.py --verify | sed \"s#$HOME#\\$HOME#g\" > <evidence_dir>/hook-verify.txt; sha256sum <harness_config_files> > <evidence_dir>/hook-configs-after.txt; rc=$?; echo \"exit=$rc\"; (exit $rc)",
       "pass": "exit 0; --verify prints exactly one line per SD-021 harness (Claude Code, Codex, Cursor, Muse, AGY): 'wired <config file>' or 'typed_gap <exact capability evidence>'; a timestamped backup of each edited configuration exists; the D4 skills, spec-authoring and vnv-review are linked into Muse's skill directory (and AGY's if verified) or recorded typed_gap; the output contains no absolute home path ($HOME placeholder)",
       "description": "Live D4-E install from the Alphazedehq main checkout (never a linked worktree) at IE-P1-10, under lease harness-configs with no implementer or Scribe session running; config sha256 before/after recorded $HOME-relative (AC-AFC-D4-04, AC-AFC-D5-05, RISK-AFC-12; IE-P1-F04).",
       "repository": "Alphazedehq main checkout (host harness configurations)",
@@ -626,7 +639,7 @@
     },
     {
       "id": "CMD-HOOK-INSTALL-SANDBOX",
-      "command": "h=$(mktemp -d) && HOME=\"$h\" python3 hooks/install-ci-gate-hook.py --install && HOME=\"$h\" python3 hooks/install-ci-gate-hook.py --verify | sed \"s#$h#\\$HOME#g\" > <evidence_dir>/hook-verify-sandbox.txt; echo \"exit=$?\"",
+      "command": "h=$(mktemp -d) && HOME=\"$h\" python3 hooks/install-ci-gate-hook.py --install && HOME=\"$h\" python3 hooks/install-ci-gate-hook.py --verify | sed \"s#$h#\\$HOME#g\" > <evidence_dir>/hook-verify-sandbox.txt; rc=$?; echo \"exit=$rc\"; (exit $rc)",
       "pass": "exit 0; one line per SD-021 harness (Claude Code, Codex, Cursor, Muse, AGY): 'wired <config file>' or 'typed_gap <exact capability evidence>'; the D4 skills and spec-authoring linked into the sandbox Muse skill directory or typed_gap; the written hook command path is <checkout>/hooks/ci-gate-hook.sh of the checkout the installer ran from; no file outside the temp HOME changed (live harness configuration sha256 unchanged)",
       "description": "Pre-merge installer check against a temporary HOME (IE-P1-F04; AC-AFC-D4-04, AC-AFC-D5-05, RISK-AFC-12).",
       "repository": "Alphazedehq (slice worktree of alphazede/Alphazedehq)",
@@ -725,7 +738,7 @@
     },
     {
       "id": "CMD-LANDING-CHECK",
-      "command": "git -C <repo_checkout> fetch origin main \"pull/<pr_number>/head:refs/afc-check/pr-<pr_number>\" && { git -C <repo_checkout> merge-base --is-ancestor refs/afc-check/pr-<pr_number> origin/main || test -z \"$(git -C <repo_checkout> cherry origin/main refs/afc-check/pr-<pr_number> | grep '^+')\"; }; echo \"exit=$?\"; git -C <repo_checkout> update-ref -d refs/afc-check/pr-<pr_number>",
+      "command": "git -C <repo_checkout> fetch origin main \"pull/<pr_number>/head:refs/afc-check/pr-<pr_number>\" && { git -C <repo_checkout> merge-base --is-ancestor refs/afc-check/pr-<pr_number> origin/main || test -z \"$(git -C <repo_checkout> cherry origin/main refs/afc-check/pr-<pr_number> | grep '^+')\"; }; rc=$?; echo \"exit=$rc\"; git -C <repo_checkout> update-ref -d refs/afc-check/pr-<pr_number>; (exit $rc)",
       "pass": "exit 0: every PR commit is in main's history (merge commit) or patch-equivalent present (rebase merge); a squash merge of a multi-commit PR leaves '+' lines and fails; the Reviewer receipt (one review), at most one repair receipt and a green gate run precede mergedAt; no force-push: main's ruleset readback (gh api repos/<owner_repo>/rulesets) shows non_fast_forward, or, where that API returns 403 (private GitHub Free repository, IE-P1-F10), every merge SHA recorded by CMD-MERGE-IDENTITY is still an ancestor of origin/main and the CMD-PR-CHECKS receipt precedes mergedAt",
       "description": "Never-squash, review-before-merge landing check (AC-AFC-LAND-01, AC-AFC-D4-05, AC-AFC-D5-05).",
       "repository": "this or Alphazedehq",
@@ -736,7 +749,7 @@
     },
     {
       "id": "CMD-SPEC-VENDOR",
-      "command": "t=$(mktemp -d) && v=<vendored_source_commit> && git -C <alphazedehq_checkout> merge-base --is-ancestor \"$v\" origin/main && test \"$(git -C <alphazedehq_checkout> rev-parse \"$v\":skills/spec-authoring)\" = \"$(git -C <alphazedehq_checkout> rev-parse <azhq_d5_sha>:skills/spec-authoring)\" && grep -qF \"$(git -C <alphazedehq_checkout> rev-parse <azhq_d5_sha>:skills/spec-authoring)\" tools/spec/VENDORED.md && git -C <alphazedehq_checkout> archive <azhq_d5_sha> skills/spec-authoring/scripts skills/spec-authoring/template | tar -x -C \"$t\" && diff -r --exclude=VENDORED.md --exclude=template \"$t/skills/spec-authoring/scripts\" tools/spec && diff -r \"$t/skills/spec-authoring/template\" tools/spec/template && grep -q 'Permission is hereby granted' tools/spec/VENDORED.md && grep -q 'Permission is hereby granted' THIRD_PARTY_NOTICES.md; echo \"exit=$?\"",
+      "command": "t=$(mktemp -d) && v=<vendored_source_commit> && git -C <alphazedehq_checkout> merge-base --is-ancestor \"$v\" origin/main && test \"$(git -C <alphazedehq_checkout> rev-parse \"$v\":skills/spec-authoring)\" = \"$(git -C <alphazedehq_checkout> rev-parse <azhq_d5_sha>:skills/spec-authoring)\" && grep -qF \"$(git -C <alphazedehq_checkout> rev-parse <azhq_d5_sha>:skills/spec-authoring)\" tools/spec/VENDORED.md && git -C <alphazedehq_checkout> archive <azhq_d5_sha> skills/spec-authoring/scripts skills/spec-authoring/template | tar -x -C \"$t\" && diff -r --exclude=VENDORED.md --exclude=template \"$t/skills/spec-authoring/scripts\" tools/spec && diff -r \"$t/skills/spec-authoring/template\" tools/spec/template && grep -q 'Permission is hereby granted' tools/spec/VENDORED.md && grep -q 'Permission is hereby granted' THIRD_PARTY_NOTICES.md; rc=$?; echo \"exit=$rc\"; (exit $rc)",
       "pass": "exit 0 (<vendored_source_commit> = the source commit recorded in tools/spec/VENDORED.md): that commit is on Alphazedehq main and its skills/spec-authoring tree id equals that of the D5 merge commit azhq.d5 (and VENDORED.md records that tree id); tools/spec equals the merged D5 scripts and template; VENDORED.md and THIRD_PARTY_NOTICES.md carry the GridMarket MIT notice",
       "description": "Vendored spec tools identity (AC-AFC-SPEC-01, AC-AFC-D5-04 at use; CONTRACT-AFC-SPECKIT as amended by IE-P1-F03: scripts and template vendored, tree-id pinning).",
       "repository": "this (1wgrumph/amazon-fantasy-companion)",
@@ -749,7 +762,7 @@
     },
     {
       "id": "CMD-SCAN",
-      "command": "Run the scan-software-supply-chain skill procedure on <artifact> (origin, version or commit, intended command) and write its report to <evidence_dir>/scan-<artifact>.md; then: grep -qE '^verdict: (PASS|BLOCK|INDETERMINATE)$' <evidence_dir>/scan-<artifact>.md && grep -qE '^verdict: PASS$' <evidence_dir>/scan-<artifact>.md; echo \"exit=$?\"",
+      "command": "Run the scan-software-supply-chain skill procedure on <artifact> (origin, version or commit, intended command) and write its report to <evidence_dir>/scan-<artifact>.md; then: grep -qE '^verdict: (PASS|BLOCK|INDETERMINATE)$' <evidence_dir>/scan-<artifact>.md && grep -qE '^verdict: PASS$' <evidence_dir>/scan-<artifact>.md; rc=$?; echo \"exit=$rc\"; (exit $rc)",
       "pass": "exit 0: a PASS receipt exists before first use of the artifact; BLOCK or INDETERMINATE refuses use (fail closed); an artifact used without a receipt dated before its first use fails",
       "description": "scan-software-supply-chain receipt (RISK-AFC-13). Phase 1 acquisitions: the GridMarket source at its pinned commit (S06); the pinned pytest==9.0.3 + pyyaml==6.0.3 wheel closure in <wheel_dir> (S02, S06; consumed offline through <afc_uv_env>), uv-fetched coverage, diff-cover, mutmut (S09, S11); each SHA-pinned GitHub Action in ci.yml (S09); uv and Graphviz (receipt on record or a new scan). Alphazedehq hooks/scan-supply-chain.sh is an advisory routing hook, not a scanner (TE-P1-F03).",
       "repository": "host (receipts under the slice evidence directory)",
@@ -763,7 +776,7 @@
     },
     {
       "id": "CMD-OCR-DELEGATE",
-      "command": "ocr delegate preview --from <base_sha> --to <head_sha> > <review_dir>/ocr-preview.txt && ocr delegate rule <every_file_listed_in_preview> > <review_dir>/ocr-rules.txt; echo \"exit=$?\"",
+      "command": "ocr delegate preview --from <base_sha> --to <head_sha> > <review_dir>/ocr-preview.txt && ocr delegate rule <every_file_listed_in_preview> > <review_dir>/ocr-rules.txt; rc=$?; echo \"exit=$rc\"; (exit $rc)",
       "pass": "exit 0; the Reviewer report has a per-file OCR section for every previewed file; a non-zero exit or missing binary is a typed gap with the exact error, never PASS; OCR assists and never replaces the independent review",
       "description": "OpenCodeReview delegation mode in every Reviewer packet (rule 15; frozen review.coverage_assist enabled + required).",
       "repository": "this or Alphazedehq (Reviewer session)",
@@ -916,6 +929,18 @@
         "Phase 1 closeout"
       ],
       "tool_availability_2026_10_11": "yes (gh)"
+    },
+    {
+      "id": "CMD-MODEL-SYSON",
+      "command": "e=<st_evidence_dir>; s=<syson_url>; n=0; mkdir -p \"$(dirname \"$e\")\" && mkdir \"$e\" \"$e/upload\" && n=1 && mapfile -t f < <(find <models_dir> -type f -name '*.sysml' | LC_ALL=C sort) && [ ${#f[@]} -gt 0 ] && printf 'model: %s\\n' \"${f[@]}\" && sha256sum \"${f[@]}\" > \"$e/model-digests.txt\" && p=$(curl -fsS -m 60 \"$s/api/graphql\" -H 'Content-Type: application/json' --data \"$(jq -cn --arg id \"$(cat /proc/sys/kernel/random/uuid)\" --arg n 'afc-model-parse-<run>' '{query:\"mutation($input: CreateProjectInput!){createProject(input:$input){__typename ... on CreateProjectSuccessPayload{project{id}} ... on ErrorPayload{message}}}\",variables:{input:{id:$id,name:$n,templateId:\"blank-project\",libraryIds:[]}}}')\" | tee \"$e/create-project.json\" | jq -er '.data.createProject.project.id') && echo \"$p\" > \"$e/project-id.txt\" && c=$(curl -fsS -m 60 \"$s/api/graphql\" -H 'Content-Type: application/json' --data \"$(jq -cn --arg p \"$p\" '{query:\"query($p: ID!){viewer{project(projectId:$p){currentEditingContext{id}}}}\",variables:{p:$p}}')\" | jq -er '.data.viewer.project.currentEditingContext.id') && ok=1 && i=0 && for m in \"${f[@]}\"; do i=$((i+1)); u=\"$e/upload/$i-$(basename \"$m\")\"; { cat \"$m\"; printf '\\npackage AFCParseEnd%d;\\n' \"$i\"; } > \"$u\"; o=$(jq -cn --arg id \"$(cat /proc/sys/kernel/random/uuid)\" --arg c \"$c\" '{query:\"mutation Upload($input: UploadDocumentInput!) { uploadDocument(input: $input) { __typename ... on UploadDocumentSuccessPayload { id report } ... on ErrorPayload { message } } }\",variables:{input:{id:$id,editingContextId:$c,file:null,readOnly:false}}}'); curl -sS -m 90 \"$s/api/graphql/upload\" --form-string \"operations=$o\" --form-string 'map={\"0\":\"variables.file\"}' --form \"0=@$u;type=application/octet-stream\" > \"$e/import-$i.json\"; jq -c --arg m \"$m\" '{model:$m,result:.data.uploadDocument.__typename,report:.data.uploadDocument.report,errors:.errors}' \"$e/import-$i.json\" >> \"$e/import-diagnostics.jsonl\" || ok=0; jq -e '((.errors // []) | length) == 0 and .data.uploadDocument.__typename == \"UploadDocumentSuccessPayload\" and .data.uploadDocument.report == \"\"' \"$e/import-$i.json\" > /dev/null || ok=0; done && curl -fsS -m 300 \"$s/api/rest/projects/$p/commits/00000000-0000-0000-0000-000000000000/elements\" > \"$e/elements.json\" && jq -e --argjson n \"$i\" '[.[] | select(.\"@type\" == \"Package\") | .declaredName] as $d | all(range(1; $n + 1); \"AFCParseEnd\\(.)\" as $k | any($d[]; . == $k))' \"$e/elements.json\" > \"$e/sentinels.txt\" && [ \"$ok\" = 1 ]; rc=$?; [ \"$n\" = 1 ] && cat \"$e/project-id.txt\" \"$e/import-diagnostics.jsonl\" \"$e/sentinels.txt\" 2>/dev/null; echo \"exit=$rc\"; (exit $rc)",
+      "pass": "exit 0 (the wrapper's own exit status is the verdict; no exit masking): <st_evidence_dir> is new for this run; at least one `.sysml` file is found under <models_dir> and each is listed; the model digests are written; SysON creates one new project `afc-model-parse-<run>` and its id is written to project-id.txt; every file is uploaded into that project (the uploaded copy, with one end-marker package `AFCParseEnd<n>` appended, is kept under upload/) and SysON answers UploadDocumentSuccessPayload with no GraphQL errors and an empty report; and the read-back lists every end marker (sentinels.txt `true`). A reused <st_evidence_dir>, an empty file list or a SysON that does not answer (no project id) exits non-zero and is typed gap TOOL_MISSING or SYSON_UNAVAILABLE, never PASS. A non-empty report (`[ERROR]` syntax errors or `[Warning] Unable to resolve name`) or a missing end marker (SysON silently truncates a file after a syntax error it does not report, eclipse-syson#2510) is FAIL; import-diagnostics.jsonl names the file and message, and the Systems Modeler repairs the models in the spec track and runs again with a new <run>. Nothing is loaded into, registered with or read from the Requirements System registry or checkouts, and no other SysON project is touched (DEC-AFC-SD-032).",
+      "description": "ST-3 SysON parse check for the spec-track product models (DEC-AFC-SD-032; supersedes the syside method of DEC-AFC-SD-031 and the registry load of DEC-AFC-SD-030; the register stays Markdown, SD-027). Imports the models into a new SysON project of their own with SysON's own textual SysML import. <models_dir> = the absolute path of docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/models in the spec-track checkout; <st_evidence_dir> = docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/model-parse/<run>/; <syson_url> and <run> are defined in environments syson. Evidence: model-digests.txt, create-project.json, project-id.txt, import-<n>.json, import-diagnostics.jsonl, upload/, elements.json, sentinels.txt.",
+      "repository": "host (the local SysON of the packaged-default Requirements System host); reads the spec-track checkout, writes only <st_evidence_dir> and its own new SysON project",
+      "used_by": [
+        "ST-3 (b) and (c) (spec-track plan; Systems Modeler)",
+        "ST-4 entry criterion"
+      ],
+      "tool_availability_2026_10_11": "present on 2026-10-12: SysON answering on the packaged-default host's writable port, curl, jq. Self-tested on 2026-10-12 against scratch projects (deleted after): two clean files exit 0; empty dir, a truncating syntax error with an empty report, an unresolved name, and SysON down exit non-zero. The current spec-track draft models exit 1 (AFC-States.sysml line 14 syntax error; AFC-Data.sysml unresolved `String`/`Boolean`)."
     }
   ],
   "required_commands": [
@@ -1278,7 +1303,7 @@
       "Positive case": "no repository, owner, pilot or exclusion that scopes the capability is named in D4 skill or hook text",
       "Negative/failure case": "any match outside GATES.md fails",
       "Command/procedure ID": "CMD-D4-AGNOSTIC",
-      "Evidence": "CMD-D4-AGNOSTIC output, exit=0, per PR on its own paths, plus the combined Wave 1 exit run"
+      "Evidence": "CMD-D4-AGNOSTIC output with the scanned-file list and exit=0, per PR on its own changed files, plus the combined Wave 1 exit run"
     },
     {
       "SEIT row ID": "SEIT-AFC-CI-01.U",
@@ -1612,7 +1637,7 @@
       "preconditions": [
         "Lifecycle-local requirement AC-AFC-D5-01 from the technical plan; Requirements Engineer Phase 1 gate PASS (specialists/requirements-engineer-receipt-p1.md, round 2); planning inputs bound by sha256 in source_baseline"
       ],
-      "stimulus_or_procedure": "Run CMD-D5-AGNOSTIC on the exact candidate of S06 and capture its output with the candidate SHA.",
+      "stimulus_or_procedure": "Run CMD-D5-AGNOSTIC on the exact committed candidate of S06, <base> from its dispatch record, and capture its output with the candidate SHA.",
       "expected_result": "template, build, lint and diagram scripts run with uv run --script and Graphviz dot only, in a non-git temp dir; LICENSE-gridmarket keeps the MIT copyright and permission notice",
       "observable_evidence": "CMD-D5-AGNOSTIC output, exit=0",
       "pass_fail_rule": "PASS iff CMD-D5-AGNOSTIC's pass rule holds on the exact candidate and the expected result is observed in the evidence; FAIL when the negative case is observed; a missing tool, missing file, unreachable host or not_run outcome is a typed gap, never PASS",
@@ -1656,7 +1681,7 @@
       "preconditions": [
         "Lifecycle-local requirement AC-AFC-D5-02 from the technical plan; Requirements Engineer Phase 1 gate PASS (specialists/requirements-engineer-receipt-p1.md, round 2); planning inputs bound by sha256 in source_baseline"
       ],
-      "stimulus_or_procedure": "Run CMD-D5-AGNOSTIC on the exact candidate of S06 and capture its output with the candidate SHA.",
+      "stimulus_or_procedure": "Run CMD-D5-AGNOSTIC on the exact committed candidate of S06, <base> from its dispatch record, and capture its output with the candidate SHA.",
       "expected_result": "no GridMarket product name, document id or --project backend outside license, attribution and provenance records; no absolute local path; the shipped template builds and lints in a temp dir outside any git repository with exit 0",
       "observable_evidence": "CMD-D5-AGNOSTIC output, exit=0",
       "pass_fail_rule": "PASS iff CMD-D5-AGNOSTIC's pass rule holds on the exact candidate and the expected result is observed in the evidence; FAIL when the negative case is observed; a missing tool, missing file, unreachable host or not_run outcome is a typed gap, never PASS",
@@ -2120,9 +2145,9 @@
       "preconditions": [
         "Lifecycle-local requirement AC-AFC-D4-06 from the technical plan; Requirements Engineer Phase 1 gate PASS (specialists/requirements-engineer-receipt-p1.md, round 2); planning inputs bound by sha256 in source_baseline"
       ],
-      "stimulus_or_procedure": "Run CMD-D4-AGNOSTIC per slice on that slice's own paths at its exact candidate (S01, S02, S03, S11, S41), and once combined at the Wave 1 exit on the Alphazedehq main checkout after S01..S03 merge; capture each output with its SHA.",
+      "stimulus_or_procedure": "Run CMD-D4-AGNOSTIC per slice at its exact committed candidate (S01, S02, S03, S11, S41), scanning only the tracked files the slice changed since the <base> of its dispatch record (DEC-AFC-SD-029), and once combined at the Wave 1 exit on the Alphazedehq main checkout after S01..S03 merge; capture each output, scanned-file list and exit status with its SHA.",
       "expected_result": "no repository, owner, pilot or exclusion that scopes the capability is named in D4 skill or hook text",
-      "observable_evidence": "CMD-D4-AGNOSTIC output, exit=0, per PR on its own paths, plus the combined Wave 1 exit run",
+      "observable_evidence": "CMD-D4-AGNOSTIC output with the scanned-file list and exit=0, per PR on its own changed files, plus the combined Wave 1 exit run",
       "pass_fail_rule": "PASS iff CMD-D4-AGNOSTIC's pass rule holds on the exact candidate and the expected result is observed in the evidence; FAIL when the negative case is observed; a missing tool, missing file, unreachable host or not_run outcome is a typed gap, never PASS",
       "method_fields": {
         "reverify": "Reverify: not applicable — Phase 1 changes are skill text, shell and Python scripts and workflow YAML; no compiled binary is built or claimed",
@@ -3076,7 +3101,7 @@
       "wave": "Wave 1",
       "order": 1,
       "merges": "S01 D4-A (Alphazedehq) -> azhq.d4a",
-      "pre_merge": "CMD-D4A-TEST, CMD-SKILL-SIZE, CMD-SKILL-TRIGGER, CMD-D4-AGNOSTIC (own skill directory) on the PR head; Reviewer with CMD-OCR-DELEGATE",
+      "pre_merge": "CMD-D4A-TEST, CMD-SKILL-SIZE, CMD-SKILL-TRIGGER, CMD-D4-AGNOSTIC (files the slice changed in its own skill directory) on the PR head; Reviewer with CMD-OCR-DELEGATE",
       "post_step_vv": "CMD-LANDING-CHECK, CMD-MERGE-IDENTITY, CMD-AZHQ-SKILL-TESTS at azhq.d4a, CMD-AZHQ-SYNC",
       "rows": [
         "SEIT-AFC-D4-01.T",
@@ -3091,7 +3116,7 @@
       "wave": "Wave 1",
       "order": 1,
       "merges": "S02 D4-B (Alphazedehq) -> azhq.d4b",
-      "pre_merge": "CMD-SCAN (pytest==9.0.3 + pyyaml==6.0.3 wheel closure in <wheel_dir>), CMD-D4B-TEST, CMD-SKILL-SIZE, CMD-SKILL-TRIGGER, CMD-D4-AGNOSTIC (own skill directory); Reviewer with CMD-OCR-DELEGATE",
+      "pre_merge": "CMD-SCAN (pytest==9.0.3 + pyyaml==6.0.3 wheel closure in <wheel_dir>), CMD-D4B-TEST, CMD-SKILL-SIZE, CMD-SKILL-TRIGGER, CMD-D4-AGNOSTIC (files the slice changed in its own skill directory); Reviewer with CMD-OCR-DELEGATE",
       "post_step_vv": "CMD-LANDING-CHECK, CMD-MERGE-IDENTITY, CMD-AZHQ-SKILL-TESTS at azhq.d4b, CMD-AZHQ-SYNC",
       "rows": [
         "SEIT-AFC-D4-02.T",
@@ -3106,7 +3131,7 @@
       "wave": "Wave 1",
       "order": 1,
       "merges": "S03 D4-C (Alphazedehq) -> azhq.d4c",
-      "pre_merge": "CMD-D4C-TEST, CMD-SKILL-SIZE, CMD-SKILL-TRIGGER, CMD-D4-AGNOSTIC (own skill directory); Reviewer with CMD-OCR-DELEGATE",
+      "pre_merge": "CMD-D4C-TEST, CMD-SKILL-SIZE, CMD-SKILL-TRIGGER, CMD-D4-AGNOSTIC (files the slice changed in its own skill directory); Reviewer with CMD-OCR-DELEGATE",
       "post_step_vv": "CMD-LANDING-CHECK, CMD-MERGE-IDENTITY, CMD-AZHQ-SKILL-TESTS at azhq.d4c, CMD-AZHQ-SYNC only when no PR is being opened or landed; Wave 1 exit: CMD-D4-AGNOSTIC combined over the three D4 skill directories once azhq.d4a, azhq.d4b and azhq.d4c are all recorded",
       "rows": [
         "SEIT-AFC-D4-03.T",

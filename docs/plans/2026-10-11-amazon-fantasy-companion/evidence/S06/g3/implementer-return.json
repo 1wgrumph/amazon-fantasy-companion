@@ -1,0 +1,78 @@
+{
+  "outcome": "CONTRACT_FAILURE",
+  "lease_id": "S06-g3",
+  "at": "2026-10-12T07:22:38.222401+00:00",
+  "blocker": "CMD-D5-AGNOSTIC requires the full base SHA from the dispatch record; S06-g3 records origin/main, a mutable ref, and no immutable base is recorded. implementation.json dispatch_records.fields.base requires full SHA the worktree was created from. Cannot substitute a guessed SHA or amend the read-only dispatch record.",
+  "candidates": {
+    "Alphazedehq": {
+      "branch": "afc/s06-spec-authoring",
+      "head": "0ce8e0c64b8f42ce699ab999a6ce6fea036742f5",
+      "draft_pr": null
+    },
+    "requirements-system": {
+      "branch": "afc/s06-use-rs-nontrigger",
+      "head": "1c76360fea8c0638435ffb47be2fadc4edab9c6b",
+      "draft_pr": null
+    }
+  },
+  "changed_paths": [],
+  "bran_status": "hit",
+  "bran_refs": {
+    "coverage": "partial; skill files located, CONTRACT-AFC-SPECKIT unmatched",
+    "paths": [
+      "skills/spec-authoring/SKILL.md",
+      "skills/spec-authoring/scripts/vendor.sh"
+    ],
+    "extra_discovery_avoided": false
+  },
+  "commands": [
+    {
+      "command": "Pinned HQ BRAN hash verification, then bran check . bran-strict",
+      "exit_code": 0,
+      "tail": "selected_passed: true; exit_code: 0"
+    },
+    {
+      "command": "BRAN query . \"spec-authoring S06 CONTRACT-AFC-SPECKIT\"",
+      "exit_code": 0,
+      "tail": "partial_unanchored; matched spec-authoring and s06"
+    },
+    {
+      "command": "dispatch base full-SHA precondition",
+      "exit_code": 1,
+      "tail": "CONTRACT_FAILURE: S06-g3 base is origin/main; expected 40 hexadecimal characters"
+    }
+  ],
+  "proof_rows": {
+    "SEIT-AFC-D5-01.T": "NOT_RUN",
+    "SEIT-AFC-D5-01.S": "NOT_RUN (BRAN component passed only)",
+    "SEIT-AFC-D5-02": "BLOCKED (dispatch base missing)",
+    "SEIT-AFC-D5-03.T": "NOT_RUN",
+    "SEIT-AFC-D5-03.I": "NOT_RUN",
+    "SEIT-AFC-D5-04": "NOT_RUN",
+    "SEIT-AFC-D5-05.L": "NOT_RUN (outside implementer authority)",
+    "SEIT-AFC-RISK-13.D": "NOT_RUN",
+    "SEIT-AFC-RISK-15": "NOT_RUN",
+    "SEIT-AFC-RISK-16": "NOT_RUN (Phase 2 entry outside this slice)"
+  },
+  "remaining_risks": [
+    "Prior reported vendoring test failure remains unrepaired.",
+    "Both draft PRs remain unopened.",
+    "No current-candidate test, scan, size or trigger pass is claimed."
+  ],
+  "developer_feedback": {
+    "tool": "Lifecycle dispatch record",
+    "used_for": "CMD-D5-AGNOSTIC immutable scan baseline",
+    "worked_well": "Preflight detected mutable baseline before editing",
+    "task": "Resume S06-g3",
+    "steps": "Read journey.json dispatch and implementation.json dispatch schema",
+    "expected": "Full SHA of worktree creation base",
+    "actual": "origin/main",
+    "severity": "blocking",
+    "workaround": "none within packet authority; Orchestrator records the verified original base SHA",
+    "suggestion": "Validate dispatch base as 40-hex before dispatch",
+    "measured_cost": "unknown",
+    "would_build_again": "unknown",
+    "aws_services": "n/a"
+  },
+  "review": "Not performed; independent phase review and OCR remain for the dispatched reviewer. Reverify not applicable: no compiled binary built or claimed."
+}

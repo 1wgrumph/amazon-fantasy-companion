@@ -1,0 +1,60 @@
+**DELTA_APPLIED.** SD-029 and the dispatch-record convention are fully applied. SD-030 is in the plan, but its new check can't pass yet: it needs an owner decision on how the models get registered with the host (new open item **OD-AFC-13**).
+
+- **New manifest digest:** `0a85d1e5d58c42ff816f37cc0600cbe0fea51df2e1dd71d430116588e9714843`. The rendered manifest is `fdfd2cdf…38a8` and its `--check` passed.
+- **Gates:**
+  - plan-package PASS with zero findings.
+  - All four schemas (implementation, seit, authority, journey) validate with 0 errors.
+  - 0 orphan command or proof references; the plan now has 55 proof cases and 48 commands.
+  - Rule-12 scan: 0 hits.
+- **Receipt:** `specialists/pd-delta-w1b-receipt.md`, with the revision diff against origin/main `d7e4dab`. Nothing committed; `journey.json` is untouched apart from the Orchestrator's own earlier edit.
+
+## What changed
+
+1. **SD-029 (the two agnostic checks):** both IDs are kept.
+   - `CMD-D4-AGNOSTIC` now takes the files from `git diff --name-only --diff-filter=ACMR <base>..HEAD -- <slice_paths>`. It drops `*.pyc`, `__pycache__/`, `build/`, `dist/` and GATES.md, then runs `git grep … HEAD` on what's left. Only committed content is scanned. An empty file list fails, so a wrong `<base>` can't pass by accident.
+   - `CMD-D5-AGNOSTIC` uses the same scoping for its name and home-path scans. Its build and lint steps are unchanged.
+   - **Exit-code masking:** all 27 commands that ended in `echo "exit=$?"` now end with `rc=$?; echo "exit=$rc"; (exit $rc)`, so the wrapper exits with the real status. That includes CMD-RED and CMD-LANDING-CHECK, where the echo was in the middle.
+2. **SD-030 (SysON parse check):**
+   - New command `CMD-MODEL-LOAD` loads the models as a new package. It never uses `--replace`, and it compares `checkout list` before and after to prove nothing else changed.
+   - ST-3 gains step (d), the parse check. ST-4 now waits on it.
+   - `authority.json` allows that one host action for the spec track and prohibits everything around it: `--replace`, checkout create/release/move, other packages, and the Maestro checkout.
+3. **Dispatch records:** `implementation.json` gains a `dispatch_records` convention.
+   - Each record has a lease id `<slice>-g<generation>` plus repository, worktree, branch, base SHA and `evidence/<slice>/`.
+   - The Orchestrator writes it to `journey.json` execution_receipts before dispatch.
+   - The two agnostic checks take their `<base>` from it, and `<evidence_dir>` resolves from it.
+
+## Blocker: OD-AFC-13 (owner decision)
+
+`model load` only accepts packages bound in the host's model registry, which is compiled into the Requirements System. It also needs a specification that governs the model, and the AFC register is Markdown (SD-027). I ran CMD-MODEL-LOAD as written on a copy of the four spec-track `.sysml` files. Host 0.1.0-102 refused it before uploading anything: `package is not bound to a configured model`, exit 1.
+
+Options:
+- **A:** add an AFC model to the requirements-system registry, with a governing AFC `.sdoc` and its own checkout. This needs authority the current envelope doesn't hold.
+- **B:** use a host parse or check path that doesn't need a native load, if one exists.
+- **C:** accept the gap.
+
+Until you decide, CMD-MODEL-LOAD records `MODEL_NOT_REGISTERED`, and ST-4 waits.
+
+## Orchestrator follow-ups
+
+- Record SD-029 and SD-030 in `journey.json` as the basis for the new digest.
+- Regenerate the S01, S03 and S06 packets and write their dispatch records first. Each was dispatched twice, so the next lease ids are `-g3`.
+- S02 (PR #303) passed under the old check, whose wrapper always exited 0. Check its receipt for a printed `exit=0`, or rerun the new form, before landing.
+
+## developer_feedback
+
+- **PD-W1B-OBS-1 (Major):** the Requirements System can't parse-check a new, unregistered model. Suggest a `model parse` verb.
+- **PD-W1B-OBS-2 (Major):** the plan's command wrappers masked exit codes. Suggest a plan-package lint for a trailing bare `echo "exit=$?"`.
+- **PD-W1B-OBS-3 (Minor):** digest rebinding still takes two passes. Suggest a `rebind` subcommand.
+- **PD-W1B-OBS-4 (Major):** a dry run of each slice's commands on its base would have caught both scan defects before dispatch.
+
+## Testing
+
+I ran the new commands exactly as written in `seit.json`:
+- **D4 check:** on a read-only Alphazedehq checkout, and on a scratch repo covering clean, violation, bad-base, untracked `.pyc` and uncommitted cases.
+- **D5 scans:** on a scratch repo.
+- **CMD-MODEL-LOAD:** on a copy of the spec-track models.
+
+Not run: the successful CMD-MODEL-LOAD path (needs OD-AFC-13) and the D5 build and lint half (needs S06's scanned wheels).
+
+Known limit: file names from the diff are word-split, so a path with spaces or glob characters would break the scan. None exist in the D4 or D5 skill directories today.
+exit=0
