@@ -35,7 +35,15 @@ run_area() {
     case "$1" in
         hygiene)
             python3 -c 'import yaml' || return 3
-            git diff --check HEAD -- || return 1
+            ws_out=$(git diff --check HEAD -- 2>&1)
+            ws_rc=$?
+            if (( ws_rc != 0 )); then
+                # Report file:line:rule-id only; never echo matched line text.
+                # Unparseable git errors still fail closed (no false PASS).
+                ws=$(printf '%s\n' "$ws_out" | sed -n 's/^\([^:][^:]*:[0-9][0-9]*\):.*/\1:WS-CHECK/p' | sort -u)
+                [[ -n "$ws" ]] && printf '%s\n' "$ws"
+                return 1
+            fi
             python3 tools/ci/check_paths.py || return "$?"
             python3 tools/ci/check_workflows.py .github/workflows/ || return "$?"
             python3 -m unittest discover -s tools/ci/tests ;;
