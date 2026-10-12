@@ -237,6 +237,27 @@
       "decided_at": "2026-10-12T02:17:01Z",
       "decision": "Owner approved the Phase 1 package at the integrated review (candidate 173e005, manifest digest 4128aa9cdacd1fca06edfb68652258730db107eb6213f6dca3faf9e9cca55e84) with every presented recommendation: OD-AFC-01=A extensions only; OD-AFC-06 track specialist logs via .gitignore negation after scrub; OD-AFC-07 reciprocal non-trigger in use-requirements-system; OD-AFC-08 one spec-authoring skill; OD-AFC-09 vendor spec tools into tools/spec/; OD-AFC-10 REFUSED_NO_VNV is a non-pass row, not a merge block; OA-AFC-A2=A tech-writing lane; OA-AFC-A3=A per-PR review at each integration step; OD-AFC-12 .sdoc register on the local Requirements System host. Continuation granted for Phase 1 under AUTH-AFC-2026-10-11-002 with its exclusions.",
       "source": "Owner: 'Approved'"
+    },
+    {
+      "id": "DEC-AFC-SD-026",
+      "status": "confirmed",
+      "decided_at": "2026-10-12T02:54:36Z",
+      "decision": "Shared-skill validation follows Alphazedehq's stock practice (skills/release-process/tests/test_release_process.py): keep required HQ frontmatter (type, title, okf_status, tags); a per-skill unit test asserts <60 lines and the word limit and required fields; the generic skill-creator quick_validate.py runs only on a temp copy holding the portable fields; BRAN bran-strict validates the full document; trigger checks use a recorded trigger-requests.json + classification results fixture, not a live 1-turn harness run.",
+      "source": "Owner: 'Follow what we have been doing in AZHQ stock' (after S01/S02/S03 validator conflict)"
+    },
+    {
+      "id": "DEC-AFC-SD-027",
+      "status": "confirmed",
+      "decided_at": "2026-10-12T02:54:36Z",
+      "decision": "The Requirements System .sdoc register is for Alphazedehq only. This product's requirements register is a Markdown register in this repository (spec track), not bound to the Requirements System host. Reverses OD-AFC-12's .sdoc recommendation.",
+      "source": "Owner: 'Requirements register is only for azhq.' (after ST-2 RS guard refusal)"
+    },
+    {
+      "id": "DEC-AFC-SD-028",
+      "status": "confirmed",
+      "decided_at": "2026-10-12T02:54:36Z",
+      "decision": "OD-AFC-07 reciprocal non-trigger lands in alphazede/requirements-system (skills/use-requirements-system/SKILL.md) with its own PR; S06 write set extends there (Alphazedehq only symlinks it).",
+      "source": "Owner: 'Add RS repo PR'"
     }
   ],
   "open_decisions": [],
@@ -2074,6 +2095,11 @@
       "at": "2026-10-11T23:25:16Z",
       "kind": "resume",
       "detail": "Planning and Design run 2 and Test Engineer ended on Claude session limit (reset 18:20 America/Chicago). Liveness INACTIVE (no processes). Resumed from durable state with specialists/pd-resume-prompt.md; accepted SM/RE/IE work not replayed."
+    },
+    {
+      "at": "2026-10-12T02:54:36Z",
+      "kind": "wave_receipt",
+      "detail": "Wave 1: S07 DONE, reviewed PASS (Muse, OCR), PR #3 merged. S01/S03 OWNER_DECISION_REQUIRED and S02 BLOCKED on plan verification defects (generic validator vs HQ metadata; 1-turn trigger harness; PyYAML wheel not acquired; CMD-D4-AGNOSTIC spans S03 files). S06 BLOCKED: use-requirements-system is a symlink into requirements-system repo. Resolved by DEC-AFC-SD-026..028; plan delta follows."
     }
   ],
   "planning_review": {

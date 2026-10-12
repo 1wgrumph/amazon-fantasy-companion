@@ -1,0 +1,2148 @@
+OpenAI Codex v0.162.1
+--------
+workdir: $HOME/alphazede/worktrees/alphazedehq-afc-s03-ship-pull-request
+model: gpt-6-astra
+provider: openai
+approval: never
+sandbox: danger-full-access
+reasoning effort: medium
+reasoning summaries: none
+session id: 01a12de7-9c21-79f3-acbe-0b0c99c6dbb5
+--------
+user
+ROLE
+Product Implementer (BEARING_ROLE=implementer), Bearing Lite Lifecycle AFC-2026-10-11, slice S03, lane spec-and-docs (profile tech-writing, single_implementer).
+RESPONSIBILITY: implement this one approved slice in its exact write set and return verifiable evidence. Not review, not merge, not other slices.
+
+STATE
+- Approved plan (owner DEC-AFC-APPROVAL-001; authority AUTH-AFC-2026-10-11-002 effective; manifest 4128aa9c). Read-only plan: $HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/ — technical plan, design.md, seit.json, implementation.json (slice S03).
+- Repo: alphazede/Alphazedehq. Your worktree (cwd): $HOME/alphazede/worktrees/alphazedehq-afc-s03-ship-pull-request, branch afc/s03-ship-pull-request, base 47c46f2 (origin/main).
+- Design refs: DES-AFC-D4. Requirements: AC-AFC-D4-03, AC-AFC-D4-05, AC-AFC-D4-06 (statements in the technical plan; read them).
+- Approved owner decisions that bind this slice: OD-AFC-01=A extensions only; OD-AFC-07 add reciprocal non-trigger to use-requirements-system; OD-AFC-08 one spec-authoring skill; OD-AFC-09 vendor spec tools (S42, not you); OD-AFC-10 REFUSED_NO_VNV is a non-pass row, not a merge block; OA-AFC-A2=A; OA-AFC-A3=A per-PR review.
+- Dependencies: —. Leases held for you by the Orchestrator: alphazedehq-skills/ship-pull-request.
+
+OBJECTIVE
+Skill slice (spec-and-docs lane, Phase 1): deliver AC-AFC-D4-03, AC-AFC-D4-05, AC-AFC-D4-06 per DES-AFC-D4 inside the exact write set. Done when: Existing `tests/edit-pr.test.sh` passes; size check exit 0; PR open.
+Fixed names from the plan: {
+ "trigger_requests": {
+  "matching": "open and gate a pull request for this branch",
+  "non_matching": "review this diff for bugs",
+  "expected_peer": "code-review"
+ },
+ "source": "seit.json gate_declarations.spec_and_docs.trigger_requests"
+}
+
+AUTHORITY
+Write only (repo-relative to your worktree):
+- skills/ship-pull-request/SKILL.md
+- skills/ship-pull-request/references/GATES.md
+- skills/ship-pull-request/references/EDIT-PR.md
+Allowed: edit those paths, run the commands below, commit on your branch (author comes from env; never add Co-Authored-By lines), push your branch, open ONE draft PR to main with the ship-pull-request body format.
+Prohibited: any other path; merging; pushing to main; force-push; editing other skills; credentials; publication; touching the owner's dirty files (e.g. Alphazedehq untracked `evals /`). No absolute home paths in committed files (rule 12).
+Skills to load (absolute paths):
+- $HOME/.claude/plugins/cache/bearing-lite/bearing-lite/1.1.6/skills/implementer/SKILL.md
+- $HOME/.agents/skills/create-lean-skill/SKILL.md
+- $HOME/.claude/skills/ship-pull-request/SKILL.md (PR body/edit rules only; do not merge)
+
+TIME BUDGET
+Phase 1 target 2026-10-13T23:00:00Z. Stop and return if blocked; do not spin.
+
+LOOP
+Read the slice, its requirements and design sections → implement → run VERIFY commands → fix → repeat until stop condition or a STOP rule fires.
+
+VERIFY
+Commands (from seit.json; run each, keep output with exit codes and candidate SHA):
+- CMD-D4C-TEST: `bash skills/ship-pull-request/tests/edit-pr.test.sh && grep -q 'REFUSED_NO_VNV' skills/ship-pull-request/SKILL.md && grep -qE 'docs/vnv/AGENTS.md|Vnv/AGENTS.md' skills/ship-pull-request/SKILL.md && grep -q -- '--scope=commits=' skills/ship-pull-request/SKILL.md && grep -q 'tools/ci/gate.sh' skills/ship-pull-request/references/GATES.md && grep -q 'amazon-fantasy-companion' skills/ship-pull-request/references/GATES.md && test -f skills/ship-pull-request/references/EDIT-PR.md; echo "exit=$?"`
+  PASS: exit 0
+- CMD-SKILL-SIZE: `test $(wc -l < <skill_dir>/SKILL.md) -lt 60 && test $(wc -w < <skill_dir>/SKILL.md) -lt 650 && ! grep -n '\[TODO\]' <skill_dir>/SKILL.md && python3 <skill_creator_scripts>/quick_validate.py <skill_dir>; echo "exit=$?"`
+  PASS: exit 0: SKILL.md < 60 lines and < 650 words (skill_size_max, frontmatter included), no [TODO], skill-creator quick_validate passes
+- CMD-SKILL-TRIGGER: `cd "$(mktemp -d)" && claude -p '<request_text>' --output-format stream-json --verbose --max-turns 1 --allowedTools Skill < /dev/null | jq -r 'select(.type=="assistant") | .message.content[]? | select(.type=="tool_use" and .name=="Skill") | .input.skill' > <evidence_dir>/trigger-<skill>-<matching|nonmatching>.txt`
+  PASS: matching request: the evidence file names the skill under test; non-matching request: it names the stated peer (or nothing) and never the skill under test; request text, harness version and raw output recorded; a harness refusal or usage limit is a typed gap with the exact error
+- CMD-D4-AGNOSTIC: `! git grep -nIiE '1wgrumph|alphazede/|amazon-fantasy-companion|gridmarket|betbot|\bpilot\b|exclusion' -- skills/setup-pre-commit skills/setup-a-repo skills/ship-pull-request ':!skills/ship-pull-request/references/GATES.md' <hook_paths_if_merged> <s41_path_if_dispatched>; echo "exit=$?"`
+  PASS: exit 0 (no match); GATES.md rows are gate data and are excluded by design (DES-AFC-D4); <hook_paths_if_merged> = hooks/ci-gate-hook.sh hooks/install-ci-gate-hook.py hooks/README.md at S11
+Proof rows this slice must satisfy:
+- SEIT-AFC-D4-03.T: AC-AFC-D4-03 via CMD-D4C-TEST — expected: the gate step runs vnv-review with an explicit --scope=commits=<base>..HEAD when docs/vnv/AGENTS.md or Vnv/AGENTS.md exists, else records REFUSED_NO_VNV; GATES.md has the shared-gate and amazon-fantasy-companion rows
+- SEIT-AFC-D4-03.S: AC-AFC-D4-03 via CMD-SKILL-SIZE — expected: ship-pull-request SKILL.md drops from 82 lines to < 60 lines and < 650 words
+- SEIT-AFC-D4-05.L: AC-AFC-D4-05 via CMD-LANDING-CHECK — expected: each D4 PR (D4-A, D4-B, D4-C, D4-E, D4-F if dispatched) merged by rebase or merge commit after the trigger evidence
+- SEIT-AFC-D4-05.T: AC-AFC-D4-05 via CMD-SKILL-TRIGGER — expected: each changed D4 skill is selected by its matching request before merge
+- SEIT-AFC-D4-06: AC-AFC-D4-06 via CMD-D4-AGNOSTIC — expected: no repository, owner, pilot or exclusion that scopes the capability is named in D4 skill or hook text
+
+RETURN
+Status DONE | BLOCKED | OWNER_DECISION_REQUIRED; branch, head SHA, PR URL (draft); files changed; each VERIFY command with exit code and output tail; proof-row status; residual risks; and a developer_feedback section: per tool/API/SDK used, the AC-AFC-DX-04 fields that apply (used for, worked well, needs work, onboarding zero-to-hello-world, would build again Yes/No+why, AWS services n/a here; friction entries: task, steps, expected vs actual, severity Blocker/Major/Minor/None, workaround, actionable suggestion; feature requests with priority Critical/Important/Nice-to-have). Use n/a or unknown, never invent. If nothing new, say so and name tools exercised.
+
+STOP
+Existing `tests/edit-pr.test.sh` passes; size check exit 0; PR open.
+Also stop with OWNER_DECISION_REQUIRED if a fix needs a scope, contract or behavior choice the plan does not settle; BLOCKED with exact error if a tool or dependency is unavailable.
+
+hook: SessionStart
+hook: SessionStart
+hook: SessionStart
+hook: SessionStart
+hook: SessionStart Completed
+hook: SessionStart Completed
+hook: SessionStart Completed
+hook: SessionStart Completed
+hook: UserPromptSubmit
+hook: UserPromptSubmit
+hook: UserPromptSubmit
+hook: UserPromptSubmit
+hook: UserPromptSubmit
+hook: UserPromptSubmit
+hook: UserPromptSubmit Completed
+hook: UserPromptSubmit Completed
+hook: UserPromptSubmit Completed
+hook: UserPromptSubmit Completed
+hook: UserPromptSubmit Completed
+hook: UserPromptSubmit Completed
+codex
+I’ll use BRAN, the Implementer and Create Lean Skill workflows, and Ship Pull Request’s body rules. I’ll stay within S03’s three-file write set, run the specified checks, and stop after opening the draft PR without merging.
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/bash -lc 'cat $HOME/.agents/skills/use-bran/SKILL.md $HOME/.claude/plugins/cache/bearing-lite/bearing-lite/1.1.6/skills/implementer/SKILL.md $HOME/.agents/skills/create-lean-skill/SKILL.md $HOME/.claude/skills/ship-pull-request/SKILL.md' in $HOME/alphazede/worktrees/alphazedehq-afc-s03-ship-pull-request
+ succeeded in 0ms:
+---
+name: use-bran
+description: >
+  Use BRAN as the canonical internal repository-knowledge tool to locate
+  evidence, validate metadata and source links against native policy, run
+  deterministic repository checks, inspect bounded librarian packets, and
+  check internal/public boundaries. Use when a request mentions BRAN,
+  repository knowledge, source precedence, metadata validation, native
+  policy checks, or BRAN integrity. Also fires automatically via hook on
+  relevant prompts, session start, and after search_replace on
+  docs/skills/canonical files.
+type: agent-skill
+title: Use BRAN
+okf_status: active
+tags:
+  - internal
+  - librarian
+---
+
+# Use BRAN
+
+BRAN is the canonical internal repository-knowledge implementation. It owns
+validation rules, retrieval precedence, derived-state rebuilding, and bounded
+repair authority. Use it directly for repository checks, evidence queries, and
+policy validation.
+
+## Workflow
+
+1. Resolve the repository root and confirm `.bran/policy.yaml` exists. If no
+   native policy is present, return `bran_status: unavailable` and use normal
+   repository discovery.
+2. Resolve the pinned BRAN binary at `tools/bran/runtime/bran` relative to the
+   trusted Alphazedehq checkout containing this skill, and verify it against
+   `tools/bran/runtime/bran-release-pin.json` before execution.
+3. Run repository validation:
+
+   ```bash
+   <bran-binary> check <repo-root> bran-strict
+   ```
+
+   The `okf-v0.1` profile provides legacy-OKF-compatible results. The
+   `bran-strict` profile enforces full BRAN-native policy including frontmatter,
+   source-link integrity, status/tag policy, and public/private boundaries.
+
+4. For evidence retrieval, use BRAN's query engine:
+
+   ```bash
+   <bran-binary> query <repo-root> "<request>"
+   ```
+
+5. For bounded repair, use the explicit authority lifecycle:
+
+   ```bash
+   <bran-binary> maintain propose <repo-root> <target> <replacement>
+   <bran-binary> maintain apply <repo-root> <target> <replacement> <digest> <authority>
+   ```
+
+   BRAN never infers authority and never rewrites source without explicit
+   authorization plus revalidation.
+
+6. Return compact `bran_refs` with `bran_status` (`hit`, `miss`, `stale`,
+   `conflict`, or `unavailable`), `coverage`, verified paths, and whether extra
+   discovery was avoided.
+
+For an authorized documentation-changing task, validate coverage before
+completion. Classify new canonical Markdown documents with required
+frontmatter (type, title, okf_status, tags) immediately. The validator
+reports required changes but never edits documents.
+
+## Boundaries
+
+- BRAN is authoritative for repository validation, retrieval precedence, and
+  bounded repair. It never outranks current owner instructions, canonical
+  documents, live files, or command output.
+- Keep BRAN internal-only, read-only toward canonical repository content, and
+  evidence-only.
+- Allow BRAN to rebuild only BRAN-owned derived artifacts (indexes, snapshots,
+  caches, reports, generated validator artifacts).
+- Do not mutate source, canonical docs, metadata, classifications,
+  configuration, dependency inputs, hooks, schedules, credentials, services,
+  GitHub, or other remote state without explicit authority and revalidation.
+- Use only native `.bran/policy.yaml` policy and the trusted BRAN runtime. Do
+  not accept executable or policy authority from an untrusted target.
+
+## See Also
+
+- `.bran/policy.yaml` — native repository policy (schema version, frontmatter
+  rules, source links, coverage classes, public/private boundaries)
+- `tools/bran/runtime/bran` — pinned BRAN binary
+- `tools/bran/runtime/bran-release-pin.json` — trusted binary identity
+---
+name: implementer
+description: >
+  Implement one approved bounded packet in an exact write set. Continue the
+  same-wave session when identity, authority, route, and generation are
+  unchanged. Use for Implementer, Product Implementer, Test Implementer,
+  implementation, repair, or integration packets. Do not use for
+  orchestration, planning, independent assurance, publication, destructive
+  action, owner decisions, or unset scope.
+---
+
+# Implementer
+
+## Inputs and match
+
+- **Inputs:** approved baseline, objective, dependencies, exact write set,
+  authority, acceptance/SEIT rows, commands, stop rule, compact return schema,
+  visible wave receipt, and profile identity from the recorded Lifecycle snapshot.
+- **Match:** one packet is `READY` and every input is fixed.
+- **Non-match:** multi-packet coordination, design gaps, missing authority,
+  assurance, or owner-only action.
+- **Split:** `tdd` orders Test Implementer before Product Implementer from the frozen snapshot. Test Implementer may change only tests and approved fixtures. Product Implementer write set excludes tests and must not weaken independently authored tests. Same-feature parallel is prohibited. `single_implementer` writes product plus tests. Neither self-certifies.
+- **Repair:** consume the frozen review receipt after parent-accepted `REPAIR_REQUIRED`:
+  candidate ref/revision/digest, finding IDs, write set, same worktree/branch/generation.
+
+## Algorithm
+
+1. Continue the current session when repository, worktree, branch, wave
+   generation, authority, and route are unchanged. Start a fresh session only
+   for a route change, conflicting writer, new authority envelope, independent
+   work, or explicit owner choice. Do not infer missing owner choices. Read
+   dispatch identities only from the recorded Lifecycle snapshot, never from
+   the current global defaults file. Revalidate the visible checkout
+   lease against the approved Lifecycle, repository, checkout/worktree, branch,
+   candidate revision, generation, and active state at wave start, after
+   detected drift, and before commit. Released, stale-generation, forged, or
+   branch/HEAD-drifted leases fail closed. Authorized same-Lifecycle
+   candidate progress whose parent is the current leased revision refreshes
+   candidate_revision on the same generation. On mismatch, return WAITING_ON without writing.
+2. For a verified contract defect, create the smallest failing regression first.
+3. Make the smallest change that satisfies the packet inside the write set.
+   For a published standard, verify against its cited document and clause before changing code; neighbouring behavior is not the authority.
+4. After all edits, run one completion pass for Product and Test Implementers: inspect the final diff;
+   run relevant repository formatting, lint, type checks and focused tests (e.g. Rust fmt/Clippy `-D warnings`, UI typecheck/lint).
+   Fix every actionable in-scope bug and unexpected failure in that pass; rerun affected checks on the final candidate.
+   Record intentional TDD baseline reds separately; never weaken tests/checks to turn green. Remaining unexpected failures or authority gaps block ready handoff; report exact evidence without expanding scope or starting another cleanup pass.
+5. Author checks and receipts are diagnostic, never independent review or assurance.
+   Report commands/results and mutation, changed-line coverage and red-then-green evidence with the repository's own tool. Missing/not-run declared checks are typed gaps, never PASS.
+   Bind baseline/candidate failing/passing runs to the same test IDs.
+6. Preserve unrelated work. Return only the compact receipt. Stop on acceptance,
+   authority boundary, design gap, or exhausted correction.
+
+## Return and recovery
+
+Return `CANDIDATE_READY`, `PARTIAL`, `WAITING_ON`, or
+`OWNER_DECISION_REQUIRED` with verdict, candidate_ref, changed_paths, tests,
+findings, and blocker. Use one author cleanup pass per packet; report anything unresolved.
+
+One independent-review repair; close by deterministic verification; no extra review; dispatch if
+session cannot be preserved. Never expand scope, self-certify as assurance, publish, or hide a failure.
+---
+name: create-lean-skill
+description: >
+  Design, rebuild, audit, or improve compact agent skills as bounded, testable
+  procedures. Use for SKILL.md work, skill comparison, skill migration, skill
+  repair, or missing-skill evaluation. Do not use for ordinary prompts or
+  product implementation.
+type: agent-skill
+title: Create Lean Skill
+okf_status: active
+tags:
+  - internal
+  - skills
+---
+
+# Create Lean Skill
+
+Create or revise one skill at a time. Treat it as executable behavior, not a
+prompt essay.
+
+## Inputs and preconditions
+
+- Require a target behavior, one matching request, one non-matching request,
+  target location, write authority, and repository rules.
+- Inspect the installed catalog and strongest comparable skill. Improve or
+  merge behavior into the existing owner; never copy or duplicate a skill.
+- Create a skill only when no existing skill can own the outcome cleanly.
+
+## Algorithm
+
+1. Define one purpose, observable outcome, triggers, and explicit non-triggers.
+2. Specify inputs, preconditions, local state, ordered steps, branches, allowed
+   tools, evidence, validation, recovery, stop conditions, authority, and typed
+   outputs. Omit fields that truly do not apply.
+3. Bound every loop. Allow at most three evidence-driven correction rounds;
+   stop when no new evidence, hypothesis, strategy, or environment change exists.
+4. Keep `SKILL.md` below 60 total lines and 650 words, including frontmatter,
+   and within any stricter size limit the target repository enforces.
+   Put all trigger conditions in its description and use direct imperatives.
+5. Default to `SKILL.md` plus `agents/openai.yaml`. Add scripts, references, or
+   assets only when repeated deterministic work or conditional detail proves need.
+6. Reuse the installed `skill-creator` initialization, metadata-generation, and
+   validation scripts. Preserve stricter repository metadata and report generic
+   validator incompatibility separately.
+7. Test the matching and non-matching requests. Forward-test raw tasks when
+   failure is costly or behavior is complex. For improvements, compare current
+   and candidate behavior using evidence rather than model preference.
+8. Keep the revision a candidate until validation passes; promote or retain the
+   current version from the evidence.
+
+## Outcomes
+
+Return exactly one: `SUCCESS` with paths and evidence; `NO_CHANGE` with proof;
+`NEEDS_OWNER_DECISION`; `NEEDS_EVIDENCE`; `VALIDATION_FAILED`; or `BLOCKED`.
+
+Never claim success without validation, hide core behavior in references, expand
+authority, or trade required behavior merely to satisfy the size limit.
+---
+name: ship-pull-request
+description: Author, gate, and close out pull requests in any repository. Use when the user asks to open, draft, ready, review, gate, triage, merge, or close out one or many PRs, write or fix a PR description, or check whether a PR is ready to merge.
+type: agent-skill
+title: Ship Pull Request
+okf_status: active
+tags:
+  - internal
+  - operations
+---
+
+# Ship Pull Request
+
+One procedure for every PR in every repo. Repository differences are data, not
+different steps — gates in `references/GATES.md`. A lone PR is a chain of one.
+
+## Resolve
+
+Never skip. List every PR in scope with base, draft state and check state
+(`gh pr list --json number,baseRefName,headRefName,isDraft,mergeStateStatus,
+statusCheckRollup`), look up each repo's gate, then order the work bottom-up
+from the PR based on the default branch and process one at a time.
+
+## Author
+
+1. One branch, one purpose, branched from its base.
+2. Rebase onto the base. Never merge the base into the branch.
+3. Run the gate locally and see its exit code.
+4. Write the body per `references/PR-BODY.md`.
+5. Open as draft. Draft states a named, specific gap.
+
+## Edit
+
+When updating a PR's title, body, or base:
+- Never use `gh pr edit` (`gh 2.45.0` fails on the deprecated Projects-classic
+  GraphQL schema and silently leaves PR text stale).
+- Use the REST PATCH path or the helper script:
+  ```sh
+  scripts/edit-pr.sh <number> --title "<title>" --body-file <path>
+  # or directly with gh api:
+  gh api -X PATCH repos/<owner>/<repo>/pulls/<number> -f title="<title>" -F body=@<path>
+  ```
+- **Verification step (mandatory)**: check that the PR text updated by reading
+  it back to detect and prevent stale-text failures:
+  ```sh
+  scripts/check-pr-text.sh <number> --title "<title>" --body-file <path>
+  # or directly with gh api:
+  gh api repos/<owner>/<repo>/pulls/<number> --jq '{title: .title, body: .body}'
+  ```
+
+## Ready
+
+Leave draft only when every claim under Validation has run and its output was
+seen. An unrun or failing claim stays under Residual risk and the PR stays
+draft. Never promote on an agent's report alone. Promote with `gh pr ready <number>`,
+and send title and body updates through the REST edit path and verify the saved text.
+
+## Gate
+
+- The reviewer re-runs the gate. Pasted output is not evidence.
+- Review per `AGENTS.md` § Code review policy: one review of the integrated
+  diff, P0-P3, verified findings only. Docs and skills self-review.
+- Read the negative tests: each bypass needs a test that names it.
+- A red check blocks that PR and everything above it. Fix the lowest failure.
+- A failing gate on a non-draft PR returns it to draft.
+- Close with `no known gap` or an explicit list, never a bare approval.
+
+## Merge
+
+Rebase-merge to linear history, then delete the branch. Never squash: squashing
+discards the reviewed commits and replaces them with one no reviewer saw. Under
+rebase the individual commit messages survive, so the PR body is the review
+record, not the commit message. Never add `Co-Authored-By` AI-model lines. Then
+rebase the next PR onto the merged base and re-gate it:
+`references/STACKED-PRS.md`.
+
+## Close out
+
+- Close the originating issue from the merge, not by hand.
+- Every unresolved Residual-risk item becomes a tracked issue at merge time.
+- Downstream propagation (public mirror, package publish, release) is batched
+  and owner-triggered, never part of merge. Commands in `references/GATES.md`.
+
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/bash -lc 'pwd; test -f .bran/policy.yaml && cat tools/bran/runtime/bran-release-pin.json; sha256sum tools/bran/runtime/bran; cat $HOME/alphazede/AGENTS.md' in $HOME/alphazede/worktrees/alphazedehq-afc-s03-ship-pull-request
+ succeeded in 0ms:
+$HOME/alphazede/worktrees/alphazedehq-afc-s03-ship-pull-request
+{"schema_version":"1","version":"bran 0.2.0","source_commit":"f5032eb3f9d850d2b0f4fdbd6085d4a95270b26b","sha256":"776b782a3ab1d9d931f3c121a729a16ae2e8426fa53cb27224273bf59ddd883e"}
+sha256sum: tools/bran/runtime/bran: No such file or directory
+# AGENTS.md — AlphaZede Workspace Root
+
+`$HOME/alphazede` is a **multi-repo workspace container, not a repository.**
+No `.git`, no `.bran/policy.yaml`, no build, no tests, no commits at this level.
+
+This file is canonical for agents that start here. Its only job is to answer two
+questions fast: **where am I**, and **which repository does the owner mean?**
+Once you know the repo, that repo's own `AGENTS.md` takes over and this file stops
+applying.
+
+## Authority order
+
+1. Current owner (William Rumph) instructions in this session
+2. The target repository's `AGENTS.md` and any path-specific nested `AGENTS.md`
+3. The target repository's `CLAUDE.md` / `AGY.md` / `GEMINI.md` / `QWEN.md` lens
+4. This file (workspace routing only)
+
+A rule stated inside a repo always beats a summary written here.
+
+## Orientation tree
+
+```
+$HOME/alphazede/
+├── alphazede-markets/     AZM — options trading engine        [git: alphazede/btm]
+│   ├── btm/               Rust Cargo workspace (5 crates) + Python IBKR bridge
+│   ├── btm-fpga/          RTL/HLS Vivado projects, Kria KV260 deployment
+│   ├── btm-ibkr/          IBKR integration
+│   └── deploy/ docs/ lessons/ prompts/ reports/ tests/ ui/ Vnv/ Xilinx/
+├── alphazede-sports/      AZS — fantasy + sports betting      [git: alphazede/alphazede-sports]
+│   ├── command_node/ data_node/ services/  distributed runtime
+│   ├── apps/ frontend/ packages/           Next.js / TypeScript
+│   ├── hardware/ infra/ deploy/            FPGA + fleet
+│   └── agents/ docs/ tools/ tests/ Vnv/ Security/
+├── betbot/                BTO — legacy production sports bot  [git: 1wgrumph/betbot]
+│   └── analysis/ core/ engines/ models/ pipeline/ clients/ docs/ tests/
+├── azedge/                AZEdge foundation (Rust + pnpm)     [local only]
+│   └── crates/ services/ schemas/ migrations/ runbooks/ tools/
+├── bran/                  BRAN internal canonical source      [local only]
+│   └── crates/ schemas/ fixtures/ examples/ skill/ docs/
+├── bearing/               Bearing — public browser control room [git: alphazede/bearing]
+│   └── src/ skills/ plugin-skills/ hooks/ examples/ test/
+├── developers/            Public reviewed developer assets    [git: alphazede/developers]
+│   └── az-sports-dev/ grok-safe/ window/ docs/
+├── Alphazedehq/           Portfolio / chief-of-staff repo     [git: alphazede/Alphazedehq]
+│   ├── bran-dev/          BRAN dev checkout
+│   ├── docs/              infrastructure guide, IP table, model matrix
+│   └── lessons/ prompts/ skills/ standards/ tools/
+├── agentic-eval-arena/    Sealed agent-evaluation harness     [local only]
+│   └── arena/ capsules/ hidden_graders/ reviewer_corpus/ harbor_bench/
+│
+├── worktrees/             linked git worktrees for in-flight branches
+├── evidence/              BRAN migration + branch-cleanup evidence bundles
+├── data/                  golf_cache
+├── external/              telegram/ — run_admin_bot.py + logs
+└── Odi/                   docs/plans/2026-07-22-odi-mvp
+```
+
+## Disambiguation — what the owner means
+
+| If the owner says… | Work in |
+|---|---|
+| markets, AZM, trading, options, IBKR, KV260, "the trading system" | `alphazede-markets/` |
+| sports, AZS, fantasy, DFS, data node, command node, filter node | `alphazede-sports/` |
+| betbot, BTO, "the old bot", "legacy production" | `betbot/` |
+| azedge, AZEdge, foundation, foundation-types | `azedge/` |
+| bran, BRAN, repo knowledge, OKF | `bran/` (source) — **not** `developers/` |
+| bearing, control room, focus guard, navigator/explorer/crewmate | `bearing/` (public). `alphazede/bearing-dev` is archived (2026-09-23); Bearing Lite is `alphazede/bearing-lite` (maintenance: bug fixes only) |
+| developers, public repo, export, scrubbed snapshot | `developers/` |
+| HQ, portfolio, fleet, IPs, infrastructure, node setup | `Alphazedehq/` |
+| arena, eval, grader, candidate profiles | `agentic-eval-arena/` |
+
+Ambiguous cases worth a question rather than a guess:
+
+- **"Bearing"** — `bearing/` is the public browser control room; `alphazede/bearing-lite`
+  is the plugin (maintenance mode, bug fixes only); `alphazede/bearing-dev` is
+  archived. The future private Bearing SaaS repo does not exist yet. Ask which.
+- **"BRAN"** — develop in `bran/`; `developers/` is an export target only.
+- **"FPGA"** — `alphazede-markets/btm-fpga/` (Vivado/KV260) and
+  `alphazede-sports/hardware/` (Quartus/DE1-SoC) are different toolchains.
+
+## Naming
+
+Use **AZM** (AlphaZede Markets), **AZS** (AlphaZede Sports), **AZEdge**. The
+retired term `BTM` was migrated to `AZM` across `alphazede-markets/`,
+`Alphazedehq/`, `alphazede-sports/`, and `betbot/` on 2026-07-24 (uppercase,
+word-boundary).
+
+**Lowercase `btm` is intentionally unchanged** — it is structural, not prose: the
+`btm/`, `btm-fpga/`, `btm-ibkr/` directories, crate names, and the `btm.git`
+remote. `BTM` also survives in `evidence/` (immutable bundles) and in the
+in-flight branches under `worktrees/`, so it returns if those merge.
+
+## Worktrees
+
+**Location (owner rule, 2026-09-24).**
+- Every linked worktree lives at `$HOME/alphazede/worktrees/<repo>-<topic>`, where the owner can see it. This applies to every harness: Claude Code, Codex, Muse, Cursor, Grok and AGY.
+- Never create a worktree in a hidden location: `.claude/worktrees/`, `.codex/`, `.cursor/`, any other dot-directory, or `/tmp`. Harness features that create worktrees automatically in hidden folders (for example isolation worktrees) are not used for repository work. Create the worktree explicitly under `worktrees/` instead.
+
+**Cleanup.** When a branch is merged into `origin/main`, the agent that owns it removes all three in the same session:
+- the worktree (`git worktree remove`);
+- the local branch (`git branch -d`);
+- the remote branch (`git push origin --delete <branch>`).
+
+The rule does not cover:
+- worktrees with uncommitted or unmerged work;
+- worktrees in use by a running process;
+- worktrees locked as an active Requirements System host's `sdoc_root`.
+
+`worktrees/*` are linked worktrees; each belongs to some parent repo's `.git`,
+**and the parent is not always the same-named root repo**. Any leftover
+`bearing-*` worktrees came from the archived `bearing-dev`.
+
+Resolve ownership from the parent side, never by guessing from the directory name:
+
+```bash
+git -C <parent-repo> worktree list
+```
+
+If a worktree's internal `.git` file points at a stale parent path, commands run
+*inside* it fail with "not a git repository" — operate from the parent instead.
+
+**Never squash-merge** (owner rule, 2026-09-24). Merge a PR with a rebase merge or a
+merge commit (`gh pr merge --rebase` or `--merge`), so every commit stays in `main`'s
+history. Squash merge is disabled on azedge, Alphazedehq and requirements-system.
+GitHub deletes the remote branch automatically on merge. The agent still removes the
+worktree and the local branch.
+
+**Agents may create worktrees and branches without asking** (owner rule, 2026-09-24).
+Create them under `worktrees/` as described above, one worktree per task, and clean
+them up once merged. Switching, resetting, or deleting a branch or worktree that holds
+unmerged or uncommitted work is still destructive git, and still needs the owner's
+authorization.
+
+## BRAN — repository knowledge
+
+BRAN is the canonical internal tool for repository evidence, metadata validation,
+and deterministic checks. Prefer it over blind file search. The tree above tells
+you *where* you are; BRAN tells you *what is true inside* a repo.
+
+Pinned runtime — verify sha256 against the pin before executing:
+
+```bash
+B=$HOME/alphazede/Alphazedehq/tools/bran/runtime/bran
+cat "$(dirname "$B")/bran-release-pin.json"
+sha256sum "$B"                      # must match the pin
+"$B" check <repo-root> bran-strict
+"$B" query <repo-root> "<request>"
+```
+
+Repos with a native `.bran/policy.yaml`: `Alphazedehq`, `alphazede-markets`,
+`alphazede-sports`, `azedge`, `betbot`, `developers` — all six passed
+`bran-strict` on 2026-07-24. `bran/`, `bearing/`, `agentic-eval-arena/`, and this
+workspace root have no policy; BRAN reports `unavailable` there, so use normal
+discovery.
+
+Shared frontmatter contract: required `type`, `title`, `okf_status`, `tags`;
+optional `freshness`, `resource`, `public_boundary`. New canonical Markdown needs
+it immediately. The validator reports required changes; it never edits documents.
+
+BRAN routes to canonical sources. It never outranks owner instructions, canonical
+docs, live files, or command output. Repair is authority-gated
+(`maintain propose` → `maintain apply` with digest + authority), and BRAN may
+rebuild only its own derived artifacts.
+
+## Cross-repo rules
+
+These hold everywhere here; each repo states its own stricter version.
+
+1. **No `Co-Authored-By` AI-model lines** in any commit, in any repo.
+2. **Secrets stay in env / owner-held secret records.** Never in commits, docs, or
+   agent output. Never print connection strings or passwords.
+3. **Proprietary IP is audience-scoped.** Model routing, prompt text, agent
+   architecture, scoring formulas, thresholds, and calibration values must not
+   reach external broadcasts, public repos, customer mirrors, or `developers/`.
+4. **Landing work is the agent's job.** When a change is committed and its
+   verification passed, push the branch, open the PR, and merge it once the
+   required checks are green. `main` is PR-only by ruleset: that is the
+   mechanism, not an approval step, and no owner sign-off is needed. Never
+   commit on local `main`, never force-push. Deploying merged work to a
+   runtime host, installing or enabling its service units, and restarting its
+   services are agent work; verify the result on the host. **Owner-authorized
+   actions are separate and per-session:** activation (turning on a live
+   trading, live betting, or new customer-facing path), production DB
+   mutation, credential access, destructive git, and public export. Approval
+   for one is not approval for another. **Approved-plan
+   exception:** waived for any of these actions taken in execution of an approved
+   plan — `plan-spec.md`, `design.md`, `implementation.md`, and
+   `seit.md`/`validation.md` complete, with a review record (`review.md` or
+   `review.html`) showing a passing `/gate-review` entry — in which case
+   per-session authority is automatic.
+   **Issue closure is agent work:** close a tracked issue after its fix is
+   merged and all acceptance checks pass, without separate owner confirmation.
+   Partially addressed issues stay open.
+5. **Code is the source of truth.** When docs and code disagree, code wins — then
+   fix the doc.
+6. **Trust but verify.** Provider coverage, deployment state, artifact presence,
+   and any agent's summary are unverified claims until backed by primary docs,
+   live responses, repo code, or real command output. A delegated agent's report
+   is a claim, not proof.
+7. **Zero-tolerance bug policy** in the money-risk systems (AZM, AZS, BTO). No
+   "we'll fix it later." Gate reviewers hunt for bugs, not checklists.
+8. **Preserve features and guards.** Don't remove, hide, weaken, or bypass shipped
+   features, filters, or checks without explicit owner approval for that exact change.
+9. **Gate review before commit** where the repo defines one. Authoring sessions
+   cannot self-certify.
+10. **Scan externally acquired software** before first use; fail closed on `BLOCK`
+    or `INDETERMINATE`.
+11. **Preserve unrelated work.** Several repos carry uncommitted changes at any
+    time. Inspect every diff before committing and never sweep up work that is
+    not yours.
+12. **No hardcoded local paths in anything that ships publicly.** No absolute
+    user-home path — `/home/<user>/…`, `/Users/<user>/…`, `C:\Users\<user>\…` —
+    may appear in a public repo, a public export surface, a customer mirror, or
+    `developers/`. This applies to production code, tests, fixtures, examples,
+    scripts, and docs alike.
+
+    It leaks the owner's machine layout to everyone who clones, and code keyed
+    to one home directory is broken for every other user by construction.
+
+    - Detect private paths **by shape**, never by a fixed list of real paths. A
+      hardcoded list only recognizes one machine and publishes that machine's
+      layout in the process.
+    - Derive real paths at runtime from the repository root, an environment
+      variable, a CLI argument, or config.
+    - Where a sample path is genuinely needed, use a placeholder user segment
+      (`user`, `example-user`, `someone`) so intent stays obvious.
+    - Private-only roots (plans, submissions, internal bug records) may
+      reference local paths; the rule covers what actually ships.
+
+    Enforce it mechanically, not by review habit. BRAN's implementation is
+    `hardcoded_home_users` in `bran-dev/tools/ci/public_boundary_check.py`,
+    scoped to the export surface derived from `public-export.json` and wired
+    into the repo's fast gate; port that shape to any repo with a public
+    surface.
+13. **Architecture specifications and plan records** are governed by
+    COE-ASA-013 through COE-ASA-016 and GLOSS-ASA-001 in Alphazedehq
+    `docs/coe/index.md`.
+14. **The Requirements System host is a local dev/test host; running it is
+    agent work** (owner, 2026-10-05).
+    - Every agent uses the packaged-default host. Find it through
+      `$XDG_RUNTIME_DIR/alphazede-requirements-system/host.port`.
+    - If it is down, start it: `alphazede-requirements-system start --no-browser`.
+      Stopping and restarting it are agent work too. Check
+      `alphazede-requirements-system checkout list` and active `busy` claims
+      first, so you do not cut off another agent's run.
+    - After merging a requirements-system change to a payload path, upgrade the
+      host with `packaging/debian/upgrade-host.sh <gated .deb>`.
+15. **Every code review runs OCR, and every binary claim runs Reverify.**
+    - OCR means OpenCodeReview (`ocr`). By default it runs in delegation
+      mode inside the reviewer's own session:
+      `ocr delegate preview --from <base> --to <head>`, then
+      `ocr delegate rule <every listed file>`. The reviewer applies each
+      rule group to its files and reports a per-file OCR section next to the
+      verdict. OCR assists the review; it is never the independent review.
+    - Reverify (`reverify`) runs on any claim about a compiled binary.
+      Otherwise, state `Reverify: not applicable — <reason>`.
+    - Whoever dispatches a reviewer writes both into the packet. Reviewers
+      do not probe for tools.
+    - A tool that cannot run is a typed gap with its exact error, never a
+      pass.
+16. **Every frontend change gets a visual review.** A change that alters
+    rendered UI (pages, components, styles, layout) is reviewed in a running
+    browser before merge, not only as a diff.
+    - Run the candidate on a local dev or test host, never production.
+    - Drive every changed flow with browser automation or computer use:
+      click through each changed screen and state, at desktop and phone
+      widths.
+    - Capture a screenshot of each state and keep it with the review
+      evidence. Never capture customer data.
+    - Judge against the spec, the design references, or the approved
+      mockups: layout, spacing, typography, empty and error states, console
+      errors, and accessibility basics.
+    - Visual findings join the same review-and-repair round as code findings.
+      A UI that cannot be run is a typed gap with its exact error, never a
+      pass.
+    - Whoever dispatches the reviewer writes the run command and the flows to
+      check into the packet.
+17. **Each orchestrating session runs at most five implementation agents at
+    once**, unless the owner says otherwise for a task (owner, 2026-09-30).
+    The cap is per orchestrating session, not workspace-wide: agents started
+    by other sessions do not count against it. Every Coordinator the
+    Orchestrator starts is its own orchestrating session with its own cap of
+    five (owner clarification, 2026-09-30). So the Orchestrator's direct
+    dispatches count against its five, and each Coordinator's dispatches count
+    against that Coordinator's five; they are not one shared pool. It counts
+    the Implementer, Light Implementer and repair runs that session
+    dispatched; reviewers are not counted. Queue further slices until one of
+    its own slots frees; do not stop a running agent to make room without
+    saying so.
+18. **File product bottlenecks as enhancements** (owner, 2026-09-30). An
+    agent that hits a repeatable bottleneck in a product or its tooling files
+    a GitHub enhancement issue in the owning repository. Examples: a gate that
+    forces reruns, a hot file that every slice conflicts on, a missing
+    command, a manual multi-step procedure.
+    - File through `Alphazedehq/hooks/issue-labels.py` with kind
+      `enhancement`: dry-run first, then `--submit`.
+    - Search for a duplicate first; add evidence to an existing issue instead
+      of filing a second.
+    - Use the standard sections (Origin, Harness / version, What, Current
+      evidence, Expected, Acceptance), with the measured cost as evidence.
+    - File only what you observed, never speculation.
+    - Public repositories follow the publication rule: the owner approves
+      the exact text first.
+19. **Do the asked work, sized to what the gate measures** (owner lesson,
+    2026-10-01). Do not add steps, checks, copies or scope the owner did not
+    ask for, even when a plan or habit suggests them. Before any heavy step,
+    check that its size matches the decision it serves. Lesson from one
+    deploy:
+    - A pre-deploy backup of a 47 GB database, then a full integrity check
+      of the copy, then a table-size scan: about an hour, none of it the
+      owner's normal deploy process.
+    - A full `--all` regrade back to February (about 3 hours) when the gate
+      only counted picks since August 1; the unbounded provider traffic
+      likely got the host blocked by the provider.
+    - A plan step that copied the whole 47 GB database to devnode to fit a
+      few parameters.
+    Rules that follow:
+    - Follow the owner's normal process for routine operations (deploys,
+      restarts, regrades). Propose an extra safety step in one line; do it
+      only if the owner says yes.
+    - Bound every bulk operation (regrade, backfill, export, scan) to the
+      window or IDs the decision needs, and state its expected size and
+      duration before starting it.
+    - Query only the rows and columns needed; never copy a whole production
+      database to answer a narrow question.
+    - A plan written by an agent is not owner intent for its heavy steps;
+      check those against this rule before running them.
+
+## Session start
+
+1. Identify the target repository — do not work at this root.
+2. `git -C <repo> status --short` and check the branch. Several repos sit on
+   feature branches, not `main`/`master`, and several are dirty.
+3. Open that repo's `AGENTS.md` and its agent-specific lens, plus any
+   path-specific `AGENTS.md` for the paths you will touch.
+4. Use BRAN for architecture, terminology, and knowledge questions where a
+   `.bran/policy.yaml` exists.
+5. Confirm authority, paths, and validation commands before editing.
+
+## Validation
+
+There is no workspace-level build or test. Run each repository's own commands,
+documented in its `README.md` / `AGENTS.md` / `CLAUDE.md`. Examples:
+
+- `bran`: `./tools/ci/check.sh --fast` (`--full` only for release/security/perf surface)
+- `azedge`: `cargo fmt --all -- --check`, `cargo clippy --workspace --all-targets -- -D warnings`,
+  `cargo test --workspace --all-targets`, `pnpm -r lint`, `pnpm -r test`,
+  `bash tools/ci/foundation-contracts.sh`
+- `bearing`: `pnpm typecheck`, `pnpm test`, `pnpm test:integration`, `pnpm build`,
+  `pnpm eval:native`, `pnpm audit --audit-level=moderate`
+- `betbot`: `tests/bm1_runtime/` is the default BM1 pipeline suite
+
+
+## Fixable review findings
+
+Never pass or accept `ACCEPT_WITH_FINDINGS` while a fixable bug remains. If an actionable review finding can be repaired without causing a regression or violating the approved contract, the verdict is `REPAIR_REQUIRED`; fix it in the authorized repair round and rerun deterministic verification. `ACCEPT_WITH_FINDINGS` is reserved for owner-approved residual risk or a finding that cannot be repaired within the approved contract without causing a regression.
+
+Review and repair run as one pair: one independent review, then one repair
+round that fixes every finding it raised. After that repair, deterministic
+verification decides and the change lands; do not start another review round
+unless the owner asks or the repair changed the approved scope. Never file a
+review finding as an issue instead of fixing it in that repair round.
+
+## Defect filing
+
+Defects and gaps found during work are disposed of under COE-ELSD-008,
+COE-ELSD-009 and COE-ELSD-010 of the COE-ELSD library, published REV-3
+(commit 8d39a72e70b55f72fc206ef776d279b06369192c, sha256:645ada3c5044b8e2a942757e61b172e61fb28cd5aa4b8f38b3ba88aa5895940e), in alphazede/Alphazedehq
+`docs/coe/engineering-lifecycle-secure-delivery/engineering-lifecycle-secure-delivery.sdoc`.
+
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/bash -lc 'sha256sum $HOME/alphazede/Alphazedehq/tools/bran/runtime/bran; cat $HOME/alphazede/Alphazedehq/tools/bran/runtime/bran-release-pin.json; readlink -f $HOME/.agents/skills/use-bran; git status --short; git branch --show-current; git rev-parse HEAD' in $HOME/alphazede/worktrees/alphazedehq-afc-s03-ship-pull-request
+ succeeded in 438ms:
+776b782a3ab1d9d931f3c121a729a16ae2e8426fa53cb27224273bf59ddd883e  $HOME/alphazede/Alphazedehq/tools/bran/runtime/bran
+{"schema_version":"1","version":"bran 0.2.0","source_commit":"f5032eb3f9d850d2b0f4fdbd6085d4a95270b26b","sha256":"776b782a3ab1d9d931f3c121a729a16ae2e8426fa53cb27224273bf59ddd883e"}
+$HOME/alphazede/Alphazedehq/skills/use-bran
+afc/s03-ship-pull-request
+47c46f2e16fed060482a1bf3a0e34ddcb9bc57fc
+
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/bash -lc '$HOME/alphazede/Alphazedehq/tools/bran/runtime/bran check "$PWD" bran-strict; $HOME/alphazede/Alphazedehq/tools/bran/runtime/bran query "$PWD" '"'ship-pull-request skill gate requirements'" in $HOME/alphazede/worktrees/alphazedehq-afc-s03-ship-pull-request
+ succeeded in 228ms:
+{"schema_version":"1.0.0","command":"check","status":"ok","data":{"root":"$HOME/alphazede/worktrees/alphazedehq-afc-s03-ship-pull-request","selected_profile":"bran-strict","okf_compatibility":{"profile":"okf-v0.1","status":"pass","diagnostics":[]},"okf_v0_2":{"profile":"okf-v0.2","status":"pass","diagnostics":[]},"bran_strict":{"profile":"bran-strict","status":"pass","diagnostics":[]},"selected_profile_error":null,"selected_passed":true,"exit_code":0},"warnings":["Symlink { path: \"skills/use-requirements-system\" }"],"failures":[],"provenance":{"sources":["repository-scanner","bran-core"],"policy_source":"repository-file"},"metrics":{"selected_passed":true,"exit_code":0}}
+{"schema_version":"1.0.0","command":"query","status":"ok","data":{"root":"$HOME/alphazede/worktrees/alphazedehq-afc-s03-ship-pull-request","query":"ship-pull-request skill gate requirements","query_outcome":"grounded","query_coverage":{"matched_terms":["ship-pull-request","gate","requirements","skill"],"unmatched_terms":[]},"selected_locators":["docs/plans/agent-skills/2026-09-08-engineering-methods-and-vnv-integration/design.md","docs/plans/agent-skills/2026-09-08-engineering-methods-and-vnv-integration/engineering-methods-and-vnv-integration-technical-plan.md","docs/plans/agent-skills/2026-09-08-engineering-methods-and-vnv-integration/repository-map.md","docs/plans/organizational-requirements/2026-09-03-engineering-lifecycle-secure-delivery/engineering-lifecycle-secure-delivery-spec.md","docs/plans/organizational-requirements/2026-09-03-engineering-lifecycle-secure-delivery/evidence/INDEX.md","docs/plans/organizational-requirements/2026-09-03-engineering-lifecycle-secure-delivery/evidence/sweep-audit.md","docs/plans/organizational-requirements/2026-09-03-engineering-lifecycle-secure-delivery/implementation.md","docs/plans/organizational-requirements/2026-09-07-coe-sit-customer-identity-extension/coe-sit-customer-identity-extension-spec.md","docs/plans/organizational-requirements/2026-09-07-coe-sit-customer-identity-extension/implementation.md","docs/plans/organizational-requirements/2026-09-10-ci-cd-github-governance-profile/setup-a-repo-skill-receipt.json","docs/plans/organizational-requirements/2026-09-10-coe-api-contracts/coe-api-contracts-technical-plan.md","docs/plans/organizational-requirements/2026-09-10-coe-api-contracts/design.md","docs/plans/organizational-requirements/2026-09-10-coe-api-contracts/evidence/reviews/round-1/validator.md","docs/plans/organizational-requirements/2026-09-10-coe-api-contracts/repository-map.md","docs/plans/organizational-requirements/2026-09-16-coe-org-requirements-v1/coe-org-requirements-v1-technical-plan.md","docs/plans/organizational-requirements/2026-09-16-coe-org-requirements-v1/design.md","docs/plans/organizational-requirements/2026-09-16-coe-org-requirements-v1/journey.md","docs/plans/organizational-requirements/2026-09-25-coe-elsd-rev3/coe-elsd-rev3-technical-plan.md","docs/plans/organizational-requirements/2026-10-01-coe-data-database-lifecycle/evidence/hq-gates.json","docs/plans/organizational-requirements/repository-map.md","docs/plans/requirements-model-management/2026-08-31-alphazede-requirements-model-management/alphazede-requirements-model-management-spec.md","docs/plans/requirements-model-management/2026-08-31-alphazede-requirements-model-management/design.md","docs/plans/requirements-model-management/2026-08-31-alphazede-requirements-model-management/implementation.md","docs/plans/requirements-model-management/2026-08-31-alphazede-requirements-model-management/seit.md","skills/engineering-methods/references/standards-receipts.md","skills/requirements-engineering/SKILL.md","skills/requirements-engineering/references/examples.md","skills/requirements-engineering/references/interface-completeness-profile.md","skills/requirements-engineering/references/nasa-requirement-checklist.md","skills/requirements-engineering/references/quality-gate.md","skills/requirements-engineering/references/requirements-authoring.md","skills/ship-pull-request/references/GATES.md"],"why_selected":[{"locator":"docs/plans/agent-skills/2026-09-08-engineering-methods-and-vnv-integration/design.md","reason":"metadata_seed"},{"locator":"docs/plans/agent-skills/2026-09-08-engineering-methods-and-vnv-integration/engineering-methods-and-vnv-integration-technical-plan.md","reason":"metadata_seed"},{"locator":"docs/plans/agent-skills/2026-09-08-engineering-methods-and-vnv-integration/repository-map.md","reason":"metadata_seed"},{"locator":"docs/plans/organizational-requirements/2026-09-03-engineering-lifecycle-secure-delivery/engineering-lifecycle-secure-delivery-spec.md","reason":"metadata_seed"},{"locator":"docs/plans/organizational-requirements/2026-09-03-engineering-lifecycle-secure-delivery/evidence/INDEX.md","reason":"metadata_seed"},{"locator":"docs/plans/organizational-requirements/2026-09-03-engineering-lifecycle-secure-delivery/evidence/sweep-audit.md","reason":"metadata_seed"},{"locator":"docs/plans/organizational-requirements/2026-09-03-engineering-lifecycle-secure-delivery/implementation.md","reason":"metadata_seed"},{"locator":"docs/plans/organizational-requirements/2026-09-07-coe-sit-customer-identity-extension/coe-sit-customer-identity-extension-spec.md","reason":"metadata_seed"},{"locator":"docs/plans/organizational-requirements/2026-09-07-coe-sit-customer-identity-extension/implementation.md","reason":"metadata_seed"},{"locator":"docs/plans/organizational-requirements/2026-09-10-ci-cd-github-governance-profile/setup-a-repo-skill-receipt.json","reason":"metadata_seed"},{"locator":"docs/plans/organizational-requirements/2026-09-10-coe-api-contracts/coe-api-contracts-technical-plan.md","reason":"metadata_seed"},{"locator":"docs/plans/organizational-requirements/2026-09-10-coe-api-contracts/design.md","reason":"metadata_seed"},{"locator":"docs/plans/organizational-requirements/2026-09-10-coe-api-contracts/evidence/reviews/round-1/validator.md","reason":"metadata_seed"},{"locator":"docs/plans/organizational-requirements/2026-09-10-coe-api-contracts/repository-map.md","reason":"metadata_seed"},{"locator":"docs/plans/organizational-requirements/2026-09-16-coe-org-requirements-v1/coe-org-requirements-v1-technical-plan.md","reason":"metadata_seed"},{"locator":"docs/plans/organizational-requirements/2026-09-16-coe-org-requirements-v1/design.md","reason":"metadata_seed"},{"locator":"docs/plans/organizational-requirements/2026-09-16-coe-org-requirements-v1/journey.md","reason":"metadata_seed"},{"locator":"docs/plans/organizational-requirements/2026-09-25-coe-elsd-rev3/coe-elsd-rev3-technical-plan.md","reason":"metadata_seed"},{"locator":"docs/plans/organizational-requirements/2026-10-01-coe-data-database-lifecycle/evidence/hq-gates.json","reason":"metadata_seed"},{"locator":"docs/plans/organizational-requirements/repository-map.md","reason":"metadata_seed"},{"locator":"docs/plans/requirements-model-management/2026-08-31-alphazede-requirements-model-management/alphazede-requirements-model-management-spec.md","reason":"metadata_seed"},{"locator":"docs/plans/requirements-model-management/2026-08-31-alphazede-requirements-model-management/design.md","reason":"metadata_seed"},{"locator":"docs/plans/requirements-model-management/2026-08-31-alphazede-requirements-model-management/implementation.md","reason":"metadata_seed"},{"locator":"docs/plans/requirements-model-management/2026-08-31-alphazede-requirements-model-management/seit.md","reason":"metadata_seed"},{"locator":"skills/engineering-methods/references/standards-receipts.md","reason":"metadata_seed"},{"locator":"skills/requirements-engineering/SKILL.md","reason":"metadata_seed"},{"locator":"skills/requirements-engineering/references/examples.md","reason":"metadata_seed"},{"locator":"skills/requirements-engineering/references/interface-completeness-profile.md","reason":"metadata_seed"},{"locator":"skills/requirements-engineering/references/nasa-requirement-checklist.md","reason":"metadata_seed"},{"locator":"skills/requirements-engineering/references/quality-gate.md","reason":"metadata_seed"},{"locator":"skills/requirements-engineering/references/requirements-authoring.md","reason":"metadata_seed"},{"locator":"skills/ship-pull-request/references/GATES.md","reason":"metadata_seed"}],"source_rankings":[{"locator":"docs/plans/organizational-requirements/2026-09-16-coe-org-requirements-v1/journey.md","rank":1,"score":{"exact":2,"partial":5,"active":3,"canonical":0,"public_safe":0,"confidence":50,"freshness":""},"match_reason":"exact:body+tags"},{"locator":"docs/plans/organizational-requirements/2026-09-03-engineering-lifecycle-secure-delivery/implementation.md","rank":2,"score":{"exact":2,"partial":4,"active":2,"canonical":0,"public_safe":0,"confidence":50,"freshness":"2026-09-03"},"match_reason":"exact:body+tags"},{"locator":"docs/plans/organizational-requirements/2026-09-03-engineering-lifecycle-secure-delivery/engineering-lifecycle-secure-delivery-spec.md","rank":3,"score":{"exact":2,"partial":4,"active":2,"canonical":0,"public_safe":0,"confidence":50,"freshness":"2026-09-03"},"match_reason":"exact:body+tags"},{"locator":"skills/requirements-engineering/references/quality-gate.md","rank":4,"score":{"exact":1,"partial":8,"active":3,"canonical":1,"public_safe":0,"confidence":50,"freshness":"2026-09-09"},"match_reason":"exact:tags"},{"locator":"skills/requirements-engineering/SKILL.md","rank":5,"score":{"exact":1,"partial":7,"active":3,"canonical":1,"public_safe":0,"confidence":50,"freshness":"2026-09-09"},"match_reason":"exact:tags"},{"locator":"skills/requirements-engineering/references/examples.md","rank":6,"score":{"exact":1,"partial":7,"active":3,"canonical":1,"public_safe":0,"confidence":50,"freshness":"2026-09-09"},"match_reason":"exact:tags"},{"locator":"skills/requirements-engineering/references/requirements-authoring.md","rank":7,"score":{"exact":1,"partial":7,"active":3,"canonical":1,"public_safe":0,"confidence":40,"freshness":"2026-09-09"},"match_reason":"exact:tags"},{"locator":"skills/ship-pull-request/references/GATES.md","rank":8,"score":{"exact":1,"partial":6,"active":3,"canonical":0,"public_safe":0,"confidence":50,"freshness":""},"match_reason":"exact:body+path"},{"locator":"skills/engineering-methods/references/standards-receipts.md","rank":9,"score":{"exact":1,"partial":5,"active":3,"canonical":1,"public_safe":0,"confidence":50,"freshness":"2026-09-09"},"match_reason":"exact:tags"},{"locator":"docs/plans/organizational-requirements/2026-09-16-coe-org-requirements-v1/coe-org-requirements-v1-technical-plan.md","rank":10,"score":{"exact":1,"partial":5,"active":2,"canonical":0,"public_safe":0,"confidence":50,"freshness":"2026-09-16"},"match_reason":"exact:tags"},{"locator":"docs/plans/organizational-requirements/2026-10-01-coe-data-database-lifecycle/evidence/hq-gates.json","rank":11,"score":{"exact":1,"partial":5,"active":0,"canonical":0,"public_safe":0,"confidence":50,"freshness":""},"match_reason":"exact:body"},{"locator":"docs/plans/organizational-requirements/2026-09-10-ci-cd-github-governance-profile/setup-a-repo-skill-receipt.json","rank":12,"score":{"exact":1,"partial":5,"active":0,"canonical":0,"public_safe":0,"confidence":50,"freshness":""},"match_reason":"exact:body"},{"locator":"skills/requirements-engineering/references/nasa-requirement-checklist.md","rank":13,"score":{"exact":1,"partial":4,"active":3,"canonical":1,"public_safe":0,"confidence":50,"freshness":"2026-09-09"},"match_reason":"exact:tags"},{"locator":"skills/requirements-engineering/references/interface-completeness-profile.md","rank":14,"score":{"exact":1,"partial":4,"active":3,"canonical":1,"public_safe":0,"confidence":50,"freshness":"2026-09-09"},"match_reason":"exact:tags"},{"locator":"docs/plans/agent-skills/2026-09-08-engineering-methods-and-vnv-integration/repository-map.md","rank":15,"score":{"exact":1,"partial":4,"active":3,"canonical":0,"public_safe":0,"confidence":50,"freshness":"2026-09-08"},"match_reason":"exact:tags"},{"locator":"docs/plans/requirements-model-management/2026-08-31-alphazede-requirements-model-management/design.md","rank":16,"score":{"exact":1,"partial":4,"active":3,"canonical":0,"public_safe":0,"confidence":50,"freshness":"2026-09-02"},"match_reason":"exact:tags"},{"locator":"docs/plans/requirements-model-management/2026-08-31-alphazede-requirements-model-management/implementation.md","rank":17,"score":{"exact":1,"partial":4,"active":3,"canonical":0,"public_safe":0,"confidence":50,"freshness":"2026-09-02"},"match_reason":"exact:tags"},{"locator":"docs/plans/requirements-model-management/2026-08-31-alphazede-requirements-model-management/alphazede-requirements-model-management-spec.md","rank":18,"score":{"exact":1,"partial":4,"active":3,"canonical":0,"public_safe":0,"confidence":50,"freshness":"2026-09-02"},"match_reason":"exact:tags"},{"locator":"docs/plans/requirements-model-management/2026-08-31-alphazede-requirements-model-management/seit.md","rank":19,"score":{"exact":1,"partial":4,"active":3,"canonical":0,"public_safe":0,"confidence":50,"freshness":"2026-09-02"},"match_reason":"exact:tags"},{"locator":"docs/plans/organizational-requirements/2026-09-03-engineering-lifecycle-secure-delivery/evidence/INDEX.md","rank":20,"score":{"exact":1,"partial":4,"active":3,"canonical":0,"public_safe":0,"confidence":50,"freshness":""},"match_reason":"exact:body"},{"locator":"docs/plans/organizational-requirements/2026-09-03-engineering-lifecycle-secure-delivery/evidence/sweep-audit.md","rank":21,"score":{"exact":1,"partial":4,"active":3,"canonical":0,"public_safe":0,"confidence":50,"freshness":""},"match_reason":"exact:body"},{"locator":"docs/plans/organizational-requirements/2026-09-10-coe-api-contracts/repository-map.md","rank":22,"score":{"exact":1,"partial":4,"active":3,"canonical":0,"public_safe":0,"confidence":50,"freshness":""},"match_reason":"exact:tags"},{"locator":"docs/plans/organizational-requirements/2026-09-25-coe-elsd-rev3/coe-elsd-rev3-technical-plan.md","rank":23,"score":{"exact":1,"partial":4,"active":2,"canonical":0,"public_safe":0,"confidence":50,"freshness":"2026-09-25"},"match_reason":"exact:tags"},{"locator":"docs/plans/organizational-requirements/2026-09-16-coe-org-requirements-v1/design.md","rank":24,"score":{"exact":1,"partial":4,"active":2,"canonical":0,"public_safe":0,"confidence":50,"freshness":"2026-09-16"},"match_reason":"exact:tags"},{"locator":"docs/plans/organizational-requirements/2026-09-10-coe-api-contracts/coe-api-contracts-technical-plan.md","rank":25,"score":{"exact":1,"partial":4,"active":2,"canonical":0,"public_safe":0,"confidence":50,"freshness":"2026-09-10"},"match_reason":"exact:tags"},{"locator":"docs/plans/organizational-requirements/2026-09-10-coe-api-contracts/evidence/reviews/round-1/validator.md","rank":26,"score":{"exact":1,"partial":4,"active":2,"canonical":0,"public_safe":0,"confidence":50,"freshness":"2026-09-10"},"match_reason":"exact:tags"},{"locator":"docs/plans/organizational-requirements/2026-09-10-coe-api-contracts/design.md","rank":27,"score":{"exact":1,"partial":4,"active":2,"canonical":0,"public_safe":0,"confidence":50,"freshness":"2026-09-10"},"match_reason":"exact:tags"},{"locator":"docs/plans/agent-skills/2026-09-08-engineering-methods-and-vnv-integration/engineering-methods-and-vnv-integration-technical-plan.md","rank":28,"score":{"exact":1,"partial":4,"active":2,"canonical":0,"public_safe":0,"confidence":50,"freshness":"2026-09-08"},"match_reason":"exact:tags"},{"locator":"docs/plans/agent-skills/2026-09-08-engineering-methods-and-vnv-integration/design.md","rank":29,"score":{"exact":1,"partial":4,"active":2,"canonical":0,"public_safe":0,"confidence":50,"freshness":"2026-09-08"},"match_reason":"exact:tags"},{"locator":"docs/plans/organizational-requirements/2026-09-07-coe-sit-customer-identity-extension/implementation.md","rank":30,"score":{"exact":1,"partial":4,"active":2,"canonical":0,"public_safe":0,"confidence":50,"freshness":"2026-09-07"},"match_reason":"exact:tags"},{"locator":"docs/plans/organizational-requirements/2026-09-07-coe-sit-customer-identity-extension/coe-sit-customer-identity-extension-spec.md","rank":31,"score":{"exact":1,"partial":4,"active":2,"canonical":0,"public_safe":0,"confidence":50,"freshness":"2026-09-07"},"match_reason":"exact:tags"},{"locator":"docs/plans/organizational-requirements/repository-map.md","rank":32,"score":{"exact":1,"partial":4,"active":2,"canonical":0,"public_safe":0,"confidence":50,"freshness":"2026-09-03"},"match_reason":"exact:tags"}],"candidate_source_bytes":28350770,"selected_source_bytes":841076,"context_bytes_avoided":27509694,"estimated_tokens":210269,"token_estimate_method":"bytes-divided-by-four-ceiling","actual_model_input_tokens":"unavailable","symbol_navigation":{"schema_version":"1.0.0","outcome":"unavailable","truncated":false,"scip":{"status":"unavailable","reason":"index_missing","index":"index.scip"},"lsp":{"status":"unavailable","reason":"not_implemented"}},"document_evidence":{"sources":[{"path":"archive/HGTS_BTO_Infrastructure_Architecture_Spec_v1.docx","source_type":"docx","source_digest":"b24d0aaea78958251b7f90d32e3c9ba5ae83a17b7b32b118789058f4ad80f795","fidelity":{"headers_footers":"unsupported","headings":"normalized","lists":"normalized","macros":"unsupported","paragraphs":"normalized","tables":"normalized","text":"normalized"},"anchor_count":132}],"matches":[{"path":"archive/HGTS_BTO_Infrastructure_Architecture_Spec_v1.docx","source_type":"docx","anchor":"docx:s1:b118","native_locator":"s1#118","source_digest":"b24d0aaea78958251b7f90d32e3c9ba5ae83a17b7b32b118789058f4ad80f795","fidelity":{"headers_footers":"unsupported","headings":"normalized","lists":"normalized","macros":"unsupported","paragraphs":"normalized","tables":"normalized","text":"normalized"},"derivation":"embedded","score":1,"rank":1},{"path":"archive/HGTS_BTO_Infrastructure_Architecture_Spec_v1.docx","source_type":"docx","anchor":"docx:s1:b137","native_locator":"s1#137","source_digest":"b24d0aaea78958251b7f90d32e3c9ba5ae83a17b7b32b118789058f4ad80f795","fidelity":{"headers_footers":"unsupported","headings":"normalized","lists":"normalized","macros":"unsupported","paragraphs":"normalized","tables":"normalized","text":"normalized"},"derivation":"embedded","score":1,"rank":2},{"path":"archive/HGTS_BTO_Infrastructure_Architecture_Spec_v1.docx","source_type":"docx","anchor":"docx:s1:b156","native_locator":"s1#156","source_digest":"b24d0aaea78958251b7f90d32e3c9ba5ae83a17b7b32b118789058f4ad80f795","fidelity":{"headers_footers":"unsupported","headings":"normalized","lists":"normalized","macros":"unsupported","paragraphs":"normalized","tables":"normalized","text":"normalized"},"derivation":"embedded","score":1,"rank":3},{"path":"archive/HGTS_BTO_Infrastructure_Architecture_Spec_v1.docx","source_type":"docx","anchor":"docx:s1:b33","native_locator":"s1#33","source_digest":"b24d0aaea78958251b7f90d32e3c9ba5ae83a17b7b32b118789058f4ad80f795","fidelity":{"headers_footers":"unsupported","headings":"normalized","lists":"normalized","macros":"unsupported","paragraphs":"normalized","tables":"normalized","text":"normalized"},"derivation":"embedded","score":1,"rank":4},{"path":"archive/HGTS_BTO_Infrastructure_Architecture_Spec_v1.docx","source_type":"docx","anchor":"docx:s1:b41","native_locator":"s1#41","source_digest":"b24d0aaea78958251b7f90d32e3c9ba5ae83a17b7b32b118789058f4ad80f795","fidelity":{"headers_footers":"unsupported","headings":"normalized","lists":"normalized","macros":"unsupported","paragraphs":"normalized","tables":"normalized","text":"normalized"},"derivation":"embedded","score":1,"rank":5},{"path":"archive/HGTS_BTO_Infrastructure_Architecture_Spec_v1.docx","source_type":"docx","anchor":"docx:s1:b51","native_locator":"s1#51","source_digest":"b24d0aaea78958251b7f90d32e3c9ba5ae83a17b7b32b118789058f4ad80f795","fidelity":{"headers_footers":"unsupported","headings":"normalized","lists":"normalized","macros":"unsupported","paragraphs":"normalized","tables":"normalized","text":"normalized"},"derivation":"embedded","score":1,"rank":6},{"path":"archive/HGTS_BTO_Infrastructure_Architecture_Spec_v1.docx","source_type":"docx","anchor":"docx:s1:b71","native_locator":"s1#71","source_digest":"b24d0aaea78958251b7f90d32e3c9ba5ae83a17b7b32b118789058f4ad80f795","fidelity":{"headers_footers":"unsupported","headings":"normalized","lists":"normalized","macros":"unsupported","paragraphs":"normalized","tables":"normalized","text":"normalized"},"derivation":"embedded","score":1,"rank":7},{"path":"archive/HGTS_BTO_Infrastructure_Architecture_Spec_v1.docx","source_type":"docx","anchor":"docx:s1:b80","native_locator":"s1#80","source_digest":"b24d0aaea78958251b7f90d32e3c9ba5ae83a17b7b32b118789058f4ad80f795","fidelity":{"headers_footers":"unsupported","headings":"normalized","lists":"normalized","macros":"unsupported","paragraphs":"normalized","tables":"normalized","text":"normalized"},"derivation":"embedded","score":1,"rank":8},{"path":"archive/HGTS_BTO_Infrastructure_Architecture_Spec_v1.docx","source_type":"docx","anchor":"docx:s1:b92","native_locator":"s1#92","source_digest":"b24d0aaea78958251b7f90d32e3c9ba5ae83a17b7b32b118789058f4ad80f795","fidelity":{"headers_footers":"unsupported","headings":"normalized","lists":"normalized","macros":"unsupported","paragraphs":"normalized","tables":"normalized","text":"normalized"},"derivation":"embedded","score":1,"rank":9}],"refusals":[],"unsupported":[],"omitted_files":0,"omitted_matches":0}},"warnings":["Symlink { path: \"skills/use-requirements-system\" }","UnsupportedInput { path: \"alphazede-web/evidence/h5/about-desktop-dark.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h5/about-desktop-light.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h5/about-mobile-dark.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h5/about-mobile-light.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h5/contact-desktop-dark.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h5/contact-desktop-light.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h5/contact-mobile-dark.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h5/contact-mobile-light.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h5/divisions-desktop-dark.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h5/divisions-desktop-light.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h5/divisions-mobile-dark.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h5/divisions-mobile-light.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h5/home-desktop-dark.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h5/home-desktop-light.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h5/home-mobile-dark.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h5/home-mobile-light.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h5/open-source-desktop-dark.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h5/open-source-desktop-light.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h5/open-source-mobile-dark.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h5/open-source-mobile-light.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h5/research-desktop-dark.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h5/research-desktop-light.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h5/research-mobile-dark.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h5/research-mobile-light.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/about-desktop-dark.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/about-desktop-light.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/about-mobile-dark.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/about-mobile-light.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/contact-desktop-dark.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/contact-desktop-light.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/contact-mobile-dark.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/contact-mobile-light.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/divisions-desktop-dark.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/divisions-desktop-light.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/divisions-mobile-dark.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/divisions-mobile-light.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/home-desktop-dark.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/home-desktop-light.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/home-graph-interaction.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/home-mobile-dark.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/home-mobile-light.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/nav-360-dark.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/nav-360-light.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/nav-enlarged-text-390.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/open-source-desktop-dark.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/open-source-desktop-light.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/open-source-mobile-dark.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/open-source-mobile-light.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/open-source-mobile-links.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/research-desktop-dark.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/research-desktop-light.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/research-filtered.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/research-mobile-dark.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/research-mobile-light.png\" }","UnsupportedInput { path: \"alphazede-web/public/fonts/lato-latin-400.woff2\" }","UnsupportedInput { path: \"alphazede-web/public/fonts/lato-latin-900.woff2\" }","UnsupportedInput { path: \"alphazede-web/public/fonts/noto-serif-display-latin-italic.woff2\" }","UnsupportedInput { path: \"alphazede-web/public/fonts/noto-serif-display-latin.woff2\" }","UnsupportedInput { path: \"alphazede-web/public/fonts/noto-serif-ethiopic-400.woff2\" }","UnsupportedInput { path: \"alphazede-web/public/fonts/ubuntu-sans-mono-latin.woff2\" }","UnsupportedInput { path: \"alphazede-web/src/components/home/evidence/home-desktop-dark.png\" }","UnsupportedInput { path: \"alphazede-web/src/components/home/evidence/home-desktop-light.png\" }","UnsupportedInput { path: \"alphazede-web/src/components/home/evidence/home-mobile-dark.png\" }","UnsupportedInput { path: \"alphazede-web/src/components/home/evidence/home-mobile-light.png\" }","UnsupportedInput { path: \"archive/HGTS_BTO_Infrastructure_Architecture_Spec_v1.docx\" }","UnsupportedInput { path: \"business_admin/websites/alphazede-legacy-landing/alphazede-logo.png\" }","UnsupportedInput { path: \"business_admin/websites/predicts-deferred-landing/alphazede-logo.png\" }","UnsupportedInput { path: \"docs/brand/assets/alphazede-logo-source.png\" }","UnsupportedInput { path: \"docs/plans/2026-07-17-okf-sqz-workspace-metrics/assets/bran-two-ravens-master.png\" }","UnsupportedInput { path: \"docs/plans/branding/2026-09-15-bearing-lite-product-page/evidence/brand-map-desktop-dark.png\" }","UnsupportedInput { path: \"docs/plans/branding/2026-09-15-bearing-lite-product-page/evidence/brand-map-desktop-light.png\" }","UnsupportedInput { path: \"docs/plans/branding/2026-09-15-bearing-lite-product-page/evidence/brand-map-mobile-light.png\" }","UnsupportedInput { path: \"docs/plans/branding/2026-09-15-bearing-lite-product-page/evidence/brand-map-mobile-no-js.png\" }","UnsupportedInput { path: \"docs/plans/branding/2026-09-15-bearing-lite-product-page/evidence/docs-desktop-dark.png\" }","UnsupportedInput { path: \"docs/plans/branding/2026-09-15-bearing-lite-product-page/evidence/docs-desktop-light.png\" }","UnsupportedInput { path: \"docs/plans/branding/2026-09-15-bearing-lite-product-page/evidence/docs-mobile-dark.png\" }","UnsupportedInput { path: \"docs/plans/branding/2026-09-15-bearing-lite-product-page/evidence/docs-mobile-light.png\" }","UnsupportedInput { path: \"docs/plans/branding/2026-09-15-bearing-lite-product-page/evidence/docs-mobile-no-js.png\" }","UnsupportedInput { path: \"docs/plans/branding/2026-09-15-bearing-lite-product-page/evidence/overview-desktop-dark.png\" }","UnsupportedInput { path: \"docs/plans/branding/2026-09-15-bearing-lite-product-page/evidence/overview-desktop-light.png\" }","UnsupportedInput { path: \"docs/plans/branding/2026-09-15-bearing-lite-product-page/evidence/overview-mobile-light.png\" }","UnsupportedInput { path: \"docs/plans/branding/2026-09-15-bearing-lite-product-page/evidence/overview-mobile-no-js.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/assets/alphazede-logo.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/assets/fonts/DMSans-variable.woff2\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/assets/fonts/IBMPlexMono-400-normal.woff2\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/assets/fonts/IBMPlexMono-500-normal.woff2\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/assets/fonts/InstrumentSerif-400-italic.woff2\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/assets/fonts/InstrumentSerif-400-normal.woff2\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/about-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/about-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/about-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/about-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/contact-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/contact-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/contact-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/contact-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/divisions-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/divisions-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/divisions-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/divisions-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/home-desktop-dark-reduced-motion.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/home-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/home-desktop-light-keyboard-focus.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/home-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/home-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/home-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/open-source-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/open-source-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/open-source-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/open-source-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/pass1/about-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/pass1/about-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/pass1/about-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/pass1/about-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/pass1/contact-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/pass1/contact-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/pass1/contact-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/pass1/contact-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/pass1/divisions-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/pass1/divisions-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/pass1/divisions-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/pass1/divisions-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/pass1/home-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/pass1/home-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/pass1/home-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/pass1/home-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/pass1/open-source-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/pass1/open-source-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/pass1/open-source-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/pass1/open-source-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/pass1/research-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/pass1/research-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/pass1/research-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/pass1/research-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/research-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/research-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/research-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/research-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/codex/review/about-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/codex/review/about-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/codex/review/about-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/codex/review/about-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/codex/review/contact-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/codex/review/contact-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/codex/review/contact-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/codex/review/contact-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/codex/review/divisions-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/codex/review/divisions-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/codex/review/divisions-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/codex/review/divisions-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/codex/review/home-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/codex/review/home-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/codex/review/home-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/codex/review/home-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/codex/review/open-source-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/codex/review/open-source-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/codex/review/open-source-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/codex/review/open-source-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/codex/review/research-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/codex/review/research-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/codex/review/research-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/codex/review/research-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/assets/alphazede-logo-source.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/assets/fonts/NotoSerifEthiopic-Regular.ttf\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/assets/fonts/fraunces-400.woff2\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/assets/fonts/fraunces-400i.woff2\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/assets/fonts/fraunces-600.woff2\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/assets/fonts/ibm-plex-mono-400.woff2\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/assets/fonts/ibm-plex-mono-500.woff2\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/assets/fonts/source-sans-400.woff2\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/assets/fonts/source-sans-600.woff2\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/about-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/about-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/about-heritage.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/about-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/about-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/contact-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/contact-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/contact-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/contact-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/divisions-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/divisions-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/divisions-markets.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/divisions-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/divisions-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/divisions-sports.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/first-pass/about-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/first-pass/about-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/first-pass/about-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/first-pass/about-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/first-pass/contact-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/first-pass/contact-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/first-pass/contact-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/first-pass/contact-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/first-pass/divisions-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/first-pass/divisions-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/first-pass/divisions-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/first-pass/divisions-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/first-pass/home-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/first-pass/home-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/first-pass/home-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/first-pass/home-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/first-pass/open-source-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/first-pass/open-source-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/first-pass/open-source-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/first-pass/open-source-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/first-pass/research-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/first-pass/research-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/first-pass/research-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/first-pass/research-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/home-below.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/home-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/home-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/home-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/home-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/home-mobile-menu.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/open-source-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/open-source-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/open-source-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/open-source-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/research-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/research-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/research-library.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/research-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/research-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/about-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/about-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/about-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/about-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/contact-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/contact-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/contact-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/contact-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/divisions-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/divisions-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/divisions-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/divisions-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/home-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/home-desktop-light-reduced-motion.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/home-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/home-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/home-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/open-source-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/open-source-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/open-source-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/open-source-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/pass-1/about-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/pass-1/about-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/pass-1/about-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/pass-1/about-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/pass-1/contact-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/pass-1/contact-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/pass-1/contact-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/pass-1/contact-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/pass-1/divisions-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/pass-1/divisions-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/pass-1/divisions-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/pass-1/divisions-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/pass-1/home-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/pass-1/home-desktop-light-reduced-motion.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/pass-1/home-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/pass-1/home-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/pass-1/home-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/pass-1/open-source-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/pass-1/open-source-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/pass-1/open-source-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/pass-1/open-source-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/pass-1/research-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/pass-1/research-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/pass-1/research-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/pass-1/research-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/research-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/research-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/research-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/research-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/reference-v3/alphazede-original-desktop.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/reference-v3/alphazede-original-mobile.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/reference-v3/alphazede-sports-desktop.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/reference-v3/alphazede-sports-mobile.png\" }","OversizedInput { path: \"docs/plans/123-website-security-assurance/evidence/sbom.json\", actual: 1676111, limit: 1048576 }","OversizedInput { path: \"docs/plans/123-website-security-assurance/evidence/wave3-s6-nuclei.jsonl\", actual: 1694183, limit: 1048576 }","OversizedInput { path: \"docs/plans/agent-skills/2026-09-08-engineering-methods-and-vnv-integration/migration-classification-proposal.json\", actual: 1358039, limit: 1048576 }","OversizedInput { path: \"docs/plans/agent-skills/2026-09-08-engineering-methods-and-vnv-integration/review.html\", actual: 2157919, limit: 1048576 }","OversizedInput { path: \"docs/plans/organizational-requirements/2026-10-01-coe-data-database-lifecycle/implementation.json\", actual: 1472636, limit: 1048576 }"],"failures":[],"provenance":{"sources":["repository-scanner","bran-core"],"selected_locators":["docs/plans/agent-skills/2026-09-08-engineering-methods-and-vnv-integration/design.md","docs/plans/agent-skills/2026-09-08-engineering-methods-and-vnv-integration/engineering-methods-and-vnv-integration-technical-plan.md","docs/plans/agent-skills/2026-09-08-engineering-methods-and-vnv-integration/repository-map.md","docs/plans/organizational-requirements/2026-09-03-engineering-lifecycle-secure-delivery/engineering-lifecycle-secure-delivery-spec.md","docs/plans/organizational-requirements/2026-09-03-engineering-lifecycle-secure-delivery/evidence/INDEX.md","docs/plans/organizational-requirements/2026-09-03-engineering-lifecycle-secure-delivery/evidence/sweep-audit.md","docs/plans/organizational-requirements/2026-09-03-engineering-lifecycle-secure-delivery/implementation.md","docs/plans/organizational-requirements/2026-09-07-coe-sit-customer-identity-extension/coe-sit-customer-identity-extension-spec.md","docs/plans/organizational-requirements/2026-09-07-coe-sit-customer-identity-extension/implementation.md","docs/plans/organizational-requirements/2026-09-10-ci-cd-github-governance-profile/setup-a-repo-skill-receipt.json","docs/plans/organizational-requirements/2026-09-10-coe-api-contracts/coe-api-contracts-technical-plan.md","docs/plans/organizational-requirements/2026-09-10-coe-api-contracts/design.md","docs/plans/organizational-requirements/2026-09-10-coe-api-contracts/evidence/reviews/round-1/validator.md","docs/plans/organizational-requirements/2026-09-10-coe-api-contracts/repository-map.md","docs/plans/organizational-requirements/2026-09-16-coe-org-requirements-v1/coe-org-requirements-v1-technical-plan.md","docs/plans/organizational-requirements/2026-09-16-coe-org-requirements-v1/design.md","docs/plans/organizational-requirements/2026-09-16-coe-org-requirements-v1/journey.md","docs/plans/organizational-requirements/2026-09-25-coe-elsd-rev3/coe-elsd-rev3-technical-plan.md","docs/plans/organizational-requirements/2026-10-01-coe-data-database-lifecycle/evidence/hq-gates.json","docs/plans/organizational-requirements/repository-map.md","docs/plans/requirements-model-management/2026-08-31-alphazede-requirements-model-management/alphazede-requirements-model-management-spec.md","docs/plans/requirements-model-management/2026-08-31-alphazede-requirements-model-management/design.md","docs/plans/requirements-model-management/2026-08-31-alphazede-requirements-model-management/implementation.md","docs/plans/requirements-model-management/2026-08-31-alphazede-requirements-model-management/seit.md","skills/engineering-methods/references/standards-receipts.md","skills/requirements-engineering/SKILL.md","skills/requirements-engineering/references/examples.md","skills/requirements-engineering/references/interface-completeness-profile.md","skills/requirements-engineering/references/nasa-requirement-checklist.md","skills/requirements-engineering/references/quality-gate.md","skills/requirements-engineering/references/requirements-authoring.md","skills/ship-pull-request/references/GATES.md"],"why_selected":[{"locator":"docs/plans/agent-skills/2026-09-08-engineering-methods-and-vnv-integration/design.md","reason":"metadata_seed"},{"locator":"docs/plans/agent-skills/2026-09-08-engineering-methods-and-vnv-integration/engineering-methods-and-vnv-integration-technical-plan.md","reason":"metadata_seed"},{"locator":"docs/plans/agent-skills/2026-09-08-engineering-methods-and-vnv-integration/repository-map.md","reason":"metadata_seed"},{"locator":"docs/plans/organizational-requirements/2026-09-03-engineering-lifecycle-secure-delivery/engineering-lifecycle-secure-delivery-spec.md","reason":"metadata_seed"},{"locator":"docs/plans/organizational-requirements/2026-09-03-engineering-lifecycle-secure-delivery/evidence/INDEX.md","reason":"metadata_seed"},{"locator":"docs/plans/organizational-requirements/2026-09-03-engineering-lifecycle-secure-delivery/evidence/sweep-audit.md","reason":"metadata_seed"},{"locator":"docs/plans/organizational-requirements/2026-09-03-engineering-lifecycle-secure-delivery/implementation.md","reason":"metadata_seed"},{"locator":"docs/plans/organizational-requirements/2026-09-07-coe-sit-customer-identity-extension/coe-sit-customer-identity-extension-spec.md","reason":"metadata_seed"},{"locator":"docs/plans/organizational-requirements/2026-09-07-coe-sit-customer-identity-extension/implementation.md","reason":"metadata_seed"},{"locator":"docs/plans/organizational-requirements/2026-09-10-ci-cd-github-governance-profile/setup-a-repo-skill-receipt.json","reason":"metadata_seed"},{"locator":"docs/plans/organizational-requirements/2026-09-10-coe-api-contracts/coe-api-contracts-technical-plan.md","reason":"metadata_seed"},{"locator":"docs/plans/organizational-requirements/2026-09-10-coe-api-contracts/design.md","reason":"metadata_seed"},{"locator":"docs/plans/organizational-requirements/2026-09-10-coe-api-contracts/evidence/reviews/round-1/validator.md","reason":"metadata_seed"},{"locator":"docs/plans/organizational-requirements/2026-09-10-coe-api-contracts/repository-map.md","reason":"metadata_seed"},{"locator":"docs/plans/organizational-requirements/2026-09-16-coe-org-requirements-v1/coe-org-requirements-v1-technical-plan.md","reason":"metadata_seed"},{"locator":"docs/plans/organizational-requirements/2026-09-16-coe-org-requirements-v1/design.md","reason":"metadata_seed"},{"locator":"docs/plans/organizational-requirements/2026-09-16-coe-org-requirements-v1/journey.md","reason":"metadata_seed"},{"locator":"docs/plans/organizational-requirements/2026-09-25-coe-elsd-rev3/coe-elsd-rev3-technical-plan.md","reason":"metadata_seed"},{"locator":"docs/plans/organizational-requirements/2026-10-01-coe-data-database-lifecycle/evidence/hq-gates.json","reason":"metadata_seed"},{"locator":"docs/plans/organizational-requirements/repository-map.md","reason":"metadata_seed"},{"locator":"docs/plans/requirements-model-management/2026-08-31-alphazede-requirements-model-management/alphazede-requirements-model-management-spec.md","reason":"metadata_seed"},{"locator":"docs/plans/requirements-model-management/2026-08-31-alphazede-requirements-model-management/design.md","reason":"metadata_seed"},{"locator":"docs/plans/requirements-model-management/2026-08-31-alphazede-requirements-model-management/implementation.md","reason":"metadata_seed"},{"locator":"docs/plans/requirements-model-management/2026-08-31-alphazede-requirements-model-management/seit.md","reason":"metadata_seed"},{"locator":"skills/engineering-methods/references/standards-receipts.md","reason":"metadata_seed"},{"locator":"skills/requirements-engineering/SKILL.md","reason":"metadata_seed"},{"locator":"skills/requirements-engineering/references/examples.md","reason":"metadata_seed"},{"locator":"skills/requirements-engineering/references/interface-completeness-profile.md","reason":"metadata_seed"},{"locator":"skills/requirements-engineering/references/nasa-requirement-checklist.md","reason":"metadata_seed"},{"locator":"skills/requirements-engineering/references/quality-gate.md","reason":"metadata_seed"},{"locator":"skills/requirements-engineering/references/requirements-authoring.md","reason":"metadata_seed"},{"locator":"skills/ship-pull-request/references/GATES.md","reason":"metadata_seed"}],"source_rankings":[{"locator":"docs/plans/organizational-requirements/2026-09-16-coe-org-requirements-v1/journey.md","rank":1,"score":{"exact":2,"partial":5,"active":3,"canonical":0,"public_safe":0,"confidence":50,"freshness":""},"match_reason":"exact:body+tags"},{"locator":"docs/plans/organizational-requirements/2026-09-03-engineering-lifecycle-secure-delivery/implementation.md","rank":2,"score":{"exact":2,"partial":4,"active":2,"canonical":0,"public_safe":0,"confidence":50,"freshness":"2026-09-03"},"match_reason":"exact:body+tags"},{"locator":"docs/plans/organizational-requirements/2026-09-03-engineering-lifecycle-secure-delivery/engineering-lifecycle-secure-delivery-spec.md","rank":3,"score":{"exact":2,"partial":4,"active":2,"canonical":0,"public_safe":0,"confidence":50,"freshness":"2026-09-03"},"match_reason":"exact:body+tags"},{"locator":"skills/requirements-engineering/references/quality-gate.md","rank":4,"score":{"exact":1,"partial":8,"active":3,"canonical":1,"public_safe":0,"confidence":50,"freshness":"2026-09-09"},"match_reason":"exact:tags"},{"locator":"skills/requirements-engineering/SKILL.md","rank":5,"score":{"exact":1,"partial":7,"active":3,"canonical":1,"public_safe":0,"confidence":50,"freshness":"2026-09-09"},"match_reason":"exact:tags"},{"locator":"skills/requirements-engineering/references/examples.md","rank":6,"score":{"exact":1,"partial":7,"active":3,"canonical":1,"public_safe":0,"confidence":50,"freshness":"2026-09-09"},"match_reason":"exact:tags"},{"locator":"skills/requirements-engineering/references/requirements-authoring.md","rank":7,"score":{"exact":1,"partial":7,"active":3,"canonical":1,"public_safe":0,"confidence":40,"freshness":"2026-09-09"},"match_reason":"exact:tags"},{"locator":"skills/ship-pull-request/references/GATES.md","rank":8,"score":{"exact":1,"partial":6,"active":3,"canonical":0,"public_safe":0,"confidence":50,"freshness":""},"match_reason":"exact:body+path"},{"locator":"skills/engineering-methods/references/standards-receipts.md","rank":9,"score":{"exact":1,"partial":5,"active":3,"canonical":1,"public_safe":0,"confidence":50,"freshness":"2026-09-09"},"match_reason":"exact:tags"},{"locator":"docs/plans/organizational-requirements/2026-09-16-coe-org-requirements-v1/coe-org-requirements-v1-technical-plan.md","rank":10,"score":{"exact":1,"partial":5,"active":2,"canonical":0,"public_safe":0,"confidence":50,"freshness":"2026-09-16"},"match_reason":"exact:tags"},{"locator":"docs/plans/organizational-requirements/2026-10-01-coe-data-database-lifecycle/evidence/hq-gates.json","rank":11,"score":{"exact":1,"partial":5,"active":0,"canonical":0,"public_safe":0,"confidence":50,"freshness":""},"match_reason":"exact:body"},{"locator":"docs/plans/organizational-requirements/2026-09-10-ci-cd-github-governance-profile/setup-a-repo-skill-receipt.json","rank":12,"score":{"exact":1,"partial":5,"active":0,"canonical":0,"public_safe":0,"confidence":50,"freshness":""},"match_reason":"exact:body"},{"locator":"skills/requirements-engineering/references/nasa-requirement-checklist.md","rank":13,"score":{"exact":1,"partial":4,"active":3,"canonical":1,"public_safe":0,"confidence":50,"freshness":"2026-09-09"},"match_reason":"exact:tags"},{"locator":"skills/requirements-engineering/references/interface-completeness-profile.md","rank":14,"score":{"exact":1,"partial":4,"active":3,"canonical":1,"public_safe":0,"confidence":50,"freshness":"2026-09-09"},"match_reason":"exact:tags"},{"locator":"docs/plans/agent-skills/2026-09-08-engineering-methods-and-vnv-integration/repository-map.md","rank":15,"score":{"exact":1,"partial":4,"active":3,"canonical":0,"public_safe":0,"confidence":50,"freshness":"2026-09-08"},"match_reason":"exact:tags"},{"locator":"docs/plans/requirements-model-management/2026-08-31-alphazede-requirements-model-management/design.md","rank":16,"score":{"exact":1,"partial":4,"active":3,"canonical":0,"public_safe":0,"confidence":50,"freshness":"2026-09-02"},"match_reason":"exact:tags"},{"locator":"docs/plans/requirements-model-management/2026-08-31-alphazede-requirements-model-management/implementation.md","rank":17,"score":{"exact":1,"partial":4,"active":3,"canonical":0,"public_safe":0,"confidence":50,"freshness":"2026-09-02"},"match_reason":"exact:tags"},{"locator":"docs/plans/requirements-model-management/2026-08-31-alphazede-requirements-model-management/alphazede-requirements-model-management-spec.md","rank":18,"score":{"exact":1,"partial":4,"active":3,"canonical":0,"public_safe":0,"confidence":50,"freshness":"2026-09-02"},"match_reason":"exact:tags"},{"locator":"docs/plans/requirements-model-management/2026-08-31-alphazede-requirements-model-management/seit.md","rank":19,"score":{"exact":1,"partial":4,"active":3,"canonical":0,"public_safe":0,"confidence":50,"freshness":"2026-09-02"},"match_reason":"exact:tags"},{"locator":"docs/plans/organizational-requirements/2026-09-03-engineering-lifecycle-secure-delivery/evidence/INDEX.md","rank":20,"score":{"exact":1,"partial":4,"active":3,"canonical":0,"public_safe":0,"confidence":50,"freshness":""},"match_reason":"exact:body"},{"locator":"docs/plans/organizational-requirements/2026-09-03-engineering-lifecycle-secure-delivery/evidence/sweep-audit.md","rank":21,"score":{"exact":1,"partial":4,"active":3,"canonical":0,"public_safe":0,"confidence":50,"freshness":""},"match_reason":"exact:body"},{"locator":"docs/plans/organizational-requirements/2026-09-10-coe-api-contracts/repository-map.md","rank":22,"score":{"exact":1,"partial":4,"active":3,"canonical":0,"public_safe":0,"confidence":50,"freshness":""},"match_reason":"exact:tags"},{"locator":"docs/plans/organizational-requirements/2026-09-25-coe-elsd-rev3/coe-elsd-rev3-technical-plan.md","rank":23,"score":{"exact":1,"partial":4,"active":2,"canonical":0,"public_safe":0,"confidence":50,"freshness":"2026-09-25"},"match_reason":"exact:tags"},{"locator":"docs/plans/organizational-requirements/2026-09-16-coe-org-requirements-v1/design.md","rank":24,"score":{"exact":1,"partial":4,"active":2,"canonical":0,"public_safe":0,"confidence":50,"freshness":"2026-09-16"},"match_reason":"exact:tags"},{"locator":"docs/plans/organizational-requirements/2026-09-10-coe-api-contracts/coe-api-contracts-technical-plan.md","rank":25,"score":{"exact":1,"partial":4,"active":2,"canonical":0,"public_safe":0,"confidence":50,"freshness":"2026-09-10"},"match_reason":"exact:tags"},{"locator":"docs/plans/organizational-requirements/2026-09-10-coe-api-contracts/evidence/reviews/round-1/validator.md","rank":26,"score":{"exact":1,"partial":4,"active":2,"canonical":0,"public_safe":0,"confidence":50,"freshness":"2026-09-10"},"match_reason":"exact:tags"},{"locator":"docs/plans/organizational-requirements/2026-09-10-coe-api-contracts/design.md","rank":27,"score":{"exact":1,"partial":4,"active":2,"canonical":0,"public_safe":0,"confidence":50,"freshness":"2026-09-10"},"match_reason":"exact:tags"},{"locator":"docs/plans/agent-skills/2026-09-08-engineering-methods-and-vnv-integration/engineering-methods-and-vnv-integration-technical-plan.md","rank":28,"score":{"exact":1,"partial":4,"active":2,"canonical":0,"public_safe":0,"confidence":50,"freshness":"2026-09-08"},"match_reason":"exact:tags"},{"locator":"docs/plans/agent-skills/2026-09-08-engineering-methods-and-vnv-integration/design.md","rank":29,"score":{"exact":1,"partial":4,"active":2,"canonical":0,"public_safe":0,"confidence":50,"freshness":"2026-09-08"},"match_reason":"exact:tags"},{"locator":"docs/plans/organizational-requirements/2026-09-07-coe-sit-customer-identity-extension/implementation.md","rank":30,"score":{"exact":1,"partial":4,"active":2,"canonical":0,"public_safe":0,"confidence":50,"freshness":"2026-09-07"},"match_reason":"exact:tags"},{"locator":"docs/plans/organizational-requirements/2026-09-07-coe-sit-customer-identity-extension/coe-sit-customer-identity-extension-spec.md","rank":31,"score":{"exact":1,"partial":4,"active":2,"canonical":0,"public_safe":0,"confidence":50,"freshness":"2026-09-07"},"match_reason":"exact:tags"},{"locator":"docs/plans/organizational-requirements/repository-map.md","rank":32,"score":{"exact":1,"partial":4,"active":2,"canonical":0,"public_safe":0,"confidence":50,"freshness":"2026-09-03"},"match_reason":"exact:tags"}]},"metrics":{"candidate_source_bytes":28350770,"selected_source_bytes":841076,"context_bytes_avoided":27509694,"estimated_tokens":210269,"token_estimate_method":"bytes-divided-by-four-ceiling"}}
+
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/bash -lc 'ls $HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion; cat skills/ship-pull-request/references/GATES.md skills/ship-pull-request/references/PR-BODY.md; rg --files -g AGENTS.md skills; ls $HOME/.agents/skills/code-review $HOME/.codex/skills/.system/skill-creator/scripts' in $HOME/alphazede/worktrees/alphazedehq-afc-s03-ship-pull-request
+ exited 2 in 0ms:
+amazon-fantasy-companion-dod-manifest.html
+amazon-fantasy-companion-technical-plan.md
+authority.json
+design.md
+evidence
+implementation.json
+journey.json
+packets
+repository-map.md
+scope-decision-batch.md
+seit.json
+specialists
+superseded-run1
+views
+workspace.md
+---
+type: reference
+title: Per-Repository Pull Request Gates
+okf_status: active
+tags:
+  - internal
+  - operations
+---
+
+# Per-Repository Pull Request Gates
+
+Run the gate locally before pushing and see its exit code. Verified against
+each repo's workflow and manifest on 2026-07-27. When a repo's CI and this
+table disagree, CI wins and this table is stale — fix it in the same change.
+
+## bran-dev, bran (Rust)
+
+Source: `.github/workflows/bran-fast.yml`, `tools/ci/check.sh`.
+
+```sh
+./tools/ci/check.sh --fast     # what CI runs on every PR
+./tools/ci/check.sh --full     # before requesting review
+```
+
+Modes: `--fast --full --conformance --security --performance --test-budget
+--export --tui`. Add `--security` for trust-boundary diffs and `--export` for
+anything the public mirror carries. Toolchain is pinned to Rust 1.94.1.
+
+Export and cutover, batched and owner-triggered, never part of merge:
+`./tools/ci/check.sh --export`, `tools/ci/public_boundary_check.py`,
+`tools/cutover/publish-hygiene.sh`.
+
+## alphazede-markets (Rust + Python)
+
+Source: `.github/workflows/ci.yml`.
+
+```sh
+cargo clippy --workspace --all-targets -- -D warnings
+cargo test --workspace
+cargo fmt --workspace --check
+pip install -e ".[dev]" && pytest tests/ -m "not integration"
+```
+
+## alphazede-sports (pnpm)
+
+Source: `package.json`, `.github/workflows/`, `tools/ci/`.
+
+```sh
+pnpm lint && pnpm typecheck && pnpm test
+pnpm test:contracts && pnpm test:ui
+pnpm test:e2e            # test:e2e:ci in CI
+```
+
+Additional workflow gates: `frontend-spec-gate.yml`, `audit.yml`, `codeql.yml`.
+`tools/ci/` holds repo-specific checks (`check-ci-tooling.sh`,
+`check-services-source-hygiene.sh`, and others) — run the ones your diff
+touches.
+
+## azedge
+
+Source: `.github/workflows/quality.yml`, `package.json`, `tools/ci/`.
+
+```sh
+pnpm lint && pnpm test
+```
+
+Contract scripts in `tools/ci/`: `foundation-contracts.sh`,
+`data-contracts.sh`, `outcome-schema.sh`, `compatibility-equivalence.sh`,
+`package-manifests.sh`.
+
+## developers
+
+Source: `.github/workflows/`. Gates: `bran-fast.yml`, `window-verify.yml`,
+`codeql.yml`, `semgrep.yml`. Publishing runs through `npm-publish.yml` and
+`bran-release.yml`.
+
+## Alphazedehq (umbrella)
+
+Source: `.github/workflows/coe-gates.yml`, the only tracked workflow (CodeQL is
+GitHub-managed and has no file here). Its single `coe-gates` job runs on every
+pull request and on push to `main`, and runs these commands in order:
+
+```sh
+python3 tools/coe/lint-plan-spec.py                 # all of docs/plans, not just the diff
+shopt -s globstar                                   # needed for the ** pattern
+python3 tools/coe/lint-sdoc.py docs/coe/**/*.sdoc
+bash tools/coe/test-pre-commit-gates.sh             # the pre-commit gate's own suite
+python3 hooks/test-issue-labels.py
+bash hooks/test-bug-report-routing.sh
+bash skills/ship-pull-request/tests/edit-pr.test.sh # PR edit tooling & stale-text verification
+node --test skills/test-engineering/tests/te-evaluator.test.cjs
+python3 skills/test-engineering/tests/te-receipt-contract.test.py
+python3 skills/test-engineering/tests/ponytail-on-off.test.py
+```
+
+The first three install nothing: two stdlib-only Python linters and a Bash
+suite. The three
+Test Engineering suites need Node 22 and Python 3.12, and the last two need the
+isolated Draft 2020-12 validator. CI provisions that validator into the runner
+temp from `tools/coe/te-schema-validator-requirements.txt` with a hash-pinned
+`pip install --require-hashes --no-deps --target`, then exports the target
+directory as `EMV_SCHEMA_VALIDATOR_IMPORTS`. Running the last two locally means
+pointing the same variable at your own verified import directory:
+
+```sh
+EMV_SCHEMA_VALIDATOR_IMPORTS=<your verified imports> \
+  python3 skills/test-engineering/tests/te-receipt-contract.test.py
+```
+
+The validator is a test fixture, never a product dependency: `--target` keeps it
+off the interpreter every other step uses, and it is never installed globally.
+Its pins are the six SCAN-EMV-SCHEMA-VALIDATOR-001 packages, byte-identical to
+Bearing Lite's `test/schema-validator-requirements.txt`; change the two files
+together or not at all.
+
+No Test Engineering step is conditional. A missing adapter, schema or suite
+fails the job rather than being skipped, so absent product cannot read as a
+green gate.
+
+Local-only, and deliberately not run by CI:
+
+```sh
+./tools/bran/runtime/bran check . bran-strict    # any docs/ or skills/ change
+tools/coe/validate-sdoc.sh                  # any docs/coe/ change; needs AZ_REQUIREMENTS_STRICTDOC_WHEEL
+tools/coe/pre-commit-gates.sh               # the two lint gates, over staged paths
+```
+
+`coe-gates.yml` runs neither the StrictDoc bridge nor `validate-sdoc.sh`: both
+need the packaged engine, which is an installed payload on an owner node and is
+not available to a hosted runner. `pre-commit-gates.sh` is tracked but only
+active in a checkout whose owner has chained it into `.git/hooks/pre-commit` —
+see `hooks/README.md` § The repository gates.
+
+The live plan-record grammar for new work: a Journey writes
+`<journey-topic>-technical-plan.md` with frontmatter `type: technical-plan`,
+alongside the approved artifact names `design.md`, `seit.json`,
+`implementation.json` and `review.html`. `type: plan-spec` stays a valid legacy
+input and the historical records keep their names; the command names
+`lint-plan-spec.py` and `pre-commit-gates.sh` are unchanged. What
+`lint-plan-spec.py` gates is the declared Markdown `type` — the JSON artifact
+names are the writing convention, not a gate.
+
+Verify the runtime against `tools/bran/runtime/bran-release-pin.json` before
+running it. Documentation-only and skill-only changes use deterministic
+self-review per `AGENTS.md` § Code review policy.
+
+## betbot
+
+No CI workflow is present. The gate is the repo's own review flow — see
+`betbot/AGENTS.md` and `betbot/CLAUDE.md`, with `scripts/bug_hunter_*.sh` for
+the bug-hunter pass. Confirm the intended gate with the owner before merging;
+do not invent a command.
+---
+type: reference
+title: Pull Request Body Contract
+okf_status: active
+tags:
+  - internal
+  - operations
+---
+
+# Pull Request Body Contract
+
+Four sections, in this order. A missing section is a blocked PR.
+
+```markdown
+## What changed
+
+- One bullet per externally visible change, imperative mood.
+- Name the invariant a change establishes, not the files it touched.
+
+## Why
+
+The property that did not hold before and holds now. State the constraint the
+change was built under when one shaped the design.
+
+## Validation
+
+- Each command exactly as run, one per line.
+- The result: counts, exit status, what the output showed.
+
+## Residual risk
+
+- Every gate not run, and why.
+- Every accepted limitation of the approach.
+- `no known gap` only when that is literally true.
+```
+
+## Rules
+
+- Validation lists commands actually run in this branch. A command you intend
+  to run belongs under Residual risk until it has run.
+- An unavailable environment is a residual risk, not an omission. Name the
+  missing configuration.
+- This body is the permanent review record for the change. Rebase-merge keeps
+  the individual commit messages, so the body is not the commit message. Write
+  both to be read a year later by someone bisecting.
+- When creating or editing PR descriptions, never use `gh pr edit` (on Ubuntu
+  `gh 2.45.0`, it fails on the deprecated Projects-classic GraphQL schema and
+  silently leaves text stale). Always update using GitHub REST PATCH
+  (`gh api -X PATCH repos/<owner>/<repo>/pulls/<n> -F body=@<file>` or
+  `scripts/edit-pr.sh`) and perform the verification
+  readback (`gh api repos/<owner>/<repo>/pulls/<n> --jq '{title: .title, body: .body}'`
+  or `scripts/check-pr-text.sh`) to detect and reject stale PR text.
+
+## Worked example
+
+`alphazede/bran-dev#14` states its gate output (`--fast`, 263 core and 38 CLI
+tests) and discloses that the live external-host smoke test could not run
+because the required environment configuration was unavailable, and that the
+PR therefore stays draft. That disclosure is the pattern to copy.
+ls: cannot access '$HOME/.agents/skills/code-review': No such file or directory
+$HOME/.codex/skills/.system/skill-creator/scripts:
+__pycache__
+generate_openai_yaml.py
+init_skill.py
+quick_validate.py
+
+codex
+BRAN’s strict check passed (`bran_status: hit`). I’m reading the exact S03 plan sections and skill references because the query returned broader historical guidance. The branch is clean at the expected base, `47c46f2`.
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/bash -lc "python3 - <<'PY'
+from pathlib import Path
+import json
+p=Path('$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion')
+for name in ['implementation.json','authority.json']:
+ d=json.loads((p/name).read_text()); print(name)
+ if name=='authority.json': print(json.dumps(d,indent=2))
+ else:
+  def walk(x):
+   if isinstance(x,dict):
+    if any(v=='S03' for v in x.values() if isinstance(v,str)): print(json.dumps(x,indent=2))
+    else:
+     for k,v in x.items():
+      if any(t in k for t in ['profile','coverage_assist','reverify']): print(k,json.dumps(v))
+      else: walk(v)
+   elif isinstance(x,list):
+    for v in x: walk(v)
+  walk(d)
+for name in ['amazon-fantasy-companion-technical-plan.md','design.md']:
+ lines=(p/name).read_text().splitlines(); print(name)
+ for i,l in enumerate(lines):
+  if any(t in l for t in ['AC-AFC-D4-03','AC-AFC-D4-05','AC-AFC-D4-06','DES-AFC-D4']): print('\\n'.join(lines[max(0,i-2):i+28]))
+PY
+cat $HOME/.codex/skills/.system/skill-creator/scripts/quick_validate.py
+ls $HOME/.claude/skills/code-review
+rg -n 'lease|S03' $HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/workspace.md" in $HOME/alphazede/worktrees/alphazedehq-afc-s03-ship-pull-request
+ exited 1 in 0ms:
+implementation.json
+coverage_assist {"capability": "review.coverage_assist", "backend": "OCR (OpenCodeReview) delegate mode", "enabled": true, "required": true, "command_id": "CMD-OCR-DELEGATE", "packet_text": "OCR delegate mode (ocr delegate preview --from <base> --to <head>; ocr delegate rule <files>), required", "gap_rule": "missing, unavailable or not_run is a typed gap with the exact error, never PASS", "source": "every frozen lane snapshot review.coverage_assist"}
+reverify {"capability": "deterministic_verification.reverify", "enabled": true, "command_id": "CMD-REVIEW-PACKET-CHECK", "applies_to": ["SEIT-AFC-REV-01.R"], "packet_text": "Reverify: not applicable \u2014 Phase 1 changes are skill text, shell and Python scripts and workflow YAML; no compiled binary is built or claimed", "gap_rule": "reverify error or not_run is a typed gap with the exact error, never PASS; ordinary ATE reruns never substitute", "source": "every frozen lane snapshot deterministic_verification.reverify; seit.json gate_declarations.reverify"}
+profile_freeze {"state": "frozen", "source": "journey.json profile_selection.frozen_snapshots", "catalog": "~/.agents/bearing-lite/profiles.json", "selected_at": "2026-10-11T20:10:26Z", "decision": "DEC-AFC-PROFILE-001", "planning": {"profile": "primary", "configuration_digest_sha256": "b81a141be5b9d83cbecbb34df460b0f25929c2ae0df165f16ff529acfc50bafa", "snapshot_ref": "journey.json#/profile_selection/frozen_snapshots/primary"}, "lanes": {"spec-and-docs": {"profile": "tech-writing", "configuration_digest_sha256": "8a6b57450b92f5658666150c7cdcb05553016240061befb226c0ae4eb83c94ce", "snapshot_ref": "journey.json#/profile_selection/frozen_snapshots/tech-writing", "development_strategy": "single_implementer", "coverage_assist": {"enabled": true, "required": true}, "deterministic_verification": {"reverify": {"enabled": true}}}, "ci": {"profile": "primary", "configuration_digest_sha256": "b81a141be5b9d83cbecbb34df460b0f25929c2ae0df165f16ff529acfc50bafa", "snapshot_ref": "journey.json#/profile_selection/frozen_snapshots/primary", "development_strategy": "tdd", "coverage_assist": {"enabled": true, "required": true}, "deterministic_verification": {"reverify": {"enabled": true}}}, "scribe-side-lane": {"profile": "primary", "configuration_digest_sha256": "b81a141be5b9d83cbecbb34df460b0f25929c2ae0df165f16ff529acfc50bafa", "snapshot_ref": "journey.json#/profile_selection/frozen_snapshots/primary", "role": "scribe"}}, "note": "Frozen copies; later catalog edits have no effect without an owner-confirmed dated amendment. Lanes tv-app-ui (frontend), device-integration-spikes (heavyweight) and defects (bug-triager) are unused in Phase 1; their snapshots stay frozen for Phase 2."}
+{
+  "from": "S03",
+  "to": "S11T",
+  "kind": "merged",
+  "condition": "S01, S02, S03 merged (C13)"
+}
+{
+  "from": "S03",
+  "to": "S41",
+  "kind": "merged",
+  "condition": "OD-AFC-01 = B; S01, S02, S03 merged"
+}
+snapshot_profile "tech-writing"
+snapshot_profile "tech-writing"
+coverage_assist "OCR delegate mode (ocr delegate preview --from <base> --to <head>; ocr delegate rule <files>), required"
+coverage_assist_command_id "CMD-OCR-DELEGATE"
+reverify "Reverify: not applicable \u2014 Phase 1 changes are skill text, shell and Python scripts and workflow YAML; no compiled binary is built or claimed"
+lane_profile "tech-writing"
+snapshot_profile "tech-writing"
+snapshot_profile "tech-writing"
+coverage_assist "OCR delegate mode (ocr delegate preview --from <base> --to <head>; ocr delegate rule <files>), required"
+coverage_assist_command_id "CMD-OCR-DELEGATE"
+reverify "Reverify: not applicable \u2014 Phase 1 changes are skill text, shell and Python scripts and workflow YAML; no compiled binary is built or claimed"
+lane_profile "tech-writing"
+{
+  "id": "S03",
+  "role": "Product Implementer",
+  "goal": "Skill slice (spec-and-docs lane, Phase 1): deliver AC-AFC-D4-03, AC-AFC-D4-05, AC-AFC-D4-06 per DES-AFC-D4 inside the exact write set. Done when: Existing `tests/edit-pr.test.sh` passes; size check exit 0; PR open.",
+  "type": "skill",
+  "requirement_ids": [
+    "AC-AFC-D4-03",
+    "AC-AFC-D4-05",
+    "AC-AFC-D4-06"
+  ],
+  "design_ids": [
+    "DES-AFC-D4"
+  ],
+  "seit_proof_rows": [
+    "SEIT-AFC-D4-03.T",
+    "SEIT-AFC-D4-03.S",
+    "SEIT-AFC-D4-05.L",
+    "SEIT-AFC-D4-05.T",
+    "SEIT-AFC-D4-06"
+  ],
+  "design_lenses": [
+    "Lean skill",
+    "Repo-agnostic",
+    "Parallel-safe CI",
+    "Owner boundary",
+    "Developer feedback"
+  ],
+  "model_route": {
+    "snapshot_profile": "tech-writing",
+    "snapshot_role": "implementer",
+    "configuration_digest_sha256": "8a6b57450b92f5658666150c7cdcb05553016240061befb226c0ae4eb83c94ce",
+    "harness": "Codex CLI",
+    "model": "GPT-6 Astra",
+    "reasoning": "medium",
+    "ordered_fallbacks": [
+      {
+        "harness": "Claude Code",
+        "model": "Claude Opus 5.5",
+        "reasoning": "medium",
+        "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route."
+      },
+      {
+        "harness": "Muse Code",
+        "model": "Muse Spark 1.3",
+        "reasoning": "max",
+        "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks."
+      }
+    ]
+  },
+  "reasoning_level": {
+    "level": "medium",
+    "reason": "Frozen tech-writing snapshot implementer route reasoning; no per-slice override."
+  },
+  "review_path": {
+    "reviewer_cadence": "phase",
+    "reviewer_route": {
+      "snapshot_profile": "tech-writing",
+      "snapshot_role": "reviewer",
+      "configuration_digest_sha256": "8a6b57450b92f5658666150c7cdcb05553016240061befb226c0ae4eb83c94ce",
+      "harness": "Muse Code",
+      "model": "Muse Spark 1.3",
+      "reasoning": "max",
+      "ordered_fallbacks": [
+        {
+          "harness": "Claude Code",
+          "model": "Claude Opus 5.5",
+          "reasoning": "xhigh",
+          "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route."
+        },
+        {
+          "harness": "Codex CLI",
+          "model": "GPT-6 Astra",
+          "reasoning": "xhigh",
+          "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks."
+        }
+      ]
+    },
+    "review_unit": "Phase 1 integration step IE-P1-3 (review boundary unit per OA-AFC-A3 option A; each PR reviewed once at its own step)",
+    "test_engineer_assurance": "disabled (frozen tech-writing snapshot test_engineer.assurance.enabled=false)",
+    "integration_engineer_execution": "lifecycle",
+    "coverage_assist": "OCR delegate mode (ocr delegate preview --from <base> --to <head>; ocr delegate rule <files>), required",
+    "coverage_assist_command_id": "CMD-OCR-DELEGATE",
+    "reverify": "Reverify: not applicable \u2014 Phase 1 changes are skill text, shell and Python scripts and workflow YAML; no compiled binary is built or claimed",
+    "review_cardinality": "n=1, k=1, c=0 (one independent review, one repair round, deterministic verification decides)",
+    "skills": [
+      "$HOME/.claude/plugins/cache/bearing-lite/bearing-lite/1.1.6/skills/reviewer/SKILL.md",
+      "$HOME/.claude/skills/vnv-review/SKILL.md (once docs/vnv exists, after S07)"
+    ],
+    "landing_skill": "$HOME/.claude/skills/ship-pull-request/SKILL.md (rebase or merge commit, never squash)"
+  },
+  "write_set": [
+    "Alphazedehq:skills/ship-pull-request/SKILL.md",
+    "Alphazedehq:skills/ship-pull-request/references/GATES.md",
+    "Alphazedehq:skills/ship-pull-request/references/EDIT-PR.md"
+  ],
+  "command_ids": [
+    "CMD-D4C-TEST",
+    "CMD-SKILL-SIZE",
+    "CMD-SKILL-TRIGGER",
+    "CMD-D4-AGNOSTIC"
+  ],
+  "stop_condition": "Existing `tests/edit-pr.test.sh` passes; size check exit 0; PR open.",
+  "human_decision": {
+    "owner_actions": [],
+    "open_decisions": [
+      "OD-AFC-10",
+      "OA-AFC-A2"
+    ]
+  },
+  "authority_id": "AUTH-AFC-2026-10-11-002",
+  "work_class": "judgement",
+  "work_class_reason": "Skill text and tooling authoring; content and boundaries are written in-session.",
+  "lane": "spec-and-docs",
+  "lane_profile": "tech-writing",
+  "milestone": "Phase 1",
+  "wave": "Wave 1",
+  "depends_on": [],
+  "depends_on_text": "\u2014",
+  "leases": [
+    "alphazedehq-skills/ship-pull-request"
+  ],
+  "repo": "alphazede/Alphazedehq",
+  "skills": [
+    "$HOME/.claude/plugins/cache/bearing-lite/bearing-lite/1.1.6/skills/implementer/SKILL.md",
+    "$HOME/.agents/skills/create-lean-skill/SKILL.md"
+  ],
+  "developer_feedback_required": true,
+  "developer_feedback": {
+    "requirement_id": "AC-AFC-DX-01",
+    "check_command_id": "CMD-DX-PRESENCE",
+    "rule": "Every dispatch packet and return carries a developer_feedback section the Scribe can ingest (S08 seeds the log). Each observation gives the AC-AFC-DX-04 fields that apply (Devpost Product Feedback, Friction Log Entry, Feature Request); a field that does not apply is n/a and an unmeasured one is unknown (DEC-AFC-SD-025)."
+  },
+  "development_strategy": "single_implementer",
+  "packet_fixed_names": {
+    "trigger_requests": {
+      "matching": "open and gate a pull request for this branch",
+      "non_matching": "review this diff for bugs",
+      "expected_peer": "code-review"
+    },
+    "source": "seit.json gate_declarations.spec_and_docs.trigger_requests"
+  }
+}
+snapshot_profile "tech-writing"
+snapshot_profile "tech-writing"
+coverage_assist "OCR delegate mode (ocr delegate preview --from <base> --to <head>; ocr delegate rule <files>), required"
+coverage_assist_command_id "CMD-OCR-DELEGATE"
+reverify "Reverify: not applicable \u2014 Phase 1 changes are skill text, shell and Python scripts and workflow YAML; no compiled binary is built or claimed"
+lane_profile "tech-writing"
+snapshot_profile "tech-writing"
+snapshot_profile "tech-writing"
+coverage_assist "OCR delegate mode (ocr delegate preview --from <base> --to <head>; ocr delegate rule <files>), required"
+coverage_assist_command_id "CMD-OCR-DELEGATE"
+reverify "Reverify: not applicable \u2014 Phase 1 changes are skill text, shell and Python scripts and workflow YAML; no compiled binary is built or claimed"
+lane_profile "tech-writing"
+snapshot_profile "tech-writing"
+snapshot_profile "tech-writing"
+coverage_assist "OCR delegate mode (ocr delegate preview --from <base> --to <head>; ocr delegate rule <files>), required"
+coverage_assist_command_id "CMD-OCR-DELEGATE"
+reverify "Reverify: not applicable \u2014 Phase 1 changes are skill text, shell and Python scripts and workflow YAML; no compiled binary is built or claimed"
+lane_profile "tech-writing"
+snapshot_profile "tech-writing"
+snapshot_profile "tech-writing"
+coverage_assist "OCR delegate mode (ocr delegate preview --from <base> --to <head>; ocr delegate rule <files>), required"
+coverage_assist_command_id "CMD-OCR-DELEGATE"
+reverify "Reverify: not applicable \u2014 Phase 1 changes are skill text, shell and Python scripts and workflow YAML; no compiled binary is built or claimed"
+lane_profile "tech-writing"
+snapshot_profile "primary"
+snapshot_profile "primary"
+coverage_assist "OCR delegate mode (ocr delegate preview --from <base> --to <head>; ocr delegate rule <files>), required"
+coverage_assist_command_id "CMD-OCR-DELEGATE"
+reverify "Reverify: not applicable \u2014 Phase 1 changes are skill text, shell and Python scripts and workflow YAML; no compiled binary is built or claimed"
+lane_profile "primary"
+snapshot_profile "primary"
+snapshot_profile "primary"
+coverage_assist "OCR delegate mode (ocr delegate preview --from <base> --to <head>; ocr delegate rule <files>), required"
+coverage_assist_command_id "CMD-OCR-DELEGATE"
+reverify "Reverify: not applicable \u2014 Phase 1 changes are skill text, shell and Python scripts and workflow YAML; no compiled binary is built or claimed"
+lane_profile "primary"
+snapshot_profile "primary"
+snapshot_profile "primary"
+coverage_assist "OCR delegate mode (ocr delegate preview --from <base> --to <head>; ocr delegate rule <files>), required"
+coverage_assist_command_id "CMD-OCR-DELEGATE"
+reverify "Reverify: not applicable \u2014 Phase 1 changes are skill text, shell and Python scripts and workflow YAML; no compiled binary is built or claimed"
+lane_profile "primary"
+snapshot_profile "primary"
+snapshot_profile "primary"
+coverage_assist "OCR delegate mode (ocr delegate preview --from <base> --to <head>; ocr delegate rule <files>), required"
+coverage_assist_command_id "CMD-OCR-DELEGATE"
+reverify "Reverify: not applicable \u2014 Phase 1 changes are skill text, shell and Python scripts and workflow YAML; no compiled binary is built or claimed"
+lane_profile "primary"
+snapshot_profile "tech-writing"
+snapshot_profile "tech-writing"
+coverage_assist "OCR delegate mode (ocr delegate preview --from <base> --to <head>; ocr delegate rule <files>), required"
+coverage_assist_command_id "CMD-OCR-DELEGATE"
+reverify "Reverify: not applicable \u2014 Phase 1 changes are skill text, shell and Python scripts and workflow YAML; no compiled binary is built or claimed"
+lane_profile "tech-writing"
+snapshot_profile "primary"
+snapshot_profile "primary"
+coverage_assist "OCR delegate mode (ocr delegate preview --from <base> --to <head>; ocr delegate rule <files>), required"
+coverage_assist_command_id "CMD-OCR-DELEGATE"
+reverify "Reverify: not applicable \u2014 Phase 1 changes are skill text, shell and Python scripts and workflow YAML; no compiled binary is built or claimed"
+lane_profile "primary"
+{
+  "id": "S03",
+  "role": "Product Implementer",
+  "depends_on": "\u2014",
+  "write_set": [
+    "Alphazedehq:skills/ship-pull-request/SKILL.md",
+    "Alphazedehq:skills/ship-pull-request/references/GATES.md",
+    "Alphazedehq:skills/ship-pull-request/references/EDIT-PR.md"
+  ],
+  "wave": "Wave 1",
+  "lane": "spec-and-docs",
+  "status": "planned"
+}
+authority.json
+{
+  "schema_version": "1",
+  "schema": "bearing-lite/authority.schema.json",
+  "id": "AUTH-AFC-2026-10-11-002",
+  "state": "effective",
+  "subject": {
+    "lifecycle": "AFC-2026-10-11",
+    "title": "Amazon Fantasy Companion: architecture, program plan, milestones",
+    "plan_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/",
+    "deadline": "2026-10-23T19:00:00Z",
+    "phase": "Phase 1 (DEC-AFC-SD-023): D5, D4, this repository gate and Vnv tree, Scribe log start"
+  },
+  "repositories": [
+    {
+      "repository": "github:1wgrumph/amazon-fantasy-companion",
+      "role": "product and planning repository",
+      "landing": "PR to main; rebase or merge commit; never squash, never force-push, never commit on local main"
+    },
+    {
+      "repository": "github:alphazede/Alphazedehq",
+      "role": "shared skills and hooks (D4, D5) cross-repo write set",
+      "landing": "one PR per sub-change; rebase or merge commit; that repository's own gates apply"
+    }
+  ],
+  "baseline": {
+    "repository": "github:1wgrumph/amazon-fantasy-companion",
+    "branch": "plan/2026-10-11-amazon-fantasy-companion",
+    "revision": "2c13a6bf560e87d11864cc6234f48e40dd9cf529",
+    "package": "the five-artifact planning package in the plan directory, bound by implementation.json journey_settings.planning_review.candidate_digest",
+    "revision_note": "Planning candidate is regenerated on top of f885e48 (CHANGE_REQUESTED at integrated review round 1); the Orchestrator commits it."
+  },
+  "granting_owner_decisions": [
+    "DEC-AFC-001",
+    "DEC-AFC-002",
+    "DEC-AFC-SD-001",
+    "DEC-AFC-SD-002",
+    "DEC-AFC-SD-003",
+    "DEC-AFC-SD-004",
+    "DEC-AFC-SD-005",
+    "DEC-AFC-SD-006",
+    "DEC-AFC-SD-006a",
+    "DEC-AFC-SD-007",
+    "DEC-AFC-SD-008",
+    "DEC-AFC-SD-009",
+    "DEC-AFC-SD-010",
+    "DEC-AFC-SD-011",
+    "DEC-AFC-SD-012",
+    "DEC-AFC-PROFILE-001",
+    "DEC-AFC-SD-014",
+    "DEC-AFC-SD-015",
+    "DEC-AFC-SD-016",
+    "DEC-AFC-SD-017",
+    "DEC-AFC-SD-018",
+    "DEC-AFC-SD-019",
+    "DEC-AFC-SD-020",
+    "DEC-AFC-SD-021",
+    "DEC-AFC-SD-022",
+    "DEC-AFC-SD-023",
+    "DEC-AFC-SD-024",
+    "DEC-AFC-APPROVAL-001"
+  ],
+  "granting_owner_decisions_note": "DEC-AFC-APPROVAL-001 is the identity reserved for the owner's integrated approval of this exact Phase 1 package; it does not exist until the owner records it. Until then state is proposed and effective is false. DEC-AFC-SD-013 is superseded by DEC-AFC-SD-022 and grants nothing.",
+  "allowed": {
+    "scope": [
+      "Phase 1 slices S01, S02, S03, S06, S06L, S07, S08, S09T, S09, S11T, S11, S42 (and S41 only if OD-AFC-01 = B) of implementation.json within their write sets and dependencies",
+      "D4 and D5 pull requests in alphazede/Alphazedehq (S01, S02, S03, S06, S11T, S11, S41 if OD-AFC-01 = B)",
+      "Local harness skill links and hook configuration on the development host after a timestamped backup (S06L, S11)",
+      "Opening the spec-track plan directory and running the Phase 1 spec-track planning-role sessions (Requirements Engineer, Systems Modeler; ST-1..ST-3) that write only inside docs/plans/*-amazon-fantasy-companion-phase-2/ (directory glob kept as an identifier); running the local packaged-default Requirements System host for them (cross-repo rule 14)"
+    ],
+    "actions": [
+      "create worktrees under <workspace>/worktrees/ and branches",
+      "commit with the agent author identity",
+      "push lane branches",
+      "open pull requests",
+      "merge pull requests by rebase or merge commit after one Reviewer review, at most one repair round and a green gate",
+      "fast-forward the Alphazedehq main checkout between dispatches (alphazedehq-main-checkout lease)",
+      "file issues through the issue-label policy tool in this repository",
+      "run scan-software-supply-chain and install scanned tools (uv, Graphviz) on the development host",
+      "close tracked issues after their fix merges and acceptance passes"
+    ],
+    "paths": [
+      "tools/ci/**",
+      "tools/spec/**",
+      ".githooks/**",
+      ".github/workflows/**",
+      "docs/vnv/**",
+      "docs/developer-feedback/**",
+      "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/**",
+      "docs/plans/*-amazon-fantasy-companion-phase-2/** (Phase 1 spec-track planning sessions only)",
+      "THIRD_PARTY_NOTICES.md",
+      ".gitignore (planning commit only, OD-AFC-06)",
+      "Alphazedehq:skills/setup-pre-commit/**",
+      "Alphazedehq:skills/setup-a-repo/**",
+      "Alphazedehq:skills/ship-pull-request/**",
+      "Alphazedehq:skills/spec-authoring/**",
+      "Alphazedehq:skills/use-requirements-system/SKILL.md (description lines only, if OD-AFC-07 approved)",
+      "Alphazedehq:skills/ci-cd/SKILL.md (only if OD-AFC-01 = B)",
+      "Alphazedehq:hooks/ci-gate-hook.sh",
+      "Alphazedehq:hooks/test-ci-gate-hook.sh",
+      "Alphazedehq:hooks/install-ci-gate-hook.py",
+      "Alphazedehq:hooks/README.md"
+    ]
+  },
+  "prohibited": {
+    "scope": [
+      "Any product work in Phase 1: TV app, backend, device spikes, ESPN capture, AWS deployment, submission material (DEC-AFC-SD-023)",
+      "GitHub milestone creation before the Phase 2 plan is approved (DEC-AFC-SD-023)",
+      "Messaging and community features",
+      "Paid Actions overage (C11)",
+      "Copying the GridMarket kit as project-local skills (SD-013 superseded)"
+    ],
+    "actions": [
+      "license choice, repository visibility flip, video upload, Devpost submission, reviewer access, external feedback (C9)",
+      "AWS account creation, credential creation or reading of secret values",
+      "Yahoo developer application",
+      "upstream issue or PR to any third-party project",
+      "squash merge, force-push, commit on local main, git switch, destructive git on unmerged work",
+      "route or profile change outside the frozen profiles and their fallback conditions",
+      "publication or release of either repository"
+    ],
+    "paths": [
+      ".env",
+      ".env.*",
+      "tv-app/**, backend/**, spikes/** (Phase 2), spec/** (written at spec-track step ST-4 under the spec-track plan, not by this Lifecycle's slices)",
+      "any path outside the allowed list",
+      "Alphazedehq paths outside the D4 and D5 write sets"
+    ]
+  },
+  "role_grants": [
+    {
+      "role": "Orchestrator",
+      "grant": "dispatch, leases, landing, owner stops, opening the spec track and Phase 2 planning"
+    },
+    {
+      "role": "Product Implementer / Test Implementer / Light Implementer",
+      "grant": "the write set of the dispatched slice only"
+    },
+    {
+      "role": "Reviewer",
+      "grant": "read-only review of one candidate with OCR delegate mode; no writes"
+    },
+    {
+      "role": "Test Engineer (assurance) and Integration Engineer (execution)",
+      "grant": "read-only assessment and evidence files named in their packets; the Integration Engineer writes the spec-track entry receipt (AC-AFC-PLAN-03)"
+    },
+    {
+      "role": "Scribe",
+      "grant": "journey.json history and docs/developer-feedback/** transcription"
+    },
+    {
+      "role": "Requirements Engineer, Systems Modeler (Phase 1 spec-track planning sessions)",
+      "grant": "writes only inside the spec-track plan directory"
+    }
+  ],
+  "effective": true,
+  "expiry_conditions": [
+    "Phase 1 closeout recorded in the DoD Manifest",
+    "owner revocation or supersession of this envelope",
+    "a change to the approved package digest without owner re-approval"
+  ],
+  "supersedes": [
+    "AUTH-AFC-2026-10-11-001 (proposed for f885e48; never effective; CHANGE_REQUESTED)"
+  ],
+  "approval_receipt": {
+    "status": "approved",
+    "decision_id": "DEC-AFC-APPROVAL-001",
+    "approved_at": "2026-10-12T02:17:01Z",
+    "package": "Phase 1 candidate 173e005, manifest digest 4128aa9cdacd1fca06edfb68652258730db107eb6213f6dca3faf9e9cca55e84"
+  },
+  "continuation": {
+    "granted": true,
+    "owner_decision_id": "DEC-AFC-APPROVAL-001",
+    "exclusions": [
+      "scope_change",
+      "budget_exhaustion",
+      "owner_hold",
+      "owner_only_actions",
+      "route_or_profile_change"
+    ],
+    "expires_at": null
+  }
+}
+amazon-fantasy-companion-technical-plan.md
+| AC-AFC-D4-01 | The shared `setup-pre-commit` skill shall define one repo-agnostic gate entrypoint contract, shall ship a template gate script and an installer for local git hooks that invoke it, shall state that GitHub Actions invoke the same entrypoint, shall contain no `[TODO]` text, and its `SKILL.md` shall be within skill_size_max. | SD-018, SD-021, DX-007, C10 | test, inspection | S01; D4-A |
+| AC-AFC-D4-02 | The shared `setup-a-repo` skill shall reference a workflow-authoring guide stating the rules of AC-AFC-CI-02 plus free hosted runners on public repositories and the gh_private_minutes budget (C11), and shall ship a checker script that exits non-zero on a workflow violating any of those rules; its `SKILL.md` shall be within skill_size_max. | SD-017, SD-019, SD-021, C11, C14 | test | S02; D4-B |
+| AC-AFC-D4-03 | The shared `ship-pull-request` skill shall run `vnv-review` when the repository has a Vnv guidance tree (`docs/vnv/AGENTS.md` or `Vnv/AGENTS.md`) and otherwise record REFUSED_NO_VNV, never a pass; its `references/GATES.md` shall gain a shared-gate row and an amazon-fantasy-companion row; its `SKILL.md` shall be within skill_size_max. | SD-020, SD-021, C10, C12 | test, inspection | S03; D4-C |
+| AC-AFC-D4-04 | When AC-AFC-D4-01..03 are merged (C13), one shared hook script shall run the current repository's gate entrypoint before an agent-initiated `git commit` or `git push` in every harness named in SD-021 that exposes a pre-tool hook; the installer shall record each harness without one as a typed gap with its exact evidence, and shall expose the D4 skills in Muse's skill directory. | SD-021, C13, coverage ledger (Muse skills gap) | test, demonstration | S11T, S11; D4-E |
+| AC-AFC-D4-05 | The program shall land each D4 skill change in Alphazedehq through its own pull request merged by rebase or merge commit, after the skill is exercised against one matching and one non-matching request. | SD-021, create-lean-skill, workspace rule (never squash) | inspection | S01, S02, S03, S11, S41; D4 PRs |
+| AC-AFC-D4-06 | The D4 skill and hook text shall name no repository, owner, pilot or exclusion that scopes the capability. | SD-019 | inspection | S01, S02, S03, S11, S41; D4 text |
+
+### This repository's gate, vendored spec tools and Vnv tree
+
+| ID | Statement | Source | Verification | Allocation |
+|---|---|---|---|---|
+| AC-AFC-CI-01 *(amended)* | The repository shall have one gate entrypoint `tools/ci/gate.sh` with the areas `spec`, `docs` and `hygiene`; the local pre-commit and pre-push hooks and the Actions workflow shall invoke that entrypoint with the same area arguments, and each area shall exit non-zero when any of its checks fails. | SD-016, SD-021, DEC-AFC-SD-023 (Phase 1 areas; Phase 2 adds product areas) | test | S09T, S09; repo gate |
+| AC-AFC-CI-02 | The Actions workflow shall trigger on `pull_request` and `push` to `main` only (never `pull_request_target`), shall use a concurrency group per workflow and ref with cancel-in-progress, shall run an area only when its paths change, shall report one stable check name per area, shall pin every action to a full commit SHA, shall grant `contents: read` only, shall expose no secret to fork pull requests, and shall run on GitHub-hosted runners. | SD-017, SD-021, C14 | test | S09T, S09, S08; repo gate workflow |
+| AC-AFC-CI-03 | The `hygiene` area shall reject tracked files matching an absolute user-home path shape or the repository’s documented credential-detection rules for Yahoo client secrets, OAuth tokens, AWS credentials and device tokens, and shall identify each finding by file and rule identifier without printing the matched secret. | Cross-repo rule 12, SD-010, C7 | test | S09T, S09; repo gate hygiene area |
+| AC-AFC-CI-04 *(new)* | The `spec` area shall run the vendored spec lint, figure lint and a byte-identical rebuild for every `spec/<name>/` source directory and, while none exists, shall build and lint the vendored template in a temporary directory; the `docs` area shall fail when a Vnv guidance area file lacks any of Scope, Tools, Review Focus or findings target, or when a tracked Markdown file links to a repository-relative path that does not exist. | DEC-AFC-SD-023 (repo gate for spec/docs areas), SD-014, SD-022 | test | S09T, S09; repo gate spec and docs areas |
+| AC-AFC-SPEC-01 *(amended)* | When the D5 pull request (AC-AFC-D5-01..05) is merged, the program shall vendor `tools/spec/` with the D5 vendor step, with `VENDORED.md` naming the merged Alphazedehq commit and `THIRD_PARTY_NOTICES.md` carrying the GridMarket MIT notice. | SD-022, SD-009, OD-AFC-09 | inspection | S42; vendored spec tools and notices |
+| AC-AFC-VNV-01 *(amended)* | The repository shall contain the Vnv guidance tree: `docs/vnv/AGENTS.md` and one `docs/vnv/<area>/AGENTS.md` for each Phase 1 area (ci-cd, spec, developer-feedback), each naming Scope, Tools, Review Focus and findings target. | SD-014, DEC-AFC-SD-023 (product areas move to Phase 2) | inspection | S07; Vnv guidance tree |
+
+### Scribe developer feedback (issue #1 contract)
+
+| ID | Statement | Source | Verification | Allocation |
+|---|---|---|---|---|
+| AC-AFC-DX-01 | The program shall give every dispatch packet and every return in this Lifecycle a `developer_feedback` section that lists observations with IDs and evidence, or states "no new observations" and names the tools exercised. | #1 §Scribe contract | inspection | All Phase 1 slices; dispatch/return records and Scribe log |
+| AC-AFC-DX-02 *(amended)* | The repository shall contain the running observation log `docs/developer-feedback/observations.md` with the AC-AFC-DX-04 tables, carrying DX-001..DX-007 and every Phase 1 observation as one row each in which every column holds a value, `n/a` or `unknown`, and passing the `hygiene` area. | #1 §Scribe contract, SD-011, DEC-AFC-SD-023 (log start in Phase 1; submission assembly in Phase 2), DEC-AFC-SD-025 | inspection | S08; developer-feedback log |
+| AC-AFC-DX-04 *(new)* | The observation log shall define an observations table whose header carries the issue #1 Scribe contract columns (ID, timestamp, reporting role, task or packet, tool/API/SDK, version, device/OS, evidence, classification), the Devpost Product Feedback columns (used for, what worked well, what needs work, onboarding from zero to hello world, would build again Yes/No and why, AWS services used and how) and the Devpost Friction Log Entry columns (task attempted, steps taken, expected result, actual result, severity rating, workaround used, actionable suggestion), and a feature-requests table whose header carries ID, tool, description, why it matters to this project and priority, with every priority value one of Critical, Important or Nice-to-have. | DEC-AFC-SD-025; Devpost rules and resources (evidence/devpost-feedback-rules.md, HTTP 200 on 2026-10-12); #1 §Scribe contract | inspection | S08; developer-feedback log |
+
+### Program plan
+
+| ID | Statement | Source | Verification | Allocation |
+|---|---|---|---|---|
+| AC-AFC-D4-03 | The shared `ship-pull-request` skill shall run `vnv-review` when the repository has a Vnv guidance tree (`docs/vnv/AGENTS.md` or `Vnv/AGENTS.md`) and otherwise record REFUSED_NO_VNV, never a pass; its `references/GATES.md` shall gain a shared-gate row and an amazon-fantasy-companion row; its `SKILL.md` shall be within skill_size_max. | SD-020, SD-021, C10, C12 | test, inspection | S03; D4-C |
+| AC-AFC-D4-04 | When AC-AFC-D4-01..03 are merged (C13), one shared hook script shall run the current repository's gate entrypoint before an agent-initiated `git commit` or `git push` in every harness named in SD-021 that exposes a pre-tool hook; the installer shall record each harness without one as a typed gap with its exact evidence, and shall expose the D4 skills in Muse's skill directory. | SD-021, C13, coverage ledger (Muse skills gap) | test, demonstration | S11T, S11; D4-E |
+| AC-AFC-D4-05 | The program shall land each D4 skill change in Alphazedehq through its own pull request merged by rebase or merge commit, after the skill is exercised against one matching and one non-matching request. | SD-021, create-lean-skill, workspace rule (never squash) | inspection | S01, S02, S03, S11, S41; D4 PRs |
+| AC-AFC-D4-06 | The D4 skill and hook text shall name no repository, owner, pilot or exclusion that scopes the capability. | SD-019 | inspection | S01, S02, S03, S11, S41; D4 text |
+
+### This repository's gate, vendored spec tools and Vnv tree
+
+| ID | Statement | Source | Verification | Allocation |
+|---|---|---|---|---|
+| AC-AFC-CI-01 *(amended)* | The repository shall have one gate entrypoint `tools/ci/gate.sh` with the areas `spec`, `docs` and `hygiene`; the local pre-commit and pre-push hooks and the Actions workflow shall invoke that entrypoint with the same area arguments, and each area shall exit non-zero when any of its checks fails. | SD-016, SD-021, DEC-AFC-SD-023 (Phase 1 areas; Phase 2 adds product areas) | test | S09T, S09; repo gate |
+| AC-AFC-CI-02 | The Actions workflow shall trigger on `pull_request` and `push` to `main` only (never `pull_request_target`), shall use a concurrency group per workflow and ref with cancel-in-progress, shall run an area only when its paths change, shall report one stable check name per area, shall pin every action to a full commit SHA, shall grant `contents: read` only, shall expose no secret to fork pull requests, and shall run on GitHub-hosted runners. | SD-017, SD-021, C14 | test | S09T, S09, S08; repo gate workflow |
+| AC-AFC-CI-03 | The `hygiene` area shall reject tracked files matching an absolute user-home path shape or the repository’s documented credential-detection rules for Yahoo client secrets, OAuth tokens, AWS credentials and device tokens, and shall identify each finding by file and rule identifier without printing the matched secret. | Cross-repo rule 12, SD-010, C7 | test | S09T, S09; repo gate hygiene area |
+| AC-AFC-CI-04 *(new)* | The `spec` area shall run the vendored spec lint, figure lint and a byte-identical rebuild for every `spec/<name>/` source directory and, while none exists, shall build and lint the vendored template in a temporary directory; the `docs` area shall fail when a Vnv guidance area file lacks any of Scope, Tools, Review Focus or findings target, or when a tracked Markdown file links to a repository-relative path that does not exist. | DEC-AFC-SD-023 (repo gate for spec/docs areas), SD-014, SD-022 | test | S09T, S09; repo gate spec and docs areas |
+| AC-AFC-SPEC-01 *(amended)* | When the D5 pull request (AC-AFC-D5-01..05) is merged, the program shall vendor `tools/spec/` with the D5 vendor step, with `VENDORED.md` naming the merged Alphazedehq commit and `THIRD_PARTY_NOTICES.md` carrying the GridMarket MIT notice. | SD-022, SD-009, OD-AFC-09 | inspection | S42; vendored spec tools and notices |
+| AC-AFC-VNV-01 *(amended)* | The repository shall contain the Vnv guidance tree: `docs/vnv/AGENTS.md` and one `docs/vnv/<area>/AGENTS.md` for each Phase 1 area (ci-cd, spec, developer-feedback), each naming Scope, Tools, Review Focus and findings target. | SD-014, DEC-AFC-SD-023 (product areas move to Phase 2) | inspection | S07; Vnv guidance tree |
+
+### Scribe developer feedback (issue #1 contract)
+
+| ID | Statement | Source | Verification | Allocation |
+|---|---|---|---|---|
+| AC-AFC-DX-01 | The program shall give every dispatch packet and every return in this Lifecycle a `developer_feedback` section that lists observations with IDs and evidence, or states "no new observations" and names the tools exercised. | #1 §Scribe contract | inspection | All Phase 1 slices; dispatch/return records and Scribe log |
+| AC-AFC-DX-02 *(amended)* | The repository shall contain the running observation log `docs/developer-feedback/observations.md` with the AC-AFC-DX-04 tables, carrying DX-001..DX-007 and every Phase 1 observation as one row each in which every column holds a value, `n/a` or `unknown`, and passing the `hygiene` area. | #1 §Scribe contract, SD-011, DEC-AFC-SD-023 (log start in Phase 1; submission assembly in Phase 2), DEC-AFC-SD-025 | inspection | S08; developer-feedback log |
+| AC-AFC-DX-04 *(new)* | The observation log shall define an observations table whose header carries the issue #1 Scribe contract columns (ID, timestamp, reporting role, task or packet, tool/API/SDK, version, device/OS, evidence, classification), the Devpost Product Feedback columns (used for, what worked well, what needs work, onboarding from zero to hello world, would build again Yes/No and why, AWS services used and how) and the Devpost Friction Log Entry columns (task attempted, steps taken, expected result, actual result, severity rating, workaround used, actionable suggestion), and a feature-requests table whose header carries ID, tool, description, why it matters to this project and priority, with every priority value one of Critical, Important or Nice-to-have. | DEC-AFC-SD-025; Devpost rules and resources (evidence/devpost-feedback-rules.md, HTTP 200 on 2026-10-12); #1 §Scribe contract | inspection | S08; developer-feedback log |
+
+### Program plan
+
+| ID | Statement | Source | Verification | Allocation |
+|---|---|---|---|---|
+| AC-AFC-PLAN-01 *(amended)* | The technical plan shall define the Phase 1 waves, each slice belonging to exactly one wave with no wave scheduling more than impl_agent_cap concurrent implementation agents, and shall define the Phase 1 spec track and Phase 2 sequence with each step's entry criteria and dependencies; no GitHub milestone shall be created during Phase 1. | SD-012, DEC-AFC-SD-023, Rule 17 | inspection | Planning; this plan §Program plan and §Phase 1 spec track and Phase 2 sequence |
+| AC-AFC-PLAN-03 *(new)* | When Phase 1 closes out, the program shall record a spec-track entry receipt naming the D5 merge commit, the D4 merge commits, the vendored `tools/spec/` commit on `main`, the gate run on `main` with each area's result, and the status of each spec-track and Phase 2 entry criterion (met, not met, or owner action pending). | DEC-AFC-SD-023 | inspection | Integration Engineer execution session at Phase 1 closeout; spec-track entry receipt |
+| AC-AFC-D4-04 | When AC-AFC-D4-01..03 are merged (C13), one shared hook script shall run the current repository's gate entrypoint before an agent-initiated `git commit` or `git push` in every harness named in SD-021 that exposes a pre-tool hook; the installer shall record each harness without one as a typed gap with its exact evidence, and shall expose the D4 skills in Muse's skill directory. | SD-021, C13, coverage ledger (Muse skills gap) | test, demonstration | S11T, S11; D4-E |
+| AC-AFC-D4-05 | The program shall land each D4 skill change in Alphazedehq through its own pull request merged by rebase or merge commit, after the skill is exercised against one matching and one non-matching request. | SD-021, create-lean-skill, workspace rule (never squash) | inspection | S01, S02, S03, S11, S41; D4 PRs |
+| AC-AFC-D4-06 | The D4 skill and hook text shall name no repository, owner, pilot or exclusion that scopes the capability. | SD-019 | inspection | S01, S02, S03, S11, S41; D4 text |
+
+### This repository's gate, vendored spec tools and Vnv tree
+
+| ID | Statement | Source | Verification | Allocation |
+|---|---|---|---|---|
+| AC-AFC-CI-01 *(amended)* | The repository shall have one gate entrypoint `tools/ci/gate.sh` with the areas `spec`, `docs` and `hygiene`; the local pre-commit and pre-push hooks and the Actions workflow shall invoke that entrypoint with the same area arguments, and each area shall exit non-zero when any of its checks fails. | SD-016, SD-021, DEC-AFC-SD-023 (Phase 1 areas; Phase 2 adds product areas) | test | S09T, S09; repo gate |
+| AC-AFC-CI-02 | The Actions workflow shall trigger on `pull_request` and `push` to `main` only (never `pull_request_target`), shall use a concurrency group per workflow and ref with cancel-in-progress, shall run an area only when its paths change, shall report one stable check name per area, shall pin every action to a full commit SHA, shall grant `contents: read` only, shall expose no secret to fork pull requests, and shall run on GitHub-hosted runners. | SD-017, SD-021, C14 | test | S09T, S09, S08; repo gate workflow |
+| AC-AFC-CI-03 | The `hygiene` area shall reject tracked files matching an absolute user-home path shape or the repository’s documented credential-detection rules for Yahoo client secrets, OAuth tokens, AWS credentials and device tokens, and shall identify each finding by file and rule identifier without printing the matched secret. | Cross-repo rule 12, SD-010, C7 | test | S09T, S09; repo gate hygiene area |
+| AC-AFC-CI-04 *(new)* | The `spec` area shall run the vendored spec lint, figure lint and a byte-identical rebuild for every `spec/<name>/` source directory and, while none exists, shall build and lint the vendored template in a temporary directory; the `docs` area shall fail when a Vnv guidance area file lacks any of Scope, Tools, Review Focus or findings target, or when a tracked Markdown file links to a repository-relative path that does not exist. | DEC-AFC-SD-023 (repo gate for spec/docs areas), SD-014, SD-022 | test | S09T, S09; repo gate spec and docs areas |
+| AC-AFC-SPEC-01 *(amended)* | When the D5 pull request (AC-AFC-D5-01..05) is merged, the program shall vendor `tools/spec/` with the D5 vendor step, with `VENDORED.md` naming the merged Alphazedehq commit and `THIRD_PARTY_NOTICES.md` carrying the GridMarket MIT notice. | SD-022, SD-009, OD-AFC-09 | inspection | S42; vendored spec tools and notices |
+| AC-AFC-VNV-01 *(amended)* | The repository shall contain the Vnv guidance tree: `docs/vnv/AGENTS.md` and one `docs/vnv/<area>/AGENTS.md` for each Phase 1 area (ci-cd, spec, developer-feedback), each naming Scope, Tools, Review Focus and findings target. | SD-014, DEC-AFC-SD-023 (product areas move to Phase 2) | inspection | S07; Vnv guidance tree |
+
+### Scribe developer feedback (issue #1 contract)
+
+| ID | Statement | Source | Verification | Allocation |
+|---|---|---|---|---|
+| AC-AFC-DX-01 | The program shall give every dispatch packet and every return in this Lifecycle a `developer_feedback` section that lists observations with IDs and evidence, or states "no new observations" and names the tools exercised. | #1 §Scribe contract | inspection | All Phase 1 slices; dispatch/return records and Scribe log |
+| AC-AFC-DX-02 *(amended)* | The repository shall contain the running observation log `docs/developer-feedback/observations.md` with the AC-AFC-DX-04 tables, carrying DX-001..DX-007 and every Phase 1 observation as one row each in which every column holds a value, `n/a` or `unknown`, and passing the `hygiene` area. | #1 §Scribe contract, SD-011, DEC-AFC-SD-023 (log start in Phase 1; submission assembly in Phase 2), DEC-AFC-SD-025 | inspection | S08; developer-feedback log |
+| AC-AFC-DX-04 *(new)* | The observation log shall define an observations table whose header carries the issue #1 Scribe contract columns (ID, timestamp, reporting role, task or packet, tool/API/SDK, version, device/OS, evidence, classification), the Devpost Product Feedback columns (used for, what worked well, what needs work, onboarding from zero to hello world, would build again Yes/No and why, AWS services used and how) and the Devpost Friction Log Entry columns (task attempted, steps taken, expected result, actual result, severity rating, workaround used, actionable suggestion), and a feature-requests table whose header carries ID, tool, description, why it matters to this project and priority, with every priority value one of Critical, Important or Nice-to-have. | DEC-AFC-SD-025; Devpost rules and resources (evidence/devpost-feedback-rules.md, HTTP 200 on 2026-10-12); #1 §Scribe contract | inspection | S08; developer-feedback log |
+
+### Program plan
+
+| ID | Statement | Source | Verification | Allocation |
+|---|---|---|---|---|
+| AC-AFC-PLAN-01 *(amended)* | The technical plan shall define the Phase 1 waves, each slice belonging to exactly one wave with no wave scheduling more than impl_agent_cap concurrent implementation agents, and shall define the Phase 1 spec track and Phase 2 sequence with each step's entry criteria and dependencies; no GitHub milestone shall be created during Phase 1. | SD-012, DEC-AFC-SD-023, Rule 17 | inspection | Planning; this plan §Program plan and §Phase 1 spec track and Phase 2 sequence |
+| AC-AFC-PLAN-03 *(new)* | When Phase 1 closes out, the program shall record a spec-track entry receipt naming the D5 merge commit, the D4 merge commits, the vendored `tools/spec/` commit on `main`, the gate run on `main` with each area's result, and the status of each spec-track and Phase 2 entry criterion (met, not met, or owner action pending). | DEC-AFC-SD-023 | inspection | Integration Engineer execution session at Phase 1 closeout; spec-track entry receipt |
+
+design.md
+- Lenses: Parallel-safe CI, Security controls, Contract-first.
+
+### DES-AFC-D4 — Shared CI/CD capability (Alphazedehq)
+
+Write set in `alphazede/Alphazedehq` (cross-repo; each sub-change is its own
+PR, branch `ci-cd/<topic>`, worktree `worktrees/Alphazedehq-ci-cd-<topic>`):
+
+| Sub-change | Files | Content |
+|---|---|---|
+| D4-A `setup-pre-commit` (S01) | `skills/setup-pre-commit/SKILL.md`, `skills/setup-pre-commit/agents/openai.yaml`, `skills/setup-pre-commit/references/gate-contract.md`, `skills/setup-pre-commit/templates/gate.sh`, `skills/setup-pre-commit/scripts/install-hooks.sh`, `skills/setup-pre-commit/tests/test-install-hooks.sh` | Replace the `[TODO]` template (DX-007) with the gate entrypoint procedure: inventory checks → write `tools/ci/gate.sh` from the template → install `.githooks` via `core.hooksPath` → wire Actions per `setup-a-repo` → verify with a deliberate failing change. |
+| D4-B `setup-a-repo` (S02) | `skills/setup-a-repo/SKILL.md`, `skills/setup-a-repo/references/workflow-authoring.md`, `skills/setup-a-repo/templates/ci.yml`, `skills/setup-a-repo/scripts/check-workflows.py`, `skills/setup-a-repo/tests/test_check_workflows.py` | Workflow-authoring rules (AC-AFC-CI-02 list, free hosted runners on public repos, gh_private_minutes budget, C11, C14) and a checker that exits 1 on violation. `SKILL.md` gains one "Workflows" step, its description drops "one named AlphaZede repository" for any personal or organization repository (SD-019), and it is trimmed below skill_size_max (it is exactly 60 lines today). |
+| D4-C `ship-pull-request` (S03) | `skills/ship-pull-request/SKILL.md`, `skills/ship-pull-request/references/GATES.md`, `skills/ship-pull-request/references/EDIT-PR.md` | Gate step: when `docs/vnv/AGENTS.md` or `Vnv/AGENTS.md` exists run `vnv-review`, else record `REFUSED_NO_VNV` (C12, never a pass); the diff scope is passed explicitly (`--scope=commits=<base>..HEAD`) because `vnv-review` defaults to `master...HEAD`. GATES.md: a shared-gate row (`tools/ci/gate.sh`) and an amazon-fantasy-companion row. The Edit section moves to `references/EDIT-PR.md` so `SKILL.md` drops from 82 lines to below skill_size_max (C10). |
+| D4-E harness hooks (S11T, S11) | `hooks/ci-gate-hook.sh`, `hooks/test-ci-gate-hook.sh`, `hooks/install-ci-gate-hook.py`, `hooks/README.md` | CONTRACT-AFC-HOOK; the installer edits each harness configuration idempotently after a timestamped backup, and links the shared skills and `vnv-review` into Muse's (and, if verified, AGY's) skill directory. Runs only after D4-A..C merge (C13). |
+| D4-F thin entry-point skill (S41, only if OD-AFC-01 = B) | `skills/ci-cd/SKILL.md` | A router under 25 lines naming the three skills; no procedure of its own. |
+
+- Every changed `SKILL.md` is checked with `wc -l` and `wc -w` against
+  skill_size_max and exercised on one matching and one non-matching request
+  per create-lean-skill (AC-AFC-D4-05). No text names specific repositories
+  as pilots or exclusions (AC-AFC-D4-06); the amazon-fantasy-companion GATES
+  row is gate data, not scoping.
+- Recommendation for OD-AFC-01: extensions only (see technical plan).
+- Lenses: Lean skill, Repo-agnostic, Parallel-safe CI, Owner boundary.
+
+
+### DES-AFC-VNV — Vnv guidance tree (Phase 1 areas)
+
+- `docs/vnv/AGENTS.md` indexes the areas.
+- `docs/vnv/<area>/AGENTS.md` exists for `ci-cd`, `spec` and
+  `developer-feedback`. This is the layout `vnv-review` reads: every
+  immediate `<guidance-root>/*/AGENTS.md`. Each file names:
+- Every changed `SKILL.md` is checked with `wc -l` and `wc -w` against
+  skill_size_max and exercised on one matching and one non-matching request
+  per create-lean-skill (AC-AFC-D4-05). No text names specific repositories
+  as pilots or exclusions (AC-AFC-D4-06); the amazon-fantasy-companion GATES
+  row is gate data, not scoping.
+- Recommendation for OD-AFC-01: extensions only (see technical plan).
+- Lenses: Lean skill, Repo-agnostic, Parallel-safe CI, Owner boundary.
+
+
+### DES-AFC-VNV — Vnv guidance tree (Phase 1 areas)
+
+- `docs/vnv/AGENTS.md` indexes the areas.
+- `docs/vnv/<area>/AGENTS.md` exists for `ci-cd`, `spec` and
+  `developer-feedback`. This is the layout `vnv-review` reads: every
+  immediate `<guidance-root>/*/AGENTS.md`. Each file names:
+  - Scope: the paths.
+  - Tools: the CONTRACT-AFC-GATE commands.
+  - Review Focus: the lenses that apply.
+  - Findings target: GitHub issues in this repository with the `vnv` label,
+    filed through the issue-label policy tool.
+- The shape follows the shared `vnv-review` skill's profile schema.
+- Phase 2 adds the `tv-app`, `backend` and `device-integration` areas when
+  those paths exist.
+- Lenses: Spec discipline, Owner boundary.
+
+### DES-AFC-DX — Scribe developer-feedback log
+
+- `docs/developer-feedback/observations.md` is the running log. It is
+  public per SD-011.
+  - One row per observation, with the fields of the issue #1 Scribe
+  skill_size_max and exercised on one matching and one non-matching request
+  per create-lean-skill (AC-AFC-D4-05). No text names specific repositories
+  as pilots or exclusions (AC-AFC-D4-06); the amazon-fantasy-companion GATES
+  row is gate data, not scoping.
+- Recommendation for OD-AFC-01: extensions only (see technical plan).
+- Lenses: Lean skill, Repo-agnostic, Parallel-safe CI, Owner boundary.
+
+
+### DES-AFC-VNV — Vnv guidance tree (Phase 1 areas)
+
+- `docs/vnv/AGENTS.md` indexes the areas.
+- `docs/vnv/<area>/AGENTS.md` exists for `ci-cd`, `spec` and
+  `developer-feedback`. This is the layout `vnv-review` reads: every
+  immediate `<guidance-root>/*/AGENTS.md`. Each file names:
+  - Scope: the paths.
+  - Tools: the CONTRACT-AFC-GATE commands.
+  - Review Focus: the lenses that apply.
+  - Findings target: GitHub issues in this repository with the `vnv` label,
+    filed through the issue-label policy tool.
+- The shape follows the shared `vnv-review` skill's profile schema.
+- Phase 2 adds the `tv-app`, `backend` and `device-integration` areas when
+  those paths exist.
+- Lenses: Spec discipline, Owner boundary.
+
+### DES-AFC-DX — Scribe developer-feedback log
+
+- `docs/developer-feedback/observations.md` is the running log. It is
+  public per SD-011.
+  - One row per observation, with the fields of the issue #1 Scribe
+    contract.
+#!/usr/bin/env python3
+"""
+Quick validation script for skills - minimal version
+"""
+
+import re
+import sys
+from pathlib import Path
+
+import yaml
+
+MAX_SKILL_NAME_LENGTH = 64
+
+
+def validate_skill(skill_path):
+    """Basic validation of a skill"""
+    skill_path = Path(skill_path)
+
+    skill_md = skill_path / "SKILL.md"
+    if not skill_md.exists():
+        return False, "SKILL.md not found"
+
+    content = skill_md.read_text()
+    if not content.startswith("---"):
+        return False, "No YAML frontmatter found"
+
+    match = re.match(r"^---\n(.*?)\n---", content, re.DOTALL)
+    if not match:
+        return False, "Invalid frontmatter format"
+
+    frontmatter_text = match.group(1)
+
+    try:
+        frontmatter = yaml.safe_load(frontmatter_text)
+        if not isinstance(frontmatter, dict):
+            return False, "Frontmatter must be a YAML dictionary"
+    except yaml.YAMLError as e:
+        return False, f"Invalid YAML in frontmatter: {e}"
+
+    allowed_properties = {"name", "description", "license", "allowed-tools", "metadata"}
+
+    unexpected_keys = set(frontmatter.keys()) - allowed_properties
+    if unexpected_keys:
+        allowed = ", ".join(sorted(allowed_properties))
+        unexpected = ", ".join(sorted(unexpected_keys))
+        return (
+            False,
+            f"Unexpected key(s) in SKILL.md frontmatter: {unexpected}. Allowed properties are: {allowed}",
+        )
+
+    if "name" not in frontmatter:
+        return False, "Missing 'name' in frontmatter"
+    if "description" not in frontmatter:
+        return False, "Missing 'description' in frontmatter"
+
+    name = frontmatter.get("name", "")
+    if not isinstance(name, str):
+        return False, f"Name must be a string, got {type(name).__name__}"
+    name = name.strip()
+    if name:
+        if not re.match(r"^[a-z0-9-]+$", name):
+            return (
+                False,
+                f"Name '{name}' should be hyphen-case (lowercase letters, digits, and hyphens only)",
+            )
+        if name.startswith("-") or name.endswith("-") or "--" in name:
+            return (
+                False,
+                f"Name '{name}' cannot start/end with hyphen or contain consecutive hyphens",
+            )
+        if len(name) > MAX_SKILL_NAME_LENGTH:
+            return (
+                False,
+                f"Name is too long ({len(name)} characters). "
+                f"Maximum is {MAX_SKILL_NAME_LENGTH} characters.",
+            )
+
+    description = frontmatter.get("description", "")
+    if not isinstance(description, str):
+        return False, f"Description must be a string, got {type(description).__name__}"
+    description = description.strip()
+    if description.startswith("[TODO:"):
+        return False, "Description contains an unfinished TODO placeholder"
+    if description:
+        if "<" in description or ">" in description:
+            return False, "Description cannot contain angle brackets (< or >)"
+        if len(description) > 1024:
+            return (
+                False,
+                f"Description is too long ({len(description)} characters). Maximum is 1024 characters.",
+            )
+
+    body = content[match.end() :]
+    fence_marker = None
+    fence_length = 0
+    for line in body.splitlines():
+        fence = re.match(r"^[ \t]*(?:(?:[-+*]|\d+[.)])[ \t]+)?(`{3,}|~{3,})(.*)$", line)
+        if fence:
+            marker = fence.group(1)
+            if fence_marker is None:
+                fence_marker = marker[0]
+                fence_length = len(marker)
+            elif (
+                marker[0] == fence_marker
+                and len(marker) >= fence_length
+                and not fence.group(2).strip()
+            ):
+                fence_marker = None
+                fence_length = 0
+            continue
+
+        if fence_marker is None and re.fullmatch(
+            r"[ ]{0,3}\[TODO:[^\n]*\][ \t]*", line
+        ):
+            return False, "Skill instructions contain an unfinished TODO placeholder"
+
+    return True, "Skill is valid!"
+
+
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("Usage: python quick_validate.py <skill_directory>")
+        sys.exit(1)
+
+    valid, message = validate_skill(sys.argv[1])
+    print(message)
+    sys.exit(0 if valid else 1)
+ls: cannot access '$HOME/.claude/skills/code-review': No such file or directory
+
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/bash -lc "rg -n 'AC-AFC-D4-0[356]|OD-AFC-10|OA-AFC-A2' $HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/amazon-fantasy-companion-technical-plan.md; cat .bran/policy.yaml | head -90; ls $HOME/.claude/skills/skill-creator/scripts; ls $HOME/.agents/skills/skill-creator/scripts; cat $HOME/.agents/skills/vnv-review/SKILL.md; python3 $HOME/.codex/skills/.system/skill-creator/scripts/quick_validate.py skills/ship-pull-request; echo \"exit="'$?"' in $HOME/alphazede/worktrees/alphazedehq-afc-s03-ship-pull-request
+ succeeded in 9ms:
+131:| AC-AFC-D4-03 | The shared `ship-pull-request` skill shall run `vnv-review` when the repository has a Vnv guidance tree (`docs/vnv/AGENTS.md` or `Vnv/AGENTS.md`) and otherwise record REFUSED_NO_VNV, never a pass; its `references/GATES.md` shall gain a shared-gate row and an amazon-fantasy-companion row; its `SKILL.md` shall be within skill_size_max. | SD-020, SD-021, C10, C12 | test, inspection | S03; D4-C |
+133:| AC-AFC-D4-05 | The program shall land each D4 skill change in Alphazedehq through its own pull request merged by rebase or merge commit, after the skill is exercised against one matching and one non-matching request. | SD-021, create-lean-skill, workspace rule (never squash) | inspection | S01, S02, S03, S11, S41; D4 PRs |
+134:| AC-AFC-D4-06 | The D4 skill and hook text shall name no repository, owner, pilot or exclusion that scopes the capability. | SD-019 | inspection | S01, S02, S03, S11, S41; D4 text |
+238:| spec-and-docs | tech-writing | single_implementer | S01, S02, S03, S06, S07, S41 (conditional) (D4/D5 skill text and tooling, Vnv tree; OA-AFC-A2) |
+431:| OD-AFC-10 | In a repository without a Vnv guidance tree, does `ship-pull-request`'s `REFUSED_NO_VNV` block the merge? | No. Record it as a non-pass gate row (C12) and let the repository's required checks decide. Blocking would stop merges in every repository the owner touches (SD-019). This repository has a tree, so it always runs `vnv-review`. |
+432:| OA-AFC-A2 | Lane for the D4/D5 skill-authoring slices (S01, S02, S03, S06). **A:** spec-and-docs = tech-writing profile (single_implementer; Reviewer with OCR still applies). **B:** keep SKILL.md and references text on tech-writing, and move the executable parts (gate template, hook installer, workflow checker, D5 scripts) to the primary profile with tdd. | **A** for the schedule. B's risk stays visible: the executable shared tooling gets no Assurance Test Engineer pass, only the Reviewer and the scripts' own tests. Phase 1 has more slack than f885e48 had, so B is now affordable: it costs about one day and a slice-graph/SEIT regeneration. |
+schema_version: "1"
+frontmatter:
+  required:
+    - type
+    - title
+    - okf_status
+    - tags
+  optional:
+    - freshness
+    - resource
+    - public_boundary
+    - name
+    - description
+    - license
+  canonical_docs_frontmatter_state: "strict"
+coverage:
+  - canonical
+  - legacy
+  - excluded
+  - unclassified
+document_coverage:
+  roots:
+    - "docs/bran"
+    - "docs/brand"
+    - "docs/coe"
+  native_bundle:
+    - "docs/bran/index.md"
+    - "docs/bran/tags.md"
+  canonical_documents:
+    - "skills/bug-hunter-triage/SKILL.md"
+    - "business_admin/google-workspace.md"
+    - "docs/research/ponytail-quality/README.md"
+    - "docs/research/ponytail-quality/protocol.md"
+    - "docs/research/agent-plugins-spec/README.md"
+    - "docs/research/agent-plugins-spec/migration-plan.md"
+    - "docs/research/pagefind-bran/README.md"
+    - "alphazede-web/src/content/docs/open-source/bearing-lite/docs/index.md"
+    - "alphazede-web/src/content/docs/open-source/bearing-lite/docs/installation.md"
+    - "alphazede-web/src/content/docs/open-source/bearing-lite/docs/lifecycle.md"
+    - "alphazede-web/src/content/docs/open-source/bearing-lite/docs/roles-and-sessions.md"
+    - "alphazede-web/src/content/docs/open-source/bearing-lite/docs/configuration.md"
+    - "alphazede-web/src/content/docs/open-source/bearing-lite/docs/artifacts-and-assurance.md"
+    - "alphazede-web/src/content/docs/open-source/bearing-lite/docs/troubleshooting.md"
+    - "alphazede-web/src/content/docs/open-source/bearing-lite/docs/security-and-privacy.md"
+    - "alphazede-web/src/content/docs/open-source/bearing-lite/docs/release-and-references.md"
+    - "research/2026-09-16-external-open-source-tools-landscape.md"
+    - "docs/brand/index.md"
+    - "docs/brand/architecture.md"
+    - "docs/brand/verbal-identity.md"
+    - "docs/brand/visual-identity.md"
+    - "docs/brand/research-content.md"
+    - "docs/brand/digital-experience.md"
+    - "docs/brand/assets/README.md"
+    - "docs/brand/design-system.md"
+    - "docs/coe/index.md"
+    - "docs/coe/engineering-lifecycle-secure-delivery/security-tools.md"
+    - "docs/coe/engineering-lifecycle-secure-delivery/threat-modeling.md"
+    - "AGENTS.md"
+    - "CLAUDE.md"
+    - "docs/AZ_infrastructure__guide.md"
+    - "docs/plans/AGENTS.md"
+    - "skills/engineering-methods/references/standards-receipts.md"
+    - "skills/integration-engineering/SKILL.md"
+    - "skills/requirements-engineering/SKILL.md"
+    - "skills/requirements-engineering/references/examples.md"
+    - "skills/requirements-engineering/references/nasa-requirement-checklist.md"
+    - "skills/requirements-engineering/references/quality-gate.md"
+    - "skills/requirements-engineering/references/requirements-authoring.md"
+    - "skills/sysml-modeling/SKILL.md"
+    - "skills/sysml-modeling/references/examples.md"
+    - "skills/sysml-modeling/references/mbse-method.md"
+    - "skills/sysml-modeling/references/model-quality-gate.md"
+    - "skills/sysml-modeling/references/sysml-v2-validation.md"
+    - "skills/test-engineering/SKILL.md"
+    - "skills/test-engineering/references/examples.md"
+    - "skills/test-engineering/references/quality-gate.md"
+    - "skills/test-engineering/references/verification-case.md"
+    - "skills/test-engineering/references/vnv-plan.md"
+    - "skills/write-tests/SKILL.md"
+    - "skills/typesafe-ai/SKILL.md"
+    - "skills/use-jev/SKILL.md"
+    - "skills/use-jev/evaluation/README.md"
+tags:
+  allowed:
+    - architecture
+    - brand
+    - internal
+    - librarian
+    - marketing
+    - operations
+ls: cannot access '$HOME/.claude/skills/skill-creator/scripts': No such file or directory
+ls: cannot access '$HOME/.agents/skills/skill-creator/scripts': No such file or directory
+---
+name: vnv-review
+description: Build a repository-grounded VnV review profile for an explicit diff, pre-deploy check, security review profile, or major surface change. Do not use for ordinary reviews, implementation, remediation, or generic security advice.
+type: agent-skill
+title: VnV Review
+okf_status: active
+tags: [internal, security, performance, review]
+---
+
+# VnV Review
+
+Emit the exact profile in `references/PROFILE-SCHEMA.md`; print it unless the
+user supplies `--out=<path>`.
+
+## Procedure
+
+1. Resolve scope: default `git diff master...HEAD`; support `--scope=staged`,
+   `--scope=commits=A..B`, and `--include-uncommitted`. Refuse a dirty tree
+   unless uncommitted work is explicitly included.
+2. Discover durable guidance: prefer `docs/vnv/AGENTS.md`; fall back to
+   `Vnv/AGENTS.md`. Refuse if neither exists. Treat `Vnv/` as an evidence root
+   when guidance routes SARIF, findings, coverage, or results there.
+3. Read every immediate `<guidance-root>/*/AGENTS.md`. Parse `Scope`, `Tools`,
+   `Review Focus`, references, and the declared findings target. Never infer a
+   missing tool list from generic knowledge.
+4. Map changed files in declared order; first scope match wins. Cross-cutting
+   lanes match only their own paths. List unmatched paths under `(unmapped)`.
+5. Lift must-run commands verbatim. Reference only headings from
+   `SECURITY_TOOLS.md`, `PERFORMANCE_TOOLS.md`, and `SEO_GEO_CHECKLIST.md`;
+   never inline their bodies.
+6. Add one-line threat prompts for new HTTP routes, external integrations,
+   persistence, or user-facing surfaces.
+7. Emit scope, subsystem map, must-run commands, optional references, prompts,
+   findings targets, rules, unmapped warnings, and evidence-root distinction.
+
+## Boundaries and outcomes
+
+- Never edit SARIF, findings, source, plans, or tool catalogs; never run repairs.
+- Do not expose models, scoring formulas, credentials, proprietary prompts, or
+  private evidence in the profile.
+- Retry discovery at most once with materially new scope evidence.
+- Return `PROFILE`, `REFUSED_DIRTY_SCOPE`, `REFUSED_NO_VNV`, or
+  `REFUSED_ALL_UNMAPPED`, plus scope, evidence, warnings, and blocker.
+Unexpected key(s) in SKILL.md frontmatter: okf_status, tags, title, type. Allowed properties are: allowed-tools, description, license, metadata, name
+exit=1
+
+codex
+**OWNER_DECISION_REQUIRED — S03’s validation contract conflicts with required repository metadata.**
+
+The installed `quick_validate.py` rejects the existing skill’s mandatory BRAN frontmatter:
+
+```text
+Unexpected key(s) in SKILL.md frontmatter: okf_status, tags, title, type.
+Allowed properties are: allowed-tools, description, license, metadata, name
+exit=1
+```
+
+Removing those fields would violate repository policy; changing or bypassing the validator would change the approved verification contract. The [Create Lean Skill instructions]($HOME/.agents/skills/create-lean-skill/SKILL.md) require: “Preserve stricter repository metadata and report generic validator incompatibility separately.”
+
+The Orchestrator needs to resolve the validator contract while preserving required metadata.
+
+- **Branch:** `afc/s03-ship-pull-request`
+- **HEAD:** `47c46f2e16fed060482a1bf3a0e34ddcb9bc57fc`
+- **Files changed:** none; checkout clean
+- **Draft PR:** none
+- **bran_status:** `hit`; verified pinned runtime, strict validation passed
+
+| Verification / proof | Result |
+|---|---|
+| CMD-SKILL-SIZE / D4-03.S | Blocked: validator component exits 1 on baseline; full composite not run |
+| CMD-D4C-TEST / D4-03.T | Not run; stopped before implementation |
+| CMD-SKILL-TRIGGER / D4-05.T | Not run |
+| CMD-D4-AGNOSTIC / D4-06 | Not run |
+| CMD-LANDING-CHECK / D4-05.L | Pending Orchestrator; merging prohibited for this worker |
+
+**developer_feedback**
+
+Observation `S03-DF-01`: skill-creator validator, version unknown; used for baseline skill validation. It produced a clear diagnostic but rejects repository-required metadata. Steps: read installed validator, run against existing skill; expected compatible validation, actual exit 1. Severity: **Blocker**. Workaround: none applied. Suggestion: define an approved metadata-compatible validation path. Onboarding: unknown. Would build again: **Yes**, with metadata compatibility. AWS: n/a. Feature request: repository metadata support — **Important**.
+
+Other tools exercised: Bash, Python, Git, and BRAN 0.2.0; no new observations.
+
+Implementation, trigger testing, and PR creation remain undone. No files or verification rules were altered.
+hook: Stop
+hook: Stop Completed
+tokens used
+50,737
+**OWNER_DECISION_REQUIRED — S03’s validation contract conflicts with required repository metadata.**
+
+The installed `quick_validate.py` rejects the existing skill’s mandatory BRAN frontmatter:
+
+```text
+Unexpected key(s) in SKILL.md frontmatter: okf_status, tags, title, type.
+Allowed properties are: allowed-tools, description, license, metadata, name
+exit=1
+```
+
+Removing those fields would violate repository policy; changing or bypassing the validator would change the approved verification contract. The [Create Lean Skill instructions]($HOME/.agents/skills/create-lean-skill/SKILL.md) require: “Preserve stricter repository metadata and report generic validator incompatibility separately.”
+
+The Orchestrator needs to resolve the validator contract while preserving required metadata.
+
+- **Branch:** `afc/s03-ship-pull-request`
+- **HEAD:** `47c46f2e16fed060482a1bf3a0e34ddcb9bc57fc`
+- **Files changed:** none; checkout clean
+- **Draft PR:** none
+- **bran_status:** `hit`; verified pinned runtime, strict validation passed
+
+| Verification / proof | Result |
+|---|---|
+| CMD-SKILL-SIZE / D4-03.S | Blocked: validator component exits 1 on baseline; full composite not run |
+| CMD-D4C-TEST / D4-03.T | Not run; stopped before implementation |
+| CMD-SKILL-TRIGGER / D4-05.T | Not run |
+| CMD-D4-AGNOSTIC / D4-06 | Not run |
+| CMD-LANDING-CHECK / D4-05.L | Pending Orchestrator; merging prohibited for this worker |
+
+**developer_feedback**
+
+Observation `S03-DF-01`: skill-creator validator, version unknown; used for baseline skill validation. It produced a clear diagnostic but rejects repository-required metadata. Steps: read installed validator, run against existing skill; expected compatible validation, actual exit 1. Severity: **Blocker**. Workaround: none applied. Suggestion: define an approved metadata-compatible validation path. Onboarding: unknown. Would build again: **Yes**, with metadata compatibility. AWS: n/a. Feature request: repository metadata support — **Important**.
+
+Other tools exercised: Bash, Python, Git, and BRAN 0.2.0; no new observations.
+
+Implementation, trigger testing, and PR creation remain undone. No files or verification rules were altered.
+exit=0
