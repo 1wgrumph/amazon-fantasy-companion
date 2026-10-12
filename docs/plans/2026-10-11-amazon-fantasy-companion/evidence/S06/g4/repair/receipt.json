@@ -1,0 +1,76 @@
+{
+  "verdict": "PASS",
+  "scope": "S06 named standards-yaml repair only",
+  "lease_id": "S06-g4",
+  "head": "ae8941f950c40b6a842980fdb2e1f6a5e12d3c73",
+  "branch": "afc/s06-spec-authoring",
+  "changed_paths": [
+    "skills/spec-authoring/agents/openai.yaml"
+  ],
+  "diff_summary": "Add interface.default_prompt (one line).",
+  "local_gates": {
+    "exit": 0,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "not_applicable": 14,
+    "merge_receipt": true
+  },
+  "verification": [
+    {
+      "command": "CMD-D5-AGNOSTIC",
+      "exit": 0,
+      "head": "ae8941f950c40b6a842980fdb2e1f6a5e12d3c73"
+    },
+    {
+      "command": "CMD-D5-TEST",
+      "exit": 0,
+      "head": "ae8941f950c40b6a842980fdb2e1f6a5e12d3c73"
+    },
+    {
+      "command": "CMD-SKILL-SIZE",
+      "exit": 0,
+      "head": "ae8941f950c40b6a842980fdb2e1f6a5e12d3c73"
+    },
+    {
+      "command": "CMD-SKILL-TRIGGER-RECIPROCAL",
+      "exit": 0,
+      "head": "ae8941f950c40b6a842980fdb2e1f6a5e12d3c73"
+    },
+    {
+      "command": "CMD-SKILL-TRIGGER",
+      "exit": 0,
+      "head": "ae8941f950c40b6a842980fdb2e1f6a5e12d3c73"
+    }
+  ],
+  "CMD-SCAN": {
+    "source_receipt_exit": 0,
+    "wheels_receipt_exit": 0,
+    "wheel_hashes": "matched existing scan receipt",
+    "new_acquisitions": false
+  },
+  "bran_status": "hit",
+  "bran_strict_exit": 0,
+  "developer_feedback": {
+    "observations": "no new observations",
+    "tools": [
+      "git",
+      "bash local-gates",
+      "standards-yaml validator",
+      "BRAN",
+      "uv",
+      "pytest",
+      "unittest",
+      "Graphviz",
+      "Claude routing evaluator",
+      "gh"
+    ]
+  },
+  "remaining_risks": [
+    "Existing S06 RISK-13 historical acquisition receipts for installed uv and Graphviz were not located in the prior receipt; this repair does not resolve that gap."
+  ],
+  "not_performed": [
+    "merge",
+    "re-review"
+  ]
+}

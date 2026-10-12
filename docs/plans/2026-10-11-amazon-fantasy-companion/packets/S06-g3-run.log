@@ -1,0 +1,1695 @@
+OpenAI Codex v0.162.1
+--------
+workdir: $HOME/alphazede/worktrees/alphazedehq-afc-s06-spec-authoring
+model: gpt-6-astra
+provider: openai
+approval: never
+sandbox: danger-full-access
+reasoning effort: medium
+reasoning summaries: none
+session id: 01a12efc-a2e3-7501-a87a-7fae214e2ecd
+--------
+user
+ROLE
+Product Implementer (BEARING_ROLE=implementer), Bearing Lite Lifecycle AFC-2026-10-11, slice S06, generation 3, lane spec-and-docs (profile tech-writing, single_implementer).
+RESPONSIBILITY: implement this one approved slice in its exact write set and return verifiable evidence. Not review, not merge, not other slices.
+
+STATE
+FACTS:
+- Dispatch record (journey.json execution_receipts): lease_id S06-g3; worktree $HOME/alphazede/worktrees/alphazedehq-afc-s06-spec-authoring; branch afc/s06-spec-authoring; base origin/main; evidence_dir docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/ (in the planning worktree: $HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/ — write your receipts there); authority AUTH-AFC-2026-10-11-002; package digest 0a85d1e5d58c42ff816f37cc0600cbe0fea51df2e1dd71d430116588e9714843 (owner DEC-AFC-APPROVAL-003).
+- Read-only plan: $HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/ (technical plan, design.md, seit.json, implementation.json slice S06, specialists/pd-delta-w1b-receipt.md).
+- Previous attempt: stopped CONTRACT_FAILURE on CMD-D5-AGNOSTIC scanning generated .pyc (plan defect, now fixed by DEC-AFC-SD-029); also 36 passed / 1 failed test: a repairable vendoring Git path-resolution bug that is YOURS to fix. Commits kept: afc/s06-spec-authoring 0ce8e0c6, afc/s06-use-rs-nontrigger 1c76360f (requirements-system worktree $HOME/alphazede/worktrees/requirements-system-afc-s06). Continue from them; nothing pushed yet. Its return: $HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/packets/S06-r2-run.log.
+- S02 (setup-a-repo) merged to Alphazedehq main (PR #303); rebase onto origin/main if your branch needs it.
+- Requirements AC-AFC-D5-01, AC-AFC-D5-02, AC-AFC-D5-03, AC-AFC-D5-04, AC-AFC-D5-05, RISK-AFC-13, RISK-AFC-15, RISK-AFC-16; design DES-AFC-D5, CONTRACT-AFC-SPECKIT. Stock skill-test pattern: Alphazedehq skills/release-process/tests/.
+ASSUMPTIONS to check: commands below run as written on this host.
+Other agents work in other worktrees concurrently; verify only your own write set.
+
+OBJECTIVE
+Skill slice (spec-and-docs lane, Phase 1): deliver AC-AFC-D5-01, AC-AFC-D5-02, AC-AFC-D5-03, AC-AFC-D5-04, AC-AFC-D5-05, RISK-AFC-13, RISK-AFC-15 per DES-AFC-D5, CONTRACT-AFC-SPECKIT inside the exact write set. Done when: S06 stop condition holds (Alphazedehq PR plus requirements-system PR, DEC-AFC-SD-028).
+
+AUTHORITY
+Allowed writes (repo-prefixed):
+- Alphazedehq:skills/spec-authoring/ (includes tests/test_spec_authoring.py and tests/trigger-requests.json)
+- requirements-system:skills/use-requirements-system/SKILL.md
+- your evidence_dir above (receipts only)
+Allowed actions: run the commands below; acquire+scan software per scan-software-supply-chain only when a command needs it; commit on your branch (author from env; never Co-Authored-By); push your branch; open ONE draft PR per repo to main.
+Prohibited: any other path; merging; pushing to main; force-push; credentials; publication; owner's untracked files (Alphazedehq `evals /`); absolute home paths in committed files.
+Skills (absolute paths):
+- $HOME/.claude/plugins/cache/bearing-lite/bearing-lite/1.1.6/skills/implementer/SKILL.md
+- $HOME/.agents/skills/create-lean-skill/SKILL.md
+- $HOME/.claude/skills/scan-software-supply-chain/SKILL.md
+- $HOME/.claude/skills/ship-pull-request/SKILL.md (PR body/edit rules only)
+
+LOOP
+Implement → run VERIFY → classify each failure (implementation / plan-command / environment) → retry only with a new hypothesis or evidence. A plan-command defect is CONTRACT_FAILURE with the exact command and output; do not change commands.
+
+VERIFY
+Commands (run each on the committed candidate; keep exit code, output tail, candidate SHA):
+- CMD-SCAN: `Run the scan-software-supply-chain skill procedure on <artifact> (origin, version or commit, intended command) and write its report to <evidence_dir>/scan-<artifact>.md; then: grep -qE '^verdict: (PASS|BLOCK|INDETERMINATE)$' <evidence_dir>/scan-<artifact>.md && grep -qE '^verdict: PASS$' <evidence_dir>/scan-<artifact>.md; rc=$?; echo "exit=$rc"; (exit $rc)`
+  PASS: exit 0: a PASS receipt exists before first use of the artifact; BLOCK or INDETERMINATE refuses use (fail closed); an artifact used without a receipt dated before its first use fails
+- CMD-D5-TEST: `env <afc_uv_env> uv run --no-project --with 'pytest==9.0.3' --with 'pyyaml==6.0.3' python -m pytest skills/spec-authoring/tests --ignore=skills/spec-authoring/tests/test_spec_authoring.py -rA; rc=$?; echo "exit=$rc"; (exit $rc)`
+  PASS: exit 0, 0 failed, 0 errors; the tests include: build, lint and diagram on the template; vendor.sh copy + VENDORED.md fields (source repository, commit, MIT notice) + refusal to overwrite a modified vendored copy; description names SDoc/StrictDoc/Requirements System documents as non-triggers and cites requirements-engineering by reference; test_spec_authoring.py (the stock size/trigger unittest) runs under CMD-SKILL-SIZE and CMD-SKILL-TRIGGER, not pytest
+- CMD-D5-AGNOSTIC: `t=$(mktemp -d) && cp -r skills/spec-authoring/template "$t/spec" && (cd "$t" && ! git rev-parse --git-dir 2>/dev/null) && env <afc_uv_env> uv run --script skills/spec-authoring/scripts/spec_build.py "$t/spec" "$t/out.md" && env <afc_uv_env> uv run --script skills/spec-authoring/scripts/spec_lint.py "$t/spec" && env <afc_uv_env> uv run --script skills/spec-authoring/scripts/diagram.py lint "$t/spec" && d=$(git diff --name-only --diff-filter=ACMR <base>..HEAD -- skills/spec-authoring) && f=$(printf '%s\n' "$d" | grep -vE '^$|\.pyc$|(^|/)(__pycache__|build|dist)/'; true) && printf 'scanned: %s\n' ${f:-none} && test -n "$f" && g=$(printf '%s\n' "$f" | grep -vE '(^|/)(LICENSE-gridmarket|vendor\.sh)$|(^|/)references/'; true) && { [ -z "$g" ] || { git grep -nIiE 'gridmarket|--project backend' HEAD -- $g; [ $? -eq 1 ]; }; } && { git grep -nIE '(/home/|/Users/)[A-Za-z0-9._-]+/|[A-Za-z]:\\Users\\' HEAD -- $f; [ $? -eq 1 ]; } && git grep -q 'Permission is hereby granted' HEAD -- skills/spec-authoring/LICENSE-gridmarket; rc=$?; echo "exit=$rc"; (exit $rc)`
+  PASS: exit 0: the template builds and lints with zero findings in a non-git temp dir using only uv --script and dot; no GridMarket name, document id or --project backend in operational text, templates or tool invocation (license, attribution and provenance records excepted: LICENSE-gridmarket, references/vendoring.md provenance, vendor.sh MIT notice text); no absolute home path; MIT notice retained; diagram exit 3 (dot missing) is a typed gap; the wrapper's own exit status is the verdict. The name and home-path scans read only tracked files S06 changed (`git diff --name-only --diff-filter=ACMR <base>..HEAD -- skills/spec-authoring` at the exact committed candidate, <base> from the S06 dispatch record), minus generated artifacts (*.pyc, __pycache__/, build/, dist/), through `git grep ... HEAD`; bytecode that the build, lint or tests write is never scanned (DEC-AFC-SD-029). An empty scanned list is FAIL (wrong <base>); any non-zero exit other than a printed match is a typed gap
+- CMD-SKILL-SIZE: `python3 -m unittest discover -s <skill_dir>/tests -t <skill_dir>/tests -p 'test_<skill_snake>.py' -k test_creator_validation_and_repository_metadata -v && test "$(sha256sum < <alphazedehq_checkout>/tools/bran/runtime/bran | cut -d' ' -f1)" = "$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1]))["sha256"])' <alphazedehq_checkout>/tools/bran/runtime/bran-release-pin.json)" && <alphazedehq_checkout>/tools/bran/runtime/bran check . bran-strict; rc=$?; echo "exit=$rc"; (exit $rc)`
+  PASS: exit 0: the per-skill unit test skills/<skill>/tests/test_<skill_snake>.py (Alphazedehq stock pattern, skills/release-process/tests/test_release_process.py) passes test_creator_validation_and_repository_metadata: SKILL.md < 60 lines and < 650 words (skill_size_max, frontmatter included; S41 router < 25 lines), no [TODO], frontmatter name equals the skill and the required HQ fields type, title, okf_status and tags are non-empty, and the installed skill-creator quick_validate.py ($HOME/.codex/skills/.system/skill-creator/scripts/quick_validate.py, run with check=True) passes on a temporary copy holding only the portable fields (name, description, license, allowed-tools, metadata) and the unchanged body; then the pinned BRAN runtime matches bran-release-pin.json and `bran check . bran-strict` exits 0 on the slice worktree, validating the complete repository document. quick_validate is never run on the repository SKILL.md itself (it rejects the required HQ fields). python3 with PyYAML is the host's installed interpreter (unchanged local tool, as the stock test uses); `import yaml` failing is typed gap TOOL_MISSING
+- CMD-SKILL-TRIGGER: `e=$(mktemp -d) && cp <skill_dir>/SKILL.md <skill_dir>/tests/trigger-requests.json "$e"/ && (cd "$e" && claude --version > harness-version.txt && claude -p 'You are an independent skill-routing evaluator. Read SKILL.md and trigger-requests.json in this directory. For each request id, answer MATCH if an agent with this skill installed should use it for that request according to its description, otherwise NO_MATCH. Reply with only a JSON object mapping every request id to MATCH or NO_MATCH.' --output-format json --max-turns 5 --allowedTools Read --disallowedTools Bash,Write,Edit,WebFetch,WebSearch < /dev/null > session.json && jq -r .result session.json | python3 -c 'import json,sys; t=sys.stdin.read(); print(json.dumps(json.loads(t[t.index("{"):t.rindex("}")+1])))' > results.json) && cp "$e"/results.json <evidence_dir>/trigger-results-<skill>.json && cp "$e"/harness-version.txt "$e"/session.json <evidence_dir>/ && <SKILL_PREFIX>_TRIGGER_RESULTS=<evidence_dir>/trigger-results-<skill>.json python3 -m unittest discover -s <skill_dir>/tests -t <skill_dir>/tests -p 'test_<skill_snake>.py' -k test_trigger_classifications -v; rc=$?; echo "exit=$rc"; (exit $rc)`
+  PASS: exit 0: skills/<skill>/tests/trigger-requests.json holds request_1 = the matching request and request_2 = the non-matching request of gate_declarations.spec_and_docs.trigger_requests.<skill>; a fresh evaluator session that is not the authoring session receives only SKILL.md and trigger-requests.json (never the checker) with Read as its only tool (no permission bypass, no Bash, Write, Edit or web tools; least privilege) and prints the classification, which the command extracts from session.json into the results file; test_trigger_classifications asserts the result keys equal the request keys and the results equal {request_1: MATCH, request_2: NO_MATCH}. The results file, harness version and session output are evidence, not committed (stock: <SKILL_PREFIX>_TRIGGER_RESULTS points outside the repository; <SKILL_PREFIX> is the upper-snake skill name, e.g. SETUP_PRE_COMMIT). S06 reciprocal (DEC-AFC-SD-028): the same evaluator run on the requirements-system worktree's skills/use-requirements-system/SKILL.md with spec-authoring's trigger-requests.json writes <evidence_dir>/trigger-results-use-requirements-system.json, checked by `python3 -c 'import json,sys; assert json.load(open(sys.argv[1]))=={"request_1":"NO_MATCH","request_2":"MATCH"}' <file>`. A harness refusal or usage limit is a typed gap with the exact error
+Proof rows:
+- SEIT-AFC-D5-01.T: AC-AFC-D5-01 via CMD-D5-AGNOSTIC — expected: template, build, lint and diagram scripts run with uv run --script and Graphviz dot only, in a non-git temp dir; LICENSE-gridmarket keeps the MIT copyright and permission notice
+- SEIT-AFC-D5-01.S: AC-AFC-D5-01 via CMD-SKILL-SIZE — expected: skills/spec-authoring/SKILL.md < 60 lines and < 650 words; required HQ fields present; quick_validate passes on the portable-fields copy; bran-strict exit 0
+- SEIT-AFC-D5-02: AC-AFC-D5-02 via CMD-D5-AGNOSTIC — expected: no GridMarket product name, document id or --project backend outside license, attribution and provenance records; no absolute local path; the shipped template builds and lints in a temp dir outside any git repository with exit 0
+- SEIT-AFC-D5-03.T: AC-AFC-D5-03 via CMD-SKILL-TRIGGER — expected: 'write the architecture spec for this repo as Markdown sections and build it' selects spec-authoring
+- SEIT-AFC-D5-03.I: AC-AFC-D5-03 via CMD-D5-TEST — expected: the description names SDoc, StrictDoc and Requirements System documents as non-triggers and cites requirements-engineering by reference
+- SEIT-AFC-D5-04: AC-AFC-D5-04 via CMD-D5-TEST — expected: vendor.sh copies the scripts to <repo>/tools/spec/ and writes VENDORED.md with source repository, commit and MIT notice
+- SEIT-AFC-D5-05.L: AC-AFC-D5-05 via CMD-LANDING-CHECK — expected: the D5 PR merged by rebase or merge commit after one review, at most one repair and green checks
+- SEIT-AFC-RISK-13.D: RISK-AFC-13 via CMD-SCAN — expected: PASS receipts for the GridMarket source at its pinned commit and the uv-fetched pyyaml/pytest before first use; uv and Graphviz receipts on record
+- SEIT-AFC-RISK-15: RISK-AFC-15 via CMD-SKILL-TRIGGER — expected: the matching and non-matching requests show no collision between spec-authoring and use-requirements-system
+- SEIT-AFC-RISK-16: RISK-AFC-16 via PROC-PHASE2-ENTRY — expected: D5 and S42 land by the Phase 1 target, or the entry receipt records the slip and ST-4 waits while ST-2 and ST-3 continue
+Environment definitions (seit.json excerpt):
+{
+ "host": "owner workstation: uv 0.11.6, python3 (jsonschema 4.19.2), Graphviz dot, gh, jq, git, shellcheck, claude, ocr v1.12.13, reverify present; kcov, mutmut and diff-cover absent on 2026-10-11 (coverage/mutation tools are fetched by uv after CMD-SCAN; shell coverage and shell mutation are TOOL_MISSING)",
+ "repositories": "this repository (lane worktrees under worktrees/amazon-fantasy-companion-<lane>-<slice>); alphazede/Alphazedehq slice worktrees and the leased main checkout (alphazedehq-main-checkout); alphazede/requirements-system slice worktree for S06's reciprocal non-trigger edit only (<workspace>/worktrees/requirements-system-afc-s06-nontrigger; DEC-AFC-SD-028)",
+ "fixtures": "credential and path fixtures are generated at test time inside tools/ci/tests (never literal secrets committed); workflow violation fixtures per AC-AFC-CI-02 rule; a temp HOME fixture for installer tests; fixture spec/<name>/ directories created in temp dirs",
+ "hermeticity": "gate and skill tests run in temp dirs without network; only CMD-PR-CHECKS, CMD-NO-MILESTONE, PROC-ACTIONS-BUDGET and CMD-MERGE-IDENTITY read GitHub; mutation runs only in the slice worktree and must leave git diff clean",
+ "simulations": "none",
+ "evidence_dirs": "<evidence_dir> = the evidence_dir/g<generation>/ of the slice's dispatch record (implementation.json dispatch_records; docs/plans/2026-10-11-amazon-fantasy-companion/evidence/<slice>/g<generation>/), or the step receipt directory an integration step records in journey.json execution_receipts; <review_dir>/<review_evidence_dir> = the Reviewer evidence store; evidence/phase2-entry-receipt.json = docs/plans/2026-10-11-amazon-fantasy-companion/evidence/phase2-entry-receipt.json (IE-P1-F08)",
+ "python_wheels": "<afc_uv_env> = UV_OFFLINE=1 UV_NO_CACHE=1 UV_FIND_LINKS=<wheel_dir> UV_PYTHON=\"$(command -v python3)\"; <wheel_dir> is a host directory outside every repository filled once by `python3 -m pip download --only-binary=:all: --dest <wheel_dir> 'pytest==9.0.3' 'pyyaml==6.0.3'` (the closure adds iniconfig, packaging, pluggy, pygments) and scanned by CMD-SCAN before first use; the scan receipt records `sha256sum <wheel_dir>/*.whl` (DEC-AFC-SD-026 item 3); offline with no cache, only <wheel_dir> satisfies a requirement, so an unscanned cached wheel can never be used (an empty or missing <wheel_dir> fails resolution, fail closed)",
+ "dispatch_base": "<base> = the full base SHA in the slice's dispatch record (implementation.json dispatch_records), the commit its worktree was created from; for the Wave 1 exit combined CMD-D4-AGNOSTIC run, the oldest base among the S01, S02 and S03 records",
+ "exit_status": "A command's own exit status is its verdict (DEC-AFC-SD-029). A command that prints `exit=<n>` ends with `; rc=$?; echo \"exit=$rc\"; (exit $rc)`, so the wrapper exits with the checked status; a trailing bare `echo \"exit=$?\"` (exit 0 always) is never used. Run each command under bash at the slice worktree root."
+}
+
+RETURN
+Typed outcome PASS | REPAIRABLE_FAILURE | CONTRACT_FAILURE | ENVIRONMENT_FAILURE | NEEDS_MORE_EVIDENCE | OWNER_DECISION_REQUIRED; lease_id; branch, head SHA, draft PR URL(s); changed paths; commands with exit codes and output tails; proof-row status; remaining risks; blocker; developer_feedback (AC-AFC-DX-04 fields that apply; n/a or unknown, never invented).
+
+STOP
+Tests, repo-agnostic build and size check exit 0; trigger classification and the reciprocal use-requirements-system classification pass; PR open in Alphazedehq and the reciprocal non-trigger PR open in alphazede/requirements-system (DEC-AFC-SD-028).
+Stop on CONTRACT_FAILURE, OWNER_DECISION_REQUIRED, or ENVIRONMENT_FAILURE with the exact error.
+
+hook: SessionStart
+hook: SessionStart
+hook: SessionStart
+hook: SessionStart
+hook: SessionStart Completed
+hook: SessionStart Completed
+hook: SessionStart Completed
+hook: SessionStart Completed
+hook: UserPromptSubmit
+hook: UserPromptSubmit
+hook: UserPromptSubmit
+hook: UserPromptSubmit
+hook: UserPromptSubmit
+hook: UserPromptSubmit
+hook: UserPromptSubmit Completed
+hook: UserPromptSubmit Completed
+hook: UserPromptSubmit Completed
+hook: UserPromptSubmit Completed
+hook: UserPromptSubmit Completed
+hook: UserPromptSubmit Completed
+codex
+I’ll resume S06 from the retained commits, use the implementer, BRAN, and create-lean-skill procedures, then run the prescribed checks. I’ll stop at the two draft PRs, as this packet requires.
+
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/bash -lc "cat '$HOME/.codex/skills/use-bran/SKILL.md' '$HOME/.claude/plugins/cache/bearing-lite/bearing-lite/1.1.6/skills/implementer/SKILL.md' '$HOME/.agents/skills/create-lean-skill/SKILL.md' '$HOME/.claude/skills/scan-software-supply-chain/SKILL.md' '$HOME/.claude/skills/ship-pull-request/SKILL.md'" in $HOME/alphazede/worktrees/alphazedehq-afc-s06-spec-authoring
+ succeeded in 0ms:
+---
+name: use-bran
+description: >
+  Use BRAN as the canonical internal repository-knowledge tool to locate
+  evidence, validate metadata and source links against native policy, run
+  deterministic repository checks, inspect bounded librarian packets, and
+  check internal/public boundaries. Use when a request mentions BRAN,
+  repository knowledge, source precedence, metadata validation, native
+  policy checks, or BRAN integrity. Also fires automatically via hook on
+  relevant prompts, session start, and after search_replace on
+  docs/skills/canonical files.
+type: agent-skill
+title: Use BRAN
+okf_status: active
+tags:
+  - internal
+  - librarian
+---
+
+# Use BRAN
+
+BRAN is the canonical internal repository-knowledge implementation. It owns
+validation rules, retrieval precedence, derived-state rebuilding, and bounded
+repair authority. Use it directly for repository checks, evidence queries, and
+policy validation.
+
+## Workflow
+
+1. Resolve the repository root and confirm `.bran/policy.yaml` exists. If no
+   native policy is present, return `bran_status: unavailable` and use normal
+   repository discovery.
+2. Resolve the pinned BRAN binary at `tools/bran/runtime/bran` relative to the
+   trusted Alphazedehq checkout containing this skill, and verify it against
+   `tools/bran/runtime/bran-release-pin.json` before execution.
+3. Run repository validation:
+
+   ```bash
+   <bran-binary> check <repo-root> bran-strict
+   ```
+
+   The `okf-v0.1` profile provides legacy-OKF-compatible results. The
+   `bran-strict` profile enforces full BRAN-native policy including frontmatter,
+   source-link integrity, status/tag policy, and public/private boundaries.
+
+4. For evidence retrieval, use BRAN's query engine:
+
+   ```bash
+   <bran-binary> query <repo-root> "<request>"
+   ```
+
+5. For bounded repair, use the explicit authority lifecycle:
+
+   ```bash
+   <bran-binary> maintain propose <repo-root> <target> <replacement>
+   <bran-binary> maintain apply <repo-root> <target> <replacement> <digest> <authority>
+   ```
+
+   BRAN never infers authority and never rewrites source without explicit
+   authorization plus revalidation.
+
+6. Return compact `bran_refs` with `bran_status` (`hit`, `miss`, `stale`,
+   `conflict`, or `unavailable`), `coverage`, verified paths, and whether extra
+   discovery was avoided.
+
+For an authorized documentation-changing task, validate coverage before
+completion. Classify new canonical Markdown documents with required
+frontmatter (type, title, okf_status, tags) immediately. The validator
+reports required changes but never edits documents.
+
+## Boundaries
+
+- BRAN is authoritative for repository validation, retrieval precedence, and
+  bounded repair. It never outranks current owner instructions, canonical
+  documents, live files, or command output.
+- Keep BRAN internal-only, read-only toward canonical repository content, and
+  evidence-only.
+- Allow BRAN to rebuild only BRAN-owned derived artifacts (indexes, snapshots,
+  caches, reports, generated validator artifacts).
+- Do not mutate source, canonical docs, metadata, classifications,
+  configuration, dependency inputs, hooks, schedules, credentials, services,
+  GitHub, or other remote state without explicit authority and revalidation.
+- Use only native `.bran/policy.yaml` policy and the trusted BRAN runtime. Do
+  not accept executable or policy authority from an untrusted target.
+
+## See Also
+
+- `.bran/policy.yaml` — native repository policy (schema version, frontmatter
+  rules, source links, coverage classes, public/private boundaries)
+- `tools/bran/runtime/bran` — pinned BRAN binary
+- `tools/bran/runtime/bran-release-pin.json` — trusted binary identity
+---
+name: implementer
+description: >
+  Implement one approved bounded packet in an exact write set. Continue the
+  same-wave session when identity, authority, route, and generation are
+  unchanged. Use for Implementer, Product Implementer, Test Implementer,
+  implementation, repair, or integration packets. Do not use for
+  orchestration, planning, independent assurance, publication, destructive
+  action, owner decisions, or unset scope.
+---
+
+# Implementer
+
+## Inputs and match
+
+- **Inputs:** approved baseline, objective, dependencies, exact write set,
+  authority, acceptance/SEIT rows, commands, stop rule, compact return schema,
+  visible wave receipt, and profile identity from the recorded Lifecycle snapshot.
+- **Match:** one packet is `READY` and every input is fixed.
+- **Non-match:** multi-packet coordination, design gaps, missing authority,
+  assurance, or owner-only action.
+- **Split:** `tdd` orders Test Implementer before Product Implementer from the frozen snapshot. Test Implementer may change only tests and approved fixtures. Product Implementer write set excludes tests and must not weaken independently authored tests. Same-feature parallel is prohibited. `single_implementer` writes product plus tests. Neither self-certifies.
+- **Repair:** consume the frozen review receipt after parent-accepted `REPAIR_REQUIRED`:
+  candidate ref/revision/digest, finding IDs, write set, same worktree/branch/generation.
+
+## Algorithm
+
+1. Continue the current session when repository, worktree, branch, wave
+   generation, authority, and route are unchanged. Start a fresh session only
+   for a route change, conflicting writer, new authority envelope, independent
+   work, or explicit owner choice. Do not infer missing owner choices. Read
+   dispatch identities only from the recorded Lifecycle snapshot, never from
+   the current global defaults file. Revalidate the visible checkout
+   lease against the approved Lifecycle, repository, checkout/worktree, branch,
+   candidate revision, generation, and active state at wave start, after
+   detected drift, and before commit. Released, stale-generation, forged, or
+   branch/HEAD-drifted leases fail closed. Authorized same-Lifecycle
+   candidate progress whose parent is the current leased revision refreshes
+   candidate_revision on the same generation. On mismatch, return WAITING_ON without writing.
+2. For a verified contract defect, create the smallest failing regression first.
+3. Make the smallest change that satisfies the packet inside the write set.
+   For a published standard, verify against its cited document and clause before changing code; neighbouring behavior is not the authority.
+4. After all edits, run one completion pass for Product and Test Implementers: inspect the final diff;
+   run relevant repository formatting, lint, type checks and focused tests (e.g. Rust fmt/Clippy `-D warnings`, UI typecheck/lint).
+   Fix every actionable in-scope bug and unexpected failure in that pass; rerun affected checks on the final candidate.
+   Record intentional TDD baseline reds separately; never weaken tests/checks to turn green. Remaining unexpected failures or authority gaps block ready handoff; report exact evidence without expanding scope or starting another cleanup pass.
+5. Author checks and receipts are diagnostic, never independent review or assurance.
+   Report commands/results and mutation, changed-line coverage and red-then-green evidence with the repository's own tool. Missing/not-run declared checks are typed gaps, never PASS.
+   Bind baseline/candidate failing/passing runs to the same test IDs.
+6. Preserve unrelated work. Return only the compact receipt. Stop on acceptance,
+   authority boundary, design gap, or exhausted correction.
+
+## Return and recovery
+
+Return `CANDIDATE_READY`, `PARTIAL`, `WAITING_ON`, or
+`OWNER_DECISION_REQUIRED` with verdict, candidate_ref, changed_paths, tests,
+findings, and blocker. Use one author cleanup pass per packet; report anything unresolved.
+
+One independent-review repair; close by deterministic verification; no extra review; dispatch if
+session cannot be preserved. Never expand scope, self-certify as assurance, publish, or hide a failure.
+---
+name: create-lean-skill
+description: >
+  Design, rebuild, audit, or improve compact agent skills as bounded, testable
+  procedures. Use for SKILL.md work, skill comparison, skill migration, skill
+  repair, or missing-skill evaluation. Do not use for ordinary prompts or
+  product implementation.
+type: agent-skill
+title: Create Lean Skill
+okf_status: active
+tags:
+  - internal
+  - skills
+---
+
+# Create Lean Skill
+
+Create or revise one skill at a time. Treat it as executable behavior, not a
+prompt essay.
+
+## Inputs and preconditions
+
+- Require a target behavior, one matching request, one non-matching request,
+  target location, write authority, and repository rules.
+- Inspect the installed catalog and strongest comparable skill. Improve or
+  merge behavior into the existing owner; never copy or duplicate a skill.
+- Create a skill only when no existing skill can own the outcome cleanly.
+
+## Algorithm
+
+1. Define one purpose, observable outcome, triggers, and explicit non-triggers.
+2. Specify inputs, preconditions, local state, ordered steps, branches, allowed
+   tools, evidence, validation, recovery, stop conditions, authority, and typed
+   outputs. Omit fields that truly do not apply.
+3. Bound every loop. Allow at most three evidence-driven correction rounds;
+   stop when no new evidence, hypothesis, strategy, or environment change exists.
+4. Keep `SKILL.md` below 60 total lines and 650 words, including frontmatter,
+   and within any stricter size limit the target repository enforces.
+   Put all trigger conditions in its description and use direct imperatives.
+5. Default to `SKILL.md` plus `agents/openai.yaml`. Add scripts, references, or
+   assets only when repeated deterministic work or conditional detail proves need.
+6. Reuse the installed `skill-creator` initialization, metadata-generation, and
+   validation scripts. Preserve stricter repository metadata and report generic
+   validator incompatibility separately.
+7. Test the matching and non-matching requests. Forward-test raw tasks when
+   failure is costly or behavior is complex. For improvements, compare current
+   and candidate behavior using evidence rather than model preference.
+8. Keep the revision a candidate until validation passes; promote or retain the
+   current version from the evidence.
+
+## Outcomes
+
+Return exactly one: `SUCCESS` with paths and evidence; `NO_CHANGE` with proof;
+`NEEDS_OWNER_DECISION`; `NEEDS_EVIDENCE`; `VALIDATION_FAILED`; or `BLOCKED`.
+
+Never claim success without validation, hide core behavior in references, expand
+authority, or trade required behavior merely to satisfy the size limit.
+---
+name: scan-software-supply-chain
+description: >-
+  Scan external software at acquisition, installation, import, update, or
+  release admission. Use for newly downloaded or vendored binaries, installers,
+  archives, packages, images, plugins, skills, MCP servers, agent tools,
+  dependency changes, release artifacts, and explicit provenance requests. Do
+  not use merely because an unchanged installed local tool is invoked.
+---
+
+# Scan Software Supply Chain
+
+Treat externally acquired, dependency-delivered, or provenance-unknown software
+as inert data until the scan reaches `PASS`. The control exists because
+trusted-looking external tools and packages can silently upload source, execute
+installers, or introduce compromised dependencies before ordinary code review
+notices.
+
+## Scope boundary
+
+Do not invoke this skill for an already-installed, unchanged local tool merely
+because it is being run or lacks a historical scan receipt. Apply the control
+at acquisition or update; concrete evidence of tampering or unexpected
+behaviour is a new scan trigger.
+
+Invoke this skill when at least one condition applies:
+
+- software bytes came from outside the current reviewed repository change,
+  including a download, package cache, registry, attachment, vendored tree, or
+  external generator;
+- a dependency, lockfile, package, plugin, MCP server, agent/model tool,
+  installer, bootstrapper, container image, or native binary is being added or
+  changed;
+- a locally built binary, archive, image, or installer is about to cross a
+  release, deployment, or distribution boundary; or
+- the owner explicitly asks for provenance, malware, dependency, upload, or
+  supply-chain verification.
+
+Do not invoke this skill solely because an agent or developer created or edited
+ordinary repository source, tests, scripts, documentation, prompts,
+configuration, or a policy skill. Treat model-authored code as locally authored
+code: inspect the diff and use the repository's normal lint, tests, security
+review, and gate requirements. A local script enters supply-chain scope only
+when it downloads, installs, imports, vendors, or executes external software, or
+when it becomes a release/distribution artifact.
+
+Do not rescan an unchanged trusted local tool before each invocation. Rescan
+only when its bytes, version, origin, wrapper/source policy, permissions, or
+relevant scan rules changed, or when concrete evidence calls its trust into
+question.
+
+## Safety rules
+
+- Do not execute the target, its installer, its package hooks, `--help`, or `--version` to discover what it is.
+- Do not use `ldd` on an untrusted binary. Prefer `readelf`, `objdump`, and bounded `strings`.
+- Do not upload proprietary artifacts, hashes tied to private releases, source, or secrets to public scanners.
+- Do not install a scanner, ruleset, advisory database, runtime, or unpacking tool without owner approval. Scan any newly acquired scanner through this workflow before trusting it.
+- Use existing local tools and databases first. Record unavailable or stale checks instead of silently weakening the result.
+- Keep downloaded material and extraction outside the repository. List archive contents and reject traversal, absolute paths, device nodes, or unsafe links before extraction.
+- Dynamic analysis is optional and comes only after static checks pass. Use a disposable, no-network sandbox with read-only inputs and an empty temporary home; obtain owner approval before any meaningful host, credential, network, or external-state interaction.
+- Preserve existing files. Quarantine or delete only with explicit owner authorization.
+
+## 1. Resolve the scan packet
+
+Record:
+
+- exact artifact paths and whether each is `downloaded`, `installed`,
+  `imported`, `vendored`, or `release-artifact`;
+- intended command or integration point;
+- origin URL, repository, package registry, package name/version, installer, or producing command;
+- expected digest, signature, release attestation, lockfile integrity, or package-manager ownership when available;
+- scan boundary, exclusions, tool availability, and whether network access is required.
+
+For an in-scope release artifact, include its manifest, vendored dependencies,
+nested binaries, image layers, installer, and other distributed payloads. Do
+not broaden the scope to ordinary source files merely because they produced the
+artifact; those remain under normal code validation and review.
+
+If origin, scope, or intended behavior cannot be established, continue static inspection but the maximum verdict is `INDETERMINATE`.
+
+## 2. Inventory without execution
+
+Use deterministic local commands first:
+
+```bash
+file -- <artifact>
+stat -- <artifact>
+sha256sum -- <artifact>
+find -P <tree> -xdev -type f -print
+find -P <tree> -xdev \( -type l -o -perm /6000 -o -perm /0022 \) -print
+```
+
+For a tree, hash regular files in a stable sorted order. Record symlink targets
+separately and flag links escaping the scan root. Identify executable bits,
+shebangs, setuid/setgid files, world-writable files, device nodes, sockets,
+hidden payloads, nested archives, and file-extension/magic mismatches.
+
+For archives, list before extraction with the appropriate existing tool, such as `tar -tvf` or `unzip -l`. Treat listing failures or unsupported formats as `INDETERMINATE`.
+
+## 3. Verify provenance and integrity
+
+Prefer primary sources and independent verification:
+
+- compare the computed digest with an official HTTPS release manifest, signed checksum, transparency record, registry integrity field, or lockfile;
+- verify signatures with an already-trusted system tool such as `gpgv`, `minisign`, or `cosign` only when the matching trusted key or identity policy is known;
+- for OS packages, use package-manager ownership, repository policy, and verification commands;
+- for language packages, reconcile the exact version and integrity/checksum against the lockfile and local package cache;
+- for container images, use an already-local immutable digest or saved archive unless the owner approves a pull.
+
+A matching hash proves identity, not safety. A missing or mismatched expected hash, signature, identity, version, or origin blocks use.
+
+## 4. Run static security checks
+
+Select the minimum relevant checks by artifact type and threat. Do not run every
+available scanner by default. Record each selected command, tool version,
+database/ruleset age when available, and exit status.
+
+- Malware/signature scan: use an installed local ClamAV, YARA, or equivalent scanner when available.
+- SBOM and vulnerabilities: use local `syft` inventory and `trivy`, `grype`, `osv-scanner`, or ecosystem auditors without silent database/rules downloads.
+- Secrets: use `gitleaks` or `detect-secrets` in redacted mode when the external
+  artifact contains source, configuration, archives, templates, or other
+  credential-bearing material. Redact at the point of discovery: never let a
+  found credential value reach a log, transcript, or report — the scan must not
+  become a second copy of the secret it found.
+  - **Extract before scanning packed formats.** Entropy detectors run on a packed
+    binary (`.asar`, `.exe`, image layer, compiled bundle) match its integrity
+    hashes and base64 blocks as `generic-api-key`/`private-key` — pure noise.
+    Extract to a text tree first and scan that. A "secret" whose byte offset lands
+    in an archive header or integrity block is a false positive; discard it.
+  - **A named provider prefix outranks any entropy score.** A hit on a documented
+    prefix in a *plaintext text/config file* is high-confidence regardless of
+    entropy, and a plain high-entropy string in a binary is low-confidence
+    regardless of length. Rank on this, do not flatten every rule hit into one
+    list. Named prefixes include at least: `GOCSPX-` (Google OAuth client
+    secret), `AKIA`/`ASIA` (AWS), `ghp_`/`gho_`/`ghs_` (GitHub), `sk-`/`sk-proj-`
+    (OpenAI), `xoxb-`/`xoxp-` (Slack), `AIza` (Google API key), and any
+    `-----BEGIN … PRIVATE KEY-----` block.
+  - **Classify ownership — this is the disclosure trigger.** For each real
+    credential, ask whose it is and where it was found. Your own secret in your
+    own tree is an internal rotation. A **third party's live credential shipped
+    inside a distributed artifact you acquired** is a vulnerability *in their
+    product*: the correct action is coordinated private disclosure, not internal
+    cleanup. Nearby vendor metadata (updater config, `owner`/`repo` fields,
+    package manifest) identifies the owner.
+- Source/static analysis: use repository-native lint and security tooling first, then local `semgrep`, `bandit`, `cargo audit`, `npm audit`, `pip-audit`, or equivalents as applicable. Do not use network-fetched rule packs implicitly.
+- Native binaries: inspect headers, interpreter, imports, RPATH/RUNPATH, capabilities, hardening, notes, and bounded suspicious strings with `readelf`/`objdump`; do not load the binary.
+- Scripts/installers: inspect all shell commands, downloads, self-update paths, persistence, privilege changes, credential reads, environment loading, telemetry, repository traversal, and outbound endpoints.
+- Archives/images: scan both the container/archive and the safely extracted tree when extraction is justified.
+
+Investigate unexpected upload, telemetry, remote configuration, self-update, credential access, shell download-and-execute, persistence, obfuscation, or repository-wide traversal as blocking until disproved.
+
+## 5. Use dynamic analysis only when necessary
+
+State the behavior that static analysis cannot resolve and the sandbox boundary that would answer it. Default boundary:
+
+- no network;
+- read-only artifact and source mounts;
+- empty temporary home and environment allowlist;
+- no host secrets, agent sockets, SSH/GPG material, Docker socket, browser profile, or cloud metadata;
+- process, filesystem, and attempted-network logging;
+- disposable teardown after evidence capture.
+
+Do not call a sandboxed run `PASS` if the real product requires untested network, credentials, elevated privileges, or installer behavior.
+
+## 6. Classify the result
+
+Return exactly one verdict:
+
+- `PASS`: provenance and integrity are consistent; required static checks completed; no malware, blocking vulnerability, secret, unsafe packaging, or unexplained behavior remains.
+- `BLOCK`: malware; integrity/signature mismatch; critical or reachable high-severity issue; unexpected upload/credential access/persistence; unsafe installer/archive behavior; **a live credential shipped in the artifact**; or another demonstrated violation.
+- `INDETERMINATE`: incomplete provenance, unsupported format, missing/stale required scanner data, unresolved behavior, or incomplete scope.
+
+When a `BLOCK` is a **third party's** credential shipped in a distributed
+artifact, the remediation is not internal rotation — it is coordinated private
+disclosure to that vendor. Name it as such in the verdict and its action, so the
+finding is surfaced as reportable rather than buried in the file list.
+
+`BLOCK` and `INDETERMINATE` are fail-closed: do not execute, install, import,
+commit, deploy, or otherwise adopt the artifact until it is remediated or the
+owner explicitly accepts the named residual risk.
+
+Report the scope, origins, hashes, commands and outcomes, findings, unavailable
+checks, verdict, and residual risks. Store evidence in an existing authorized
+packet or the session response; do not create standalone audit documents in a
+repository unless its instructions authorize them.
+
+Lead the report with a **`CREDENTIAL FINDINGS`** block whenever any secret rule
+fired, even on a `PASS`. It is ranked by confidence and ownership — named-prefix
+secret in plaintext config first, entropy-only binary hit last — and each entry
+carries a recommended action (rotate internally, discard as false positive, or
+prepare disclosure). A named-prefix hit never appears below the fold. Omission
+is not an option: if the block is empty, say so explicitly, so a real credential
+can never be lost inside an otherwise-passing file listing.
+
+## Workflow integration
+
+- Run this scan while acquiring or updating an in-scope artifact, before it is
+  installed, imported, admitted to a dependency or release set, deployed, or
+  distributed.
+- Reuse a passing result when artifact digest, origin/source policy, scanner
+  policy, and applicable scan rules still match. Repeat only affected checks
+  after one of those fingerprint fields changes.
+- For ordinary locally authored work, do not invoke this skill. Use diff review,
+  repository-native lint and tests, risk-appropriate security review, and the
+  required gate instead.
+- This skill does not replace `$security-scan`, `$security-diff-scan`, threat modeling, tests, or the repository's current review workflow; use those workflows when their triggers apply.
+---
+name: ship-pull-request
+description: Author, gate, and close out pull requests in any repository. Use when the user asks to open, draft, ready, review, gate, triage, merge, or close out one or many PRs, write or fix a PR description, or check whether a PR is ready to merge.
+type: agent-skill
+title: Ship Pull Request
+okf_status: active
+tags:
+  - internal
+  - operations
+---
+
+# Ship Pull Request
+
+One procedure for every PR in every repo. Repository differences are data, not
+different steps — gates in `references/GATES.md`. A lone PR is a chain of one.
+
+## Resolve
+
+Never skip. List every PR in scope with base, draft state and check state
+(`gh pr list --json number,baseRefName,headRefName,isDraft,mergeStateStatus,
+statusCheckRollup`), look up each repo's gate, then order the work bottom-up
+from the PR based on the default branch and process one at a time.
+
+## Author
+
+1. One branch, one purpose, branched from its base.
+2. Rebase onto the base. Never merge the base into the branch.
+3. Run the gate locally and see its exit code.
+4. Write the body per `references/PR-BODY.md`.
+5. Open as draft. Draft states a named, specific gap.
+
+## Edit
+
+When updating a PR's title, body, or base:
+- Never use `gh pr edit` (`gh 2.45.0` fails on the deprecated Projects-classic
+  GraphQL schema and silently leaves PR text stale).
+- Use the REST PATCH path or the helper script:
+  ```sh
+  scripts/edit-pr.sh <number> --title "<title>" --body-file <path>
+  # or directly with gh api:
+  gh api -X PATCH repos/<owner>/<repo>/pulls/<number> -f title="<title>" -F body=@<path>
+  ```
+- **Verification step (mandatory)**: check that the PR text updated by reading
+  it back to detect and prevent stale-text failures:
+  ```sh
+  scripts/check-pr-text.sh <number> --title "<title>" --body-file <path>
+  # or directly with gh api:
+  gh api repos/<owner>/<repo>/pulls/<number> --jq '{title: .title, body: .body}'
+  ```
+
+## Ready
+
+Leave draft only when every claim under Validation has run and its output was
+seen. An unrun or failing claim stays under Residual risk and the PR stays
+draft. Never promote on an agent's report alone. Promote with `gh pr ready <number>`,
+and send title and body updates through the REST edit path and verify the saved text.
+
+## Gate
+
+- The reviewer re-runs the gate. Pasted output is not evidence.
+- Review per `AGENTS.md` § Code review policy: one review of the integrated
+  diff, P0-P3, verified findings only. Docs and skills self-review.
+- Read the negative tests: each bypass needs a test that names it.
+- A red check blocks that PR and everything above it. Fix the lowest failure.
+- A failing gate on a non-draft PR returns it to draft.
+- Close with `no known gap` or an explicit list, never a bare approval.
+
+## Merge
+
+Rebase-merge to linear history, then delete the branch. Never squash: squashing
+discards the reviewed commits and replaces them with one no reviewer saw. Under
+rebase the individual commit messages survive, so the PR body is the review
+record, not the commit message. Never add `Co-Authored-By` AI-model lines. Then
+rebase the next PR onto the merged base and re-gate it:
+`references/STACKED-PRS.md`.
+
+## Close out
+
+- Close the originating issue from the merge, not by hand.
+- Every unresolved Residual-risk item becomes a tracked issue at merge time.
+- Downstream propagation (public mirror, package publish, release) is batched
+  and owner-triggered, never part of merge. Commands in `references/GATES.md`.
+
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/bash -lc 'test -f .bran/policy.yaml && test "$(sha256sum tools/bran/runtime/bran | cut -d'"' ' -f1)\" = \""'$(python3 -c '"'import json;print(json.load(open(\"tools/bran/runtime/bran-release-pin.json\"))[\"sha256\"])')\" && tools/bran/runtime/bran check . bran-strict && tools/bran/runtime/bran query . 'spec-authoring S06 CONTRACT-AFC-SPECKIT'" in $HOME/alphazede/worktrees/alphazedehq-afc-s06-spec-authoring
+ exited 1 in 0ms:
+sha256sum: tools/bran/runtime/bran: No such file or directory
+
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/bash -lc "pwd; git status --short; git log -1 --format='%H %s'; cat $HOME/alphazede/AGENTS.md; cat $HOME/.claude/skills/ship-pull-request/references/PR-BODY.md" in $HOME/alphazede/worktrees/alphazedehq-afc-s06-spec-authoring
+ succeeded in 0ms:
+$HOME/alphazede/worktrees/alphazedehq-afc-s06-spec-authoring
+0ce8e0c64b8f42ce699ab999a6ce6fea036742f5 feat: add portable Markdown specification authoring skill
+# AGENTS.md — AlphaZede Workspace Root
+
+`$HOME/alphazede` is a **multi-repo workspace container, not a repository.**
+No `.git`, no `.bran/policy.yaml`, no build, no tests, no commits at this level.
+
+This file is canonical for agents that start here. Its only job is to answer two
+questions fast: **where am I**, and **which repository does the owner mean?**
+Once you know the repo, that repo's own `AGENTS.md` takes over and this file stops
+applying.
+
+## Authority order
+
+1. Current owner (William Rumph) instructions in this session
+2. The target repository's `AGENTS.md` and any path-specific nested `AGENTS.md`
+3. The target repository's `CLAUDE.md` / `AGY.md` / `GEMINI.md` / `QWEN.md` lens
+4. This file (workspace routing only)
+
+A rule stated inside a repo always beats a summary written here.
+
+## Orientation tree
+
+```
+$HOME/alphazede/
+├── alphazede-markets/     AZM — options trading engine        [git: alphazede/btm]
+│   ├── btm/               Rust Cargo workspace (5 crates) + Python IBKR bridge
+│   ├── btm-fpga/          RTL/HLS Vivado projects, Kria KV260 deployment
+│   ├── btm-ibkr/          IBKR integration
+│   └── deploy/ docs/ lessons/ prompts/ reports/ tests/ ui/ Vnv/ Xilinx/
+├── alphazede-sports/      AZS — fantasy + sports betting      [git: alphazede/alphazede-sports]
+│   ├── command_node/ data_node/ services/  distributed runtime
+│   ├── apps/ frontend/ packages/           Next.js / TypeScript
+│   ├── hardware/ infra/ deploy/            FPGA + fleet
+│   └── agents/ docs/ tools/ tests/ Vnv/ Security/
+├── betbot/                BTO — legacy production sports bot  [git: 1wgrumph/betbot]
+│   └── analysis/ core/ engines/ models/ pipeline/ clients/ docs/ tests/
+├── azedge/                AZEdge foundation (Rust + pnpm)     [local only]
+│   └── crates/ services/ schemas/ migrations/ runbooks/ tools/
+├── bran/                  BRAN internal canonical source      [local only]
+│   └── crates/ schemas/ fixtures/ examples/ skill/ docs/
+├── bearing/               Bearing — public browser control room [git: alphazede/bearing]
+│   └── src/ skills/ plugin-skills/ hooks/ examples/ test/
+├── developers/            Public reviewed developer assets    [git: alphazede/developers]
+│   └── az-sports-dev/ grok-safe/ window/ docs/
+├── Alphazedehq/           Portfolio / chief-of-staff repo     [git: alphazede/Alphazedehq]
+│   ├── bran-dev/          BRAN dev checkout
+│   ├── docs/              infrastructure guide, IP table, model matrix
+│   └── lessons/ prompts/ skills/ standards/ tools/
+├── agentic-eval-arena/    Sealed agent-evaluation harness     [local only]
+│   └── arena/ capsules/ hidden_graders/ reviewer_corpus/ harbor_bench/
+│
+├── worktrees/             linked git worktrees for in-flight branches
+├── evidence/              BRAN migration + branch-cleanup evidence bundles
+├── data/                  golf_cache
+├── external/              telegram/ — run_admin_bot.py + logs
+└── Odi/                   docs/plans/2026-07-22-odi-mvp
+```
+
+## Disambiguation — what the owner means
+
+| If the owner says… | Work in |
+|---|---|
+| markets, AZM, trading, options, IBKR, KV260, "the trading system" | `alphazede-markets/` |
+| sports, AZS, fantasy, DFS, data node, command node, filter node | `alphazede-sports/` |
+| betbot, BTO, "the old bot", "legacy production" | `betbot/` |
+| azedge, AZEdge, foundation, foundation-types | `azedge/` |
+| bran, BRAN, repo knowledge, OKF | `bran/` (source) — **not** `developers/` |
+| bearing, control room, focus guard, navigator/explorer/crewmate | `bearing/` (public). `alphazede/bearing-dev` is archived (2026-09-23); Bearing Lite is `alphazede/bearing-lite` (maintenance: bug fixes only) |
+| developers, public repo, export, scrubbed snapshot | `developers/` |
+| HQ, portfolio, fleet, IPs, infrastructure, node setup | `Alphazedehq/` |
+| arena, eval, grader, candidate profiles | `agentic-eval-arena/` |
+
+Ambiguous cases worth a question rather than a guess:
+
+- **"Bearing"** — `bearing/` is the public browser control room; `alphazede/bearing-lite`
+  is the plugin (maintenance mode, bug fixes only); `alphazede/bearing-dev` is
+  archived. The future private Bearing SaaS repo does not exist yet. Ask which.
+- **"BRAN"** — develop in `bran/`; `developers/` is an export target only.
+- **"FPGA"** — `alphazede-markets/btm-fpga/` (Vivado/KV260) and
+  `alphazede-sports/hardware/` (Quartus/DE1-SoC) are different toolchains.
+
+## Naming
+
+Use **AZM** (AlphaZede Markets), **AZS** (AlphaZede Sports), **AZEdge**. The
+retired term `BTM` was migrated to `AZM` across `alphazede-markets/`,
+`Alphazedehq/`, `alphazede-sports/`, and `betbot/` on 2026-07-24 (uppercase,
+word-boundary).
+
+**Lowercase `btm` is intentionally unchanged** — it is structural, not prose: the
+`btm/`, `btm-fpga/`, `btm-ibkr/` directories, crate names, and the `btm.git`
+remote. `BTM` also survives in `evidence/` (immutable bundles) and in the
+in-flight branches under `worktrees/`, so it returns if those merge.
+
+## Worktrees
+
+**Location (owner rule, 2026-09-24).**
+- Every linked worktree lives at `$HOME/alphazede/worktrees/<repo>-<topic>`, where the owner can see it. This applies to every harness: Claude Code, Codex, Muse, Cursor, Grok and AGY.
+- Never create a worktree in a hidden location: `.claude/worktrees/`, `.codex/`, `.cursor/`, any other dot-directory, or `/tmp`. Harness features that create worktrees automatically in hidden folders (for example isolation worktrees) are not used for repository work. Create the worktree explicitly under `worktrees/` instead.
+
+**Cleanup.** When a branch is merged into `origin/main`, the agent that owns it removes all three in the same session:
+- the worktree (`git worktree remove`);
+- the local branch (`git branch -d`);
+- the remote branch (`git push origin --delete <branch>`).
+
+The rule does not cover:
+- worktrees with uncommitted or unmerged work;
+- worktrees in use by a running process;
+- worktrees locked as an active Requirements System host's `sdoc_root`.
+
+`worktrees/*` are linked worktrees; each belongs to some parent repo's `.git`,
+**and the parent is not always the same-named root repo**. Any leftover
+`bearing-*` worktrees came from the archived `bearing-dev`.
+
+Resolve ownership from the parent side, never by guessing from the directory name:
+
+```bash
+git -C <parent-repo> worktree list
+```
+
+If a worktree's internal `.git` file points at a stale parent path, commands run
+*inside* it fail with "not a git repository" — operate from the parent instead.
+
+**Never squash-merge** (owner rule, 2026-09-24). Merge a PR with a rebase merge or a
+merge commit (`gh pr merge --rebase` or `--merge`), so every commit stays in `main`'s
+history. Squash merge is disabled on azedge, Alphazedehq and requirements-system.
+GitHub deletes the remote branch automatically on merge. The agent still removes the
+worktree and the local branch.
+
+**Agents may create worktrees and branches without asking** (owner rule, 2026-09-24).
+Create them under `worktrees/` as described above, one worktree per task, and clean
+them up once merged. Switching, resetting, or deleting a branch or worktree that holds
+unmerged or uncommitted work is still destructive git, and still needs the owner's
+authorization.
+
+## BRAN — repository knowledge
+
+BRAN is the canonical internal tool for repository evidence, metadata validation,
+and deterministic checks. Prefer it over blind file search. The tree above tells
+you *where* you are; BRAN tells you *what is true inside* a repo.
+
+Pinned runtime — verify sha256 against the pin before executing:
+
+```bash
+B=$HOME/alphazede/Alphazedehq/tools/bran/runtime/bran
+cat "$(dirname "$B")/bran-release-pin.json"
+sha256sum "$B"                      # must match the pin
+"$B" check <repo-root> bran-strict
+"$B" query <repo-root> "<request>"
+```
+
+Repos with a native `.bran/policy.yaml`: `Alphazedehq`, `alphazede-markets`,
+`alphazede-sports`, `azedge`, `betbot`, `developers` — all six passed
+`bran-strict` on 2026-07-24. `bran/`, `bearing/`, `agentic-eval-arena/`, and this
+workspace root have no policy; BRAN reports `unavailable` there, so use normal
+discovery.
+
+Shared frontmatter contract: required `type`, `title`, `okf_status`, `tags`;
+optional `freshness`, `resource`, `public_boundary`. New canonical Markdown needs
+it immediately. The validator reports required changes; it never edits documents.
+
+BRAN routes to canonical sources. It never outranks owner instructions, canonical
+docs, live files, or command output. Repair is authority-gated
+(`maintain propose` → `maintain apply` with digest + authority), and BRAN may
+rebuild only its own derived artifacts.
+
+## Cross-repo rules
+
+These hold everywhere here; each repo states its own stricter version.
+
+1. **No `Co-Authored-By` AI-model lines** in any commit, in any repo.
+2. **Secrets stay in env / owner-held secret records.** Never in commits, docs, or
+   agent output. Never print connection strings or passwords.
+3. **Proprietary IP is audience-scoped.** Model routing, prompt text, agent
+   architecture, scoring formulas, thresholds, and calibration values must not
+   reach external broadcasts, public repos, customer mirrors, or `developers/`.
+4. **Landing work is the agent's job.** When a change is committed and its
+   verification passed, push the branch, open the PR, and merge it once the
+   required checks are green. `main` is PR-only by ruleset: that is the
+   mechanism, not an approval step, and no owner sign-off is needed. Never
+   commit on local `main`, never force-push. Deploying merged work to a
+   runtime host, installing or enabling its service units, and restarting its
+   services are agent work; verify the result on the host. **Owner-authorized
+   actions are separate and per-session:** activation (turning on a live
+   trading, live betting, or new customer-facing path), production DB
+   mutation, credential access, destructive git, and public export. Approval
+   for one is not approval for another. **Approved-plan
+   exception:** waived for any of these actions taken in execution of an approved
+   plan — `plan-spec.md`, `design.md`, `implementation.md`, and
+   `seit.md`/`validation.md` complete, with a review record (`review.md` or
+   `review.html`) showing a passing `/gate-review` entry — in which case
+   per-session authority is automatic.
+   **Issue closure is agent work:** close a tracked issue after its fix is
+   merged and all acceptance checks pass, without separate owner confirmation.
+   Partially addressed issues stay open.
+5. **Code is the source of truth.** When docs and code disagree, code wins — then
+   fix the doc.
+6. **Trust but verify.** Provider coverage, deployment state, artifact presence,
+   and any agent's summary are unverified claims until backed by primary docs,
+   live responses, repo code, or real command output. A delegated agent's report
+   is a claim, not proof.
+7. **Zero-tolerance bug policy** in the money-risk systems (AZM, AZS, BTO). No
+   "we'll fix it later." Gate reviewers hunt for bugs, not checklists.
+8. **Preserve features and guards.** Don't remove, hide, weaken, or bypass shipped
+   features, filters, or checks without explicit owner approval for that exact change.
+9. **Gate review before commit** where the repo defines one. Authoring sessions
+   cannot self-certify.
+10. **Scan externally acquired software** before first use; fail closed on `BLOCK`
+    or `INDETERMINATE`.
+11. **Preserve unrelated work.** Several repos carry uncommitted changes at any
+    time. Inspect every diff before committing and never sweep up work that is
+    not yours.
+12. **No hardcoded local paths in anything that ships publicly.** No absolute
+    user-home path — `/home/<user>/…`, `/Users/<user>/…`, `C:\Users\<user>\…` —
+    may appear in a public repo, a public export surface, a customer mirror, or
+    `developers/`. This applies to production code, tests, fixtures, examples,
+    scripts, and docs alike.
+
+    It leaks the owner's machine layout to everyone who clones, and code keyed
+    to one home directory is broken for every other user by construction.
+
+    - Detect private paths **by shape**, never by a fixed list of real paths. A
+      hardcoded list only recognizes one machine and publishes that machine's
+      layout in the process.
+    - Derive real paths at runtime from the repository root, an environment
+      variable, a CLI argument, or config.
+    - Where a sample path is genuinely needed, use a placeholder user segment
+      (`user`, `example-user`, `someone`) so intent stays obvious.
+    - Private-only roots (plans, submissions, internal bug records) may
+      reference local paths; the rule covers what actually ships.
+
+    Enforce it mechanically, not by review habit. BRAN's implementation is
+    `hardcoded_home_users` in `bran-dev/tools/ci/public_boundary_check.py`,
+    scoped to the export surface derived from `public-export.json` and wired
+    into the repo's fast gate; port that shape to any repo with a public
+    surface.
+13. **Architecture specifications and plan records** are governed by
+    COE-ASA-013 through COE-ASA-016 and GLOSS-ASA-001 in Alphazedehq
+    `docs/coe/index.md`.
+14. **The Requirements System host is a local dev/test host; running it is
+    agent work** (owner, 2026-10-05).
+    - Every agent uses the packaged-default host. Find it through
+      `$XDG_RUNTIME_DIR/alphazede-requirements-system/host.port`.
+    - If it is down, start it: `alphazede-requirements-system start --no-browser`.
+      Stopping and restarting it are agent work too. Check
+      `alphazede-requirements-system checkout list` and active `busy` claims
+      first, so you do not cut off another agent's run.
+    - After merging a requirements-system change to a payload path, upgrade the
+      host with `packaging/debian/upgrade-host.sh <gated .deb>`.
+15. **Every code review runs OCR, and every binary claim runs Reverify.**
+    - OCR means OpenCodeReview (`ocr`). By default it runs in delegation
+      mode inside the reviewer's own session:
+      `ocr delegate preview --from <base> --to <head>`, then
+      `ocr delegate rule <every listed file>`. The reviewer applies each
+      rule group to its files and reports a per-file OCR section next to the
+      verdict. OCR assists the review; it is never the independent review.
+    - Reverify (`reverify`) runs on any claim about a compiled binary.
+      Otherwise, state `Reverify: not applicable — <reason>`.
+    - Whoever dispatches a reviewer writes both into the packet. Reviewers
+      do not probe for tools.
+    - A tool that cannot run is a typed gap with its exact error, never a
+      pass.
+16. **Every frontend change gets a visual review.** A change that alters
+    rendered UI (pages, components, styles, layout) is reviewed in a running
+    browser before merge, not only as a diff.
+    - Run the candidate on a local dev or test host, never production.
+    - Drive every changed flow with browser automation or computer use:
+      click through each changed screen and state, at desktop and phone
+      widths.
+    - Capture a screenshot of each state and keep it with the review
+      evidence. Never capture customer data.
+    - Judge against the spec, the design references, or the approved
+      mockups: layout, spacing, typography, empty and error states, console
+      errors, and accessibility basics.
+    - Visual findings join the same review-and-repair round as code findings.
+      A UI that cannot be run is a typed gap with its exact error, never a
+      pass.
+    - Whoever dispatches the reviewer writes the run command and the flows to
+      check into the packet.
+17. **Each orchestrating session runs at most five implementation agents at
+    once**, unless the owner says otherwise for a task (owner, 2026-09-30).
+    The cap is per orchestrating session, not workspace-wide: agents started
+    by other sessions do not count against it. Every Coordinator the
+    Orchestrator starts is its own orchestrating session with its own cap of
+    five (owner clarification, 2026-09-30). So the Orchestrator's direct
+    dispatches count against its five, and each Coordinator's dispatches count
+    against that Coordinator's five; they are not one shared pool. It counts
+    the Implementer, Light Implementer and repair runs that session
+    dispatched; reviewers are not counted. Queue further slices until one of
+    its own slots frees; do not stop a running agent to make room without
+    saying so.
+18. **File product bottlenecks as enhancements** (owner, 2026-09-30). An
+    agent that hits a repeatable bottleneck in a product or its tooling files
+    a GitHub enhancement issue in the owning repository. Examples: a gate that
+    forces reruns, a hot file that every slice conflicts on, a missing
+    command, a manual multi-step procedure.
+    - File through `Alphazedehq/hooks/issue-labels.py` with kind
+      `enhancement`: dry-run first, then `--submit`.
+    - Search for a duplicate first; add evidence to an existing issue instead
+      of filing a second.
+    - Use the standard sections (Origin, Harness / version, What, Current
+      evidence, Expected, Acceptance), with the measured cost as evidence.
+    - File only what you observed, never speculation.
+    - Public repositories follow the publication rule: the owner approves
+      the exact text first.
+19. **Do the asked work, sized to what the gate measures** (owner lesson,
+    2026-10-01). Do not add steps, checks, copies or scope the owner did not
+    ask for, even when a plan or habit suggests them. Before any heavy step,
+    check that its size matches the decision it serves. Lesson from one
+    deploy:
+    - A pre-deploy backup of a 47 GB database, then a full integrity check
+      of the copy, then a table-size scan: about an hour, none of it the
+      owner's normal deploy process.
+    - A full `--all` regrade back to February (about 3 hours) when the gate
+      only counted picks since August 1; the unbounded provider traffic
+      likely got the host blocked by the provider.
+    - A plan step that copied the whole 47 GB database to devnode to fit a
+      few parameters.
+    Rules that follow:
+    - Follow the owner's normal process for routine operations (deploys,
+      restarts, regrades). Propose an extra safety step in one line; do it
+      only if the owner says yes.
+    - Bound every bulk operation (regrade, backfill, export, scan) to the
+      window or IDs the decision needs, and state its expected size and
+      duration before starting it.
+    - Query only the rows and columns needed; never copy a whole production
+      database to answer a narrow question.
+    - A plan written by an agent is not owner intent for its heavy steps;
+      check those against this rule before running them.
+
+## Session start
+
+1. Identify the target repository — do not work at this root.
+2. `git -C <repo> status --short` and check the branch. Several repos sit on
+   feature branches, not `main`/`master`, and several are dirty.
+3. Open that repo's `AGENTS.md` and its agent-specific lens, plus any
+   path-specific `AGENTS.md` for the paths you will touch.
+4. Use BRAN for architecture, terminology, and knowledge questions where a
+   `.bran/policy.yaml` exists.
+5. Confirm authority, paths, and validation commands before editing.
+
+## Validation
+
+There is no workspace-level build or test. Run each repository's own commands,
+documented in its `README.md` / `AGENTS.md` / `CLAUDE.md`. Examples:
+
+- `bran`: `./tools/ci/check.sh --fast` (`--full` only for release/security/perf surface)
+- `azedge`: `cargo fmt --all -- --check`, `cargo clippy --workspace --all-targets -- -D warnings`,
+  `cargo test --workspace --all-targets`, `pnpm -r lint`, `pnpm -r test`,
+  `bash tools/ci/foundation-contracts.sh`
+- `bearing`: `pnpm typecheck`, `pnpm test`, `pnpm test:integration`, `pnpm build`,
+  `pnpm eval:native`, `pnpm audit --audit-level=moderate`
+- `betbot`: `tests/bm1_runtime/` is the default BM1 pipeline suite
+
+
+## Fixable review findings
+
+Never pass or accept `ACCEPT_WITH_FINDINGS` while a fixable bug remains. If an actionable review finding can be repaired without causing a regression or violating the approved contract, the verdict is `REPAIR_REQUIRED`; fix it in the authorized repair round and rerun deterministic verification. `ACCEPT_WITH_FINDINGS` is reserved for owner-approved residual risk or a finding that cannot be repaired within the approved contract without causing a regression.
+
+Review and repair run as one pair: one independent review, then one repair
+round that fixes every finding it raised. After that repair, deterministic
+verification decides and the change lands; do not start another review round
+unless the owner asks or the repair changed the approved scope. Never file a
+review finding as an issue instead of fixing it in that repair round.
+
+## Defect filing
+
+Defects and gaps found during work are disposed of under COE-ELSD-008,
+COE-ELSD-009 and COE-ELSD-010 of the COE-ELSD library, published REV-3
+(commit 8d39a72e70b55f72fc206ef776d279b06369192c, sha256:645ada3c5044b8e2a942757e61b172e61fb28cd5aa4b8f38b3ba88aa5895940e), in alphazede/Alphazedehq
+`docs/coe/engineering-lifecycle-secure-delivery/engineering-lifecycle-secure-delivery.sdoc`.
+---
+type: reference
+title: Pull Request Body Contract
+okf_status: active
+tags:
+  - internal
+  - operations
+---
+
+# Pull Request Body Contract
+
+Four sections, in this order. A missing section is a blocked PR.
+
+```markdown
+## What changed
+
+- One bullet per externally visible change, imperative mood.
+- Name the invariant a change establishes, not the files it touched.
+
+## Why
+
+The property that did not hold before and holds now. State the constraint the
+change was built under when one shaped the design.
+
+## Validation
+
+- Each command exactly as run, one per line.
+- The result: counts, exit status, what the output showed.
+
+## Residual risk
+
+- Every gate not run, and why.
+- Every accepted limitation of the approach.
+- `no known gap` only when that is literally true.
+```
+
+## Rules
+
+- Validation lists commands actually run in this branch. A command you intend
+  to run belongs under Residual risk until it has run.
+- An unavailable environment is a residual risk, not an omission. Name the
+  missing configuration.
+- This body is the permanent review record for the change. Rebase-merge keeps
+  the individual commit messages, so the body is not the commit message. Write
+  both to be read a year later by someone bisecting.
+- When creating or editing PR descriptions, never use `gh pr edit` (on Ubuntu
+  `gh 2.45.0`, it fails on the deprecated Projects-classic GraphQL schema and
+  silently leaves text stale). Always update using GitHub REST PATCH
+  (`gh api -X PATCH repos/<owner>/<repo>/pulls/<n> -F body=@<file>` or
+  `scripts/edit-pr.sh`) and perform the verification
+  readback (`gh api repos/<owner>/<repo>/pulls/<n> --jq '{title: .title, body: .body}'`
+  or `scripts/check-pr-text.sh`) to detect and reject stale PR text.
+
+## Worked example
+
+`alphazede/bran-dev#14` states its gate output (`--fast`, 263 core and 38 CLI
+tests) and discloses that the live external-host smoke test could not run
+because the required environment configuration was unavailable, and that the
+PR therefore stays draft. That disclosure is the pattern to copy.
+
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/bash -lc 'ls $HOME/alphazede/Alphazedehq/tools/bran/runtime/; ls $HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/; git -C $HOME/alphazede/worktrees/requirements-system-afc-s06 status --short' in $HOME/alphazede/worktrees/alphazedehq-afc-s06-spec-authoring
+ succeeded in 0ms:
+bran
+bran-campaign
+bran-campaign.provenance.txt
+bran-campaign.sha256
+bran-release-pin.json
+bran.provenance.txt
+amazon-fantasy-companion-dod-manifest.html
+amazon-fantasy-companion-technical-plan.md
+authority.json
+design.md
+evidence
+implementation.json
+journey.json
+packets
+repository-map.md
+scope-decision-batch.md
+seit.json
+specialists
+superseded-run1
+views
+workspace.md
+
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/bash -lc 'B=$HOME/alphazede/Alphazedehq/tools/bran/runtime/bran; test "$(sha256sum "$B" | cut -d'"' ' -f1)\" = \""'$(python3 -c '"'import json;print(json.load(open(\"$HOME/alphazede/Alphazedehq/tools/bran/runtime/bran-release-pin.json\"))[\"sha256\"])')\" && \""'$B" check . bran-strict && "$B" query . '"'spec-authoring S06 CONTRACT-AFC-SPECKIT'" in $HOME/alphazede/worktrees/alphazedehq-afc-s06-spec-authoring
+ succeeded in 392ms:
+{"schema_version":"1.0.0","command":"check","status":"ok","data":{"root":".","selected_profile":"bran-strict","okf_compatibility":{"profile":"okf-v0.1","status":"pass","diagnostics":[]},"okf_v0_2":{"profile":"okf-v0.2","status":"pass","diagnostics":[]},"bran_strict":{"profile":"bran-strict","status":"pass","diagnostics":[]},"selected_profile_error":null,"selected_passed":true,"exit_code":0},"warnings":["Symlink { path: \"skills/use-requirements-system\" }"],"failures":[],"provenance":{"sources":["repository-scanner","bran-core"],"policy_source":"repository-file"},"metrics":{"selected_passed":true,"exit_code":0}}
+{"schema_version":"1.0.0","command":"query","status":"ok","data":{"root":".","query":"spec-authoring S06 CONTRACT-AFC-SPECKIT","query_outcome":"partial_unanchored","query_coverage":{"matched_terms":["spec-authoring","s06"],"unmatched_terms":["contract-afc-speckit"]},"selected_locators":["skills/spec-authoring/LICENSE-gridmarket","skills/spec-authoring/SKILL.md","skills/spec-authoring/agents/openai.yaml","skills/spec-authoring/references/figures.md","skills/spec-authoring/references/section-rules.md","skills/spec-authoring/references/vendoring.md","skills/spec-authoring/scripts/diagram.py","skills/spec-authoring/scripts/spec_build.py","skills/spec-authoring/scripts/spec_lint.py","skills/spec-authoring/scripts/vendor.sh","skills/spec-authoring/template/01-introduction.md","skills/spec-authoring/template/01.1-background.md","skills/spec-authoring/template/01.2-baseline.md","skills/spec-authoring/template/01.2.1-baselines.md","skills/spec-authoring/template/01.3-feature-set.md","skills/spec-authoring/template/01.4-scope.md","skills/spec-authoring/template/01.6-terms.md","skills/spec-authoring/template/02-open-items.md","skills/spec-authoring/template/02.1-risks.md","skills/spec-authoring/template/03-use-model.md","skills/spec-authoring/template/04.1.1-feature.md","skills/spec-authoring/template/04.3-data-model.md","skills/spec-authoring/template/04.4-performance.md","skills/spec-authoring/template/04.8-rationale.md","skills/spec-authoring/template/05-security.md","skills/spec-authoring/template/07-verification.md","skills/spec-authoring/template/spec.yaml","skills/spec-authoring/tests/test_azdiagram.py","skills/spec-authoring/tests/test_portability.py","skills/spec-authoring/tests/test_spec_authoring.py","skills/spec-authoring/tests/test_spec_tools.py","skills/spec-authoring/tests/trigger-requests.json"],"why_selected":[{"locator":"skills/spec-authoring/LICENSE-gridmarket","reason":"metadata_seed"},{"locator":"skills/spec-authoring/SKILL.md","reason":"metadata_seed"},{"locator":"skills/spec-authoring/agents/openai.yaml","reason":"metadata_seed"},{"locator":"skills/spec-authoring/references/figures.md","reason":"metadata_seed"},{"locator":"skills/spec-authoring/references/section-rules.md","reason":"metadata_seed"},{"locator":"skills/spec-authoring/references/vendoring.md","reason":"metadata_seed"},{"locator":"skills/spec-authoring/scripts/diagram.py","reason":"metadata_seed"},{"locator":"skills/spec-authoring/scripts/spec_build.py","reason":"metadata_seed"},{"locator":"skills/spec-authoring/scripts/spec_lint.py","reason":"metadata_seed"},{"locator":"skills/spec-authoring/scripts/vendor.sh","reason":"metadata_seed"},{"locator":"skills/spec-authoring/template/01-introduction.md","reason":"metadata_seed"},{"locator":"skills/spec-authoring/template/01.1-background.md","reason":"metadata_seed"},{"locator":"skills/spec-authoring/template/01.2-baseline.md","reason":"metadata_seed"},{"locator":"skills/spec-authoring/template/01.2.1-baselines.md","reason":"metadata_seed"},{"locator":"skills/spec-authoring/template/01.3-feature-set.md","reason":"metadata_seed"},{"locator":"skills/spec-authoring/template/01.4-scope.md","reason":"metadata_seed"},{"locator":"skills/spec-authoring/template/01.6-terms.md","reason":"metadata_seed"},{"locator":"skills/spec-authoring/template/02-open-items.md","reason":"metadata_seed"},{"locator":"skills/spec-authoring/template/02.1-risks.md","reason":"metadata_seed"},{"locator":"skills/spec-authoring/template/03-use-model.md","reason":"metadata_seed"},{"locator":"skills/spec-authoring/template/04.1.1-feature.md","reason":"metadata_seed"},{"locator":"skills/spec-authoring/template/04.3-data-model.md","reason":"metadata_seed"},{"locator":"skills/spec-authoring/template/04.4-performance.md","reason":"metadata_seed"},{"locator":"skills/spec-authoring/template/04.8-rationale.md","reason":"metadata_seed"},{"locator":"skills/spec-authoring/template/05-security.md","reason":"metadata_seed"},{"locator":"skills/spec-authoring/template/07-verification.md","reason":"metadata_seed"},{"locator":"skills/spec-authoring/template/spec.yaml","reason":"metadata_seed"},{"locator":"skills/spec-authoring/tests/test_azdiagram.py","reason":"metadata_seed"},{"locator":"skills/spec-authoring/tests/test_portability.py","reason":"metadata_seed"},{"locator":"skills/spec-authoring/tests/test_spec_authoring.py","reason":"metadata_seed"},{"locator":"skills/spec-authoring/tests/test_spec_tools.py","reason":"metadata_seed"},{"locator":"skills/spec-authoring/tests/trigger-requests.json","reason":"metadata_seed"}],"source_rankings":[{"locator":"skills/spec-authoring/tests/test_portability.py","rank":1,"score":{"exact":1,"partial":1,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:body+path"},{"locator":"skills/spec-authoring/references/figures.md","rank":2,"score":{"exact":1,"partial":0,"active":3,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/references/vendoring.md","rank":3,"score":{"exact":1,"partial":0,"active":3,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/references/section-rules.md","rank":4,"score":{"exact":1,"partial":0,"active":3,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/SKILL.md","rank":5,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:body+path"},{"locator":"skills/spec-authoring/scripts/vendor.sh","rank":6,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/scripts/diagram.py","rank":7,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/LICENSE-gridmarket","rank":8,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/template/spec.yaml","rank":9,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/agents/openai.yaml","rank":10,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/scripts/spec_lint.py","rank":11,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/scripts/spec_build.py","rank":12,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/template/01.4-scope.md","rank":13,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/template/01.6-terms.md","rank":14,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/template/02.1-risks.md","rank":15,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/template/05-security.md","rank":16,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/tests/test_azdiagram.py","rank":17,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/template/03-use-model.md","rank":18,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/tests/test_spec_tools.py","rank":19,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/template/02-open-items.md","rank":20,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/template/01.2-baseline.md","rank":21,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/template/04.1.1-feature.md","rank":22,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/template/04.8-rationale.md","rank":23,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/template/01.1-background.md","rank":24,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/template/01-introduction.md","rank":25,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/tests/trigger-requests.json","rank":26,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/template/04.3-data-model.md","rank":27,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/template/07-verification.md","rank":28,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/tests/test_spec_authoring.py","rank":29,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:body+path"},{"locator":"skills/spec-authoring/template/01.2.1-baselines.md","rank":30,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/template/01.3-feature-set.md","rank":31,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/template/04.4-performance.md","rank":32,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"}],"candidate_source_bytes":28448352,"selected_source_bytes":58165,"context_bytes_avoided":28390187,"estimated_tokens":14542,"token_estimate_method":"bytes-divided-by-four-ceiling","actual_model_input_tokens":"unavailable","symbol_navigation":{"schema_version":"1.0.0","outcome":"unavailable","truncated":false,"scip":{"status":"unavailable","reason":"index_missing","index":"index.scip"},"lsp":{"status":"unavailable","reason":"not_implemented"}},"document_evidence":{"sources":[{"path":"archive/HGTS_BTO_Infrastructure_Architecture_Spec_v1.docx","source_type":"docx","source_digest":"b24d0aaea78958251b7f90d32e3c9ba5ae83a17b7b32b118789058f4ad80f795","fidelity":{"headers_footers":"unsupported","headings":"normalized","lists":"normalized","macros":"unsupported","paragraphs":"normalized","tables":"normalized","text":"normalized"},"anchor_count":132}],"matches":[],"refusals":[],"unsupported":[],"omitted_files":0,"omitted_matches":0}},"warnings":["Symlink { path: \"skills/use-requirements-system\" }","UnsupportedInput { path: \"alphazede-web/evidence/h5/about-desktop-dark.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h5/about-desktop-light.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h5/about-mobile-dark.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h5/about-mobile-light.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h5/contact-desktop-dark.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h5/contact-desktop-light.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h5/contact-mobile-dark.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h5/contact-mobile-light.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h5/divisions-desktop-dark.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h5/divisions-desktop-light.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h5/divisions-mobile-dark.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h5/divisions-mobile-light.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h5/home-desktop-dark.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h5/home-desktop-light.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h5/home-mobile-dark.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h5/home-mobile-light.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h5/open-source-desktop-dark.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h5/open-source-desktop-light.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h5/open-source-mobile-dark.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h5/open-source-mobile-light.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h5/research-desktop-dark.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h5/research-desktop-light.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h5/research-mobile-dark.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h5/research-mobile-light.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/about-desktop-dark.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/about-desktop-light.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/about-mobile-dark.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/about-mobile-light.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/contact-desktop-dark.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/contact-desktop-light.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/contact-mobile-dark.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/contact-mobile-light.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/divisions-desktop-dark.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/divisions-desktop-light.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/divisions-mobile-dark.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/divisions-mobile-light.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/home-desktop-dark.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/home-desktop-light.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/home-graph-interaction.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/home-mobile-dark.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/home-mobile-light.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/nav-360-dark.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/nav-360-light.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/nav-enlarged-text-390.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/open-source-desktop-dark.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/open-source-desktop-light.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/open-source-mobile-dark.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/open-source-mobile-light.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/open-source-mobile-links.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/research-desktop-dark.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/research-desktop-light.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/research-filtered.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/research-mobile-dark.png\" }","UnsupportedInput { path: \"alphazede-web/evidence/h6/research-mobile-light.png\" }","UnsupportedInput { path: \"alphazede-web/public/fonts/lato-latin-400.woff2\" }","UnsupportedInput { path: \"alphazede-web/public/fonts/lato-latin-900.woff2\" }","UnsupportedInput { path: \"alphazede-web/public/fonts/noto-serif-display-latin-italic.woff2\" }","UnsupportedInput { path: \"alphazede-web/public/fonts/noto-serif-display-latin.woff2\" }","UnsupportedInput { path: \"alphazede-web/public/fonts/noto-serif-ethiopic-400.woff2\" }","UnsupportedInput { path: \"alphazede-web/public/fonts/ubuntu-sans-mono-latin.woff2\" }","UnsupportedInput { path: \"alphazede-web/src/components/home/evidence/home-desktop-dark.png\" }","UnsupportedInput { path: \"alphazede-web/src/components/home/evidence/home-desktop-light.png\" }","UnsupportedInput { path: \"alphazede-web/src/components/home/evidence/home-mobile-dark.png\" }","UnsupportedInput { path: \"alphazede-web/src/components/home/evidence/home-mobile-light.png\" }","UnsupportedInput { path: \"archive/HGTS_BTO_Infrastructure_Architecture_Spec_v1.docx\" }","UnsupportedInput { path: \"business_admin/websites/alphazede-legacy-landing/alphazede-logo.png\" }","UnsupportedInput { path: \"business_admin/websites/predicts-deferred-landing/alphazede-logo.png\" }","UnsupportedInput { path: \"docs/brand/assets/alphazede-logo-source.png\" }","UnsupportedInput { path: \"docs/plans/2026-07-17-okf-sqz-workspace-metrics/assets/bran-two-ravens-master.png\" }","UnsupportedInput { path: \"docs/plans/branding/2026-09-15-bearing-lite-product-page/evidence/brand-map-desktop-dark.png\" }","UnsupportedInput { path: \"docs/plans/branding/2026-09-15-bearing-lite-product-page/evidence/brand-map-desktop-light.png\" }","UnsupportedInput { path: \"docs/plans/branding/2026-09-15-bearing-lite-product-page/evidence/brand-map-mobile-light.png\" }","UnsupportedInput { path: \"docs/plans/branding/2026-09-15-bearing-lite-product-page/evidence/brand-map-mobile-no-js.png\" }","UnsupportedInput { path: \"docs/plans/branding/2026-09-15-bearing-lite-product-page/evidence/docs-desktop-dark.png\" }","UnsupportedInput { path: \"docs/plans/branding/2026-09-15-bearing-lite-product-page/evidence/docs-desktop-light.png\" }","UnsupportedInput { path: \"docs/plans/branding/2026-09-15-bearing-lite-product-page/evidence/docs-mobile-dark.png\" }","UnsupportedInput { path: \"docs/plans/branding/2026-09-15-bearing-lite-product-page/evidence/docs-mobile-light.png\" }","UnsupportedInput { path: \"docs/plans/branding/2026-09-15-bearing-lite-product-page/evidence/docs-mobile-no-js.png\" }","UnsupportedInput { path: \"docs/plans/branding/2026-09-15-bearing-lite-product-page/evidence/overview-desktop-dark.png\" }","UnsupportedInput { path: \"docs/plans/branding/2026-09-15-bearing-lite-product-page/evidence/overview-desktop-light.png\" }","UnsupportedInput { path: \"docs/plans/branding/2026-09-15-bearing-lite-product-page/evidence/overview-mobile-light.png\" }","UnsupportedInput { path: \"docs/plans/branding/2026-09-15-bearing-lite-product-page/evidence/overview-mobile-no-js.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/assets/alphazede-logo.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/assets/fonts/DMSans-variable.woff2\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/assets/fonts/IBMPlexMono-400-normal.woff2\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/assets/fonts/IBMPlexMono-500-normal.woff2\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/assets/fonts/InstrumentSerif-400-italic.woff2\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/assets/fonts/InstrumentSerif-400-normal.woff2\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/about-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/about-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/about-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/about-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/contact-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/contact-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/contact-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/contact-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/divisions-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/divisions-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/divisions-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/divisions-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/home-desktop-dark-reduced-motion.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/home-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/home-desktop-light-keyboard-focus.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/home-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/home-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/home-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/open-source-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/open-source-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/open-source-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/open-source-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/pass1/about-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/pass1/about-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/pass1/about-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/pass1/about-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/pass1/contact-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/pass1/contact-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/pass1/contact-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/pass1/contact-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/pass1/divisions-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/pass1/divisions-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/pass1/divisions-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/pass1/divisions-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/pass1/home-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/pass1/home-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/pass1/home-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/pass1/home-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/pass1/open-source-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/pass1/open-source-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/pass1/open-source-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/pass1/open-source-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/pass1/research-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/pass1/research-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/pass1/research-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/pass1/research-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/research-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/research-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/research-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/claude-fable/review/research-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/codex/review/about-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/codex/review/about-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/codex/review/about-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/codex/review/about-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/codex/review/contact-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/codex/review/contact-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/codex/review/contact-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/codex/review/contact-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/codex/review/divisions-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/codex/review/divisions-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/codex/review/divisions-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/codex/review/divisions-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/codex/review/home-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/codex/review/home-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/codex/review/home-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/codex/review/home-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/codex/review/open-source-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/codex/review/open-source-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/codex/review/open-source-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/codex/review/open-source-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/codex/review/research-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/codex/review/research-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/codex/review/research-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/codex/review/research-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/assets/alphazede-logo-source.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/assets/fonts/NotoSerifEthiopic-Regular.ttf\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/assets/fonts/fraunces-400.woff2\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/assets/fonts/fraunces-400i.woff2\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/assets/fonts/fraunces-600.woff2\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/assets/fonts/ibm-plex-mono-400.woff2\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/assets/fonts/ibm-plex-mono-500.woff2\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/assets/fonts/source-sans-400.woff2\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/assets/fonts/source-sans-600.woff2\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/about-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/about-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/about-heritage.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/about-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/about-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/contact-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/contact-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/contact-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/contact-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/divisions-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/divisions-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/divisions-markets.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/divisions-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/divisions-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/divisions-sports.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/first-pass/about-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/first-pass/about-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/first-pass/about-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/first-pass/about-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/first-pass/contact-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/first-pass/contact-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/first-pass/contact-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/first-pass/contact-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/first-pass/divisions-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/first-pass/divisions-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/first-pass/divisions-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/first-pass/divisions-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/first-pass/home-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/first-pass/home-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/first-pass/home-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/first-pass/home-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/first-pass/open-source-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/first-pass/open-source-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/first-pass/open-source-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/first-pass/open-source-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/first-pass/research-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/first-pass/research-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/first-pass/research-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/first-pass/research-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/home-below.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/home-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/home-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/home-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/home-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/home-mobile-menu.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/open-source-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/open-source-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/open-source-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/open-source-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/research-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/research-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/research-library.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/research-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/grok-build/review/research-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/about-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/about-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/about-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/about-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/contact-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/contact-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/contact-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/contact-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/divisions-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/divisions-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/divisions-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/divisions-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/home-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/home-desktop-light-reduced-motion.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/home-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/home-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/home-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/open-source-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/open-source-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/open-source-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/open-source-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/pass-1/about-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/pass-1/about-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/pass-1/about-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/pass-1/about-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/pass-1/contact-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/pass-1/contact-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/pass-1/contact-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/pass-1/contact-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/pass-1/divisions-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/pass-1/divisions-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/pass-1/divisions-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/pass-1/divisions-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/pass-1/home-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/pass-1/home-desktop-light-reduced-motion.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/pass-1/home-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/pass-1/home-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/pass-1/home-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/pass-1/open-source-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/pass-1/open-source-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/pass-1/open-source-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/pass-1/open-source-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/pass-1/research-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/pass-1/research-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/pass-1/research-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/pass-1/research-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/research-desktop-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/research-desktop-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/research-mobile-dark.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/lanes-v4/kimi-k3/review/research-mobile-light.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/reference-v3/alphazede-original-desktop.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/reference-v3/alphazede-original-mobile.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/reference-v3/alphazede-sports-desktop.png\" }","UnsupportedInput { path: \"docs/prototypes/alphazede-design-system/reference-v3/alphazede-sports-mobile.png\" }","OversizedInput { path: \"docs/plans/123-website-security-assurance/evidence/sbom.json\", actual: 1676111, limit: 1048576 }","OversizedInput { path: \"docs/plans/123-website-security-assurance/evidence/wave3-s6-nuclei.jsonl\", actual: 1694183, limit: 1048576 }","OversizedInput { path: \"docs/plans/agent-skills/2026-09-08-engineering-methods-and-vnv-integration/migration-classification-proposal.json\", actual: 1358039, limit: 1048576 }","OversizedInput { path: \"docs/plans/agent-skills/2026-09-08-engineering-methods-and-vnv-integration/review.html\", actual: 2157919, limit: 1048576 }","OversizedInput { path: \"docs/plans/organizational-requirements/2026-10-01-coe-data-database-lifecycle/implementation.json\", actual: 1472636, limit: 1048576 }","unmatched_query_terms: contract-afc-speckit"],"failures":[],"provenance":{"sources":["repository-scanner","bran-core"],"selected_locators":["skills/spec-authoring/LICENSE-gridmarket","skills/spec-authoring/SKILL.md","skills/spec-authoring/agents/openai.yaml","skills/spec-authoring/references/figures.md","skills/spec-authoring/references/section-rules.md","skills/spec-authoring/references/vendoring.md","skills/spec-authoring/scripts/diagram.py","skills/spec-authoring/scripts/spec_build.py","skills/spec-authoring/scripts/spec_lint.py","skills/spec-authoring/scripts/vendor.sh","skills/spec-authoring/template/01-introduction.md","skills/spec-authoring/template/01.1-background.md","skills/spec-authoring/template/01.2-baseline.md","skills/spec-authoring/template/01.2.1-baselines.md","skills/spec-authoring/template/01.3-feature-set.md","skills/spec-authoring/template/01.4-scope.md","skills/spec-authoring/template/01.6-terms.md","skills/spec-authoring/template/02-open-items.md","skills/spec-authoring/template/02.1-risks.md","skills/spec-authoring/template/03-use-model.md","skills/spec-authoring/template/04.1.1-feature.md","skills/spec-authoring/template/04.3-data-model.md","skills/spec-authoring/template/04.4-performance.md","skills/spec-authoring/template/04.8-rationale.md","skills/spec-authoring/template/05-security.md","skills/spec-authoring/template/07-verification.md","skills/spec-authoring/template/spec.yaml","skills/spec-authoring/tests/test_azdiagram.py","skills/spec-authoring/tests/test_portability.py","skills/spec-authoring/tests/test_spec_authoring.py","skills/spec-authoring/tests/test_spec_tools.py","skills/spec-authoring/tests/trigger-requests.json"],"why_selected":[{"locator":"skills/spec-authoring/LICENSE-gridmarket","reason":"metadata_seed"},{"locator":"skills/spec-authoring/SKILL.md","reason":"metadata_seed"},{"locator":"skills/spec-authoring/agents/openai.yaml","reason":"metadata_seed"},{"locator":"skills/spec-authoring/references/figures.md","reason":"metadata_seed"},{"locator":"skills/spec-authoring/references/section-rules.md","reason":"metadata_seed"},{"locator":"skills/spec-authoring/references/vendoring.md","reason":"metadata_seed"},{"locator":"skills/spec-authoring/scripts/diagram.py","reason":"metadata_seed"},{"locator":"skills/spec-authoring/scripts/spec_build.py","reason":"metadata_seed"},{"locator":"skills/spec-authoring/scripts/spec_lint.py","reason":"metadata_seed"},{"locator":"skills/spec-authoring/scripts/vendor.sh","reason":"metadata_seed"},{"locator":"skills/spec-authoring/template/01-introduction.md","reason":"metadata_seed"},{"locator":"skills/spec-authoring/template/01.1-background.md","reason":"metadata_seed"},{"locator":"skills/spec-authoring/template/01.2-baseline.md","reason":"metadata_seed"},{"locator":"skills/spec-authoring/template/01.2.1-baselines.md","reason":"metadata_seed"},{"locator":"skills/spec-authoring/template/01.3-feature-set.md","reason":"metadata_seed"},{"locator":"skills/spec-authoring/template/01.4-scope.md","reason":"metadata_seed"},{"locator":"skills/spec-authoring/template/01.6-terms.md","reason":"metadata_seed"},{"locator":"skills/spec-authoring/template/02-open-items.md","reason":"metadata_seed"},{"locator":"skills/spec-authoring/template/02.1-risks.md","reason":"metadata_seed"},{"locator":"skills/spec-authoring/template/03-use-model.md","reason":"metadata_seed"},{"locator":"skills/spec-authoring/template/04.1.1-feature.md","reason":"metadata_seed"},{"locator":"skills/spec-authoring/template/04.3-data-model.md","reason":"metadata_seed"},{"locator":"skills/spec-authoring/template/04.4-performance.md","reason":"metadata_seed"},{"locator":"skills/spec-authoring/template/04.8-rationale.md","reason":"metadata_seed"},{"locator":"skills/spec-authoring/template/05-security.md","reason":"metadata_seed"},{"locator":"skills/spec-authoring/template/07-verification.md","reason":"metadata_seed"},{"locator":"skills/spec-authoring/template/spec.yaml","reason":"metadata_seed"},{"locator":"skills/spec-authoring/tests/test_azdiagram.py","reason":"metadata_seed"},{"locator":"skills/spec-authoring/tests/test_portability.py","reason":"metadata_seed"},{"locator":"skills/spec-authoring/tests/test_spec_authoring.py","reason":"metadata_seed"},{"locator":"skills/spec-authoring/tests/test_spec_tools.py","reason":"metadata_seed"},{"locator":"skills/spec-authoring/tests/trigger-requests.json","reason":"metadata_seed"}],"source_rankings":[{"locator":"skills/spec-authoring/tests/test_portability.py","rank":1,"score":{"exact":1,"partial":1,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:body+path"},{"locator":"skills/spec-authoring/references/figures.md","rank":2,"score":{"exact":1,"partial":0,"active":3,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/references/vendoring.md","rank":3,"score":{"exact":1,"partial":0,"active":3,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/references/section-rules.md","rank":4,"score":{"exact":1,"partial":0,"active":3,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/SKILL.md","rank":5,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:body+path"},{"locator":"skills/spec-authoring/scripts/vendor.sh","rank":6,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/scripts/diagram.py","rank":7,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/LICENSE-gridmarket","rank":8,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/template/spec.yaml","rank":9,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/agents/openai.yaml","rank":10,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/scripts/spec_lint.py","rank":11,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/scripts/spec_build.py","rank":12,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/template/01.4-scope.md","rank":13,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/template/01.6-terms.md","rank":14,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/template/02.1-risks.md","rank":15,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/template/05-security.md","rank":16,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/tests/test_azdiagram.py","rank":17,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/template/03-use-model.md","rank":18,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/tests/test_spec_tools.py","rank":19,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/template/02-open-items.md","rank":20,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/template/01.2-baseline.md","rank":21,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/template/04.1.1-feature.md","rank":22,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/template/04.8-rationale.md","rank":23,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/template/01.1-background.md","rank":24,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/template/01-introduction.md","rank":25,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/tests/trigger-requests.json","rank":26,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/template/04.3-data-model.md","rank":27,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/template/07-verification.md","rank":28,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/tests/test_spec_authoring.py","rank":29,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:body+path"},{"locator":"skills/spec-authoring/template/01.2.1-baselines.md","rank":30,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/template/01.3-feature-set.md","rank":31,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"},{"locator":"skills/spec-authoring/template/04.4-performance.md","rank":32,"score":{"exact":1,"partial":0,"active":0,"canonical":0,"public_safe":0,"confidence":40,"freshness":""},"match_reason":"exact:path"}]},"metrics":{"candidate_source_bytes":28448352,"selected_source_bytes":58165,"context_bytes_avoided":28390187,"estimated_tokens":14542,"token_estimate_method":"bytes-divided-by-four-ceiling"}}
+
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/bash -lc "python3 - <<'PY'
+import json,pathlib
+p=pathlib.Path('$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion')
+for n in ['journey.json','implementation.json']:
+ d=json.loads((p/n).read_text())
+ def walk(x,path=''):
+  if isinstance(x,dict):
+   if any(str(v) in ('S06','S06-g3') for v in x.values() if not isinstance(v,(dict,list))): print(n,path,json.dumps(x,indent=2))
+   else:
+    for k,v in x.items(): walk(v,path+'/'+k)
+  elif isinstance(x,list):
+   for i,v in enumerate(x): walk(v,path+'/'+str(i))
+ walk(d)
+print((p/'specialists/pd-delta-w1b-receipt.md').read_text())
+PY" in $HOME/alphazede/worktrees/alphazedehq-afc-s06-spec-authoring
+ succeeded in 0ms:
+journey.json /execution_receipts/8 {
+  "at": "2026-10-12T07:20:17Z",
+  "kind": "dispatch_record",
+  "lease_id": "S06-g3",
+  "slice": "S06",
+  "generation": 3,
+  "repository": "alphazede/Alphazedehq + alphazede/requirements-system",
+  "worktree": "$HOME/alphazede/worktrees/alphazedehq-afc-s06-spec-authoring + requirements-system-afc-s06",
+  "branch": "afc/s06-spec-authoring + afc/s06-use-rs-nontrigger",
+  "base": "origin/main",
+  "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/",
+  "authority": "AUTH-AFC-2026-10-11-002",
+  "package_digest": "0a85d1e5d58c42ff816f37cc0600cbe0fea51df2e1dd71d430116588e9714843"
+}
+implementation.json /dependencies/0 {
+  "from": "S06",
+  "to": "S06L",
+  "kind": "merged",
+  "condition": "S06 merged; alphazedehq-main-checkout at or after the S06 merge commit"
+}
+implementation.json /dependencies/1 {
+  "from": "S06",
+  "to": "S42",
+  "kind": "merged",
+  "condition": "S06 merged; alphazedehq-main-checkout at or after the S06 merge commit"
+}
+implementation.json /dependencies/13 {
+  "from": "S06",
+  "to": "S11",
+  "kind": "merged",
+  "condition": "S11T, S09 merged, S06 merged, S06L"
+}
+implementation.json /slices/3 {
+  "id": "S06",
+  "role": "Product Implementer",
+  "goal": "Skill slice (spec-and-docs lane, Phase 1): deliver AC-AFC-D5-01, AC-AFC-D5-02, AC-AFC-D5-03, AC-AFC-D5-04, AC-AFC-D5-05, RISK-AFC-13, RISK-AFC-15 per DES-AFC-D5, CONTRACT-AFC-SPECKIT inside the exact write set. Done when: S06 stop condition holds (Alphazedehq PR plus requirements-system PR, DEC-AFC-SD-028).",
+  "type": "skill",
+  "requirement_ids": [
+    "AC-AFC-D5-01",
+    "AC-AFC-D5-02",
+    "AC-AFC-D5-03",
+    "AC-AFC-D5-04",
+    "AC-AFC-D5-05",
+    "RISK-AFC-13",
+    "RISK-AFC-15",
+    "RISK-AFC-16"
+  ],
+  "design_ids": [
+    "DES-AFC-D5",
+    "CONTRACT-AFC-SPECKIT"
+  ],
+  "seit_proof_rows": [
+    "SEIT-AFC-D5-01.T",
+    "SEIT-AFC-D5-01.S",
+    "SEIT-AFC-D5-02",
+    "SEIT-AFC-D5-03.T",
+    "SEIT-AFC-D5-03.I",
+    "SEIT-AFC-D5-04",
+    "SEIT-AFC-D5-05.L",
+    "SEIT-AFC-RISK-13.D",
+    "SEIT-AFC-RISK-15",
+    "SEIT-AFC-RISK-16"
+  ],
+  "design_lenses": [
+    "Lean skill",
+    "Repo-agnostic",
+    "Spec discipline",
+    "Developer feedback"
+  ],
+  "model_route": {
+    "snapshot_profile": "tech-writing",
+    "snapshot_role": "implementer",
+    "configuration_digest_sha256": "8a6b57450b92f5658666150c7cdcb05553016240061befb226c0ae4eb83c94ce",
+    "harness": "Codex CLI",
+    "model": "GPT-6 Astra",
+    "reasoning": "medium",
+    "ordered_fallbacks": [
+      {
+        "harness": "Claude Code",
+        "model": "Claude Opus 5.5",
+        "reasoning": "medium",
+        "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route."
+      },
+      {
+        "harness": "Muse Code",
+        "model": "Muse Spark 1.3",
+        "reasoning": "max",
+        "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks."
+      }
+    ]
+  },
+  "reasoning_level": {
+    "level": "medium",
+    "reason": "Frozen tech-writing snapshot implementer route reasoning; no per-slice override."
+  },
+  "review_path": {
+    "reviewer_cadence": "phase",
+    "reviewer_route": {
+      "snapshot_profile": "tech-writing",
+      "snapshot_role": "reviewer",
+      "configuration_digest_sha256": "8a6b57450b92f5658666150c7cdcb05553016240061befb226c0ae4eb83c94ce",
+      "harness": "Muse Code",
+      "model": "Muse Spark 1.3",
+      "reasoning": "max",
+      "ordered_fallbacks": [
+        {
+          "harness": "Claude Code",
+          "model": "Claude Opus 5.5",
+          "reasoning": "xhigh",
+          "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route."
+        },
+        {
+          "harness": "Codex CLI",
+          "model": "GPT-6 Astra",
+          "reasoning": "xhigh",
+          "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks."
+        }
+      ]
+    },
+    "review_unit": "Phase 1 integration step IE-P1-4 (review boundary unit per OA-AFC-A3 option A; each PR reviewed once at its own step)",
+    "test_engineer_assurance": "disabled (frozen tech-writing snapshot test_engineer.assurance.enabled=false)",
+    "integration_engineer_execution": "lifecycle",
+    "coverage_assist": "OCR delegate mode (ocr delegate preview --from <base> --to <head>; ocr delegate rule <files>), required",
+    "coverage_assist_command_id": "CMD-OCR-DELEGATE",
+    "reverify": "Reverify: not applicable \u2014 Phase 1 changes are skill text, shell and Python scripts and workflow YAML; no compiled binary is built or claimed",
+    "review_cardinality": "n=1, k=1, c=0 (one independent review, one repair round, deterministic verification decides)",
+    "skills": [
+      "$HOME/.claude/plugins/cache/bearing-lite/bearing-lite/1.1.6/skills/reviewer/SKILL.md",
+      "$HOME/.claude/skills/vnv-review/SKILL.md (once docs/vnv exists, after S07)"
+    ],
+    "landing_skill": "$HOME/.claude/skills/ship-pull-request/SKILL.md (rebase or merge commit, never squash)"
+  },
+  "write_set": [
+    "Alphazedehq:skills/spec-authoring/ (includes tests/test_spec_authoring.py and tests/trigger-requests.json)",
+    "requirements-system:skills/use-requirements-system/SKILL.md"
+  ],
+  "command_ids": [
+    "CMD-SCAN",
+    "CMD-D5-TEST",
+    "CMD-D5-AGNOSTIC",
+    "CMD-SKILL-SIZE",
+    "CMD-SKILL-TRIGGER"
+  ],
+  "stop_condition": "Tests, repo-agnostic build and size check exit 0; trigger classification and the reciprocal use-requirements-system classification pass; PR open in Alphazedehq and the reciprocal non-trigger PR open in alphazede/requirements-system (DEC-AFC-SD-028).",
+  "human_decision": {
+    "owner_actions": [],
+    "open_decisions": [
+      "OD-AFC-07",
+      "OD-AFC-08",
+      "OA-AFC-A2"
+    ]
+  },
+  "authority_id": "AUTH-AFC-2026-10-11-002",
+  "work_class": "judgement",
+  "work_class_reason": "Skill text and tooling authoring; content and boundaries are written in-session.",
+  "lane": "spec-and-docs",
+  "lane_profile": "tech-writing",
+  "milestone": "Phase 1",
+  "wave": "Wave 1",
+  "depends_on": [],
+  "depends_on_text": "\u2014",
+  "leases": [
+    "alphazedehq-skills/spec-authoring",
+    "requirements-system-skills/use-requirements-system"
+  ],
+  "repo": "alphazede/Alphazedehq",
+  "skills": [
+    "$HOME/.claude/plugins/cache/bearing-lite/bearing-lite/1.1.6/skills/implementer/SKILL.md",
+    "$HOME/.agents/skills/create-lean-skill/SKILL.md",
+    "$HOME/.claude/skills/scan-software-supply-chain/SKILL.md"
+  ],
+  "developer_feedback_required": true,
+  "developer_feedback": {
+    "requirement_id": "AC-AFC-DX-01",
+    "check_command_id": "CMD-DX-PRESENCE",
+    "rule": "Every dispatch packet and return carries a developer_feedback section the Scribe can ingest (S08 seeds the log). Each observation gives the AC-AFC-DX-04 fields that apply (Devpost Product Feedback, Friction Log Entry, Feature Request); a field that does not apply is n/a and an unmeasured one is unknown (DEC-AFC-SD-025)."
+  },
+  "development_strategy": "single_implementer",
+  "packet_fixed_names": {
+    "trigger_requests": {
+      "matching": "write the architecture spec for this repo as Markdown sections and build it",
+      "non_matching": "publish the SDoc revision to the Requirements System workbench",
+      "expected_peer": "use-requirements-system"
+    },
+    "source": "seit.json gate_declarations.spec_and_docs.trigger_requests"
+  },
+  "cross_repo_write": {
+    "repository": "alphazede/requirements-system",
+    "path": "skills/use-requirements-system/SKILL.md (description lines only)",
+    "worktree": "<workspace>/worktrees/requirements-system-afc-s06-nontrigger",
+    "landing": "its own PR, rebase or merge commit; that repository's own gates and AGENTS.md apply",
+    "rule": "Alphazedehq skills/use-requirements-system is a tracked symlink into the requirements-system checkout; edit the real file in the requirements-system worktree, never the symlink or its target directory in Alphazedehq",
+    "decision": "DEC-AFC-SD-028"
+  },
+  "verification_note": "CMD-SKILL-SIZE and CMD-SKILL-TRIGGER follow the Alphazedehq stock skill-test pattern (DEC-AFC-SD-026): author tests/test_<skill_snake>.py (mirroring skills/release-process/tests/test_release_process.py) and tests/trigger-requests.json; never run quick_validate.py on the repository SKILL.md; CMD-D4-AGNOSTIC (D4 slices) scans only the tracked files this slice changed in its own directory since its dispatch-record <base>, generated artifacts excluded (DEC-AFC-SD-029). CMD-D5-AGNOSTIC's name and home-path scans read only the tracked files S06 changed since its dispatch-record <base>; bytecode is never scanned (DEC-AFC-SD-029). Every command's own exit status is its verdict; evidence goes to the dispatch record's evidence_dir."
+}
+implementation.json /dod_manifest/tasks/3 {
+  "id": "S06",
+  "role": "Product Implementer",
+  "depends_on": "\u2014",
+  "write_set": [
+    "Alphazedehq:skills/spec-authoring/ (includes tests/test_spec_authoring.py and tests/trigger-requests.json)",
+    "requirements-system:skills/use-requirements-system/SKILL.md"
+  ],
+  "wave": "Wave 1",
+  "lane": "spec-and-docs",
+  "status": "planned"
+}
+implementation.json /dod_manifest/tasks/5 {
+  "id": "S06L",
+  "role": "Light Implementer",
+  "depends_on": "S06",
+  "write_set": [
+    "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/skill-links.txt"
+  ],
+  "wave": "Wave 2",
+  "lane": "spec-and-docs",
+  "status": "planned"
+}
+implementation.json /dod_manifest/tasks/6 {
+  "id": "S42",
+  "role": "Light Implementer",
+  "depends_on": "S06",
+  "write_set": [
+    "tools/spec/",
+    "THIRD_PARTY_NOTICES.md"
+  ],
+  "wave": "Wave 2",
+  "lane": "spec-and-docs",
+  "status": "planned"
+}
+# Planning and Design DELTA receipt: Wave 1 re-dispatch, DEC-AFC-SD-029, DEC-AFC-SD-030, dispatch records
+
+- **Role:** Planning and Design node (`BEARING_ROLE=planning_and_design`), DELTA mode. It applies owner decisions made during the Wave 1 re-dispatch and the Orchestrator's S01 dispatch-record finding. It is not a correction round.
+- **Inputs:** `specialists/pd-delta-w1b-prompt.md`; `journey.json` DEC-AFC-SD-029, DEC-AFC-SD-030 and the 2026-10-12T07:10:15Z `wave_receipt`; `packets/S03-r2-run.log` (directory-wide scan, exit masking); `packets/S06-r2-run.log` (`.pyc` matches); the spec-track models in the `amazon-fantasy-companion-spec-track` worktree (read-only).
+- **Revision against:** `origin/main` = `d7e4dab`. Its package artifacts are the approved amended package (DEC-AFC-APPROVAL-002, manifest digest `d7d92af7…c334d9`). Local HEAD `756853c` has the same tree.
+- **Return:** `DELTA_APPLIED`. SD-030 is in the plan, but `CMD-MODEL-LOAD` cannot pass until the owner decides **OD-AFC-13**. Until then it records the typed gap `MODEL_NOT_REGISTERED`.
+- **New manifest (candidate) digest:** `0a85d1e5d58c42ff816f37cc0600cbe0fea51df2e1dd71d430116588e9714843`
+- **Rendered DoD Manifest:** sha256 `fdfd2cdff965306cc66897cc56f03f534556044e6f94ce4979667924e93538a8`, template 1.0.1
+
+## Revision diff vs origin/main (d7e4dab)
+
+| Item | Change |
+|---|---|
+| 1. SD-029 `CMD-D4-AGNOSTIC` | The ID is kept. The new command is `d=$(git diff --name-only --diff-filter=ACMR <base>..HEAD -- <slice_paths>)`. It filters out `^$`, `\.pyc$`, `(^\|/)(__pycache__\|build\|dist)/` and GATES.md, prints `scanned:` for each file, and fails on an empty list. It then runs `git grep -nIiE '<pattern>' HEAD -- $f; [ $? -eq 1 ]`, so it reads committed content only and never sees untracked or uncommitted files. `<base>` is the base SHA from the slice's dispatch record. The combined Wave 1 exit run uses the oldest base among S01..S03. A match exits 1, and any other non-zero status (for example 128 for a bad base) is a typed gap. The pass rule, the description, SEIT-AFC-D4-06 stimulus and evidence, the traceability row and the integration_vv_sequence pre_merge text are all updated. |
+| 1. SD-029 `CMD-D5-AGNOSTIC` | The ID is kept. The template build, lint and diagram steps are unchanged. The name scan and the home-path scan now read only the tracked files S06 changed (`<base>..HEAD -- skills/spec-authoring`), with generated artifacts excluded, through `git grep … HEAD`. The provenance exclusions are the same as before: `LICENSE-gridmarket`, `vendor.sh` and `references/`. The MIT check is `git grep -q … HEAD -- LICENSE-gridmarket`. An empty scanned list is FAIL. The pass rule, the description and the D5-01 and D5-02 stimulus text are updated. |
+| 1. Exit masking | Every command that ended with `; echo "exit=$?"` (25 besides the two above) now ends with `; rc=$?; echo "exit=$rc"; (exit $rc)`. CMD-RED and CMD-LANDING-CHECK had the echo in the middle of the command. They keep their trailing receipt and cleanup steps and then exit with `rc`. A new `seit.json` `environments.exit_status` entry states the rule. Zero `echo "exit=$?"` remain in any command. |
+| 2. SD-030 `CMD-MODEL-LOAD` (new, 48th command) | The command saves `checkout list` (before), the sha256 of each model, and `model load --package <models_dir>` stdout and stderr into `<st_evidence_dir>`. It then saves `checkout list` (after), and `cmp` requires the before and after lists to be identical. The rule: never `--replace`, never `checkout create`, `release` or `move`, never another package, never the Maestro checkout. A parse error is FAIL and goes to the Systems Modeler for repair. A refusal before parsing is `MODEL_NOT_REGISTERED` or `HOST_UNAVAILABLE`, never PASS. `used_by` is ST-3 (b)/(c) and the ST-4 entry criterion. |
+| 2. SD-030 ST-3 / ST-4 | Updated in the TP table, `implementation.json` `phase2_sequence` and design DES-AFC-PHASE2. ST-3 gains step (d), the SysON parse check after (b) and again after (c). Its exit requires CMD-MODEL-LOAD PASS on the final model digest, or the recorded gap while OD-AFC-13 is open. ST-4 entry adds "ST-3 (d) PASS, or the owner's OD-AFC-13 decision". ST-4 figures come from views of the loaded model revision. |
+| 2. SD-030 `authority.json` | The spec-track scope line adds CMD-MODEL-LOAD. One allowed action: `model load --package <spec-track models dir>` on the local packaged-default host, starting it with `start --no-browser` if it is down (rule 14). One prohibited action: `--replace`, `checkout create`, `release` or `move`, any other package, the Maestro checkout, and stopping the host while a busy claim is active. The granting decisions add SD-029 and SD-030. |
+| 2. OD-AFC-13 (new, open) | **Finding:** `model load` refuses any package that the host's compiled-in model registry does not bind (requirements-system `migrations/*/registry/registry.toml`, `include_str!`). The bound model must also be governed by a specification with an active checkout. I ran CMD-MODEL-LOAD as written against a scratch copy of the four spec-track `.sysml` files. The result was `package is not bound to a configured model`, exit 1, before any POST, and the checkout list was unchanged. Options: **A**, a requirements-system registry entry plus a governing AFC `.sdoc` and its own `checkout create` (needs authority beyond this envelope); **B**, a host checker or parser path without a native load; **C**, the owner accepts the gap. OD-AFC-13 is recorded in `implementation.json` open_decisions, the TP open-items table and `dod_manifest.authority`. |
+| 3. Dispatch records | New `implementation.json` `dispatch_records`. Before each dispatch the Orchestrator writes a `dispatch_record` to `journey.json` execution_receipts with these fields: `lease_id` = `<slice>-g<generation>` (generation counts earlier rounds), slice, generation, leases, repository, worktree, branch, `base` (full SHA, the `<base>` of the agnostic checks), `evidence_dir` = `docs/plans/2026-10-11-amazon-fantasy-companion/evidence/<slice>/` (with a `g<n>/` subdirectory per generation), packet, route and `dispatched_at`. A packet without its record is CONTRACT_FAILURE before any edit. `seit.json` `evidence_dirs` now resolves `<evidence_dir>` from the record, and the new `dispatch_base` defines `<base>`. DES-AFC-LANES gains the convention, and the slice `verification_note`s (S01, S02, S03, S06, S41) name it. |
+| Bookkeeping | `revision_against` is now d7e4dab / `d7d92af7…` APPROVED, decided by SD-029 and SD-030. The prior pair moves to `revision_history`. `revision_diff` is rewritten. `planning_review.repair_revision` and `candidate_digest` are rebound, as are the identity rows (Revision against, Authority, the inputs, seit, Candidate digest). There are still 33 requirement rows with no statement changed, so no Requirements Engineer gate is needed. The plan holds 55 proof cases and 48 commands, and all earlier IDs are stable. No write set, wave, route or dependency changed. |
+
+`git diff --stat origin/main -- <plan dir>` (package files):
+
+```text
+amazon-fantasy-companion-dod-manifest.html | 18   amazon-fantasy-companion-technical-plan.md | 5
+authority.json | 12   design.md | 32   implementation.json | 137   seit.json | 100
+```
+
+## Digests
+
+| Artifact | origin/main | New |
+|---|---|---|
+| technical plan | `4dbaf7e0…1fe07` | `4e6571573a1f22aff6c2245af67b903abcfdebd22a6e0a67dd18fb608b13fe66` |
+| design.md | `7c53f5eb…923d3` | `b9c52d4200aa6731c5548c54ba21317fd314296f2b4ccfa242a8851ef1ef2e30` |
+| views/views.json | `d54a59f8…2ce6` | unchanged |
+| seit.json | `fc03a461…ccdcf` | `a4d39d5e2fb95b1a0526b67e858ff8100bc4609d644b6ff8cc3b6f46068926df` |
+| candidate (manifest digest) | `d7d92af7…c334d9` | `0a85d1e5d58c42ff816f37cc0600cbe0fea51df2e1dd71d430116588e9714843` |
+| authority.json | `5a49c74f…a3ad6` | `9e080ffd2357d79b81b493159d588d9e2c449fd551837e1898b582ed4f43c896` |
+| implementation.json | `1b68d0ff…2ea3` | `72b00a4de0c9526ad26ba2c5d54d70649276dfc1d4b719974c9a67c92d8fd9c4` |
+
+## Commands and results
+
+```text
+node <bearing-lite 1.1.6>/hooks/plan-package.cjs <plan dir>                        exit 0  PASS, findings [], manifest_digest 0a85d1e5…714843
+node <bearing-lite 1.1.6>/tools/render-dod-manifest.mjs implementation.json          exit 0  RENDER_WRITE sha256:fdfd2cdf…38a8
+node <bearing-lite 1.1.6>/tools/render-dod-manifest.mjs implementation.json --check  exit 0  RENDER_CHECK_PASS sha256:fdfd2cdf…38a8
+python3 jsonschema Draft202012Validator (<bearing-lite 1.1.6>/schemas)             implementation 0 | seit 0 | authority 0 | journey 0
+slice command_ids / seit_proof_rows -> seit                                         0 orphans; 55 proofs, 48 commands
+rule 12 home-path shape scan (TP, design, *.json, manifest, views/, evidence/, slice-graph.md)   0 hits
+Self-test, commands extracted verbatim from seit.json:
+  CMD-D4-AGNOSTIC, Alphazedehq main (read-only), skills/ship-pull-request, <base>=HEAD      scanned: none, exit=1, wrapper=1 (empty list fails)
+  CMD-D4-AGNOSTIC, same, <base>=1c96ccbb^ (last SKILL.md change)                           scans SKILL.md, PR-BODY.md only; PR-BODY.md:56 match, exit=1, wrapper=1
+  CMD-D4-AGNOSTIC, scratch repo: clean change + untracked pyc + GATES.md + old file        exit=0; committed violation exit=1; bad base exit=128; uncommitted text not scanned
+  CMD-D5-AGNOSTIC scan part, scratch repo: provenance files + untracked .pyc with home path  exit=0; committed home path exit=1, wrapper=1
+  CMD-MODEL-LOAD, scratch copy of the 4 spec-track models, host 0.1.0-102                  "package is not bound to a configured model", exit=1, wrapper=1, no POST
+```
+
+The positive CMD-MODEL-LOAD path was not exercised: it needs OD-AFC-13. CMD-D5-AGNOSTIC's build and lint half is unchanged and was not rerun here, because it needs S06's scanned wheels.
+
+## Write set
+
+Changed: TP, `design.md`, `seit.json`, `implementation.json`, `authority.json`, the manifest HTML. New: this receipt. Not edited: `journey.json` (the Orchestrator's own uncommitted edit is preserved), `views/`, `packets/`, `specialists/slice-graph.md` (no write set changed) and `specialists/pd-delta-w1b-run.log`. No commits, pushes or branch operations. The pre-edit backup and the delta scripts (`delta.py`, `rebind.py`) live in a host cache directory outside the repository.
+
+## Orchestrator follow-ups
+
+- **Authority:** record DEC-AFC-SD-029 and DEC-AFC-SD-030 in `journey.json` as the basis for the new digest `0a85d1e5…`, the same way as for SD-026..028.
+- **OD-AFC-13:** owner decision needed before ST-3 (d) can pass. ST-2, ST-3 (a) to (c) and every Wave 1 or Wave 2 slice are unaffected.
+- **Re-dispatch:** regenerate `packets/S01`, `S03` and `S06` from `implementation.json` and write each slice's `dispatch_record` first. S01, S03 and S06 have each been dispatched twice, so their next `lease_id` is `-g3`. S03's earlier blocker (PR-BODY.md and edit-pr.test.sh) is now out of scope unless S03 changes those files.
+- **S02 (PR #303, already PASS):** it ran the old CMD-D4-AGNOSTIC, whose wrapper always exited 0. Check its receipt for a printed `exit=0` before you land it, or rerun the new form on its head.
+
+## developer_feedback
+
+| ID | Tool | Used for | Worked well | Needs work (task / steps / expected / actual) | Severity | Workaround | Suggestion | Would build again |
+|---|---|---|---|---|---|---|---|---|
+| PD-W1B-OBS-1 | Requirements System 0.1.0-102 `model load` | SD-030 SysON parse check of a new product model | Fails closed before any POST, with a clear message | Load a new, unregistered SysML package to check that it parses / `model load --package <dir>` / a parse result / `package is not bound to a configured model`, exit 1. The registry is compiled in, so a new product cannot be parse-checked without a code change and a governing `.sdoc`. | Major | OD-AFC-13 | A host `model parse --package DIR` (or a check with no registry) that loads into a scratch native project and reports parser diagnostics only | Yes |
+| PD-W1B-OBS-2 | Plan (this Lifecycle) | Command wrappers | `exit=` lines made the evidence readable | 27 commands ended in `; echo "exit=$?"`, so every wrapper exited 0. S03 caught it by hand. | Major | `rc=$?; echo; (exit $rc)` | A plan-package lint that rejects a trailing bare `echo "exit=$?"` in seit commands | Yes |
+| PD-W1B-OBS-3 | plan-package.cjs | Digest rebind | PASS/FAIL with exact digests | The two-pass rebind is still needed (repeats PD-W1-OBS-3) | Minor | Two-pass script | A `rebind` subcommand | Yes |
+| PD-W1B-OBS-4 | Plan (this Lifecycle) | Pre-dispatch validation | n/a | Like PD-W1-OBS-4: the agnostic scope and `.pyc` defects would have surfaced in a dry run of each slice's commands against its base. | Major | This delta | Dry-run each slice's commands on its dispatch-record base before dispatch | Yes |
+
+AWS services: n/a. Tools exercised: python3 (json, jsonschema, hashlib), node v22.23.3 (plan-package, render-dod-manifest), git 2.53.0, alphazede-requirements-system 0.1.0-102 (`checkout list`, `model load`, refused), sha256sum, cmp.
+
+
+codex
+BRAN validation passed using the pinned HQ runtime; `bran_status: hit` for the existing skill files. The S06-g3 dispatch record has `base: origin/main`, but the approved scan requires a recorded full SHA. I’m checking for that immutable base elsewhere in the dispatch records before editing.
+
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/bash -lc "python3 - <<'PY'
+import json,pathlib
+p=pathlib.Path('$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion')
+i=json.loads((p/'implementation.json').read_text()); print('dispatch_records:',json.dumps(i.get('dispatch_records'),indent=2))
+j=json.loads((p/'journey.json').read_text())
+for x in j.get('execution_receipts',[]):
+ if 'S06' in json.dumps(x): print(json.dumps(x,indent=2))
+PY
+ git -C $HOME/alphazede/worktrees/requirements-system-afc-s06 log -1 --format='%H %s'
+ git branch --show-current" in $HOME/alphazede/worktrees/alphazedehq-afc-s06-spec-authoring
+ succeeded in 0ms:
+dispatch_records: {
+  "convention": "Every slice dispatch, first or repeated, has one dispatch record. The Orchestrator writes it into journey.json execution_receipts (kind `dispatch_record`) before the dispatch and names it in the packet. A packet without its dispatch record is an Orchestrator defect; the implementer returns CONTRACT_FAILURE before any edit (S01 Wave 1 re-dispatch finding).",
+  "writer": "Orchestrator",
+  "when": "Before each dispatch. A re-dispatch increments generation and writes a new record; the record releases the previous generation's lease.",
+  "fields": {
+    "lease_id": "<slice>-g<generation>, for example S01-g3. Generation counts every dispatch of that slice in this Lifecycle, earlier rounds included (S01 Wave 1 = g1, re-dispatch = g2).",
+    "slice": "slice id from implementation.json slices",
+    "generation": "integer, starting at 1",
+    "leases": "the slice's leases (slices[].leases) granted under this lease_id",
+    "repository": "repository the worktree belongs to",
+    "worktree": "<workspace>/worktrees/... per integration_plan.worktrees",
+    "branch": "the slice branch",
+    "base": "full SHA the worktree was created from; it is <base> in CMD-D4-AGNOSTIC and CMD-D5-AGNOSTIC",
+    "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/<slice>/ in this repository; one subdirectory per generation, g<generation>/",
+    "packet": "packets/<slice>[-r<n>].md path",
+    "route": "model route and reasoning level from the frozen lane profile",
+    "dispatched_at": "UTC timestamp"
+  },
+  "evidence_dir_rule": "<evidence_dir> in every command and proof case is the record's evidence_dir/g<generation>/. Cross-repository slices write their evidence there, in this repository's evidence/ tree (authority.json allowed path), never into the Alphazedehq or requirements-system worktree.",
+  "example": {
+    "kind": "dispatch_record",
+    "lease_id": "S03-g3",
+    "slice": "S03",
+    "generation": 3,
+    "leases": [
+      "alphazedehq-skills/ship-pull-request"
+    ],
+    "repository": "github:alphazede/Alphazedehq",
+    "worktree": "<workspace>/worktrees/Alphazedehq-ci-cd-ship-pull-request",
+    "branch": "afc/s03-ship-pull-request",
+    "base": "<40-hex SHA>",
+    "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S03/",
+    "packet": "packets/S03-r3.md",
+    "route": "<lane profile route>",
+    "dispatched_at": "<UTC>"
+  }
+}
+{
+  "at": "2026-10-12T02:54:36Z",
+  "kind": "wave_receipt",
+  "detail": "Wave 1: S07 DONE, reviewed PASS (Muse, OCR), PR #3 merged. S01/S03 OWNER_DECISION_REQUIRED and S02 BLOCKED on plan verification defects (generic validator vs HQ metadata; 1-turn trigger harness; PyYAML wheel not acquired; CMD-D4-AGNOSTIC spans S03 files). S06 BLOCKED: use-requirements-system is a symlink into requirements-system repo. Resolved by DEC-AFC-SD-026..028; plan delta follows."
+}
+{
+  "at": "2026-10-12T07:10:15Z",
+  "kind": "wave_receipt",
+  "detail": "Wave 1 re-dispatch: S02 PASS (Alphazedehq PR #303, review running). S01 CONTRACT_FAILURE: Orchestrator packet gave no slice lease/evidence dir (Orchestrator defect). S03 and S06 CONTRACT_FAILURE on agnostic-scan command scope (plan defect, DEC-AFC-SD-029); S06 also 1 failing vendoring test (implementation defect). ST-3b/c READY with CHECKER_UNAVAILABLE gap (DEC-AFC-SD-030)."
+}
+{
+  "at": "2026-10-12T07:20:17Z",
+  "kind": "dispatch_record",
+  "lease_id": "S06-g3",
+  "slice": "S06",
+  "generation": 3,
+  "repository": "alphazede/Alphazedehq + alphazede/requirements-system",
+  "worktree": "$HOME/alphazede/worktrees/alphazedehq-afc-s06-spec-authoring + requirements-system-afc-s06",
+  "branch": "afc/s06-spec-authoring + afc/s06-use-rs-nontrigger",
+  "base": "origin/main",
+  "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/",
+  "authority": "AUTH-AFC-2026-10-11-002",
+  "package_digest": "0a85d1e5d58c42ff816f37cc0600cbe0fea51df2e1dd71d430116588e9714843"
+}
+1c76360fea8c0638435ffb47be2fadc4edab9c6b docs: separate Markdown spec authoring from Requirements System routing
+afc/s06-spec-authoring
+
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/bash -lc "python3 - <<'PY'
+import json,re,pathlib,subprocess,datetime
+p=pathlib.Path('$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion')
+r=next(x for x in json.loads((p/'journey.json').read_text())['execution_receipts'] if x.get('lease_id')=='S06-g3')
+e=p/'evidence/S06/g3'; e.mkdir(parents=True,exist_ok=True)
+out={'outcome':'CONTRACT_FAILURE','lease_id':'S06-g3','at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'blocker':'CMD-D5-AGNOSTIC requires the full base SHA from the dispatch record; S06-g3 records origin/main, a mutable ref, and no immutable base is recorded. implementation.json dispatch_records.fields.base requires full SHA the worktree was created from. Cannot substitute a guessed SHA or amend the read-only dispatch record.','candidates':{'Alphazedehq':{'branch':'afc/s06-spec-authoring','head':'0ce8e0c64b8f42ce699ab999a6ce6fea036742f5','draft_pr':None},'requirements-system':{'branch':'afc/s06-use-rs-nontrigger','head':'1c76360fea8c0638435ffb47be2fadc4edab9c6b','draft_pr':None}},'changed_paths':[],'bran_status':'hit','bran_refs':{'coverage':'partial; skill files located, CONTRACT-AFC-SPECKIT unmatched','paths':['skills/spec-authoring/SKILL.md','skills/spec-authoring/scripts/vendor.sh'],'extra_discovery_avoided':False},'commands':[{'command':'Pinned HQ BRAN hash verification, then bran check . bran-strict','exit_code':0,'tail':'selected_passed: true; exit_code: 0'},{'command':'BRAN query . \"spec-authoring S06 CONTRACT-AFC-SPECKIT\"','exit_code':0,'tail':'partial_unanchored; matched spec-authoring and s06'},{'command':'dispatch base full-SHA precondition','exit_code':1,'tail':'CONTRACT_FAILURE: S06-g3 base is origin/main; expected 40 hexadecimal characters'}],'proof_rows':{'SEIT-AFC-D5-01.T':'NOT_RUN','SEIT-AFC-D5-01.S':'NOT_RUN (BRAN component passed only)','SEIT-AFC-D5-02':'BLOCKED (dispatch base missing)','SEIT-AFC-D5-03.T':'NOT_RUN','SEIT-AFC-D5-03.I':'NOT_RUN','SEIT-AFC-D5-04':'NOT_RUN','SEIT-AFC-D5-05.L':'NOT_RUN (outside implementer authority)','SEIT-AFC-RISK-13.D':'NOT_RUN','SEIT-AFC-RISK-15':'NOT_RUN','SEIT-AFC-RISK-16':'NOT_RUN (Phase 2 entry outside this slice)'},'remaining_risks':['Prior reported vendoring test failure remains unrepaired.','Both draft PRs remain unopened.','No current-candidate test, scan, size or trigger pass is claimed.'],'developer_feedback':{'tool':'Lifecycle dispatch record','used_for':'CMD-D5-AGNOSTIC immutable scan baseline','worked_well':'Preflight detected mutable baseline before editing','task':'Resume S06-g3','steps':'Read journey.json dispatch and implementation.json dispatch schema','expected':'Full SHA of worktree creation base','actual':'origin/main','severity':'blocking','workaround':'none within packet authority; Orchestrator records the verified original base SHA','suggestion':'Validate dispatch base as 40-hex before dispatch','measured_cost':'unknown','would_build_again':'unknown','aws_services':'n/a'},'review':'Not performed; independent phase review and OCR remain for the dispatched reviewer. Reverify not applicable: no compiled binary built or claimed.'}
+(e/'implementer-return.json').write_text(json.dumps(out,indent=2)+'\\n')
+print('CONTRACT_FAILURE: S06-g3 base is '+r['base']+'; expected 40 hexadecimal characters')
+raise SystemExit(0 if re.fullmatch('[0-9a-fA-F]{40}',r['base']) else 1)
+PY" in $HOME/alphazede/worktrees/alphazedehq-afc-s06-spec-authoring
+ exited 1 in 0ms:
+CONTRACT_FAILURE: S06-g3 base is origin/main; expected 40 hexadecimal characters
+
+codex
+**CONTRACT_FAILURE — S06-g3**
+
+The dispatch records `base: origin/main`; CMD-D5-AGNOSTIC requires the **full SHA the worktree was created from**. Preflight exited 1. The Orchestrator must record that verified SHA before execution resumes.
+
+Candidates unchanged:
+
+- HQ: `afc/s06-spec-authoring` at `0ce8e0c6`
+- Requirements System: `afc/s06-use-rs-nontrigger` at `1c76360f`
+
+`bran_status: hit`; pinned BRAN validation passed. Full proof-row statuses and developer feedback: [receipt](../amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/g3/implementer-return.json).
+
+Implementation, prescribed verification, and draft PR creation remain unperformed. The previously reported vendoring defect remains unrepaired.
+hook: Stop
+hook: Stop Completed
+tokens used
+43,814
+**CONTRACT_FAILURE — S06-g3**
+
+The dispatch records `base: origin/main`; CMD-D5-AGNOSTIC requires the **full SHA the worktree was created from**. Preflight exited 1. The Orchestrator must record that verified SHA before execution resumes.
+
+Candidates unchanged:
+
+- HQ: `afc/s06-spec-authoring` at `0ce8e0c6`
+- Requirements System: `afc/s06-use-rs-nontrigger` at `1c76360f`
+
+`bran_status: hit`; pinned BRAN validation passed. Full proof-row statuses and developer feedback: [receipt](../amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/g3/implementer-return.json).
+
+Implementation, prescribed verification, and draft PR creation remain unperformed. The previously reported vendoring defect remains unrepaired.
+exit=0

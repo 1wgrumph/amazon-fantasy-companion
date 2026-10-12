@@ -1,0 +1,25 @@
+**DELTA_APPLIED.** The new manifest digest is `7a9a87433dd0c1aebcb00acd82c3f49989fef915730bcda22c817239d00f055d`.
+
+- **CMD-MODEL-LOAD → CMD-MODEL-PARSE:** the command keeps its slot as the 48th command, and no proof case cites it. It fails if there are no `.sysml` files under the spec-track `models/`. It then requires:
+  - a CMD-SCAN receipt with `verdict: PASS` that contains the sha256 of the pinned `syside-0.11.0` wheel;
+  - the venv's syside to report version 0.11.0.
+
+  It then records the model digests and calls `syside.load_model(all files)`, which raises an error if any file fails to parse. Its own exit status is the verdict, with no masking. Nothing enters the Requirements System. A new `environments.syside` entry in `seit.json` covers the pinned download, the scan, and installing into a virtual environment outside every repository.
+- **OD-AFC-13** is closed, citing SD-031, in `implementation.json`, the technical plan's open-items table and the manifest's authority events.
+- **`authority.json`:** the Requirements System model-load action is removed. The syside install is added to the existing "scan, then install" action. The prohibited line now forbids any Requirements System action on the spec-track models. APPROVAL-003 and SD-031 are added to the granting decisions.
+- **ST-3/ST-4:** the step text, dependencies and exit criteria in the technical plan, `implementation.json` and the design doc now name CMD-MODEL-PARSE, and the MODEL_NOT_REGISTERED fallback is gone.
+- **Checks:**
+  - plan-package PASS with zero findings.
+  - Manifest render and `--check` both pass (sha256 `6fb09423…a924`).
+  - Schema validation shows 0 errors in all four files.
+  - No orphaned command or proof IDs (55 proofs, 48 commands).
+  - Rule 12 finds no real home paths. Three lines match the path shape, but they are existing placeholder or regex text, not real paths.
+- **Command self-test:** I ran the command as written in `seit.json` against a stand-in syside module, not the real one. All six cases exited with the right status: empty model dir, good model, parse error, scan verdict BLOCK, wheel digest missing from the receipt, wrong version. The first run showed that a failed run could print an earlier run's parse log as if it were its own, so the command now clears that log first.
+- The disposition and new digests are appended to `specialists/pd-delta-w1b-receipt.md`. I did not touch `journey.json` (byte-identical to before) or `packets/`, and made no commits.
+
+**Decision for you:** syside 0.11.0 is proprietary and needs a license key (`SYSIDE_LICENSE_KEY`). You have to put it in the ST-3 run environment. Without it the parse check records the gap SYSIDE_LICENSE_MISSING, and ST-4 can't start. syside documents no `check` command, so the parse check uses its Python `load_model` call instead.
+
+I did not install or run the real syside: that needs the supply-chain scan receipt and your key, and both happen when ST-3 runs. The Orchestrator still has to record the new digest against SD-031 in `journey.json`.
+
+Sources: [syside on PyPI](https://pypi.org/project/syside/), [Sensmetry syside docs](https://docs.sensmetry.com/python/textual/), [syside CLI reference](https://docs.sensmetry.com/python/syside/cli/)
+exit=0

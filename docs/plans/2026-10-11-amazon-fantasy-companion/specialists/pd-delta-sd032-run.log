@@ -1,0 +1,21 @@
+**DELTA_APPLIED.** The new manifest digest is `a018168f575741b5f53bbe7fac4bcb13128e31f37f69d73ba2433cf8d09d5144`. The rendered manifest is sha256 `ad2d4d3d…19067`.
+
+**Checks:** plan-package passed with zero findings, `render --check` passed, and all four schemas validated with 0 errors. The plan still has 55 proofs and 48 commands, with 0 orphans. The rule-12 scan of the package files found 0 hits.
+
+**Changes:**
+- **New command:** `CMD-MODEL-PARSE` is replaced in place by `CMD-MODEL-SYSON`. It makes one new local SysON project, `afc-model-parse-<run>`, using SysON's own `createProject` and `uploadDocument`, and records the project id in `project-id.txt`. It also saves the model digests and each file's import diagnostics. Its exit status is the verdict. It never uses the Requirements System CLI, registry or checkouts, and needs no key.
+- **One addition beyond the literal ask:** each uploaded file gets an end-marker package appended, and the command checks that every marker comes back when it reads the project. In testing, SysON imported a file with a syntax error, gave an empty report, and silently dropped everything after the error (known upstream issue eclipse-syson#2510). Without the marker, that file would have passed.
+- **Removed:** syside, `SYSIDE_LICENSE_KEY` and the CMD-SCAN syside entry are gone from all operative text. The seit environment entry `syside` became `syson`. syside is still named only in history, where the text records what SD-032 superseded.
+- **ST-3/ST-4:** updated in the technical plan, `phase2_sequence` and the design.
+- **`authority.json`:** the install action is back to uv and Graphviz only. A new allowed action creates one SysON project per run. The prohibition now also covers editing or deleting any other SysON project, and any keyed tool. DEC-AFC-SD-032 was added to the granting decisions.
+- **Receipt:** the disposition, digests and test results are appended to `specialists/pd-delta-w1b-receipt.md`. Nothing was committed, as instructed. `journey.json` and `packets/` were not touched.
+
+**Tested on the local SysON:** a clean model passes. An empty directory, a silently cut-off file, an unresolved name and SysON being down all fail. I re-ran the command copied exactly from `seit.json` and got the same results. The five scratch projects were deleted, and no other project was touched.
+
+**For you:**
+- **The current spec-track models fail this check today.** `AFC-States.sysml` has a syntax error at line 14, and `AFC-Data.sysml` uses `String` and `Boolean` without importing ScalarValues. That is Systems Modeler repair work in ST-3.
+- **Rule 12 (outside my write set):** 12 untracked implementer evidence files under `evidence/S01|S03|S06/g4` contain absolute home paths. Clean them before committing `evidence/`.
+- **Journey record:** `journey.json` still needs an entry tying the new digest `a018168f…` to SD-032, like the one for SD-031.
+
+I did not run the full CMD-MODEL-SYSON on the real models directory: the test run read the four models directly, then the project was deleted. Each real run leaves its SysON project behind as evidence, so projects will pile up over time.
+exit=0

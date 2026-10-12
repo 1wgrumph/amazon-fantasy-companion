@@ -1,0 +1,55 @@
+{
+  "outcome": "CONTRACT_FAILURE",
+  "lease_id": "S03-g3",
+  "branch": "afc/s03-ship-pull-request",
+  "head_sha": "47c46f2e16fed060482a1bf3a0e34ddcb9bc57fc",
+  "draft_pr_urls": [],
+  "changed_paths": [],
+  "blocker": "dispatch_record S03-g3: base must be a full 40-hex SHA; got 'origin/main'",
+  "affected_command": "CMD-D4-AGNOSTIC",
+  "command_status": "NOT_RUN: required immutable <base> missing from dispatch record",
+  "commands": [
+    {
+      "command": "Pinned HQ BRAN checksum verification and bran check . bran-strict",
+      "exit_code": 0,
+      "output_tail": "selected_passed=true; exit_code=0"
+    },
+    {
+      "command": "BRAN query . ship-pull-request gates",
+      "exit_code": 0,
+      "output_tail": "query_outcome=grounded; matched_terms=[ship-pull-request,gates]"
+    }
+  ],
+  "proof_rows": {
+    "SEIT-AFC-D4-03.T": "NOT_RUN: dispatch contract failure",
+    "SEIT-AFC-D4-03.S": "NOT_RUN: dispatch contract failure",
+    "SEIT-AFC-D4-05.L": "NOT_RUN: dispatch contract failure",
+    "SEIT-AFC-D4-05.T": "NOT_RUN: dispatch contract failure",
+    "SEIT-AFC-D4-06": "NOT_RUN: dispatch contract failure"
+  },
+  "bran_status": "hit",
+  "bran_refs": {
+    "coverage": "ship-pull-request gates; repository metadata validation",
+    "verified_paths": [
+      ".bran/policy.yaml"
+    ],
+    "extra_discovery_avoided": false
+  },
+  "remaining_risks": [
+    "No implementation, committed-candidate checks, trigger evaluation, or PR creation performed."
+  ],
+  "developer_feedback": {
+    "tool": "Lifecycle dispatch record",
+    "used_for": "Resolve the immutable base for S03-g3 verification",
+    "worked_well": "Recorded lease, branch, authority and digest identify the intended slice.",
+    "task": "Validate dispatch before implementation",
+    "steps": "Read journey.json execution_receipts and implementation.json dispatch_records.fields.base",
+    "expected": "Full base SHA in dispatch record",
+    "actual": "dispatch_record S03-g3: base must be a full 40-hex SHA; got 'origin/main'",
+    "severity": "blocking",
+    "workaround": "n/a; packet requires stopping on CONTRACT_FAILURE",
+    "suggestion": "Orchestrator record the verified immutable base SHA before re-dispatch.",
+    "would_build_again": "unknown",
+    "aws_services": "n/a"
+  }
+}

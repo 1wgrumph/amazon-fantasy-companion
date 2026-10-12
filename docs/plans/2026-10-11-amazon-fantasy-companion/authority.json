@@ -67,7 +67,12 @@
     "DEC-AFC-SD-027",
     "DEC-AFC-SD-028",
     "DEC-AFC-SD-025",
-    "DEC-AFC-APPROVAL-002"
+    "DEC-AFC-APPROVAL-002",
+    "DEC-AFC-SD-029",
+    "DEC-AFC-SD-030",
+    "DEC-AFC-APPROVAL-003",
+    "DEC-AFC-SD-031",
+    "DEC-AFC-SD-032"
   ],
   "granting_owner_decisions_note": "DEC-AFC-APPROVAL-001 is the identity reserved for the owner's integrated approval of this exact Phase 1 package; it does not exist until the owner records it. Until then state is proposed and effective is false. DEC-AFC-SD-013 is superseded by DEC-AFC-SD-022 and grants nothing.",
   "allowed": {
@@ -75,7 +80,7 @@
       "Phase 1 slices S01, S02, S03, S06, S06L, S07, S08, S09T, S09, S11T, S11, S42 (and S41 only if OD-AFC-01 = B) of implementation.json within their write sets and dependencies",
       "D4 and D5 pull requests in alphazede/Alphazedehq (S01, S02, S03, S06, S11T, S11, S41 if OD-AFC-01 = B)",
       "Local harness skill links and hook configuration on the development host after a timestamped backup (S06L, S11)",
-      "Opening the spec-track plan directory and running the Phase 1 spec-track planning-role sessions (Requirements Engineer, Systems Modeler; ST-1..ST-3) that write only inside docs/plans/*-amazon-fantasy-companion-phase-2/ (directory glob kept as an identifier)",
+      "Opening the spec-track plan directory and running the Phase 1 spec-track planning-role sessions (Requirements Engineer, Systems Modeler; ST-1..ST-3) that write only inside docs/plans/*-amazon-fantasy-companion-phase-2/ (directory glob kept as an identifier); the Systems Modeler (or the Orchestrator for it) runs CMD-MODEL-SYSON (import into a new local SysON project of its own) on the spec-track models; nothing enters the Requirements System registry or checkouts (DEC-AFC-SD-032)",
       "S06 reciprocal non-trigger pull request in alphazede/requirements-system (DEC-AFC-SD-028)"
     ],
     "actions": [
@@ -87,6 +92,7 @@
       "fast-forward the Alphazedehq main checkout between dispatches (alphazedehq-main-checkout lease)",
       "file issues through the issue-label policy tool in this repository",
       "run scan-software-supply-chain and install scanned tools (uv, Graphviz) on the development host",
+      "CMD-MODEL-SYSON on the local SysON of the packaged-default Requirements System host: create one new SysON project `afc-model-parse-<run>` per run, upload the spec-track `.sysml` models into it and read it back; start the host with `alphazede-requirements-system start --no-browser` if it is down (cross-repo rule 14) (DEC-AFC-SD-032)",
       "close tracked issues after their fix merges and acceptance passes"
     ],
     "paths": [
@@ -127,7 +133,8 @@
       "upstream issue or PR to any third-party project",
       "squash merge, force-push, commit on local main, git switch, destructive git on unmerged work",
       "route or profile change outside the frozen profiles and their fallback conditions",
-      "publication or release of either repository"
+      "publication or release of either repository",
+      "Requirements System host: any registry, checkout or `model` action for the spec-track models (`model load`, `checkout create`, `checkout release`, `checkout move`); any change to, or deletion of, a SysON project other than the run's own new project, the active Maestro checkout or other packages; any keyed or licensed tool for the model check (DEC-AFC-SD-032)"
     ],
     "paths": [
       ".env",
@@ -183,6 +190,11 @@
         "decision_id": "DEC-AFC-APPROVAL-002",
         "approved_at": "2026-10-12T06:53:13Z",
         "manifest_digest": "d7d92af72feaf95259869bf2fe80c14b0abaea3b7c309549ddfb5866a9c334d9"
+      },
+      {
+        "decision_id": "DEC-AFC-APPROVAL-003",
+        "approved_at": "2026-10-12T07:20:17Z",
+        "manifest_digest": "0a85d1e5d58c42ff816f37cc0600cbe0fea51df2e1dd71d430116588e9714843"
       }
     ]
   },

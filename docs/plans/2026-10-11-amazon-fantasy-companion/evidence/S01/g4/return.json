@@ -1,0 +1,117 @@
+{
+  "outcome": "PASS",
+  "scope": "S01 author implementation and draft-PR stop condition only; not independent review or landing",
+  "lease_id": "S01-g4",
+  "generation": 4,
+  "authority": "AUTH-AFC-2026-10-11-002",
+  "package_digest": "7a9a87433dd0c1aebcb00acd82c3f49989fef915730bcda22c817239d00f055d",
+  "branch": "afc/s01-setup-pre-commit",
+  "base_sha": "47c46f2e16fed060482a1bf3a0e34ddcb9bc57fc",
+  "head_sha": "21b4512a9e698f60dc82176996dc8dfc8b3dccb7",
+  "draft_pr_urls": [
+    "https://github.com/alphazede/Alphazedehq/pull/306"
+  ],
+  "changed_paths": [
+    "skills/setup-pre-commit/SKILL.md",
+    "skills/setup-pre-commit/agents/openai.yaml",
+    "skills/setup-pre-commit/references/gate-contract.md",
+    "skills/setup-pre-commit/scripts/install-hooks.sh",
+    "skills/setup-pre-commit/templates/gate.sh",
+    "skills/setup-pre-commit/tests/test-install-hooks.sh",
+    "skills/setup-pre-commit/tests/test_setup_pre_commit.py",
+    "skills/setup-pre-commit/tests/trigger-requests.json"
+  ],
+  "commands": {
+    "CMD-D4A-TEST": {
+      "command": "bash skills/setup-pre-commit/tests/test-install-hooks.sh; rc=$?; echo \"exit=$rc\"; (exit $rc)",
+      "candidate_sha": "21b4512a9e698f60dc82176996dc8dfc8b3dccb7",
+      "exit_code": 0,
+      "output_tail": "gate: hygiene: PASS checks completed\nhygiene\ngate: hygiene: PASS checks completed\ngate: hygiene: GAP required tool missing: git\ngate: hygiene: PASS checks completed\ngate: hygiene: FAIL check exit 2\ngate: hygiene: FAIL check exit 2\ngate: hygiene: FAIL check exit 2\ngate: hygiene: PASS checks completed\ngate: hygiene: PASS checks completed\nPASS: installer, idempotence, gate exits 0/1/2/3, commit/push entrypoint, conflict preservation\ngate: alpha: PASS checks completed\ngate: alpha: PASS checks completed\ngate: beta: PASS checks completed\ngate: alpha: PASS checks completed\ngate: beta: PASS checks completed\nPASS: changed selection includes staged, committed, untracked and both rename paths\nexit=0\n"
+    },
+    "CMD-SKILL-SIZE": {
+      "command": "python3 -m unittest discover -s skills/setup-pre-commit/tests -t skills/setup-pre-commit/tests -p 'test_setup_pre_commit.py' -k test_creator_validation_and_repository_metadata -v && test \"$(sha256sum < $HOME/alphazede/Alphazedehq/tools/bran/runtime/bran | cut -d' ' -f1)\" = \"$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1]))[\"sha256\"])' $HOME/alphazede/Alphazedehq/tools/bran/runtime/bran-release-pin.json)\" && $HOME/alphazede/Alphazedehq/tools/bran/runtime/bran check . bran-strict; rc=$?; echo \"exit=$rc\"; (exit $rc)",
+      "candidate_sha": "21b4512a9e698f60dc82176996dc8dfc8b3dccb7",
+      "exit_code": 0,
+      "output_tail": "test_creator_validation_and_repository_metadata (test_setup_pre_commit.SetupPreCommitTests.test_creator_validation_and_repository_metadata) ... Skill is valid!\nok\n\n----------------------------------------------------------------------\nRan 1 test in 0.036s\n\nOK\n{\"schema_version\":\"1.0.0\",\"command\":\"check\",\"status\":\"ok\",\"data\":{\"root\":\".\",\"selected_profile\":\"bran-strict\",\"okf_compatibility\":{\"profile\":\"okf-v0.1\",\"status\":\"pass\",\"diagnostics\":[]},\"okf_v0_2\":{\"profile\":\"okf-v0.2\",\"status\":\"pass\",\"diagnostics\":[]},\"bran_strict\":{\"profile\":\"bran-strict\",\"status\":\"pass\",\"diagnostics\":[]},\"selected_profile_error\":null,\"selected_passed\":true,\"exit_code\":0},\"warnings\":[\"Symlink { path: \\\"skills/use-requirements-system\\\" }\"],\"failures\":[],\"provenance\":{\"sources\":[\"repository-scanner\",\"bran-core\"],\"policy_source\":\"repository-file\"},\"metrics\":{\"selected_passed\":true,\"exit_code\":0}}\nexit=0\n"
+    },
+    "CMD-SKILL-TRIGGER": {
+      "command": "e=$(mktemp -d) && cp skills/setup-pre-commit/SKILL.md skills/setup-pre-commit/tests/trigger-requests.json \"$e\"/ && (cd \"$e\" && claude --version > harness-version.txt && claude -p 'You are an independent skill-routing evaluator. Read SKILL.md and trigger-requests.json in this directory. For each request id, answer MATCH if an agent with this skill installed should use it for that request according to its description, otherwise NO_MATCH. Reply with only a JSON object mapping every request id to MATCH or NO_MATCH.' --output-format json --max-turns 5 --allowedTools Read --disallowedTools Bash,Write,Edit,WebFetch,WebSearch < /dev/null > session.json && jq -r .result session.json | python3 -c 'import json,sys; t=sys.stdin.read(); print(json.dumps(json.loads(t[t.index(\"{\"):t.rindex(\"}\")+1])))' > results.json) && cp \"$e\"/results.json $HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S01/g4/trigger-results-setup-pre-commit.json && cp \"$e\"/harness-version.txt \"$e\"/session.json $HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S01/g4/ && SETUP_PRE_COMMIT_TRIGGER_RESULTS=$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S01/g4/trigger-results-setup-pre-commit.json python3 -m unittest discover -s skills/setup-pre-commit/tests -t skills/setup-pre-commit/tests -p 'test_setup_pre_commit.py' -k test_trigger_classifications -v; rc=$?; echo \"exit=$rc\"; (exit $rc)",
+      "candidate_sha": "21b4512a9e698f60dc82176996dc8dfc8b3dccb7",
+      "exit_code": 0,
+      "output_tail": "test_trigger_classifications (test_setup_pre_commit.SetupPreCommitTests.test_trigger_classifications) ... ok\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\nexit=0\n"
+    },
+    "CMD-D4-AGNOSTIC": {
+      "command": "d=$(git diff --name-only --diff-filter=ACMR 47c46f2e16fed060482a1bf3a0e34ddcb9bc57fc..HEAD -- skills/setup-pre-commit) && f=$(printf '%s\\n' \"$d\" | grep -vE '^$|\\.pyc$|(^|/)(__pycache__|build|dist)/|^skills/ship-pull-request/references/GATES\\.md$'; true) && printf 'scanned: %s\\n' ${f:-none} && test -n \"$f\" && { git grep -nIiE '1wgrumph|alphazede/|amazon-fantasy-companion|gridmarket|betbot|\\bpilot\\b|exclusion' HEAD -- $f; [ $? -eq 1 ]; }; rc=$?; echo \"exit=$rc\"; (exit $rc)",
+      "candidate_sha": "21b4512a9e698f60dc82176996dc8dfc8b3dccb7",
+      "exit_code": 0,
+      "output_tail": "scanned: skills/setup-pre-commit/SKILL.md\nscanned: skills/setup-pre-commit/agents/openai.yaml\nscanned: skills/setup-pre-commit/references/gate-contract.md\nscanned: skills/setup-pre-commit/scripts/install-hooks.sh\nscanned: skills/setup-pre-commit/templates/gate.sh\nscanned: skills/setup-pre-commit/tests/test-install-hooks.sh\nscanned: skills/setup-pre-commit/tests/test_setup_pre_commit.py\nscanned: skills/setup-pre-commit/tests/trigger-requests.json\nexit=0\n"
+    }
+  },
+  "proof_rows": {
+    "SEIT-AFC-D4-01.T": "PASS",
+    "SEIT-AFC-D4-01.S": "PASS",
+    "SEIT-AFC-D4-05.T": "PASS",
+    "SEIT-AFC-D4-06": "PASS",
+    "SEIT-AFC-D4-05.L": "NOT_RUN: merge prohibited by worker packet; parent landing obligation"
+  },
+  "bran_status": "hit",
+  "bran_refs": [
+    "skills/setup-pre-commit/SKILL.md",
+    "skills/setup-a-repo/SKILL.md",
+    "skills/release-process/tests/test_release_process.py"
+  ],
+  "bran_coverage": "Full repository bran-strict PASS; bounded raw reads needed for supplied plan and executable tests. Verified canonical HQ runtime used; this worktree has pin files but no runtime executable.",
+  "peer_comparison": "Existing setup-pre-commit owns local gates/hooks; setup-a-repo owns hosted workflows. Extended existing scaffold, no duplicate skill. Reused installed creator YAML generator and portable-copy validator.",
+  "skill_size": {
+    "lines": 46,
+    "words": 331
+  },
+  "trigger_results": {
+    "request_1": "MATCH",
+    "request_2": "NO_MATCH"
+  },
+  "supplemental_checks": {
+    "shellcheck": "PASS exit 0",
+    "git_diff_check": "PASS exit 0",
+    "remote_pr_readback": "PASS draft, exact body/title/head",
+    "working_tree": "clean"
+  },
+  "failure_classification": [
+    {
+      "kind": "implementation",
+      "detail": "ShellCheck SC2016 and SC2251 diagnostics corrected before commit; documented literal hook expansion and made negative assertion fail closed."
+    },
+    {
+      "kind": "harness",
+      "detail": "Guard rejected writing a test containing a destructive Git cleanup verb. Replaced cleanup with explicit fixture content and git add; no override or destructive command used."
+    }
+  ],
+  "review": {
+    "coverage_assist": "OCR delegate required at parent independent review; not run by implementer",
+    "reverify": "not applicable: no compiled binary built or claimed",
+    "changed_line_coverage": "NOT_APPLICABLE per frozen tech-writing plan",
+    "mutation": "NOT_APPLICABLE per frozen tech-writing plan",
+    "red_then_green": "NOT_APPLICABLE per frozen single_implementer plan"
+  },
+  "risks": [
+    "Independent review and landing check remain.",
+    "Template requires adopter-specific check inventory and area/path mappings; default hygiene is not a complete project gate."
+  ],
+  "blocker": null,
+  "developer_feedback": {
+    "tool": "Git, bash, installed skill-creator, BRAN, Claude Code",
+    "task": "Implement and verify shared gate skill",
+    "worked_well": "Temporary real Git repositories verify both hook entrypoints and negative behavior; stock portable metadata validation passes.",
+    "friction": "Worktree lacks BRAN executable; canonical pinned runtime is available and passes verification.",
+    "steps": "Attempt local runtime verification; resolve canonical checkout runtime and verify its pin.",
+    "expected": "Usable pinned runtime for repository validation",
+    "actual": "Local executable absent; canonical runtime works",
+    "severity": "minor",
+    "workaround": "Use the authorized checkout placeholder for canonical pinned runtime",
+    "suggestion": "Resolve canonical runtime explicitly in future worker packets",
+    "measured_cost": "unknown",
+    "would_build_again": "yes",
+    "aws_services": "n/a",
+    "feature_request": "n/a"
+  }
+}

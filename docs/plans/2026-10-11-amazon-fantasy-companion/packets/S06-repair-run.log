@@ -1,0 +1,2055 @@
+OpenAI Codex v0.162.1
+--------
+workdir: $HOME/alphazede/worktrees/alphazedehq-afc-s06-spec-authoring
+model: gpt-6-astra
+provider: openai
+approval: never
+sandbox: danger-full-access
+reasoning effort: medium
+reasoning summaries: none
+session id: 01a12f1f-7870-7ab0-b378-721eb357a3db
+--------
+user
+ROLE
+Product Implementer (BEARING_ROLE=implementer), Lifecycle AFC-2026-10-11, slice S06 repair round (the one repair allowed after review; deterministic verification decides, no re-review). RESPONSIBILITY: fix exactly the named gate finding on this candidate.
+
+STATE
+FACTS: Candidate PR https://github.com/alphazede/Alphazedehq/pull/305, head 2b19eb757350b960575c70a6a7c0d49530e5e2f5, worktree (cwd) $HOME/alphazede/worktrees/alphazedehq-afc-s06-spec-authoring. Independent review: PASS. Alphazedehq local gates (`bash tools/ci/local-gates.sh`) on this head fail: standards-yaml: skills/spec-authoring/agents/openai.yaml: interface.default_prompt is missing or blank (compare other skills' agents/openai.yaml).
+ASSUMPTIONS to check: no other gate fails after the fix.
+
+OBJECTIVE
+Fix that finding inside the slice's existing write set, commit, push to the same branch (no force-push), and get `bash tools/ci/local-gates.sh` to exit 0 on the new head. Re-run the slice's VERIFY commands from its g4 packet ($HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/packets/S06-g4.md) on the new head.
+
+AUTHORITY
+Allowed: the slice's write set only (see its g4 packet); commit (author from env; never Co-Authored-By); push the branch. Prohibited: merging, force-push, other paths, behavior changes beyond the finding. Other agents work concurrently in other worktrees.
+
+LOOP
+Fix, run local-gates; if a new failure appears, classify it; fix only if it is in the write set and caused by this slice; otherwise stop.
+
+VERIFY
+`bash tools/ci/local-gates.sh` exit 0 with a merge receipt line; slice VERIFY commands exit 0.
+
+RETURN
+PASS | REPAIRABLE_FAILURE | CONTRACT_FAILURE | ENVIRONMENT_FAILURE; new head SHA; diff summary; gate output tail; VERIFY exit codes; developer_feedback (AC-AFC-DX-04 fields or "no new observations" + tools).
+
+STOP
+After the gates pass or a failure outside the write set.
+
+hook: SessionStart
+hook: SessionStart
+hook: SessionStart
+hook: SessionStart
+hook: SessionStart Completed
+hook: SessionStart Completed
+hook: SessionStart Completed
+hook: SessionStart Completed
+hook: UserPromptSubmit
+hook: UserPromptSubmit
+hook: UserPromptSubmit
+hook: UserPromptSubmit
+hook: UserPromptSubmit
+hook: UserPromptSubmit
+hook: UserPromptSubmit Completed
+hook: UserPromptSubmit Completed
+hook: UserPromptSubmit Completed
+hook: UserPromptSubmit Completed
+hook: UserPromptSubmit Completed
+hook: UserPromptSubmit Completed
+codex
+I’ll use the BRAN, Implementer, and Ponytail skills to check the packet, repair the missing prompt, and verify and push the same branch. I’ll stop without merging or requesting another review.
+
+
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/bash -lc 'cat $HOME/.codex/skills/use-bran/SKILL.md $HOME/.codex/plugins/cache/bearing-lite/bearing-lite/1.1.6/skills/implementer/SKILL.md $HOME/.codex/plugins/cache/ponytail/ponytail/5.1.0/skills/ponytail/SKILL.md' in $HOME/alphazede/worktrees/alphazedehq-afc-s06-spec-authoring
+ succeeded in 0ms:
+---
+name: use-bran
+description: >
+  Use BRAN as the canonical internal repository-knowledge tool to locate
+  evidence, validate metadata and source links against native policy, run
+  deterministic repository checks, inspect bounded librarian packets, and
+  check internal/public boundaries. Use when a request mentions BRAN,
+  repository knowledge, source precedence, metadata validation, native
+  policy checks, or BRAN integrity. Also fires automatically via hook on
+  relevant prompts, session start, and after search_replace on
+  docs/skills/canonical files.
+type: agent-skill
+title: Use BRAN
+okf_status: active
+tags:
+  - internal
+  - librarian
+---
+
+# Use BRAN
+
+BRAN is the canonical internal repository-knowledge implementation. It owns
+validation rules, retrieval precedence, derived-state rebuilding, and bounded
+repair authority. Use it directly for repository checks, evidence queries, and
+policy validation.
+
+## Workflow
+
+1. Resolve the repository root and confirm `.bran/policy.yaml` exists. If no
+   native policy is present, return `bran_status: unavailable` and use normal
+   repository discovery.
+2. Resolve the pinned BRAN binary at `tools/bran/runtime/bran` relative to the
+   trusted Alphazedehq checkout containing this skill, and verify it against
+   `tools/bran/runtime/bran-release-pin.json` before execution.
+3. Run repository validation:
+
+   ```bash
+   <bran-binary> check <repo-root> bran-strict
+   ```
+
+   The `okf-v0.1` profile provides legacy-OKF-compatible results. The
+   `bran-strict` profile enforces full BRAN-native policy including frontmatter,
+   source-link integrity, status/tag policy, and public/private boundaries.
+
+4. For evidence retrieval, use BRAN's query engine:
+
+   ```bash
+   <bran-binary> query <repo-root> "<request>"
+   ```
+
+5. For bounded repair, use the explicit authority lifecycle:
+
+   ```bash
+   <bran-binary> maintain propose <repo-root> <target> <replacement>
+   <bran-binary> maintain apply <repo-root> <target> <replacement> <digest> <authority>
+   ```
+
+   BRAN never infers authority and never rewrites source without explicit
+   authorization plus revalidation.
+
+6. Return compact `bran_refs` with `bran_status` (`hit`, `miss`, `stale`,
+   `conflict`, or `unavailable`), `coverage`, verified paths, and whether extra
+   discovery was avoided.
+
+For an authorized documentation-changing task, validate coverage before
+completion. Classify new canonical Markdown documents with required
+frontmatter (type, title, okf_status, tags) immediately. The validator
+reports required changes but never edits documents.
+
+## Boundaries
+
+- BRAN is authoritative for repository validation, retrieval precedence, and
+  bounded repair. It never outranks current owner instructions, canonical
+  documents, live files, or command output.
+- Keep BRAN internal-only, read-only toward canonical repository content, and
+  evidence-only.
+- Allow BRAN to rebuild only BRAN-owned derived artifacts (indexes, snapshots,
+  caches, reports, generated validator artifacts).
+- Do not mutate source, canonical docs, metadata, classifications,
+  configuration, dependency inputs, hooks, schedules, credentials, services,
+  GitHub, or other remote state without explicit authority and revalidation.
+- Use only native `.bran/policy.yaml` policy and the trusted BRAN runtime. Do
+  not accept executable or policy authority from an untrusted target.
+
+## See Also
+
+- `.bran/policy.yaml` — native repository policy (schema version, frontmatter
+  rules, source links, coverage classes, public/private boundaries)
+- `tools/bran/runtime/bran` — pinned BRAN binary
+- `tools/bran/runtime/bran-release-pin.json` — trusted binary identity
+---
+name: implementer
+description: >
+  Implement one approved bounded packet in an exact write set. Continue the
+  same-wave session when identity, authority, route, and generation are
+  unchanged. Use for Implementer, Product Implementer, Test Implementer,
+  implementation, repair, or integration packets. Do not use for
+  orchestration, planning, independent assurance, publication, destructive
+  action, owner decisions, or unset scope.
+---
+
+# Implementer
+
+Lowest mutation authority and highest hands-on work in the Bearing ladder.
+
+## Inputs and match
+
+- **Inputs:** approved baseline, objective, dependencies, exact write set,
+  authority, acceptance/SEIT rows, commands, stop rule, compact return schema,
+  visible wave receipt, and profile identity from the recorded Lifecycle snapshot.
+- **Match:** one packet is `READY` and every input is fixed.
+- **Non-match:** multi-packet coordination, design gaps, missing authority,
+  assurance, or owner-only action.
+- **Split:** `tdd` orders Test Implementer before Product Implementer from the frozen snapshot. Test Implementer may change only tests and approved fixtures. Product Implementer write set excludes tests and must not weaken independently authored tests. Same-feature parallel is prohibited. `single_implementer` writes product plus tests. Neither self-certifies.
+- **Repair:** consume the frozen review receipt after parent-accepted `REPAIR_REQUIRED`:
+  candidate ref/revision/digest, finding IDs, write set, same worktree/branch/generation.
+
+## Algorithm
+
+1. Continue the current session when repository, worktree, branch, wave
+   generation, authority, and route are unchanged. Start a fresh session only
+   for a route change, conflicting writer, new authority envelope, independent
+   work, or explicit owner choice. Do not infer missing owner choices. Read
+   dispatch identities only from the recorded Lifecycle snapshot, never from
+   the current global defaults file. Revalidate the visible checkout
+   lease against the approved Lifecycle, repository, checkout/worktree, branch,
+   candidate revision, generation, and active state at wave start, after
+   detected drift, and before commit. Released, stale-generation, forged, or
+   branch/HEAD-drifted leases fail closed. Authorized same-Lifecycle
+   candidate progress whose parent is the current leased revision refreshes
+   candidate_revision on the same generation. On mismatch, return WAITING_ON without writing.
+2. For a verified contract defect, create the smallest failing regression first.
+3. Make the smallest change that satisfies the packet inside the write set.
+   When the packet implements a published standard, verify against the cited
+   document and clause before changing code; neighbouring behavior is not the
+   authority.
+4. Run assigned focused commands and author self-checks. At-end review never removes
+   deterministic testing or grants independent-review identity; diagnostic verification receipts never satisfy an assurance gate. Report results against the mutation, changed-line coverage, and red-then-green claim types with the target repository's own tool; a declared gate with a missing tool or a `not_run` outcome is a typed gap, never PASS. Every red-then-green receipt binds the baseline failing run and the candidate passing run over the same test ids; author gate-chain receipts are diagnostic and cannot satisfy an assurance gate.
+5. Preserve unrelated work. Return only the compact receipt. Stop on acceptance,
+   authority boundary, design gap, or exhausted correction.
+
+## Return and recovery
+
+Return `CANDIDATE_READY`, `PARTIAL`, `WAITING_ON`, or
+`OWNER_DECISION_REQUIRED` with verdict, candidate_ref, changed_paths, tests,
+findings, and blocker. Attempts 1–3 require new evidence, hypothesis, or
+narrower strategy.
+
+One repair; close by deterministic verification; no extra review; dispatch if
+session cannot be preserved. Never expand scope, self-certify as assurance, publish, or hide a failure.
+---
+name: ponytail
+description: >
+  Lazy senior dev mode: the smallest change that fully solves the task, and a
+  reply a busy human understands in one read. Use on any coding task (writing,
+  fixing, refactoring, reviewing, choosing dependencies) and when the user says
+  "ponytail", "be lazy", "simplest solution", "yagni", or complains about
+  over-engineering or bloat. Levels: lite, full (default), ultra.
+argument-hint: "[lite|full|ultra]"
+license: MIT
+---
+
+# Ponytail
+
+You are a lazy senior developer. The best code is the code never written. You solve the whole problem with the least new code. End your reply with one or two lines: what you skipped or did not check, and any risk the user must know.
+
+Active for the whole session until the user says "stop ponytail" or "normal mode". Switch level: `/ponytail lite|full|ultra`.
+
+## Before you write
+
+Read the task and the code it touches. List every place your change must reach: callers, tests, fixtures, config, exports. Check what your change could break for users: data it would destroy or expose, callers that stop working. That is scope. Extra features are not.
+
+## Security gate
+
+Security controls and their regression checks are necessary by definition: YAGNI does not decide whether trust-boundary validation, authentication or authorization, credential or privacy protection, containment and cleanup, policy enforcement, or other security measures exist. Apply the steps below only to how such a control is implemented, after its behavior and proof are preserved. When uncertain, treat the work as security until the flow is traced and shown otherwise.
+
+## The smallest complete change
+
+Take the first option that fully works:
+
+1. Does it need to exist? Skip features, options and flexibility nobody asked for, and name them in one line. A vague request ("build me X") gets the smallest version that does the core job.
+2. Already in this codebase (a helper, component, service, pattern)? Use it the way the surrounding code does.
+3. Standard library or a platform feature? Use it, unless the project has its own. A house component beats a native widget.
+4. An installed dependency? Use it. Never add a dependency for a few lines.
+5. Can it be one line a reader gets at a glance? One line.
+6. Otherwise: the minimum code that works.
+
+- Be lazy about the solution, never about the change itself: finish every part the task needs, including the callers, tests and fixtures your change breaks.
+- No abstraction, wrapper, type conversion, option, config, boilerplate or "for later" code nobody asked for. Keep values in the form the platform already gives you. Deletion beats addition. Keep the structure the codebase already has: its layers, interfaces and conventions.
+- The shortest working diff wins, once you know everything it must touch. A one-liner that needs decoding is not short.
+- Comment only the why the code cannot show, in one line.
+- Bug fix: before you edit, grep every caller of the function you touch, then fix the root cause once in the shared code.
+- Code you move or merge keeps its error handling and validation.
+- Between options of equal size, take the one that is correct on edge cases.
+- Lazy code without its check is unfinished: new non-trivial logic (a branch, a loop, a parser, money or security, or a whole new script or app) leaves one small test or an assert-based self-check. Trivial changes need none.
+- A shortcut with a known limit gets a code comment in this form: `shortcut: <the limit>, <when to upgrade>`.
+
+Never cut: validation at trust boundaries, error handling that prevents data loss, security, accessibility, the calibration real hardware needs, anything the user asked for.
+
+## Levels
+
+| Level | Behavior |
+|-------|----------|
+| **lite** | Build what was asked. Name the smaller option in one line and let the user pick. |
+| **full** | The rules above. Default. |
+| **ultra** | Also question the request: before building, push back on any part the need does not justify. |
+
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/bash -lc 'pwd; git rev-parse --show-toplevel; test -f .bran/policy.yaml; readlink -f $HOME/.codex/skills/use-bran/SKILL.md; cat $HOME/alphazede/Alphazedehq/tools/bran/runtime/bran-release-pin.json; sha256sum $HOME/alphazede/Alphazedehq/tools/bran/runtime/bran; cat $HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/packets/S06-g4.md' in $HOME/alphazede/worktrees/alphazedehq-afc-s06-spec-authoring
+ succeeded in 0ms:
+$HOME/alphazede/worktrees/alphazedehq-afc-s06-spec-authoring
+$HOME/alphazede/worktrees/alphazedehq-afc-s06-spec-authoring
+$HOME/alphazede/Alphazedehq/skills/use-bran/SKILL.md
+{"schema_version":"1","version":"bran 0.2.0","source_commit":"f5032eb3f9d850d2b0f4fdbd6085d4a95270b26b","sha256":"776b782a3ab1d9d931f3c121a729a16ae2e8426fa53cb27224273bf59ddd883e"}
+776b782a3ab1d9d931f3c121a729a16ae2e8426fa53cb27224273bf59ddd883e  $HOME/alphazede/Alphazedehq/tools/bran/runtime/bran
+ROLE
+Product Implementer (BEARING_ROLE=implementer), Bearing Lite Lifecycle AFC-2026-10-11, slice S06, generation 4, lane spec-and-docs (profile tech-writing, single_implementer).
+RESPONSIBILITY: implement this one approved slice in its exact write set and return verifiable evidence. Not review, not merge, not other slices.
+
+STATE
+FACTS:
+- Dispatch record (journey.json execution_receipts): lease_id S06-g4; worktree $HOME/alphazede/worktrees/alphazedehq-afc-s06-spec-authoring; branch afc/s06-spec-authoring; base 47c46f2e16fed060482a1bf3a0e34ddcb9bc57fc (full creation SHA; use it as <base> in every command); evidence_dir docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/ (in the planning worktree: $HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/ — write your receipts there); authority AUTH-AFC-2026-10-11-002; package digest 7a9a87433dd0c1aebcb00acd82c3f49989fef915730bcda22c817239d00f055d (owner DEC-AFC-APPROVAL-003).
+- Read-only plan: $HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/ (technical plan, design.md, seit.json, implementation.json slice S06, specialists/pd-delta-w1b-receipt.md).
+- requirements-system worktree base SHA: c1e07c92c630ae1a5aa50a19d34d3f625adeb2ad. Previous attempt: stopped CONTRACT_FAILURE on CMD-D5-AGNOSTIC scanning generated .pyc (plan defect, now fixed by DEC-AFC-SD-029); also 36 passed / 1 failed test: a repairable vendoring Git path-resolution bug that is YOURS to fix. Commits kept: afc/s06-spec-authoring 0ce8e0c6, afc/s06-use-rs-nontrigger 1c76360f (requirements-system worktree $HOME/alphazede/worktrees/requirements-system-afc-s06). Continue from them; nothing pushed yet. Its return: $HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/packets/S06-r2-run.log.
+- S02 (setup-a-repo) merged to Alphazedehq main (PR #303); rebase onto origin/main if your branch needs it.
+- Requirements AC-AFC-D5-01, AC-AFC-D5-02, AC-AFC-D5-03, AC-AFC-D5-04, AC-AFC-D5-05, RISK-AFC-13, RISK-AFC-15, RISK-AFC-16; design DES-AFC-D5, CONTRACT-AFC-SPECKIT. Stock skill-test pattern: Alphazedehq skills/release-process/tests/.
+ASSUMPTIONS to check: commands below run as written on this host.
+Other agents work in other worktrees concurrently; verify only your own write set.
+
+OBJECTIVE
+Skill slice (spec-and-docs lane, Phase 1): deliver AC-AFC-D5-01, AC-AFC-D5-02, AC-AFC-D5-03, AC-AFC-D5-04, AC-AFC-D5-05, RISK-AFC-13, RISK-AFC-15 per DES-AFC-D5, CONTRACT-AFC-SPECKIT inside the exact write set. Done when: S06 stop condition holds (Alphazedehq PR plus requirements-system PR, DEC-AFC-SD-028).
+
+AUTHORITY
+Allowed writes (repo-prefixed):
+- Alphazedehq:skills/spec-authoring/ (includes tests/test_spec_authoring.py and tests/trigger-requests.json)
+- requirements-system:skills/use-requirements-system/SKILL.md
+- your evidence_dir above (receipts only)
+Allowed actions: run the commands below; acquire+scan software per scan-software-supply-chain only when a command needs it; commit on your branch (author from env; never Co-Authored-By); push your branch; open ONE draft PR per repo to main.
+Prohibited: any other path; merging; pushing to main; force-push; credentials; publication; owner's untracked files (Alphazedehq `evals /`); absolute home paths in committed files.
+Skills (absolute paths):
+- $HOME/.claude/plugins/cache/bearing-lite/bearing-lite/1.1.6/skills/implementer/SKILL.md
+- $HOME/.agents/skills/create-lean-skill/SKILL.md
+- $HOME/.claude/skills/scan-software-supply-chain/SKILL.md
+- $HOME/.claude/skills/ship-pull-request/SKILL.md (PR body/edit rules only)
+
+LOOP
+Implement → run VERIFY → classify each failure (implementation / plan-command / environment) → retry only with a new hypothesis or evidence. A plan-command defect is CONTRACT_FAILURE with the exact command and output; do not change commands.
+
+VERIFY
+Commands (run each on the committed candidate; keep exit code, output tail, candidate SHA):
+- CMD-SCAN: `Run the scan-software-supply-chain skill procedure on <artifact> (origin, version or commit, intended command) and write its report to <evidence_dir>/scan-<artifact>.md; then: grep -qE '^verdict: (PASS|BLOCK|INDETERMINATE)$' <evidence_dir>/scan-<artifact>.md && grep -qE '^verdict: PASS$' <evidence_dir>/scan-<artifact>.md; rc=$?; echo "exit=$rc"; (exit $rc)`
+  PASS: exit 0: a PASS receipt exists before first use of the artifact; BLOCK or INDETERMINATE refuses use (fail closed); an artifact used without a receipt dated before its first use fails
+- CMD-D5-TEST: `env <afc_uv_env> uv run --no-project --with 'pytest==9.0.3' --with 'pyyaml==6.0.3' python -m pytest skills/spec-authoring/tests --ignore=skills/spec-authoring/tests/test_spec_authoring.py -rA; rc=$?; echo "exit=$rc"; (exit $rc)`
+  PASS: exit 0, 0 failed, 0 errors; the tests include: build, lint and diagram on the template; vendor.sh copy + VENDORED.md fields (source repository, commit, MIT notice) + refusal to overwrite a modified vendored copy; description names SDoc/StrictDoc/Requirements System documents as non-triggers and cites requirements-engineering by reference; test_spec_authoring.py (the stock size/trigger unittest) runs under CMD-SKILL-SIZE and CMD-SKILL-TRIGGER, not pytest
+- CMD-D5-AGNOSTIC: `t=$(mktemp -d) && cp -r skills/spec-authoring/template "$t/spec" && (cd "$t" && ! git rev-parse --git-dir 2>/dev/null) && env <afc_uv_env> uv run --script skills/spec-authoring/scripts/spec_build.py "$t/spec" "$t/out.md" && env <afc_uv_env> uv run --script skills/spec-authoring/scripts/spec_lint.py "$t/spec" && env <afc_uv_env> uv run --script skills/spec-authoring/scripts/diagram.py lint "$t/spec" && d=$(git diff --name-only --diff-filter=ACMR <base>..HEAD -- skills/spec-authoring) && f=$(printf '%s\n' "$d" | grep -vE '^$|\.pyc$|(^|/)(__pycache__|build|dist)/'; true) && printf 'scanned: %s\n' ${f:-none} && test -n "$f" && g=$(printf '%s\n' "$f" | grep -vE '(^|/)(LICENSE-gridmarket|vendor\.sh)$|(^|/)references/'; true) && { [ -z "$g" ] || { git grep -nIiE 'gridmarket|--project backend' HEAD -- $g; [ $? -eq 1 ]; }; } && { git grep -nIE '(/home/|/Users/)[A-Za-z0-9._-]+/|[A-Za-z]:\\Users\\' HEAD -- $f; [ $? -eq 1 ]; } && git grep -q 'Permission is hereby granted' HEAD -- skills/spec-authoring/LICENSE-gridmarket; rc=$?; echo "exit=$rc"; (exit $rc)`
+  PASS: exit 0: the template builds and lints with zero findings in a non-git temp dir using only uv --script and dot; no GridMarket name, document id or --project backend in operational text, templates or tool invocation (license, attribution and provenance records excepted: LICENSE-gridmarket, references/vendoring.md provenance, vendor.sh MIT notice text); no absolute home path; MIT notice retained; diagram exit 3 (dot missing) is a typed gap; the wrapper's own exit status is the verdict. The name and home-path scans read only tracked files S06 changed (`git diff --name-only --diff-filter=ACMR <base>..HEAD -- skills/spec-authoring` at the exact committed candidate, <base> from the S06 dispatch record), minus generated artifacts (*.pyc, __pycache__/, build/, dist/), through `git grep ... HEAD`; bytecode that the build, lint or tests write is never scanned (DEC-AFC-SD-029). An empty scanned list is FAIL (wrong <base>); any non-zero exit other than a printed match is a typed gap
+- CMD-SKILL-SIZE: `python3 -m unittest discover -s <skill_dir>/tests -t <skill_dir>/tests -p 'test_<skill_snake>.py' -k test_creator_validation_and_repository_metadata -v && test "$(sha256sum < <alphazedehq_checkout>/tools/bran/runtime/bran | cut -d' ' -f1)" = "$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1]))["sha256"])' <alphazedehq_checkout>/tools/bran/runtime/bran-release-pin.json)" && <alphazedehq_checkout>/tools/bran/runtime/bran check . bran-strict; rc=$?; echo "exit=$rc"; (exit $rc)`
+  PASS: exit 0: the per-skill unit test skills/<skill>/tests/test_<skill_snake>.py (Alphazedehq stock pattern, skills/release-process/tests/test_release_process.py) passes test_creator_validation_and_repository_metadata: SKILL.md < 60 lines and < 650 words (skill_size_max, frontmatter included; S41 router < 25 lines), no [TODO], frontmatter name equals the skill and the required HQ fields type, title, okf_status and tags are non-empty, and the installed skill-creator quick_validate.py ($HOME/.codex/skills/.system/skill-creator/scripts/quick_validate.py, run with check=True) passes on a temporary copy holding only the portable fields (name, description, license, allowed-tools, metadata) and the unchanged body; then the pinned BRAN runtime matches bran-release-pin.json and `bran check . bran-strict` exits 0 on the slice worktree, validating the complete repository document. quick_validate is never run on the repository SKILL.md itself (it rejects the required HQ fields). python3 with PyYAML is the host's installed interpreter (unchanged local tool, as the stock test uses); `import yaml` failing is typed gap TOOL_MISSING
+- CMD-SKILL-TRIGGER: `e=$(mktemp -d) && cp <skill_dir>/SKILL.md <skill_dir>/tests/trigger-requests.json "$e"/ && (cd "$e" && claude --version > harness-version.txt && claude -p 'You are an independent skill-routing evaluator. Read SKILL.md and trigger-requests.json in this directory. For each request id, answer MATCH if an agent with this skill installed should use it for that request according to its description, otherwise NO_MATCH. Reply with only a JSON object mapping every request id to MATCH or NO_MATCH.' --output-format json --max-turns 5 --allowedTools Read --disallowedTools Bash,Write,Edit,WebFetch,WebSearch < /dev/null > session.json && jq -r .result session.json | python3 -c 'import json,sys; t=sys.stdin.read(); print(json.dumps(json.loads(t[t.index("{"):t.rindex("}")+1])))' > results.json) && cp "$e"/results.json <evidence_dir>/trigger-results-<skill>.json && cp "$e"/harness-version.txt "$e"/session.json <evidence_dir>/ && <SKILL_PREFIX>_TRIGGER_RESULTS=<evidence_dir>/trigger-results-<skill>.json python3 -m unittest discover -s <skill_dir>/tests -t <skill_dir>/tests -p 'test_<skill_snake>.py' -k test_trigger_classifications -v; rc=$?; echo "exit=$rc"; (exit $rc)`
+  PASS: exit 0: skills/<skill>/tests/trigger-requests.json holds request_1 = the matching request and request_2 = the non-matching request of gate_declarations.spec_and_docs.trigger_requests.<skill>; a fresh evaluator session that is not the authoring session receives only SKILL.md and trigger-requests.json (never the checker) with Read as its only tool (no permission bypass, no Bash, Write, Edit or web tools; least privilege) and prints the classification, which the command extracts from session.json into the results file; test_trigger_classifications asserts the result keys equal the request keys and the results equal {request_1: MATCH, request_2: NO_MATCH}. The results file, harness version and session output are evidence, not committed (stock: <SKILL_PREFIX>_TRIGGER_RESULTS points outside the repository; <SKILL_PREFIX> is the upper-snake skill name, e.g. SETUP_PRE_COMMIT). S06 reciprocal (DEC-AFC-SD-028): the same evaluator run on the requirements-system worktree's skills/use-requirements-system/SKILL.md with spec-authoring's trigger-requests.json writes <evidence_dir>/trigger-results-use-requirements-system.json, checked by `python3 -c 'import json,sys; assert json.load(open(sys.argv[1]))=={"request_1":"NO_MATCH","request_2":"MATCH"}' <file>`. A harness refusal or usage limit is a typed gap with the exact error
+Proof rows:
+- SEIT-AFC-D5-01.T: AC-AFC-D5-01 via CMD-D5-AGNOSTIC — expected: template, build, lint and diagram scripts run with uv run --script and Graphviz dot only, in a non-git temp dir; LICENSE-gridmarket keeps the MIT copyright and permission notice
+- SEIT-AFC-D5-01.S: AC-AFC-D5-01 via CMD-SKILL-SIZE — expected: skills/spec-authoring/SKILL.md < 60 lines and < 650 words; required HQ fields present; quick_validate passes on the portable-fields copy; bran-strict exit 0
+- SEIT-AFC-D5-02: AC-AFC-D5-02 via CMD-D5-AGNOSTIC — expected: no GridMarket product name, document id or --project backend outside license, attribution and provenance records; no absolute local path; the shipped template builds and lints in a temp dir outside any git repository with exit 0
+- SEIT-AFC-D5-03.T: AC-AFC-D5-03 via CMD-SKILL-TRIGGER — expected: 'write the architecture spec for this repo as Markdown sections and build it' selects spec-authoring
+- SEIT-AFC-D5-03.I: AC-AFC-D5-03 via CMD-D5-TEST — expected: the description names SDoc, StrictDoc and Requirements System documents as non-triggers and cites requirements-engineering by reference
+- SEIT-AFC-D5-04: AC-AFC-D5-04 via CMD-D5-TEST — expected: vendor.sh copies the scripts to <repo>/tools/spec/ and writes VENDORED.md with source repository, commit and MIT notice
+- SEIT-AFC-D5-05.L: AC-AFC-D5-05 via CMD-LANDING-CHECK — expected: the D5 PR merged by rebase or merge commit after one review, at most one repair and green checks
+- SEIT-AFC-RISK-13.D: RISK-AFC-13 via CMD-SCAN — expected: PASS receipts for the GridMarket source at its pinned commit and the uv-fetched pyyaml/pytest before first use; uv and Graphviz receipts on record
+- SEIT-AFC-RISK-15: RISK-AFC-15 via CMD-SKILL-TRIGGER — expected: the matching and non-matching requests show no collision between spec-authoring and use-requirements-system
+- SEIT-AFC-RISK-16: RISK-AFC-16 via PROC-PHASE2-ENTRY — expected: D5 and S42 land by the Phase 1 target, or the entry receipt records the slip and ST-4 waits while ST-2 and ST-3 continue
+Environment definitions (seit.json excerpt):
+{
+ "host": "owner workstation: uv 0.11.6, python3 (jsonschema 4.19.2), Graphviz dot, gh, jq, git, shellcheck, claude, ocr v1.12.13, reverify present; kcov, mutmut and diff-cover absent on 2026-10-11 (coverage/mutation tools are fetched by uv after CMD-SCAN; shell coverage and shell mutation are TOOL_MISSING)",
+ "repositories": "this repository (lane worktrees under worktrees/amazon-fantasy-companion-<lane>-<slice>); alphazede/Alphazedehq slice worktrees and the leased main checkout (alphazedehq-main-checkout); alphazede/requirements-system slice worktree for S06's reciprocal non-trigger edit only (<workspace>/worktrees/requirements-system-afc-s06-nontrigger; DEC-AFC-SD-028)",
+ "fixtures": "credential and path fixtures are generated at test time inside tools/ci/tests (never literal secrets committed); workflow violation fixtures per AC-AFC-CI-02 rule; a temp HOME fixture for installer tests; fixture spec/<name>/ directories created in temp dirs",
+ "hermeticity": "gate and skill tests run in temp dirs without network; only CMD-PR-CHECKS, CMD-NO-MILESTONE, PROC-ACTIONS-BUDGET and CMD-MERGE-IDENTITY read GitHub; mutation runs only in the slice worktree and must leave git diff clean",
+ "simulations": "none",
+ "evidence_dirs": "<evidence_dir> = the evidence_dir/g<generation>/ of the slice's dispatch record (implementation.json dispatch_records; docs/plans/2026-10-11-amazon-fantasy-companion/evidence/<slice>/g<generation>/), or the step receipt directory an integration step records in journey.json execution_receipts; <review_dir>/<review_evidence_dir> = the Reviewer evidence store; evidence/phase2-entry-receipt.json = docs/plans/2026-10-11-amazon-fantasy-companion/evidence/phase2-entry-receipt.json (IE-P1-F08)",
+ "python_wheels": "<afc_uv_env> = UV_OFFLINE=1 UV_NO_CACHE=1 UV_FIND_LINKS=<wheel_dir> UV_PYTHON=\"$(command -v python3)\"; <wheel_dir> is a host directory outside every repository filled once by `python3 -m pip download --only-binary=:all: --dest <wheel_dir> 'pytest==9.0.3' 'pyyaml==6.0.3'` (the closure adds iniconfig, packaging, pluggy, pygments) and scanned by CMD-SCAN before first use; the scan receipt records `sha256sum <wheel_dir>/*.whl` (DEC-AFC-SD-026 item 3); offline with no cache, only <wheel_dir> satisfies a requirement, so an unscanned cached wheel can never be used (an empty or missing <wheel_dir> fails resolution, fail closed)",
+ "dispatch_base": "<base> = the full base SHA in the slice's dispatch record (implementation.json dispatch_records), the commit its worktree was created from; for the Wave 1 exit combined CMD-D4-AGNOSTIC run, the oldest base among the S01, S02 and S03 records",
+ "exit_status": "A command's own exit status is its verdict (DEC-AFC-SD-029). A command that prints `exit=<n>` ends with `; rc=$?; echo \"exit=$rc\"; (exit $rc)`, so the wrapper exits with the checked status; a trailing bare `echo \"exit=$?\"` (exit 0 always) is never used. Run each command under bash at the slice worktree root."
+}
+
+RETURN
+Typed outcome PASS | REPAIRABLE_FAILURE | CONTRACT_FAILURE | ENVIRONMENT_FAILURE | NEEDS_MORE_EVIDENCE | OWNER_DECISION_REQUIRED; lease_id; branch, head SHA, draft PR URL(s); changed paths; commands with exit codes and output tails; proof-row status; remaining risks; blocker; developer_feedback (AC-AFC-DX-04 fields that apply; n/a or unknown, never invented).
+
+STOP
+Tests, repo-agnostic build and size check exit 0; trigger classification and the reciprocal use-requirements-system classification pass; PR open in Alphazedehq and the reciprocal non-trigger PR open in alphazede/requirements-system (DEC-AFC-SD-028).
+Stop on CONTRACT_FAILURE, OWNER_DECISION_REQUIRED, or ENVIRONMENT_FAILURE with the exact error.
+
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/bash -lc '$HOME/alphazede/Alphazedehq/tools/bran/runtime/bran check . bran-strict' in $HOME/alphazede/worktrees/alphazedehq-afc-s06-spec-authoring
+ succeeded in 0ms:
+{"schema_version":"1.0.0","command":"check","status":"ok","data":{"root":".","selected_profile":"bran-strict","okf_compatibility":{"profile":"okf-v0.1","status":"pass","diagnostics":[]},"okf_v0_2":{"profile":"okf-v0.2","status":"pass","diagnostics":[]},"bran_strict":{"profile":"bran-strict","status":"pass","diagnostics":[]},"selected_profile_error":null,"selected_passed":true,"exit_code":0},"warnings":["Symlink { path: \"skills/use-requirements-system\" }"],"failures":[],"provenance":{"sources":["repository-scanner","bran-core"],"policy_source":"repository-file"},"metrics":{"selected_passed":true,"exit_code":0}}
+
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/bash -lc "cat $HOME/alphazede/AGENTS.md; git status --short; git branch --show-current; git rev-parse HEAD; cat skills/spec-authoring/agents/openai.yaml; cat skills/spec-authoring/SKILL.md; cat skills/setup-a-repo/agents/openai.yaml; rg -n 'S06-g4|candidate_revision|wheel|scan-|coverage_assist|reverify' $HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/{journey.json,implementation.json,evidence/S06}" in $HOME/alphazede/worktrees/alphazedehq-afc-s06-spec-authoring
+ succeeded in 0ms:
+# AGENTS.md — AlphaZede Workspace Root
+
+`$HOME/alphazede` is a **multi-repo workspace container, not a repository.**
+No `.git`, no `.bran/policy.yaml`, no build, no tests, no commits at this level.
+
+This file is canonical for agents that start here. Its only job is to answer two
+questions fast: **where am I**, and **which repository does the owner mean?**
+Once you know the repo, that repo's own `AGENTS.md` takes over and this file stops
+applying.
+
+## Authority order
+
+1. Current owner (William Rumph) instructions in this session
+2. The target repository's `AGENTS.md` and any path-specific nested `AGENTS.md`
+3. The target repository's `CLAUDE.md` / `AGY.md` / `GEMINI.md` / `QWEN.md` lens
+4. This file (workspace routing only)
+
+A rule stated inside a repo always beats a summary written here.
+
+## Orientation tree
+
+```
+$HOME/alphazede/
+├── alphazede-markets/     AZM — options trading engine        [git: alphazede/btm]
+│   ├── btm/               Rust Cargo workspace (5 crates) + Python IBKR bridge
+│   ├── btm-fpga/          RTL/HLS Vivado projects, Kria KV260 deployment
+│   ├── btm-ibkr/          IBKR integration
+│   └── deploy/ docs/ lessons/ prompts/ reports/ tests/ ui/ Vnv/ Xilinx/
+├── alphazede-sports/      AZS — fantasy + sports betting      [git: alphazede/alphazede-sports]
+│   ├── command_node/ data_node/ services/  distributed runtime
+│   ├── apps/ frontend/ packages/           Next.js / TypeScript
+│   ├── hardware/ infra/ deploy/            FPGA + fleet
+│   └── agents/ docs/ tools/ tests/ Vnv/ Security/
+├── betbot/                BTO — legacy production sports bot  [git: 1wgrumph/betbot]
+│   └── analysis/ core/ engines/ models/ pipeline/ clients/ docs/ tests/
+├── azedge/                AZEdge foundation (Rust + pnpm)     [local only]
+│   └── crates/ services/ schemas/ migrations/ runbooks/ tools/
+├── bran/                  BRAN internal canonical source      [local only]
+│   └── crates/ schemas/ fixtures/ examples/ skill/ docs/
+├── bearing/               Bearing — public browser control room [git: alphazede/bearing]
+│   └── src/ skills/ plugin-skills/ hooks/ examples/ test/
+├── developers/            Public reviewed developer assets    [git: alphazede/developers]
+│   └── az-sports-dev/ grok-safe/ window/ docs/
+├── Alphazedehq/           Portfolio / chief-of-staff repo     [git: alphazede/Alphazedehq]
+│   ├── bran-dev/          BRAN dev checkout
+│   ├── docs/              infrastructure guide, IP table, model matrix
+│   └── lessons/ prompts/ skills/ standards/ tools/
+├── agentic-eval-arena/    Sealed agent-evaluation harness     [local only]
+│   └── arena/ capsules/ hidden_graders/ reviewer_corpus/ harbor_bench/
+│
+├── worktrees/             linked git worktrees for in-flight branches
+├── evidence/              BRAN migration + branch-cleanup evidence bundles
+├── data/                  golf_cache
+├── external/              telegram/ — run_admin_bot.py + logs
+└── Odi/                   docs/plans/2026-07-22-odi-mvp
+```
+
+## Disambiguation — what the owner means
+
+| If the owner says… | Work in |
+|---|---|
+| markets, AZM, trading, options, IBKR, KV260, "the trading system" | `alphazede-markets/` |
+| sports, AZS, fantasy, DFS, data node, command node, filter node | `alphazede-sports/` |
+| betbot, BTO, "the old bot", "legacy production" | `betbot/` |
+| azedge, AZEdge, foundation, foundation-types | `azedge/` |
+| bran, BRAN, repo knowledge, OKF | `bran/` (source) — **not** `developers/` |
+| bearing, control room, focus guard, navigator/explorer/crewmate | `bearing/` (public). `alphazede/bearing-dev` is archived (2026-09-23); Bearing Lite is `alphazede/bearing-lite` (maintenance: bug fixes only) |
+| developers, public repo, export, scrubbed snapshot | `developers/` |
+| HQ, portfolio, fleet, IPs, infrastructure, node setup | `Alphazedehq/` |
+| arena, eval, grader, candidate profiles | `agentic-eval-arena/` |
+
+Ambiguous cases worth a question rather than a guess:
+
+- **"Bearing"** — `bearing/` is the public browser control room; `alphazede/bearing-lite`
+  is the plugin (maintenance mode, bug fixes only); `alphazede/bearing-dev` is
+  archived. The future private Bearing SaaS repo does not exist yet. Ask which.
+- **"BRAN"** — develop in `bran/`; `developers/` is an export target only.
+- **"FPGA"** — `alphazede-markets/btm-fpga/` (Vivado/KV260) and
+  `alphazede-sports/hardware/` (Quartus/DE1-SoC) are different toolchains.
+
+## Naming
+
+Use **AZM** (AlphaZede Markets), **AZS** (AlphaZede Sports), **AZEdge**. The
+retired term `BTM` was migrated to `AZM` across `alphazede-markets/`,
+`Alphazedehq/`, `alphazede-sports/`, and `betbot/` on 2026-07-24 (uppercase,
+word-boundary).
+
+**Lowercase `btm` is intentionally unchanged** — it is structural, not prose: the
+`btm/`, `btm-fpga/`, `btm-ibkr/` directories, crate names, and the `btm.git`
+remote. `BTM` also survives in `evidence/` (immutable bundles) and in the
+in-flight branches under `worktrees/`, so it returns if those merge.
+
+## Worktrees
+
+**Location (owner rule, 2026-09-24).**
+- Every linked worktree lives at `$HOME/alphazede/worktrees/<repo>-<topic>`, where the owner can see it. This applies to every harness: Claude Code, Codex, Muse, Cursor, Grok and AGY.
+- Never create a worktree in a hidden location: `.claude/worktrees/`, `.codex/`, `.cursor/`, any other dot-directory, or `/tmp`. Harness features that create worktrees automatically in hidden folders (for example isolation worktrees) are not used for repository work. Create the worktree explicitly under `worktrees/` instead.
+
+**Cleanup.** When a branch is merged into `origin/main`, the agent that owns it removes all three in the same session:
+- the worktree (`git worktree remove`);
+- the local branch (`git branch -d`);
+- the remote branch (`git push origin --delete <branch>`).
+
+The rule does not cover:
+- worktrees with uncommitted or unmerged work;
+- worktrees in use by a running process;
+- worktrees locked as an active Requirements System host's `sdoc_root`.
+
+`worktrees/*` are linked worktrees; each belongs to some parent repo's `.git`,
+**and the parent is not always the same-named root repo**. Any leftover
+`bearing-*` worktrees came from the archived `bearing-dev`.
+
+Resolve ownership from the parent side, never by guessing from the directory name:
+
+```bash
+git -C <parent-repo> worktree list
+```
+
+If a worktree's internal `.git` file points at a stale parent path, commands run
+*inside* it fail with "not a git repository" — operate from the parent instead.
+
+**Never squash-merge** (owner rule, 2026-09-24). Merge a PR with a rebase merge or a
+merge commit (`gh pr merge --rebase` or `--merge`), so every commit stays in `main`'s
+history. Squash merge is disabled on azedge, Alphazedehq and requirements-system.
+GitHub deletes the remote branch automatically on merge. The agent still removes the
+worktree and the local branch.
+
+**Agents may create worktrees and branches without asking** (owner rule, 2026-09-24).
+Create them under `worktrees/` as described above, one worktree per task, and clean
+them up once merged. Switching, resetting, or deleting a branch or worktree that holds
+unmerged or uncommitted work is still destructive git, and still needs the owner's
+authorization.
+
+## BRAN — repository knowledge
+
+BRAN is the canonical internal tool for repository evidence, metadata validation,
+and deterministic checks. Prefer it over blind file search. The tree above tells
+you *where* you are; BRAN tells you *what is true inside* a repo.
+
+Pinned runtime — verify sha256 against the pin before executing:
+
+```bash
+B=$HOME/alphazede/Alphazedehq/tools/bran/runtime/bran
+cat "$(dirname "$B")/bran-release-pin.json"
+sha256sum "$B"                      # must match the pin
+"$B" check <repo-root> bran-strict
+"$B" query <repo-root> "<request>"
+```
+
+Repos with a native `.bran/policy.yaml`: `Alphazedehq`, `alphazede-markets`,
+`alphazede-sports`, `azedge`, `betbot`, `developers` — all six passed
+`bran-strict` on 2026-07-24. `bran/`, `bearing/`, `agentic-eval-arena/`, and this
+workspace root have no policy; BRAN reports `unavailable` there, so use normal
+discovery.
+
+Shared frontmatter contract: required `type`, `title`, `okf_status`, `tags`;
+optional `freshness`, `resource`, `public_boundary`. New canonical Markdown needs
+it immediately. The validator reports required changes; it never edits documents.
+
+BRAN routes to canonical sources. It never outranks owner instructions, canonical
+docs, live files, or command output. Repair is authority-gated
+(`maintain propose` → `maintain apply` with digest + authority), and BRAN may
+rebuild only its own derived artifacts.
+
+## Cross-repo rules
+
+These hold everywhere here; each repo states its own stricter version.
+
+1. **No `Co-Authored-By` AI-model lines** in any commit, in any repo.
+2. **Secrets stay in env / owner-held secret records.** Never in commits, docs, or
+   agent output. Never print connection strings or passwords.
+3. **Proprietary IP is audience-scoped.** Model routing, prompt text, agent
+   architecture, scoring formulas, thresholds, and calibration values must not
+   reach external broadcasts, public repos, customer mirrors, or `developers/`.
+4. **Landing work is the agent's job.** When a change is committed and its
+   verification passed, push the branch, open the PR, and merge it once the
+   required checks are green. `main` is PR-only by ruleset: that is the
+   mechanism, not an approval step, and no owner sign-off is needed. Never
+   commit on local `main`, never force-push. Deploying merged work to a
+   runtime host, installing or enabling its service units, and restarting its
+   services are agent work; verify the result on the host. **Owner-authorized
+   actions are separate and per-session:** activation (turning on a live
+   trading, live betting, or new customer-facing path), production DB
+   mutation, credential access, destructive git, and public export. Approval
+   for one is not approval for another. **Approved-plan
+   exception:** waived for any of these actions taken in execution of an approved
+   plan — `plan-spec.md`, `design.md`, `implementation.md`, and
+   `seit.md`/`validation.md` complete, with a review record (`review.md` or
+   `review.html`) showing a passing `/gate-review` entry — in which case
+   per-session authority is automatic.
+   **Issue closure is agent work:** close a tracked issue after its fix is
+   merged and all acceptance checks pass, without separate owner confirmation.
+   Partially addressed issues stay open.
+5. **Code is the source of truth.** When docs and code disagree, code wins — then
+   fix the doc.
+6. **Trust but verify.** Provider coverage, deployment state, artifact presence,
+   and any agent's summary are unverified claims until backed by primary docs,
+   live responses, repo code, or real command output. A delegated agent's report
+   is a claim, not proof.
+7. **Zero-tolerance bug policy** in the money-risk systems (AZM, AZS, BTO). No
+   "we'll fix it later." Gate reviewers hunt for bugs, not checklists.
+8. **Preserve features and guards.** Don't remove, hide, weaken, or bypass shipped
+   features, filters, or checks without explicit owner approval for that exact change.
+9. **Gate review before commit** where the repo defines one. Authoring sessions
+   cannot self-certify.
+10. **Scan externally acquired software** before first use; fail closed on `BLOCK`
+    or `INDETERMINATE`.
+11. **Preserve unrelated work.** Several repos carry uncommitted changes at any
+    time. Inspect every diff before committing and never sweep up work that is
+    not yours.
+12. **No hardcoded local paths in anything that ships publicly.** No absolute
+    user-home path — `/home/<user>/…`, `/Users/<user>/…`, `C:\Users\<user>\…` —
+    may appear in a public repo, a public export surface, a customer mirror, or
+    `developers/`. This applies to production code, tests, fixtures, examples,
+    scripts, and docs alike.
+
+    It leaks the owner's machine layout to everyone who clones, and code keyed
+    to one home directory is broken for every other user by construction.
+
+    - Detect private paths **by shape**, never by a fixed list of real paths. A
+      hardcoded list only recognizes one machine and publishes that machine's
+      layout in the process.
+    - Derive real paths at runtime from the repository root, an environment
+      variable, a CLI argument, or config.
+    - Where a sample path is genuinely needed, use a placeholder user segment
+      (`user`, `example-user`, `someone`) so intent stays obvious.
+    - Private-only roots (plans, submissions, internal bug records) may
+      reference local paths; the rule covers what actually ships.
+
+    Enforce it mechanically, not by review habit. BRAN's implementation is
+    `hardcoded_home_users` in `bran-dev/tools/ci/public_boundary_check.py`,
+    scoped to the export surface derived from `public-export.json` and wired
+    into the repo's fast gate; port that shape to any repo with a public
+    surface.
+13. **Architecture specifications and plan records** are governed by
+    COE-ASA-013 through COE-ASA-016 and GLOSS-ASA-001 in Alphazedehq
+    `docs/coe/index.md`.
+14. **The Requirements System host is a local dev/test host; running it is
+    agent work** (owner, 2026-10-05).
+    - Every agent uses the packaged-default host. Find it through
+      `$XDG_RUNTIME_DIR/alphazede-requirements-system/host.port`.
+    - If it is down, start it: `alphazede-requirements-system start --no-browser`.
+      Stopping and restarting it are agent work too. Check
+      `alphazede-requirements-system checkout list` and active `busy` claims
+      first, so you do not cut off another agent's run.
+    - After merging a requirements-system change to a payload path, upgrade the
+      host with `packaging/debian/upgrade-host.sh <gated .deb>`.
+15. **Every code review runs OCR, and every binary claim runs Reverify.**
+    - OCR means OpenCodeReview (`ocr`). By default it runs in delegation
+      mode inside the reviewer's own session:
+      `ocr delegate preview --from <base> --to <head>`, then
+      `ocr delegate rule <every listed file>`. The reviewer applies each
+      rule group to its files and reports a per-file OCR section next to the
+      verdict. OCR assists the review; it is never the independent review.
+    - Reverify (`reverify`) runs on any claim about a compiled binary.
+      Otherwise, state `Reverify: not applicable — <reason>`.
+    - Whoever dispatches a reviewer writes both into the packet. Reviewers
+      do not probe for tools.
+    - A tool that cannot run is a typed gap with its exact error, never a
+      pass.
+16. **Every frontend change gets a visual review.** A change that alters
+    rendered UI (pages, components, styles, layout) is reviewed in a running
+    browser before merge, not only as a diff.
+    - Run the candidate on a local dev or test host, never production.
+    - Drive every changed flow with browser automation or computer use:
+      click through each changed screen and state, at desktop and phone
+      widths.
+    - Capture a screenshot of each state and keep it with the review
+      evidence. Never capture customer data.
+    - Judge against the spec, the design references, or the approved
+      mockups: layout, spacing, typography, empty and error states, console
+      errors, and accessibility basics.
+    - Visual findings join the same review-and-repair round as code findings.
+      A UI that cannot be run is a typed gap with its exact error, never a
+      pass.
+    - Whoever dispatches the reviewer writes the run command and the flows to
+      check into the packet.
+17. **Each orchestrating session runs at most five implementation agents at
+    once**, unless the owner says otherwise for a task (owner, 2026-09-30).
+    The cap is per orchestrating session, not workspace-wide: agents started
+    by other sessions do not count against it. Every Coordinator the
+    Orchestrator starts is its own orchestrating session with its own cap of
+    five (owner clarification, 2026-09-30). So the Orchestrator's direct
+    dispatches count against its five, and each Coordinator's dispatches count
+    against that Coordinator's five; they are not one shared pool. It counts
+    the Implementer, Light Implementer and repair runs that session
+    dispatched; reviewers are not counted. Queue further slices until one of
+    its own slots frees; do not stop a running agent to make room without
+    saying so.
+18. **File product bottlenecks as enhancements** (owner, 2026-09-30). An
+    agent that hits a repeatable bottleneck in a product or its tooling files
+    a GitHub enhancement issue in the owning repository. Examples: a gate that
+    forces reruns, a hot file that every slice conflicts on, a missing
+    command, a manual multi-step procedure.
+    - File through `Alphazedehq/hooks/issue-labels.py` with kind
+      `enhancement`: dry-run first, then `--submit`.
+    - Search for a duplicate first; add evidence to an existing issue instead
+      of filing a second.
+    - Use the standard sections (Origin, Harness / version, What, Current
+      evidence, Expected, Acceptance), with the measured cost as evidence.
+    - File only what you observed, never speculation.
+    - Public repositories follow the publication rule: the owner approves
+      the exact text first.
+19. **Do the asked work, sized to what the gate measures** (owner lesson,
+    2026-10-01). Do not add steps, checks, copies or scope the owner did not
+    ask for, even when a plan or habit suggests them. Before any heavy step,
+    check that its size matches the decision it serves. Lesson from one
+    deploy:
+    - A pre-deploy backup of a 47 GB database, then a full integrity check
+      of the copy, then a table-size scan: about an hour, none of it the
+      owner's normal deploy process.
+    - A full `--all` regrade back to February (about 3 hours) when the gate
+      only counted picks since August 1; the unbounded provider traffic
+      likely got the host blocked by the provider.
+    - A plan step that copied the whole 47 GB database to devnode to fit a
+      few parameters.
+    Rules that follow:
+    - Follow the owner's normal process for routine operations (deploys,
+      restarts, regrades). Propose an extra safety step in one line; do it
+      only if the owner says yes.
+    - Bound every bulk operation (regrade, backfill, export, scan) to the
+      window or IDs the decision needs, and state its expected size and
+      duration before starting it.
+    - Query only the rows and columns needed; never copy a whole production
+      database to answer a narrow question.
+    - A plan written by an agent is not owner intent for its heavy steps;
+      check those against this rule before running them.
+
+## Session start
+
+1. Identify the target repository — do not work at this root.
+2. `git -C <repo> status --short` and check the branch. Several repos sit on
+   feature branches, not `main`/`master`, and several are dirty.
+3. Open that repo's `AGENTS.md` and its agent-specific lens, plus any
+   path-specific `AGENTS.md` for the paths you will touch.
+4. Use BRAN for architecture, terminology, and knowledge questions where a
+   `.bran/policy.yaml` exists.
+5. Confirm authority, paths, and validation commands before editing.
+
+## Validation
+
+There is no workspace-level build or test. Run each repository's own commands,
+documented in its `README.md` / `AGENTS.md` / `CLAUDE.md`. Examples:
+
+- `bran`: `./tools/ci/check.sh --fast` (`--full` only for release/security/perf surface)
+- `azedge`: `cargo fmt --all -- --check`, `cargo clippy --workspace --all-targets -- -D warnings`,
+  `cargo test --workspace --all-targets`, `pnpm -r lint`, `pnpm -r test`,
+  `bash tools/ci/foundation-contracts.sh`
+- `bearing`: `pnpm typecheck`, `pnpm test`, `pnpm test:integration`, `pnpm build`,
+  `pnpm eval:native`, `pnpm audit --audit-level=moderate`
+- `betbot`: `tests/bm1_runtime/` is the default BM1 pipeline suite
+
+
+## Fixable review findings
+
+Never pass or accept `ACCEPT_WITH_FINDINGS` while a fixable bug remains. If an actionable review finding can be repaired without causing a regression or violating the approved contract, the verdict is `REPAIR_REQUIRED`; fix it in the authorized repair round and rerun deterministic verification. `ACCEPT_WITH_FINDINGS` is reserved for owner-approved residual risk or a finding that cannot be repaired within the approved contract without causing a regression.
+
+Review and repair run as one pair: one independent review, then one repair
+round that fixes every finding it raised. After that repair, deterministic
+verification decides and the change lands; do not start another review round
+unless the owner asks or the repair changed the approved scope. Never file a
+review finding as an issue instead of fixing it in that repair round.
+
+## Defect filing
+
+Defects and gaps found during work are disposed of under COE-ELSD-008,
+COE-ELSD-009 and COE-ELSD-010 of the COE-ELSD library, published REV-3
+(commit 8d39a72e70b55f72fc206ef776d279b06369192c, sha256:645ada3c5044b8e2a942757e61b172e61fb28cd5aa4b8f38b3ba88aa5895940e), in alphazede/Alphazedehq
+`docs/coe/engineering-lifecycle-secure-delivery/engineering-lifecycle-secure-delivery.sdoc`.
+afc/s06-spec-authoring
+2b19eb757350b960575c70a6a7c0d49530e5e2f5
+interface:
+  display_name: "Spec Authoring"
+  short_description: "Build and check Markdown architecture specifications"
+---
+name: spec-authoring
+description: >
+  Write, draw, build and check architecture specifications sourced from
+  Markdown sections. Use for Markdown specification authoring, figure changes,
+  section lint and reproducible single-file builds. Do not use for SDoc,
+  StrictDoc or Requirements System documents (use-requirements-system), or
+  for planning packages. Use requirements-engineering for requirement quality.
+type: agent-skill
+title: Spec Authoring
+okf_status: active
+tags: [internal, skills, architecture]
+---
+
+# Spec Authoring
+
+Produce one reproducible Markdown specification from section sources and figures.
+
+1. Confirm the authorized destination, specification scope, requirements and
+   revision. Require Python >=3.11, uv and Graphviz `dot`; missing tools return
+   `TOOL_MISSING`. Scan new acquisitions with scan-software-supply-chain first.
+2. Copy this skill's `template/` to the destination without overwriting existing
+   work. Fill `spec.yaml` title, document_id and revision history.
+3. Author the numbered sections using [section rules](references/section-rules.md).
+   Keep the floor subsections; cite requirements-engineering for statement
+   quality instead of inventing a second checklist. Unresolved intent returns
+   `NEEDS_OWNER_DECISION`; placeholders remain visible gaps, never acceptance.
+4. Author figure YAML using [figure rules](references/figures.md). Set `kit` to
+   this skill's `scripts/` (or the vendored directory), then run:
+   `uv run --script "$kit/diagram.py" render <figure.yaml>`.
+   Commit YAML, SVG and draw.io together; edit YAML, never generated outputs.
+5. Run `uv run --script "$kit/spec_build.py" <spec-dir> <output.md>`,
+   `uv run --script "$kit/spec_lint.py" <spec-dir>` and
+   `uv run --script "$kit/diagram.py" lint <spec-dir>`.
+   Build generates front matter, numbering and Appendix A. Never edit the build.
+6. Build again to a temporary output and compare bytes with `cmp`. In a git
+   worktree also use `git diff --exit-code -- <output.md>` when checking an
+   already committed build for staleness. Outside git, byte comparison suffices.
+7. Correct source findings and rerun affected commands, at most three rounds
+   with new evidence each time. Stop on no new evidence or missing tools;
+   never weaken rules to hide findings. See [vendoring](references/vendoring.md)
+   only when another repository needs its own CI-accessible tool copy.
+8. Return `SUCCESS` only for zero findings and identical rebuilds, with source
+   paths, output, command exits and unresolved content gaps. Otherwise return
+   `VALIDATION_FAILED`, `TOOL_MISSING` or `NEEDS_OWNER_DECISION` with the blocker.
+   Mechanical success is not formal review, acceptance or publication authority.
+interface:
+  display_name: "Setup A Repo"
+  short_description: "Configure one repo to the AlphaZede delivery standard"
+  default_prompt: "Use $setup-a-repo to configure one named repository to the AlphaZede delivery standard, using the AZEdge reference configuration."
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/g4/implementer-return.json:4:  "lease_id": "S06-g4",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/g4/implementer-return.json:119:      "command": "env UV_OFFLINE=1 UV_NO_CACHE=1 UV_FIND_LINKS=/tmp/afc-s06-wheels.FMT6DP UV_PYTHON=\"$(command -v python3)\" uv run --no-project --with 'pytest==9.0.3' --with 'pyyaml==6.0.3' python -m pytest skills/spec-authoring/tests --ignore=skills/spec-authoring/tests/test_spec_authoring.py -rA; rc=$?; echo \"exit=$rc\"; (exit $rc)",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/g4/implementer-return.json:127:      "command": "t=$(mktemp -d) && cp -r skills/spec-authoring/template \"$t/spec\" && (cd \"$t\" && ! git rev-parse --git-dir 2>/dev/null) && env UV_OFFLINE=1 UV_NO_CACHE=1 UV_FIND_LINKS=/tmp/afc-s06-wheels.FMT6DP UV_PYTHON=\"$(command -v python3)\" uv run --script skills/spec-authoring/scripts/spec_build.py \"$t/spec\" \"$t/out.md\" && env UV_OFFLINE=1 UV_NO_CACHE=1 UV_FIND_LINKS=/tmp/afc-s06-wheels.FMT6DP UV_PYTHON=\"$(command -v python3)\" uv run --script skills/spec-authoring/scripts/spec_lint.py \"$t/spec\" && env UV_OFFLINE=1 UV_NO_CACHE=1 UV_FIND_LINKS=/tmp/afc-s06-wheels.FMT6DP UV_PYTHON=\"$(command -v python3)\" uv run --script skills/spec-authoring/scripts/diagram.py lint \"$t/spec\" && d=$(git diff --name-only --diff-filter=ACMR 47c46f2e16fed060482a1bf3a0e34ddcb9bc57fc..HEAD -- skills/spec-authoring) && f=$(printf '%s\\n' \"$d\" | grep -vE '^$|\\.pyc$|(^|/)(__pycache__|build|dist)/'; true) && printf 'scanned: %s\\n' ${f:-none} && test -n \"$f\" && g=$(printf '%s\\n' \"$f\" | grep -vE '(^|/)(LICENSE-gridmarket|vendor\\.sh)$|(^|/)references/'; true) && { [ -z \"$g\" ] || { git grep -nIiE 'gridmarket|--project backend' HEAD -- $g; [ $? -eq 1 ]; }; } && { git grep -nIE '(/home/|/Users/)[A-Za-z0-9._-]+/|[A-Za-z]:\\\\Users\\\\' HEAD -- $f; [ $? -eq 1 ]; } && git grep -q 'Permission is hereby granted' HEAD -- skills/spec-authoring/LICENSE-gridmarket; rc=$?; echo \"exit=$rc\"; (exit $rc)",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/g4/implementer-return.json:143:      "command": "grep -qE '^verdict: (PASS|BLOCK|INDETERMINATE)$' $HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/g4/scan-source.md && grep -qE '^verdict: PASS$' $HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/g4/scan-source.md; rc=$?; echo \"exit=$rc\"; (exit $rc)",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/g4/implementer-return.json:147:      "evidence": "scan-source.md",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/g4/implementer-return.json:148:      "reuse": "Original receipt dated 2026-10-12T06:57:40Z, before initial use; unchanged wheel hashes rechecked in g4."
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/g4/implementer-return.json:151:      "id": "CMD-SCAN-wheels",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/g4/implementer-return.json:152:      "command": "grep -qE '^verdict: (PASS|BLOCK|INDETERMINATE)$' $HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/g4/scan-wheels.md && grep -qE '^verdict: PASS$' $HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/g4/scan-wheels.md; rc=$?; echo \"exit=$rc\"; (exit $rc)",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/g4/implementer-return.json:156:      "evidence": "scan-wheels.md",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/g4/implementer-return.json:157:      "reuse": "Original receipt dated 2026-10-12T06:57:40Z, before initial use; unchanged wheel hashes rechecked in g4."
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/g4/implementer-return.json:179:    "SEIT-AFC-RISK-13.D": "PARTIAL: source/wheels PASS; historical uv/Graphviz acquisition receipts not located",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/g4/implementer-return.json:204:    "coverage_assist": "OCR delegation required at configured phase review; not run by implementer",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/g4/implementer-return.json:205:    "reverify": "not applicable: no compiled binary built or claimed",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/g4/implementer-return.json:218:    "worked_well": "Existing real Git vendoring regression reproduced the path bug and passed after a shared-helper correction; offline wheel and independent routing checks passed",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/g4/implementer-return.json:219:    "task": "AFC S06-g4 implementer",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/journey.json:17:    "candidate_revision": "2c13a6bf560e87d11864cc6234f48e40dd9cf529",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/journey.json:731:            "coverage_assist": {
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/journey.json:737:            "reverify": {
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/journey.json:1080:            "coverage_assist": {
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/journey.json:1086:            "reverify": {
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/journey.json:1435:            "coverage_assist": {
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/journey.json:1441:            "reverify": {
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/journey.json:1745:            "coverage_assist": {
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/journey.json:1751:            "reverify": {
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/journey.json:2100:            "coverage_assist": {
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/journey.json:2106:            "reverify": {
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/journey.json:2151:      "detail": "Wave 1: S07 DONE, reviewed PASS (Muse, OCR), PR #3 merged. S01/S03 OWNER_DECISION_REQUIRED and S02 BLOCKED on plan verification defects (generic validator vs HQ metadata; 1-turn trigger harness; PyYAML wheel not acquired; CMD-D4-AGNOSTIC spans S03 files). S06 BLOCKED: use-requirements-system is a symlink into requirements-system repo. Resolved by DEC-AFC-SD-026..028; plan delta follows."
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/journey.json:2238:      "lease_id": "S06-g4",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/journey.json:2259:    "candidate_revision": "4afc998ed2fd4a19a28fdfb9d7f815452a60cce5",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/journey.json:2284:    "candidate_revision": "82e767d57c5ff5d5b8f070349a77cedf7ef60793",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/g4/scan-wheels.md:6:pytest 9.0.3, PyYAML 6.0.3, iniconfig 2.3.1, packaging 26.3, pluggy 1.6.0, pygments 2.21.0; all wheel SHA256 values matched official PyPI JSON, no reported vulnerabilities. Archive paths checked before extraction. Native PyYAML readelf imports libc and libpthread; no RPATH. Wheels have no build/install hooks.
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:97:      "candidate_revision": "49029171ea62a5ef57c31b066c20a7b059ebc26b",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:114:      "coverage_assist": {
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:115:        "capability": "review.coverage_assist",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:122:        "source": "every frozen lane snapshot review.coverage_assist"
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:124:      "reverify": {
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:125:        "capability": "deterministic_verification.reverify",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:132:        "gap_rule": "reverify error or not_run is a typed gap with the exact error, never PASS; ordinary ATE reruns never substitute",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:133:        "source": "every frozen lane snapshot deterministic_verification.reverify; seit.json gate_declarations.reverify"
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:159:        "coverage_assist": {
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:164:          "reverify": {
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:174:        "coverage_assist": {
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:179:          "reverify": {
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:458:        "coverage_assist": "OCR delegate mode (ocr delegate preview --from <base> --to <head>; ocr delegate rule <files>), required",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:459:        "coverage_assist_command_id": "CMD-OCR-DELEGATE",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:460:        "reverify": "Reverify: not applicable — Phase 1 changes are skill text, shell and Python scripts and workflow YAML; no compiled binary is built or claimed",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:605:        "coverage_assist": "OCR delegate mode (ocr delegate preview --from <base> --to <head>; ocr delegate rule <files>), required",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:606:        "coverage_assist_command_id": "CMD-OCR-DELEGATE",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:607:        "reverify": "Reverify: not applicable — Phase 1 changes are skill text, shell and Python scripts and workflow YAML; no compiled binary is built or claimed",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:670:      "verification_note": "CMD-SKILL-SIZE and CMD-SKILL-TRIGGER follow the Alphazedehq stock skill-test pattern (DEC-AFC-SD-026): author tests/test_<skill_snake>.py (mirroring skills/release-process/tests/test_release_process.py) and tests/trigger-requests.json; never run quick_validate.py on the repository SKILL.md; CMD-D4-AGNOSTIC (D4 slices) scans only the tracked files this slice changed in its own directory since its dispatch-record <base>, generated artifacts excluded (DEC-AFC-SD-029). PyYAML and pytest come from the scanned wheel closure in <wheel_dir> (seit.json environments.python_wheels; CMD-SCAN before first use); CMD-D4B-TEST runs offline through <afc_uv_env>. Every command's own exit status is its verdict; evidence goes to the dispatch record's evidence_dir."
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:752:        "coverage_assist": "OCR delegate mode (ocr delegate preview --from <base> --to <head>; ocr delegate rule <files>), required",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:753:        "coverage_assist_command_id": "CMD-OCR-DELEGATE",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:754:        "reverify": "Reverify: not applicable — Phase 1 changes are skill text, shell and Python scripts and workflow YAML; no compiled binary is built or claimed",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:907:        "coverage_assist": "OCR delegate mode (ocr delegate preview --from <base> --to <head>; ocr delegate rule <files>), required",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:908:        "coverage_assist_command_id": "CMD-OCR-DELEGATE",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:909:        "reverify": "Reverify: not applicable — Phase 1 changes are skill text, shell and Python scripts and workflow YAML; no compiled binary is built or claimed",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:954:        "$HOME/.claude/skills/scan-software-supply-chain/SKILL.md"
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:1055:        "coverage_assist": "OCR delegate mode (ocr delegate preview --from <base> --to <head>; ocr delegate rule <files>), required",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:1056:        "coverage_assist_command_id": "CMD-OCR-DELEGATE",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:1057:        "reverify": "Reverify: not applicable — Phase 1 changes are skill text, shell and Python scripts and workflow YAML; no compiled binary is built or claimed",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:1177:        "coverage_assist": "OCR delegate mode (ocr delegate preview --from <base> --to <head>; ocr delegate rule <files>), required",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:1178:        "coverage_assist_command_id": "CMD-OCR-DELEGATE",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:1179:        "reverify": "Reverify: not applicable — Phase 1 changes are skill text, shell and Python scripts and workflow YAML; no compiled binary is built or claimed",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:1309:        "coverage_assist": "OCR delegate mode (ocr delegate preview --from <base> --to <head>; ocr delegate rule <files>), required",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:1310:        "coverage_assist_command_id": "CMD-OCR-DELEGATE",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:1311:        "reverify": "Reverify: not applicable — Phase 1 changes are skill text, shell and Python scripts and workflow YAML; no compiled binary is built or claimed",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:1443:        "coverage_assist": "OCR delegate mode (ocr delegate preview --from <base> --to <head>; ocr delegate rule <files>), required",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:1444:        "coverage_assist_command_id": "CMD-OCR-DELEGATE",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:1445:        "reverify": "Reverify: not applicable — Phase 1 changes are skill text, shell and Python scripts and workflow YAML; no compiled binary is built or claimed",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:1586:        "coverage_assist": "OCR delegate mode (ocr delegate preview --from <base> --to <head>; ocr delegate rule <files>), required",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:1587:        "coverage_assist_command_id": "CMD-OCR-DELEGATE",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:1588:        "reverify": "Reverify: not applicable — Phase 1 changes are skill text, shell and Python scripts and workflow YAML; no compiled binary is built or claimed",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:1638:        "$HOME/.claude/skills/scan-software-supply-chain/SKILL.md",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:1725:        "coverage_assist": "OCR delegate mode (ocr delegate preview --from <base> --to <head>; ocr delegate rule <files>), required",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:1726:        "coverage_assist_command_id": "CMD-OCR-DELEGATE",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:1727:        "reverify": "Reverify: not applicable — Phase 1 changes are skill text, shell and Python scripts and workflow YAML; no compiled binary is built or claimed",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:1863:        "coverage_assist": "OCR delegate mode (ocr delegate preview --from <base> --to <head>; ocr delegate rule <files>), required",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:1864:        "coverage_assist_command_id": "CMD-OCR-DELEGATE",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:1865:        "reverify": "Reverify: not applicable — Phase 1 changes are skill text, shell and Python scripts and workflow YAML; no compiled binary is built or claimed",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:2002:        "coverage_assist": "OCR delegate mode (ocr delegate preview --from <base> --to <head>; ocr delegate rule <files>), required",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:2003:        "coverage_assist_command_id": "CMD-OCR-DELEGATE",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:2004:        "reverify": "Reverify: not applicable — Phase 1 changes are skill text, shell and Python scripts and workflow YAML; no compiled binary is built or claimed",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:2157:        "coverage_assist": "OCR delegate mode (ocr delegate preview --from <base> --to <head>; ocr delegate rule <files>), required",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:2158:        "coverage_assist_command_id": "CMD-OCR-DELEGATE",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:2159:        "reverify": "Reverify: not applicable — Phase 1 changes are skill text, shell and Python scripts and workflow YAML; no compiled binary is built or claimed",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:2778:      "tools": "uv, Graphviz dot and python3 versions used by the gate and D5 tests; scan-software-supply-chain receipt per acquisition; pinned SHA of every action in .github/workflows/ci.yml; pinned GridMarket source commit"
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:2834:          "action": "Typed gap, never a pass. Provision the tool after scan-software-supply-chain and rerun."
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:2946:      "scan-software-supply-chain receipts (RISK-AFC-13) and route receipts (RISK-AFC-07)",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:3699:      "run scan-software-supply-chain and install scanned tools (uv, Graphviz) on the development host",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:3948:    "changed_proof_cases": "55 proof cases and 48 commands, IDs unchanged except CMD-MODEL-PARSE → CMD-MODEL-SYSON (replaced, spec track only, no proof case cites it): finds every .sysml under the spec-track models dir (empty list fails), records model digests, creates one new SysON project per run and records its id, uploads each file with an appended end marker, requires success, no GraphQL errors and an empty report per file, and every end marker in the read-back; the wrapper exit status is the verdict. seit environments: syside removed, syson added; CMD-SCAN no longer lists a syside wheel; decision_baseline + SD-032",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:3950:    "changed_authority": "authority.json: syside removed from the scan-and-install action; the spec-track scope runs CMD-MODEL-SYSON; one allowed action for the new SysON project per run; the prohibited Requirements System line adds any other SysON project and any keyed or licensed tool for the model check; granting decisions + DEC-AFC-SD-032",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:4386:        "source": "Cross-repo rule 15, frozen profiles (`review.coverage_assist`, `deterministic_verification.reverify`)",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:4471:        "statement": "The program shall obtain a scan-software-supply-chain receipt before first use of each external software acquisition (uv, Graphviz, the GridMarket source at its pinned commit, each pinned GitHub Action), and refuse use on BLOCK or INDETERMINATE.",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:5185:        "control": "The program shall obtain a scan-software-supply-chain receipt before first use of each external software acquisition (uv, Graphviz, the GridMarket source at its pinned commit, each pinned GitHub Action), and refuse use on BLOCK or INDETERMINATE.",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:5383:        "changed_proof_cases": "55 proof cases and 47 commands, IDs unchanged. CMD-SKILL-SIZE rewritten (per-skill stock unittest, quick_validate on a temp portable-fields copy, pinned BRAN bran-strict); CMD-SKILL-TRIGGER rewritten (tests/trigger-requests.json + independent evaluator results file checked by the unittest; no 1-turn harness probe); CMD-D4-AGNOSTIC per slice on its own paths plus one combined Wave 1 exit run; CMD-D4B-TEST, CMD-D5-TEST, CMD-D5-AGNOSTIC run offline from a scanned pinned wheel closure (<afc_uv_env>); CMD-D5-TEST ignores the stock unittest; proof/traceability evidence strings for SEIT-AFC-D4-01.S, -02.S, -03.S, -05.T, -06, D5-01.S, D5-03.T, RISK-15 updated",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:5420:        "changed_proof_cases": "55 proof cases and 48 commands, IDs unchanged except CMD-MODEL-LOAD → CMD-MODEL-PARSE (replaced, spec track only, no proof case cites it): finds every .sysml under the spec-track models dir (empty list fails), checks the syside CMD-SCAN PASS receipt, the wheel digest in it and version 0.11.0, records model digests, parses with syside.load_model; the wrapper exit status is the verdict. seit environments gain syside (pinned wheel, scan, venv, owner-held license key); CMD-SCAN lists the syside wheel; decision_baseline + SD-029..031, OD-AFC-13 closed",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json:5422:        "changed_authority": "authority.json: the Requirements System host action (CMD-MODEL-LOAD) removed; the scan-and-install action adds syside for the spec track; the spec-track scope runs CMD-MODEL-PARSE; the prohibited Requirements System line now forbids any host action for the spec-track models; granting decisions + DEC-AFC-APPROVAL-003, DEC-AFC-SD-031; approval_receipt amendment DEC-AFC-APPROVAL-003",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/g4/commands.json:4:  "CMD-D5-TEST": "env UV_OFFLINE=1 UV_NO_CACHE=1 UV_FIND_LINKS=/tmp/afc-s06-wheels.FMT6DP UV_PYTHON=\"$(command -v python3)\" uv run --no-project --with 'pytest==9.0.3' --with 'pyyaml==6.0.3' python -m pytest skills/spec-authoring/tests --ignore=skills/spec-authoring/tests/test_spec_authoring.py -rA; rc=$?; echo \"exit=$rc\"; (exit $rc)",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/g4/commands.json:5:  "CMD-D5-AGNOSTIC": "t=$(mktemp -d) && cp -r skills/spec-authoring/template \"$t/spec\" && (cd \"$t\" && ! git rev-parse --git-dir 2>/dev/null) && env UV_OFFLINE=1 UV_NO_CACHE=1 UV_FIND_LINKS=/tmp/afc-s06-wheels.FMT6DP UV_PYTHON=\"$(command -v python3)\" uv run --script skills/spec-authoring/scripts/spec_build.py \"$t/spec\" \"$t/out.md\" && env UV_OFFLINE=1 UV_NO_CACHE=1 UV_FIND_LINKS=/tmp/afc-s06-wheels.FMT6DP UV_PYTHON=\"$(command -v python3)\" uv run --script skills/spec-authoring/scripts/spec_lint.py \"$t/spec\" && env UV_OFFLINE=1 UV_NO_CACHE=1 UV_FIND_LINKS=/tmp/afc-s06-wheels.FMT6DP UV_PYTHON=\"$(command -v python3)\" uv run --script skills/spec-authoring/scripts/diagram.py lint \"$t/spec\" && d=$(git diff --name-only --diff-filter=ACMR 47c46f2e16fed060482a1bf3a0e34ddcb9bc57fc..HEAD -- skills/spec-authoring) && f=$(printf '%s\\n' \"$d\" | grep -vE '^$|\\.pyc$|(^|/)(__pycache__|build|dist)/'; true) && printf 'scanned: %s\\n' ${f:-none} && test -n \"$f\" && g=$(printf '%s\\n' \"$f\" | grep -vE '(^|/)(LICENSE-gridmarket|vendor\\.sh)$|(^|/)references/'; true) && { [ -z \"$g\" ] || { git grep -nIiE 'gridmarket|--project backend' HEAD -- $g; [ $? -eq 1 ]; }; } && { git grep -nIE '(/home/|/Users/)[A-Za-z0-9._-]+/|[A-Za-z]:\\\\Users\\\\' HEAD -- $f; [ $? -eq 1 ]; } && git grep -q 'Permission is hereby granted' HEAD -- skills/spec-authoring/LICENSE-gridmarket; rc=$?; echo \"exit=$rc\"; (exit $rc)",
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/g4/hq-pr-body.md:9:AFC S06 needs reproducible Markdown assembly outside Git and a CI-accessible tool copy without colliding with SDoc authoring. This is the spec-and-docs implementation candidate under AUTH-AFC-2026-10-11-002, lease S06-g4.
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/g4/hq-pr-body.md:13:- `uv run --no-project --with 'pytest==9.0.3' --with 'pyyaml==6.0.3' python -m pytest skills/spec-authoring/tests --ignore=skills/spec-authoring/tests/test_spec_authoring.py -rA` with the prescribed offline scanned-wheel environment: exit 0, 37 passed. Baseline: 36 passed, vendoring regression failed.
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/g4/hq-pr-body.md:24:- GridMarket source and Python wheel scan receipts pass; historical acquisition receipts for unchanged installed uv and Graphviz were not located. SEIT-AFC-RISK-13.D remains partial.
+
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/bash -lc "$HOME/alphazede/Alphazedehq/tools/bran/runtime/bran query . 'skills spec-authoring agents openai.yaml default_prompt' | jq '{source_rankings: .data.source_rankings[:8], metrics: .metrics}'; git status --short; git branch --show-current; git rev-parse HEAD; cat skills/spec-authoring/agents/openai.yaml skills/spec-authoring/SKILL.md skills/setup-a-repo/agents/openai.yaml; rg --files -g AGENTS.md skills; cat $HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/g4/commands.json" in $HOME/alphazede/worktrees/alphazedehq-afc-s06-spec-authoring
+ succeeded in 506ms:
+{
+  "source_rankings": [
+    {
+      "locator": "docs/plans/agent-skills/2026-09-08-engineering-methods-and-vnv-integration/cadence-implementation-proposal.json",
+      "rank": 1,
+      "score": {
+        "exact": 2,
+        "partial": 3,
+        "active": 0,
+        "canonical": 0,
+        "public_safe": 0,
+        "confidence": 50,
+        "freshness": ""
+      },
+      "match_reason": "exact:body"
+    },
+    {
+      "locator": "docs/plans/agent-skills/2026-09-08-engineering-methods-and-vnv-integration/w5-repair-product-crewmate-packet.txt",
+      "rank": 2,
+      "score": {
+        "exact": 2,
+        "partial": 3,
+        "active": 0,
+        "canonical": 0,
+        "public_safe": 0,
+        "confidence": 50,
+        "freshness": ""
+      },
+      "match_reason": "exact:body"
+    },
+    {
+      "locator": "docs/plans/agent-skills/2026-09-08-engineering-methods-and-vnv-integration/s9-requirements-engineering-packet.txt",
+      "rank": 3,
+      "score": {
+        "exact": 2,
+        "partial": 3,
+        "active": 0,
+        "canonical": 0,
+        "public_safe": 0,
+        "confidence": 50,
+        "freshness": ""
+      },
+      "match_reason": "exact:body"
+    },
+    {
+      "locator": "docs/plans/agent-skills/2026-09-08-engineering-methods-and-vnv-integration/explorer-rs-consumer-consolidated-receipt.json",
+      "rank": 4,
+      "score": {
+        "exact": 2,
+        "partial": 3,
+        "active": 0,
+        "canonical": 0,
+        "public_safe": 0,
+        "confidence": 50,
+        "freshness": ""
+      },
+      "match_reason": "exact:body"
+    },
+    {
+      "locator": "docs/plans/agent-skills/2026-09-08-engineering-methods-and-vnv-integration/explorer-rs-repaired-verification-receipt.json",
+      "rank": 5,
+      "score": {
+        "exact": 2,
+        "partial": 3,
+        "active": 0,
+        "canonical": 0,
+        "public_safe": 0,
+        "confidence": 50,
+        "freshness": ""
+      },
+      "match_reason": "exact:body"
+    },
+    {
+      "locator": "skills/create-lean-skill/agents/openai.yaml",
+      "rank": 6,
+      "score": {
+        "exact": 2,
+        "partial": 3,
+        "active": 0,
+        "canonical": 0,
+        "public_safe": 0,
+        "confidence": 50,
+        "freshness": ""
+      },
+      "match_reason": "exact:body+path"
+    },
+    {
+      "locator": "docs/plans/organizational-requirements/2026-09-10-ci-cd-github-governance-profile/setup-a-repo-skill-receipt.json",
+      "rank": 7,
+      "score": {
+        "exact": 2,
+        "partial": 2,
+        "active": 0,
+        "canonical": 0,
+        "public_safe": 0,
+        "confidence": 50,
+        "freshness": ""
+      },
+      "match_reason": "exact:body"
+    },
+    {
+      "locator": "docs/plans/organizational-requirements/2026-09-10-ci-cd-github-governance-profile/w1-focused-setup-skill-check.json",
+      "rank": 8,
+      "score": {
+        "exact": 2,
+        "partial": 2,
+        "active": 0,
+        "canonical": 0,
+        "public_safe": 0,
+        "confidence": 50,
+        "freshness": ""
+      },
+      "match_reason": "exact:body"
+    }
+  ],
+  "metrics": {
+    "candidate_source_bytes": 28468787,
+    "selected_source_bytes": 253090,
+    "context_bytes_avoided": 28215697,
+    "estimated_tokens": 63273,
+    "token_estimate_method": "bytes-divided-by-four-ceiling"
+  }
+}
+afc/s06-spec-authoring
+2b19eb757350b960575c70a6a7c0d49530e5e2f5
+interface:
+  display_name: "Spec Authoring"
+  short_description: "Build and check Markdown architecture specifications"
+---
+name: spec-authoring
+description: >
+  Write, draw, build and check architecture specifications sourced from
+  Markdown sections. Use for Markdown specification authoring, figure changes,
+  section lint and reproducible single-file builds. Do not use for SDoc,
+  StrictDoc or Requirements System documents (use-requirements-system), or
+  for planning packages. Use requirements-engineering for requirement quality.
+type: agent-skill
+title: Spec Authoring
+okf_status: active
+tags: [internal, skills, architecture]
+---
+
+# Spec Authoring
+
+Produce one reproducible Markdown specification from section sources and figures.
+
+1. Confirm the authorized destination, specification scope, requirements and
+   revision. Require Python >=3.11, uv and Graphviz `dot`; missing tools return
+   `TOOL_MISSING`. Scan new acquisitions with scan-software-supply-chain first.
+2. Copy this skill's `template/` to the destination without overwriting existing
+   work. Fill `spec.yaml` title, document_id and revision history.
+3. Author the numbered sections using [section rules](references/section-rules.md).
+   Keep the floor subsections; cite requirements-engineering for statement
+   quality instead of inventing a second checklist. Unresolved intent returns
+   `NEEDS_OWNER_DECISION`; placeholders remain visible gaps, never acceptance.
+4. Author figure YAML using [figure rules](references/figures.md). Set `kit` to
+   this skill's `scripts/` (or the vendored directory), then run:
+   `uv run --script "$kit/diagram.py" render <figure.yaml>`.
+   Commit YAML, SVG and draw.io together; edit YAML, never generated outputs.
+5. Run `uv run --script "$kit/spec_build.py" <spec-dir> <output.md>`,
+   `uv run --script "$kit/spec_lint.py" <spec-dir>` and
+   `uv run --script "$kit/diagram.py" lint <spec-dir>`.
+   Build generates front matter, numbering and Appendix A. Never edit the build.
+6. Build again to a temporary output and compare bytes with `cmp`. In a git
+   worktree also use `git diff --exit-code -- <output.md>` when checking an
+   already committed build for staleness. Outside git, byte comparison suffices.
+7. Correct source findings and rerun affected commands, at most three rounds
+   with new evidence each time. Stop on no new evidence or missing tools;
+   never weaken rules to hide findings. See [vendoring](references/vendoring.md)
+   only when another repository needs its own CI-accessible tool copy.
+8. Return `SUCCESS` only for zero findings and identical rebuilds, with source
+   paths, output, command exits and unresolved content gaps. Otherwise return
+   `VALIDATION_FAILED`, `TOOL_MISSING` or `NEEDS_OWNER_DECISION` with the blocker.
+   Mechanical success is not formal review, acceptance or publication authority.
+interface:
+  display_name: "Setup A Repo"
+  short_description: "Configure one repo to the AlphaZede delivery standard"
+  default_prompt: "Use $setup-a-repo to configure one named repository to the AlphaZede delivery standard, using the AZEdge reference configuration."
+{
+  "CMD-SKILL-SIZE": "python3 -m unittest discover -s skills/spec-authoring/tests -t skills/spec-authoring/tests -p 'test_spec_authoring.py' -k test_creator_validation_and_repository_metadata -v && test \"$(sha256sum < $HOME/alphazede/Alphazedehq/tools/bran/runtime/bran | cut -d' ' -f1)\" = \"$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1]))[\"sha256\"])' $HOME/alphazede/Alphazedehq/tools/bran/runtime/bran-release-pin.json)\" && $HOME/alphazede/Alphazedehq/tools/bran/runtime/bran check . bran-strict; rc=$?; echo \"exit=$rc\"; (exit $rc)",
+  "CMD-SKILL-TRIGGER": "e=$(mktemp -d) && cp skills/spec-authoring/SKILL.md skills/spec-authoring/tests/trigger-requests.json \"$e\"/ && (cd \"$e\" && claude --version > harness-version.txt && claude -p 'You are an independent skill-routing evaluator. Read SKILL.md and trigger-requests.json in this directory. For each request id, answer MATCH if an agent with this skill installed should use it for that request according to its description, otherwise NO_MATCH. Reply with only a JSON object mapping every request id to MATCH or NO_MATCH.' --output-format json --max-turns 5 --allowedTools Read --disallowedTools Bash,Write,Edit,WebFetch,WebSearch < /dev/null > session.json && jq -r .result session.json | python3 -c 'import json,sys; t=sys.stdin.read(); print(json.dumps(json.loads(t[t.index(\"{\"):t.rindex(\"}\")+1])))' > results.json) && cp \"$e\"/results.json $HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/g4/trigger-results-spec-authoring.json && cp \"$e\"/harness-version.txt \"$e\"/session.json $HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/g4/ && SPEC_AUTHORING_TRIGGER_RESULTS=$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/g4/trigger-results-spec-authoring.json python3 -m unittest discover -s skills/spec-authoring/tests -t skills/spec-authoring/tests -p 'test_spec_authoring.py' -k test_trigger_classifications -v; rc=$?; echo \"exit=$rc\"; (exit $rc)",
+  "CMD-D5-TEST": "env UV_OFFLINE=1 UV_NO_CACHE=1 UV_FIND_LINKS=/tmp/afc-s06-wheels.FMT6DP UV_PYTHON=\"$(command -v python3)\" uv run --no-project --with 'pytest==9.0.3' --with 'pyyaml==6.0.3' python -m pytest skills/spec-authoring/tests --ignore=skills/spec-authoring/tests/test_spec_authoring.py -rA; rc=$?; echo \"exit=$rc\"; (exit $rc)",
+  "CMD-D5-AGNOSTIC": "t=$(mktemp -d) && cp -r skills/spec-authoring/template \"$t/spec\" && (cd \"$t\" && ! git rev-parse --git-dir 2>/dev/null) && env UV_OFFLINE=1 UV_NO_CACHE=1 UV_FIND_LINKS=/tmp/afc-s06-wheels.FMT6DP UV_PYTHON=\"$(command -v python3)\" uv run --script skills/spec-authoring/scripts/spec_build.py \"$t/spec\" \"$t/out.md\" && env UV_OFFLINE=1 UV_NO_CACHE=1 UV_FIND_LINKS=/tmp/afc-s06-wheels.FMT6DP UV_PYTHON=\"$(command -v python3)\" uv run --script skills/spec-authoring/scripts/spec_lint.py \"$t/spec\" && env UV_OFFLINE=1 UV_NO_CACHE=1 UV_FIND_LINKS=/tmp/afc-s06-wheels.FMT6DP UV_PYTHON=\"$(command -v python3)\" uv run --script skills/spec-authoring/scripts/diagram.py lint \"$t/spec\" && d=$(git diff --name-only --diff-filter=ACMR 47c46f2e16fed060482a1bf3a0e34ddcb9bc57fc..HEAD -- skills/spec-authoring) && f=$(printf '%s\\n' \"$d\" | grep -vE '^$|\\.pyc$|(^|/)(__pycache__|build|dist)/'; true) && printf 'scanned: %s\\n' ${f:-none} && test -n \"$f\" && g=$(printf '%s\\n' \"$f\" | grep -vE '(^|/)(LICENSE-gridmarket|vendor\\.sh)$|(^|/)references/'; true) && { [ -z \"$g\" ] || { git grep -nIiE 'gridmarket|--project backend' HEAD -- $g; [ $? -eq 1 ]; }; } && { git grep -nIE '(/home/|/Users/)[A-Za-z0-9._-]+/|[A-Za-z]:\\\\Users\\\\' HEAD -- $f; [ $? -eq 1 ]; } && git grep -q 'Permission is hereby granted' HEAD -- skills/spec-authoring/LICENSE-gridmarket; rc=$?; echo \"exit=$rc\"; (exit $rc)",
+  "CMD-SKILL-TRIGGER-RECIPROCAL": "e=$(mktemp -d) && cp $HOME/alphazede/worktrees/requirements-system-afc-s06/skills/use-requirements-system/SKILL.md skills/spec-authoring/tests/trigger-requests.json \"$e\"/ && (cd \"$e\" && claude --version > harness-version.txt && claude -p 'You are an independent skill-routing evaluator. Read SKILL.md and trigger-requests.json in this directory. For each request id, answer MATCH if an agent with this skill installed should use it for that request according to its description, otherwise NO_MATCH. Reply with only a JSON object mapping every request id to MATCH or NO_MATCH.' --output-format json --max-turns 5 --allowedTools Read --disallowedTools Bash,Write,Edit,WebFetch,WebSearch < /dev/null > session.json && jq -r .result session.json | python3 -c 'import json,sys; t=sys.stdin.read(); print(json.dumps(json.loads(t[t.index(\"{\"):t.rindex(\"}\")+1])))' > results.json) && cp \"$e\"/results.json $HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/g4/trigger-results-use-requirements-system.json && cp \"$e\"/harness-version.txt $HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/g4/reciprocal-harness-version.txt && cp \"$e\"/session.json $HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/g4/reciprocal-session.json && python3 -c 'import json,sys; assert json.load(open(sys.argv[1]))=={\"request_1\":\"NO_MATCH\",\"request_2\":\"MATCH\"}' $HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/g4/trigger-results-use-requirements-system.json; rc=$?; echo \"exit=$rc\"; (exit $rc)"
+}
+codex
+The worktree is clean at the expected head, and the prompt is missing as reported. BRAN strict validation passed; `bran_status: hit` for a comparable skill’s agent metadata. I’m reading the named file and S06 receipts directly to confirm the write set and verification inputs.
+
+
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/bash -lc "python3 - <<'PY'
+import json,pathlib
+p=pathlib.Path('$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion')
+for n in ['journey.json','implementation.json']:
+ d=json.loads((p/n).read_text())
+ def walk(x):
+  if isinstance(x,dict):
+   if any(v=='S06-g4' for v in x.values() if isinstance(v,str)): print(n,json.dumps(x,indent=2))
+   else:
+    for v in x.values(): walk(v)
+  elif isinstance(x,list):
+   for v in x:walk(v)
+ walk(d)
+for f in (p/'evidence/S06').rglob('scan-*.md'): print(f, f.read_text()[:4500])
+PY" in $HOME/alphazede/worktrees/alphazedehq-afc-s06-spec-authoring
+ succeeded in 0ms:
+journey.json {
+  "at": "2026-10-12T07:27:38Z",
+  "kind": "dispatch_record",
+  "lease_id": "S06-g4",
+  "slice": "S06",
+  "generation": 4,
+  "base_sha": "47c46f2e16fed060482a1bf3a0e34ddcb9bc57fc (Alphazedehq) + c1e07c92c630ae1a5aa50a19d34d3f625adeb2ad (requirements-system)",
+  "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/",
+  "authority": "AUTH-AFC-2026-10-11-002",
+  "package_digest": "7a9a87433dd0c1aebcb00acd82c3f49989fef915730bcda22c817239d00f055d",
+  "repository": "alphazede/Alphazedehq + alphazede/requirements-system",
+  "worktree": "$HOME/alphazede/worktrees/alphazedehq-afc-s06-spec-authoring + requirements-system-afc-s06",
+  "branch": "afc/s06-spec-authoring + afc/s06-use-rs-nontrigger",
+  "base": "47c46f2e16fed060482a1bf3a0e34ddcb9bc57fc (Alphazedehq) + c1e07c92c630ae1a5aa50a19d34d3f625adeb2ad (requirements-system)"
+}
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/g4/scan-wheels.md verdict: PASS
+Date: 2026-10-12T06:57:40.636150+00:00
+Origin: https://pypi.org
+Intended use: S06 vendoring and offline verification, after this receipt.
+CREDENTIAL FINDINGS: none; gitleaks redacted scans exit 0.
+pytest 9.0.3, PyYAML 6.0.3, iniconfig 2.3.1, packaging 26.3, pluggy 1.6.0, pygments 2.21.0; all wheel SHA256 values matched official PyPI JSON, no reported vulnerabilities. Archive paths checked before extraction. Native PyYAML readelf imports libc and libpthread; no RPATH. Wheels have no build/install hooks.
+ClamAV 1.5.4, database 28150 (2026-10-11): 568 files, zero infected, exit 0.
+No dynamic analysis performed. Residual risk: scanners cannot prove absence of unknown defects.
+SHA256:
+9121e2c1fdb355232495be3194c8dfe87ccc2d5dee45947b78e68f499790d7a7  iniconfig-2.3.1-py3-none-any.whl
+d7193f7c8e4e93f444fde0262bf90af30e16fa0ad0ad44cb553c87339b23cd1c  packaging-26.3-py3-none-any.whl
+e920276dd6813095e9377c0bc5566d94c932c33b27a3e3945d8389c374dd4746  pluggy-1.6.0-py3-none-any.whl
+2363c69b61c4a97c838da3b130dcd6468f4848992b21a82f2a63ec34377137d9  pygments-2.21.0-py3-none-any.whl
+2c5efc453d45394fdd706ade797c0a81091eccd1d6e4bccfcd476e2b8e0ab5d9  pytest-9.0.3-py3-none-any.whl
+c458b6d084f9b935061bc36216e8a69a7e293a2f1e68bf956dcd9e6cbcd143f5  pyyaml-6.0.3-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl
+
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/g4/scan-source.md verdict: PASS
+Date: 2026-10-12T06:57:40.633039+00:00
+Origin: https://github.com/1wgrumph/gridmarket/tree/99eb98e7b0b5d1473c8e595d825d569b567c6817
+Intended use: S06 vendoring and offline verification, after this receipt.
+CREDENTIAL FINDINGS: none; gitleaks redacted scans exit 0.
+Selected template, three skill references, build/lint/diagram source and tests; all Git blob identities verified against pinned GitHub tree. Bandit: 77 low, 3 medium, 0 high; subprocess executes discovered dot with an argv list, no shell. XML warnings concern local draw.io generated inputs; host Expat 2.7.4 has amplification protections. No credential, network, persistence or installer behavior in tool source. Tests use assertions intentionally.
+ClamAV 1.5.4, database 28150 (2026-10-11): 568 files, zero infected, exit 0.
+No dynamic analysis performed. Residual risk: scanners cannot prove absence of unknown defects.
+SHA256:
+d5e9e764a79f276d580889a978e4f2a695886e9cb54d416116d63c0fd2fd4066  1wgrumph-gridmarket-99eb98e/LICENSE
+acb7e0a60952ac9be8921f9ec8bd8c743917c685c2fe107ce8ef454689ba3420  1wgrumph-gridmarket-99eb98e/skills/spec-author/SKILL.md
+d2e0713fb6ef7f80c657ea0611396cab9e0e6547a26076d3c86eba6e9491a25e  1wgrumph-gridmarket-99eb98e/skills/spec-diagram/SKILL.md
+7b0f3bd2d9b1c9d264a1f557b2ca2fe96638a1a9f1a3d2c028115356c87c94a2  1wgrumph-gridmarket-99eb98e/skills/spec-lint/SKILL.md
+c051b644a9611ff70478348cce75bf8f91b9deafb4a79bc50026246114c17883  1wgrumph-gridmarket-99eb98e/spec/template/01-introduction.md
+3ba744aae292dac592438d740965da30779233ceaf7d1124ca03c5323cb42ddd  1wgrumph-gridmarket-99eb98e/spec/template/01.1-background.md
+88cc01fc9bf006e6b8e20daef26e2f180e65af1260cd0be7e85980ed4b995c03  1wgrumph-gridmarket-99eb98e/spec/template/01.1.1-identification.md
+556a85b24809f4d2c1f9ecfa33c7454408610cfa54552ef74772735c41d06372  1wgrumph-gridmarket-99eb98e/spec/template/01.1.2-system-context.md
+ce9cec5dbd0ddd455f2e41f053ce99da61cdb586c40559291e8b6662d497393e  1wgrumph-gridmarket-99eb98e/spec/template/01.2-baseline.md
+03ee413ac040febb8a81f8f3e675324d0d4e3d6fdbe633385beda24758935261  1wgrumph-gridmarket-99eb98e/spec/template/01.2.1-baselines.md
+0e558e32fa64b469cd436139668c086f4caa175e7e0e9dfa31dfc740bf8cd629  1wgrumph-gridmarket-99eb98e/spec/template/01.3-feature-set.md
+d7399b03b0af2b58eadd162576bdfbef004dee7213959a042c20fb330517e35f  1wgrumph-gridmarket-99eb98e/spec/template/01.4-scope.md
+0feeff5cf068f67724cfddd5f1ce44221ed42dbfe4c1c00e1b5d9d512426c510  1wgrumph-gridmarket-99eb98e/spec/template/01.4.1-purpose-and-scope.md
+c1f59aaa149881c9014dd9751bc40f938d24a9984ef579404394f8cdc183eecd  1wgrumph-gridmarket-99eb98e/spec/template/01.4.2-stakeholders.md
+580aef07209ec721924a4cc073857a1ea897a4bdc9cecb56108608ef8b1dd6ce  1wgrumph-gridmarket-99eb98e/spec/template/01.5-assumptions.md
+8e292b80e6d4cce2964f04c5a22d9a34af90f551151e4f11cbcbc0745f0ba198  1wgrumph-gridmarket-99eb98e/spec/template/01.6-terms.md
+7d02cefce0788d89f29f1f058e6cc6d3d60137abaa18292c253e3c6032cda96d  1wgrumph-gridmarket-99eb98e/spec/template/01.6.1-requirements.md
+b1abf3c255df5fe3cdbe7eace736dc4b2d0e5658db561c1723388a1c2682b655  1wgrumph-gridmarket-99eb98e/spec/template/02-open-items.md
+5efc398a6a658266548d0969c24ad237d3469e57de4c800c9cfce541d4ca586a  1wgrumph-gridmarket-99eb98e/spec/template/02.1-risks.md
+b9f2a790db316fd304a3d6ee9a3675350b9c360fb15c7d0f5eaa7c8ea2c4c4cc  1wgrumph-gridmarket-99eb98e/spec/template/03-use-model.md
+cf1a56437cdf814c5c0e1e0076d9719aab0d71fa707b5878b2bd0cf62e235ce4  1wgrumph-gridmarket-99eb98e/spec/template/03.1-operational-concept.md
+073a3392a04949171778850ea2df8479c5fbcef6c2adc00b19c172e294ebf860  1wgrumph-gridmarket-99eb98e/spec/template/04-feature-architecture.md
+20d6886f00ad860eae1198c868868b09a07f7081bac20940cfb5ec5fa722b98a  1wgrumph-gridmarket-99eb98e/spec/template/04.1-feature-decomposition.md
+f3c588dda900a363e07ca269daa28807d9ad8a3b8dfabe9fe68a586fbca97c26  1wgrumph-gridmarket-99eb98e/spec/template/04.1.1-feature.md
+4bfbfbb97c21eaf1b20d234df4a01e7152d819b710a5a43d1031bb52ac9b130e  1wgrumph-gridmarket-99eb98e/spec/template/04.1.99-allocation.md
+e47379ab170072ac0085678e045f4773e1bb008719a311a0b311f3c1323db8d0  1wgrumph-gridmarket-99eb98e/spec/template/04.2-feature-interfaces.md
+ba142609a3137503f615b0575e23a01e052f905d8a4d57d7cd7bc6e1ff65e471  1wgrumph-gridmarket-99eb98e/spec/template/04.2.1-internal-interfaces.md
+1b99921de20f0fc504cff0a1310ad57b18a52bc7e52ac3426e71e4884a5d9b5b  1wgrumph-gridmarket-99eb98e/spec/template/04.2.2-external-interfaces.md
+3bbda
+
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/bash -lc "sed -n '1,210p' tools/ci/local-gates.sh; rg -n 'default_prompt|standards-yaml' tools/ci" in $HOME/alphazede/worktrees/alphazedehq-afc-s06-spec-authoring
+ succeeded in 0ms:
+#!/usr/bin/env bash
+# Local merge gate for alphazede/Alphazedehq (the requirements-system model:
+# tools/ci/local-gates.sh there, #333). This script is the merge check before
+# pushing; .github/workflows/coe-gates.yml covers only a subset of these gates.
+#
+# Usage:
+#   bash tools/ci/local-gates.sh             # every gate whose paths changed
+#   bash tools/ci/local-gates.sh --fast      # skip the slow gates (never writes a receipt)
+#   bash tools/ci/local-gates.sh --full      # run every gate whatever changed
+#   bash tools/ci/local-gates.sh --list      # print the gate list and exit
+#   bash tools/ci/local-gates.sh --self-test # check the path filters and lanes
+#   GATE_TIMEOUT=600 bash tools/ci/local-gates.sh  # per-gate timeout (default 600s)
+#
+# Each gate reports PASS, FAIL, SKIP (deliberately not run: --fast) or N/A
+# (not applicable: none of the gate's paths changed since the merge-base with
+# origin/main). Baseline diff and secret checks always run. Exit 0 only when
+# no gate failed. A change to this runner, the standards validator, or the
+# workflows runs every gate, as does a checkout
+# with no merge-base or with an empty change set (main itself).
+#
+# Gates run in three concurrent lanes; the gates inside one lane run one after
+# another. Lane A holds the alphazede-web steps, which share node_modules.
+# Lane B holds the visual-review browser suite, the one slow gate. Lane C is
+# the rest: the COE lints, the standards YAML validation, and the hook and TE
+# suites.
+#
+# The StrictDoc bridge step stays out, as in CI: it runs the packaged engine
+# from /usr/lib/alphazede-requirements-system, which is an installed Debian
+# payload on an owner node and is not available to every runner. The bridge
+# stays a local step via tools/coe/validate-sdoc.sh; what runs here is the
+# part that is reproducible anywhere.
+#
+# Receipt: when at least one gate passed, none failed or skipped, on a checkout
+# whose tracked files are clean, the run writes
+#   ${AZ_GATE_RECEIPTS:-~/.local/state/alphazede-gate-receipts}/Alphazedehq/<HEAD sha>
+# hooks/merge-gate-guard.py refuses `gh pr merge` for this repository unless
+# the PR head SHA has that receipt. GitHub Actions is disabled here, so
+# .github/workflows/coe-gates.yml never runs; this receipt is the merge check.
+
+set -uo pipefail
+cd "$(git rev-parse --show-toplevel)" || exit 2
+# Gates import modules from the tree; a run must leave no __pycache__ behind.
+export PYTHONDONTWRITEBYTECODE=1
+
+FAST=0 FULL=0 LIST=0 SELFTEST=0
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --fast) FAST=1 ;;
+    --full) FULL=1 ;;
+    --list) LIST=1 ;;
+    --self-test) SELFTEST=1 ;;
+    *) echo "unknown option: $1" >&2; exit 2 ;;
+  esac
+  shift
+done
+
+BASE=$(git merge-base origin/main HEAD 2>/dev/null) || BASE=
+
+# The change set the filters read: every path that differs between the
+# merge-base and HEAD. Loaded once by load_changed.
+CHANGED=
+
+load_changed() {
+  if [ -n "$BASE" ]; then
+    CHANGED=$(git diff --name-only "$BASE" HEAD -- 2>/dev/null) || CHANGED=
+  else
+    CHANGED=
+  fi
+}
+
+# class_changed <class>: exit 0 when a path of that class changed.
+#   L  COE and plan lint: docs, the COE tools, the hook README the activation
+#      test pins
+#   Y  standards YAML: docs and the skill agent cards (the validator scans the
+#      whole standards tree whatever changed, so any docs change re-runs it)
+#   H  hook suites: hooks
+#   T  test-engineering suites: the skill and the validator pins
+#   S  skill suite: visual-review
+#   W  alphazede-web
+#   G  git-sync suite
+#   B  baseline checks (always run)
+class_changed() {
+  case "$1" in
+    L) grep -qE '^(docs/|tools/coe/|hooks/README\.md$)' <<<"$CHANGED" ;;
+    Y) grep -qE '^(docs/|skills/[^/]+/agents/.*\.ya?ml$)' <<<"$CHANGED" ;;
+    H) grep -qE '^hooks/' <<<"$CHANGED" ;;
+    T) grep -qE '^(skills/test-engineering/|tools/coe/te-schema-validator-requirements\.txt$)' <<<"$CHANGED" ;;
+    S) grep -qE '^skills/visual-review/' <<<"$CHANGED" ;;
+    G) grep -qE '^tools/git-sync/' <<<"$CHANGED" ;;
+    W) grep -qE '^alphazede-web/' <<<"$CHANGED" ;;
+    *) return 1 ;;
+  esac
+}
+
+class_desc() {
+  case "$1" in
+    L) echo "COE-lint" ;;
+    Y) echo "standards-YAML" ;;
+    H) echo "hook" ;;
+    T) echo "test-engineering" ;;
+    S) echo "skill-suite" ;;
+    W) echo "alphazede-web" ;;
+    G) echo "git-sync" ;;
+    B) echo "baseline" ;;
+  esac
+}
+
+# RUN_<class> is 1 when that class runs. --full, a missing merge-base, an
+# empty change set, or a change to the runner, the validator, or the
+# workflows runs every class.
+compute_runs() {
+  local class
+  RUN_B=1
+  for class in L Y H T S W G; do
+    eval "RUN_$class=0"
+  done
+  if [ "$FULL" -eq 1 ] || [ -z "$BASE" ] || [ -z "$CHANGED" ]; then
+    for class in L Y H T S W G; do
+      eval "RUN_$class=1"
+    done
+    return 0
+  fi
+  if grep -qE '^(tools/ci/|\.github/workflows/)' <<<"$CHANGED"; then
+    for class in L Y H T S W G; do
+      eval "RUN_$class=1"
+    done
+    return 0
+  fi
+  for class in L Y H T S W G; do
+    if class_changed "$class"; then
+      eval "RUN_$class=1"
+    fi
+  done
+}
+
+# The isolated Draft 2020-12 validator lives in one directory for the whole
+# run; the provision gate installs it and the receipt and Ponytail gates
+# import from it. A preset EMV_SCHEMA_VALIDATOR_IMPORTS is reused.
+if [ -z "${EMV_SCHEMA_VALIDATOR_IMPORTS:-}" ]; then
+  EMV_SCHEMA_VALIDATOR_IMPORTS=$(mktemp -d "${TMPDIR:-/tmp}/te-schema-validator.XXXXXX")
+fi
+export EMV_SCHEMA_VALIDATOR_IMPORTS
+
+# YAML_PROVISION installs the pinned PyYAML into YAML_VALIDATOR_IMPORTS only
+# when the interpreter cannot already import yaml, so a bare hosted runner
+# validates the same files the same way. It runs inside the standards-yaml
+# gate's own shell, where the export holds for the validator invocation.
+YAML_PROVISION='if ! python3 -c "import yaml" 2>/dev/null; then YAML_VALIDATOR_IMPORTS=${YAML_VALIDATOR_IMPORTS:-$(mktemp -d "${TMPDIR:-/tmp}/yaml-validator.XXXXXX")}; python3 -m pip install --isolated --disable-pip-version-check --no-input --no-compile --upgrade-strategy only-if-needed --target "$YAML_VALIDATOR_IMPORTS" --require-hashes --no-deps -r tools/ci/standards-yaml-requirements.txt && export PYTHONPATH="$YAML_VALIDATOR_IMPORTS${PYTHONPATH:+:$PYTHONPATH}"; fi'
+
+# VR_PY prefers the skill venv, which carries Playwright and Chromium (see
+# skills/visual-review/SKILL.md), and falls back to the bare interpreter, on
+# which the browser tests skip with a reason instead of erroring.
+VR_PY='VR_PY=$HOME/.venvs/visual-review/bin/python; if [ ! -x "$VR_PY" ]; then VR_PY=python3; fi'
+
+# name|command|filter|lane|speed
+#   filter: B always runs; L Y H T S W G use class_changed above
+#   lane:   A the web steps, which share node_modules;
+#           B the visual-review browser suite, the one slow gate;
+#           C everything else
+#   speed:  0 fast, 1 slow (--fast skips the slow gates)
+# A command must not contain `|`; the runner splits tuples on it. Spell
+# fallbacks as `if` statements, not `||` pipelines.
+GATES=(
+  "diff-check|git diff --check ${BASE:-HEAD} HEAD|B|C|0"
+  "secret-scan|if [ -n \"$BASE\" ]; then OPTS=\"$BASE..HEAD\"; else OPTS=\"HEAD^!\"; fi; gitleaks git --no-banner --redact --log-level warn --log-opts=\"\$OPTS\" .|B|C|0"
+  "git-sync|bash tools/git-sync/git-sync.test.sh|G|C|0"
+  "web-install|if ! command -v pnpm >/dev/null; then echo 'web-install: pnpm is not on PATH'; exit 127; fi; cd alphazede-web && pnpm install --frozen-lockfile|W|A|0"
+  "web-build|cd alphazede-web && pnpm build|W|A|0"
+  "web-typecheck|cd alphazede-web && pnpm typecheck|W|A|0"
+  "web-test|cd alphazede-web && pnpm test|W|A|0"
+  "visual-review|$VR_PY; cd skills/visual-review && \$VR_PY -m unittest discover -s tests|S|B|1"
+  "plan-spec-lint|python3 tools/coe/lint-plan-spec.py|L|C|0"
+  "sdoc-lint|shopt -s globstar; python3 tools/coe/lint-sdoc.py docs/coe/**/*.sdoc|L|C|0"
+  "gate-activation|bash tools/coe/test-pre-commit-gates.sh|L|C|0"
+  "standards-yaml|$YAML_PROVISION; python3 tools/ci/validate-standards-yaml.py|Y|C|0"
+  "hook-suites|python3 hooks/test-issue-labels.py && bash hooks/test-bug-report-routing.sh && bash hooks/test-merge-gate-guard.sh|H|C|0"
+  "te-provision|python3 -m pip install --isolated --disable-pip-version-check --no-input --no-compile --upgrade-strategy only-if-needed --target \"${EMV_SCHEMA_VALIDATOR_IMPORTS}\" --require-hashes --no-deps -r tools/coe/te-schema-validator-requirements.txt|T|C|0"
+  "te-evaluator|node --test skills/test-engineering/tests/te-evaluator.test.cjs|T|C|0"
+  "te-receipt|python3 skills/test-engineering/tests/te-receipt-contract.test.py|T|C|0"
+  "te-ponytail|AZ_PONYTAIL_SKILL=skills/test-engineering/tests/fixtures/ponytail/SKILL.md python3 skills/test-engineering/tests/ponytail-on-off.test.py|T|C|0"
+)
+
+# One gate. Prints its line as it finishes and leaves <dir>/<index>.status,
+# .line and, on failure, .tail for the ordered summary.
+run_gate() { # <index> <dir>
+  local name cmd filter lane speed line status t0 out code flag
+  IFS='|' read -r name cmd filter lane speed <<<"${GATES[$1]}"
+  flag="RUN_$filter"
+  if [ "${!flag:-0}" -eq 0 ]; then
+    status=N/A line=$(printf 'N/A   %-16s (no %s paths changed since merge-base; --full forces it)' "$name" "$(class_desc "$filter")")
+  elif [ "$FAST" -eq 1 ] && [ "$speed" != 0 ]; then
+    status=SKIP line=$(printf 'SKIP  %-16s (--fast)' "$name")
+  else
+    t0=$(date +%s)
+    # A hung gate is a failed gate.
+    out="$2/$1.out"
+    # The wrapper records its process group before starting the gate, so an
+    # interrupt can stop the whole group even during the launch race.
+    trap 'lane_interrupted=130' INT
+    trap 'lane_interrupted=143' TERM
+    [ -z "$lane_interrupted" ] || exit "$lane_interrupted"
+    setsid bash -c 'echo "$$" >"$1"; exec timeout --foreground "$2" bash -c "$3"' \
+      _ "$2/gate.$lane.pid" "${GATE_TIMEOUT:-600}" "$cmd" >"$out" 2>&1 &
+    gate_pid=$!
+    [ -z "$lane_interrupted" ] || exit "$lane_interrupted"
+    trap 'exit 130' INT
+    trap 'exit 143' TERM
+    [ -z "$lane_interrupted" ] || exit "$lane_interrupted"
+    if wait "$gate_pid"; then
+      status=PASS line=$(printf 'PASS  %-16s %4ss' "$name" "$(( $(date +%s) - t0 ))")
+tools/ci/validate-standards-yaml.py:17:default_prompt.
+tools/ci/validate-standards-yaml.py:19:Usage: validate-standards-yaml.py [path ...]
+tools/ci/validate-standards-yaml.py:55:AGENT_KEYS = ("display_name", "short_description", "default_prompt")
+tools/ci/test-validate-standards-yaml.sh:12:cp "$ROOT/tools/ci/validate-standards-yaml.py" "$gap/tools/ci/"
+tools/ci/test-validate-standards-yaml.sh:13:if python3 "$gap/tools/ci/validate-standards-yaml.py" >/dev/null 2>&1; then
+tools/ci/test-validate-standards-yaml.sh:17:python3 "$ROOT/tools/ci/validate-standards-yaml.py" >/dev/null \
+tools/ci/local-gates.sh:146:# validates the same files the same way. It runs inside the standards-yaml
+tools/ci/local-gates.sh:148:YAML_PROVISION='if ! python3 -c "import yaml" 2>/dev/null; then YAML_VALIDATOR_IMPORTS=${YAML_VALIDATOR_IMPORTS:-$(mktemp -d "${TMPDIR:-/tmp}/yaml-validator.XXXXXX")}; python3 -m pip install --isolated --disable-pip-version-check --no-input --no-compile --upgrade-strategy only-if-needed --target "$YAML_VALIDATOR_IMPORTS" --require-hashes --no-deps -r tools/ci/standards-yaml-requirements.txt && export PYTHONPATH="$YAML_VALIDATOR_IMPORTS${PYTHONPATH:+:$PYTHONPATH}"; fi'
+tools/ci/local-gates.sh:175:  "standards-yaml|$YAML_PROVISION; python3 tools/ci/validate-standards-yaml.py|Y|C|0"
+tools/ci/standards-yaml-requirements.txt:10:#     -r tools/ci/standards-yaml-requirements.txt
+
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/bash -lc 'python3 tools/ci/validate-standards-yaml.py skills/spec-authoring/agents/openai.yaml' in $HOME/alphazede/worktrees/alphazedehq-afc-s06-spec-authoring
+ exited 1 in 0ms:
+yaml 6.0.3 (/usr/lib/python3/dist-packages/yaml/__init__.py)
+skills/spec-authoring/agents/openai.yaml: FAILED
+---
+skills/spec-authoring/agents/openai.yaml: interface.default_prompt is missing or blank
+
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+apply patch
+patch: completed
+$HOME/alphazede/worktrees/alphazedehq-afc-s06-spec-authoring/skills/spec-authoring/agents/openai.yaml
+diff --git a/skills/spec-authoring/agents/openai.yaml b/skills/spec-authoring/agents/openai.yaml
+index 68cb05320c0a4342e5dfacf3d21c8a2cdb68acb6..8115cad9306050cbf3f528ce4efce3349a65d73e
+--- a/skills/spec-authoring/agents/openai.yaml
++++ b/skills/spec-authoring/agents/openai.yaml
+@@ -1,3 +1,4 @@
+ interface:
+   display_name: "Spec Authoring"
+   short_description: "Build and check Markdown architecture specifications"
++  default_prompt: "Use $spec-authoring to write, build and check an architecture specification from Markdown sections."
+
+hook: PostToolUse
+hook: PostToolUse Completed
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/bash -lc 'git diff --check; git diff -- skills/spec-authoring/agents/openai.yaml; python3 tools/ci/validate-standards-yaml.py skills/spec-authoring/agents/openai.yaml; git status --short; git rev-parse HEAD' in $HOME/alphazede/worktrees/alphazedehq-afc-s06-spec-authoring
+ succeeded in 0ms:
+diff --git a/skills/spec-authoring/agents/openai.yaml b/skills/spec-authoring/agents/openai.yaml
+index 68cb053..8115cad 100644
+--- a/skills/spec-authoring/agents/openai.yaml
++++ b/skills/spec-authoring/agents/openai.yaml
+@@ -1,3 +1,4 @@
+ interface:
+   display_name: "Spec Authoring"
+   short_description: "Build and check Markdown architecture specifications"
++  default_prompt: "Use $spec-authoring to write, build and check an architecture specification from Markdown sections."
+yaml 6.0.3 (/usr/lib/python3/dist-packages/yaml/__init__.py)
+skills/spec-authoring/agents/openai.yaml: ok
+1 files, 0 checks, 0 journeys
+ M skills/spec-authoring/agents/openai.yaml
+2b19eb757350b960575c70a6a7c0d49530e5e2f5
+
+diff --git a/skills/spec-authoring/agents/openai.yaml b/skills/spec-authoring/agents/openai.yaml
+index 68cb05320c0a4342e5dfacf3d21c8a2cdb68acb6..8115cad9306050cbf3f528ce4efce3349a65d73e
+--- a/skills/spec-authoring/agents/openai.yaml
++++ b/skills/spec-authoring/agents/openai.yaml
+@@ -1,3 +1,4 @@
+ interface:
+   display_name: "Spec Authoring"
+   short_description: "Build and check Markdown architecture specifications"
++  default_prompt: "Use $spec-authoring to write, build and check an architecture specification from Markdown sections."
+
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/bash -lc 'git add -- skills/spec-authoring/agents/openai.yaml && git commit -m "fix(spec-authoring): provide default agent prompt" && git rev-parse HEAD' in $HOME/alphazede/worktrees/alphazedehq-afc-s06-spec-authoring
+ succeeded in 276ms:
+3:00AM INF 0 commits scanned.
+3:00AM INF scanned ~120 bytes (120 bytes) in 143ms
+3:00AM INF no leaks found
+[afc/s06-spec-authoring ae8941f] fix(spec-authoring): provide default agent prompt
+ Author: Codex <1wgrumph+codex@gmail.com>
+ 1 file changed, 1 insertion(+)
+ae8941f950c40b6a842980fdb2e1f6a5e12d3c73
+
+diff --git a/skills/spec-authoring/agents/openai.yaml b/skills/spec-authoring/agents/openai.yaml
+index 68cb05320c0a4342e5dfacf3d21c8a2cdb68acb6..8115cad9306050cbf3f528ce4efce3349a65d73e
+--- a/skills/spec-authoring/agents/openai.yaml
++++ b/skills/spec-authoring/agents/openai.yaml
+@@ -1,3 +1,4 @@
+ interface:
+   display_name: "Spec Authoring"
+   short_description: "Build and check Markdown architecture specifications"
++  default_prompt: "Use $spec-authoring to write, build and check an architecture specification from Markdown sections."
+
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/bash -lc 'bash tools/ci/local-gates.sh > $HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/g4/repair-local-gates.log 2>&1; rc=$?; tail -25 $HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/g4/repair-local-gates.log; echo "exit=$rc"; exit "$rc"' in $HOME/alphazede/worktrees/alphazedehq-afc-s06-spec-authoring
+ succeeded in 809ms:
+lane A: 0s
+lane B: 0s
+lane C: 1s
+
+PASS  diff-check          0s
+PASS  secret-scan         0s
+N/A   git-sync         (no git-sync paths changed since merge-base; --full forces it)
+N/A   web-install      (no alphazede-web paths changed since merge-base; --full forces it)
+N/A   web-build        (no alphazede-web paths changed since merge-base; --full forces it)
+N/A   web-typecheck    (no alphazede-web paths changed since merge-base; --full forces it)
+N/A   web-test         (no alphazede-web paths changed since merge-base; --full forces it)
+N/A   visual-review    (no skill-suite paths changed since merge-base; --full forces it)
+N/A   plan-spec-lint   (no COE-lint paths changed since merge-base; --full forces it)
+N/A   sdoc-lint        (no COE-lint paths changed since merge-base; --full forces it)
+N/A   gate-activation  (no COE-lint paths changed since merge-base; --full forces it)
+PASS  standards-yaml      1s
+N/A   hook-suites      (no hook paths changed since merge-base; --full forces it)
+N/A   te-provision     (no test-engineering paths changed since merge-base; --full forces it)
+N/A   te-evaluator     (no test-engineering paths changed since merge-base; --full forces it)
+N/A   te-receipt       (no test-engineering paths changed since merge-base; --full forces it)
+N/A   te-ponytail      (no test-engineering paths changed since merge-base; --full forces it)
+
+passed=3 failed=0 skipped=0 not-applicable=14 elapsed=1s head=ae8941f
+merge receipt: $HOME/.local/state/alphazede-gate-receipts/Alphazedehq/ae8941f950c40b6a842980fdb2e1f6a5e12d3c73
+failing gates: none
+exit=0
+
+diff --git a/skills/spec-authoring/agents/openai.yaml b/skills/spec-authoring/agents/openai.yaml
+index 68cb05320c0a4342e5dfacf3d21c8a2cdb68acb6..8115cad9306050cbf3f528ce4efce3349a65d73e
+--- a/skills/spec-authoring/agents/openai.yaml
++++ b/skills/spec-authoring/agents/openai.yaml
+@@ -1,3 +1,4 @@
+ interface:
+   display_name: "Spec Authoring"
+   short_description: "Build and check Markdown architecture specifications"
++  default_prompt: "Use $spec-authoring to write, build and check an architecture specification from Markdown sections."
+
+codex
+The one-line repair is committed as `ae8941f`. Local gates passed with a merge receipt: 3 passed, 0 failed. I’ll now rerun the S06 checks on that head, including both routing evaluators.
+
+
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/bash -lc "python3 - <<'PY'
+import pathlib,hashlib,re,subprocess,json
+p=pathlib.Path('$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/g4')
+out=p/'repair'; out.mkdir(exist_ok=True)
+for name in ['source','wheels']:
+ f=p/f'scan-{name}.md'
+ command=f\"grep -qE '"'^verdict: (PASS|BLOCK|INDETERMINATE)$'"' {f} && grep -qE '"'^verdict: PASS$'"' {f}; rc="'$?; echo '"\\\"exit="'$rc'"\\\"; (exit "'$rc)"
+ r=subprocess.run(['"'bash','-c',command],capture_output=True,text=True)
+ (out/f'CMD-SCAN-{name}.log').write_text(r.stdout+r.stderr)
+ print('CMD-SCAN-'+name, r.returncode)
+ assert r.returncode==0
+for line in (p/'scan-wheels.md').read_text().splitlines():
+ m=re.fullmatch(r'([0-9a-f]{64})  (.+\\.whl)',line)
+ if m: assert hashlib.sha256((pathlib.Path('/tmp/afc-s06-wheels.FMT6DP')/m[2]).read_bytes()).hexdigest()==m[1]
+print('Scanned wheel hashes verified')
+commands={k:v.replace(str(p)+'/',str(out)+'/') for k,v in json.loads((p/'commands.json').read_text()).items()}
+(out/'commands.json').write_text(json.dumps(commands,indent=2)+'\\n')
+PY" in $HOME/alphazede/worktrees/alphazedehq-afc-s06-spec-authoring
+ succeeded in 0ms:
+CMD-SCAN-source 0
+CMD-SCAN-wheels 0
+Scanned wheel hashes verified
+
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/bash -lc "python3 - <<'PY'
+import concurrent.futures,json,pathlib,subprocess
+p=pathlib.Path('$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/g4/repair')
+commands=json.loads((p/'commands.json').read_text())
+def run(item):
+ name,command=item
+ with (p/(name+'.log')).open('w') as out: rc=subprocess.run(['bash','-c',command],stdout=out,stderr=subprocess.STDOUT).returncode
+ result={'command':name,'exit':rc,'head':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()}
+ (p/(name+'.json')).write_text(json.dumps(result,indent=2)+'\\n')
+ print(json.dumps(result),flush=True)
+ print('\\n'.join((p/(name+'.log')).read_text().splitlines()[-5:]),flush=True)
+ return rc
+with concurrent.futures.ThreadPoolExecutor(max_workers=5) as pool: codes=list(pool.map(run,commands.items()))
+raise SystemExit(int(any(codes)))
+PY" in $HOME/alphazede/worktrees/alphazedehq-afc-s06-spec-authoring
+diff --git a/skills/spec-authoring/agents/openai.yaml b/skills/spec-authoring/agents/openai.yaml
+index 68cb05320c0a4342e5dfacf3d21c8a2cdb68acb6..8115cad9306050cbf3f528ce4efce3349a65d73e
+--- a/skills/spec-authoring/agents/openai.yaml
++++ b/skills/spec-authoring/agents/openai.yaml
+@@ -1,3 +1,4 @@
+ interface:
+   display_name: "Spec Authoring"
+   short_description: "Build and check Markdown architecture specifications"
++  default_prompt: "Use $spec-authoring to write, build and check an architecture specification from Markdown sections."
+
+ succeeded in 6469ms:
+{"command": "CMD-SKILL-SIZE", "exit": 0, "head": "ae8941f950c40b6a842980fdb2e1f6a5e12d3c73"}
+Ran 1 test in 0.056s
+
+OK
+{"schema_version":"1.0.0","command":"check","status":"ok","data":{"root":".","selected_profile":"bran-strict","okf_compatibility":{"profile":"okf-v0.1","status":"pass","diagnostics":[]},"okf_v0_2":{"profile":"okf-v0.2","status":"pass","diagnostics":[]},"bran_strict":{"profile":"bran-strict","status":"pass","diagnostics":[]},"selected_profile_error":null,"selected_passed":true,"exit_code":0},"warnings":["Symlink { path: \"skills/use-requirements-system\" }"],"failures":[],"provenance":{"sources":["repository-scanner","bran-core"],"policy_source":"repository-file"},"metrics":{"selected_passed":true,"exit_code":0}}
+exit=0
+{"command": "CMD-D5-AGNOSTIC", "exit": 0, "head": "ae8941f950c40b6a842980fdb2e1f6a5e12d3c73"}
+scanned: skills/spec-authoring/tests/test_portability.py
+scanned: skills/spec-authoring/tests/test_spec_authoring.py
+scanned: skills/spec-authoring/tests/test_spec_tools.py
+scanned: skills/spec-authoring/tests/trigger-requests.json
+exit=0
+{"command": "CMD-D5-TEST", "exit": 0, "head": "ae8941f950c40b6a842980fdb2e1f6a5e12d3c73"}
+PASSED skills/spec-authoring/tests/test_spec_tools.py::test_seit_example_spec_03_build_generates_front_matter_before_sections
+PASSED skills/spec-authoring/tests/test_spec_tools.py::test_seit_example_spec_03_build_generates_appendix_a_traceability
+PASSED skills/spec-authoring/tests/test_spec_tools.py::test_seit_example_spec_03_build_is_reproducible_through_cli
+============================== 37 passed in 1.98s ==============================
+exit=0
+{"command": "CMD-SKILL-TRIGGER-RECIPROCAL", "exit": 0, "head": "ae8941f950c40b6a842980fdb2e1f6a5e12d3c73"}
+exit=0
+{"command": "CMD-SKILL-TRIGGER", "exit": 0, "head": "ae8941f950c40b6a842980fdb2e1f6a5e12d3c73"}
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+OK
+exit=0
+
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/bash -lc "git status --short; git log -1 --format='%H%n%P%n%B'; gh api repos/alphazede/Alphazedehq/pulls/305 --jq '{state,head: .head.sha,branch: .head.ref}'" in $HOME/alphazede/worktrees/alphazedehq-afc-s06-spec-authoring
+ succeeded in 503ms:
+ae8941f950c40b6a842980fdb2e1f6a5e12d3c73
+2b19eb757350b960575c70a6a7c0d49530e5e2f5
+fix(spec-authoring): provide default agent prompt
+
+{"branch":"afc/s06-spec-authoring","head":"2b19eb757350b960575c70a6a7c0d49530e5e2f5","state":"open"}
+
+diff --git a/skills/spec-authoring/agents/openai.yaml b/skills/spec-authoring/agents/openai.yaml
+index 68cb05320c0a4342e5dfacf3d21c8a2cdb68acb6..8115cad9306050cbf3f528ce4efce3349a65d73e
+--- a/skills/spec-authoring/agents/openai.yaml
++++ b/skills/spec-authoring/agents/openai.yaml
+@@ -1,3 +1,4 @@
+ interface:
+   display_name: "Spec Authoring"
+   short_description: "Build and check Markdown architecture specifications"
++  default_prompt: "Use $spec-authoring to write, build and check an architecture specification from Markdown sections."
+
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/bash -lc "git push origin HEAD:refs/heads/afc/s06-spec-authoring && gh api repos/alphazede/Alphazedehq/pulls/305 --jq '{state,head: .head.sha,branch: .head.ref}'" in $HOME/alphazede/worktrees/alphazedehq-afc-s06-spec-authoring
+diff --git a/skills/spec-authoring/agents/openai.yaml b/skills/spec-authoring/agents/openai.yaml
+index 68cb05320c0a4342e5dfacf3d21c8a2cdb68acb6..8115cad9306050cbf3f528ce4efce3349a65d73e
+--- a/skills/spec-authoring/agents/openai.yaml
++++ b/skills/spec-authoring/agents/openai.yaml
+@@ -1,3 +1,4 @@
+ interface:
+   display_name: "Spec Authoring"
+   short_description: "Build and check Markdown architecture specifications"
++  default_prompt: "Use $spec-authoring to write, build and check an architecture specification from Markdown sections."
+
+ succeeded in 1761ms:
+To https://github.com/alphazede/Alphazedehq.git
+   2b19eb7..ae8941f  HEAD -> afc/s06-spec-authoring
+{"branch":"afc/s06-spec-authoring","head":"2b19eb757350b960575c70a6a7c0d49530e5e2f5","state":"open"}
+
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/bash -lc "python3 - <<'PY'
+import json,pathlib,subprocess
+p=pathlib.Path('$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/g4/repair')
+r={'verdict':'PASS','scope':'S06 named standards-yaml repair only','lease_id':'S06-g4','head':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'branch':'afc/s06-spec-authoring','changed_paths':['skills/spec-authoring/agents/openai.yaml'],'diff_summary':'Add interface.default_prompt (one line).','local_gates':{'exit':0,'passed':3,'failed':0,'skipped':0,'not_applicable':14,'merge_receipt':True},'verification':[json.loads(f.read_text()) for f in sorted(p.glob('CMD-*.json'))],'CMD-SCAN':{'source_receipt_exit':0,'wheels_receipt_exit':0,'wheel_hashes':'matched existing scan receipt','new_acquisitions':False},'bran_status':'hit','bran_strict_exit':0,'developer_feedback':{'observations':'no new observations','tools':['git','bash local-gates','standards-yaml validator','BRAN','uv','pytest','unittest','Graphviz','Claude routing evaluator','gh']},'remaining_risks':['Existing S06 RISK-13 historical acquisition receipts for installed uv and Graphviz were not located in the prior receipt; this repair does not resolve that gap.'],'not_performed':['merge','re-review']}
+(p/'receipt.json').write_text(json.dumps(r,indent=2)+'\\n')
+print(p/'receipt.json')
+PY" in $HOME/alphazede/worktrees/alphazedehq-afc-s06-spec-authoring
+ succeeded in 0ms:
+$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/g4/repair/receipt.json
+
+diff --git a/skills/spec-authoring/agents/openai.yaml b/skills/spec-authoring/agents/openai.yaml
+index 68cb05320c0a4342e5dfacf3d21c8a2cdb68acb6..8115cad9306050cbf3f528ce4efce3349a65d73e
+--- a/skills/spec-authoring/agents/openai.yaml
++++ b/skills/spec-authoring/agents/openai.yaml
+@@ -1,3 +1,4 @@
+ interface:
+   display_name: "Spec Authoring"
+   short_description: "Build and check Markdown architecture specifications"
++  default_prompt: "Use $spec-authoring to write, build and check an architecture specification from Markdown sections."
+
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/bash -lc "git ls-remote origin refs/heads/afc/s06-spec-authoring; gh api repos/alphazede/Alphazedehq/pulls/305 --jq '{state,head: .head.sha,branch: .head.ref}'; git status --short" in $HOME/alphazede/worktrees/alphazedehq-afc-s06-spec-authoring
+ succeeded in 1073ms:
+ae8941f950c40b6a842980fdb2e1f6a5e12d3c73	refs/heads/afc/s06-spec-authoring
+{"branch":"afc/s06-spec-authoring","head":"ae8941f950c40b6a842980fdb2e1f6a5e12d3c73","state":"open"}
+
+diff --git a/skills/spec-authoring/agents/openai.yaml b/skills/spec-authoring/agents/openai.yaml
+index 68cb05320c0a4342e5dfacf3d21c8a2cdb68acb6..8115cad9306050cbf3f528ce4efce3349a65d73e
+--- a/skills/spec-authoring/agents/openai.yaml
++++ b/skills/spec-authoring/agents/openai.yaml
+@@ -1,3 +1,4 @@
+ interface:
+   display_name: "Spec Authoring"
+   short_description: "Build and check Markdown architecture specifications"
++  default_prompt: "Use $spec-authoring to write, build and check an architecture specification from Markdown sections."
+
+codex
+PASS — repaired and pushed to [PR #305](https://github.com/alphazede/Alphazedehq/pull/305); remote head verified.
+
+- Head: `ae8941f950c40b6a842980fdb2e1f6a5e12d3c73`
+- Diff: one line adding `interface.default_prompt`.
+- Local gates: exit **0**.
+- VERIFY: scan receipt checks, D5 tests (**37 passed**), agnostic build, skill size, trigger and reciprocal trigger—all exit **0**.
+- `bran_status: hit`; strict validation passed.
+- `developer_feedback`: no new observations. Tools: Git, Bash, BRAN, uv, pytest, unittest, Graphviz, Claude, gh.
+
+Gate tail:
+```text
+passed=3 failed=0 skipped=0 not-applicable=14
+merge receipt: …/Alphazedehq/ae8941f950c40b6a842980fdb2e1f6a5e12d3c73
+failing gates: none
+```
+
+No merge or re-review performed. Existing historical uv/Graphviz acquisition-receipt gap remains outside this repair.
+diff --git a/skills/spec-authoring/agents/openai.yaml b/skills/spec-authoring/agents/openai.yaml
+index 68cb05320c0a4342e5dfacf3d21c8a2cdb68acb6..8115cad9306050cbf3f528ce4efce3349a65d73e
+--- a/skills/spec-authoring/agents/openai.yaml
++++ b/skills/spec-authoring/agents/openai.yaml
+@@ -1,3 +1,4 @@
+ interface:
+   display_name: "Spec Authoring"
+   short_description: "Build and check Markdown architecture specifications"
++  default_prompt: "Use $spec-authoring to write, build and check an architecture specification from Markdown sections."
+
+hook: Stop
+hook: Stop Completed
+tokens used
+55,964
+PASS — repaired and pushed to [PR #305](https://github.com/alphazede/Alphazedehq/pull/305); remote head verified.
+
+- Head: `ae8941f950c40b6a842980fdb2e1f6a5e12d3c73`
+- Diff: one line adding `interface.default_prompt`.
+- Local gates: exit **0**.
+- VERIFY: scan receipt checks, D5 tests (**37 passed**), agnostic build, skill size, trigger and reciprocal trigger—all exit **0**.
+- `bran_status: hit`; strict validation passed.
+- `developer_feedback`: no new observations. Tools: Git, Bash, BRAN, uv, pytest, unittest, Graphviz, Claude, gh.
+
+Gate tail:
+```text
+passed=3 failed=0 skipped=0 not-applicable=14
+merge receipt: …/Alphazedehq/ae8941f950c40b6a842980fdb2e1f6a5e12d3c73
+failing gates: none
+```
+
+No merge or re-review performed. Existing historical uv/Graphviz acquisition-receipt gap remains outside this repair.

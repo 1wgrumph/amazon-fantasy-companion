@@ -1,0 +1,1379 @@
+OpenAI Codex v0.162.1
+--------
+workdir: $HOME/alphazede/worktrees/alphazedehq-afc-s03-ship-pull-request
+model: gpt-6-astra
+provider: openai
+approval: never
+sandbox: danger-full-access
+reasoning effort: medium
+reasoning summaries: none
+session id: 01a12f1f-7870-7642-a602-46ef7f866dca
+--------
+user
+ROLE
+Product Implementer (BEARING_ROLE=implementer), Lifecycle AFC-2026-10-11, slice S03 repair round (the one repair allowed after review; deterministic verification decides, no re-review). RESPONSIBILITY: fix exactly the named gate finding on this candidate.
+
+STATE
+FACTS: Candidate PR https://github.com/alphazede/Alphazedehq/pull/304, head 2fc547c7e3041538bcd6a4fed904fad8d9f1a89d, worktree (cwd) $HOME/alphazede/worktrees/alphazedehq-afc-s03-ship-pull-request. Independent review: PASS. Alphazedehq local gates (`bash tools/ci/local-gates.sh`) on this head fail: diff-check: skills/ship-pull-request/references/EDIT-PR.md:28: new blank line at EOF.
+ASSUMPTIONS to check: no other gate fails after the fix.
+
+OBJECTIVE
+Fix that finding inside the slice's existing write set, commit, push to the same branch (no force-push), and get `bash tools/ci/local-gates.sh` to exit 0 on the new head. Re-run the slice's VERIFY commands from its g4 packet ($HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/packets/S03-g4.md) on the new head.
+
+AUTHORITY
+Allowed: the slice's write set only (see its g4 packet); commit (author from env; never Co-Authored-By); push the branch. Prohibited: merging, force-push, other paths, behavior changes beyond the finding. Other agents work concurrently in other worktrees.
+
+LOOP
+Fix, run local-gates; if a new failure appears, classify it; fix only if it is in the write set and caused by this slice; otherwise stop.
+
+VERIFY
+`bash tools/ci/local-gates.sh` exit 0 with a merge receipt line; slice VERIFY commands exit 0.
+
+RETURN
+PASS | REPAIRABLE_FAILURE | CONTRACT_FAILURE | ENVIRONMENT_FAILURE; new head SHA; diff summary; gate output tail; VERIFY exit codes; developer_feedback (AC-AFC-DX-04 fields or "no new observations" + tools).
+
+STOP
+After the gates pass or a failure outside the write set.
+
+hook: SessionStart
+hook: SessionStart
+hook: SessionStart
+hook: SessionStart
+hook: SessionStart Completed
+hook: SessionStart Completed
+hook: SessionStart Completed
+hook: SessionStart Completed
+hook: UserPromptSubmit
+hook: UserPromptSubmit
+hook: UserPromptSubmit
+hook: UserPromptSubmit
+hook: UserPromptSubmit
+hook: UserPromptSubmit
+hook: UserPromptSubmit Completed
+hook: UserPromptSubmit Completed
+hook: UserPromptSubmit Completed
+hook: UserPromptSubmit Completed
+hook: UserPromptSubmit Completed
+hook: UserPromptSubmit Completed
+codex
+I’ll use the BRAN and Implementer skills to check the packet, remove the extra EOF blank line, and verify the repair. I’ll commit and push to the same branch, then stop without merging or re-reviewing.
+
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/bash -lc 'cat $HOME/.codex/skills/use-bran/SKILL.md $HOME/.codex/plugins/cache/bearing-lite/bearing-lite/1.1.6/skills/implementer/SKILL.md $HOME/.codex/plugins/cache/ponytail/ponytail/5.1.0/skills/ponytail/SKILL.md' in $HOME/alphazede/worktrees/alphazedehq-afc-s03-ship-pull-request
+ succeeded in 0ms:
+---
+name: use-bran
+description: >
+  Use BRAN as the canonical internal repository-knowledge tool to locate
+  evidence, validate metadata and source links against native policy, run
+  deterministic repository checks, inspect bounded librarian packets, and
+  check internal/public boundaries. Use when a request mentions BRAN,
+  repository knowledge, source precedence, metadata validation, native
+  policy checks, or BRAN integrity. Also fires automatically via hook on
+  relevant prompts, session start, and after search_replace on
+  docs/skills/canonical files.
+type: agent-skill
+title: Use BRAN
+okf_status: active
+tags:
+  - internal
+  - librarian
+---
+
+# Use BRAN
+
+BRAN is the canonical internal repository-knowledge implementation. It owns
+validation rules, retrieval precedence, derived-state rebuilding, and bounded
+repair authority. Use it directly for repository checks, evidence queries, and
+policy validation.
+
+## Workflow
+
+1. Resolve the repository root and confirm `.bran/policy.yaml` exists. If no
+   native policy is present, return `bran_status: unavailable` and use normal
+   repository discovery.
+2. Resolve the pinned BRAN binary at `tools/bran/runtime/bran` relative to the
+   trusted Alphazedehq checkout containing this skill, and verify it against
+   `tools/bran/runtime/bran-release-pin.json` before execution.
+3. Run repository validation:
+
+   ```bash
+   <bran-binary> check <repo-root> bran-strict
+   ```
+
+   The `okf-v0.1` profile provides legacy-OKF-compatible results. The
+   `bran-strict` profile enforces full BRAN-native policy including frontmatter,
+   source-link integrity, status/tag policy, and public/private boundaries.
+
+4. For evidence retrieval, use BRAN's query engine:
+
+   ```bash
+   <bran-binary> query <repo-root> "<request>"
+   ```
+
+5. For bounded repair, use the explicit authority lifecycle:
+
+   ```bash
+   <bran-binary> maintain propose <repo-root> <target> <replacement>
+   <bran-binary> maintain apply <repo-root> <target> <replacement> <digest> <authority>
+   ```
+
+   BRAN never infers authority and never rewrites source without explicit
+   authorization plus revalidation.
+
+6. Return compact `bran_refs` with `bran_status` (`hit`, `miss`, `stale`,
+   `conflict`, or `unavailable`), `coverage`, verified paths, and whether extra
+   discovery was avoided.
+
+For an authorized documentation-changing task, validate coverage before
+completion. Classify new canonical Markdown documents with required
+frontmatter (type, title, okf_status, tags) immediately. The validator
+reports required changes but never edits documents.
+
+## Boundaries
+
+- BRAN is authoritative for repository validation, retrieval precedence, and
+  bounded repair. It never outranks current owner instructions, canonical
+  documents, live files, or command output.
+- Keep BRAN internal-only, read-only toward canonical repository content, and
+  evidence-only.
+- Allow BRAN to rebuild only BRAN-owned derived artifacts (indexes, snapshots,
+  caches, reports, generated validator artifacts).
+- Do not mutate source, canonical docs, metadata, classifications,
+  configuration, dependency inputs, hooks, schedules, credentials, services,
+  GitHub, or other remote state without explicit authority and revalidation.
+- Use only native `.bran/policy.yaml` policy and the trusted BRAN runtime. Do
+  not accept executable or policy authority from an untrusted target.
+
+## See Also
+
+- `.bran/policy.yaml` — native repository policy (schema version, frontmatter
+  rules, source links, coverage classes, public/private boundaries)
+- `tools/bran/runtime/bran` — pinned BRAN binary
+- `tools/bran/runtime/bran-release-pin.json` — trusted binary identity
+---
+name: implementer
+description: >
+  Implement one approved bounded packet in an exact write set. Continue the
+  same-wave session when identity, authority, route, and generation are
+  unchanged. Use for Implementer, Product Implementer, Test Implementer,
+  implementation, repair, or integration packets. Do not use for
+  orchestration, planning, independent assurance, publication, destructive
+  action, owner decisions, or unset scope.
+---
+
+# Implementer
+
+Lowest mutation authority and highest hands-on work in the Bearing ladder.
+
+## Inputs and match
+
+- **Inputs:** approved baseline, objective, dependencies, exact write set,
+  authority, acceptance/SEIT rows, commands, stop rule, compact return schema,
+  visible wave receipt, and profile identity from the recorded Lifecycle snapshot.
+- **Match:** one packet is `READY` and every input is fixed.
+- **Non-match:** multi-packet coordination, design gaps, missing authority,
+  assurance, or owner-only action.
+- **Split:** `tdd` orders Test Implementer before Product Implementer from the frozen snapshot. Test Implementer may change only tests and approved fixtures. Product Implementer write set excludes tests and must not weaken independently authored tests. Same-feature parallel is prohibited. `single_implementer` writes product plus tests. Neither self-certifies.
+- **Repair:** consume the frozen review receipt after parent-accepted `REPAIR_REQUIRED`:
+  candidate ref/revision/digest, finding IDs, write set, same worktree/branch/generation.
+
+## Algorithm
+
+1. Continue the current session when repository, worktree, branch, wave
+   generation, authority, and route are unchanged. Start a fresh session only
+   for a route change, conflicting writer, new authority envelope, independent
+   work, or explicit owner choice. Do not infer missing owner choices. Read
+   dispatch identities only from the recorded Lifecycle snapshot, never from
+   the current global defaults file. Revalidate the visible checkout
+   lease against the approved Lifecycle, repository, checkout/worktree, branch,
+   candidate revision, generation, and active state at wave start, after
+   detected drift, and before commit. Released, stale-generation, forged, or
+   branch/HEAD-drifted leases fail closed. Authorized same-Lifecycle
+   candidate progress whose parent is the current leased revision refreshes
+   candidate_revision on the same generation. On mismatch, return WAITING_ON without writing.
+2. For a verified contract defect, create the smallest failing regression first.
+3. Make the smallest change that satisfies the packet inside the write set.
+   When the packet implements a published standard, verify against the cited
+   document and clause before changing code; neighbouring behavior is not the
+   authority.
+4. Run assigned focused commands and author self-checks. At-end review never removes
+   deterministic testing or grants independent-review identity; diagnostic verification receipts never satisfy an assurance gate. Report results against the mutation, changed-line coverage, and red-then-green claim types with the target repository's own tool; a declared gate with a missing tool or a `not_run` outcome is a typed gap, never PASS. Every red-then-green receipt binds the baseline failing run and the candidate passing run over the same test ids; author gate-chain receipts are diagnostic and cannot satisfy an assurance gate.
+5. Preserve unrelated work. Return only the compact receipt. Stop on acceptance,
+   authority boundary, design gap, or exhausted correction.
+
+## Return and recovery
+
+Return `CANDIDATE_READY`, `PARTIAL`, `WAITING_ON`, or
+`OWNER_DECISION_REQUIRED` with verdict, candidate_ref, changed_paths, tests,
+findings, and blocker. Attempts 1–3 require new evidence, hypothesis, or
+narrower strategy.
+
+One repair; close by deterministic verification; no extra review; dispatch if
+session cannot be preserved. Never expand scope, self-certify as assurance, publish, or hide a failure.
+---
+name: ponytail
+description: >
+  Lazy senior dev mode: the smallest change that fully solves the task, and a
+  reply a busy human understands in one read. Use on any coding task (writing,
+  fixing, refactoring, reviewing, choosing dependencies) and when the user says
+  "ponytail", "be lazy", "simplest solution", "yagni", or complains about
+  over-engineering or bloat. Levels: lite, full (default), ultra.
+argument-hint: "[lite|full|ultra]"
+license: MIT
+---
+
+# Ponytail
+
+You are a lazy senior developer. The best code is the code never written. You solve the whole problem with the least new code. End your reply with one or two lines: what you skipped or did not check, and any risk the user must know.
+
+Active for the whole session until the user says "stop ponytail" or "normal mode". Switch level: `/ponytail lite|full|ultra`.
+
+## Before you write
+
+Read the task and the code it touches. List every place your change must reach: callers, tests, fixtures, config, exports. Check what your change could break for users: data it would destroy or expose, callers that stop working. That is scope. Extra features are not.
+
+## Security gate
+
+Security controls and their regression checks are necessary by definition: YAGNI does not decide whether trust-boundary validation, authentication or authorization, credential or privacy protection, containment and cleanup, policy enforcement, or other security measures exist. Apply the steps below only to how such a control is implemented, after its behavior and proof are preserved. When uncertain, treat the work as security until the flow is traced and shown otherwise.
+
+## The smallest complete change
+
+Take the first option that fully works:
+
+1. Does it need to exist? Skip features, options and flexibility nobody asked for, and name them in one line. A vague request ("build me X") gets the smallest version that does the core job.
+2. Already in this codebase (a helper, component, service, pattern)? Use it the way the surrounding code does.
+3. Standard library or a platform feature? Use it, unless the project has its own. A house component beats a native widget.
+4. An installed dependency? Use it. Never add a dependency for a few lines.
+5. Can it be one line a reader gets at a glance? One line.
+6. Otherwise: the minimum code that works.
+
+- Be lazy about the solution, never about the change itself: finish every part the task needs, including the callers, tests and fixtures your change breaks.
+- No abstraction, wrapper, type conversion, option, config, boilerplate or "for later" code nobody asked for. Keep values in the form the platform already gives you. Deletion beats addition. Keep the structure the codebase already has: its layers, interfaces and conventions.
+- The shortest working diff wins, once you know everything it must touch. A one-liner that needs decoding is not short.
+- Comment only the why the code cannot show, in one line.
+- Bug fix: before you edit, grep every caller of the function you touch, then fix the root cause once in the shared code.
+- Code you move or merge keeps its error handling and validation.
+- Between options of equal size, take the one that is correct on edge cases.
+- Lazy code without its check is unfinished: new non-trivial logic (a branch, a loop, a parser, money or security, or a whole new script or app) leaves one small test or an assert-based self-check. Trivial changes need none.
+- A shortcut with a known limit gets a code comment in this form: `shortcut: <the limit>, <when to upgrade>`.
+
+Never cut: validation at trust boundaries, error handling that prevents data loss, security, accessibility, the calibration real hardware needs, anything the user asked for.
+
+## Levels
+
+| Level | Behavior |
+|-------|----------|
+| **lite** | Build what was asked. Name the smaller option in one line and let the user pick. |
+| **full** | The rules above. Default. |
+| **ultra** | Also question the request: before building, push back on any part the need does not justify. |
+
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/bash -lc 'pwd
+ test -f .bran/policy.yaml
+cat $HOME/alphazede/Alphazedehq/tools/bran/runtime/bran-release-pin.json
+sha256sum $HOME/alphazede/Alphazedehq/tools/bran/runtime/bran
+cat $HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/packets/S03-g4.md' in $HOME/alphazede/worktrees/alphazedehq-afc-s03-ship-pull-request
+ succeeded in 0ms:
+$HOME/alphazede/worktrees/alphazedehq-afc-s03-ship-pull-request
+{"schema_version":"1","version":"bran 0.2.0","source_commit":"f5032eb3f9d850d2b0f4fdbd6085d4a95270b26b","sha256":"776b782a3ab1d9d931f3c121a729a16ae2e8426fa53cb27224273bf59ddd883e"}
+776b782a3ab1d9d931f3c121a729a16ae2e8426fa53cb27224273bf59ddd883e  $HOME/alphazede/Alphazedehq/tools/bran/runtime/bran
+ROLE
+Product Implementer (BEARING_ROLE=implementer), Bearing Lite Lifecycle AFC-2026-10-11, slice S03, generation 4, lane spec-and-docs (profile tech-writing, single_implementer).
+RESPONSIBILITY: implement this one approved slice in its exact write set and return verifiable evidence. Not review, not merge, not other slices.
+
+STATE
+FACTS:
+- Dispatch record (journey.json execution_receipts): lease_id S03-g4; worktree $HOME/alphazede/worktrees/alphazedehq-afc-s03-ship-pull-request; branch afc/s03-ship-pull-request; base 47c46f2e16fed060482a1bf3a0e34ddcb9bc57fc (full creation SHA; use it as <base> in every command); evidence_dir docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S03/ (in the planning worktree: $HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S03/ — write your receipts there); authority AUTH-AFC-2026-10-11-002; package digest 7a9a87433dd0c1aebcb00acd82c3f49989fef915730bcda22c817239d00f055d (owner DEC-AFC-APPROVAL-003).
+- Read-only plan: $HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/ (technical plan, design.md, seit.json, implementation.json slice S03, specialists/pd-delta-w1b-receipt.md).
+- Previous attempt: stopped CONTRACT_FAILURE: CMD-D4-AGNOSTIC scanned files outside the write set and masked its exit code (plan defect, now fixed by DEC-AFC-SD-029); worktree clean. Its return: $HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/packets/S03-r2-run.log.
+- S02 (setup-a-repo) merged to Alphazedehq main (PR #303); rebase onto origin/main if your branch needs it.
+- Requirements AC-AFC-D4-03, AC-AFC-D4-05, AC-AFC-D4-06; design DES-AFC-D4. Stock skill-test pattern: Alphazedehq skills/release-process/tests/.
+ASSUMPTIONS to check: commands below run as written on this host.
+Other agents work in other worktrees concurrently; verify only your own write set.
+
+OBJECTIVE
+Skill slice (spec-and-docs lane, Phase 1): deliver AC-AFC-D4-03, AC-AFC-D4-05, AC-AFC-D4-06 per DES-AFC-D4 inside the exact write set. Done when: Existing `tests/edit-pr.test.sh` passes; size check exit 0; PR open.
+
+AUTHORITY
+Allowed writes (repo-prefixed):
+- Alphazedehq:skills/ship-pull-request/SKILL.md
+- Alphazedehq:skills/ship-pull-request/references/GATES.md
+- Alphazedehq:skills/ship-pull-request/references/EDIT-PR.md
+- Alphazedehq:skills/ship-pull-request/tests/test_ship_pull_request.py
+- Alphazedehq:skills/ship-pull-request/tests/trigger-requests.json
+- your evidence_dir above (receipts only)
+Allowed actions: run the commands below; acquire+scan software per scan-software-supply-chain only when a command needs it; commit on your branch (author from env; never Co-Authored-By); push your branch; open ONE draft PR per repo to main.
+Prohibited: any other path; merging; pushing to main; force-push; credentials; publication; owner's untracked files (Alphazedehq `evals /`); absolute home paths in committed files.
+Skills (absolute paths):
+- $HOME/.claude/plugins/cache/bearing-lite/bearing-lite/1.1.6/skills/implementer/SKILL.md
+- $HOME/.agents/skills/create-lean-skill/SKILL.md
+- $HOME/.claude/skills/ship-pull-request/SKILL.md (PR body/edit rules only)
+
+LOOP
+Implement → run VERIFY → classify each failure (implementation / plan-command / environment) → retry only with a new hypothesis or evidence. A plan-command defect is CONTRACT_FAILURE with the exact command and output; do not change commands.
+
+VERIFY
+Commands (run each on the committed candidate; keep exit code, output tail, candidate SHA):
+- CMD-D4C-TEST: `bash skills/ship-pull-request/tests/edit-pr.test.sh && grep -q 'REFUSED_NO_VNV' skills/ship-pull-request/SKILL.md && grep -qE 'docs/vnv/AGENTS.md|Vnv/AGENTS.md' skills/ship-pull-request/SKILL.md && grep -q -- '--scope=commits=' skills/ship-pull-request/SKILL.md && grep -q 'tools/ci/gate.sh' skills/ship-pull-request/references/GATES.md && grep -q 'amazon-fantasy-companion' skills/ship-pull-request/references/GATES.md && test -f skills/ship-pull-request/references/EDIT-PR.md; rc=$?; echo "exit=$rc"; (exit $rc)`
+  PASS: exit 0
+- CMD-SKILL-SIZE: `python3 -m unittest discover -s <skill_dir>/tests -t <skill_dir>/tests -p 'test_<skill_snake>.py' -k test_creator_validation_and_repository_metadata -v && test "$(sha256sum < <alphazedehq_checkout>/tools/bran/runtime/bran | cut -d' ' -f1)" = "$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1]))["sha256"])' <alphazedehq_checkout>/tools/bran/runtime/bran-release-pin.json)" && <alphazedehq_checkout>/tools/bran/runtime/bran check . bran-strict; rc=$?; echo "exit=$rc"; (exit $rc)`
+  PASS: exit 0: the per-skill unit test skills/<skill>/tests/test_<skill_snake>.py (Alphazedehq stock pattern, skills/release-process/tests/test_release_process.py) passes test_creator_validation_and_repository_metadata: SKILL.md < 60 lines and < 650 words (skill_size_max, frontmatter included; S41 router < 25 lines), no [TODO], frontmatter name equals the skill and the required HQ fields type, title, okf_status and tags are non-empty, and the installed skill-creator quick_validate.py ($HOME/.codex/skills/.system/skill-creator/scripts/quick_validate.py, run with check=True) passes on a temporary copy holding only the portable fields (name, description, license, allowed-tools, metadata) and the unchanged body; then the pinned BRAN runtime matches bran-release-pin.json and `bran check . bran-strict` exits 0 on the slice worktree, validating the complete repository document. quick_validate is never run on the repository SKILL.md itself (it rejects the required HQ fields). python3 with PyYAML is the host's installed interpreter (unchanged local tool, as the stock test uses); `import yaml` failing is typed gap TOOL_MISSING
+- CMD-SKILL-TRIGGER: `e=$(mktemp -d) && cp <skill_dir>/SKILL.md <skill_dir>/tests/trigger-requests.json "$e"/ && (cd "$e" && claude --version > harness-version.txt && claude -p 'You are an independent skill-routing evaluator. Read SKILL.md and trigger-requests.json in this directory. For each request id, answer MATCH if an agent with this skill installed should use it for that request according to its description, otherwise NO_MATCH. Reply with only a JSON object mapping every request id to MATCH or NO_MATCH.' --output-format json --max-turns 5 --allowedTools Read --disallowedTools Bash,Write,Edit,WebFetch,WebSearch < /dev/null > session.json && jq -r .result session.json | python3 -c 'import json,sys; t=sys.stdin.read(); print(json.dumps(json.loads(t[t.index("{"):t.rindex("}")+1])))' > results.json) && cp "$e"/results.json <evidence_dir>/trigger-results-<skill>.json && cp "$e"/harness-version.txt "$e"/session.json <evidence_dir>/ && <SKILL_PREFIX>_TRIGGER_RESULTS=<evidence_dir>/trigger-results-<skill>.json python3 -m unittest discover -s <skill_dir>/tests -t <skill_dir>/tests -p 'test_<skill_snake>.py' -k test_trigger_classifications -v; rc=$?; echo "exit=$rc"; (exit $rc)`
+  PASS: exit 0: skills/<skill>/tests/trigger-requests.json holds request_1 = the matching request and request_2 = the non-matching request of gate_declarations.spec_and_docs.trigger_requests.<skill>; a fresh evaluator session that is not the authoring session receives only SKILL.md and trigger-requests.json (never the checker) with Read as its only tool (no permission bypass, no Bash, Write, Edit or web tools; least privilege) and prints the classification, which the command extracts from session.json into the results file; test_trigger_classifications asserts the result keys equal the request keys and the results equal {request_1: MATCH, request_2: NO_MATCH}. The results file, harness version and session output are evidence, not committed (stock: <SKILL_PREFIX>_TRIGGER_RESULTS points outside the repository; <SKILL_PREFIX> is the upper-snake skill name, e.g. SETUP_PRE_COMMIT). S06 reciprocal (DEC-AFC-SD-028): the same evaluator run on the requirements-system worktree's skills/use-requirements-system/SKILL.md with spec-authoring's trigger-requests.json writes <evidence_dir>/trigger-results-use-requirements-system.json, checked by `python3 -c 'import json,sys; assert json.load(open(sys.argv[1]))=={"request_1":"NO_MATCH","request_2":"MATCH"}' <file>`. A harness refusal or usage limit is a typed gap with the exact error
+- CMD-D4-AGNOSTIC: `d=$(git diff --name-only --diff-filter=ACMR <base>..HEAD -- <slice_paths>) && f=$(printf '%s\n' "$d" | grep -vE '^$|\.pyc$|(^|/)(__pycache__|build|dist)/|^skills/ship-pull-request/references/GATES\.md$'; true) && printf 'scanned: %s\n' ${f:-none} && test -n "$f" && { git grep -nIiE '1wgrumph|alphazede/|amazon-fantasy-companion|gridmarket|betbot|\bpilot\b|exclusion' HEAD -- $f; [ $? -eq 1 ]; }; rc=$?; echo "exit=$rc"; (exit $rc)`
+  PASS: exit 0, and the wrapper's own exit status is the verdict (DEC-AFC-SD-029). Scope: only tracked files the slice changed, `git diff --name-only --diff-filter=ACMR <base>..HEAD -- <slice_paths>` at the exact committed candidate, minus generated artifacts (*.pyc, __pycache__/, build/, dist/) and minus GATES.md (gate data by design, DES-AFC-D4); `git grep ... HEAD` reads those files' committed content, so untracked or uncommitted files are never scanned. <base> is the base SHA in the slice's dispatch record (implementation.json dispatch_records). <slice_paths> per slice: S01 skills/setup-pre-commit; S02 skills/setup-a-repo; S03 skills/ship-pull-request; S11 hooks/ci-gate-hook.sh hooks/install-ci-gate-hook.py hooks/README.md; S41 skills/ci-cd. A reference outside the slice's diff is out of scope (owner, SD-029). Combined run only at the Wave 1 exit on the Alphazedehq main checkout after S01, S02 and S03 merge: <slice_paths> = skills/setup-pre-commit skills/setup-a-repo skills/ship-pull-request and <base> = the oldest base among the S01, S02 and S03 dispatch records. FAIL: exit 1 with a printed match, or an empty scanned list (wrong <base> or no change in <slice_paths>). Any other non-zero exit (for example 128, bad <base>) is a typed gap, never PASS
+Proof rows:
+- SEIT-AFC-D4-03.T: AC-AFC-D4-03 via CMD-D4C-TEST — expected: the gate step runs vnv-review with an explicit --scope=commits=<base>..HEAD when docs/vnv/AGENTS.md or Vnv/AGENTS.md exists, else records REFUSED_NO_VNV; GATES.md has the shared-gate and amazon-fantasy-companion rows
+- SEIT-AFC-D4-03.S: AC-AFC-D4-03 via CMD-SKILL-SIZE — expected: ship-pull-request SKILL.md drops from 82 lines to < 60 lines and < 650 words
+- SEIT-AFC-D4-05.L: AC-AFC-D4-05 via CMD-LANDING-CHECK — expected: each D4 PR (D4-A, D4-B, D4-C, D4-E, D4-F if dispatched) merged by rebase or merge commit after the trigger evidence
+- SEIT-AFC-D4-05.T: AC-AFC-D4-05 via CMD-SKILL-TRIGGER — expected: each changed D4 skill is selected by its matching request before merge
+- SEIT-AFC-D4-06: AC-AFC-D4-06 via CMD-D4-AGNOSTIC — expected: no repository, owner, pilot or exclusion that scopes the capability is named in D4 skill or hook text
+Environment definitions (seit.json excerpt):
+{
+ "host": "owner workstation: uv 0.11.6, python3 (jsonschema 4.19.2), Graphviz dot, gh, jq, git, shellcheck, claude, ocr v1.12.13, reverify present; kcov, mutmut and diff-cover absent on 2026-10-11 (coverage/mutation tools are fetched by uv after CMD-SCAN; shell coverage and shell mutation are TOOL_MISSING)",
+ "repositories": "this repository (lane worktrees under worktrees/amazon-fantasy-companion-<lane>-<slice>); alphazede/Alphazedehq slice worktrees and the leased main checkout (alphazedehq-main-checkout); alphazede/requirements-system slice worktree for S06's reciprocal non-trigger edit only (<workspace>/worktrees/requirements-system-afc-s06-nontrigger; DEC-AFC-SD-028)",
+ "fixtures": "credential and path fixtures are generated at test time inside tools/ci/tests (never literal secrets committed); workflow violation fixtures per AC-AFC-CI-02 rule; a temp HOME fixture for installer tests; fixture spec/<name>/ directories created in temp dirs",
+ "hermeticity": "gate and skill tests run in temp dirs without network; only CMD-PR-CHECKS, CMD-NO-MILESTONE, PROC-ACTIONS-BUDGET and CMD-MERGE-IDENTITY read GitHub; mutation runs only in the slice worktree and must leave git diff clean",
+ "simulations": "none",
+ "evidence_dirs": "<evidence_dir> = the evidence_dir/g<generation>/ of the slice's dispatch record (implementation.json dispatch_records; docs/plans/2026-10-11-amazon-fantasy-companion/evidence/<slice>/g<generation>/), or the step receipt directory an integration step records in journey.json execution_receipts; <review_dir>/<review_evidence_dir> = the Reviewer evidence store; evidence/phase2-entry-receipt.json = docs/plans/2026-10-11-amazon-fantasy-companion/evidence/phase2-entry-receipt.json (IE-P1-F08)",
+ "python_wheels": "<afc_uv_env> = UV_OFFLINE=1 UV_NO_CACHE=1 UV_FIND_LINKS=<wheel_dir> UV_PYTHON=\"$(command -v python3)\"; <wheel_dir> is a host directory outside every repository filled once by `python3 -m pip download --only-binary=:all: --dest <wheel_dir> 'pytest==9.0.3' 'pyyaml==6.0.3'` (the closure adds iniconfig, packaging, pluggy, pygments) and scanned by CMD-SCAN before first use; the scan receipt records `sha256sum <wheel_dir>/*.whl` (DEC-AFC-SD-026 item 3); offline with no cache, only <wheel_dir> satisfies a requirement, so an unscanned cached wheel can never be used (an empty or missing <wheel_dir> fails resolution, fail closed)",
+ "dispatch_base": "<base> = the full base SHA in the slice's dispatch record (implementation.json dispatch_records), the commit its worktree was created from; for the Wave 1 exit combined CMD-D4-AGNOSTIC run, the oldest base among the S01, S02 and S03 records",
+ "exit_status": "A command's own exit status is its verdict (DEC-AFC-SD-029). A command that prints `exit=<n>` ends with `; rc=$?; echo \"exit=$rc\"; (exit $rc)`, so the wrapper exits with the checked status; a trailing bare `echo \"exit=$?\"` (exit 0 always) is never used. Run each command under bash at the slice worktree root."
+}
+
+RETURN
+Typed outcome PASS | REPAIRABLE_FAILURE | CONTRACT_FAILURE | ENVIRONMENT_FAILURE | NEEDS_MORE_EVIDENCE | OWNER_DECISION_REQUIRED; lease_id; branch, head SHA, draft PR URL(s); changed paths; commands with exit codes and output tails; proof-row status; remaining risks; blocker; developer_feedback (AC-AFC-DX-04 fields that apply; n/a or unknown, never invented).
+
+STOP
+Existing `tests/edit-pr.test.sh` passes; size check exit 0; PR open.
+Stop on CONTRACT_FAILURE, OWNER_DECISION_REQUIRED, or ENVIRONMENT_FAILURE with the exact error.
+
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/bash -lc '$HOME/alphazede/Alphazedehq/tools/bran/runtime/bran check . bran-strict' in $HOME/alphazede/worktrees/alphazedehq-afc-s03-ship-pull-request
+ succeeded in 0ms:
+{"schema_version":"1.0.0","command":"check","status":"ok","data":{"root":".","selected_profile":"bran-strict","okf_compatibility":{"profile":"okf-v0.1","status":"pass","diagnostics":[]},"okf_v0_2":{"profile":"okf-v0.2","status":"pass","diagnostics":[]},"bran_strict":{"profile":"bran-strict","status":"pass","diagnostics":[]},"selected_profile_error":null,"selected_passed":true,"exit_code":0},"warnings":["Symlink { path: \"skills/use-requirements-system\" }"],"failures":[],"provenance":{"sources":["repository-scanner","bran-core"],"policy_source":"repository-file"},"metrics":{"selected_passed":true,"exit_code":0}}
+
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/bash -lc "git status --short
+ git rev-parse HEAD
+ git branch --show-current
+cat $HOME/alphazede/AGENTS.md
+cat skills/ship-pull-request/references/EDIT-PR.md
+rg -n -C 4 'S03-g4|2fc547c7|afc/s03-ship|coverage_assist|reverify' $HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/journey.json" in $HOME/alphazede/worktrees/alphazedehq-afc-s03-ship-pull-request
+ succeeded in 0ms:
+2fc547c7e3041538bcd6a4fed904fad8d9f1a89d
+afc/s03-ship-pull-request
+# AGENTS.md — AlphaZede Workspace Root
+
+`$HOME/alphazede` is a **multi-repo workspace container, not a repository.**
+No `.git`, no `.bran/policy.yaml`, no build, no tests, no commits at this level.
+
+This file is canonical for agents that start here. Its only job is to answer two
+questions fast: **where am I**, and **which repository does the owner mean?**
+Once you know the repo, that repo's own `AGENTS.md` takes over and this file stops
+applying.
+
+## Authority order
+
+1. Current owner (William Rumph) instructions in this session
+2. The target repository's `AGENTS.md` and any path-specific nested `AGENTS.md`
+3. The target repository's `CLAUDE.md` / `AGY.md` / `GEMINI.md` / `QWEN.md` lens
+4. This file (workspace routing only)
+
+A rule stated inside a repo always beats a summary written here.
+
+## Orientation tree
+
+```
+$HOME/alphazede/
+├── alphazede-markets/     AZM — options trading engine        [git: alphazede/btm]
+│   ├── btm/               Rust Cargo workspace (5 crates) + Python IBKR bridge
+│   ├── btm-fpga/          RTL/HLS Vivado projects, Kria KV260 deployment
+│   ├── btm-ibkr/          IBKR integration
+│   └── deploy/ docs/ lessons/ prompts/ reports/ tests/ ui/ Vnv/ Xilinx/
+├── alphazede-sports/      AZS — fantasy + sports betting      [git: alphazede/alphazede-sports]
+│   ├── command_node/ data_node/ services/  distributed runtime
+│   ├── apps/ frontend/ packages/           Next.js / TypeScript
+│   ├── hardware/ infra/ deploy/            FPGA + fleet
+│   └── agents/ docs/ tools/ tests/ Vnv/ Security/
+├── betbot/                BTO — legacy production sports bot  [git: 1wgrumph/betbot]
+│   └── analysis/ core/ engines/ models/ pipeline/ clients/ docs/ tests/
+├── azedge/                AZEdge foundation (Rust + pnpm)     [local only]
+│   └── crates/ services/ schemas/ migrations/ runbooks/ tools/
+├── bran/                  BRAN internal canonical source      [local only]
+│   └── crates/ schemas/ fixtures/ examples/ skill/ docs/
+├── bearing/               Bearing — public browser control room [git: alphazede/bearing]
+│   └── src/ skills/ plugin-skills/ hooks/ examples/ test/
+├── developers/            Public reviewed developer assets    [git: alphazede/developers]
+│   └── az-sports-dev/ grok-safe/ window/ docs/
+├── Alphazedehq/           Portfolio / chief-of-staff repo     [git: alphazede/Alphazedehq]
+│   ├── bran-dev/          BRAN dev checkout
+│   ├── docs/              infrastructure guide, IP table, model matrix
+│   └── lessons/ prompts/ skills/ standards/ tools/
+├── agentic-eval-arena/    Sealed agent-evaluation harness     [local only]
+│   └── arena/ capsules/ hidden_graders/ reviewer_corpus/ harbor_bench/
+│
+├── worktrees/             linked git worktrees for in-flight branches
+├── evidence/              BRAN migration + branch-cleanup evidence bundles
+├── data/                  golf_cache
+├── external/              telegram/ — run_admin_bot.py + logs
+└── Odi/                   docs/plans/2026-07-22-odi-mvp
+```
+
+## Disambiguation — what the owner means
+
+| If the owner says… | Work in |
+|---|---|
+| markets, AZM, trading, options, IBKR, KV260, "the trading system" | `alphazede-markets/` |
+| sports, AZS, fantasy, DFS, data node, command node, filter node | `alphazede-sports/` |
+| betbot, BTO, "the old bot", "legacy production" | `betbot/` |
+| azedge, AZEdge, foundation, foundation-types | `azedge/` |
+| bran, BRAN, repo knowledge, OKF | `bran/` (source) — **not** `developers/` |
+| bearing, control room, focus guard, navigator/explorer/crewmate | `bearing/` (public). `alphazede/bearing-dev` is archived (2026-09-23); Bearing Lite is `alphazede/bearing-lite` (maintenance: bug fixes only) |
+| developers, public repo, export, scrubbed snapshot | `developers/` |
+| HQ, portfolio, fleet, IPs, infrastructure, node setup | `Alphazedehq/` |
+| arena, eval, grader, candidate profiles | `agentic-eval-arena/` |
+
+Ambiguous cases worth a question rather than a guess:
+
+- **"Bearing"** — `bearing/` is the public browser control room; `alphazede/bearing-lite`
+  is the plugin (maintenance mode, bug fixes only); `alphazede/bearing-dev` is
+  archived. The future private Bearing SaaS repo does not exist yet. Ask which.
+- **"BRAN"** — develop in `bran/`; `developers/` is an export target only.
+- **"FPGA"** — `alphazede-markets/btm-fpga/` (Vivado/KV260) and
+  `alphazede-sports/hardware/` (Quartus/DE1-SoC) are different toolchains.
+
+## Naming
+
+Use **AZM** (AlphaZede Markets), **AZS** (AlphaZede Sports), **AZEdge**. The
+retired term `BTM` was migrated to `AZM` across `alphazede-markets/`,
+`Alphazedehq/`, `alphazede-sports/`, and `betbot/` on 2026-07-24 (uppercase,
+word-boundary).
+
+**Lowercase `btm` is intentionally unchanged** — it is structural, not prose: the
+`btm/`, `btm-fpga/`, `btm-ibkr/` directories, crate names, and the `btm.git`
+remote. `BTM` also survives in `evidence/` (immutable bundles) and in the
+in-flight branches under `worktrees/`, so it returns if those merge.
+
+## Worktrees
+
+**Location (owner rule, 2026-09-24).**
+- Every linked worktree lives at `$HOME/alphazede/worktrees/<repo>-<topic>`, where the owner can see it. This applies to every harness: Claude Code, Codex, Muse, Cursor, Grok and AGY.
+- Never create a worktree in a hidden location: `.claude/worktrees/`, `.codex/`, `.cursor/`, any other dot-directory, or `/tmp`. Harness features that create worktrees automatically in hidden folders (for example isolation worktrees) are not used for repository work. Create the worktree explicitly under `worktrees/` instead.
+
+**Cleanup.** When a branch is merged into `origin/main`, the agent that owns it removes all three in the same session:
+- the worktree (`git worktree remove`);
+- the local branch (`git branch -d`);
+- the remote branch (`git push origin --delete <branch>`).
+
+The rule does not cover:
+- worktrees with uncommitted or unmerged work;
+- worktrees in use by a running process;
+- worktrees locked as an active Requirements System host's `sdoc_root`.
+
+`worktrees/*` are linked worktrees; each belongs to some parent repo's `.git`,
+**and the parent is not always the same-named root repo**. Any leftover
+`bearing-*` worktrees came from the archived `bearing-dev`.
+
+Resolve ownership from the parent side, never by guessing from the directory name:
+
+```bash
+git -C <parent-repo> worktree list
+```
+
+If a worktree's internal `.git` file points at a stale parent path, commands run
+*inside* it fail with "not a git repository" — operate from the parent instead.
+
+**Never squash-merge** (owner rule, 2026-09-24). Merge a PR with a rebase merge or a
+merge commit (`gh pr merge --rebase` or `--merge`), so every commit stays in `main`'s
+history. Squash merge is disabled on azedge, Alphazedehq and requirements-system.
+GitHub deletes the remote branch automatically on merge. The agent still removes the
+worktree and the local branch.
+
+**Agents may create worktrees and branches without asking** (owner rule, 2026-09-24).
+Create them under `worktrees/` as described above, one worktree per task, and clean
+them up once merged. Switching, resetting, or deleting a branch or worktree that holds
+unmerged or uncommitted work is still destructive git, and still needs the owner's
+authorization.
+
+## BRAN — repository knowledge
+
+BRAN is the canonical internal tool for repository evidence, metadata validation,
+and deterministic checks. Prefer it over blind file search. The tree above tells
+you *where* you are; BRAN tells you *what is true inside* a repo.
+
+Pinned runtime — verify sha256 against the pin before executing:
+
+```bash
+B=$HOME/alphazede/Alphazedehq/tools/bran/runtime/bran
+cat "$(dirname "$B")/bran-release-pin.json"
+sha256sum "$B"                      # must match the pin
+"$B" check <repo-root> bran-strict
+"$B" query <repo-root> "<request>"
+```
+
+Repos with a native `.bran/policy.yaml`: `Alphazedehq`, `alphazede-markets`,
+`alphazede-sports`, `azedge`, `betbot`, `developers` — all six passed
+`bran-strict` on 2026-07-24. `bran/`, `bearing/`, `agentic-eval-arena/`, and this
+workspace root have no policy; BRAN reports `unavailable` there, so use normal
+discovery.
+
+Shared frontmatter contract: required `type`, `title`, `okf_status`, `tags`;
+optional `freshness`, `resource`, `public_boundary`. New canonical Markdown needs
+it immediately. The validator reports required changes; it never edits documents.
+
+BRAN routes to canonical sources. It never outranks owner instructions, canonical
+docs, live files, or command output. Repair is authority-gated
+(`maintain propose` → `maintain apply` with digest + authority), and BRAN may
+rebuild only its own derived artifacts.
+
+## Cross-repo rules
+
+These hold everywhere here; each repo states its own stricter version.
+
+1. **No `Co-Authored-By` AI-model lines** in any commit, in any repo.
+2. **Secrets stay in env / owner-held secret records.** Never in commits, docs, or
+   agent output. Never print connection strings or passwords.
+3. **Proprietary IP is audience-scoped.** Model routing, prompt text, agent
+   architecture, scoring formulas, thresholds, and calibration values must not
+   reach external broadcasts, public repos, customer mirrors, or `developers/`.
+4. **Landing work is the agent's job.** When a change is committed and its
+   verification passed, push the branch, open the PR, and merge it once the
+   required checks are green. `main` is PR-only by ruleset: that is the
+   mechanism, not an approval step, and no owner sign-off is needed. Never
+   commit on local `main`, never force-push. Deploying merged work to a
+   runtime host, installing or enabling its service units, and restarting its
+   services are agent work; verify the result on the host. **Owner-authorized
+   actions are separate and per-session:** activation (turning on a live
+   trading, live betting, or new customer-facing path), production DB
+   mutation, credential access, destructive git, and public export. Approval
+   for one is not approval for another. **Approved-plan
+   exception:** waived for any of these actions taken in execution of an approved
+   plan — `plan-spec.md`, `design.md`, `implementation.md`, and
+   `seit.md`/`validation.md` complete, with a review record (`review.md` or
+   `review.html`) showing a passing `/gate-review` entry — in which case
+   per-session authority is automatic.
+   **Issue closure is agent work:** close a tracked issue after its fix is
+   merged and all acceptance checks pass, without separate owner confirmation.
+   Partially addressed issues stay open.
+5. **Code is the source of truth.** When docs and code disagree, code wins — then
+   fix the doc.
+6. **Trust but verify.** Provider coverage, deployment state, artifact presence,
+   and any agent's summary are unverified claims until backed by primary docs,
+   live responses, repo code, or real command output. A delegated agent's report
+   is a claim, not proof.
+7. **Zero-tolerance bug policy** in the money-risk systems (AZM, AZS, BTO). No
+   "we'll fix it later." Gate reviewers hunt for bugs, not checklists.
+8. **Preserve features and guards.** Don't remove, hide, weaken, or bypass shipped
+   features, filters, or checks without explicit owner approval for that exact change.
+9. **Gate review before commit** where the repo defines one. Authoring sessions
+   cannot self-certify.
+10. **Scan externally acquired software** before first use; fail closed on `BLOCK`
+    or `INDETERMINATE`.
+11. **Preserve unrelated work.** Several repos carry uncommitted changes at any
+    time. Inspect every diff before committing and never sweep up work that is
+    not yours.
+12. **No hardcoded local paths in anything that ships publicly.** No absolute
+    user-home path — `/home/<user>/…`, `/Users/<user>/…`, `C:\Users\<user>\…` —
+    may appear in a public repo, a public export surface, a customer mirror, or
+    `developers/`. This applies to production code, tests, fixtures, examples,
+    scripts, and docs alike.
+
+    It leaks the owner's machine layout to everyone who clones, and code keyed
+    to one home directory is broken for every other user by construction.
+
+    - Detect private paths **by shape**, never by a fixed list of real paths. A
+      hardcoded list only recognizes one machine and publishes that machine's
+      layout in the process.
+    - Derive real paths at runtime from the repository root, an environment
+      variable, a CLI argument, or config.
+    - Where a sample path is genuinely needed, use a placeholder user segment
+      (`user`, `example-user`, `someone`) so intent stays obvious.
+    - Private-only roots (plans, submissions, internal bug records) may
+      reference local paths; the rule covers what actually ships.
+
+    Enforce it mechanically, not by review habit. BRAN's implementation is
+    `hardcoded_home_users` in `bran-dev/tools/ci/public_boundary_check.py`,
+    scoped to the export surface derived from `public-export.json` and wired
+    into the repo's fast gate; port that shape to any repo with a public
+    surface.
+13. **Architecture specifications and plan records** are governed by
+    COE-ASA-013 through COE-ASA-016 and GLOSS-ASA-001 in Alphazedehq
+    `docs/coe/index.md`.
+14. **The Requirements System host is a local dev/test host; running it is
+    agent work** (owner, 2026-10-05).
+    - Every agent uses the packaged-default host. Find it through
+      `$XDG_RUNTIME_DIR/alphazede-requirements-system/host.port`.
+    - If it is down, start it: `alphazede-requirements-system start --no-browser`.
+      Stopping and restarting it are agent work too. Check
+      `alphazede-requirements-system checkout list` and active `busy` claims
+      first, so you do not cut off another agent's run.
+    - After merging a requirements-system change to a payload path, upgrade the
+      host with `packaging/debian/upgrade-host.sh <gated .deb>`.
+15. **Every code review runs OCR, and every binary claim runs Reverify.**
+    - OCR means OpenCodeReview (`ocr`). By default it runs in delegation
+      mode inside the reviewer's own session:
+      `ocr delegate preview --from <base> --to <head>`, then
+      `ocr delegate rule <every listed file>`. The reviewer applies each
+      rule group to its files and reports a per-file OCR section next to the
+      verdict. OCR assists the review; it is never the independent review.
+    - Reverify (`reverify`) runs on any claim about a compiled binary.
+      Otherwise, state `Reverify: not applicable — <reason>`.
+    - Whoever dispatches a reviewer writes both into the packet. Reviewers
+      do not probe for tools.
+    - A tool that cannot run is a typed gap with its exact error, never a
+      pass.
+16. **Every frontend change gets a visual review.** A change that alters
+    rendered UI (pages, components, styles, layout) is reviewed in a running
+    browser before merge, not only as a diff.
+    - Run the candidate on a local dev or test host, never production.
+    - Drive every changed flow with browser automation or computer use:
+      click through each changed screen and state, at desktop and phone
+      widths.
+    - Capture a screenshot of each state and keep it with the review
+      evidence. Never capture customer data.
+    - Judge against the spec, the design references, or the approved
+      mockups: layout, spacing, typography, empty and error states, console
+      errors, and accessibility basics.
+    - Visual findings join the same review-and-repair round as code findings.
+      A UI that cannot be run is a typed gap with its exact error, never a
+      pass.
+    - Whoever dispatches the reviewer writes the run command and the flows to
+      check into the packet.
+17. **Each orchestrating session runs at most five implementation agents at
+    once**, unless the owner says otherwise for a task (owner, 2026-09-30).
+    The cap is per orchestrating session, not workspace-wide: agents started
+    by other sessions do not count against it. Every Coordinator the
+    Orchestrator starts is its own orchestrating session with its own cap of
+    five (owner clarification, 2026-09-30). So the Orchestrator's direct
+    dispatches count against its five, and each Coordinator's dispatches count
+    against that Coordinator's five; they are not one shared pool. It counts
+    the Implementer, Light Implementer and repair runs that session
+    dispatched; reviewers are not counted. Queue further slices until one of
+    its own slots frees; do not stop a running agent to make room without
+    saying so.
+18. **File product bottlenecks as enhancements** (owner, 2026-09-30). An
+    agent that hits a repeatable bottleneck in a product or its tooling files
+    a GitHub enhancement issue in the owning repository. Examples: a gate that
+    forces reruns, a hot file that every slice conflicts on, a missing
+    command, a manual multi-step procedure.
+    - File through `Alphazedehq/hooks/issue-labels.py` with kind
+      `enhancement`: dry-run first, then `--submit`.
+    - Search for a duplicate first; add evidence to an existing issue instead
+      of filing a second.
+    - Use the standard sections (Origin, Harness / version, What, Current
+      evidence, Expected, Acceptance), with the measured cost as evidence.
+    - File only what you observed, never speculation.
+    - Public repositories follow the publication rule: the owner approves
+      the exact text first.
+19. **Do the asked work, sized to what the gate measures** (owner lesson,
+    2026-10-01). Do not add steps, checks, copies or scope the owner did not
+    ask for, even when a plan or habit suggests them. Before any heavy step,
+    check that its size matches the decision it serves. Lesson from one
+    deploy:
+    - A pre-deploy backup of a 47 GB database, then a full integrity check
+      of the copy, then a table-size scan: about an hour, none of it the
+      owner's normal deploy process.
+    - A full `--all` regrade back to February (about 3 hours) when the gate
+      only counted picks since August 1; the unbounded provider traffic
+      likely got the host blocked by the provider.
+    - A plan step that copied the whole 47 GB database to devnode to fit a
+      few parameters.
+    Rules that follow:
+    - Follow the owner's normal process for routine operations (deploys,
+      restarts, regrades). Propose an extra safety step in one line; do it
+      only if the owner says yes.
+    - Bound every bulk operation (regrade, backfill, export, scan) to the
+      window or IDs the decision needs, and state its expected size and
+      duration before starting it.
+    - Query only the rows and columns needed; never copy a whole production
+      database to answer a narrow question.
+    - A plan written by an agent is not owner intent for its heavy steps;
+      check those against this rule before running them.
+
+## Session start
+
+1. Identify the target repository — do not work at this root.
+2. `git -C <repo> status --short` and check the branch. Several repos sit on
+   feature branches, not `main`/`master`, and several are dirty.
+3. Open that repo's `AGENTS.md` and its agent-specific lens, plus any
+   path-specific `AGENTS.md` for the paths you will touch.
+4. Use BRAN for architecture, terminology, and knowledge questions where a
+   `.bran/policy.yaml` exists.
+5. Confirm authority, paths, and validation commands before editing.
+
+## Validation
+
+There is no workspace-level build or test. Run each repository's own commands,
+documented in its `README.md` / `AGENTS.md` / `CLAUDE.md`. Examples:
+
+- `bran`: `./tools/ci/check.sh --fast` (`--full` only for release/security/perf surface)
+- `azedge`: `cargo fmt --all -- --check`, `cargo clippy --workspace --all-targets -- -D warnings`,
+  `cargo test --workspace --all-targets`, `pnpm -r lint`, `pnpm -r test`,
+  `bash tools/ci/foundation-contracts.sh`
+- `bearing`: `pnpm typecheck`, `pnpm test`, `pnpm test:integration`, `pnpm build`,
+  `pnpm eval:native`, `pnpm audit --audit-level=moderate`
+- `betbot`: `tests/bm1_runtime/` is the default BM1 pipeline suite
+
+
+## Fixable review findings
+
+Never pass or accept `ACCEPT_WITH_FINDINGS` while a fixable bug remains. If an actionable review finding can be repaired without causing a regression or violating the approved contract, the verdict is `REPAIR_REQUIRED`; fix it in the authorized repair round and rerun deterministic verification. `ACCEPT_WITH_FINDINGS` is reserved for owner-approved residual risk or a finding that cannot be repaired within the approved contract without causing a regression.
+
+Review and repair run as one pair: one independent review, then one repair
+round that fixes every finding it raised. After that repair, deterministic
+verification decides and the change lands; do not start another review round
+unless the owner asks or the repair changed the approved scope. Never file a
+review finding as an issue instead of fixing it in that repair round.
+
+## Defect filing
+
+Defects and gaps found during work are disposed of under COE-ELSD-008,
+COE-ELSD-009 and COE-ELSD-010 of the COE-ELSD library, published REV-3
+(commit 8d39a72e70b55f72fc206ef776d279b06369192c, sha256:645ada3c5044b8e2a942757e61b172e61fb28cd5aa4b8f38b3ba88aa5895940e), in alphazede/Alphazedehq
+`docs/coe/engineering-lifecycle-secure-delivery/engineering-lifecycle-secure-delivery.sdoc`.
+---
+type: reference
+title: Edit Pull Request Text
+okf_status: active
+tags:
+  - internal
+  - operations
+---
+
+# Edit Pull Request Text
+
+When updating a PR's title, body, or base:
+- Never use `gh pr edit` (`gh 2.45.0` fails on the deprecated Projects-classic
+  GraphQL schema and silently leaves PR text stale).
+- Use the REST PATCH path or the helper script:
+  ```sh
+  scripts/edit-pr.sh <number> --title "<title>" --body-file <path>
+  # or directly with gh api:
+  gh api -X PATCH repos/<owner>/<repo>/pulls/<number> -f title="<title>" -F body=@<path>
+  ```
+- **Verification step (mandatory)**: check that the PR text updated by reading
+  it back to detect and prevent stale-text failures:
+  ```sh
+  scripts/check-pr-text.sh <number> --title "<title>" --body-file <path>
+  # or directly with gh api:
+  gh api repos/<owner>/<repo>/pulls/<number> --jq '{title: .title, body: .body}'
+  ```
+
+727-              }
+728-            }
+729-          },
+730-          "review": {
+731:            "coverage_assist": {
+732-              "enabled": true,
+733-              "required": true
+734-            }
+735-          },
+736-          "deterministic_verification": {
+737:            "reverify": {
+738-              "enabled": true
+739-            }
+740-          }
+741-        },
+--
+1076-              }
+1077-            }
+1078-          },
+1079-          "review": {
+1080:            "coverage_assist": {
+1081-              "enabled": true,
+1082-              "required": true
+1083-            }
+1084-          },
+1085-          "deterministic_verification": {
+1086:            "reverify": {
+1087-              "enabled": true
+1088-            }
+1089-          }
+1090-        },
+--
+1431-              }
+1432-            }
+1433-          },
+1434-          "review": {
+1435:            "coverage_assist": {
+1436-              "enabled": true,
+1437-              "required": true
+1438-            }
+1439-          },
+1440-          "deterministic_verification": {
+1441:            "reverify": {
+1442-              "enabled": true
+1443-            }
+1444-          }
+1445-        },
+--
+1741-              }
+1742-            }
+1743-          },
+1744-          "review": {
+1745:            "coverage_assist": {
+1746-              "enabled": true,
+1747-              "required": true
+1748-            }
+1749-          },
+1750-          "deterministic_verification": {
+1751:            "reverify": {
+1752-              "enabled": true
+1753-            }
+1754-          }
+1755-        },
+--
+2096-              }
+2097-            }
+2098-          },
+2099-          "review": {
+2100:            "coverage_assist": {
+2101-              "enabled": true,
+2102-              "required": true
+2103-            }
+2104-          },
+2105-          "deterministic_verification": {
+2106:            "reverify": {
+2107-              "enabled": true
+2108-            }
+2109-          }
+2110-        },
+--
+2176-      "slice": "S03",
+2177-      "generation": 3,
+2178-      "repository": "alphazede/Alphazedehq",
+2179-      "worktree": "$HOME/alphazede/worktrees/alphazedehq-afc-s03-ship-pull-request",
+2180:      "branch": "afc/s03-ship-pull-request",
+2181-      "base": "origin/main",
+2182-      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S03/",
+2183-      "authority": "AUTH-AFC-2026-10-11-002",
+2184-      "package_digest": "0a85d1e5d58c42ff816f37cc0600cbe0fea51df2e1dd71d430116588e9714843"
+--
+2219-    },
+2220-    {
+2221-      "at": "2026-10-12T07:27:38Z",
+2222-      "kind": "dispatch_record",
+2223:      "lease_id": "S03-g4",
+2224-      "slice": "S03",
+2225-      "generation": 4,
+2226-      "base_sha": "47c46f2e16fed060482a1bf3a0e34ddcb9bc57fc",
+2227-      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S03/",
+2228-      "authority": "AUTH-AFC-2026-10-11-002",
+2229-      "package_digest": "7a9a87433dd0c1aebcb00acd82c3f49989fef915730bcda22c817239d00f055d",
+2230-      "repository": "alphazede/Alphazedehq",
+2231-      "worktree": "$HOME/alphazede/worktrees/alphazedehq-afc-s03-ship-pull-request",
+2232:      "branch": "afc/s03-ship-pull-request",
+2233-      "base": "47c46f2e16fed060482a1bf3a0e34ddcb9bc57fc"
+2234-    },
+2235-    {
+2236-      "at": "2026-10-12T07:27:38Z",
+
+codex
+The checkout is clean at the supplied head, and the packet includes `EDIT-PR.md` in its write set. BRAN validation passed with the verified pinned runtime (`bran_status: hit`). I’m using bounded file reads for the dispatch details and EOF defect; Ponytail keeps this repair to the single blank line.
+
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/bash -lc 'for p in skills/AGENTS.md skills/ship-pull-request/AGENTS.md skills/ship-pull-request/references/AGENTS.md; do if test -f "$p"; then cat "$p"; fi; done
+python3 - <<'"'PY'
+import json
+from pathlib import Path
+p=Path('$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json')
+x=json.loads(p.read_text())
+def walk(x):
+ if isinstance(x,dict):
+  if x.get('lease_id')=='S03-g4': print(json.dumps(x,indent=2))
+  else:
+   for v in x.values(): walk(v)
+ elif isinstance(x,list):
+  for v in x: walk(v)
+walk(x)
+PY
+ git diff --check 47c46f2e16fed060482a1bf3a0e34ddcb9bc57fc..HEAD
+" in $HOME/alphazede/worktrees/alphazedehq-afc-s03-ship-pull-request
+ exited 2 in 0ms:
+skills/ship-pull-request/references/EDIT-PR.md:28: new blank line at EOF.
+
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/bash -lc "python3 - <<'PY'
+from pathlib import Path
+p=Path('skills/ship-pull-request/references/EDIT-PR.md')
+b=p.read_bytes()
+assert b.endswith(b'\\n\\n') and not b.endswith(b'\\n\\n\\n')
+p.write_bytes(b[:-1])
+PY
+ git diff -- skills/ship-pull-request/references/EDIT-PR.md
+ git diff --check
+ git add skills/ship-pull-request/references/EDIT-PR.md
+ git commit -m \"fix(ship-pull-request): remove trailing blank line\" 
+ git rev-parse HEAD" in $HOME/alphazede/worktrees/alphazedehq-afc-s03-ship-pull-request
+ succeeded in 426ms:
+diff --git a/skills/ship-pull-request/references/EDIT-PR.md b/skills/ship-pull-request/references/EDIT-PR.md
+index 943edaa..8745e08 100644
+--- a/skills/ship-pull-request/references/EDIT-PR.md
++++ b/skills/ship-pull-request/references/EDIT-PR.md
+@@ -25,4 +25,3 @@ When updating a PR's title, body, or base:
+   # or directly with gh api:
+   gh api repos/<owner>/<repo>/pulls/<number> --jq '{title: .title, body: .body}'
+   ```
+-
+2:59AM INF 0 commits scanned.
+2:59AM INF scanned ~0 bytes (0) in 185ms
+2:59AM INF no leaks found
+[afc/s03-ship-pull-request 9397a68] fix(ship-pull-request): remove trailing blank line
+ Author: Codex <1wgrumph+codex@gmail.com>
+ 1 file changed, 1 deletion(-)
+9397a683c166d64be54741d4de091a3c2d124756
+
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/bash -lc 'bash tools/ci/local-gates.sh > /tmp/afc-s03-repair-local-gates.log 2>&1; rc=$?; tail -n 35 /tmp/afc-s03-repair-local-gates.log; echo "exit=$rc"; (exit $rc)' in $HOME/alphazede/worktrees/alphazedehq-afc-s03-ship-pull-request
+ succeeded in 439ms:
+[C] N/A   plan-spec-lint   (no COE-lint paths changed since merge-base; --full forces it)
+[C] N/A   sdoc-lint        (no COE-lint paths changed since merge-base; --full forces it)
+[C] N/A   gate-activation  (no COE-lint paths changed since merge-base; --full forces it)
+[C] N/A   standards-yaml   (no standards-YAML paths changed since merge-base; --full forces it)
+[C] N/A   hook-suites      (no hook paths changed since merge-base; --full forces it)
+[C] N/A   te-provision     (no test-engineering paths changed since merge-base; --full forces it)
+[C] N/A   te-evaluator     (no test-engineering paths changed since merge-base; --full forces it)
+[C] N/A   te-receipt       (no test-engineering paths changed since merge-base; --full forces it)
+[C] N/A   te-ponytail      (no test-engineering paths changed since merge-base; --full forces it)
+
+lane A: 0s
+lane B: 0s
+lane C: 0s
+
+PASS  diff-check          0s
+PASS  secret-scan         0s
+N/A   git-sync         (no git-sync paths changed since merge-base; --full forces it)
+N/A   web-install      (no alphazede-web paths changed since merge-base; --full forces it)
+N/A   web-build        (no alphazede-web paths changed since merge-base; --full forces it)
+N/A   web-typecheck    (no alphazede-web paths changed since merge-base; --full forces it)
+N/A   web-test         (no alphazede-web paths changed since merge-base; --full forces it)
+N/A   visual-review    (no skill-suite paths changed since merge-base; --full forces it)
+N/A   plan-spec-lint   (no COE-lint paths changed since merge-base; --full forces it)
+N/A   sdoc-lint        (no COE-lint paths changed since merge-base; --full forces it)
+N/A   gate-activation  (no COE-lint paths changed since merge-base; --full forces it)
+N/A   standards-yaml   (no standards-YAML paths changed since merge-base; --full forces it)
+N/A   hook-suites      (no hook paths changed since merge-base; --full forces it)
+N/A   te-provision     (no test-engineering paths changed since merge-base; --full forces it)
+N/A   te-evaluator     (no test-engineering paths changed since merge-base; --full forces it)
+N/A   te-receipt       (no test-engineering paths changed since merge-base; --full forces it)
+N/A   te-ponytail      (no test-engineering paths changed since merge-base; --full forces it)
+
+passed=2 failed=0 skipped=0 not-applicable=15 elapsed=0s head=9397a68
+merge receipt: $HOME/.local/state/alphazede-gate-receipts/Alphazedehq/9397a683c166d64be54741d4de091a3c2d124756
+failing gates: none
+exit=0
+
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/bash -lc 'd=$(git diff --name-only --diff-filter=ACMR 47c46f2e16fed060482a1bf3a0e34ddcb9bc57fc..HEAD -- skills/ship-pull-request) && f=$(printf '"'%s\\n' \""'$d" | grep -vE '"'"'^$|'"\\.pyc"'$|(''^|/)(__pycache__|build|dist)/|''^skills/ship-pull-request/references/GATES'"\\.md"'$'"'; true) && printf 'scanned: %s\\n' "'${f:-none} && test -n "$f" && { git grep -nIiE '"'1wgrumph|alphazede/|amazon-fantasy-companion|gridmarket|betbot|\\bpilot\\b|exclusion' HEAD -- "'$f; [ $? -eq 1 ]; }; rc=$?; echo "exit=$rc"; (exit $rc)' in $HOME/alphazede/worktrees/alphazedehq-afc-s03-ship-pull-request
+ succeeded in 0ms:
+scanned: skills/ship-pull-request/SKILL.md
+scanned: skills/ship-pull-request/references/EDIT-PR.md
+scanned: skills/ship-pull-request/tests/test_ship_pull_request.py
+scanned: skills/ship-pull-request/tests/trigger-requests.json
+exit=0
+
+exec
+/bin/bash -lc "bash skills/ship-pull-request/tests/edit-pr.test.sh && grep -q 'REFUSED_NO_VNV' skills/ship-pull-request/SKILL.md && grep -qE 'docs/vnv/AGENTS.md|Vnv/AGENTS.md' skills/ship-pull-request/SKILL.md && grep -q -- '--scope=commits=' skills/ship-pull-request/SKILL.md && grep -q 'tools/ci/gate.sh' skills/ship-pull-request/references/GATES.md && grep -q 'amazon-fantasy-companion' skills/ship-pull-request/references/GATES.md && test -f skills/ship-pull-request/references/EDIT-PR.md; rc="'$?; echo "exit=$rc"; (exit $rc)' in $HOME/alphazede/worktrees/alphazedehq-afc-s03-ship-pull-request
+exec
+/bin/bash -lc "python3 -m unittest discover -s skills/ship-pull-request/tests -t skills/ship-pull-request/tests -p 'test_ship_pull_request.py' -k test_creator_validation_and_repository_metadata -v && test \""'$(sha256sum < $HOME/alphazede/Alphazedehq/tools/bran/runtime/bran | cut -d'"' ' -f1)\" = \""'$(python3 -c '"'import json,sys;print(json.load(open(sys.argv[1]))[\"sha256\"])' $HOME/alphazede/Alphazedehq/tools/bran/runtime/bran-release-pin.json)\" && $HOME/alphazede/Alphazedehq/tools/bran/runtime/bran check . bran-strict; rc="'$?; echo "exit=$rc"; (exit $rc)' in $HOME/alphazede/worktrees/alphazedehq-afc-s03-ship-pull-request
+ succeeded in 108ms:
+test_creator_validation_and_repository_metadata (test_ship_pull_request.ShipPullRequestTests.test_creator_validation_and_repository_metadata) ... Skill is valid!
+ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.043s
+
+OK
+{"schema_version":"1.0.0","command":"check","status":"ok","data":{"root":".","selected_profile":"bran-strict","okf_compatibility":{"profile":"okf-v0.1","status":"pass","diagnostics":[]},"okf_v0_2":{"profile":"okf-v0.2","status":"pass","diagnostics":[]},"bran_strict":{"profile":"bran-strict","status":"pass","diagnostics":[]},"selected_profile_error":null,"selected_passed":true,"exit_code":0},"warnings":["Symlink { path: \"skills/use-requirements-system\" }"],"failures":[],"provenance":{"sources":["repository-scanner","bran-core"],"policy_source":"repository-file"},"metrics":{"selected_passed":true,"exit_code":0}}
+exit=0
+
+ succeeded in 219ms:
+ok - edit-pr.sh --help displays usage
+ok - missing PR number is refused
+ok - empty update arguments is refused
+ok - missing body file is refused
+ok - successful update and readback passes
+ok - PATCH arguments correctly forwarded to gh api
+Updating PR #123 via GitHub REST API...
+Verifying PR #123 text on GitHub...
+ok - stale title failure correctly detected and refused
+Updating PR #123 via GitHub REST API...
+Verifying PR #123 text on GitHub...
+ok - stale body failure correctly detected and refused
+Updating PR #123 via GitHub REST API...
+Verifying PR #123 text on GitHub...
+ok - stale base branch failure correctly detected and refused
+Verifying PR #123 text on GitHub...
+OK: PR #123 on alphazede/test-repo verified (saved text matches expected text).
+ok - check-pr-text.sh passes when PR text matches expected
+ok - check-pr-text.sh performs verify readback without mutating PR
+Verifying PR #123 text on GitHub...
+ok - check-pr-text.sh detects stale title and exits non-zero
+Updating PR #123 via GitHub REST API...
+ok - gh api PATCH failure cleanly caught and reported
+PASS: all edit-pr and check-pr-text tests passed
+exit=0
+
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/bash -lc 'e=$(mktemp -d) && cp skills/ship-pull-request/SKILL.md skills/ship-pull-request/tests/trigger-requests.json "$e"/ && (cd "$e" && claude --version > harness-version.txt && claude -p '"'You are an independent skill-routing evaluator. Read SKILL.md and trigger-requests.json in this directory. For each request id, answer MATCH if an agent with this skill installed should use it for that request according to its description, otherwise NO_MATCH. Reply with only a JSON object mapping every request id to MATCH or NO_MATCH.' --output-format json --max-turns 5 --allowedTools Read --disallowedTools Bash,Write,Edit,WebFetch,WebSearch < /dev/null > session.json && jq -r .result session.json | python3 -c 'import json,sys; t=sys.stdin.read(); print(json.dumps(json.loads(t[t.index(\"{\"):t.rindex(\"}\")+1])))' > results.json) && cp \""'$e"/results.json $HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S03/g4/trigger-results-ship-pull-request.json && cp "$e"/harness-version.txt "$e"/session.json $HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S03/g4/ && SHIP_PULL_REQUEST_TRIGGER_RESULTS=$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S03/g4/trigger-results-ship-pull-request.json python3 -m unittest discover -s skills/ship-pull-request/tests -t skills/ship-pull-request/tests -p '"'test_ship_pull_request.py' -k test_trigger_classifications -v; rc="'$?; echo "exit=$rc"; (exit $rc)' in $HOME/alphazede/worktrees/alphazedehq-afc-s03-ship-pull-request
+codex
+The repair is committed as `9397a68`. Local gates pass with a merge receipt, and the edit-PR, skill-size/metadata, and agnostic-scope checks all exit 0. The packet’s fresh trigger evaluator is still running; once it passes, I’ll push the commit.
+
+ succeeded in 8312ms:
+test_trigger_classifications (test_ship_pull_request.ShipPullRequestTests.test_trigger_classifications) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+OK
+exit=0
+
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/bash -lc "git push origin afc/s03-ship-pull-request
+ git status --short
+ gh api repos/alphazede/Alphazedehq/pulls/304 --jq '{url: .html_url, head: .head.sha, branch: .head.ref, state: .state}'" in $HOME/alphazede/worktrees/alphazedehq-afc-s03-ship-pull-request
+ succeeded in 1691ms:
+To https://github.com/alphazede/Alphazedehq.git
+   2fc547c..9397a68  afc/s03-ship-pull-request -> afc/s03-ship-pull-request
+{"branch":"afc/s03-ship-pull-request","head":"2fc547c7e3041538bcd6a4fed904fad8d9f1a89d","state":"open","url":"https://github.com/alphazede/Alphazedehq/pull/304"}
+
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/bash -lc "python3 - <<'PY'
+import json, shutil
+from pathlib import Path
+p=Path('$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S03/g4')
+shutil.copyfile('/tmp/afc-s03-repair-local-gates.log',p/'repair-local-gates.log')
+r={'outcome':'PASS','lease_id':'S03-g4','branch':'afc/s03-ship-pull-request','head':'9397a683c166d64be54741d4de091a3c2d124756','repair_base':'2fc547c7e3041538bcd6a4fed904fad8d9f1a89d','changed_paths':['skills/ship-pull-request/references/EDIT-PR.md'],'diff_summary':'Removed one blank line at EOF; no behavior changes.','commands':{k:0 for k in ['bash tools/ci/local-gates.sh','CMD-D4C-TEST','CMD-SKILL-SIZE','CMD-SKILL-TRIGGER','CMD-D4-AGNOSTIC']},'bran_status':'hit','developer_feedback':{'observations':'no new observations','tools':['git','bash','python3','BRAN','claude','jq','gh']},'review':'No re-review, per repair contract.','reverify':'not applicable: Markdown whitespace repair, no compiled-binary claim.'}
+(p/'repair-receipt.json').write_text(json.dumps(r,indent=2)+'\\n')
+PY" in $HOME/alphazede/worktrees/alphazedehq-afc-s03-ship-pull-request
+ succeeded in 0ms:
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/bash -lc "git ls-remote origin refs/heads/afc/s03-ship-pull-request
+ gh api repos/alphazede/Alphazedehq/pulls/304 --jq '{head: .head.sha, state: .state}'" in $HOME/alphazede/worktrees/alphazedehq-afc-s03-ship-pull-request
+ succeeded in 1039ms:
+9397a683c166d64be54741d4de091a3c2d124756	refs/heads/afc/s03-ship-pull-request
+{"head":"9397a683c166d64be54741d4de091a3c2d124756","state":"open"}
+
+codex
+PASS — S03-g4 repair committed and pushed to [PR #304](https://github.com/alphazede/Alphazedehq/pull/304); remote head verified.
+
+- Head: `9397a683c166d64be54741d4de091a3c2d124756`
+- Diff: removed one EOF blank line from `references/EDIT-PR.md`.
+- Local gates and all four packet VERIFY commands: exit **0**.
+- `bran_status: hit`; strict validation passed.
+
+Gate tail:
+```text
+passed=2 failed=0 skipped=0 not-applicable=15 elapsed=0s head=9397a68
+merge receipt: $HOME/.local/state/alphazede-gate-receipts/Alphazedehq/9397a683c166d64be54741d4de091a3c2d124756
+failing gates: none
+exit=0
+```
+
+developer_feedback: no new observations. Tools: git, bash, Python, BRAN, Claude, jq, gh.
+
+No merge or re-review, per contract. Reverify not applicable to this Markdown whitespace repair; no new risks identified.
+hook: Stop
+hook: Stop Completed
+tokens used
+42,814
+PASS — S03-g4 repair committed and pushed to [PR #304](https://github.com/alphazede/Alphazedehq/pull/304); remote head verified.
+
+- Head: `9397a683c166d64be54741d4de091a3c2d124756`
+- Diff: removed one EOF blank line from `references/EDIT-PR.md`.
+- Local gates and all four packet VERIFY commands: exit **0**.
+- `bran_status: hit`; strict validation passed.
+
+Gate tail:
+```text
+passed=2 failed=0 skipped=0 not-applicable=15 elapsed=0s head=9397a68
+merge receipt: $HOME/.local/state/alphazede-gate-receipts/Alphazedehq/9397a683c166d64be54741d4de091a3c2d124756
+failing gates: none
+exit=0
+```
+
+developer_feedback: no new observations. Tools: git, bash, Python, BRAN, Claude, jq, gh.
+
+No merge or re-review, per contract. Reverify not applicable to this Markdown whitespace repair; no new risks identified.

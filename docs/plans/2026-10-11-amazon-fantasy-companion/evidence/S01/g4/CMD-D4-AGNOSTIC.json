@@ -1,0 +1,6 @@
+{
+  "command": "d=$(git diff --name-only --diff-filter=ACMR 47c46f2e16fed060482a1bf3a0e34ddcb9bc57fc..HEAD -- skills/setup-pre-commit) && f=$(printf '%s\\n' \"$d\" | grep -vE '^$|\\.pyc$|(^|/)(__pycache__|build|dist)/|^skills/ship-pull-request/references/GATES\\.md$'; true) && printf 'scanned: %s\\n' ${f:-none} && test -n \"$f\" && { git grep -nIiE '1wgrumph|alphazede/|amazon-fantasy-companion|gridmarket|betbot|\\bpilot\\b|exclusion' HEAD -- $f; [ $? -eq 1 ]; }; rc=$?; echo \"exit=$rc\"; (exit $rc)",
+  "candidate_sha": "21b4512a9e698f60dc82176996dc8dfc8b3dccb7",
+  "exit_code": 0,
+  "output_tail": "scanned: skills/setup-pre-commit/SKILL.md\nscanned: skills/setup-pre-commit/agents/openai.yaml\nscanned: skills/setup-pre-commit/references/gate-contract.md\nscanned: skills/setup-pre-commit/scripts/install-hooks.sh\nscanned: skills/setup-pre-commit/templates/gate.sh\nscanned: skills/setup-pre-commit/tests/test-install-hooks.sh\nscanned: skills/setup-pre-commit/tests/test_setup_pre_commit.py\nscanned: skills/setup-pre-commit/tests/trigger-requests.json\nexit=0\n"
+}

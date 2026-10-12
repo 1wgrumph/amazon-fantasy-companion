@@ -265,6 +265,55 @@
       "decided_at": "2026-10-12T06:53:13Z",
       "decision": "Owner re-approved the amended Phase 1 package implementing DEC-AFC-SD-026..028 (manifest digest d7d92af72feaf95259869bf2fe80c14b0abaea3b7c309549ddfb5866a9c334d9); authority AUTH-AFC-2026-10-11-002 remains effective, bound to this digest.",
       "source": "Owner: 'Approve'"
+    },
+    {
+      "id": "DEC-AFC-SD-029",
+      "status": "confirmed",
+      "decided_at": "2026-10-12T07:10:15Z",
+      "decision": "CMD-D4-AGNOSTIC and CMD-D5-AGNOSTIC scan only tracked files the slice changes (git diff base..HEAD), excluding generated artifacts (.pyc, __pycache__, build output); pre-existing references outside the slice's diff are out of scope.",
+      "source": "Owner: 'Approve fix'"
+    },
+    {
+      "id": "DEC-AFC-SD-030",
+      "status": "confirmed",
+      "decided_at": "2026-10-12T07:10:15Z",
+      "decision": "Product SysML v2 models are parser-checked by loading them into the local Requirements System SysON (alphazede-requirements-system model load --package DIR) as a new package; exception to SD-027 for models only (the register stays Markdown). Never replace or alter other packages or the active Maestro checkout.",
+      "source": "Owner: 'Load into RS/SysON'"
+    },
+    {
+      "id": "DEC-AFC-APPROVAL-003",
+      "status": "confirmed",
+      "decided_at": "2026-10-12T07:20:17Z",
+      "decision": "Owner re-approved the amended package implementing DEC-AFC-SD-029/030 (manifest 0a85d1e5d58c42ff816f37cc0600cbe0fea51df2e1dd71d430116588e9714843).",
+      "source": "Owner: 'Approve'"
+    },
+    {
+      "id": "DEC-AFC-SD-031",
+      "status": "confirmed",
+      "decided_at": "2026-10-12T07:20:17Z",
+      "decision": "OD-AFC-13 resolved: product SysML v2 models are parse-checked with a standalone syside parser installed locally after a supply-chain scan; nothing enters the Requirements System. Supersedes the SysON method of DEC-AFC-SD-030.",
+      "source": "Owner: 'Standalone syside'"
+    },
+    {
+      "id": "DEC-AFC-SD-031-DIGEST",
+      "status": "confirmed",
+      "decided_at": "2026-10-12T07:27:38Z",
+      "decision": "Package digest after applying DEC-AFC-SD-031 (OD-AFC-13 syside): 7a9a87433dd0c1aebcb00acd82c3f49989fef915730bcda22c817239d00f055d. OD resolution inside the approved package; no other change.",
+      "source": "Orchestrator receipt of owner decision DEC-AFC-SD-031"
+    },
+    {
+      "id": "DEC-AFC-SD-032",
+      "status": "confirmed",
+      "decided_at": "2026-10-12T07:48:22Z",
+      "decision": "Parse-check the product SysML v2 models by importing them directly into the local SysON (its own new project via SysON's import), not through the Requirements System CLI registry/checkout and not with any keyed tool. Supersedes DEC-AFC-SD-031 (syside). No API keys.",
+      "source": "Owner: 'Why are we not using syson? We are not using anything that needs api keys you are already overly complicating things'"
+    },
+    {
+      "id": "DEC-AFC-SD-032-DIGEST",
+      "status": "confirmed",
+      "decided_at": "2026-10-12T08:16:44Z",
+      "decision": "Package digest after applying DEC-AFC-SD-032 (SysON direct import, no keyed tools): a018168f575741b5f53bbe7fac4bcb13128e31f37f69d73ba2433cf8d09d5144.",
+      "source": "Orchestrator receipt of owner decision DEC-AFC-SD-032"
     }
   ],
   "open_decisions": [],
@@ -2107,6 +2156,113 @@
       "at": "2026-10-12T02:54:36Z",
       "kind": "wave_receipt",
       "detail": "Wave 1: S07 DONE, reviewed PASS (Muse, OCR), PR #3 merged. S01/S03 OWNER_DECISION_REQUIRED and S02 BLOCKED on plan verification defects (generic validator vs HQ metadata; 1-turn trigger harness; PyYAML wheel not acquired; CMD-D4-AGNOSTIC spans S03 files). S06 BLOCKED: use-requirements-system is a symlink into requirements-system repo. Resolved by DEC-AFC-SD-026..028; plan delta follows."
+    },
+    {
+      "at": "2026-10-12T07:10:15Z",
+      "kind": "wave_receipt",
+      "detail": "Wave 1 re-dispatch: S02 PASS (Alphazedehq PR #303, review running). S01 CONTRACT_FAILURE: Orchestrator packet gave no slice lease/evidence dir (Orchestrator defect). S03 and S06 CONTRACT_FAILURE on agnostic-scan command scope (plan defect, DEC-AFC-SD-029); S06 also 1 failing vendoring test (implementation defect). ST-3b/c READY with CHECKER_UNAVAILABLE gap (DEC-AFC-SD-030)."
+    },
+    {
+      "at": "2026-10-12T07:20:17Z",
+      "kind": "dispatch_record",
+      "lease_id": "S01-g3",
+      "slice": "S01",
+      "generation": 3,
+      "repository": "alphazede/Alphazedehq",
+      "worktree": "$HOME/alphazede/worktrees/alphazedehq-afc-s01-setup-pre-commit",
+      "branch": "afc/s01-setup-pre-commit",
+      "base": "origin/main",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S01/",
+      "authority": "AUTH-AFC-2026-10-11-002",
+      "package_digest": "0a85d1e5d58c42ff816f37cc0600cbe0fea51df2e1dd71d430116588e9714843"
+    },
+    {
+      "at": "2026-10-12T07:20:17Z",
+      "kind": "dispatch_record",
+      "lease_id": "S03-g3",
+      "slice": "S03",
+      "generation": 3,
+      "repository": "alphazede/Alphazedehq",
+      "worktree": "$HOME/alphazede/worktrees/alphazedehq-afc-s03-ship-pull-request",
+      "branch": "afc/s03-ship-pull-request",
+      "base": "origin/main",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S03/",
+      "authority": "AUTH-AFC-2026-10-11-002",
+      "package_digest": "0a85d1e5d58c42ff816f37cc0600cbe0fea51df2e1dd71d430116588e9714843"
+    },
+    {
+      "at": "2026-10-12T07:20:17Z",
+      "kind": "dispatch_record",
+      "lease_id": "S06-g3",
+      "slice": "S06",
+      "generation": 3,
+      "repository": "alphazede/Alphazedehq + alphazede/requirements-system",
+      "worktree": "$HOME/alphazede/worktrees/alphazedehq-afc-s06-spec-authoring + requirements-system-afc-s06",
+      "branch": "afc/s06-spec-authoring + afc/s06-use-rs-nontrigger",
+      "base": "origin/main",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/",
+      "authority": "AUTH-AFC-2026-10-11-002",
+      "package_digest": "0a85d1e5d58c42ff816f37cc0600cbe0fea51df2e1dd71d430116588e9714843"
+    },
+    {
+      "at": "2026-10-12T07:27:38Z",
+      "kind": "orchestrator_defect",
+      "detail": "g3 dispatch records named base 'origin/main' instead of the full creation SHA; S01/S03/S06 returned CONTRACT_FAILURE before editing. Re-dispatched as g4 with full SHAs."
+    },
+    {
+      "at": "2026-10-12T07:27:38Z",
+      "kind": "dispatch_record",
+      "lease_id": "S01-g4",
+      "slice": "S01",
+      "generation": 4,
+      "base_sha": "47c46f2e16fed060482a1bf3a0e34ddcb9bc57fc",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S01/",
+      "authority": "AUTH-AFC-2026-10-11-002",
+      "package_digest": "7a9a87433dd0c1aebcb00acd82c3f49989fef915730bcda22c817239d00f055d",
+      "repository": "alphazede/Alphazedehq",
+      "worktree": "$HOME/alphazede/worktrees/alphazedehq-afc-s01-setup-pre-commit",
+      "branch": "afc/s01-setup-pre-commit",
+      "base": "47c46f2e16fed060482a1bf3a0e34ddcb9bc57fc"
+    },
+    {
+      "at": "2026-10-12T07:27:38Z",
+      "kind": "dispatch_record",
+      "lease_id": "S03-g4",
+      "slice": "S03",
+      "generation": 4,
+      "base_sha": "47c46f2e16fed060482a1bf3a0e34ddcb9bc57fc",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S03/",
+      "authority": "AUTH-AFC-2026-10-11-002",
+      "package_digest": "7a9a87433dd0c1aebcb00acd82c3f49989fef915730bcda22c817239d00f055d",
+      "repository": "alphazede/Alphazedehq",
+      "worktree": "$HOME/alphazede/worktrees/alphazedehq-afc-s03-ship-pull-request",
+      "branch": "afc/s03-ship-pull-request",
+      "base": "47c46f2e16fed060482a1bf3a0e34ddcb9bc57fc"
+    },
+    {
+      "at": "2026-10-12T07:27:38Z",
+      "kind": "dispatch_record",
+      "lease_id": "S06-g4",
+      "slice": "S06",
+      "generation": 4,
+      "base_sha": "47c46f2e16fed060482a1bf3a0e34ddcb9bc57fc (Alphazedehq) + c1e07c92c630ae1a5aa50a19d34d3f625adeb2ad (requirements-system)",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/",
+      "authority": "AUTH-AFC-2026-10-11-002",
+      "package_digest": "7a9a87433dd0c1aebcb00acd82c3f49989fef915730bcda22c817239d00f055d",
+      "repository": "alphazede/Alphazedehq + alphazede/requirements-system",
+      "worktree": "$HOME/alphazede/worktrees/alphazedehq-afc-s06-spec-authoring + requirements-system-afc-s06",
+      "branch": "afc/s06-spec-authoring + afc/s06-use-rs-nontrigger",
+      "base": "47c46f2e16fed060482a1bf3a0e34ddcb9bc57fc (Alphazedehq) + c1e07c92c630ae1a5aa50a19d34d3f625adeb2ad (requirements-system)"
+    },
+    {
+      "at": "2026-10-12T07:48:22Z",
+      "kind": "wave_receipt",
+      "detail": "Wave 1 g4: S01 PASS (HQ PR #306), S03 PASS (HQ PR #304), S06 NEEDS_MORE_EVIDENCE (HQ PR #305, requirements-system PR #532; RISK-13.D uv/Graphviz scan receipts missing). Reviews dispatched."
+    },
+    {
+      "at": "2026-10-12T08:16:44Z",
+      "kind": "wave_receipt",
+      "detail": "Wave 1 landed in Alphazedehq: S02 #303, S01 #306, S03 #304 (repair: EOF blank line), S06 #305 (repair: agents/openai.yaml default_prompt); all reviewed PASS (Muse, OCR) and local-gates PASS on merged heads. S07 #3 merged earlier. requirements-system #532 (S06 reciprocal non-trigger): local-gates cargo-test fails on different unrelated runtime tests each run (flaky under host load); re-run pending. Spec track: ST-3d SysON import PASS (project 2a033855-6bae-4fe1-975c-00bbb9419100), 65/65 allocation."
     }
   ],
   "planning_review": {

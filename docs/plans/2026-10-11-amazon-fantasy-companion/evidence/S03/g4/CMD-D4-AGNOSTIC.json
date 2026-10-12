@@ -1,0 +1,6 @@
+{
+  "command": "d=$(git diff --name-only --diff-filter=ACMR 47c46f2e16fed060482a1bf3a0e34ddcb9bc57fc..HEAD -- skills/ship-pull-request) && f=$(printf '%s\\n' \"$d\" | grep -vE '^$|\\.pyc$|(^|/)(__pycache__|build|dist)/|^skills/ship-pull-request/references/GATES\\.md$'; true) && printf 'scanned: %s\\n' ${f:-none} && test -n \"$f\" && { git grep -nIiE '1wgrumph|alphazede/|amazon-fantasy-companion|gridmarket|betbot|\\bpilot\\b|exclusion' HEAD -- $f; [ $? -eq 1 ]; }; rc=$?; echo \"exit=$rc\"; (exit $rc)",
+  "candidate_sha": "2fc547c7e3041538bcd6a4fed904fad8d9f1a89d",
+  "exit_code": 0,
+  "output": "scanned: skills/ship-pull-request/SKILL.md\nscanned: skills/ship-pull-request/references/EDIT-PR.md\nscanned: skills/ship-pull-request/tests/test_ship_pull_request.py\nscanned: skills/ship-pull-request/tests/trigger-requests.json\nexit=0\n"
+}

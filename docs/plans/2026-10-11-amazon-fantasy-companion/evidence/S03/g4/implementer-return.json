@@ -1,0 +1,86 @@
+{
+  "outcome": "PASS",
+  "role_outcome": "CANDIDATE_READY",
+  "lease_id": "S03-g4",
+  "branch": "afc/s03-ship-pull-request",
+  "head_sha": "2fc547c7e3041538bcd6a4fed904fad8d9f1a89d",
+  "base_sha": "47c46f2e16fed060482a1bf3a0e34ddcb9bc57fc",
+  "draft_pr": "https://github.com/alphazede/Alphazedehq/pull/304",
+  "changed_paths": [
+    "skills/ship-pull-request/SKILL.md",
+    "skills/ship-pull-request/references/EDIT-PR.md",
+    "skills/ship-pull-request/references/GATES.md",
+    "skills/ship-pull-request/tests/test_ship_pull_request.py",
+    "skills/ship-pull-request/tests/trigger-requests.json"
+  ],
+  "commands": {
+    "CMD-D4C-TEST": {
+      "command": "bash skills/ship-pull-request/tests/edit-pr.test.sh && grep -q 'REFUSED_NO_VNV' skills/ship-pull-request/SKILL.md && grep -qE 'docs/vnv/AGENTS.md|Vnv/AGENTS.md' skills/ship-pull-request/SKILL.md && grep -q -- '--scope=commits=' skills/ship-pull-request/SKILL.md && grep -q 'tools/ci/gate.sh' skills/ship-pull-request/references/GATES.md && grep -q 'amazon-fantasy-companion' skills/ship-pull-request/references/GATES.md && test -f skills/ship-pull-request/references/EDIT-PR.md; rc=$?; echo \"exit=$rc\"; (exit $rc)",
+      "candidate_sha": "2fc547c7e3041538bcd6a4fed904fad8d9f1a89d",
+      "exit_code": 0,
+      "output": "ok - edit-pr.sh --help displays usage\nok - missing PR number is refused\nok - empty update arguments is refused\nok - missing body file is refused\nok - successful update and readback passes\nok - PATCH arguments correctly forwarded to gh api\nUpdating PR #123 via GitHub REST API...\nVerifying PR #123 text on GitHub...\nok - stale title failure correctly detected and refused\nUpdating PR #123 via GitHub REST API...\nVerifying PR #123 text on GitHub...\nok - stale body failure correctly detected and refused\nUpdating PR #123 via GitHub REST API...\nVerifying PR #123 text on GitHub...\nok - stale base branch failure correctly detected and refused\nVerifying PR #123 text on GitHub...\nOK: PR #123 on alphazede/test-repo verified (saved text matches expected text).\nok - check-pr-text.sh passes when PR text matches expected\nok - check-pr-text.sh performs verify readback without mutating PR\nVerifying PR #123 text on GitHub...\nok - check-pr-text.sh detects stale title and exits non-zero\nUpdating PR #123 via GitHub REST API...\nok - gh api PATCH failure cleanly caught and reported\nPASS: all edit-pr and check-pr-text tests passed\nexit=0\n"
+    },
+    "CMD-SKILL-SIZE": {
+      "command": "python3 -m unittest discover -s skills/ship-pull-request/tests -t skills/ship-pull-request/tests -p 'test_ship_pull_request.py' -k test_creator_validation_and_repository_metadata -v && test \"$(sha256sum < $HOME/alphazede/Alphazedehq/tools/bran/runtime/bran | cut -d' ' -f1)\" = \"$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1]))[\"sha256\"])' $HOME/alphazede/Alphazedehq/tools/bran/runtime/bran-release-pin.json)\" && $HOME/alphazede/Alphazedehq/tools/bran/runtime/bran check . bran-strict; rc=$?; echo \"exit=$rc\"; (exit $rc)",
+      "candidate_sha": "2fc547c7e3041538bcd6a4fed904fad8d9f1a89d",
+      "exit_code": 0,
+      "output": "Skill is valid!\n{\"schema_version\":\"1.0.0\",\"command\":\"check\",\"status\":\"ok\",\"data\":{\"root\":\".\",\"selected_profile\":\"bran-strict\",\"okf_compatibility\":{\"profile\":\"okf-v0.1\",\"status\":\"pass\",\"diagnostics\":[]},\"okf_v0_2\":{\"profile\":\"okf-v0.2\",\"status\":\"pass\",\"diagnostics\":[]},\"bran_strict\":{\"profile\":\"bran-strict\",\"status\":\"pass\",\"diagnostics\":[]},\"selected_profile_error\":null,\"selected_passed\":true,\"exit_code\":0},\"warnings\":[\"Symlink { path: \\\"skills/use-requirements-system\\\" }\"],\"failures\":[],\"provenance\":{\"sources\":[\"repository-scanner\",\"bran-core\"],\"policy_source\":\"repository-file\"},\"metrics\":{\"selected_passed\":true,\"exit_code\":0}}\nexit=0\ntest_creator_validation_and_repository_metadata (test_ship_pull_request.ShipPullRequestTests.test_creator_validation_and_repository_metadata) ... ok\n\n----------------------------------------------------------------------\nRan 1 test in 0.039s\n\nOK\n"
+    },
+    "CMD-SKILL-TRIGGER": {
+      "command": "e=$(mktemp -d) && cp skills/ship-pull-request/SKILL.md skills/ship-pull-request/tests/trigger-requests.json \"$e\"/ && (cd \"$e\" && claude --version > harness-version.txt && claude -p 'You are an independent skill-routing evaluator. Read SKILL.md and trigger-requests.json in this directory. For each request id, answer MATCH if an agent with this skill installed should use it for that request according to its description, otherwise NO_MATCH. Reply with only a JSON object mapping every request id to MATCH or NO_MATCH.' --output-format json --max-turns 5 --allowedTools Read --disallowedTools Bash,Write,Edit,WebFetch,WebSearch < /dev/null > session.json && jq -r .result session.json | python3 -c 'import json,sys; t=sys.stdin.read(); print(json.dumps(json.loads(t[t.index(\"{\"):t.rindex(\"}\")+1])))' > results.json) && cp \"$e\"/results.json $HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S03/g4/trigger-results-ship-pull-request.json && cp \"$e\"/harness-version.txt \"$e\"/session.json $HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S03/g4/ && SHIP_PULL_REQUEST_TRIGGER_RESULTS=$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S03/g4/trigger-results-ship-pull-request.json python3 -m unittest discover -s skills/ship-pull-request/tests -t skills/ship-pull-request/tests -p 'test_ship_pull_request.py' -k test_trigger_classifications -v; rc=$?; echo \"exit=$rc\"; (exit $rc)",
+      "candidate_sha": "2fc547c7e3041538bcd6a4fed904fad8d9f1a89d",
+      "exit_code": 0,
+      "output": "exit=0\ntest_trigger_classifications (test_ship_pull_request.ShipPullRequestTests.test_trigger_classifications) ... ok\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n"
+    },
+    "CMD-D4-AGNOSTIC": {
+      "command": "d=$(git diff --name-only --diff-filter=ACMR 47c46f2e16fed060482a1bf3a0e34ddcb9bc57fc..HEAD -- skills/ship-pull-request) && f=$(printf '%s\\n' \"$d\" | grep -vE '^$|\\.pyc$|(^|/)(__pycache__|build|dist)/|^skills/ship-pull-request/references/GATES\\.md$'; true) && printf 'scanned: %s\\n' ${f:-none} && test -n \"$f\" && { git grep -nIiE '1wgrumph|alphazede/|amazon-fantasy-companion|gridmarket|betbot|\\bpilot\\b|exclusion' HEAD -- $f; [ $? -eq 1 ]; }; rc=$?; echo \"exit=$rc\"; (exit $rc)",
+      "candidate_sha": "2fc547c7e3041538bcd6a4fed904fad8d9f1a89d",
+      "exit_code": 0,
+      "output": "scanned: skills/ship-pull-request/SKILL.md\nscanned: skills/ship-pull-request/references/EDIT-PR.md\nscanned: skills/ship-pull-request/tests/test_ship_pull_request.py\nscanned: skills/ship-pull-request/tests/trigger-requests.json\nexit=0\n"
+    }
+  },
+  "proof_rows": {
+    "SEIT-AFC-D4-03.T": "PASS author check",
+    "SEIT-AFC-D4-03.S": "PASS author check: 52 lines, 410 words",
+    "SEIT-AFC-D4-05.T": "PASS evaluator classifications",
+    "SEIT-AFC-D4-05.L": "NOT_RUN: landing delegated; merge prohibited in this packet",
+    "SEIT-AFC-D4-06": "PASS S03; combined Wave 1 check remains"
+  },
+  "bran_status": "hit",
+  "bran_refs": {
+    "coverage": "all query terms matched; bran-strict passes",
+    "verified_paths": [
+      "skills/ship-pull-request/SKILL.md",
+      "skills/ship-pull-request/references/GATES.md",
+      "skills/ship-pull-request/tests/edit-pr.test.sh"
+    ],
+    "extra_discovery": "Bounded reads for exact contract, peer comparison and stock tests"
+  },
+  "baseline_red": {
+    "test": "test_creator_validation_and_repository_metadata",
+    "exit_code": 1,
+    "output_tail": "AssertionError: 82 not less than 60"
+  },
+  "peer_comparison": "Installed ponytail-review owns standalone diff bug reviews; retained ship-pull-request as the PR lifecycle owner and added explicit non-trigger without copying peer procedure.",
+  "remaining_risks": [
+    "Independent review with OCR remains at configured integration boundary",
+    "Landing and combined Wave 1 check remain",
+    "Repository-wide CI not run locally"
+  ],
+  "reverify": "not applicable: no compiled binary built or claimed",
+  "blocker": null,
+  "developer_feedback": {
+    "tool": "BRAN pinned runtime",
+    "task": "Validate S03 linked worktree",
+    "steps": "Tried worktree-local runtime, then resolved shared HQ runtime per use-bran",
+    "expected": "Pinned executable available through trusted HQ checkout",
+    "actual": "Worktree runtime absent; shared runtime pin matches and bran-strict passes",
+    "severity": "minor",
+    "workaround": "Resolve alphazedehq_checkout to shared HQ checkout as packet placeholder permits",
+    "suggestion": "Document shared runtime resolution in linked-worktree dispatches",
+    "measured_cost": "unknown",
+    "aws_services": "n/a",
+    "would_build_again": "n/a"
+  },
+  "scope_note": "Only authorized five paths committed; receipts external to slice; no merge, review, publication or issue mutation performed."
+}
