@@ -18,12 +18,12 @@
     "planning_inputs": [
       {
         "path": "docs/plans/2026-10-11-amazon-fantasy-companion/amazon-fantasy-companion-technical-plan.md",
-        "sha256": "dfc1b9b2c92a7f4030d4a95464f190235da4e93b30f3dafd9fcf02cc61112cd6",
+        "sha256": "0051816b697836e111a21ec7bf01a13ad9559eb239ad3aa8192deb2c185bc82c",
         "binding_status": "bound"
       },
       {
         "path": "docs/plans/2026-10-11-amazon-fantasy-companion/design.md",
-        "sha256": "f33b50c593ea766bf4ff50bc49c4e0201dedcf4afcd3edfbfb9cb0b07361308b",
+        "sha256": "4b397fb81756115e07fdd630c78e57dafd6e2f0a9ec97af568ddec43275e57ca",
         "binding_status": "bound"
       },
       {
@@ -71,7 +71,8 @@
       "DEC-AFC-SD-021": "confirmed",
       "DEC-AFC-SD-022": "confirmed",
       "DEC-AFC-SD-023": "confirmed",
-      "DEC-AFC-SD-024": "confirmed"
+      "DEC-AFC-SD-024": "confirmed",
+      "DEC-AFC-SD-025": "confirmed"
     },
     "superseded": {
       "DEC-AFC-SD-013": "DEC-AFC-SD-022"
@@ -190,9 +191,9 @@
     "system": "Phase 1 delivery tooling: D5 shared spec-authoring skill and D4 shared CI/CD skills and harness hooks (alphazede/Alphazedehq); this repository's gate (tools/ci/gate.sh: spec, docs, hygiene), local hooks, Actions workflow, vendored tools/spec, Vnv tree (ci-cd, spec, developer-feedback) and Scribe log",
     "flowdown": "Each Phase 1 AC-AFC/RISK-AFC row maps to one or more SEIT-AFC proof rows, each with exactly one design/contract id and one command; suffixes split methods or boundaries (.T test, .S size, .I inspection, .L landing, .K links, .H hygiene or host, .U unit, .A all-area integration, .W workflow, .P PR/planning, .D demonstration/docs, .G gate acquisitions, .M milestones, .O OCR, .R review packet, .V vendored use)",
     "counts": {
-      "requirement_rows": 32,
-      "proof_rows": 54,
-      "commands": 46
+      "requirement_rows": 33,
+      "proof_rows": 55,
+      "commands": 47
     },
     "views": "views/views.json MODEL-AFC-V4 (Phase 1 delivery tooling flow) and the Phase 1 views listed there; V1..V3 are spec-track reference only",
     "deferred": "Product rows (PROF, MON, FEED, ALERT, WATCH, CTRL, PANEL, SPIKE, SEC, LW, SPEC-02/03, PLAN-02, DX-03, SUB, VIS; RISK-01..06, 09, 10, 14) moved to the spec track or Phase 2 (technical plan §Deferred to the spec track or Phase 2) and have no proof case here",
@@ -283,7 +284,9 @@
       ],
       "S08": [
         "SEIT-AFC-CI-02.P",
-        "SEIT-AFC-DX-02"
+        "SEIT-AFC-DX-02",
+        "SEIT-AFC-DX-01",
+        "SEIT-AFC-DX-04"
       ],
       "S07": [
         "SEIT-AFC-VNV-01",
@@ -815,14 +818,25 @@
     },
     {
       "id": "CMD-DX-COVERAGE",
-      "command": "f=docs/developer-feedback/observations.md; for i in 001 002 003 004 005 006 007; do grep -q \"DX-$i\" \"$f\" || echo \"MISSING DX-$i\"; done; h=$(grep -m1 -E '^\\|' \"$f\"); for c in ID timestamp role task tool version expected actual evidence severity workaround classification; do printf '%s' \"$h\" | grep -qi \"$c\" || echo \"MISSING column $c\"; done; python3 tools/ci/check_paths.py --files \"$f\"",
-      "pass": "no output from the loops and check_paths exit 0: DX-001..DX-007 present, the header carries the issue #1 Scribe contract fields, no path or credential finding; every Phase 1 observation id cited in a return's developer_feedback section appears in the log (inspected against CMD-DX-PRESENCE inputs)",
-      "description": "Scribe log start (AC-AFC-DX-02, amended: log only; per-tool summary and friction log are Phase 2).",
+      "command": "f=docs/developer-feedback/observations.md; for i in 001 002 003 004 005 006 007; do grep -q \"DX-$i\" \"$f\" || echo \"MISSING DX-$i\"; done; python3 -I -c 'import re,sys\nt=open(sys.argv[1],encoding=\"utf-8\").read()\nm=re.search(r\"^#+ *Observations *\\n(?:[^|\\n].*\\n|\\n)*((?:\\|.*(?:\\n|$))+)\",t,re.M|re.I)\nr=[[c.strip() for c in l.strip().strip(\"|\").split(\"|\")] for l in m.group(1).splitlines()] if m else []\nif not r: print(\"MISSING table Observations\")\nfor x in r[2:]:\n    if len(x)!=len(r[0]): print(\"BAD row \"+x[0]+\": \"+str(len(x))+\" cells, header has \"+str(len(r[0])))\n    elif \"\" in x: print(\"EMPTY cell in \"+x[0]+\": \"+r[0][x.index(\"\")])\n' \"$f\"; python3 tools/ci/check_paths.py --files \"$f\"",
+      "pass": "no output and check_paths exit 0: DX-001..DX-007 present; every Observations row has the header's cell count and no empty cell (`n/a` and `unknown` are values); no path or credential finding; every Phase 1 observation id cited in a return's developer_feedback section appears in the log (inspected against CMD-DX-PRESENCE inputs)",
+      "description": "Scribe log content (AC-AFC-DX-02, amended by DEC-AFC-SD-025: every row complete; submission assembly is Phase 2).",
       "repository": "this (1wgrumph/amazon-fantasy-companion)",
       "used_by": [
         "S08"
       ],
       "tool_availability_2026_10_11": "yes after S09"
+    },
+    {
+      "id": "CMD-DX-SCHEMA",
+      "command": "f=docs/developer-feedback/observations.md; python3 -I -c 'import re,sys\nt=open(sys.argv[1],encoding=\"utf-8\").read()\ndef tab(h):\n    m=re.search(r\"^#+ *\"+h+r\" *\\n(?:[^|\\n].*\\n|\\n)*((?:\\|.*(?:\\n|$))+)\",t,re.M|re.I)\n    return [[c.strip() for c in l.strip().strip(\"|\").split(\"|\")] for l in m.group(1).splitlines()] if m else None\nO=[\"ID\",\"Timestamp\",\"Reporting role\",\"Task or packet\",\"Tool/API/SDK\",\"Version\",\"Device/OS\",\"Evidence\",\"Classification\",\"Used for\",\"What worked well\",\"What needs work\",\"Onboarding (zero to hello world)\",\"Would build again (Yes/No and why)\",\"AWS services used and how\",\"Task attempted\",\"Steps taken\",\"Expected result\",\"Actual result\",\"Severity rating\",\"Workaround used\",\"Actionable suggestion\"]\nF=[\"ID\",\"Tool\",\"Description\",\"Why it matters to this project\",\"Priority\"]\nfor h,cols in ((\"Observations\",O),(\"Feature requests\",F)):\n    r=tab(h)\n    if r is None: print(\"MISSING table \"+h); continue\n    hdr=[c.lower() for c in r[0]]\n    [print(\"MISSING column \"+h+\": \"+c) for c in cols if c.lower() not in hdr]\n    if h==\"Feature requests\" and \"priority\" in hdr:\n        i=hdr.index(\"priority\")\n        [print(\"BAD priority \"+x[0]+\": \"+x[i]) for x in r[2:] if len(x)>i and x[i] not in (\"Critical\",\"Important\",\"Nice-to-have\")]\n' \"$f\"",
+      "pass": "no output: the `## Observations` table header carries all 22 AC-AFC-DX-04 columns (issue #1 Scribe contract, Devpost Product Feedback, Devpost Friction Log Entry), the `## Feature requests` table header carries ID, Tool, Description, Why it matters to this project and Priority, and every Priority value is Critical, Important or Nice-to-have",
+      "description": "Scribe log schema (AC-AFC-DX-04, DEC-AFC-SD-025; columns from evidence/devpost-feedback-rules.md and the issue #1 Scribe contract).",
+      "repository": "this (1wgrumph/amazon-fantasy-companion)",
+      "used_by": [
+        "S08"
+      ],
+      "tool_availability_2026_10_11": "yes (python3 standard library)"
     },
     {
       "id": "CMD-NO-MILESTONE",
@@ -1385,10 +1399,20 @@
       "Acceptance/risk ID": "AC-AFC-DX-02",
       "Design/contract ID": "DES-AFC-DX",
       "Boundary/test layer": "repository docs",
-      "Positive case": "docs/developer-feedback/observations.md carries DX-001..DX-007 and every Phase 1 observation, one row each with the issue #1 Scribe contract fields, and passes the hygiene rules",
-      "Negative/failure case": "a MISSING line, a path or credential finding, or a Phase 1 observation id absent from the log fails",
+      "Positive case": "docs/developer-feedback/observations.md carries DX-001..DX-007 and every Phase 1 observation, one complete row each (every cell a value, `n/a` or `unknown`), and passes the hygiene rules",
+      "Negative/failure case": "a MISSING, BAD row or EMPTY cell line, a path or credential finding, or a Phase 1 observation id absent from the log fails",
       "Command/procedure ID": "CMD-DX-COVERAGE",
       "Evidence": "CMD-DX-COVERAGE output + CMD-GATE-HYGIENE on the S08 PR"
+    },
+    {
+      "SEIT row ID": "SEIT-AFC-DX-04",
+      "Acceptance/risk ID": "AC-AFC-DX-04",
+      "Design/contract ID": "DES-AFC-DX",
+      "Boundary/test layer": "repository docs",
+      "Positive case": "The `## Observations` header carries every AC-AFC-DX-04 column and the `## Feature requests` header carries ID, Tool, Description, Why it matters to this project and Priority, with every Priority value Critical, Important or Nice-to-have",
+      "Negative/failure case": "a MISSING table, MISSING column or BAD priority line fails",
+      "Command/procedure ID": "CMD-DX-SCHEMA",
+      "Evidence": "CMD-DX-SCHEMA output on the S08 PR"
     },
     {
       "SEIT row ID": "SEIT-AFC-PLAN-01.I",
@@ -2420,11 +2444,12 @@
       "command_id": "CMD-DX-COVERAGE",
       "method": "inspection",
       "preconditions": [
-        "Lifecycle-local requirement AC-AFC-DX-02 from the technical plan; Requirements Engineer Phase 1 gate PASS (specialists/requirements-engineer-receipt-p1.md, round 2); planning inputs bound by sha256 in source_baseline",
-        "S09 merged (hygiene area and check_paths.py --files exist)"
+        "Lifecycle-local requirement AC-AFC-DX-02 (amended by DEC-AFC-SD-025) from the technical plan; Requirements Engineer gate PASS (specialists/requirements-engineer-receipt-sd025.md); planning inputs bound by sha256 in source_baseline",
+        "S09 merged (hygiene area and check_paths.py --files exist)",
+        "SEIT-AFC-DX-04 passes on the same candidate (the log has the AC-AFC-DX-04 tables)"
       ],
       "stimulus_or_procedure": "Run CMD-DX-COVERAGE on the exact candidate of S08 and capture its output with the candidate SHA.",
-      "expected_result": "docs/developer-feedback/observations.md carries DX-001..DX-007 and every Phase 1 observation, one row each with the issue #1 Scribe contract fields, and passes the hygiene rules",
+      "expected_result": "docs/developer-feedback/observations.md carries DX-001..DX-007 and every Phase 1 observation, one complete row each (every cell a value, `n/a` or `unknown`), and passes the hygiene rules",
       "observable_evidence": "CMD-DX-COVERAGE output + CMD-GATE-HYGIENE on the S08 PR",
       "pass_fail_rule": "PASS iff CMD-DX-COVERAGE's pass rule holds on the exact candidate and the expected result is observed in the evidence; FAIL when the negative case is observed; a missing tool, missing file, unreachable host or not_run outcome is a typed gap, never PASS",
       "method_fields": {
@@ -2432,7 +2457,30 @@
         "slice": "S08",
         "lane": "Scribe side lane (planning primary)"
       },
-      "negative_or_failure_case": "a MISSING line, a path or credential finding, or a Phase 1 observation id absent from the log fails",
+      "negative_or_failure_case": "a MISSING, BAD row or EMPTY cell line, a path or credential finding, or a Phase 1 observation id absent from the log fails",
+      "boundary_test_layer": "repository docs"
+    },
+    {
+      "id": "SEIT-AFC-DX-04",
+      "kind": "verification",
+      "requirement_id": "AC-AFC-DX-04",
+      "design_id": "DES-AFC-DX",
+      "command_id": "CMD-DX-SCHEMA",
+      "method": "inspection",
+      "preconditions": [
+        "Lifecycle-local requirement AC-AFC-DX-04 (new, DEC-AFC-SD-025) from the technical plan; Requirements Engineer gate PASS (specialists/requirements-engineer-receipt-sd025.md); planning inputs bound by sha256 in source_baseline",
+        "Column names fixed by design.md §DES-AFC-DX from evidence/devpost-feedback-rules.md"
+      ],
+      "stimulus_or_procedure": "Run CMD-DX-SCHEMA on the exact candidate of S08 and capture its output with the candidate SHA.",
+      "expected_result": "The `## Observations` header carries every AC-AFC-DX-04 column and the `## Feature requests` header carries ID, Tool, Description, Why it matters to this project and Priority, with every Priority value Critical, Important or Nice-to-have",
+      "observable_evidence": "CMD-DX-SCHEMA output on the S08 PR",
+      "pass_fail_rule": "PASS iff CMD-DX-SCHEMA's pass rule holds on the exact candidate and the expected result is observed in the evidence; FAIL when the negative case is observed; a missing tool, missing file, unreachable host or not_run outcome is a typed gap, never PASS",
+      "method_fields": {
+        "reverify": "Reverify: not applicable — Phase 1 changes are skill text, shell and Python scripts and workflow YAML; no compiled binary is built or claimed",
+        "slice": "S08",
+        "lane": "Scribe side lane (planning primary)"
+      },
+      "negative_or_failure_case": "a MISSING table, MISSING column or BAD priority line fails",
       "boundary_test_layer": "repository docs"
     },
     {
@@ -2976,7 +3024,7 @@
       "applies_to": [
         "S08"
       ],
-      "gate": "CMD-GATE-HYGIENE and CMD-DX-COVERAGE",
+      "gate": "CMD-GATE-HYGIENE, CMD-DX-COVERAGE and CMD-DX-SCHEMA",
       "red_then_green": {
         "status": "NOT_APPLICABLE",
         "reason": "documentation log, no executable code"
@@ -3177,10 +3225,11 @@
       "wave": "Wave 2",
       "order": 5,
       "merges": "S08 Scribe log (this) -> this.dx_log",
-      "pre_merge": "CMD-DX-COVERAGE, CMD-GATE-HYGIENE, CMD-PR-CHECKS; Reviewer with CMD-OCR-DELEGATE",
+      "pre_merge": "CMD-DX-COVERAGE, CMD-DX-SCHEMA, CMD-GATE-HYGIENE, CMD-PR-CHECKS; Reviewer with CMD-OCR-DELEGATE",
       "post_step_vv": "CMD-LANDING-CHECK, CMD-MERGE-IDENTITY, CMD-GATE-ALL on main",
       "rows": [
         "SEIT-AFC-DX-02",
+        "SEIT-AFC-DX-04",
         "SEIT-AFC-CI-02.P",
         "SEIT-AFC-LAND-01"
       ]

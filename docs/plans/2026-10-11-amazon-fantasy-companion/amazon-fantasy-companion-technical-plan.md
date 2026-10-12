@@ -4,7 +4,7 @@ status: amended
 lifecycle: AFC-2026-10-11
 title: "Amazon Fantasy Companion: architecture, program plan, milestones"
 plan_dir: docs/plans/2026-10-11-amazon-fantasy-companion/
-revision_note: "Phase 1 regeneration after the owner CHANGE at integrated review round 1 (DEC-AFC-SD-023, DEC-AFC-SD-024); replaces the 54-slice package at f885e48. OR-01 relabel: the spec track (register, SysML v2 models, D1, owner spec review) is Phase 1, steps ST-1..ST-5 (were P2-1..P2-5)."
+revision_note: "Phase 1 regeneration after the owner CHANGE at integrated review round 1 (DEC-AFC-SD-023, DEC-AFC-SD-024); replaces the 54-slice package at f885e48. OR-01 relabel: the spec track (register, SysML v2 models, D1, owner spec review) is Phase 1, steps ST-1..ST-5 (were P2-1..P2-5). DEC-AFC-SD-025: developer-feedback log schema follows the Devpost rules (AC-AFC-DX-02 amended, AC-AFC-DX-04 new)."
 ---
 
 # Amazon Fantasy Companion — Technical Plan (Phase 1)
@@ -29,7 +29,8 @@ planning. This package is **Phase 1**. When it is done:
   It has a vendored copy of the D5 tools, so public CI can build a
   specification. It has a Vnv guidance tree for the Phase 1 areas.
 - **Scribe developer-feedback log started** (issue #1 Scribe contract,
-  SD-011).
+  SD-011). From its first row it carries every field the Devpost rules ask
+  for (DEC-AFC-SD-025), so entries are captured as they happen.
 - **Phase 1 also runs the spec track (ST-1..ST-5), planned here as a
   sequence, not as slices.** It covers the requirements register
   (Requirements Engineer), the SysML v2 models (Systems Modeler: structure,
@@ -148,7 +149,8 @@ spec-track input (ST-3).
 | ID | Statement | Source | Verification | Allocation |
 |---|---|---|---|---|
 | AC-AFC-DX-01 | The program shall give every dispatch packet and every return in this Lifecycle a `developer_feedback` section that lists observations with IDs and evidence, or states "no new observations" and names the tools exercised. | #1 §Scribe contract | inspection | All Phase 1 slices; dispatch/return records and Scribe log |
-| AC-AFC-DX-02 *(amended)* | The repository shall contain the running observation log `docs/developer-feedback/observations.md`, one row per observation with the fields of the issue #1 Scribe contract, carrying DX-001..DX-007 and every Phase 1 observation, and passing the `hygiene` area. | #1 §Scribe contract, SD-011, DEC-AFC-SD-023 (log start in Phase 1; per-tool summary and friction log in Phase 2) | inspection | S08; developer-feedback log |
+| AC-AFC-DX-02 *(amended)* | The repository shall contain the running observation log `docs/developer-feedback/observations.md` with the AC-AFC-DX-04 tables, carrying DX-001..DX-007 and every Phase 1 observation as one row each in which every column holds a value, `n/a` or `unknown`, and passing the `hygiene` area. | #1 §Scribe contract, SD-011, DEC-AFC-SD-023 (log start in Phase 1; submission assembly in Phase 2), DEC-AFC-SD-025 | inspection | S08; developer-feedback log |
+| AC-AFC-DX-04 *(new)* | The observation log shall define an observations table whose header carries the issue #1 Scribe contract columns (ID, timestamp, reporting role, task or packet, tool/API/SDK, version, device/OS, evidence, classification), the Devpost Product Feedback columns (used for, what worked well, what needs work, onboarding from zero to hello world, would build again Yes/No and why, AWS services used and how) and the Devpost Friction Log Entry columns (task attempted, steps taken, expected result, actual result, severity rating, workaround used, actionable suggestion), and a feature-requests table whose header carries ID, tool, description, why it matters to this project and priority, with every priority value one of Critical, Important or Nice-to-have. | DEC-AFC-SD-025; Devpost rules and resources (evidence/devpost-feedback-rules.md, HTTP 200 on 2026-10-12); #1 §Scribe contract | inspection | S08; developer-feedback log |
 
 ### Program plan
 
@@ -346,7 +348,7 @@ non-binding input.
 | AC-AFC-SPIKE-01..02, SEC-01..04, LW-01 | Spikes SP-1..SP-7, product security controls, lightweight-device rules. | Product scope: spec-track register (ST-2); spike execution is Phase 2. Spike timing is re-planned against the remaining live windows (RISK-AFC-17). |
 | AC-AFC-SPEC-02, SPEC-03 | D1 build quality and the revision that records spike verdicts. | D1 is spec-track ST-4 (Phase 1); the spike-verdict revision follows the Phase 2 spikes. |
 | AC-AFC-PLAN-02 | D3 milestone creation and readback. | Milestones are created only after the Phase 2 plan is approved (P2-7). |
-| AC-AFC-DX-02 (per-tool summary and friction log parts), DX-03 | Sanitized per-tool summary and friction log. | They cover tools used through submission. Phase 1 starts the log only. |
+| AC-AFC-DX-02 (submission assembly), DX-03 | Submission-time assembly from the log: per-tool Product Feedback (tools, APIs and SDKs and what for; what worked well; what needs work; onboarding from zero to hello world; would build again Yes/No and why; AWS services used and how, for AWS Builder), optional Feature Requests (description, why it matters, priority Critical/Important/Nice-to-have) and sanitized Friction Log entries, which Stage 1 can reward with a bonus of up to 10% (evidence/devpost-feedback-rules.md). DX-03 checks them against the rules current at submission. | They cover tools used through submission. Phase 1 starts the log, with every field the rules ask for (AC-AFC-DX-04, DEC-AFC-SD-025). |
 | AC-AFC-SUB-01..04 | README, owner checklist, demo clips, voice claims. | Submission. |
 | AC-AFC-VIS-01 | On-device visual review of TV UI. | No UI exists in Phase 1. In Phase 2 its evidence path becomes `evidence/visual/` (DEC-AFC-SD-024). |
 | RISK-AFC-01..06, 09, 10, 14 | Device, notification, deep-link, panel mode, ESPN, Yahoo, AWS budget, identity-match and live-window risks. | Product risks; re-stated in the Phase 2 plan. |

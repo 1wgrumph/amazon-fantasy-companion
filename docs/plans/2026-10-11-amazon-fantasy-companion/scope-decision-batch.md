@@ -102,7 +102,7 @@ The workflow-authoring rules in SD-021 are: concurrency groups, path filters, st
   - DX-003: NFL docs require sign-in.
   - DX-004: Yahoo returned HTTP 429 to the retrieval tool.
 - **DX-005, documentation gap:** the Fire TV notifications page was last updated 2020-10-29, and Vega's `expo-notifications` supports scheduling only, with nothing documented about showing over another app's playback.
-- **DX-006, research-tool limitation:** WebFetch got HTTP 403 from amazonappdev2026.devpost.com, both the rules page and the overview. Cause unverified.
+- **DX-006, research-tool limitation:** WebFetch got HTTP 403 from amazonappdev2026.devpost.com, both the rules page and the overview. Cause unverified. Resolved 2026-10-12: `curl` fetched the rules and resources pages with HTTP 200, so the 403 came from WebFetch alone. The product-feedback and friction-log sections are recorded verbatim in `evidence/devpost-feedback-rules.md` (DEC-AFC-SD-025).
 - **DX-007, configuration issue:** `setup-pre-commit` is linked into the Claude, Codex, `.agents` and Cursor skill folders, but its `SKILL.md` is still an empty skill-creator template, so invoking it loads `[TODO]` placeholder text. D4 fixes this.
 - **Tools exercised:** `gh api`, `gh search code`, `gh repo view`, `gh issue list`, WebSearch, WebFetch (developer.amazon.com, aws.amazon.com, developers.cloudflare.com, docs.github.com, sports.yahoo.com, bgr.com), and read-only `ls`/`sed`/`grep`/`readlink`/`wc`.
 
