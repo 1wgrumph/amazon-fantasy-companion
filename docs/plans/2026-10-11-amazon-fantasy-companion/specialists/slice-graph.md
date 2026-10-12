@@ -107,7 +107,7 @@ S32 --> S37; S33 --> S37; S37 --> S38; S37 --> S39; S36 --> S40.
 
 | Needed by | Owner action |
 |---|---|
-| Planning landing | Integrated approval of this package (OD-AFC-01..06). |
+| Planning landing | Integrated approval of this package (OD-AFC-01..11, OA-AFC-A1..A2). |
 | S12 | Stick located, model confirmed, ADB debugging enabled, stick on the workstation's network. |
 | S14 | At least one provider app installed and signed in on the stick. |
 | S18 | AWS Free-plan account created; named CLI profile `afc-dev` configured on the workstation. |

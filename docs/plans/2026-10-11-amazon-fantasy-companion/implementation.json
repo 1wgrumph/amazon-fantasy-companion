@@ -15,7 +15,7 @@
     "planning_inputs": [
       {
         "path": "docs/plans/2026-10-11-amazon-fantasy-companion/amazon-fantasy-companion-technical-plan.md",
-        "sha256": "9bda1ff52d520302ec41da3dbf44d5d706d189110f52acb6babeb6e347f685bb",
+        "sha256": "f413d1bcebd134d2c569dca2fb4b702ea3efe8dcd9dedd9856e597f8128df3ce",
         "binding_status": "bound"
       },
       {
@@ -100,8 +100,9 @@
     "planning_review": {
       "policy_ref": "skills/bearing-lite/references/review-policy.md",
       "candidate_ref": "plan/2026-10-11-amazon-fantasy-companion",
-      "candidate_revision": "2c13a6bf560e87d11864cc6234f48e40dd9cf529",
-      "candidate_digest": "87fa24334fda312e61582c169cfe9b3c205f989ff30cd6edc7017bf4a9ee78f3",
+      "candidate_revision": "4afc998ed2fd4a19a28fdfb9d7f815452a60cce5",
+      "repair_revision": "recorded by the Orchestrator in journey.json after the repair commit",
+      "candidate_digest": "2300046ae30b2b9afdceccd1384983f30c0a4840060008635a0990635dcb9621",
       "candidate_digest_source": "node <bearing-lite>/hooks/plan-package.cjs manifest_digest over seit.json planning_inputs plus seit.json",
       "reviewer_slots": [
         {
@@ -5288,7 +5289,12 @@
         "CMD-MUTATION-ANDROID"
       ],
       "stop_condition": "Green on JVM and on the stick.",
-      "human_decision": null,
+      "human_decision": {
+        "owner_actions": [],
+        "open_decisions": [
+          "OD-AFC-11"
+        ]
+      },
       "authority_id": "AUTH-AFC-2026-10-11-001",
       "work_class": "judgement",
       "work_class_reason": "Product code authoring against frozen contracts; implementation choices are made in-session.",
@@ -5554,7 +5560,8 @@
       "human_decision": {
         "owner_actions": [],
         "open_decisions": [
-          "OA-AFC-A1"
+          "OA-AFC-A1",
+          "OD-AFC-11"
         ]
       },
       "authority_id": "AUTH-AFC-2026-10-11-001",
@@ -5829,7 +5836,8 @@
       "human_decision": {
         "owner_actions": [],
         "open_decisions": [
-          "OA-AFC-A1"
+          "OA-AFC-A1",
+          "OD-AFC-11"
         ]
       },
       "authority_id": "AUTH-AFC-2026-10-11-001",
@@ -6478,7 +6486,8 @@
       "human_decision": {
         "owner_actions": [],
         "open_decisions": [
-          "OA-AFC-A1"
+          "OA-AFC-A1",
+          "OD-AFC-11"
         ]
       },
       "authority_id": "AUTH-AFC-2026-10-11-001",
@@ -6732,7 +6741,8 @@
       "human_decision": {
         "owner_actions": [],
         "open_decisions": [
-          "OA-AFC-A1"
+          "OA-AFC-A1",
+          "OD-AFC-11"
         ]
       },
       "authority_id": "AUTH-AFC-2026-10-11-001",
@@ -8859,7 +8869,7 @@
       "aws": {
         "stack_name": "afc-dev",
         "aws_profile_name": "afc-dev",
-        "template_digest": "sha256 of backend/template.yaml at the deployed SHA (CMD-TEMPLATE-DIGEST)",
+        "template_digest": "stack tags SourceCommit (= deployed commit) and TemplateSha256 (= sha256 of backend/template.yaml at that commit), read by CMD-TEMPLATE-DIGEST",
         "parameters": [
           "ReplayMode"
         ],
@@ -10720,7 +10730,7 @@
     "owner_action_entry_criteria": [
       {
         "needed_by": "Planning landing",
-        "owner_action": "Integrated approval of this package (OD-AFC-01..06)."
+        "owner_action": "Integrated approval of this package (OD-AFC-01..11, OA-AFC-A1..A2)."
       },
       {
         "needed_by": "S12",
@@ -10773,7 +10783,7 @@
     {
       "id": "OD-AFC-01",
       "decision": "D4 form: extensions of existing shared skills only (SD-018), or extensions plus one thin shared entry-point skill (owner's latest words \"Just create the shared skill please\").",
-      "recommendation": "**A — extensions only.** `setup-pre-commit` becomes the shared CI/CD gate skill and is already linked into every harness; a second entry-point skill would only route to the three extended skills and duplicate their trigger surface, which C10 forbids. If \"the shared skill\" meant one new named skill, option B costs one light slice (S41, `skills/ci-cd/SKILL.md`, a router under 25 lines) and changes nothing else.",
+      "recommendation": "**A — extensions only.** `setup-pre-commit` becomes the shared CI/CD gate skill and is already linked into every harness; a second entry-point skill would only route to the three extended skills and duplicate their trigger surface, which C10 forbids. If \"the shared skill\" meant one new named skill, option B costs one judgement slice (S41, `skills/ci-cd/SKILL.md`, a router under 25 lines) and changes nothing else.",
       "source": "technical plan §Open owner decisions for the integrated review",
       "status": "open_for_integrated_review"
     },
@@ -10839,6 +10849,20 @@
       "recommendation": "No. Record `REFUSED_NO_VNV` as a non-pass gate row in the PR (C12) and let the repository's own required checks decide the merge; blocking would stop merges in every repository the owner touches (SD-019) until each gains a tree. This repository has a tree (SD-014), so its merges always run `vnv-review`.",
       "source": "technical plan §Open owner decisions for the integrated review",
       "status": "open_for_integrated_review"
+    },
+    {
+      "id": "OD-AFC-11",
+      "source": "Test Engineer finding TE-F05 (seit.json planning_findings_for_plan_integrator); planning review R1 FR-04",
+      "status": "open_for_integrated_review",
+      "decision": "Visual review evidence store (TE-F05, AC-AFC-VIS-01): where do the on-stick screenshots and UI dumps from S25, S26, S27, S31, S32 and PROC-VISUAL-REVIEW live? Option 1: commit them under `docs/evidence/visual/<slice>/` and add that path to the S25, S26, S27, S31 and S32 write sets (inside authority `docs/evidence/**`). Option 2: an untracked Lifecycle evidence directory recorded in `journey.json` `execution_receipts` as `<review_evidence_dir>`.",
+      "recommendation": "Owner's choice; the Planning node does not pick. The Test Engineer named both options without preferring one (`specialists/test-engineer-receipt.md` TE-F05). Option 1 puts the evidence in the public repository, so every screenshot needs a no-customer-data check before commit; option 2 keeps it out of the repository and matches the current SEIT `evidence_path` form (`<review_evidence_dir>/<slice>/`). Choosing 1 adds the path to the five write sets and rewrites those SEIT evidence paths before dispatch.",
+      "affects": [
+        "S25",
+        "S26",
+        "S27",
+        "S31",
+        "S32"
+      ]
     },
     {
       "id": "OA-AFC-A1",
@@ -10910,7 +10934,7 @@
     "state": "planning",
     "title": "Amazon Fantasy Companion — Definition of Done Manifest (AFC-2026-10-11)",
     "lede": "Planning projection of implementation.json for the single integrated owner review. The five planning artifacts remain authoritative.",
-    "bluf": "54 slices in 5 waves (M1..M5, deadline 2026-10-23T19:00:00Z) across five lanes on frozen profiles; 81 Lifecycle-local requirement rows traced to 126 SEIT proof cases; S34 and S41 are conditional; 12 open owner items (OD-AFC-01..10, OA-AFC-A1..A2) await the integrated review.",
+    "bluf": "54 slices in 5 waves (M1..M5, deadline 2026-10-23T19:00:00Z) across five lanes on frozen profiles; 81 Lifecycle-local requirement rows traced to 126 SEIT proof cases; S34 and S41 are conditional; 13 open owner items (OD-AFC-01..11, OA-AFC-A1..A2) await the integrated review.",
     "identity": [
       {
         "label": "Lifecycle",
@@ -10930,7 +10954,7 @@
       },
       {
         "label": "Candidate digest",
-        "value": "87fa24334fda312e61582c169cfe9b3c205f989ff30cd6edc7017bf4a9ee78f3"
+        "value": "2300046ae30b2b9afdceccd1384983f30c0a4840060008635a0990635dcb9621"
       },
       {
         "label": "Authority",
@@ -10938,7 +10962,7 @@
       },
       {
         "label": "Input amazon-fantasy-companion-technical-plan.md",
-        "value": "9bda1ff52d520302ec41da3dbf44d5d706d189110f52acb6babeb6e347f685bb"
+        "value": "f413d1bcebd134d2c569dca2fb4b702ea3efe8dcd9dedd9856e597f8128df3ce"
       },
       {
         "label": "Input design.md",
@@ -10950,7 +10974,7 @@
       },
       {
         "label": "seit.json",
-        "value": "cae54c15641549606b449da2a6bd396d592d11e096f0002d4487553789cc30d3"
+        "value": "bd3b4f0bd4cc1dced3c58ffe4d8cf3686a698001d31b87b8eedbdf414232f91a"
       },
       {
         "label": "Profile primary digest",
@@ -11894,7 +11918,7 @@
         "id": "AC-AFC-SUB-03",
         "statement": "The demo material shall consist of clips recorded from the device for the storyboard segments of #1, with every replay segment labeled as replay and every Mode A segment labeled as sample footage.",
         "source": "#1 §Proposed video storyboard, C2, SD-006a",
-        "verification": "inspection",
+        "verification": "demonstration",
         "allocation": "M5; device clips and storyboard/clip index",
         "ownership": "Lifecycle-local",
         "seit_rows": 1,
@@ -13894,16 +13918,16 @@
       {
         "id": "TE-F05",
         "risk": "No write set stores UI screenshots and dumps (AC-AFC-VIS-01).",
-        "control": "Needs a Planning-node or owner choice: untracked Lifecycle evidence dir or docs/evidence/visual/<slice>/ in UI slice write sets.",
+        "control": "Presented to the owner as OD-AFC-11 (planning review R1 FR-04): untracked Lifecycle evidence dir or docs/evidence/visual/<slice>/ in UI slice write sets.",
         "recovery": "Visual review evidence otherwise has no committed home.",
-        "status": "open"
+        "status": "open (owner decision OD-AFC-11)"
       },
       {
         "id": "TE-F07",
         "risk": "integration_plan configuration_identity still names the IE source-file template digest; SEIT uses stack tags.",
-        "control": "S18 packet carries the tag form; integration plan copy is mechanical and unchanged.",
+        "control": "Planning delta R1 (FR-07) reworded integration_plan.configuration_identity.aws.template_digest to the stack-tag form (SourceCommit, TemplateSha256) that CMD-TEMPLATE-DIGEST reads; the S18 packet carries the same form.",
         "recovery": "IE planning delta or Planning-node note.",
-        "status": "open"
+        "status": "closed (planning delta R1)"
       },
       {
         "id": "TE-F08",
@@ -14006,6 +14030,12 @@
         "status": "open"
       },
       {
+        "event": "OD-AFC-11: Visual review evidence store (TE-F05, AC-AFC-VIS-01): where do the on-stick screenshots and UI dumps from S25, S26, S27, S31, S32 and PROC-VISUAL-REVIEW live? …",
+        "owner": "William Rumph",
+        "evidence": "Recommendation: Owner's choice; the Planning node does not pick. The Test Engineer named both options without preferring one (`specialists/test-engineer-receipt.md` TE-F05). Option 1 puts the evidence in the public repository, so every screenshot needs a no-customer-data che…",
+        "status": "open"
+      },
+      {
         "event": "OA-AFC-A1: The tv-app-ui lane runs on Codex (frontend profile implementer: Codex CLI / GPT-6 Astra / high), so frontend-design must be named by absolute SKILL.md path, no…",
         "owner": "William Rumph",
         "evidence": "Recommendation: Approve; the dispatcher re-resolves the installed version at dispatch time if the plugin updates.",
@@ -14020,7 +14050,7 @@
       {
         "event": "Owner entry action for Planning landing",
         "owner": "William Rumph",
-        "evidence": "Integrated approval of this package (OD-AFC-01..06).",
+        "evidence": "Integrated approval of this package (OD-AFC-01..11, OA-AFC-A1..A2).",
         "status": "pending"
       },
       {

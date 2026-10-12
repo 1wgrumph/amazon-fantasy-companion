@@ -673,7 +673,7 @@
         <section class="block" id="s1" aria-labelledby="h-s1">
           <h2 id="h-s1"><span class="secno">1</span>BLUF and Lifecycle state</h2>
           <div class="bluf">
-            <p><strong>54 slices in 5 waves (M1..M5, deadline 2026-10-23T19:00:00Z) across five lanes on frozen profiles; 81 Lifecycle-local requirement rows traced to 126 SEIT proof cases; S34 and S41 are conditional; 12 open owner items (OD-AFC-01..10, OA-AFC-A1..A2) await the integrated review.</strong></p>
+            <p><strong>54 slices in 5 waves (M1..M5, deadline 2026-10-23T19:00:00Z) across five lanes on frozen profiles; 81 Lifecycle-local requirement rows traced to 126 SEIT proof cases; S34 and S41 are conditional; 13 open owner items (OD-AFC-01..11, OA-AFC-A1..A2) await the integrated review.</strong></p>
             <p><strong>Lifecycle state.</strong> <span class="status status-plan"><span class="mark" aria-hidden="true"></span>planning</span></p>
             <p>This manifest compares authorized intent with planned work, evidence, and gaps. It does not grant execution, acceptance, release, or deployment.</p>
           <ul class="legend status-key" aria-label="Status key">
@@ -698,17 +698,17 @@
             <dt>Candidate ref</dt>
             <dd><code>plan/2026-10-11-amazon-fantasy-companion</code></dd>
             <dt>Candidate digest</dt>
-            <dd><code>87fa24334fda312e61582c169cfe9b3c205f989ff30cd6edc7017bf4a9ee78f3</code></dd>
+            <dd><code>2300046ae30b2b9afdceccd1384983f30c0a4840060008635a0990635dcb9621</code></dd>
             <dt>Authority</dt>
             <dd><code>AUTH-AFC-2026-10-11-001 (proposed, effective false)</code></dd>
             <dt>Input amazon-fantasy-companion-technical-plan.md</dt>
-            <dd><code>9bda1ff52d520302ec41da3dbf44d5d706d189110f52acb6babeb6e347f685bb</code></dd>
+            <dd><code>f413d1bcebd134d2c569dca2fb4b702ea3efe8dcd9dedd9856e597f8128df3ce</code></dd>
             <dt>Input design.md</dt>
             <dd><code>d83150f7f41274f5d0a18d074d6e4ef3fb428de2e74555d8b471aba60d118418</code></dd>
             <dt>Input views.json</dt>
             <dd><code>965a8b8c4821238387fed209969b9d6fb8ff7369f41484967e527719ace4130d</code></dd>
             <dt>seit.json</dt>
-            <dd><code>cae54c15641549606b449da2a6bd396d592d11e096f0002d4487553789cc30d3</code></dd>
+            <dd><code>bd3b4f0bd4cc1dced3c58ffe4d8cf3686a698001d31b87b8eedbdf414232f91a</code></dd>
             <dt>Profile primary digest</dt>
             <dd><code>b81a141be5b9d83cbecbb34df460b0f25929c2ae0df165f16ff529acfc50bafa</code></dd>
             <dt>Profile frontend digest</dt>
@@ -3354,18 +3354,18 @@
                 <tr class="row-hold">
                   <th scope="row" class="id">TE-F05</th>
                   <td>No write set stores UI screenshots and dumps (AC-AFC-VIS-01).</td>
-                  <td>Needs a Planning-node or owner choice: untracked Lifecycle evidence dir or docs/evidence/visual/&lt;slice&gt;/ in UI slice write sets.</td>
+                  <td>Presented to the owner as OD-AFC-11 (planning review R1 FR-04): untracked Lifecycle evidence dir or docs/evidence/visual/&lt;slice&gt;/ in UI slice write sets.</td>
                   <td>Visual review evidence otherwise has no committed home.</td>
-                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>open</span></td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>open (owner decision OD-AFC-11)</span></td>
                   <td>—</td>
                   <td>—</td>
                 </tr>
-                <tr class="row-hold">
+                <tr class="row-plan">
                   <th scope="row" class="id">TE-F07</th>
                   <td>integration_plan configuration_identity still names the IE source-file template digest; SEIT uses stack tags.</td>
-                  <td>S18 packet carries the tag form; integration plan copy is mechanical and unchanged.</td>
+                  <td>Planning delta R1 (FR-07) reworded integration_plan.configuration_identity.aws.template_digest to the stack-tag form (SourceCommit, TemplateSha256) that CMD-TEMPLATE-DIGEST reads; the S18 packet carries the same form.</td>
                   <td>IE planning delta or Planning-node note.</td>
-                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>open</span></td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>closed (planning delta R1)</span></td>
                   <td>—</td>
                   <td>—</td>
                 </tr>
@@ -3493,6 +3493,12 @@
                   <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>open</span></td>
                 </tr>
                 <tr class="row-hold">
+                  <th scope="row" class="id">OD-AFC-11: Visual review evidence store (TE-F05, AC-AFC-VIS-01): where do the on-stick screenshots and UI dumps from S25, S26, S27, S31, S32 and PROC-VISUAL-REVIEW live? …</th>
+                  <td>William Rumph</td>
+                  <td>Recommendation: Owner&#39;s choice; the Planning node does not pick. The Test Engineer named both options without preferring one (`specialists/test-engineer-receipt.md` TE-F05). Option 1 puts the evidence in the public repository, so every screenshot needs a no-customer-data che…</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>open</span></td>
+                </tr>
+                <tr class="row-hold">
                   <th scope="row" class="id">OA-AFC-A1: The tv-app-ui lane runs on Codex (frontend profile implementer: Codex CLI / GPT-6 Astra / high), so frontend-design must be named by absolute SKILL.md path, no…</th>
                   <td>William Rumph</td>
                   <td>Recommendation: Approve; the dispatcher re-resolves the installed version at dispatch time if the plugin updates.</td>
@@ -3507,7 +3513,7 @@
                 <tr class="row-hold">
                   <th scope="row" class="id">Owner entry action for Planning landing</th>
                   <td>William Rumph</td>
-                  <td>Integrated approval of this package (OD-AFC-01..06).</td>
+                  <td>Integrated approval of this package (OD-AFC-01..11, OA-AFC-A1..A2).</td>
                   <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>pending</span></td>
                 </tr>
                 <tr class="row-hold">
