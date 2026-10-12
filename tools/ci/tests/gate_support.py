@@ -8,7 +8,9 @@ import contextlib
 import importlib.util
 import io
 import os
+import runpy
 import shutil
+import sys
 import subprocess
 from pathlib import Path
 
@@ -36,6 +38,21 @@ def call_main(module, argv, cwd):
         except SystemExit as exc:
             rc = exc.code
     return rc, out.getvalue() + err.getvalue()
+
+
+def run_as_script(name, argv, cwd):
+    """Run tools/ci/<name>.py as __main__ in-process so coverage sees it; return its exit code."""
+    path = REPO / 'tools' / 'ci' / f'{name}.py'
+    saved = sys.argv
+    sys.argv = [str(path), *argv]
+    try:
+        with contextlib.chdir(cwd), contextlib.redirect_stdout(io.StringIO()):
+            runpy.run_path(str(path), run_name='__main__')
+    except SystemExit as exc:
+        return exc.code
+    finally:
+        sys.argv = saved
+    return None
 
 
 def git(cwd, *args):
