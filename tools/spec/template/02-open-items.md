@@ -4,16 +4,7 @@ requirements: []
 
 ## 2 Open Items
 
-**BLUF:** <One assertive sentence: the decisions and questions still open.>
-
-**Frame**
-
-- **Who:** <The actor this section concerns.>
-- **What:** <The subject or feature.>
-- **Why:** <The intent.>
-- **How:** <The mechanism.>
-- **When:** <The time, phase, or trigger.>
-- **Where:** <The location, component, or boundary.>
+<One assertive sentence: the decisions and questions still open.>
 
 <Prose with no word limit: the decisions and questions still open. Bind at most 5 requirements in the front
 matter. Add one captioned table (T1-T8) when 3 or more items share 2 or more
