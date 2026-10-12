@@ -23,7 +23,7 @@
     "intake": "accepted",
     "architectural_alignment": "accepted",
     "scope_definition": "accepted",
-    "planning_and_design": "plan_review_ready"
+    "planning_and_design": "regenerating_for_owner_change"
   },
   "decisions": [
     {
@@ -209,6 +209,20 @@
       "decided_at": "2026-10-11T20:43:37Z",
       "decision": "Spec authoring becomes a shared, repo-agnostic skill (deliverable D5), generalized from the GridMarket spec kit (template, build, lint, diagram tooling) and installed like the other shared skills; nothing GridMarket-specific. D1 product spec is written with that skill after integrated approval. Supersedes SD-013 (copy GridMarket kit).",
       "source": "Owner: 'Gridmarket spec kit shouldn't be gridmarket specific and needed to be a shared skill on how to create specs'"
+    },
+    {
+      "id": "DEC-AFC-SD-023",
+      "status": "confirmed",
+      "decided_at": "2026-10-12T00:24:27Z",
+      "decision": "Restructure: Phase 1 = D5 shared spec-authoring skill, D4 shared CI/CD skill extensions + harness hooks, then D1 product specification with a real requirements register (Requirements Engineer) and SysML v2 models (Systems Modeler: structure, interfaces, states, data); owner reviews the spec. Phase 2 = implementation planning derived from the approved spec; full-detail GitHub milestones (D3) created only after the Phase 2 plan is approved. The 54-slice implementation plan at f885e48 is not approved.",
+      "source": "Owner at integrated review: 'shouldn't the milestone should have been creating after planning again? ... we actually write the spec first then we can actually plan implementation. Like do we even have models and requirements?'; owner chose 'D4 in Phase 1'"
+    },
+    {
+      "id": "DEC-AFC-SD-024",
+      "status": "confirmed",
+      "decided_at": "2026-10-12T00:24:27Z",
+      "decision": "Visual-review screenshots are committed under top-level evidence/visual/ (not docs/); no account or customer data in captures. Resolves OD-AFC-11.",
+      "source": "Owner: 'screen shots isn't docs'; chose 'evidence/visual/ (committed)'"
     }
   ],
   "open_decisions": [],
@@ -2063,5 +2077,15 @@
       "deterministic_gate": "plan-package.cjs PASS, findings []",
       "receipt": "specialists/pd-delta-r1-receipt.md"
     }
+  },
+  "integrated_review": {
+    "round": 1,
+    "presented_candidate": "f885e48 (manifest 2300046a...)",
+    "outcome": "CHANGE_REQUESTED",
+    "decided_by": [
+      "DEC-AFC-SD-023",
+      "DEC-AFC-SD-024"
+    ],
+    "at": "2026-10-12T00:24:27Z"
   }
 }

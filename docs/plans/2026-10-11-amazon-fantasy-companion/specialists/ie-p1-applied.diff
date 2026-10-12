@@ -1,0 +1,186 @@
+--- /tmp/afc-ie1/amazon-fantasy-companion-technical-plan.md	2026-10-11 19:44:54.311039852 -0500
++++ amazon-fantasy-companion-technical-plan.md	2026-10-11 19:45:32.469348193 -0500
+@@ -192,9 +192,13 @@
+ 
+ ## Program plan — Phase 1 waves
+ 
+-Times are UTC. Phase 1 is one phase. The Reviewer cadence is `phase`: one
+-review per Phase 1 pull request at the phase boundary, at most one repair,
+-then the deterministic gate. Ready, independent work is dispatched at
++Times are UTC. Phase 1 is one phase. The Reviewer cadence is `phase`.
++Phase 1's review boundaries are its integration steps IE-P1-1..IE-P1-11
++(`specialists/integration-plan.md`). Each Phase 1 pull request is
++reviewed once at its own integration step, after its slice reaches its
++stop condition. It then gets at most one repair and the deterministic gate
++before it merges. The Reviewer packet declares that step as the cadence
++boundary (IE-P1-F01; owner item OA-AFC-A3). Ready, independent work is dispatched at
+ once. Work is serialized only on a dependency, a shared interface, a
+ write-set overlap, a shared mutable resource, or impl_agent_cap.
+ 
+@@ -204,7 +208,7 @@
+ |---|---|
+ | `alphazedehq-skills/<skill>` | One Alphazedehq skill directory per slice. |
+ | `harness-configs` | The harness configurations. |
+-| `alphazedehq-main-checkout` | The Alphazedehq main checkout that every harness skill link resolves to. Fast-forward only, between dispatches; HEAD is recorded in each later packet. |
++| `alphazedehq-main-checkout` | The Alphazedehq main checkout that every harness skill link resolves to. It is a reader-writer lease: S06L, S42 and the IE-P1-10 live install read it; the Orchestrator's fast-forward takes it exclusively, only when no reader holds it and no pull request is being opened or landed. HEAD is recorded in each later packet (IE-P1-F02). |
+ 
+ The slice table, dependencies and write sets are in
+ `specialists/slice-graph.md` and, after integration, `implementation.json`.
+@@ -229,7 +233,7 @@
+ | Wave | Slices | Dispatch order and serialization |
+ |---|---|---|
+ | Wave 1 | S01 S02 S03 S06 S07 | All five at approval. They touch disjoint skill directories (`alphazedehq-skills/<skill>` leases; S06 also holds `use-requirements-system`) and `docs/vnv/` in this repository. |
+-| Wave 2 | S06L S42 S09T S09 S11T S11 S41 S08 | S06L and S42 after S06 merges (S06L holds `harness-configs` and `alphazedehq-main-checkout`). S09T after S01, S02 and S42 merge. S09 after S09T and S07. S11T after S01..S03 merge (C13). S11 after S11T, S09 and S06, and holds `harness-configs`, so it waits for S06L. S41 only if OD-AFC-01 = B. S08 (Scribe, not counted) commits the log after S09 so the hygiene area checks it. Scribe observations accumulate from Wave 1 dispatch onward. |
++| Wave 2 | S06L S42 S09T S09 S11T S11 S41 S08 | S06L and S42 after S06 merges (S06L holds `harness-configs` and `alphazedehq-main-checkout`). S09T after S01, S02 and S42 merge. S09 after S09T and S07. S11T after S01..S03 merge (C13). S11 after S11T, S09, S06 and S06L (and S41 when OD-AFC-01 = B, so the new skill is linked into Muse; IE-P1-F05), and holds `harness-configs`. Its live install runs at IE-P1-10 from the Alphazedehq main checkout after merge (IE-P1-F04). S41 only if OD-AFC-01 = B. S08 (Scribe, not counted) commits the log after S09 merges and S11 and S41 have returned, so it carries every Phase 1 observation and the hygiene area checks it (IE-P1-F06). Scribe observations accumulate from Wave 1 dispatch onward. |
+ 
+ ```mermaid
+ flowchart LR
+@@ -248,6 +252,8 @@
+   S09 --> S11
+   S06 --> S11
+   S06L --> S11
++  S11 --> S08
++  S41 -. OD-AFC-01=B .-> S11
+   S01 --> S41[S41 thin entry skill, OD-AFC-01=B]
+   S02 --> S41
+   S03 --> S41
+@@ -348,8 +354,12 @@
+ 1. Every Phase 1 AC-AFC row has passing evidence named by its SEIT row, or
+    a recorded typed gap (RISK-AFC-12) shown to the owner.
+ 2. Every D4 and D5 pull request is merged in Alphazedehq by rebase or merge
+-   commit. This repository's gate pull request is merged with the
+-   `gate / spec`, `gate / docs` and `gate / hygiene` checks green.
++   commit. Alphazedehq's CI path filters do not run the D4/D5 suites. So
++   each D4/D5 merge commit also carries a local rerun receipt of its suite
++   (CMD-AZHQ-SKILL-TESTS), and the Phase 1 closeout reruns every suite at
++   the final Alphazedehq commit (IE-P1-F09). This repository's gate pull
++   request is merged with the `gate / spec`, `gate / docs` and
++   `gate / hygiene` checks green.
+ 3. Each Phase 1 pull request is reviewed once (OCR included), repaired at
+    most once, verified deterministically and landed.
+ 4. The Phase 2 entry receipt (AC-AFC-PLAN-03) is recorded. The Assurance
+@@ -388,6 +398,7 @@
+ | OD-AFC-09 | Vendor the D5 scripts into this repository's `tools/spec/` so public CI can run the `spec` area, given that Alphazedehq is private (S42). | Yes. The scripts derive from public MIT code. SD-011 already makes this repository public. The MIT notice travels in `VENDORED.md` and `THIRD_PARTY_NOTICES.md`. |
+ | OD-AFC-10 | In a repository without a Vnv guidance tree, does `ship-pull-request`'s `REFUSED_NO_VNV` block the merge? | No. Record it as a non-pass gate row (C12) and let the repository's required checks decide. Blocking would stop merges in every repository the owner touches (SD-019). This repository has a tree, so it always runs `vnv-review`. |
+ | OA-AFC-A2 | Lane for the D4/D5 skill-authoring slices (S01, S02, S03, S06). **A:** spec-and-docs = tech-writing profile (single_implementer; Reviewer with OCR still applies). **B:** keep SKILL.md and references text on tech-writing, and move the executable parts (gate template, hook installer, workflow checker, D5 scripts) to the primary profile with tdd. | **A** for the schedule. B's risk stays visible: the executable shared tooling gets no Assurance Test Engineer pass, only the Reviewer and the scripts' own tests. Phase 1 has more slack than f885e48 had, so B is now affordable: it costs about one day and a slice-graph/SEIT regeneration. |
++| OA-AFC-A3 *(new)* | Review cadence boundary in Phase 1 (IE-P1-F01). The frozen profiles say Reviewer cadence `phase`, and Phase 1 is one phase. Wave 2 needs Wave 1 pull requests merged, and merging needs the review. So a single end-of-phase review deadlocks. **A:** keep `cadence: phase` and treat each integration step IE-P1-1..IE-P1-11 as Phase 1's review boundary, so each pull request is reviewed once at its own step. **B:** an owner amendment of the frozen cadence to `slice` for Phase 1. | **A.** The review count is the same as one review per pull request at phase end (13 or fewer), only earlier, and the frozen profile is unchanged. If the owner reads A as a cadence change, B records it explicitly; nothing else in the plan changes. |
+ | OD-AFC-12 *(new)* | Phase 2 register form (P2-2): draft `.sdoc` in the Phase 2 plan directory, bound to the packaged-default Requirements System host for review readback (artifact grammar rule 7 and the specification-wave default), or a Markdown register only. | `.sdoc` bound to the local Requirements System host. The grammar requires an `.sdoc` register for a specification Lifecycle, and the host is local dev/test, so running it is agent work (cross-repo rule 14). D1 stays a Markdown specification built by D5 and cites the register UIDs. Needed before P2-2 starts, not before Phase 1 execution. |
+ 
+ Closed since f885e48: OD-AFC-11 (DEC-AFC-SD-024). Phase 2-only items
+--- /tmp/afc-ie1/design.md	2026-10-11 19:44:54.311134273 -0500
++++ design.md	2026-10-11 19:45:21.981851684 -0500
+@@ -109,7 +109,7 @@
+ | `agents/openai.yaml` | Default agent metadata (create-lean-skill step 5). |
+ | `references/section-rules.md` | Section grammar (front matter `requirements:` ≤ 5, BLUF, Frame, T1–T8 tables, F1–F8 figures), COE-ASA-001 floor subsections. |
+ | `references/figures.md` | azdiagram classes F1–F8, YAML input shapes, render and lint. |
+-| `references/vendoring.md` | When a repository's CI cannot reach the shared skill (private skill, public repository): copy `scripts/` to `<repo>/tools/spec/` with `scripts/vendor.sh`, which writes `VENDORED.md` (source commit, MIT notice). |
++| `references/vendoring.md` | When a repository's CI cannot reach the shared skill (private skill, public repository): copy `scripts/` and `template/` to `<repo>/tools/spec/` with `scripts/vendor.sh`, which writes `VENDORED.md` (source commit, skill tree id, MIT notice) (IE-P1-F03). |
+ | `template/` | GridMarket `spec/template/` with project names removed (`spec.yaml` placeholders, no GridMarket identifiers). |
+ | `scripts/spec_build.py`, `scripts/spec_lint.py`, `scripts/diagram.py`, `scripts/azdiagram/` | GridMarket tools with PEP 723 inline metadata (`requires-python >= 3.11`, `dependencies = ["pyyaml"]`), run as `uv run --script`; no `--project` flag, no repository-specific paths. |
+ | `scripts/vendor.sh` | Vendor step above. |
+@@ -281,20 +281,33 @@
+   - `alphazedehq-skills/<skill>`: no two slices edit the same skill
+     directory.
+   - `harness-configs`: S06L, S11.
+-  - `alphazedehq-main-checkout`: fast-forward only, between dispatches;
+-    HEAD is recorded in each later packet.
++  - `alphazedehq-main-checkout`: a reader-writer lease (IE-P1-F02).
++    - Slices that read skills from the checkout (S06L, S42) and the
++      IE-P1-10 live install hold a shared read lease.
++    - The Orchestrator's fast-forward (CMD-AZHQ-SYNC) takes it
++      exclusively. It runs only when no read lease is held and no session
++      of this Lifecycle is opening or landing a pull request.
++    - Each sync records the HEAD before and after it and the sessions
++      running at that moment. The HEAD is recorded in each later packet.
+ - impl_agent_cap: at most 5 concurrent Implementer, Test Implementer, Light
+   Implementer and repair sessions per orchestrating session. Reviewer,
+   Scribe, Test Engineer and Integration Engineer sessions do not count.
+ - Landing:
+   - Alphazedehq: one pull request per sub-change (D4-A, D4-B, D4-C, D5,
+     D4-E, and D4-F if chosen), under that repository's own gates.
+-  - This repository: one pull request each for S07, S42, S09 (tests and
+-    gate) and S08.
+-  - Every pull request is reviewed once at the Phase 1 boundary, on the
+-    lane profile's reviewer route, with OCR delegate mode and
+-    `Reverify: not applicable` (AC-AFC-REV-01). It gets at most one repair
+-    and a green gate, then merges by rebase or merge commit.
++  - This repository: one pull request each for S07, S06L (link readback
++    evidence), S42, S09 (tests and gate) and S08 (IE-P1-F07).
++  - Every pull request is reviewed once at its integration step (the
++    Phase 1 review boundary unit), on the lane profile's reviewer route,
++    with OCR delegate mode and `Reverify: not applicable` (AC-AFC-REV-01).
++    It gets at most one repair and a green gate, then merges by merge
++    commit (IE-P1-F01; owner item OA-AFC-A3).
++  - This repository is private until the owner flips visibility. A private
++    GitHub Free repository has no rulesets or branch protection, so the
++    Orchestrator enforces PR-only `main` and green `gate / <area>` checks:
++    CMD-PR-CHECKS runs before every merge, and nothing is pushed directly
++    to `main`. Its Actions runs count against gh_private_minutes
++    (RISK-AFC-08; IE-P1-F10).
+ - Lenses: Parallel-safe CI, Owner boundary.
+ 
+ ### DES-AFC-PHASE2 — Phase 2 sequence
+@@ -354,9 +367,18 @@
+   `uv run --script <kit>/diagram.py lint <spec dir>` (`diagram.py` is a PEP 723
+   wrapper that puts its own directory on `sys.path` and runs `azdiagram`) — SVG plus draw.io from one layout; lint exit 1 on
+   overlap or size overflow; exit 3 when Graphviz `dot` is missing.
+-- `<skill>/scripts/vendor.sh <repo root>` — copies the scripts to
+-  `<repo root>/tools/spec/` and writes `VENDORED.md` (source repository,
+-  commit, MIT notice); refuses to overwrite a modified vendored copy.
++- `<skill>/scripts/vendor.sh <repo root>` — copies the contents of
++  `scripts/` and the `template/` directory to `<repo root>/tools/spec/`
++  (template at `tools/spec/template/`) and writes `VENDORED.md`:
++  - the source repository;
++  - the source commit, `git log -1 --format=%H -- <skill dir>` in the
++    source checkout;
++  - the tree id of the skill directory at that commit;
++  - the MIT notice.
++
++  It refuses to run when the skill directory has uncommitted changes. It
++  refuses to overwrite a vendored copy whose files differ from its
++  recorded commit (IE-P1-F03).
+ 
+ 
+ ## Diagrams
+--- /tmp/afc-ie1/slice-graph.md	2026-10-11 19:44:54.311191205 -0500
++++ specialists/slice-graph.md	2026-10-11 19:45:22.078076233 -0500
+@@ -41,20 +41,21 @@
+ | S06 | spec-and-docs (tech-writing) | Product Implementer | skill / judgement | — | AC-AFC-D5-01, AC-AFC-D5-02, AC-AFC-D5-03, AC-AFC-D5-04, AC-AFC-D5-05, RISK-AFC-13, RISK-AFC-15 | DES-AFC-D5, CONTRACT-AFC-SPECKIT | Alphazedehq: `skills/spec-authoring/` (whole new directory: `SKILL.md`, `agents/openai.yaml`, `references/section-rules.md`, `references/figures.md`, `references/vendoring.md`, `template/`, `scripts/spec_build.py`, `scripts/spec_lint.py`, `scripts/diagram.py`, `scripts/azdiagram/`, `scripts/vendor.sh`, `tests/`, `LICENSE-gridmarket`), `skills/use-requirements-system/SKILL.md` (description lines only, OD-AFC-07) | alphazedehq-skills (spec-authoring, use-requirements-system) | CMD-SCAN, CMD-D5-TEST, CMD-D5-AGNOSTIC, CMD-SKILL-SIZE, CMD-SKILL-TRIGGER | Tests, repo-agnostic build and size check exit 0; trigger check routes both requests correctly; PR open in Alphazedehq. |
+ | S07 | spec-and-docs (tech-writing) | Product Implementer | docs / judgement | — | AC-AFC-VNV-01 | DES-AFC-VNV | this: `docs/vnv/` | — | CMD-VNV-CHECK | Index plus ci-cd, spec and developer-feedback area files, each with Scope, Tools, Review Focus, Findings target. |
+ | S06L | spec-and-docs (tech-writing) | Light Implementer | link / light | S06 merged; alphazedehq-main-checkout at or after the S06 merge commit | AC-AFC-D5-05 | DES-AFC-D5 | this: `docs/plans/2026-10-11-amazon-fantasy-companion/evidence/skill-links.txt` | harness-configs, alphazedehq-main-checkout | CMD-SKILL-LINK | `readlink` of the four harness links resolves to the merged skill directory. |
+-| S42 | spec-and-docs (tech-writing) | Light Implementer | vendor / light | S06 merged; alphazedehq-main-checkout at or after the S06 merge commit | AC-AFC-SPEC-01, AC-AFC-D5-04 | DES-AFC-D5, CONTRACT-AFC-SPECKIT | this: `tools/spec/`, `THIRD_PARTY_NOTICES.md` | alphazedehq-main-checkout | CMD-SPEC-VENDOR | `tools/spec/VENDORED.md` names the merged D5 commit; vendored files equal that commit; MIT notice present in both files. |
++| S42 | spec-and-docs (tech-writing) | Light Implementer | vendor / light | S06 merged; alphazedehq-main-checkout at or after the S06 merge commit | AC-AFC-SPEC-01, AC-AFC-D5-04 | DES-AFC-D5, CONTRACT-AFC-SPECKIT | this: `tools/spec/`, `THIRD_PARTY_NOTICES.md` | alphazedehq-main-checkout | CMD-SPEC-VENDOR | `tools/spec/VENDORED.md` names a source commit whose `skills/spec-authoring/` tree id equals that of the merged D5 commit; vendored files (scripts and template) equal that tree; MIT notice present in both files (IE-P1-F03). |
+ | S09T | ci (primary) | Test Implementer | test / judgement | S01, S02, S42 merged | AC-AFC-CI-01, AC-AFC-CI-02, AC-AFC-CI-03, AC-AFC-CI-04, AC-AFC-PATH-01 | DES-AFC-GATE, CONTRACT-AFC-GATE | this: `tools/ci/tests/` | — | CMD-RED | Named tests fail for the missing gate (red receipt). |
+ | S09 | ci (primary) | Product Implementer | ci / judgement | S09T, S07 merged | AC-AFC-CI-01, AC-AFC-CI-02, AC-AFC-CI-03, AC-AFC-CI-04, AC-AFC-PATH-01, RISK-AFC-08, RISK-AFC-11, RISK-AFC-13 | DES-AFC-GATE, CONTRACT-AFC-GATE | this: `tools/ci/gate.sh`, `tools/ci/check_paths.py`, `tools/ci/check_docs.py`, `tools/ci/check_workflows.py`, `tools/ci/VENDORED.md`, `.githooks/pre-commit`, `.githooks/pre-push`, `.github/workflows/ci.yml` | — | CMD-SCAN, CMD-GATE-HYGIENE, CMD-GATE-DOCS, CMD-GATE-SPEC, CMD-WORKFLOW-CHECK, CMD-GATE-ALL | S09T tests green; workflow checker exit 0; PR shows `gate / spec`, `gate / docs`, `gate / hygiene` green. |
+ | S11T | ci (primary) | Test Implementer | test / judgement | S01, S02, S03 merged | AC-AFC-D4-04 | DES-AFC-D4, CONTRACT-AFC-HOOK | Alphazedehq: `hooks/test-ci-gate-hook.sh` | — | CMD-RED | Hook tests fail before the hook exists. |
+-| S11 | ci (primary) | Product Implementer | hook / judgement | S11T, S09 merged, S06 merged, S06L | AC-AFC-D4-04, AC-AFC-D4-05, AC-AFC-D4-06, AC-AFC-D5-05, RISK-AFC-12 | DES-AFC-D4, CONTRACT-AFC-HOOK | Alphazedehq: `hooks/ci-gate-hook.sh`, `hooks/install-ci-gate-hook.py`, `hooks/README.md` | harness-configs | CMD-HOOK-TEST, CMD-HOOK-INSTALL | Hook tests green; installer `--verify` reports each SD-021 harness as wired or a typed gap; Muse skill directory exposes D4 and D5 skills or a typed gap. |
++| S11 | ci (primary) | Product Implementer | hook / judgement | S11T, S09 merged, S06 merged, S06L, S41 merged when OD-AFC-01 = B | AC-AFC-D4-04, AC-AFC-D4-05, AC-AFC-D4-06, AC-AFC-D5-05, RISK-AFC-12 | DES-AFC-D4, CONTRACT-AFC-HOOK | Alphazedehq: `hooks/ci-gate-hook.sh`, `hooks/install-ci-gate-hook.py`, `hooks/README.md` | harness-configs | CMD-HOOK-TEST, CMD-HOOK-INSTALL-SANDBOX | Hook tests green; installer `--install --verify` run with HOME set to a temporary directory reports each SD-021 harness as wired or a typed gap and links the D4 and D5 skills into the sandbox Muse skill directory or records a typed gap; the installer writes the hook path of the checkout it runs from; no live harness configuration is edited before merge. The live install (CMD-HOOK-INSTALL) runs at integration step IE-P1-10 from the Alphazedehq main checkout after merge and fast-forward (IE-P1-F04). |
+ | S41 | spec-and-docs (tech-writing) | Light Implementer | skill / light (conditional) | OD-AFC-01 = B; S01, S02, S03 merged | AC-AFC-D4-05, AC-AFC-D4-06 | DES-AFC-D4 | Alphazedehq: `skills/ci-cd/SKILL.md` | alphazedehq-skills (ci-cd) | CMD-SKILL-SIZE, CMD-SKILL-TRIGGER | Not dispatched unless the owner selects option B. |
+-| S08 | (planning primary) | Scribe | docs / judgement | S09 merged (hygiene area exists); observations accumulate from Wave 1 dispatch | AC-AFC-DX-01, AC-AFC-DX-02 | DES-AFC-DX | this: `docs/developer-feedback/observations.md` | — | CMD-GATE-HYGIENE | Log carries DX-001..DX-007, planning and Phase 1 observations; hygiene PASS. |
++| S08 | (planning primary) | Scribe | docs / judgement | S09 merged (hygiene area exists); S11 returned; S41 returned or not dispatched; observations accumulate from Wave 1 dispatch (IE-P1-F06) | AC-AFC-DX-01, AC-AFC-DX-02 | DES-AFC-DX | this: `docs/developer-feedback/observations.md` | — | CMD-GATE-HYGIENE | Log carries DX-001..DX-007, planning and Phase 1 observations; hygiene PASS. |
+ 
+ ## Dependencies (acyclic)
+ 
+ S06 --> S06L; S06 --> S42; S01 --> S09T; S02 --> S09T; S42 --> S09T;
+ S09T --> S09; S07 --> S09; S09 --> S08; S01 --> S11T; S02 --> S11T;
+ S03 --> S11T; S11T --> S11; S09 --> S11; S06 --> S11; S06L --> S11;
+-S01 --> S41; S02 --> S41; S03 --> S41.
++S01 --> S41; S02 --> S41; S03 --> S41; S41 --> S11 (only when
++OD-AFC-01 = B; IE-P1-F05); S11 --> S08; S41 --> S08 (IE-P1-F06).
+ 
+ ## Lifecycle-level rows (no slice)
+ 
+@@ -67,7 +68,12 @@
+ - AC-AFC-PATH-01 at planning: the Orchestrator's scrub before each
+   planning commit.
+ - AC-AFC-PLAN-01: this plan.
+-- AC-AFC-PLAN-03: the Integration Engineer at Phase 1 closeout.
++- AC-AFC-PLAN-03: the Integration Engineer execution session at Phase 1
++  closeout. It is recorded at
++  `docs/plans/2026-10-11-amazon-fantasy-companion/evidence/phase2-entry-receipt.json`
++  (contents per integration-plan.md `phase2_entry_receipt`) and landed in
++  the Phase 1 closeout pull request with the DoD Manifest closeout
++  (IE-P1-F08).
+ - RISK-AFC-07: route receipts.
+ - RISK-AFC-16: Phase 2 entry receipt.
+ - RISK-AFC-17: Phase 2 entry receipt and Phase 2 plan.

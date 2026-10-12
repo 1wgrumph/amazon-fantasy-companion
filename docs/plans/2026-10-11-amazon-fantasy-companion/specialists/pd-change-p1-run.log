@@ -1,0 +1,104 @@
+Waiting for the RE/SM/IE completion notifications.
+
+RE round-2 confirm running; SM and IE still running.
+
+Waiting for notifications.
+
+Waiting on IE, TE and SM finalization.
+
+Waiting for IE and TE.
+
+Waiting for TE.
+
+Plan Integrator running; waiting for its completion.
+
+## PLAN_REVIEW_READY: Phase 1 package (owner CHANGE, round 1)
+
+The Phase 1 package is regenerated and passes every mechanical check:
+
+- **Freeze:** `plan-package.cjs` PASS with no findings. Candidate digest is `253294a017eb51171ce795e25184f036a27a310afb8840793ff4f86a65863688`, against the f885e48 digest `2300046a…`.
+- **Schemas:** implementation, seit and authority all validate.
+- **DoD Manifest:** rendered (`RENDER_WRITE`) and checked (`RENDER_CHECK_PASS`, sha256 `4544e1d4…`). I also opened it in a browser.
+- **Review gate:** `evaluatePlanningReview` returns `review_round_pending`, so the manifest exists and only the planning review is left.
+- **Rule 12:** none of the planning artifacts contains a home path. Five new `specialists/*-p1*.log` files do contain home paths and need your scrub before commit.
+
+Nothing is committed. I wrote only inside the plan directory and did not touch `journey.json`.
+
+### Revision diff against f885e48
+
+**Requirements: 81 rows down to 32, all Lifecycle-local.**
+- Kept unchanged: D5-01..05, D4-01..06, CI-02, CI-03, DX-01, LAND-01, REV-01, PATH-01.
+- Kept but reworded: CI-01 (gate areas are now spec, docs and hygiene), SPEC-01 (vendoring only), VNV-01 (Phase 1 areas only), DX-02 (the log only), PLAN-01, RISK-13, RISK-16.
+- New: CI-04 (what the spec and docs areas check), PLAN-03 (the Phase 2 entry receipt), RISK-17 (spec-first schedule).
+- The other 52 IDs moved to the new "Deferred to Phase 2" section. The Requirements Engineer checked that every f885e48 ID is accounted for there.
+
+**Design.**
+- All product design and contracts moved to Phase 2.
+- The gate design now has spec, docs and hygiene areas. The spec area checks the vendored template while no spec exists yet.
+- New design section DES-AFC-PHASE2, plus the Integration Engineer corrections: a shared-read lease on the Alphazedehq checkout, vendoring that includes the template and pins by tree id, a sandboxed hook install before the live one, and landing rules for a private repo.
+- Views: V4 revised; V5 (context) and V6 (use cases) added; V1–V3 kept only as Phase 2 reference.
+
+**Proof cases:** 126 down to 54, with 46 commands. Reverify is marked not applicable on every row, because no binary is built.
+
+**Slices:**
+- 54 slices in 5 waves become 13 in 2 waves: S01, S02, S03, S06, S07, then S06L, S42, S09T, S09, S11T, S11, S41 (only if you choose OD-AFC-01 option B), S08.
+- S42 is new: it vendors the spec tools into this repo.
+- S10 (milestones) and all product slices are gone.
+- M1..M5 are gone and no GitHub milestones are created.
+- I reclassified S41 from light to judgement work.
+
+**Phase 2** is a planned sequence P2-1..P2-7, not slices:
+- Requirements and model work (P2-2, P2-3) starts at approval, in parallel with Phase 1.
+- Only D1 assembly (P2-4) waits, for S06, S42 and S09 to land.
+- Visual evidence goes to `evidence/visual/` (DEC-AFC-SD-024).
+
+**Authority:** `AUTH-AFC-2026-10-11-002` replaces -001, which was never effective. It grants Phase 1 paths only, adds SD-023 and SD-024, and allows the Phase 2 planning sessions to write in the Phase 2 plan directory.
+
+**Bounds:** the cap of 5 implementation agents is unchanged. Phase 1 should finish by 2026-10-13T23:00Z.
+
+### Specialists (all on their primary routes; Muse was used again after its quota reset)
+
+| Role | Route | Result |
+|---|---|---|
+| Requirements Engineer | Muse | Round 1: 31/32 rows passed. I applied its exact fix to RISK-17. Round 2: PASS. |
+| Systems Modeler | Muse (two runs) | READY: views updated, then mappings finalized. |
+| Integration Engineer | Claude | GAPS: IE-P1-F01..F10, all applied as correction round 1. |
+| Test Engineer | Claude | PASS |
+| Plan Integrator | Muse | PLAN_REVIEW_READY |
+
+Both gates used one correction round, under the limit of two.
+
+### Open owner items
+
+| Item | Question | Recommendation |
+|---|---|---|
+| OD-AFC-01 | Extend the existing skills only, or also add one entry-point skill? | Extend only |
+| OD-AFC-06 | Track the specialist logs in git? | Yes, with a `.gitignore` negation after the scrub |
+| OD-AFC-07 | Add the reciprocal non-trigger to `use-requirements-system`? | Yes |
+| OD-AFC-08 | One spec skill or three? | One |
+| OD-AFC-09 | Vendor the spec tools into this repo? | Yes |
+| OD-AFC-10 | Should `REFUSED_NO_VNV` block merges? | No |
+| OA-AFC-A2 | Which lane writes the D4/D5 skills? | tech-writing (option A); option B now costs about a day |
+| OA-AFC-A3 *(new)* | Review timing: one review at the end of Phase 1 deadlocks, because Wave 2 needs Wave 1 merged first | Review each PR at its own integration step, keeping `cadence: phase`. The review count is the same. |
+| OD-AFC-12 *(new)* | Format of the Phase 2 requirements register | `.sdoc`, bound to the local Requirements System host |
+
+- **Moved to Phase 2:** OD-AFC-02 to OD-AFC-05 and OA-AFC-A1.
+- **Closed:** OD-AFC-11, by SD-024.
+- **Milestones:** none argued for in Phase 1.
+
+### Things you should know
+- **Naming mismatch:** SD-023's journey text puts the spec work (D1, the register and the models) in Phase 1. Your packet places it in Phase 2 planning. I followed the packet. The substance is the same, but please align the journey wording.
+- **Lost live window:** removing product slices drops the planned ESPN capture of the Monday 2026-10-12 game. RISK-17 records this, and the Phase 2 plan has to re-plan against the remaining windows.
+- **Alphazedehq CI:** its path filters do not run the D4/D5 test suites, so green CI there is not evidence. The plan adds local reruns of each suite (IE-P1-F09). This is worth filing as an enhancement under rule 18; I did not file it.
+- **No branch protection:** this repo is private, so its rulesets API returns 403 and nothing enforces PR-only `main`. You enforce it with a checks command before every merge (IE-P1-F10).
+- **Planning review:** this new candidate still needs its planning review before you present it.
+
+### developer_feedback
+- **Packet sequencing:** the Test Engineer was started before the Integration Engineer's fixes were applied, which cost it one reconciliation round. Dispatch it after those fixes next time.
+- **Freeze check:** `checkIntegrationStepRefs` reads any JSON key named `step` as a slice reference.
+- **Wrong scan command:** the f885e48 `CMD-SCAN` called an advisory hook that always exits 0, not a scanner.
+- **Lint parser:** `ac_mechanical_lint.py` needed fixing to read rows marked amended/new and to skip the Deferred table.
+- **Tools used:** muse exec, claude -p, node freeze/render/review-gate, jsonschema, headless Chrome for the visual checks, git, sha256sum.
+
+I did not run the planning review itself, which is your dispatch. V4 has one cosmetic text overflow in its `tools/spec/` box.
+exit=0

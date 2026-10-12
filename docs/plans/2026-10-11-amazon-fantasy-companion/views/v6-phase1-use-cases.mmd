@@ -1,0 +1,19 @@
+%% MODEL-AFC-V6 — Phase 1 use cases and outcomes: what agents and the owner do with the Phase 1 tooling
+%% mode: diagram-assisted; explanatory only; sysml_claim: false
+%% Planned design (Planning and Design node); nothing here is realized yet.
+%% Mermaid has no native use-case diagram; stadium nodes carry the same content.
+flowchart TB
+  UC1(["UC-T1: agent authors a spec with spec-authoring<br/>copy template, fill, draw figures, build, lint<br/>Outcome: one built spec file, lint-clean, byte-identical rebuild"])
+  UC2(["UC-T2: agent commits, the gate judges<br/>local hooks or harness hook run gate.sh<br/>Outcome: PASS or typed FAIL/GAP, same from every entry point"])
+  UC3(["UC-T3: agent opens a PR<br/>ship-pull-request + vnv-review against docs/vnv/<br/>Outcome: gate table + findings, or REFUSED_NO_VNV; merge by rebase, never squash"])
+  UC4(["UC-T4: owner/agent sets up a new repo<br/>setup-pre-commit + setup-a-repo wire gate, hooks, workflow<br/>Outcome: gate + ci.yml + hooks installed and verified with a failing change"])
+
+  UC1 -.-> SK["D5 skill + CONTRACT-AFC-SPECKIT"]
+  UC2 -.-> GT["gate.sh + CONTRACT-AFC-GATE/HOOK"]
+  UC3 -.-> VN["docs/vnv/ + ship-pull-request"]
+  UC4 -.-> D4["setup-pre-commit + setup-a-repo"]
+
+  classDef uc fill:#e8f0fe,stroke:#1a56db,stroke-width:2px
+  classDef sup fill:#ffffff,stroke:#333333
+  class UC1,UC2,UC3,UC4 uc
+  class SK,GT,VN,D4 sup

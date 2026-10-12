@@ -3,481 +3,447 @@ type: integration-plan
 status: gaps
 lifecycle: AFC-2026-10-11
 role: integration_engineer (planning session)
-inputs: amazon-fantasy-companion-technical-plan.md, design.md, specialists/slice-graph.md, views/views.json, specialists/systems-modeler-receipt.md, journey.json
+revision_note: "Phase 1 regeneration after DEC-AFC-SD-023 and DEC-AFC-SD-024. The f885e48 version (41-slice product plan) stays in git; its product findings are Phase 2 input."
+inputs: amazon-fantasy-companion-technical-plan.md, design.md, specialists/slice-graph.md, journey.json, f885e48 specialists/integration-plan.md
 ---
 
-# Integration plan — AFC-2026-10-11 (planning session)
+# Integration plan — AFC-2026-10-11 Phase 1 (planning session)
 
-This plan defines how the 41 slices are assembled into one integrated candidate. It covers items and versions, interface checks, order, entry criteria, stubs, configuration identity, post-step V&V handoff, anomaly handling, rollback, cut-offs and owner-only dependencies. It does not implement, change requirements or design, author tests or review.
-Post-step command IDs come from `slice-graph.md`. IDs marked *proposed* are new, and the Planning Test Engineer finalizes them in `seit.json`.
-The Plan Integrator copies the `integration_plan` JSON block into `implementation.json` mechanically.
+This plan defines how the 13 Phase 1 slices (S01, S02, S03, S06, S07, S06L,
+S42, S09T, S09, S11T, S11, S41, S08) assemble into one Phase 1 candidate
+across two repositories. It covers items and versions, interface checks,
+order, entry criteria, stubs, configuration identity, post-step V&V handoff,
+anomaly handling, rollback, recovery, cut-offs, the final candidate, the
+Phase 2 entry receipt and the closeout assessment inputs. It does not
+implement, change requirements or design, author tests or review.
 
-Outcome: **GAPS**. The assembly strategy is complete. However, 18 slice-graph or design defects must be corrected before the affected slices dispatch (section "Concurrency proof and findings").
-None of them needs an owner decision. Each one has exact corrected text in `concurrency_findings`.
+Command IDs come from `slice-graph.md`. IDs marked *proposed* are new; the
+Planning Test Engineer finalizes them in `seit.json`. The Plan Integrator
+copies the `integration_plan` JSON block into `implementation.json`.
+
+**Outcome: GAPS.** The assembly strategy is complete. Ten slice-graph,
+design or technical-plan defects (IE-P1-F01..F10) need correcting before the
+affected slices dispatch. The most serious is F01: read literally, the
+review rule in the plan deadlocks Wave 2. None of the ten needs a new owner
+decision. Each has exact corrected text in `concurrency_findings`. The owner
+sees the corrected package at the integrated review.
 
 ## Assembly model
 
-- **Items.** There are two repositories:
-  - `1wgrumph/amazon-fantasy-companion`, here called *this*;
-  - `alphazede/Alphazedehq`, here called *AZHQ*: D4-A/B/C/E/F and D5, each landing through its own PR.
-- **This repository's integration levels:**
-  - *Slice branch.* One per running slice or TDD pair (finding IE-F07).
-  - *Lane branch.* `afc/<lane>-m<n>`, one PR per lane per milestone (DES-AFC-LANES).
-  - *`main`.* Lane PRs merge with `gh pr merge --merge`, because lane branches contain merge commits. Never squash, never force-push.
-  - A pushed lane branch is synchronized by merging `origin/main` into it. It is never rebased.
-- **Readiness.** A lane PR merges only after all of these hold:
-  - every slice in it reached its stop condition;
-  - the lane PR passed one Reviewer review, with OCR delegate mode and Reverify or `not applicable` (AC-AFC-REV-01), plus an on-device visual review for UI (AC-AFC-VIS-01);
-  - at most one repair round followed;
-  - its `gate / <area>` checks are green.
-- **Contract-first freeze.**
-  - S04 and S05 freeze the device and API surface. S06 freezes SPECKIT. S01 freezes GATE. S11 freezes HOOK.
-  - After each freeze, the step's CMD-CONTRACT-FROZEN (proposed) check fails on any change to a frozen file that did not arrive through a routed hot-file delta.
-- **Hot files** have one owner each. Any later change is a *hot-file delta*:
-  - a separate one-file packet on the owner lane;
-  - holds lease `hot-file/<path>`;
-  - merged into the owner lane branch, then merged into the consuming lane branch before the consumer's slice continues.
-  - Hot-file deltas are routed product changes, never integration glue.
-- **Live skills.** AZHQ skills go live on this host only when the AZHQ main checkout fast-forwards. Harness links resolve to `<workspace>/Alphazedehq/skills/<skill>`, verified by `readlink` for `setup-pre-commit`. That checkout is therefore a leased resource, `alphazedehq-main-checkout` (IE-F16).
-- **Integration receipts.** Merge SHA, command outputs and digests for each step are recorded in `journey.json` `execution_receipts` by the Orchestrator. No new tracked write set is created for them.
+- **Items.**
+  - *this*: `1wgrumph/amazon-fantasy-companion`. S07, S06L, S42, S09T+S09
+    and S08 each land through their own PR.
+  - *AZHQ*: `alphazede/Alphazedehq`. D4-A (S01), D4-B (S02), D4-C (S03),
+    D5 (S06), D4-E (S11T+S11) and D4-F (S41, only if OD-AFC-01 = B) each
+    land through their own PR.
+- **Integration level.** Each slice (or TDD pair) has one branch in one
+  worktree. Its PR merges straight to `main`; Phase 1 has no lane branches.
+  - Merge method: `gh pr merge --merge` in both repositories.
+  - A merge commit keeps the reviewed PR head SHA as an ancestor of `main`.
+    So the Reviewer's exact candidate ref, the CMD-RED test-file digests
+    and the TDD author-identity commit order all stay valid after merge.
+    Rebase merge is allowed by policy, but it rewrites those SHAs.
+  - Never squash, never force-push.
+- **Readiness.** A PR merges only when all of these hold:
+  - its slice reached its stop condition;
+  - it had one Reviewer review at its integration step: OCR delegate mode,
+    plus `Reverify: not applicable — Phase 1 changes are skill text, shell
+    and Python scripts and workflow YAML; no compiled binary is built or
+    claimed` (AC-AFC-REV-01). See F01.
+  - it had at most one repair round;
+  - deterministic verification is green: the PR's checks plus the slice's
+    local command receipts on the PR head.
+- **Live skills.** Every harness skill link resolves into the AZHQ main
+  checkout, `<workspace>/Alphazedehq/skills/<skill>`. This was verified with
+  `readlink` for `setup-pre-commit` in the Claude Code, Codex, `.agents`
+  and Cursor skill directories.
+  - A merged AZHQ change goes live for every agent on the host only when
+    CMD-AZHQ-SYNC fast-forwards that checkout.
+  - The checkout is on `main`, level with `origin/main` at
+    `47c46f2e16fed060482a1bf3a0e34ddcb9bc57fc`. It has one untracked
+    directory (`evals /`), which does not block a fast-forward.
+- **Integration receipts.** The Orchestrator records each step's merge SHA,
+  command outputs and digests in `journey.json` `execution_receipts`. This
+  creates no new tracked write set.
 
 ## Interface and compatibility checks
 
-| Contract | Producer → consumer | Freeze point | Static check | Exercised at |
-|---|---|---|---|---|
-| CONTRACT-AFC-GATE | S01 template → S09 `gate.sh` → S11 hook, Actions | IE-M1-1 / IE-M1-6 | CMD-CI-VENDOR-PIN (proposed): `tools/ci/VENDORED.md` names `azhq.d4a`, `azhq.d4b`; CMD-WORKFLOW-CHECK | IE-M1-6 PR checks; IE-M2-1 CMD-HOOK-DEMO (proposed) |
-| CONTRACT-AFC-HOOK | S11 → harness configs | IE-M2-1 | CMD-HOOK-TEST | CMD-HOOK-INSTALL `--verify`, CMD-HOOK-DEMO |
-| CONTRACT-AFC-SPECKIT | S06 → S19 `tools/spec/` → `spec` gate area | IE-M1-3 | CMD-SPEC-VENDOR (VENDORED.md commit = `azhq.d5`, files identical) | IE-M2-4 CMD-GATE-SPEC; IE-M4-5 |
-| CONTRACT-AFC-API | S05 `backend/api/openapi.yaml` ↔ TV `net/` (S04 interface, S25 impl) | IE-M1-6 | CMD-CONTRACT-FROZEN on `openapi.yaml` and `net/ApiClient.kt` | IE-M3-2 CMD-SMOKE; IE-M3-4 CMD-E2E-REPLAY (proposed) |
-| CONTRACT-AFC-EVENT | S20 feed → S22 match/policy, S24 panel, S30 | IE-M1-6 | S05 contract tests in `gate / backend` | IE-M3-1 lane merge order S20→S22→S24, each followed by CMD-GATE-BACKEND |
-| CONTRACT-AFC-ALERT | S22 → `/v1/alerts` → S25 alerts | IE-M1-6 | S05 contract tests; S25T parsing tests | IE-M3-4 CMD-E2E-REPLAY (heads-up over playback) |
-| CONTRACT-AFC-LAUNCH | S23 target → S25 watch; S25 outcome → `/v1/alerts/{id}/outcome` | IE-M1-6 | S23T/S25T tests | IE-M3-4, IE-M3-5 (S28 GAME_OPENED) |
-| CONTRACT-AFC-PROVIDERS | S14 `docs/spikes/SP-3-provider-registry.json` → S23 `backend/providers/registry.json` | IE-M2-3 | CMD-REGISTRY-CHECK (proposed): every registry entry's `verified.form` appears verified in the SP-3 draft | IE-M3-1 |
-| CONTRACT-AFC-PANEL | S24 → `/v1/panel` → S27 panel, S32 labels | IE-M1-6 | S05 contract tests; S27T tests | IE-M3-4; IE-M4-6 |
-| CONTRACT-AFC-LINEUPSOURCE | S21 Yahoo/Manual → S22, S24 | IE-M1-6 | S21T tests | IE-M3-1 merge S21 before S22 |
-| CONTRACT-AFC-TABLES | S05 `store/` → S20..S24, S30 | IE-M1-6 | CMD-CONTRACT-FROZEN on `backend/src/afc_backend/store/` (IE-F05) | IE-M3-2 deployed stack smoke |
+| Contract | Producer → consumer | Static check | Exercised at |
+|---|---|---|---|
+| CONTRACT-AFC-GATE | S01 template `templates/gate.sh` (azhq.d4a) → S09 `tools/ci/gate.sh` → `.githooks`, `ci.yml`, S11 hook | CMD-CI-VENDOR-PIN (proposed): `tools/ci/VENDORED.md` names azhq.d4a and azhq.d4b, and the vendored `check_workflows.py` equals `skills/setup-a-repo/scripts/check-workflows.py` at azhq.d4b; CMD-WORKFLOW-CHECK | IE-P1-9 CMD-GATE-ALL on the merge commit, plus PR checks `gate / spec`, `gate / docs`, `gate / hygiene`; IE-P1-10 CMD-HOOK-DEMO (proposed) |
+| CONTRACT-AFC-HOOK | S11 `hooks/ci-gate-hook.sh` → harness configurations | CMD-HOOK-TEST; CMD-HOOK-INSTALL-SANDBOX (proposed, F04) | IE-P1-10 CMD-HOOK-INSTALL `--verify` (live, from the main checkout) and CMD-HOOK-DEMO |
+| CONTRACT-AFC-SPECKIT | S06 `scripts/`, `template/`, `vendor.sh` (azhq.d5) → S42 `tools/spec/` → `spec` gate area → Phase 2 P2-4 | CMD-SPEC-VENDOR, amended per F03: tree-equality against azhq.d5 that includes `template/` | IE-P1-9 CMD-GATE-SPEC (template build path, AC-AFC-CI-04); Phase 2 P2-4 |
 
-Two-endpoint completeness, checked against the interface-completeness profile: each contract above names its producer and consumer obligations in `design.md` §Contracts.
-Passing this structural check is not runtime proof. Runtime proof comes only from the "Exercised at" column.
+Structural two-endpoint completeness: `design.md` §Contracts names the
+producer and consumer obligations of all three contracts. One defect
+breaks compatibility:
+
+- The SPECKIT vendor step copies only `scripts/`.
+- The GATE `spec` area reads `tools/spec/template/`.
+- F03 corrects this.
+
+A structural pass is not runtime proof. Runtime proof comes only from the
+"Exercised at" column.
 
 ## Stubs and simulators
 
-| Stub | Introduced | Replaced by | Removal check |
-|---|---|---|---|
-| TV component stubs (`afc.companion.*`) | S04 | S25, S26, S27, S31, S32 | CMD-STUB-SCAN (proposed): no `AFC-STUB` marker under `tv-app/app/src/main/` at IE-M4-6 |
-| Backend route stubs | S05 | S20..S24, S30 | CMD-STUB-SCAN under `backend/src/` at IE-M4-6 |
-| Empty provider registry | S05 | S23 (SP-3-verified entries only) | CMD-REGISTRY-CHECK |
-| `ReplaySource` + `backend/fixtures/espn/` | S16, S20 | Live ESPN (ReplayMode off) for S28 | Replay label present whenever ReplayMode on (CMD-E2E-REPLAY) |
-| `ManualSource` | S21 | YahooSource if S17 verdict = Yahoo | S17 verdict recorded |
-| Mode A `CompanionPlayer` | S27 | Mode B only if S15 verdict = Mode B | S15 verdict; label check in CMD-E2E-REPLAY |
-| `spec` area `GAP tools/spec missing` / `PASS nothing to check` | S09 | S19 vendored kit | CMD-GATE-SPEC PASS at IE-M2-4 |
-| Gate `GAP` exit 3 (tool missing) | S09 | — (typed gap, never a pass) | Any GAP at a post-step is an anomaly, not a pass |
+| Stub or simulator | Where | Replaced by / removal |
+|---|---|---|
+| S09T red tests (failing until S09) | S09 TDD worktree, uncommitted | S09 green; the tests are committed first under the Test Implementer identity |
+| S11T red tests | S11 TDD worktree in AZHQ, uncommitted | S11 green; same commit rule |
+| Temporary HOME for the pre-merge installer run (F04) | `mktemp -d` scratch HOME during S11 | Deleted after S11's run. The live install happens only at IE-P1-10. |
+| Scratch worktree with a deliberate hygiene failure | IE-P1-10 CMD-HOOK-DEMO, `<workspace>/worktrees/amazon-fantasy-companion-hookdemo` | Removed right after the demo. Never pushed. |
+| `spec` area template-build path (no `spec/<name>/` yet) | `tools/ci/gate.sh` | Permanent by design until Phase 2 P2-4 adds `spec/amazon-fantasy-companion/` |
+| Muse or AGY without a hook surface | installer `--verify` | Typed gap (RISK-AFC-12), never a pass |
 
-Stubs that are permanent by design are not removed: ReplaySource, ManualSource and Mode A. Every other stub is gone at the final candidate.
+## Ordered steps
 
-## Ordered steps (summary)
+The same `order` value means the steps are independent: they land in
+readiness order. "After" lists steps that must have merged first.
 
-Steps with the same `order` inside a milestone are independent and land in readiness order.
-
-| Step | Order | Merges | Gate to enter (short) |
-|---|---|---|---|
-| IE-M1-1 | 1 | S01 (AZHQ) | S01 receipts, review, AZHQ checks |
-| IE-M1-2 | 1 | S02 (AZHQ) | same |
-| IE-M1-3 | 1 | S06 (AZHQ) | same + trigger test both directions |
-| IE-M1-4 | 1 | S03 (AZHQ) | same |
-| IE-M1-5 | 2 | S04 | CMD-ANDROID-BUILD, scan PASS |
-| IE-M1-6 | 3 | S05, S09T, S09 | IE-M1-1..3 merged; IE-M1-5 merged |
-| IE-M1-7 | 4 | S07, S10, S06L, S08 | IE-M1-6 merged; IE-M1-3 merged and AZHQ checkout synced |
-| IE-M2-1 | 1 | S11T, S11 (AZHQ) | IE-M1-1,2,4 merged (C13); IE-M1-6 merged |
-| IE-M2-2 | 1 | S41 (AZHQ, conditional) | OD-AFC-01 = B |
-| IE-M2-3 | 2 | S12, S13, S14, S15 | four verdicts; spike_panel_max held |
-| IE-M2-4 | 2 | S19 | IE-M1-3 and IE-M1-6 merged |
-| IE-M2-5 | 3 | S16, S18 | 10-15 capture done; S18 smoke |
-| IE-M3-1 | 1 | S17, S20T..S24 | pairs green; T_yahoo verdict |
-| IE-M3-2 | 2 | (deploy) | IE-M3-1 merged |
-| IE-M3-3 | 2 | S26T, S26, S27T, S27 | pairs green; visual review |
-| IE-M3-4 | 3 | (candidate) S25T, S25 on lane branch + main | IE-M3-1..3 done; cut-off 10-18T15:00Z |
-| IE-M3-5 | 4 | S25T, S25, S28 | live evidence |
-| IE-M4-1 | 1 | S30T, S30 (+deploy) | green |
-| IE-M4-2 | 1 | S31T, S31, S32T, S32 | green; visual review |
-| IE-M4-3 | 1 | S34 (stretch, conditional) | OD-AFC-03 = yes |
-| IE-M4-4 | 2 | S33 | each fix + regression test |
-| IE-M4-5 | 2 | S35 | IE-M3-5, IE-M2-4 merged |
-| IE-M4-6 | 3 | (M4 candidate) | IE-M4-1..5 done |
-| IE-M5-1 | 1 | S36, S37, S39 | IE-M4-6 exit |
-| IE-M5-2 | 2 | S38, S40 | IE-M5-1 merged |
-| IE-M5-3 | 3 | (handoff) | final candidate frozen |
-
-## Cut-offs
-
-The live-window times use standard NFL slot times converted from EDT (UTC−4). They are assumptions: S16 and S28 confirm each window from the ESPN scoreboard (CMD-ESPN-RECORD) before relying on it.
-
-- **S16 windows.**
-  - The Mon 10-12 game starts about 2026-10-13T00:15Z.
-  - The Thu 10-15 game starts about 2026-10-16T00:15Z. This is after the M2 due time (IE-F11).
-- **Sunday 2026-10-18, S28.**
-  - M3 candidate cut-off is **2026-10-18T15:00:00Z**, giving 2 h before the 17:00Z kickoffs.
-  - Late windows: SNF (cut-off 2026-10-18T22:00:00Z), then Mon 10-19 MNF (cut-off 2026-10-19T22:00:00Z, past M3 due; record the slip), then Thu 10-22 (cut-off 2026-10-22T22:00:00Z).
-  - If all live windows are missed, labeled replay applies (RISK-AFC-14). The owner must accept the live-only limitation before closeout (technical plan, Exit criteria 1).
-- **spike_panel_max.** The S15 verdict is due within 24 h of S12's first install, or Mode A applies by default.
-- **T_yahoo.** S17 runs at or after 2026-10-16T19:00:00Z.
-- **Stretch S34.** It starts only after M3 exit with M4 on schedule, and drops at **2026-10-21T12:00:00Z**.
-- **Conditional S41.** It runs only if OD-AFC-01 = B.
-- **Feature freeze.** After the M4 due time (2026-10-21T23:00:00Z), only P0 or P1 fixes (S33) and M5 documents merge.
-- **Final candidate freeze: 2026-10-23T08:00:00Z.** This leaves 4 h to the M5 due time (12:00Z) and 11 h to T_deadline (19:00Z). That is the owner's 7-hour M5 buffer plus a 4-hour assessment window.
-
-## Owner-only dependencies (time each blocks ready work)
-
-These are summarized here. Full entries are in `owner_dependencies`.
-None is an open question. Each one is an entry criterion that the confirmed decisions already name.
-
-| ID | Action | Blocks | Ready-work blocked from | Latest safe time |
+| Step | Order | Merges (repo) | After | Consumed as |
 |---|---|---|---|---|
-| OWN-01 | Integrated approval + planning PR merge | All 13 wave-1 slices | now (2026-10-11) | 2026-10-12T20:00:00Z (S16 must start before the 10-12 game) |
-| OWN-02 | Stick located, model confirmed, ADB on, on network | S12→S13→S14→S15 → S23T, S25T, S27T, S28 | S04 stop condition met | 2026-10-13T23:00:00Z |
-| OWN-03 | Provider app installed and signed in | S14 → S15, S23T, S25T, S27T | S13 verdict | S12 first install + 12 h (the spike_panel_max clock runs) |
-| OWN-04 | AWS Free-plan account + `afc-dev` profile | S18 → S17, IE-M2-5, IE-M3-2, S28 | S05 stop condition met | 2026-10-15T12:00:00Z (M2); hard limit 2026-10-17T12:00:00Z |
-| OWN-05 | Yahoo app submitted; on approval, SSM client id/secret | Live Yahoo path only (manual default otherwise) | M2 entry | 2026-10-16T19:00:00Z (T_yahoo) |
-| OWN-06 | OD-AFC-01, -03, -07 at integrated review | S41, S34, S06 scope | review | with OWN-01 |
-| OWN-07 | Class C stops (C1, RISK-AFC-02..04) if triggered | Device lane | stop time | within 4 h of the stop, or the M3 cut-off is at risk |
-| OWN-08 | M5 actions: license, visibility flip, ESPN terms (C3), video upload, reviewer access, Devpost, external feedback | Submission only | M5 due | before 2026-10-23T19:00:00Z |
+| IE-P1-1 | 1 | S01 (AZHQ) | planning PR merged | azhq.d4a |
+| IE-P1-2 | 1 | S02 (AZHQ) | planning PR merged | azhq.d4b |
+| IE-P1-3 | 1 | S03 (AZHQ) | planning PR merged | azhq.d4c |
+| IE-P1-4 | 1 | S06 (AZHQ) | planning PR merged | azhq.d5 |
+| IE-P1-5 | 1 | S07 (this) | planning PR merged | this.vnv |
+| IE-P1-6 | 2 | S06L (this) | IE-P1-4 + sync | this.skill_links |
+| IE-P1-7 | 2 | S42 (this) | IE-P1-4 | this.spec_vendor |
+| IE-P1-8 | 2 | S41 (AZHQ, conditional) | IE-P1-1..3 | azhq.d4f |
+| IE-P1-9 | 3 | S09T + S09 (this) | IE-P1-1, -2, -5, -7 | this.gate |
+| IE-P1-10 | 4 | S11T + S11 (AZHQ), then live install | IE-P1-1..4, -6, -9, -8 or n/a | azhq.d4e |
+| IE-P1-11 | 5 | S08 (this) | IE-P1-9; S11 and S41 returned (F06) | this.dx_log |
+| IE-P1-12 | 6 | none (final candidate and closeout) | IE-P1-1..11 | this.p1_final, azhq.p1_final |
 
-## Concurrency proof and findings
+Dispatch timing:
 
-**Method.**
-- Every pair of slices not ordered by the dependency graph was compared by path prefix within the same repository. The compared write sets are each slice's `Write set` column in `slice-graph.md`.
-- Unordered pairs whose write sets overlap:
-  - **S05 × S16.** `backend/` ⊇ `backend/fixtures/espn/`. Both are wave 1 and both are in the first five dispatched. This is a defect: IE-F01.
-  - **S08 × S39.** Both write `docs/developer-feedback/observations.md`. They are milestone-ordered (M1 vs M5) and never run at the same time, so this is not a defect.
-  - **S33 × {S30, S31T, S31, S32T, S32}.** S33 writes `backend/src/` and `tv-app/app/src/` and overlaps their paths. The S33 row already guards this: it dispatches only after a no-overlap write-set check. It is not a defect if that check compares concrete per-defect files.
-- Every other unordered pair is disjoint. Per wave:
-  - W1: the S01/S02/S03/S06 AZHQ skill directories are pairwise distinct; S04 `tv-app/`, S07 `docs/vnv/`, S08, S09T `tools/ci/tests/`, S09 `tools/ci/*`+`.githooks`+`.github/workflows/ci.yml`, S06L and S10 (distinct files under `evidence/`) are disjoint.
-  - W2: S11T and S11 touch distinct `hooks/` files; S12..S15 touch distinct `docs/spikes/SP-n*` and `spikes/spn/` paths; S18 (`backend/samconfig.toml`, `docs/runbooks/deploy.md`) and S19 (`tools/spec/`, `THIRD_PARTY_NOTICES.md`, `spec/`) are disjoint.
-  - W3: the backend tests and src packages `feed`, `lineup`+`auth`, `match`+`policy`, `resolver`, `panel` and the `api/*.py` modules are pairwise distinct; the TV `alerts`+`watch`+`net`, `settings`+`link`+`detect` and `panel`+`player` packages are distinct; S17 and S28 write distinct docs.
-  - W4: S30, S31x and S32x are disjoint; S34 and S35 are disjoint from all others.
-  - W5: S36 to S40 are disjoint.
-- Declared write sets are not the whole picture. Hidden shared writes exist on hot files and through read-before-write dependencies; these are findings IE-F02 to IE-F06.
-- Shared runtime resources: `fire-tv-stick`, `aws-afc-dev`, `live-game-window`, `harness-configs` and `alphazedehq-skills/<skill>` are serialized by leases. Missing resources are added in IE-F07 (shared worktree index) and IE-F16 (AZHQ main checkout).
+- S11T dispatches as soon as IE-P1-1..3 merge.
+- The S09T and S09 red phase dispatches as soon as IE-P1-1, -2 and -7
+  merge.
+- S09's green phase also needs IE-P1-5.
 
-Each finding's exact corrected text is in `concurrency_findings`. The Plan Integrator applies the corrections to `slice-graph.md`, `design.md` or the technical plan. This plan does not edit them.
+None of these is an integration step. Their merges are IE-P1-9 and
+IE-P1-10.
+
+## Cut-offs (UTC)
+
+| Point | Target | If missed |
+|---|---|---|
+| Wave 1 merged (IE-P1-1..5) | 2026-10-12T18:00:00Z | Record the slip. Wave 2 dispatches per merged dependency, not per wave. |
+| IE-P1-6, -7, -8 merged | 2026-10-12T23:00:00Z | Same. |
+| IE-P1-9 gate on `main` | 2026-10-13T12:00:00Z | P2-4 cannot start (RISK-AFC-16). P2-2 and P2-3 continue. |
+| IE-P1-10, -11 merged | 2026-10-13T18:00:00Z | Same. |
+| Final candidate frozen (IE-P1-12 entry) | 2026-10-13T18:00:00Z | Closeout moves with it. |
+| Phase 1 exit | 2026-10-13T23:00:00Z | The Phase 2 entry receipt states the slip, the days left to T_deadline (2026-10-23T19:00:00Z) and the remaining live NFL windows. Any scope cut is an owner decision at the Phase 2 integrated review (RISK-AFC-17). Never fall back to the project-local GridMarket kit (RISK-AFC-16). |
+| S41 | Runs only if OD-AFC-01 = B | Otherwise IE-P1-8 is recorded as not applicable. |
+
+## Owner-only dependencies
+
+None of these is a new question. Each is an entry criterion that the
+package already names.
+
+| ID | Owner action | Blocks |
+|---|---|---|
+| OWN-P1-01 | Integrated approval of the Phase 1 package (OD-AFC-01, -06, -07, -08, -09, -10, -12, OA-AFC-A2) | Everything. The planning PR merge after approval is agent work. |
+| OWN-P1-02 | OD-AFC-01 = A or B | IE-P1-8 and the IE-P1-10 install timing (F05) |
+| OWN-P1-03 | OD-AFC-07 | S06 scope (the `use-requirements-system` description line) |
+| OWN-P1-04 | OD-AFC-09 | S42 / IE-P1-7, and through it IE-P1-9 |
+| OWN-P1-05 | Destructive git on the AZHQ main checkout, only if a fast-forward is blocked (AN-04) | Every sync after it |
+| OWN-P1-06 | Paid Actions overage, only if gh_private_minutes runs out (RISK-AFC-08). This repository is private today. | Hosted CI runs only; the local gate continues |
+| OWN-P1-07 | Credential rotation, only if a secret is exposed (RISK-AFC-11) | The affected PR |
+| OWN-P1-08 | Class C stop on a third evidence-changing correction round | That slice |
+| OWN-P1-09 | Phase 2 product owner actions: stick and ADB, AWS account and profile, Yahoo application, provider app sign-in | Phase 2 only. The receipt records them as met, not met, or owner action pending. |
+
+The visibility flip is not part of Phase 1. When the owner flips it later,
+the vendored D4 files (`tools/ci/`) and D5 files (`tools/spec/`) become
+public. They are in the approved design, so no new decision is needed.
+
+## Concurrency proof
+
+**Method.** I compared the `Write set` columns of `slice-graph.md` (current
+working tree) pairwise for every pair of slices that the dependency graph
+leaves unordered. Paths in different repositories are disjoint by
+construction. I then checked shared runtime resources, hot files and
+read-before-write edges against the live host state.
+
+**Wave 1 (S01 S02 S03 S06 S07), 10 pairs, all disjoint:**
+
+- AZHQ pairs. Each slice owns its own skill directories:
+  - S01: `skills/setup-pre-commit/**` (6 files);
+  - S02: `skills/setup-a-repo/**` (5 files);
+  - S03: `skills/ship-pull-request/{SKILL.md,references/GATES.md,references/EDIT-PR.md}`;
+  - S06: `skills/spec-authoring/**` plus `skills/use-requirements-system/SKILL.md`.
+
+  These are four distinct top-level skill directories. The six pairs
+  S01×S02, S01×S03, S01×S06, S02×S03, S02×S06 and S03×S06 are disjoint.
+- S07 (this repository, `docs/vnv/`) is in a different repository from
+  S01, S02, S03 and S06: 4 more disjoint pairs.
+- Hidden AZHQ shared files: none of the four writes `.bran/policy.yaml`,
+  `AGENTS.md` or `.github/workflows/coe-gates.yml`.
+  - `.bran/policy.yaml` `canonical_documents` is an opt-in list, so new
+    skill files need no entry.
+  - If a slice finds it must touch one of these files, that is a write
+    outside its set. It stops and routes a single-writer delta. It does not
+    edit in parallel.
+- Runtime:
+  - Four AZHQ worktrees share one object store. The Orchestrator creates
+    them one after another before dispatch, so the `.git/worktrees` lock
+    never races.
+  - No fast-forward happens before the first merge.
+  - Five agents is exactly impl_agent_cap. A Wave 1 repair run counts
+    against the cap, so it queues if Wave 2 slices hold the other slots.
+
+**Wave 2: unordered pairs in the current graph, all write-disjoint:**
+
+- S06L×S42: `docs/plans/2026-10-11-amazon-fantasy-companion/evidence/skill-links.txt`
+  vs `tools/spec/`, `THIRD_PARTY_NOTICES.md`. Disjoint. They do contend on
+  the exclusive `alphazedehq-main-checkout` lease, although both only read
+  it (F02).
+- S06L × {S09T, S09, S08}: the evidence file vs `tools/ci/tests/`, vs
+  `tools/ci/*`, `.githooks/*`, `.github/workflows/ci.yml`, and vs
+  `docs/developer-feedback/observations.md`. All disjoint.
+- S06L × {S11T, S41}, S42 × {S11T, S41}, S09T × {S11T, S41},
+  S09 × {S11T, S41}, S11T × S08, S41 × S08: different repositories.
+- S11T×S41 and S11×S41: `hooks/test-ci-gate-hook.sh` and
+  `hooks/{ci-gate-hook.sh,install-ci-gate-hook.py,README.md}` vs
+  `skills/ci-cd/SKILL.md`. Disjoint by path. They have a read dependency:
+  the installer links "every shared skill the harness lacks" into Muse, so
+  a `ci-cd` skill merged after the live install is missing there (F05).
+- S11×S08: different repositories. However:
+  - the live install edits harness configurations, which can include
+    Muse's, while the Scribe runs on Muse Code;
+  - S08 must also carry S11's observations (F06).
+- Peak concurrent implementation agents: {S06L, S42, S11T, S41} = 4, plus
+  at most one Wave 1 repair = 5. That is within the cap when the
+  Orchestrator queues by slot. S08 (Scribe) is not counted.
+
+**Hot files (single writer each; no defect):**
+
+| File | Writer | Note |
+|---|---|---|
+| `THIRD_PARTY_NOTICES.md` | S42 only | Absent today; S42 creates it. S09 vendors owner code (D4), not third-party code. |
+| `tools/ci/VENDORED.md` | S09 only | S09T only reads it. |
+| `.gitignore` | Orchestrator only (the OD-AFC-06 negation in the planning commit) | No Phase 1 slice writes it. Any slice that needs it routes a delta to the Orchestrator. |
+| AZHQ `hooks/README.md` | S11 only | `tools/coe/test-pre-commit-gates.sh` asserts two lines in it, and the AZHQ `lint` lane runs that test on a README change. This is in the IE-P1-10 entry criteria. |
+| `core.hooksPath` (this repository's shared git config, seen by every worktree) | S09 (the D4-A installer) | `.githooks` resolves per worktree, so branches without `.githooks/` run no hooks. Recorded in configuration identity. Rollback unsets it. |
+
+**Read and write dependencies checked:**
+
+- These edges are present and correct:
+  - S06→S06L, S06→S42, S42→S09T and S07→S09;
+  - {S01, S02}→S09T, for the template and checker S09 vendors;
+  - {S01, S02, S03}→S11T, for C13;
+  - S09→S11 (the demo needs `gate.sh`), S06→S11 and S06L→S11;
+  - S09→S08 (the hygiene receipt).
+- The missing edges are F05 and F06.
+
+**f885e48 findings carried forward:**
+
+- Applied in this package: IE-F03, IE-F07, IE-F08, IE-F09, IE-F10, IE-F15,
+  IE-F16 and IE-F18. They appear in `design.md` and `slice-graph.md`.
+- Phase 2 input (product lanes): IE-F01, IE-F02, IE-F04, IE-F05, IE-F06,
+  IE-F11, IE-F12 and IE-F14. The Phase 2 entry receipt lists them.
+- Moot: IE-F13 (S41 milestone) and IE-F17 (product ignore paths).
 
 ```json integration_plan
 {
   "branches": [
-    {"repo": "alphazede/Alphazedehq", "branch": "ci-cd/setup-pre-commit", "slices": ["S01"], "milestone": "M1", "base": "origin/main", "merge": "gh pr merge --merge or --rebase (never squash)", "consumed_as": "azhq.d4a"},
-    {"repo": "alphazede/Alphazedehq", "branch": "ci-cd/setup-a-repo", "slices": ["S02"], "milestone": "M1", "base": "origin/main", "merge": "gh pr merge --merge or --rebase (never squash)", "consumed_as": "azhq.d4b"},
-    {"repo": "alphazede/Alphazedehq", "branch": "ci-cd/ship-pull-request", "slices": ["S03"], "milestone": "M1", "base": "origin/main", "merge": "gh pr merge --merge or --rebase (never squash)", "consumed_as": "azhq.d4c"},
-    {"repo": "alphazede/Alphazedehq", "branch": "spec-authoring/d5", "slices": ["S06"], "milestone": "M1", "base": "origin/main", "merge": "gh pr merge --merge or --rebase (never squash)", "consumed_as": "azhq.d5"},
-    {"repo": "alphazede/Alphazedehq", "branch": "ci-cd/harness-hooks", "slices": ["S11T", "S11"], "milestone": "M2", "base": "origin/main at or after azhq.d4a, azhq.d4b, azhq.d4c", "merge": "gh pr merge --merge or --rebase (never squash)", "consumed_as": "azhq.d4e"},
-    {"repo": "alphazede/Alphazedehq", "branch": "ci-cd/entry-point", "slices": ["S41"], "milestone": "M2 (per IE-F13)", "base": "origin/main at or after azhq.d4c", "merge": "gh pr merge --merge or --rebase (never squash)", "consumed_as": "azhq.d4f", "conditional": "OD-AFC-01 = B"},
-    {"repo": "this", "branch": "afc/device-integration-spikes-m1", "slices": ["S04"], "milestone": "M1", "base": "origin/main after planning PR", "merge": "gh pr merge --merge"},
-    {"repo": "this", "branch": "afc/backend-m1", "slices": ["S05", "S09T", "S09"], "milestone": "M1", "base": "origin/main after planning PR; merge origin/main after IE-M1-5", "merge": "gh pr merge --merge"},
-    {"repo": "this", "branch": "afc/spec-and-docs-m1", "slices": ["S07", "S10", "S06L"], "milestone": "M1", "base": "origin/main after planning PR; merge origin/main after IE-M1-6", "merge": "gh pr merge --merge"},
-    {"repo": "this", "branch": "afc/scribe-m1", "slices": ["S08"], "milestone": "M1", "base": "origin/main after planning PR; merge origin/main after IE-M1-6", "merge": "gh pr merge --merge"},
-    {"repo": "this", "branch": "afc/device-integration-spikes-m2", "slices": ["S12", "S13", "S14", "S15"], "milestone": "M2", "base": "origin/main (APK built from the recorded S04 commit)", "merge": "gh pr merge --merge"},
-    {"repo": "this", "branch": "afc/backend-m2", "slices": ["S16", "S18"], "milestone": "M2", "base": "origin/main; S18 slice branch starts from the recorded S05 commit if IE-M1-6 has not merged", "merge": "gh pr merge --merge"},
-    {"repo": "this", "branch": "afc/spec-and-docs-m2", "slices": ["S19"], "milestone": "M2", "base": "origin/main after IE-M1-6", "merge": "gh pr merge --merge"},
-    {"repo": "this", "branch": "afc/backend-m3", "slices": ["S17", "S20T", "S20", "S21T", "S21", "S22T", "S22", "S23T", "S23", "S24T", "S24"], "milestone": "M3", "base": "origin/main after IE-M1-6", "merge": "gh pr merge --merge"},
-    {"repo": "this", "branch": "afc/tv-app-ui-m3", "slices": ["S26T", "S26", "S27T", "S27"], "milestone": "M3", "base": "origin/main after IE-M1-5", "merge": "gh pr merge --merge"},
-    {"repo": "this", "branch": "afc/device-integration-spikes-m3", "slices": ["S25T", "S25", "S28"], "milestone": "M3", "base": "origin/main after IE-M1-5; merge origin/main after IE-M3-1 and IE-M3-3 (becomes the M3 candidate)", "merge": "gh pr merge --merge"},
-    {"repo": "this", "branch": "afc/backend-m4", "slices": ["S30T", "S30"], "milestone": "M4", "base": "origin/main after IE-M3-1", "merge": "gh pr merge --merge"},
-    {"repo": "this", "branch": "afc/tv-app-ui-m4", "slices": ["S31T", "S31", "S32T", "S32"], "milestone": "M4", "base": "origin/main after IE-M3-3", "merge": "gh pr merge --merge"},
-    {"repo": "this", "branch": "afc/defects-m4", "slices": ["S33"], "milestone": "M4", "base": "origin/main after IE-M3-5", "merge": "gh pr merge --merge"},
-    {"repo": "this", "branch": "afc/device-integration-spikes-m4", "slices": ["S34"], "milestone": "M4", "base": "origin/main after IE-M3-5", "merge": "gh pr merge --merge", "conditional": "OD-AFC-03 = yes"},
-    {"repo": "this", "branch": "afc/spec-and-docs-m4", "slices": ["S35"], "milestone": "M4", "base": "origin/main after IE-M3-5", "merge": "gh pr merge --merge"},
-    {"repo": "this", "branch": "afc/spec-and-docs-m5", "slices": ["S36", "S37"], "milestone": "M5", "base": "origin/main after IE-M4-6", "merge": "gh pr merge --merge"},
-    {"repo": "this", "branch": "afc/scribe-m5", "slices": ["S39"], "milestone": "M5", "base": "origin/main after IE-M4-6", "merge": "gh pr merge --merge"},
-    {"repo": "this", "branch": "afc/device-integration-spikes-m5", "slices": ["S38", "S40"], "milestone": "M5", "base": "origin/main after IE-M5-1", "merge": "gh pr merge --merge"},
-    {"repo": "this", "branch": "afc/<lane>-m<n>-<slice> (slice branches)", "slices": ["one per running slice or TDD pair; a TDD pair shares one, named after the green slice"], "milestone": "per slice", "base": "the lane branch head at dispatch", "merge": "git merge --no-ff into the lane branch in the lane worktree; never pushed with force"}
+    {"repo": "alphazede/Alphazedehq", "branch": "ci-cd/setup-pre-commit", "slices": ["S01"], "base": "AZHQ origin/main at dispatch (SHA recorded as azhq.base)", "merge": "gh pr merge --merge (never squash, never force-push)", "consumed_as": "azhq.d4a"},
+    {"repo": "alphazede/Alphazedehq", "branch": "ci-cd/setup-a-repo", "slices": ["S02"], "base": "AZHQ origin/main at dispatch", "merge": "gh pr merge --merge", "consumed_as": "azhq.d4b"},
+    {"repo": "alphazede/Alphazedehq", "branch": "ci-cd/ship-pull-request", "slices": ["S03"], "base": "AZHQ origin/main at dispatch", "merge": "gh pr merge --merge", "consumed_as": "azhq.d4c"},
+    {"repo": "alphazede/Alphazedehq", "branch": "spec-authoring/d5", "slices": ["S06"], "base": "AZHQ origin/main at dispatch", "merge": "gh pr merge --merge", "consumed_as": "azhq.d5"},
+    {"repo": "alphazede/Alphazedehq", "branch": "ci-cd/entry-point", "slices": ["S41"], "base": "AZHQ origin/main at or after azhq.d4a, azhq.d4b, azhq.d4c", "merge": "gh pr merge --merge", "consumed_as": "azhq.d4f", "conditional": "OD-AFC-01 = B"},
+    {"repo": "alphazede/Alphazedehq", "branch": "ci-cd/harness-hooks", "slices": ["S11T", "S11"], "base": "AZHQ origin/main at or after azhq.d4a, azhq.d4b, azhq.d4c, azhq.d5", "merge": "gh pr merge --merge (tests commit first under the Test Implementer author identity)", "consumed_as": "azhq.d4e"},
+    {"repo": "this", "branch": "afc/spec-and-docs-p1-s07", "slices": ["S07"], "base": "origin/main after the planning PR (this.plan)", "merge": "gh pr merge --merge", "consumed_as": "this.vnv"},
+    {"repo": "this", "branch": "afc/spec-and-docs-p1-s06l", "slices": ["S06L"], "base": "origin/main at dispatch", "merge": "gh pr merge --merge", "consumed_as": "this.skill_links"},
+    {"repo": "this", "branch": "afc/spec-and-docs-p1-s42", "slices": ["S42"], "base": "origin/main at dispatch", "merge": "gh pr merge --merge", "consumed_as": "this.spec_vendor"},
+    {"repo": "this", "branch": "afc/ci-p1-s09", "slices": ["S09T", "S09"], "base": "origin/main at or after this.spec_vendor; origin/main merged in (no rebase) after this.vnv before S09 green", "merge": "gh pr merge --merge (tests commit first under the Test Implementer author identity)", "consumed_as": "this.gate"},
+    {"repo": "this", "branch": "afc/scribe-p1-s08", "slices": ["S08"], "base": "origin/main at or after this.gate", "merge": "gh pr merge --merge", "consumed_as": "this.dx_log"},
+    {"rule": "A repair after review commits on the same branch. A repair after merge or revert starts a new branch <branch>-r<n> from origin/main. A pushed branch is synchronized by merging origin/main, never by rebase or force-push. Never commit on local main."}
   ],
   "worktrees": [
-    {"path": "<workspace>/worktrees/amazon-fantasy-companion-<lane>-m<n>", "use": "lane integration worktree: merges completed slice branches, runs post-merge lane gate, opens the lane PR", "owner": "Orchestrator or Coordinator of that wave"},
-    {"path": "<workspace>/worktrees/amazon-fantasy-companion-<lane>-<slice>", "use": "one per running slice or TDD pair (IE-F07); never shared by two concurrent sessions", "owner": "the slice's implementer session(s)"},
-    {"path": "<workspace>/worktrees/Alphazedehq-ci-cd-setup-pre-commit", "use": "S01"},
-    {"path": "<workspace>/worktrees/Alphazedehq-ci-cd-setup-a-repo", "use": "S02"},
-    {"path": "<workspace>/worktrees/Alphazedehq-ci-cd-ship-pull-request", "use": "S03"},
-    {"path": "<workspace>/worktrees/Alphazedehq-spec-authoring", "use": "S06"},
-    {"path": "<workspace>/worktrees/Alphazedehq-ci-cd-harness-hooks", "use": "S11T, S11"},
-    {"path": "<workspace>/worktrees/Alphazedehq-ci-cd-entry-point", "use": "S41 (conditional)"},
-    {"rule": "Never hidden directories or /tmp. Remove the worktree, local branch and remote branch in the same session after the PR merges, unless it holds uncommitted or unmerged work."}
+    {"path": "<workspace>/worktrees/Alphazedehq-ci-cd-setup-pre-commit", "slices": ["S01"]},
+    {"path": "<workspace>/worktrees/Alphazedehq-ci-cd-setup-a-repo", "slices": ["S02"]},
+    {"path": "<workspace>/worktrees/Alphazedehq-ci-cd-ship-pull-request", "slices": ["S03"]},
+    {"path": "<workspace>/worktrees/Alphazedehq-spec-authoring", "slices": ["S06"]},
+    {"path": "<workspace>/worktrees/Alphazedehq-ci-cd-entry-point", "slices": ["S41"], "conditional": "OD-AFC-01 = B"},
+    {"path": "<workspace>/worktrees/Alphazedehq-ci-cd-harness-hooks", "slices": ["S11T", "S11"], "note": "shared TDD-pair worktree"},
+    {"path": "<workspace>/worktrees/amazon-fantasy-companion-spec-and-docs-s07", "slices": ["S07"]},
+    {"path": "<workspace>/worktrees/amazon-fantasy-companion-spec-and-docs-s06l", "slices": ["S06L"]},
+    {"path": "<workspace>/worktrees/amazon-fantasy-companion-spec-and-docs-s42", "slices": ["S42"]},
+    {"path": "<workspace>/worktrees/amazon-fantasy-companion-ci-s09", "slices": ["S09T", "S09"], "note": "shared TDD-pair worktree"},
+    {"path": "<workspace>/worktrees/amazon-fantasy-companion-scribe-s08", "slices": ["S08"]},
+    {"path": "<workspace>/worktrees/amazon-fantasy-companion-hookdemo", "slices": [], "note": "IE-P1-10 CMD-HOOK-DEMO scratch worktree, detached at this.gate, never pushed, removed after the demo"},
+    {"rule": "The Orchestrator creates worktrees one at a time before dispatch. Never in hidden directories or /tmp. After the PR merges, remove the worktree, the local branch and the remote branch in the same session, unless the worktree holds uncommitted or unmerged work."}
   ],
   "steps": [
     {
-      "id": "IE-M1-1", "milestone": "M1", "order": 1, "merges": ["S01"],
-      "entry_criteria": ["Planning PR merged on main (OWN-01)", "S01 stop condition met at PR head: CMD-D4A-TEST, CMD-SKILL-SIZE, CMD-SKILL-TRIGGER exit 0", "S01 write set includes skills/setup-pre-commit/agents/openai.yaml (IE-F18)", "One Reviewer review with OCR delegate (Reverify: not applicable — no binary) and at most one repair", "AZHQ PR required checks green; PR mergeable without conflict; lease alphazedehq-skills/setup-pre-commit held by S01 only"],
-      "post_step_vv": ["CMD-MERGE-IDENTITY (proposed): record AZHQ merge commit as azhq.d4a", "CMD-D4A-TEST and CMD-SKILL-SIZE re-run on azhq.d4a", "CMD-AZHQ-SYNC (proposed): fast-forward the AZHQ main checkout under lease alphazedehq-main-checkout; record HEAD"],
-      "rollback": "Revert PR in Alphazedehq (git revert -m 1 azhq.d4a on a new branch, PR, merge commit); CMD-AZHQ-SYNC; S09T/S09/S11T re-pin to the revert-free predecessor or wait for the relanded fix. Never force-push.",
-      "exit": "azhq.d4a recorded; skill live on host at the synced HEAD."
+      "id": "IE-P1-1", "phase": "Phase 1", "order": 1, "repo": "alphazede/Alphazedehq", "merges": ["S01"], "after": ["planning PR merged on this main (this.plan)"],
+      "entry_criteria": ["S01 stop condition met at the PR head: CMD-D4A-TEST, CMD-SKILL-SIZE exit 0; CMD-SKILL-TRIGGER routes the matching request to setup-pre-commit and the non-matching one to its stated peer", "No [TODO] text in skills/setup-pre-commit/ (AC-AFC-D4-01); no repository-scoping names (AC-AFC-D4-06)", "One Reviewer review at this step (F01) with OCR delegate and the Reverify not-applicable line; at most one repair", "AZHQ PR checks green and mergeable; lease alphazedehq-skills/setup-pre-commit held by S01 only"],
+      "post_step_vv": ["CMD-MERGE-IDENTITY (proposed): record PR number, merge commit as azhq.d4a, and git rev-parse azhq.d4a:skills/setup-pre-commit", "CMD-AZHQ-SKILL-TESTS (proposed) at azhq.d4a: CMD-D4A-TEST and CMD-SKILL-SIZE rerun locally, because AZHQ coe-gates path filters do not run this suite (F09)", "CMD-AZHQ-SYNC (proposed): fast-forward the AZHQ main checkout under the exclusive form of lease alphazedehq-main-checkout (F02); record pre and post HEAD and the running sessions"],
+      "rollback": "Revert PR in Alphazedehq: branch revert/ci-cd-setup-pre-commit from origin/main, git revert -m 1 azhq.d4a, PR, gh pr merge --merge. Then CMD-AZHQ-SYNC. S09T, S09 and S11T do not dispatch, or are re-pinned, until the change relands. Never force-push.",
+      "exit": "azhq.d4a and its skill tree id recorded; the skill is live on the host at the synced HEAD."
     },
     {
-      "id": "IE-M1-2", "milestone": "M1", "order": 1, "merges": ["S02"],
-      "entry_criteria": ["S02 stop condition met: CMD-D4B-TEST, CMD-SKILL-SIZE, CMD-SKILL-TRIGGER exit 0; template passes the checker", "Reviewer review recorded (OCR delegate; Reverify not applicable — no binary)", "AZHQ checks green; lease alphazedehq-skills/setup-a-repo"],
-      "post_step_vv": ["CMD-MERGE-IDENTITY → azhq.d4b", "CMD-D4B-TEST re-run on azhq.d4b", "CMD-AZHQ-SYNC"],
-      "rollback": "Revert PR in Alphazedehq; CMD-AZHQ-SYNC; S09 vendored checker re-vendored from the reverted state by a new S09 repair packet.",
+      "id": "IE-P1-2", "phase": "Phase 1", "order": 1, "repo": "alphazede/Alphazedehq", "merges": ["S02"], "after": ["this.plan"],
+      "entry_criteria": ["S02 stop condition met: CMD-D4B-TEST, CMD-SKILL-SIZE exit 0; skills/setup-a-repo/templates/ci.yml passes check-workflows.py; CMD-SKILL-TRIGGER", "SKILL.md description no longer scopes to one named repository (SD-019, AC-AFC-D4-06)", "Reviewer review at this step (F01); at most one repair; AZHQ checks green; lease alphazedehq-skills/setup-a-repo"],
+      "post_step_vv": ["CMD-MERGE-IDENTITY -> azhq.d4b (+ tree id of skills/setup-a-repo)", "CMD-AZHQ-SKILL-TESTS (proposed) at azhq.d4b (CMD-D4B-TEST)", "CMD-AZHQ-SYNC"],
+      "rollback": "Revert PR in Alphazedehq; CMD-AZHQ-SYNC. If S09 already vendored check_workflows.py from azhq.d4b, an S09 repair packet re-vendors it from the reverted state and updates tools/ci/VENDORED.md.",
       "exit": "azhq.d4b recorded."
     },
     {
-      "id": "IE-M1-3", "milestone": "M1", "order": 1, "merges": ["S06"],
-      "entry_criteria": ["S06 stop condition met: CMD-SCAN PASS, CMD-D5-TEST, CMD-D5-AGNOSTIC, CMD-SKILL-SIZE exit 0; CMD-SKILL-TRIGGER routes the matching request to spec-authoring and the SDoc request to use-requirements-system", "OD-AFC-07 decision applied (use-requirements-system description edit present only if approved)", "Reviewer review recorded; AZHQ checks green; leases alphazedehq-skills/spec-authoring and alphazedehq-skills/use-requirements-system"],
-      "post_step_vv": ["CMD-MERGE-IDENTITY → azhq.d5", "CMD-D5-TEST and CMD-D5-AGNOSTIC re-run on azhq.d5", "CMD-AZHQ-SYNC"],
-      "rollback": "Revert PR in Alphazedehq; CMD-AZHQ-SYNC; remove the S06L harness links (restore from S06L evidence); S19 does not start until relanded.",
-      "exit": "azhq.d5 recorded; unblocks S06L, S09T (with azhq.d4a, azhq.d4b), S19."
-    },
-    {
-      "id": "IE-M1-4", "milestone": "M1", "order": 1, "merges": ["S03"],
-      "entry_criteria": ["S03 stop condition met: existing tests/edit-pr.test.sh passes (CMD-D4C-TEST), CMD-SKILL-SIZE exit 0, CMD-SKILL-TRIGGER", "Reviewer review recorded; AZHQ checks green (coe-gates runs edit-pr.test.sh); lease alphazedehq-skills/ship-pull-request"],
-      "post_step_vv": ["CMD-MERGE-IDENTITY → azhq.d4c", "CMD-D4C-TEST re-run on azhq.d4c", "CMD-AZHQ-SYNC (changes the PR gate procedure for every repository on the host: sync only between dispatches)"],
+      "id": "IE-P1-3", "phase": "Phase 1", "order": 1, "repo": "alphazede/Alphazedehq", "merges": ["S03"], "after": ["this.plan"],
+      "entry_criteria": ["S03 stop condition met: skills/ship-pull-request/tests/edit-pr.test.sh passes (CMD-D4C-TEST); CMD-SKILL-SIZE exit 0 (SKILL.md below 60 lines and 650 words); CMD-SKILL-TRIGGER", "The vnv-review step passes --scope=commits=<base>..HEAD and records REFUSED_NO_VNV as a non-pass, non-blocking row (OD-AFC-10)", "Reviewer review at this step (F01); AZHQ checks green; lease alphazedehq-skills/ship-pull-request"],
+      "post_step_vv": ["CMD-MERGE-IDENTITY -> azhq.d4c", "CMD-AZHQ-SKILL-TESTS (proposed) at azhq.d4c (CMD-D4C-TEST)", "CMD-AZHQ-SYNC, only when no session of this Lifecycle is opening or landing a PR, because this changes the PR gate procedure for every agent on the host (F02)"],
       "rollback": "Revert PR in Alphazedehq; CMD-AZHQ-SYNC.",
-      "exit": "azhq.d4c recorded; with azhq.d4a and azhq.d4b satisfies C13 for S11T."
+      "exit": "azhq.d4c recorded. With azhq.d4a and azhq.d4b this satisfies C13, so S11T and S41 (if B) can dispatch."
     },
     {
-      "id": "IE-M1-5", "milestone": "M1", "order": 2, "merges": ["S04"],
-      "entry_criteria": ["S04 stop condition met with corrected commands (IE-F02): CMD-SCAN PASS for starter, Android SDK and Gradle wrapper; CMD-ANDROID-BUILD (proposed) exit 0", "S04 skeleton satisfies IE-F04, IE-F05, IE-F06, IE-F17 (net interface, hot-file contents, API base URL property, footage ignore)", "Starter .github/ dropped (SM F4); minSdk 25, applicationId afc.companion (SM F1, F2)", "Reviewer review recorded (Reverify on the debug APK claim per AC-AFC-REV-01)"],
-      "post_step_vv": ["CMD-MERGE-IDENTITY → this.s04", "CMD-ANDROID-BUILD on the merge commit", "CMD-APK-SHA (proposed) of the debug APK; CMD-GATE-ANDROID becomes available after IE-M1-6"],
-      "rollback": "Revert PR on this repository (revert branch, PR, merge commit). S12 continues from the recorded S04 APK only if the revert did not change tv-app/app/build.gradle.kts or AndroidManifest.xml; else S12 waits.",
-      "exit": "this.s04 and the S04 APK sha256 recorded; tv-app hot-file owner fixed as the device-integration-spikes lane."
+      "id": "IE-P1-4", "phase": "Phase 1", "order": 1, "repo": "alphazede/Alphazedehq", "merges": ["S06"], "after": ["this.plan"],
+      "entry_criteria": ["S06 stop condition met: CMD-SCAN PASS (uv, Graphviz, the GridMarket source at its pinned commit; RISK-AFC-13); CMD-D5-TEST, CMD-D5-AGNOSTIC, CMD-SKILL-SIZE exit 0; CMD-SKILL-TRIGGER routes the Markdown-spec request to spec-authoring and the SDoc publication request to use-requirements-system (AC-AFC-D5-03, RISK-AFC-15)", "vendor.sh copies scripts/ and template/ and records the source commit and skill tree id (F03)", "OD-AFC-07 disposition applied: the use-requirements-system description edit is present only if approved", "skills/spec-authoring/LICENSE-gridmarket present (AC-AFC-D5-01)", "Reviewer review at this step (F01); AZHQ checks green; leases alphazedehq-skills/spec-authoring and alphazedehq-skills/use-requirements-system"],
+      "post_step_vv": ["CMD-MERGE-IDENTITY -> azhq.d5 (+ git rev-parse azhq.d5:skills/spec-authoring)", "CMD-AZHQ-SKILL-TESTS (proposed) at azhq.d5 (CMD-D5-TEST, CMD-D5-AGNOSTIC)", "CMD-AZHQ-SYNC; record HEAD for the S06L and S42 packets"],
+      "rollback": "Revert PR in Alphazedehq; CMD-AZHQ-SYNC. If S06L already ran, CMD-SKILL-UNLINK (proposed) removes its four links. If S42 already merged, IE-P1-7 rolls back too. P2-4 waits for the change to reland (RISK-AFC-16).",
+      "exit": "azhq.d5 and its skill tree id recorded. This unblocks S06L and S42."
     },
     {
-      "id": "IE-M1-6", "milestone": "M1", "order": 3, "merges": ["S05", "S09T", "S09"],
-      "entry_criteria": ["IE-M1-1, IE-M1-2, IE-M1-3 merged (S09T dependency)", "IE-M1-5 merged and origin/main merged into afc/backend-m1 (so CMD-GATE-ALL on main has tv-app)", "S05 stop condition met with CMD-BACKEND-CHECK (IE-F02); S05 write set excludes backend/fixtures/ (IE-F01) and carries the IE-F05 hot-file contents", "S09T red receipt (CMD-RED) and S09 green; CMD-WORKFLOW-CHECK exit 0; tools/ci/VENDORED.md names azhq.d4a and azhq.d4b (IE-F10); hygiene area runs tools/ci/tests (IE-F09)", "Planning package scrubbed of absolute home paths (hygiene must pass on all tracked files)", "PR shows gate / backend and gate / hygiene checks green; Reviewer review recorded"],
-      "post_step_vv": ["CMD-MERGE-IDENTITY → this.s05_s09", "CMD-GATE-ALL on the merge commit: android PASS (debug APK built by the gate), backend PASS, spec PASS nothing to check, hygiene PASS", "CMD-CI-VENDOR-PIN (proposed)", "CMD-CONTRACT-FROZEN (proposed) baseline recorded: sha256 of backend/api/openapi.yaml, backend/template.yaml, backend/src/afc_backend/store/, tv-app/app/src/main/java/afc/companion/net/ApiClient.kt"],
-      "rollback": "Revert PR on this repository. Lane branches that merged main after this step merge the revert too. git config core.hooksPath is reset by the D4-A installer's uninstall path if hooks block work after revert.",
-      "exit": "Repo gate live on main and in PR checks (AC-AFC-CI-01..03); frozen-contract baseline recorded."
+      "id": "IE-P1-5", "phase": "Phase 1", "order": 1, "repo": "this", "merges": ["S07"], "after": ["this.plan"],
+      "entry_criteria": ["CMD-VNV-CHECK: docs/vnv/AGENTS.md plus ci-cd, spec and developer-feedback area files, each with Scope, Tools, Review Focus and Findings target (AC-AFC-VNV-01)", "Reviewer review at this step (F01). No gate exists yet, so CMD-PATH-SCAN-PLAN (proposed: tools-free rule-12 scan) runs on the diff.", "CMD-PR-CHECKS (proposed): the Orchestrator confirms PR-only landing, because this private repository has no ruleset (F10)"],
+      "post_step_vv": ["CMD-MERGE-IDENTITY -> this.vnv", "CMD-VNV-CHECK on this.vnv"],
+      "rollback": "Revert PR on this repository. After IE-P1-9, the docs area then has no Vnv area to check, and ship-pull-request records REFUSED_NO_VNV. Reland through a repair branch.",
+      "exit": "this.vnv recorded. It satisfies S09's S07 dependency."
     },
     {
-      "id": "IE-M1-7", "milestone": "M1", "order": 4, "merges": ["S07", "S10", "S06L", "S08"],
-      "entry_criteria": ["IE-M1-6 merged and origin/main merged into afc/spec-and-docs-m1 and afc/scribe-m1 (hygiene receipt for S08 per IE-F03)", "IE-M1-3 merged and CMD-AZHQ-SYNC HEAD at or after azhq.d5 before S06L ran (IE-F16); lease harness-configs released by S06L", "CMD-VNV-CHECK, CMD-MILESTONES, CMD-SKILL-LINK, CMD-GATE-HYGIENE receipts", "Reviewer review recorded for each PR"],
-      "post_step_vv": ["CMD-MERGE-IDENTITY for both PRs", "CMD-GATE-HYGIENE and CMD-VNV-CHECK on main", "CMD-SKILL-LINK re-read on host"],
-      "rollback": "Revert the affected PR; S06L links removed by deleting the four symlinks it created (paths in skill-links.txt).",
-      "exit": "M1 exit: milestones readback equal (AC-AFC-PLAN-02); D4-A..C and D5 merged and linked; gate green on a PR; Vnv tree; debug APK built by gate; backend skeleton with frozen API green; Scribe log; first ESPN capture committed on the S16 slice branch (IE-F12)."
+      "id": "IE-P1-6", "phase": "Phase 1", "order": 2, "repo": "this", "merges": ["S06L"], "after": ["IE-P1-4"],
+      "entry_criteria": ["CMD-AZHQ-SYNC after IE-P1-4: main checkout HEAD at or after azhq.d5 and git rev-parse HEAD:skills/spec-authoring equals the azhq.d5 tree id", "Lease harness-configs held by S06L; shared read lease on alphazedehq-main-checkout (F02)", "CMD-SKILL-LINK: four lines, $HOME/.claude/skills, $HOME/.codex/skills, $HOME/.agents/skills and $HOME/.cursor/skills /spec-authoring resolving to <workspace>/Alphazedehq/skills/spec-authoring, written $HOME-relative; the evidence file holds no absolute home path", "Reviewer review at this step (F01); CMD-PR-CHECKS"],
+      "post_step_vv": ["CMD-MERGE-IDENTITY -> this.skill_links", "CMD-SKILL-LINK re-read on the host", "CMD-SKILL-TRIGGER (spec-authoring matching request) in a fresh session, to show that the link is live"],
+      "rollback": "CMD-SKILL-UNLINK (proposed): remove each path in evidence/skill-links.txt, only if it is a symlink whose target is the AZHQ main checkout skill path; revert the evidence PR.",
+      "exit": "D5 skill linked in the four harness directories (AC-AFC-D5-05 part 2). harness-configs released for S11."
     },
     {
-      "id": "IE-M2-1", "milestone": "M2", "order": 1, "merges": ["S11T", "S11"],
-      "entry_criteria": ["IE-M1-1, IE-M1-2, IE-M1-4 merged (C13); IE-M1-6 merged (a repository with tools/ci/gate.sh exists for the demonstration, IE-F15)", "S11T red receipt then CMD-HOOK-TEST green at PR head", "Lease harness-configs free; no implementer session mid-commit (installer changes every harness on the host)", "Reviewer review recorded; AZHQ checks green"],
-      "post_step_vv": ["CMD-MERGE-IDENTITY → azhq.d4e", "CMD-AZHQ-SYNC", "CMD-HOOK-INSTALL then installer --verify: per harness wired or typed gap (Muse, AGY)", "CMD-HOOK-DEMO (proposed): in a scratch slice worktree of this repository, a commit carrying a deliberate hygiene failure is blocked under each wired harness; the scratch worktree is removed"],
-      "rollback": "CMD-HOOK-RESTORE (proposed): installer restores each harness configuration from its timestamped backup; revert PR in Alphazedehq; CMD-AZHQ-SYNC.",
-      "exit": "AC-AFC-D4-04 and AC-AFC-D5-05 (Muse/AGY) evidence; azhq.d4e recorded."
+      "id": "IE-P1-7", "phase": "Phase 1", "order": 2, "repo": "this", "merges": ["S42"], "after": ["IE-P1-4"],
+      "entry_criteria": ["OD-AFC-09 approved", "S42 ran skills/spec-authoring/scripts/vendor.sh from the main checkout at HEAD with skill tree equal to azhq.d5's, under the shared read lease (F02)", "CMD-SPEC-VENDOR (amended per F03): tools/spec/ equals git archive azhq.d5 skills/spec-authoring/{scripts,template} (excluding VENDORED.md); tools/spec/VENDORED.md names the source commit, the skill tree id equal to azhq.d5's, and the MIT notice; THIRD_PARTY_NOTICES.md carries the GridMarket MIT notice", "uv run --script tools/spec/spec_build.py and spec_lint.py build and lint tools/spec/template in a temporary directory with exit 0 (pre-gate interface smoke)", "Reviewer review at this step (F01); CMD-PR-CHECKS"],
+      "post_step_vv": ["CMD-MERGE-IDENTITY -> this.spec_vendor", "CMD-SPEC-VENDOR on this.spec_vendor"],
+      "rollback": "Revert PR on this repository. The spec area then returns GAP tools/spec missing (exit 3), a typed gap. Re-vendor from azhq.d5 in a repair packet.",
+      "exit": "AC-AFC-SPEC-01 evidence. S09T can dispatch, given IE-P1-1 and IE-P1-2."
     },
     {
-      "id": "IE-M2-2", "milestone": "M2", "order": 1, "merges": ["S41"],
-      "entry_criteria": ["OD-AFC-01 = B (else this step is skipped and recorded as not applicable)", "IE-M1-1, IE-M1-2, IE-M1-4 merged", "CMD-SKILL-SIZE, CMD-SKILL-TRIGGER pass; Reviewer review; lease alphazedehq-skills/ci-cd"],
-      "post_step_vv": ["CMD-MERGE-IDENTITY → azhq.d4f", "CMD-AZHQ-SYNC", "CMD-SKILL-TRIGGER re-run on host"],
-      "rollback": "Revert PR in Alphazedehq; CMD-AZHQ-SYNC.",
-      "exit": "azhq.d4f recorded or step marked not applicable."
+      "id": "IE-P1-8", "phase": "Phase 1", "order": 2, "repo": "alphazede/Alphazedehq", "merges": ["S41"], "after": ["IE-P1-1", "IE-P1-2", "IE-P1-3"],
+      "entry_criteria": ["OD-AFC-01 = B; otherwise record this step as not_applicable with the decision ID", "CMD-SKILL-SIZE: router under 25 lines; CMD-SKILL-TRIGGER; no procedure of its own", "Reviewer review at this step (F01); lease alphazedehq-skills/ci-cd"],
+      "post_step_vv": ["CMD-MERGE-IDENTITY -> azhq.d4f", "CMD-AZHQ-SYNC", "CMD-SKILL-TRIGGER rerun on the host"],
+      "rollback": "Revert PR in Alphazedehq; CMD-AZHQ-SYNC. Rerun CMD-HOOK-INSTALL --verify so that Muse's stale ci-cd link is reported or removed.",
+      "exit": "azhq.d4f recorded, or the step is marked not_applicable."
     },
     {
-      "id": "IE-M2-3", "milestone": "M2", "order": 2, "merges": ["S12", "S13", "S14", "S15"],
-      "entry_criteria": ["Verdict files SP-1..SP-4 present; C1 not triggered (else class C owner stop, OWN-07, and this step waits)", "S15 verdict timestamp at most S12 first-install + spike_panel_max, or Mode A recorded at expiry", "SP-3 registry draft present", "origin/main merged into afc/device-integration-spikes-m2; Reviewer review recorded"],
-      "post_step_vv": ["CMD-MERGE-IDENTITY", "CMD-SPIKE-VERDICTS (proposed): each verdict file has route, steps, evidence paths, verdict, limits (AC-AFC-SPIKE-02)", "CMD-GATE-HYGIENE on main", "Record panel mode and sha256 of docs/spikes/SP-3-provider-registry.json"],
-      "rollback": "Revert PR; verdicts are evidence, so a wrong verdict is superseded by a new verdict commit, never edited in place after merge.",
-      "exit": "Panel mode and SP-3 route fixed as inputs to S23T, S25T, S27T."
+      "id": "IE-P1-9", "phase": "Phase 1", "order": 3, "repo": "this", "merges": ["S09T", "S09"], "after": ["IE-P1-1", "IE-P1-2", "IE-P1-5", "IE-P1-7"],
+      "entry_criteria": ["CMD-RED receipt from S09T: failing output plus sha256 of each test file in tools/ci/tests/", "S09 green: tests committed first under the Test Implementer author identity, then the product; --no-verify never used; CMD-SCAN PASS for each pinned GitHub Action (RISK-AFC-13)", "CMD-CI-VENDOR-PIN (proposed): tools/ci/VENDORED.md names azhq.d4a and azhq.d4b; tools/ci/check_workflows.py equals azhq.d4b:skills/setup-a-repo/scripts/check-workflows.py; gate.sh derives from azhq.d4a:skills/setup-pre-commit/templates/gate.sh", "CMD-WORKFLOW-CHECK exit 0; CMD-GATE-HYGIENE, CMD-GATE-DOCS, CMD-GATE-SPEC exit 0 in the worktree", "The planning package on main holds no absolute home path and no broken relative Markdown link. Checked 2026-10-11: 61 Markdown files, 0 broken links; 0 tracked files with home paths. The untracked re-p1-run.log and sm-p1-run.log contain home paths and must be scrubbed before OD-AFC-06 tracks them.", "PR shows gate / spec, gate / docs and gate / hygiene green (CMD-PR-CHECKS); Reviewer review at this step (F01)"],
+      "post_step_vv": ["CMD-MERGE-IDENTITY -> this.gate", "CMD-GATE-ALL on this.gate: spec PASS (template path), docs PASS, hygiene PASS; any GAP is an anomaly (AN-05)", "CMD-HOOKSPATH (proposed): git config --get core.hooksPath equals .githooks; record it", "CMD-WORKFLOW-CHECK on main"],
+      "rollback": "Revert PR on this repository, then git config --unset core.hooksPath in this repository. Branches that merged main after the step merge the revert. Reland from afc/ci-p1-s09-r1.",
+      "exit": "Repository gate live on main and in PR checks (AC-AFC-CI-01..04). P2-4's S09 criterion met."
     },
     {
-      "id": "IE-M2-4", "milestone": "M2", "order": 2, "merges": ["S19"],
-      "entry_criteria": ["IE-M1-3 merged (azhq.d5) and IE-M1-6 merged (spec area)", "CMD-SPEC-VENDOR: tools/spec/VENDORED.md commit equals azhq.d5 and files equal the AZHQ tree at azhq.d5", "Rev 0.1 builds; CMD-GATE-SPEC PASS; second build byte-identical", "Reviewer review recorded"],
-      "post_step_vv": ["CMD-MERGE-IDENTITY", "CMD-GATE-SPEC and CMD-SPEC-VENDOR on main"],
-      "rollback": "Revert PR; re-vendor from azhq.d5 in a repair packet.",
-      "exit": "AC-AFC-SPEC-01, -02 (rev 0.1)."
+      "id": "IE-P1-10", "phase": "Phase 1", "order": 4, "repo": "alphazede/Alphazedehq", "merges": ["S11T", "S11"], "after": ["IE-P1-1", "IE-P1-2", "IE-P1-3", "IE-P1-4", "IE-P1-6", "IE-P1-9", "IE-P1-8 merged or not_applicable"],
+      "entry_criteria": ["CMD-RED receipt from S11T, then CMD-HOOK-TEST green at the PR head", "CMD-HOOK-INSTALL-SANDBOX (proposed, F04): installer --install --verify against HOME=$(mktemp -d) reports each SD-021 harness as wired or typed gap; no live harness configuration edited before merge; hook command path is <checkout>/hooks/ci-gate-hook.sh of the checkout the installer runs from", "bash tools/coe/test-pre-commit-gates.sh passes (hooks/README.md coupling); AZHQ lint and te-hooks lanes green", "Reviewer review at this step (F01); lease harness-configs free"],
+      "post_step_vv": ["CMD-MERGE-IDENTITY -> azhq.d4e", "CMD-AZHQ-SKILL-TESTS (proposed) at azhq.d4e (CMD-HOOK-TEST)", "CMD-AZHQ-SYNC", "Live install under lease harness-configs, with no implementer or Scribe session running: CMD-HOOK-INSTALL from <workspace>/Alphazedehq (the main checkout, never a linked worktree); record each edited config's sha256 before and after and its timestamped backup path, $HOME-relative", "CMD-HOOK-INSTALL --verify: one line per harness (Claude Code, Codex, Cursor, Muse, AGY), wired or typed_gap with evidence; D4 skills, D5 skill and vnv-review linked into $HOME/.config/muse/skills (and AGY's if verified) or typed gap (AC-AFC-D4-04, AC-AFC-D5-05 part 3)", "CMD-HOOK-DEMO (proposed): in the hookdemo scratch worktree, a commit with a deliberate PATH-HOME-POSIX finding is blocked under each wired harness in a fresh headless session; the worktree is removed afterwards"],
+      "rollback": "CMD-HOOK-RESTORE (proposed): installer restores each harness configuration from its recorded backup and removes the skill links it created (from its receipt). Then revert PR in Alphazedehq and CMD-AZHQ-SYNC. If a harness's tool calls fail after install, restore first, then diagnose (AN-07).",
+      "exit": "azhq.d4e recorded. Hooks wired or typed gaps (RISK-AFC-12). Config digests and backups recorded."
     },
     {
-      "id": "IE-M2-5", "milestone": "M2", "order": 3, "merges": ["S16", "S18"],
-      "entry_criteria": ["S16 captures from the 10-12 and 10-15 games committed (10-15 game ends about 2026-10-16T04:00Z, IE-F11); CMD-ESPN-RECORD verdict file", "S18: CMD-SCAN PASS (SAM CLI), CMD-SAM-DEPLOY to stack afc-dev with profile afc-dev, CMD-SMOKE 401 without token and 200 on link start; deployed backend/template.yaml sha256 equals main's (CMD-TEMPLATE-DIGEST, proposed)", "origin/main merged into afc/backend-m2; gate / backend and gate / hygiene green; Reviewer review recorded"],
-      "post_step_vv": ["CMD-MERGE-IDENTITY", "CMD-GATE-BACKEND on main", "Record sha256 manifest of backend/fixtures/espn/ (fixture digest)"],
-      "rollback": "Revert PR; stack afc-dev stays as deployed (no paid resource by AC-AFC-SEC-03); redeploy from the previous recorded SHA with CMD-SAM-ROLLBACK (proposed) if the template changed.",
-      "exit": "M2 exit: SP-1..SP-5 verdicts, panel mode, fixtures, dev stack, hooks wired or typed gaps, spec rev 0.1."
+      "id": "IE-P1-11", "phase": "Phase 1", "order": 5, "repo": "this", "merges": ["S08"], "after": ["IE-P1-9", "S11 returned", "S41 returned or not dispatched"],
+      "entry_criteria": ["docs/developer-feedback/observations.md carries DX-001..DX-007, the planning observations and the developer_feedback of every Phase 1 implementation and Reviewer return up to S11 (F06)", "CMD-GATE-HYGIENE and CMD-GATE-DOCS exit 0 on the branch (no home path, no secret, links resolve)", "The S08 commit runs under the git hooks and, if the live install has happened, under the harness hook; --no-verify never used", "Reviewer review at this step (F01); CMD-PR-CHECKS gate / docs and gate / hygiene green"],
+      "post_step_vv": ["CMD-MERGE-IDENTITY -> this.dx_log", "CMD-GATE-ALL on main", "CMD-DX-PRESENCE (from f885e48 seit; TE to confirm): every row has the issue #1 Scribe contract fields"],
+      "rollback": "Revert PR. The log is evidence, so a correction is a new commit, never an in-place edit after merge.",
+      "exit": "AC-AFC-DX-02 evidence."
     },
     {
-      "id": "IE-M3-1", "milestone": "M3", "order": 1, "merges": ["S17", "S20T", "S20", "S21T", "S21", "S22T", "S22", "S23T", "S23", "S24T", "S24"],
-      "entry_criteria": ["Each TDD pair: CMD-RED receipt then green slice (IE-F08 commit handling); CMD-GATE-BACKEND exit 0 in its slice worktree", "Slice branches merged into afc/backend-m3 with git merge --no-ff in order S20 → S21 → S22 → S23 → S24, CMD-GATE-BACKEND after each merge; a non-whitespace conflict returns to the later slice's lane", "CMD-CONTRACT-FROZEN: openapi.yaml, template.yaml, store/ unchanged except routed hot-file deltas", "CMD-REGISTRY-CHECK: registry.json entries subset of SP-3 verified forms", "S17 verdict recorded at or after T_yahoo (2026-10-16T19:00:00Z)", "Reviewer review recorded; target merge 2026-10-17T18:00:00Z"],
-      "post_step_vv": ["CMD-MERGE-IDENTITY → this.m3_backend", "CMD-GATE-BACKEND, CMD-GATE-HYGIENE, CMD-CONTRACT-FROZEN on main"],
-      "rollback": "Revert PR; IE-M3-4 candidate forms on the device lane branch by merging the unreverted lane heads only if their gate passes, else S28 uses the previous deployed stack in replay mode.",
-      "exit": "Backend feature-complete for M3 on main."
-    },
-    {
-      "id": "IE-M3-2", "milestone": "M3", "order": 2, "merges": [],
-      "entry_criteria": ["IE-M3-1 merged", "Lease aws-afc-dev free (S17 done)", "OWN-04 satisfied"],
-      "post_step_vv": ["CMD-SAM-DEPLOY from this.m3_backend with ReplayMode=on", "CMD-SMOKE", "CMD-TEMPLATE-DIGEST; record stack outputs (ApiUrl) and provider registry sha256"],
-      "rollback": "CMD-SAM-ROLLBACK: redeploy the last recorded good SHA (CloudFormation rolls back a failed update automatically); never delete the stack without the owner.",
-      "exit": "Dev stack equals main at this.m3_backend; ApiUrl recorded for APK builds."
-    },
-    {
-      "id": "IE-M3-3", "milestone": "M3", "order": 2, "merges": ["S26T", "S26", "S27T", "S27"],
-      "entry_criteria": ["S27T started only after IE-M2-3 recorded the panel mode", "Pairs green: CMD-GATE-ANDROID in each slice worktree; CMD-FOOTAGE-FETCH sha256 pinned (Mode A)", "Slice branches merged into afc/tv-app-ui-m3 (S26 then S27), CMD-GATE-ANDROID after each", "On-device visual review with CMD-ADB-SCREENCAP per changed screen and state (AC-AFC-VIS-01); Reviewer review recorded", "No edit to tv-app hot files outside routed hot-file deltas (CMD-CONTRACT-FROZEN)", "Target merge 2026-10-18T06:00:00Z"],
-      "post_step_vv": ["CMD-MERGE-IDENTITY → this.m3_tvui", "CMD-GATE-ANDROID on main", "CMD-CONTRACT-FROZEN"],
-      "rollback": "Revert PR; IE-M3-4 builds the candidate from the remaining merged lanes and records missing panel or settings screens as an anomaly.",
-      "exit": "Settings, link, detect, panel, player on main."
-    },
-    {
-      "id": "IE-M3-4", "milestone": "M3", "order": 3, "merges": ["S25T", "S25"],
-      "entry_criteria": ["IE-M3-1 and IE-M3-3 merged (or their recorded lane heads, per anomaly rule AN-03); IE-M3-2 done", "S25 green on JVM and CMD-ANDROID-CONNECTED on the stick", "origin/main merged into afc/device-integration-spikes-m3 without non-whitespace conflict; this merge commit is the M3 candidate", "Leases fire-tv-stick and aws-afc-dev held from 2026-10-18T09:00:00Z", "Cut-off: candidate ready by 2026-10-18T15:00:00Z"],
-      "post_step_vv": ["CMD-GATE-ALL on the candidate", "CMD-FOOTAGE-FETCH then APK build with -PafcApiBaseUrl=<ApiUrl> (IE-F06); CMD-APK-SHA", "CMD-INSTALL-APK on the stick", "CMD-E2E-REPLAY (proposed): with ReplayMode=on, a released alert appears as heads-up over provider playback, Watch records a launch outcome, the panel shows replay-labeled points in the decided mode; CMD-ADB-SCREENCAP for each"],
-      "rollback": "Uninstall the candidate APK and reinstall the last recorded good APK (CMD-INSTALL-APK with its sha256); reset afc/device-integration-spikes-m3 only by a new revert commit, never by reset or force-push.",
-      "exit": "M3 candidate SHA and APK sha256 recorded and rehearsed in replay."
-    },
-    {
-      "id": "IE-M3-5", "milestone": "M3", "order": 4, "merges": ["S25T", "S25", "S28"],
-      "entry_criteria": ["IE-M3-4 exit", "Lease live-game-window (Sunday 2026-10-18) plus fire-tv-stick and aws-afc-dev", "Stack redeployed from the same SHA with ReplayMode=off (CMD-SAM-DEPLOY, CMD-TEMPLATE-DIGEST unchanged except the parameter)", "S28 evidence doc committed on afc/device-integration-spikes-m3; Reviewer review (Reverify on the APK claim) recorded"],
-      "post_step_vv": ["CMD-INSTALL-APK, CMD-ADB-SCREENCAP, CMD-SCREENRECORD during the live window (S28)", "After merge: CMD-MERGE-IDENTITY → this.m3; CMD-GATE-ALL on main", "CMD-TREE-EQUAL (proposed): tv-app/ and backend/ identical between the live candidate and this.m3; if the repair round changed them, CMD-E2E-REPLAY reruns on this.m3"],
-      "rollback": "Revert PR; the live evidence keeps its candidate SHA; if a later window is used (cut-offs), S28 reruns against the then-current candidate.",
-      "exit": "M3 exit: live alert over provider playback, Watch outcome, panel live on the stick (or recorded slip per cut-offs)."
-    },
-    {
-      "id": "IE-M4-1", "milestone": "M4", "order": 1, "merges": ["S30T", "S30"],
-      "entry_criteria": ["Pair green; CMD-GATE-BACKEND; CMD-CONTRACT-FROZEN", "Reviewer review recorded"],
-      "post_step_vv": ["CMD-MERGE-IDENTITY", "CMD-GATE-BACKEND on main", "CMD-SAM-DEPLOY (ReplayMode=on), CMD-SMOKE, CMD-TEMPLATE-DIGEST"],
-      "rollback": "Revert PR; CMD-SAM-ROLLBACK to this.m3.",
-      "exit": "Corrections live on the dev stack."
-    },
-    {
-      "id": "IE-M4-2", "milestone": "M4", "order": 1, "merges": ["S31T", "S31", "S32T", "S32"],
-      "entry_criteria": ["Pairs green; slice branches merged S31 then S32 into afc/tv-app-ui-m4 with CMD-GATE-ANDROID after each", "Reboot persistence screencaps (S31); label screencaps (S32); visual review (AC-AFC-VIS-01); Reviewer review recorded"],
-      "post_step_vv": ["CMD-MERGE-IDENTITY", "CMD-GATE-ANDROID on main", "CMD-CONTRACT-FROZEN"],
-      "rollback": "Revert PR.",
-      "exit": "Complete controls, persistence and labels on main."
-    },
-    {
-      "id": "IE-M4-3", "milestone": "M4", "order": 1, "merges": ["S34"],
-      "entry_criteria": ["OD-AFC-03 = yes, M3 exit met and every M4 slice on schedule; else not dispatched and recorded not applicable", "Verdict (verified route or drop) by 2026-10-21T12:00:00Z; Reviewer review recorded"],
-      "post_step_vv": ["CMD-MERGE-IDENTITY", "CMD-SPIKE-VERDICTS", "CMD-GATE-HYGIENE"],
-      "rollback": "Revert PR.",
-      "exit": "SP-7 verdict; voice stays hidden unless verified and implemented (AC-AFC-CTRL-03)."
-    },
-    {
-      "id": "IE-M4-4", "milestone": "M4", "order": 2, "merges": ["S33"],
-      "entry_criteria": ["Each defect packet declared concrete files and passed the no-overlap check against running slices", "Each fix has a regression test; CMD-GATE-ALL green on afc/defects-m4 after merging origin/main (after IE-M4-1, IE-M4-2)", "No open P0/P1 defect; Reviewer review recorded"],
-      "post_step_vv": ["CMD-MERGE-IDENTITY", "CMD-GATE-ALL on main"],
-      "rollback": "Revert PR (or the single defect's commit by a revert PR) and reopen the defect.",
-      "exit": "No open P0/P1."
-    },
-    {
-      "id": "IE-M4-5", "milestone": "M4", "order": 2, "merges": ["S35"],
-      "entry_criteria": ["IE-M2-4 and IE-M3-5 merged; S12..S17 verdicts on main", "Rev 1.0 builds; CMD-GATE-SPEC PASS; identical rebuild; Reviewer review recorded"],
-      "post_step_vv": ["CMD-MERGE-IDENTITY", "CMD-GATE-SPEC on main"],
-      "rollback": "Revert PR; rev 0.1 remains.",
-      "exit": "AC-AFC-SPEC-02, -03 (rev 1.0)."
-    },
-    {
-      "id": "IE-M4-6", "milestone": "M4", "order": 3, "merges": [],
-      "entry_criteria": ["IE-M4-1, IE-M4-2, IE-M4-4, IE-M4-5 merged; IE-M4-3 merged or not applicable", "Leases fire-tv-stick and aws-afc-dev", "Cut-off 2026-10-21T23:00:00Z"],
-      "post_step_vv": ["CMD-GATE-ALL on main (this.m4)", "CMD-STUB-SCAN", "CMD-SAM-DEPLOY from this.m4, CMD-SMOKE, CMD-TEMPLATE-DIGEST, registry sha256", "CMD-FOOTAGE-FETCH, APK build with -PafcApiBaseUrl, CMD-APK-SHA, CMD-INSTALL-APK", "CMD-E2E-REPLAY including correction alert and panel total agreement (AC-AFC-ALERT-03, AC-AFC-PANEL-04)", "Optional live re-check on Thu 10-22 if S28 used replay"],
-      "rollback": "Revert the M4 PR that broke the check; candidate falls back to this.m3 plus the passing M4 PRs.",
-      "exit": "M4 candidate this.m4 with APK sha256: input to S38 clips and M5."
-    },
-    {
-      "id": "IE-M5-1", "milestone": "M5", "order": 1, "merges": ["S36", "S37", "S39"],
-      "entry_criteria": ["IE-M4-6 exit", "S36 README setup steps run once from a clean clone in replay mode; S37 lists every owner-only action with due times; S39 coverage and sanitization; CMD-GATE-HYGIENE", "Reviewer review recorded"],
-      "post_step_vv": ["CMD-MERGE-IDENTITY", "CMD-GATE-HYGIENE on main", "CMD-TREE-EQUAL: tv-app/ and backend/ unchanged since this.m4"],
-      "rollback": "Revert PR.",
-      "exit": "Submission documents on main."
-    },
-    {
-      "id": "IE-M5-2", "milestone": "M5", "order": 2, "merges": ["S38", "S40"],
-      "entry_criteria": ["IE-M5-1 merged", "S38 clips recorded from the this.m4 APK (sha256 in clips README); replay and Mode A segments labeled", "S40: CMD-APK-RELEASE from apk_build_sha = main after IE-M5-1, after CMD-FOOTAGE-FETCH and with -PafcApiBaseUrl; signing per the remaining-risk note (no owner key assumed)", "CMD-TREE-EQUAL: tv-app/ and backend/ equal between this.m4 and apk_build_sha", "Reviewer review recorded"],
-      "post_step_vv": ["CMD-MERGE-IDENTITY → this.final", "CMD-GATE-ALL on this.final", "CMD-TREE-EQUAL: tv-app/ and backend/ equal between apk_build_sha and this.final", "CMD-STUB-SCAN"],
-      "rollback": "Revert PR; rebuild the APK from the previous apk_build_sha.",
-      "exit": "Final integrated candidate frozen by 2026-10-23T08:00:00Z."
-    },
-    {
-      "id": "IE-M5-3", "milestone": "M5", "order": 3, "merges": [],
-      "entry_criteria": ["IE-M5-2 exit", "Dev stack deployed from this.final tree (CMD-TEMPLATE-DIGEST equals this.final backend/template.yaml)"],
-      "post_step_vv": ["CMD-REVERIFY (proposed): Reverify on the final APK sha256 (AC-AFC-REV-01)", "Hand the final candidate to the Assurance Test Engineer and the Integration Engineer execution sessions (Lifecycle cadence)"],
-      "rollback": "If an assessment fails before 2026-10-23T12:00:00Z: revert the offending M5 PR or repair once and repeat IE-M5-2; after that, report the result to the owner unchanged.",
-      "exit": "Lifecycle-end assessment inputs complete; owner M5 actions remain owner-only."
+      "id": "IE-P1-12", "phase": "Phase 1", "order": 6, "repo": "both", "merges": [], "after": ["IE-P1-1", "IE-P1-2", "IE-P1-3", "IE-P1-4", "IE-P1-5", "IE-P1-6", "IE-P1-7", "IE-P1-8 or not_applicable", "IE-P1-9", "IE-P1-10", "IE-P1-11"],
+      "entry_criteria": ["Every Phase 1 PR merged or recorded as not_applicable; no open repair; no unresolved anomaly", "Final candidate frozen: no merge to Phase 1 paths after this point except a revert", "CMD-AZHQ-SYNC: AZHQ main checkout at azhq.p1_final"],
+      "post_step_vv": ["CMD-GATE-ALL on this.p1_final, with each area's line recorded", "CMD-AZHQ-SKILL-TESTS at azhq.p1_final: all D4/D5 suites", "CMD-SKILL-LINK and CMD-HOOK-INSTALL --verify readback on the host", "CMD-SKILL-SIZE and CMD-SKILL-TRIGGER for every changed SKILL.md at azhq.p1_final", "CMD-SPEC-VENDOR and CMD-CI-VENDOR-PIN on this.p1_final", "CMD-P2-ENTRY-RECEIPT (proposed): the Integration Engineer execution session assembles phase2_entry_receipt; the Assurance Test Engineer and the Integration Engineer execution session return verdicts on the candidate"],
+      "rollback": "There is no merge to roll back. A failing closeout check returns to AN-01 for the owning step.",
+      "exit": "Phase 1 candidate assessed. Phase 2 entry receipt recorded and landed with the DoD Manifest closeout (F08)."
     }
   ],
   "configuration_identity": {
-    "this_repo_commits": {"planning": "<planning PR merge SHA>", "this.s04": "<IE-M1-5 merge>", "this.s05_s09": "<IE-M1-6 merge>", "this.m3_backend": "<IE-M3-1 merge>", "this.m3_tvui": "<IE-M3-3 merge>", "m3_candidate": "<IE-M3-4 lane merge commit>", "this.m3": "<IE-M3-5 merge>", "this.m4": "<main at IE-M4-6>", "apk_build_sha": "<main after IE-M5-1>", "this.final": "<IE-M5-2 merge>"},
-    "alphazedehq_commits": {"azhq.d4a": "<S01 merge>", "azhq.d4b": "<S02 merge>", "azhq.d4c": "<S03 merge>", "azhq.d5": "<S06 merge>", "azhq.d4e": "<S11 merge>", "azhq.d4f": "<S41 merge or not applicable>", "azhq_checkout_head": "<HEAD after each CMD-AZHQ-SYNC; recorded in every dispatch packet issued after it>"},
-    "consumed_pins": {"tools/ci/VENDORED.md": "azhq.d4a (gate template), azhq.d4b (check_workflows.py)", "tools/spec/VENDORED.md": "azhq.d5", "S09T/S11T read inputs": "azhq.d4a, azhq.d4b, azhq.d4c, azhq.d5"},
-    "apk": {"debug_apk_sha256": "per IE-M1-5, IE-M3-4, IE-M4-6 (CMD-APK-SHA)", "final_apk_sha256": "S40 docs/evidence/final-apk.md", "build_inputs": ["apk_build_sha", "Gradle wrapper checksum", "footage sha256 pinned in tools/fetch-footage.sh (Mode A)", "Gradle property afcApiBaseUrl value (stack output, not a secret)"]},
-    "aws": {"stack_name": "afc-dev", "aws_profile_name": "afc-dev", "template_digest": "sha256 of backend/template.yaml at the deployed SHA (CMD-TEMPLATE-DIGEST)", "parameters": ["ReplayMode"], "stack_outputs": ["ApiUrl"], "ssm_parameter_names": "as declared in backend/template.yaml by S05 (names only; values owner-held)"},
-    "provider_registry_digest": "sha256 of backend/providers/registry.json at this.m3_backend, this.m4, this.final; SP-3 draft sha256 at IE-M2-3",
-    "fixtures_digest": "sha256 manifest of backend/fixtures/espn/ at IE-M2-5",
-    "env_var_names": ["AWS_PROFILE", "GIT_AUTHOR_NAME", "GIT_AUTHOR_EMAIL", "ANDROID_HOME", "JAVA_HOME"],
-    "harness_config_backups": "timestamped backups written by install-ci-gate-hook.py at IE-M2-1 (paths recorded in the installer receipt, home-relative)"
+    "this": {"plan": "merge commit of the planning PR on main", "vnv": "IE-P1-5", "skill_links": "IE-P1-6", "spec_vendor": "IE-P1-7", "gate": "IE-P1-9", "dx_log": "IE-P1-11", "p1_final": "origin/main HEAD at IE-P1-12 entry"},
+    "azhq": {"base": "AZHQ origin/main at Wave 1 dispatch (observed 47c46f2e16fed060482a1bf3a0e34ddcb9bc57fc on 2026-10-11; re-record at dispatch)", "d4a": "IE-P1-1", "d4b": "IE-P1-2", "d4c": "IE-P1-3", "d5": "IE-P1-4", "d4f": "IE-P1-8 (conditional)", "d4e": "IE-P1-10", "p1_final": "AZHQ origin/main HEAD at IE-P1-12 entry"},
+    "per_merge_record": ["PR number and URL", "merge method (merge)", "GitHub mergeCommit oid", "reviewed PR head SHA (an ancestor of the merge)", "git rev-parse <merge>:<owned path> tree id for each owned directory"],
+    "vendored": {"tools/spec/VENDORED.md": "source repository, source commit, skills/spec-authoring tree id equal to azhq.d5's, MIT notice", "tools/ci/VENDORED.md": "source repository, azhq.d4a, azhq.d4b"},
+    "alphazedehq_main_checkout": "HEAD before and after each CMD-AZHQ-SYNC, with the sessions running at that moment",
+    "harness_skill_links": ["$HOME/.claude/skills/spec-authoring", "$HOME/.codex/skills/spec-authoring", "$HOME/.agents/skills/spec-authoring", "$HOME/.cursor/skills/spec-authoring", "each -> <workspace>/Alphazedehq/skills/spec-authoring"],
+    "harness_hook_configs": "per installer --verify line: config file ($HOME-relative), sha256 before and after, timestamped backup path; Muse skill directory $HOME/.config/muse/skills (exists; today holds only Bearing Lite links); AGY surface or typed gap",
+    "git_config": "this repository core.hooksPath = .githooks (shared across all worktrees of the repository)",
+    "tools": "uv, Graphviz dot and python3 versions used by the gate and D5 tests; scan-software-supply-chain receipt per acquisition; pinned SHA of every action in .github/workflows/ci.yml; pinned GridMarket source commit"
   },
-  "authorized_glue": {
-    "default": "none",
-    "allowed_mechanical": ["git merge --no-ff of a completed slice branch into its lane branch", "git merge of origin/main into a lane branch", "resolution of whitespace-only conflicts"],
-    "not_glue": ["any non-whitespace conflict: returns to the lane that merged later", "hot-file deltas: routed one-file packets on the owner lane (S04 lane for tv-app hot files, S05 lane for backend hot files)", "any change to a frozen contract: CONTRACT_STOP to the Orchestrator"],
-    "hot_file_owners": {"tv-app/app/build.gradle.kts, tv-app/build.gradle.kts, tv-app/settings.gradle.kts, tv-app/gradle/, tv-app/app/src/main/AndroidManifest.xml, MainActivity and navigation": "S04 (device-integration-spikes lane)", "backend/template.yaml, backend/pyproject.toml, backend/uv.lock, backend/api/openapi.yaml, backend/src/afc_backend/store/, backend/src/afc_backend/api router module, backend/tests/conftest.py": "S05 (backend lane)", "THIRD_PARTY_NOTICES.md": "S19 then S36", "docs/developer-feedback/observations.md": "S08 then S39"}
-  },
+  "authorized_glue": [],
+  "authorized_glue_note": "None. Renaming check-workflows.py to tools/ci/check_workflows.py and deriving gate.sh from the D4-A template are part of S09's product write set, not glue. A needed contract change is CONTRACT_STOP to the Orchestrator.",
   "stubs": [
-    {"stub": "TV component stubs marked AFC-STUB", "by": "S04", "replaced_by": ["S25", "S26", "S27", "S31", "S32"], "removal_check": "CMD-STUB-SCAN at IE-M4-6 and IE-M5-2"},
-    {"stub": "Backend route stubs marked AFC-STUB", "by": "S05", "replaced_by": ["S20", "S21", "S22", "S23", "S24", "S30"], "removal_check": "CMD-STUB-SCAN"},
-    {"stub": "Empty provider registry", "by": "S05", "replaced_by": ["S23"], "removal_check": "CMD-REGISTRY-CHECK"},
-    {"stub": "ReplaySource with recorded fixtures (simulator, permanent)", "by": "S16, S20", "replaced_by": [], "removal_check": "replay label present whenever ReplayMode=on (CMD-E2E-REPLAY)"},
-    {"stub": "ManualSource (permanent fallback)", "by": "S21", "replaced_by": [], "removal_check": "S17 verdict decides the default"},
-    {"stub": "Mode A CompanionPlayer (permanent fallback)", "by": "S27", "replaced_by": [], "removal_check": "S15 verdict; sample-footage label"},
-    {"stub": "spec gate area GAP or PASS nothing to check", "by": "S09", "replaced_by": ["S19"], "removal_check": "CMD-GATE-SPEC PASS at IE-M2-4"}
+    {"id": "STUB-P1-1", "what": "S09T red tests", "removed_by": "S09 green (IE-P1-9)"},
+    {"id": "STUB-P1-2", "what": "S11T red tests", "removed_by": "S11 green (IE-P1-10)"},
+    {"id": "SIM-P1-1", "what": "temporary HOME for the pre-merge installer run (F04)", "removed_by": "deleted after S11's run; live install at IE-P1-10"},
+    {"id": "SIM-P1-2", "what": "hookdemo scratch worktree with a deliberate hygiene failure", "removed_by": "removed right after CMD-HOOK-DEMO; never pushed"},
+    {"id": "PERM-P1-1", "what": "spec area template-build path while no spec/<name>/ exists", "removed_by": "permanent by design; Phase 2 P2-4 adds spec/amazon-fantasy-companion/"}
   ],
   "anomaly_rollback_recovery": {
     "anomalies": [
-      {"id": "AN-01", "class": "post-merge check failure on main", "action": "Stop dependent merges; revert PR of the step (git revert -m 1, PR, merge commit); lane repairs on a new slice branch from main; reland through the same step"},
-      {"id": "AN-02", "class": "interface mismatch between producer and consumer", "action": "Return to the producer lane if it violates the frozen contract, else to the consumer lane; a needed contract change is CONTRACT_STOP to the Orchestrator (Planning and Design), never glue"},
-      {"id": "AN-03", "class": "lane PR not merged by its cut-off (M3)", "action": "Form the candidate on the device lane branch by merging the recorded unmerged lane heads whose gates pass; record the composite SHA; land through review afterwards"},
-      {"id": "AN-04", "class": "deploy failure", "action": "CloudFormation automatic rollback; CMD-SAM-ROLLBACK to the last recorded good SHA; no stack deletion or plan change (owner-only)"},
-      {"id": "AN-05", "class": "AZHQ skill regression after sync", "action": "Revert PR in Alphazedehq; CMD-AZHQ-SYNC; packets issued after the bad sync are re-issued with the new HEAD"},
-      {"id": "AN-06", "class": "AZHQ main checkout cannot fast-forward (local uncommitted owner work conflicts)", "action": "Do not stash, reset or switch; report to the owner with the conflicting path; consumers wait (destructive git is owner-only)"},
-      {"id": "AN-07", "class": "device unavailable or C1 triggered", "action": "Class C owner stop (OWN-07); device lane holds; backend and tv-app-ui lanes continue against replay and fakes"},
-      {"id": "AN-08", "class": "live window missed", "action": "Next window per cut-offs; replay fallback with labels (RISK-AFC-14)"},
-      {"id": "AN-09", "class": "gate GAP (exit 3) at a post-step", "action": "Typed gap, never a pass; provision the tool (after scan-software-supply-chain) and rerun"},
-      {"id": "AN-10", "class": "route exhausted mid-step (RISK-AFC-07)", "action": "Next ordered fallback of the frozen profile with an activation receipt; queue if all exhausted"}
+      {"id": "AN-01", "class": "post-merge check failure on main (either repository)", "action": "Stop dependent dispatches and merges. Revert PR (git revert -m 1 <merge>, PR, merge commit). Repair on <branch>-r1 from origin/main. Reland through the same step id with suffix -r1."},
+      {"id": "AN-02", "class": "interface mismatch on GATE, HOOK or SPECKIT", "action": "Return the work to the producer slice if it violates the contract, else to the consumer. A needed contract change is CONTRACT_STOP to the Orchestrator (Planning and Design), never glue."},
+      {"id": "AN-03", "class": "AZHQ skill regression after a sync", "action": "Revert PR in Alphazedehq; CMD-AZHQ-SYNC; re-issue packets dispatched after the bad sync with the new HEAD."},
+      {"id": "AN-04", "class": "AZHQ main checkout cannot fast-forward (owner local work or an untracked path conflicts, for example `evals /`)", "action": "Do not stash, reset, clean or switch. Report the conflicting path to the owner (OWN-P1-05). Consumers wait."},
+      {"id": "AN-05", "class": "gate GAP (exit 3) at a post-step", "action": "Typed gap, never a pass. Provision the tool after scan-software-supply-chain and rerun."},
+      {"id": "AN-06", "class": "route exhausted mid-step (RISK-AFC-07)", "action": "Next ordered fallback of the frozen profile, with a class B receipt that preserves the coverage-assist and Reverify settings. Queue the slice if all fallbacks are exhausted."},
+      {"id": "AN-07", "class": "live hook install breaks a harness (tool calls error or every commit is blocked)", "action": "CMD-HOOK-RESTORE at once, then record a typed gap. S11 repair round. Re-install only after IE-P1-10 entry criteria hold again."},
+      {"id": "AN-08", "class": "trigger collision D5 vs use-requirements-system (RISK-AFC-15)", "action": "D5 repair round narrows the descriptions per the OD-AFC-07 disposition. Never merge the two skills."},
+      {"id": "AN-09", "class": "gh_private_minutes exhausted (RISK-AFC-08); both repositories are private", "action": "Stop hosted runs. Local gate receipts (CMD-GATE-ALL) stand as deterministic evidence. No paid overage without the owner (OWN-P1-06)."},
+      {"id": "AN-10", "class": "scan BLOCK or INDETERMINATE (RISK-AFC-13)", "action": "Fail closed. The slice stops. No substitute tool without a passing scan."},
+      {"id": "AN-11", "class": "secret or absolute home path detected (RISK-AFC-11)", "action": "Block the merge until sanitized. If already exposed, record the artifact without the value and notify the owner (OWN-P1-07)."},
+      {"id": "AN-12", "class": "cut-off missed", "action": "Record the slip in the Phase 2 entry receipt. P2-2 and P2-3 continue. Any scope cut is an owner decision (RISK-AFC-16, RISK-AFC-17)."}
     ],
-    "rollback_rules": ["Revert PR only; never force-push, reset a pushed branch or commit on local main", "Deploy rollback redeploys a recorded SHA; hook rollback restores the installer's timestamped backups", "A rollback is complete when the post-step V&V of the restored state passes"],
-    "recovery": "After a revert, the owning lane repairs on a fresh slice branch from main; the step reruns with the same entry criteria; no new review round unless the repair changed the approved scope (one review + one repair rule)."
+    "rollback_rules": ["Revert PRs only. Never force-push, reset or delete a branch that holds unmerged work.", "Harness configurations are restored from the timestamped backups the installer records (CMD-HOOK-RESTORE).", "Skill links are removed only from the paths recorded in evidence/skill-links.txt and in the installer receipt, and only when they are symlinks into the AZHQ main checkout (CMD-SKILL-UNLINK).", "this repository: git config --unset core.hooksPath when IE-P1-9 is reverted."],
+    "recovery": "After a revert, the consuming steps re-pin to the relanded merge commit. Their post-step V&V reruns on the new identity. A third evidence-changing correction round is a class C owner stop (OWN-P1-08)."
   },
   "cutoffs": [
-    {"id": "CO-01", "what": "Planning approval and merge for S16 to catch the 10-12 game", "at": "2026-10-12T20:00:00Z"},
-    {"id": "CO-02", "what": "S15 panel verdict", "at": "S12 first install + 24 h (spike_panel_max); Mode A at expiry"},
-    {"id": "CO-03", "what": "S17 Yahoo check", "at": "not before 2026-10-16T19:00:00Z"},
-    {"id": "CO-04", "what": "Backend M3 lane merge target", "at": "2026-10-17T18:00:00Z"},
-    {"id": "CO-05", "what": "tv-app-ui M3 lane merge target", "at": "2026-10-18T06:00:00Z"},
-    {"id": "CO-06", "what": "M3 candidate ready for Sunday live test", "at": "2026-10-18T15:00:00Z; then SNF 2026-10-18T22:00:00Z, MNF 2026-10-19T22:00:00Z, TNF 2026-10-22T22:00:00Z; else labeled replay plus owner acceptance"},
-    {"id": "CO-07", "what": "S34 stretch drop", "at": "2026-10-21T12:00:00Z"},
-    {"id": "CO-08", "what": "Feature freeze (only P0/P1 fixes and M5 docs merge after)", "at": "2026-10-21T23:00:00Z"},
-    {"id": "CO-09", "what": "Final candidate frozen", "at": "2026-10-23T08:00:00Z"},
-    {"id": "CO-10", "what": "M5 due; owner buffer to T_deadline", "at": "2026-10-23T12:00:00Z; T_deadline 2026-10-23T19:00:00Z"}
+    {"point": "Wave 1 merged (IE-P1-1..5)", "target": "2026-10-12T18:00:00Z"},
+    {"point": "IE-P1-6, IE-P1-7, IE-P1-8 merged", "target": "2026-10-12T23:00:00Z"},
+    {"point": "IE-P1-9 gate on main (P2-4 precondition)", "target": "2026-10-13T12:00:00Z"},
+    {"point": "IE-P1-10, IE-P1-11 merged", "target": "2026-10-13T18:00:00Z"},
+    {"point": "final candidate frozen (IE-P1-12 entry)", "target": "2026-10-13T18:00:00Z"},
+    {"point": "Phase 1 exit", "target": "2026-10-13T23:00:00Z", "on_miss": "AN-12"},
+    {"point": "S41", "target": "only if OD-AFC-01 = B"}
   ],
   "final_candidate": {
-    "ref": "this.final (IE-M5-2 merge commit on main of 1wgrumph/amazon-fantasy-companion)",
-    "includes": ["apk_build_sha and final APK sha256 (S40)", "dev stack afc-dev deployed from the this.final backend tree (template digest)", "provider registry digest", "azhq.d4a, azhq.d4b, azhq.d4c, azhq.d4e, azhq.d5 (and azhq.d4f if B)", "vendored pins in tools/ci/VENDORED.md and tools/spec/VENDORED.md", "spec rev 1.0 build (byte-identical rebuild)"],
-    "invariants": ["CMD-TREE-EQUAL between apk_build_sha and this.final for tv-app/ and backend/", "CMD-GATE-ALL PASS on this.final", "CMD-STUB-SCAN clean", "no absolute home path in tracked files (hygiene)"]
+    "definition": "Composite candidate: this.p1_final (this repository main) plus azhq.p1_final (Alphazedehq main) plus the recorded host configuration (harness skill links, harness hook configs with digests, core.hooksPath)",
+    "contents": ["azhq.d4a, azhq.d4b, azhq.d4c, azhq.d5, azhq.d4e, azhq.d4f (if B) as ancestors of azhq.p1_final", "this.vnv, this.skill_links, this.spec_vendor, this.gate, this.dx_log as ancestors of this.p1_final", "AZHQ main checkout HEAD = azhq.p1_final at assessment"],
+    "assessed_by": "Integration Engineer execution session (fresh, no author ancestry; route per journey.json integration_engineer.execution, cadence lifecycle) and the Assurance Test Engineer"
   },
-  "lifecycle_assessment_inputs": {
-    "sessions": "Integration Engineer execution session per lane profile at Lifecycle cadence on the same final candidate: primary (Codex CLI / GPT-6.1 Sol), frontend (Claude Code / Claude Opus 5.5), heavyweight (Claude Code / Claude Opus 5.5), bug-triager (Codex CLI / GPT-6.1 Sol), tech-writing (Claude Code / Claude Opus 5.5; the snapshot has no cadence field, so the skill default lifecycle applies). Each starts fresh and rejects author ancestry. The Assurance Test Engineer runs alongside.",
-    "inputs": ["final_candidate block and all configuration_identity values", "every step receipt in journey.json execution_receipts (merge SHAs, command outputs, digests)", "Reviewer records per lane PR with OCR sections and Reverify or not-applicable lines", "spike verdicts SP-1..SP-7", "S28 live evidence (or recorded slip and replay evidence)", "IE-M3-4 and IE-M4-6 CMD-E2E-REPLAY screencaps", "visual review screencaps (AC-AFC-VIS-01)", "Reverify output on the final APK", "seit.json V&V results per AC-AFC row", "owner-accepted limitations (class C)", "anomaly log AN-* with resolutions", "typed gaps (Muse/AGY hooks, any GAP exits)"],
-    "approved_outcome": "technical plan §Outcome and M5 exit criteria"
+  "phase2_entry_receipt": {
+    "requirement": "AC-AFC-PLAN-03",
+    "author": "Integration Engineer execution session at IE-P1-12",
+    "location": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/phase2-entry-receipt.json, landed in the Phase 1 closeout PR with the DoD Manifest closeout (F08)",
+    "contents": ["D5 merge commit azhq.d5: PR, merge method, skill tree id", "D4 merge commits azhq.d4a, azhq.d4b, azhq.d4c, azhq.d4e, and azhq.d4f or not_applicable", "Vendored tools/spec/ commit on main (this.spec_vendor), with the CMD-SPEC-VENDOR result and the tools/spec/VENDORED.md source commit", "The gate run on main: CMD-GATE-ALL at this.p1_final with each area's PASS, FAIL or GAP line", "Status of each Phase 2 entry criterion as met, not met or owner action pending: P2-1 (Phase 1 approval); P2-4 (S06 merged, S42 on main, S09 gate on main, P2-2 PASS, P2-3(c) done); OD-AFC-12; owner actions for stick and ADB, AWS account and profile, Yahoo application (T_yahoo 2026-10-16T19:00:00Z), provider app sign-in", "Slips against the cut-offs; days left to T_deadline; remaining live NFL windows (RISK-AFC-16, RISK-AFC-17)", "Typed gaps: Muse and AGY hook surfaces, any GAP exits", "Open anomalies and their resolutions", "f885e48 product-lane findings forwarded as Phase 2 input: IE-F01, IE-F02, IE-F04, IE-F05, IE-F06, IE-F11, IE-F12, IE-F14", "Harness link and hook readback (CMD-SKILL-LINK, CMD-HOOK-INSTALL --verify) at azhq.p1_final"]
   },
+  "lifecycle_assessment_inputs": ["final_candidate and every configuration_identity value", "Step receipts in journey.json execution_receipts (merge SHAs, command outputs, digests, sync records)", "Reviewer record per PR, with the OCR delegate section and the Reverify not-applicable line (AC-AFC-REV-01)", "seit.json V&V results per Phase 1 AC-AFC and RISK-AFC row", "CMD-AZHQ-SKILL-TESTS, CMD-SKILL-SIZE and CMD-SKILL-TRIGGER evidence at azhq.p1_final", "CMD-GATE-ALL at this.p1_final", "CMD-HOOK-INSTALL --verify, CMD-HOOK-DEMO, CMD-SKILL-LINK readbacks", "CMD-RED receipts for S09T and S11T, and the author-identity commit order", "scan-software-supply-chain receipts (RISK-AFC-13) and route receipts (RISK-AFC-07)", "Anomaly log AN-* with resolutions; typed gaps", "Scribe log at this.dx_log", "Phase 2 entry receipt"],
   "owner_dependencies": [
-    {"id": "OWN-01", "action": "Integrated approval of the planning package and planning PR merge", "blocks": ["all wave-1 slices"], "blocked_from": "2026-10-11", "latest_safe": "2026-10-12T20:00:00Z", "cost_if_late": "S16 misses the 10-12 game; feed fixtures only from 10-15; M1 due at risk"},
-    {"id": "OWN-02", "action": "Stick located, model confirmed, ADB debugging enabled, on network", "blocks": ["S12", "S13", "S14", "S15", "S23T", "S25T", "S27T", "S28"], "blocked_from": "S04 stop condition met", "latest_safe": "2026-10-13T23:00:00Z", "cost_if_late": "every hour late delays the device chain and the M3 cut-off one hour"},
-    {"id": "OWN-03", "action": "At least one provider app installed and signed in on the stick", "blocks": ["S14", "S15", "S23T", "S25T", "S27T"], "blocked_from": "S13 verdict", "latest_safe": "S12 first install + 12 h", "cost_if_late": "spike_panel_max may expire into Mode A; SP-3 route unverified"},
-    {"id": "OWN-04", "action": "AWS Free-plan account and named CLI profile afc-dev", "blocks": ["S18", "S17", "IE-M2-5", "IE-M3-2", "IE-M3-5", "IE-M4-1", "IE-M4-6"], "blocked_from": "S05 stop condition met", "latest_safe": "2026-10-15T12:00:00Z (M2); hard 2026-10-17T12:00:00Z", "cost_if_late": "no deployed backend for the Sunday live test"},
-    {"id": "OWN-05", "action": "Yahoo application submitted; on approval, client id and secret into SSM", "blocks": ["live Yahoo path of S21 and S28 only"], "blocked_from": "M2 entry", "latest_safe": "2026-10-16T19:00:00Z", "cost_if_late": "manual lineup default (C6), labeled"},
-    {"id": "OWN-06", "action": "OD-AFC-01, OD-AFC-03, OD-AFC-07 at the integrated review", "blocks": ["S41", "S34", "S06 scope"], "blocked_from": "integrated review", "latest_safe": "with OWN-01", "cost_if_late": "S06 lands without the reciprocal non-trigger; S41/S34 not dispatched"},
-    {"id": "OWN-07", "action": "Class C stop answers (C1, RISK-AFC-02..04) if triggered", "blocks": ["device lane"], "blocked_from": "stop time", "latest_safe": "stop + 4 h, and before 2026-10-18T09:00:00Z", "cost_if_late": "M3 live test at risk"},
-    {"id": "OWN-08", "action": "License choice, visibility flip, ESPN terms (C3), video upload, reviewer access, Devpost submission, external feedback", "blocks": ["submission only"], "blocked_from": "IE-M5-3", "latest_safe": "2026-10-23T19:00:00Z", "cost_if_late": "no submission"}
+    {"id": "OWN-P1-01", "action": "Integrated approval of the Phase 1 package (OD-AFC-01, -06, -07, -08, -09, -10, -12, OA-AFC-A2)", "blocks": "all steps"},
+    {"id": "OWN-P1-02", "action": "OD-AFC-01 A or B", "blocks": "IE-P1-8; IE-P1-10 install timing (F05)"},
+    {"id": "OWN-P1-03", "action": "OD-AFC-07", "blocks": "S06 scope (IE-P1-4)"},
+    {"id": "OWN-P1-04", "action": "OD-AFC-09", "blocks": "IE-P1-7, then IE-P1-9"},
+    {"id": "OWN-P1-05", "action": "Destructive git on the AZHQ main checkout, only if a fast-forward is blocked (AN-04)", "blocks": "every sync after it"},
+    {"id": "OWN-P1-06", "action": "Paid Actions overage (RISK-AFC-08)", "blocks": "hosted CI only"},
+    {"id": "OWN-P1-07", "action": "Credential rotation after exposure (RISK-AFC-11)", "blocks": "affected PR"},
+    {"id": "OWN-P1-08", "action": "Class C stop on a third correction round", "blocks": "that slice"},
+    {"id": "OWN-P1-09", "action": "Phase 2 product owner actions (stick and ADB, AWS, Yahoo, provider app)", "blocks": "Phase 2 only; recorded in the receipt"}
   ],
   "concurrency_findings": [
-    {"id": "IE-F01", "class": "write overlap", "slices": ["S05", "S16"], "compared": "S05 `backend/` (whole new directory) vs S16 `backend/fixtures/espn/`; both wave 1, both in the first five dispatched, no dependency edge", "target": "slice-graph.md S05 row, Write set", "corrected_text": "this: `backend/` except `backend/fixtures/` (new: pyproject, uv.lock, template.yaml, api/openapi.yaml, src skeleton with route stubs, contract tests, tools/check_template.py, providers/registry.json empty list)"},
-    {"id": "IE-F02", "class": "dependency (read before write)", "slices": ["S04", "S05", "S09"], "compared": "S04 command CMD-GATE-ANDROID and S05 command CMD-GATE-BACKEND invoke `tools/ci/gate.sh`, which is in S09's write set; S09 waits on S09T, which waits on S01, S02, S06 merges; S04 and S05 have no edge to S09", "target": "slice-graph.md S04 and S05 rows, Commands and Stop condition", "corrected_text": "S04 Commands: `CMD-SCAN, CMD-ANDROID-BUILD`; Stop condition: `Starter and Android SDK scanned PASS; CMD-ANDROID-BUILD (cd tv-app && ./gradlew --no-daemon :app:lintDebug :app:testDebugUnitTest :app:assembleDebug) exit 0 (debug APK built); gate.sh android runs at IE-M1-6.` S05 Commands: `CMD-SCAN, CMD-BACKEND-CHECK`; Stop condition: `Contract tests and template check pass; CMD-BACKEND-CHECK (the three DES-AFC-GATE backend commands) exit 0; gate.sh backend runs on the IE-M1-6 PR.`"},
-    {"id": "IE-F03", "class": "dependency (read before write)", "slices": ["S08", "S09"], "compared": "S08 command CMD-GATE-HYGIENE needs `tools/ci/gate.sh` and `tools/ci/check_paths.py` (S09 write set); S08 Depends on is empty", "target": "slice-graph.md S08 row Depends on; Dependencies list", "corrected_text": "S08 Depends on: `S09 (hygiene receipt only; authoring starts at dispatch)`; add edge `S09 --> S08`"},
-    {"id": "IE-F04", "class": "dependency (read before write)", "slices": ["S25", "S26", "S27"], "compared": "S25 writes `tv-app/app/src/main/java/afc/companion/net/`; S26 (`settings/`, `link/`, `detect/`) and S27 (`panel/`, `player/`) call the API through `net/` and run concurrently with S25 in wave 3 with no edge", "target": "slice-graph.md S04 Stop condition and S25 Write set", "corrected_text": "S04 Stop condition append: `net/ApiClient.kt declares one Kotlin interface method per CONTRACT-AFC-API route with its request and response types.` S25 Write set: `this: tv-app/app/src/main/java/afc/companion/alerts/, tv-app/app/src/main/java/afc/companion/watch/, tv-app/app/src/main/java/afc/companion/net/ (implements the S04 ApiClient interface; signatures unchanged)`"},
-    {"id": "IE-F05", "class": "write overlap (hidden hot files, SM F5)", "slices": ["S04", "S05", "S20", "S21", "S22", "S23", "S24", "S25", "S26", "S27", "S30", "S31"], "compared": "No feature write set lists `tv-app/app/build.gradle.kts`, `AndroidManifest.xml`, navigation, `backend/template.yaml`, `backend/pyproject.toml`, `backend/uv.lock`, `backend/src/afc_backend/store/`, the API router or `backend/tests/conftest.py`; S25 (foreground-service type, POST_NOTIFICATIONS, androidTest deps), S26/S31 (DataStore), S20 (Scheduler resource, HTTP and schema deps), S20..S24 (store accessors) need them while running concurrently. DES-AFC-TV names DataStore persistence but omits DataStore from its dependency list.", "target": "slice-graph.md S04 and S05 Stop conditions; design.md DES-AFC-TV dependencies bullet", "corrected_text": "S04 Stop condition append: `build.gradle.kts declares Jetpack Compose, Media3 ExoPlayer, OkHttp, kotlinx.serialization, AndroidX DataStore Preferences and test dependencies JUnit 4, kotlinx-coroutines-test, AndroidX Test runner, UI Automator; AndroidManifest.xml declares POST_NOTIFICATIONS, FOREGROUND_SERVICE, the AlertService foreground-service type and <queries> by intent (android.intent.action.MAIN + android.intent.category.LEANBACK_LAUNCHER); navigation routes every component stub.` S05 Stop condition append: `pyproject.toml and uv.lock hold every DES-AFC-* runtime and test dependency; store/ implements every CONTRACT-AFC-TABLES key accessor; template.yaml declares every route group, the FeedIngest schedule group, the ReplayMode parameter and the SSM parameter names.` design.md DES-AFC-TV: `Dependencies limited to: Jetpack Compose (starter), AndroidX Media3 ExoPlayer (Mode A only), OkHttp, kotlinx.serialization, AndroidX DataStore Preferences; test-only: JUnit 4, kotlinx-coroutines-test, AndroidX Test runner, UI Automator. Gradle wrapper checksum is verified at import.`"},
-    {"id": "IE-F06", "class": "missing interface configuration", "slices": ["S04", "S25", "S40"], "compared": "No artifact defines how the APK learns the backend URL (searched design.md, technical plan, slice-graph.md, SM receipt for base URL, BuildConfig, ApiUrl); the TV-to-backend interface cannot be assembled", "target": "design.md DES-AFC-TV; slice-graph.md S04 Stop condition", "corrected_text": "design.md DES-AFC-TV add bullet: `The API base URL comes from Gradle property afcApiBaseUrl into buildConfigField(\"String\", \"AFC_API_BASE_URL\", ...); empty shows \"Backend not configured\"; the APK build passes -PafcApiBaseUrl=<afc-dev stack output ApiUrl>; it carries no secret.` S04 Stop condition append: `AFC_API_BASE_URL is read from Gradle property afcApiBaseUrl.`"},
-    {"id": "IE-F07", "class": "shared resource (worktree index)", "slices": ["S20T..S24", "S25T..S27", "S07, S10, S06L"], "compared": "DES-AFC-LANES gives one worktree per lane, but up to five backend slices (wave 3), S26x and S27x, and S07/S10/S06L run concurrently in one lane; disjoint write sets do not protect a shared index, staging area or the working tree that gate.sh --changed reads", "target": "design.md DES-AFC-LANES Worktrees bullet", "corrected_text": "- Worktrees: one per running slice or TDD pair, `worktrees/amazon-fantasy-companion-<lane>-<slice>` on branch `afc/<lane>-m<n>-<slice>` cut from the lane branch `afc/<lane>-m<n>`; the lane integration worktree `worktrees/amazon-fantasy-companion-<lane>-m<n>` merges completed slice branches with `git merge --no-ff`; `worktrees/Alphazedehq-ci-cd-<topic>` and `worktrees/Alphazedehq-spec-authoring` unchanged; never hidden directories."},
-    {"id": "IE-F08", "class": "dependency (gate contract vs tdd red phase)", "slices": ["S20T", "S21T", "S22T", "S23T", "S24T", "S25T", "S26T", "S27T", "S30T", "S31T", "S32T"], "compared": "After S09 (`.githooks/pre-commit` runs `gate.sh --changed`) and S11 (harness hook runs the gate and catches `--no-verify`, CONTRACT-AFC-HOOK), a commit of failing tests under `backend/tests/**` or `tv-app/app/src/test/**` triggers the backend or android area and is blocked; no artifact defines how red tests are committed", "target": "design.md DES-AFC-LANES Development strategy bullet", "corrected_text": "- Development strategy: `tdd` lanes split each feature into a Test Implementer slice (red, `<id>T`) and a Product Implementer slice (green). The red slice ends with the CMD-RED receipt (failing output plus sha256 of each test file) taken in the shared TDD-pair worktree and leaves the tests uncommitted; the green slice continues in that worktree and, when green, commits the tests first with the Test Implementer's author identity and then the product code with its own; the gate runs on each commit; `--no-verify` is never used. Scaffold and spike slices are single Product Implementer slices (OD-AFC-04); `spec-and-docs` is `single_implementer`."},
-    {"id": "IE-F09", "class": "missing evidence", "slices": ["S09T", "S09"], "compared": "S09T writes `tools/ci/tests/`; DES-AFC-GATE area paths are `tv-app/**`, `backend/**`, `spec/**` + `tools/spec/**`, and hygiene (always), and hygiene runs only check_paths and the workflow checker, so no gate area, hook or Actions job runs the gate's own tests", "target": "design.md DES-AFC-GATE hygiene bullet", "corrected_text": "- `hygiene`: `python3 tools/ci/check_paths.py` over all tracked files (AC-AFC-CI-03, AC-AFC-PATH-01), the D4-B workflow checker over `.github/workflows/`, and the gate's own tests in `tools/ci/tests/` (always runs; the checker is vendored into `tools/ci/` by S09 from the merged D4-B commit because the shared skill is private)."},
-    {"id": "IE-F10", "class": "configuration identity", "slices": ["S09"], "compared": "S09 vendors the D4-B checker (and gate.sh from the D4-A template) into `tools/ci/`, but its write set has no file recording the source commits, unlike S19's `tools/spec/VENDORED.md`", "target": "slice-graph.md S09 row Write set", "corrected_text": "this: `tools/ci/gate.sh`, `tools/ci/check_paths.py`, `tools/ci/check_workflows.py`, `tools/ci/VENDORED.md` (source repository and the D4-A and D4-B merge commits), `.githooks/pre-commit`, `.githooks/pre-push`, `.github/workflows/ci.yml`"},
-    {"id": "IE-F11", "class": "dependency (schedule)", "slices": ["S16", "S20T"], "compared": "M2 due 2026-10-15T23:00:00Z precedes the Thu 10-15 game (about 2026-10-16T00:15Z), so S16's stop condition and the M2 exit fixture criterion cannot be met by M2 due; S20T (M3 critical path) waits for S16 completion about 2026-10-16T04:00Z", "target": "technical plan Milestones M2 Due; slice-graph.md S20T Depends on and Dependencies list", "corrected_text": "Technical plan M2 Due: `2026-10-16T06:00:00Z`. slice-graph.md S20T Depends on: `S05, S16 first capture (2026-10-12 fixtures committed)`; Dependencies list: replace `S16 --> S20T` with `S16 (2026-10-12 capture) --> S20T`."},
-    {"id": "IE-F12", "class": "milestone inconsistency", "slices": ["S16"], "compared": "slice-graph.md S16 Milestone M2 and stop condition (10-12 and 10-15 fixtures) vs technical plan M1 slice list containing S16 and M1 exit `first ESPN fixtures recorded`", "target": "technical plan Milestones table M1 row", "corrected_text": "M1 Slices: `S01, S02, S03, S04, S05, S06, S06L, S07, S08, S09T, S09, S10`; M1 Exit criterion: replace `first ESPN fixtures recorded` with `S16 2026-10-12 capture committed on its slice branch`; M2 Slices: `S11T, S11, S12, S13, S14, S15, S16, S18, S19`."},
-    {"id": "IE-F13", "class": "milestone inconsistency", "slices": ["S41"], "compared": "slice-graph.md S41 Milestone M1 and Wave 4 vs technical plan M4 slice list `S41 (conditional)`; its dependencies (OD-AFC-01 = B; S01..S03 merged) equal S11T's", "target": "slice-graph.md S41 row and Waves; technical plan M2 and M4 rows", "corrected_text": "slice-graph.md S41 Milestone: `M2`; Wave 2: `S11T S11 S12 S13 S14 S15 S18 S19 S41`; Wave 4: `S30T S30 S31T S31 S32T S32 S33 S34 S35`. Technical plan M2 Slices append `S41 (conditional)`; M4 Slices remove `S41 (conditional)`."},
-    {"id": "IE-F14", "class": "dependency (missing edge)", "slices": ["S17", "S28", "S35"], "compared": "M3 entry criterion `T_yahoo outcome applied` and the S28 live test need the S17 lineup-source verdict; S35 needs S12..S17 verdicts; the Dependencies list has no S17 edge to either", "target": "slice-graph.md S28 Depends on; Dependencies list", "corrected_text": "S28 Depends on: `S17; M3 assembly complete (IE steps)`; Dependencies list add `S17 --> S28` (also covers S35 through `S28 --> S35`)."},
-    {"id": "IE-F15", "class": "dependency (missing edge)", "slices": ["S09", "S11"], "compared": "S11's AC-AFC-D4-04 demonstration and CMD-HOOK-INSTALL --verify need a repository with `tools/ci/gate.sh` (S09 write set); S11 depends only on S11T", "target": "slice-graph.md S11 Depends on; Dependencies list", "corrected_text": "S11 Depends on: `S11T, S09 merged`; Dependencies list add `S09 --> S11`."},
-    {"id": "IE-F16", "class": "shared resource (live skill checkout)", "slices": ["S01", "S02", "S03", "S06", "S06L", "S11", "S41"], "compared": "Harness skill links resolve to the Alphazedehq main checkout (`readlink` of the Claude Code `setup-pre-commit` link shows `<workspace>/Alphazedehq/skills/setup-pre-commit`); merged skill changes go live for every agent only when that checkout fast-forwards, and it currently has 1 uncommitted entry; the resource list omits it", "target": "technical plan Program plan shared resources sentence; slice-graph.md S06L Depends on", "corrected_text": "Technical plan: add `the Alphazedehq main checkout that every harness skill link resolves to (alphazedehq-main-checkout lease; fast-forward only, between dispatches, HEAD recorded in each later packet)` to the shared mutable resources. slice-graph.md S06L Depends on: `S06 merged; alphazedehq-main-checkout at or after the S06 merge commit`."},
-    {"id": "IE-F17", "class": "write overlap (unowned file)", "slices": ["S27", "S38"], "compared": "S27 fetches footage into git-ignored `tv-app/app/src/main/assets/footage/` and S38 stores clips in git-ignored `submission-media/` (design.md), but no write set includes an ignore file", "target": "slice-graph.md S04 Stop condition and S38 Write set", "corrected_text": "S04 Stop condition append: `tv-app/.gitignore ignores app/src/main/assets/footage/.` S38 Write set: `this: docs/submission/clips/README.md, .gitignore (adds submission-media/ only)`."},
-    {"id": "IE-F18", "class": "write set mismatch", "slices": ["S01"], "compared": "design.md DES-AFC-D4 D4-A lists `skills/setup-pre-commit/agents/openai.yaml`; slice-graph.md S01 Write set omits it (the directory today holds only SKILL.md)", "target": "slice-graph.md S01 Write set", "corrected_text": "Alphazedehq: `skills/setup-pre-commit/SKILL.md`, `skills/setup-pre-commit/agents/openai.yaml`, `skills/setup-pre-commit/references/gate-contract.md`, `skills/setup-pre-commit/templates/gate.sh`, `skills/setup-pre-commit/scripts/install-hooks.sh`, `skills/setup-pre-commit/tests/test-install-hooks.sh`"}
+    {"id": "IE-P1-F01", "class": "dependency", "slices": ["S01", "S02", "S03", "S06", "S07", "S06L", "S42", "S09T", "S09", "S11T", "S11", "S41", "S08"], "compared": "The technical plan §Program plan ('one review per Phase 1 pull request at the phase boundary') and DES-AFC-LANES Landing ('reviewed once at the Phase 1 boundary') put every review at the single Phase 1 boundary. Merge needs that review (AC-AFC-LAND-01). But the Wave 2 edges need merges inside Phase 1: S06->S42 ('S06 merged'), S42->S09T, S09->S11, S09->S08, and C13 for S11T. Read literally, no Wave 2 slice can start until Phase 1 ends, and Phase 1 cannot end without them.", "target": "technical plan §Program plan — Phase 1 waves, second sentence; design.md DES-AFC-LANES Landing, last bullet", "corrected_text": "Technical plan: 'The Reviewer cadence is `phase`. Phase 1's review boundaries are its integration steps IE-P1-1..IE-P1-11 (specialists/integration-plan.md): each Phase 1 pull request is reviewed once at its own integration step, after its slice reaches its stop condition, then gets at most one repair and the deterministic gate before it merges. The Reviewer packet declares that step as the cadence boundary.' DES-AFC-LANES: '- Every pull request is reviewed once at its integration step (the Phase 1 review boundary unit), on the lane profile's reviewer route, with OCR delegate mode and `Reverify: not applicable` (AC-AFC-REV-01). It gets at most one repair and a green gate, then merges by merge commit.'"},
+    {"id": "IE-P1-F02", "class": "shared resource", "slices": ["S06L", "S42", "S11"], "compared": "S06L lease 'harness-configs, alphazedehq-main-checkout' and S42 lease 'alphazedehq-main-checkout'. Both only read the checkout, and both dispatch on the S06 merge. Because DES-AFC-LANES grants each lease 'to one slice at a time', they serialize for no reason. Separately, 'fast-forward only, between dispatches' does not stop a fast-forward while Wave 1 or Wave 2 sessions run: under continuous dispatch, merges always land while other sessions are running. The S03 fast-forward changes ship-pull-request for every PR-opening session on the host.", "target": "design.md DES-AFC-LANES Leases, alphazedehq-main-checkout bullet", "corrected_text": "- `alphazedehq-main-checkout`: a reader-writer lease. Slices that read skills from the checkout (S06L, S42) and the IE-P1-10 live install hold a shared read lease. The Orchestrator's fast-forward (CMD-AZHQ-SYNC) takes it exclusively. It runs only when no read lease is held and no session of this Lifecycle is opening or landing a pull request. Each sync records the HEAD before and after it and the sessions running at that moment. The HEAD is recorded in each later packet."},
+    {"id": "IE-P1-F03", "class": "dependency (interface mismatch)", "slices": ["S06", "S42", "S09"], "compared": "CONTRACT-AFC-SPECKIT vendor step ('copies the scripts to <repo root>/tools/spec/') and DES-AFC-D5 references/vendoring.md ('copy scripts/') vs DES-AFC-GATE spec area ('copies tools/spec/template/ into a temporary directory', AC-AFC-CI-04). The template is never vendored. S42 stop condition 'VENDORED.md names the merged D5 commit': vendor.sh runs from the live main checkout, which may already be past the D5 merge, so the commit it records is undefined.", "target": "design.md §Contracts CONTRACT-AFC-SPECKIT, vendor bullet; design.md DES-AFC-D5 files table, references/vendoring.md row; slice-graph.md S42 Stop condition", "corrected_text": "CONTRACT-AFC-SPECKIT: '- `<skill>/scripts/vendor.sh <repo root>` — copies the contents of `scripts/` and the `template/` directory to `<repo root>/tools/spec/` (template at `tools/spec/template/`) and writes `VENDORED.md` (source repository; source commit = `git log -1 --format=%H -- <skill dir>` in the source checkout; the tree id of the skill directory at that commit; MIT notice); refuses to run when the skill directory has uncommitted changes, and refuses to overwrite a vendored copy whose files differ from its recorded commit.' vendoring.md row: 'When a repository's CI cannot reach the shared skill (private skill, public repository): copy `scripts/` and `template/` to `<repo>/tools/spec/` with `scripts/vendor.sh`, which writes `VENDORED.md` (source commit, skill tree id, MIT notice).' S42 Stop condition: '`tools/spec/VENDORED.md` names a source commit whose `skills/spec-authoring/` tree id equals that of the merged D5 commit; vendored files (scripts and template) equal that tree; MIT notice present in both files.'"},
+    {"id": "IE-P1-F04", "class": "shared resource", "slices": ["S11"], "compared": "S11 stop condition: 'installer --verify reports each SD-021 harness as wired or a typed gap; Muse skill directory exposes D4 and D5 skills'. To meet it before merge, S11 must run the installer against the live harness configurations. That writes, into every harness on the host, a hook path inside the linked worktree worktrees/Alphazedehq-ci-cd-harness-hooks. The worktree is deleted after merge, which leaves every harness pointing at a missing hook. The installer also runs unreviewed code against shared harness configs while other sessions are running.", "target": "slice-graph.md S11 Commands and Stop condition", "corrected_text": "Commands: `CMD-HOOK-TEST, CMD-HOOK-INSTALL-SANDBOX`. Stop condition: `Hook tests green; installer --install --verify run with HOME set to a temporary directory reports each SD-021 harness as wired or a typed gap and links the D4 and D5 skills into the sandbox Muse skill directory or records a typed gap; the installer writes the hook path of the checkout it runs from; no live harness configuration is edited before merge. The live install (CMD-HOOK-INSTALL) runs at integration step IE-P1-10 from the Alphazedehq main checkout after merge and fast-forward.`"},
+    {"id": "IE-P1-F05", "class": "dependency", "slices": ["S41", "S11"], "compared": "S41 writes skills/ci-cd/SKILL.md. S11's installer links 'every shared skill the harness lacks' into Muse and AGY, and AC-AFC-D4-04 requires the D4 skills in Muse's directory. S41 and S11 have no edge, so a ci-cd skill that merges after the live install is never linked into Muse.", "target": "slice-graph.md S11 Depends on; Dependencies list", "corrected_text": "S11 Depends on: `S11T, S09 merged, S06 merged, S06L, S41 merged when OD-AFC-01 = B`. Dependencies list add: `S41 --> S11 (only when OD-AFC-01 = B)`."},
+    {"id": "IE-P1-F06", "class": "dependency", "slices": ["S08", "S11", "S41"], "compared": "S08 stop condition 'Log carries DX-001..DX-007, planning and Phase 1 observations' and AC-AFC-DX-02 'every Phase 1 observation'. S08 depends only on S09 merged, so it can land before S11 (and S41) return their developer_feedback sections.", "target": "slice-graph.md S08 Depends on; Dependencies list", "corrected_text": "S08 Depends on: `S09 merged (hygiene area exists); S11 returned; S41 returned or not dispatched; observations accumulate from Wave 1 dispatch`. Dependencies list add: `S11 --> S08; S41 --> S08`."},
+    {"id": "IE-P1-F07", "class": "missing evidence", "slices": ["S06L"], "compared": "S06L writes docs/plans/2026-10-11-amazon-fantasy-companion/evidence/skill-links.txt in this repository. DES-AFC-LANES Landing lists PRs only for S07, S42, S09 and S08, so S06L's evidence has no landing path.", "target": "design.md DES-AFC-LANES Landing, 'This repository' bullet", "corrected_text": "- This repository: one pull request each for S07, S06L (link readback evidence), S42, S09 (tests and gate) and S08."},
+    {"id": "IE-P1-F08", "class": "missing evidence", "slices": [], "compared": "AC-AFC-PLAN-03 requires a recorded Phase 2 entry receipt. The slice-graph Lifecycle-level rows allocate it to 'the Integration Engineer at Phase 1 closeout', but no artifact path or landing exists, so the closeout PR would not carry it.", "target": "slice-graph.md §Lifecycle-level rows, AC-AFC-PLAN-03 bullet", "corrected_text": "- AC-AFC-PLAN-03: the Integration Engineer execution session at Phase 1 closeout, recorded at `docs/plans/2026-10-11-amazon-fantasy-companion/evidence/phase2-entry-receipt.json` (contents per integration-plan.md `phase2_entry_receipt`) and landed in the Phase 1 closeout pull request with the DoD Manifest closeout."},
+    {"id": "IE-P1-F09", "class": "missing evidence", "slices": ["S01", "S02", "S03", "S06", "S11"], "compared": "The Alphazedehq .github/workflows/coe-gates.yml path filters (lint: docs/**, tools/coe/**, hooks/README.md; yaml: skills/*/agents/*.yaml; hooks: hooks/**; skills: skills/visual-review/** only) and the te-hooks lane's explicit test list (test-issue-labels.py, test-bug-report-routing.sh, edit-pr.test.sh) run none of the D4-A, D4-B or D5 suites or the new hooks/test-ci-gate-hook.sh. edit-pr.test.sh runs only when hooks/** or test-engineering paths change, not on an S03-only PR. So 'AZHQ checks green' is not evidence for these slices. Adding lanes would make coe-gates.yml a hot file for four concurrent Wave 1 slices, which is out of Phase 1 scope.", "target": "technical plan §Exit criteria, item 2", "corrected_text": "2. Every D4 and D5 pull request is merged in Alphazedehq by rebase or merge commit. Alphazedehq CI path filters do not run the D4/D5 suites, so each D4/D5 merge commit also carries a local rerun receipt of its suite (CMD-AZHQ-SKILL-TESTS), and the Phase 1 closeout reruns every suite at the final Alphazedehq commit. This repository's gate pull request is merged with the `gate / spec`, `gate / docs` and `gate / hygiene` checks green."},
+    {"id": "IE-P1-F10", "class": "shared resource", "slices": ["S07", "S06L", "S42", "S09", "S08"], "compared": "On 2026-10-11, `gh repo view` reports 1wgrumph/amazon-fantasy-companion as PRIVATE, and the rulesets API returns 403 ('Upgrade to GitHub Pro or make this repository public'). DES-AFC-LANES and AC-AFC-LAND-01 assume enforced PR-only main and green required checks. Here neither is enforced, and the five PRs' Actions runs consume gh_private_minutes (RISK-AFC-08, C11).", "target": "design.md DES-AFC-LANES Landing, add a bullet after 'This repository: …'", "corrected_text": "- This repository is private until the owner flips visibility, and a private GitHub Free repository has no rulesets or branch protection. So PR-only `main` and green `gate / <area>` checks are enforced by the Orchestrator: CMD-PR-CHECKS before every merge, and no direct push to `main`. Its Actions runs count against gh_private_minutes (RISK-AFC-08)."}
   ]
 }
 ```
@@ -486,45 +452,70 @@ Each finding's exact corrected text is in `concurrency_findings`. The Plan Integ
 
 | ID | Purpose |
 |---|---|
-| CMD-ANDROID-BUILD | DES-AFC-GATE android commands run directly (before `gate.sh` exists) |
-| CMD-BACKEND-CHECK | DES-AFC-GATE backend commands run directly |
-| CMD-MERGE-IDENTITY | `gh pr view --json mergeCommit,mergedAt` plus `git rev-parse`; records the merge SHA |
-| CMD-AZHQ-SYNC | Fast-forward-only update of the AZHQ main checkout; fails closed on conflict; records HEAD |
-| CMD-CI-VENDOR-PIN | `tools/ci/VENDORED.md` commits equal `azhq.d4a`/`azhq.d4b`, and vendored files equal those trees |
-| CMD-CONTRACT-FROZEN | sha256 of the frozen contract files equals the IE-M1-6 baseline, except for routed deltas |
-| CMD-HOOK-DEMO | A deliberate hygiene failure is blocked under each wired harness |
-| CMD-HOOK-RESTORE | The installer restores harness configurations from timestamped backups |
-| CMD-SPIKE-VERDICTS | Each verdict file has route, steps, evidence paths, verdict and limits |
-| CMD-REGISTRY-CHECK | Registry entries ⊆ SP-3 verified forms; sha256 recorded |
-| CMD-TEMPLATE-DIGEST | sha256 of the deployed `backend/template.yaml` equals the one in the source commit; stack outputs |
-| CMD-SAM-ROLLBACK | Redeploys a recorded SHA to `afc-dev` |
-| CMD-APK-SHA | sha256 of the built APK |
-| CMD-E2E-REPLAY | On-stick replay rehearsal: heads-up over playback, Watch outcome, panel in mode, labels |
-| CMD-STUB-SCAN | No `AFC-STUB` marker under `tv-app/app/src/main/` or `backend/src/` |
-| CMD-TREE-EQUAL | `git diff --exit-code <a> <b> -- tv-app backend` |
-| CMD-REVERIFY | Reverify on the final APK |
-
-## Remaining risks
-
-- **S16 and the agent cap.** S16 occupies one cap slot from 10-12 to 10-16 if its session stays open. The Orchestrator should close it after the 10-12 capture and continue it for 10-15. Otherwise wave 2 already runs at five, counting S16, S11x, the stick chain, S18 and S19.
-- **AZHQ CI coverage.** AZHQ CI (`coe-gates.yml`) does not run the new D4/D5 tests: its skills path group covers only `skills/visual-review/**`, and its hooks group runs named suites only. Their evidence is the post-step reruns on each merge commit, not AZHQ required checks.
-- **Release signing.** If `CMD-APK-RELEASE` needs a release keystore, creating one is credential work for the owner. Without that, S40 records a debug-signed sideload APK.
-- **Same model routes.** For the primary and heavyweight profiles, the IE execution route is the same model as the implementer route. A fresh session satisfies "rejects author ancestry", but the independence comes from the session, not the model.
-- **Live-window times** are slot assumptions until the ESPN scoreboard confirms them.
+| CMD-MERGE-IDENTITY | Record PR number, merge method, mergeCommit oid, reviewed head SHA and owned-path tree ids (`gh pr view --json mergeCommit,headRefOid,number`; `git rev-parse <sha>:<path>`) |
+| CMD-AZHQ-SYNC | `git -C <workspace>/Alphazedehq merge --ff-only origin/main` under the exclusive form of the main-checkout lease; record HEAD before and after and the running sessions |
+| CMD-AZHQ-SKILL-TESTS | Rerun the D4/D5 suites (CMD-D4A/D4B/D4C/D5-TEST, CMD-D5-AGNOSTIC, CMD-HOOK-TEST) on a given AZHQ commit, in a detached scratch worktree under `worktrees/` |
+| CMD-CI-VENDOR-PIN | `tools/ci/VENDORED.md` names azhq.d4a and azhq.d4b; the vendored checker equals `git show azhq.d4b:skills/setup-a-repo/scripts/check-workflows.py` |
+| CMD-SPEC-VENDOR (amend) | Compare against `git archive azhq.d5 skills/spec-authoring/scripts skills/spec-authoring/template`, and accept a VENDORED.md commit whose skill tree id equals azhq.d5's (F03) |
+| CMD-SKILL-UNLINK | Remove the recorded skill links only if each is a symlink into the AZHQ main checkout |
+| CMD-HOOK-INSTALL-SANDBOX | `HOME=$(mktemp -d) python3 hooks/install-ci-gate-hook.py --install --verify` |
+| CMD-HOOK-DEMO / CMD-HOOK-RESTORE | As in f885e48 `seit.json`, retargeted to IE-P1-10 |
+| CMD-HOOKSPATH | `git config --get core.hooksPath` equals `.githooks` |
+| CMD-PR-CHECKS | `gh pr checks <n>`: every `gate / <area>` check is pass, and the PR targets `main` |
+| CMD-PATH-SCAN-PLAN | Scan the diff for rule-12 home-path shapes before the gate exists (IE-P1-5) |
+| CMD-P2-ENTRY-RECEIPT | Assemble and validate the receipt keys in `phase2_entry_receipt` |
 
 ## Typed outcome
 
-- **outcome:** GAPS
-- **verdict:** The integration plan is complete, with 26 steps, every contract checked, cut-offs and owner dependencies. Dispatch of S04, S05, S08, S09, S11, S16/S20T, S25..S27 and the TDD red slices must wait for the corrections in IE-F01..IE-F18. No owner decision is required.
-- **candidate_ref:** none (planning session). The final candidate is defined as `this.final`.
-- **changed_paths:** `docs/plans/2026-10-11-amazon-fantasy-companion/specialists/integration-plan.md`
-- **blocker:** none for the owner. The Plan Integrator / Planning and Design must apply the corrected text before dispatch.
+- **Outcome:** GAPS.
+- **Verdict:** The Phase 1 assembly strategy is complete: 12 steps, all three
+  contracts checked, cut-offs, rollback and the Phase 2 entry receipt
+  defined. Before the affected slices dispatch, the Plan Integrator must
+  apply IE-P1-F01..F10:
+  - F01 affects every merge;
+  - F03 affects S06 and S42;
+  - F04 and F05 affect S11;
+  - F06 affects S08;
+  - F02, F07, F08, F09 and F10 are design and plan text.
+
+  No owner decision is required.
+- **candidate_ref:** none; this is a planning session. The planning base is
+  `f885e48` plus working-tree changes on
+  `plan/2026-10-11-amazon-fantasy-companion`.
+- **changed_paths:** `docs/plans/2026-10-11-amazon-fantasy-companion/specialists/integration-plan.md`.
+- **Remaining risks:**
+  - F01 redefines the Phase 1 review boundary unit without changing the
+    frozen `cadence: phase` value. If the Orchestrator judges that this
+    changes the frozen profile, it becomes an owner amendment at the
+    integrated review.
+  - A live hook install edits configurations shared by every session on
+    the host (AN-07).
+  - Both repositories are private, so CI minutes are metered.
+- **Blocker:** none for the planning output. Dispatch blockers are
+  F01, F03, F04, F05 and F06.
 
 ## developer_feedback
 
-- **IE-DX-01.** The `integration_engineer` execution session in the frozen `tech-writing` snapshot has no `cadence` field, while primary, frontend, heavyweight and bug-triager declare `lifecycle`.
-  Evidence: `journey.json` `profile_selection.frozen_snapshots.tech-writing.snapshot.roles.integration_engineer`. The skill default (`lifecycle`) was applied.
-- **IE-DX-02.** In `slice-graph.md`, the owner-action table rows (`| S12 |`, `| S14 |`, `| S18 |`) share the slice-row prefix. A mechanical parser picks them up as slice rows; this plan's overlap check had to skip them by column count.
-  The Plan Integrator's mechanical copy should key on column count or section.
-- **Tools exercised:** Bash (`cat`, `sed`, `grep`, `ls`, `wc`, `readlink`), `git -C` read-only on Alphazedehq, `python3` (journey extraction, pairwise write-set overlap check), and the `integration-engineer` and `integration-engineering` skills.
-  BRAN reported `unavailable` (no policy here), so normal discovery was used.
+- **DX-IE-P1-01** (Alphazedehq CI coverage):
+  - Observation: `coe-gates.yml` path filters run no suite for changed
+    skills other than `visual-review`, and `edit-pr.test.sh` is not
+    triggered by `skills/ship-pull-request/**`.
+  - Evidence: `.github/workflows/coe-gates.yml` filters block and te-hooks
+    lane, read on 2026-10-11.
+  - Cost: every D4/D5 merge needs a manual local rerun (F09).
+  - Candidate enhancement for `alphazede/Alphazedehq` (rule 18). Filing is
+    the Orchestrator's call.
+- **DX-IE-P1-02** (GitHub plan limits):
+  - Observation: a private repository on GitHub Free returns 403 for
+    rulesets, so "PR-only main by ruleset" cannot hold for this
+    repository until it is public.
+  - Evidence: `gh api repos/1wgrumph/amazon-fantasy-companion/rulesets`
+    returned HTTP 403 on 2026-10-11.
+- **DX-IE-P1-03** (BRAN):
+  - Observation: the BRAN hook reported `bran_status: unavailable` for
+    this repository (no `.bran/policy.yaml`), so ordinary discovery was
+    used.
+- **Tools exercised:** git, gh (repo view, rulesets, branch protection),
+  readlink, grep/sed/awk, python3 (Markdown link scan), the Bearing Lite
+  integration-engineer skill (1.1.6) and the integration-engineering method
+  skill.

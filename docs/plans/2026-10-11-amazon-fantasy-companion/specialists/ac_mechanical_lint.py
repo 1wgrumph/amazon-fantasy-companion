@@ -8,7 +8,9 @@ spec = importlib.util.spec_from_file_location("lint_sdoc", sys.argv[1])
 mod = importlib.util.module_from_spec(spec); spec.loader.exec_module(mod)
 rows = flagged = 0
 for line in open(sys.argv[2], encoding="utf-8"):
-    m = re.match(r"\| (AC-AFC-[A-Z0-9-]+) \| (.+?) \| ", line)
+    if line.startswith("## Exclusions"):
+        break  # rows after this point (Deferred to Phase 2) are not register rows
+    m = re.match(r"\| ((?:AC|RISK)-AFC-[A-Z0-9-]+)(?: \*\((?:amended|new)\)\*)? \| (.+?) \| ", line)
     if not m:
         continue
     rows += 1

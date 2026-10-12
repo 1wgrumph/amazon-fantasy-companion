@@ -1,4 +1,4 @@
-%% MODEL-AFC-V4 — Delivery tooling flow: D4 shared CI/CD gate and D5 shared spec-authoring skill
+%% MODEL-AFC-V4 — Phase 1 delivery tooling flow: D4 shared CI/CD gate and D5 shared spec-authoring skill
 %% mode: diagram-assisted; explanatory only; sysml_claim: false
 %% Planned design (Planning and Design node); nothing here is realized yet.
 %% Paths prefixed "Alphazedehq:" live in the private alphazede/Alphazedehq repo; all others are in this repo.
@@ -10,8 +10,8 @@ flowchart TB
   end
 
   GH["Local git hooks: .githooks/ (pre-commit, pre-push)"]
-  GA["GitHub Actions: .github/workflows/ci.yml<br/>pull_request only, never pull_request_target (C14); forks get no secrets<br/>stable check names, concurrency groups, path filters,<br/>SHA-pinned actions, least-privilege permissions"]
-  HH["Harness pre-tool hooks: Claude Code, Codex, Muse, Cursor, AGY<br/>start only after the D4 skill extensions land (C13)<br/>Muse skills folder empty today: known gap"]
+  GA["GitHub Actions: .github/workflows/ci.yml<br/>pull_request and push to main, never pull_request_target (C14); forks get no secrets<br/>stable check names, concurrency groups, path filters,<br/>SHA-pinned actions, least-privilege permissions"]
+  HH["Harness pre-tool hooks: Claude Code, Codex, Muse, Cursor, AGY<br/>start only after the D4 skill extensions land (C13)<br/>missing hook surface is a typed gap (RISK-AFC-12)"]
   SH["Shared hook script: Alphazedehq:hooks/ci-gate-hook.sh"]
 
   SPC -.->|authors| GATE
@@ -20,49 +20,52 @@ flowchart TB
   SPRS -.->|defines| SPR
 
   GATE[["tools/ci/gate.sh AREA — one gate entrypoint per repo"]]
-  A1["android: tv-app/ (Gradle)"]
-  A2["backend: backend/ (Python 3.12, AWS SAM)"]
-  A3["spec: lint + build D1 with vendored tools/spec/"]
-  A4["hygiene: rule 12 / C7 local-path block"]
+  A3["spec: vendored tools/spec/ lint + figure lint + byte-identical rebuild<br/>per spec/&lt;name&gt;/; while none exists, template self-check in a temp dir"]
+  A5["docs: Vnv area headings + relative Markdown links"]
+  A4["hygiene: rule 12 / C7 local-path block + credential rules"]
+  NOTE["Phase 2 adds android, backend areas behind the same entrypoint<br/>(CONTRACT-AFC-GATE unchanged)"]
   RES{"All selected areas pass?"}
   FAIL["Fail: same verdict from every entry point"]
 
   SPR["ship-pull-request"]
   VNV{"Vnv guidance tree?<br/>docs/vnv/AGENTS.md (vnv-review also accepts Vnv/AGENTS.md)"}
   REV["vnv-review PROFILE: findings join the one review-and-repair round"]
-  REF["REFUSED_NO_VNV recorded in the gate table: typed gap, never a pass (C12)"]
+  REF["REFUSED_NO_VNV recorded in the gate table: typed gap, never a pass (C12)<br/>other repos: non-pass row, required checks decide (OD-AFC-10)"]
   MERGE["Merge when required checks are green (rebase or merge commit, never squash)"]
 
   GH --> GATE
   GA --> GATE
   HH --> SH --> GATE
-  GATE --> A1 & A2 & A3 & A4 --> RES
+  GATE --> A3 & A5 & A4 --> RES
+  GATE -.-> NOTE
   RES -->|no| FAIL
   RES -->|yes| SPR
   SPR --> VNV
-  VNV -->|"yes (this repo: docs/vnv planned, SD-014)"| REV --> MERGE
+  VNV -->|"yes (this repo: S07 docs/vnv/ with ci-cd, spec, developer-feedback)"| REV --> MERGE
   VNV -->|no| REF
 
   subgraph d5["D5 shared spec-authoring skill (SD-022, supersedes SD-013)"]
     GM["GridMarket spec kit (source, MIT): 1wgrumph/gridmarket<br/>spec/template/, tools/spec_build.py, tools/spec_lint.py, tools/azdiagram/,<br/>skills spec-author, spec-diagram, spec-lint"]
-    SA["Alphazedehq:skills/spec-authoring/<br/>SKILL.md, references/, template/,<br/>scripts/spec_build.py, scripts/spec_lint.py, scripts/azdiagram/<br/>PEP 723 inline deps via uv run --script; Graphviz dot external"]
-    VEN["tools/spec/ (this repo): vendored copy, MIT notice retained"]
-    D1["D1: spec/amazon-fantasy-companion/ built to<br/>spec/Amazon-Fantasy-Companion-Specification.md<br/>authored after integrated approval"]
+    SA["Alphazedehq:skills/spec-authoring/<br/>SKILL.md, references/, template/,<br/>scripts/spec_build.py, scripts/spec_lint.py, scripts/diagram.py, scripts/azdiagram/<br/>PEP 723 inline deps via uv run --script; Graphviz dot external"]
+    VEN["tools/spec/ (this repo): vendored copy via S42 vendor step, MIT notice retained"]
+    D1["D1 product specification (Phase 1 spec track, ST-4): dashed consumer,<br/>built with D5 from the gated register and the sysml-v2 models"]
     GM -->|"generalize; nothing GridMarket-specific"| SA
-    SA -->|"documented vendor step (Alphazedehq is private; this repo goes public)"| VEN
-    VEN -->|"spec_lint + spec_build"| D1
+    SA -->|"vendor.sh (Alphazedehq is private; this repo goes public)"| VEN
+    VEN -.->|"spec track ST-4"| D1
   end
 
   A3 -.->|runs| VEN
-  A3 -.->|checks| D1
+  A3 -.->|no spec/ exists yet, so self-checks| VEN
 
   classDef entry fill:#ffffff,stroke:#333333
   classDef gate fill:#e8f0fe,stroke:#1a56db,stroke-width:2px
   classDef area fill:#eaf7ea,stroke:#2f855a
   classDef gap fill:#fff5f5,stroke:#b91c1c
   classDef skill fill:#fff8ec,stroke:#b7791f
+  classDef future fill:#f3f4f6,stroke:#6b7280,stroke-dasharray:6 4
   class GH,GA,HH,SH entry
   class GATE gate
-  class A1,A2,A3,A4 area
+  class A3,A5,A4 area
   class REF,FAIL gap
   class SPC,SAR,SPRS,SA skill
+  class NOTE,D1 future
