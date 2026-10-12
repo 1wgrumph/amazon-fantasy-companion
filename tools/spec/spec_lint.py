@@ -5,7 +5,7 @@
 """Lint specification section sources.
 
 A section source is YAML front matter with a ``requirements`` list, exactly one
-heading, a ``**BLUF:**`` line, a ``**Frame**`` list with the six fields, prose,
+heading, an opening prose paragraph without printed writer labels,
 and a captioned table or figure whenever the structural trigger fires.
 
 Usage: ``python tools/spec_lint.py <section dir>``; exits 1 on any finding.
@@ -20,7 +20,9 @@ from pathlib import Path
 import yaml
 
 MAX_REQUIREMENTS = 5
-FRAME_FIELDS = ("Who", "What", "Why", "How", "When", "Where")
+WRITER_LABEL = re.compile(
+    r"\*\*(?:BLUF|Frame)\b|\*\*(?:Who|What|Why|How|When|Where):?\*\*"
+)
 TABLE_CLASSES = {f"T{n}" for n in range(1, 9)}
 FIGURE_CLASSES = {f"F{n}" for n in range(1, 9)}
 SECTION_FILE = re.compile(r"^(\d+(?:\.\d+)*)-.+\.md$")
@@ -96,11 +98,17 @@ def lint_section(text: str) -> list[str]:
         findings.append(
             f"has {len(headings)} headings; a section source has exactly one"
         )
-    if not any(re.match(r"^\*\*BLUF:\*\* \S", line) for line in lines):
-        findings.append("missing BLUF line (**BLUF:** ...)")
-    for name in FRAME_FIELDS:
-        if not any(re.match(rf"^[-*] \*\*{name}:\*\* \S", line) for line in lines):
-            findings.append(f"Frame missing {name} field (- **{name}:** ...)")
+    if WRITER_LABEL.search(body):
+        findings.append("printed writer label; use ordinary specification prose")
+    opening_lines = re.sub(r"<!--.*?-->", "", body, flags=re.DOTALL).splitlines()
+    heading_index = next(
+        (i for i, line in enumerate(opening_lines) if HEADING.match(line)), -1
+    )
+    opening = _next_content(opening_lines, heading_index).strip()
+    if not opening or re.match(
+        r"^(?:#|[-*+] |\d+[.)] |[|>]|!\[|```|~~~|(?:Table|Figure) \()", opening
+    ):
+        findings.append("missing opening paragraph after the section heading")
 
     has_table = has_figure = False
     for i, line in enumerate(lines):
