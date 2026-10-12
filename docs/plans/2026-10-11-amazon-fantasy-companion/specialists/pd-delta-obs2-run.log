@@ -1,0 +1,19 @@
+**DELTA_APPLIED.** The new manifest digest is `4128aa9cdacd1fca06edfb68652258730db107eb6213f6dca3faf9e9cca55e84`.
+
+- **Fix:** I added `SEIT-AFC-DX-01` to `slice_proof_map.S08` in `seit.json`. It sits in the same position as in `implementation.json`: CI-02.P, DX-02, DX-01, DX-04. That map is the only place in `seit.json` that lists proof rows per slice.
+- **Sweep:** I compared all 13 slices' `seit_proof_rows` with `slice_proof_map`, matching on exact list and order, and the slice keys match too. S08 was the only mismatch; there are now none, so nothing else was edited.
+- **Rebind:**
+  - `seit.json` is now `17710bbb…ab158`. I updated `seit_json_sha256_at_integration` and the manifest's identity row to match.
+  - The candidate digest moved from `283b7a06…` to `4128aa9c…`, updated in `planning_review.candidate_digest` and its identity row.
+  - The technical plan, design and views did not change, so their digests stand.
+- **Checks, all passing:**
+  - `plan-package.cjs`: PASS with zero findings.
+  - The manifest re-rendered and `--check` passes (sha256 `39abc3b3…605b3e`).
+  - Schema validation gives 0 errors on implementation, seit, authority and journey.
+  - No proof row is orphaned (55 proofs, 33 requirements).
+  - The rule-12 home-path scan has 0 hits.
+- **Recorded:** the disposition is appended to `specialists/pd-change-sd025-receipt.md`.
+- **Write set:** `seit.json`, `implementation.json` (digest strings only), the manifest HTML and the receipt. No commits.
+
+`plan-package.cjs` still doesn't compare `slice_proof_map` with `seit_proof_rows`, so this kind of mismatch can come back. The receipt notes that gap. The Digests table earlier in the receipt still shows the old values; the appended section replaces them.
+exit=0

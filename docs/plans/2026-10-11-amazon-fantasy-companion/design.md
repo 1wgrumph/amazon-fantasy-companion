@@ -3,7 +3,7 @@ type: design
 status: amended
 lifecycle: AFC-2026-10-11
 technical_plan: amazon-fantasy-companion-technical-plan.md
-revision_note: "Phase 1 regeneration (DEC-AFC-SD-023, DEC-AFC-SD-024). Product design of f885e48 moves to the Phase 1 spec track (SysML v2 models, D1) and Phase 2 (technical plan §Deferred to the spec track or Phase 2). OR-01 relabel: spec-track steps ST-1..ST-5 (were P2-1..P2-5)."
+revision_note: "Phase 1 regeneration (DEC-AFC-SD-023, DEC-AFC-SD-024). Product design of f885e48 moves to the Phase 1 spec track (SysML v2 models, D1) and Phase 2 (technical plan §Deferred to the spec track or Phase 2). OR-01 relabel: spec-track steps ST-1..ST-5 (were P2-1..P2-5). DEC-AFC-SD-025: DES-AFC-DX log schema follows the Devpost rules."
 ---
 
 # Amazon Fantasy Companion — Design (Phase 1)
@@ -244,8 +244,33 @@ PR, branch `ci-cd/<topic>`, worktree `worktrees/Alphazedehq-ci-cd-<topic>`):
     contract.
   - Seeded with DX-001..DX-007, the planning observations and the Phase 1
     observations (S08).
-- The per-tool summary and the sanitized friction log are Phase 2 work,
-  done at submission.
+- Log schema (AC-AFC-DX-04, DEC-AFC-SD-025). The columns follow the Devpost
+  rules (`evidence/devpost-feedback-rules.md`, fetched with HTTP 200 on
+  2026-10-12), so every entry is complete when it is written:
+
+  | Table | Columns |
+  |---|---|
+  | Observations: issue #1 | ID, Timestamp, Reporting role, Task or packet, Tool/API/SDK, Version, Device/OS, Evidence, Classification |
+  | Observations: Product Feedback | Used for, What worked well, What needs work, Onboarding (zero to hello world), Would build again (Yes/No and why), AWS services used and how |
+  | Observations: Friction Log Entry | Task attempted, Steps taken, Expected result, Actual result, Severity rating, Workaround used, Actionable suggestion |
+  | Feature requests | ID, Tool, Description, Why it matters to this project, Priority |
+
+  - The log has two headings, `## Observations` and `## Feature requests`,
+    each followed by its table. Column names are exactly as above.
+  - Priority is Critical, Important or Nice-to-have, as the rules list.
+  - The observations table is one table with all three column groups.
+    A cell that does not apply holds `n/a`. A value nobody measured holds
+    `unknown`. The Scribe never invents a value.
+  - "Expected vs. actual result" is two columns. The Phase 2 assembly
+    joins them.
+  - Severity rating uses Blocker, Major, Minor or None (a positive
+    experience). The rules name no scale, so this one is a design choice.
+  - AWS services used and how is filled only for AWS tools. It feeds the
+    AWS Builder Mini Challenge answer inside Product Feedback.
+- Submission assembly is Phase 2 work, done at submission time from these
+  rows. It produces per-tool Product Feedback, optional Feature Requests and
+  sanitized Friction Log entries. Stage 1 can recommend a bonus of up to 10%
+  for friction log entries.
 - Every packet template in `implementation.json` carries the
   `developer_feedback` section (AC-AFC-DX-01).
 - Lenses: Developer feedback, Owner boundary.

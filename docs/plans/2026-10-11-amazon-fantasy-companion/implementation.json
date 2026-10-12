@@ -15,12 +15,12 @@
     "planning_inputs": [
       {
         "path": "docs/plans/2026-10-11-amazon-fantasy-companion/amazon-fantasy-companion-technical-plan.md",
-        "sha256": "dfc1b9b2c92a7f4030d4a95464f190235da4e93b30f3dafd9fcf02cc61112cd6",
+        "sha256": "0051816b697836e111a21ec7bf01a13ad9559eb239ad3aa8192deb2c185bc82c",
         "binding_status": "bound"
       },
       {
         "path": "docs/plans/2026-10-11-amazon-fantasy-companion/design.md",
-        "sha256": "f33b50c593ea766bf4ff50bc49c4e0201dedcf4afcd3edfbfb9cb0b07361308b",
+        "sha256": "4b397fb81756115e07fdd630c78e57dafd6e2f0a9ec97af568ddec43275e57ca",
         "binding_status": "bound"
       },
       {
@@ -37,7 +37,7 @@
       "docs/plans/2026-10-11-amazon-fantasy-companion/seit.json at f885e48 (reused ids)"
     ],
     "plan_directory": "docs/plans/2026-10-11-amazon-fantasy-companion",
-    "seit_json_sha256_at_integration": "4c64a1032b1ff91ec9ef16bfa4efd9641ab4919f1aef84df6894ff3f2cd4c7e7",
+    "seit_json_sha256_at_integration": "17710bbbc095509728eb12c3560cc200b8addba4f1e7787870a68bd0e34ab158",
     "planning_input_note": "The three inputs are modified in the working tree relative to the revision; digests are of the working files at SEIT write time."
   },
   "journey_settings": {
@@ -94,9 +94,9 @@
     "planning_review": {
       "policy_ref": "skills/bearing-lite/references/review-policy.md",
       "candidate_ref": "plan/2026-10-11-amazon-fantasy-companion",
-      "candidate_revision": "82e767d57c5ff5d5b8f070349a77cedf7ef60793",
-      "repair_revision": "recorded by the Orchestrator in journey.json after the repair commit",
-      "candidate_digest": "23a97b492e5de074de44ad01ec7489567a1fea8a6c61aaf9e768932d85911a37",
+      "candidate_revision": "49029171ea62a5ef57c31b066c20a7b059ebc26b",
+      "repair_revision": "DEC-AFC-SD-025 change applied on top of candidate_revision; the Orchestrator records its commit in journey.json",
+      "candidate_digest": "4128aa9cdacd1fca06edfb68652258730db107eb6213f6dca3faf9e9cca55e84",
       "candidate_digest_source": "node <bearing-lite>/hooks/plan-package.cjs manifest_digest over seit.json planning_inputs plus seit.json",
       "reviewer_slots": [
         {
@@ -241,7 +241,7 @@
         "S08"
       ],
       "entry": "Wave 1 merges each slice depends on (S06 merged for S06L/S42; S01..S03 merged for S11T/S41; C13).",
-      "exit": "D5 linked (AC-AFC-D5-05); tools/spec/ vendored (AC-AFC-SPEC-01); repo gate live on main (AC-AFC-CI-01..04); harness hooks wired or typed gaps (AC-AFC-D4-04); Scribe log (AC-AFC-DX-02); spec-track entry receipt recorded (AC-AFC-PLAN-03).",
+      "exit": "D5 linked (AC-AFC-D5-05); tools/spec/ vendored (AC-AFC-SPEC-01); repo gate live on main (AC-AFC-CI-01..04); harness hooks wired or typed gaps (AC-AFC-D4-04); Scribe log in the Devpost-rules schema (AC-AFC-DX-02, AC-AFC-DX-04); spec-track entry receipt recorded (AC-AFC-PLAN-03).",
       "dispatch_order": "S06L and S42 after S06 merges. S09T after S01, S02 and S42 merge. S09 after S09T and S07. S11T after S01..S03 merge (C13). S11 after S11T, S09, S06 and S06L (and S41 when OD-AFC-01 = B). S41 only if OD-AFC-01 = B. S08 after S09 merges and S11 and S41 have returned (Scribe, not counted). At most five run at once (impl_agent_cap)."
     }
   ],
@@ -507,7 +507,7 @@
       "developer_feedback": {
         "requirement_id": "AC-AFC-DX-01",
         "check_command_id": "CMD-DX-PRESENCE",
-        "rule": "Every dispatch packet and return carries a developer_feedback section the Scribe can ingest (S08 seeds the log)."
+        "rule": "Every dispatch packet and return carries a developer_feedback section the Scribe can ingest (S08 seeds the log). Each observation gives the AC-AFC-DX-04 fields that apply (Devpost Product Feedback, Friction Log Entry, Feature Request); a field that does not apply is n/a and an unmeasured one is unknown (DEC-AFC-SD-025)."
       },
       "development_strategy": "single_implementer",
       "packet_fixed_names": {
@@ -651,7 +651,7 @@
       "developer_feedback": {
         "requirement_id": "AC-AFC-DX-01",
         "check_command_id": "CMD-DX-PRESENCE",
-        "rule": "Every dispatch packet and return carries a developer_feedback section the Scribe can ingest (S08 seeds the log)."
+        "rule": "Every dispatch packet and return carries a developer_feedback section the Scribe can ingest (S08 seeds the log). Each observation gives the AC-AFC-DX-04 fields that apply (Devpost Product Feedback, Friction Log Entry, Feature Request); a field that does not apply is n/a and an unmeasured one is unknown (DEC-AFC-SD-025)."
       },
       "development_strategy": "single_implementer",
       "packet_fixed_names": {
@@ -793,7 +793,7 @@
       "developer_feedback": {
         "requirement_id": "AC-AFC-DX-01",
         "check_command_id": "CMD-DX-PRESENCE",
-        "rule": "Every dispatch packet and return carries a developer_feedback section the Scribe can ingest (S08 seeds the log)."
+        "rule": "Every dispatch packet and return carries a developer_feedback section the Scribe can ingest (S08 seeds the log). Each observation gives the AC-AFC-DX-04 fields that apply (Devpost Product Feedback, Friction Log Entry, Feature Request); a field that does not apply is n/a and an unmeasured one is unknown (DEC-AFC-SD-025)."
       },
       "development_strategy": "single_implementer",
       "packet_fixed_names": {
@@ -948,7 +948,7 @@
       "developer_feedback": {
         "requirement_id": "AC-AFC-DX-01",
         "check_command_id": "CMD-DX-PRESENCE",
-        "rule": "Every dispatch packet and return carries a developer_feedback section the Scribe can ingest (S08 seeds the log)."
+        "rule": "Every dispatch packet and return carries a developer_feedback section the Scribe can ingest (S08 seeds the log). Each observation gives the AC-AFC-DX-04 fields that apply (Devpost Product Feedback, Friction Log Entry, Feature Request); a field that does not apply is n/a and an unmeasured one is unknown (DEC-AFC-SD-025)."
       },
       "development_strategy": "single_implementer",
       "packet_fixed_names": {
@@ -1071,7 +1071,7 @@
       "developer_feedback": {
         "requirement_id": "AC-AFC-DX-01",
         "check_command_id": "CMD-DX-PRESENCE",
-        "rule": "Every dispatch packet and return carries a developer_feedback section the Scribe can ingest (S08 seeds the log)."
+        "rule": "Every dispatch packet and return carries a developer_feedback section the Scribe can ingest (S08 seeds the log). Each observation gives the AC-AFC-DX-04 fields that apply (Devpost Product Feedback, Friction Log Entry, Feature Request); a field that does not apply is n/a and an unmeasured one is unknown (DEC-AFC-SD-025)."
       },
       "development_strategy": "single_implementer"
     },
@@ -1198,7 +1198,7 @@
       "developer_feedback": {
         "requirement_id": "AC-AFC-DX-01",
         "check_command_id": "CMD-DX-PRESENCE",
-        "rule": "Every dispatch packet and return carries a developer_feedback section the Scribe can ingest (S08 seeds the log)."
+        "rule": "Every dispatch packet and return carries a developer_feedback section the Scribe can ingest (S08 seeds the log). Each observation gives the AC-AFC-DX-04 fields that apply (Devpost Product Feedback, Friction Log Entry, Feature Request); a field that does not apply is n/a and an unmeasured one is unknown (DEC-AFC-SD-025)."
       },
       "development_strategy": "light"
     },
@@ -1336,7 +1336,7 @@
       "developer_feedback": {
         "requirement_id": "AC-AFC-DX-01",
         "check_command_id": "CMD-DX-PRESENCE",
-        "rule": "Every dispatch packet and return carries a developer_feedback section the Scribe can ingest (S08 seeds the log)."
+        "rule": "Every dispatch packet and return carries a developer_feedback section the Scribe can ingest (S08 seeds the log). Each observation gives the AC-AFC-DX-04 fields that apply (Devpost Product Feedback, Friction Log Entry, Feature Request); a field that does not apply is n/a and an unmeasured one is unknown (DEC-AFC-SD-025)."
       },
       "development_strategy": "light"
     },
@@ -1464,7 +1464,7 @@
       "developer_feedback": {
         "requirement_id": "AC-AFC-DX-01",
         "check_command_id": "CMD-DX-PRESENCE",
-        "rule": "Every dispatch packet and return carries a developer_feedback section the Scribe can ingest (S08 seeds the log)."
+        "rule": "Every dispatch packet and return carries a developer_feedback section the Scribe can ingest (S08 seeds the log). Each observation gives the AC-AFC-DX-04 fields that apply (Devpost Product Feedback, Friction Log Entry, Feature Request); a field that does not apply is n/a and an unmeasured one is unknown (DEC-AFC-SD-025)."
       },
       "development_strategy": "tdd",
       "packet_fixed_names": {
@@ -1625,7 +1625,7 @@
       "developer_feedback": {
         "requirement_id": "AC-AFC-DX-01",
         "check_command_id": "CMD-DX-PRESENCE",
-        "rule": "Every dispatch packet and return carries a developer_feedback section the Scribe can ingest (S08 seeds the log)."
+        "rule": "Every dispatch packet and return carries a developer_feedback section the Scribe can ingest (S08 seeds the log). Each observation gives the AC-AFC-DX-04 fields that apply (Devpost Product Feedback, Friction Log Entry, Feature Request); a field that does not apply is n/a and an unmeasured one is unknown (DEC-AFC-SD-025)."
       },
       "development_strategy": "tdd"
     },
@@ -1746,7 +1746,7 @@
       "developer_feedback": {
         "requirement_id": "AC-AFC-DX-01",
         "check_command_id": "CMD-DX-PRESENCE",
-        "rule": "Every dispatch packet and return carries a developer_feedback section the Scribe can ingest (S08 seeds the log)."
+        "rule": "Every dispatch packet and return carries a developer_feedback section the Scribe can ingest (S08 seeds the log). Each observation gives the AC-AFC-DX-04 fields that apply (Devpost Product Feedback, Friction Log Entry, Feature Request); a field that does not apply is n/a and an unmeasured one is unknown (DEC-AFC-SD-025)."
       },
       "development_strategy": "tdd",
       "packet_fixed_names": {
@@ -1900,7 +1900,7 @@
       "developer_feedback": {
         "requirement_id": "AC-AFC-DX-01",
         "check_command_id": "CMD-DX-PRESENCE",
-        "rule": "Every dispatch packet and return carries a developer_feedback section the Scribe can ingest (S08 seeds the log)."
+        "rule": "Every dispatch packet and return carries a developer_feedback section the Scribe can ingest (S08 seeds the log). Each observation gives the AC-AFC-DX-04 fields that apply (Devpost Product Feedback, Friction Log Entry, Feature Request); a field that does not apply is n/a and an unmeasured one is unknown (DEC-AFC-SD-025)."
       },
       "development_strategy": "tdd"
     },
@@ -2031,7 +2031,7 @@
       "developer_feedback": {
         "requirement_id": "AC-AFC-DX-01",
         "check_command_id": "CMD-DX-PRESENCE",
-        "rule": "Every dispatch packet and return carries a developer_feedback section the Scribe can ingest (S08 seeds the log)."
+        "rule": "Every dispatch packet and return carries a developer_feedback section the Scribe can ingest (S08 seeds the log). Each observation gives the AC-AFC-DX-04 fields that apply (Devpost Product Feedback, Friction Log Entry, Feature Request); a field that does not apply is n/a and an unmeasured one is unknown (DEC-AFC-SD-025)."
       },
       "development_strategy": "single_implementer",
       "packet_fixed_names": {
@@ -2047,11 +2047,12 @@
     {
       "id": "S08",
       "role": "Scribe",
-      "goal": "Docs slice (scribe-side-lane lane, Phase 1): deliver AC-AFC-DX-01, AC-AFC-DX-02 per DES-AFC-DX inside the exact write set. Done when: Log carries DX-001..DX-007, planning and Phase 1 observations; hygiene PASS.",
+      "goal": "Docs slice (scribe-side-lane lane, Phase 1): deliver AC-AFC-DX-01, AC-AFC-DX-02, AC-AFC-DX-04 per DES-AFC-DX inside the exact write set. Done when: Log carries DX-001..DX-007, planning and Phase 1 observations as complete rows in the AC-AFC-DX-04 schema; hygiene PASS.",
       "type": "docs",
       "requirement_ids": [
         "AC-AFC-DX-01",
         "AC-AFC-DX-02",
+        "AC-AFC-DX-04",
         "AC-AFC-CI-02"
       ],
       "design_ids": [
@@ -2060,7 +2061,8 @@
       "seit_proof_rows": [
         "SEIT-AFC-CI-02.P",
         "SEIT-AFC-DX-02",
-        "SEIT-AFC-DX-01"
+        "SEIT-AFC-DX-01",
+        "SEIT-AFC-DX-04"
       ],
       "design_lenses": [
         "Developer feedback",
@@ -2147,9 +2149,10 @@
       "command_ids": [
         "CMD-GATE-HYGIENE",
         "CMD-DX-COVERAGE",
+        "CMD-DX-SCHEMA",
         "CMD-PR-CHECKS"
       ],
-      "stop_condition": "Log carries DX-001..DX-007, planning and Phase 1 observations; hygiene PASS.",
+      "stop_condition": "Log carries DX-001..DX-007, planning and Phase 1 observations as complete rows in the AC-AFC-DX-04 schema; hygiene PASS.",
       "human_decision": null,
       "authority_id": "AUTH-AFC-2026-10-11-002",
       "work_class": "judgement",
@@ -2173,7 +2176,7 @@
       "developer_feedback": {
         "requirement_id": "AC-AFC-DX-01",
         "check_command_id": "CMD-DX-PRESENCE",
-        "rule": "Every dispatch packet and return carries a developer_feedback section the Scribe can ingest (S08 seeds the log)."
+        "rule": "Every dispatch packet and return carries a developer_feedback section the Scribe can ingest (S08 seeds the log). Each observation gives the AC-AFC-DX-04 fields that apply (Devpost Product Feedback, Friction Log Entry, Feature Request); a field that does not apply is n/a and an unmeasured one is unknown (DEC-AFC-SD-025)."
       },
       "development_strategy": "scribe side lane"
     }
@@ -2666,10 +2669,11 @@
         "post_step_vv": [
           "CMD-MERGE-IDENTITY -> this.dx_log",
           "CMD-GATE-ALL on main",
-          "CMD-DX-COVERAGE: every row has the issue #1 Scribe contract fields"
+          "CMD-DX-COVERAGE: every row is complete (a value, n/a or unknown in every cell)",
+          "CMD-DX-SCHEMA: the Observations and Feature requests headers carry the AC-AFC-DX-04 columns"
         ],
         "rollback": "Revert PR. The log is evidence, so a correction is a new commit, never an in-place edit after merge.",
-        "exit": "AC-AFC-DX-02 evidence."
+        "exit": "AC-AFC-DX-02 and AC-AFC-DX-04 evidence."
       },
       {
         "id": "IE-P1-12",
@@ -3384,6 +3388,19 @@
       "lifecycle_level_bindings": [],
       "ownership": "Lifecycle-local"
     },
+    "AC-AFC-DX-04": {
+      "design_ids": [
+        "DES-AFC-DX"
+      ],
+      "seit_rows": [
+        "SEIT-AFC-DX-04"
+      ],
+      "slices": [
+        "S08"
+      ],
+      "lifecycle_level_bindings": [],
+      "ownership": "Lifecycle-local"
+    },
     "AC-AFC-PLAN-01": {
       "design_ids": [
         "DES-AFC-LANES",
@@ -3577,7 +3594,7 @@
     }
   },
   "assurance": {
-    "seit": "seit.json (54 proof cases, 46 procedures and commands, gate_declarations per lane)",
+    "seit": "seit.json (55 proof cases, 47 procedures and commands, gate_declarations per lane)",
     "pass_fail": "A requirement row PASSES iff every SEIT-AFC proof row citing it passes its pass_fail_rule on the exact candidate. A typed gap (TOOL_MISSING, NOT_RUN, OWNER_ACTION_PENDING) is never PASS. NOT_APPLICABLE counts only with a non-empty reason in gate_declarations. RISK-AFC-17 is OPEN_CARRIED at Phase 1 closeout.",
     "evidence": "Command output captured per run with the candidate SHA (git rev-parse HEAD); author receipts are diagnostic-only; assurance receipts come from a fresh Assurance Test Engineer rerunning the same commands (ci lane); No credential, account name, email or absolute home path in committed evidence; hook-demo and review evidence stay outside the repository",
     "tdd_receipt": "Each red-expected row needs CMD-RED on the Test Implementer candidate and the green command on the Product Implementer candidate over the same test ids, with test-file sha256 recorded in both",
@@ -3764,9 +3781,9 @@
       "status": "deferred_to_phase_2"
     },
     {
-      "f885e48_item": "AC-AFC-DX-02 (per-tool summary and friction log parts), DX-03",
-      "what_moved": "Sanitized per-tool summary and friction log.",
-      "why_moved": "They cover tools used through submission. Phase 1 starts the log only.",
+      "f885e48_item": "AC-AFC-DX-02 (submission assembly), DX-03",
+      "what_moved": "Submission-time assembly from the log: per-tool Product Feedback (tools, APIs and SDKs and what for; what worked well; what needs work; onboarding from zero to hello world; would build again Yes/No and why; AWS services used and how, for AWS Builder), optional Feature Requests (description, why it matters, priority Critical/Important/Nice-to-have) and sanitized Friction Log entries, which Stage 1 can reward with a bonus of up to 10% (evidence/devpost-feedback-rules.md). DX-03 checks them against the rules current at submission.",
+      "why_moved": "They cover tools used through submission. Phase 1 starts the log, with every field the rules ask for (AC-AFC-DX-04, DEC-AFC-SD-025).",
       "status": "deferred_to_phase_2"
     },
     {
@@ -3886,21 +3903,20 @@
   "milestones": [],
   "milestones_note": "No GitHub milestones in Phase 1 (DEC-AFC-SD-023); D3 milestones are planned and created in Phase 2 (P2-6, P2-7)",
   "revision_against": {
-    "package": "f885e48",
-    "candidate_digest": "2300046ae30b2b9afdceccd1384983f30c0a4840060008635a0990635dcb9621",
+    "package": "4902917",
+    "candidate_digest": "23a97b492e5de074de44ad01ec7489567a1fea8a6c61aaf9e768932d85911a37",
     "outcome": "CHANGE_REQUESTED",
     "decided_by": [
-      "DEC-AFC-SD-023",
-      "DEC-AFC-SD-024"
+      "DEC-AFC-SD-025"
     ]
   },
   "revision_diff": {
-    "changed_requirements": "81 rows at f885e48 → 32 Phase 1 rows: 7 amended (AC-AFC-CI-01, SPEC-01, VNV-01, DX-02, PLAN-01, RISK-AFC-13, RISK-AFC-16), 3 new (AC-AFC-CI-04, PLAN-03, RISK-AFC-17); all product rows moved to technical plan §Deferred to the spec track or Phase 2.",
-    "changed_design": "30 design/contract IDs → 10: DES-AFC-D4/D5/DX/GATE/LANES/VNV kept (amended), DES-AFC-PHASE2 new, CONTRACT-AFC-GATE/HOOK/SPECKIT kept; product design deferred to ST-3/ST-4.",
-    "changed_proof_cases": "126 proof cases and 75 commands → 54 proof cases and 46 commands; SEIT-AFC-RISK-17 OPEN_CARRIED until P2-6; Reverify not applicable in Phase 1.",
-    "changed_slices": "54 slices in 5 waves (M1..M5) → 13 Phase 1 slices in 2 waves; S42 new; S41 judgement, conditional on OD-AFC-01 = B; product slices re-planned at P2-6.",
-    "changed_authority": "AUTH-AFC-2026-10-11-001 → AUTH-AFC-2026-10-11-002 (proposed, effective false); Phase 1 write sets only.",
-    "changed_bounds": "No GitHub milestones in Phase 1 (DEC-AFC-SD-023); Phase 1 spec track planned as sequence ST-1..ST-5 and Phase 2 as P2-6..P2-7; visual evidence under evidence/visual/ (DEC-AFC-SD-024)."
+    "changed_requirements": "32 → 33 rows: AC-AFC-DX-02 amended (complete rows in the AC-AFC-DX-04 schema; source adds DEC-AFC-SD-025); AC-AFC-DX-04 new (log schema: issue #1 Scribe fields, Devpost Product Feedback incl. onboarding, would-build-again and AWS services, Friction Log Entry fields, Feature Requests with Critical/Important/Nice-to-have). Deferred row 'AC-AFC-DX-02 (submission assembly), DX-03' restated with the Devpost deliverables and the up-to-10% Stage 1 friction-log bonus.",
+    "changed_design": "DES-AFC-DX amended: log headings, column table, n/a and unknown values, severity scale (design choice), Phase 2 submission assembly.",
+    "changed_proof_cases": "54 → 55 proof cases and 46 → 47 commands: SEIT-AFC-DX-04 and CMD-DX-SCHEMA new; SEIT-AFC-DX-02 and CMD-DX-COVERAGE amended (complete-row check replaces the header grep).",
+    "changed_slices": "S08: +AC-AFC-DX-04, +SEIT-AFC-DX-04, +CMD-DX-SCHEMA; goal and stop condition name the schema. Every slice's developer_feedback rule asks for the AC-AFC-DX-04 fields that apply. No slice, wave, write set, route or dependency added or removed.",
+    "changed_authority": "none",
+    "changed_bounds": "none; DX-006 resolved (rules fetched with curl, HTTP 200; evidence/devpost-feedback-rules.md)"
   },
   "dod_manifest": {
     "template_version": "1.0.1",
@@ -3908,7 +3924,7 @@
     "state": "planning",
     "title": "Amazon Fantasy Companion — Definition of Done Manifest (AFC-2026-10-11, Phase 1)",
     "lede": "Planning projection of implementation.json for the single integrated owner review. The five planning artifacts remain authoritative.",
-    "bluf": "Phase 1 regeneration after integrated review round 1 CHANGE_REQUESTED (DEC-AFC-SD-023, DEC-AFC-SD-024): 13 slices in 2 waves on the spec-and-docs (tech-writing), ci (primary) and scribe-side-lane lanes; 32 Lifecycle-local requirement rows traced to 54 SEIT proof cases (46 commands); S41 conditional on OD-AFC-01 = B; 9 open owner items await the integrated review; no GitHub milestones in Phase 1; Phase 1 spec track planned as sequence ST-1..ST-5 and Phase 2 as P2-6..P2-7. Revision: 54 slices/5 waves/M1..M5 → 13 slices/2 waves; 81 requirement rows → 32; 126 proof cases → 54.",
+    "bluf": "Phase 1 regeneration after integrated review round 1 CHANGE_REQUESTED (DEC-AFC-SD-023, DEC-AFC-SD-024): 13 slices in 2 waves on the spec-and-docs (tech-writing), ci (primary) and scribe-side-lane lanes; 33 Lifecycle-local requirement rows traced to 55 SEIT proof cases (47 commands); S41 conditional on OD-AFC-01 = B; 9 open owner items await the integrated review; no GitHub milestones in Phase 1; Phase 1 spec track planned as sequence ST-1..ST-5 and Phase 2 as P2-6..P2-7. Revision: 54 slices/5 waves/M1..M5 → 13 slices/2 waves; 81 requirement rows → 32; 126 proof cases → 54. Owner change DEC-AFC-SD-025 at integrated review P1: the Scribe log follows the Devpost product-feedback, feature-request and friction-log fields from its first row (AC-AFC-DX-04 new, AC-AFC-DX-02 amended).",
     "identity": [
       {
         "label": "Lifecycle",
@@ -3924,7 +3940,7 @@
       },
       {
         "label": "Revision against",
-        "value": "f885e48e58a6c10fa716b6c5ef048a71980a977a (CHANGE_REQUESTED at integrated review round 1)"
+        "value": "49029171ea62a5ef57c31b066c20a7b059ebc26b (CHANGE_REQUESTED at integrated review P1, DEC-AFC-SD-025); before it f885e48e58a6c10fa716b6c5ef048a71980a977a (CHANGE_REQUESTED at round 1)"
       },
       {
         "label": "Candidate ref",
@@ -3932,7 +3948,7 @@
       },
       {
         "label": "Candidate digest",
-        "value": "23a97b492e5de074de44ad01ec7489567a1fea8a6c61aaf9e768932d85911a37"
+        "value": "4128aa9cdacd1fca06edfb68652258730db107eb6213f6dca3faf9e9cca55e84"
       },
       {
         "label": "Authority",
@@ -3940,11 +3956,11 @@
       },
       {
         "label": "Input amazon-fantasy-companion-technical-plan.md",
-        "value": "dfc1b9b2c92a7f4030d4a95464f190235da4e93b30f3dafd9fcf02cc61112cd6"
+        "value": "0051816b697836e111a21ec7bf01a13ad9559eb239ad3aa8192deb2c185bc82c"
       },
       {
         "label": "Input design.md",
-        "value": "f33b50c593ea766bf4ff50bc49c4e0201dedcf4afcd3edfbfb9cb0b07361308b"
+        "value": "4b397fb81756115e07fdd630c78e57dafd6e2f0a9ec97af568ddec43275e57ca"
       },
       {
         "label": "Input views.json",
@@ -3952,7 +3968,7 @@
       },
       {
         "label": "seit.json",
-        "value": "4c64a1032b1ff91ec9ef16bfa4efd9641ab4919f1aef84df6894ff3f2cd4c7e7"
+        "value": "17710bbbc095509728eb12c3560cc200b8addba4f1e7787870a68bd0e34ab158"
       },
       {
         "label": "Profile primary digest",
@@ -4271,8 +4287,8 @@
       },
       {
         "id": "AC-AFC-DX-02",
-        "statement": "The repository shall contain the running observation log `docs/developer-feedback/observations.md`, one row per observation with the fields of the issue #1 Scribe contract, carrying DX-001..DX-007 and every Phase 1 observation, and passing the `hygiene` area.",
-        "source": "#1 §Scribe contract, SD-011, DEC-AFC-SD-023 (log start in Phase 1; per-tool summary and friction log in Phase 2)",
+        "statement": "The repository shall contain the running observation log `docs/developer-feedback/observations.md` with the AC-AFC-DX-04 tables, carrying DX-001..DX-007 and every Phase 1 observation as one row each in which every column holds a value, `n/a` or `unknown`, and passing the `hygiene` area.",
+        "source": "#1 §Scribe contract, SD-011, DEC-AFC-SD-023 (log start in Phase 1; submission assembly in Phase 2), DEC-AFC-SD-025",
         "verification": "inspection",
         "allocation": "S08; developer-feedback log",
         "ownership": "Lifecycle-local",
@@ -4282,6 +4298,20 @@
         ],
         "status": "planned",
         "change": "amended"
+      },
+      {
+        "id": "AC-AFC-DX-04",
+        "statement": "The observation log shall define an observations table whose header carries the issue #1 Scribe contract columns (ID, timestamp, reporting role, task or packet, tool/API/SDK, version, device/OS, evidence, classification), the Devpost Product Feedback columns (used for, what worked well, what needs work, onboarding from zero to hello world, would build again Yes/No and why, AWS services used and how) and the Devpost Friction Log Entry columns (task attempted, steps taken, expected result, actual result, severity rating, workaround used, actionable suggestion), and a feature-requests table whose header carries ID, tool, description, why it matters to this project and priority, with every priority value one of Critical, Important or Nice-to-have.",
+        "source": "DEC-AFC-SD-025; Devpost rules and resources (evidence/devpost-feedback-rules.md, HTTP 200 on 2026-10-12); #1 §Scribe contract",
+        "verification": "inspection",
+        "allocation": "S08; developer-feedback log",
+        "ownership": "Lifecycle-local",
+        "seit_rows": 1,
+        "slices": [
+          "S08"
+        ],
+        "status": "planned",
+        "change": "new"
       },
       {
         "id": "AC-AFC-PLAN-01",
@@ -4598,7 +4628,7 @@
         "source": "views/v5-phase1-context.mmd",
         "digest": "sha256:94186f9094a4ce584c1d2c73e7b286f2525ea381660780617b137b6503f79447",
         "viewpoint": "Context / boundary",
-        "trace": "AC-AFC-D5-01, AC-AFC-D5-04, AC-AFC-SPEC-01, AC-AFC-CI-01, AC-AFC-CI-02, AC-AFC-D4-01, AC-AFC-D4-02, AC-AFC-D4-03, AC-AFC-D4-04, AC-AFC-VNV-01, AC-AFC-DX-02, RISK-AFC-13, DES-AFC-D5, DES-AFC-GATE, DES-AFC-D4, DES-AFC-VNV, DES-AFC-DX, DES-AFC-PHASE2, CONTRACT-AFC-GATE, CONTRACT-AFC-HOOK, CONTRACT-AFC-SPECKIT",
+        "trace": "AC-AFC-D5-01, AC-AFC-D5-04, AC-AFC-SPEC-01, AC-AFC-CI-01, AC-AFC-CI-02, AC-AFC-D4-01, AC-AFC-D4-02, AC-AFC-D4-03, AC-AFC-D4-04, AC-AFC-VNV-01, AC-AFC-DX-02, AC-AFC-DX-04, RISK-AFC-13, DES-AFC-D5, DES-AFC-GATE, DES-AFC-D4, DES-AFC-VNV, DES-AFC-DX, DES-AFC-PHASE2, CONTRACT-AFC-GATE, CONTRACT-AFC-HOOK, CONTRACT-AFC-SPECKIT",
         "limitations": "Planned design from the Planning and Design node; nothing is realized. Explanatory Mermaid plus hand-written SVG; not a SysML v2 model (sysml_claim false). Requirement mappings are provisional until the Requirements Engineer Phase 1 PASS. The vnv-review skill and the harnesses are external actors; their internals are not modeled. RISK-AFC-07 (route limits) and RISK-AFC-08 (exhausted minutes) are process controls, not drawn.",
         "view": {
           "format": "svg",
@@ -5009,7 +5039,7 @@
       },
       {
         "surface": "docs/plans/2026-10-11-amazon-fantasy-companion/seit.json",
-        "impact": "54 proof cases, 46 commands, gate declarations, VV sequence IE-P1-1..12",
+        "impact": "55 proof cases, 47 commands, gate declarations, VV sequence IE-P1-1..12",
         "owner": "Planning Test Engineer",
         "timing": "planning",
         "verification": "seit.schema.json; planning review",
@@ -5228,10 +5258,31 @@
       {
         "event": "Deferred to the spec track or Phase 2",
         "owner": "William Rumph",
-        "evidence": "AC-AFC-PROF-01..04, MON-01..04, FEED-01..03, ALERT-01..05, WATCH-01..03, CTRL-01..03, PANEL-01..05 [deferred_to_phase_2]; AC-AFC-SPIKE-01..02, SEC-01..04, LW-01 [deferred_to_phase_2]; AC-AFC-SPEC-02, SPEC-03 [deferred_to_phase_2]; AC-AFC-PLAN-02 [deferred_to_phase_2]; AC-AFC-DX-02 (per-tool summary and friction log parts), DX-03 [deferred_to_phase_2]; AC-AFC-SUB-01..04 [deferred_to_phase_2]; AC-AFC-VIS-01 [deferred_to_phase_2]; RISK-AFC-01..06, 09, 10, 14 [deferred_to_phase_2]; Gate areas `android`, `backend`; Vnv areas tv-app, backend, device-integration [deferred_to_phase_2]; Product design (f885e48 `design.md` DES-AFC-ARCH, TV, ALERTPATH, WATCH, PANEL, FEED, LINEUP, POLICY, AUTH, INFRA, SPIKES, SPEC, SUB; CONTRACT-AFC-API, EVENT, ALERT, LAUNCH, PROVIDERS, PANEL, LINEUPSOURCE, TABLES) and the design quantities [deferred_to_phase_2]; Views MODEL-AFC-V1..V3 (diagram-assisted product views) [deferred_to_phase_2]; Slices S04, S05, S10, S12..S40 and waves 3..5; milestones M1..M5 [deferred_to_phase_2]; Open items OD-AFC-02 (AI commentary), OD-AFC-03 (Alexa stretch), OD-AFC-04 (spikes evidence-only), OD-AFC-05 (design quantities), OA-AFC-A1 (frontend-design skill path) [deferred_to_phase_2]; OD-AFC-11 (visual evidence store) [closed]",
+        "evidence": "AC-AFC-PROF-01..04, MON-01..04, FEED-01..03, ALERT-01..05, WATCH-01..03, CTRL-01..03, PANEL-01..05 [deferred_to_phase_2]; AC-AFC-SPIKE-01..02, SEC-01..04, LW-01 [deferred_to_phase_2]; AC-AFC-SPEC-02, SPEC-03 [deferred_to_phase_2]; AC-AFC-PLAN-02 [deferred_to_phase_2]; AC-AFC-DX-02 (submission assembly), DX-03 [deferred_to_phase_2]; AC-AFC-SUB-01..04 [deferred_to_phase_2]; AC-AFC-VIS-01 [deferred_to_phase_2]; RISK-AFC-01..06, 09, 10, 14 [deferred_to_phase_2]; Gate areas `android`, `backend`; Vnv areas tv-app, backend, device-integration [deferred_to_phase_2]; Product design (f885e48 `design.md` DES-AFC-ARCH, TV, ALERTPATH, WATCH, PANEL, FEED, LINEUP, POLICY, AUTH, INFRA, SPIKES, SPEC, SUB; CONTRACT-AFC-API, EVENT, ALERT, LAUNCH, PROVIDERS, PANEL, LINEUPSOURCE, TABLES) and the design quantities [deferred_to_phase_2]; Views MODEL-AFC-V1..V3 (diagram-assisted product views) [deferred_to_phase_2]; Slices S04, S05, S10, S12..S40 and waves 3..5; milestones M1..M5 [deferred_to_phase_2]; Open items OD-AFC-02 (AI commentary), OD-AFC-03 (Alexa stretch), OD-AFC-04 (spikes evidence-only), OD-AFC-05 (design quantities), OA-AFC-A1 (frontend-design skill path) [deferred_to_phase_2]; OD-AFC-11 (visual evidence store) [closed]",
         "status": "deferred_to_phase_2"
       }
     ]
   },
-  "phase2_sequence_note": "OR-01 relabel: entries ST-1..ST-5 are the Phase 1 spec track (were P2-1..P2-5; content, roles and dependencies unchanged); P2-6 and P2-7 are Phase 2. The key name phase2_sequence, deferred_to_phase_2, phase2_entry_receipt, the plan-directory glob and evidence/phase2-entry-receipt.json are stable identifiers."
+  "phase2_sequence_note": "OR-01 relabel: entries ST-1..ST-5 are the Phase 1 spec track (were P2-1..P2-5; content, roles and dependencies unchanged); P2-6 and P2-7 are Phase 2. The key name phase2_sequence, deferred_to_phase_2, phase2_entry_receipt, the plan-directory glob and evidence/phase2-entry-receipt.json are stable identifiers.",
+  "revision_history": [
+    {
+      "revision_against": {
+        "package": "f885e48",
+        "candidate_digest": "2300046ae30b2b9afdceccd1384983f30c0a4840060008635a0990635dcb9621",
+        "outcome": "CHANGE_REQUESTED",
+        "decided_by": [
+          "DEC-AFC-SD-023",
+          "DEC-AFC-SD-024"
+        ]
+      },
+      "revision_diff": {
+        "changed_requirements": "81 rows at f885e48 → 32 Phase 1 rows: 7 amended (AC-AFC-CI-01, SPEC-01, VNV-01, DX-02, PLAN-01, RISK-AFC-13, RISK-AFC-16), 3 new (AC-AFC-CI-04, PLAN-03, RISK-AFC-17); all product rows moved to technical plan §Deferred to the spec track or Phase 2.",
+        "changed_design": "30 design/contract IDs → 10: DES-AFC-D4/D5/DX/GATE/LANES/VNV kept (amended), DES-AFC-PHASE2 new, CONTRACT-AFC-GATE/HOOK/SPECKIT kept; product design deferred to ST-3/ST-4.",
+        "changed_proof_cases": "126 proof cases and 75 commands → 54 proof cases and 46 commands; SEIT-AFC-RISK-17 OPEN_CARRIED until P2-6; Reverify not applicable in Phase 1.",
+        "changed_slices": "54 slices in 5 waves (M1..M5) → 13 Phase 1 slices in 2 waves; S42 new; S41 judgement, conditional on OD-AFC-01 = B; product slices re-planned at P2-6.",
+        "changed_authority": "AUTH-AFC-2026-10-11-001 → AUTH-AFC-2026-10-11-002 (proposed, effective false); Phase 1 write sets only.",
+        "changed_bounds": "No GitHub milestones in Phase 1 (DEC-AFC-SD-023); Phase 1 spec track planned as sequence ST-1..ST-5 and Phase 2 as P2-6..P2-7; visual evidence under evidence/visual/ (DEC-AFC-SD-024)."
+      }
+    }
+  ]
 }

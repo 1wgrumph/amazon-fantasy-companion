@@ -1,0 +1,34 @@
+**PLAN_REVIEW_READY.** DEC-AFC-SD-025 is applied and the package is frozen again. The freeze passed with zero findings, and the new candidate digest is `283b7a06…a746`. Nothing is committed: the change is in the working tree on top of 4902917.
+
+**What changed**
+- **Requirements (now 33, was 32):**
+  - AC-AFC-DX-02 is amended: every row in the developer-feedback log must be complete. Each cell holds a value, `n/a` or `unknown`.
+  - AC-AFC-DX-04 is new and defines the log's columns:
+    - Each observation row carries the issue #1 Scribe fields, the Devpost product-feedback fields, and the friction-log fields exactly as the rules list them.
+    - The product-feedback fields are: what the tool was used for, what worked, what needs work, onboarding (zero to hello world), would build again (Yes/No and why), and AWS services used and how.
+    - A Feature requests table has a priority of Critical, Important or Nice-to-have.
+  - The Phase 1 S08 log uses this schema from its first row. Building the submission from it stays in Phase 2, and the plan notes that friction log entries can earn a Stage 1 bonus of up to 10%.
+- **Design (DES-AFC-DX):** it now names the log's two headings, the exact column names and the `n/a`/`unknown` rule. It also sets a severity scale of Blocker, Major, Minor or None. The rules don't give a scale, so I chose that one; you can change it at the review.
+- **SEIT (now 55 proof cases and 47 commands):** I added SEIT-AFC-DX-04 with a new CMD-DX-SCHEMA check, and amended SEIT-AFC-DX-02 and CMD-DX-COVERAGE to check that every row is complete. Existing IDs are unchanged. Both commands caught every bad case in a test against sample logs: a missing column, a bad priority, an empty cell, and a missing row or table.
+- **Slices:** S08 now carries DX-04, its proof row and the new command. All 13 slices' `developer_feedback` rule now asks for the DX-04 fields that apply. No slice, wave, route or authority changed.
+- **DX-006:** the only text calling the rules unverified was in `scope-decision-batch.md`. I added a dated note there: curl got HTTP 200, so the earlier 403 came from WebFetch alone.
+
+**Gates**
+- **Requirements Engineer:** PASS on DX-02 and DX-04 in one round, run on Muse Spark 1.3 at max. After the pass I edited only the technical plan's frontmatter revision note; the mechanical lint confirms the requirement rows are unchanged.
+- **Checks:**
+  - `plan-package.cjs` passes with zero findings, the manifest renders, and its `--check` passes.
+  - All four JSON files validate against their schemas with zero errors.
+  - The check that every slice requirement has a proof row finds no mismatches.
+  - The home-path scan for rule 12 finds nothing.
+  - The planning-review gate returns `review_round_pending`, which confirms the manifest exists.
+
+The receipt with the full diff against 4902917 is `specialists/pd-change-sd025-receipt.md`.
+
+**developer_feedback**
+- **PD-SD025-OBS-1:** any late edit to the technical plan means redoing the digests by hand across three files. A single rebind command would fix this.
+- **PD-SD025-OBS-2:** an existing gap in the plan: in `seit.json`, S08's proof list leaves out SEIT-AFC-DX-01, which `implementation.json` includes. The freeze doesn't compare the two, and I left it alone as out of scope.
+- **PD-SD025-OBS-3:** Muse's output includes absolute home paths, so I rewrote them to `$HOME` before keeping the log.
+- **Tools used:** python3, node, Muse Code 1.4.6, git, sed, grep and sha256sum.
+
+I didn't re-check the 31 unchanged requirement rows. The one remaining risk is OBS-2, which the freeze does not catch.
+exit=0
