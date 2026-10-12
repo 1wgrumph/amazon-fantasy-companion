@@ -12,7 +12,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from gate_support import REPO, call_main, init_repo, load_tool, write
+from gate_support import REPO, call_main, init_repo, load_tool, run_as_script, write
 
 SEP = '/'
 BACK = '\\'
@@ -87,6 +87,31 @@ class AC_AFC_CI_03(unittest.TestCase):
         self.assertEqual(rc, 1, out)
         self.assertIn('dirty.md:1:PATH-HOME-POSIX', out.splitlines())
         self.assertNotIn('clean.md', out)
+
+    def test_unknown_option_is_a_usage_error_exit_2(self):
+        rc, out = call_main(self.tool, ['--no-such-option'], self.tmp)
+        self.assertEqual(rc, 2, out)
+        self.assertIn('usage:', out)
+
+    def test_directories_and_binary_files_are_skipped(self):
+        line, _ = fixtures()['PATH-HOME-POSIX']
+        (self.tmp / 'subdir').mkdir()
+        (self.tmp / 'blob.bin').write_bytes(line.encode() + b'\0\n')
+        rc, out = call_main(self.tool, ['--files', 'subdir', 'blob.bin'], self.tmp)
+        self.assertEqual(rc, 0, out)
+        self.assertEqual(out, '')
+
+    def test_unreadable_file_or_git_failure_exits_1(self):
+        for argv in (['--files', 'missing.txt'], []):
+            with self.subTest(argv=argv):
+                rc, out = call_main(self.tool, argv, self.tmp)
+                self.assertEqual(rc, 1, out)
+                self.assertIn('check_paths: unreadable input or git failure', out)
+
+    def test_script_entrypoint_exits_with_main_status(self):
+        write(self.tmp, {'clean.md': 'nothing here\n', 'dirty.md': fixtures()['PATH-HOME-POSIX'][0] + '\n'})
+        self.assertEqual(run_as_script('check_paths', ['--files', 'clean.md'], self.tmp), 0)
+        self.assertEqual(run_as_script('check_paths', ['--files', 'dirty.md'], self.tmp), 1)
 
 
 class AC_AFC_PATH_01(unittest.TestCase):
