@@ -1,0 +1,58 @@
+COMMAND: uv run --script tools/spec/diagram.py render spec/amazon-fantasy-companion/figures/alert-lifecycle.yaml
+graphviz: spec/amazon-fantasy-companion/figures/alert-lifecycle.svg spec/amazon-fantasy-companion/figures/alert-lifecycle.drawio
+EXIT: 0
+COMMAND: uv run --script tools/spec/diagram.py render spec/amazon-fantasy-companion/figures/data.yaml
+graphviz: spec/amazon-fantasy-companion/figures/data.svg spec/amazon-fantasy-companion/figures/data.drawio
+EXIT: 0
+COMMAND: uv run --script tools/spec/diagram.py render spec/amazon-fantasy-companion/figures/device-link.yaml
+graphviz: spec/amazon-fantasy-companion/figures/device-link.svg spec/amazon-fantasy-companion/figures/device-link.drawio
+EXIT: 0
+COMMAND: uv run --script tools/spec/diagram.py render spec/amazon-fantasy-companion/figures/interfaces.yaml
+graphviz: spec/amazon-fantasy-companion/figures/interfaces.svg spec/amazon-fantasy-companion/figures/interfaces.drawio
+EXIT: 0
+COMMAND: uv run --script tools/spec/diagram.py render spec/amazon-fantasy-companion/figures/panel-mode.yaml
+graphviz: spec/amazon-fantasy-companion/figures/panel-mode.svg spec/amazon-fantasy-companion/figures/panel-mode.drawio
+EXIT: 0
+COMMAND: uv run --script tools/spec/diagram.py render spec/amazon-fantasy-companion/figures/structure.yaml
+graphviz: spec/amazon-fantasy-companion/figures/structure.svg spec/amazon-fantasy-companion/figures/structure.drawio
+EXIT: 0
+COMMAND: uv run --script tools/spec/diagram.py render spec/amazon-fantasy-companion/figures/system-context.yaml
+graphviz: spec/amazon-fantasy-companion/figures/system-context.svg spec/amazon-fantasy-companion/figures/system-context.drawio
+EXIT: 0
+COMMAND: uv run --script tools/spec/diagram.py render spec/amazon-fantasy-companion/figures/watch-flow.yaml
+grid: spec/amazon-fantasy-companion/figures/watch-flow.svg spec/amazon-fantasy-companion/figures/watch-flow.drawio
+EXIT: 0
+COMMAND: uv run --script tools/spec/spec_build.py spec/amazon-fantasy-companion spec/amazon-fantasy-companion/amazon-fantasy-companion.md
+EXIT: 0
+COMMAND: uv run --script tools/spec/spec_lint.py spec/amazon-fantasy-companion
+EXIT: 0
+COMMAND: uv run --script tools/spec/diagram.py lint spec/amazon-fantasy-companion
+EXIT: 0
+COMMAND: uv run --script tools/spec/spec_build.py spec/amazon-fantasy-companion docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/ST-4/g3/rebuild.tmp.md
+EXIT: 0
+COMMAND: cmp spec/amazon-fantasy-companion/amazon-fantasy-companion.md docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/ST-4/g3/rebuild.tmp.md
+EXIT: 0
+COMMAND: python3 docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/ST-4/g3/check-spec.py
+UID coverage: 66/66; Appendix A: 66/66; unknown UIDs: 0; withdrawn: 3
+Section and local-link checks: 66 sections; PASS
+Generated whitespace: only the builder’s intentional Markdown hard break at line 3
+Write-set check: 81 changed paths; PASS
+EXIT: 0
+COMMAND: bash -c \!\ grep\ -nRE\ \"\\\*\\\*\(BLUF\|Frame\|Who\|What\|Why\|How\|When\|Where\):\?\\\*\\\*\"\ spec/amazon-fantasy-companion/
+EXIT: 0
+COMMAND: grep -n -i sample\ footage\\\|Mode\ A spec/amazon-fantasy-companion/amazon-fantasy-companion.md
+524:The figure below retains the earlier native `PanelMode` element for traceability. Its Mode A sample-footage branch is superseded by SD-035 and retained pending Phase 2 design; it is not the current product fallback. The figure annotation identifies that mismatch without changing the read-only model.
+532:SD-035 withdraws AFC-PR-049, AFC-PR-050 and AFC-PR-051 because the owner rejected Mode A sample footage.
+551:| tvApp.panel, player | PANEL, PLAYER | LineupPanel.kt; CompanionPlayer.kt is a retained Mode A model allocation pending Phase 2 design per SD-035, not an active footage feature |
+701:| alert-lifecycle, panel-mode, device-link | AFC-States / V-ST3b-3 | Retained native states/triggers; panel-mode annotates the superseded fallback pending SD-035 design alignment |
+714:AlertLifecycle follows detected → matched → gated → emitted → delivered, with matched → suppressed and emitted/delivered → corrected. The retained PanelMode model starts in modeB and transitions only to modeA on spikeFailed. Its Mode A sample-footage meaning is superseded by SD-035 and retained pending Phase 2 design, along with `tvApp.player` and PLAYER. The current fallback is the full-screen companion-app panel in 4.1.12; the old transition is not an implementation instruction. DeviceLink starts unlinked, requests codePending, then links on userConfirm or expires on codeTimeout; expired can request again. Sections 4.1.5, 4.1.10 and 4.1.12 draw these separately.
+EXIT: 0
+COMMAND: python3 docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/ST-4/g3/check-spec.py --paths-only
+EXIT: 0
+COMMAND: git diff --check -- . :\!spec/amazon-fantasy-companion/amazon-fantasy-companion.md
+EXIT: 0
+COMMAND: git diff --cached --check -- . :\!spec/amazon-fantasy-companion/amazon-fantasy-companion.md
+EXIT: 0
+COMMAND: sha256sum spec/amazon-fantasy-companion/amazon-fantasy-companion.md
+1d5291cb990976652d3740f46ff7bfd28bd7f24eb9abb4fc1825faad43e1088a  spec/amazon-fantasy-companion/amazon-fantasy-companion.md
+EXIT: 0
