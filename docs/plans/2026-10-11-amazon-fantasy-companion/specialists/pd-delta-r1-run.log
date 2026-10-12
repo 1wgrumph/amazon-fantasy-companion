@@ -1,0 +1,24 @@
+**DELTA_APPLIED.** All eight findings (FR-01 to FR-08) and developer_feedback item (2) are applied. The freeze check passes with no findings, the manifest re-renders and its `--check` passes, and both JSON files validate against their schemas. Nothing is committed.
+
+- **New manifest digest:** `2300046ae30b2b9afdceccd1384983f30c0a4840060008635a0990635dcb9621`
+- **Rendered manifest:** `sha256:3a60b38e3b7719fe923c6220088f2c25047567a890adb2a617e0f67423d66c2e`
+- **New file hashes:** technical plan `f413d1bc…`, `seit.json` `bd3b4f0b…`
+- **Files changed:** the technical plan, `seit.json`, `implementation.json`, the DoD manifest HTML, `specialists/slice-graph.md`, plus the new receipt `specialists/pd-delta-r1-receipt.md`. All are inside the plan directory. `journey.json`, `design.md`, `views/` and `authority.json` are untouched.
+
+**How the choices inside findings were handled:**
+- **FR-04:** I didn't pick for the owner. TE-F05 is now owner decision OD-AFC-11, with both options and their consequences. The Test Engineer named both options without recommending one, so the row says "owner's choice". OD-AFC-11 is also on the five UI slices (S25, S26, S27, S31, S32), in the DoD risk row and in `seit.json`. The write sets are unchanged until the owner decides.
+- **FR-02:** `candidate_revision` is now the reviewed commit `4afc998e…`, and `repair_revision` says the Orchestrator records it in `journey.json`.
+- **FR-03:** The manifest's `seit.json` row now holds `bd3b4f0b…`, not the reviewer's `bc02a21f…`. That value went stale once this repair edited `seit.json`.
+- **FR-05:** Every range now reads `(OD-AFC-01..11, OA-AFC-A1..A2)`, and the summary line says 13 open items. The same text is fixed at `slice-graph.md:110`.
+- **FR-07:** TE-F07 is marked closed, since the reworded text was its only open part.
+- **FR-08:** I also changed the AC-AFC-SUB-03 row in the manifest to `demonstration` so it matches the technical plan.
+
+The rule 12 grep finds only the two existing path-detector patterns in `seit.json` command text, not any literal home path.
+
+developer_feedback:
+- `plan-package.cjs` doesn't compare the manifest's `seit.json` row with the real hash on disk, so any later edit to `seit.json` will make it stale again. A check for this would have caught FR-03 automatically.
+- `open_items` has 13 entries, not the 12 the prompt named, so it matches `implementation.json` once OD-AFC-11 is in.
+- If the owner picks OD-AFC-11 option 1, a follow-up mechanical repair must add the evidence path to the five write sets and update their screenshot paths in `seit.json`. Option 2 needs no package change.
+
+**For you (Orchestrator):** record the repair commit hash and the new digest in `journey.json`. I didn't run `evaluatePlanningReview`, and I relied on the reviewer's verified scope rather than re-checking slice routes or the dependency graph.
+exit=0

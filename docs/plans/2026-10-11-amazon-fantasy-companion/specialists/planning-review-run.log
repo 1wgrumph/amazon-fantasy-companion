@@ -1,0 +1,30 @@
+muse: workspace root: $HOME/alphazede/worktrees/amazon-fantasy-companion-planning (explicit)
+muse: workspace trust: trusted source=run-flag
+muse: Skills: 67 loaded · 1 warning
+muse:   `skills_catalog` was trimmed to fit its size limit (32 KB): 13 descriptions compacted, 0 skill ids omitted
+muse:   Run `muse skills list --source all` for full diagnostics.
+Verdict: **REPAIR_REQUIRED** — 8 verified, fixable findings (1 P1, 3 P2, 4 P3). Candidate binding verified: `plan-package.cjs` → PASS, digest `87fa2433…` matches. Review written to [planning-review-r1.md]($HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/specialists/planning-review-r1.md); nothing else touched, no commits.
+
+Findings (ID, severity, location, fix):
+
+- **FR-01 (P1)** — TP open-decisions table (`technical-plan.md:408-421`) omits OA-AFC-A1/A2, though both are `open_for_integrated_review` (`implementation.json:10844,10861`, manifest `:3496-3502`) and TP entry criterion 1 scopes approval to that table. OA-AFC-A2=B would invalidate the slice graph. Fix: append the two rows verbatim from `implementation.json`.
+- **FR-02 (P2)** — `implementation.json:103` `candidate_revision` is the seed commit `2c13a6b`, not the candidate `4afc998`. Fix: set to the repaired package commit at commit time.
+- **FR-03 (P2)** — Manifest §2 records `seit.json: cae54c15…` (`manifest:711`, `implementation.json:10953`) but the shipped file is `bc02a21f…` (PD-R1 rebind, cause documented in `pd-r1-correction.md`). Other three hashes match. Fix: update `:10953`, regenerate manifest; keep `:40` as history.
+- **FR-04 (P2)** — TE-F05 undisposed: UI slices' stop conditions require screencaps (AC-AFC-VIS-01) but no write set covers them (`implementation.json:5277,5540,5814,6464,6722`; manifest TE-F05 open). Fix: add `docs/evidence/visual/<slice>/` to the five write sets, or record the option-2 owner disposition.
+- **FR-05 (P3)** — `manifest:3510` stale "(OD-AFC-01..06)" vs the 12-item table above it. Fix: "(OD-AFC-01..10, OA-AFC-A1..A2)".
+- **FR-06 (P3)** — "one light slice (S41)" in TP:412, `implementation.json:10776`, `seit.json:80` contradicts PI-F01 (S41 is judgement/Product Implementer). Fix: "one judgement slice" ×3.
+- **FR-07 (P3)** — `implementation.json:8862` `template_digest` prose doesn't name the `SourceCommit`/`TemplateSha256` tags `CMD-TEMPLATE-DIGEST` uses. Fix: reword.
+- **FR-08 (P3)** — AC-AFC-SUB-03: TP says `inspection` (:253), proof says `demonstration` (`seit.json:5165`). Only method-label mismatch in 81 rows. Fix: align labels.
+
+Verified clean: 54/54 slice routes incl. fallback order; acyclic deps (71/71 edges); write-set overlaps all benign by design; 81 AC/RISK rows → 126 proofs, all commands/refs resolve; no owner-only actions assigned to agents; no rule-12 leaks in the candidate; D4 size claims (60/82 lines) and all SVG hashes confirmed; milestone dates fit T_deadline with 7 h buffer.
+
+OCR (delegate, all 8 files, no tool failures): 5 JSON files PASS (no key typos, aspell-checked); manifest HTML PASS (no active content, 4 static SVGs); both lint `.py` files PASS with one shared non-blocking note (no `argv` guard). Excluded `.md` scope files were read directly.
+
+Reverify: not applicable — the candidate contains no compiled binary.
+
+Route actually used: primary planning-review route, Muse Code / Muse Spark / max; no fallback.
+
+developer_feedback: package is unusually self-consistent; most IE/TE/PI deltas landed with receipts. Minor: `seit.json decision_baseline.open_items` still shows 10 (pre-amendment projection; authoritative 12-list is complete). Schedule is tight but fits the owner deadline — pressure noted, no date change proposed. Tools exercised: `plan-package.cjs`, `ocr delegate` preview + 8 rules, `sha256sum`, `aspell`, purpose-built `/tmp/afc-review/` Python checks, `git show/status/check-ignore`, `diff`, `grep`.
+
+Skipped: line-by-line prose review ofJourney/SD logs beyond decision extraction; re-running the DoD renderer. Risk: FR-03's repair must re-freeze the digest, which renumbers the candidate binding the owner approves.
+exit=0
