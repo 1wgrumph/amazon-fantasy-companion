@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="660" viewBox="0 0 960 660" font-family="monospace">
+  <desc>Derived projection of AFCData (AFC-Data.sysml). Model revision digest 14fb815b78c2c6817d556c36d351b22dd3996db5f5a7e34a87251ce69bfdcfe5. Native source is the .sysml file; this SVG replaces nothing.</desc>
+  <rect x="0" y="0" width="960" height="660" fill="#ffffff"/>
+  <text x="20" y="28" font-size="18" font-weight="bold">AFC data (derived view)</text>
+  <text x="20" y="48" font-size="11" fill="#444">Source AFCData d16b0e3d0badb… — see models/views.md for full digest</text>
+
+  <rect x="20" y="60" width="290" height="220" fill="#f4f8ff" stroke="#333" stroke-width="2"/>
+  <text x="34" y="86" font-size="14" font-weight="bold">GameEvent</text>
+  <text x="34" y="108" font-size="12">score, fieldPosition,</text>
+  <text x="34" y="124" font-size="12">possession, playerIds,</text>
+  <text x="34" y="140" font-size="12">eventTime, correctionOf</text>
+  <text x="34" y="168" font-size="11" fill="#444">PR-008, 012, 013, 064</text>
+  <text x="34" y="196" font-size="11" fill="#444">ingest → matcher → policy;</text>
+  <text x="34" y="210" font-size="11" fill="#444">replay-labeled when substituted</text>
+
+  <rect x="335" y="60" width="290" height="220" fill="#f4fff4" stroke="#333" stroke-width="2"/>
+  <text x="349" y="86" font-size="14" font-weight="bold">Alert</text>
+  <text x="349" y="108" font-size="12">alertType, triggerContext,</text>
+  <text x="349" y="124" font-size="12">providerRoute, commentary,</text>
+  <text x="349" y="140" font-size="12">emittedAt</text>
+  <text x="349" y="168" font-size="11" fill="#444">PR-014, 015, 023, 025..027, 029</text>
+  <text x="349" y="196" font-size="11" fill="#444">one per resolved event;</text>
+  <text x="349" y="210" font-size="11" fill="#444">commentary grounded in event</text>
+
+  <rect x="650" y="60" width="290" height="220" fill="#fff8f0" stroke="#333" stroke-width="2"/>
+  <text x="664" y="86" font-size="14" font-weight="bold">Lineup</text>
+  <text x="664" y="108" font-size="12">source, team, league,</text>
+  <text x="664" y="124" font-size="12">starters, scoring</text>
+  <text x="664" y="152" font-size="11" fill="#444">PR-001, 006, 007, 039, 065</text>
+  <text x="664" y="180" font-size="11" fill="#444">exactly one active source:</text>
+  <text x="664" y="194" font-size="11" fill="#444">Yahoo read-only or manual</text>
+
+  <rect x="20" y="300" width="290" height="200" fill="#f8f4ff" stroke="#333" stroke-width="2"/>
+  <text x="34" y="326" font-size="14" font-weight="bold">PanelState</text>
+  <text x="34" y="348" font-size="12">visible, teamTotal,</text>
+  <text x="34" y="364" font-size="12">progress, freshness</text>
+  <text x="34" y="392" font-size="11" fill="#444">PR-026, 039, 040, 044, 046, 061, 065</text>
+  <text x="34" y="420" font-size="11" fill="#444">consistent with alerts (PR-046);</text>
+  <text x="34" y="434" font-size="11" fill="#444">stale/unavailable labeled</text>
+
+  <rect x="335" y="300" width="290" height="200" fill="#fffff0" stroke="#333" stroke-width="2"/>
+  <text x="349" y="326" font-size="14" font-weight="bold">Settings</text>
+  <text x="349" y="348" font-size="12">fantasySelections, teamLeague,</text>
+  <text x="349" y="364" font-size="12">alertTypes, frequency, quietHours,</text>
+  <text x="349" y="380" font-size="12">gameDayPeriods, spoilerDelay,</text>
+  <text x="349" y="396" font-size="12">presentation, voice, excitement,</text>
+  <text x="349" y="412" font-size="12">providerPref, switchingConfirm,</text>
+  <text x="349" y="428" font-size="12">panelPrefs, detectionOptIn</text>
+  <text x="349" y="456" font-size="11" fill="#444">PR-002, 005, 009, 016..023,</text>
+  <text x="349" y="470" font-size="11" fill="#444">034, 035, 037, 042, 044</text>
+
+  <rect x="650" y="300" width="290" height="200" fill="#f0f8f8" stroke="#333" stroke-width="2"/>
+  <text x="664" y="326" font-size="14" font-weight="bold">RoutingOutcome (enum)</text>
+  <text x="664" y="348" font-size="12">gameOpened, searchOpened,</text>
+  <text x="664" y="364" font-size="12">appHomeOpened, appAbsent,</text>
+  <text x="664" y="380" font-size="12">accessUnknown, playbackDenied</text>
+  <text x="664" y="408" font-size="11" fill="#444">PR-031, 032, 033</text>
+  <text x="664" y="436" font-size="14" font-weight="bold">DeviceCode</text>
+  <text x="664" y="458" font-size="12">code, expires</text>
+  <text x="664" y="476" font-size="11" fill="#444">PR-038</text>
+
+  <text x="20" y="540" font-size="11" fill="#444">Flows: GameEvent (ingest) → Alert (policy) → notifier/panel; Lineup + Settings drive</text>
+  <text x="20" y="556" font-size="11" fill="#444">matching and gating; PanelState renders Lineup + feed under Settings; DeviceCode links.</text>
+  <text x="20" y="584" font-size="11" fill="#444">Derived projection — native source AFC-Data.sysml. Allocation: models/allocation.md.</text>
+</svg>

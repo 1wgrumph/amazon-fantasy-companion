@@ -1,0 +1,22 @@
+muse: workspace root: $HOME/alphazede/worktrees/amazon-fantasy-companion-spec-track (explicit)
+muse: workspace trust: trusted source=run-flag
+muse: Skills: 67 loaded · 1 warning
+muse:   `skills_catalog` was trimmed to fit its size limit (32 KB): 13 descriptions compacted, 0 skill ids omitted
+muse:   Run `muse skills list --source all` for full diagnostics.
+PASS
+
+**Top finding:** all four `.sysml` files import into SysON with zero errors and zero warnings after two small repairs; 65/65 UID allocation is byte-unchanged.
+
+- **Project:** `afc-product-models`, id `2a033855-6bae-4fe1-975c-00bbb9419100` (editing context `9565c8a1-…`), created from `sysmlv2-template` via SysON's own GraphQL `createProject` + multipart `uploadDocument`. No other project touched, no `model load`, no commits.
+- **Diagnostics before → after:**
+  - `AFC-States`: hard syntax error at line 14 (`signal def` is not in the grammar; only pre-error content parsed) → repaired to ten `signal <name>;` usages → null report. Transition `first/accept/then` forms parse as written.
+  - `AFC-Data`: 36 `[Warning] Unable to resolve name 'String'/'Boolean'` → repaired with `import ScalarValues::*;` → null report.
+  - `AFC-Structure`, `AFC-Interfaces`: null reports on first upload, untouched.
+- **Changed files:** the two repaired `.sysml` files; `views.md` (new digests, `CHECKER_UNAVAILABLE` closed, decision-1 stdlib exception); `allocation.md` (digest citation line only); four SVG `<desc>` cites; new [receipt](docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/specialists/sm-syson-receipt.md).
+- **Allocation:** re-ran the ST-3b/c probe (digest constant + `signal` form adapted): RESULT OK 17/17, `defined-in-sysml=161 table2=161`; register cross-check 65 == 65 both directions.
+- **models sha256:** combined `14fb815b…dcfe5`; per-file: Data `1d342eef…`, Interfaces `504cfcb8…` (unchanged), States `7d25c0f1…`, Structure `13d20b60…` (unchanged); full list in the receipt.
+- **Remaining risks:** two stale repair-loop docs (Data-v1, partial States-v1) remain in my project — re-upload doesn't replace and the schema has no document delete; named in the receipt. Other agents were concurrently creating/deleting unrelated projects on the shared host; I verified only my write set. Conformance is SysON's bundled engine, not an independent OMG proof.
+- **developer_feedback:** SysON GraphQL used keylessly. Frictions: uploads need the editing-context id (project id fails generically with no log line); multipart `map` must be string form `{"0":"variables.file"}`; project creation requires `templateId` + `libraryIds: []`. No device/SDK/simulator use; nothing else under AC-AFC-DX-04.
+
+Skipped: deleting the two stale in-project docs (no safe API path — needs live explorer-tree ids); no independent OMG-conformance claim.
+exit=0
