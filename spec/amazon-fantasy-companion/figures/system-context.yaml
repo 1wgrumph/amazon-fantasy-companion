@@ -1,0 +1,75 @@
+# Derived from ST-3d model views; model digest 14fb815b78c2c6817d556c36d351b22dd3996db5f5a7e34a87251ce69bfdcfe5
+{
+  "class": "F1",
+  "title": "AFC system context",
+  "max_width": 2400,
+  "max_height": 1600,
+  "direction": "LR",
+  "nodes": [
+    {
+      "id": "customer",
+      "label": "Customer / phone"
+    },
+    {
+      "id": "tv",
+      "label": "tvApp: Fire TV"
+    },
+    {
+      "id": "backend",
+      "label": "backend: AWS"
+    },
+    {
+      "id": "yahoo",
+      "label": "Yahoo / manual lineup"
+    },
+    {
+      "id": "espn",
+      "label": "ESPN / labeled replay"
+    },
+    {
+      "id": "provider",
+      "label": "Provider apps"
+    },
+    {
+      "id": "os",
+      "label": "Fire OS / conditional Alexa"
+    }
+  ],
+  "edges": [
+    {
+      "from": "customer",
+      "to": "tv",
+      "label": "settings / remote"
+    },
+    {
+      "from": "customer",
+      "to": "backend",
+      "label": "device-code confirmation"
+    },
+    {
+      "from": "tv",
+      "to": "backend",
+      "label": "TvBackendApi"
+    },
+    {
+      "from": "yahoo",
+      "to": "backend",
+      "label": "lineup context"
+    },
+    {
+      "from": "espn",
+      "to": "backend",
+      "label": "event facts"
+    },
+    {
+      "from": "tv",
+      "to": "provider",
+      "label": "Watch"
+    },
+    {
+      "from": "tv",
+      "to": "os",
+      "label": "notification / verified voice"
+    }
+  ]
+}
