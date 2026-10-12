@@ -1,0 +1,118 @@
+{
+  "verdict": "CONTRACT_FAILURE",
+  "lease_id": "S09-g4",
+  "lifecycle": "AFC-2026-10-11",
+  "head_sha": "2b275766ef67c63f697f4d7022038115863364aa",
+  "candidate_state": "Uncommitted gate repair; no commit or push attempted",
+  "changed_paths": [
+    "tools/ci/gate.sh",
+    "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S09/g4/ (planning worktree)"
+  ],
+  "finding": {
+    "id": "D1-fixture-prerequisite",
+    "exact_error": "AssertionError: 2 != 0 : fatal: Not a valid object name origin/main\nusage: gate.sh [--changed[=<base>]] [--list] [<area>...]",
+    "source": "tools/ci/tests/test_gate_isolation.py:48 creates origin/main only in sentinel; :49 creates invocation repo without origin/main; :54 invokes --changed; :61 requires rc=0",
+    "contract": "design.md:407-410 specifies default base is merge base with origin/main",
+    "necessary_correction": "Test Implementer must initialize refs/remotes/origin/main in the invocation fixture repository before run_gate; no test edits made in this packet",
+    "partial_evidence": "Sentinel byte snapshot and one-commit log assertions passed, but the gate exited before any checks or planted fixture test ran; full isolation acceptance is not established"
+  },
+  "commands": [
+    {
+      "command": "env -u GIT_INDEX_FILE -u GIT_DIR python3 -m unittest discover -s tools/ci/tests -v",
+      "exit_code": 1,
+      "output_tail": "rea_missing_any_required_heading_exits_1) ... ok\ntest_complete_area_and_resolving_links_pass (test_check_docs.AC_AFC_CI_04_Docs.test_complete_area_and_resolving_links_pass) ... ok\ntest_relative_link_to_missing_path_exits_1 (test_check_docs.AC_AFC_CI_04_Docs.test_relative_link_to_missing_path_exits_1) ... ok\ntest_script_entrypoint_exits_with_main_status (test_check_docs.AC_AFC_CI_04_Docs.test_script_entrypoint_exits_with_main_status) ... ok\ntest_unreadable_markdown_or_git_failure_exits_1 (test_check_docs.AC_AFC_CI_04_Docs.test_unreadable_markdown_or_git_failure_exits_1) ... fatal: not a git repository (or any parent up to mount point /)\nStopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).\nok\ntest_directories_and_binary_files_are_skipped (test_check_paths.AC_AFC_CI_03.test_directories_and_binary_files_are_skipped) ... ok\ntest_each_rule_reports_file_line_rule_id_without_matched_text (test_check_paths.AC_AFC_CI_03.test_each_rule_reports_file_line_rule_id_without_matched_text) ... ok\ntest_files_option_scans_only_named_files (test_check_paths.AC_AFC_CI_03.test_files_option_scans_only_named_files) ... ok\ntest_placeholder_user_segments_pass (test_check_paths.AC_AFC_CI_03.test_placeholder_user_segments_pass) ... ok\ntest_relative_path_with_a_folder_named_home_passes (test_check_paths.AC_AFC_CI_03.test_relative_path_with_a_folder_named_home_passes) ... ok\ntest_script_entrypoint_exits_with_main_status (test_check_paths.AC_AFC_CI_03.test_script_entrypoint_exits_with_main_status) ... ok\ntest_unknown_option_is_a_usage_error_exit_2 (test_check_paths.AC_AFC_CI_03.test_unknown_option_is_a_usage_error_exit_2) ... ok\ntest_unreadable_file_or_git_failure_exits_1 (test_check_paths.AC_AFC_CI_03.test_unreadable_file_or_git_failure_exits_1) ... fatal: not a git repository (or any parent up to mount point /)\nStopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).\nok\ntest_repository_tracked_files_have_no_home_path (test_check_paths.AC_AFC_PATH_01.test_repository_tracked_files_have_no_home_path) ... ok\ntest_seeded_tracked_home_path_reported_and_untracked_ignored (test_check_paths.AC_AFC_PATH_01.test_seeded_tracked_home_path_reported_and_untracked_ignored) ... ok\ntest_ci_area_jobs_invoke_gate_with_their_area (test_gate.AC_AFC_CI_01.test_ci_area_jobs_invoke_gate_with_their_area) ... ok\ntest_docs_area_exits_1_on_seeded_broken_link (test_gate.AC_AFC_CI_01.test_docs_area_exits_1_on_seeded_broken_link) ... ok\ntest_git_hooks_invoke_gate_changed (test_gate.AC_AFC_CI_01.test_git_hooks_invoke_gate_changed) ... ok\ntest_hygiene_exits_0_on_clean_copy_and_1_on_seeded_finding (test_gate.AC_AFC_CI_01.test_hygiene_exits_0_on_clean_copy_and_1_on_seeded_finding) ... ok\ntest_list_prints_exactly_spec_docs_hygiene (test_gate.AC_AFC_CI_01.test_list_prints_exactly_spec_docs_hygiene) ... ok\ntest_missing_tools_spec_exits_3_with_gap (test_gate.AC_AFC_CI_01.test_missing_tools_spec_exits_3_with_gap) ... ok\ntest_unknown_area_exits_2 (test_gate.AC_AFC_CI_01.test_unknown_area_exits_2) ... ok\ntest_unknown_option_exits_2 (test_gate.AC_AFC_CI_01.test_unknown_option_exits_2) ... ok\ntest_fresh_build_passes_and_stale_build_exits_1 (test_gate.AC_AFC_CI_04_Spec.test_fresh_build_passes_and_stale_build_exits_1) ... ok\ntest_missing_dot_exits_3_with_gap (test_gate.AC_AFC_CI_04_Spec.test_missing_dot_exits_3_with_gap) ... ok\ntest_spec_lint_finding_exits_1 (test_gate.AC_AFC_CI_04_Spec.test_spec_lint_finding_exits_1) ... ok\ntest_template_self_check_passes_and_removes_temp_dir (test_gate.AC_AFC_CI_04_Spec.test_template_self_check_passes_and_removes_temp_dir) ... ok\ntest_hook_git_env_does_not_reach_sentinel_repo (test_gate_isolation.D1_HookEnvironmentIsolation.test_hook_git_env_does_not_reach_sentinel_repo) ... FAIL\ntest_ci_path_filters_cover_each_area (test_workflows.AC_AFC_CI_02.test_ci_path_filters_cover_each_area) ... ok\ntest_committed_workflows_pass_the_checker (test_workflows.AC_AFC_CI_02.test_committed_workflows_pass_the_checker) ... ok\ntest_each_violation_exits_1_naming_its_rule (test_workflows.AC_AFC_CI_02.test_each_violation_exits_1_naming_its_rule) ... ok\ntest_valid_fixture_passes (test_workflows.AC_AFC_CI_02.test_valid_fixture_passes) ... ok\n\n======================================================================\nFAIL: test_hook_git_env_does_not_reach_sentinel_repo (test_gate_isolation.D1_HookEnvironmentIsolation.test_hook_git_env_does_not_reach_sentinel_repo)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"$HOME/alphazede/worktrees/amazon-fantasy-companion-s09/tools/ci/tests/test_gate_isolation.py\", line 61, in test_hook_git_env_does_not_reach_sentinel_repo\n    self.assertEqual(rc, 0, out)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^\nAssertionError: 2 != 0 : fatal: Not a valid object name origin/main\nusage: gate.sh [--changed[=<base>]] [--list] [<area>...]\n\n\n----------------------------------------------------------------------\nRan 33 tests in 4.345s\n\nFAILED (failures=1)\n",
+      "head_sha": "2b275766ef67c63f697f4d7022038115863364aa",
+      "gate_sha256": "4a8d4873e5b43984631713a4957f01fe0b754d04edb4e873984d3796f3a8f100",
+      "at": "2026-10-12T12:21:55.886856+00:00",
+      "classification": "plan-command",
+      "classification_detail": "Frozen D1 fixture is missing the declared --changed default-base prerequisite in the invocation repository; this is a test-contract failure, not an environment failure or permission to change base semantics."
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "output_tail": "",
+      "head_sha": "2b275766ef67c63f697f4d7022038115863364aa"
+    },
+    {
+      "command": "git log --oneline -3",
+      "exit_code": 0,
+      "output_tail": "2b27576 S09T g3: D1 hook-env isolation regression (red) and D2 checker coverage tests\n733d00f ci: add shared gate entrypoint, local checkers, hooks and workflow (S09 g3)\n7f12bca S09T g2: workflow fixtures use the contract form bash tools/ci/gate.sh <area>\n",
+      "head_sha": "2b275766ef67c63f697f4d7022038115863364aa"
+    },
+    {
+      "command": "git config --get core.hooksPath",
+      "exit_code": 1,
+      "output_tail": "",
+      "expected": "unset; configuration unchanged",
+      "head_sha": "2b275766ef67c63f697f4d7022038115863364aa"
+    }
+  ],
+  "not_run": [
+    {
+      "command": "bash tools/ci/gate.sh",
+      "reason": "STOP on CONTRACT_FAILURE; frozen test must be repaired in its authorized packet"
+    },
+    {
+      "command": "bash tools/ci/gate.sh --changed",
+      "reason": "STOP on CONTRACT_FAILURE; frozen test must be repaired in its authorized packet"
+    },
+    {
+      "command": "throwaway clone hook simulation",
+      "reason": "STOP on CONTRACT_FAILURE; frozen test must be repaired in its authorized packet"
+    },
+    {
+      "command": "CMD-COVERAGE-CI",
+      "reason": "STOP on CONTRACT_FAILURE; frozen test must be repaired in its authorized packet"
+    },
+    {
+      "command": "git commit --no-verify",
+      "reason": "STOP on CONTRACT_FAILURE; frozen test must be repaired in its authorized packet"
+    },
+    {
+      "command": "git push --no-verify origin HEAD:afc/s09-gate-r2",
+      "reason": "STOP on CONTRACT_FAILURE; frozen test must be repaired in its authorized packet"
+    }
+  ],
+  "frozen_tests_sha256": {
+    "tools/ci/tests/gate_support.py": "99ae8dc1a7789db386ccf2ee4d86ac9989fd06dde542b5ca43d293862a8c20b5",
+    "tools/ci/tests/test_check_docs.py": "e07e4ff5b5ba59877bbe239e3388a7060f4314b8541a4763fe8331d89ad0ca4a",
+    "tools/ci/tests/test_check_paths.py": "bc65263723df80f21b11916148ba1396065bb3b0217cfa9d506cad487d12ab29",
+    "tools/ci/tests/test_gate_isolation.py": "3bb610b9fb0c83d279798de9c760e03aa1ec15863e01aad01317d2f58455f67c"
+  },
+  "remaining_risks": [
+    "Full gates, hook simulation, changed-base resolution in linked worktree, and coverage percentage remain unverified.",
+    "gate.sh shell coverage tool kcov is unavailable (TOOL_MISSING); no shell coverage PASS claimed.",
+    "Existing untracked __pycache__ directories were present at start and left untouched."
+  ],
+  "capabilities": {
+    "review.coverage_assist": "Frozen enabled/required selection retained in binding.json; review outside this implementer packet, not run.",
+    "deterministic_verification.reverify": "Frozen enabled selection retained in binding.json; not applicable to this shell-source change, no compiled binary claim."
+  },
+  "developer_feedback": {
+    "id": "DX-S09-g4-001",
+    "timestamp": "2026-10-12T12:24:25.903278+00:00",
+    "reporting_role": "implementer",
+    "task_or_packet": "AFC-2026-10-11 / S09-g4",
+    "tool_api_sdk": "Python unittest and Git fixture setup",
+    "version": {
+      "python": "3.14.4",
+      "git": "git version 2.53.0"
+    },
+    "device_os": "Linux",
+    "evidence": "evidence/S09/g4/unittest.txt; tools/ci/tests/test_gate_isolation.py:48-54; design.md:407-410",
+    "classification": "test-contract prerequisite missing (plan-command)",
+    "used_for": "Repair and deterministic verification of inherited Git hook environment isolation",
+    "what_worked_well": "33 tests run; 32 pass; frozen D1 identifies a separate missing-base prerequisite after environment cleanup. Test hashes match the S09T g3 receipt.",
+    "what_needs_work": "Create the required origin/main ref in the invocation fixture, not only the sentinel.",
+    "onboarding_zero_to_hello_world": "Recorded S09T g3 receipt and frozen dispatch make the baseline and prohibited paths explicit.",
+    "would_build_again": "Yes; disposable sentinel repositories safely expose Git environment leakage.",
+    "aws_services_used_and_how": "Not applicable; no AWS tools used.",
+    "tools": [
+      "bash",
+      "git",
+      "python3/unittest",
+      "rg",
+      "apply_patch"
+    ]
+  }
+}

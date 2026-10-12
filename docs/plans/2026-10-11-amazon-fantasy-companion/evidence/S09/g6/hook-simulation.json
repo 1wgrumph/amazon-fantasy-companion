@@ -1,0 +1,218 @@
+{
+  "exit_code": 0,
+  "head_sha": "ad0f8576b58cf8b9acb5bc4592fb722496500aea",
+  "commands": [
+    {
+      "command": [
+        "git",
+        "clone",
+        "--no-hardlinks",
+        "$HOME/alphazede/worktrees/amazon-fantasy-companion-s09",
+        "/tmp/afc-s09-g6-hook-lh_5nl3m/clone"
+      ],
+      "exit_code": 0,
+      "output_tail": "Cloning into '/tmp/afc-s09-g6-hook-lh_5nl3m/clone'...\ndone.\n"
+    },
+    {
+      "command": [
+        "git",
+        "init",
+        "--bare",
+        "/tmp/afc-s09-g6-hook-lh_5nl3m/remote.git"
+      ],
+      "exit_code": 0,
+      "output_tail": "hint: Using 'master' as the name for the initial branch. This default branch name\nhint: will change to \"main\" in Git 3.0. To configure the initial branch name\nhint: to use in all of your new repositories, which will suppress this warning,\nhint: call:\nhint:\nhint: \tgit config --global init.defaultBranch <name>\nhint:\nhint: Names commonly chosen instead of 'master' are 'main', 'trunk' and\nhint: 'development'. The just-created branch can be renamed via this command:\nhint:\nhint: \tgit branch -m <name>\nhint:\nhint: Disable this message with \"git config set advice.defaultBranchName false\"\nInitialized empty Git repository in /tmp/afc-s09-g6-hook-lh_5nl3m/remote.git/\n"
+    },
+    {
+      "command": [
+        "git",
+        "remote",
+        "set-url",
+        "origin",
+        "/tmp/afc-s09-g6-hook-lh_5nl3m/remote.git"
+      ],
+      "exit_code": 0,
+      "output_tail": ""
+    },
+    {
+      "command": [
+        "git",
+        "update-ref",
+        "refs/remotes/origin/main",
+        "HEAD"
+      ],
+      "exit_code": 0,
+      "output_tail": ""
+    },
+    {
+      "command": [
+        "git",
+        "config",
+        "core.hooksPath",
+        ".githooks"
+      ],
+      "exit_code": 0,
+      "output_tail": ""
+    },
+    {
+      "command": [
+        "git",
+        "add",
+        "tools/ci/gate.sh"
+      ],
+      "exit_code": 0,
+      "output_tail": ""
+    },
+    {
+      "command": [
+        "bash",
+        ".githooks/pre-commit"
+      ],
+      "exit_code": 0,
+      "output_tail": "Installed 1 package in 2ms\nInstalled 1 package in 1ms\nInstalled 1 package in 3ms\ngate: spec: PASS checks completed\ngate: docs: PASS checks completed\n.github/workflows/ci.yml: PASS\n.....fatal: not a git repository (or any parent up to mount point /)\nStopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).\n........fatal: not a git repository (or any parent up to mount point /)\nStopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).\n....................\n----------------------------------------------------------------------\nRan 33 tests in 4.568s\n\nOK\ngate: hygiene: PASS checks completed\n"
+    },
+    {
+      "command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit_code": 0,
+      "output_tail": "ad0f8576b58cf8b9acb5bc4592fb722496500aea\n"
+    },
+    {
+      "command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit_code": 0,
+      "output_tail": "ad0f8576b58cf8b9acb5bc4592fb722496500aea\n"
+    },
+    {
+      "command": [
+        "git",
+        "commit",
+        "--no-verify",
+        "-m",
+        "ci: isolate shared gate from inherited Git locations"
+      ],
+      "exit_code": 0,
+      "output_tail": "[afc/s09-gate f167435] ci: isolate shared gate from inherited Git locations\n 1 file changed, 5 insertions(+)\n"
+    },
+    {
+      "command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit_code": 0,
+      "output_tail": "f167435b6b83148b2571381ddae5c0d880ae3f71\n"
+    },
+    {
+      "command": [
+        "git",
+        "symbolic-ref",
+        "HEAD"
+      ],
+      "exit_code": 0,
+      "output_tail": "refs/heads/afc/s09-gate\n"
+    },
+    {
+      "command": [
+        "bash",
+        ".githooks/pre-push",
+        "origin",
+        "/tmp/afc-s09-g6-hook-lh_5nl3m/remote.git"
+      ],
+      "exit_code": 0,
+      "output_tail": "gate: spec: PASS checks completed\ngate: docs: PASS checks completed\n.github/workflows/ci.yml: PASS\n.....fatal: not a git repository (or any parent up to mount point /)\nStopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).\n........fatal: not a git repository (or any parent up to mount point /)\nStopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).\n....................\n----------------------------------------------------------------------\nRan 33 tests in 3.832s\n\nOK\ngate: hygiene: PASS checks completed\n"
+    },
+    {
+      "command": [
+        "git",
+        "push",
+        "--no-verify",
+        "origin",
+        "HEAD:refs/heads/hook-simulation"
+      ],
+      "exit_code": 0,
+      "output_tail": "To /tmp/afc-s09-g6-hook-lh_5nl3m/remote.git\n * [new branch]      HEAD -> hook-simulation\n"
+    },
+    {
+      "command": [
+        "git",
+        "log",
+        "--oneline",
+        "-3"
+      ],
+      "exit_code": 0,
+      "output_tail": "f167435 ci: isolate shared gate from inherited Git locations\nad0f857 S09T g4: D1 fixture gives the invocation repo the origin/main base ref\n2b27576 S09T g3: D1 hook-env isolation regression (red) and D2 checker coverage tests\n"
+    },
+    {
+      "command": [
+        "git",
+        "rev-list",
+        "--count",
+        "HEAD^..HEAD"
+      ],
+      "exit_code": 0,
+      "output_tail": "1\n"
+    },
+    {
+      "command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=no"
+      ],
+      "exit_code": 0,
+      "output_tail": ""
+    },
+    {
+      "command": [
+        "git",
+        "--git-dir=/tmp/afc-s09-g6-hook-lh_5nl3m/remote.git",
+        "rev-parse",
+        "refs/heads/hook-simulation"
+      ],
+      "exit_code": 0,
+      "output_tail": "f167435b6b83148b2571381ddae5c0d880ae3f71\n"
+    },
+    {
+      "command": [
+        "bash",
+        "-x",
+        "tools/ci/gate.sh",
+        "--changed"
+      ],
+      "exit_code": 0,
+      "output_tail": "(  ! found  ))\n+ [[ -d tools/spec/template ]]\n+ cp -R tools/spec/template /tmp/tmp.mPi8muFAAj/source\n+ spec_check /tmp/tmp.mPi8muFAAj/source /tmp/tmp.mPi8muFAAj/built.md\n+ local source=/tmp/tmp.mPi8muFAAj/source output=/tmp/tmp.mPi8muFAAj/built.md\n+ uv run --script tools/spec/spec_lint.py /tmp/tmp.mPi8muFAAj/source\n+ uv run --script tools/spec/diagram.py lint /tmp/tmp.mPi8muFAAj/source\n+ uv run --script tools/spec/spec_build.py /tmp/tmp.mPi8muFAAj/source /tmp/tmp.mPi8muFAAj/built.md\n++ rm -rf /tmp/tmp.mPi8muFAAj\n+ rc=0\n+ case \"$rc\" in\n+ printf 'gate: %s: PASS checks completed\\n' spec\ngate: spec: PASS checks completed\n+ for area in \"${areas[@]}\"\n+ wanted=0\n+ for request in \"${selected[@]}\"\n+ [[ docs == spec ]]\n+ for request in \"${selected[@]}\"\n+ [[ docs == docs ]]\n+ wanted=1\n+ for request in \"${selected[@]}\"\n+ [[ docs == hygiene ]]\n+ (( changed ))\n+ [[ docs == hygiene ]]\n+ (( wanted ))\n+ (( changed ))\n+ [[ docs != hygiene ]]\n+ affected=0\n+ for path in \"${paths[@]}\"\n+ area_matches docs .githooks/pre-commit\n+ case \"$1\" in\n+ case \"$2\" in\n+ return 0\n+ affected=1\n+ break\n+ (( affected ))\n+ run_area docs\n+ need python3\n+ command -v python3\n+ case \"$1\" in\n+ python3 tools/ci/check_docs.py\n+ rc=0\n+ case \"$rc\" in\n+ printf 'gate: %s: PASS checks completed\\n' docs\ngate: docs: PASS checks completed\n+ for area in \"${areas[@]}\"\n+ wanted=0\n+ for request in \"${selected[@]}\"\n+ [[ hygiene == spec ]]\n+ for request in \"${selected[@]}\"\n+ [[ hygiene == docs ]]\n+ for request in \"${selected[@]}\"\n+ [[ hygiene == hygiene ]]\n+ wanted=1\n+ (( changed ))\n+ [[ hygiene == hygiene ]]\n+ wanted=1\n+ (( wanted ))\n+ (( changed ))\n+ [[ hygiene != hygiene ]]\n+ run_area hygiene\n+ need python3\n+ command -v python3\n+ case \"$1\" in\n+ python3 -c 'import yaml'\n+ git diff --check HEAD --\n+ python3 tools/ci/check_paths.py\n+ python3 tools/ci/check_workflows.py .github/workflows/\n.github/workflows/ci.yml: PASS\n+ python3 -m unittest discover -s tools/ci/tests\n.....fatal: not a git repository (or any parent up to mount point /)\nStopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).\n........fatal: not a git repository (or any parent up to mount point /)\nStopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).\n....................\n----------------------------------------------------------------------\nRan 33 tests in 5.145s\n\nOK\n+ rc=0\n+ case \"$rc\" in\n+ printf 'gate: %s: PASS checks completed\\n' hygiene\ngate: hygiene: PASS checks completed\n+ exit 0\n+ rm -f /tmp/tmp.ZPsb5KGbrR\n"
+    },
+    {
+      "command": [
+        "git",
+        "merge-base",
+        "HEAD",
+        "origin/main"
+      ],
+      "exit_code": 0,
+      "output_tail": "5e59270b8320d6085039f26b64f14897736845f6\n"
+    },
+    {
+      "command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit_code": 0,
+      "output_tail": "ad0f8576b58cf8b9acb5bc4592fb722496500aea\n"
+    }
+  ],
+  "log_after": "f167435 ci: isolate shared gate from inherited Git locations\nad0f857 S09T g4: D1 fixture gives the invocation repo the origin/main base ref\n2b27576 S09T g3: D1 hook-env isolation regression (red) and D2 checker coverage tests\n",
+  "clone_index_intact": true,
+  "linked_worktree_hostile_environment": "PASS",
+  "resolved_root": "$HOME/alphazede/worktrees/amazon-fantasy-companion-s09",
+  "diff_base": "5e59270b8320d6085039f26b64f14897736845f6",
+  "simulation_method": "Real pre-commit and pre-push scripts invoked explicitly with hook Git environment; all git commit/push commands carry --no-verify per packet authority; only clone config changed."
+}

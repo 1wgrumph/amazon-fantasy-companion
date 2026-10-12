@@ -1,0 +1,19 @@
+{
+  "lease_id": "B3-r1",
+  "role": "implementer",
+  "bug_route": "bug-triager implementer (Muse Code / Muse Spark 1.3 / max)",
+  "verdict": "PASS",
+  "findings": ["B3-R1", "B3-R2"],
+  "repository": "alphazede/Alphazedehq",
+  "branch": "afc/b3-appendix-links",
+  "base": "f19f44a57d13c5cd6dfebfd3dce429c7a70ceb4b",
+  "head": "1eadf6e634533e842639324ec461088fa257d09d",
+  "draft_pr": "https://github.com/alphazede/Alphazedehq/pull/320",
+  "changed_paths": ["skills/spec-authoring/scripts/spec_build.py"],
+  "changelog": "unchanged: PR #320 entry still fits (Appendix A sections link to each section's own anchor)",
+  "fix": "slug() reserves every emitted anchor and advances -1, -2 until unused (github-slugger); allocation seeded with the document title; trace captures each section's own (label, anchor); revision lookup keeps first occurrence",
+  "suite": "80 passed, 1 deselected (trigger classifications: not run, needs independent evaluator); exit=0; TMPDIR=/var/tmp/az, clean tree",
+  "template": "build twice byte-identical (cmp exit 0); spec_lint exit 0; sha256 cb75378cdaa2bb7f7c43e3f6400334eec3af147c489f866ad554183a729eef1b (unchanged from B3 review)",
+  "afc": "66/66 Appendix A rows link; 177/177 targets exist and match their heading label; sha256 73f534a3a2efdc4aa996df98a64c213e8a6a711303c0e1cb826c0c9b61f215cf (unchanged from B3 review)",
+  "local_gates": "exit 0; passed=2 failed=0 skipped=0 not-applicable=15"
+}

@@ -1,0 +1,547 @@
+FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF...                                    [100%]
+=================================== FAILURES ===================================
+_____________ test_seit_example_spec_02_conforming_section_passes ______________
+
+    def test_seit_example_spec_02_conforming_section_passes() -> None:
+>       assert spec_lint().lint_section(CONFORMING) == []
+E       AssertionError: assert ['missing BLU...** ...)', ...] == []
+E
+E         Left contains 7 more items, first extra item: 'missing BLUF line (**BLUF:** ...)'
+E         Use -v to get more diff
+
+skills/spec-authoring/tests/test_spec_tools.py:101: AssertionError
+_______________ test_seit_example_spec_02_five_requirements_pass _______________
+
+    def test_seit_example_spec_02_five_requirements_pass() -> None:
+>       assert spec_lint().lint_section(with_requirements(5)) == []
+E       AssertionError: assert ['missing BLU...** ...)', ...] == []
+E
+E         Left contains 7 more items, first extra item: 'missing BLUF line (**BLUF:** ...)'
+E         Use -v to get more diff
+
+skills/spec-authoring/tests/test_spec_tools.py:105: AssertionError
+_______________ test_seit_example_spec_02_six_requirements_fail ________________
+
+    def test_seit_example_spec_02_six_requirements_fail() -> None:
+        findings = spec_lint().lint_section(with_requirements(6))
+
+>       assert len(findings) == 1
+E       AssertionError: assert 8 == 1
+E        +  where 8 = len(['binds 6 requirements; at most 5 per section', 'missing BLUF line (**BLUF:** ...)', 'Frame missing Who field (- **Who... field (- **What:** ...)', 'Frame missing Why field (- **Why:** ...)', 'Frame missing How field (- **How:** ...)', ...])
+
+skills/spec-authoring/tests/test_spec_tools.py:111: AssertionError
+___________ test_sd034_printed_writer_labels_fail[**{label}:**-BLUF] ___________
+
+label = 'BLUF', form = '**{label}:**'
+
+    @pytest.mark.parametrize("label", ("BLUF", "Frame", *FRAME_FIELDS))
+    @pytest.mark.parametrize("form", ("**{label}:**", "**{label}**:"))
+    def test_sd034_printed_writer_labels_fail(label, form):
+        text = CONFORMING + "\n" + form.format(label=label) + " Legacy guidance.\n"
+        findings = spec_lint().lint_section(text)
+>       assert any("printed writer label" in finding for finding in findings)
+E       assert False
+E        +  where False = any(<generator object test_sd034_printed_writer_labels_fail.<locals>.<genexpr> at 0x713592135f20>)
+
+skills/spec-authoring/tests/test_spec_tools.py:120: AssertionError
+__________ test_sd034_printed_writer_labels_fail[**{label}:**-Frame] ___________
+
+label = 'Frame', form = '**{label}:**'
+
+    @pytest.mark.parametrize("label", ("BLUF", "Frame", *FRAME_FIELDS))
+    @pytest.mark.parametrize("form", ("**{label}:**", "**{label}**:"))
+    def test_sd034_printed_writer_labels_fail(label, form):
+        text = CONFORMING + "\n" + form.format(label=label) + " Legacy guidance.\n"
+        findings = spec_lint().lint_section(text)
+>       assert any("printed writer label" in finding for finding in findings)
+E       assert False
+E        +  where False = any(<generator object test_sd034_printed_writer_labels_fail.<locals>.<genexpr> at 0x713591ec0790>)
+
+skills/spec-authoring/tests/test_spec_tools.py:120: AssertionError
+___________ test_sd034_printed_writer_labels_fail[**{label}:**-Who] ____________
+
+label = 'Who', form = '**{label}:**'
+
+    @pytest.mark.parametrize("label", ("BLUF", "Frame", *FRAME_FIELDS))
+    @pytest.mark.parametrize("form", ("**{label}:**", "**{label}**:"))
+    def test_sd034_printed_writer_labels_fail(label, form):
+        text = CONFORMING + "\n" + form.format(label=label) + " Legacy guidance.\n"
+        findings = spec_lint().lint_section(text)
+>       assert any("printed writer label" in finding for finding in findings)
+E       assert False
+E        +  where False = any(<generator object test_sd034_printed_writer_labels_fail.<locals>.<genexpr> at 0x713591f4bb90>)
+
+skills/spec-authoring/tests/test_spec_tools.py:120: AssertionError
+___________ test_sd034_printed_writer_labels_fail[**{label}:**-What] ___________
+
+label = 'What', form = '**{label}:**'
+
+    @pytest.mark.parametrize("label", ("BLUF", "Frame", *FRAME_FIELDS))
+    @pytest.mark.parametrize("form", ("**{label}:**", "**{label}**:"))
+    def test_sd034_printed_writer_labels_fail(label, form):
+        text = CONFORMING + "\n" + form.format(label=label) + " Legacy guidance.\n"
+        findings = spec_lint().lint_section(text)
+>       assert any("printed writer label" in finding for finding in findings)
+E       assert False
+E        +  where False = any(<generator object test_sd034_printed_writer_labels_fail.<locals>.<genexpr> at 0x713591f49ff0>)
+
+skills/spec-authoring/tests/test_spec_tools.py:120: AssertionError
+___________ test_sd034_printed_writer_labels_fail[**{label}:**-Why] ____________
+
+label = 'Why', form = '**{label}:**'
+
+    @pytest.mark.parametrize("label", ("BLUF", "Frame", *FRAME_FIELDS))
+    @pytest.mark.parametrize("form", ("**{label}:**", "**{label}**:"))
+    def test_sd034_printed_writer_labels_fail(label, form):
+        text = CONFORMING + "\n" + form.format(label=label) + " Legacy guidance.\n"
+        findings = spec_lint().lint_section(text)
+>       assert any("printed writer label" in finding for finding in findings)
+E       assert False
+E        +  where False = any(<generator object test_sd034_printed_writer_labels_fail.<locals>.<genexpr> at 0x713591f4b780>)
+
+skills/spec-authoring/tests/test_spec_tools.py:120: AssertionError
+___________ test_sd034_printed_writer_labels_fail[**{label}:**-How] ____________
+
+label = 'How', form = '**{label}:**'
+
+    @pytest.mark.parametrize("label", ("BLUF", "Frame", *FRAME_FIELDS))
+    @pytest.mark.parametrize("form", ("**{label}:**", "**{label}**:"))
+    def test_sd034_printed_writer_labels_fail(label, form):
+        text = CONFORMING + "\n" + form.format(label=label) + " Legacy guidance.\n"
+        findings = spec_lint().lint_section(text)
+>       assert any("printed writer label" in finding for finding in findings)
+E       assert False
+E        +  where False = any(<generator object test_sd034_printed_writer_labels_fail.<locals>.<genexpr> at 0x713591f4b510>)
+
+skills/spec-authoring/tests/test_spec_tools.py:120: AssertionError
+___________ test_sd034_printed_writer_labels_fail[**{label}:**-When] ___________
+
+label = 'When', form = '**{label}:**'
+
+    @pytest.mark.parametrize("label", ("BLUF", "Frame", *FRAME_FIELDS))
+    @pytest.mark.parametrize("form", ("**{label}:**", "**{label}**:"))
+    def test_sd034_printed_writer_labels_fail(label, form):
+        text = CONFORMING + "\n" + form.format(label=label) + " Legacy guidance.\n"
+        findings = spec_lint().lint_section(text)
+>       assert any("printed writer label" in finding for finding in findings)
+E       assert False
+E        +  where False = any(<generator object test_sd034_printed_writer_labels_fail.<locals>.<genexpr> at 0x713591f4aa80>)
+
+skills/spec-authoring/tests/test_spec_tools.py:120: AssertionError
+__________ test_sd034_printed_writer_labels_fail[**{label}:**-Where] ___________
+
+label = 'Where', form = '**{label}:**'
+
+    @pytest.mark.parametrize("label", ("BLUF", "Frame", *FRAME_FIELDS))
+    @pytest.mark.parametrize("form", ("**{label}:**", "**{label}**:"))
+    def test_sd034_printed_writer_labels_fail(label, form):
+        text = CONFORMING + "\n" + form.format(label=label) + " Legacy guidance.\n"
+        findings = spec_lint().lint_section(text)
+>       assert any("printed writer label" in finding for finding in findings)
+E       assert False
+E        +  where False = any(<generator object test_sd034_printed_writer_labels_fail.<locals>.<genexpr> at 0x713592135f20>)
+
+skills/spec-authoring/tests/test_spec_tools.py:120: AssertionError
+___________ test_sd034_printed_writer_labels_fail[**{label}**:-BLUF] ___________
+
+label = 'BLUF', form = '**{label}**:'
+
+    @pytest.mark.parametrize("label", ("BLUF", "Frame", *FRAME_FIELDS))
+    @pytest.mark.parametrize("form", ("**{label}:**", "**{label}**:"))
+    def test_sd034_printed_writer_labels_fail(label, form):
+        text = CONFORMING + "\n" + form.format(label=label) + " Legacy guidance.\n"
+        findings = spec_lint().lint_section(text)
+>       assert any("printed writer label" in finding for finding in findings)
+E       assert False
+E        +  where False = any(<generator object test_sd034_printed_writer_labels_fail.<locals>.<genexpr> at 0x713592e55630>)
+
+skills/spec-authoring/tests/test_spec_tools.py:120: AssertionError
+__________ test_sd034_printed_writer_labels_fail[**{label}**:-Frame] ___________
+
+label = 'Frame', form = '**{label}**:'
+
+    @pytest.mark.parametrize("label", ("BLUF", "Frame", *FRAME_FIELDS))
+    @pytest.mark.parametrize("form", ("**{label}:**", "**{label}**:"))
+    def test_sd034_printed_writer_labels_fail(label, form):
+        text = CONFORMING + "\n" + form.format(label=label) + " Legacy guidance.\n"
+        findings = spec_lint().lint_section(text)
+>       assert any("printed writer label" in finding for finding in findings)
+E       assert False
+E        +  where False = any(<generator object test_sd034_printed_writer_labels_fail.<locals>.<genexpr> at 0x713591ec1700>)
+
+skills/spec-authoring/tests/test_spec_tools.py:120: AssertionError
+___________ test_sd034_printed_writer_labels_fail[**{label}**:-Who] ____________
+
+label = 'Who', form = '**{label}**:'
+
+    @pytest.mark.parametrize("label", ("BLUF", "Frame", *FRAME_FIELDS))
+    @pytest.mark.parametrize("form", ("**{label}:**", "**{label}**:"))
+    def test_sd034_printed_writer_labels_fail(label, form):
+        text = CONFORMING + "\n" + form.format(label=label) + " Legacy guidance.\n"
+        findings = spec_lint().lint_section(text)
+>       assert any("printed writer label" in finding for finding in findings)
+E       assert False
+E        +  where False = any(<generator object test_sd034_printed_writer_labels_fail.<locals>.<genexpr> at 0x713591d94ad0>)
+
+skills/spec-authoring/tests/test_spec_tools.py:120: AssertionError
+___________ test_sd034_printed_writer_labels_fail[**{label}**:-What] ___________
+
+label = 'What', form = '**{label}**:'
+
+    @pytest.mark.parametrize("label", ("BLUF", "Frame", *FRAME_FIELDS))
+    @pytest.mark.parametrize("form", ("**{label}:**", "**{label}**:"))
+    def test_sd034_printed_writer_labels_fail(label, form):
+        text = CONFORMING + "\n" + form.format(label=label) + " Legacy guidance.\n"
+        findings = spec_lint().lint_section(text)
+>       assert any("printed writer label" in finding for finding in findings)
+E       assert False
+E        +  where False = any(<generator object test_sd034_printed_writer_labels_fail.<locals>.<genexpr> at 0x713591f4ac20>)
+
+skills/spec-authoring/tests/test_spec_tools.py:120: AssertionError
+___________ test_sd034_printed_writer_labels_fail[**{label}**:-Why] ____________
+
+label = 'Why', form = '**{label}**:'
+
+    @pytest.mark.parametrize("label", ("BLUF", "Frame", *FRAME_FIELDS))
+    @pytest.mark.parametrize("form", ("**{label}:**", "**{label}**:"))
+    def test_sd034_printed_writer_labels_fail(label, form):
+        text = CONFORMING + "\n" + form.format(label=label) + " Legacy guidance.\n"
+        findings = spec_lint().lint_section(text)
+>       assert any("printed writer label" in finding for finding in findings)
+E       assert False
+E        +  where False = any(<generator object test_sd034_printed_writer_labels_fail.<locals>.<genexpr> at 0x713591d942b0>)
+
+skills/spec-authoring/tests/test_spec_tools.py:120: AssertionError
+___________ test_sd034_printed_writer_labels_fail[**{label}**:-How] ____________
+
+label = 'How', form = '**{label}**:'
+
+    @pytest.mark.parametrize("label", ("BLUF", "Frame", *FRAME_FIELDS))
+    @pytest.mark.parametrize("form", ("**{label}:**", "**{label}**:"))
+    def test_sd034_printed_writer_labels_fail(label, form):
+        text = CONFORMING + "\n" + form.format(label=label) + " Legacy guidance.\n"
+        findings = spec_lint().lint_section(text)
+>       assert any("printed writer label" in finding for finding in findings)
+E       assert False
+E        +  where False = any(<generator object test_sd034_printed_writer_labels_fail.<locals>.<genexpr> at 0x713591de01e0>)
+
+skills/spec-authoring/tests/test_spec_tools.py:120: AssertionError
+___________ test_sd034_printed_writer_labels_fail[**{label}**:-When] ___________
+
+label = 'When', form = '**{label}**:'
+
+    @pytest.mark.parametrize("label", ("BLUF", "Frame", *FRAME_FIELDS))
+    @pytest.mark.parametrize("form", ("**{label}:**", "**{label}**:"))
+    def test_sd034_printed_writer_labels_fail(label, form):
+        text = CONFORMING + "\n" + form.format(label=label) + " Legacy guidance.\n"
+        findings = spec_lint().lint_section(text)
+>       assert any("printed writer label" in finding for finding in findings)
+E       assert False
+E        +  where False = any(<generator object test_sd034_printed_writer_labels_fail.<locals>.<genexpr> at 0x713591d94110>)
+
+skills/spec-authoring/tests/test_spec_tools.py:120: AssertionError
+__________ test_sd034_printed_writer_labels_fail[**{label}**:-Where] ___________
+
+label = 'Where', form = '**{label}**:'
+
+    @pytest.mark.parametrize("label", ("BLUF", "Frame", *FRAME_FIELDS))
+    @pytest.mark.parametrize("form", ("**{label}:**", "**{label}**:"))
+    def test_sd034_printed_writer_labels_fail(label, form):
+        text = CONFORMING + "\n" + form.format(label=label) + " Legacy guidance.\n"
+        findings = spec_lint().lint_section(text)
+>       assert any("printed writer label" in finding for finding in findings)
+E       assert False
+E        +  where False = any(<generator object test_sd034_printed_writer_labels_fail.<locals>.<genexpr> at 0x713591de0930>)
+
+skills/spec-authoring/tests/test_spec_tools.py:120: AssertionError
+_________________ test_sd034_missing_opening_paragraph_fails[] _________________
+
+content = ''
+
+    @pytest.mark.parametrize("content", (
+        "", "   \n", "<!-- author guidance -->\n",
+        "<!-- author\nguidance -->\n", "- List item\n", "| Column |\n",
+        "Figure (F1): Context\n\n![Context](figures/context.svg)\n",
+        "```text\nExample only\n```\n",
+    ))
+    def test_sd034_missing_opening_paragraph_fails(content):
+        text = "---\nrequirements: []\n---\n\n## Section\n\n" + content
+>       assert any("opening paragraph" in finding for finding in spec_lint().lint_section(text))
+E       assert False
+E        +  where False = any(<generator object test_sd034_missing_opening_paragraph_fails.<locals>.<genexpr> at 0x713591d97510>)
+
+skills/spec-authoring/tests/test_spec_tools.py:131: AssertionError
+______________ test_sd034_missing_opening_paragraph_fails[   \n] _______________
+
+content = '   \n'
+
+    @pytest.mark.parametrize("content", (
+        "", "   \n", "<!-- author guidance -->\n",
+        "<!-- author\nguidance -->\n", "- List item\n", "| Column |\n",
+        "Figure (F1): Context\n\n![Context](figures/context.svg)\n",
+        "```text\nExample only\n```\n",
+    ))
+    def test_sd034_missing_opening_paragraph_fails(content):
+        text = "---\nrequirements: []\n---\n\n## Section\n\n" + content
+>       assert any("opening paragraph" in finding for finding in spec_lint().lint_section(text))
+E       assert False
+E        +  where False = any(<generator object test_sd034_missing_opening_paragraph_fails.<locals>.<genexpr> at 0x713591de1e50>)
+
+skills/spec-authoring/tests/test_spec_tools.py:131: AssertionError
+____ test_sd034_missing_opening_paragraph_fails[<!-- author guidance -->\n] ____
+
+content = '<!-- author guidance -->\n'
+
+    @pytest.mark.parametrize("content", (
+        "", "   \n", "<!-- author guidance -->\n",
+        "<!-- author\nguidance -->\n", "- List item\n", "| Column |\n",
+        "Figure (F1): Context\n\n![Context](figures/context.svg)\n",
+        "```text\nExample only\n```\n",
+    ))
+    def test_sd034_missing_opening_paragraph_fails(content):
+        text = "---\nrequirements: []\n---\n\n## Section\n\n" + content
+>       assert any("opening paragraph" in finding for finding in spec_lint().lint_section(text))
+E       assert False
+E        +  where False = any(<generator object test_sd034_missing_opening_paragraph_fails.<locals>.<genexpr> at 0x713591d97c60>)
+
+skills/spec-authoring/tests/test_spec_tools.py:131: AssertionError
+___ test_sd034_missing_opening_paragraph_fails[<!-- author\nguidance -->\n] ____
+
+content = '<!-- author\nguidance -->\n'
+
+    @pytest.mark.parametrize("content", (
+        "", "   \n", "<!-- author guidance -->\n",
+        "<!-- author\nguidance -->\n", "- List item\n", "| Column |\n",
+        "Figure (F1): Context\n\n![Context](figures/context.svg)\n",
+        "```text\nExample only\n```\n",
+    ))
+    def test_sd034_missing_opening_paragraph_fails(content):
+        text = "---\nrequirements: []\n---\n\n## Section\n\n" + content
+>       assert any("opening paragraph" in finding for finding in spec_lint().lint_section(text))
+E       assert False
+E        +  where False = any(<generator object test_sd034_missing_opening_paragraph_fails.<locals>.<genexpr> at 0x713591de1560>)
+
+skills/spec-authoring/tests/test_spec_tools.py:131: AssertionError
+__________ test_sd034_missing_opening_paragraph_fails[- List item\n] ___________
+
+content = '- List item\n'
+
+    @pytest.mark.parametrize("content", (
+        "", "   \n", "<!-- author guidance -->\n",
+        "<!-- author\nguidance -->\n", "- List item\n", "| Column |\n",
+        "Figure (F1): Context\n\n![Context](figures/context.svg)\n",
+        "```text\nExample only\n```\n",
+    ))
+    def test_sd034_missing_opening_paragraph_fails(content):
+        text = "---\nrequirements: []\n---\n\n## Section\n\n" + content
+>       assert any("opening paragraph" in finding for finding in spec_lint().lint_section(text))
+E       assert False
+E        +  where False = any(<generator object test_sd034_missing_opening_paragraph_fails.<locals>.<genexpr> at 0x713591d96c20>)
+
+skills/spec-authoring/tests/test_spec_tools.py:131: AssertionError
+___________ test_sd034_missing_opening_paragraph_fails[| Column |\n] ___________
+
+content = '| Column |\n'
+
+    @pytest.mark.parametrize("content", (
+        "", "   \n", "<!-- author guidance -->\n",
+        "<!-- author\nguidance -->\n", "- List item\n", "| Column |\n",
+        "Figure (F1): Context\n\n![Context](figures/context.svg)\n",
+        "```text\nExample only\n```\n",
+    ))
+    def test_sd034_missing_opening_paragraph_fails(content):
+        text = "---\nrequirements: []\n---\n\n## Section\n\n" + content
+>       assert any("opening paragraph" in finding for finding in spec_lint().lint_section(text))
+E       assert False
+E        +  where False = any(<generator object test_sd034_missing_opening_paragraph_fails.<locals>.<genexpr> at 0x713591de3510>)
+
+skills/spec-authoring/tests/test_spec_tools.py:131: AssertionError
+_ test_sd034_missing_opening_paragraph_fails[Figure (F1): Context\n\n![Context](figures/context.svg)\n] _
+
+content = 'Figure (F1): Context\n\n![Context](figures/context.svg)\n'
+
+    @pytest.mark.parametrize("content", (
+        "", "   \n", "<!-- author guidance -->\n",
+        "<!-- author\nguidance -->\n", "- List item\n", "| Column |\n",
+        "Figure (F1): Context\n\n![Context](figures/context.svg)\n",
+        "```text\nExample only\n```\n",
+    ))
+    def test_sd034_missing_opening_paragraph_fails(content):
+        text = "---\nrequirements: []\n---\n\n## Section\n\n" + content
+>       assert any("opening paragraph" in finding for finding in spec_lint().lint_section(text))
+E       assert False
+E        +  where False = any(<generator object test_sd034_missing_opening_paragraph_fails.<locals>.<genexpr> at 0x713591d94a00>)
+
+skills/spec-authoring/tests/test_spec_tools.py:131: AssertionError
+___ test_sd034_missing_opening_paragraph_fails[```text\nExample only\n```\n] ___
+
+content = '```text\nExample only\n```\n'
+
+    @pytest.mark.parametrize("content", (
+        "", "   \n", "<!-- author guidance -->\n",
+        "<!-- author\nguidance -->\n", "- List item\n", "| Column |\n",
+        "Figure (F1): Context\n\n![Context](figures/context.svg)\n",
+        "```text\nExample only\n```\n",
+    ))
+    def test_sd034_missing_opening_paragraph_fails(content):
+        text = "---\nrequirements: []\n---\n\n## Section\n\n" + content
+>       assert any("opening paragraph" in finding for finding in spec_lint().lint_section(text))
+E       assert False
+E        +  where False = any(<generator object test_sd034_missing_opening_paragraph_fails.<locals>.<genexpr> at 0x713591de13c0>)
+
+skills/spec-authoring/tests/test_spec_tools.py:131: AssertionError
+________________ test_sd034_comment_before_opening_prose_passes ________________
+
+    def test_sd034_comment_before_opening_prose_passes():
+        text = CONFORMING.replace("## Market\n", "## Market\n<!-- private guidance -->\n")
+>       assert spec_lint().lint_section(text) == []
+E       AssertionError: assert ['missing BLU...** ...)', ...] == []
+E
+E         Left contains 7 more items, first extra item: 'missing BLUF line (**BLUF:** ...)'
+E         Use -v to get more diff
+
+skills/spec-authoring/tests/test_spec_tools.py:136: AssertionError
+_ test_seit_example_spec_02_class_outside_t1_t8_f1_f8_fails[Table (T2):-Table (T9):-T9] _
+
+old = 'Table (T2):', new = 'Table (T9):', bad_class = 'T9'
+
+    @pytest.mark.parametrize(
+        ("old", "new", "bad_class"),
+        [
+            ("Table (T2):", "Table (T9):", "T9"),
+            ("Figure (F1):", "Figure (F9):", "F9"),
+        ],
+    )
+    def test_seit_example_spec_02_class_outside_t1_t8_f1_f8_fails(
+        old: str, new: str, bad_class: str
+    ) -> None:
+        findings = spec_lint().lint_section(replace_once(CONFORMING, old, new))
+
+>       assert len(findings) == 1
+E       AssertionError: assert 8 == 1
+E        +  where 8 = len(['missing BLUF line (**BLUF:** ...)', 'Frame missing Who field (- **Who:** ...)', 'Frame missing What field (- **What:...field (- **Why:** ...)', 'Frame missing How field (- **How:** ...)', 'Frame missing When field (- **When:** ...)', ...])
+
+skills/spec-authoring/tests/test_spec_tools.py:151: AssertionError
+_ test_seit_example_spec_02_class_outside_t1_t8_f1_f8_fails[Figure (F1):-Figure (F9):-F9] _
+
+old = 'Figure (F1):', new = 'Figure (F9):', bad_class = 'F9'
+
+    @pytest.mark.parametrize(
+        ("old", "new", "bad_class"),
+        [
+            ("Table (T2):", "Table (T9):", "T9"),
+            ("Figure (F1):", "Figure (F9):", "F9"),
+        ],
+    )
+    def test_seit_example_spec_02_class_outside_t1_t8_f1_f8_fails(
+        old: str, new: str, bad_class: str
+    ) -> None:
+        findings = spec_lint().lint_section(replace_once(CONFORMING, old, new))
+
+>       assert len(findings) == 1
+E       AssertionError: assert 8 == 1
+E        +  where 8 = len(['missing BLUF line (**BLUF:** ...)', 'Frame missing Who field (- **Who:** ...)', 'Frame missing What field (- **What:...field (- **Why:** ...)', 'Frame missing How field (- **How:** ...)', 'Frame missing When field (- **When:** ...)', ...])
+
+skills/spec-authoring/tests/test_spec_tools.py:151: AssertionError
+_________ test_seit_example_spec_02_attribute_list_without_table_fails _________
+
+    def test_seit_example_spec_02_attribute_list_without_table_fails() -> None:
+        text = replace_once(CONFORMING, TABLE_BLOCK, ATTRIBUTE_LIST)
+
+        findings = spec_lint().lint_section(text)
+
+>       assert len(findings) == 1
+E       AssertionError: assert 8 == 1
+E        +  where 8 = len(['missing BLUF line (**BLUF:** ...)', 'Frame missing Who field (- **Who:** ...)', 'Frame missing What field (- **What:...field (- **Why:** ...)', 'Frame missing How field (- **How:** ...)', 'Frame missing When field (- **When:** ...)', ...])
+
+skills/spec-authoring/tests/test_spec_tools.py:160: AssertionError
+_ test_seit_example_spec_02_related_entities_without_figure_fail[relationship] _
+
+trigger = '- ERCOT Worker -> Market\n- Bot population -> Market\n- Market -> Dashboard\n'
+
+    @pytest.mark.parametrize(
+        "trigger", [ARROW_LIST, ORDERED_STEPS], ids=["relationship", "time-order"]
+    )
+    def test_seit_example_spec_02_related_entities_without_figure_fail(trigger: str) -> None:
+        text = replace_once(CONFORMING, FIGURE_BLOCK, "")
+        text = replace_once(text, ARROW_LIST, trigger)
+
+        findings = spec_lint().lint_section(text)
+
+>       assert len(findings) == 1
+E       AssertionError: assert 8 == 1
+E        +  where 8 = len(['missing BLUF line (**BLUF:** ...)', 'Frame missing Who field (- **Who:** ...)', 'Frame missing What field (- **What:...field (- **Why:** ...)', 'Frame missing How field (- **How:** ...)', 'Frame missing When field (- **When:** ...)', ...])
+
+skills/spec-authoring/tests/test_spec_tools.py:173: AssertionError
+__ test_seit_example_spec_02_related_entities_without_figure_fail[time-order] __
+
+trigger = '1. The Worker polls ERCOT.\n2. The market reprices open orders.\n3. The dashboard shows the new prices.\n'
+
+    @pytest.mark.parametrize(
+        "trigger", [ARROW_LIST, ORDERED_STEPS], ids=["relationship", "time-order"]
+    )
+    def test_seit_example_spec_02_related_entities_without_figure_fail(trigger: str) -> None:
+        text = replace_once(CONFORMING, FIGURE_BLOCK, "")
+        text = replace_once(text, ARROW_LIST, trigger)
+
+        findings = spec_lint().lint_section(text)
+
+>       assert len(findings) == 1
+E       AssertionError: assert 8 == 1
+E        +  where 8 = len(['missing BLUF line (**BLUF:** ...)', 'Frame missing Who field (- **Who:** ...)', 'Frame missing What field (- **What:...field (- **Why:** ...)', 'Frame missing How field (- **How:** ...)', 'Frame missing When field (- **When:** ...)', ...])
+
+skills/spec-authoring/tests/test_spec_tools.py:173: AssertionError
+___________ test_seit_example_spec_02_cli_exit_code_follows_findings ___________
+
+tmp_path = PosixPath('/tmp/pytest-of-spectre/pytest-304/test_seit_example_spec_02_cli_0')
+
+    def test_seit_example_spec_02_cli_exit_code_follows_findings(tmp_path: Path) -> None:
+        good, bad = tmp_path / "good", tmp_path / "bad"
+        good.mkdir()
+        bad.mkdir()
+        (good / "02-market.md").write_text(CONFORMING)
+        (bad / "02-market.md").write_text(with_requirements(6))
+
+>       assert spec_lint().lint_section(CONFORMING) == []
+E       AssertionError: assert ['missing BLU...** ...)', ...] == []
+E
+E         Left contains 7 more items, first extra item: 'missing BLUF line (**BLUF:** ...)'
+E         Use -v to get more diff
+
+skills/spec-authoring/tests/test_spec_tools.py:184: AssertionError
+=========================== short test summary info ============================
+FAILED skills/spec-authoring/tests/test_spec_tools.py::test_seit_example_spec_02_conforming_section_passes
+FAILED skills/spec-authoring/tests/test_spec_tools.py::test_seit_example_spec_02_five_requirements_pass
+FAILED skills/spec-authoring/tests/test_spec_tools.py::test_seit_example_spec_02_six_requirements_fail
+FAILED skills/spec-authoring/tests/test_spec_tools.py::test_sd034_printed_writer_labels_fail[**{label}:**-BLUF]
+FAILED skills/spec-authoring/tests/test_spec_tools.py::test_sd034_printed_writer_labels_fail[**{label}:**-Frame]
+FAILED skills/spec-authoring/tests/test_spec_tools.py::test_sd034_printed_writer_labels_fail[**{label}:**-Who]
+FAILED skills/spec-authoring/tests/test_spec_tools.py::test_sd034_printed_writer_labels_fail[**{label}:**-What]
+FAILED skills/spec-authoring/tests/test_spec_tools.py::test_sd034_printed_writer_labels_fail[**{label}:**-Why]
+FAILED skills/spec-authoring/tests/test_spec_tools.py::test_sd034_printed_writer_labels_fail[**{label}:**-How]
+FAILED skills/spec-authoring/tests/test_spec_tools.py::test_sd034_printed_writer_labels_fail[**{label}:**-When]
+FAILED skills/spec-authoring/tests/test_spec_tools.py::test_sd034_printed_writer_labels_fail[**{label}:**-Where]
+FAILED skills/spec-authoring/tests/test_spec_tools.py::test_sd034_printed_writer_labels_fail[**{label}**:-BLUF]
+FAILED skills/spec-authoring/tests/test_spec_tools.py::test_sd034_printed_writer_labels_fail[**{label}**:-Frame]
+FAILED skills/spec-authoring/tests/test_spec_tools.py::test_sd034_printed_writer_labels_fail[**{label}**:-Who]
+FAILED skills/spec-authoring/tests/test_spec_tools.py::test_sd034_printed_writer_labels_fail[**{label}**:-What]
+FAILED skills/spec-authoring/tests/test_spec_tools.py::test_sd034_printed_writer_labels_fail[**{label}**:-Why]
+FAILED skills/spec-authoring/tests/test_spec_tools.py::test_sd034_printed_writer_labels_fail[**{label}**:-How]
+FAILED skills/spec-authoring/tests/test_spec_tools.py::test_sd034_printed_writer_labels_fail[**{label}**:-When]
+FAILED skills/spec-authoring/tests/test_spec_tools.py::test_sd034_printed_writer_labels_fail[**{label}**:-Where]
+FAILED skills/spec-authoring/tests/test_spec_tools.py::test_sd034_missing_opening_paragraph_fails[]
+FAILED skills/spec-authoring/tests/test_spec_tools.py::test_sd034_missing_opening_paragraph_fails[   \n]
+FAILED skills/spec-authoring/tests/test_spec_tools.py::test_sd034_missing_opening_paragraph_fails[<!-- author guidance -->\n]
+FAILED skills/spec-authoring/tests/test_spec_tools.py::test_sd034_missing_opening_paragraph_fails[<!-- author\nguidance -->\n]
+FAILED skills/spec-authoring/tests/test_spec_tools.py::test_sd034_missing_opening_paragraph_fails[- List item\n]
+FAILED skills/spec-authoring/tests/test_spec_tools.py::test_sd034_missing_opening_paragraph_fails[| Column |\n]
+FAILED skills/spec-authoring/tests/test_spec_tools.py::test_sd034_missing_opening_paragraph_fails[Figure (F1): Context\n\n![Context](figures/context.svg)\n]
+FAILED skills/spec-authoring/tests/test_spec_tools.py::test_sd034_missing_opening_paragraph_fails[```text\nExample only\n```\n]
+FAILED skills/spec-authoring/tests/test_spec_tools.py::test_sd034_comment_before_opening_prose_passes
+FAILED skills/spec-authoring/tests/test_spec_tools.py::test_seit_example_spec_02_class_outside_t1_t8_f1_f8_fails[Table (T2):-Table (T9):-T9]
+FAILED skills/spec-authoring/tests/test_spec_tools.py::test_seit_example_spec_02_class_outside_t1_t8_f1_f8_fails[Figure (F1):-Figure (F9):-F9]
+FAILED skills/spec-authoring/tests/test_spec_tools.py::test_seit_example_spec_02_attribute_list_without_table_fails
+FAILED skills/spec-authoring/tests/test_spec_tools.py::test_seit_example_spec_02_related_entities_without_figure_fail[relationship]
+FAILED skills/spec-authoring/tests/test_spec_tools.py::test_seit_example_spec_02_related_entities_without_figure_fail[time-order]
+FAILED skills/spec-authoring/tests/test_spec_tools.py::test_seit_example_spec_02_cli_exit_code_follows_findings
+34 failed, 3 passed in 0.23s

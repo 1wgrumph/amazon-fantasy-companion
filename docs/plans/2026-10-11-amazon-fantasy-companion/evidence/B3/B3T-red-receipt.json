@@ -1,0 +1,23 @@
+{
+  "lease_id": "B3T-g1",
+  "role": "test_implementer",
+  "verdict": "PASS",
+  "repository": "alphazede/Alphazedehq",
+  "branch": "afc/b3-appendix-links",
+  "base": "c323c56f556cf708b7104838d2f2977af015fe67",
+  "head": "9b0ca5e2d3d64b9898148f051057da0b3ad959e0",
+  "changed_paths": ["skills/spec-authoring/tests/test_appendix_links.py"],
+  "command": "python3 -m pytest skills/spec-authoring/tests -q --deselect skills/spec-authoring/tests/test_spec_authoring.py::SpecAuthoringTests::test_trigger_classifications",
+  "trigger_test": "deselected: needs SPEC_AUTHORING_TRIGGER_RESULTS from an independent evaluator; not supplied",
+  "result": "1 failed, 76 passed, 1 deselected; exit=1",
+  "red": {
+    "test": "test_appendix_links.py::test_b3_appendix_a_section_references_link_to_section_anchors",
+    "failure": "AssertionError: AC-EX-DATA-01: Appendix A sections are not links: 'Overview'  (assert [] == ['Overview'])"
+  },
+  "lint_link_rule_test": "test_b3_appendix_a_passes_the_lint_link_rule passes on the current builder: SECTION_REF only matches 'section N'/'see N.N' phrasing, so bare section names do not trip it. It is a guard against the fix emitting lint-failing references, not the red signal.",
+  "sha256": {
+    "skills/spec-authoring/tests/test_appendix_links.py": "cbeebcc582968747dfe8a35c99b69e38ae4c022eb5c2c641514f4101013d3ca3",
+    "skills/spec-authoring/scripts/spec_build.py (unchanged, base)": "561a43f0253d8c000fa43a186de26f1a7938e881d1c65c422bdbc75b0c44489e",
+    "evidence/B3/B3T-red-pytest.txt": "500df3c9312dfa961415c71eb9180e7762412ad22734b0eddf8fe3977bd4aa25"
+  }
+}

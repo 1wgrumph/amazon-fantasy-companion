@@ -1,0 +1,43 @@
+Installed 7 packages in 1ms
+.....fatal: not a git repository (or any parent up to mount point /)
+Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+........fatal: not a git repository (or any parent up to mount point /)
+Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+...............F....
+======================================================================
+FAIL: test_hook_git_env_does_not_reach_sentinel_repo (test_gate_isolation.D1_HookEnvironmentIsolation.test_hook_git_env_does_not_reach_sentinel_repo)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "$HOME/alphazede/worktrees/amazon-fantasy-companion-s09/tools/ci/tests/test_gate_isolation.py", line 57, in test_hook_git_env_does_not_reach_sentinel_repo
+    self.assertEqual(snapshot(sentinel / '.git'), before,
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                     f'gate.sh --changed wrote to the repository named by hook GIT_DIR/GIT_INDEX_FILE\n'
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                     f'sentinel log:\n{log}\ngate output:\n{out}')
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'HEA[69 chars]0\x00\x01j\xcc\xce\xcc$\x85\xde?j\xcc\xce\xcc$[489 chars]b\n'} != {'HEA[69 chars]0\x00Ej\xcc\xce\xcb\x1f|1qj\xcc\xc9\xd8\x02\x8[19087 chars]b\n'}
+Diff is 25104 characters long. Set self.maxDiff to None to see it. : gate.sh --changed wrote to the repository named by hook GIT_DIR/GIT_INDEX_FILE
+sentinel log:
+287f5f6 fixture
+5bbaf59 fixture
+
+gate output:
+gate: spec: PASS checks completed
+gate: docs: PASS checks completed
+.github/workflows/ci.yml: PASS
+gate: hygiene: PASS checks completed
+Installed 1 package in 0.28ms
+Installed 1 package in 0.26ms
+Installed 1 package in 0.51ms
+..
+----------------------------------------------------------------------
+Ran 2 tests in 0.011s
+
+OK
+
+
+----------------------------------------------------------------------
+Ran 33 tests in 6.141s
+
+FAILED (failures=1)
+exit=1

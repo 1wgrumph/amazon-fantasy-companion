@@ -1,0 +1,10 @@
+verdict: PASS
+CREDENTIAL FINDINGS: none
+Date: 2026-10-12T11:51:51.831909+00:00
+Artifact: /tmp/afc-s09-g3-actions-qkq8qkra/paths-filter; inert fetched checkout, before workflow adoption or execution.
+Origin: https://github.com/dorny/paths-filter; commit 0e4a8c6effa4802afeda77dc8d303f8176d7dfad; tree 7964786b4fae6038028e1faec0893f70cec2b57c.
+Intended integration: .github/workflows/ci.yml; Only git fallback, token empty; fetch from declared origin; derives changed paths and sets outputs; no upload or persistence.
+Integrity/inventory: fetched exact commit over HTTPS; git fsck exit 0 and clean checkout; complete per-file SHA256 manifest in action-hashes.txt. 232 total regular files in the three actions; no setuid, devices, or escaping links. Host-created group-write modes removed before admission. Source, bundled JavaScript, maps, manifests and lockfiles inspected; no installs or build hooks executed.
+Static checks: clamscan --recursive --no-summary --infected /tmp/afc-s09-g3-actions-qkq8qkra exit 0, no infected files; ClamAV 1.5.4, DB 28150 dated 2026-10-11. gitleaks dir --redact exit 1 for only two adjudicated emulator-constant false positives across the three trees; redacted actions-gitleaks.json contains metadata. Inspected action.yml main/post, source entrypoints, subprocess arguments, downloads, credential cleanup and cache behavior. No unexplained exfiltration, telemetry, privilege escalation, or persistence. No arbitrary third-party setup script is executed.
+Unavailable checks: independent signed release/attestation absent; no current local dependency-advisory database assessment claimed. Git commit is the provenance anchor. Bundled dependency identity is covered by the Git tree and hash manifest.
+Residual risks: static checks cannot exclude unknown vulnerabilities; Actions behavior on GitHub still needs operational proof. uv archive identity is pinned by GitHub release digest 0c6bab77a67a445dc849ed5e8ee8d3cb333b6e2eba863643ce1e228075f27943. Dynamic analysis not needed for source admission; no action run on the workstation.
