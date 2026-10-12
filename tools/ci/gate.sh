@@ -40,7 +40,7 @@ run_area() {
             if (( ws_rc != 0 )); then
                 # Report file:line:rule-id only; never echo matched line text.
                 # Unparseable git errors still fail closed (no false PASS).
-                ws=$(printf '%s\n' "$ws_out" | sed -n 's/^\([^:][^:]*:[0-9][0-9]*\):.*/\1:WS-CHECK/p' | sort -u)
+                ws=$(printf '%s\n' "$ws_out" | sed -n '/^+/d; s/^\([^:][^:]*:[0-9][0-9]*\):.*/\1:WS-CHECK/p' | sort -u)
                 [[ -n "$ws" ]] && printf '%s\n' "$ws"
                 return 1
             fi
