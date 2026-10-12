@@ -47,6 +47,8 @@ class D1_HookEnvironmentIsolation(unittest.TestCase):
         sentinel = copy_repo(self.tmp / 'sentinel')
         git(sentinel, 'update-ref', 'refs/remotes/origin/main', 'HEAD')
         repo = copy_repo(self.tmp / 'repo')
+        # --changed resolves its base from origin/main in the repo it runs in.
+        git(repo, 'update-ref', 'refs/remotes/origin/main', 'HEAD')
         write(repo, {str(TESTS / 'gate_support.py'): (REPO / TESTS / 'gate_support.py').read_text(encoding='utf-8'),
                      str(TESTS / 'test_fixture_commit.py'): FIXTURE_TEST})
         before = snapshot(sentinel / '.git')
