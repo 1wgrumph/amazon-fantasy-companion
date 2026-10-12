@@ -89,6 +89,16 @@ class AC_AFC_CI_01(unittest.TestCase):
         for line in findings:
             self.assertRegex(line, r'^[^:]+:[0-9]+:[A-Z0-9-]+$')
 
+    def test_hygiene_whitespace_finding_does_not_echo_colon_shaped_line_text(self):
+        repo = copy_repo(self.tmp / 'repo')
+        token = 'review_' + secrets.token_hex(8)  # content shaped like a file:line location
+        write(repo, {'notes.md': f'first line\n{token}:123:payload   \n'})
+        git(repo, 'add', 'notes.md')
+        rc, out = run_gate(self, repo, 'hygiene')  # out is stdout + stderr
+        self.assertEqual(rc, 1, out.replace(token, '<token>'))
+        self.assertFalse(token in out, 'hygiene output echoed colon-shaped staged line text:\n'
+                         + out.replace(token, '<token>'))
+
     def test_docs_area_exits_1_on_seeded_broken_link(self):
         repo = copy_repo(self.tmp / 'repo')
         write(repo, {'BROKEN.md': '# Broken\n\n[gone](docs/does-not-exist.md)\n'})
