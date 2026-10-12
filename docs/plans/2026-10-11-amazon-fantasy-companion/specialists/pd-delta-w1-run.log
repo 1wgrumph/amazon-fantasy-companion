@@ -1,2 +1,17 @@
-You've hit your session limit · resets 11:20pm (America/Chicago)
-exit=1
+I fixed the security finding: the trigger-check evaluator no longer runs with `--dangerously-skip-permissions`. Fixing it changed `seit.json`, so the manifest digest from my last message is replaced:
+
+**DELTA_APPLIED, new manifest digest `d7d92af72feaf95259869bf2fe80c14b0abaea3b7c309549ddfb5866a9c334d9`** (rendered manifest `50ea1240…2252b`).
+
+- **What the evaluator gets now:** only the Read tool, with Bash, Write, Edit and the web tools blocked and at most 5 turns. That is all it needs to read SKILL.md and `trigger-requests.json`, while those files are skill text still being written.
+- **How the results file is made:** the evaluator prints its JSON answer, and the command pulls it out of `session.json` with `jq` and python3 into `results.json`. The command's pass rule now says the evaluator runs with least privilege.
+- **Retest on `release-process`:** the evaluator returned `{"request_1": "MATCH", "request_2": "NO_MATCH"}` and the trigger unit test passed.
+- **Checks after the fix:**
+  - `plan-package.cjs` passes with zero findings.
+  - The manifest render `--check` passes.
+  - All four schemas validate with zero errors.
+  - The rule-12 home-path scan finds nothing.
+  - No other command in the plan bypasses permissions.
+- **Receipt:** `specialists/pd-delta-w1-receipt.md` now has the new digests and a section on how the finding was handled.
+
+The developer_feedback and Orchestrator follow-ups from my last message still apply; record this digest in `journey.json`, not the earlier `ce0ef1a4…`. Nothing is committed, as you asked.
+exit=0

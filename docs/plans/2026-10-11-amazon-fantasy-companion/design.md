@@ -74,7 +74,7 @@ skills/setup-pre-commit/          D4-A (S01)
 skills/setup-a-repo/              D4-B (S02)
 skills/ship-pull-request/         D4-C (S03)
 skills/spec-authoring/            D5 (S06)
-skills/use-requirements-system/SKILL.md   description non-trigger only, if OD-AFC-07 = yes (S06)
+requirements-system:skills/use-requirements-system/SKILL.md   description non-trigger only (S06; own PR in alphazede/requirements-system, which Alphazedehq symlinks; DEC-AFC-SD-028)
 skills/ci-cd/SKILL.md             only if OD-AFC-01 = B (S41)
 hooks/ci-gate-hook.sh, install-ci-gate-hook.py, test-ci-gate-hook.sh, README.md   D4-E (S11T, S11)
 ```
@@ -131,12 +131,20 @@ ships the single-file PEP 723 wrapper `scripts/diagram.py`.
   description gains the reciprocal non-trigger. `requirements-engineering`
   remains the owner of requirement-statement quality; the new skill cites it
   by reference and does not restate its checklist.
-- Validation per create-lean-skill: `wc -l`/`wc -w` within skill_size_max;
-  one matching request ("write the architecture spec for this repo as
-  Markdown sections and build it") routes to `spec-authoring`; one
-  non-matching request ("publish the SDoc revision to the Requirements System
-  workbench") routes to `use-requirements-system`; skill-creator validation
-  scripts run; tests pass.
+- Validation per create-lean-skill, realized with the Alphazedehq stock
+  skill-test pattern (DEC-AFC-SD-026; `skills/release-process/tests/`):
+  `tests/test_spec_authoring.py` asserts skill_size_max, no `[TODO]` and the
+  required HQ frontmatter, and runs skill-creator `quick_validate.py` on a
+  temporary copy holding only the portable fields; BRAN `bran-strict`
+  validates the full document. `tests/trigger-requests.json` holds the
+  matching request ("write the architecture spec for this repo as Markdown
+  sections and build it") and the non-matching one ("publish the SDoc
+  revision to the Requirements System workbench"); an independent evaluator
+  session classifies them and the unit test checks its results file. The
+  same evaluator on `use-requirements-system` returns the inverse. The
+  reciprocal edit is made in a requirements-system worktree, because
+  Alphazedehq's `skills/use-requirements-system` is a symlink into that
+  repository (DEC-AFC-SD-028).
 - Linking (S06L, light): after S06 merges, symlink the skill into
   `$HOME/.claude/skills`, `$HOME/.codex/skills`, `$HOME/.agents/skills` and
   `$HOME/.cursor/skills` like the existing shared skills; Muse and AGY are
@@ -211,11 +219,17 @@ PR, branch `ci-cd/<topic>`, worktree `worktrees/Alphazedehq-ci-cd-<topic>`):
 | D4-E harness hooks (S11T, S11) | `hooks/ci-gate-hook.sh`, `hooks/test-ci-gate-hook.sh`, `hooks/install-ci-gate-hook.py`, `hooks/README.md` | CONTRACT-AFC-HOOK; the installer edits each harness configuration idempotently after a timestamped backup, and links the shared skills and `vnv-review` into Muse's (and, if verified, AGY's) skill directory. Runs only after D4-A..C merge (C13). |
 | D4-F thin entry-point skill (S41, only if OD-AFC-01 = B) | `skills/ci-cd/SKILL.md` | A router under 25 lines naming the three skills; no procedure of its own. |
 
-- Every changed `SKILL.md` is checked with `wc -l` and `wc -w` against
-  skill_size_max and exercised on one matching and one non-matching request
-  per create-lean-skill (AC-AFC-D4-05). No text names specific repositories
-  as pilots or exclusions (AC-AFC-D4-06); the amazon-fantasy-companion GATES
-  row is gate data, not scoping.
+- Every changed `SKILL.md` follows the Alphazedehq stock skill-test pattern
+  (DEC-AFC-SD-026): its `tests/test_<skill>.py` asserts skill_size_max, no
+  `[TODO]` and the required HQ frontmatter, and runs `quick_validate.py` on a
+  temporary portable-fields copy; BRAN `bran-strict` validates the full
+  document; `tests/trigger-requests.json` holds one matching and one
+  non-matching request, classified by an independent evaluator session whose
+  results file the unit test checks (AC-AFC-D4-05). No text names specific
+  repositories as pilots or exclusions (AC-AFC-D4-06): each slice checks its
+  own skill directory, and one combined check runs at the Wave 1 exit after
+  S01..S03 merge; the amazon-fantasy-companion GATES row is gate data, not
+  scoping.
 - Recommendation for OD-AFC-01: extensions only (see technical plan).
 - Lenses: Lean skill, Repo-agnostic, Parallel-safe CI, Owner boundary.
 
@@ -342,8 +356,10 @@ PR, branch `ci-cd/<topic>`, worktree `worktrees/Alphazedehq-ci-cd-<topic>`):
 - The Phase 1 spec track opens its own plan directory
   `docs/plans/<open-date>-amazon-fantasy-companion-phase-2/` (path kept from
   the authority record; it later also holds the Phase 2 implementation
-  plan), with `journey_type: specification` and a draft `.sdoc` register
-  (OD-AFC-12). The spec-track steps are ST-1..ST-5 and the Phase 2 steps
+  plan), with `journey_type: specification` and a Markdown requirements
+  register `docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/requirements-register.md`
+  in this repository, gated by the Requirements Engineer and not bound to the
+  Requirements System host (DEC-AFC-SD-027 closes OD-AFC-12). The spec-track steps are ST-1..ST-5 and the Phase 2 steps
   are P2-6..P2-7 of the technical plan (ST-n replaces the earlier P2-n for
   n = 1..5; the design ID DES-AFC-PHASE2 is kept).
 - Interfaces from the D5/D4 waves to the spec track and Phase 2:

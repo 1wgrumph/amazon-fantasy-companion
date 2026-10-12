@@ -15,12 +15,12 @@
     "planning_inputs": [
       {
         "path": "docs/plans/2026-10-11-amazon-fantasy-companion/amazon-fantasy-companion-technical-plan.md",
-        "sha256": "0051816b697836e111a21ec7bf01a13ad9559eb239ad3aa8192deb2c185bc82c",
+        "sha256": "4dbaf7e00d1a956c329db3ce525ad0aae2f0b6cd0c37f738c64e86193991fe07",
         "binding_status": "bound"
       },
       {
         "path": "docs/plans/2026-10-11-amazon-fantasy-companion/design.md",
-        "sha256": "4b397fb81756115e07fdd630c78e57dafd6e2f0a9ec97af568ddec43275e57ca",
+        "sha256": "7c53f5eb93c8341f9db9c5f38f5740bdea1222760ef2419223b7527ef32923d3",
         "binding_status": "bound"
       },
       {
@@ -37,7 +37,7 @@
       "docs/plans/2026-10-11-amazon-fantasy-companion/seit.json at f885e48 (reused ids)"
     ],
     "plan_directory": "docs/plans/2026-10-11-amazon-fantasy-companion",
-    "seit_json_sha256_at_integration": "17710bbbc095509728eb12c3560cc200b8addba4f1e7787870a68bd0e34ab158",
+    "seit_json_sha256_at_integration": "fc03a46162b0b2f031b3f2916f1d9b23b745189815653ec6fc6b535ebe3ccdcf",
     "planning_input_note": "The three inputs are modified in the working tree relative to the revision; digests are of the working files at SEIT write time."
   },
   "journey_settings": {
@@ -95,8 +95,8 @@
       "policy_ref": "skills/bearing-lite/references/review-policy.md",
       "candidate_ref": "plan/2026-10-11-amazon-fantasy-companion",
       "candidate_revision": "49029171ea62a5ef57c31b066c20a7b059ebc26b",
-      "repair_revision": "DEC-AFC-SD-025 change applied on top of candidate_revision; the Orchestrator records its commit in journey.json",
-      "candidate_digest": "4128aa9cdacd1fca06edfb68652258730db107eb6213f6dca3faf9e9cca55e84",
+      "repair_revision": "Wave 1 execution delta (DEC-AFC-SD-026..028) applied on top of 9e98b31; the Orchestrator records its commit in journey.json",
+      "candidate_digest": "d7d92af72feaf95259869bf2fe80c14b0abaea3b7c309549ddfb5866a9c334d9",
       "candidate_digest_source": "node <bearing-lite>/hooks/plan-package.cjs manifest_digest over seit.json planning_inputs plus seit.json",
       "reviewer_slots": [
         {
@@ -224,8 +224,8 @@
         "S07"
       ],
       "entry": "Owner approves this package at the integrated review (OD-AFC-01, -06, -07, -08, -09, -10, -12, OA-AFC-A2, OA-AFC-A3); planning package merged on `main`.",
-      "exit": "D4-A..C PRs merged in Alphazedehq (AC-AFC-D4-01..03, -05, -06); D5 PR merged (AC-AFC-D5-01..05 except links); Vnv tree (AC-AFC-VNV-01).",
-      "dispatch_order": "All five at approval. They touch disjoint skill directories (`alphazedehq-skills/<skill>` leases; S06 also holds use-requirements-system) and `docs/vnv/` in this repository."
+      "exit": "D4-A..C PRs merged in Alphazedehq (AC-AFC-D4-01..03, -05, -06); D5 PR merged (AC-AFC-D5-01..05 except links); Vnv tree (AC-AFC-VNV-01). CMD-D4-AGNOSTIC combined run exits 0 on the Alphazedehq main checkout after S01, S02 and S03 merge (SEIT-AFC-D4-06; DEC-AFC-SD-026 delta).",
+      "dispatch_order": "All five at approval. They touch disjoint skill directories (`alphazedehq-skills/<skill>` leases; S06 also holds requirements-system-skills/use-requirements-system in alphazede/requirements-system, DEC-AFC-SD-028) and `docs/vnv/` in this repository."
     },
     {
       "id": "Wave 2",
@@ -471,7 +471,9 @@
         "Alphazedehq:skills/setup-pre-commit/references/gate-contract.md",
         "Alphazedehq:skills/setup-pre-commit/templates/gate.sh",
         "Alphazedehq:skills/setup-pre-commit/scripts/install-hooks.sh",
-        "Alphazedehq:skills/setup-pre-commit/tests/test-install-hooks.sh"
+        "Alphazedehq:skills/setup-pre-commit/tests/test-install-hooks.sh",
+        "Alphazedehq:skills/setup-pre-commit/tests/test_setup_pre_commit.py",
+        "Alphazedehq:skills/setup-pre-commit/tests/trigger-requests.json"
       ],
       "command_ids": [
         "CMD-D4A-TEST",
@@ -517,7 +519,8 @@
           "expected_peer": "setup-a-repo"
         },
         "source": "seit.json gate_declarations.spec_and_docs.trigger_requests"
-      }
+      },
+      "verification_note": "CMD-SKILL-SIZE and CMD-SKILL-TRIGGER follow the Alphazedehq stock skill-test pattern (DEC-AFC-SD-026): author tests/test_<skill_snake>.py (mirroring skills/release-process/tests/test_release_process.py) and tests/trigger-requests.json; never run quick_validate.py on the repository SKILL.md; CMD-D4-AGNOSTIC (D4 slices) covers this slice's own directory only."
     },
     {
       "id": "S02",
@@ -614,7 +617,9 @@
         "Alphazedehq:skills/setup-a-repo/references/workflow-authoring.md",
         "Alphazedehq:skills/setup-a-repo/templates/ci.yml",
         "Alphazedehq:skills/setup-a-repo/scripts/check-workflows.py",
-        "Alphazedehq:skills/setup-a-repo/tests/test_check_workflows.py"
+        "Alphazedehq:skills/setup-a-repo/tests/test_check_workflows.py",
+        "Alphazedehq:skills/setup-a-repo/tests/test_setup_a_repo.py",
+        "Alphazedehq:skills/setup-a-repo/tests/trigger-requests.json"
       ],
       "command_ids": [
         "CMD-D4B-TEST",
@@ -661,7 +666,8 @@
           "expected_peer": "setup-pre-commit"
         },
         "source": "seit.json gate_declarations.spec_and_docs.trigger_requests"
-      }
+      },
+      "verification_note": "CMD-SKILL-SIZE and CMD-SKILL-TRIGGER follow the Alphazedehq stock skill-test pattern (DEC-AFC-SD-026): author tests/test_<skill_snake>.py (mirroring skills/release-process/tests/test_release_process.py) and tests/trigger-requests.json; never run quick_validate.py on the repository SKILL.md; CMD-D4-AGNOSTIC (D4 slices) covers this slice's own directory only. PyYAML and pytest come from the scanned wheel closure in <wheel_dir> (seit.json environments.python_wheels; CMD-SCAN before first use); CMD-D4B-TEST runs offline through <afc_uv_env>."
     },
     {
       "id": "S03",
@@ -756,7 +762,9 @@
       "write_set": [
         "Alphazedehq:skills/ship-pull-request/SKILL.md",
         "Alphazedehq:skills/ship-pull-request/references/GATES.md",
-        "Alphazedehq:skills/ship-pull-request/references/EDIT-PR.md"
+        "Alphazedehq:skills/ship-pull-request/references/EDIT-PR.md",
+        "Alphazedehq:skills/ship-pull-request/tests/test_ship_pull_request.py",
+        "Alphazedehq:skills/ship-pull-request/tests/trigger-requests.json"
       ],
       "command_ids": [
         "CMD-D4C-TEST",
@@ -803,12 +811,13 @@
           "expected_peer": "code-review"
         },
         "source": "seit.json gate_declarations.spec_and_docs.trigger_requests"
-      }
+      },
+      "verification_note": "CMD-SKILL-SIZE and CMD-SKILL-TRIGGER follow the Alphazedehq stock skill-test pattern (DEC-AFC-SD-026): author tests/test_<skill_snake>.py (mirroring skills/release-process/tests/test_release_process.py) and tests/trigger-requests.json; never run quick_validate.py on the repository SKILL.md; CMD-D4-AGNOSTIC (D4 slices) covers this slice's own directory only."
     },
     {
       "id": "S06",
       "role": "Product Implementer",
-      "goal": "Skill slice (spec-and-docs lane, Phase 1): deliver AC-AFC-D5-01, AC-AFC-D5-02, AC-AFC-D5-03, AC-AFC-D5-04, AC-AFC-D5-05, RISK-AFC-13, RISK-AFC-15 per DES-AFC-D5, CONTRACT-AFC-SPECKIT inside the exact write set. Done when: Tests, repo-agnostic build and size check exit 0; trigger check routes both requests correctly; PR open in Alphazedehq.",
+      "goal": "Skill slice (spec-and-docs lane, Phase 1): deliver AC-AFC-D5-01, AC-AFC-D5-02, AC-AFC-D5-03, AC-AFC-D5-04, AC-AFC-D5-05, RISK-AFC-13, RISK-AFC-15 per DES-AFC-D5, CONTRACT-AFC-SPECKIT inside the exact write set. Done when: S06 stop condition holds (Alphazedehq PR plus requirements-system PR, DEC-AFC-SD-028).",
       "type": "skill",
       "requirement_ids": [
         "AC-AFC-D5-01",
@@ -906,8 +915,8 @@
         "landing_skill": "$HOME/.claude/skills/ship-pull-request/SKILL.md (rebase or merge commit, never squash)"
       },
       "write_set": [
-        "Alphazedehq:skills/spec-authoring/",
-        "Alphazedehq:skills/use-requirements-system/SKILL.md"
+        "Alphazedehq:skills/spec-authoring/ (includes tests/test_spec_authoring.py and tests/trigger-requests.json)",
+        "requirements-system:skills/use-requirements-system/SKILL.md"
       ],
       "command_ids": [
         "CMD-SCAN",
@@ -916,7 +925,7 @@
         "CMD-SKILL-SIZE",
         "CMD-SKILL-TRIGGER"
       ],
-      "stop_condition": "Tests, repo-agnostic build and size check exit 0; trigger check routes both requests correctly; PR open in Alphazedehq.",
+      "stop_condition": "Tests, repo-agnostic build and size check exit 0; trigger classification and the reciprocal use-requirements-system classification pass; PR open in Alphazedehq and the reciprocal non-trigger PR open in alphazede/requirements-system (DEC-AFC-SD-028).",
       "human_decision": {
         "owner_actions": [],
         "open_decisions": [
@@ -936,7 +945,7 @@
       "depends_on_text": "—",
       "leases": [
         "alphazedehq-skills/spec-authoring",
-        "alphazedehq-skills/use-requirements-system"
+        "requirements-system-skills/use-requirements-system"
       ],
       "repo": "alphazede/Alphazedehq",
       "skills": [
@@ -958,7 +967,16 @@
           "expected_peer": "use-requirements-system"
         },
         "source": "seit.json gate_declarations.spec_and_docs.trigger_requests"
-      }
+      },
+      "cross_repo_write": {
+        "repository": "alphazede/requirements-system",
+        "path": "skills/use-requirements-system/SKILL.md (description lines only)",
+        "worktree": "<workspace>/worktrees/requirements-system-afc-s06-nontrigger",
+        "landing": "its own PR, rebase or merge commit; that repository's own gates and AGENTS.md apply",
+        "rule": "Alphazedehq skills/use-requirements-system is a tracked symlink into the requirements-system checkout; edit the real file in the requirements-system worktree, never the symlink or its target directory in Alphazedehq",
+        "decision": "DEC-AFC-SD-028"
+      },
+      "verification_note": "CMD-SKILL-SIZE and CMD-SKILL-TRIGGER follow the Alphazedehq stock skill-test pattern (DEC-AFC-SD-026): author tests/test_<skill_snake>.py (mirroring skills/release-process/tests/test_release_process.py) and tests/trigger-requests.json; never run quick_validate.py on the repository SKILL.md; CMD-D4-AGNOSTIC (D4 slices) covers this slice's own directory only."
     },
     {
       "id": "S07",
@@ -1992,7 +2010,9 @@
         "landing_skill": "$HOME/.claude/skills/ship-pull-request/SKILL.md (rebase or merge commit, never squash)"
       },
       "write_set": [
-        "Alphazedehq:skills/ci-cd/SKILL.md"
+        "Alphazedehq:skills/ci-cd/SKILL.md",
+        "Alphazedehq:skills/ci-cd/tests/test_ci_cd.py",
+        "Alphazedehq:skills/ci-cd/tests/trigger-requests.json"
       ],
       "command_ids": [
         "CMD-SKILL-SIZE",
@@ -2042,7 +2062,8 @@
         },
         "source": "seit.json gate_declarations.spec_and_docs.trigger_requests"
       },
-      "dispatchable": false
+      "dispatchable": false,
+      "verification_note": "CMD-SKILL-SIZE and CMD-SKILL-TRIGGER follow the Alphazedehq stock skill-test pattern (DEC-AFC-SD-026): author tests/test_<skill_snake>.py (mirroring skills/release-process/tests/test_release_process.py) and tests/trigger-requests.json; never run quick_validate.py on the repository SKILL.md; CMD-D4-AGNOSTIC (D4 slices) covers this slice's own directory only."
     },
     {
       "id": "S08",
@@ -2450,7 +2471,8 @@
         "post_step_vv": [
           "CMD-MERGE-IDENTITY -> azhq.d4c",
           "CMD-AZHQ-SKILL-TESTS (proposed) at azhq.d4c (CMD-D4C-TEST)",
-          "CMD-AZHQ-SYNC, only when no session of this Lifecycle is opening or landing a PR, because this changes the PR gate procedure for every agent on the host (F02)"
+          "CMD-AZHQ-SYNC, only when no session of this Lifecycle is opening or landing a PR, because this changes the PR gate procedure for every agent on the host (F02)",
+          "Wave 1 exit, once azhq.d4a, azhq.d4b and azhq.d4c are all recorded: CMD-D4-AGNOSTIC combined over skills/setup-pre-commit, skills/setup-a-repo and skills/ship-pull-request on the Alphazedehq main checkout"
         ],
         "rollback": "Revert PR in Alphazedehq; CMD-AZHQ-SYNC.",
         "exit": "azhq.d4c recorded. With azhq.d4a and azhq.d4b this satisfies C13, so S11T and S41 (if B) can dispatch."
@@ -2469,14 +2491,15 @@
         "entry_criteria": [
           "S06 stop condition met: CMD-SCAN PASS (uv, Graphviz, the GridMarket source at its pinned commit; RISK-AFC-13); CMD-D5-TEST, CMD-D5-AGNOSTIC, CMD-SKILL-SIZE exit 0; CMD-SKILL-TRIGGER routes the Markdown-spec request to spec-authoring and the SDoc publication request to use-requirements-system (AC-AFC-D5-03, RISK-AFC-15)",
           "vendor.sh copies scripts/ and template/ and records the source commit and skill tree id (F03)",
-          "OD-AFC-07 disposition applied: the use-requirements-system description edit is present only if approved",
+          "OD-AFC-07 disposition applied: the reciprocal non-trigger is in the alphazede/requirements-system PR (DEC-AFC-SD-028); that PR's checks green",
           "skills/spec-authoring/LICENSE-gridmarket present (AC-AFC-D5-01)",
-          "Reviewer review at this step (F01); AZHQ checks green; leases alphazedehq-skills/spec-authoring and alphazedehq-skills/use-requirements-system"
+          "Reviewer review at this step (F01); AZHQ checks green; leases alphazedehq-skills/spec-authoring and requirements-system-skills/use-requirements-system"
         ],
         "post_step_vv": [
           "CMD-MERGE-IDENTITY -> azhq.d5 (+ git rev-parse azhq.d5:skills/spec-authoring)",
           "CMD-AZHQ-SKILL-TESTS (proposed) at azhq.d5 (CMD-D5-TEST, CMD-D5-AGNOSTIC)",
-          "CMD-AZHQ-SYNC; record HEAD for the S06L and S42 packets"
+          "CMD-AZHQ-SYNC; record HEAD for the S06L and S42 packets",
+          "CMD-MERGE-IDENTITY -> rs.d5nt for the requirements-system PR; fast-forward the requirements-system checkout the Alphazedehq symlink resolves to only when it is clean, else record a typed gap"
         ],
         "rollback": "Revert PR in Alphazedehq; CMD-AZHQ-SYNC. If S06L already ran, CMD-SKILL-UNLINK (proposed) removes its four links. If S42 already merged, IE-P1-7 rolls back too. ST-4 waits for the change to reland (RISK-AFC-16).",
         "exit": "azhq.d5 and its skill tree id recorded. This unblocks S06L and S42."
@@ -2903,7 +2926,7 @@
         "D4 merge commits azhq.d4a, azhq.d4b, azhq.d4c, azhq.d4e, and azhq.d4f or not_applicable",
         "Vendored tools/spec/ commit on main (this.spec_vendor), with the CMD-SPEC-VENDOR result and the tools/spec/VENDORED.md source commit",
         "The gate run on main: CMD-GATE-ALL at this.p1_final with each area's PASS, FAIL or GAP line",
-        "Status of each spec-track and Phase 2 entry criterion as met, not met or owner action pending: ST-1 (Phase 1 package approval); ST-4 (S06 merged, S42 on main, S09 gate on main, ST-2 PASS, ST-3(c) done); OD-AFC-12; owner actions for stick and ADB, AWS account and profile, Yahoo application (T_yahoo 2026-10-16T19:00:00Z), provider app sign-in",
+        "Status of each spec-track and Phase 2 entry criterion as met, not met or owner action pending: ST-1 (Phase 1 package approval); ST-4 (S06 merged, S42 on main, S09 gate on main, ST-2 PASS, ST-3(c) done); register form per DEC-AFC-SD-027 (Markdown register docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/requirements-register.md, no Requirements System host); owner actions for stick and ADB, AWS account and profile, Yahoo application (T_yahoo 2026-10-16T19:00:00Z), provider app sign-in",
         "Slips against the cut-offs; days left to T_deadline; remaining live NFL windows (RISK-AFC-16, RISK-AFC-17)",
         "Typed gaps: Muse and AGY hook surfaces, any GAP exits",
         "Open anomalies and their resolutions",
@@ -3750,9 +3773,10 @@
     {
       "id": "OD-AFC-12",
       "decision": "Spec-track register form (ST-2): draft `.sdoc` in the spec-track plan directory, bound to the packaged-default Requirements System host for review readback (artifact grammar rule 7 and the specification-wave default), or a Markdown register only.",
-      "recommendation": "`.sdoc` bound to the local Requirements System host. The grammar requires an `.sdoc` register for a specification Lifecycle, and the host is local dev/test, so running it is agent work (cross-repo rule 14). D1 stays a Markdown specification built by D5 and cites the register UIDs. Needed before ST-2 starts, not before the D5/D4 waves execute.",
+      "recommendation": "(superseded by DEC-AFC-SD-027) `.sdoc` bound to the local Requirements System host. The grammar requires an `.sdoc` register for a specification Lifecycle, and the host is local dev/test, so running it is agent work (cross-repo rule 14). D1 stays a Markdown specification built by D5 and cites the register UIDs. Needed before ST-2 starts, not before the D5/D4 waves execute.",
       "source": "technical plan §Open owner items for the integrated review",
-      "status": "open_for_integrated_review"
+      "status": "closed_by DEC-AFC-SD-027",
+      "resolution": "Owner, 2026-10-12: the Requirements System .sdoc register is for Alphazedehq only. ST-2 writes a Markdown register docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/requirements-register.md in this repository (UID, statement, rationale, verification method, allocation, sources), gated by the Requirements Engineer, not bound to the Requirements System host. D1 cites its UIDs."
     }
   ],
   "deferred_to_phase_2": [
@@ -3853,7 +3877,7 @@
     },
     {
       "id": "ST-2",
-      "work": "Product requirements register: UID, statement, rationale, verification method and allocation for every retained item 1, 2, 3, 4 and 6 of issue #1, plus the right-side lineup panel. It gives full coverage of the customer controls (#1 item 6 and every setting the panel and alerts expose), the conditionals C1..C9, SD-001..SD-011 and SD-024. It is written as a draft `.sdoc` register (artifact grammar, Requirements register rule 7) and gated by the Requirements Engineer. The f885e48 product rows (§Deferred to the spec track or Phase 2) are non-binding input and are re-derived, not copied.",
+      "work": "Product requirements register: UID, statement, rationale, verification method and allocation for every retained item 1, 2, 3, 4 and 6 of issue #1, plus the right-side lineup panel. It gives full coverage of the customer controls (#1 item 6 and every setting the panel and alerts expose), the conditionals C1..C9, SD-001..SD-011 and SD-024. It is a Markdown register in this repository, `docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/requirements-register.md`: one table with the columns UID, statement, rationale, verification method, allocation and sources. The Requirements Engineer gates it. It is not bound to the Requirements System host; the .sdoc register is for Alphazedehq only (DEC-AFC-SD-027, closes OD-AFC-12). The f885e48 product rows (§Deferred to the spec track or Phase 2) are non-binding input and are re-derived, not copied.",
       "role_and_route": "Requirements Engineer (planning primary: Muse Code / Muse Spark 1.3 / max)",
       "entry_criteria": "ST-1. The Systems Modeler contextual pass (ST-3a) is consumed before the first register draft (allocation inputs rule 1).",
       "depends_on": "ST-1, ST-3a",
@@ -3903,20 +3927,22 @@
   "milestones": [],
   "milestones_note": "No GitHub milestones in Phase 1 (DEC-AFC-SD-023); D3 milestones are planned and created in Phase 2 (P2-6, P2-7)",
   "revision_against": {
-    "package": "4902917",
-    "candidate_digest": "23a97b492e5de074de44ad01ec7489567a1fea8a6c61aaf9e768932d85911a37",
-    "outcome": "CHANGE_REQUESTED",
+    "package": "888bc19 (origin/main; approved Phase 1 package 173e005, DEC-AFC-APPROVAL-001)",
+    "candidate_digest": "4128aa9cdacd1fca06edfb68652258730db107eb6213f6dca3faf9e9cca55e84",
+    "outcome": "APPROVED; Wave 1 execution delta",
     "decided_by": [
-      "DEC-AFC-SD-025"
+      "DEC-AFC-SD-026",
+      "DEC-AFC-SD-027",
+      "DEC-AFC-SD-028"
     ]
   },
   "revision_diff": {
-    "changed_requirements": "32 → 33 rows: AC-AFC-DX-02 amended (complete rows in the AC-AFC-DX-04 schema; source adds DEC-AFC-SD-025); AC-AFC-DX-04 new (log schema: issue #1 Scribe fields, Devpost Product Feedback incl. onboarding, would-build-again and AWS services, Friction Log Entry fields, Feature Requests with Critical/Important/Nice-to-have). Deferred row 'AC-AFC-DX-02 (submission assembly), DX-03' restated with the Devpost deliverables and the up-to-10% Stage 1 friction-log bonus.",
-    "changed_design": "DES-AFC-DX amended: log headings, column table, n/a and unknown values, severity scale (design choice), Phase 2 submission assembly.",
-    "changed_proof_cases": "54 → 55 proof cases and 46 → 47 commands: SEIT-AFC-DX-04 and CMD-DX-SCHEMA new; SEIT-AFC-DX-02 and CMD-DX-COVERAGE amended (complete-row check replaces the header grep).",
-    "changed_slices": "S08: +AC-AFC-DX-04, +SEIT-AFC-DX-04, +CMD-DX-SCHEMA; goal and stop condition name the schema. Every slice's developer_feedback rule asks for the AC-AFC-DX-04 fields that apply. No slice, wave, write set, route or dependency added or removed.",
-    "changed_authority": "none",
-    "changed_bounds": "none; DX-006 resolved (rules fetched with curl, HTTP 200; evidence/devpost-feedback-rules.md)"
+    "changed_requirements": "none: 33 rows unchanged; no requirement statement edited (the ST-2 register form is a spec-track step, not a register row)",
+    "changed_design": "DES-AFC-D4 and DES-AFC-D5 validation bullets follow the Alphazedehq stock skill-test pattern (SD-026); DES-AFC-D5 write-set tree places use-requirements-system in alphazede/requirements-system (SD-028); DES-AFC-PHASE2 register is the Markdown register docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/requirements-register.md, no Requirements System host (SD-027)",
+    "changed_proof_cases": "55 proof cases and 47 commands, IDs unchanged. CMD-SKILL-SIZE rewritten (per-skill stock unittest, quick_validate on a temp portable-fields copy, pinned BRAN bran-strict); CMD-SKILL-TRIGGER rewritten (tests/trigger-requests.json + independent evaluator results file checked by the unittest; no 1-turn harness probe); CMD-D4-AGNOSTIC per slice on its own paths plus one combined Wave 1 exit run; CMD-D4B-TEST, CMD-D5-TEST, CMD-D5-AGNOSTIC run offline from a scanned pinned wheel closure (<afc_uv_env>); CMD-D5-TEST ignores the stock unittest; proof/traceability evidence strings for SEIT-AFC-D4-01.S, -02.S, -03.S, -05.T, -06, D5-01.S, D5-03.T, RISK-15 updated",
+    "changed_slices": "S01, S02, S03, S41 write sets + tests/test_<skill>.py and tests/trigger-requests.json; S06 write set: requirements-system:skills/use-requirements-system/SKILL.md replaces the Alphazedehq symlink path, lease renamed, cross_repo_write block, stop condition names both PRs; verification_note on S01, S02, S03, S06, S41; Wave 1 exit adds the combined agnostic run; IE-P1-3 and IE-P1-4 post-step V&V updated",
+    "changed_authority": "authority.json: + repository alphazede/requirements-system (S06 only), its one path, a prohibited-path line, a scope line; the Requirements System host clause removed from the spec-track scope; granting decisions + DEC-AFC-SD-026..028",
+    "changed_bounds": "OD-AFC-12 closed by DEC-AFC-SD-027"
   },
   "dod_manifest": {
     "template_version": "1.0.1",
@@ -3932,7 +3958,7 @@
       },
       {
         "label": "Repository",
-        "value": "1wgrumph/amazon-fantasy-companion (+ alphazede/Alphazedehq cross-repo write set)"
+        "value": "1wgrumph/amazon-fantasy-companion (+ alphazede/Alphazedehq cross-repo write set; alphazede/requirements-system for S06 only)"
       },
       {
         "label": "Baseline",
@@ -3940,7 +3966,7 @@
       },
       {
         "label": "Revision against",
-        "value": "49029171ea62a5ef57c31b066c20a7b059ebc26b (CHANGE_REQUESTED at integrated review P1, DEC-AFC-SD-025); before it f885e48e58a6c10fa716b6c5ef048a71980a977a (CHANGE_REQUESTED at round 1)"
+        "value": "888bc19 (origin/main; approved package 173e005, DEC-AFC-APPROVAL-001, manifest 4128aa9c…e55e84); Wave 1 delta DEC-AFC-SD-026..028"
       },
       {
         "label": "Candidate ref",
@@ -3948,19 +3974,19 @@
       },
       {
         "label": "Candidate digest",
-        "value": "4128aa9cdacd1fca06edfb68652258730db107eb6213f6dca3faf9e9cca55e84"
+        "value": "d7d92af72feaf95259869bf2fe80c14b0abaea3b7c309549ddfb5866a9c334d9"
       },
       {
         "label": "Authority",
-        "value": "AUTH-AFC-2026-10-11-002 (proposed, effective false)"
+        "value": "AUTH-AFC-2026-10-11-002 (effective; approved DEC-AFC-APPROVAL-001; extended by DEC-AFC-SD-026..028)"
       },
       {
         "label": "Input amazon-fantasy-companion-technical-plan.md",
-        "value": "0051816b697836e111a21ec7bf01a13ad9559eb239ad3aa8192deb2c185bc82c"
+        "value": "4dbaf7e00d1a956c329db3ce525ad0aae2f0b6cd0c37f738c64e86193991fe07"
       },
       {
         "label": "Input design.md",
-        "value": "4b397fb81756115e07fdd630c78e57dafd6e2f0a9ec97af568ddec43275e57ca"
+        "value": "7c53f5eb93c8341f9db9c5f38f5740bdea1222760ef2419223b7527ef32923d3"
       },
       {
         "label": "Input views.json",
@@ -3968,7 +3994,7 @@
       },
       {
         "label": "seit.json",
-        "value": "17710bbbc095509728eb12c3560cc200b8addba4f1e7787870a68bd0e34ab158"
+        "value": "fc03a46162b0b2f031b3f2916f1d9b23b745189815653ec6fc6b535ebe3ccdcf"
       },
       {
         "label": "Profile primary digest",
@@ -4829,7 +4855,9 @@
           "Alphazedehq:skills/setup-pre-commit/references/gate-contract.md",
           "Alphazedehq:skills/setup-pre-commit/templates/gate.sh",
           "Alphazedehq:skills/setup-pre-commit/scripts/install-hooks.sh",
-          "Alphazedehq:skills/setup-pre-commit/tests/test-install-hooks.sh"
+          "Alphazedehq:skills/setup-pre-commit/tests/test-install-hooks.sh",
+          "Alphazedehq:skills/setup-pre-commit/tests/test_setup_pre_commit.py",
+          "Alphazedehq:skills/setup-pre-commit/tests/trigger-requests.json"
         ],
         "wave": "Wave 1",
         "lane": "spec-and-docs",
@@ -4844,7 +4872,9 @@
           "Alphazedehq:skills/setup-a-repo/references/workflow-authoring.md",
           "Alphazedehq:skills/setup-a-repo/templates/ci.yml",
           "Alphazedehq:skills/setup-a-repo/scripts/check-workflows.py",
-          "Alphazedehq:skills/setup-a-repo/tests/test_check_workflows.py"
+          "Alphazedehq:skills/setup-a-repo/tests/test_check_workflows.py",
+          "Alphazedehq:skills/setup-a-repo/tests/test_setup_a_repo.py",
+          "Alphazedehq:skills/setup-a-repo/tests/trigger-requests.json"
         ],
         "wave": "Wave 1",
         "lane": "spec-and-docs",
@@ -4857,7 +4887,9 @@
         "write_set": [
           "Alphazedehq:skills/ship-pull-request/SKILL.md",
           "Alphazedehq:skills/ship-pull-request/references/GATES.md",
-          "Alphazedehq:skills/ship-pull-request/references/EDIT-PR.md"
+          "Alphazedehq:skills/ship-pull-request/references/EDIT-PR.md",
+          "Alphazedehq:skills/ship-pull-request/tests/test_ship_pull_request.py",
+          "Alphazedehq:skills/ship-pull-request/tests/trigger-requests.json"
         ],
         "wave": "Wave 1",
         "lane": "spec-and-docs",
@@ -4868,8 +4900,8 @@
         "role": "Product Implementer",
         "depends_on": "—",
         "write_set": [
-          "Alphazedehq:skills/spec-authoring/",
-          "Alphazedehq:skills/use-requirements-system/SKILL.md"
+          "Alphazedehq:skills/spec-authoring/ (includes tests/test_spec_authoring.py and tests/trigger-requests.json)",
+          "requirements-system:skills/use-requirements-system/SKILL.md"
         ],
         "wave": "Wave 1",
         "lane": "spec-and-docs",
@@ -4967,7 +4999,9 @@
         "role": "Product Implementer",
         "depends_on": "S01, S02, S03",
         "write_set": [
-          "Alphazedehq:skills/ci-cd/SKILL.md"
+          "Alphazedehq:skills/ci-cd/SKILL.md",
+          "Alphazedehq:skills/ci-cd/tests/test_ci_cd.py",
+          "Alphazedehq:skills/ci-cd/tests/trigger-requests.json"
         ],
         "wave": "Wave 2",
         "lane": "spec-and-docs",
@@ -5250,16 +5284,28 @@
         "status": "open_for_integrated_review"
       },
       {
-        "event": "Open decision OD-AFC-12",
+        "event": "Closed decision OD-AFC-12 (DEC-AFC-SD-027)",
         "owner": "William Rumph",
-        "evidence": "Spec-track register form (ST-2): draft `.sdoc` in the spec-track plan directory, bound to the packaged-default Requirements System host for review readback (artifact grammar rule 7 and the specification-wave default), or a Markdown register only. Recommendation: `.sdoc` bound to the local Requirements System host. The grammar requires an `.sdoc` register for a specification Lifecycle, and the host is local dev/test, so running it is agent work (cross-repo rule 14). D1 stays a Markdown specification built by D5 and cites the register UIDs. Needed before ST-2 starts, not before the D5/D4 waves execute.",
-        "status": "open_for_integrated_review"
+        "evidence": "Markdown register docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/requirements-register.md in this repository, gated by the Requirements Engineer; no Requirements System host binding.",
+        "status": "confirmed"
       },
       {
         "event": "Deferred to the spec track or Phase 2",
         "owner": "William Rumph",
         "evidence": "AC-AFC-PROF-01..04, MON-01..04, FEED-01..03, ALERT-01..05, WATCH-01..03, CTRL-01..03, PANEL-01..05 [deferred_to_phase_2]; AC-AFC-SPIKE-01..02, SEC-01..04, LW-01 [deferred_to_phase_2]; AC-AFC-SPEC-02, SPEC-03 [deferred_to_phase_2]; AC-AFC-PLAN-02 [deferred_to_phase_2]; AC-AFC-DX-02 (submission assembly), DX-03 [deferred_to_phase_2]; AC-AFC-SUB-01..04 [deferred_to_phase_2]; AC-AFC-VIS-01 [deferred_to_phase_2]; RISK-AFC-01..06, 09, 10, 14 [deferred_to_phase_2]; Gate areas `android`, `backend`; Vnv areas tv-app, backend, device-integration [deferred_to_phase_2]; Product design (f885e48 `design.md` DES-AFC-ARCH, TV, ALERTPATH, WATCH, PANEL, FEED, LINEUP, POLICY, AUTH, INFRA, SPIKES, SPEC, SUB; CONTRACT-AFC-API, EVENT, ALERT, LAUNCH, PROVIDERS, PANEL, LINEUPSOURCE, TABLES) and the design quantities [deferred_to_phase_2]; Views MODEL-AFC-V1..V3 (diagram-assisted product views) [deferred_to_phase_2]; Slices S04, S05, S10, S12..S40 and waves 3..5; milestones M1..M5 [deferred_to_phase_2]; Open items OD-AFC-02 (AI commentary), OD-AFC-03 (Alexa stretch), OD-AFC-04 (spikes evidence-only), OD-AFC-05 (design quantities), OA-AFC-A1 (frontend-design skill path) [deferred_to_phase_2]; OD-AFC-11 (visual evidence store) [closed]",
         "status": "deferred_to_phase_2"
+      },
+      {
+        "event": "Owner decision DEC-AFC-SD-026",
+        "evidence": "Shared-skill validation follows the Alphazedehq stock skill-test pattern (CMD-SKILL-SIZE, CMD-SKILL-TRIGGER rewritten; CMD-D4-AGNOSTIC per slice).",
+        "owner": "William Rumph",
+        "status": "confirmed"
+      },
+      {
+        "event": "Owner decision DEC-AFC-SD-028",
+        "evidence": "S06 reciprocal non-trigger lands in alphazede/requirements-system with its own PR; authority adds that repository for S06 only.",
+        "owner": "William Rumph",
+        "status": "confirmed"
       }
     ]
   },
@@ -5282,6 +5328,24 @@
         "changed_slices": "54 slices in 5 waves (M1..M5) → 13 Phase 1 slices in 2 waves; S42 new; S41 judgement, conditional on OD-AFC-01 = B; product slices re-planned at P2-6.",
         "changed_authority": "AUTH-AFC-2026-10-11-001 → AUTH-AFC-2026-10-11-002 (proposed, effective false); Phase 1 write sets only.",
         "changed_bounds": "No GitHub milestones in Phase 1 (DEC-AFC-SD-023); Phase 1 spec track planned as sequence ST-1..ST-5 and Phase 2 as P2-6..P2-7; visual evidence under evidence/visual/ (DEC-AFC-SD-024)."
+      }
+    },
+    {
+      "revision_against": {
+        "package": "4902917",
+        "candidate_digest": "23a97b492e5de074de44ad01ec7489567a1fea8a6c61aaf9e768932d85911a37",
+        "outcome": "CHANGE_REQUESTED",
+        "decided_by": [
+          "DEC-AFC-SD-025"
+        ]
+      },
+      "revision_diff": {
+        "changed_requirements": "32 → 33 rows: AC-AFC-DX-02 amended (complete rows in the AC-AFC-DX-04 schema; source adds DEC-AFC-SD-025); AC-AFC-DX-04 new (log schema: issue #1 Scribe fields, Devpost Product Feedback incl. onboarding, would-build-again and AWS services, Friction Log Entry fields, Feature Requests with Critical/Important/Nice-to-have). Deferred row 'AC-AFC-DX-02 (submission assembly), DX-03' restated with the Devpost deliverables and the up-to-10% Stage 1 friction-log bonus.",
+        "changed_design": "DES-AFC-DX amended: log headings, column table, n/a and unknown values, severity scale (design choice), Phase 2 submission assembly.",
+        "changed_proof_cases": "54 → 55 proof cases and 46 → 47 commands: SEIT-AFC-DX-04 and CMD-DX-SCHEMA new; SEIT-AFC-DX-02 and CMD-DX-COVERAGE amended (complete-row check replaces the header grep).",
+        "changed_slices": "S08: +AC-AFC-DX-04, +SEIT-AFC-DX-04, +CMD-DX-SCHEMA; goal and stop condition name the schema. Every slice's developer_feedback rule asks for the AC-AFC-DX-04 fields that apply. No slice, wave, write set, route or dependency added or removed.",
+        "changed_authority": "none",
+        "changed_bounds": "none; DX-006 resolved (rules fetched with curl, HTTP 200; evidence/devpost-feedback-rules.md)"
       }
     }
   ]
