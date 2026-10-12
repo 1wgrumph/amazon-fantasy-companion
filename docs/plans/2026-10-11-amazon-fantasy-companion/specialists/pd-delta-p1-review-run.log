@@ -1,0 +1,33 @@
+**DELTA_APPLIED.** I fixed all three P1 findings, and every deterministic check passes.
+
+- **New candidate digest:** `23a97b492e5de074de44ad01ec7489567a1fea8a6c61aaf9e768932d85911a37` (was `f213dceb…`)
+- **Re-rendered manifest:** sha256 `76b591f0c0e15eabf1a74af87870f484cbd99b943411a942ce86b26f7d2e7b8c`, and `--check` passes.
+- **Receipt:** `specialists/pd-delta-p1-review-receipt.md`
+
+**Findings:**
+
+| ID | Fix |
+|---|---|
+| FP1-01 | Applied as the reviewer wrote it:<br>• added the missing requirements to S06, S07, S06L, S42, S11 and S08<br>• added SEIT-AFC-DX-01 to S08<br>• added the missing slices to the traceability rows for CI-02, PATH-01, RISK-13 and RISK-16<br>• updated the two technical-plan Allocation cells<br>I made the same edits in the `dod_manifest.requirements` copy, which lists the same slices and allocations, so all three copies agree. A check across the slices, proof rows and traceability now finds no mismatches. |
+| FP1-02 | Added `, OA-AFC-A3` to both approval strings. The script confirmed exactly two replacements. |
+| FP1-03 | `candidate_revision` is now `82e767d57c5ff5d5b8f070349a77cedf7ef60793`, and `repair_revision` uses the text from your packet. |
+
+**Checks (all exit 0):**
+- `plan-package.cjs` returns PASS with zero findings.
+- The four JSON files have 0 schema errors.
+- Rule 12 finds 0 home paths. The receipt's only `/home/` text is a `/home/<user>/` placeholder.
+- The requirement lint output is byte-identical to `ac-mechanical-lint-p1.txt`.
+- None of the old technical-plan, seit, candidate or manifest digests remain in the package.
+
+**Digests rebound:**
+- technical plan: now `dfc1b9b2…`, written into `seit.json`, `implementation.json` and the manifest
+- `seit.json`: now `4c64a103…`
+- candidate digest
+
+**developer_feedback:**
+1. The freeze check should catch slices that prove a requirement they don't declare. It passed FP1-01 without complaint.
+2. The manifest template doesn't show the requirements' slice and allocation fields or the two approval strings, so the manifest diff only shows the three new digests. A wrong value in those fields wouldn't show up in the manifest.
+3. FP1-03's suggested fix asked the commit to contain its own hash, which isn't possible; the review policy should say which revision `candidate_revision` names.
+
+As instructed, I made no commits. `journey.json` still needs the repair commit recorded once that commit exists. I didn't re-check the 7 SVG views, `design.md` or `authority.json` because none of them changed.
+exit=0

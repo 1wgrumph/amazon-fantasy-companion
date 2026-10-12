@@ -15,7 +15,7 @@
     "planning_inputs": [
       {
         "path": "docs/plans/2026-10-11-amazon-fantasy-companion/amazon-fantasy-companion-technical-plan.md",
-        "sha256": "f4afd24a982a255cf573e2838a8182506b99ea98acef1b6c05ed8e6f5747f982",
+        "sha256": "dfc1b9b2c92a7f4030d4a95464f190235da4e93b30f3dafd9fcf02cc61112cd6",
         "binding_status": "bound"
       },
       {
@@ -37,7 +37,7 @@
       "docs/plans/2026-10-11-amazon-fantasy-companion/seit.json at f885e48 (reused ids)"
     ],
     "plan_directory": "docs/plans/2026-10-11-amazon-fantasy-companion",
-    "seit_json_sha256_at_integration": "bf723abc2c673da423d142c8f95408f3e37de99d08037a151d25b2eed546b973",
+    "seit_json_sha256_at_integration": "4c64a1032b1ff91ec9ef16bfa4efd9641ab4919f1aef84df6894ff3f2cd4c7e7",
     "planning_input_note": "The three inputs are modified in the working tree relative to the revision; digests are of the working files at SEIT write time."
   },
   "journey_settings": {
@@ -94,9 +94,9 @@
     "planning_review": {
       "policy_ref": "skills/bearing-lite/references/review-policy.md",
       "candidate_ref": "plan/2026-10-11-amazon-fantasy-companion",
-      "candidate_revision": "f885e48e58a6c10fa716b6c5ef048a71980a977a",
-      "repair_revision": "recorded by the Orchestrator in journey.json after the regeneration commit",
-      "candidate_digest": "f213dcebb4e5acffa97ded459fbd69eea7298b4dc111d9e4bec3e9a642ee1d98",
+      "candidate_revision": "82e767d57c5ff5d5b8f070349a77cedf7ef60793",
+      "repair_revision": "recorded by the Orchestrator in journey.json after the repair commit",
+      "candidate_digest": "23a97b492e5de074de44ad01ec7489567a1fea8a6c61aaf9e768932d85911a37",
       "candidate_digest_source": "node <bearing-lite>/hooks/plan-package.cjs manifest_digest over seit.json planning_inputs plus seit.json",
       "reviewer_slots": [
         {
@@ -817,7 +817,8 @@
         "AC-AFC-D5-04",
         "AC-AFC-D5-05",
         "RISK-AFC-13",
-        "RISK-AFC-15"
+        "RISK-AFC-15",
+        "RISK-AFC-16"
       ],
       "design_ids": [
         "DES-AFC-D5",
@@ -965,7 +966,8 @@
       "goal": "Docs slice (spec-and-docs lane, Phase 1): deliver AC-AFC-VNV-01 per DES-AFC-VNV inside the exact write set. Done when: Index plus ci-cd, spec and developer-feedback area files, each with Scope, Tools, Review Focus, Findings target.",
       "type": "docs",
       "requirement_ids": [
-        "AC-AFC-VNV-01"
+        "AC-AFC-VNV-01",
+        "AC-AFC-PATH-01"
       ],
       "design_ids": [
         "DES-AFC-VNV"
@@ -1079,7 +1081,8 @@
       "goal": "Link slice (spec-and-docs lane, Phase 1): deliver AC-AFC-D5-05 per DES-AFC-D5 inside the exact write set. Done when: `readlink` of the four harness links resolves to the merged skill directory.",
       "type": "link",
       "requirement_ids": [
-        "AC-AFC-D5-05"
+        "AC-AFC-D5-05",
+        "AC-AFC-PATH-01"
       ],
       "design_ids": [
         "DES-AFC-D5"
@@ -1206,7 +1209,9 @@
       "type": "vendor",
       "requirement_ids": [
         "AC-AFC-SPEC-01",
-        "AC-AFC-D5-04"
+        "AC-AFC-D5-04",
+        "AC-AFC-PATH-01",
+        "RISK-AFC-16"
       ],
       "design_ids": [
         "DES-AFC-D5",
@@ -1759,7 +1764,8 @@
         "AC-AFC-D4-05",
         "AC-AFC-D4-06",
         "AC-AFC-D5-05",
-        "RISK-AFC-12"
+        "RISK-AFC-12",
+        "RISK-AFC-13"
       ],
       "design_ids": [
         "DES-AFC-D4",
@@ -2045,14 +2051,16 @@
       "type": "docs",
       "requirement_ids": [
         "AC-AFC-DX-01",
-        "AC-AFC-DX-02"
+        "AC-AFC-DX-02",
+        "AC-AFC-CI-02"
       ],
       "design_ids": [
         "DES-AFC-DX"
       ],
       "seit_proof_rows": [
         "SEIT-AFC-CI-02.P",
-        "SEIT-AFC-DX-02"
+        "SEIT-AFC-DX-02",
+        "SEIT-AFC-DX-01"
       ],
       "design_lenses": [
         "Developer feedback",
@@ -2916,7 +2924,7 @@
     "owner_dependencies": [
       {
         "id": "OWN-P1-01",
-        "action": "Integrated approval of the Phase 1 package (OD-AFC-01, -06, -07, -08, -09, -10, -12, OA-AFC-A2)",
+        "action": "Integrated approval of the Phase 1 package (OD-AFC-01, -06, -07, -08, -09, -10, -12, OA-AFC-A2, OA-AFC-A3)",
         "blocks": "all steps"
       },
       {
@@ -3286,7 +3294,8 @@
       ],
       "slices": [
         "S09T",
-        "S09"
+        "S09",
+        "S08"
       ],
       "lifecycle_level_bindings": [],
       "ownership": "Lifecycle-local"
@@ -3441,7 +3450,10 @@
       ],
       "slices": [
         "S09T",
-        "S09"
+        "S09",
+        "S07",
+        "S06L",
+        "S42"
       ],
       "lifecycle_level_bindings": [
         "Orchestrator scrub before each planning commit"
@@ -3515,7 +3527,8 @@
       ],
       "slices": [
         "S06",
-        "S09"
+        "S09",
+        "S11"
       ],
       "lifecycle_level_bindings": [],
       "ownership": "Lifecycle-local"
@@ -3541,7 +3554,8 @@
         "SEIT-AFC-RISK-16"
       ],
       "slices": [
-        "S06"
+        "S06",
+        "S42"
       ],
       "lifecycle_level_bindings": [
         "spec-track entry receipt (IE-P1-12)"
@@ -3627,7 +3641,7 @@
     "owner_action_entry_criteria": [
       {
         "needed_by": "Wave 1",
-        "owner_action": "Integrated approval of this Phase 1 package (OD-AFC-01, -06, -07, -08, -09, -10, -12, OA-AFC-A2)."
+        "owner_action": "Integrated approval of this Phase 1 package (OD-AFC-01, -06, -07, -08, -09, -10, -12, OA-AFC-A2, OA-AFC-A3)."
       },
       {
         "needed_by": "Phase 2 product work (not Phase 1)",
@@ -3918,7 +3932,7 @@
       },
       {
         "label": "Candidate digest",
-        "value": "f213dcebb4e5acffa97ded459fbd69eea7298b4dc111d9e4bec3e9a642ee1d98"
+        "value": "23a97b492e5de074de44ad01ec7489567a1fea8a6c61aaf9e768932d85911a37"
       },
       {
         "label": "Authority",
@@ -3926,7 +3940,7 @@
       },
       {
         "label": "Input amazon-fantasy-companion-technical-plan.md",
-        "value": "f4afd24a982a255cf573e2838a8182506b99ea98acef1b6c05ed8e6f5747f982"
+        "value": "dfc1b9b2c92a7f4030d4a95464f190235da4e93b30f3dafd9fcf02cc61112cd6"
       },
       {
         "label": "Input design.md",
@@ -3938,7 +3952,7 @@
       },
       {
         "label": "seit.json",
-        "value": "bf723abc2c673da423d142c8f95408f3e37de99d08037a151d25b2eed546b973"
+        "value": "4c64a1032b1ff91ec9ef16bfa4efd9641ab4919f1aef84df6894ff3f2cd4c7e7"
       },
       {
         "label": "Profile primary digest",
@@ -4175,12 +4189,13 @@
         "statement": "The Actions workflow shall trigger on `pull_request` and `push` to `main` only (never `pull_request_target`), shall use a concurrency group per workflow and ref with cancel-in-progress, shall run an area only when its paths change, shall report one stable check name per area, shall pin every action to a full commit SHA, shall grant `contents: read` only, shall expose no secret to fork pull requests, and shall run on GitHub-hosted runners.",
         "source": "SD-017, SD-021, C14",
         "verification": "test",
-        "allocation": "S09T, S09; repo gate workflow",
+        "allocation": "S09T, S09, S08; repo gate workflow",
         "ownership": "Lifecycle-local",
         "seit_rows": 2,
         "slices": [
           "S09T",
-          "S09"
+          "S09",
+          "S08"
         ],
         "status": "planned"
       },
@@ -4324,7 +4339,10 @@
         "seit_rows": 2,
         "slices": [
           "S09T",
-          "S09"
+          "S09",
+          "S07",
+          "S06L",
+          "S42"
         ],
         "status": "planned"
       },
@@ -4391,12 +4409,13 @@
         "statement": "The program shall obtain a scan-software-supply-chain receipt before first use of each external software acquisition (uv, Graphviz, the GridMarket source at its pinned commit, each pinned GitHub Action), and refuse use on BLOCK or INDETERMINATE.",
         "source": "Cross-repo rule 10",
         "verification": "inspection",
-        "allocation": "S06, S09; acquisition receipts",
+        "allocation": "S06, S09, S11; acquisition receipts",
         "ownership": "Lifecycle-local",
         "seit_rows": 2,
         "slices": [
           "S06",
-          "S09"
+          "S09",
+          "S11"
         ],
         "status": "planned",
         "change": "amended",
@@ -4427,7 +4446,8 @@
         "ownership": "Lifecycle-local",
         "seit_rows": 1,
         "slices": [
-          "S06"
+          "S06",
+          "S42"
         ],
         "status": "planned",
         "change": "amended",
