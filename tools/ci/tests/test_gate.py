@@ -3,13 +3,14 @@ AC-AFC-CI-04 (SEIT-AFC-CI-04.U), per CONTRACT-AFC-GATE and DES-AFC-GATE."""
 
 import os
 import re
+import secrets
 import shutil
 import subprocess
 import tempfile
 import unittest
 from pathlib import Path
 
-from gate_support import REPO, commit_all, copy_repo, path_without, run_gate, write
+from gate_support import REPO, commit_all, copy_repo, git, path_without, run_gate, write
 
 AREAS = {'spec', 'docs', 'hygiene'}
 DIRECT_CHECKS = re.compile(r'check_(paths|docs|workflows)\.py|spec_(lint|build)\.py|diagram\.py')
@@ -75,6 +76,19 @@ class AC_AFC_CI_01(unittest.TestCase):
         self.assertEqual(rc, 1, out)
         self.assertIn('gate: hygiene: FAIL', out)
 
+    def test_hygiene_whitespace_finding_reports_rule_ids_without_line_text(self):
+        repo = copy_repo(self.tmp / 'repo')
+        fake = 'AKIA' + secrets.token_hex(8).upper()  # generated fake credential shape
+        write(repo, {'notes.md': f'first line\naws_key = {fake}   \n'})
+        git(repo, 'add', 'notes.md')
+        rc, out = run_gate(self, repo, 'hygiene')
+        self.assertEqual(rc, 1, out)
+        self.assertNotIn(fake, out, 'hygiene output echoed the staged line text')
+        findings = [line for line in out.splitlines() if not line.startswith('gate: ')]
+        self.assertTrue(findings, out)
+        for line in findings:
+            self.assertRegex(line, r'^[^:]+:[0-9]+:[A-Z0-9-]+$')
+
     def test_docs_area_exits_1_on_seeded_broken_link(self):
         repo = copy_repo(self.tmp / 'repo')
         write(repo, {'BROKEN.md': '# Broken\n\n[gone](docs/does-not-exist.md)\n'})
@@ -132,9 +146,12 @@ class AC_AFC_CI_04_Spec(unittest.TestCase):
         rc, out = run_gate(self, self.repo, 'spec')
         self.assertEqual(rc, 0, out)
         self.assertIn('gate: spec: PASS', out)
-        intro = source / '01-introduction.md'
-        intro.write_text(intro.read_text(encoding='utf-8').replace(
-            '**BLUF:** <One assertive sentence', '**BLUF:** <One changed assertive sentence'), encoding='utf-8')
+        # Append rather than edit template prose: the vendored template changes upstream.
+        section = sorted(source.glob('*.md'))[0]
+        before = section.read_text(encoding='utf-8')
+        section.write_text(before.rstrip('\n') + '\n\nStale-build marker sentence added by the gate test.\n',
+                           encoding='utf-8')
+        self.assertNotEqual(section.read_text(encoding='utf-8'), before, 'stale edit did not change the source')
         commit_all(self.repo)
         rc, out = run_gate(self, self.repo, 'spec')
         self.assertEqual(rc, 1, out)
