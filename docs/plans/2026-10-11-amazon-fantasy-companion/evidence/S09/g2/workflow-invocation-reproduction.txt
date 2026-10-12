@@ -1,0 +1,21 @@
+Candidate SHA: 8b4cd9dfeafa4dd1e268a1d7c1b78dc03a1b2eb7
+Checker commit: 120dee00207425201aa77d1f42f3756ee6bc406e
+Checker SHA256: 5919f62d98b566dc4428eed1e5262b50877f274e5ea4dc7fa48f07aa85cd4d3f
+Harness: import test_workflows from tools/ci/tests; assign its CHECKER to the scanned exported artifact, then run AC_AFC_CI_02.test_valid_fixture_passes with unittest. Repository tests unchanged.
+Focused S09T positive test: exit 1, Ran 1 test, FAILED (failures=1).
+Output tail:
+AssertionError: 1 != 0 : <temporary fixture>/ci.yml: spec: require shared gate with positional area
+<temporary fixture>/ci.yml: hygiene: require shared gate with positional area
+
+Exact VALID CLI reproduction: python3 /tmp/afc-s09-g2-checker-271lit48/check-workflows.py /tmp/afc-s09-g2-checker-271lit48/ci.yml
+Input: test_workflows.VALID, unmodified.
+exit=1
+/tmp/afc-s09-g2-checker-271lit48/ci.yml: spec: require shared gate with positional area
+/tmp/afc-s09-g2-checker-271lit48/ci.yml: hygiene: require shared gate with positional area
+
+Control: same command and fixture except temporary run values changed from "tools/ci/gate.sh " to "bash tools/ci/gate.sh ".
+exit=0
+/tmp/afc-s09-g2-checker-271lit48/ci.yml: PASS
+
+Classification: incompatible frozen positive fixture and exact vendor pin, not missing dependency or directory-input failure.
+No product or test file changed. No full gate, commit, push or PR attempted.

@@ -1,0 +1,334 @@
+{
+  "verdict": "PASS",
+  "role": "implementer",
+  "realization_status": "CANDIDATE_READY",
+  "lease_id": "S43-g1",
+  "lifecycle": "AFC-2026-10-11",
+  "slice": "S43",
+  "generation": 1,
+  "head_sha": "68172c3e987d1825efff3b9fead02ff05d3a9def",
+  "draft_pr_url": "https://github.com/alphazede/Alphazedehq/pull/316",
+  "remote_verified": true,
+  "merged": false,
+  "worktree_retained_for_active_lease": true,
+  "changed_paths": [
+    "AGENTS.md",
+    "CHANGELOG.md",
+    "skills/release-process/SKILL.md",
+    "skills/release-process/references/RELEASE-NOTES.md",
+    "skills/setup-a-repo/SKILL.md",
+    "skills/setup-a-repo/templates/CHANGELOG.md",
+    "skills/ship-pull-request/SKILL.md",
+    "skills/ship-pull-request/references/REVISION-RECORD.md",
+    "skills/spec-authoring/SKILL.md",
+    "skills/spec-authoring/references/section-rules.md",
+    "skills/spec-authoring/scripts/spec_build.py",
+    "skills/spec-authoring/scripts/spec_lint.py",
+    "skills/spec-authoring/template/spec.yaml",
+    "skills/spec-authoring/tests/fixtures/negative/document/01-references.md",
+    "skills/spec-authoring/tests/fixtures/negative/issue/01-references.md",
+    "skills/spec-authoring/tests/fixtures/negative/revision/01-references.md",
+    "skills/spec-authoring/tests/fixtures/negative/revision/spec.yaml",
+    "skills/spec-authoring/tests/fixtures/negative/section/01-references.md",
+    "skills/spec-authoring/tests/fixtures/spec/src/spec.yaml",
+    "skills/spec-authoring/tests/test_reference_records.py"
+  ],
+  "commands": [
+    {
+      "command": "SPEC_AUTHORING_TRIGGER_RESULTS, SHIP_PULL_REQUEST_TRIGGER_RESULTS, SETUP_A_REPO_TRIGGER_RESULTS, RELEASE_TRIGGER_RESULTS point to trigger-results.json; PYTHONDONTWRITEBYTECODE=1 python3 -m pytest -q skills/spec-authoring/tests skills/ship-pull-request/tests skills/setup-a-repo/tests skills/release-process/tests",
+      "exit_code": 0,
+      "candidate_sha": "68172c3e987d1825efff3b9fead02ff05d3a9def",
+      "log": "skills-final.log",
+      "output_tail": [
+        "........................................................................ [ 60%]",
+        "...............................................                      [100%]",
+        "119 passed, 4 subtests passed in 3.62s"
+      ]
+    },
+    {
+      "command": "bash skills/ship-pull-request/tests/edit-pr.test.sh",
+      "exit_code": 0,
+      "candidate_sha": "68172c3e987d1825efff3b9fead02ff05d3a9def",
+      "log": "pr-tools-final.log",
+      "output_tail": [
+        "ok - edit-pr.sh --help displays usage",
+        "ok - missing PR number is refused",
+        "ok - empty update arguments is refused",
+        "ok - missing body file is refused",
+        "ok - successful update and readback passes",
+        "ok - PATCH arguments correctly forwarded to gh api",
+        "Updating PR #123 via GitHub REST API...",
+        "Verifying PR #123 text on GitHub...",
+        "ok - stale title failure correctly detected and refused",
+        "Updating PR #123 via GitHub REST API...",
+        "Verifying PR #123 text on GitHub...",
+        "ok - stale body failure correctly detected and refused",
+        "Updating PR #123 via GitHub REST API...",
+        "Verifying PR #123 text on GitHub...",
+        "ok - stale base branch failure correctly detected and refused",
+        "Verifying PR #123 text on GitHub...",
+        "OK: PR #123 on alphazede/test-repo verified (saved text matches expected text).",
+        "ok - check-pr-text.sh passes when PR text matches expected",
+        "ok - check-pr-text.sh performs verify readback without mutating PR",
+        "Verifying PR #123 text on GitHub...",
+        "ok - check-pr-text.sh detects stale title and exits non-zero",
+        "Updating PR #123 via GitHub REST API...",
+        "ok - gh api PATCH failure cleanly caught and reported",
+        "PASS: all edit-pr and check-pr-text tests passed"
+      ]
+    },
+    {
+      "command": "bash skills/release-process/tests/find-pin-consumers.test.sh",
+      "exit_code": 0,
+      "candidate_sha": "68172c3e987d1825efff3b9fead02ff05d3a9def",
+      "log": "pin-consumers-final.log",
+      "output_tail": [
+        "ok - no hit exits 0 with a coverage line",
+        "ok - hidden nested repository is searched",
+        "ok - parent of a nested repository is searched",
+        "ok - worktree collapses into its repository",
+        "ok - dangling worktree link is reported",
+        "ok - bare version guard is a hit",
+        "ok - failed fetch exits 2 naming the repository",
+        "ok - origin without main exits 2",
+        "ok - failed git grep exits 2 naming the repository",
+        "ok - empty digest searches the version",
+        "ok - empty digest with no version hit exits 0"
+      ]
+    },
+    {
+      "command": "bash tools/ci/local-gates.sh",
+      "exit_code": 0,
+      "candidate_sha": "68172c3e987d1825efff3b9fead02ff05d3a9def",
+      "log": "local-gates-final.log",
+      "output_tail": [
+        "lane A: 0s",
+        "lane B: 0s",
+        "lane C: 1s",
+        "",
+        "PASS  diff-check          0s",
+        "PASS  secret-scan         1s",
+        "N/A   git-sync         (no git-sync paths changed since merge-base; --full forces it)",
+        "N/A   web-install      (no alphazede-web paths changed since merge-base; --full forces it)",
+        "N/A   web-build        (no alphazede-web paths changed since merge-base; --full forces it)",
+        "N/A   web-typecheck    (no alphazede-web paths changed since merge-base; --full forces it)",
+        "N/A   web-test         (no alphazede-web paths changed since merge-base; --full forces it)",
+        "N/A   visual-review    (no skill-suite paths changed since merge-base; --full forces it)",
+        "N/A   plan-spec-lint   (no COE-lint paths changed since merge-base; --full forces it)",
+        "N/A   sdoc-lint        (no COE-lint paths changed since merge-base; --full forces it)",
+        "N/A   gate-activation  (no COE-lint paths changed since merge-base; --full forces it)",
+        "N/A   standards-yaml   (no standards-YAML paths changed since merge-base; --full forces it)",
+        "N/A   hook-suites      (no hook paths changed since merge-base; --full forces it)",
+        "N/A   te-provision     (no test-engineering paths changed since merge-base; --full forces it)",
+        "N/A   te-evaluator     (no test-engineering paths changed since merge-base; --full forces it)",
+        "N/A   te-receipt       (no test-engineering paths changed since merge-base; --full forces it)",
+        "N/A   te-ponytail      (no test-engineering paths changed since merge-base; --full forces it)",
+        "",
+        "passed=2 failed=0 skipped=0 not-applicable=15 elapsed=1s head=68172c3",
+        "merge receipt: $HOME/.local/state/alphazede-gate-receipts/Alphazedehq/68172c3e987d1825efff3b9fead02ff05d3a9def",
+        "failing gates: none"
+      ]
+    },
+    {
+      "command": "verified pinned BRAN: check . bran-strict",
+      "exit_code": 0,
+      "candidate_sha": "68172c3e987d1825efff3b9fead02ff05d3a9def",
+      "log": "bran-final.log",
+      "output_tail": [
+        "{\"schema_version\":\"1.0.0\",\"command\":\"check\",\"status\":\"ok\",\"data\":{\"root\":\".\",\"selected_profile\":\"bran-strict\",\"okf_compatibility\":{\"profile\":\"okf-v0.1\",\"status\":\"pass\",\"diagnostics\":[]},\"okf_v0_2\":{\"profile\":\"okf-v0.2\",\"status\":\"pass\",\"diagnostics\":[]},\"bran_strict\":{\"profile\":\"bran-strict\",\"status\":\"pass\",\"diagnostics\":[]},\"selected_profile_error\":null,\"selected_passed\":true,\"exit_code\":0},\"warnings\":[\"Symlink { path: \\\"skills/use-requirements-system\\\" }\"],\"failures\":[],\"provenance\":{\"sources\":[\"repository-scanner\",\"bran-core\"],\"policy_source\":\"repository-file\"},\"metrics\":{\"selected_passed\":true,\"exit_code\":0}}"
+      ]
+    },
+    {
+      "command": [
+        "python3",
+        "skills/spec-authoring/scripts/spec_build.py",
+        "skills/spec-authoring/template",
+        "$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S43/template-first.md"
+      ],
+      "exit_code": 0,
+      "expected_exit": 0,
+      "output_tail": [],
+      "candidate_sha": "68172c3e987d1825efff3b9fead02ff05d3a9def"
+    },
+    {
+      "command": [
+        "python3",
+        "skills/spec-authoring/scripts/spec_build.py",
+        "skills/spec-authoring/template",
+        "$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S43/template-second.md"
+      ],
+      "exit_code": 0,
+      "expected_exit": 0,
+      "output_tail": [],
+      "candidate_sha": "68172c3e987d1825efff3b9fead02ff05d3a9def"
+    },
+    {
+      "command": [
+        "cmp",
+        "$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S43/template-first.md",
+        "$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S43/template-second.md"
+      ],
+      "exit_code": 0,
+      "expected_exit": 0,
+      "output_tail": [],
+      "candidate_sha": "68172c3e987d1825efff3b9fead02ff05d3a9def"
+    },
+    {
+      "command": [
+        "python3",
+        "skills/spec-authoring/scripts/spec_lint.py",
+        "skills/spec-authoring/template"
+      ],
+      "exit_code": 0,
+      "expected_exit": 0,
+      "output_tail": [],
+      "candidate_sha": "68172c3e987d1825efff3b9fead02ff05d3a9def"
+    },
+    {
+      "command": [
+        "python3",
+        "skills/spec-authoring/scripts/spec_lint.py",
+        "skills/spec-authoring/tests/fixtures/negative/issue"
+      ],
+      "exit_code": 1,
+      "expected_exit": 1,
+      "output_tail": [
+        "skills/spec-authoring/tests/fixtures/negative/issue/01-references.md: unlinked issue/PR reference: #123"
+      ],
+      "candidate_sha": "68172c3e987d1825efff3b9fead02ff05d3a9def"
+    },
+    {
+      "command": [
+        "python3",
+        "skills/spec-authoring/scripts/spec_lint.py",
+        "skills/spec-authoring/tests/fixtures/negative/section"
+      ],
+      "exit_code": 1,
+      "expected_exit": 1,
+      "output_tail": [
+        "skills/spec-authoring/tests/fixtures/negative/section/01-references.md: unlinked section reference: section 4.2"
+      ],
+      "candidate_sha": "68172c3e987d1825efff3b9fead02ff05d3a9def"
+    },
+    {
+      "command": [
+        "python3",
+        "skills/spec-authoring/scripts/spec_lint.py",
+        "skills/spec-authoring/tests/fixtures/negative/document"
+      ],
+      "exit_code": 1,
+      "expected_exit": 1,
+      "output_tail": [
+        "skills/spec-authoring/tests/fixtures/negative/document/01-references.md: unlinked document/file reference: design.md"
+      ],
+      "candidate_sha": "68172c3e987d1825efff3b9fead02ff05d3a9def"
+    },
+    {
+      "command": [
+        "python3",
+        "skills/spec-authoring/scripts/spec_lint.py",
+        "skills/spec-authoring/tests/fixtures/negative/revision"
+      ],
+      "exit_code": 1,
+      "expected_exit": 1,
+      "output_tail": [
+        "skills/spec-authoring/tests/fixtures/negative/revision/spec.yaml: revision 0.2: changes must list changed sections",
+        "skills/spec-authoring/tests/fixtures/negative/revision/spec.yaml: revision 0.2: links.pr must be a PR URL",
+        "skills/spec-authoring/tests/fixtures/negative/revision/spec.yaml: revision 0.2: links.diff must be a diff/compare URL"
+      ],
+      "candidate_sha": "68172c3e987d1825efff3b9fead02ff05d3a9def"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "expected_exit": 0,
+      "output_tail": [],
+      "candidate_sha": "68172c3e987d1825efff3b9fead02ff05d3a9def"
+    },
+    {
+      "command": "Scan all changed committed files for /home/",
+      "exit_code": 0,
+      "output_tail": [
+        "No absolute home paths in 20 changed files"
+      ],
+      "candidate_sha": "68172c3e987d1825efff3b9fead02ff05d3a9def"
+    }
+  ],
+  "skill_sizes": {
+    "spec-authoring": {
+      "lines": 48,
+      "words": 359
+    },
+    "ship-pull-request": {
+      "lines": 55,
+      "words": 429
+    },
+    "setup-a-repo": {
+      "lines": 58,
+      "words": 441
+    },
+    "release-process": {
+      "lines": 59,
+      "words": 399
+    }
+  },
+  "regression": {
+    "baseline_sha": "23f0bb28a9ef9e0ec6ca1d4ec130489e8c569beb",
+    "baseline_exit": 1,
+    "baseline_cases_failed": 19,
+    "candidate_exit": 0,
+    "candidate_cases_passed": 19,
+    "baseline_log": "red-tests.log"
+  },
+  "failure_classification": [
+    {
+      "type": "expected_negative_test",
+      "detail": "19 planned S43 cases failed on baseline; BUG_ROUTE: not-a-bug planned slice"
+    },
+    {
+      "type": "test_precondition",
+      "detail": "Precommit vendoring test refused uncommitted source; committed candidate passed without changing the test or guard"
+    }
+  ],
+  "scope_corrections": [
+    "Three pre-existing absolute home paths in allowed AGENTS.md changed to equivalent $HOME paths to satisfy the portability gate; unrelated rules preserved."
+  ],
+  "bran_status": "hit",
+  "bran_refs": [
+    "AGENTS.md",
+    "skills/spec-authoring/SKILL.md",
+    "skills/setup-a-repo/SKILL.md",
+    "skills/release-process/SKILL.md"
+  ],
+  "lean_skill_outcome": "SUCCESS",
+  "trigger_evaluation": "Independent skill_trigger_checks; each of four skills request_1 MATCH and request_2 NO_MATCH; no implementation review",
+  "remaining_risks": [
+    "Reference detection is lexical; arbitrary named-document titles and actual anchor/remote URL correctness require author checking.",
+    "Later existing specification revisions must add changed sections and GitHub PR/diff or compare links.",
+    "Workspace-rule link assumes the dispatched worktree layout."
+  ],
+  "not_run": [
+    "Independent review",
+    "Merge",
+    "Release/publication"
+  ],
+  "developer_feedback": {
+    "observations": "no new observations",
+    "tools": [
+      "functions.exec",
+      "exec_command",
+      "apply_patch",
+      "collaboration.spawn_agent (trigger evaluation only)",
+      "verified pinned BRAN 0.2.0",
+      "installed skill-creator quick_validate.py",
+      "Python/pytest",
+      "Graphviz",
+      "git",
+      "gh REST API"
+    ]
+  }
+}

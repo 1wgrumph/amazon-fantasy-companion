@@ -1,0 +1,141 @@
+{
+  "verdict": "PASS",
+  "lease_id": "S09-g6",
+  "lifecycle": "AFC-2026-10-11",
+  "generation": 6,
+  "base_sha": "ad0f8576b58cf8b9acb5bc4592fb722496500aea",
+  "head_sha": "be366cc2612edfa56ef20ff018a35bd12d95f3af",
+  "changed_paths": [
+    "tools/ci/gate.sh",
+    "$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S09/g6"
+  ],
+  "product_changed_paths": [
+    "tools/ci/gate.sh"
+  ],
+  "candidate_binding": "Commands ran on base HEAD plus the exact g4 gate diff; committed gate blob sha256 matches verified gate sha256; commit parent matches leased baseline.",
+  "gate_sha256": "4a8d4873e5b43984631713a4957f01fe0b754d04edb4e873984d3796f3a8f100",
+  "commands": [
+    {
+      "command": "env -u GIT_INDEX_FILE -u GIT_DIR python3 -m unittest discover -s tools/ci/tests -v",
+      "exit_code": 0,
+      "head_sha": "ad0f8576b58cf8b9acb5bc4592fb722496500aea",
+      "output_tail": "ository (or any parent up to mount point /)\nStopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).\nok\ntest_repository_tracked_files_have_no_home_path (test_check_paths.AC_AFC_PATH_01.test_repository_tracked_files_have_no_home_path) ... ok\ntest_seeded_tracked_home_path_reported_and_untracked_ignored (test_check_paths.AC_AFC_PATH_01.test_seeded_tracked_home_path_reported_and_untracked_ignored) ... ok\ntest_ci_area_jobs_invoke_gate_with_their_area (test_gate.AC_AFC_CI_01.test_ci_area_jobs_invoke_gate_with_their_area) ... ok\ntest_docs_area_exits_1_on_seeded_broken_link (test_gate.AC_AFC_CI_01.test_docs_area_exits_1_on_seeded_broken_link) ... ok\ntest_git_hooks_invoke_gate_changed (test_gate.AC_AFC_CI_01.test_git_hooks_invoke_gate_changed) ... ok\ntest_hygiene_exits_0_on_clean_copy_and_1_on_seeded_finding (test_gate.AC_AFC_CI_01.test_hygiene_exits_0_on_clean_copy_and_1_on_seeded_finding) ... ok\ntest_list_prints_exactly_spec_docs_hygiene (test_gate.AC_AFC_CI_01.test_list_prints_exactly_spec_docs_hygiene) ... ok\ntest_missing_tools_spec_exits_3_with_gap (test_gate.AC_AFC_CI_01.test_missing_tools_spec_exits_3_with_gap) ... ok\ntest_unknown_area_exits_2 (test_gate.AC_AFC_CI_01.test_unknown_area_exits_2) ... ok\ntest_unknown_option_exits_2 (test_gate.AC_AFC_CI_01.test_unknown_option_exits_2) ... ok\ntest_fresh_build_passes_and_stale_build_exits_1 (test_gate.AC_AFC_CI_04_Spec.test_fresh_build_passes_and_stale_build_exits_1) ... ok\ntest_missing_dot_exits_3_with_gap (test_gate.AC_AFC_CI_04_Spec.test_missing_dot_exits_3_with_gap) ... ok\ntest_spec_lint_finding_exits_1 (test_gate.AC_AFC_CI_04_Spec.test_spec_lint_finding_exits_1) ... ok\ntest_template_self_check_passes_and_removes_temp_dir (test_gate.AC_AFC_CI_04_Spec.test_template_self_check_passes_and_removes_temp_dir) ... ok\ntest_hook_git_env_does_not_reach_sentinel_repo (test_gate_isolation.D1_HookEnvironmentIsolation.test_hook_git_env_does_not_reach_sentinel_repo) ... ok\ntest_ci_path_filters_cover_each_area (test_workflows.AC_AFC_CI_02.test_ci_path_filters_cover_each_area) ... ok\ntest_committed_workflows_pass_the_checker (test_workflows.AC_AFC_CI_02.test_committed_workflows_pass_the_checker) ... ok\ntest_each_violation_exits_1_naming_its_rule (test_workflows.AC_AFC_CI_02.test_each_violation_exits_1_naming_its_rule) ... ok\ntest_valid_fixture_passes (test_workflows.AC_AFC_CI_02.test_valid_fixture_passes) ... ok\n\n----------------------------------------------------------------------\nRan 33 tests in 3.668s\n\nOK\n"
+    },
+    {
+      "command": "bash tools/ci/gate.sh",
+      "exit_code": 0,
+      "head_sha": "ad0f8576b58cf8b9acb5bc4592fb722496500aea",
+      "output_tail": "gate: spec: PASS checks completed\ngate: docs: PASS checks completed\n.github/workflows/ci.yml: PASS\n.....fatal: not a git repository (or any parent up to mount point /)\nStopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).\n........fatal: not a git repository (or any parent up to mount point /)\nStopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).\n....................\n----------------------------------------------------------------------\nRan 33 tests in 3.408s\n\nOK\ngate: hygiene: PASS checks completed\n"
+    },
+    {
+      "command": "bash tools/ci/gate.sh --changed",
+      "exit_code": 0,
+      "head_sha": "ad0f8576b58cf8b9acb5bc4592fb722496500aea",
+      "output_tail": "gate: spec: PASS checks completed\ngate: docs: PASS checks completed\n.github/workflows/ci.yml: PASS\n.....fatal: not a git repository (or any parent up to mount point /)\nStopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).\n........fatal: not a git repository (or any parent up to mount point /)\nStopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).\n....................\n----------------------------------------------------------------------\nRan 33 tests in 3.489s\n\nOK\ngate: hygiene: PASS checks completed\n"
+    },
+    {
+      "command": "uv run --no-project --with 'coverage>=7,<8' --with 'diff-cover>=9,<10' sh -c 'coverage run --branch --source=tools/ci -m unittest discover -s tools/ci/tests && coverage xml -o $HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S09/g6/coverage-ci.xml && diff-cover $HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S09/g6/coverage-ci.xml --compare-branch=origin/main --include \"tools/ci/*.py\" --exclude tools/ci/check_workflows.py --fail-under=90'; rc=$?; echo \"exit=$rc\"; (exit $rc)",
+      "environment": {
+        "UV_OFFLINE": "1",
+        "UV_NO_CACHE": "1",
+        "UV_FIND_LINKS": "/tmp/afc-s09-g3-metrics-wheels-4onmfgui",
+        "UV_PYTHON": "/usr/bin/python3",
+        "PYTHONPATH": "/tmp/afc-s09-g3-metrics-wheels-4onmfgui/host-yaml",
+        "COVERAGE_RCFILE": "$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S09/g6/coverage.rc"
+      },
+      "exit_code": 0,
+      "head_sha": "ad0f8576b58cf8b9acb5bc4592fb722496500aea",
+      "output_tail": "Installed 7 packages in 2ms\n.....fatal: not a git repository (or any parent up to mount point /)\nStopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).\n........fatal: not a git repository (or any parent up to mount point /)\nStopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).\n....................\n----------------------------------------------------------------------\nRan 33 tests in 6.421s\n\nOK\nCombined 9 files, skipped 14\nWrote XML report to $HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S09/g6/coverage-ci.xml\n-------------\nDiff Coverage\nDiff: origin/main...HEAD, staged and unstaged changes\n-------------\ntools/ci/check_docs.py (100%)\ntools/ci/check_paths.py (100%)\ntools/ci/check_workflows.py (88.0%): Missing lines 24,48,67,89,94,110,133,142,156-157,168-169,172-173\n-------------\nTotal:   198 lines\nMissing: 14 lines\nCoverage: 92%\n-------------\n\nexit=0\n"
+    },
+    {
+      "command": [
+        "git",
+        "commit",
+        "--no-verify",
+        "-m",
+        "ci: isolate gate from inherited Git hook environment"
+      ],
+      "exit_code": 0,
+      "output_tail": "[afc/s09-gate be366cc] ci: isolate gate from inherited Git hook environment\n 1 file changed, 5 insertions(+)\n",
+      "head_sha": "be366cc2612edfa56ef20ff018a35bd12d95f3af"
+    },
+    {
+      "command": [
+        "git",
+        "log",
+        "--oneline",
+        "-3"
+      ],
+      "exit_code": 0,
+      "head_sha": "be366cc2612edfa56ef20ff018a35bd12d95f3af",
+      "output_tail": "be366cc ci: isolate gate from inherited Git hook environment\nad0f857 S09T g4: D1 fixture gives the invocation repo the origin/main base ref\n2b27576 S09T g3: D1 hook-env isolation regression (red) and D2 checker coverage tests\n",
+      "core_hooksPath": "unset"
+    },
+    {
+      "command": [
+        "git",
+        "push",
+        "--no-verify",
+        "origin",
+        "HEAD:afc/s09-gate-r2"
+      ],
+      "exit_code": 0,
+      "head_sha": "be366cc2612edfa56ef20ff018a35bd12d95f3af",
+      "output_tail": "To https://github.com/1wgrumph/amazon-fantasy-companion.git\n   ad0f857..be366cc  HEAD -> afc/s09-gate-r2\n"
+    },
+    {
+      "command": "python3 evidence/S09/g6/verify-hooks.py",
+      "exit_code": 0,
+      "head_sha": "ad0f8576b58cf8b9acb5bc4592fb722496500aea",
+      "output_tail": "f167435 ci: isolate shared gate from inherited Git locations\nad0f857 S09T g4: D1 fixture gives the invocation repo the origin/main base ref\n2b27576 S09T g3: D1 hook-env isolation regression (red) and D2 checker coverage tests\n",
+      "evidence": "hook-simulation.json; hook-simulation.log"
+    }
+  ],
+  "red_then_green": {
+    "test_id": "test_gate_isolation.D1_HookEnvironmentIsolation.test_hook_git_env_does_not_reach_sentinel_repo",
+    "red_receipt": "evidence/S09T/g3/return.json",
+    "green_receipt": "unittest.log; 33 tests, OK"
+  },
+  "coverage": {
+    "diff_cover_percent": 92,
+    "check_docs_percent": 100,
+    "check_paths_percent": 100,
+    "shell_coverage": "TOOL_MISSING: kcov absent; no shell-line coverage PASS claimed"
+  },
+  "hook_simulation": "PASS: explicitly invoked actual hook scripts with inherited Git environment, no-verify commit/push to local bare remote; clone index unchanged; log contains candidate plus expected S09T commits; hostile location vars still resolve and diff invocation linked worktree",
+  "shared_hooksPath": "unset; no shared git config changed",
+  "frozen_capabilities": {
+    "coverage_assist": {
+      "enabled": true,
+      "required": true
+    },
+    "deterministic_verification": {
+      "reverify": {
+        "enabled": true
+      }
+    }
+  },
+  "OCR": "not run: this packet does not authorize review",
+  "Reverify": "not applicable: shell repair, no compiled binary claim",
+  "failure_classification": "Resolved environment (committer identity) and harness (overbroad fixture-subject assertion); known plan-command exclude mismatch retained; no implementation failures. Details in verification-failures.json.",
+  "remaining_risks": [
+    "Known diff-cover 9.7.2 exclude-pattern defect counts vendored checker; unchanged and stricter 92% result passes.",
+    "Shell coverage TOOL_MISSING (kcov absent).",
+    "Automatic Git hook dispatch was not exercised: real scripts were invoked explicitly to preserve the packet requirement that every commit/push use --no-verify.",
+    "Pre-existing untracked Python cache directories preserved."
+  ],
+  "developer_feedback": {
+    "observations": "no new observations",
+    "tools": [
+      "bash",
+      "git",
+      "python3",
+      "uv",
+      "coverage.py",
+      "diff-cover"
+    ]
+  },
+  "BRAN": "unavailable: repository has no native policy",
+  "independent_review_or_assurance": "not performed; author deterministic verification only",
+  "stop": "Pushed authorized remote branch; no PR creation, review or merge."
+}
