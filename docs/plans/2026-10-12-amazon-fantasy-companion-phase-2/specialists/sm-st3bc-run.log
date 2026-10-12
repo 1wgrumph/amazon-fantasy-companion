@@ -1,0 +1,25 @@
+muse: workspace root: $HOME/alphazede/worktrees/amazon-fantasy-companion-spec-track (explicit)
+muse: workspace trust: trusted source=run-flag
+muse: Skills: 67 loaded · 1 warning
+muse:   `skills_catalog` was trimmed to fit its size limit (32 KB): 13 descriptions compacted, 0 skill ids omitted
+muse:   Run `muse skills list --source all` for full diagnostics.
+**READY** — ST-3b/ST-3c complete. Native textual SysML v2 models plus full UID allocation, all mechanically verified.
+
+**Changed paths** (write set only, uncommitted per authority):
+- [models/](docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/models/): `AFC-Structure.sysml`, `AFC-Interfaces.sysml`, `AFC-States.sysml`, `AFC-Data.sysml` (native sources), `view-{structure,interfaces,states,data}.svg` (derived projections), `views.md` (DEC-EMV-021 metadata), `allocation.md` (ST-3c mapping)
+- [sm-st3bc-receipt.md](docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/specialists/sm-st3bc-receipt.md)
+
+**Model revision digest:** `d16b0e3d0badb519dce178475a5a4b6694a736c0bbb0062d51a0270d64efb632` (sha256 over the four `.sysml` sources, sorted order; per-file digests in the receipt).
+
+**Evidence:** probe `st3bc_check.py` 18/18 OK — 65/65 UIDs allocated, 161/161 elements mapped (1 stated reason: `externals` grouping), zero dangling references, Table 1↔2 back-consistent, all SVGs XML-parse and cite the digest, C7 grep clean. Register cross-check: allocation UID set == register UID set both directions.
+
+**Typed gaps:** `CHECKER_UNAVAILABLE` — no SysML v2 parser installed (`syside: not found`, nothing on PATH); the RS `check` command was not run because this journey defines no profile/SEIT/design/receipt it requires. `S8-LEDGER-MISSING` — same non-blocking observation as ST-2 (OMG receipt content is embedded in the readable skill reference). No silent substitution: native sources + digest + derivation records exist; no normative-coverage claim made.
+
+**Risks:** unparsed `.sysml` may need small syntax repairs (trigger/multiplicity forms) once a parser exists; allocation unaffected.
+
+**Owner questions:** (1) Stick model/OS confirmed? (2) Yahoo application status? (3) AWS Free-plan account created? (4) First link-contract provider? (5) Install a SysML v2 parser for ST-4 conformance claims?
+
+**developer_feedback:** no new observations; tools: read_skill, file reads, sha256sum, grep, python3 probes, xml parses.
+
+Skipped: cross-package `import` bindings (self-contained packages + doc linkage instead; ST-4-or-later work). Risk: models are review-level, not parser-proven — ST-4 must not claim SysML conformance.
+exit=0

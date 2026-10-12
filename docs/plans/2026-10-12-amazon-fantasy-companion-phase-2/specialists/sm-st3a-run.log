@@ -1,0 +1,29 @@
+muse: workspace root: $HOME/alphazede/worktrees/amazon-fantasy-companion-spec-track (explicit)
+muse: workspace trust: trusted source=run-flag
+muse: Skills: 67 loaded · 1 warning
+muse:   `skills_catalog` was trimmed to fit its size limit (32 KB): 13 descriptions compacted, 0 skill ids omitted
+muse:   Run `muse skills list --source all` for full diagnostics.
+READY
+
+Paths (written, no commits, no other paths touched):
+- [sm-contextual-pass.md]($HOME/alphazede/worktrees/amazon-fantasy-companion-spec-track/docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/sm-contextual-pass.md)
+- [sm-st3a-receipt.md]($HOME/alphazede/worktrees/amazon-fantasy-companion-spec-track/docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/specialists/sm-st3a-receipt.md)
+
+Current flow: none — confirmed greenfield (`tv-app/`, `backend/` absent; plan defers their creation to Phase 2).
+
+Placements (all with planned repo-relative paths, each citing issue #1 / SD / plan):
+- TV app `tv-app/` (Kotlin/Compose, SD-003; starter layout verified via `gh api`): shell/nav, build config (minSdk 25), manifest, profile/settings UI, app detector, alert service + notifier, Watch launcher, lineup panel, Mode-A-only companion player.
+- Backend `backend/` (AWS serverless, SD-005/C4): SAM template, device auth, REST API, ESPN ingest + labeled replay/fixtures (C2), Yahoo OAuth + manual fallback (SD-007/C6), identity matcher, alert policy, provider resolver, panel service, SSM secrets.
+- Stores: DynamoDB (profiles, event cache/dedup), SSM SecureString, replay fixtures.
+- External: ESPN JSON, Yahoo API, manual entry, provider apps, Fire OS notification service, Alexa route (conditional, C8), device-link consumer.
+
+Interfaces for ST-3b: TV app ↔ backend API; backend ↔ ESPN; backend ↔ Yahoo; TV app → provider launch (six explicit outcomes from #1); TV app → Fire OS notifications; conditional Alexa; device-code flow; backend-internal ingest→matcher→policy chain; data interfaces GameEvent/alert/lineup/panel state/settings.
+
+Mode decision: `sysml-v2` — mandated by the approved plan's ST-3 row (structure, interface, state, data + view metadata, mapping after register PASS); V1..V3 stay reference-only; no silent Mermaid substitution. ST-3b must first check the sysml-modeling skill's local references or return TYPED_GAP.
+
+Open questions for the owner (listed): stick model/OS confirmation (C1); Yahoo application status (C6); AWS account created (SD-005); Mode A footage location (F12); first link-contract provider for the Phase 2 spike; license choice.
+
+developer_feedback: no new observations. Tools exercised: `read_skill` (systems-modeler, sysml-modeling), `gh api` (issue #1, starter contents), file reads (scope batch, technical plan, design.md, views.json, parent modeler receipt), read-only `ls`/`grep`.
+
+Skipped: deep starter source read (top-level layout only — enough for placement paths); risk: minSdk-25 and provider-contract assumptions stay unverified until the owner confirms the stick and Phase 2 spikes run.
+exit=0
