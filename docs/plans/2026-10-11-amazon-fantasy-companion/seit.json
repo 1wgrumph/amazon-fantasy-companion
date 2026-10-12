@@ -18,12 +18,12 @@
     "planning_inputs": [
       {
         "path": "docs/plans/2026-10-11-amazon-fantasy-companion/amazon-fantasy-companion-technical-plan.md",
-        "sha256": "0051816b697836e111a21ec7bf01a13ad9559eb239ad3aa8192deb2c185bc82c",
+        "sha256": "4dbaf7e00d1a956c329db3ce525ad0aae2f0b6cd0c37f738c64e86193991fe07",
         "binding_status": "bound"
       },
       {
         "path": "docs/plans/2026-10-11-amazon-fantasy-companion/design.md",
-        "sha256": "4b397fb81756115e07fdd630c78e57dafd6e2f0a9ec97af568ddec43275e57ca",
+        "sha256": "7c53f5eb93c8341f9db9c5f38f5740bdea1222760ef2419223b7527ef32923d3",
         "binding_status": "bound"
       },
       {
@@ -72,7 +72,10 @@
       "DEC-AFC-SD-022": "confirmed",
       "DEC-AFC-SD-023": "confirmed",
       "DEC-AFC-SD-024": "confirmed",
-      "DEC-AFC-SD-025": "confirmed"
+      "DEC-AFC-SD-025": "confirmed",
+      "DEC-AFC-SD-026": "confirmed",
+      "DEC-AFC-SD-027": "confirmed",
+      "DEC-AFC-SD-028": "confirmed"
     },
     "superseded": {
       "DEC-AFC-SD-013": "DEC-AFC-SD-022"
@@ -104,7 +107,7 @@
       },
       {
         "id": "OD-AFC-12",
-        "status": "open_for_integrated_review"
+        "status": "closed_by DEC-AFC-SD-027"
       },
       {
         "id": "OA-AFC-A2",
@@ -180,7 +183,7 @@
         "used_by": "CMD-D5-TEST, CMD-D5-AGNOSTIC, CMD-SPEC-VENDOR, CMD-GATE-SPEC"
       },
       {
-        "id": "create-lean-skill skill_size_max and matching/non-matching check",
+        "id": "create-lean-skill skill_size_max and matching/non-matching check, realized with the Alphazedehq stock skill-test pattern (skills/release-process/tests/test_release_process.py; DEC-AFC-SD-026)",
         "source": "technical plan §Glossary",
         "used_by": "CMD-SKILL-SIZE, CMD-SKILL-TRIGGER"
       }
@@ -296,10 +299,10 @@
   },
   "vv_methods": {
     "methods": {
-      "test": "unittest (tools/ci), pytest via uv (Alphazedehq skills), bash test scripts (Alphazedehq setup-pre-commit, ship-pull-request, hooks)",
+      "test": "unittest (tools/ci), pytest via uv from scanned wheels, offline (Alphazedehq skills), per-skill stock unittest (CMD-SKILL-SIZE), bash test scripts (Alphazedehq setup-pre-commit, ship-pull-request, hooks)",
       "inspection": "deterministic grep/diff/gh readbacks over files, records and GitHub state; human inspection only where marked PROC-*",
       "demonstration": "CMD-HOOK-DEMO in each wired harness; CMD-PR-CHECKS on live Actions runs",
-      "evaluation": "LLM skill-activation probes (CMD-SKILL-TRIGGER)",
+      "evaluation": "recorded trigger classification (CMD-SKILL-TRIGGER): an independent evaluator session classifies tests/trigger-requests.json; the per-skill unittest checks the results file",
       "analysis": "not used in Phase 1"
     },
     "reverify": "Reverify: not applicable — Phase 1 changes are skill text, shell and Python scripts and workflow YAML; no compiled binary is built or claimed. Profile setting deterministic_verification.reverify is enabled and preserved; no proof row selects it.",
@@ -330,11 +333,12 @@
   ],
   "environments_fixtures_data_simulations_support": {
     "host": "owner workstation: uv 0.11.6, python3 (jsonschema 4.19.2), Graphviz dot, gh, jq, git, shellcheck, claude, ocr v1.12.13, reverify present; kcov, mutmut and diff-cover absent on 2026-10-11 (coverage/mutation tools are fetched by uv after CMD-SCAN; shell coverage and shell mutation are TOOL_MISSING)",
-    "repositories": "this repository (lane worktrees under worktrees/amazon-fantasy-companion-<lane>-<slice>); alphazede/Alphazedehq slice worktrees and the leased main checkout (alphazedehq-main-checkout)",
+    "repositories": "this repository (lane worktrees under worktrees/amazon-fantasy-companion-<lane>-<slice>); alphazede/Alphazedehq slice worktrees and the leased main checkout (alphazedehq-main-checkout); alphazede/requirements-system slice worktree for S06's reciprocal non-trigger edit only (<workspace>/worktrees/requirements-system-afc-s06-nontrigger; DEC-AFC-SD-028)",
     "fixtures": "credential and path fixtures are generated at test time inside tools/ci/tests (never literal secrets committed); workflow violation fixtures per AC-AFC-CI-02 rule; a temp HOME fixture for installer tests; fixture spec/<name>/ directories created in temp dirs",
     "hermeticity": "gate and skill tests run in temp dirs without network; only CMD-PR-CHECKS, CMD-NO-MILESTONE, PROC-ACTIONS-BUDGET and CMD-MERGE-IDENTITY read GitHub; mutation runs only in the slice worktree and must leave git diff clean",
     "simulations": "none",
-    "evidence_dirs": "<evidence_dir> = the slice or step receipt directory recorded in journey.json execution_receipts; <review_dir>/<review_evidence_dir> = the Reviewer evidence store; evidence/phase2-entry-receipt.json = docs/plans/2026-10-11-amazon-fantasy-companion/evidence/phase2-entry-receipt.json (IE-P1-F08)"
+    "evidence_dirs": "<evidence_dir> = the slice or step receipt directory recorded in journey.json execution_receipts; <review_dir>/<review_evidence_dir> = the Reviewer evidence store; evidence/phase2-entry-receipt.json = docs/plans/2026-10-11-amazon-fantasy-companion/evidence/phase2-entry-receipt.json (IE-P1-F08)",
+    "python_wheels": "<afc_uv_env> = UV_OFFLINE=1 UV_NO_CACHE=1 UV_FIND_LINKS=<wheel_dir> UV_PYTHON=\"$(command -v python3)\"; <wheel_dir> is a host directory outside every repository filled once by `python3 -m pip download --only-binary=:all: --dest <wheel_dir> 'pytest==9.0.3' 'pyyaml==6.0.3'` (the closure adds iniconfig, packaging, pluggy, pygments) and scanned by CMD-SCAN before first use; the scan receipt records `sha256sum <wheel_dir>/*.whl` (DEC-AFC-SD-026 item 3); offline with no cache, only <wheel_dir> satisfies a requirement, so an unscanned cached wheel can never be used (an empty or missing <wheel_dir> fails resolution, fail closed)"
   },
   "procedures_and_commands": [
     {
@@ -482,7 +486,7 @@
     },
     {
       "id": "CMD-D4B-TEST",
-      "command": "uv run --no-project --with 'pytest>=8,<10' --with 'pyyaml>=6,<7' python -m pytest skills/setup-a-repo/tests/test_check_workflows.py -rA && python3 skills/setup-a-repo/scripts/check-workflows.py skills/setup-a-repo/templates/ci.yml; echo \"exit=$?\"",
+      "command": "env <afc_uv_env> uv run --no-project --with 'pytest==9.0.3' --with 'pyyaml==6.0.3' python -m pytest skills/setup-a-repo/tests/test_check_workflows.py -rA && python3 skills/setup-a-repo/scripts/check-workflows.py skills/setup-a-repo/templates/ci.yml; echo \"exit=$?\"",
       "pass": "exit 0; the tests hold one violating fixture per AC-AFC-CI-02 rule, each exiting 1; the shipped template passes the checker",
       "description": "D4-B checker tests (AC-AFC-D4-02).",
       "repository": "Alphazedehq (slice worktree of alphazede/Alphazedehq)",
@@ -490,7 +494,7 @@
         "S02",
         "Wave 1 S02 merge"
       ],
-      "tool_availability_2026_10_11": "yes (uv; pytest/pyyaml fetched by uv, CMD-SCAN receipt at first use)"
+      "tool_availability_2026_10_11": "yes (uv 0.11.6); pytest/pyyaml wheels from the scanned <wheel_dir> (<afc_uv_env>), offline"
     },
     {
       "id": "CMD-D4C-TEST",
@@ -506,9 +510,9 @@
     },
     {
       "id": "CMD-SKILL-SIZE",
-      "command": "test $(wc -l < <skill_dir>/SKILL.md) -lt 60 && test $(wc -w < <skill_dir>/SKILL.md) -lt 650 && ! grep -n '\\[TODO\\]' <skill_dir>/SKILL.md && python3 <skill_creator_scripts>/quick_validate.py <skill_dir>; echo \"exit=$?\"",
-      "pass": "exit 0: SKILL.md < 60 lines and < 650 words (skill_size_max, frontmatter included), no [TODO], skill-creator quick_validate passes",
-      "description": "create-lean-skill size and structure check per changed skill.",
+      "command": "python3 -m unittest discover -s <skill_dir>/tests -t <skill_dir>/tests -p 'test_<skill_snake>.py' -k test_creator_validation_and_repository_metadata -v && test \"$(sha256sum < <alphazedehq_checkout>/tools/bran/runtime/bran | cut -d' ' -f1)\" = \"$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1]))[\"sha256\"])' <alphazedehq_checkout>/tools/bran/runtime/bran-release-pin.json)\" && <alphazedehq_checkout>/tools/bran/runtime/bran check . bran-strict; echo \"exit=$?\"",
+      "pass": "exit 0: the per-skill unit test skills/<skill>/tests/test_<skill_snake>.py (Alphazedehq stock pattern, skills/release-process/tests/test_release_process.py) passes test_creator_validation_and_repository_metadata: SKILL.md < 60 lines and < 650 words (skill_size_max, frontmatter included; S41 router < 25 lines), no [TODO], frontmatter name equals the skill and the required HQ fields type, title, okf_status and tags are non-empty, and the installed skill-creator quick_validate.py ($HOME/.codex/skills/.system/skill-creator/scripts/quick_validate.py, run with check=True) passes on a temporary copy holding only the portable fields (name, description, license, allowed-tools, metadata) and the unchanged body; then the pinned BRAN runtime matches bran-release-pin.json and `bran check . bran-strict` exits 0 on the slice worktree, validating the complete repository document. quick_validate is never run on the repository SKILL.md itself (it rejects the required HQ fields). python3 with PyYAML is the host's installed interpreter (unchanged local tool, as the stock test uses); `import yaml` failing is typed gap TOOL_MISSING",
+      "description": "Shared-skill size, metadata and portable-field validation per the Alphazedehq stock pattern (DEC-AFC-SD-026): per-skill unittest + quick_validate on a temp portable-fields copy + BRAN bran-strict.",
       "repository": "Alphazedehq (slice worktree of alphazede/Alphazedehq)",
       "used_by": [
         "S01",
@@ -517,14 +521,14 @@
         "S06",
         "S41"
       ],
-      "tool_availability_2026_10_11": "yes (skill-creator quick_validate.py present in the plugin cache)"
+      "tool_availability_2026_10_11": "yes (host python3 with PyYAML 6.0.3; skill-creator quick_validate.py; pinned BRAN 0.2.0 runtime, sha256 matches its pin on 2026-10-12)"
     },
     {
       "id": "CMD-SKILL-TRIGGER",
-      "command": "cd \"$(mktemp -d)\" && claude -p '<request_text>' --output-format stream-json --verbose --max-turns 1 --allowedTools Skill < /dev/null | jq -r 'select(.type==\"assistant\") | .message.content[]? | select(.type==\"tool_use\" and .name==\"Skill\") | .input.skill' > <evidence_dir>/trigger-<skill>-<matching|nonmatching>.txt",
-      "pass": "matching request: the evidence file names the skill under test; non-matching request: it names the stated peer (or nothing) and never the skill under test; request text, harness version and raw output recorded; a harness refusal or usage limit is a typed gap with the exact error",
-      "description": "create-lean-skill matching/non-matching activation evaluation (method evaluation; LLM selection is evaluated, not deterministically proven). Requests: gate_declarations.spec_and_docs.trigger_requests.",
-      "repository": "Alphazedehq (slice worktree of alphazede/Alphazedehq) (scratch directory, fresh session per request)",
+      "command": "e=$(mktemp -d) && cp <skill_dir>/SKILL.md <skill_dir>/tests/trigger-requests.json \"$e\"/ && (cd \"$e\" && claude --version > harness-version.txt && claude -p 'You are an independent skill-routing evaluator. Read SKILL.md and trigger-requests.json in this directory. For each request id, answer MATCH if an agent with this skill installed should use it for that request according to its description, otherwise NO_MATCH. Reply with only a JSON object mapping every request id to MATCH or NO_MATCH.' --output-format json --max-turns 5 --allowedTools Read --disallowedTools Bash,Write,Edit,WebFetch,WebSearch < /dev/null > session.json && jq -r .result session.json | python3 -c 'import json,sys; t=sys.stdin.read(); print(json.dumps(json.loads(t[t.index(\"{\"):t.rindex(\"}\")+1])))' > results.json) && cp \"$e\"/results.json <evidence_dir>/trigger-results-<skill>.json && cp \"$e\"/harness-version.txt \"$e\"/session.json <evidence_dir>/ && <SKILL_PREFIX>_TRIGGER_RESULTS=<evidence_dir>/trigger-results-<skill>.json python3 -m unittest discover -s <skill_dir>/tests -t <skill_dir>/tests -p 'test_<skill_snake>.py' -k test_trigger_classifications -v; echo \"exit=$?\"",
+      "pass": "exit 0: skills/<skill>/tests/trigger-requests.json holds request_1 = the matching request and request_2 = the non-matching request of gate_declarations.spec_and_docs.trigger_requests.<skill>; a fresh evaluator session that is not the authoring session receives only SKILL.md and trigger-requests.json (never the checker) with Read as its only tool (no permission bypass, no Bash, Write, Edit or web tools; least privilege) and prints the classification, which the command extracts from session.json into the results file; test_trigger_classifications asserts the result keys equal the request keys and the results equal {request_1: MATCH, request_2: NO_MATCH}. The results file, harness version and session output are evidence, not committed (stock: <SKILL_PREFIX>_TRIGGER_RESULTS points outside the repository; <SKILL_PREFIX> is the upper-snake skill name, e.g. SETUP_PRE_COMMIT). S06 reciprocal (DEC-AFC-SD-028): the same evaluator run on the requirements-system worktree's skills/use-requirements-system/SKILL.md with spec-authoring's trigger-requests.json writes <evidence_dir>/trigger-results-use-requirements-system.json, checked by `python3 -c 'import json,sys; assert json.load(open(sys.argv[1]))=={\"request_1\":\"NO_MATCH\",\"request_2\":\"MATCH\"}' <file>`. A harness refusal or usage limit is a typed gap with the exact error",
+      "description": "Recorded trigger classification per the Alphazedehq stock pattern (DEC-AFC-SD-026): tests/trigger-requests.json + an independent evaluator's results file checked by the per-skill unittest; replaces the 1-turn live harness probe (method evaluation; LLM classification is evaluated, not deterministically proven).",
+      "repository": "Alphazedehq (slice worktree of alphazede/Alphazedehq); evaluator in a scratch directory, fresh session",
       "used_by": [
         "S01",
         "S02",
@@ -532,23 +536,23 @@
         "S06",
         "S41"
       ],
-      "tool_availability_2026_10_11": "yes (claude, jq)"
+      "tool_availability_2026_10_11": "yes (claude, jq, python3)"
     },
     {
       "id": "CMD-D5-TEST",
-      "command": "uv run --no-project --with 'pytest>=8,<10' --with 'pyyaml>=6,<7' python -m pytest skills/spec-authoring/tests -rA; echo \"exit=$?\"",
-      "pass": "exit 0, 0 failed, 0 errors; the tests include: build, lint and diagram on the template; vendor.sh copy + VENDORED.md fields (source repository, commit, MIT notice) + refusal to overwrite a modified vendored copy; description names SDoc/StrictDoc/Requirements System documents as non-triggers and cites requirements-engineering by reference",
+      "command": "env <afc_uv_env> uv run --no-project --with 'pytest==9.0.3' --with 'pyyaml==6.0.3' python -m pytest skills/spec-authoring/tests --ignore=skills/spec-authoring/tests/test_spec_authoring.py -rA; echo \"exit=$?\"",
+      "pass": "exit 0, 0 failed, 0 errors; the tests include: build, lint and diagram on the template; vendor.sh copy + VENDORED.md fields (source repository, commit, MIT notice) + refusal to overwrite a modified vendored copy; description names SDoc/StrictDoc/Requirements System documents as non-triggers and cites requirements-engineering by reference; test_spec_authoring.py (the stock size/trigger unittest) runs under CMD-SKILL-SIZE and CMD-SKILL-TRIGGER, not pytest",
       "description": "D5 tool and skill-contract tests (AC-AFC-D5-01..04).",
       "repository": "Alphazedehq (slice worktree of alphazede/Alphazedehq)",
       "used_by": [
         "S06",
         "Wave 1 S06 merge"
       ],
-      "tool_availability_2026_10_11": "yes (uv, dot)"
+      "tool_availability_2026_10_11": "yes (uv 0.11.6); pytest/pyyaml wheels from the scanned <wheel_dir> (<afc_uv_env>), offline"
     },
     {
       "id": "CMD-D5-AGNOSTIC",
-      "command": "t=$(mktemp -d) && cp -r skills/spec-authoring/template \"$t/spec\" && (cd \"$t\" && ! git rev-parse --git-dir 2>/dev/null) && uv run --script skills/spec-authoring/scripts/spec_build.py \"$t/spec\" \"$t/out.md\" && uv run --script skills/spec-authoring/scripts/spec_lint.py \"$t/spec\" && uv run --script skills/spec-authoring/scripts/diagram.py lint \"$t/spec\" && ! grep -rniE 'gridmarket|--project backend' skills/spec-authoring --exclude=LICENSE-gridmarket --exclude-dir=references --exclude=vendor.sh && ! grep -rnE '(/home/|/Users/)[A-Za-z0-9._-]+/|[A-Za-z]:\\\\Users\\\\' skills/spec-authoring && grep -q 'Permission is hereby granted' skills/spec-authoring/LICENSE-gridmarket; echo \"exit=$?\"",
+      "command": "t=$(mktemp -d) && cp -r skills/spec-authoring/template \"$t/spec\" && (cd \"$t\" && ! git rev-parse --git-dir 2>/dev/null) && env <afc_uv_env> uv run --script skills/spec-authoring/scripts/spec_build.py \"$t/spec\" \"$t/out.md\" && env <afc_uv_env> uv run --script skills/spec-authoring/scripts/spec_lint.py \"$t/spec\" && env <afc_uv_env> uv run --script skills/spec-authoring/scripts/diagram.py lint \"$t/spec\" && ! grep -rniE 'gridmarket|--project backend' skills/spec-authoring --exclude=LICENSE-gridmarket --exclude-dir=references --exclude=vendor.sh && ! grep -rnE '(/home/|/Users/)[A-Za-z0-9._-]+/|[A-Za-z]:\\\\Users\\\\' skills/spec-authoring && grep -q 'Permission is hereby granted' skills/spec-authoring/LICENSE-gridmarket; echo \"exit=$?\"",
       "pass": "exit 0: the template builds and lints with zero findings in a non-git temp dir using only uv --script and dot; no GridMarket name, document id or --project backend in operational text, templates or tool invocation (license, attribution and provenance records excepted: LICENSE-gridmarket, references/vendoring.md provenance, vendor.sh MIT notice text); no absolute home path; MIT notice retained; diagram exit 3 (dot missing) is a typed gap",
       "description": "D5 repo-agnostic check (AC-AFC-D5-01, AC-AFC-D5-02). The provenance exclusions are reviewed by the Reviewer: a GridMarket name inside an excluded file is allowed only in a license, attribution or provenance sentence.",
       "repository": "Alphazedehq (slice worktree of alphazede/Alphazedehq)",
@@ -560,8 +564,8 @@
     },
     {
       "id": "CMD-D4-AGNOSTIC",
-      "command": "! git grep -nIiE '1wgrumph|alphazede/|amazon-fantasy-companion|gridmarket|betbot|\\bpilot\\b|exclusion' -- skills/setup-pre-commit skills/setup-a-repo skills/ship-pull-request ':!skills/ship-pull-request/references/GATES.md' <hook_paths_if_merged> <s41_path_if_dispatched>; echo \"exit=$?\"",
-      "pass": "exit 0 (no match); GATES.md rows are gate data and are excluded by design (DES-AFC-D4); <hook_paths_if_merged> = hooks/ci-gate-hook.sh hooks/install-ci-gate-hook.py hooks/README.md at S11",
+      "command": "! git grep -nIiE '1wgrumph|alphazede/|amazon-fantasy-companion|gridmarket|betbot|\\bpilot\\b|exclusion' -- <slice_paths> ':!skills/ship-pull-request/references/GATES.md'; echo \"exit=$?\"",
+      "pass": "exit 0 (no match). Per slice, <slice_paths> is that slice's own write set only: S01 skills/setup-pre-commit; S02 skills/setup-a-repo; S03 skills/ship-pull-request; S11 hooks/ci-gate-hook.sh hooks/install-ci-gate-hook.py hooks/README.md; S41 skills/ci-cd. A match in another slice's directory is that slice's finding, never this slice's failure. Combined run only at the Wave 1 exit, on the Alphazedehq main checkout after S01, S02 and S03 merge: <slice_paths> = skills/setup-pre-commit skills/setup-a-repo skills/ship-pull-request. GATES.md rows are gate data and are excluded by design (DES-AFC-D4)",
       "description": "D4 text names no repository, owner, pilot or exclusion (AC-AFC-D4-06).",
       "repository": "Alphazedehq (slice worktree of alphazede/Alphazedehq)",
       "used_by": [
@@ -569,7 +573,8 @@
         "S02",
         "S03",
         "S11",
-        "S41"
+        "S41",
+        "Wave 1 exit (combined, after S01..S03 merge)"
       ],
       "tool_availability_2026_10_11": "yes"
     },
@@ -746,9 +751,10 @@
       "id": "CMD-SCAN",
       "command": "Run the scan-software-supply-chain skill procedure on <artifact> (origin, version or commit, intended command) and write its report to <evidence_dir>/scan-<artifact>.md; then: grep -qE '^verdict: (PASS|BLOCK|INDETERMINATE)$' <evidence_dir>/scan-<artifact>.md && grep -qE '^verdict: PASS$' <evidence_dir>/scan-<artifact>.md; echo \"exit=$?\"",
       "pass": "exit 0: a PASS receipt exists before first use of the artifact; BLOCK or INDETERMINATE refuses use (fail closed); an artifact used without a receipt dated before its first use fails",
-      "description": "scan-software-supply-chain receipt (RISK-AFC-13). Phase 1 acquisitions: the GridMarket source at its pinned commit (S06); uv-fetched PyPI packages pyyaml, pytest, coverage, diff-cover, mutmut (S02, S06, S09, S11); each SHA-pinned GitHub Action in ci.yml (S09); uv and Graphviz (receipt on record or a new scan). Alphazedehq hooks/scan-supply-chain.sh is an advisory routing hook, not a scanner (TE-P1-F03).",
+      "description": "scan-software-supply-chain receipt (RISK-AFC-13). Phase 1 acquisitions: the GridMarket source at its pinned commit (S06); the pinned pytest==9.0.3 + pyyaml==6.0.3 wheel closure in <wheel_dir> (S02, S06; consumed offline through <afc_uv_env>), uv-fetched coverage, diff-cover, mutmut (S09, S11); each SHA-pinned GitHub Action in ci.yml (S09); uv and Graphviz (receipt on record or a new scan). Alphazedehq hooks/scan-supply-chain.sh is an advisory routing hook, not a scanner (TE-P1-F03).",
       "repository": "host (receipts under the slice evidence directory)",
       "used_by": [
+        "S02",
         "S06",
         "S09",
         "first use of each listed acquisition"
@@ -1059,10 +1065,10 @@
       "Acceptance/risk ID": "AC-AFC-D5-01",
       "Design/contract ID": "DES-AFC-D5",
       "Boundary/test layer": "skill text",
-      "Positive case": "skills/spec-authoring/SKILL.md < 60 lines and < 650 words; quick_validate passes",
-      "Negative/failure case": "60 or more lines, 650 or more words, or a quick_validate error fails",
+      "Positive case": "skills/spec-authoring/SKILL.md < 60 lines and < 650 words; required HQ fields present; quick_validate passes on the portable-fields copy; bran-strict exit 0",
+      "Negative/failure case": "60 or more lines, 650 or more words, a missing HQ field, a quick_validate error on the portable copy or a bran-strict finding fails",
       "Command/procedure ID": "CMD-SKILL-SIZE",
-      "Evidence": "CMD-SKILL-SIZE output (wc + quick_validate), exit=0"
+      "Evidence": "CMD-SKILL-SIZE output (stock unittest + bran-strict), exit=0"
     },
     {
       "SEIT row ID": "SEIT-AFC-D5-02",
@@ -1082,7 +1088,7 @@
       "Positive case": "'write the architecture spec for this repo as Markdown sections and build it' selects spec-authoring",
       "Negative/failure case": "'publish the SDoc revision to the Requirements System workbench' selects use-requirements-system, never spec-authoring (RISK-AFC-15)",
       "Command/procedure ID": "CMD-SKILL-TRIGGER",
-      "Evidence": "trigger-spec-authoring-matching.txt and trigger-spec-authoring-nonmatching.txt with request text and harness version"
+      "Evidence": "trigger-results-spec-authoring.json (+ trigger-results-use-requirements-system.json, inverse) with harness version and session output"
     },
     {
       "SEIT row ID": "SEIT-AFC-D5-03.I",
@@ -1162,7 +1168,7 @@
       "Positive case": "setup-pre-commit SKILL.md within skill_size_max and free of [TODO]",
       "Negative/failure case": "[TODO] present or size over the limit fails",
       "Command/procedure ID": "CMD-SKILL-SIZE",
-      "Evidence": "CMD-SKILL-SIZE output, exit=0"
+      "Evidence": "CMD-SKILL-SIZE output (stock unittest + bran-strict), exit=0"
     },
     {
       "SEIT row ID": "SEIT-AFC-D4-02.T",
@@ -1182,7 +1188,7 @@
       "Positive case": "setup-a-repo SKILL.md below 60 lines (exactly 60 today) and 650 words",
       "Negative/failure case": "60 lines fails",
       "Command/procedure ID": "CMD-SKILL-SIZE",
-      "Evidence": "CMD-SKILL-SIZE output, exit=0"
+      "Evidence": "CMD-SKILL-SIZE output (stock unittest + bran-strict), exit=0"
     },
     {
       "SEIT row ID": "SEIT-AFC-D4-03.T",
@@ -1202,7 +1208,7 @@
       "Positive case": "ship-pull-request SKILL.md drops from 82 lines to < 60 lines and < 650 words",
       "Negative/failure case": "size over the limit fails",
       "Command/procedure ID": "CMD-SKILL-SIZE",
-      "Evidence": "CMD-SKILL-SIZE output, exit=0"
+      "Evidence": "CMD-SKILL-SIZE output (stock unittest + bran-strict), exit=0"
     },
     {
       "SEIT row ID": "SEIT-AFC-D4-04.U",
@@ -1262,7 +1268,7 @@
       "Positive case": "each changed D4 skill is selected by its matching request before merge",
       "Negative/failure case": "its non-matching request selects the named peer (or none), never the skill",
       "Command/procedure ID": "CMD-SKILL-TRIGGER",
-      "Evidence": "trigger evidence files per skill, dated before the PR mergedAt"
+      "Evidence": "trigger-results-<skill>.json per skill with harness version, dated before the PR mergedAt"
     },
     {
       "SEIT row ID": "SEIT-AFC-D4-06",
@@ -1272,7 +1278,7 @@
       "Positive case": "no repository, owner, pilot or exclusion that scopes the capability is named in D4 skill or hook text",
       "Negative/failure case": "any match outside GATES.md fails",
       "Command/procedure ID": "CMD-D4-AGNOSTIC",
-      "Evidence": "CMD-D4-AGNOSTIC output, exit=0, per PR"
+      "Evidence": "CMD-D4-AGNOSTIC output, exit=0, per PR on its own paths, plus the combined Wave 1 exit run"
     },
     {
       "SEIT row ID": "SEIT-AFC-CI-01.U",
@@ -1572,7 +1578,7 @@
       "Positive case": "the matching and non-matching requests show no collision between spec-authoring and use-requirements-system",
       "Negative/failure case": "a collision is recorded with the failing requests and repaired in the D5 repair round; use-requirements-system is edited only per the OD-AFC-07 disposition",
       "Command/procedure ID": "CMD-SKILL-TRIGGER",
-      "Evidence": "trigger evidence for spec-authoring (and use-requirements-system if edited)"
+      "Evidence": "trigger-results-spec-authoring.json and trigger-results-use-requirements-system.json (requirements-system PR candidate)"
     },
     {
       "SEIT row ID": "SEIT-AFC-RISK-16",
@@ -1629,15 +1635,15 @@
         "Lifecycle-local requirement AC-AFC-D5-01 from the technical plan; Requirements Engineer Phase 1 gate PASS (specialists/requirements-engineer-receipt-p1.md, round 2); planning inputs bound by sha256 in source_baseline"
       ],
       "stimulus_or_procedure": "Run CMD-SKILL-SIZE on the exact candidate of S06 and capture its output with the candidate SHA.",
-      "expected_result": "skills/spec-authoring/SKILL.md < 60 lines and < 650 words; quick_validate passes",
-      "observable_evidence": "CMD-SKILL-SIZE output (wc + quick_validate), exit=0",
+      "expected_result": "skills/spec-authoring/SKILL.md < 60 lines and < 650 words; required HQ fields present; quick_validate passes on the portable-fields copy; bran-strict exit 0",
+      "observable_evidence": "CMD-SKILL-SIZE output (stock unittest + bran-strict), exit=0",
       "pass_fail_rule": "PASS iff CMD-SKILL-SIZE's pass rule holds on the exact candidate and the expected result is observed in the evidence; FAIL when the negative case is observed; a missing tool, missing file, unreachable host or not_run outcome is a typed gap, never PASS",
       "method_fields": {
         "reverify": "Reverify: not applicable — Phase 1 changes are skill text, shell and Python scripts and workflow YAML; no compiled binary is built or claimed",
         "slice": "S06",
         "lane": "spec-and-docs (tech-writing, single_implementer)"
       },
-      "negative_or_failure_case": "60 or more lines, 650 or more words, or a quick_validate error fails",
+      "negative_or_failure_case": "60 or more lines, 650 or more words, a missing HQ field, a quick_validate error on the portable copy or a bran-strict finding fails",
       "boundary_test_layer": "skill text"
     },
     {
@@ -1674,14 +1680,15 @@
       ],
       "stimulus_or_procedure": "Run CMD-SKILL-TRIGGER on the exact candidate of S06 and capture its output with the candidate SHA.",
       "expected_result": "'write the architecture spec for this repo as Markdown sections and build it' selects spec-authoring",
-      "observable_evidence": "trigger-spec-authoring-matching.txt and trigger-spec-authoring-nonmatching.txt with request text and harness version",
+      "observable_evidence": "trigger-results-spec-authoring.json (+ trigger-results-use-requirements-system.json, inverse) with harness version and session output",
       "pass_fail_rule": "PASS iff CMD-SKILL-TRIGGER's pass rule holds on the exact candidate and the expected result is observed in the evidence; FAIL when the negative case is observed; a missing tool, missing file, unreachable host or not_run outcome is a typed gap, never PASS",
       "method_fields": {
         "reverify": "Reverify: not applicable — Phase 1 changes are skill text, shell and Python scripts and workflow YAML; no compiled binary is built or claimed",
         "slice": "S06",
         "lane": "spec-and-docs (tech-writing, single_implementer)",
         "requests": "gate_declarations.spec_and_docs.trigger_requests.spec-authoring",
-        "ceiling": "LLM skill selection is evaluated, not deterministically proven"
+        "ceiling": "LLM skill selection is evaluated, not deterministically proven",
+        "reciprocal": "use-requirements-system lives in alphazede/requirements-system (Alphazedehq symlinks it); S06 edits it in a requirements-system worktree with its own PR (DEC-AFC-SD-028)"
       },
       "negative_or_failure_case": "'publish the SDoc revision to the Requirements System workbench' selects use-requirements-system, never spec-authoring (RISK-AFC-15)",
       "boundary_test_layer": "skill activation (fresh harness session)"
@@ -1855,7 +1862,7 @@
       ],
       "stimulus_or_procedure": "Run CMD-SKILL-SIZE on the exact candidate of S01 and capture its output with the candidate SHA.",
       "expected_result": "setup-pre-commit SKILL.md within skill_size_max and free of [TODO]",
-      "observable_evidence": "CMD-SKILL-SIZE output, exit=0",
+      "observable_evidence": "CMD-SKILL-SIZE output (stock unittest + bran-strict), exit=0",
       "pass_fail_rule": "PASS iff CMD-SKILL-SIZE's pass rule holds on the exact candidate and the expected result is observed in the evidence; FAIL when the negative case is observed; a missing tool, missing file, unreachable host or not_run outcome is a typed gap, never PASS",
       "method_fields": {
         "reverify": "Reverify: not applicable — Phase 1 changes are skill text, shell and Python scripts and workflow YAML; no compiled binary is built or claimed",
@@ -1899,7 +1906,7 @@
       ],
       "stimulus_or_procedure": "Run CMD-SKILL-SIZE on the exact candidate of S02 and capture its output with the candidate SHA.",
       "expected_result": "setup-a-repo SKILL.md below 60 lines (exactly 60 today) and 650 words",
-      "observable_evidence": "CMD-SKILL-SIZE output, exit=0",
+      "observable_evidence": "CMD-SKILL-SIZE output (stock unittest + bran-strict), exit=0",
       "pass_fail_rule": "PASS iff CMD-SKILL-SIZE's pass rule holds on the exact candidate and the expected result is observed in the evidence; FAIL when the negative case is observed; a missing tool, missing file, unreachable host or not_run outcome is a typed gap, never PASS",
       "method_fields": {
         "reverify": "Reverify: not applicable — Phase 1 changes are skill text, shell and Python scripts and workflow YAML; no compiled binary is built or claimed",
@@ -1943,7 +1950,7 @@
       ],
       "stimulus_or_procedure": "Run CMD-SKILL-SIZE on the exact candidate of S03 and capture its output with the candidate SHA.",
       "expected_result": "ship-pull-request SKILL.md drops from 82 lines to < 60 lines and < 650 words",
-      "observable_evidence": "CMD-SKILL-SIZE output, exit=0",
+      "observable_evidence": "CMD-SKILL-SIZE output (stock unittest + bran-strict), exit=0",
       "pass_fail_rule": "PASS iff CMD-SKILL-SIZE's pass rule holds on the exact candidate and the expected result is observed in the evidence; FAIL when the negative case is observed; a missing tool, missing file, unreachable host or not_run outcome is a typed gap, never PASS",
       "method_fields": {
         "reverify": "Reverify: not applicable — Phase 1 changes are skill text, shell and Python scripts and workflow YAML; no compiled binary is built or claimed",
@@ -2088,9 +2095,9 @@
       "preconditions": [
         "Lifecycle-local requirement AC-AFC-D4-05 from the technical plan; Requirements Engineer Phase 1 gate PASS (specialists/requirements-engineer-receipt-p1.md, round 2); planning inputs bound by sha256 in source_baseline"
       ],
-      "stimulus_or_procedure": "Run CMD-SKILL-TRIGGER on the exact candidate of S01, S02, S03, S41 and capture its output with the candidate SHA.",
+      "stimulus_or_procedure": "Run CMD-SKILL-TRIGGER (recorded classification) on the exact candidate of S01, S02, S03, S41 and capture its output with the candidate SHA.",
       "expected_result": "each changed D4 skill is selected by its matching request before merge",
-      "observable_evidence": "trigger evidence files per skill, dated before the PR mergedAt",
+      "observable_evidence": "trigger-results-<skill>.json per skill with harness version, dated before the PR mergedAt",
       "pass_fail_rule": "PASS iff CMD-SKILL-TRIGGER's pass rule holds on the exact candidate and the expected result is observed in the evidence; FAIL when the negative case is observed; a missing tool, missing file, unreachable host or not_run outcome is a typed gap, never PASS",
       "method_fields": {
         "reverify": "Reverify: not applicable — Phase 1 changes are skill text, shell and Python scripts and workflow YAML; no compiled binary is built or claimed",
@@ -2113,13 +2120,13 @@
       "preconditions": [
         "Lifecycle-local requirement AC-AFC-D4-06 from the technical plan; Requirements Engineer Phase 1 gate PASS (specialists/requirements-engineer-receipt-p1.md, round 2); planning inputs bound by sha256 in source_baseline"
       ],
-      "stimulus_or_procedure": "Run CMD-D4-AGNOSTIC on the exact candidate of S01, S02, S03, S11, S41 and capture its output with the candidate SHA.",
+      "stimulus_or_procedure": "Run CMD-D4-AGNOSTIC per slice on that slice's own paths at its exact candidate (S01, S02, S03, S11, S41), and once combined at the Wave 1 exit on the Alphazedehq main checkout after S01..S03 merge; capture each output with its SHA.",
       "expected_result": "no repository, owner, pilot or exclusion that scopes the capability is named in D4 skill or hook text",
-      "observable_evidence": "CMD-D4-AGNOSTIC output, exit=0, per PR",
+      "observable_evidence": "CMD-D4-AGNOSTIC output, exit=0, per PR on its own paths, plus the combined Wave 1 exit run",
       "pass_fail_rule": "PASS iff CMD-D4-AGNOSTIC's pass rule holds on the exact candidate and the expected result is observed in the evidence; FAIL when the negative case is observed; a missing tool, missing file, unreachable host or not_run outcome is a typed gap, never PASS",
       "method_fields": {
         "reverify": "Reverify: not applicable — Phase 1 changes are skill text, shell and Python scripts and workflow YAML; no compiled binary is built or claimed",
-        "slice": "S01, S02, S03, S11, S41",
+        "slice": "S01, S02, S03, S11, S41 (per slice); Wave 1 exit (combined)",
         "lane": "spec-and-docs (tech-writing, single_implementer)"
       },
       "negative_or_failure_case": "any match outside GATES.md fails",
@@ -2836,14 +2843,15 @@
       ],
       "stimulus_or_procedure": "Run CMD-SKILL-TRIGGER on the exact candidate of S06 and capture its output with the candidate SHA.",
       "expected_result": "the matching and non-matching requests show no collision between spec-authoring and use-requirements-system",
-      "observable_evidence": "trigger evidence for spec-authoring (and use-requirements-system if edited)",
+      "observable_evidence": "trigger-results-spec-authoring.json and trigger-results-use-requirements-system.json (requirements-system PR candidate)",
       "pass_fail_rule": "PASS iff CMD-SKILL-TRIGGER's pass rule holds on the exact candidate and the expected result is observed in the evidence; FAIL when the negative case is observed; a missing tool, missing file, unreachable host or not_run outcome is a typed gap, never PASS",
       "method_fields": {
         "reverify": "Reverify: not applicable — Phase 1 changes are skill text, shell and Python scripts and workflow YAML; no compiled binary is built or claimed",
         "slice": "S06",
         "lane": "spec-and-docs (tech-writing, single_implementer)",
         "requests": "gate_declarations.spec_and_docs.trigger_requests.spec-authoring",
-        "ceiling": "LLM skill selection is evaluated, not deterministically proven"
+        "ceiling": "LLM skill selection is evaluated, not deterministically proven",
+        "reciprocal": "use-requirements-system lives in alphazede/requirements-system (Alphazedehq symlinks it); S06 edits it in a requirements-system worktree with its own PR (DEC-AFC-SD-028)"
       },
       "negative_or_failure_case": "a collision is recorded with the failing requests and repaired in the D5 repair round; use-requirements-system is edited only per the OD-AFC-07 disposition",
       "boundary_test_layer": "skill activation"
@@ -3068,7 +3076,7 @@
       "wave": "Wave 1",
       "order": 1,
       "merges": "S01 D4-A (Alphazedehq) -> azhq.d4a",
-      "pre_merge": "CMD-D4A-TEST, CMD-SKILL-SIZE, CMD-SKILL-TRIGGER, CMD-D4-AGNOSTIC on the PR head; Reviewer with CMD-OCR-DELEGATE",
+      "pre_merge": "CMD-D4A-TEST, CMD-SKILL-SIZE, CMD-SKILL-TRIGGER, CMD-D4-AGNOSTIC (own skill directory) on the PR head; Reviewer with CMD-OCR-DELEGATE",
       "post_step_vv": "CMD-LANDING-CHECK, CMD-MERGE-IDENTITY, CMD-AZHQ-SKILL-TESTS at azhq.d4a, CMD-AZHQ-SYNC",
       "rows": [
         "SEIT-AFC-D4-01.T",
@@ -3083,7 +3091,7 @@
       "wave": "Wave 1",
       "order": 1,
       "merges": "S02 D4-B (Alphazedehq) -> azhq.d4b",
-      "pre_merge": "CMD-SCAN (pytest, pyyaml), CMD-D4B-TEST, CMD-SKILL-SIZE, CMD-SKILL-TRIGGER, CMD-D4-AGNOSTIC; Reviewer with CMD-OCR-DELEGATE",
+      "pre_merge": "CMD-SCAN (pytest==9.0.3 + pyyaml==6.0.3 wheel closure in <wheel_dir>), CMD-D4B-TEST, CMD-SKILL-SIZE, CMD-SKILL-TRIGGER, CMD-D4-AGNOSTIC (own skill directory); Reviewer with CMD-OCR-DELEGATE",
       "post_step_vv": "CMD-LANDING-CHECK, CMD-MERGE-IDENTITY, CMD-AZHQ-SKILL-TESTS at azhq.d4b, CMD-AZHQ-SYNC",
       "rows": [
         "SEIT-AFC-D4-02.T",
@@ -3098,8 +3106,8 @@
       "wave": "Wave 1",
       "order": 1,
       "merges": "S03 D4-C (Alphazedehq) -> azhq.d4c",
-      "pre_merge": "CMD-D4C-TEST, CMD-SKILL-SIZE, CMD-SKILL-TRIGGER, CMD-D4-AGNOSTIC; Reviewer with CMD-OCR-DELEGATE",
-      "post_step_vv": "CMD-LANDING-CHECK, CMD-MERGE-IDENTITY, CMD-AZHQ-SKILL-TESTS at azhq.d4c, CMD-AZHQ-SYNC only when no PR is being opened or landed",
+      "pre_merge": "CMD-D4C-TEST, CMD-SKILL-SIZE, CMD-SKILL-TRIGGER, CMD-D4-AGNOSTIC (own skill directory); Reviewer with CMD-OCR-DELEGATE",
+      "post_step_vv": "CMD-LANDING-CHECK, CMD-MERGE-IDENTITY, CMD-AZHQ-SKILL-TESTS at azhq.d4c, CMD-AZHQ-SYNC only when no PR is being opened or landed; Wave 1 exit: CMD-D4-AGNOSTIC combined over the three D4 skill directories once azhq.d4a, azhq.d4b and azhq.d4c are all recorded",
       "rows": [
         "SEIT-AFC-D4-03.T",
         "SEIT-AFC-D4-03.S",
@@ -3112,9 +3120,9 @@
       "step": "IE-P1-4",
       "wave": "Wave 1",
       "order": 1,
-      "merges": "S06 D5 (Alphazedehq; use-requirements-system description per OD-AFC-07) -> azhq.d5",
-      "pre_merge": "CMD-SCAN (GridMarket source, pyyaml, pytest), CMD-D5-TEST, CMD-D5-AGNOSTIC, CMD-SKILL-SIZE, CMD-SKILL-TRIGGER; Reviewer with CMD-OCR-DELEGATE",
-      "post_step_vv": "CMD-LANDING-CHECK, CMD-MERGE-IDENTITY (+ skill tree id), CMD-AZHQ-SKILL-TESTS at azhq.d5, CMD-AZHQ-SYNC; rollback CMD-SKILL-UNLINK if S06L ran",
+      "merges": "S06 D5 (Alphazedehq) -> azhq.d5; reciprocal non-trigger (alphazede/requirements-system, own PR, DEC-AFC-SD-028) -> rs.d5nt",
+      "pre_merge": "CMD-SCAN (GridMarket source; the pytest + pyyaml wheel closure in <wheel_dir>), CMD-D5-TEST, CMD-D5-AGNOSTIC, CMD-SKILL-SIZE, CMD-SKILL-TRIGGER; Reviewer with CMD-OCR-DELEGATE",
+      "post_step_vv": "CMD-LANDING-CHECK, CMD-MERGE-IDENTITY (+ skill tree id), CMD-AZHQ-SKILL-TESTS at azhq.d5, CMD-AZHQ-SYNC; rollback CMD-SKILL-UNLINK if S06L ran; CMD-LANDING-CHECK and CMD-MERGE-IDENTITY for the requirements-system PR -> rs.d5nt; fast-forward the requirements-system checkout the Alphazedehq symlink resolves to only when it is clean, else typed gap",
       "rows": [
         "SEIT-AFC-D5-01.T",
         "SEIT-AFC-D5-01.S",
