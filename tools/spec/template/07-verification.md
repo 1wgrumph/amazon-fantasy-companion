@@ -4,16 +4,7 @@ requirements: []
 
 ## 7 Verification Approach
 
-**BLUF:** <One assertive sentence: how the specification is shown to hold.>
-
-**Frame**
-
-- **Who:** <The actor this section concerns.>
-- **What:** <The subject or feature.>
-- **Why:** <The intent.>
-- **How:** <The mechanism.>
-- **When:** <The time, phase, or trigger.>
-- **Where:** <The location, component, or boundary.>
+<One assertive sentence: how the specification is shown to hold.>
 
 <Prose with no word limit: how the specification is shown to hold. Bind at most 5 requirements in the front
 matter. Add one captioned table (T1-T8) when 3 or more items share 2 or more
