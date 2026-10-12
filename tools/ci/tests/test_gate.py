@@ -99,6 +99,19 @@ class AC_AFC_CI_01(unittest.TestCase):
         self.assertFalse(token in out, 'hygiene output echoed colon-shaped staged line text:\n'
                          + out.replace(token, '<token>'))
 
+    def test_hygiene_whitespace_finding_keeps_location_for_plus_leading_filename(self):
+        # B1-R1: git's header for a file named "+..." starts with "+" like a content line.
+        repo = copy_repo(self.tmp / 'repo')
+        token = 'review_' + secrets.token_hex(8) + ':7:payload'
+        write(repo, {'+plus.txt': f'{token}   \n'})
+        git(repo, 'add', '+plus.txt')
+        rc, out = run_gate(self, repo, 'hygiene')  # out is stdout + stderr
+        shown = out.replace(token, '<token>')
+        self.assertEqual(rc, 1, shown)
+        self.assertFalse(token in out, 'hygiene output echoed staged line text:\n' + shown)
+        self.assertTrue('+plus.txt:1:WS-CHECK' in out.splitlines(),
+                        'hygiene finding lost its +plus.txt location:\n' + shown)
+
     def test_docs_area_exits_1_on_seeded_broken_link(self):
         repo = copy_repo(self.tmp / 'repo')
         write(repo, {'BROKEN.md': '# Broken\n\n[gone](docs/does-not-exist.md)\n'})
