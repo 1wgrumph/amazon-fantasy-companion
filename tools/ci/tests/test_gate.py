@@ -61,7 +61,7 @@ class AC_AFC_CI_01(unittest.TestCase):
         for area in AREAS:
             with self.subTest(area=area):
                 runs = '\n'.join(str(step.get('run', '')) for step in jobs[area].get('steps', []))
-                self.assertRegex(runs, rf'tools/ci/gate\.sh\s+{area}(\s|$)')
+                self.assertIn(f'bash tools/ci/gate.sh {area}', runs.splitlines())
                 self.assertIsNone(DIRECT_CHECKS.search(runs), f'job {area} calls a check directly')
 
     def test_hygiene_exits_0_on_clean_copy_and_1_on_seeded_finding(self):

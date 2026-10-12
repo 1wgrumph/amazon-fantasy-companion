@@ -52,7 +52,7 @@ jobs:
       - uses: actions/checkout@{PIN}
         with:
           persist-credentials: false
-      - run: tools/ci/gate.sh spec
+      - run: bash tools/ci/gate.sh spec
   hygiene:
     name: gate / hygiene
     runs-on: ubuntu-latest
@@ -60,7 +60,7 @@ jobs:
       - uses: actions/checkout@{PIN}
         with:
           persist-credentials: false
-      - run: tools/ci/gate.sh hygiene
+      - run: bash tools/ci/gate.sh hygiene
 """
 
 # rule -> (replace old, new) on VALID, and the word the checker must name.
@@ -69,10 +69,13 @@ VIOLATIONS = {
     'unpinned action': ((f'actions/checkout@{PIN}\n        with:\n          persist',
                          'actions/checkout@v5\n        with:\n          persist'), 'full commit SHA'),
     'permission wider than contents: read': (('  contents: read\n', '  contents: write\n'), 'permissions'),
-    'secret reachable from a fork pull request': (('      - run: tools/ci/gate.sh hygiene\n',
-                                                   '      - run: tools/ci/gate.sh hygiene\n'
+    'secret reachable from a fork pull request': (('      - run: bash tools/ci/gate.sh hygiene\n',
+                                                   '      - run: bash tools/ci/gate.sh hygiene\n'
                                                    '        env:\n          TOKEN: ${{ secrets.TOKEN }}\n'),
                                                   'secrets'),
+    # contract form is `bash tools/ci/gate.sh <area>`; the bare form must be rejected
+    'bare gate invocation': (('      - run: bash tools/ci/gate.sh hygiene\n',
+                              '      - run: tools/ci/gate.sh hygiene\n'), 'shared gate'),
     'missing cancel-in-progress': (('  cancel-in-progress: true\n', ''), 'concurrency'),
     'self-hosted runner': (('    name: gate / hygiene\n    runs-on: ubuntu-latest\n',
                             '    name: gate / hygiene\n    runs-on: self-hosted\n'), 'runners'),
