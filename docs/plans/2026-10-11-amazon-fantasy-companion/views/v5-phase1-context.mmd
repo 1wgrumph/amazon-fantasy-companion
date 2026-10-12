@@ -1,0 +1,24 @@
+%% MODEL-AFC-V5 — Phase 1 context and boundary: who builds the tooling, where it runs, what the spec track and Phase 2 consume
+%% mode: diagram-assisted; explanatory only; sysml_claim: false
+%% Planned design (Planning and Design node); nothing here is realized yet.
+flowchart LR
+  GM["GridMarket spec kit (MIT): 1wgrumph/gridmarket at a pinned commit<br/>read-only source; scan before use (RISK-AFC-13)"]
+  AH["Alphazedehq (private): skills/setup-pre-commit, setup-a-repo,<br/>ship-pull-request, spec-authoring (D5); hooks/ci-gate-hook.sh; vnv-review"]
+  REPO["This repo (public): tools/ci/gate.sh (spec, docs, hygiene),<br/>.githooks/, ci.yml, tools/spec/ via S42, docs/vnv/, observations.md<br/>no android/, backend/ in Phase 1; no secrets to forks (C14)"]
+  HARN["Harnesses: Claude Code, Codex, Muse, Cursor, AGY<br/>pre-tool hooks after the D4 skills land (C13)"]
+  ACT["GitHub Actions: hosted runners<br/>pull_request + push to main; private-minutes budget (C11)"]
+  P2["Spec-track consumer (ST-4, dashed): D1 built with D5 + gate spec area;<br/>android, backend areas and product Vnv arrive in Phase 2"]
+  GM -->|"generalize; nothing GridMarket-specific"| AH
+  AH -->|"authors gate + workflow; S42 vendor step"| REPO
+  HARN -->|"agent commits via hooks"| REPO
+  REPO -->|"ci.yml runs here"| ACT
+  REPO -.->|"serves"| P2
+
+  classDef ext fill:#ffffff,stroke:#333333
+  classDef repo fill:#e8f0fe,stroke:#1a56db,stroke-width:2px
+  classDef skill fill:#fff8ec,stroke:#b7791f
+  classDef future fill:#f3f4f6,stroke:#6b7280,stroke-dasharray:6 4
+  class GM,HARN,ACT ext
+  class REPO repo
+  class AH skill
+  class P2 future

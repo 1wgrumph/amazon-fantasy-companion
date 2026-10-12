@@ -1,112 +1,169 @@
 ---
 type: specialist-receipt
-role: test_engineer (Planning Test Engineer session)
-lifecycle: AFC-2026-10-11
-harness: Claude Code / Claude Opus 5.5
-date: 2026-10-11
+title: Planning Test Engineer — AFC-2026-10-11 — Phase 1 SEIT regeneration
+okf_status: draft
+tags: [test-engineering, planning, afc, seit]
 ---
 
-# Planning Test Engineer receipt — AFC-2026-10-11
+# Planning Test Engineer receipt — Phase 1 SEIT
 
-## Typed outcome
+**Outcome: PASS.** `seit.json` was regenerated for Phase 1 and is valid against `seit.schema.json`. All 32 Phase 1 AC-AFC and RISK-AFC rows have proof cases, and no deferred product row has one. One proof row, SEIT-AFC-RISK-17, can only be OPEN_CARRIED at Phase 1 closeout. It closes at P2-6 (TE-P1-F07). That status is planned, and it is not a stop.
 
-- **outcome:** PASS
-- **verdict:** `seit.json` is written and valid against `seit.schema.json`. It has 126 proof cases covering all 65 AC-AFC rows and all 16 RISK-AFC rows, 75 commands, one flat 126-row traceability matrix, and gate declarations per lane. Every command ID named by the slice graph is present. Every command ID named by the integration plan is present, except `CMD-REVERIFY`, which is renamed to `CMD-REVERIFY-APK` (TE-F01). Ten findings go to the Plan Integrator (TE-F01..TE-F10). None needs a new owner decision.
-- **candidate_ref:** `1wgrumph/amazon-fantasy-companion` @ `2c13a6bf560e87d11864cc6234f48e40dd9cf529` on `plan/2026-10-11-amazon-fantasy-companion`, plus the untracked plan directory. Bound inputs (sha256):
-  - `amazon-fantasy-companion-technical-plan.md` `9bda1ff52d520302ec41da3dbf44d5d706d189110f52acb6babeb6e347f685bb`
-  - `design.md` `d972faa0f583b262d19c7ebdbc900e47d0d07695fb8c6c8fa6f5cc440edf095c`
-  - `views/views.json` `965a8b8c4821238387fed209969b9d6fb8ff7369f41484967e527719ace4130d`
-  - output `seit.json` `cae54c15641549606b449da2a6bd396d592d11e096f0002d4487553789cc30d3`
-- **changed_paths:** `docs/plans/2026-10-11-amazon-fantasy-companion/seit.json`, `docs/plans/2026-10-11-amazon-fantasy-companion/specialists/test-engineer-receipt.md`
+- **Verdict:** the tailored V&V plan is complete for Phase 1:
+  - 54 proof cases and 54 traceability rows;
+  - 46 commands and procedures;
+  - gate claims declared for the `ci` lane;
+  - the `spec-and-docs` lane rests on its own tests.
+
+  Every command id in the slice graph exists. The integration sequence follows IE-P1-1..IE-P1-12.
+- **candidate_ref:** `plan/2026-10-11-amazon-fantasy-companion` at `f885e48e58a6c10fa716b6c5ef048a71980a977a` plus working-tree changes. The bound inputs and their sha256 at write time:
+  - `amazon-fantasy-companion-technical-plan.md`: `2c8aa8f61fe2faa71287d0ad91d4595b91f9bb082ebebbdeb50b5f0b6fe24f08`
+  - `design.md`: `0ef4414e9420b6377d04ce4d530cfb7d66335d246ebd452b7cf64115588278f8`
+  - `views/views.json`: `8618f13d87a1bed662976e99afcb55f63bef0e98ea3a506372482d9642100435`
+- **Output:** `seit.json` sha256 `e35fca6781f3ae3b80862c359709e2b014d48c632389645c6fa6c5cdd45f7bf8`.
+- **changed_paths** (nothing committed):
+  - `docs/plans/2026-10-11-amazon-fantasy-companion/seit.json`
+  - `docs/plans/2026-10-11-amazon-fantasy-companion/specialists/test-engineer-receipt.md`
 - **blocker:** none.
 
-## What seit.json contains
+## What changed from f885e48
 
-- `source_baseline`: the three bound inputs above. `decision_baseline`: a `decision-baseline-projection` of 26 DEC-AFC ids (DEC-AFC-SD-013 `superseded` by SD-022) and OD-AFC-01..10 as `open_for_integrated_review`, plus the frozen OCR, Reverify and assurance settings.
-- All always-on sections, `required_commands` (18), `cross_cutting_checks` (path, secrets, developer_feedback, OCR, Reverify, on-device visual review, landing, real device, supply chain, typed gap).
-- `procedures_and_commands`: 75 entries with `id`, exact `command`, `pass`, `description`, `repository`, `used_by` and tool availability on 2026-10-11. No `actor` field.
-- `proof_cases`: 48 red-then-green rows naming the test and product slices; 22 rows on the stick or the dev stack naming the lease and evidence path; Reverify applies only to `SEIT-AFC-SEC-01.R` and `SEIT-AFC-REV-01.R` (S40 APK). Every other row states `Reverify: not applicable — <reason>`.
-- `gate_declarations`:
-  - Backend: pytest, coverage.py + diff-cover (≥ 90 % changed lines) and mutmut (≥ 0.70).
-  - tv-app: Gradle JUnit, Kover + diff-cover (≥ 80 %) and PIT (≥ 60 %).
-  - `tools/ci`: unittest red-then-green and coverage; mutation is a typed gap.
-  - Alphazedehq skills: their own tests and coverage.py for Python (≥ 80 %); shell coverage and mutation are typed gaps.
-  - Alphazedehq hooks: red-then-green; coverage and mutation are typed gaps.
-  - Spikes and scaffolds: NOT_APPLICABLE, each with a reason.
-  - Every declared gate whose tool is missing, or whose outcome is `not_run`, is a typed gap and never PASS.
-- `integration_vv_sequence`: aligned with IE-M1-1..IE-M5-3, plus a per-phase row for the review, landing, developer-feedback and route checks.
+- **Kept with stable ids.** These proof cases and commands were kept where still valid:
+  - D4 and D5;
+  - CI-01..03, VNV-01, DX-01/02;
+  - LAND-01, REV-01, PATH-01;
+  - RISK-07, -08, -11, -12, -13, -15, -16.
+- **Dropped.** All product proof cases and commands, for example PROF, MON, FEED, ALERT, WATCH, CTRL, PANEL, SPIKE, SEC, LW, SPEC-02/03, PLAN-02, DX-03, SUB, VIS, RISK-01..06/09/10/14, and the device, AWS, APK and Reverify commands.
+- **Amended rows.**
+  - CI-01: three areas, plus a new `.K` hooks-path row.
+  - SPEC-01: the D1 ordering check is removed.
+  - VNV-01: three areas.
+  - DX-02: the log only.
+  - PLAN-01: waves plus the no-milestone check `.M`.
+  - REV-01.R: the Reverify not-applicable packet check replaces the APK Reverify.
+  - RISK-13: split into `.D` (S06) and `.G` (S09/S11).
+  - RISK-16: now proved by the entry receipt.
+  - RISK-11: adds `.P` for the planning scrub.
+- **New rows.**
+  - AC-AFC-CI-04: `.U` unit, `.S` spec area, `.D` docs area.
+  - AC-AFC-PLAN-03: PROC-PHASE2-ENTRY.
+  - RISK-AFC-17: PROC-PHASE2-PLAN-INSPECT.
+  - D5-04.V: the vendor step in use at S42.
+  - D4-04.X: the sandbox installer at S11.
+- **New commands.**
+  - CMD-GATE-DOCS, CMD-NO-MILESTONE, CMD-REVIEW-PACKET-CHECK.
+  - CMD-COVERAGE-CI, CMD-MUTATION-CI, CMD-COVERAGE-HOOK, CMD-MUTATION-HOOK.
+  - From the IE plan: CMD-HOOK-INSTALL-SANDBOX, CMD-AZHQ-SKILL-TESTS, CMD-SKILL-UNLINK, CMD-HOOKSPATH.
+  - PROC-PHASE2-ENTRY and PROC-PHASE2-PLAN-INSPECT.
+- **Not applicable in Phase 1.** Reverify is recorded in every proof case as `Reverify: not applicable — Phase 1 changes are skill text, shell and Python scripts and workflow YAML; no compiled binary is built or claimed`. CMD-OCR-DELEGATE is kept.
+- **Gate claims.**
+  - `ci` lane (primary, tdd, assurance enabled):
+    - red-then-green: unittest, and the bash hook tests;
+    - changed-line coverage: coverage.py + diff-cover via uv, at least 90 %;
+    - mutation: mutmut 2.x via uvx, at least 0.70.
+  - Shell coverage and shell mutation are declared typed gaps (TOOL_MISSING), because kcov and a shell mutation tool are absent.
+  - `spec-and-docs` lane (tech-writing, assurance disabled): red-then-green, coverage and mutation are NOT_APPLICABLE with reasons. Its gate is the skills' own tests plus the size, agnostic and trigger checks (OA-AFC-A2 option A).
 
-## Commands run (verbatim output)
+## Reconciliation during this session
 
-Schema validation and cross-check (`python3` + `jsonschema` 4.19.2, Draft 2020-12), final round:
+The Integration Engineer Phase 1 plan landed at 19:43. The Orchestrator applied its findings to the technical plan, `design.md` and `slice-graph.md` at 19:45, while this session was running.
 
-```
+The first coverage cross-check caught the change: `missing: ['CMD-HOOK-INSTALL-SANDBOX']`. I re-read the changed inputs and reconciled them:
+
+- the S11 sandbox install and the live install at IE-P1-10 (IE-P1-F04);
+- template vendoring and tree-id pinning in CMD-SPEC-VENDOR (IE-P1-F03);
+- the entry receipt path `evidence/phase2-entry-receipt.json` (IE-P1-F08);
+- the D4/D5 suite rerun CMD-AZHQ-SKILL-TESTS (IE-P1-F09);
+- landing on a private repository, where CMD-LANDING-CHECK now proves no force-push by ancestor checks (IE-P1-F10);
+- the new open item OA-AFC-A3.
+
+The requirement rows were unchanged: a diff of the technical plan shows only the §Program plan, Exit criteria and owner-items edits. The digests above are of the reconciled inputs.
+
+## Commands run and output
+
+Schema validation and coverage cross-check: `python3 <scratch>/verify.py $HOME/.claude/plugins/cache/bearing-lite/bearing-lite/1.1.6/schemas/seit.schema.json`. It uses jsonschema 4.19.2 with Draft202012Validator. The script is outside the repository. Final run, verbatim, `verify_exit=0`:
+
+```text
 schema_errors: 0
-AC rows: 65  RISK rows: 16  proof cases: 126  commands: 75
-AC rows without proof case: []
-RISK rows without proof case: []
-proof requirement ids not in plan: []
-proof command_ids missing from procedures: []
-slice-graph command ids: 34  missing from seit: []
-integration-plan command ids: 47  missing from seit: ['CMD-REVERIFY']
-unknown design ids: []
-duplicate SEIT ids: []
-bad SEIT id grammar: []
-bad command id grammar: []
-trace rows: 126  bad column sets: 0  empty negatives: 0
-actor fields: 0
-Reverify applies: ['SEIT-AFC-SEC-01.R', 'SEIT-AFC-REV-01.R']
-rows lacking reverify note: []
-tdd rows: 48  device/lease rows: 22
-absolute home paths: []
-decisions: 26 superseded  open_items: ['OD-AFC-01', 'OD-AFC-02', 'OD-AFC-03', 'OD-AFC-04', 'OD-AFC-05', 'OD-AFC-06', 'OD-AFC-07', 'OD-AFC-08', 'OD-AFC-09', 'OD-AFC-10']
-slice coverage gaps: 0
+phase1_plan_rows: 32 proof_cases: 54 requirements_covered: 32 commands: 46
+missing_from_proof_cases: []
+unknown_requirement_ids: []
+deferred_ids_in_cases_or_matrix: []
+case_command_ids_unknown: []
+slice_graph_command_ids: 20 missing: []
+actor_fields: []
+unknown_design_ids: []
+matrix_rows: 54 bad_columns: 0
+cases_missing_reverify_line: []
+tdd_cases_missing_slice_fields: []
+dup_case_ids: 0
+slices_without_rows: []
+seq_rows_unknown: []
+seq_cmds_unknown: []
+required_cmds_unknown: []
 ```
 
-`CMD-REVERIFY` is the intentional rename to `CMD-REVERIFY-APK` (TE-F01).
+Correction rounds (2 of 3 allowed):
 
-Correction rounds: 1 of 3.
+1. **Unknown id.** The slice graph changed concurrently and named `CMD-HOOK-INSTALL-SANDBOX`. Hypothesis: the IE-P1 findings had been applied. Fix: reconcile against the IE plan, as described above.
+2. **Command syntax.** `bash -n` and `shellcheck -s bash -S error` were run over every CMD command string, with `<placeholders>` substituted. The placeholder `<vendored_source_commit_from_VENDORED.md>` was not a valid token. Fix: rename it to `<vendored_source_commit>` and define it in the pass rule. Rerun: `bash_syntax_ok`, `shellcheck_errors_none`.
 
-- **Round 0.** Schema-valid, with 121 cases. A slice-to-proof cross-check found 15 slice→requirement links where no proof row named the slice (coverage gaps): S04, S05, S06, S08, S11, S13, S14, S16, S17, S27T, S31T, S32T/S32, S34, S36.
-- **Fix.** Added `method_fields.contributing_slices` and five rows: PANEL-03.T, PANEL-05.T, PANEL-05.C, CTRL-01.P and PANEL-01.L.
-- **Round 1.** Output above.
+Other checks:
 
-Other commands run, all read-only apart from the two allowed writes:
+- **Rule 12 scan of `seit.json`:** `grep -cE '(/home/|/Users/)[A-Za-z0-9._-]+/'` returned `0`.
+- **Slice → proof rows** (`slice_proof_map`):
+  - S01, S02, S03: 5 each.
+  - S06: 10.
+  - S06L, S07, S08: 2 each.
+  - S09: 13.
+  - S09T: 5.
+  - S11: 9.
+  - S11T: 1.
+  - S41: 3.
+  - S42: 4.
 
-- `sha256sum` of the three inputs.
-- `jq`, `python3` reads of `journey.json` and `integration-plan.md`.
-- Tool checks: `which` (adb, sam, gradle, mutmut absent; java, dot, uv, ocr, reverify, jq, pytest present), `java -version` (OpenJDK 21.0.12), `ocr --version` (v1.12.13), `reverify auto|strings|verify --help`, `ocr delegate --help`.
-- `grep COE-ASA-001` in Alphazedehq `docs/coe/index.md`: the identifier is present. The clause text is in the COE-ASA SDoc and was not opened.
-- The generator scripts are scratch files outside the repository.
+Read-only commands:
+
+- `git rev-parse f885e48`;
+- `git show f885e48:<plan>/seit.json`;
+- `sha256sum` of the bound inputs;
+- `git status --short`;
+- `command -v` tool probes: kcov, mutmut and diff-cover are absent; ocr v1.12.13, uv 0.11.6, dot, gh, jq, claude and shellcheck are present;
+- reads of the journey profile snapshots: `primary` assurance enabled, `tech-writing` assurance disabled, `coverage_assist` enabled and required, `reverify` enabled.
 
 ## Findings (planning_findings_for_plan_integrator)
 
-| ID | Finding | Needed |
-|---|---|---|
-| TE-F01 | `CMD-REVERIFY` → `CMD-REVERIFY-APK`. 26 new CMD/PROC IDs. | Add the IDs to the slice command lists named in the finding text. |
-| TE-F02 | S28 lacks `CMD-DUMPSYS`. S17 lacks `CMD-SPIKE-VERDICTS`. S40's AC-AFC-REV-01 needs `CMD-REVERIFY-APK` at IE-M5-3. | Covered by TE-F01; trace REV-01.R and SEC-01.R to S40 and IE-M5-3. |
-| TE-F03 | `CMD-REVERIFY-APK` needs `check_paths.py --files`. | DES-AFC-GATE hygiene bullet plus an S09T test. |
-| TE-F04 | coverage, diff-cover, mutmut, Kover and PIT are in no dependency list. Thresholds are TE proposals. | Amend DES-AFC-TV/INFRA and the S04/S05 stop conditions (via CMD-SCAN). Show the thresholds at integrated review. Otherwise these claims are typed gaps. |
-| TE-F05 | No write set or store for UI screenshots and dumps (VIS-01). | Name `<review_evidence_dir>` or add `docs/evidence/visual/<slice>/` to the UI slice write sets. |
-| TE-F06 | Fixed names: D4 trigger requests, the `tools/ci/tests` runner (unittest), spike verdict headings, `spikes/sp5/record.py`. | Copy them into the packets and DES-AFC-GATE. |
-| TE-F07 | `CMD-TEMPLATE-DIGEST` changes to stack tags (SAM rewrites the template). | Adopt in the IE configuration identity and the S18 runbook. |
-| TE-F08 | The `specialists/` logs and prompts contain absolute home paths; `CMD-PATH-SCAN-PLAN` will flag them. | Orchestrator scrubs them before the planning commit (entry criterion 2). |
-| TE-F09 | Rows waiting on owner entry actions OWN-02..05 and the keystore. WATCH-02.D and ALERT-04.D may end as class C limitations. | Track them as OWNER_ACTION_PENDING typed gaps. |
-| TE-F10 | CTRL-03 and SUB-04 depend on OD-AFC-03. The S41 rows depend on OD-AFC-01 = B. | Activate or drop them per the integrated-review dispositions. |
+| ID | Class | Needed | Owner decision |
+|---|---|---|---|
+| TE-P1-F01 | integration reconciliation | Copy the IE-P1 post-step commands into `implementation.json` with the finalized ids. IE CMD-P2-ENTRY-RECEIPT becomes PROC-PHASE2-ENTRY. IE-P1-11's row-field check is CMD-DX-COVERAGE, not CMD-DX-PRESENCE. | no |
+| TE-P1-F02 | command ids added to slices | Add the listed commands to S01..S03, S02, S07, S06L, S42, S09, S11, S41 and S08, plus the step-level and Lifecycle-level commands. No slice-graph id was renamed. | no |
+| TE-P1-F03 | command corrected | f885e48 CMD-SCAN called Alphazedehq `hooks/scan-supply-chain.sh`, which is an advisory routing hook that always exits 0, not a scanner. It now runs the scan-software-supply-chain skill procedure and checks the verdict line. | no |
+| TE-P1-F04 | test-design convention | The S11T test runs the installer through `$AFC_HOOK_PY` (default `python3`). The S09T tests call `check_paths`/`check_docs` `main(argv)` in-process, so coverage.py can measure them. | no |
+| TE-P1-F05 | resolved | The template vendoring and entry-receipt path gaps were closed by IE-P1-F03 and IE-P1-F08. | no |
+| TE-P1-F06 | private-repo landing | Run CMD-PR-CHECKS before every this-repo merge. CMD-LANDING-CHECK uses ancestor checks while the rulesets API returns 403. | no |
+| TE-P1-F07 | proof completes outside Phase 1 | The DoD Manifest shows SEIT-AFC-RISK-17 as OPEN_CARRIED until P2-6. | no |
+| TE-P1-F08 | declared typed gaps | Shell coverage and shell mutation are TOOL_MISSING. Spec-and-docs has no coverage or mutation claims under OA-AFC-A2 option A. Option B means regenerating this SEIT. | no |
+| TE-P1-F09 | slice proof coverage | Every slice has proof rows. Copy `slice_proof_map` into `implementation.json`. | no |
+| TE-P1-F10 | open owner item | OA-AFC-A3 sets the review boundary per integration step, or amends the cadence to `slice`. The proof rows are the same either way. | yes (OA-AFC-A3, already open for integrated review) |
 
 ## Remaining risks
 
-- **Typed gaps on this host.** adb, the Android SDK, Gradle, AWS SAM and the aws CLI are absent, so every device, Android and deploy command is a typed gap until S04 or S18 installs them after a scan. OpenJDK 21 is present, unlike the packet's "Gradle JDK absent".
-- **Trigger checks are evaluations.** `CMD-SKILL-TRIGGER` and the D4/D5 activation rows rely on LLM skill selection, so they are evaluations, not deterministic proof.
-- **E2E is not scripted.** `CMD-E2E-REPLAY` is a sequence of primitive adb steps with two manual D-pad navigation steps. It is not a tracked script, so reruns depend on following the SP-3 steps.
-- **Coverage and mutation thresholds are unratified.** They are proposals until the integrated review.
-- **COE-ASA-001 not read at clause level.** Only the identifier was verified. `SEIT-AFC-SPEC-02.B` relies on `spec_lint` section rules to enforce the floor.
+- **Unverified tool flags.** The mutmut 2.x and diff-cover flags are declared but were not executed: installing them was out of scope, and they need CMD-SCAN first. A flag or runtime failure at first use is TOOL_MISSING or NOT_RUN, never PASS.
+- **No Assurance pass on the shared tooling.** The executable shared tooling in the spec-and-docs lane (gate template, installer script, workflow checker, D5 scripts) gets its own tests and the Reviewer only (OA-AFC-A2 A).
+- **Skill selection is evaluated, not proven.** CMD-SKILL-TRIGGER evaluates LLM skill selection; it does not prove it deterministically.
+- **Concurrent edits.** The bound inputs were edited during this session. Any later edit to the technical plan, `design.md` or `views.json` invalidates these digests and needs a Planning Test Engineer delta.
 
 ## developer_feedback
 
-- **TE-DX-01.** The dispatch packet says the Gradle JDK is absent, but `java -version` reports OpenJDK 21.0.12 at `/usr/bin/java`. The Android SDK and Gradle are absent.
-  - Evidence: the `which` and `java -version` output in this session.
-- **TE-DX-02.** `seit.schema.json` does not constrain `procedures_and_commands` item fields (`id`, `command`), the `traceability_matrix` columns, or `gate_declarations`. Schema validation alone cannot catch a missing command id or a malformed trace row; this session needed a scripted cross-check.
-  - Evidence: `$HOME/.claude/plugins/cache/bearing-lite/bearing-lite/1.1.6/schemas/seit.schema.json` `properties`.
-- **TE-DX-03.** `slice-graph.md` writes paired green slices as "same as S20T". Mechanical requirement extraction must resolve that phrase; this session skipped such rows because each pair shares its proof rows.
-- **Tools exercised:** Bash, `python3` (`json`, `jsonschema`, `re`, `hashlib`), `jq`, `sha256sum`, `grep`, `ocr --help`, `reverify --help`, `java -version`, and the `test-engineer` and `test-engineering` skills. BRAN reported `unavailable` (no policy in this repository).
+- **TE-P1-OBS-001**, classified as a configuration, environment or harness issue in the Lifecycle orchestration. The Planning Test Engineer was dispatched while the Integration Engineer Phase 1 run was still producing its plan. The Orchestrator then edited three bound inputs mid-session (all three were modified at 19:45, and the IE log finished at 19:44).
+  - Evidence: `ls -la --time-style=+%H:%M` on `integration-plan.md`, `slice-graph.md`, `design.md` and the technical plan, and the first cross-check line `missing: ['CMD-HOOK-INSTALL-SANDBOX']`.
+  - Impact: one reconciliation round, about a third of the session.
+  - Workaround: the cross-check script caught it.
+  - Suggestion: dispatch the Test Engineer after the IE findings are applied, or freeze the bound inputs for the duration of the run.
+- **TE-P1-OBS-002**, classified as a documentation gap in the prior artifact. The f885e48 SEIT defined CMD-SCAN as `bash hooks/scan-supply-chain.sh <artifact>`, but that file is an advisory PreToolUse hook. The command was never exercised against the tool it names.
+  - Evidence: the head of `hooks/scan-supply-chain.sh` ("Advisory PreToolUse hook … always fails open").
+  - Suggestion: the planning review should spot-check one invocation per new command id.
+- **Positive.** The `seit.schema.json` validation, combined with a scripted id cross-check (plan rows, slice-graph ids, design ids and sequence rows), gave a fast, exact loop.
+- **Tools exercised:** python3 jsonschema 4.19.2, git, sha256sum, grep/sed/diff, bash -n, shellcheck, and `command -v` probes.
+
+Skipped: no command was executed against Alphazedehq or GitHub, because this was planning only. The mutmut and diff-cover CLIs were not fetched.

@@ -1,161 +1,189 @@
 ---
 type: specialist-receipt
-role: plan_integrator
-lifecycle: AFC-2026-10-11
-harness: Claude Code / Claude Opus 5.5 / high (fallback 1 of the frozen primary plan_integrator route; Muse 429 class B)
-date: 2026-10-12
+title: Plan Integrator — AFC-2026-10-11 — Phase 1 implementation.json regeneration
+okf_status: draft
+tags: [plan-integration, planning, afc, implementation]
 ---
 
-# Plan Integrator receipt — AFC-2026-10-11
+# Plan Integrator receipt — Phase 1 regeneration
 
-## Typed outcome
+**Outcome: PLAN_REVIEW_READY.** `implementation.json` was regenerated for Phase 1
+after the owner CHANGE at integrated review round 1 (DEC-AFC-SD-023,
+DEC-AFC-SD-024). It is valid against `implementation.schema.json`, the
+plan-package freeze is PASS, and the DoD Manifest rendered with
+RENDER_CHECK_PASS. No requirement, design, or V&V change was needed; every
+reconciliation was mechanical.
 
-- **outcome:** PLAN_REVIEW_READY
-- **verdict:** `implementation.json` is schema-valid (0 errors) and passes the freeze with `"outcome": "PASS"`. The DoD Manifest renders (RENDER_WRITE) and its byte check passes (RENDER_CHECK_PASS). Every field came from the stable inputs; nothing needed invented intent, requirements, models, integration strategy or V&V. Ten findings go to the planning review (below); four of them need a Planning-node or IE delta that this role may not make.
-- **candidate_ref:** `plan/2026-10-11-amazon-fantasy-companion` @ `2c13a6bf560e87d11864cc6234f48e40dd9cf529` plus the untracked plan directory.
-- **candidate_digest:** `6fd4c72e5c91784d33c27d75ff1a420cff6c45c0e43a126797f8567110fbeba7` (plan-package `manifest_digest` over the three `seit.json` planning inputs plus `seit.json`).
-- **changed_paths:**
-  - `docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json` (new; sha256 `7597ec3415f4c52fb9b06711de0c43d90d37d0b7e55e503560c86b0b02282541`)
-  - `docs/plans/2026-10-11-amazon-fantasy-companion/amazon-fantasy-companion-dod-manifest.html` (new; renderer output, sha256 `97bf373e2e2d43ef50e089330e9f0f0362376b92bf4f21aa09bbf53724583a72`)
-  - `docs/plans/2026-10-11-amazon-fantasy-companion/specialists/plan-integrator-receipt.md` (this file)
-- **seit.json:** not modified. All three planning-input digests still match the files on disk, so no rebinding was needed. Old and new digests are identical:
-  - technical plan `9bda1ff52d520302ec41da3dbf44d5d706d189110f52acb6babeb6e347f685bb`
-  - design.md `d972faa0f583b262d19c7ebdbc900e47d0d07695fb8c6c8fa6f5cc440edf095c`
-  - views/views.json `965a8b8c4821238387fed209969b9d6fb8ff7369f41484967e527719ace4130d`
-  - seit.json `cae54c15641549606b449da2a6bd396d592d11e096f0002d4487553789cc30d3`
+- **Verdict:** PLAN_REVIEW_READY, no blocker.
+- **candidate_ref:** `plan/2026-10-11-amazon-fantasy-companion` at
+  `f885e48e58a6c10fa716b6c5ef048a71980a977a` plus working-tree changes
+  (the Orchestrator records the commit of this regeneration).
+- **candidate_digest:**
+  `64d2fabc012d127d62f67fca89d4fcf6d180610353717a67fb4867495df1e0bf`
+- **changed_paths** (nothing committed):
+  - `docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json`
+  - `docs/plans/2026-10-11-amazon-fantasy-companion/amazon-fantasy-companion-dod-manifest.html`
+    (renderer output, sha256 `b7b619eeb5ad11b0dc73f2c71e5cc2ff8c5b42c4b16049e02d4f021401e8e385`)
+  - `docs/plans/2026-10-11-amazon-fantasy-companion/specialists/plan-integrator-receipt.md`
+- **counts:** 13 slices (Wave 1: S01 S02 S03 S06 S07; Wave 2: S06L S42 S09T S09
+  S11T S11 S41 S08), 32 requirements traced (24 AC-AFC + 8 RISK-AFC), 54 proof
+  cases bound, 46 commands, 21 dependencies (acyclic), 9 open decisions,
+  14 deferred rows, 7 Phase 2 sequence steps, 0 milestones.
 - **blocker:** none.
 
-## Commands run (verbatim output)
+## What changed from f885e48
 
-Schema validation (`python3` + `jsonschema`, Draft 2020-12, `<bearing-lite 1.1.6>/schemas/implementation.schema.json`):
+- **Slices:** 54 in 5 waves (M1..M5) → 13 in 2 waves (`milestone: Phase 1`).
+  S42 new. S41 light-conditional on OD-AFC-01 = B, `dispatchable: false`.
+- **Requirements:** 81 rows → 32 Phase 1 rows: 7 amended (CI-01, SPEC-01,
+  VNV-01, DX-02, PLAN-01, RISK-13, RISK-16), 3 new (CI-04, PLAN-03, RISK-17).
+- **Design:** 30 IDs → 10 (DES-AFC-D4/D5/DX/GATE/LANES/VNV,
+  DES-AFC-PHASE2 new, CONTRACT-AFC-GATE/HOOK/SPECKIT).
+- **Proof:** 126 cases / 75 commands → 54 cases / 46 commands.
+- **Authority:** AUTH-AFC-2026-10-11-001 → AUTH-AFC-2026-10-11-002
+  (proposed, effective false).
+- **Bounds:** no GitHub milestones in Phase 1; Phase 2 as sequence P2-1..P2-7;
+  visual evidence under `evidence/visual/`.
 
-```
+## Reconciliation applied (all mechanical, no owner decision)
+
+- **TE-P1-F01:** IE `CMD-P2-ENTRY-RECEIPT (proposed)` → `PROC-PHASE2-ENTRY`
+  (IE-P1-12 post_step_vv); IE-P1-11 row-field check → `CMD-DX-COVERAGE`.
+  All other IE-proposed IDs exist in `seit.json` unchanged; their
+  `(proposed)` annotations were kept verbatim as the IE wrote them.
+- **TE-P1-F02:** added CMD-D4-AGNOSTIC to S01/S02/S03/S11/S41, CMD-SCAN to
+  S02/S11, CMD-PATH-SCAN-PLAN to S07/S06L/S42, CMD-PR-CHECKS/CMD-CI-VENDOR-PIN/
+  CMD-COVERAGE-CI/CMD-MUTATION-CI to S09, CMD-COVERAGE-HOOK/CMD-MUTATION-HOOK
+  to S11, CMD-DX-COVERAGE/CMD-PR-CHECKS to S08. Reviewer packets carry
+  CMD-OCR-DELEGATE (`coverage_assist_command_id`); every packet/return carries
+  CMD-DX-PRESENCE (`developer_feedback.check_command_id`).
+- **TE-P1-F04:** test-design conventions added to the S09T goal (in-process
+  `main(argv)`) and the S11T goal (`$AFC_HOOK_PY`), with
+  `packet_fixed_names` runners from `gate_declarations`.
+- **TE-P1-F07:** SEIT-AFC-RISK-17 shown OPEN_CARRIED (closes at P2-6) in the
+  DoD Manifest requirements and risks sections and the traceability binding.
+- **TE-P1-F09:** `slice_proof_map` copied verbatim into `seit_proof_rows`
+  (incl. S08's SEIT-AFC-CI-02.P and the shared D5-05.L / RISK-13.G / RISK-16 rows).
+- **TE-P1-F10 / OA-AFC-A3:** every `review_unit` names its integration step
+  IE-P1-1..IE-P1-11 as the Phase 1 review boundary unit (option A).
+- **IE-P1-F01..F10** were already applied to the technical plan, design.md and
+  slice-graph.md by the Planning node; the `integration_plan` JSON block was
+  copied with only the two TE-P1-F01 renames above.
+- **seit.json digests:** the three `planning_inputs` digests match the files on
+  disk (technical plan `2c8aa8f6…`, design `0ef4414e…`, views `8618f13d…`), so
+  no mechanical rebinding was needed; `seit.json` is untouched.
+- **phase2_sequence key:** entries use `id` (P2-1..P2-7), not `step`: the
+  freeze `checkIntegrationStepRefs` treats any `step`/`step_id` key as a
+  reference that must resolve to a slice (see PI-P1-OBS-001).
+- **S41 work class:** kept `light` per this packet and slice-graph.md. Note:
+  the f885e48 Plan Integrator had reclassified S41 to `judgement` (PI-F01,
+  criterion 4). The packet settles it as light; the `work_class_reason` cites
+  the five criteria for a name-only router under 25 lines.
+
+## Commands run and output
+
+Schema validation (`python3`, jsonschema Draft202012Validator against
+`implementation.schema.json`):
+
+```text
 schema_errors: 0
 ```
 
-Freeze, `node <bearing-lite 1.1.6>/hooks/plan-package.cjs docs/plans/2026-10-11-amazon-fantasy-companion`. Round 1 returned only the expected `missing_candidate_digest` finding. The digest was then bound and the package regenerated. Final run:
+Freeze (`node <bearing-lite>/hooks/plan-package.cjs <plan dir>`), final run:
 
-```
+```text
 {
   "outcome": "PASS",
-  "manifest_digest": "6fd4c72e5c91784d33c27d75ff1a420cff6c45c0e43a126797f8567110fbeba7",
+  "manifest_digest": "64d2fabc012d127d62f67fca89d4fcf6d180610353717a67fb4867495df1e0bf",
   "findings": []
 }
-exit=0
 ```
 
-Renderer, `node <bearing-lite 1.1.6>/tools/render-dod-manifest.mjs <PLAN>/implementation.json` then `--check`. The output path below has `$HOME` substituted:
+Renderer (`node <bearing-lite>/tools/render-dod-manifest.mjs implementation.json`
+from the plan directory, then with `--check`):
 
-```
-RENDER_WRITE path=$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/amazon-fantasy-companion-dod-manifest.html digest=sha256:97bf373e2e2d43ef50e089330e9f0f0362376b92bf4f21aa09bbf53724583a72 template=1.0.1
-RENDER_CHECK_PASS digest=sha256:97bf373e2e2d43ef50e089330e9f0f0362376b92bf4f21aa09bbf53724583a72 output=$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/amazon-fantasy-companion-dod-manifest.html template=1.0.1
-```
-
-The manifest embeds all four model views (MODEL-AFC-V1..V4). Each SVG sha256 matches `views.json`. There are no gap rows; `status-gap` appears only in the CSS and the legend.
-
-Planning-review gate shape, `evaluatePlanningReview({...planning_review, plan_dir, dod_manifest, round_number: 1, completed_rounds: 0})`:
-
-```
-{"outcome":"NEEDS_MORE_EVIDENCE","reason":"review_round_pending"}
+```text
+RENDER_WRITE path=<plan dir>/amazon-fantasy-companion-dod-manifest.html digest=sha256:b7b619eeb5ad11b0dc73f2c71e5cc2ff8c5b42c4b16049e02d4f021401e8e385 template=1.0.1
+RENDER_CHECK_PASS digest=sha256:b7b619eeb5ad11b0dc73f2c71e5cc2ff8c5b42c4b16049e02d4f021401e8e385 output=<plan dir>/amazon-fantasy-companion-dod-manifest.html template=1.0.1
 ```
 
-This is the expected pre-review state. The manifest is generated, and the slot binding is valid: `primary_route_ref` and `fallback_route_refs` are strings.
+Correction rounds (2 used of 3 allowed):
 
-Path scan (rule 12), `grep -c` for the absolute home-directory prefix (slash, `home`, slash) over every written file:
+1. **Digest + step refs.** First freeze: `candidate_digest_mismatch` (placeholder)
+   and 7× `unresolved_integration_step` P2-1..P2-7. Hypothesis: the
+   `phase2_sequence` `step` keys collide with the freeze step-reference check;
+   the digest is computed over inputs plus `seit.json` only. Fix: renamed the
+   key to `id`, bound the printed `manifest_digest` into
+   `planning_review.candidate_digest` and the manifest identity rows. Re-freeze: PASS.
+2. **Manifest marker case.** `OPEN_CARRIED` probe in the HTML returned 0
+   (rendered lowercase). Fix: RISK-AFC-17 DoD status set to the exact
+   `OPEN_CARRIED (closes at P2-6)`. Re-freeze PASS, re-render
+   RENDER_CHECK_PASS.
 
+Rule 12 scan (absolute-home-path grep count over every file written):
+
+```text
+implementation.json:0
+amazon-fantasy-companion-dod-manifest.html:0
+specialists/plan-integrator-receipt.md:0
 ```
-implementation.json: 0
-amazon-fantasy-companion-dod-manifest.html: 0
-specialists/plan-integrator-receipt.md: 0
-```
 
-Other read-only commands: `sha256sum` of the inputs and SVGs; `python3` reads of `seit.json`, `journey.json`, `views.json`, `authority.json`, the technical plan, `design.md`, `slice-graph.md` and `integration-plan.md`; a skill-path existence check. The generator is a scratch script outside the repository.
-
-Correction rounds: 1 of 3. The only correction was binding the digest. A wording-only regeneration of one DoD row followed, with the freeze and the renderer rerun after it.
-
-## Counts
-
-- Slices: 54 (S01..S41 plus T/L variants), in 5 waves and 71 dependencies. The dependencies are acyclic: 45 `complete`, 12 `merged`, 13 `tdd_pair`, 1 `first_capture`.
-- Requirements traced: 81 of 81 (65 AC-AFC and 16 RISK-AFC), all `Lifecycle-local`. Each has at least one SEIT row and at least one slice or lifecycle-level binding; missing traces: none.
-- Proof cases bound: 126 of 126. 116 are bound to slices through `method_fields.slice`, `tdd.test_slice` / `product_slice` or `contributing_slices`. 10 are lifecycle-level: SEIT-AFC-PLAN-01, CI-01.A, D4-04.D, LAND-01, REV-01.O, VIS-01, RISK-07, RISK-08, RISK-11, RISK-16.
-- Commands: every slice `command_id` exists in `seit.json` `procedures_and_commands`. No procedure carries an `actor` field.
-- Write paths: 125 (119 unique), within the 128 limit. Alphazedehq paths carry the `Alphazedehq:` prefix.
-- Open owner items: 12 (OD-AFC-01..10 verbatim, then OA-AFC-A1 and OA-AFC-A2).
-
-## Reconciliation applied mechanically
-
-- **Routes.** Each slice `model_route` is its lane profile's frozen snapshot route, copied with `snapshot_profile`, `snapshot_role`, `configuration_digest_sha256` and ordered fallbacks. Product Implementer slices take `implementer`, Test Implementer slices `test_implementer`, Light Implementer slices `light_implementer`, and S08/S39 the primary `scribe` route. `reasoning_level.level` is the route's reasoning.
-- **Commands.** Command lists are the slice-graph IDs, plus each procedure's `used_by` slice list in `seit.json`, plus the explicit TE-F01 additions. TE-F01 adds two items that are not in `used_by`: `CMD-DEVICE-GUARD` on S12..S15 and S28, and `CMD-COVERAGE-BACKEND` on S05. `CMD-OCR-DELEGATE` goes into every `review_path`. `CMD-DX-PRESENCE` goes into every slice's `developer_feedback` block.
-- **Requirement IDs.** Each slice keeps its slice-graph requirements, plus the requirement of every SEIT row the Test Engineer bound to that slice (TE-F02 asked for this for S40). Added:
-  - S04: RISK-13
-  - S05: SEC-01, RISK-13
-  - S06: RISK-13, RISK-15
-  - S06L: PATH-01
-  - S09: SEC-01
-  - S10: PATH-01
-  - S11: RISK-12
-  - S12: RISK-01
-  - S13: RISK-02
-  - S14: RISK-03
-  - S15: RISK-04
-  - S17: RISK-06
-  - S18: SEC-02, RISK-09, RISK-13
-  - S20T and S20: RISK-05
-  - S22T and S22: RISK-10
-  - S23: RISK-03
-  - S26T and S26: PROF-02
-  - S27T and S27: PANEL-04
-  - S28: RISK-14
-  - S37: LW-01
-  - S38: RISK-14
-  - S40: SEC-01
-- **Lenses.** `design_lenses` is the union of the `- Lenses:` lines of the slice's DES sections in `design.md`, plus `Developer feedback` on every slice (AC-AFC-DX-01). Every value is in the design lens table.
-- **Fixed names (TE-F06, TE-F07).** These are copied into `packet_fixed_names` on the named slices:
-  - D4/D5 trigger requests: S01, S02, S03, S06, S41
-  - unittest runner: S09T
-  - verdict headings: S12..S17, S34
-  - `spikes/sp5/record.py`: S16
-  - stack-tag identity: S18
-- **Amendments.** OA-AFC-A1 is applied as instructed: every tv-app-ui slice names frontend-design by its installed absolute path in `$HOME` form. The path exists and matches the Claude plugin registry entry (`gitCommitSha f359d43b4060…`). OA-AFC-A2 keeps the slice-graph allocation (option A). Both are listed after OD-AFC-10 with status `open_for_integrated_review`, and both appear in the DoD authority section.
-- **Conditional slices.** S34 and S41 carry `dispatchable: false` and `conditional_on` (TE-F10).
-- **Integration plan.** `integration_plan` is the parsed `integration_plan` JSON block, copied unchanged.
+Other checks: builder self-check (13 slices, 32 requirements, 54 proof cases,
+46 commands; unknown command/proof/lens scan; dependency acyclicity; wave
+membership; traceability coverage) OK; goal ≤ 512 chars asserted per slice;
+excluded skills (`use-jev`, `claude-api`, `typesafe-ai`) absent; waves are
+exactly Wave 1 + Wave 2; milestones empty with `milestones_note`.
 
 ## Findings
 
-| ID | Class | Finding | Disposition |
-|---|---|---|---|
-| PI-F01 | light slice rule | The slice graph marks S41 (`skills/ci-cd/SKILL.md`, a new router skill) `light (conditional)` on the Light Implementer route. Writing a new SKILL.md is authoring, so it fails light-implementer criterion 4. OA-AFC-A2 also lists S41 among the skill-authoring slices. | Reclassified as `judgement` / Product Implementer on the tech-writing `implementer` route. The planning reviewer confirms this or returns it. |
-| PI-F02 | missing trace | No SEIT row binds S33 (defects). | `seit_proof_rows: []` with `seit_proof_note`: the proof is `gate_declarations.defects` (red on the pre-fix commit, green on the fix) plus CMD-GATE-ALL. If the reviewer wants a row, that is a Planning Test Engineer delta. |
-| PI-F03 | write-set | The S33 write set is prose. | `write_set` holds the bounding roots `tv-app/app/src/`, `backend/src/` and `backend/tests/` ("and their tests"), and the slice-graph text is kept in `write_set_note`. |
-| TE-F03 | design (Planning node) | `CMD-REVERIFY-APK` needs a file mode for `check_paths.py`. | Proposed DES-AFC-GATE hygiene-bullet text: "`tools/ci/check_paths.py` also accepts `--files <path>...` and applies the same rule ids, with the same no-secret output, to only those files; S09T adds a test for this mode." |
-| TE-F04 | design (Planning node) | The gate tools are in no dependency list. | Proposed DES-AFC-TV text: "Test-only Gradle plugins Kover (`org.jetbrains.kotlinx.kover`) and PIT (`info.solidsoft.pitest`), each admitted through CMD-SCAN." Proposed DES-AFC-INFRA text: "Backend test dependencies coverage, diff-cover and mutmut in `backend/pyproject.toml` and `uv.lock`, each admitted through CMD-SCAN." S04/S05 stop conditions would gain the same clause. The thresholds are shown for the integrated review in DoD row VV-GATES. Until these are amended, coverage and mutation claims are TOOL_MISSING typed gaps. |
-| TE-F05 | write-set (NEEDS_OWNER_DECISION or Planning node) | No committed home exists for UI screenshots and dumps (AC-AFC-VIS-01). | Not decided here. Option 1: add `docs/evidence/visual/<slice>/` to the S25, S26, S27, S31 and S32 write sets (already inside authority `docs/evidence/**`). Option 2: an untracked Lifecycle evidence directory recorded in `journey.json` `execution_receipts`. Shown as an open DoD risk row. |
-| TE-F07 | integration plan (IE delta) | `integration_plan.configuration_identity` still names the source-file template digest, but SEIT uses stack tags. | The S18 packet carries the tag form. The integration-plan copy stays unchanged; an IE planning delta should adopt `SourceCommit` / `TemplateSha256` stack tags. |
-| TE-F08 | rule 12 | The `specialists/` prompts and logs contain absolute home paths. | This role made no edit. The Orchestrator must run CMD-PATH-SCAN-PLAN and scrub before the planning commit (entry criterion 2). |
-| TE-F09 | owner-gated proof | Device, afc-dev, Yahoo and keystore rows wait on owner actions. | `owner_wait_tracking` names OWNER_ACTION_PENDING as a typed gap. The owner entry actions are in `approval_boundaries` and in the DoD authority rows. |
-| TE-F10 | conditional rows | The S34 and S41 rows depend on OD-AFC-03 and OD-AFC-01. | The slices are marked non-dispatchable. The Plan Integrator activates or drops them after the integrated-review dispositions. |
-
-Dependency `kind` is derived from each target's slice-graph "Depends on" text:
-- `merged` when the source is in a run of IDs ending in "merged";
-- `tdd_pair` for SxxT → Sxx;
-- `first_capture` for S16 → S20T;
-- `complete` for everything else.
-
-The verbatim text is kept in `condition`.
+None needing a requirement, design, or V&V change. Nothing recorded as
+NEEDS_OWNER_DECISION: every reconciliation input was mechanical.
 
 ## Remaining risks
 
-- TE-F03, TE-F04, TE-F05 and TE-F07 stay open until a Planning-node or IE delta lands, or the owner disposes of them. If the package is approved as-is, those proofs remain typed gaps.
-- Under OA-AFC-A2 option A, the executable shared tooling in S01, S02, S03 and S06 gets no Assurance Test Engineer pass, because the tech-writing snapshot has assurance disabled.
-- The spec-authoring SKILL.md path in the S19 and S35 packets does not exist until S06 merges.
-- The frontend-design path is pinned to the installed plugin version. If the plugin updates, the dispatcher must re-resolve it (OA-AFC-A1).
-- The Muse 429 window runs until 2026-10-12T00:00:00Z. A planning-review dispatch before the reset activates fallback 1, Codex CLI / GPT-6 Astra / high, with a class B receipt.
-- Goals for S04 and S05 are cut at a sentence boundary to stay within 512 characters. The full text is in `stop_condition`.
+- **S41 light classification** (above): if the owner or a Reviewer judges the
+  router authoring to fail light criterion 4, S41 reclassifies to `judgement`
+  on the tech-writing implementer route with no other change.
+- **TE-P1-F08 typed gaps** (shell coverage/mutation TOOL_MISSING) and the
+  **OA-AFC-A2 option A** residual (no Assurance pass on executable shared
+  tooling) are shown in the manifest; option B regenerates the SEIT.
+- **Unverified tool flags** for mutmut/diff-cover carry over from the Test
+  Engineer receipt; a first-use failure is TOOL_MISSING or NOT_RUN, never PASS.
 
 ## developer_feedback
 
-- **PI-DX-01.** `slice-graph.md` has no goal column, so each `goal` is composed mechanically from type, lane, requirements, design and stop condition. A goal column in the slice-graph template would remove this step.
-- **PI-DX-02.** The freeze treats any object with string `id` and `role` as a slice, and any `step`, `requires` or `integration_steps` string as a reference it must resolve. DoD rows and copied blocks therefore have to avoid those key shapes. The rule is undocumented in the schema; this session found it by reading `hooks/plan-package.cjs`.
-- **PI-DX-03.** `seit.json` `used_by` and TE-F01 disagree in two places (DEVICE-GUARD and S05 COVERAGE-BACKEND). Command binding needs both sources. `seit.json` would be easier to consume if every TE-F01 addition were also in `used_by`.
-- **PI-DX-04.** The light-implementer criteria and the slice graph disagreed on S41. The slice-graph template would benefit from a `work_class_reason` column, so this check happens upstream.
-- **Tools exercised:** Bash, `python3` (`json`, `jsonschema`, `re`, `hashlib`), `node` (plan-package.cjs, planning-review.cjs, render-dod-manifest.mjs), `sha256sum`, `grep`. BRAN reported `unavailable` (this repository has no policy).
+- **PI-P1-OBS-001**, classified as a tooling issue in the Bearing Lite freeze
+  hook. `checkIntegrationStepRefs` in `hooks/plan-package.cjs` treats every
+  `step`/`step_id` key anywhere in `implementation.json` as an
+  integration-step reference that must resolve to a slice id or receipt.
+  - Evidence: first freeze returned 7× `unresolved_integration_step`
+    (P2-1..P2-7) for the `phase2_sequence` planning entries, which are not
+    integration steps.
+  - Impact: one correction round; the entries were renamed to `id`.
+  - Suggestion: scope the check to integration-step-shaped nodes, or document
+    `step`/`step_id` as reserved keys for slice references.
+- **Tools exercised:** python3 (jsonschema Draft202012Validator, builder
+  self-checks), `node hooks/plan-package.cjs`, `node tools/render-dod-manifest.mjs`
+  (write + `--check`), git (`rev-parse`, `show`, `status`), sha256sum, grep.
+- No new observations beyond PI-P1-OBS-001. The builder script lives outside
+  the repository (`/tmp/pi_build.py`) and is not part of the deliverable.
+
+Skipped: no commits, pushes, or branch operations (Orchestrator's call); no
+edits outside the four authorized paths (three written; `seit.json` verified
+current and left untouched).
+
+## Planning and Design correction after the Plan Integrator run (Phase 1)
+
+The Plan Integrator's risk note said "S41 kept `light` per packet". The Planning node reclassified S41 as `judgement` / Product Implementer. Authoring a router SKILL.md with trigger checks is not a deterministic runbook step.
+
+What changed:
+
+- `implementation.json`: the S41 role, work_class, work_class_reason, model_route, reasoning_level and skills now match S01, the tech-writing implementer route. The `dod_manifest.tasks` S41 role, the OD-AFC-01 recommendation text and `revision_diff.changed_slices` changed to match.
+- The technical plan lanes table and the OD-AFC-01 recommendation, the `design.md` DES-AFC-LANES bullets and the `slice-graph.md` S41 row now say the same.
+- The `seit.json` and `implementation.json` planning-input digests were rebound mechanically. The technical plan went 2c8aa8f6… → a06cd82a…, and `design.md` went 0ef4414e… → 5556230a…. The seit content is otherwise unchanged; the S41 commands carry no `actor`.
+
+Results:
+
+- The candidate digest went 64d2fabc… → `253294a017eb51171ce795e25184f036a27a310afb8840793ff4f86a65863688`.
+- Freeze PASS with findings [], schemas OK (implementation, seit, authority), and RENDER_WRITE / RENDER_CHECK_PASS at sha256:4544e1d4….
+- `evaluatePlanningReview` returns NEEDS_MORE_EVIDENCE / review_round_pending, so the manifest is generated.

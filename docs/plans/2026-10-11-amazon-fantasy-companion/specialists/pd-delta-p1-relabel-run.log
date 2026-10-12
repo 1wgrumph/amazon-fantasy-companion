@@ -1,0 +1,37 @@
+**DELTA_APPLIED.** OR-01 is fixed. The register, SysML v2 models, D1 assembly and owner spec review are now labelled Phase 1 throughout the package. All checks pass.
+
+- **New candidate digest:** `f213dcebb4e5acffa97ded459fbd69eea7298b4dc111d9e4bec3e9a642ee1d98` (was `253294a0…`).
+- **Rendered manifest:** sha256 `c772815a…36b6b`, `RENDER_CHECK_PASS`.
+- **Receipt:** `specialists/pd-delta-p1-relabel-receipt.md`
+
+**ID mapping:**
+
+| Before | After | Phase |
+|---|---|---|
+| P2-1..P2-5 (incl. P2-3a, P2-3b/c) | ST-1..ST-5 (ST-3a, ST-3b/c) | Phase 1 spec track |
+| P2-6, P2-7 | unchanged | Phase 2: implementation plan, then milestones (D3), then implementation |
+
+What the work does, who does it, and the order are unchanged. ST-2 and ST-3 are Requirements Engineer and Systems Modeler sessions that start at approval, in parallel with the D5/D4 waves. ST-4 waits for S06, S42, S09 and the register and model gates. P2-6 waits for the owner's spec approval at ST-5.
+
+**Files updated:** technical plan, `design.md`, `seit.json`, `implementation.json` (which now has a mapping note), `authority.json` text, the V4/V5/V6 views and `views.json`, and the regenerated manifest. "Deferred to Phase 2" is renamed "Deferred to the spec track or Phase 2". Product implementation rows in it stay Phase 2.
+
+**Checks:**
+- Plan-package freeze passes with no findings.
+- Schema validation shows 0 errors in all three JSON files.
+- Render write and `--check` both pass.
+- The rule-12 home-path scan finds 0 matches in all 19 files.
+- The mechanical requirement lint output is byte-identical to before (32 rows, 6 flagged).
+- The edited SVGs render in headless Chrome without text overflow.
+
+**developer_feedback:**
+- **PD-OR01-OBS-1:** my global ID-substitution pass also rewrote the "were P2-1..P2-5" mapping notes. I caught it with a grep and fixed it.
+- **PD-OR01-OBS-2:** the freeze does not check the `svg_sha256` values in `views.json`, so a stale view digest would pass silently. I rebound them by hand; the freeze should check them.
+- **PD-OR01-OBS-3:** called with the plan directory path, `evaluatePlanningReview` returned `planning_review_missing`. The earlier receipt recorded `review_round_pending`, so I may have called it the wrong way. I didn't investigate.
+
+**Not done or not checked:**
+- Some stable identifiers still say "phase2"/"phase-2" and were kept on purpose: the plan-directory glob, `evidence/phase2-entry-receipt.json`, the PROC-/DES- IDs and the JSON keys. Renaming them would change authority paths and IDs, which the packet ruled out.
+- Earlier specialist receipts (`integration-plan.md`, `slice-graph.md`, RE/SM/TE receipts) still use P2-n IDs; the receipt's mapping table resolves them.
+- `journey.json` is untouched.
+- No commits, as the packet required.
+- The edits change the wording of AC-AFC-PLAN-01, PLAN-03, RISK-AFC-16 and RISK-17, but no obligation changed. The Requirements Engineer has not re-gated them; whether that's needed is your call.
+exit=0

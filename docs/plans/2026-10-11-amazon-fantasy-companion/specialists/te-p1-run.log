@@ -1,0 +1,67 @@
+**PASS.** `seit.json` for Phase 1 is regenerated and validates against `seit.schema.json` with zero errors. All 32 Phase 1 rows (24 AC-AFC, 8 RISK-AFC) have proof cases, and no deferred product row has one. The receipt carries the same report.
+
+- **Candidate:** `plan/2026-10-11-amazon-fantasy-companion` at `f885e48e58a6c10fa716b6c5ef048a71980a977a` plus working-tree changes. The inputs are bound by sha256:
+  - technical plan `2c8aa8f6…`
+  - `design.md` `0ef4414e…`
+  - `views/views.json` `8618f13d…`
+- **Changed paths:** `PLAN/seit.json` and `PLAN/specialists/test-engineer-receipt.md` only. Nothing is committed.
+- **Counts:** 54 proof cases, 54 traceability rows, 46 commands and procedures, and all 20 command IDs the slice graph names.
+
+**The inputs changed while I was working.** The Integration Engineer Phase 1 plan landed at 19:43, and its findings were applied to the technical plan, `design.md` and the slice graph at 19:45. My first cross-check caught it (`missing: ['CMD-HOOK-INSTALL-SANDBOX']`), and I reconciled against the new versions:
+- S11 now checks its installer against a temporary home directory; the live install runs at IE-P1-10.
+- The vendored spec tools are checked by tree id, and the spec template is vendored too.
+- The Phase 2 entry receipt is at `evidence/phase2-entry-receipt.json`.
+- The Alphazedehq skill suites are rerun locally after each merge.
+- Landing checks now work on a private repository with no rulesets.
+- I added the new open item OA-AFC-A3.
+
+The requirement rows themselves did not change. The integration sequence now follows IE-P1-1..IE-P1-12.
+
+I used 2 of the 3 correction rounds. The first was that slice-graph change; the second fixed one command placeholder that broke `bash -n`. Afterwards `bash -n` and `shellcheck -s bash -S error` passed on every command, and neither file contains an absolute home path.
+
+**Cross-check output (verbatim, exit 0):**
+```text
+schema_errors: 0
+phase1_plan_rows: 32 proof_cases: 54 requirements_covered: 32 commands: 46
+missing_from_proof_cases: []
+unknown_requirement_ids: []
+deferred_ids_in_cases_or_matrix: []
+case_command_ids_unknown: []
+slice_graph_command_ids: 20 missing: []
+actor_fields: []
+unknown_design_ids: []
+matrix_rows: 54 bad_columns: 0
+cases_missing_reverify_line: []
+tdd_cases_missing_slice_fields: []
+dup_case_ids: 0
+slices_without_rows: []
+seq_rows_unknown: []
+seq_cmds_unknown: []
+required_cmds_unknown: []
+```
+
+**Findings for the Plan Integrator (TE-P1-F01..F10):**
+- **F01:** IE command IDs are finalized here. IE's `CMD-P2-ENTRY-RECEIPT` becomes `PROC-PHASE2-ENTRY`. IE-P1-11's check of the log's row fields should cite `CMD-DX-COVERAGE`, not `CMD-DX-PRESENCE`.
+- **F02:** Several slices need commands the slice graph doesn't list yet. The main ones: coverage and mutation commands on S09 and S11, and `CMD-D4-AGNOSTIC` on S01–S03, S11 and S41. The full list is in the finding.
+- **F03:** The f885e48 `CMD-SCAN` pointed at Alphazedehq `hooks/scan-supply-chain.sh`. That script is an advisory hook that always exits 0, not a scanner. `CMD-SCAN` now runs the scan-software-supply-chain skill procedure and checks the receipt's verdict line.
+- **F04:** Coverage needs two test conventions:
+  - the S11T hook tests run the installer through `$AFC_HOOK_PY` (default `python3`);
+  - the S09T tests call the path and docs checkers in-process.
+- **F06:** Run `CMD-PR-CHECKS` before every merge in this repository, because it is private with no rulesets.
+- **F07:** RISK-AFC-17 only takes effect at P2-6. At Phase 1 closeout its row can only be OPEN_CARRIED, never PASS.
+- **F08:** Shell coverage and shell mutation (kcov and a shell mutation tool are absent) are recorded as TOOL_MISSING gaps. The spec-and-docs lane has no coverage or mutation claims under OA-AFC-A2 option A. Option B means regenerating the SEIT.
+- **F10:** OA-AFC-A3 (review cadence) is an owner decision. The proof rows are the same under either option.
+- F05 is resolved by the IE changes. F09 says every slice has proof rows and asks the Plan Integrator to copy the slice-to-row map.
+
+**Remaining risks:**
+- The mutmut 2.x and diff-cover command flags are declared but were never run, since installing tools was out of scope. If they fail at first use, the claim is a typed gap.
+- Under option A, the executable shared tooling gets no Assurance Test Engineer pass, only its own tests and the Reviewer.
+- Any further edit to the three bound inputs invalidates the digests and needs a Test Engineer delta.
+
+**developer_feedback:**
+- **TE-P1-OBS-001:** this session was dispatched while the Integration Engineer run was still running, so its inputs were edited mid-session. That cost one reconciliation round. Suggestion: dispatch the Test Engineer after IE findings are applied, or freeze the inputs during the run.
+- **TE-P1-OBS-002:** the f885e48 `CMD-SCAN` was never run against the tool it named.
+- Tools exercised: jsonschema, git, sha256sum, grep/sed/diff, bash -n, shellcheck.
+
+Nothing was run against Alphazedehq or GitHub.
+exit=0

@@ -1,0 +1,45 @@
+**Outcome: GAPS.** I wrote the Phase 1 integration plan to `PLAN/specialists/integration-plan.md`. It has 12 integration steps across the two repositories, and none of its gaps needs an owner decision. Ten defects (IE-P1-F01..F10, each with exact corrected text) must be fixed by the Plan Integrator before the affected slices dispatch.
+
+**Plan shape**
+- Wave 1 merges independently: IE-P1-1..5 merge S01, S02, S03, S06 and S07.
+- Then IE-P1-6 (S06L links), IE-P1-7 (S42 vendoring) and IE-P1-8 (S41, only if OD-AFC-01 = B).
+- Then IE-P1-9 (S09T + S09 gate), IE-P1-10 (S11T + S11, then the live hook install), IE-P1-11 (S08 Scribe log).
+- IE-P1-12 assesses the final candidate and records the Phase 2 entry receipt.
+- No glue is authorized. Both repositories merge with merge commits, so the reviewed PR head SHAs stay on `main`.
+
+**Findings to fix**
+- **F01 (blocks every merge):** read literally, the rule that every PR is reviewed once "at the Phase 1 boundary" deadlocks. Wave 2 depends on Wave 1 PRs being merged, merging needs that review, and the review only happens at Phase 1's end. The fix makes each integration step its own review boundary and keeps the frozen `cadence: phase` value. If you judge that this changes the frozen profile, it becomes an owner amendment at the integrated review.
+- **F02:** the Alphazedehq main-checkout lease is exclusive, so S06L and S42 serialize even though both only read the checkout. Nothing stops a fast-forward while sessions are running; the S03 fast-forward changes `ship-pull-request` for every agent on the host. The fix is a reader-writer lease with a sync rule.
+- **F03:** the D5 vendor step copies only `scripts/`, but the gate's `spec` area reads `tools/spec/template/`. The commit `VENDORED.md` records is also undefined once the checkout fast-forwards past the D5 merge. The fix vendors the template too and pins the recorded commit by the skill directory's tree id.
+- **F04:** S11's stop condition forces a live install before merge. That writes a hook path inside a worktree that is deleted after merge, leaving every harness pointing at a missing hook. The fix runs a sandbox-HOME install before merge and the live install at IE-P1-10 from the main checkout.
+- **F05:** S41 must merge before S11 when OD-AFC-01 = B, or the new `ci-cd` skill never gets linked into Muse.
+- **F06:** S08 must wait until S11 and S41 return, or the log misses their observations ("every Phase 1 observation").
+- **F07:** S06L's evidence file has no PR to land in.
+- **F08:** the Phase 2 entry receipt has no file path or landing PR. The fix uses `evidence/phase2-entry-receipt.json`, landed in the closeout PR.
+- **F09:** Alphazedehq's CI path filters run none of the D4/D5 test suites, so green checks there are not evidence. The fix adds a local rerun of each suite on its merge commit and at closeout.
+- **F10:** this repository is private today. The rulesets API returns 403, so PR-only `main` and required checks are not enforced, and CI runs use metered private minutes.
+
+**Concurrency check**
+- **Wave 1:** all 10 pairs have disjoint write sets.
+- **Wave 2:** all 17 pairs the dependency graph leaves unordered are disjoint. The only conflicts are runtime ones, covered by F02, F05 and F06.
+- **Hot files:** `THIRD_PARTY_NOTICES.md`, `tools/ci/VENDORED.md`, `.gitignore`, Alphazedehq `hooks/README.md` and `core.hooksPath` each have a single writer.
+- **Agent cap:** at most 5 implementation agents run at once.
+
+**Remaining risks**
+- The live hook install edits configurations every session on the host shares; restore is from the installer's backups.
+- The two untracked logs `re-p1-run.log` and `sm-p1-run.log` contain home paths. They must be scrubbed before the OD-AFC-06 change starts tracking logs.
+
+**Typed outcome**
+- **candidate_ref:** none (planning session; base f885e48 plus the working tree).
+- **changed_paths:** `PLAN/specialists/integration-plan.md` only.
+- **blocker:** none for this output. F01, F03, F04, F05 and F06 must be applied before the slices they affect dispatch.
+
+**Commands run (all read-only):** git log/status/worktree checks on both repos, `gh repo view`, the rulesets and branch-protection API, `readlink` on the harness skill directories, a scan of the Markdown links (61 files, 0 broken) and home paths (0 tracked), and a check that the JSON block parses with the required keys, no forbidden keys and no home paths.
+
+**developer_feedback:**
+- **DX-IE-P1-01:** Alphazedehq's CI path filters skip the changed-skill suites. This is a candidate enhancement for the Orchestrator to file.
+- **DX-IE-P1-02:** a private repository on GitHub Free cannot have rulesets (HTTP 403).
+- **DX-IE-P1-03:** BRAN is unavailable in this repository, so I used ordinary file discovery.
+
+I did not open `seit.json` beyond the f885e48 command definitions, so every command ID marked "proposed" still needs the Planning Test Engineer. Nothing was committed, per the packet's authority.
+exit=0

@@ -278,3 +278,187 @@ None.
 - **SM3-OBS-001, positive (method):** a key-by-key JSON comparison against a pre-edit copy proved that only `trace` and `requirement_mapping_status` changed. This is stronger than reading a text diff after the trace arrays were reformatted.
 - **SM3-OBS-002, friction (register format):** the RISK rows put the allocation in a different column from the AC rows. A single `awk` column pick returned allocation for AC rows but the response text for RISK rows. Mapping still used the full row text.
 - **Tools exercised:** `grep`, `sed`, `awk`, `comm`, `python3` (`json`, `hashlib`), `python3 -m json.tool`, `sha256sum`, `git diff --no-index --stat`.
+
+## Phase 1 update (2026-10-11, after the owner CHANGE DEC-AFC-SD-023/SD-024)
+
+Verdict: **READY**. Mode stays `diagram-assisted`, `sysml_claim: false`.
+Inputs: `amazon-fantasy-companion-technical-plan.md` (Phase 1), `design.md`
+(Phase 1), `specialists/slice-graph.md`, `journey.json` DEC-AFC-SD-023/SD-024.
+No requirement, design or slice was changed: only `views/**` plus this
+append.
+
+### What changed, and why
+
+- **V4 revised to the Phase 1 design.** The old V4 showed `android` and
+  `backend` gate areas and "D1 built from vendored tools/spec" as Phase 1
+  content. The Phase 1 gate has exactly the areas `spec`, `docs`, `hygiene`
+  (AC-AFC-CI-01); `android`/`backend` are a dashed "Phase 2 adds ..." note,
+  and D1 is a dashed Phase 2 consumer (P2-4). The D5 lane now reads
+  D5 → S42 vendor step → `tools/spec/` → `spec` area, with the template
+  self-check while no `spec/<name>/` exists (AC-AFC-CI-04). Also updated:
+  Actions triggers (`pull_request` + `push` to `main`, AC-AFC-CI-02), the
+  Vnv yes-branch (S07 tree with ci-cd, spec, developer-feedback), the
+  `scripts/diagram.py` wrapper (design F6 note), and the REFUSED_NO_VNV
+  other-repos note (OD-AFC-10).
+- **V5 added (Phase 1 context/boundary)** and **V6 added (Phase 1
+  use-case/outcome)**. The artifact grammar asks for context, use-case and
+  flow views on non-trivial plans, and V4 (a flow view) cannot carry the
+  boundary or the goal-level outcomes. Both are small on purpose
+  (5.9 KiB / 4.2 KiB SVG).
+- **`views.json` rewritten, run 3.** Phase 1 views (V4, V5, V6) first with
+  full metadata. V1..V3 are untouched files, demoted to
+  `"phase": "2-reference"`: their `trace` moved verbatim to
+  `phase2_reference_ids` (trace is now `[]`) with a limitation stating they
+  are superseded by the P2-3 sysml-v2 models and are not Phase 1 design.
+  `requirement_mapping_status` is
+  `provisional: finalize after Requirements Engineer Phase 1 PASS`.
+- **Trace deltas vs the run-2 V4 trace:** added AC-AFC-CI-04 (new `spec`/`docs`
+  area behaviour), RISK-AFC-12 (depicted on the harness-hooks node) and
+  DES-AFC-PHASE2 (dashed Phase 2 content); dropped AC-AFC-SPEC-02 and
+  DES-AFC-SPEC (no longer defined; D1 build quality moved to P2-4).
+
+### changed_paths
+
+- `views/v4-delivery-tooling.mmd`, `views/v4-delivery-tooling.svg`: revised.
+- `views/v5-phase1-context.mmd`, `views/v5-phase1-context.svg`: new.
+- `views/v6-phase1-use-cases.mmd`, `views/v6-phase1-use-cases.svg`: new.
+- `views/views.json`: rewritten (run 3).
+- `specialists/systems-modeler-receipt.md`: this section only.
+- `views/v1-*`, `views/v2-*`, `views/v3-*`: untouched (hashes identical).
+
+### Checks run
+
+- **ID existence:** every traced ID checked against its defining row
+  (`^| <ID> |` with optional `*(amended)*`/`*(new)*`, before
+  `## Deferred to Phase 2` in the plan) or heading (`^### <ID>` in
+  `design.md`). Output: `ids_checked=67 missing=0`. Deferred-section
+  mentions (e.g. the `| AC-AFC-PLAN-02 |` deferred row) do not count as
+  definitions. Every `phase2_reference_ids` entry verified absent from the
+  defined set (`still-defined=0`).
+- **JSON validity:** `python3 -m json.tool views/views.json` → `exit=0`.
+- **XML parse:** all 6 SVGs parse (`xml.dom.minidom`).
+- **Allowed tags:** 0 disallowed tags in all 6 SVGs (allowed set per the
+  packet); no `script`, `style`, `foreignObject`, `href`, `xlink:`.
+- **Absolute home paths:** 0 hits (POSIX/Mac/Windows shapes) in all
+  `.mmd` and `.svg` files. **Sizes:** largest 12950 bytes (< 512 KiB cap).
+- **SVG digests** (each equals `svg_sha256` in `views.json`):
+  - `v4-delivery-tooling.svg` d5a2717af3af5c127dc58b6eaa0032f07d17d618f653df68673b8ef8c20060b1
+  - `v5-phase1-context.svg` 0305dd13c23eab80c2ce06a217cd8761540c82f052d2ee0de60da1314257b6c0
+  - `v6-phase1-use-cases.svg` 22477ec753796d6e577bb6ebf53c4ba605a198ebc596a9b8d54e60b86bbf97d2
+  - `v1-context.svg` ab6bf7a466e6936f17d24008d887ff02341e4f1eb8824b0e7e473fd01814996e (unchanged)
+  - `v2-use-cases.svg` e9f366139a6539d46ac162d9d3ebf67e8924fa4626941814a270bb4c4223bdc4 (unchanged)
+  - `v3-operational-flow.svg` cd71a995c30370f3ef26d744b74475d671d53228a2e4fc9aba9f8e0e74941e9b (unchanged)
+- **Visual render:** not run (typed gap, as in run 2: no SVG rasterizer or
+  `mmdc` on this host). Layout checked by coordinate review; text widths
+  estimated per line against their boxes.
+
+**LOOP record:** the first ID-existence script missed 12 IDs because its
+regex expected `(amended)` while the register writes `*(amended)*`.
+Classification: tool (my checker). Fixed the regex, re-ran: 67/67 pass.
+
+### Findings (none blocking)
+
+- **P1U-1, no STOP triggered.** Every depicted behaviour maps to at least
+  one defined AC/RISK/DES/CONTRACT ID; no ID was invented. IDs depicted
+  only as annotations (C-conditions, SD decisions, OD items, slice IDs) stay
+  in `source_ids`/text, not in `trace`, per the mapping-finalization
+  semantics.
+- **P1U-2, IDs not depicted by any Phase 1 view** (process/lane records,
+  not drawable behaviour): AC-AFC-D4-05, D4-06, D5-03, D5-05, DX-01,
+  PLAN-01, PLAN-03, REV-01; RISK-AFC-07, -08, -11, -15, -16, -17;
+  DES-AFC-LANES is depicted (V4/V6 landing), DES-AFC-DX is depicted (V5
+  Scribe log). If the DoD Manifest needs view coverage for any undrawn ID,
+  that is a new view request, not a trace edit.
+
+### Blocker
+
+None.
+
+### developer_feedback
+
+- **SM4-OBS-001, positive (method):** generating `views.json` from a script
+  that reads the old file preserved the V1..V3 traces byte-exact into
+  `phase2_reference_ids` and computed `svg_sha256` from the final files, so
+  a digest mismatch was impossible by construction.
+- **SM4-OBS-002, friction (register format):** the `*(amended)*`/`*(new)*`
+  markers and the Deferred-section rows that reuse the `| ID |` table shape
+  (e.g. AC-AFC-PLAN-02) mean a naive `^| ID` grep over the whole plan both
+  misses defined IDs and false-hits deferred ones. The existence check must
+  cut the file at `## Deferred to Phase 2` and allow the markers.
+- **Tools exercised:** `python3` (`json`, `hashlib`, `re`,
+  `xml.dom.minidom`), `python3 -m json.tool`, `grep`, Read, Write, Edit.
+
+## Phase 1 mapping finalization (2026-10-11, after Requirements Engineer Phase 1 PASS, receipt p1 round 2)
+
+Verdict: **READY**. Mode stays `diagram-assisted`, `sysml_claim: false`.
+Inputs: register in `amazon-fantasy-companion-technical-plan.md` (sha256
+`b5adb9e7cb380c7c96673f341dfa379f51dd828ec750398ac7d0b0202b9a7f91`,
+gated by `specialists/requirements-engineer-receipt-p1.md` round 2 PASS),
+IDs in `design.md`. No view content, requirement, design or slice was
+changed.
+
+### changed_paths
+
+- `views/views.json`: `requirement_mapping_status` is now
+  `final: mapped after Requirements Engineer Phase 1 PASS (receipt p1
+  round 2)`. The Phase 1 `trace` arrays needed no edits: every entry
+  already exists in the gated register (rows before `## Exclusions`) or
+  in `design.md`, and the round-1→round-2 repair touched only the
+  RISK-AFC-17 statement text, which no view depicts. One line changed;
+  every other field, key order and byte is unchanged.
+- This section, appended to this receipt. No `.mmd` or `.svg` file was
+  touched.
+
+### Final trace (unchanged from the Phase 1 update; re-verified)
+
+| View | Requirements (AC, RISK) | Design (DES, CONTRACT) |
+|---|---|---|
+| MODEL-AFC-V4 delivery tooling | AC-AFC-CI-01..04, PATH-01, VNV-01, D4-01..04, LAND-01, D5-01, D5-02, D5-04, SPEC-01; RISK-AFC-12 | DES-AFC-GATE, D4, VNV, D5, LANES, PHASE2; CONTRACT-AFC-GATE, HOOK, SPECKIT |
+| MODEL-AFC-V5 context/boundary | AC-AFC-D5-01, D5-04, SPEC-01, CI-01, CI-02, D4-01..04, VNV-01, DX-02; RISK-AFC-13 | DES-AFC-D5, GATE, D4, VNV, DX, PHASE2; CONTRACT-AFC-GATE, HOOK, SPECKIT |
+| MODEL-AFC-V6 use cases | AC-AFC-D5-01, D5-02, CI-01..04, PATH-01, D4-01..04, VNV-01, LAND-01 | DES-AFC-D5, GATE, D4, VNV, LANES; CONTRACT-AFC-GATE, HOOK, SPECKIT |
+
+RISK-AFC-17 (repaired statement, a Phase 2 plan-approval duty) is not
+depicted by any Phase 1 view; the repair preserves the duty and only
+re-anchors the trigger, so no trace change follows. C-conditions, SD
+decisions, OD items and slice IDs stay in `source_ids`/text, not in
+`trace`, per mapping-finalization semantics.
+
+### Checks run
+
+- **ID existence:** every Phase 1 trace entry checked against its
+  defining row (`^| <ID> |` with optional `*(amended)*`/`*(new)*`,
+  before `## Exclusions`) or heading (`^### <ID>` in `design.md`).
+  Output: `ids_checked=67 missing=0`. No ID invented or repaired.
+- **JSON validity:** `python3 -m json.tool views/views.json` →
+  `exit=0`.
+- **SVG digests:** before and after hashes identical, each equal to
+  `svg_sha256` in `views.json`:
+  - `v4-delivery-tooling.svg` d5a2717af3af5c127dc58b6eaa0032f07d17d618f653df68673b8ef8c20060b1
+  - `v5-phase1-context.svg` 0305dd13c23eab80c2ce06a217cd8761540c82f052d2ee0de60da1314257b6c0
+  - `v6-phase1-use-cases.svg` 22477ec753796d6e577bb6ebf53c4ba605a198ebc596a9b8d54e60b86bbf97d2
+  - `v1-context.svg` ab6bf7a466e6936f17d24008d887ff02341e4f1eb8824b0e7e473fd01814996e (unchanged)
+  - `v2-use-cases.svg` e9f366139a6539d46ac162d9d3ebf67e8924fa4626941814a270bb4c4223bdc4 (unchanged)
+  - `v3-operational-flow.svg` cd71a995c30370f3ef26d744b74475d671d53228a2e4fc9aba9f8e0e74941e9b (unchanged)
+
+### Findings (none blocking)
+
+- **MF-P1-1, no STOP triggered.** Every depicted behaviour maps to at
+  least one defined AC/RISK/DES/CONTRACT ID; no view depicts behaviour
+  without an ID. IDs not depicted by any Phase 1 view are unchanged from
+  the Phase 1 update (P1U-2): AC-AFC-D4-05, D4-06, D5-03, D5-05, DX-01,
+  PLAN-01, PLAN-03, REV-01; RISK-AFC-07, -08, -11, -15, -16, -17. If the
+  DoD Manifest needs view coverage for any undrawn ID, that is a new
+  view request, not a trace edit.
+
+### Blocker
+
+None.
+
+### developer_feedback
+
+- **SM5-OBS-001, positive (method):** a single-line `Edit` on
+  `requirement_mapping_status` plus before/after `sha256sum` runs made
+  "every other byte unchanged" provable without a key-by-key JSON
+  comparison pass.
+- **Tools exercised:** `sha256sum`, `python3` (`json`, `re`,
+  `hashlib`), `python3 -m json.tool`, `grep`, Read, Edit.
