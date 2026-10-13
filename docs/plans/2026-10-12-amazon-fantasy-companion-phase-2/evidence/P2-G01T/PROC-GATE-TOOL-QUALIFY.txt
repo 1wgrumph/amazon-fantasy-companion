@@ -1,0 +1,26 @@
+native coverage both=True exit=0 lines={4: 1, 5: 1, 6: 1, 7: 1}; Wrote XML report to coverage.xml
+native coverage both=False exit=2 lines={4: 1, 5: 1, 6: 1, 7: 0}; Wrote XML report to coverage.xml
+Coverage failure: total of 75 is less than fail-under=90
+test_absent_native_data_rejects_report (test_native_coverage.NativeCoverage.test_absent_native_data_rejects_report) ... ok
+test_covered_statements_pass_native_threshold (test_native_coverage.NativeCoverage.test_covered_statements_pass_native_threshold) ... ok
+test_diff_cover_binding_is_available (test_native_coverage.NativeCoverage.test_diff_cover_binding_is_available) ... FAIL
+test_uncovered_statement_fails_native_threshold (test_native_coverage.NativeCoverage.test_uncovered_statement_fails_native_threshold) ... ok
+
+======================================================================
+FAIL: test_diff_cover_binding_is_available (test_native_coverage.NativeCoverage.test_diff_cover_binding_is_available)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "$REPO/tools/ci/tests/coverage/test_native_coverage.py", line 65, in test_diff_cover_binding_is_available
+    self.assertEqual(result.returncode, 0,
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+                     'GAP DIFF_COVER_UNAVAILABLE: ' + result.stdout + result.stderr)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : GAP DIFF_COVER_UNAVAILABLE: /usr/bin/python3.12: No module named diff_cover
+
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.335s
+
+FAILED (failures=1)
+
+exit=1

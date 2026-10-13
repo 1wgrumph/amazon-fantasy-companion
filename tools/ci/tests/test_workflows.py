@@ -110,7 +110,9 @@ class AC_AFC_CI_02(unittest.TestCase):
             self.fail('PyYAML is required to read ci.yml')
         changes = yaml.safe_load(workflow.read_text(encoding='utf-8'))['jobs']['changes']
         filters = yaml.safe_load(next(s['with']['filters'] for s in changes['steps'] if s.get('id') == 'filter'))
-        self.assertEqual(set(filters), {'spec', 'docs'})
+        self.assertLessEqual({'spec', 'docs'}, set(filters))
+        self.assertEqual(set(filters), set(yaml.safe_load(workflow.read_text(encoding='utf-8'))['jobs'])
+                         - {'changes', 'hygiene'})
         self.assertLessEqual({'spec/**', 'tools/spec/**'}, set(filters['spec']))
         self.assertIn('docs/**', filters['docs'])
         self.assertTrue(any(p.endswith('*.md') for p in filters['docs']), filters['docs'])
