@@ -67,7 +67,7 @@ run_area() {
                 output="${source}$(basename "$source").md"
                 spec_check "$source" "$output" || return "$?"
                 git ls-files --error-unmatch "$output" >/dev/null 2>&1 || return 1
-                git diff --exit-code HEAD -- "$output" || return 1
+                git diff --exit-code -- "$output" || return 1
             done
             if (( ! found )); then
                 [[ -d tools/spec/template ]] || { echo 'tools/spec template missing'; return 3; }
