@@ -24,7 +24,9 @@ Dependencies (replace group references with issue links after all issue identiti
 
 ## Expected
 
-Deliver the named slices within milestone **M5**, preserving their write sets, required evidence, failure behavior and owner-only boundaries. Planning/tracking approval does not start product execution; a subsequent owner execution instruction is required.
+Deliver the named slices within milestone **M12**, preserving their write sets, required evidence, failure behavior and owner-only boundaries. Planning/tracking approval does not start product execution; a subsequent owner execution instruction is required.
+
+Sequence: step 4 of 4 in M12; starts when after Wave 4 exit (Scribe side lane, not counted against the cap). feedback and friction log
 
 Write set:
 

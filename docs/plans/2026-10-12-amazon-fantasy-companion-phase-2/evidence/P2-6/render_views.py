@@ -61,18 +61,18 @@ for k, (s, d, label) in enumerate(msgs):
         b += arrow(cx(s), y, cx(d), y, label)
 (OUT / "p2-alert-watch-flow.svg").write_text(svg(10 + len(parts) * W, 480, "Phase 2 operational flow: alert to Watch", b))
 
-# V-P2-3 program waves / milestones
-waves = [("M1 Foundations (due 10-14 23:00Z)", "L01 X01 X05 D01 G01T/G01 A01T/A01 B01T/B01 R1"),
-         ("M2 Spike verdicts (due 10-17 01:00Z = T_yahoo + 6 h)", "X04 X02 X03 X07 X06 B02T/B02 B03T/B03 A02T/A02 L02 R2"),
-         ("M3 End-to-end on the stick (due 10-19 12:00Z)", "B04..B07 pairs A03..A05 pairs L03 X09 (Sun 10-18) R3"),
-         ("M4 Feature complete (due 10-21 23:00Z)", "X10 (Mon 10-19) D02 X11 (conditional) R4 + bug-triager defects"),
-         ("M5 Submission ready (due 10-23 12:00Z)", "D03 D04 D05 SCR1 -> R5 (v1.0.0 candidate) -> L05 (APK + Reverify) -> X12 (Thu 10-22)")]
+# V-P2-3 program waves / release checkpoints
+waves = [("W1 Foundations (due 10-14 23:00Z)", "L01 X01 X05 D01 G01T/G01 A01T/A01 B01T/B01 R1"),
+         ("W2 Spike verdicts (due 10-17 01:00Z = T_yahoo + 6 h)", "X04 X02 X03 X07 X06 B02T/B02 B03T/B03 A02T/A02 L02 R2"),
+         ("W3 End-to-end on the stick (due 10-19 12:00Z)", "B04..B07 pairs A03..A05 pairs L03 X09 (Sun 10-18) R3"),
+         ("W4 Feature complete (due 10-21 23:00Z)", "X10 (Mon 10-19) D02 X11 (conditional) R4 + bug-triager defects"),
+         ("W5 Submission ready (due 10-23 12:00Z)", "D03 D04 D05 SCR1 -> R5 (v1.0.0 candidate) -> L05 (APK + Reverify) -> X12 (Thu 10-22)")]
 b = ""
 for i, (m, s) in enumerate(waves):
     y = 15 + i * 62
     b += box(15, y, 330, 46, m, "#e8f5e9") + box(365, y, 520, 46, s)
     if i:
         b += arrow(180, y - 16, 180, y)
-b += f'<text x="15" y="335" font-size="11" {FONT}>Stick chain (lease fire-tv-stick): X01 -> X04 (within 24 h of first install) -> X02 -> X03 PR 1 (desk) -> X07; X03 PR 2 = TNF 10-15. Cap: 5 implementation agents.</text>\n'
-(OUT / "p2-program-waves.svg").write_text(svg(900, 345, "Phase 2 milestones and waves", b))
+b += f'<text x="15" y="335" font-size="11" {FONT}>Stick lease: X01 -> X04 (within 24 h of first install) -> A01 review -> X02 -> X03 desk -> X07; X03 live = TNF 10-15. Cap: 5.</text>\n'
+(OUT / "p2-program-waves.svg").write_text(svg(900, 345, "Phase 2 waves and release checkpoints", b))
 print("wrote", sorted(p.name for p in OUT.glob("*.svg")))

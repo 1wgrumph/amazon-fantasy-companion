@@ -7,7 +7,7 @@
     "planning_repository": "github:1wgrumph/amazon-fantasy-companion",
     "tracking_issue": "1wgrumph/amazon-fantasy-companion#1",
     "deadline": "2026-10-23T19:00:00Z",
-    "current_activity": "CONTRACT_FAILURE: Bearing1.1.7 mandatory RE precheck rejects owner-authoritative Markdown register; profile migration frozen, chronology unapplied, no child; product held."
+    "current_activity": "13-milestone/profile package complete and mechanically verified; full-page browser check unavailable; integrated owner review pending, product held."
   },
   "checkout_lease": {
     "journey": "AFC-2026-10-11",
@@ -20,9 +20,9 @@
     "generation": 1,
     "state": "waiting_owner",
     "resumed_at": "2026-10-13T13:54:42Z",
-    "liveness": "No child dispatched in this session. Safe handoff at precheck contract gap; do not duplicate completed Opus chronology review.",
-    "heartbeat_at": "2026-10-13T14:00:48Z",
-    "active_candidate": "655eb91ad7acd110257ea36c49328b1adc053920"
+    "liveness": "All RE/IE/TE/PI children completed exit0; no active child. Do not repeat the completed Opus review or spent review/repair. Await integrated owner gate.",
+    "heartbeat_at": "2026-10-13T15:27:30Z",
+    "active_candidate": "14120d1d24e71c95e50cbc7a2e4edec1a5d7f5a7"
   },
   "stages": {
     "intake": "accepted",
@@ -3171,6 +3171,73 @@
       "result": "13milestones with3,2,3,4,3,3,3,3,2,2,4,4,3 issues;39issues52slices;5waves/releases preserved;20/20 agent-reported proposalchecks",
       "limitations": "Parent did not rerun all20checks; milestone revision/profile migration not applied; timing risk remains",
       "child_state": "COMPLETED; do not relaunch review"
+    },
+    {
+      "at": "2026-10-13T14:33:12Z",
+      "kind": "planning_delta_return",
+      "lease_id": "RE-CHR-041",
+      "role": "Requirements Engineer",
+      "route": "Cursor Agent / Grok4.7 / high",
+      "outcome": "REPAIRABLE_FAILURE",
+      "process_exit": 0,
+      "evidence": "Phase2 specialists/re-chronology-041-receipt.md",
+      "authority": "DEC-AFC-SD-040/041",
+      "independent_review": false,
+      "no_fallback": true
+    },
+    {
+      "at": "2026-10-13T14:33:12Z",
+      "kind": "planning_delta_return",
+      "lease_id": "IE-CHR-041",
+      "role": "Integration Engineer planning",
+      "route": "Claude Code / Claude Opus5.5 / high",
+      "outcome": "CANDIDATE_READY",
+      "process_exit": 0,
+      "evidence": "Phase2 specialists/ie-chronology-041-receipt.md",
+      "authority": "DEC-AFC-SD-040/041",
+      "independent_review": false,
+      "no_fallback": true
+    },
+    {
+      "at": "2026-10-13T14:53:32Z",
+      "kind": "planning_delta_return",
+      "lease_id": "RE-CHR-041-R2",
+      "role": "Requirements Engineer re-gate",
+      "route": "Cursor Agent / Grok 4.7 / high",
+      "outcome": "PASS",
+      "process_exit": 0,
+      "evidence": "Phase2 specialists/re-chronology-041-regate-receipt.md",
+      "authority": "DEC-AFC-SD-040/041",
+      "independent_review": false,
+      "no_fallback": true
+    },
+    {
+      "at": "2026-10-13T14:53:32Z",
+      "kind": "planning_delta_return",
+      "lease_id": "TE-CHR-041",
+      "role": "Planning Test Engineer",
+      "route": "Claude Code / Claude Opus 5.5 / high",
+      "outcome": "PASS",
+      "process_exit": 0,
+      "evidence": "Phase2 specialists/te-chronology-041-receipt.md",
+      "authority": "DEC-AFC-SD-040/041",
+      "independent_review": false,
+      "no_fallback": true
+    },
+    {
+      "at": "2026-10-13T15:27:30Z",
+      "kind": "planning_delta_return",
+      "lease_id": "PI-CHR-041",
+      "route": "Muse Code / Muse Spark 1.3 / max; --contributor-mode on",
+      "outcome": "PLAN_REVIEW_READY author-only",
+      "process_exits": [
+        0,
+        0
+      ],
+      "evidence": "Phase2 specialists/pi-chronology-041-final-receipt.md",
+      "parent_conservation_checks": 267,
+      "independent_review": false,
+      "no_fallback": true
     }
   ],
   "planning_review": {
@@ -3441,16 +3508,21 @@
   },
   "integrated_review_phase2": {
     "round": 1,
-    "status": "CHANGE_REQUESTED",
-    "candidate_digest": "67ac7a9071859e8d4ef05b863c3e6e4d4931d2451a162abb5bb8115eeb1b7d46",
-    "tracking_payload_sha256": "f485d8f62f72bf09c1e90c57493e03a178ec93ba7e9fc155cd776a32f736f5e9",
-    "milestones": 5,
+    "status": "AWAITING_INTEGRATED_REVIEW_WITH_VISUAL_GAP",
+    "candidate_digest": "e02871029b86f8d0f2fdef6617feb989413883cc6bdb70e5dec3a47e64c86da8",
+    "tracking_payload_sha256": "f0b8d5bf26d3959948e65960fc2b06525a96f964ab3454633eb6c1aaeab9acdb",
+    "milestones": 13,
     "issues": 39,
     "approval_scope": "Planning package plus P2-L01 GitHub tracking after PR landing only; product execution held pending subsequent owner instruction",
-    "owner_decision": "DEC-AFC-SD-040",
-    "candidate_revision": "51bc730a880105c9b21d37a7a2dc5da79ada875f",
+    "owner_decisions": [
+      "DEC-AFC-SD-040",
+      "DEC-AFC-SD-041"
+    ],
+    "authoring_baseline_revision": "14120d1d24e71c95e50cbc7a2e4edec1a5d7f5a7",
     "pr": "https://github.com/1wgrumph/amazon-fantasy-companion/pull/15",
-    "presented_at": "2026-10-13T07:47:39Z"
+    "prepared_at": "2026-10-13T15:27:30Z",
+    "evidence_ref": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/chronology-profile-delta/parent-final-verification.json",
+    "browser_gap": "No connected CUA browser; full-page visual/phone check not run and not owner-accepted. Changed SVG raster inspected; source/render checks passed."
   },
   "profile_migration_pending": {
     "authority": "DEC-AFC-SD-041",
@@ -3458,19 +3530,20 @@
     "observed_catalog_name": "opensource-hackathon",
     "observation_ref": "Phase2 evidence/fresh-session-handoff/profile-observation.json",
     "activated": true,
-    "next": "Resolve Markdown-compatible Bearing1.1.7 RE precheck contract before any specialist dispatch; downstream artifact/profile regeneration remains pending.",
+    "next": "One integrated owner review; PR15 merge/tracking creation await approval; product execution remains held.",
     "activated_at": "2026-10-13T13:54:42Z",
     "full_profile_sha256": "7d501eb8c103831a38c50d237b5d1e2e015a564b9ade8aef09a32dfc39b26ab1",
-    "evidence_ref": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/profile-migration-041"
+    "evidence_ref": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/profile-migration-041",
+    "projections": "complete"
   },
   "planning_resume_041": {
-    "outcome": "CONTRACT_FAILURE",
+    "outcome": "NEEDS_MORE_EVIDENCE",
     "at": "2026-10-13T14:00:48Z",
     "session_started_at": "2026-10-13T13:49:00Z",
     "stop_new_work_at": "2026-10-13T19:44:00Z",
-    "profile_binding": "activated; projections pending",
+    "profile_binding": "activated; all canonical projections reconciled",
     "full_profile_sha256": "7d501eb8c103831a38c50d237b5d1e2e015a564b9ade8aef09a32dfc39b26ab1",
-    "chronology": "proposal preserved; canonical rewrite not applied",
+    "chronology": "applied and mechanically verified; browser visual gap remains",
     "evidence": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/profile-migration-041/contract-gap.json",
     "dispatches": [],
     "planning_review_spent": 1,
@@ -3478,6 +3551,57 @@
     "additional_opus_review": "completed before session; not repeated",
     "pr15": "draft; merge held pending integrated approval",
     "product_execution": "held",
-    "next_action": "Resolve precheck/lint contract for Markdown before RE, then TE and PI. Do not reread live profile for dispatch; frozen entry is current authority."
-  }
+    "next_action": "Present revised package for integrated owner review with explicit browser gap; resolve or accept that gap. No duplicate dispatch or product execution.",
+    "continuation": {
+      "at": "2026-10-13T14:16:01Z",
+      "owner_instruction": "ok lets continue",
+      "precheck_resolution": "Documented pure checkRegister with lossless in-memory Markdown projection; no SDoc persisted, no plugin change; 63 active checked, 3 withdrawn retained; register-precheck PASS.",
+      "library_lint": "exit0 with no output on Markdown; zero SDoc nodes, NOT semantic lint PASS; separate RE semantic gate required.",
+      "evidence": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/chronology-profile-delta",
+      "budget_reset": false,
+      "re_correction": {
+        "scope": "owner chronology delta",
+        "correction_rounds": 2,
+        "reserved_by": "evidence/chronology-profile-delta/re-correction-result.json",
+        "regate_uids": [
+          "AC-AFC-P2-MS-01"
+        ],
+        "closed_uids": [
+          "AC-AFC-P2-REL-02",
+          "RISK-AFC-P2-13",
+          "AC-AFC-P2-DX-02"
+        ],
+        "note": "Native returned count persisted once; no planning-review or aggregate-repair budget reset."
+      },
+      "ie_outcome": "CANDIDATE_READY;32/32 parent-rerun checksPASS",
+      "re_outcome": "PASS all4affected rows closed; correction_rounds2 unchanged",
+      "te_outcome": "PASS22/22 parent-rerun checks",
+      "pi_outcome": "PLAN_REVIEW_READY author-only; both calls exit0 on same frozen route; parent267conservation checks and3negative casesPASS",
+      "browser_gap": "cua.createBrowserTab iab unavailable; cua.listBrowsers returned []; user input requested while integration continues.",
+      "active_children": [],
+      "parent_final_verification": {
+        "conservation_checks": 268,
+        "negative_cases_rejected": 3,
+        "repository_gate": "PASS39tests;spec/docs/hygiene",
+        "evidence": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/chronology-profile-delta/parent-final-verification.json",
+        "literal_label_completion": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/chronology-profile-delta/release-condition-label-receipt.json",
+        "browser_visual": "NOT_RUN; no available browser; owner acceptance not recorded"
+      }
+    }
+  },
+  "integrated_review_phase2_history": [
+    {
+      "round": 1,
+      "status": "CHANGE_REQUESTED",
+      "candidate_digest": "67ac7a9071859e8d4ef05b863c3e6e4d4931d2451a162abb5bb8115eeb1b7d46",
+      "tracking_payload_sha256": "f485d8f62f72bf09c1e90c57493e03a178ec93ba7e9fc155cd776a32f736f5e9",
+      "milestones": 5,
+      "issues": 39,
+      "approval_scope": "Planning package plus P2-L01 GitHub tracking after PR landing only; product execution held pending subsequent owner instruction",
+      "owner_decision": "DEC-AFC-SD-040",
+      "candidate_revision": "51bc730a880105c9b21d37a7a2dc5da79ada875f",
+      "pr": "https://github.com/1wgrumph/amazon-fantasy-companion/pull/15",
+      "presented_at": "2026-10-13T07:47:39Z"
+    }
+  ]
 }

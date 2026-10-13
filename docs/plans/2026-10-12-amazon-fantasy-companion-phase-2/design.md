@@ -1,6 +1,6 @@
 ---
 type: design
-status: complete
+status: amended
 lifecycle: AFC-2026-10-11
 phase: 2
 technical_plan: amazon-fantasy-companion-phase-2-technical-plan.md
@@ -29,7 +29,7 @@ Slices may cite only the lens names in this table in `design_lenses`.
 | Security controls | Are secrets server-side only, device sessions authorized per request, and local paths and account data kept out of tracked files and captures? |
 | Free-tier boundary | Does backend work stay inside the Free-plan account without plan changes or paid-only services? |
 | Couch UI | Is every control remote-reachable with visible focus, and does text meet legibility_min at 1080p? |
-| Revision record | Does the landing add the changelog entry and does the milestone release follow `release-process`? |
+| Revision record | Does the landing add the changelog entry and does the technical-wave release follow `release-process`? |
 | Developer feedback | Does the work carry a developer_feedback section the Scribe can ingest? |
 | Owner boundary | Does the work stop at owner-only actions and the conditionals C1..C9? |
 
@@ -328,7 +328,7 @@ under Added / Changed / Fixed / Removed, naming the change and linking the
 pull request, after the PR number exists and before merge, under the
 `main-landing` lease (no implementer edits `CHANGELOG.md`). The first Phase
 2 landing creates the file if absent with a Keep a Changelog header. At
-each milestone exit, P2-R<n> runs `release-process`: moves `[Unreleased]`
+each technical-wave release checkpoint W1..W5, P2-R<n> runs `release-process`: moves `[Unreleased]`
 under `## [<version>] - <date>`, bumps `versionName`/`versionCode` in
 `tv-app/app/build.gradle.kts` (`tv-app-gradle` lease), drafts release notes
 and the tag; publication waits for the owner (OA-8; OD-AFC-P2-03).
@@ -354,11 +354,12 @@ P2-SCR1 assembles `product-feedback.md`, `feature-requests.md` and
 
 ### DES-AFC-P2-LANES — Lanes, worktrees, leases, landing, defects
 
-- Lanes and frozen profiles (DEC-AFC-PROFILE-001): tv-app-ui = frontend,
-  backend = primary, device-integration-spikes = heavyweight,
-  spec-and-docs = tech-writing, defects = bug-triager. Light slices use the
-  Light Implementer of their lane profile; the Scribe uses the planning
-  profile `primary` Scribe route.
+- The frozen opensource-hackathon profile applies to all product and planning
+  lanes under DEC-AFC-SD-041; defects retain the separate bug-triager binding.
+  Light work uses light_implementer and the Scribe uses scribe. Preserve all
+  13 existing TDD pairs; evidence/documentation-only slices use their declared
+  verification method. Every Muse dispatch passes `--contributor-mode on`;
+  role routes, ordered fallbacks, cadence, capabilities and holds are frozen.
 - Before valid red tests, the Test Implementer prepares only the minimal
   scanned build/test harness and interface scaffolding needed to collect
   and run the tests; it implements none of the tested feature behavior.

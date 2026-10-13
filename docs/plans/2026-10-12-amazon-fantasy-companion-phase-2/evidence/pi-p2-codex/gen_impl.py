@@ -22,17 +22,17 @@ AUTH = PLAN / "authority.json"
 SMRECEIPT = PLAN / "specialists/sm-p2-delta-receipt.md"
 TRACKING_PAYLOAD = PLAN / "evidence/github-work-items/github-work-items.json"
 
-REVISION = "7f000aff70e435b0cac923931fd818c69111f07d"
+REVISION = "14120d1d24e71c95e50cbc7a2e4edec1a5d7f5a7"
 BRANCH = "plan/2026-10-12-afc-phase-2"
 AUTHORITY_ID = "AUTH-AFC-2026-10-12-P2-001"
 REPO = "1wgrumph/amazon-fantasy-companion"
 
 LANE_PROFILE = {
-    "tv-app-ui": "frontend",
-    "backend": "primary",
-    "device-integration-spikes": "heavyweight",
-    "spec-and-docs": "tech-writing",
-    "Scribe side lane": "primary",
+    "tv-app-ui": "opensource-hackathon",
+    "backend": "opensource-hackathon",
+    "device-integration-spikes": "opensource-hackathon",
+    "spec-and-docs": "opensource-hackathon",
+    "Scribe side lane": "opensource-hackathon",
 }
 ROLE_SNAPSHOT = {
     "Product Implementer": "implementer",
@@ -113,6 +113,15 @@ seit = json.loads(SEIT.read_text())
 authority = json.loads(AUTH.read_text())
 parent_journey = json.loads(PJ.read_text())
 FS = parent_journey["profile_selection"]["frozen_snapshots"]
+assert set(FS) == {"opensource-hackathon", "bug-triager"}, sorted(FS)
+_OSH = FS["opensource-hackathon"]
+assert _OSH["full_profile_sha256"] == "7d501eb8c103831a38c50d237b5d1e2e015a564b9ade8aef09a32dfc39b26ab1"
+assert _OSH["configuration_digest_sha256"] == "11c4478edb7b0c94da196cdc8be2317f498378724ae041bde0c108832b1e2036"
+_OSNAP = _OSH["snapshot"]
+assert _OSNAP["roles"]["reviewer"]["cadence"] == "phase"
+assert _OSNAP["roles"]["test_engineer"]["sessions"]["assurance"]["cadence"] == "lifecycle"
+assert _OSNAP["roles"]["integration_engineer"]["sessions"]["execution"]["cadence"] == "lifecycle"
+assert _OSNAP["roles"]["test_engineer"]["sessions"]["assurance"].get("enabled") is True
 
 m = re.search(r"```json integration_plan\n(.*)\n```", IEP.read_text(), re.S)
 assert m, "integration_plan json block missing"
@@ -186,12 +195,17 @@ for hdr, rows in tables_with(tp_text, "ID"):
 assert len(ac_rows) == 24, (len(ac_rows), sorted(ac_rows))
 assert len(risk_rows) == 13, (len(risk_rows), sorted(risk_rows))
 
-# ---------- TP milestone / OA / open items / waves ----------
+# ---------- TP checkpoint / milestone / OA / open items / waves ----------
+cp_tables = tables_with(tp_text, "Checkpoint")
+assert len(cp_tables) == 1
+cp_hdr, cp_rows = cp_tables[0]
+CHECKPOINTS_SRC = [dict(zip(cp_hdr, r)) for r in cp_rows]
+assert [r["Checkpoint"] for r in CHECKPOINTS_SRC] == ["W1", "W2", "W3", "W4", "W5"]
 ms_tables = tables_with(tp_text, "Milestone")
 assert len(ms_tables) == 1
 ms_hdr, ms_rows = ms_tables[0]
 MILESTONES_SRC = [dict(zip(ms_hdr, r)) for r in ms_rows]
-assert [r["Milestone"] for r in MILESTONES_SRC] == ["M1", "M2", "M3", "M4", "M5"]
+assert [r["Milestone"] for r in MILESTONES_SRC] == [f"M{n:02d}" for n in range(1, 14)]
 
 oa_tables = tables_with(tp_text, "ID")
 OA_SRC = []
@@ -308,8 +322,10 @@ def slice_type(sid, role):
 def dev_strategy(lane, role, sid):
     if role == "Light Implementer":
         return "light"
-    if lane == "spec-and-docs" or role == "Scribe":
-        return "single_implementer"
+    if role == "Scribe":
+        return "scribe assembly (PROC-SCRIBE-ASSEMBLY; documentation-only inspection)"
+    if lane == "spec-and-docs":
+        return "documentation-only inspection (declared verification method; tdd for behavior changes)"
     if sid.startswith("P2-X"):
         return "evidence-only (OD-AFC-04, open_for_integrated_review)"
     return "tdd"
@@ -376,20 +392,22 @@ for _k, _v in LENS_BY_DESIGN.items():
         assert _l in LENSES_TABLE, _l
 
 # ---------- dependencies ----------
-MS_OF = {}
-for r in MILESTONES_SRC:
+WAVE_OF = {}
+for r in CHECKPOINTS_SRC:
     for s in [re.sub(r"\s*\(conditional\)$", "", x.strip()) for x in r["Slices"].split(",")]:
-        MS_OF[s] = r["Milestone"]
-assert len(MS_OF) == 52, len(MS_OF)
+        WAVE_OF[s] = r["Checkpoint"]
+assert len(WAVE_OF) == 52, len(WAVE_OF)
 
 DEPENDENCIES = list(ARROWS)
-# Release slices R1..R4 wait for every other slice of their milestone (graph note)
+# Release slices R1..R4 wait for every other slice of their technical wave (graph note).
+# The condition label is conserved byte-identical to the 51bc730 baseline for the
+# conservation gate; wave derivation is stated in waves[] and slice-graph.md.
 for rn in ("P2-R1", "P2-R2", "P2-R3", "P2-R4"):
-    m = MS_OF[rn]
+    m = WAVE_OF[rn]
     for s in ALL_SIDS:
-        if MS_OF[s] == m and s != rn:
+        if WAVE_OF[s] == m and s != rn:
             if not any(d["from"] == s and d["to"] == rn for d in DEPENDENCIES):
-                DEPENDENCIES.append({"from": s, "to": rn, "condition": "merged (every other slice of the milestone)"})
+                DEPENDENCIES.append({"from": s, "to": rn, "condition": "merged (every other slice of the technical wave)"})
 # acyclic check
 def check_acyclic(deps):
     seen, stack = set(), set()
@@ -428,9 +446,10 @@ for s in SLICES_SRC:
     lane, role, wclass = [x.strip() for x in s["Lane / role / class"].split("/")]
     assert lane in LANE_PROFILE, lane
     profile = LANE_PROFILE[lane]
-    mcell = [x.strip() for x in s["M, wave"].split(",")]
+    mcell = [x.strip() for x in s["GitHub milestone, wave"].split(",")]
     ms, wv = mcell[0], "Wave " + mcell[1].strip("Ww").strip()
-    assert MS_OF[sid] == ms, (sid, ms)
+    assert WAVE_OF[sid] == mcell[1], (sid, mcell)
+    assert re.match(r"^M\d{2}$", ms), (sid, ms)
     goal_cell = s["Goal; stop when"].strip()
     goal = concise_goal(goal_cell)
     assert len(goal) <= 512, (sid, len(goal))
@@ -505,8 +524,7 @@ for s in SLICES_SRC:
                    "Scribe": "Assembles feedback prose; selection and wording are decided in session."}[role]
     mr = route_for(profile, ROLE_SNAPSHOT[role])
     steps = STEP_OF[sid]
-    te_assurance = ("lifecycle" if profile != "tech-writing"
-                    else "disabled (frozen tech-writing snapshot test_engineer.assurance.enabled=false)")
+    te_assurance = "lifecycle"
     sl = {
         "id": sid,
         "role": role,
@@ -564,40 +582,46 @@ for s in SLICES_SRC:
         sl["write_set_note"] = ws_note
     if sid == "P2-X11":
         sl["dispatchable"] = False
-        sl["slice_status"] = "conditional (OD-AFC-03 = yes and M3 on time; drop at 2026-10-21T12:00:00Z if unverified)"
+        sl["slice_status"] = "conditional (OD-AFC-03 = yes and W3 on time; drop at 2026-10-21T12:00:00Z if unverified)"
     SLICES.append(sl)
 BY_ID = {s["id"]: s for s in SLICES}
 assert len(BY_ID) == 52
-# X05: single issue M2, Wave 1 start kept, both PRs kept
-assert BY_ID["P2-X05"]["milestone"] == "M1" and BY_ID["P2-X05"]["wave"] == "Wave 1"
+# X05: single issue M04, Wave 1 start kept, both PRs kept
+assert BY_ID["P2-X05"]["milestone"] == "M04" and BY_ID["P2-X05"]["wave"] == "Wave 1"
 assert len(STEP_OF["P2-X03"]) == 2 and len(STEP_OF["P2-X05"]) == 2
 # no absolute home paths anywhere in slices
 assert "/ho" + "me/" not in json.dumps(SLICES)
 
 # ---------- waves / milestones / releases ----------
+_TYAHOO = re.search(r"^T_yahoo is (\S+)\.", tp_text, re.M).group(1)
 WAVES = []
 for w in (1, 2, 3, 4, 5):
-    m = f"M{w}"
-    mrow = next(r for r in MILESTONES_SRC if r["Milestone"] == m)
+    cp = f"W{w}"
+    mrow = next(r for r in CHECKPOINTS_SRC if r["Checkpoint"] == cp)
     sids = wave_lines[w]
-    assert set(sids) == {s for s in ALL_SIDS if MS_OF[s] == m}, w
-    WAVES.append({
+    assert set(sids) == {s for s in ALL_SIDS if WAVE_OF[s] == cp}, w
+    due_cell = mrow["Due (UTC)"]
+    due_on = due_cell.split(" (")[0] if " (" in due_cell else due_cell
+    assert re.match(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$", due_on), (cp, due_on)
+    wave = {
         "id": f"Wave {w}",
-        "milestone": m,
+        "checkpoint": cp,
         "slice_ids": sids,
+        "due_on": due_on,
         "entry": mrow["Entry criteria"],
         "exit": mrow["Exit criteria"],
         "dispatch_order": DISPATCH_SRC[f"Wave {w}"],
-    })
+    }
+    if " (" in due_cell:
+        inner = due_cell[len(due_on) + 2:-1]
+        wave["due_explanation"] = f"{inner} (T_yahoo is {_TYAHOO}); machine due_on is ISO only, no date change."
+    WAVES.append(wave)
+assert next(m for m in WAVES if m["checkpoint"] == "W2")["due_on"] == "2026-10-17T01:00:00Z"
 
-_TYAHOO = re.search(r"^T_yahoo is (\S+)\.", tp_text, re.M).group(1)
 MILESTONES = []
 for r in MILESTONES_SRC:
-    sids = [x.strip() for x in r["Slices"].split(",")]
-    # milestone table names X11 with "(conditional)"; normalize
-    sids = [re.sub(r"\s*\(conditional\)$", "", x) for x in sids]
-    assert set(sids) == {s for s in ALL_SIDS if MS_OF[s] == r["Milestone"]}, r["Milestone"]
-    # Machine due_on is ISO only; a parenthetical explanation moves to due_explanation (no date change).
+    issues = [x.strip() for x in r["Issues in order"].split(",")]
+    assert 2 <= len(issues) <= 6, (r["Milestone"], issues)
     due_cell = r["Due (UTC)"]
     due_on = due_cell.split(" (")[0] if " (" in due_cell else due_cell
     assert re.match(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$", due_on), (r["Milestone"], due_on)
@@ -607,22 +631,24 @@ for r in MILESTONES_SRC:
         "due_on": due_on,
         "entry": r["Entry criteria"],
         "exit": r["Exit criteria"],
-        "slices": sids,
+        "issues": issues,
     }
     if " (" in due_cell:
         inner = due_cell[len(due_on) + 2:-1]
         ms["due_explanation"] = f"{inner} (T_yahoo is {_TYAHOO}); machine due_on is ISO only, no date change."
     MILESTONES.append(ms)
-assert next(m for m in MILESTONES if m["id"] == "M2")["due_on"] == "2026-10-17T01:00:00Z"
+assert next(m for m in MILESTONES if m["id"] == "M13")["due_on"] == "2026-10-23T12:00:00Z"
+assert sum(len(m["issues"]) for m in MILESTONES) == 39
 
 RELEASES = [
-    {"milestone": "M1", "version": "v0.1.0", "slice": "P2-R1"},
-    {"milestone": "M2", "version": "v0.2.0", "slice": "P2-R2"},
-    {"milestone": "M3", "version": "v0.3.0", "slice": "P2-R3"},
-    {"milestone": "M4", "version": "v0.4.0", "slice": "P2-R4"},
-    {"milestone": "M5", "version": "v1.0.0", "slice": "P2-R5"},
+    {"checkpoint": "W1", "milestone": "M03", "version": "v0.1.0", "slice": "P2-R1"},
+    {"checkpoint": "W2", "milestone": "M06", "version": "v0.2.0", "slice": "P2-R2"},
+    {"checkpoint": "W3", "milestone": "M10", "version": "v0.3.0", "slice": "P2-R3"},
+    {"checkpoint": "W4", "milestone": "M11", "version": "v0.4.0", "slice": "P2-R4"},
+    {"checkpoint": "W5", "milestone": "M13", "version": "v1.0.0", "slice": "P2-R5"},
 ]
 for r in RELEASES:
+    assert BY_ID[r["slice"]]["milestone"] == r["milestone"], r
     r.update({
         "changelog": "moves [Unreleased] entries under the version heading; notes and tag drawn from CHANGELOG.md",
         "publication": "owner-authorized only (OA-8)",
@@ -632,7 +658,7 @@ for r in RELEASES:
 # One review payload: the parent-selected github-work-items.json with its 39 body_file
 # mirrors. Content/bodies/acceptance are the parent's, referenced here, never rewritten.
 TRACKING = json.loads(TRACKING_PAYLOAD.read_text())
-assert TRACKING["counts"] == {"milestones": 5, "issues": 39, "slices": 52, "tdd_pairs": 13}, TRACKING["counts"]
+assert TRACKING["counts"] == {"milestones": 13, "issues": 39, "slices": 52, "tdd_pairs": 13}, TRACKING["counts"]
 assert TRACKING["status"].startswith("REVIEW_PAYLOAD"), TRACKING["status"]
 _SEIT_GROUPS = {g["issue"]: (tuple(g["slices"]), g["milestone"]) for g in seit["tracking_workflow"]["groups"]}
 _PAYLOAD_GROUPS = {i["id"]: (tuple(i["slices"]), i["milestone"]) for i in TRACKING["issues"]}
@@ -644,8 +670,8 @@ WORK_ISSUES = {"status": TRACKING["status"],
                "supersession": ("evidence/github-work-items/payload-supersession.json (group mapping verified equal; "
                                 "TE tracking-payloads.json is a historical method example, not a creation authority)"),
                "boundary": TRACKING["boundary"],
-               "note": ("One issue per logical deliverable; 13 TDD pairs share issues. P2-X05's single issue belongs to M2 "
-                        "(final live-timing verdict due there); its M1 historical-fixture checkpoint and Wave 1 start are kept. "
+               "note": ("One issue per logical deliverable; 13 TDD pairs share issues. P2-X05's single issue belongs to M04 "
+                        "(final live-timing verdict due there); its W1 historical-fixture checkpoint CP-X05-HIST and Wave 1 start are kept. "
                         "P2-L01 creates milestones and issues only after integrated approval, reusing existing issues by stable slice IDs."),
                "groups": []}
 covered = set()
@@ -655,7 +681,16 @@ for i in TRACKING["issues"]:
                                   "body_file": i["body_file"], "stable_id": i["stable_id"], "kind": i["kind"]})
     covered.update(i["slices"])
 assert covered == set(ALL_SIDS), set(ALL_SIDS) - covered
-assert next(g for g in WORK_ISSUES["groups"] if g["issue"] == "P2-X05")["milestone"] == "M2"
+assert next(g for g in WORK_ISSUES["groups"] if g["issue"] == "P2-X05")["milestone"] == "M04"
+# slice milestone projection agrees with the payload mapping and the 13-row table
+_PAYLOAD_MS = {}
+for i in TRACKING["issues"]:
+    for s in i["slices"]:
+        _PAYLOAD_MS[s] = i["milestone"]
+for sid in ALL_SIDS:
+    assert BY_ID[sid]["milestone"] == _PAYLOAD_MS[sid], sid
+_TABLE_MS = {i: m["id"] for m in MILESTONES for i in m["issues"]}
+assert _TABLE_MS == {i["id"]: i["milestone"] for i in TRACKING["issues"]}
 
 # ---------- traceability ----------
 TRACE = {}
@@ -695,6 +730,14 @@ digest_arg = None
 if "--digest" in sys.argv:
     digest_arg = sys.argv[sys.argv.index("--digest") + 1]
 
+CLOSURE = json.loads((PLAN / "evidence/chronology-profile-delta/requirements-delta-closure.json").read_text())
+assert CLOSURE["outcome"] == "DELTA_APPLIED"
+_OSH_REVIEWER = _OSNAP["roles"]["reviewer"]
+def _route_str(p):
+    return f"{p['harness']} / {p['model']} / {p['reasoning']}"
+_REVIEWER_PRIMARY = _route_str(_OSH_REVIEWER["primary"])
+_REVIEWER_FALLBACKS = [_route_str(f) for f in _OSH_REVIEWER["ordered_fallbacks"]]
+
 JOURNEY_SETTINGS = {
     "lifecycle_id": "AFC-2026-10-11",
     "lifecycle_type": "feature",
@@ -702,12 +745,12 @@ JOURNEY_SETTINGS = {
     "deadline": "2026-10-23T19:00:00Z",
     "development_strategy": {
         "mode": "tdd",
-        "source": "frozen primary snapshot development_strategy; lane overrides from each lane profile snapshot (DEC-AFC-PROFILE-001)",
+        "source": "frozen opensource-hackathon snapshot development_strategy (tdd); lane strategies per technical-plan Lanes table and seit gate_declarations",
         "lane_overrides": {
             "backend": "tdd",
             "tv-app-ui": "tdd",
             "device-integration-spikes": "tdd for product code; spikes evidence-only per OD-AFC-04 (open_for_integrated_review)",
-            "spec-and-docs": "single_implementer",
+            "spec-and-docs": "tdd for behavior changes; documentation-only slices retain declared inspection method",
             "defects": "tdd (on demand; no pre-allocated slices)",
             "light work": "light (Light Implementer, lane profile light_implementer route)",
             "scribe-side-lane": "scribe side lane (uncounted)",
@@ -727,9 +770,6 @@ JOURNEY_SETTINGS = {
     "assurance_cadence": {
         "test_engineer": {
             "assurance": "lifecycle",
-            "lane_overrides": {
-                "spec-and-docs": "disabled (frozen tech-writing snapshot test_engineer.assurance.enabled=false)",
-            },
         },
         "reviewer": "phase",
         "reviewer_application": "per integration step: each pull request reviewed once at its own step (OD-AFC-P2-01, precedent OA-AFC-A3 = A)",
@@ -746,16 +786,22 @@ JOURNEY_SETTINGS = {
         "policy_ref": "skills/bearing-lite/references/review-policy.md",
         "candidate_ref": "plan/2026-10-12-afc-phase-2",
         "candidate_revision": REVISION,
-        "candidate_revision_note": ("Planning worktree HEAD at integration (merges main spec PR #10 at 92f3ed1; "
-                                    "conflicts resolved byte-identically to main). The Orchestrator records the commit of this package."),
+        "candidate_revision_note": ("Authoring baseline before this working delta (starting committed snapshot; "
+                                    "equals SEIT source_baseline.revision). Generated bytes are working-delta outputs, "
+                                    "not claimed present in that commit. Parent records the final Git commit of this package."),
         "candidate_digest": digest_arg or "PENDING-FREEZE",
         "candidate_digest_source": "node <bearing-lite>/hooks/plan-package.cjs manifest_digest over seit.json planning_inputs plus seit.json",
         "reviewer_slots": [{
             "slot_id": "planning-review",
-            "primary_route_ref": "Muse Code / Muse Spark 1.3 / max",
-            "fallback_route_refs": ["Codex CLI / GPT-6 Astra / high", "Claude Code / Fable / high"],
+            "primary_route_ref": _REVIEWER_PRIMARY,
+            "fallback_route_refs": _REVIEWER_FALLBACKS,
+            "status": "spent; zero new automatic review authority",
         }],
-        "route_source": "planning profile primary reviewer route (parent journey.json frozen_snapshots.primary)",
+        "route_source": "frozen opensource-hackathon snapshot reviewer route (parent journey.json frozen_snapshots.opensource-hackathon)",
+        "independent_review_rounds": f"{CLOSURE['independent_review_rounds_spent']}/1 spent",
+        "aggregate_repair_rounds": f"{CLOSURE['aggregate_repair_spent']}/1 spent",
+        "additional_dispatch_authorized": CLOSURE["additional_dispatch_authorized"],
+        "spent_bounds_source": "evidence/chronology-profile-delta/requirements-delta-closure.json; historical review PASS is not new independent review",
     },
     "review_capabilities": {
         "coverage_assist": {
@@ -766,7 +812,7 @@ JOURNEY_SETTINGS = {
             "command_id": "CMD-OCR-DELEGATE",
             "packet_text": "OCR delegate mode (ocr delegate preview --from <base> --to <head>; ocr delegate rule <files>), required",
             "gap_rule": "missing, unavailable or not_run is a typed gap with the exact error, never PASS",
-            "source": "every frozen lane snapshot review.coverage_assist; seit.json gate_declarations",
+            "source": "frozen opensource-hackathon snapshot review.coverage_assist (bug-triager for defects); seit.json gate_declarations",
         },
         "reverify": {
             "capability": "deterministic_verification.reverify",
@@ -777,7 +823,7 @@ JOURNEY_SETTINGS = {
             "packet_text": "CMD-REVERIFY-APK on the exact built APK; Reverify: not applicable — <concrete reason> otherwise",
             "gap_rule": ("reverify error, unproven APK semantic grounding (TE-P2-F03 REVERIFY_CAPABILITY_GAP) or not_run is a typed gap "
                          "with the exact error, never PASS; ordinary ATE reruns never substitute"),
-            "source": "every frozen lane snapshot deterministic_verification.reverify; seit.json gate_declarations",
+            "source": "frozen opensource-hackathon snapshot deterministic_verification.reverify (bug-triager for defects); seit.json gate_declarations",
         },
     },
     "owner_wait_tracking": P1JS["owner_wait_tracking"],
@@ -812,17 +858,25 @@ PROFILE_FREEZE = {
     "source": "parent journey profile_selection.frozen_snapshots ($HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/journey.json)",
     "catalog": parent_journey["profile_selection"].get("catalog"),
     "selected_at": parent_journey["profile_selection"].get("selected_at"),
-    "decision": "DEC-AFC-PROFILE-001",
+    "decision": "DEC-AFC-SD-041 (migration; prior DEC-AFC-PROFILE-001 selection in evidence/profile-migration-041/prior-profile-selection.json)",
     "planning": {
-        "profile": "primary",
-        "configuration_digest_sha256": FS["primary"]["configuration_digest_sha256"],
-        "snapshot_ref": "parent journey.json#/profile_selection/frozen_snapshots/primary",
+        "profile": "opensource-hackathon",
+        "configuration_digest_sha256": FS["opensource-hackathon"]["configuration_digest_sha256"],
+        "full_profile_sha256": FS["opensource-hackathon"]["full_profile_sha256"],
+        "snapshot_ref": "parent journey.json#/profile_selection/frozen_snapshots/opensource-hackathon",
     },
     "lanes": {},
-    "note": "Frozen copies; changes only by owner amendment. Scribe uses the planning profile primary scribe route.",
+    "bindings": {
+        "opensource-hackathon": FS["opensource-hackathon"],
+        "bug-triager": FS["bug-triager"],
+    },
+    "lane_profiles": parent_journey["profile_selection"].get("lane_profiles"),
+    "observed_orchestrator": parent_journey["profile_selection"].get("observed_orchestrator"),
+    "note": ("Frozen copies; changes only by owner amendment. Scribe uses the opensource-hackathon scribe route. "
+             "Profile selection is no product authority."),
 }
-for lane, prof in [("tv-app-ui", "frontend"), ("backend", "primary"),
-                   ("device-integration-spikes", "heavyweight"), ("spec-and-docs", "tech-writing"),
+for lane, prof in [("tv-app-ui", "opensource-hackathon"), ("backend", "opensource-hackathon"),
+                   ("device-integration-spikes", "opensource-hackathon"), ("spec-and-docs", "opensource-hackathon"),
                    ("defects", "bug-triager")]:
     snap = FS[prof]
     PROFILE_FREEZE["lanes"][lane] = {
@@ -830,19 +884,22 @@ for lane, prof in [("tv-app-ui", "frontend"), ("backend", "primary"),
         "configuration_digest_sha256": snap["configuration_digest_sha256"],
         "snapshot_ref": f"parent journey.json#/profile_selection/frozen_snapshots/{prof}",
         "development_strategy": snap["development_strategy"]["mode"],
+        "concurrency": snap["concurrency"],
+        "planning_to_implementation_clean_session": snap["planning_to_implementation_clean_session"],
         "coverage_assist": snap["snapshot"]["review"]["coverage_assist"],
         "deterministic_verification": snap["snapshot"]["deterministic_verification"],
+        "holds": snap["snapshot"].get("holds", []),
     }
 PROFILE_FREEZE["lanes"]["scribe-side-lane"] = {
-    "profile": "primary",
-    "configuration_digest_sha256": FS["primary"]["configuration_digest_sha256"],
-    "snapshot_ref": "parent journey.json#/profile_selection/frozen_snapshots/primary",
+    "profile": "opensource-hackathon",
+    "configuration_digest_sha256": FS["opensource-hackathon"]["configuration_digest_sha256"],
+    "snapshot_ref": "parent journey.json#/profile_selection/frozen_snapshots/opensource-hackathon",
     "role": "scribe",
 }
 
 ROLE_STATES = {
     "active": ["Orchestrator", "Product Implementer", "Test Implementer", "Light Implementer", "Scribe", "Reviewer",
-               "Test Engineer (assurance, lifecycle cadence; disabled for spec-and-docs)",
+               "Test Engineer (assurance, lifecycle cadence)",
                "Integration Engineer (execution, lifecycle cadence)"],
     "standby": ["Coordinator (one wave each, if used; technical plan Accountable controller)"],
     "unused_in_implementation": ["Plan Integrator", "Requirements Engineer (planning-only)", "Systems Modeler (planning)",
@@ -887,8 +944,8 @@ ASSURANCE = {
                   "A typed gap (TOOL_MISSING, TOOL_UNALLOCATED, NOT_RUN, OWNER_ACTION_PENDING, REVERIFY_CAPABILITY_GAP, "
                   "OWNER_EVIDENCE_PENDING) is never PASS. An owner-accepted typed gap is distinct from PASS (TE-P2-F05)."),
     "evidence": ("Command output captured per run with the candidate SHA (git rev-parse HEAD); author receipts are diagnostic-only; "
-                 "assurance receipts come from a fresh Assurance Test Engineer rerunning the same commands (primary, frontend, "
-                 "heavyweight lanes). No credential, account name, email or absolute home path in committed evidence; "
+                 "assurance receipts come from a fresh Assurance Test Engineer rerunning the same commands (opensource-hackathon lanes). "
+                 "No credential, account name, email or absolute home path in committed evidence; "
                  "raw agent logs stay local."),
     "tdd_receipt": ("Each red-expected row needs CMD-RED on the Test Implementer candidate and the green command on the Product "
                     "Implementer candidate over the same test ids, with test-file sha256 and frozen bootstrap hashes recorded in both; "
@@ -899,8 +956,8 @@ ASSURANCE = {
                     "APK semantic/containment grounding is REVERIFY_CAPABILITY_GAP with reverify 0.11.0, never PASS from "
                     "ZIP magic, strings, ordinary ATE or apkanalyzer alone; the P2-L05 tagged-main subcriterion stays "
                     "OWNER_EVIDENCE_PENDING until OA-8 tag readback (TE-P2-F09); fallback proof closes only its own criteria (TE-P2-F05)."),
-    "test_engineer_assurance": ("Lifecycle cadence on the M5 final candidate in a fresh session (Assurance Test Engineer routes per lane); "
-                                "spec-and-docs lane has assurance disabled, so its slices rely on Reviewer phase review and gate commands."),
+    "test_engineer_assurance": ("Lifecycle cadence on the W5 final candidate in a fresh session (Assurance Test Engineer routes per lane; "
+                                "enabled for every lane including spec-and-docs)."),
     "integration_engineer_execution": "Lifecycle cadence; integration_plan steps IE-P2-1..IE-P2-44 with post-step V&V from seit.json integration_vv_sequence.",
     "reviewer": ("Phase cadence applied per integration step (OD-AFC-P2-01, precedent OA-AFC-A3 = A); one review per PR with OCR "
                  "delegate mode, one repair round, deterministic verification decides."),
@@ -916,7 +973,8 @@ RECOVERY = {
     "integration_rollback_ref": "integration_plan.anomaly_rollback_recovery",
     "route_recovery": ("RISK-AFC-P2-10: a confirmed usage/rate limit activates only the next approved fallback in the frozen profile "
                        "with a class B receipt preserving coverage-assist and Reverify settings, or queues the slice; other errors "
-                       "never trigger a route switch."),
+                       "(config, auth, runtime) never trigger a route switch. Every Muse Code primary and fallback dispatch carries "
+                       "--contributor-mode on (frozen hold muse-contributor-mode)."),
 }
 
 APPROVAL = {
@@ -929,7 +987,7 @@ APPROVAL = {
     "owner_only_actions": [
         "Owner-only actions: credential creation or retrieval, AWS plan changes, repository visibility flip, license choice (already settled as Apache-2.0), release publication, video upload, external feedback, Devpost submission (C9)",
         "Yahoo developer application and OAuth consent (OA-2)",
-        "Authorize the exact public export and visibility change after the M5 history/content review (OA-5)",
+        "Authorize the exact public export and visibility change after the W5 history/content review (OA-5)",
         "Authorize each release publication (OA-8)",
         "Upstream issue or PR to any third-party project",
         "Production activation, production DB mutation, credential access, destructive git (workspace rule 4)",
@@ -961,12 +1019,12 @@ def outcome_text():
         paras.append(re.sub(r"\s+", " ", " ".join(cur)).strip())
     return " ".join(paras)
 
-SCOPE = [f"{m['id']} {m['title']} (due {m['due_on']}): {', '.join(m['slices'])}" for m in MILESTONES]
+SCOPE = [f"{m['id']} {m['title']} (due {m['due_on']}): issues in order {', '.join(m['issues'])}; entry: {m['entry']}" for m in MILESTONES]
 DOD = [{"id": f"DOD-{i+1}", "criterion": c, "evidence": e, "status": "planned"}
        for i, (c, e) in enumerate(zip(EXIT_CRITERIA, [
            "SEIT proof rows per row; typed gaps recorded",
            "Merge records; Reviewer packets with OCR; gate evidence; CHANGELOG entries",
-           "Assurance Test Engineer and Integration Engineer execution verdicts on the M5 candidate",
+           "Assurance Test Engineer and Integration Engineer execution verdicts on the W5 candidate",
            "Owner checklist handover; DoD Manifest closeout section"]))]
 
 REQ_MANIFEST = []
@@ -1069,8 +1127,9 @@ def rstr(profile, role_key, session=None):
     return base, (base + ("; fallbacks " + fb if fb else ""))
 
 LINEUP = []
-LANE_ROWS = [("tv-app-ui", "frontend"), ("backend", "primary"), ("device-integration-spikes", "heavyweight"),
-             ("spec-and-docs", "tech-writing"), ("defects", "bug-triager")]
+LANE_ROWS = [("tv-app-ui", "opensource-hackathon"), ("backend", "opensource-hackathon"),
+             ("device-integration-spikes", "opensource-hackathon"), ("spec-and-docs", "opensource-hackathon"),
+             ("defects", "bug-triager")]
 for lane, prof in LANE_ROWS:
     dg = FS[prof]["configuration_digest_sha256"][:8]
     roles = FS[prof]["snapshot"]["roles"]
@@ -1090,14 +1149,14 @@ for lane, prof in LANE_ROWS:
         LINEUP.append({"role": disp, "session": f"{lane} lane, profile {prof} ({dg})",
                        "configured_primary": b, "effective_route": e,
                        "status": "planned (lifecycle cadence)" if on else "disabled (enabled=false)"})
-b, e = rstr("primary", "scribe")
-LINEUP.append({"role": "Scribe", "session": "scribe side lane, profile primary (uncounted)",
+b, e = rstr("opensource-hackathon", "scribe")
+LINEUP.append({"role": "Scribe", "session": "scribe side lane, profile opensource-hackathon (uncounted)",
                "configured_primary": b, "effective_route": e, "status": "planned"})
+_sb, _se = rstr("opensource-hackathon", "reviewer")
 LINEUP.append({"role": "Planning review slot", "session": "planning-review",
-               "configured_primary": "Muse Code / Muse Spark 1.3 / max",
-               "effective_route": ("Muse Code / Muse Spark 1.3 / max; fallbacks Codex CLI / GPT-6 Astra / high; "
-                                   "Claude Code / Fable / high"),
-               "status": "pending (one independent planning review awaits this package)"})
+               "configured_primary": _sb,
+               "effective_route": _se,
+               "status": "spent (planning review 1/1, aggregate repair 1/1; zero new automatic review authority)"})
 for name, route, result in [
     ("Systems Modeler delta", "Muse Code / Muse Spark 1.3 / max", "READY (sm-p2-delta-receipt.md; combined digest 8f579882…)"),
     ("Requirements Engineer register delta", "Muse Code / Muse Spark 1.3 / max", "PASS (re-p2-delta-receipt.md)"),
@@ -1118,22 +1177,22 @@ TASKS = [{"id": s["id"], "role": s["role"], "route": s["model_route"]["harness"]
           "issue": ISSUE_OF[s["id"]], "status": "planned"} for s in SLICES]
 
 VV = []
-CLOSE_MS = {}
+CLOSE_W = {}
 for p in PCS:
     cs = p.get("closing_slice")
-    CLOSE_MS.setdefault(BY_ID[cs]["milestone"] if cs in BY_ID else "planning", []).append(p)
-for m in ["M1", "M2", "M3", "M4", "M5", "planning"]:
-    rows = CLOSE_MS.get(m, [])
+    CLOSE_W.setdefault(BY_ID[cs]["wave"] if cs in BY_ID else "planning", []).append(p)
+for m in ["Wave 1", "Wave 2", "Wave 3", "Wave 4", "Wave 5", "planning"]:
+    rows = CLOSE_W.get(m, [])
     if not rows:
         continue
     from collections import Counter
     meth = Counter(p["method"] for p in rows)
     cmds = sorted({p["command_id"] for p in rows})
     VV.append({
-        "id": f"VV-{m}",
+        "id": f"VV-{m.replace('Wave ', 'W')}",
         "method": ", ".join(f"{k} {v}" for k, v in sorted(meth.items())),
-        "cadence": ("Reviewer phase per integration step (OCR required); TE assurance lifecycle "
-                    "(spec-and-docs disabled); IE execution lifecycle"),
+        "cadence": ("Reviewer phase per integration step (OCR required); TE assurance lifecycle; "
+                    "IE execution lifecycle"),
         "evidence": f"{len(rows)} SEIT rows bound; commands {', '.join(cmds)}",
         "status": "planned",
     })
@@ -1145,11 +1204,11 @@ DOCS = [
     ("implementation.json", "52 slices, waves, dependencies, traceability", "Plan Integrator", "planning", "schema + plan-package freeze", "planned"),
     ("requirements-register.md", "66 UIDs (63 active), VCASE verification cases", "Requirements Engineer", "planning", "RE gates", "planned"),
     ("models/", "aligned SysML v2 sources, allocation, four views", "Systems Modeler", "planning", "SysON import + allocation probe", "planned"),
-    ("README.md", "product, setup, judge access, limitations (P2-D03)", "spec-and-docs lane", "M5", "PROC-README-FRESH-SETUP", "planned"),
-    ("CHANGELOG.md", "revision record per landing + per-milestone releases", "landing procedure; P2-R1..R5", "each landing/exit", "CMD-CHANGELOG-CHECK", "planned"),
-    ("spec/amazon-fantasy-companion/ (D1 revision)", "verdicts, aligned names, quantities (P2-D02)", "spec-and-docs lane", "M4", "CMD-GATE-SPEC byte-identical rebuild", "planned"),
-    ("docs/submission/", "writeup, demo plan, owner checklist (P2-D04, P2-D05)", "spec-and-docs lane", "M5", "PROC-SUBMISSION-CHECK", "planned"),
-    ("docs/developer-feedback/", "observations log + assembled feedback (P2-SCR1)", "Scribe", "continuous; M5", "PROC-SCRIBE-ASSEMBLY", "planned"),
+    ("README.md", "product, setup, judge access, limitations (P2-D03)", "spec-and-docs lane", "W5", "PROC-README-FRESH-SETUP", "planned"),
+    ("CHANGELOG.md", "revision record per landing + per-checkpoint releases", "landing procedure; P2-R1..R5", "each landing/exit", "CMD-CHANGELOG-CHECK", "planned"),
+    ("spec/amazon-fantasy-companion/ (D1 revision)", "verdicts, aligned names, quantities (P2-D02)", "spec-and-docs lane", "W4", "CMD-GATE-SPEC byte-identical rebuild", "planned"),
+    ("docs/submission/", "writeup, demo plan, owner checklist (P2-D04, P2-D05)", "spec-and-docs lane", "W5", "PROC-SUBMISSION-CHECK", "planned"),
+    ("docs/developer-feedback/", "observations log + assembled feedback (P2-SCR1)", "Scribe", "continuous; W5", "PROC-SCRIBE-ASSEMBLY", "planned"),
 ]
 DOCUMENTATION = [{"surface": a, "impact": b, "owner": c, "timing": d, "verification": e, "status": f} for a, b, c, d, e, f in DOCS]
 
@@ -1181,15 +1240,17 @@ IDENTITY = [
     {"label": "Baseline revision", "value": REVISION},
     {"label": "Plan directory", "value": str(PLAN) + "/"},
     {"label": "Candidate ref", "value": "plan/2026-10-12-afc-phase-2"},
-    {"label": "Candidate revision", "value": REVISION},
+    {"label": "Authoring baseline revision", "value": REVISION},
     {"label": "Candidate digest", "value": digest_arg or "PENDING-FREEZE"},
     {"label": "Authority", "value": f"{AUTHORITY_ID} (proposed, effective=false)"},
     {"label": "Requirement register", "value": "requirements-register.md (authority.json#/requirement_register)"},
     {"label": "Register digest", "value": f"sha256:{authority['requirement_register']['sha256']}"},
     {"label": "Model combined digest", "value": SM_COMBINED},
 ]
-for prof in ("primary", "frontend", "heavyweight", "tech-writing", "bug-triager"):
+for prof in ("opensource-hackathon", "bug-triager"):
     IDENTITY.append({"label": f"Profile {prof} digest", "value": FS[prof]["configuration_digest_sha256"]})
+IDENTITY.append({"label": "Profile opensource-hackathon full sha256",
+                 "value": FS["opensource-hackathon"]["full_profile_sha256"]})
 IDENTITY.append({"label": "seit.json", "value": sha256_file(SEIT)})
 
 DOD_MANIFEST = {
@@ -1199,7 +1260,8 @@ DOD_MANIFEST = {
     "title": "Amazon Fantasy Companion — Definition of Done Manifest (AFC-2026-10-11, Phase 2)",
     "lede": "Planning projection of implementation.json for the single integrated owner review. The five planning artifacts remain authoritative.",
     "bluf": (f"Phase 2 implementation plan from the approved spec (DEC-AFC-APPROVAL-ST5): 52 slices in 5 waves on four lanes plus "
-             f"light work and the Scribe side lane; 63 active register UIDs and 37 Lifecycle-local rows traced to 100 SEIT proof cases "
+             f"light work and the Scribe side lane, organized in 13 GitHub milestones M01..M13 with releases closing at W1..W5; "
+             f"63 active register UIDs and 37 Lifecycle-local rows traced to 100 SEIT proof cases "
              f"({NCMDS} commands). Schedule refreshed at 2026-10-13T04:00:00Z: 10 days and 15 hours remain to T_deadline; remaining live "
              "windows Thu 2026-10-15, Sun 2026-10-18, Mon 2026-10-19 and Thu 2026-10-22. Spikes run first and are time-boxed; "
              "10 open owner items await the integrated review. P2-X11 conditional on OD-AFC-03 = yes. Product execution is held "
@@ -1229,7 +1291,7 @@ IMPL = {
     "schema_version": "1",
     "artifact": {"type": "implementation.json", "lifecycle": "AFC-2026-10-11",
                  "plan_dir": str(PLAN) + "/", "status": "planning",
-                 "generated_by": "Plan Integrator (Muse Code / Muse Spark 1.3 / max; Phase 2 P2-6 codex-lead continuation)",
+                 "generated_by": "Plan Integrator (Muse Code / Muse Spark 1.3 / max; Phase 2 chronology-041 delta)",
                  "generated_on": "2026-10-13"},
     "source_baseline": {
         "repository": REPO,
@@ -1274,6 +1336,6 @@ for s in SLICES:
         assert c in REGISTRY, (s["id"], c)
 assert len(MODELS) == 7 and all(m.get("selected") and m.get("required") for m in MODELS)
 assert all(m["render_status"] == "READY" for m in MODELS)
-print(f"slices=52 deps={len(DEPENDENCIES)} trace={len(TRACE)} req_manifest={len(REQ_MANIFEST)} vv_rows={sum(len(CLOSE_MS.get(m, [])) for m in CLOSE_MS)}")
+print(f"slices=52 deps={len(DEPENDENCIES)} trace={len(TRACE)} req_manifest={len(REQ_MANIFEST)} vv_rows={sum(len(CLOSE_W.get(m, [])) for m in CLOSE_W)} milestones={len(MILESTONES)} waves={len(WAVES)}")
 (PLAN / "implementation.json").write_text(json.dumps(IMPL, indent=1) + "\n")
 print("wrote", PLAN / "implementation.json")

@@ -1,0 +1,596 @@
+[
+  {
+    "UID": "AFC-PR-001",
+    "Statement": "The backend shall retrieve the customer's leagues, teams, rosters by week, and league scoring settings through a read-only Yahoo Fantasy OAuth connection.",
+    "Rationale": "Yahoo is the lineup/league context source; read-only OAuth bounds access to need.",
+    "Verification method": "Test, backend, AWS Free-plan deployment (SD-005). Positive: roster distinguishes active slots from bench and returns scoring settings. Negative: no write-scope call is attempted and no player eligibility value is used as a starting-slot fact. VCASE-AFC-PR-001.",
+    "Allocation": "LINEUP",
+    "Sources": "#1 item 1; #1 Yahoo rows; SD-007",
+    "source_line": 81
+  },
+  {
+    "UID": "AFC-PR-002",
+    "Statement": "The TV app shall persist the customer's selected leagues, teams, starters or specific players, and favorite teams.",
+    "Rationale": "Selections drive monitoring, alerts, and panel content; loss across restart breaks trust.",
+    "Verification method": "Demonstration, system, real stick (SD-001) + backend. Positive: select, restart, selections retained. Negative: no selection silently dropped. VCASE-AFC-PR-002.",
+    "Allocation": "PROFILE, API, STORE",
+    "Sources": "#1 items 1, 6 (fantasy selections)",
+    "source_line": 82
+  },
+  {
+    "UID": "AFC-PR-003",
+    "Statement": "The TV app shall report each supported installed viewing app as installed through platform-permitted detection.",
+    "Rationale": "Provider choice needs true installed-app facts without claiming subscription.",
+    "Verification method": "Demonstration, tv-app, real stick (SD-001). Positive: each installed supported app reported installed. Negative: absent app never reported installed. VCASE-AFC-PR-003.",
+    "Allocation": "DETECTOR",
+    "Sources": "#1 item 1; SD-003",
+    "source_line": 83
+  },
+  {
+    "UID": "AFC-PR-004",
+    "Statement": "The backend shall mark each game's viewing access as verified only from supported provider integration or explicit customer confirmation.",
+    "Rationale": "Honest availability is a judging emphasis; unverified access must never read as verified.",
+    "Verification method": "Test, backend, AWS deployment. Positive: verified marking carries basis integration or confirmation. Negative: installed-app fact alone never yields verified. VCASE-AFC-PR-004.",
+    "Allocation": "RESOLVER, API",
+    "Sources": "#1 items 1, 4",
+    "source_line": 84
+  },
+  {
+    "UID": "AFC-PR-005",
+    "Statement": "The TV app shall apply the customer's review and override to all detected profile information and retained local-market information.",
+    "Rationale": "Detection is fallible; the customer is the final authority on their profile.",
+    "Verification method": "Demonstration, tv-app, real stick (SD-001). Positive: override of a detected app and of local market persists across restart and feed refresh. Negative: refresh never silently discards an override. VCASE-AFC-PR-005.",
+    "Allocation": "PROFILE, STORE",
+    "Sources": "#1 item 1",
+    "source_line": 85
+  },
+  {
+    "UID": "AFC-PR-006",
+    "Statement": "When Yahoo approval is absent at T_yahoo (2026-10-16T19:00:00Z), the backend shall accept labeled manual lineup entry built from ESPN rosters as the active lineup source.",
+    "Rationale": "Schedule-proof lineup context without misrepresenting manual data as Yahoo data.",
+    "Verification method": "Test, backend, AWS deployment. Positive: at/after T_yahoo without approval, manual entry activates and is labeled manual. Negative: manual values never presented as Yahoo values. VCASE-AFC-PR-006.",
+    "Allocation": "LINEUP",
+    "Sources": "#1 item 1; SD-007; C6",
+    "source_line": 86
+  },
+  {
+    "UID": "AFC-PR-007",
+    "Statement": "The backend shall hold exactly one active lineup source from the Yahoo read-only connection or labeled manual entry.",
+    "Rationale": "Two simultaneous sources would fork lineup truth across alerts and panel.",
+    "Verification method": "Test, backend, AWS deployment. Positive: source query returns exactly one active source. Negative: switchover never leaves zero or two active. VCASE-AFC-PR-007.",
+    "Allocation": "LINEUP",
+    "Sources": "#1 item 1; SD-007",
+    "source_line": 87
+  },
+  {
+    "UID": "AFC-PR-008",
+    "Statement": "The backend shall monitor live NFL game events only for profile-relevant games during customer-enabled viewing periods.",
+    "Rationale": "Relevance and customer control bound noise, cost, and backend load.",
+    "Verification method": "Test, backend, AWS deployment. Positive: game with a selected player or favorite team inside an enabled period is monitored. Negative: irrelevant game, or any game in quiet hours, is not monitored. VCASE-AFC-PR-008.",
+    "Allocation": "INGEST, POLICY",
+    "Sources": "#1 item 2",
+    "source_line": 88
+  },
+  {
+    "UID": "AFC-PR-009",
+    "Statement": "The TV app shall record the customer's selected schedule and game-day mode as the monitoring enablement.",
+    "Rationale": "The customer decides when the companion watches.",
+    "Verification method": "Demonstration, system, real stick (SD-001) + backend. Positive: mode change alters the monitored game set per PR-008. Negative: no monitoring outside the recorded enablement. VCASE-AFC-PR-009.",
+    "Allocation": "PROFILE, POLICY",
+    "Sources": "#1 items 2, 6 (quiet hours/game-day periods)",
+    "source_line": 89
+  },
+  {
+    "UID": "AFC-PR-010",
+    "Statement": "The TV app shall apply current-viewing-context detection only through supported mechanisms while the customer enables that detection.",
+    "Rationale": "Viewing-context sensing is sensitive and platform-limited; both bounds apply.",
+    "Verification method": "Demonstration, tv-app, real stick (SD-001). Positive: enabled detection uses a documented supported mechanism. Negative: disabled detection yields no viewing-context reads (decisions label profile-assumption per PR-011). VCASE-AFC-PR-010.",
+    "Allocation": "DETECTOR, PROFILE",
+    "Sources": "#1 items 2, 6 (detection use)",
+    "source_line": 90
+  },
+  {
+    "UID": "AFC-PR-011",
+    "Statement": "The backend shall label each monitoring decision with its observed-playback or profile-assumption basis.",
+    "Rationale": "Observed state and assumption must never be confused downstream.",
+    "Verification method": "Test, backend, AWS deployment. Positive: every decision record carries exactly one basis label. Negative: no decision ships unlabeled. VCASE-AFC-PR-011.",
+    "Allocation": "POLICY",
+    "Sources": "#1 item 2",
+    "source_line": 91
+  },
+  {
+    "UID": "AFC-PR-012",
+    "Statement": "The backend shall ingest scores, field position, possession, involved player identifiers, timestamps, and scoring corrections from ESPN's unofficial public JSON.",
+    "Rationale": "Owner-selected live feed; corrections and timestamps ground freshness and panel truth.",
+    "Verification method": "Test, backend, AWS deployment. Positive: each listed field lands in the event cache. Negative: schema-invalid response handled per PR-064, never partially stored. VCASE-AFC-PR-012.",
+    "Allocation": "INGEST",
+    "Sources": "#1 item 2; #1 feed requirements; SD-004",
+    "source_line": 92
+  },
+  {
+    "UID": "AFC-PR-013",
+    "Statement": "When the ESPN endpoint is unavailable or its contract changes, the backend shall substitute labeled replay fixtures for live events on every affected value.",
+    "Rationale": "Repeatability and outage survival without ever faking live access.",
+    "Verification method": "Test, backend, AWS deployment with fixtures. Positive: outage run marks every affected value replay. Negative: no substituted value presented as live. VCASE-AFC-PR-013.",
+    "Allocation": "REPLAY, INGEST",
+    "Sources": "#1 judging alignment (label replays); C2",
+    "source_line": 93
+  },
+  {
+    "UID": "AFC-PR-014",
+    "Statement": "The backend shall emit alerts for red-zone opportunities, player scores, and close games matching the customer's fantasy selections and alert-type settings.",
+    "Rationale": "The core personalized value: this event matters to this customer.",
+    "Verification method": "Test, backend, AWS deployment. Positive: each of the three types fires for a matching selection. Negative: non-matching event, or matching event of a disabled type, emits nothing; red zone means inside the 20-yard line; close_game_margin (DEC-AFC-SD-035, P1) is within 8 points in the 4th quarter or overtime. VCASE-AFC-PR-014. Alert text claims no player-level inference per PR-028.",
+    "Allocation": "POLICY, MATCHER",
+    "Sources": "#1 item 3; SD-035 (P1)",
+    "source_line": 94
+  },
+  {
+    "UID": "AFC-PR-015",
+    "Statement": "While heads-up presentation is selected, the TV app shall present each alert as a heads-up notification with Watch and Dismiss actions during third-party viewing-app playback.",
+    "Rationale": "The standout moment: brief alert over playback with a direct Watch path.",
+    "Verification method": "Demonstration, system, real stick (SD-001); evidence under evidence/visual/ (SD-024). Positive: provider playback continues while the alert shows Watch/Dismiss. Negative: no companion-app foregrounding, and no heads-up while panel-only presentation is selected. VCASE-AFC-PR-015.",
+    "Allocation": "NOTIFIER, ALERTSVC, MANIFEST",
+    "Sources": "#1 item 3; SD-001",
+    "source_line": 95
+  },
+  {
+    "UID": "AFC-PR-016",
+    "Statement": "The backend shall emit alerts only for customer-enabled alert types.",
+    "Rationale": "Per-type control is the primary noise control.",
+    "Verification method": "Test, system, backend + settings UI. Positive: enabled type fires on matching event. Negative: disabled type fires on nothing. VCASE-AFC-PR-016.",
+    "Allocation": "PROFILE, POLICY",
+    "Sources": "#1 items 3, 6 (alert types)",
+    "source_line": 96
+  },
+  {
+    "UID": "AFC-PR-017",
+    "Statement": "The backend shall emit no more alerts than the customer's frequency setting permits.",
+    "Rationale": "Frequency caps keep the companion welcome during simultaneous Sunday games.",
+    "Verification method": "Test, system, backend + settings UI. Positive: restrictive setting yields fewer alerts than permissive for an identical event stream. Negative: no alert beyond the setting on any run. VCASE-AFC-PR-017.",
+    "Allocation": "PROFILE, POLICY",
+    "Sources": "#1 items 3, 6 (frequency)",
+    "source_line": 97
+  },
+  {
+    "UID": "AFC-PR-018",
+    "Statement": "The backend shall suppress alerts during the customer's quiet hours.",
+    "Rationale": "Silence when the customer demands silence.",
+    "Verification method": "Test, system, backend + settings UI. Positive: triggering event inside quiet hours emits nothing. Negative: no quiet-hours alert on any run. VCASE-AFC-PR-018.",
+    "Allocation": "PROFILE, POLICY",
+    "Sources": "#1 items 3, 6 (quiet hours/game-day periods)",
+    "source_line": 98
+  },
+  {
+    "UID": "AFC-PR-019",
+    "Statement": "The backend shall emit alerts only during the customer's game-day periods.",
+    "Rationale": "Alerts belong to game time, not all time.",
+    "Verification method": "Test, system, backend + settings UI. Positive: triggering event inside a game-day period emits (subject to other filters). Negative: nothing emits outside game-day periods. VCASE-AFC-PR-019.",
+    "Allocation": "PROFILE, POLICY",
+    "Sources": "#1 items 3, 6 (quiet hours/game-day periods)",
+    "source_line": 99
+  },
+  {
+    "UID": "AFC-PR-020",
+    "Statement": "The backend shall delay each alert by the customer's spoiler delay.",
+    "Rationale": "Customers behind live play must not be spoiled by their own companion.",
+    "Verification method": "Test, backend, AWS deployment. Positive: delivery timestamp minus event timestamp is at least the set delay. Negative: no alert delivered early. VCASE-AFC-PR-020.",
+    "Allocation": "PROFILE, POLICY",
+    "Sources": "#1 items 3, 6 (spoiler delay)",
+    "source_line": 100
+  },
+  {
+    "UID": "AFC-PR-021",
+    "Statement": "The TV app shall render each alert in the customer's chosen notification presentation.",
+    "Rationale": "Presentation choice balances intrusiveness and awareness per customer.",
+    "Verification method": "Demonstration, tv-app, real stick (SD-001). Positive: each offered presentation renders as chosen. Negative: panel-only choice shows no heads-up. VCASE-AFC-PR-021.",
+    "Allocation": "PROFILE, NOTIFIER",
+    "Sources": "#1 items 3, 6 (notification presentation)",
+    "source_line": 101
+  },
+  {
+    "UID": "AFC-PR-022",
+    "Statement": "The TV app shall announce alerts by voice only while the customer enables voice announcements over an implemented and verified voice route.",
+    "Rationale": "Voice is intrusive and platform-conditional; both gates apply.",
+    "Verification method": "Demonstration, tv-app, real stick (SD-001). Positive: enabled announcements speak over the verified route. Negative: no voice when disabled or when the route is unverified. VCASE-AFC-PR-022.",
+    "Allocation": "PROFILE, NOTIFIER",
+    "Sources": "#1 items 3, 6 (voice announcements); C8",
+    "source_line": 102
+  },
+  {
+    "UID": "AFC-PR-023",
+    "Statement": "The backend shall attach excitement commentary to an alert only at or below the customer's excitement level with every named entity grounded in the triggering event data.",
+    "Rationale": "Optional flavor that can never invent events, scores, or player identity.",
+    "Verification method": "Test, backend, AWS deployment. Positive: every named entity in commentary appears in the triggering event data. Negative: level off attaches nothing, and no model output determines an event, score, or player identity; level change alters commentary for an identical event; excitement_levels (DEC-AFC-SD-035, P2) are Off / Mild / Hype. VCASE-AFC-PR-023.",
+    "Allocation": "PROFILE, POLICY",
+    "Sources": "#1 items 3, 6 (excitement level); #1 judging (grounded commentary); SD-035 (P2)",
+    "source_line": 103
+  },
+  {
+    "UID": "AFC-PR-024",
+    "Statement": "The backend shall resolve player and event identifiers across providers to single identities.",
+    "Rationale": "Yahoo, ESPN, and provider ids must converge or matching produces false alerts.",
+    "Verification method": "Test, backend, AWS deployment. Positive: same player/event across sources resolves to one identity. Negative: no two identities for one entity, no merged distinct entities. VCASE-AFC-PR-024.",
+    "Allocation": "MATCHER",
+    "Sources": "#1 item 3 (match identifiers)",
+    "source_line": 104
+  },
+  {
+    "UID": "AFC-PR-025",
+    "Statement": "The backend shall emit at most one alert per resolved event.",
+    "Rationale": "Duplicate deliveries for one event destroy trust in the companion.",
+    "Verification method": "Test, backend, AWS deployment. Positive: repeated retrieval of an unchanged event emits nothing further. Negative: no second alert for one resolved event. VCASE-AFC-PR-025.",
+    "Allocation": "MATCHER, POLICY",
+    "Sources": "#1 item 3 (duplicate events)",
+    "source_line": 105
+  },
+  {
+    "UID": "AFC-PR-026",
+    "Statement": "The backend shall propagate each scoring correction to previously emitted alerts and panel state.",
+    "Rationale": "Stale wrong scores must be repaired everywhere the customer saw them.",
+    "Verification method": "Test, system, AWS deployment. Positive: correction updates the alert record and the panel value. Negative: no corrected fact left stale in either surface. VCASE-AFC-PR-026.",
+    "Allocation": "MATCHER, POLICY, PANELSVC",
+    "Sources": "#1 item 3 (scoring corrections); panel consistency rule",
+    "source_line": 106
+  },
+  {
+    "UID": "AFC-PR-027",
+    "Statement": "Each alert shall carry the verified player and matchup context that triggered it.",
+    "Rationale": "The customer must see why this event matters to them.",
+    "Verification method": "Demonstration, system, real stick (SD-001) + backend. Positive: alert shows the triggering player and matchup from lineup and feed data. Negative: no alert without its triggering context. VCASE-AFC-PR-027.",
+    "Allocation": "POLICY, MATCHER",
+    "Sources": "#1 item 3 (verified context)",
+    "source_line": 107
+  },
+  {
+    "UID": "AFC-PR-028",
+    "Statement": "The system shall withhold any claim that a team red-zone entry proves a particular player is on the field or will score.",
+    "Rationale": "The precise over-claim the owner forbade.",
+    "Verification method": "Test, system, backend + TV surfaces. Positive: red-zone alert text makes only team-level claims. Negative: any player-on-field or will-score claim from a red-zone entry fails. VCASE-AFC-PR-028.",
+    "Allocation": "POLICY",
+    "Sources": "#1 item 3 (red zone is not proof)",
+    "source_line": 108
+  },
+  {
+    "UID": "AFC-PR-029",
+    "Statement": "The backend shall resolve each alerted event to an available provider and channel from the customer's installed apps, verified subscriptions, local market, and provider preference.",
+    "Rationale": "Correct game/channel routing is the handoff half of the standout moment. Phase 2 link-contract spike order per SD-035 (Q5): Prime Video (TNF), ESPN app, DirecTV Stream app, YouTube TV.",
+    "Verification method": "Test, backend, AWS deployment. Positive: resolution output names provider and channel with inputs recorded; local-broadcast games (CBS/FOX/NBC) resolve to the channel plus a carrying provider app when one is available. Negative: no resolution from installed-app fact alone; no deep link when no carrying app is available. VCASE-AFC-PR-029.",
+    "Allocation": "RESOLVER",
+    "Sources": "#1 item 4; SD-035 (Q5)",
+    "source_line": 109
+  },
+  {
+    "UID": "AFC-PR-030",
+    "Statement": "The TV app shall open the resolved game or channel through a supported provider launch URI or intent upon the customer's Watch action.",
+    "Rationale": "Watch must reach the game, not merely the provider home screen.",
+    "Verification method": "Demonstration, system, real stick (SD-001); evidence under evidence/visual/ (SD-024). Positive: correct game/channel opens. Negative: app-home landing does not satisfy; app launch alone does not satisfy. VCASE-AFC-PR-030.",
+    "Allocation": "LAUNCHER",
+    "Sources": "#1 item 4 (notification action/deep link)",
+    "source_line": 110
+  },
+  {
+    "UID": "AFC-PR-031",
+    "Statement": "The TV app shall report each routing outcome as exactly one of game opened, search or details opened, app home opened, app absent, access unknown, or playback denied.",
+    "Rationale": "Explicit outcomes make partial success visible instead of silently degraded.",
+    "Verification method": "Demonstration, tv-app, real stick (SD-001). Positive: each attempted route reports exactly one enum value. Negative: no silent outcome, no invented value. VCASE-AFC-PR-031.",
+    "Allocation": "LAUNCHER",
+    "Sources": "#1 app-launch research (explicit outcomes)",
+    "source_line": 111
+  },
+  {
+    "UID": "AFC-PR-032",
+    "Statement": "The system shall mark game access it cannot verify as unknown.",
+    "Rationale": "The explicit unknown-access behavior: doubt is displayed, never smoothed over.",
+    "Verification method": "Test, system, backend + TV surfaces. Positive: unverifiable access reads unknown on alerts, Watch routing, and panel. Negative: no unverified access reads verified or included. VCASE-AFC-PR-032.",
+    "Allocation": "RESOLVER, LAUNCHER",
+    "Sources": "#1 item 4 (unknown stays unknown)",
+    "source_line": 112
+  },
+  {
+    "UID": "AFC-PR-033",
+    "Statement": "The system shall withhold any promise that a game is included merely because the provider app is installed.",
+    "Rationale": "The companion must never sell access it cannot confirm.",
+    "Verification method": "Test, system, backend + TV surfaces. Positive: installed-without-verified-subscription reads unknown per PR-032. Negative: any inclusion promise from install fact alone fails. VCASE-AFC-PR-033.",
+    "Allocation": "RESOLVER, LAUNCHER",
+    "Sources": "#1 items 1, 4 (installed is not subscribed)",
+    "source_line": 113
+  },
+  {
+    "UID": "AFC-PR-034",
+    "Statement": "The backend shall choose among available services by the customer's provider preference.",
+    "Rationale": "The customer decides which of their services wins a contested game.",
+    "Verification method": "Test, system, backend + settings UI. Positive: preference change reroutes a contested game. Negative: no available-service choice contradicts the recorded preference. VCASE-AFC-PR-034.",
+    "Allocation": "PROFILE, RESOLVER",
+    "Sources": "#1 items 4, 6 (provider preference)",
+    "source_line": 114
+  },
+  {
+    "UID": "AFC-PR-035",
+    "Statement": "The TV app shall honor the customer's switching-confirmation setting for every viewing switch.",
+    "Rationale": "Unconfirmed channel switches would hijack the customer's viewing.",
+    "Verification method": "Demonstration, system, real stick (SD-001). Positive: confirmation-required setting blocks switching until confirmed. Negative: no automatic switch unless explicitly configured and supported. VCASE-AFC-PR-035.",
+    "Allocation": "PROFILE, LAUNCHER",
+    "Sources": "#1 items 4, 6 (switching confirmation)",
+    "source_line": 115
+  },
+  {
+    "UID": "AFC-PR-036",
+    "Statement": "The TV app shall offer Alexa-assisted tuning for the resolved game or channel only when the customer enables voice control over an implemented and verified Alexa route.",
+    "Rationale": "Alexa is an additional voice route, never an assumed capability.",
+    "Verification method": "Demonstration, tv-app, real stick (SD-001). Positive: enabled control over a verified route offers tuning. Negative: no Alexa offer when disabled or the route is unverified. VCASE-AFC-PR-036.",
+    "Allocation": "LAUNCHER",
+    "Sources": "#1 item 4 (Alexa-assisted tuning); SD-008; C8",
+    "source_line": 116
+  },
+  {
+    "UID": "AFC-PR-037",
+    "Statement": "The system shall use detection data and profile-based personalization only while the customer opts in to detection and personalization.",
+    "Rationale": "The master switch for sensing and personalization.",
+    "Verification method": "Test, system, backend + settings UI. Positive: opt-out yields monitoring without detection data or personalization. Negative: no detection-basis decision while opted out (labels per PR-011). VCASE-AFC-PR-037.",
+    "Allocation": "PROFILE, POLICY",
+    "Sources": "#1 item 6 (use of detection/personalization)",
+    "source_line": 117
+  },
+  {
+    "UID": "AFC-PR-038",
+    "Statement": "The backend shall link the TV app to the customer account through a device code the customer completes on a phone or browser.",
+    "Rationale": "TV-friendly linking without typing credentials on the stick.",
+    "Verification method": "Demonstration, system, real stick + phone/browser page. Positive: code entry on phone/browser links the TV app. Negative: no link completes without the customer's code action. VCASE-AFC-PR-038.",
+    "Allocation": "AUTH, API",
+    "Sources": "#1 item 6 (device-code linking sufficient)",
+    "source_line": 118
+  },
+  {
+    "UID": "AFC-PR-039",
+    "Statement": "The TV app shall display the selected fantasy team's lineup with each player's fantasy points and game status and the team total and progress under the league's scoring context.",
+    "Rationale": "The panel's core content: my players, my points, my progress.",
+    "Verification method": "Demonstration, system, real stick (SD-001) + backend; evidence under evidence/visual/ (SD-024). Positive: lineup, points, statuses, and total match the Yahoo league context (or PR-065 selected preset table for manual). Negative: no value shown without its scoring basis. VCASE-AFC-PR-039.",
+    "Allocation": "PANEL, PANELSVC",
+    "Sources": "#1 right-side panel (required experience)",
+    "source_line": 119
+  },
+  {
+    "UID": "AFC-PR-040",
+    "Statement": "The TV app shall label each unavailable or stale panel value as unavailable or stale.",
+    "Rationale": "The explicit stale-data behavior: age and absence are visible.",
+    "Verification method": "Demonstration, tv-app, real stick (SD-001). Positive: withheld feed and missing value produce stale and unavailable labels. Negative: no silently old or silently missing value; stale_after is 60 seconds (DEC-AFC-SD-035, P3). VCASE-AFC-PR-040.",
+    "Allocation": "PANEL, PANELSVC",
+    "Sources": "#1 right-side panel (stale/unavailable marks); SD-035 (P3)",
+    "source_line": 120
+  },
+  {
+    "UID": "AFC-PR-041",
+    "Statement": "The TV app shall fit the broadcast video into the screen area remaining beside the right-side lineup panel while preserving broadcast aspect ratio.",
+    "Rationale": "The panel supplements viewing; it must never cover or crop the broadcast.",
+    "Verification method": "Demonstration, tv-app, real stick (SD-001); evidence under evidence/visual/ (SD-024). Positive: simultaneous panel and video with no overlap and preserved aspect (dimension-compared capture). Negative: any overlap or crop fails. VCASE-AFC-PR-041.",
+    "Allocation": "PANEL, SHELL",
+    "Sources": "#1 right-side panel (unobscured video); SD-006",
+    "source_line": 121
+  },
+  {
+    "UID": "AFC-PR-042",
+    "Statement": "The TV app shall switch panel visibility and the followed team and league from TV remote input.",
+    "Rationale": "Core panel controls operable from the couch.",
+    "Verification method": "Demonstration, tv-app, real stick (SD-001); evidence under evidence/visual/ (SD-024). Positive: remote toggles visibility and changes team/league. Negative: no panel control requires another input device. VCASE-AFC-PR-042.",
+    "Allocation": "PANEL, PROFILE",
+    "Sources": "#1 right-side panel (show/hide, team/league)",
+    "source_line": 122
+  },
+  {
+    "UID": "AFC-PR-043",
+    "Statement": "The lineup panel shall accept all panel operations from TV remote input.",
+    "Rationale": "Full panel use without leaving the couch.",
+    "Verification method": "Demonstration, tv-app, real stick (SD-001); evidence under evidence/visual/ (SD-024). Positive: every focusable element reachable with a visible focus indicator. Negative: no remote-dead operation. VCASE-AFC-PR-043.",
+    "Allocation": "PANEL",
+    "Sources": "#1 right-side panel (remote navigable)",
+    "source_line": 123
+  },
+  {
+    "UID": "AFC-PR-044",
+    "Statement": "The lineup panel shall reflect the customer's team, league, and display settings.",
+    "Rationale": "The panel is a view of the customer's settings, not a second configuration.",
+    "Verification method": "Test, system, backend + TV panel. Positive: settings change appears on the panel. Negative: no panel content contradicts recorded settings. VCASE-AFC-PR-044.",
+    "Allocation": "PANEL, PANELSVC",
+    "Sources": "#1 right-side panel (consistent with settings)",
+    "source_line": 124
+  },
+  {
+    "UID": "AFC-PR-045",
+    "Statement": "The lineup panel shall present lineup text the owner accepts as legible from the couch on the target device, with body text at least 24 px and scores at least 32 px at 1080p.",
+    "Rationale": "Couch legibility is judged by the owner on the real target, with a numeric floor per SD-035 (Q3).",
+    "Verification method": "Demonstration, tv-app, real stick (SD-001). Positive: owner accepts lineup text as couch-legible in the demonstration and body text measures at least 24 px with scores at least 32 px at 1080p. Negative: owner rejection or under-size text fails the case. VCASE-AFC-PR-045.",
+    "Allocation": "PANEL",
+    "Sources": "#1 right-side panel (legible from the couch); SD-035 (Q3)",
+    "source_line": 125
+  },
+  {
+    "UID": "AFC-PR-046",
+    "Statement": "The system shall hold lineup panel state consistent with alerts across starter changes and scoring corrections.",
+    "Rationale": "Panel and alerts are two views of one truth.",
+    "Verification method": "Test, system, AWS deployment. Positive: starter change and correction reach both surfaces with identical corrected facts. Negative: no fact present in one surface and contradicted in the other (suppressed alerts do not break fact agreement; hidden panel refreshes on show). VCASE-AFC-PR-046.",
+    "Allocation": "PANELSVC, POLICY",
+    "Sources": "#1 right-side panel (consistency rule)",
+    "source_line": 126
+  },
+  {
+    "UID": "AFC-PR-047",
+    "Statement": "When the panel-beside-provider-video spike fails or exceeds 24 hours from first app install, the TV app shall present the lineup panel as a full screen in the companion app.",
+    "Rationale": "No Mode A footage per owner decision (SD-035, Q4): the product is alerts + Watch, and the panel fallback is a full screen in our own app.",
+    "Verification method": "Demonstration, tv-app, real stick (SD-001); evidence under evidence/visual/ (SD-024). Positive: full-screen lineup panel in the companion app. Negative: no stand-in video, no provider video claimed, and no silent substitution of phone screen, app-switch dashboard, or covering panel. VCASE-AFC-PR-047.",
+    "Allocation": "PANEL, SHELL",
+    "Sources": "#1 panel integration obligation; SD-006; SD-035 (Q4); C5",
+    "source_line": 127
+  },
+  {
+    "UID": "AFC-PR-048",
+    "Statement": "While the lineup panel is shown full-screen in the companion app, the TV app shall route alerts and Watch actions to the real provider apps.",
+    "Rationale": "Full-screen panel degrades only the panel video route, never alerting or handoff.",
+    "Verification method": "Demonstration, system, real stick (SD-001). Positive: full-screen-panel alert Watch opens the real provider route. Negative: no alert or Watch trapped in the companion app. VCASE-AFC-PR-048.",
+    "Allocation": "NOTIFIER, LAUNCHER",
+    "Sources": "SD-006; SD-035 (Q4) (alerts and Watch still go to real providers)",
+    "source_line": 128
+  },
+  {
+    "UID": "AFC-PR-049",
+    "Statement": "WITHDRAWN by DEC-AFC-SD-035 (2026-10-12). Original: Mode A sample footage shall carry a CC-BY or CC0 license with credit.",
+    "Rationale": "Withdrawal rationale: owner answered NO Mode A sample footage (Q4); the product is alerts + Watch with a full-screen panel fallback per PR-047. UID retained, never renumbered.",
+    "Verification method": "Withdrawn \u2014 no verification (VCASE-AFC-PR-049 retired).",
+    "Allocation": "PLAYER",
+    "Sources": "SD-006a (footage licensing); SD-035 (Q4 withdrawal)",
+    "source_line": 129
+  },
+  {
+    "UID": "AFC-PR-050",
+    "Statement": "WITHDRAWN by DEC-AFC-SD-035 (2026-10-12). Original: Mode A playback shall display the label 'Sample footage \u2014 not a live broadcast'.",
+    "Rationale": "Withdrawal rationale: owner answered NO Mode A sample footage (Q4); no label needed without the footage. UID retained, never renumbered.",
+    "Verification method": "Withdrawn \u2014 no verification (VCASE-AFC-PR-050 retired).",
+    "Allocation": "PLAYER",
+    "Sources": "SD-006a (footage labeling); SD-035 (Q4 withdrawal)",
+    "source_line": 130
+  },
+  {
+    "UID": "AFC-PR-051",
+    "Statement": "WITHDRAWN by DEC-AFC-SD-035 (2026-10-12). Original: Mode A sample footage shall exclude NFL footage.",
+    "Rationale": "Withdrawal rationale: owner answered NO Mode A sample footage (Q4); the exclusion is moot without the footage. UID retained, never renumbered.",
+    "Verification method": "Withdrawn \u2014 no verification (VCASE-AFC-PR-051 retired).",
+    "Allocation": "PLAYER",
+    "Sources": "SD-006a (no NFL footage); SD-035 (Q4 withdrawal)",
+    "source_line": 131
+  },
+  {
+    "UID": "AFC-PR-052",
+    "Statement": "The TV app shall run on the 2018 Fire TV stick target on Fire OS.",
+    "Rationale": "The owner's device is the target; no purchase, no silent platform switch.",
+    "Verification method": "Demonstration, tv-app, real 2018 stick (SD-001). Positive: install, launch, and operate on the target. Negative: no target-only failure waived without a C1 owner return. VCASE-AFC-PR-052.",
+    "Allocation": "SHELL, MANIFEST",
+    "Sources": "SD-003; SD-002 context; C1",
+    "source_line": 132
+  },
+  {
+    "UID": "AFC-PR-053",
+    "Statement": "The TV app build shall declare minSdk 25.",
+    "Rationale": "Pins the provisional floor the target assumes.",
+    "Verification method": "Inspection, tv-app, source review of build.gradle.kts. Positive: declaration reads 25. Negative: any other value fails. VCASE-AFC-PR-053.",
+    "Allocation": "BUILD",
+    "Sources": "SD-003",
+    "source_line": 133
+  },
+  {
+    "UID": "AFC-PR-054",
+    "Statement": "The backend shall run on AWS serverless services within the Free tier declared in template.yaml.",
+    "Rationale": "Owner-created Free-plan account bounds cost; serverless matches the workload.",
+    "Verification method": "Inspection, backend, template.yaml review + deployment record. Positive: only Free-tier services (Lambda, HTTP API, DynamoDB on-demand, Scheduler, SSM) declared and deployed. Negative: any paid service or undeleted paid resource fails. VCASE-AFC-PR-054.",
+    "Allocation": "IAC",
+    "Sources": "SD-005; SD-008 (AWS Builder services); C4",
+    "source_line": 134
+  },
+  {
+    "UID": "AFC-PR-055",
+    "Statement": "The backend shall hold Yahoo OAuth client secrets and tokens only in SSM SecureString parameters.",
+    "Rationale": "Secrets stay server-side and owner-handled, never in the APK or repo.",
+    "Verification method": "Inspection, backend, source + APK + parameter review. Positive: parameters exist and code reads only them. Negative: any secret value in APK or repo fails. VCASE-AFC-PR-055.",
+    "Allocation": "SECRET, IAC",
+    "Sources": "SD-007; C9",
+    "source_line": 135
+  },
+  {
+    "UID": "AFC-PR-056",
+    "Statement": "The TV app and backend sources shall contain no local absolute path.",
+    "Rationale": "Committed absolute paths leak the builder's machine and break other checkouts.",
+    "Verification method": "Inspection, system, repository grep over tracked sources. Positive: grep for home-rooted and root-anchored local paths returns nothing. Negative: any committed local absolute path blocks per C7. VCASE-AFC-PR-056.",
+    "Allocation": "BUILD, IAC",
+    "Sources": "SD-010; C7",
+    "source_line": 136
+  },
+  {
+    "UID": "AFC-PR-057",
+    "Statement": "The system shall exclude messenger, message board, community room, shared chat, and watch-party social features.",
+    "Rationale": "Out of scope by owner decision; the register must say so plainly.",
+    "Verification method": "Inspection, system, source and UI review. Positive: no messaging surface or endpoint exists. Negative: any listed feature present fails. VCASE-AFC-PR-057.",
+    "Allocation": "SHELL, API",
+    "Sources": "#1 explicit exclusion (owner decision 10-10)",
+    "source_line": 137
+  },
+  {
+    "UID": "AFC-PR-058",
+    "Statement": "The backend shall expose link, profile, alerts, panel, and provider operations to the TV app.",
+    "Rationale": "The TV\u2194backend contract surface the product behaviors need.",
+    "Verification method": "Test, system, deployed API. Positive: each operation responds per its contract. Negative: no TV behavior depends on an unexposed operation. VCASE-AFC-PR-058.",
+    "Allocation": "API",
+    "Sources": "#1 source review (proposed data flow); #1 items 1, 3, 4, 6; panel",
+    "source_line": 138
+  },
+  {
+    "UID": "AFC-PR-059",
+    "Statement": "The backend shall perform API aggregation, full-game monitoring, cross-provider matching, and commentary generation.",
+    "Rationale": "Heavy work stays off the stick.",
+    "Verification method": "Inspection, backend, source review. Positive: each listed function implemented backend-side. Negative: no listed function implemented TV-side. VCASE-AFC-PR-059.",
+    "Allocation": "INGEST, MATCHER, POLICY",
+    "Sources": "#1 lightweight device design",
+    "source_line": 139
+  },
+  {
+    "UID": "AFC-PR-060",
+    "Statement": "The backend shall send the TV app only updates relevant to the customer profile.",
+    "Rationale": "Small relevant updates keep the TV light and the customer unbothered.",
+    "Verification method": "Test, backend, AWS deployment. Positive: update stream for a fixture profile contains only profile-relevant updates. Negative: any irrelevant update fails. VCASE-AFC-PR-060.",
+    "Allocation": "API",
+    "Sources": "#1 lightweight device design",
+    "source_line": 140
+  },
+  {
+    "UID": "AFC-PR-061",
+    "Statement": "The TV app shall coalesce burst updates into changed rows and values.",
+    "Rationale": "No whole-screen rerenders or tickers on a small stick.",
+    "Verification method": "Test, tv-app, instrumented build or review. Positive: burst input updates only changed rows/values. Negative: whole-screen rerender on a burst fails; hidden panel suspends update application and refreshes on show. VCASE-AFC-PR-061.",
+    "Allocation": "PANEL, NOTIFIER",
+    "Sources": "#1 lightweight device design",
+    "source_line": 141
+  },
+  {
+    "UID": "AFC-PR-062",
+    "Statement": "The TV app's alert and panel components shall bound their event queues, retained history, images, and caches.",
+    "Rationale": "Declared bounds replace hope as the memory story; measurement stays excluded.",
+    "Verification method": "Inspection, tv-app, source review. Positive: each named resource has a declared limit. Negative: any unbounded named resource fails. VCASE-AFC-PR-062.",
+    "Allocation": "ALERTSVC, PANEL",
+    "Sources": "#1 lightweight device design",
+    "source_line": 142
+  },
+  {
+    "UID": "AFC-PR-063",
+    "Statement": "The TV app's alert, panel, and detector components shall keep network work, parsing, and computation off the rendering thread.",
+    "Rationale": "The render thread stays free so the UI never janks on I/O.",
+    "Verification method": "Inspection, tv-app, source review. Positive: network, parse, and compute paths dispatch off the render thread. Negative: any such work on the render thread fails. VCASE-AFC-PR-063.",
+    "Allocation": "ALERTSVC, PANEL, DETECTOR",
+    "Sources": "#1 lightweight device design",
+    "source_line": 143
+  },
+  {
+    "UID": "AFC-PR-064",
+    "Statement": "The backend shall reject a schema-invalid ESPN response without changing stored events.",
+    "Rationale": "A malformed poll must never corrupt the event cache.",
+    "Verification method": "Test, backend, AWS deployment. Positive: invalid fixture rejected, stored events byte-identical. Negative: any partial store from an invalid response fails. VCASE-AFC-PR-064.",
+    "Allocation": "INGEST",
+    "Sources": "#1 item 2 (validation at ingest); SD-004",
+    "source_line": 144
+  },
+  {
+    "UID": "AFC-PR-065",
+    "Statement": "The backend shall score manual lineups under the customer's selected preset from exactly two presets, PPR and Half-PPR, with Default preset Half-PPR, and shall score Yahoo leagues under Yahoo's own league scoring.",
+    "Rationale": "Manual lineups have no Yahoo league context; two documented presets give correct points without inventing league rules. PPR: 1 pt per reception, 1 pt per 10 rushing+receiving yards, 6 per rushing/receiving TD, 1 pt per 25 passing yards, 4 per passing TD, -1 per interception, -2 per fumble lost. Half-PPR: identical except 0.5 pt per reception.",
+    "Verification method": "Test, backend, AWS deployment. Positive: manual lineup points equal the selected preset table applied to feed statistics, and default selection is Half-PPR. Negative: any manual point without a table row fails; any third preset or Yahoo-league use of a preset table fails; manual scoring labeled with the selected preset ('PPR' or 'Half-PPR'). VCASE-AFC-PR-065.",
+    "Allocation": "PANELSVC, LINEUP",
+    "Sources": "#1 right-side panel (league scoring context); SD-007 manual entry; SD-035 (D1)",
+    "source_line": 145
+  },
+  {
+    "UID": "AFC-PR-066",
+    "Statement": "The TV app shall record the customer's selected manual-lineup scoring preset from PPR and Half-PPR, defaulting to Half-PPR.",
+    "Rationale": "The customer chooses between the two most popular scoring modes (SD-035 D1); the default preserves half-PPR behavior.",
+    "Verification method": "Demonstration, system, real stick (SD-001) + backend. Positive: preset change alters manual points per PR-065 and persists across restart; default is Half-PPR. Negative: no third preset offered and no silent preset change. VCASE-AFC-PR-066.",
+    "Allocation": "PROFILE, LINEUP",
+    "Sources": "SD-035 (D1)",
+    "source_line": 146
+  }
+]

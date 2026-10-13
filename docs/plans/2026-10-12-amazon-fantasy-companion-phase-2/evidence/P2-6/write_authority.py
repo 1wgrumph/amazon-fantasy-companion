@@ -17,7 +17,7 @@ doc = {
         "title": "Amazon Fantasy Companion Phase 2: implementation, milestones, submission",
         "plan_dir": PLAN + "/",
         "deadline": "2026-10-23T19:00:00Z",
-        "phase": "Phase 2 (DEC-AFC-SD-023 P2-6/P2-7): product implementation from the approved spec, milestones M1..M5, submission readiness",
+        "phase": "Phase 2 (DEC-AFC-SD-023 P2-6/P2-7): product implementation from the approved spec, milestones M01..M13, submission readiness",
     },
     "repositories": [
         {"repository": "github:1wgrumph/amazon-fantasy-companion", "role": "product and planning repository",
@@ -47,8 +47,8 @@ doc = {
         "scope": [
             "Phase 2 slices of implementation.json within their write sets, dependencies and leases",
             "Defect fixes dispatched on the bug-triager routes per DEC-AFC-SD-037 within write sets named by triage",
-            "Creating GitHub milestones M1..M5 exactly as approved (P2-L01)",
-            "Preparing (not publishing) one release per milestone through release-process",
+            "Creating GitHub milestones M01..M13 exactly as approved (P2-L01)",
+            "Preparing (not publishing) one release per technical-wave checkpoint W1..W5 through release-process",
         ],
         "actions": [
             "create worktrees under <workspace>/worktrees/ and branches",
@@ -58,7 +58,7 @@ doc = {
             "run scan-software-supply-chain and install scanned tools (Android command-line tools and platform-tools, AWS SAM CLI, cfn-lint, pinned Python test dependencies) on the development host",
             "adb to the owner's Fire TV stick on the local network: install and uninstall our debug and release APKs, input key events, screencap, screenrecord, dumpsys, getprop",
             "sam build and sam deploy of backend/template.yaml to the owner's Free-plan account through the owner-configured named profile afc-dev, and run deployed tests against it",
-            "create GitHub milestones M1..M5 and read them back (P2-L01)",
+            "create GitHub milestones M01..M13 and read them back (P2-L01)",
             "file issues through the issue-label policy tool in this repository; close tracked issues after their fix merges and acceptance passes",
         ],
         "paths": [

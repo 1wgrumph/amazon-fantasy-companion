@@ -1,3 +1,35 @@
+# Current review checkpoint — 2026-10-13T15:27:30Z
+
+The chronology/profile delta is applied: **13 GitHub milestones,39 logical issues,
+52 slices,13 TDD pairs**, preserving **5 technical waves/releases,121 dependencies,
+44 integration steps,100 proofs,70 commands and63 active+3 withdrawn product UIDs**.
+Native1.1.7 package/schema/renderer checks and268 parent conservation checks pass;
+3 negative cases reject duplicate/missing issues and invalid milestone sizes.
+RE's4affected local rows are closed; correction_rounds2. IE32/32,TE22/22 and
+PI40/40 author checks passed. Original independent planning review1/1 and
+aggregate repair1/1 remain spent. No new independent review or assurance claimed.
+
+Package digest: `e02871029b86f8d0f2fdef6617feb989413883cc6bdb70e5dec3a47e64c86da8`.
+Profile full digest: `7d501eb8c103831a38c50d237b5d1e2e015a564b9ade8aef09a32dfc39b26ab1`.
+Payload digest: `f0b8d5bf26d3959948e65960fc2b06525a96f964ab3454633eb6c1aaeab9acdb`.
+
+**NEEDS_MORE_EVIDENCE:** no available CUA browser. The changed wave SVG was
+rasterized and visually inspected, and HTML content/renderer byte checks pass;
+full-page browser layout, phone-width and screenshots remain NOT_RUN. Owner
+acceptance of this gap is not recorded. The earlier Markdown precheck gap is
+resolved by the installed pure checker with a lossless in-memory projection;
+Markdown remains authoritative. See Phase2 evidence/chronology-profile-delta/.
+
+All children completed; no duplicate dispatch. Present this one revised package
+for integrated approval-or-change, with the visual gap and unchanged X04/R1
+timing risk. PR15 remains draft; merge and tracking creation await approval.
+Product execution, public export and release remain held under their separate
+owner boundaries. Final-ready remains2026-10-23T12:00Z; deadline19:00Z.
+
+Earlier status and queues below are historical, not current dispatch authority.
+
+---
+
 # Resume checkpoint — 2026-10-13T14:00:48Z
 
 **CONTRACT_FAILURE.** The owner-authorized Bearing 1.1.7 / `opensource-hackathon`

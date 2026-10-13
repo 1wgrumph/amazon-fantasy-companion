@@ -1,6 +1,6 @@
 ---
 type: technical-plan
-status: complete
+status: amended
 lifecycle: AFC-2026-10-11
 phase: 2
 title: "Amazon Fantasy Companion Phase 2: implementation plan, program plan and milestones"
@@ -45,9 +45,9 @@ DEC-AFC-APPROVAL-ST5). When it is done:
   log (DEC-AFC-SD-025). The owner submits.
 - **Every landed slice is visible in the revision record** (DEC-AFC-SD-038):
   a `CHANGELOG.md` `[Unreleased]` entry linking its pull request, and one
-  release per milestone prepared through the `release-process` skill. The
+  release per technical wave prepared through the `release-process` skill. The
   owner authorizes each publication.
-- **GitHub milestones M1..M5** (D3) are defined here and created only after
+- **GitHub milestones M01..M13** (D3) are defined here and created only after
   this package is approved (P2-7).
 
 Every slice traces register UIDs (`requirements-register.md`) and spec
@@ -183,7 +183,7 @@ write sets and submission. Allocation names Phase 2 slices.
 | ID | Statement | Source | Verification | Allocation |
 |---|---|---|---|---|
 | AC-AFC-P2-REL-01 | Every Phase 2 pull request that lands shall add one `CHANGELOG.md` `## [Unreleased]` entry (Keep a Changelog section Added, Changed, Fixed or Removed) naming the change and linking the pull request; the first Phase 2 landing seeds `CHANGELOG.md` when it is absent. | DEC-AFC-SD-038; cross-repo rule 21 | inspection | Landing procedure (ship-pull-request) for every slice |
-| AC-AFC-P2-REL-02 | At each milestone exit the program shall prepare a release through the `release-process` skill: version, tag name and release notes drawn from the changelog, with the `[Unreleased]` entries moved under the version heading; it shall publish the release only after the owner authorizes that publication. | DEC-AFC-SD-038; cross-repo rules 4 and 21 | inspection | P2-R1..P2-R5 |
+| AC-AFC-P2-REL-02 | At each technical-wave release checkpoint W1..W5 the program shall prepare a release through the `release-process` skill: version, tag name and release notes drawn from the changelog, with the `[Unreleased]` entries moved under the version heading; it shall publish the release only after the owner authorizes that publication. | DEC-AFC-SD-038; cross-repo rules 4 and 21 | inspection | P2-R1..P2-R5 |
 | AC-AFC-P2-SPEC-01 | When the panel (P2-X04), provider (P2-X03) and notification (P2-X02) spike verdicts have landed, the D1 specification shall be revised to record every landed spike verdict from P2-X01..P2-X07 (plus P2-X11 when it runs), the verdict-selected panel mode and provider routes with every recorded limitation, the aligned model names (`PanelMode.fullScreen`, no `tvApp.player`, AFC-PR-066 allocation) and the Glossary Lifecycle-local design quantities as approved under OD-AFC-05, with a revision row listing the changed sections and linking the pull request and its diff, and `gate.sh spec` shall pass with a byte-identical rebuild. | DEC-AFC-SD-038; spec §2.1, §4.7; Phase 1 deferred AC-AFC-SPEC-03 | inspection, test | P2-D02 |
 
 ### Program plan and milestones
@@ -191,7 +191,7 @@ write sets and submission. Allocation names Phase 2 slices.
 | ID | Statement | Source | Verification | Allocation |
 |---|---|---|---|---|
 | AC-AFC-P2-PLAN-01 | The technical plan shall define Phase 2 waves in which every slice belongs to exactly one wave, no wave schedules more than impl_agent_cap concurrent implementation agents, and serialization is declared only for dependencies, shared interfaces, write-set overlap, the leases `fire-tv-stick`, `aws-afc-dev`, `live-game-window`, `tv-app-manifest`, `tv-app-gradle`, `backend-template` and `main-landing`, or impl_agent_cap. | SD-012 (D2); rule 17 | inspection | Planning |
-| AC-AFC-P2-MS-01 | After the owner approves this package, the program shall create GitHub milestones M1..M5 in `1wgrumph/amazon-fantasy-companion` whose title, due date (calendar date; the UTC due time is stated in the description) and description (entry criteria, exit criteria, slice list) equal the approved milestone table, and shall record a `gh api` readback that matches it field for field; no milestone is created before approval. | SD-012 (D3); DEC-AFC-SD-023 (P2-7) | inspection | P2-L01 |
+| AC-AFC-P2-MS-01 | After the owner approves this package, the program shall create GitHub milestones M01..M13 in `1wgrumph/amazon-fantasy-companion` whose title, due date (calendar date; the UTC due time is stated in the description) and description (entry criteria, exit criteria, issues in order) equal the approved table `GitHub milestones in order (D3; create only after approval)`, and shall record a `gh api` readback that matches it field for field; no milestone is created before approval. | SD-012 (D3); DEC-AFC-SD-023 (P2-7) | inspection | P2-L01 |
 | AC-AFC-P2-SCHED-01 | The plan shall state the remaining days to T_deadline and the remaining live windows, schedule each spike before the live window it needs, and present any scope reduction as an owner decision rather than cutting scope silently. | Phase 1 RISK-AFC-17; #1 §Development setup | inspection | Planning; P2-6 integrated review |
 
 ### Submission and developer feedback
@@ -202,7 +202,7 @@ write sets and submission. Allocation names Phase 2 slices.
 | AC-AFC-P2-SUB-02 | The program shall produce a demo video plan of at most 2 min 50 s covering the alert → Watch → correct game or channel moment and the lineup panel moment from issue #1 §Judging alignment, naming for each shot its source (on-device capture, owner camera capture, or labeled replay) and the register UIDs it shows; no shot claims behavior that has no passing evidence. | #1 §Judging alignment, §Acceptance (public video under three minutes) | inspection | P2-D05, P2-X12 |
 | AC-AFC-P2-SUB-03 | The submission write-up shall describe the implemented Fire TV and AWS Builder integrations from their evidence, state the YouTube TV Fantasy View differentiation (roster scores beside the game there; tune-in alerts and cross-provider Watch here), and discuss the DEC-AFC-SD-036 future direction (AWS-powered analytics viewing on Prime Video; Amazon's NBA rights) with public citations, marked as external context and not product capability. | DEC-AFC-SD-035 (competitive), DEC-AFC-SD-036, SD-008 | inspection | P2-D04 |
 | AC-AFC-P2-DX-01 | Every Phase 2 dispatch packet and return shall carry a `developer_feedback` section listing observations with IDs and evidence, or "no new observations" naming the tools exercised. | #1 §Scribe contract | inspection | All slices; Scribe log |
-| AC-AFC-P2-DX-02 | Before M5 exit the Scribe shall assemble, from `docs/developer-feedback/observations.md`, a per-tool Product Feedback file (used for, what worked well, what needs work, onboarding from zero to hello world, would build again Yes/No and why, AWS services used and how), optional Feature Requests with priority Critical / Important / Nice-to-have, and a sanitized Friction Log with the Devpost entry fields, covering every tool, API, SDK and device used in Phase 2, with no credentials, account details or local paths, and shall check the Product Feedback file and the Friction Log against the official rules current at submission. | DEC-AFC-SD-025; #1 §Scribe contract | inspection | P2-SCR1 |
+| AC-AFC-P2-DX-02 | Before W5 exit the Scribe shall assemble, from `docs/developer-feedback/observations.md`, a per-tool Product Feedback file (used for, what worked well, what needs work, onboarding from zero to hello world, would build again Yes/No and why, AWS services used and how), optional Feature Requests with priority Critical / Important / Nice-to-have, and a sanitized Friction Log with the Devpost entry fields, covering every tool, API, SDK and device used in Phase 2, with no credentials, account details or local paths, and shall check the Product Feedback file and the Friction Log against the official rules current at submission. | DEC-AFC-SD-025; #1 §Scribe contract | inspection | P2-SCR1 |
 | AC-AFC-P2-SUB-04 | The program shall produce a submission checklist listing every owner-only action (OA-1..OA-11 and the §Exclusions owner-only actions) with its due time before T_deadline, and agents shall perform none of those actions. | #1 §Acceptance; Phase 1 deferred AC-AFC-SUB-02; DEC-AFC-SD-009 | inspection | P2-D05 |
 | AC-AFC-P2-APK-01 | The submitted APK shall be built from a tagged commit on `main`, its sha256 recorded, and Reverify run on that exact APK for every claim the submission makes about it (minSdk 25, package identity, declared permissions and services), with a Reverify failure or unavailability recorded as a typed gap. | Cross-repo rule 15; frozen `deterministic_verification.reverify`; AFC-PR-053 | inspection | P2-L05 |
 
@@ -222,7 +222,7 @@ write sets and submission. Allocation names Phase 2 slices.
 | RISK-AFC-P2-10 | If a selected route reaches a confirmed usage or rate limit, then the Orchestrator shall record the evidence and activate only the next approved fallback of the frozen profile with a class B receipt preserving coverage-assist and Reverify settings, or queue the slice; other errors shall not trigger a route switch. | Frozen profiles; owner-stops class B | inspection | All dispatches | Muse quota exhaustion occurred on 2026-10-11. | Next approved fallback or queue. |
 | RISK-AFC-P2-11 | If Phase 1 slice S09 (gate entrypoint) has not merged when a Phase 2 slice is ready to land, then the slice shall wait for S09 and P2-G01; it shall not land without a green gate run, and development continues on its branch with local test evidence. | Phase 1 plan; AC-AFC-P2-LAND-01 | inspection | P2-G01; landing | S09 has merged; the Phase 2 product gate extension P2-G01 remains a prerequisite. | Landing waits; work does not. |
 | RISK-AFC-P2-12 | When a secret, account detail, customer data or absolute local path is detected in material bound for the repository, release, video or submission, the program shall block that merge or publication until sanitized, and if exposure has occurred shall record the artifact without reproducing the value and notify the owner for rotation. | Rules 2 and 12; AFC-PR-055, -056; C9 | test, inspection | `hygiene` area; P2-D03..P2-D05, P2-SCR1 | Yahoo tokens, AWS profile names and provider account names can leak into captures and logs. | Block and sanitize; rotation is the owner's action. |
-| RISK-AFC-P2-13 | If a milestone exit is at risk of missing its due time by more than 12 h, then the Orchestrator shall present the owner a scope-reduction decision using the priority order in §Program plan, not cut scope silently. | AC-AFC-P2-SCHED-01; Phase 1 RISK-AFC-17 | inspection | Orchestrator wave receipts | The deadline, device spikes and live windows constrain the schedule; the as-of remaining time is stated in Program plan. | Owner decides cuts. |
+| RISK-AFC-P2-13 | If a technical-wave release checkpoint W1..W5 is at risk of missing its due time by more than 12 h, then the Orchestrator shall present the owner a scope-reduction decision using the priority order in §Program plan, not cut scope silently. | AC-AFC-P2-SCHED-01; Phase 1 RISK-AFC-17 | inspection | Orchestrator wave receipts | The deadline, device spikes and live windows constrain the schedule; the as-of remaining time is stated in Program plan. | Owner decides cuts. |
 
 ## Exclusions
 
@@ -272,30 +272,66 @@ Leases (held by the Orchestrator, granted to one slice at a time):
 | `backend-template` | `backend/template.yaml`, `backend/samconfig.toml`, `backend/requirements.txt`, `backend/requirements-dev.txt`, `backend/src/api/openapi.yaml`, `backend/src/store/`, `backend/src/pipeline/`, `backend/tests/conftest.py`, `backend/tests/deployed/conftest.py` | P2-B01T creates test/bootstrap/shared conftest under its bounded write set; P2-B01 creates the product shared artifacts; later authorized edits one at a time, declared in the PR body; module Test Implementers own distinct deployed directories and do not edit shared conftest without this lease. |
 | `main-landing` | Merging to `main` and the `CHANGELOG.md` append | Landing procedure; one merge at a time; before each merge CMD-PR-CHECKS (every check on the head commit passes, including gate / hygiene and each path-selected gate / <area>); merge only with gh pr merge --rebase or --merge; delete the remote branch. While the repository is private, GitHub enforces no ruleset; after the OA-5 visibility flip the Orchestrator applies the main ruleset (PR-only, required checks, no squash). |
 
-### Milestones (D3; ready to create after approval)
+### Technical waves and release checkpoints (W1..W5)
 
-| Milestone | Title | Due (UTC) | Entry criteria | Exit criteria | Slices |
+| Checkpoint | Title | Due (UTC) | Entry criteria | Exit criteria | Slices |
 |---|---|---|---|---|---|
-| M1 | Foundations and device baseline | 2026-10-14T23:00:00Z | This package approved and landed (entry criterion 2); OA-1 (stick located, ADB enabled, model and Fire OS recorded) and OA-4 (Prime Video signed in) for P2-X01; Phase 1 S09 merged (met: origin/main 17b40b4). | Gate areas `tvapp` and `backend` on `main`; Vnv areas added; `tv-app/` scaffold builds and installs on the stick; backend skeleton with device-code link passes tests; P2-X01 verdict landed with first-install time; ESPN capture tool and first fixtures landed; milestones created and read back; release prepared (P2-R1). | P2-L01, P2-X01, P2-X05, P2-D01, P2-G01T, P2-G01, P2-A01T, P2-A01, P2-B01T, P2-B01, P2-R1 |
-| M2 | Spike verdicts and backend baseline | 2026-10-17T01:00:00Z (T_yahoo + 6 h for the P2-X06 verdict pull request and P2-R2) | M1 exit for device and backend slices; OA-3 (AWS account and `afc-dev` profile) and OA-10 (link passphrase) for P2-L02; OA-4 (ESPN, DirecTV Stream, YouTube TV signed in) for P2-X03. | Verdicts landed for panel (within spike_panel_max), notification, provider links (TNF check included), detection, ESPN live timing, Yahoo or manual; ingest and lineup slices merged; profile/settings UI merged with visual review; backend deployed to aws-afc-dev with link and profile smoke; release prepared (P2-R2). | P2-X04, P2-X02, P2-X03, P2-X07, P2-X06, P2-B02T, P2-B02, P2-B03T, P2-B03, P2-A02T, P2-A02, P2-L02, P2-R2 |
-| M3 | End-to-end on the stick | 2026-10-19T12:00:00Z | M2 verdicts; T_yahoo outcome applied. | On Sun 2026-10-18 with simultaneous live games: alert over provider playback → Watch → recorded routing outcome on the stick; panel in the verdict's mode with live points and freshness; matcher, policy, resolver, panel service, alert, Watch and panel UI merged; release prepared (P2-R3). | P2-B04T, P2-B04, P2-B05T, P2-B05, P2-B06T, P2-B06, P2-B07T, P2-B07, P2-A03T, P2-A03, P2-A04T, P2-A04, P2-A05T, P2-A05, P2-L03, P2-X09, P2-R3 |
-| M4 | Feature complete and hardened | 2026-10-21T23:00:00Z | M3 exit. | Corrections and starter changes verified live or by labeled replay plus live check on Mon 2026-10-19; every active register case has passing evidence or an owner-accepted typed gap; no unresolved actionable review defect at any priority without explicit owner acceptance of residual risk; D1 revision landed (AC-AFC-P2-SPEC-01); Alexa stretch verdict if OD-AFC-03 = yes; release prepared (P2-R4). | P2-X10, P2-D02, P2-X11 (conditional), P2-R4 |
-| M5 | Submission ready | 2026-10-23T12:00:00Z | M4 exit; OA-5 (LICENSE file and visibility flip) before judge-access verification; OA-6 (ESPN terms) before the write-up is final. | README and setup verified from a clean checkout; write-up, demo plan and clips ready; developer feedback assembled and sanitized; final APK tagged, hashed and Reverify run; Assurance Test Engineer and Integration Engineer execution verdicts on the M5 candidate; release prepared (P2-R5); owner checklist for submission handed over. | P2-D03, P2-D04, P2-D05, P2-SCR1, P2-R5, P2-L05, P2-X12 |
+| W1 | Foundations and device baseline | 2026-10-14T23:00:00Z | This package approved and landed (entry criterion 2); OA-1 (stick located, ADB enabled, model and Fire OS recorded) and OA-4 (Prime Video signed in) for P2-X01; Phase 1 S09 merged (met: origin/main 17b40b4). | Gate areas `tvapp` and `backend` on `main`; Vnv areas added; `tv-app/` scaffold builds and installs on the stick; backend skeleton with device-code link passes tests; P2-X01 verdict landed with first-install time; ESPN capture tool and first fixtures landed; milestones created and read back; release prepared (P2-R1). | P2-L01, P2-X01, P2-X05, P2-D01, P2-G01T, P2-G01, P2-A01T, P2-A01, P2-B01T, P2-B01, P2-R1 |
+| W2 | Spike verdicts and backend baseline | 2026-10-17T01:00:00Z (T_yahoo + 6 h for the P2-X06 verdict pull request and P2-R2) | P2-X01 merged for P2-X04 and the device chain; P2-B01 merged for backend Wave 2 slices; P2-A01 merged for P2-A02; no blanket P2-R1 prerequisite for P2-X04; OA-3 (AWS account and `afc-dev` profile) and OA-10 (link passphrase) for P2-L02; OA-4 (ESPN, DirecTV Stream, YouTube TV signed in) for P2-X03. | Verdicts landed for panel (within spike_panel_max), notification, provider links (TNF check included), detection, ESPN live timing, Yahoo or manual; ingest and lineup slices merged; profile/settings UI merged with visual review; backend deployed to aws-afc-dev with link and profile smoke; release prepared (P2-R2). | P2-X04, P2-X02, P2-X03, P2-X07, P2-X06, P2-B02T, P2-B02, P2-B03T, P2-B03, P2-A02T, P2-A02, P2-L02, P2-R2 |
+| W3 | End-to-end on the stick | 2026-10-19T12:00:00Z | W2 verdicts; T_yahoo outcome applied. | On Sun 2026-10-18 with simultaneous live games: alert over provider playback → Watch → recorded routing outcome on the stick; panel in the verdict's mode with live points and freshness; matcher, policy, resolver, panel service, alert, Watch and panel UI merged; release prepared (P2-R3). | P2-B04T, P2-B04, P2-B05T, P2-B05, P2-B06T, P2-B06, P2-B07T, P2-B07, P2-A03T, P2-A03, P2-A04T, P2-A04, P2-A05T, P2-A05, P2-L03, P2-X09, P2-R3 |
+| W4 | Feature complete and hardened | 2026-10-21T23:00:00Z | W3 exit. | Corrections and starter changes verified live or by labeled replay plus live check on Mon 2026-10-19; every active register case has passing evidence or an owner-accepted typed gap; no unresolved actionable review defect at any priority without explicit owner acceptance of residual risk; D1 revision landed (AC-AFC-P2-SPEC-01); Alexa stretch verdict if OD-AFC-03 = yes; release prepared (P2-R4). | P2-X10, P2-D02, P2-X11 (conditional), P2-R4 |
+| W5 | Submission ready | 2026-10-23T12:00:00Z | W4 exit; OA-5 (LICENSE file and visibility flip) before judge-access verification; OA-6 (ESPN terms) before the write-up is final. | README and setup verified from a clean checkout; write-up, demo plan and clips ready; developer feedback assembled and sanitized; final APK tagged, hashed and Reverify run; Assurance Test Engineer and Integration Engineer execution verdicts on the W5 candidate; release prepared (P2-R5); owner checklist for submission handed over. | P2-D03, P2-D04, P2-D05, P2-SCR1, P2-R5, P2-L05, P2-X12 |
 
-M5 leaves 7 h before T_deadline for the owner's upload, publication and
-submission. Each GitHub milestone description carries its row's entry and
-exit criteria and slice list (P2-L01).
+W5 leaves 7 h before T_deadline for the owner's upload, publication and
+submission. These five technical release checkpoints govern release prerequisites
+independently of the 13 GitHub milestone groups below. X05 contributes only its
+early historical-fixture checkpoint to W1; its live verdict remains later.
+
+### GitHub milestones in order (D3; create only after approval)
+
+Target three logical issues per milestone; allowed range two to six (DEC-AFC-SD-040).
+Issue count is not an effort estimate. Dependencies and leases, not milestone
+number alone, determine readiness. Exact UTC times accompany GitHub due dates.
+
+| Milestone | Title | Due (UTC) | Entry criteria | Exit criteria | Issues in order |
+|---|---|---|---|---|---|
+| M01 | M01 Day one: tracking, verification guidance and product gate | 2026-10-14T20:00:00Z | Owner integrated approval recorded and planning PR merged to main (IE-P2-1). | 13 milestones and 39 issues created and read back (CMD-MILESTONES-READBACK, PROC-TRACKING-SETUP); Vnv areas pass CMD-GATE-DOCS; gate areas tvapp/backend on main with CMD-WORKFLOW-CHECK and supply-chain scan PASS. | P2-L01, P2-D01, P2-G01 |
+| M02 | M02 Fire TV stick qualified and backend skeleton with device linking | 2026-10-14T20:00:00Z | Same start as M01 (planning PR merged); X01 is the time-critical item; only P2-B01 landing waits for P2-G01. | P2-X01 verdict landed with device identity, qualified host tools and first_install_at; backend skeleton with device-code link green (CMD-GATE-BACKEND, CMD-SAM-VALIDATE) and contracts.b01 recorded. | P2-X01, P2-B01 |
+| M03 | M03 Panel spike, TV app scaffold and release v0.1.0 | 2026-10-14T23:00:00Z | P2-X01 merged (stick released to X04). | X04 verdict landed (modeB with geometry evidence, or TIMEBOX/fullScreen); tv-app scaffold green, installed and visually reviewed on the stick; X05 PR 1 fixtures on main; v0.1.0 release prepared (Wave 1 exit = release checkpoint W1). | P2-X04, P2-A01, P2-R1 |
+| M04 | M04 Stick spikes and Thursday Oct 15 live checks | 2026-10-17T01:00:00Z | Stick released by P2-X04 and the P2-A01 review step (M03). | Final notification, provider-link (TNF included), detection and ESPN live-timing verdicts landed; registry.v2 and fixtures.v2 digests recorded. | P2-X02, P2-X03, P2-X07, P2-X05 |
+| M05 | M05 Feed ingest, lineup sources and first AWS deploy | 2026-10-17T01:00:00Z | P2-B01 merged (runs in parallel with M03 and M04; backend lane). | Ingest and lineup slices merged; backend deployed to aws-afc-dev with link and profile smoke (deploy.1). | P2-B03, P2-L02, P2-B02 |
+| M06 | M06 Profile settings, lineup-source verdict and release v0.2.0 | 2026-10-17T01:00:00Z | P2-A01 merged; M05 deploy available. | Profile/settings UI merged with visual review; Yahoo or manual verdict landed; v0.2.0 prepared (release checkpoint W2). | P2-A02, P2-X06, P2-R2 |
+| M07 | M07 Event matching, alert policy and panel service | 2026-10-18T09:00:00Z | Wave 3 entry as written: W2 spike verdicts landed and T_yahoo outcome applied (M04, M06); B02/B03 merged (M05). | Matcher, policy and panel service merged with CMD-CONTRACT-FROZEN PASS. | P2-B04, P2-B05, P2-B07 |
+| M08 | M08 Provider resolver, TV alerts and Watch | 2026-10-18T09:00:00Z | Wave 3 entry (same as M07); runs in parallel with M07. | Resolver, alert UI and Watch merged with instrumented runs and visual review on the stick. | P2-B06, P2-A03, P2-A04 |
+| M09 | M09 TV lineup panel and integrated backend deploy | 2026-10-18T11:00:00Z | Wave 3 entry; A05T in parallel with M07/M08. | Panel UI merged in the verdict mode; aws-afc-dev redeployed at the Wave 3 backend head with deployed suite PASS. | P2-A05, P2-L03 |
+| M10 | M10 Sunday Oct 18 live end-to-end and release v0.3.0 | 2026-10-19T12:00:00Z | M08 and M09 complete. | Sunday run record: alert over playback -> Watch -> recorded outcome; panel live; v0.3.0 prepared (release checkpoint W3). | P2-X09, P2-R3 |
+| M11 | M11 Monday Oct 19 hardening, conditional Alexa, spec revision and release v0.4.0 | 2026-10-21T23:00:00Z | Wave 4 entry: Wave 3 exit (P2-R3 merged). | Corrections/starter changes verified; D1 revision landed; X11 disposition recorded; no unresolved actionable review defect without owner acceptance; v0.4.0 prepared (release checkpoint W4). | P2-X10, P2-X11, P2-D02, P2-R4 |
+| M12 | M12 Submission documents and developer feedback | 2026-10-22T16:00:00Z | Wave 5 entry as written: Wave 4 exit (P2-R4 merged). | README, write-up, demo plan, owner checklist and sanitized developer feedback merged. | P2-D03, P2-D04, P2-D05, P2-SCR1 |
+| M13 | M13 Release candidate v1.0.0, final APK, demo capture and handover | 2026-10-23T12:00:00Z | M12 complete; IE-P2-39 (OA-5) and IE-P2-40 (final deploy if backend changed) run here as non-issue steps. | Final APK built, hashed and Reverify run; demo manifest landed; Assurance Test Engineer and Integration Engineer verdicts (IE-P2-44); owner checklist handed over. | P2-R5, P2-L05, P2-X12 |
+
+Early checkpoint CP-X05-HIST: X05 PR 1 historical fixtures land after B01 and
+feed R1 (M03) and B02 (M05); X05 closes at the TNF live verdict in M04.
+CP-X03-REG is the X03 PR 1 desk/registry checkpoint consumed before its live verdict.
+
+Parallel lanes: M03, M05 and early M04 overlap as prerequisites allow; M07,
+M08 and the start of M09 overlap under their exact dependencies. The stick
+chain remains serial, and the five-agent cap and every existing lease remain.
+
+Schedule risk: X04 holds the stick until its verdict or first_install_at +
+24 hours; A01 review follows it before R1. A first install on October 14 with
+the full timebox can miss R1 at 2026-10-14T23:00Z. Latest X01 start remains
+2026-10-14T03:15Z; no cut-off, live window or release date is moved here.
 
 ### GitHub work organization (P2-L01)
 
 After integrated approval and the planning PR landing, P2-L01 creates the
-five milestones and the work issues defined by the frozen implementation
+13 milestones and the 39 logical work issues defined by the frozen implementation
 graph. One issue represents each logical deliverable; a Test Implementer
 slice ending in T shares the Product Implementer's issue. Every slice maps
 to exactly one issue, and each issue has one final-completion milestone;
-P2-L01 itself tracks setup. X05 starts in Wave 1 and supplies M1's historical-
-fixture checkpoint, but its single issue belongs to M2 because the final
-live-timing verdict is due there. Passing the M1 checkpoint does not close
+P2-L01 itself tracks setup. X05 starts in Wave 1 and supplies W1's historical-
+fixture checkpoint (R1 in M03), but its single issue belongs to M04 because the final
+live-timing verdict is due there. Passing the W1 checkpoint does not close
 that partially completed issue or claim live evidence.
 An unselected conditional slice remains a labeled conditional issue, never
 an implicitly authorized task. Existing matching issues are reused by stable
@@ -321,13 +357,13 @@ recorded in journey.json. Publishing or executing the product is separate.
 
 | Lane | Frozen profile | Strategy | Slices |
 |---|---|---|---|
-| device-integration-spikes | heavyweight | tdd for product code; spikes evidence-only (OD-AFC-04) | P2-X01, X02, X03, X04, X05, X06, X07, X09, X10, X11 (conditional), X12 |
-| backend | primary | tdd | P2-G01T, G01, B01T, B01, B02T, B02, B03T, B03, B04T, B04, B05T, B05, B06T, B06, B07T, B07 |
-| tv-app-ui | frontend | tdd | P2-A01T, A01, A02T, A02, A03T, A03, A04T, A04, A05T, A05 |
-| spec-and-docs | tech-writing | single_implementer | P2-D01, D02, D03, D04, D05 |
+| device-integration-spikes | opensource-hackathon | tdd for product code; spikes evidence-only (OD-AFC-04) | P2-X01, X02, X03, X04, X05, X06, X07, X09, X10, X11 (conditional), X12 |
+| backend | opensource-hackathon | tdd | P2-G01T, G01, B01T, B01, B02T, B02, B03T, B03, B04T, B04, B05T, B05, B06T, B06, B07T, B07 |
+| tv-app-ui | opensource-hackathon | tdd | P2-A01T, A01, A02T, A02, A03T, A03, A04T, A04, A05T, A05 |
+| spec-and-docs | opensource-hackathon | tdd for behavior changes; documentation-only slices retain their declared inspection method | P2-D01, D02, D03, D04, D05 |
 | light work | Light Implementer route of the slice's lane profile | light | P2-L01 (spec-and-docs), L02, L03 (backend), L05 (tv-app-ui), R1..R5 (spec-and-docs) |
 | defects | bug-triager | tdd | On demand per defect (DEC-AFC-SD-037); no pre-allocated slice |
-| Scribe side lane | primary (Scribe route) | — | P2-SCR1; continuous ingestion at every return |
+| Scribe side lane | opensource-hackathon (Scribe route) | — | P2-SCR1; continuous ingestion at every return |
 
 ### Waves and dispatch order
 
@@ -339,11 +375,11 @@ Wave 5: P2-D03, P2-D04, P2-D05, P2-SCR1, P2-R5, P2-L05, P2-X12
 
 | Wave | Dispatch order and serialization (cap 5) |
 |---|---|
-| Wave 1 | At approval: P2-X01 (needs OA-1; holds `fire-tv-stick`; its first install starts the spike_panel_max clock), P2-X05 (ESPN capture; first live capture TNF 10-15; earlier captures are labeled historical), P2-B01T, P2-D01, P2-G01T. P2-A01T becomes ready after P2-X01 qualifies the host build tools. As slots free: P2-L01, then P2-A01 after A01T, P2-B01 after B01T, P2-G01T at once (Phase 1 S09 merged on 2026-10-12, origin/main 17b40b4), P2-G01 after G01T. P2-A01 and P2-B01 land after P2-G01; P2-X05 PR 1 lands after P2-B01. P2-R1 after every other M1 slice has merged. |
+| Wave 1 | At approval: P2-X01 (needs OA-1; holds `fire-tv-stick`; its first install starts the spike_panel_max clock), P2-X05 (ESPN capture; first live capture TNF 10-15; earlier captures are labeled historical), P2-B01T, P2-D01, P2-G01T. P2-A01T becomes ready after P2-X01 qualifies the host build tools. As slots free: P2-L01, then P2-A01 after A01T, P2-B01 after B01T, P2-G01T at once (Phase 1 S09 merged on 2026-10-12, origin/main 17b40b4), P2-G01 after G01T. P2-A01 and P2-B01 land after P2-G01; P2-X05 PR 1 lands after P2-B01. P2-R1 after every other Wave 1 slice has merged. |
 | Wave 2 | P2-X04 holds fire-tv-stick from P2-X01's release until its verdict or first_install_at + spike_panel_max, without interruption; P2-A01's on-device review queues behind it and runs between P2-X04 and P2-X02. P2-X04 immediately after P2-X01 (stick), then P2-X02, P2-X03 PR 1 (desk evidence, then the stick is released) and P2-X07, all serialized on `fire-tv-stick`; P2-X03 PR 2 (Prime Video TNF check) holds the stick and `live-game-window` for the 2026-10-15 game only, while P2-X05 PR 2 captures the same game host-only; the stick chain counts as one agent. P2-B02T/B02 after P2-X05 PR 1 lands fixtures (completed games with historical provenance; no prior live-capture claim). P2-B03T/B03 after P2-B01. P2-A02T/A02 after P2-A01. P2-L02 after P2-B01 and OA-3. P2-X06: Yahoo path after P2-B03 is deployed (OA-2), manual path at T_yahoo; its verdict configures P2-L03. P2-R2 last (after P2-R1). |
 | Wave 3 | Dispatch ready red slices under cap 5: P2-B04T first; P2-B05T after its verified red/shared-fixture handoff; P2-B06T, P2-A03T and P2-A05T when their own prerequisites hold. Greens follow their verified red receipts; P2-B07T/B07 and P2-A04T/A04 proceed as dependencies/leases permit. P2-A03 needs P2-X02; P2-A04 needs P2-X03 and P2-B06; P2-A05 needs P2-X04 and P2-B07. P2-L03 after B04..B07 merge. P2-X09 on Sun 2026-10-18 holds `fire-tv-stick`, `aws-afc-dev` and `live-game-window`. P2-R3 last. |
-| Wave 4 | P2-X10 on Mon 2026-10-19 MNF (corrections, starter change, Sunday defects re-checked). P2-D02 after all required P2-X01..X07 verdicts and PR #10 merged, plus P2-X11 terminal disposition when selected; include every landed verdict through the specification freeze. P2-X11 only if OD-AFC-03 = yes and M3 exited on time; dropped at 2026-10-21T12:00:00Z if unverified. Defect slices dispatch per defect on bug-triager when their write set does not overlap a running slice. P2-R4 last. |
-| Wave 5 | P2-D03, P2-D04, P2-D05 in parallel; P2-SCR1 after M4 (Scribe, not counted); P2-R5 after those four merge; P2-L05 at the P2-R5 merge commit; P2-X12 on the final APK in the Thu 2026-10-22 TNF window, landing a docs-only manifest PR after the candidate. |
+| Wave 4 | P2-X10 on Mon 2026-10-19 MNF (corrections, starter change, Sunday defects re-checked). P2-D02 after all required P2-X01..X07 verdicts and PR #10 merged, plus P2-X11 terminal disposition when selected; include every landed verdict through the specification freeze. P2-X11 only if OD-AFC-03 = yes and W3 exited on time; dropped at 2026-10-21T12:00:00Z if unverified. Defect slices dispatch per defect on bug-triager when their write set does not overlap a running slice. P2-R4 last. |
+| Wave 5 | P2-D03, P2-D04, P2-D05 in parallel; P2-SCR1 after W4 (Scribe, not counted); P2-R5 after those four merge; P2-L05 at the P2-R5 merge commit; P2-X12 on the final APK in the Thu 2026-10-22 TNF window, landing a docs-only manifest PR after the candidate. |
 
 Phase 1 RISK-AFC-08 (Actions minutes on the private repository, gh_private_minutes) continues to apply: the `tvapp` and `backend` jobs are path-filtered, and hosted runs stop rather than buy overage.
 
@@ -415,17 +451,17 @@ SEIT IDs, write set, commands, leases, dependencies, stop rule) is in
 
 | ID | Owner action | Needed by | Blocks if absent |
 |---|---|---|---|
-| OA-1 | Q6: stick located, ADB debugging enabled on the local network, model and Fire OS version recorded (P2-X01 reads `getprop` and the owner confirms). | P2-X01 dispatch (M1) | Every stick slice; RISK-AFC-P2-01 |
+| OA-1 | Q6: stick located, ADB debugging enabled on the local network, model and Fire OS version recorded (P2-X01 reads `getprop` and the owner confirms). | P2-X01 dispatch (W1) | Every stick slice; RISK-AFC-P2-01 |
 | OA-2 | Q7: Yahoo application submitted now; if approved, the owner stores the client id and secret as SSM SecureString parameters in aws-afc-dev and completes the OAuth consent in a browser. After P2-L02 reports the stack's ApiUrl, register the deployed /link callback as the Yahoo app redirect URI. | P2-X06 (by T_yahoo) | Yahoo path only; manual path proceeds (C6) |
-| OA-3 | Q8: AWS Free-plan account created and the named CLI profile `afc-dev` configured on the development host. | P2-L02 (M2) | Deployed-API cases; local backend work proceeds |
+| OA-3 | Q8: AWS Free-plan account created and the named CLI profile `afc-dev` configured on the development host. | P2-L02 (W2) | Deployed-API cases; local backend work proceeds |
 | OA-4 | Provider apps installed and signed in on the stick: Prime Video; ESPN; DirecTV Stream (current subscription); YouTube TV if a subscription exists. | P2-X01's first install (Prime Video signed in at minimum; the spike_panel_max clock starts at that install); ESPN, DirecTV Stream and YouTube TV before P2-X03 | Provider routes without a session are recorded as `accessUnknown` or `appAbsent` |
-| OA-5 | Authorize the exact public export and visibility change after the M5 history/content review. Apache-2.0 is already selected; P2-D03 prepares its standard LICENSE file as ordinary agent work. | M5 judge access | Public judge access; no public flip from a secrets scan alone |
-| OA-6 | ESPN unofficial JSON terms reviewed for public submission (C3). | P2-D04 final (M5) | Final write-up wording |
-| OA-7 | Devpost project draft, public demo video upload (YouTube or Vimeo), submission with Fire TV track and AWS Builder fields, before T_deadline; judge access kept through T_judge_access. | M5 handover | Submission |
-| OA-8 | Authorize each release publication (P2-R1..R5) and any external feedback sending. | Each milestone exit | Release stays a prepared draft |
-| OA-10 | Store the manual-mode link passphrase as an SSM SecureString parameter in aws-afc-dev under the name P2-B01's template declares, and perform the /link confirmation for the stick when P2-L02 smoke, P2-X09, P2-X10 or a data-clearing APK rollback needs a linked device. | P2-L02 link smoke (M2) | Deployed link confirmation; linked-device live runs |
-| OA-11 (optional) | Supply a release signing keystore for the submitted APK. | P2-L05 (M5) | Debug signing configuration is used |
-| OA-9 | Camera capture of the TV screen for shots where provider video is protected (RISK-AFC-P2-09), if OD-AFC-P2-02 = A. | P2-X12 (M5) | Those demo shots |
+| OA-5 | Authorize the exact public export and visibility change after the W5 history/content review. Apache-2.0 is already selected; P2-D03 prepares its standard LICENSE file as ordinary agent work. | W5 judge access | Public judge access; no public flip from a secrets scan alone |
+| OA-6 | ESPN unofficial JSON terms reviewed for public submission (C3). | P2-D04 final (W5) | Final write-up wording |
+| OA-7 | Devpost project draft, public demo video upload (YouTube or Vimeo), submission with Fire TV track and AWS Builder fields, before T_deadline; judge access kept through T_judge_access. | W5 handover | Submission |
+| OA-8 | Authorize each release publication (P2-R1..R5) and any external feedback sending. | Each technical-wave release checkpoint | Release stays a prepared draft |
+| OA-10 | Store the manual-mode link passphrase as an SSM SecureString parameter in aws-afc-dev under the name P2-B01's template declares, and perform the /link confirmation for the stick when P2-L02 smoke, P2-X09, P2-X10 or a data-clearing APK rollback needs a linked device. | P2-L02 link smoke (W2) | Deployed link confirmation; linked-device live runs |
+| OA-11 (optional) | Supply a release signing keystore for the submitted APK. | P2-L05 (W5) | Debug signing configuration is used |
+| OA-9 | Camera capture of the TV screen for shots where provider video is protected (RISK-AFC-P2-09), if OD-AFC-P2-02 = A. | P2-X12 (W5) | Those demo shots |
 
 ## Entry criteria
 
@@ -448,12 +484,12 @@ SEIT IDs, write set, commands, leases, dependencies, stop rule) is in
 1. Every active register UID has passing evidence named by its SEIT row, or
    a typed gap the owner accepted at a class C stop; every Lifecycle-local
    AC-AFC-P2 row has passing evidence.
-2. Milestones M1..M5 exit criteria are met; each slice's pull request is
+2. GitHub milestones M01..M13 and technical release checkpoints W1..W5 exit criteria are met; each slice's pull request is
    reviewed once (OCR included), repaired at most once, verified by the
    gate and landed on `main` with its changelog entry.
 3. The Assurance Test Engineer (Lifecycle cadence) and the Integration
    Engineer execution session (Lifecycle cadence) return their verdicts on
-   the M5 candidate.
+   the W5 candidate.
 4. The owner checklist for publication and submission is handed over; the
    DoD Manifest closeout is appended. Owner-only actions are listed, not
    performed.
@@ -469,7 +505,7 @@ SEIT IDs, write set, commands, leases, dependencies, stop rule) is in
   redeploying the last green commit's SAM build to aws-afc-dev; stores are
   dev data only.
 - An APK that fails on the stick is uninstalled and the last green
-  milestone APK reinstalled.
+  wave-release APK reinstalled.
 - A spike that fails yields a verdict, not a repair; its conditional
   (C1, C5, C6, C8) or a class C owner stop follows.
 - A third evidence-changing correction round of any planning gate is a
@@ -489,16 +525,30 @@ every owner-only action.
 | ID | Decision | Recommendation |
 |---|---|---|
 | OD-AFC-02 | Build optional AI excitement commentary (would need an LLM)? | **No LLM.** Fixed templates selected by excitement level Off / Mild / Hype, filled only from the triggering event's fields, satisfy AFC-PR-023 with every named entity grounded. An LLM would need an API-key service, which the owner excluded. |
-| OD-AFC-03 | Alexa voice (AFC-PR-022, -036; C8) as a stretch slice? | **Stretch only** (P2-X11): start after M3 exits on time; drop at 2026-10-21T12:00:00Z if unverified. Without it, both UIDs pass by not offering voice (their condition is an implemented and verified route). |
+| OD-AFC-03 | Alexa voice (AFC-PR-022, -036; C8) as a stretch slice? | **Stretch only** (P2-X11): start after W3 exits on time; drop at 2026-10-21T12:00:00Z if unverified. Without it, both UIDs pass by not offering voice (their condition is an implemented and verified route). |
 | OD-AFC-04 | Spike slices run as evidence-only investigations rather than test-first pairs. | **Yes.** Spikes write verdicts and throwaway probes under `spikes/`; product code that follows uses the lane's `tdd` pairs. |
 | OD-AFC-05 | Approve the Lifecycle-local design quantities in the Glossary. | **Approve as proposed.** They close the spec §2.1 contract gaps (timeouts, polling, queue bounds) needed before contract acceptance. |
-| OA-AFC-A1 | The tv-app-ui lane runs on Codex (frontend implementer Codex CLI / GPT-6 Astra / high), so `frontend-design` is named by absolute SKILL.md path. | **Approve;** the dispatcher resolves the installed plugin version at dispatch time and names `$HOME/...` in the packet, never a committed absolute path. |
+| OA-AFC-A1 | Dispatch carries the installed frontend-design skill path for TV UI work. The prior Codex lane route is superseded by DEC-AFC-SD-041. | Settled route: opensource-hackathon; retain the skill requirement and resolve its installed path at dispatch, using `$HOME/...` in committed packets. |
 | OD-AFC-P2-01 | Review cadence boundary for Phase 2. The frozen Reviewer cadence is `phase`. | **Apply the Phase 1 precedent (OA-AFC-A3 = A, DEC-AFC-APPROVAL-001):** each pull request is reviewed once at its own integration step. Listed so the owner can confirm it holds for Phase 2. |
 | OD-AFC-P2-02 | Protected provider video cannot be captured by `adb` (RISK-AFC-P2-09). **A:** owner films the TV for shots showing provider video; on-device captures cover the companion UI; `dumpsys` window geometry evidences no overlap. **B:** demo and evidence use companion UI captures only, with provider video described, not shown. | **A.** The panel-beside-video and Watch moments are the two standout moments of issue #1; B would show neither. |
-| OD-AFC-P2-03 | Release versioning for the per-milestone releases (DEC-AFC-SD-038). | Pre-releases `v0.1.0`..`v0.4.0` at M1..M4 and `v1.0.0` at M5, each a GitHub release on this repository drawn from `CHANGELOG.md`; each publication owner-authorized (OA-8). |
+| OD-AFC-P2-03 | Release versioning for the per-wave releases (DEC-AFC-SD-038). | Pre-releases `v0.1.0`..`v0.4.0` at W1..W4 and `v1.0.0` at W5, each a GitHub release on this repository drawn from `CHANGELOG.md`; each publication owner-authorized (OA-8). |
 | OD-AFC-P2-04 | Timing of the visibility flip and LICENSE (OA-5). | Prepare for 2026-10-22, subject to owner authorization of the exact public surface/history. The private repository already contains planning prompts and profile routes; a secret/path scan alone does not authorize exporting those. If the existing history cannot be shared, return the bounded clean-export/history decision before any public flip. LICENSE preparation is agent work under the settled Apache-2.0 choice. |
 | OD-AFC-P2-05 | Model alignment applied during planning (`tvApp.player` removed, `PanelMode.fullScreen`, AFC-PR-066 allocated; `specialists/sm-p2-delta-receipt.md`) and PR-047 allocation PLAYER → SHELL (`specialists/re-p2-delta-receipt.md`). The approved spec text predates them; P2-D02 revises spec §1.2.1, §4.1.12, §4.1.99, §4.7 and figure F7 to match. | **Approve** as Phase 2 design (spec §4.7 deferred this to Phase 2 design). |
 
 Closed by owner decision before this package: Q4, Q5, Q9, P1..P3, D1
 (DEC-AFC-SD-035). Q6, Q7, Q8 are owner actions OA-1..OA-3. Q10 is outside
 this Lifecycle.
+
+## Governing decision declarations
+
+| ID | Confirmed authority |
+|---|---|
+| DEC-AFC-APPROVAL-ST5 | Owner approved the product specification/register basis; see the controlling Phase 1 journey decision. Markdown remains the register authority under DEC-AFC-SD-027. |
+| DEC-AFC-SD-040 | Owner requested chronological milestones, target 3 issues and allowed range 2–6, without reducing scope; the additional Opus chronology review is completed. |
+| DEC-AFC-SD-041 | Owner selected Bearing 1.1.7 and opensource-hackathon; the complete dated binding is in Phase 1 journey.json and evidence/profile-migration-041/profile.json. |
+
+All dispatches use the frozen selected profile, including ordered fallbacks,
+TDD, cadence, concurrency, clean-session transition, OCR and Reverify. Every
+Muse primary or fallback requires `--contributor-mode on`. Confirmed usage/rate
+limits alone may activate frozen fallbacks; other errors preserve the route.
+The separate bug-triager binding and all spent review/repair limits remain.

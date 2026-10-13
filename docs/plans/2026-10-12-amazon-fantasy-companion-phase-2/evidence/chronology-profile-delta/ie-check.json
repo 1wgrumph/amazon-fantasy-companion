@@ -1,0 +1,171 @@
+{
+  "baseline": "51bc730a880105c9b21d37a7a2dc5da79ada875f",
+  "checks": [
+    {
+      "id": "G01-slice-count",
+      "result": "PASS",
+      "detail": "old 52 new 52, same order"
+    },
+    {
+      "id": "G02-wave-membership-unchanged",
+      "result": "PASS",
+      "detail": "wave column identical for 52 slices"
+    },
+    {
+      "id": "G03-github-milestone-from-proposal",
+      "result": "PASS",
+      "detail": "each slice's milestone equals proposal issue group milestone"
+    },
+    {
+      "id": "G04-issue-grouping",
+      "result": "PASS",
+      "detail": "39 issues, 13 milestones {'M01': 3, 'M02': 2, 'M03': 3, 'M04': 4, 'M05': 3, 'M06': 3, 'M07': 3, 'M08': 3, 'M09': 2, 'M10': 2, 'M11': 4, 'M12': 4, 'M13': 3}, 13 TDD pairs share milestone, every slice once"
+    },
+    {
+      "id": "G05-fixed-columns-unchanged",
+      "result": "PASS",
+      "detail": "Lane / role / class, Register UIDs, AC / RISK, Spec \u00a7, Design, Write set, Commands, Leases, Skills identical; diffs=[]"
+    },
+    {
+      "id": "G06-goal-depends-token-only",
+      "result": "PASS",
+      "detail": "goal/depends cells equal baseline after Mn->Wn/Wave n, M1..M5->M01..M13 and 3 named X05/L03 phrases; changed goals ['P2-A01', 'P2-L01', 'P2-L03', 'P2-L05', 'P2-R5', 'P2-X05', 'P2-X11']; changed depends ['P2-D02', 'P2-R1', 'P2-R2', 'P2-R3', 'P2-R4', 'P2-SCR1', 'P2-X11']; unexpected=[]"
+    },
+    {
+      "id": "G07-release-depends-wave",
+      "result": "PASS",
+      "detail": "R1..R4 depend on every other Wave n slice; X11 W3 exit; SCR1 W4 exit"
+    },
+    {
+      "id": "G08-arrows-unchanged",
+      "result": "PASS",
+      "detail": "81 arrows; only X05->R1 condition token M2->M04"
+    },
+    {
+      "id": "G09-121-dependencies",
+      "result": "PASS",
+      "detail": "old 121 (milestone-derived) new 121 (wave-derived); identical edge set"
+    },
+    {
+      "id": "G10-release-prereqs-from-wave",
+      "result": "PASS",
+      "detail": "R1..R4 follow every other slice of their technical wave"
+    },
+    {
+      "id": "G11-acyclic-and-x04-not-after-r1",
+      "result": "PASS",
+      "detail": "no cycle; X04 does not wait for R1; X04 precedes R1 via A01 review"
+    },
+    {
+      "id": "G12-x05-checkpoint",
+      "result": "PASS",
+      "detail": "X05 issue closes M04; CP-X05-HIST feeds R1 (M03) and B02 (M05)"
+    },
+    {
+      "id": "G13-wave2-entry-clarified",
+      "result": "PASS",
+      "detail": "slice graph and integration plan state per-lane Wave 2 entry"
+    },
+    {
+      "id": "G14-x11-conditional",
+      "result": "PASS",
+      "detail": "X11 remains conditional in M11"
+    },
+    {
+      "id": "I01-step-ids-order",
+      "result": "PASS",
+      "detail": "44 steps; id, order, merges, after identical"
+    },
+    {
+      "id": "I02-step-milestone-wave",
+      "result": "PASS",
+      "detail": "milestone from proposal integration_step_milestone; wave = old milestone number"
+    },
+    {
+      "id": "I03-step-slice-milestone-consistent",
+      "result": "PASS",
+      "detail": "merged slices share their step's GitHub milestone; mismatches=[]"
+    },
+    {
+      "id": "I04-step-text-token-only",
+      "result": "PASS",
+      "detail": "step text equals baseline after Mn->Wn/Wave n mapping; diffs=[]"
+    },
+    {
+      "id": "I05-cutoffs",
+      "result": "PASS",
+      "detail": "14 cut-off IDs and times unchanged; CO-Mn apply to Wn"
+    },
+    {
+      "id": "I06-wave-gate-costs",
+      "result": "PASS",
+      "detail": "gate costs, resource groups, steps and slices unchanged; W1..W5 checkpoints"
+    },
+    {
+      "id": "I07-unchanged-sections",
+      "result": "PASS",
+      "detail": "branches, worktrees, glue, stubs, anomaly, final_candidate, historical concurrency_findings identical"
+    },
+    {
+      "id": "I08-leases-and-x05-x11",
+      "result": "PASS",
+      "detail": "CO-STICK-START unchanged; early X05 checkpoint IE-P2-6 noted; IE-P2-35 before IE-P2-34"
+    },
+    {
+      "id": "P01-full-profile-sha",
+      "result": "PASS",
+      "detail": "sha256(compact sorted snapshot) = 7d501eb8c103831a38c50d237b5d1e2e015a564b9ade8aef09a32dfc39b26ab1"
+    },
+    {
+      "id": "P02-role-routes",
+      "result": "PASS",
+      "detail": "13 role/session routes with ordered fallbacks and cadences equal frozen snapshot"
+    },
+    {
+      "id": "P03-capabilities",
+      "result": "PASS",
+      "detail": "coverage_assist required, reverify enabled, tdd, concurrency, clean session, holds, reviewer cadence phase"
+    },
+    {
+      "id": "P04-bug-triager-unchanged",
+      "result": "PASS",
+      "detail": "bug-triager binding byte-identical and matches journey digest"
+    },
+    {
+      "id": "P05-lanes",
+      "result": "PASS",
+      "detail": "all lanes opensource-hackathon, defects bug-triager; old lane digests absent from binding"
+    },
+    {
+      "id": "P06-assurance-all-lanes",
+      "result": "PASS",
+      "detail": "IE execution and ATE routes from opensource-hackathon cover every lane; tech-writing exemption removed"
+    },
+    {
+      "id": "P07-muse-contributor-mode",
+      "result": "PASS",
+      "detail": "Muse primary/fallback --contributor-mode on stated in graph and assessment sessions"
+    },
+    {
+      "id": "P08-skill-paths-1.1.7",
+      "result": "PASS",
+      "detail": "bearing-lite skill paths moved to installed 1.1.7"
+    },
+    {
+      "id": "T01-no-stale-wave-tokens",
+      "result": "PASS",
+      "detail": "graph []; plan outside historical findings []"
+    },
+    {
+      "id": "T02-home-paths",
+      "result": "PASS",
+      "detail": "no absolute home path"
+    }
+  ],
+  "pass": 32,
+  "fail": 0,
+  "sha256": {
+    "specialists/slice-graph.md": "b382d93da5f82d6b096fa9a33595e851cb2c6d334b3cfed2f229adea3ff51a5b",
+    "specialists/integration-plan.md": "2dbcf9b99a9138ae6b5beef8f6475d1a069d02efe35804edb700a1d3e8ec7827"
+  }
+}

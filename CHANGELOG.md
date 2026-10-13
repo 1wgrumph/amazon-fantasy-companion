@@ -9,22 +9,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added the owner-requested chronological milestone proposal and a fresh-session
-  handoff for Bearing 1.1.7 with the `opensource-hackathon` profile; applying
-  the proposal remains pending
-  ([PR #15](https://github.com/1wgrumph/amazon-fantasy-companion/pull/15)).
-
-- Added the Phase 2 delivery and verification plan, five milestone definitions,
-  39 work-issue drafts, and sanitized Lifecycle evidence; product execution
-  remains held pending a subsequent owner instruction
+- Add the Phase 2 delivery and verification package with 13 chronological
+  GitHub milestones, 39 work-issue drafts and 52 slices, preserving five
+  technical waves and release checkpoints; product execution remains held
+  pending a separate owner instruction
   ([PR #15](https://github.com/1wgrumph/amazon-fantasy-companion/pull/15)).
 
 ### Changed
 
 - Freeze the complete `opensource-hackathon` profile under Bearing 1.1.7,
-  preserve previous bindings and spent review limits, and record the Markdown
-  register precheck blocker; chronology integration and product execution remain
-  held ([PR #15](https://github.com/1wgrumph/amazon-fantasy-companion/pull/15)).
+  including capability settings and Muse contributor mode; preserve spent
+  review limits and validate the Markdown register through the native
+  precheck's in-memory interface
+  ([PR #15](https://github.com/1wgrumph/amazon-fantasy-companion/pull/15)).
 
 - Add architecture specification revision 0.3 with clickable references, per-revision changed sections and PR/diff links; update the vendored authoring tools ([PR #10](https://github.com/1wgrumph/amazon-fantasy-companion/pull/10), [diff](https://github.com/1wgrumph/amazon-fantasy-companion/pull/10/files)).
 

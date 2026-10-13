@@ -25,6 +25,23 @@ initial receipt remain correction-1 evidence, not a new dispatch hold list.
 Current source bytes and lineage are in `evidence/ie-p2-codex/input-provenance.json`.
 BRAN is unavailable (no native policy); direct repository discovery was used.
 
+**Chronology and profile delta (DEC-AFC-SD-040/041, 2026-10-13).** Author:
+Integration Engineer planning session on the frozen `opensource-hackathon`
+route `integration_engineer.planning` (Claude Code / Claude Opus 5.5 / high), Bearing
+Lite 1.1.7 skills. Projection only, applied by
+`evidence/chronology-profile-delta/ie-apply.py`. Step and slice `milestone`
+values now name the 13 chronological GitHub milestones M01..M13 from
+`evidence/chronology-opus-review/proposal.json` (`integration_step_milestone`
+and issue groups); each step also carries its unchanged technical `wave`.
+Technical waves and release checkpoints W1..W5 (formerly M1..M5) keep their
+dates, membership, gate costs, cut-off IDs CO-M1..CO-M5 (stable identifiers
+that name wave exits) and the identity names `apk.m<n>` / `release.m<n>`
+(n = wave). No step ID, order, `after` list, merge set, lease, write set or
+dependency condition changed. Historical `concurrency_findings` keep their
+original Mn tokens, which mean wave exits Wn. Lane bindings are replaced by
+the frozen `opensource-hackathon` snapshot; `bug-triager` is unchanged. This
+is author planning work, not review or assurance.
+
 ## Inputs and evidence read (original inspection plus correction-2 source binding)
 
 | Input | Identity |
@@ -34,7 +51,7 @@ BRAN is unavailable (no native policy); direct repository discovery was used.
 | Current Phase 1 entry source | Technical-plan Entry criteria: land PR #10 with ST5-F1/F2; S42 content already landed as d259c169; PR #11 is redundant, not another prerequisite. No remote state was refreshed in this delta. |
 | Repository settings | private; rulesets and branch protection API return HTTP 403 "Upgrade to GitHub Pro or make this repository public"; `allow_squash_merge=true`; `delete_branch_on_merge=false`; no milestones exist |
 | Development host | `python3` = 3.14.4; `python3.12` = 3.12.3; Original host inspection had JDK 21 and Docker; `adb`, `sdkmanager`, `sam`, `cfn-lint` absent (X01 qualifies JDK17/Android/build-tools before A01T; B01T prepares scanned Python deps, B01 owns SAM/cfn-lint acquisition) |
-| Frozen profiles | journey `profile_selection.frozen_snapshots` (digests: primary `b81a141b…`, frontend `8e533b92…`, heavyweight `f2c555d5…`, tech-writing `8a6b5745…`, bug-triager `6ca3ffcc…`) |
+| Frozen profiles | Phase 1 journey `profile_selection.frozen_snapshots` (DEC-AFC-SD-041): `opensource-hackathon` for all implementation lanes and the Scribe (full profile sha256 `7d501eb8c103831a38c50d237b5d1e2e015a564b9ade8aef09a32dfc39b26ab1`, configuration digest `11c4478edb7b0c94da196cdc8be2317f498378724ae041bde0c108832b1e2036`); `bug-triager` for defects (`6ca3ffccea9bae0e26f960b075e7a7fe2ffc01048474f1c8a70c31d8e748138b`, unchanged). The superseded primary/frontend/heavyweight/tech-writing lane snapshots are historical (`evidence/profile-migration-041/prior-profile-selection.json`). |
 | Phase 1 IE findings | `f885e48:…/specialists/integration-plan.md` IE-F01..IE-F18. How each carries into Phase 2 is shown in the table at the end of this file. |
 
 ## Assembly model
@@ -86,7 +103,7 @@ stays OWNER_EVIDENCE_PENDING until OA-8 and tag readback.
 P2-L01 uses the technical-plan GitHub work organization procedure after
 integrated approval **and** plan landing. Derive 39 issue groups from 52 slices
 (13 TDD pairs share an issue), retain the conditional issue, and create approved
-M1..M5 with exact table dates. Duplicate-search/reuse comes before policy-tool
+M01..M13 with exact table due dates (UTC times in descriptions). Duplicate-search/reuse comes before policy-tool
 dry-run and submission. Saved labels, body, milestone, dependencies and URLs
 are read back; every slice maps exactly once. The configured filing entrypoint is
 `python3 "$HOME/alphazede/Alphazedehq/hooks/issue-labels.py" file --repo
@@ -136,7 +153,7 @@ Every step receipt records the identities below in `journey.json`
   No tested feature behavior is allowed in that preparation. Each stub carries the final signature and the
   marker `AFC-STUB`. Backend stubs raise `NotImplementedError`, which the router
   maps to 503 `not_implemented`. TV stubs render an "unavailable" placeholder.
-  CMD-STUB-SCAN must be empty before the M3 rehearsal (IE-P2-29) and at the
+  CMD-STUB-SCAN must be empty before the Wave 3 rehearsal (IE-P2-29, M10) and at the
   final candidate.
 
 ## Concurrency and assembly readiness — correction 2 (author check)
@@ -166,13 +183,14 @@ This is no independent concurrency review or hardware feasibility proof.
 - D02 waits for X01..X07 final verdicts plus selected X11 terminal disposition;
   it records every landed verdict through freeze. IE-P2-34 waits on IE-P2-35:
   Stable IDs remain; only their assembly order swaps. Later verdicts
-  receive a bounded D02 delta before M4 exit, never an omitted topic.
+  receive a bounded D02 delta before W4 exit, never an omitted topic.
 
 The technical plan's schedule baseline is 2026-10-13T04:00:00Z (10d15h to
 T_deadline). October 12 is removed from remaining live opportunities. Host-only
 earlier captures stay historical/replay. Remaining windows: October 15 TNF,
 October 18 Sunday, October 19 MNF, October 22 TNF; kickoff is rechecked at capture.
-The five milestone dates are unchanged. CO-STICK-START remains a planning
+The five wave release-checkpoint dates (W1..W5) are unchanged; the 13 GitHub
+milestone due times reuse existing cut-offs only. CO-STICK-START remains a planning
 forecast at 2026-10-14T03:15Z; qualification adds pressure and its real duration
 is unmeasured. Missed forecasts never authorize provider omissions or earlier-APK
 clips as final proof. Exact omitted topics/claims and consequences need an owner
@@ -203,22 +221,32 @@ reuse qualified runtime evidence while retaining required source gates.
 
 ## Steps, cut-offs and the final candidate
 
-The step list is in the JSON block. Summary:
+The step list is in the JSON block. Steps are grouped by technical wave;
+`milestone` is the GitHub milestone (M01..M13) and `wave` the technical wave.
+Release prerequisites for P2-R1..R4 come from wave membership, never from the
+13 GitHub milestone groups. Summary:
 
-- **M1** (due 2026-10-14T23:00Z): IE-P2-1..8. Package baseline, gate areas,
+- **Wave 1 / W1** (release checkpoint due 2026-10-14T23:00Z): IE-P2-1..8 (M01 1, 2, 3; M02 4, 5; M04 6; M03 7, 8). Package baseline, gate areas,
   device baseline, backend skeleton with frozen contracts, first fixtures, TV
   scaffold, release v0.1.0 draft.
-- **M2** (due 2026-10-17T01:00Z): IE-P2-9..20. Spike
+- **Wave 2 / W2** (release checkpoint due 2026-10-17T01:00Z): IE-P2-9..20 (M03 9; M04 10, 11, 12; M05 13, 14, 15; M04 16, 17; M06 18, 19, 20). Spike
   verdicts, ingest, lineup, first deploy, profile UI, TNF amendments, Yahoo or
   manual verdict, v0.2.0.
-- **M3** (due 2026-10-19T12:00Z): IE-P2-21..31. Matcher,
-  policy, resolver, panel service, M3 deploy, alerts, Watch and panel UI,
+- **Wave 3 / W3** (release checkpoint due 2026-10-19T12:00Z): IE-P2-21..31 (M07 21, 22; M08 23; M07 24; M09 25; M08 26, 27; M09 28; M10 29, 30, 31). Matcher,
+  policy, resolver, panel service, Wave 3 deploy, alerts, Watch and panel UI,
   rehearsal, Sunday live run, v0.3.0.
-- **M4** (due 2026-10-21T23:00Z): IE-P2-32..36. Sunday defects, MNF hardening,
+- **Wave 4 / W4** (release checkpoint due 2026-10-21T23:00Z): IE-P2-32..36 (M11 32, 33, 35, 34, 36). Sunday defects, MNF hardening,
   D1 revision, Alexa stretch, v0.4.0.
-- **M5** (due 2026-10-23T12:00Z): IE-P2-37..44. Submission docs, Scribe
+- **Wave 5 / W5** (release checkpoint due 2026-10-23T12:00Z): IE-P2-37..44 (M12 37, 38; M13 39, 40, 41, 42, 43, 44). Submission docs, Scribe
   assembly, visibility flip, final deploy, v1.0.0 candidate, final APK with
   Reverify, demo capture on the final APK, Lifecycle-end assessments.
+
+CP-X05-HIST: IE-P2-6 (X05 PR 1) belongs to the M04 issue but executes during
+M02/M03 and feeds IE-P2-8 (R1, M03) and IE-P2-13 (B02, M05). CP-X03-REG:
+IE-P2-11 (X03 PR 1) feeds IE-P2-12 (X07) and IE-P2-23/27 (B06, A04). Wave 2
+entry is per lane: X01 merged for X04, B01 merged for backend Wave 2 slices,
+A01 merged for A02; X04 never waits for R1. X04 → A01 review → R1 sits in M03
+(schedule risk W-1; no date moved). IE-P2-35 still precedes IE-P2-34 in M11.
 
 ## Phase 1 IE findings carried into Phase 2
 
@@ -303,226 +331,226 @@ The step list is in the JSON block. Summary:
     }
   ],
   "steps": [
-    {"id": "IE-P2-1", "milestone": "M1", "order": 1, "merges": [], "after": [],
+    {"id": "IE-P2-1", "milestone": "M01", "wave": "Wave 1", "milestone_note": "entry", "order": 1, "merges": [], "after": [],
      "entry_criteria": ["Owner approved the Phase 2 package at the integrated review (DEC-AFC-SD-023 P2-6)", "PR #10 with ST5-F1/F2 landed; S42 tools/spec content already landed as d259c169 per current technical-plan Entry criteria; PR #11 is not an additional prerequisite; origin/main merged into planning branch", "Sanitized tracked planning artifacts and evidence; raw agent logs remain local; CMD-GATE-HYGIENE exit 0", "Preserve existing CHANGELOG.md and add the planning PR's linked [Unreleased] entry; seed only if absent (AC-AFC-P2-REL-01)", "CMD-PR-CHECKS pass; merge by --merge or --rebase"],
      "post_step_vv": ["CMD-MAIN-GATE on the merge commit", "record p2.base"],
      "rollback": "revert PR (no force-push); Phase 2 dispatch waits",
      "exit": "p2.base recorded; every Phase 2 branch cuts from it or later"},
-    {"id": "IE-P2-2", "milestone": "M1", "order": 2, "merges": ["P2-L01", "P2-D01"], "after": ["IE-P2-1"],
-     "entry_criteria": ["P2-L01 after integrated approval AND p2.base landing: approved M1..M5 plus derived work issues; one issue per logical deliverable, TDD pair shares one, all 52 slices exactly once in 39 groups; conditional X11 stays labeled conditional; reuse matching identities; policy-tool dry-run then submit; saved labels/body/milestone/dependency/URL readback and slice-to-issue map; CMD-MILESTONES-CREATE and CMD-MILESTONES-READBACK match approved table (day precision; UTC due time in description)", "P2-D01: CMD-GATE-DOCS exit 0; three Vnv areas with Scope, Tools, Review Focus, Findings target headings", "one Reviewer review each (OCR delegate; Reverify: not applicable — no binary)"],
+    {"id": "IE-P2-2", "milestone": "M01", "wave": "Wave 1", "order": 2, "merges": ["P2-L01", "P2-D01"], "after": ["IE-P2-1"],
+     "entry_criteria": ["P2-L01 after integrated approval AND p2.base landing: approved M01..M13 plus derived work issues; one issue per logical deliverable, TDD pair shares one, all 52 slices exactly once in 39 groups; conditional X11 stays labeled conditional; reuse matching identities; policy-tool dry-run then submit; saved labels/body/milestone/dependency/URL readback and slice-to-issue map; CMD-MILESTONES-CREATE and CMD-MILESTONES-READBACK match approved table (day precision; UTC due time in description)", "P2-D01: CMD-GATE-DOCS exit 0; three Vnv areas with Scope, Tools, Review Focus, Findings target headings", "one Reviewer review each (OCR delegate; Reverify: not applicable — no binary)"],
      "post_step_vv": ["CMD-MAIN-GATE", "CMD-MILESTONES-READBACK re-run on main merge", "Use technical-plan GitHub work organization/P2-L01 readback and SEIT existing proof rows; no issue/milestone created in this planning session"],
      "rollback": "revert PR; milestones edited by gh api to the approved table (no deletion without owner)",
      "exit": "AC-AFC-P2-MS-01, AC-AFC-P2-VNV-01 evidence recorded"},
-    {"id": "IE-P2-3", "milestone": "M1", "order": 3, "merges": ["P2-G01T", "P2-G01"], "after": ["IE-P2-1"],
+    {"id": "IE-P2-3", "milestone": "M01", "wave": "Wave 1", "order": 3, "merges": ["P2-G01T", "P2-G01"], "after": ["IE-P2-1"],
      "entry_criteria": ["S09 merged (verified: origin/main 17b40b4)", "P2-G01T CMD-RED receipt with test file sha256; P2-G01 green", "CMD-WORKFLOW-CHECK exit 0; new actions SHA-pinned and CMD-SUPPLY-SCAN PASS", "gate backend uses python3.12 per IE-P2-F23 correction", "Reviewer review recorded; CMD-PR-CHECKS pass"],
      "post_step_vv": ["CMD-MAIN-GATE: tvapp and backend print `PASS no tv-app/ tree` / `PASS no backend/ tree`", "CMD-GATE-ALL on a scratch branch with an empty tv-app/ and backend/ shows GAP when the tool is missing (G01T cases)", "gh run view: jobs `gate / tvapp` and `gate / backend` exist with path filters"],
      "rollback": "revert PR; A01/B01 landings wait (RISK-AFC-P2-11)",
-     "exit": "gate areas tvapp and backend on main (M1 exit item 1)"},
-    {"id": "IE-P2-4", "milestone": "M1", "order": 4, "merges": ["P2-X01"], "after": ["IE-P2-1"],
+     "exit": "gate areas tvapp and backend on main (W1 exit item 1)"},
+    {"id": "IE-P2-4", "milestone": "M02", "wave": "Wave 1", "order": 4, "merges": ["P2-X01"], "after": ["IE-P2-1"],
      "entry_criteria": ["OA-1 done; OA-4 Prime Video signed in before the first install (IE-P2-F06)", "PROC-PREPARE and CMD-SUPPLY-SCAN before first use: actual compatible JDK17, Android command-line/platform/SDK/build-tools including apkanalyzer/apksigner, Gradle wrapper/plugins and pinned starter; qualify host build tools and record pins before A01T", "CMD-ADB-BASELINE, CMD-ADB-INSTALL, CMD-ADB-SCREENCAP receipts; first_install_at recorded in VERDICT front matter", "CMD-VERDICT-CHECK exit 0; spikes/sp1-device/.gitignore ignores local.properties (IE-P2-F24)", "RISK-AFC-P2-01: Fire OS 5 or API < 25 → class C owner stop, device slices halt"],
      "post_step_vv": ["CMD-MAIN-GATE (hygiene: no PATH-HOME in evidence)", "record device identity; set spike_panel_max deadline = first_install_at + 24 h in the lease log", "Record X01 host-preparation completion separately from first_install_at and full verdict landing; A01T host red may start on this receipt without a new stick slot"],
      "rollback": "verdict is evidence; a wrong verdict is superseded by a new verdict PR, never edited silently",
      "exit": "device identity and clock start recorded; stick released to P2-X04 immediately"},
-    {"id": "IE-P2-5", "milestone": "M1", "order": 5, "merges": ["P2-B01T", "P2-B01"], "after": ["IE-P2-3"],
+    {"id": "IE-P2-5", "milestone": "M02", "wave": "Wave 1", "order": 5, "merges": ["P2-B01T", "P2-B01"], "after": ["IE-P2-3"],
      "entry_criteria": ["B01T PROC-PREPARE with scanned/pinned Python test deps and empty API/interface harness; valid CMD-RED behavior-assertion receipt in shared B01T/B01 worktree with baseline/diff/bootstrap/test hashes, left uncommitted; B01 green on same tests; CMD-GATE-BACKEND, CMD-SAM-VALIDATE", "write set excludes backend/fixtures/ (IE-P2-F01)", "B01 carries the IE-P2-F12 content: store/ accessors, pipeline/handler.py composition, router calls, AFC-STUB stubs, empty registry.json in contract shape, samconfig.toml (stack afc-dev, profile afc-dev), backend/.gitignore, every B02..B07 dependency pinned", "CMD-SUPPLY-SCAN PASS for SAM CLI, cfn-lint and every pinned Python dependency", "test tokens generated at run time (IE-P2-F25)", "Reviewer review; CMD-PR-CHECKS pass", "B01T owns backend/tests/deployed/conftest.py and deployed/device_auth/, api/; shared conftest and dependency edits under backend-template; other T slices own distinct deployed module directories per current graph and TE-P2-F01"],
      "post_step_vv": ["CMD-MAIN-GATE", "CMD-CONTRACT-DIGEST → contracts.b01", "CMD-SAM-VALIDATE on main"],
      "rollback": "revert PR; dependents keep developing against the branch",
-     "exit": "frozen contracts recorded; backend skeleton with device-code link green (M1 exit item 4)"},
-    {"id": "IE-P2-6", "milestone": "M1", "order": 6, "merges": ["P2-X05"], "after": ["IE-P2-5"],
+     "exit": "frozen contracts recorded; backend skeleton with device-code link green (W1 exit item 4)"},
+    {"id": "IE-P2-6", "milestone": "M04", "wave": "Wave 1", "milestone_note": "CP-X05-HIST, executes during M02/M03", "order": 6, "merges": ["P2-X05"], "after": ["IE-P2-5"],
      "entry_criteria": ["X05 PR 1: capture tool, endpoints and completed-game fixtures with historical/replay provenance per CONTRACT-AFC-P2-FIXTURE; interim PARTIAL verdict, live timing pending; October 12 is no longer a remaining live opportunity; first planned live capture is TNF October 15", "lands after P2-B01 so the backend area has tests and template (IE-P2-F02)", "CMD-FIXTURE-INDEX-CHECK, CMD-VERDICT-CHECK exit 0", "Reviewer review; CMD-PR-CHECKS pass"],
      "post_step_vv": ["CMD-MAIN-GATE (backend area runs)", "CMD-CONTRACT-DIGEST → fixtures.v1"],
      "rollback": "revert PR; fixtures are never edited, a bad capture is superseded by later sequence files",
-     "exit": "first fixtures on main (M1 exit item 6); B02T may start"},
-    {"id": "IE-P2-7", "milestone": "M1", "order": 7, "merges": ["P2-A01T", "P2-A01"], "after": ["IE-P2-3", "IE-P2-4", "IE-P2-5"],
+     "exit": "first fixtures on main (W1 exit item 6); B02T may start"},
+    {"id": "IE-P2-7", "milestone": "M03", "wave": "Wave 1", "order": 7, "merges": ["P2-A01T", "P2-A01"], "after": ["IE-P2-3", "IE-P2-4", "IE-P2-5"],
      "entry_criteria": ["A01T waits for X01 qualified host JDK17/SDK/build-tools receipt; PROC-PREPARE, buildable empty test/interface harness only, no tested feature behavior; valid CMD-RED behavior assertions in shared A01T/A01 worktree with frozen bootstrap/test hashes, left uncommitted; A01 CMD-GATE-TVAPP green on same tests", "A01 carries IE-P2-F10 and F11 content (ApiClient for every operation, DTOs, navigation, stubs with AFC-STUB, all dependencies, complete manifest, tv-app/.gitignore, THIRD_PARTY_NOTICES.md starter notice, AFC_API_BASE_URL from afcApiBaseUrl)", "CMD-API-CLIENT-MATCH against contracts.b01 openapi.yaml", "CMD-SUPPLY-SCAN PASS for starter, Gradle wrapper and plugins", "PROC-VISUAL-REVIEW on the stick for shell, not-configured and network-error states, taken after P2-X04 released the stick (IE-P2-F07, F26)", "Reviewer review with Reverify on the debug APK claim (minSdk 25, package); CMD-PR-CHECKS pass", "A01 configures release variant with host debug signing unless owner supplies OA-11; L05 only executes that already-configured build; no signing configuration authored by Light Implementer"],
      "post_step_vv": ["CMD-MAIN-GATE", "CMD-APK-BUILD-DEBUG (empty ApiUrl), CMD-APK-SHA256, CMD-APK-CERT", "CMD-ADB-INSTALL on the stick (fire-tv-stick lease, next free slot)"],
      "rollback": "revert PR; CMD-ADB-ROLLBACK on the stick (first app install: adb uninstall com.afc.companion)",
-     "exit": "tv-app scaffold builds and installs on the stick (M1 exit item 3); apk.last_green set"},
-    {"id": "IE-P2-8", "milestone": "M1", "order": 8, "merges": ["P2-R1"], "after": ["IE-P2-2", "IE-P2-3", "IE-P2-4", "IE-P2-5", "IE-P2-6", "IE-P2-7"],
-     "entry_criteria": ["every other M1 slice merged", "R1 holds main-landing from branch cut to merge (IE-P2-F18)", "CMD-RELEASE-PREP, CMD-CHANGELOG-CHECK exit 0; versionName 0.1.0"],
+     "exit": "tv-app scaffold builds and installs on the stick (W1 exit item 3); apk.last_green set"},
+    {"id": "IE-P2-8", "milestone": "M03", "wave": "Wave 1", "order": 8, "merges": ["P2-R1"], "after": ["IE-P2-2", "IE-P2-3", "IE-P2-4", "IE-P2-5", "IE-P2-6", "IE-P2-7"],
+     "entry_criteria": ["every other Wave 1 slice merged", "R1 holds main-landing from branch cut to merge (IE-P2-F18)", "CMD-RELEASE-PREP, CMD-CHANGELOG-CHECK exit 0; versionName 0.1.0"],
      "post_step_vv": ["CMD-MAIN-GATE", "CMD-APK-BUILD-DEBUG at merge.P2-R1, CMD-APK-SHA256, CMD-APK-CERT → apk.m1", "draft release v0.1.0 targets merge.P2-R1; publication waits for OA-8"],
      "rollback": "revert PR; draft release deleted (unpublished draft only)",
-     "exit": "M1 exit; release.m1 recorded"},
-    {"id": "IE-P2-9", "milestone": "M2", "order": 9, "merges": ["P2-X04"], "after": ["IE-P2-4"],
+     "exit": "W1 exit; release.m1 recorded"},
+    {"id": "IE-P2-9", "milestone": "M03", "wave": "Wave 2", "order": 9, "merges": ["P2-X04"], "after": ["IE-P2-4"],
      "entry_criteria": ["X04 held fire-tv-stick continuously from X01 release; ended at verdict or first_install_at + 24 h", "modeB only with CMD-ADB-GEOMETRY + capture (or OA-9 camera, RISK-AFC-P2-09) showing video and panel without overlap or crop; else fullScreen (AC-AFC-P2-SPIKE-02)", "CMD-VERDICT-CHECK; Reviewer review; CMD-PR-CHECKS pass"],
      "post_step_vv": ["CMD-MAIN-GATE", "record panel_mode"],
      "rollback": "verdict superseded only by a new verdict PR inside the clock; after the clock, TIMEBOX → fullScreen stands",
      "exit": "panel_mode fixed for A05T/A05, X09, D02"},
-    {"id": "IE-P2-10", "milestone": "M2", "order": 10, "merges": ["P2-X02"], "after": ["IE-P2-9"],
+    {"id": "IE-P2-10", "milestone": "M04", "wave": "Wave 2", "order": 10, "merges": ["P2-X02"], "after": ["IE-P2-9"],
      "entry_criteria": ["stick released by X04 (and the A01 review slot)", "CMD-ADB-INSTALL, CMD-ADB-SCREENCAP over Prime Video playback; CMD-VERDICT-CHECK", "RISK-AFC-P2-02: no heads-up route → class C owner stop before A03 product code", "Reviewer review; CMD-PR-CHECKS pass"],
      "post_step_vv": ["CMD-MAIN-GATE", "record notify_route"],
      "rollback": "verdict superseded by new verdict PR",
      "exit": "notify_route fixed for A03T/A03"},
-    {"id": "IE-P2-11", "milestone": "M2", "order": 11, "merges": ["P2-X03"], "after": ["IE-P2-10", "IE-P2-5"],
+    {"id": "IE-P2-11", "milestone": "M04", "wave": "Wave 2", "milestone_note": "CP-X03-REG", "order": 11, "merges": ["P2-X03"], "after": ["IE-P2-10", "IE-P2-5"],
      "entry_criteria": ["PR 1 of P2-X03 (IE-P2-F05): desk evidence per provider in spike order; registry.json per CONTRACT-AFC-P2-PROVIDER-REGISTRY; interim VERDICT; stick released", "no invented URI (AC-AFC-P2-SPIKE-03); gameOpened only where arrival observed", "CMD-REGISTRY-CHECK, CMD-VERDICT-CHECK; Reviewer review; CMD-PR-CHECKS pass (backend area runs)"],
      "post_step_vv": ["CMD-MAIN-GATE", "CMD-CONTRACT-DIGEST → registry.v1"],
      "rollback": "revert PR; registry returns to the empty contract shape",
      "exit": "B06T and A04T may start"},
-    {"id": "IE-P2-12", "milestone": "M2", "order": 12, "merges": ["P2-X07"], "after": ["IE-P2-10"],
+    {"id": "IE-P2-12", "milestone": "M04", "wave": "Wave 2", "order": 12, "merges": ["P2-X07"], "after": ["IE-P2-10"],
      "entry_criteria": ["X03 desk part complete and stick released (X07 may run before IE-P2-11 lands)", "CMD-ADB-INSTALL, CMD-VERDICT-CHECK; Reviewer review; CMD-PR-CHECKS pass"],
      "post_step_vv": ["CMD-MAIN-GATE", "record detect_support"],
      "rollback": "verdict superseded by new verdict PR",
      "exit": "A02 detector behavior fixed"},
-    {"id": "IE-P2-13", "milestone": "M2", "order": 13, "merges": ["P2-B02T", "P2-B02"], "after": ["IE-P2-5", "IE-P2-6"],
+    {"id": "IE-P2-13", "milestone": "M05", "wave": "Wave 2", "order": 13, "merges": ["P2-B02T", "P2-B02"], "after": ["IE-P2-5", "IE-P2-6"],
      "entry_criteria": ["B02T red against fixtures.v1 (and fixtures.v2 cases if landed)", "B02 green: CMD-GATE-BACKEND", "CMD-CONTRACT-FROZEN vs contracts.b01", "Reviewer review; CMD-PR-CHECKS pass"],
      "post_step_vv": ["CMD-MAIN-GATE", "CMD-CONTRACT-FROZEN on main"],
      "rollback": "revert PR",
      "exit": "ingest merged"},
-    {"id": "IE-P2-14", "milestone": "M2", "order": 14, "merges": ["P2-B03T", "P2-B03"], "after": ["IE-P2-5"],
+    {"id": "IE-P2-14", "milestone": "M05", "wave": "Wave 2", "order": 14, "merges": ["P2-B03T", "P2-B03"], "after": ["IE-P2-5"],
      "entry_criteria": ["B03T verified CMD-RED receipt in shared B03 pair worktree; B03 green on unchanged test IDs/hashes", "both sources (Yahoo read-only from recorded responses, manual) and presets exactly per CONTRACT-AFC-P2-PRESETS; lands when green, not at T_yahoo (IE-P2-F04)", "recorded responses carry no token shapes (IE-P2-F25)", "CMD-CONTRACT-FROZEN; Reviewer review; CMD-PR-CHECKS pass"],
      "post_step_vv": ["CMD-MAIN-GATE", "CMD-CONTRACT-DIGEST (presets.py)"],
      "rollback": "revert PR",
      "exit": "lineup merged; X06 Yahoo path becomes testable once deployed"},
-    {"id": "IE-P2-15", "milestone": "M2", "order": 15, "merges": ["P2-L02"], "after": ["IE-P2-5"],
+    {"id": "IE-P2-15", "milestone": "M05", "wave": "Wave 2", "order": 15, "merges": ["P2-L02"], "after": ["IE-P2-5"],
      "entry_criteria": ["OA-3 done (afc-dev profile); OA-10 passphrase stored for the link-confirm smoke (IE-P2-F15)", "aws-afc-dev lease free; no in-progress game window held", "deploy commit = main HEAD (includes B02/B03 when merged); CMD-SAM-BUILD, CMD-SAM-DEPLOY with --tags GitCommit=<sha>", "any Paid-plan prompt → stop, class F (RISK-AFC-P2-07)"],
      "post_step_vv": ["CMD-STACK-OUTPUTS → ApiUrl", "CMD-DEPLOYED-COMMIT", "CMD-DEPLOYED-SMOKE (link issue 200, profile 401 without token, confirm with OA-10 passphrase entered by the owner)", "CMD-APK-BUILD-DEBUG with -PafcApiBaseUrl=ApiUrl; CMD-ADB-INSTALL; PROC-VISUAL-REVIEW of A01 code-shown, expired, linked states (IE-P2-F26)", "evidence PR lands under main-landing"],
      "rollback": "first deploy failure: stack in ROLLBACK_COMPLETE → `sam delete --stack-name afc-dev --profile afc-dev --no-prompts` (dev data only) and retry; later failures: redeploy deploy.last_green",
      "exit": "deploy.1 recorded; deploy.last_green = deploy.1"},
-    {"id": "IE-P2-16", "milestone": "M2", "order": 16, "merges": ["P2-X03"], "after": ["IE-P2-11"],
+    {"id": "IE-P2-16", "milestone": "M04", "wave": "Wave 2", "order": 16, "merges": ["P2-X03"], "after": ["IE-P2-11"],
      "entry_criteria": ["PR 2 of P2-X03: Thu 2026-10-15 TNF live check (fire-tv-stick + live-game-window for the game only); amends only the Prime Video registry entry and the verdict", "CMD-REGISTRY-CHECK; CMD-GATE-BACKEND green with the amended registry (B06 tests if merged)", "Reviewer review; CMD-PR-CHECKS pass"],
      "post_step_vv": ["CMD-MAIN-GATE", "CMD-CONTRACT-DIGEST → registry.v2"],
      "rollback": "revert PR (registry.v1 stands); live window missed → RISK-AFC-P2-08: desk outcome stands and the TNF check moves to X09",
-     "exit": "provider-link verdict final (M2 exit)"},
-    {"id": "IE-P2-17", "milestone": "M2", "order": 17, "merges": ["P2-X05"], "after": ["IE-P2-6"],
+     "exit": "provider-link verdict final (W2 exit)"},
+    {"id": "IE-P2-17", "milestone": "M04", "wave": "Wave 2", "order": 17, "merges": ["P2-X05"], "after": ["IE-P2-6"],
      "entry_criteria": ["PR 2 of P2-X05: TNF 2026-10-15 live capture appended as later sequence files; timing and correction evidence; final VERDICT", "CMD-FIXTURE-INDEX-CHECK (existing files byte-identical); Reviewer review; CMD-PR-CHECKS pass"],
      "post_step_vv": ["CMD-MAIN-GATE", "CMD-CONTRACT-DIGEST → fixtures.v2"],
      "rollback": "revert PR; fixtures.v1 stands; live captures retried at X09 (RISK-AFC-P2-08)",
-     "exit": "ESPN live timing verdict (M2 exit)"},
-    {"id": "IE-P2-18", "milestone": "M2", "order": 18, "merges": ["P2-A02T", "P2-A02"], "after": ["IE-P2-7", "IE-P2-12", "IE-P2-15"],
+     "exit": "ESPN live timing verdict (W2 exit)"},
+    {"id": "IE-P2-18", "milestone": "M06", "wave": "Wave 2", "order": 18, "merges": ["P2-A02T", "P2-A02"], "after": ["IE-P2-7", "IE-P2-12", "IE-P2-15"],
      "entry_criteria": ["A02T red; A02 CMD-GATE-TVAPP green; detector per detect_support (unsupported → control hidden, limit stated)", "manifest/gradle edits only under their leases (IE-P2-F10)", "APK with -PafcApiBaseUrl=ApiUrl; PROC-VISUAL-REVIEW on the stick for each control state", "Reviewer review with Reverify on any APK claim; CMD-PR-CHECKS pass", "A02T owns profile/ and detect/ under androidTest as well as host unit paths; all instrumented use holds fire-tv-stick cross-process lock; backend-template protects any authorized shared conftest change"],
      "post_step_vv": ["CMD-MAIN-GATE", "CMD-API-CLIENT-MATCH", "CMD-ADB-INSTALL of main-head APK"],
      "rollback": "revert PR; CMD-ADB-ROLLBACK to apk.last_green",
-     "exit": "profile and settings UI merged with visual review (M2 exit)"},
-    {"id": "IE-P2-19", "milestone": "M2", "order": 19, "merges": ["P2-X06"], "after": ["IE-P2-1"],
+     "exit": "profile and settings UI merged with visual review (W2 exit)"},
+    {"id": "IE-P2-19", "milestone": "M06", "wave": "Wave 2", "order": 19, "merges": ["P2-X06"], "after": ["IE-P2-1"],
      "entry_criteria": ["Yahoo path: OA-2 done incl. redirect URI registered at the deployed ApiUrl; P2-B03 merged and deployed (IE-P2-15 or a redeploy); OAuth read through the deployed role only", "manual path: at T_yahoo 2026-10-16T19:00:00Z without approval", "CMD-VERDICT-CHECK; Reviewer review; CMD-PR-CHECKS pass"],
      "post_step_vv": ["CMD-MAIN-GATE", "record lineup_source (consumed by IE-P2-25 deploy configuration)"],
      "rollback": "verdict superseded by new verdict PR; Yahoo failure after approval → manual (C6)",
-     "exit": "T_yahoo outcome recorded (M3 entry)"},
-    {"id": "IE-P2-20", "milestone": "M2", "order": 20, "merges": ["P2-R2"], "after": ["IE-P2-8", "IE-P2-9", "IE-P2-10", "IE-P2-11", "IE-P2-12", "IE-P2-13", "IE-P2-14", "IE-P2-15", "IE-P2-16", "IE-P2-17", "IE-P2-18", "IE-P2-19"],
-     "entry_criteria": ["every other M2 slice merged; P2-R1 merged", "main-landing held from branch cut to merge"],
+     "exit": "T_yahoo outcome recorded (Wave 3 entry)"},
+    {"id": "IE-P2-20", "milestone": "M06", "wave": "Wave 2", "order": 20, "merges": ["P2-R2"], "after": ["IE-P2-8", "IE-P2-9", "IE-P2-10", "IE-P2-11", "IE-P2-12", "IE-P2-13", "IE-P2-14", "IE-P2-15", "IE-P2-16", "IE-P2-17", "IE-P2-18", "IE-P2-19"],
+     "entry_criteria": ["every other Wave 2 slice merged; P2-R1 merged", "main-landing held from branch cut to merge"],
      "post_step_vv": ["CMD-MAIN-GATE", "CMD-CHANGELOG-CHECK", "apk.m2 (build at merge.P2-R2, sha256, cert)", "draft v0.2.0"],
      "rollback": "revert PR; delete unpublished draft",
-     "exit": "M2 exit"},
-    {"id": "IE-P2-21", "milestone": "M3", "order": 21, "merges": ["P2-B04T", "P2-B04"], "after": ["IE-P2-13", "IE-P2-14"],
+     "exit": "W2 exit"},
+    {"id": "IE-P2-21", "milestone": "M07", "wave": "Wave 3", "order": 21, "merges": ["P2-B04T", "P2-B04"], "after": ["IE-P2-13", "IE-P2-14"],
      "entry_criteria": ["B04T red (correction cases on fixtures.v2 when landed); B04 green", "CMD-CONTRACT-FROZEN; Reviewer review; CMD-PR-CHECKS pass"],
      "post_step_vv": ["CMD-MAIN-GATE"],
      "rollback": "revert PR",
      "exit": "matcher merged"},
-    {"id": "IE-P2-22", "milestone": "M3", "order": 22, "merges": ["P2-B05T", "P2-B05"], "after": ["IE-P2-21"],
+    {"id": "IE-P2-22", "milestone": "M07", "wave": "Wave 3", "order": 22, "merges": ["P2-B05T", "P2-B05"], "after": ["IE-P2-21"],
      "entry_criteria": ["B05T waits for verified B04T red receipt and frozen shared-fixture handoff, not a red-only merge; its own red receipt is verified in shared B05 pair worktree; B04 product merge remains a B05 landing prerequisite", "B05 green; implements only alert_policy.evaluate (pipeline composition is B01's)", "CMD-CONTRACT-FROZEN; Reviewer review; CMD-PR-CHECKS pass"],
      "post_step_vv": ["CMD-MAIN-GATE"],
      "rollback": "revert PR",
      "exit": "policy merged; A03 may land"},
-    {"id": "IE-P2-23", "milestone": "M3", "order": 23, "merges": ["P2-B06T", "P2-B06"], "after": ["IE-P2-11"],
+    {"id": "IE-P2-23", "milestone": "M08", "wave": "Wave 3", "order": 23, "merges": ["P2-B06T", "P2-B06"], "after": ["IE-P2-11"],
      "entry_criteria": ["B06T against registry.v1 (or v2); B06 reads registry.json read-only", "CMD-REGISTRY-CHECK unchanged digest; Reviewer review; CMD-PR-CHECKS pass"],
      "post_step_vv": ["CMD-MAIN-GATE", "CMD-CONTRACT-FROZEN (registry)"],
      "rollback": "revert PR",
      "exit": "resolver merged; A04 may land"},
-    {"id": "IE-P2-24", "milestone": "M3", "order": 24, "merges": ["P2-B07T", "P2-B07"], "after": ["IE-P2-21"],
+    {"id": "IE-P2-24", "milestone": "M07", "wave": "Wave 3", "order": 24, "merges": ["P2-B07T", "P2-B07"], "after": ["IE-P2-21"],
      "entry_criteria": ["B07T valid CMD-RED receipt in shared B07 pair worktree; B07 green on unchanged test IDs/hashes", "B07 green (stale at 60 s, null-with-reason)", "CMD-CONTRACT-FROZEN; Reviewer review; CMD-PR-CHECKS pass"],
      "post_step_vv": ["CMD-MAIN-GATE"],
      "rollback": "revert PR",
      "exit": "panel service merged; A05 may land"},
-    {"id": "IE-P2-25", "milestone": "M3", "order": 25, "merges": ["P2-L03"], "after": ["IE-P2-15", "IE-P2-19", "IE-P2-21", "IE-P2-22", "IE-P2-23", "IE-P2-24"],
+    {"id": "IE-P2-25", "milestone": "M09", "wave": "Wave 3", "order": 25, "merges": ["P2-L03"], "after": ["IE-P2-15", "IE-P2-19", "IE-P2-21", "IE-P2-22", "IE-P2-23", "IE-P2-24"],
      "entry_criteria": ["B04..B07 merged; CMD-STUB-SCAN clean for backend/src", "lineup_source applied as deploy configuration (IE-P2-F04)", "aws-afc-dev lease; deploy commit = main HEAD with --tags GitCommit"],
      "post_step_vv": ["CMD-STACK-OUTPUTS (ApiUrl unchanged; if changed, every later APK rebuilds with the new value)", "CMD-DEPLOYED-COMMIT", "CMD-DEPLOYED-SMOKE", "CMD-DEPLOYED-TESTS"],
      "rollback": "redeploy deploy.last_green (CMD-SAM-DEPLOY at that commit)",
      "exit": "deploy.2; deploy.last_green = deploy.2"},
-    {"id": "IE-P2-26", "milestone": "M3", "order": 26, "merges": ["P2-A03T", "P2-A03"], "after": ["IE-P2-18", "IE-P2-10", "IE-P2-22"],
+    {"id": "IE-P2-26", "milestone": "M08", "wave": "Wave 3", "order": 26, "merges": ["P2-A03T", "P2-A03"], "after": ["IE-P2-18", "IE-P2-10", "IE-P2-22"],
      "entry_criteria": ["A03T red incl. instrumented run on the stick (fire-tv-stick lease, IE-P2-F09)", "A03 green: CMD-GATE-TVAPP, CMD-TVAPP-INSTRUMENTED on the stick over provider playback, PROC-VISUAL-REVIEW", "AlertNotifier Watch calls the A01 WatchLauncher signature unchanged", "Reviewer review with Reverify on APK claims; CMD-PR-CHECKS pass"],
      "post_step_vv": ["CMD-MAIN-GATE", "CMD-API-CLIENT-MATCH"],
      "rollback": "revert PR; CMD-ADB-ROLLBACK",
      "exit": "alert UI merged"},
-    {"id": "IE-P2-27", "milestone": "M3", "order": 27, "merges": ["P2-A04T", "P2-A04"], "after": ["IE-P2-18", "IE-P2-11", "IE-P2-23"],
+    {"id": "IE-P2-27", "milestone": "M08", "wave": "Wave 3", "order": 27, "merges": ["P2-A04T", "P2-A04"], "after": ["IE-P2-18", "IE-P2-11", "IE-P2-23"],
      "entry_criteria": ["A04T started after A03T's red receipt; red instrumented run under fire-tv-stick", "A04 green; on-device launch per provider and PROC-VISUAL-REVIEW; one RoutingOutcome per attempt", "Reviewer review with Reverify; CMD-PR-CHECKS pass"],
      "post_step_vv": ["CMD-MAIN-GATE"],
      "rollback": "revert PR; CMD-ADB-ROLLBACK",
      "exit": "Watch merged"},
-    {"id": "IE-P2-28", "milestone": "M3", "order": 28, "merges": ["P2-A05T", "P2-A05"], "after": ["IE-P2-9", "IE-P2-18", "IE-P2-24"],
+    {"id": "IE-P2-28", "milestone": "M09", "wave": "Wave 3", "order": 28, "merges": ["P2-A05T", "P2-A05"], "after": ["IE-P2-9", "IE-P2-18", "IE-P2-24"],
      "entry_criteria": ["A05T verified red receipt, including applicable instrumented run under fire-tv-stick cross-process lock; A05 green on same test IDs/hashes", "A05 builds panel_mode only; MainActivity.kt edited by A05 alone", "CMD-TVAPP-INSTRUMENTED, PROC-VISUAL-REVIEW, CMD-TEXT-SIZE-MEASURE (body ≥ 24 px, scores ≥ 32 px)", "Reviewer review with Reverify; CMD-PR-CHECKS pass"],
      "post_step_vv": ["CMD-MAIN-GATE", "CMD-STUB-SCAN clean for tv-app/app/src/main"],
      "rollback": "revert PR; CMD-ADB-ROLLBACK",
      "exit": "panel UI merged"},
-    {"id": "IE-P2-29", "milestone": "M3", "order": 29, "merges": [], "after": ["IE-P2-25", "IE-P2-26", "IE-P2-27", "IE-P2-28"],
-     "entry_criteria": ["M3 candidate = main HEAD; CMD-TREE-EQUAL backend/ between candidate and deploy.last_green commit (else redeploy first)", "OA-4 sessions live; OA-10 linked device", "cut-off 2026-10-18T15:00:00Z"],
+    {"id": "IE-P2-29", "milestone": "M10", "wave": "Wave 3", "order": 29, "merges": [], "after": ["IE-P2-25", "IE-P2-26", "IE-P2-27", "IE-P2-28"],
+     "entry_criteria": ["W3 candidate = main HEAD; CMD-TREE-EQUAL backend/ between candidate and deploy.last_green commit (else redeploy first)", "OA-4 sessions live; OA-10 linked device", "cut-off 2026-10-18T15:00:00Z"],
      "post_step_vv": ["CMD-STUB-SCAN", "CMD-APK-BUILD-DEBUG with ApiUrl, CMD-APK-SHA256, CMD-APK-CERT, CMD-ADB-INSTALL", "CMD-E2E-REPLAY with screencaps and geometry"],
      "rollback": "CMD-ADB-ROLLBACK; failing behavior → bug-triager; owner scope decision (RISK-AFC-P2-13) if not fixable by 2026-10-18T15:00Z",
      "exit": "rehearsal receipt; candidate APK installed for X09"},
-    {"id": "IE-P2-30", "milestone": "M3", "order": 30, "merges": ["P2-X09"], "after": ["IE-P2-29"],
+    {"id": "IE-P2-30", "milestone": "M10", "wave": "Wave 3", "order": 30, "merges": ["P2-X09"], "after": ["IE-P2-29"],
      "entry_criteria": ["Sun 2026-10-18 windows; holds fire-tv-stick, aws-afc-dev, live-game-window", "no deploy during an in-progress game"],
      "post_step_vv": ["PROC-E2E-LIVE record; CMD-ADB-SCREENCAP, CMD-ADB-GEOMETRY", "defects → PROC-BUG-TRIAGE", "run-record PR: CMD-MAIN-GATE"],
      "rollback": "missed window or no qualifying event → labeled replay + next window (RISK-AFC-P2-08)",
-     "exit": "M3 live evidence (M3 exit item 1)"},
-    {"id": "IE-P2-31", "milestone": "M3", "order": 31, "merges": ["P2-R3"], "after": ["IE-P2-20", "IE-P2-21", "IE-P2-22", "IE-P2-23", "IE-P2-24", "IE-P2-25", "IE-P2-26", "IE-P2-27", "IE-P2-28", "IE-P2-29", "IE-P2-30"],
-     "entry_criteria": ["every other M3 slice merged; P2-R2 merged; main-landing held"],
+     "exit": "W3 live evidence (W3 exit item 1)"},
+    {"id": "IE-P2-31", "milestone": "M10", "wave": "Wave 3", "order": 31, "merges": ["P2-R3"], "after": ["IE-P2-20", "IE-P2-21", "IE-P2-22", "IE-P2-23", "IE-P2-24", "IE-P2-25", "IE-P2-26", "IE-P2-27", "IE-P2-28", "IE-P2-29", "IE-P2-30"],
+     "entry_criteria": ["every other Wave 3 slice merged; P2-R2 merged; main-landing held"],
      "post_step_vv": ["CMD-MAIN-GATE", "CMD-CHANGELOG-CHECK", "apk.m3", "draft v0.3.0"],
      "rollback": "revert PR; delete unpublished draft",
-     "exit": "M3 exit"},
-    {"id": "IE-P2-32", "milestone": "M4", "order": 32, "merges": [], "after": ["IE-P2-30"],
+     "exit": "W3 exit"},
+    {"id": "IE-P2-32", "milestone": "M11", "wave": "Wave 4", "order": 32, "merges": [], "after": ["IE-P2-30"],
      "entry_criteria": ["each Sunday defect fixed on bug-triager routes with reproduction, origin/escape, red-then-green regression, prevention check (AC-AFC-P2-BUG-01); write set disjoint from running slices", "fix PRs merged by 2026-10-19T20:00:00Z"],
      "post_step_vv": ["CMD-MAIN-GATE per merge", "redeploy (CMD-SAM-DEPLOY, CMD-DEPLOYED-COMMIT, CMD-DEPLOYED-SMOKE, CMD-DEPLOYED-TESTS) when backend/ changed", "CMD-APK-BUILD-DEBUG + CMD-ADB-INSTALL when tv-app/ changed", "CMD-E2E-REPLAY"],
      "rollback": "revert fix PR; redeploy deploy.last_green; CMD-ADB-ROLLBACK",
      "exit": "deploy.last_green and apk.last_green current for X10"},
-    {"id": "IE-P2-33", "milestone": "M4", "order": 33, "merges": ["P2-X10"], "after": ["IE-P2-32"],
+    {"id": "IE-P2-33", "milestone": "M11", "wave": "Wave 4", "order": 33, "merges": ["P2-X10"], "after": ["IE-P2-32"],
      "entry_criteria": ["Mon 2026-10-19 MNF (~2026-10-20T00:15Z); holds fire-tv-stick, aws-afc-dev, live-game-window"],
      "post_step_vv": ["PROC-E2E-LIVE record; CMD-DEPLOYED-TESTS; labeled replay for repeatability", "run-record PR: CMD-MAIN-GATE"],
      "rollback": "missed window → labeled replay; the gap is owner-accepted at class C or carried as a typed gap",
-     "exit": "corrections/starter changes verified (M4 exit item 1)"},
-    {"id": "IE-P2-35", "milestone": "M4", "order": 34, "merges": ["P2-X11"], "after": ["IE-P2-31"],
-     "entry_criteria": ["OD-AFC-03 = yes and M3 exited on time; drop at 2026-10-21T12:00:00Z if unverified", "CMD-VERDICT-CHECK; Reviewer review; CMD-PR-CHECKS pass"],
+     "exit": "corrections/starter changes verified (W4 exit item 1)"},
+    {"id": "IE-P2-35", "milestone": "M11", "wave": "Wave 4", "order": 34, "merges": ["P2-X11"], "after": ["IE-P2-31"],
+     "entry_criteria": ["OD-AFC-03 = yes and W3 exited on time; drop at 2026-10-21T12:00:00Z if unverified", "CMD-VERDICT-CHECK; Reviewer review; CMD-PR-CHECKS pass"],
      "post_step_vv": ["CMD-MAIN-GATE"],
      "rollback": "Unselected or timeboxed X11 records exact terminal/no-offer disposition under OD-AFC-03; only applicable no-offer criteria can close; enabled voice proof remains not_run/typed gap, never inferred PASS",
      "exit": "X11 terminal disposition recorded; verdict landed when run; D02 may freeze only after this prerequisite"},
-    {"id": "IE-P2-34", "milestone": "M4", "order": 35, "merges": ["P2-D02"], "after": ["IE-P2-1", "IE-P2-4", "IE-P2-9", "IE-P2-10", "IE-P2-12", "IE-P2-16", "IE-P2-17", "IE-P2-19", "IE-P2-35"],
-     "entry_criteria": ["All required final X01..X07 verdicts landed (X03 PR 2, X05 PR 2 included); selected X11 terminal disposition recorded and its verdict landed when run; if unselected, record OD-AFC-03/no-offer disposition without claiming enabled-voice proof", "PR #10 landed and merged tools/spec content/pin available (S42 d259c169); redundant PR #11 is not another prerequisite", "Freeze inventory binds every landed verdict through the specification freeze: paths, merge SHAs and digests; D02 includes all limits, selected modes/routes and aligned model names; any later landed verdict requires a bounded D02 delta in the same scope before M4 exit", "CMD-GATE-SPEC byte-identical rebuild; revision row with changed sections, PR and diff links", "Reviewer review; CMD-PR-CHECKS pass"],
+    {"id": "IE-P2-34", "milestone": "M11", "wave": "Wave 4", "order": 35, "merges": ["P2-D02"], "after": ["IE-P2-1", "IE-P2-4", "IE-P2-9", "IE-P2-10", "IE-P2-12", "IE-P2-16", "IE-P2-17", "IE-P2-19", "IE-P2-35"],
+     "entry_criteria": ["All required final X01..X07 verdicts landed (X03 PR 2, X05 PR 2 included); selected X11 terminal disposition recorded and its verdict landed when run; if unselected, record OD-AFC-03/no-offer disposition without claiming enabled-voice proof", "PR #10 landed and merged tools/spec content/pin available (S42 d259c169); redundant PR #11 is not another prerequisite", "Freeze inventory binds every landed verdict through the specification freeze: paths, merge SHAs and digests; D02 includes all limits, selected modes/routes and aligned model names; any later landed verdict requires a bounded D02 delta in the same scope before W4 exit", "CMD-GATE-SPEC byte-identical rebuild; revision row with changed sections, PR and diff links", "Reviewer review; CMD-PR-CHECKS pass"],
      "post_step_vv": ["CMD-MAIN-GATE"],
      "rollback": "revert PR",
      "exit": "AC-AFC-P2-SPEC-01 evidence; all landed verdicts through freeze incorporated; same D02 slice owns any necessary later delta"},
-    {"id": "IE-P2-36", "milestone": "M4", "order": 36, "merges": ["P2-R4"], "after": ["IE-P2-31", "IE-P2-32", "IE-P2-33", "IE-P2-34", "IE-P2-35"],
-     "entry_criteria": ["All M4 slices landed or explicit conditional terminal disposition recorded; D02 freeze inventory includes every landed required verdict and X11 when run; P2-R3 merged; no unresolved actionable review defect at any priority without explicit owner acceptance of residual risk; every active register case has its own passing evidence or owner-accepted typed gap; main-landing held"],
+    {"id": "IE-P2-36", "milestone": "M11", "wave": "Wave 4", "order": 36, "merges": ["P2-R4"], "after": ["IE-P2-31", "IE-P2-32", "IE-P2-33", "IE-P2-34", "IE-P2-35"],
+     "entry_criteria": ["All Wave 4 slices landed or explicit conditional terminal disposition recorded; D02 freeze inventory includes every landed required verdict and X11 when run; P2-R3 merged; no unresolved actionable review defect at any priority without explicit owner acceptance of residual risk; every active register case has its own passing evidence or owner-accepted typed gap; main-landing held"],
      "post_step_vv": ["CMD-MAIN-GATE", "CMD-CHANGELOG-CHECK", "apk.m4", "draft v0.4.0"],
      "rollback": "revert PR; delete unpublished draft",
-     "exit": "M4 exit; tv-app/ and backend/ frozen except bug-triager fixes"},
-    {"id": "IE-P2-37", "milestone": "M5", "order": 37, "merges": ["P2-D03", "P2-D04", "P2-D05"], "after": ["IE-P2-33"],
+     "exit": "W4 exit; tv-app/ and backend/ frozen except bug-triager fixes"},
+    {"id": "IE-P2-37", "milestone": "M12", "wave": "Wave 5", "order": 37, "merges": ["P2-D03", "P2-D04", "P2-D05"], "after": ["IE-P2-33"],
      "entry_criteria": ["D03 PROC-README-FRESH-SETUP pass from a clean checkout", "D04 final wording after OA-6", "D05 ≤ 2 min 50 s plan with source per shot", "CMD-GATE-DOCS, CMD-GATE-HYGIENE; Reviewer review each; CMD-PR-CHECKS pass", "cut-off 2026-10-22T16:00:00Z"],
      "post_step_vv": ["CMD-MAIN-GATE", "PROC-SUBMISSION-CHECK"],
      "rollback": "revert PR",
      "exit": "submission docs on main"},
-    {"id": "IE-P2-38", "milestone": "M5", "order": 38, "merges": ["P2-SCR1"], "after": ["IE-P2-36"],
+    {"id": "IE-P2-38", "milestone": "M12", "wave": "Wave 5", "order": 38, "merges": ["P2-SCR1"], "after": ["IE-P2-36"],
      "entry_criteria": ["PROC-SCRIBE-ASSEMBLY pass; CMD-GATE-HYGIENE; Reviewer review; CMD-PR-CHECKS pass"],
      "post_step_vv": ["CMD-MAIN-GATE"],
      "rollback": "revert PR",
      "exit": "AC-AFC-P2-DX-02"},
-    {"id": "IE-P2-39", "milestone": "M5", "order": 39, "merges": [], "after": ["IE-P2-37", "IE-P2-38"],
+    {"id": "IE-P2-39", "milestone": "M13", "wave": "Wave 5", "order": 39, "merges": [], "after": ["IE-P2-37", "IE-P2-38"],
      "entry_criteria": ["CMD-GATE-HYGIENE on main HEAD clean (secrets and paths)", "OA-5 by the owner: LICENSE committed (or agent PR approved) and visibility flipped to public (OD-AFC-P2-04: 2026-10-22)"],
      "post_step_vv": ["CMD-JUDGE-ACCESS against B01 frozen OpenAPI authentication/polling contract; no assumed successful anonymous GET /v1/link; protect returned link codes/tokens; verify anonymous repository only after OA-5", "Orchestrator applies the main ruleset (PR-only, required checks, no squash) now that rulesets are available (IE-P2-F22)"],
      "rollback": "exposure found after flip → RISK-AFC-P2-12: owner flips back to private and rotates; revert the leaking commit by PR",
      "exit": "judge access verified"},
-    {"id": "IE-P2-40", "milestone": "M5", "order": 40, "merges": [], "after": ["IE-P2-36"],
-     "entry_criteria": ["backend/ frozen at M4 exit; if main's backend/ tree differs from deploy.last_green, redeploy at main HEAD; aws-afc-dev lease"],
+    {"id": "IE-P2-40", "milestone": "M13", "wave": "Wave 5", "order": 40, "merges": [], "after": ["IE-P2-36"],
+     "entry_criteria": ["backend/ frozen at W4 exit; if main's backend/ tree differs from deploy.last_green, redeploy at main HEAD; aws-afc-dev lease"],
      "post_step_vv": ["CMD-DEPLOYED-COMMIT", "CMD-DEPLOYED-SMOKE", "CMD-DEPLOYED-TESTS"],
      "rollback": "redeploy deploy.last_green",
      "exit": "deploy.final with backend/ tree equal to the candidate's"},
-    {"id": "IE-P2-41", "milestone": "M5", "order": 41, "merges": ["P2-R5"], "after": ["IE-P2-36", "IE-P2-37", "IE-P2-38", "IE-P2-39", "IE-P2-40"],
+    {"id": "IE-P2-41", "milestone": "M13", "wave": "Wave 5", "order": 41, "merges": ["P2-R5"], "after": ["IE-P2-36", "IE-P2-37", "IE-P2-38", "IE-P2-39", "IE-P2-40"],
      "entry_criteria": ["D03, D04, D05, SCR1 merged; P2-R4 merged (IE-P2-F17, F18)", "R5 moves [Unreleased] under 1.0.0 and bumps versionName 1.0.0 / versionCode; main-landing held", "cut-off 2026-10-22T17:00:00Z"],
      "post_step_vv": ["CMD-MAIN-GATE on merge.P2-R5", "CMD-CHANGELOG-CHECK", "candidate.final = merge.P2-R5"],
      "rollback": "revert PR; candidate falls back to the IE-P2-36 state with v0.4.0",
-     "exit": "M5 candidate commit fixed"},
-    {"id": "IE-P2-42", "milestone": "M5", "order": 42, "merges": ["P2-L05"], "after": ["IE-P2-41"],
+     "exit": "W5 candidate commit fixed"},
+    {"id": "IE-P2-42", "milestone": "M13", "wave": "Wave 5", "order": 42, "merges": ["P2-L05"], "after": ["IE-P2-41"],
      "entry_criteria": ["Build from candidate.final on main with -PafcApiBaseUrl=deploy.final ApiUrl; release signing already configured by A01 (host debug signer unless OA-11); actual tools and signer pinned; no new credential access", "cut-off 2026-10-22T19:00:00Z"],
      "post_step_vv": ["CMD-APK-BUILD-RELEASE, CMD-APK-SHA256, CMD-APK-CERT", "CMD-REVERIFY-APK on exact APK sha256, selected frozen backend unchanged: meaningful grounded minSdk/package/permission/service claims required; unproven semantics, absent mapping or unsupported capability = REVERIFY_CAPABILITY_GAP; ordinary ATE/apkanalyzer/ZIP-string checks never substitute; raw output private, sanitized receipt bound to raw digest", "CMD-ADB-INSTALL of the final APK on the stick", "draft v1.0.0 release notes carry the APK sha256 (draft body, no commit); tag v1.0.0 targets candidate.final at OA-8 publication", "Main build identity and APK inspection may complete before tag; AC-AFC-P2-APK-01 tagged-main/publication subcriterion stays OWNER_EVIDENCE_PENDING until OA-8 authorization and tag readback names candidate.final; no early tag/release"],
      "rollback": "build failure → bug-triager; stick: CMD-ADB-ROLLBACK to apk.m4",
      "exit": "Exact final APK identity/inspection and truthful Reverify disposition; tagged-main/publication remains OWNER_EVIDENCE_PENDING until OA-8 tag readback"},
-    {"id": "IE-P2-43", "milestone": "M5", "order": 43, "merges": ["P2-X12"], "after": ["IE-P2-42", "IE-P2-37"],
+    {"id": "IE-P2-43", "milestone": "M13", "wave": "Wave 5", "order": 43, "merges": ["P2-X12"], "after": ["IE-P2-42", "IE-P2-37"],
      "entry_criteria": ["captures on the final APK (sha256 from IE-P2-42); TNF 2026-10-22 live window; OA-9 camera shots", "manifest names and sha256 of clips; clips untracked (evidence/demo/.gitignore)", "docs-only PR: changes no tv-app/ or backend/ path", "Manifest PR target 2026-10-23T06:00:00Z; a missed deadline records missing shots/claims, candidate hashes and remaining windows, then requires explicit owner scope decision identifying exact omissions/consequences; no automatic dropped shot"],
      "post_step_vv": ["CMD-MAIN-GATE", "CMD-TREE-EQUAL candidate.final vs main HEAD (tv-app/, backend/)"],
      "rollback": "Revert evidence PR if needed; retain final-APK capture obligation; earlier X09/X10 clips are historical evidence of those APKs only, never demonstration of apk.final; any material restriction requires exact owner scope decision",
      "exit": "demo clips manifest complete"},
-    {"id": "IE-P2-44", "milestone": "M5", "order": 44, "merges": [], "after": ["IE-P2-42"],
+    {"id": "IE-P2-44", "milestone": "M13", "wave": "Wave 5", "order": 44, "merges": [], "after": ["IE-P2-42"],
      "entry_criteria": ["final_candidate block complete; assessments start at IE-P2-42 receipt (≈2026-10-22T19:00Z)", "Assurance Test Engineer and IE execution sessions fresh, no author ancestry", "Assessments may start at IE-P2-42, but final closeout waits for IE-P2-43 manifest/tree comparison and all 100 SEIT row dispositions; tagged-main/publication subcriterion stays pending until OA-8 tag readback; author planning delta and TE planning PASS supply no independent review/assurance"],
-     "post_step_vv": ["IE execution: system-level validation against technical plan §Outcome and M5 exit on candidate.final", "Assurance Test Engineer: seit.json results per register UID and AC-AFC-P2 row", "final CMD-TREE-EQUAL after IE-P2-43; CMD-DEPLOYED-COMMIT tree check vs candidate.final backend/"],
-     "rollback": "a failing assessment finding → bug-triager in the current round; candidate re-forms at the fix merge (R5 version stays) with IE-P2-42 rebuilt; owner told of any M5 slip (RISK-AFC-P2-13)",
-     "exit": "M5 technical closeout only when final capture/evidence and required independent assessments complete; owner checklist handed over; pending tag/publication subcriteria remain explicitly pending until OA-8, never complete by planning PASS"}
+     "post_step_vv": ["IE execution: system-level validation against technical plan §Outcome and W5 exit on candidate.final", "Assurance Test Engineer: seit.json results per register UID and AC-AFC-P2 row", "final CMD-TREE-EQUAL after IE-P2-43; CMD-DEPLOYED-COMMIT tree check vs candidate.final backend/"],
+     "rollback": "a failing assessment finding → bug-triager in the current round; candidate re-forms at the fix merge (R5 version stays) with IE-P2-42 rebuilt; owner told of any W5 slip (RISK-AFC-P2-13)",
+     "exit": "W5 technical closeout only when final capture/evidence and required independent assessments complete; owner checklist handed over; pending tag/publication subcriteria remain explicitly pending until OA-8, never complete by planning PASS"}
   ],
   "configuration_identity": {
     "repository": "1wgrumph/amazon-fantasy-companion",
@@ -535,12 +563,12 @@ The step list is in the JSON block. Summary:
       "fixtures.v1, fixtures.v2",
       "panel_mode, notify_route, detect_support, lineup_source",
       "deploy.<n> {stack: afc-dev, profile: afc-dev, region name, GitCommit tag, template sha256, ApiUrl, smoke and tests receipts}; deploy.last_green; deploy.final",
-      "apk.m1..m4, apk.final {build commit, sha256, signer cert SHA-256, JDK, AGP, Gradle, afcApiBaseUrl}; apk.last_green",
-      "release.m1..m5 {tag, target commit, draft URL}",
+      "apk.m1..m4 (m<n> = wave release checkpoint W<n>), apk.final {build commit, sha256, signer cert SHA-256, JDK, AGP, Gradle, afcApiBaseUrl}; apk.last_green",
+      "release.m1..m5 (m<n> = wave n) {tag, target commit, draft URL}",
       "toolchain {AZHQ skill checkout HEAD at dispatch, tools/ci/VENDORED.md, tools/spec/VENDORED.md}",
       "red.<pair> {shared worktree, baseline commit, dirty diff digest, test IDs/file hashes, bootstrap file hashes, scanned tool pins, preparation disposition}; consumed before green, never a red-only merge",
       "spec.freeze {required X01..X07 final verdict paths/merge SHAs/digests, X11 terminal disposition and verdict when run, every other landed verdict through freeze, later D02 delta if needed}",
-      "work.organization {approved graph/payload digests, 39 logical issue groups for 52 slices, 5 milestones, duplicate search, policy dry-run/submit receipts, saved labels/body/milestone/dependency/URL readback}",
+      "work.organization {approved graph/payload digests, 39 logical issue groups for 52 slices, 13 GitHub milestones M01..M13 (5 wave release checkpoints W1..W5 unchanged), duplicate search, policy dry-run/submit receipts, saved labels/body/milestone/dependency/URL readback}",
       "qualification.<suite> {candidate/input/suite hashes, five consecutive passes and one two-concurrent-copy pass, named cross-process locks, owned cleanup, actual duration}; ordinary reuse only for unchanged qualified candidate/inputs",
       "publication {OA-8 authorization, tag readback target on main}; separate from prepublication APK inspection"
     ],
@@ -548,30 +576,149 @@ The step list is in the JSON block. Summary:
     "rule": "Never consume an unrecorded identity: predecessor merge receipt for product, explicit preparation/red handoff for premerge TDD, and terminal conditional disposition for X11. Stable step IDs retain identity; order/after/entry predicates place IE-P2-35 before IE-P2-34.",
     "command_registry_ref": "seit.json/procedures_and_commands (64 finalized IDs; unchanged in this delta)",
     "frozen_capability_binding": {
-      "primary": {
-        "source_ref": "seit.json/frozen_profile_binding/primary",
-        "role_routes_ref": "seit.json/frozen_profile_binding/primary/roles",
-        "configuration_digest_sha256": "b81a141be5b9d83cbecbb34df460b0f25929c2ae0df165f16ff529acfc50bafa",
-        "review": {
-          "coverage_assist": {
-            "enabled": true,
-            "required": true
-          }
-        },
-        "deterministic_verification": {
-          "reverify": {
-            "enabled": true
-          }
-        },
-        "backend_resolution": {
-          "coverage_assist": "OpenCodeReview delegation; TE help/provenance inspected; execution not_run here; missing/unavailable is typed gap",
-          "reverify": "reverify 0.11.0 selected; TE backend inventory inspected; exact-APK execution not_run; APK semantic grounding unproven, REVERIFY_CAPABILITY_GAP; no backend change or ATE substitute"
-        }
+      "decision": "DEC-AFC-SD-041 (Bearing Lite 1.1.7; supersedes the primary/frontend/heavyweight/tech-writing lane bindings)",
+      "lane_profiles": {
+        "tv-app-ui": "opensource-hackathon",
+        "backend": "opensource-hackathon",
+        "device-integration-spikes": "opensource-hackathon",
+        "spec-and-docs": "opensource-hackathon",
+        "scribe-side-lane": "opensource-hackathon",
+        "defects": "bug-triager"
       },
-      "frontend": {
-        "source_ref": "seit.json/frozen_profile_binding/frontend",
-        "role_routes_ref": "seit.json/frozen_profile_binding/frontend/roles",
-        "configuration_digest_sha256": "8e533b92b43f463f75272e9b498b694fbf66f32825f09917506574e65534ff5a",
+      "opensource-hackathon": {
+        "source_ref": "docs/plans/2026-10-11-amazon-fantasy-companion/journey.json#/profile_selection/frozen_snapshots/opensource-hackathon",
+        "role_routes_ref": "docs/plans/2026-10-11-amazon-fantasy-companion/journey.json#/profile_selection/frozen_snapshots/opensource-hackathon/snapshot/roles",
+        "full_profile_sha256": "7d501eb8c103831a38c50d237b5d1e2e015a564b9ade8aef09a32dfc39b26ab1",
+        "configuration_digest_sha256": "11c4478edb7b0c94da196cdc8be2317f498378724ae041bde0c108832b1e2036",
+        "role_routes": {
+          "implementer": {
+            "enabled": true,
+            "primary": "Claude Code / Claude Opus 5.5 / medium",
+            "ordered_fallbacks": [
+              "Muse Code / Muse WonderFull / xhigh",
+              "Codex CLI / GPT-6.1 Sol / high"
+            ]
+          },
+          "test_implementer": {
+            "enabled": true,
+            "primary": "Codex CLI / GPT-6.1 Sol / high",
+            "ordered_fallbacks": [
+              "Muse Code / Muse WonderFull / xhigh",
+              "Claude Code / Claude Opus 5.5 / medium"
+            ]
+          },
+          "light_implementer": {
+            "enabled": true,
+            "primary": "Muse Code / Muse Spark 1.3 / xhigh",
+            "ordered_fallbacks": [
+              "Cursor Agent / Grok 4.7 / medium",
+              "Cursor Agent / Muse Spark 1.3 / high",
+              "Claude Code / Claude Sonnet 5.5 / medium"
+            ]
+          },
+          "coordinator": {
+            "enabled": true,
+            "primary": "AGY / Gemini 3.8 Flash / medium",
+            "ordered_fallbacks": [
+              "Cursor Agent / Claude Haiku 5.5 / xhigh",
+              "Cursor Agent / Grok 4.7 / low",
+              "Deep Code CLI / DeepSeek V4 Flash / max"
+            ]
+          },
+          "reviewer": {
+            "enabled": true,
+            "primary": "Cursor Agent / Grok 4.7 / high",
+            "ordered_fallbacks": [
+              "Muse Code / Muse Spark 1.3 / max",
+              "Codex CLI / GPT-6 Astra / high",
+              "Claude Code / Claude Opus 5.5 / high"
+            ],
+            "cadence": "phase"
+          },
+          "scribe": {
+            "enabled": true,
+            "primary": "Muse Code / Muse Spark 1.3 / xhigh",
+            "ordered_fallbacks": [
+              "Claude Code / Claude Haiku 5.5 / xhigh",
+              "AGY / Claude Sonnet 5.5 / medium",
+              "Codex CLI / GPT-6.1 Sol / medium",
+              "AGY / Gemini 3.8 Flash / high"
+            ]
+          },
+          "plan_integrator": {
+            "enabled": true,
+            "primary": "Muse Code / Muse Spark 1.3 / max",
+            "ordered_fallbacks": [
+              "Claude Code / Claude Opus 5.5 / high",
+              "Codex CLI / GPT-6.1 Sol / xhigh"
+            ]
+          },
+          "systems_modeler.planning": {
+            "enabled": true,
+            "primary": "Muse Code / Muse Spark 1.3 / max",
+            "ordered_fallbacks": [
+              "Cursor Agent / Grok 4.7 / medium",
+              "Claude Code / Claude Opus 5.5 / high",
+              "Codex CLI / GPT-6.1 Sol / high"
+            ]
+          },
+          "test_engineer.planning": {
+            "enabled": true,
+            "primary": "Claude Code / Claude Opus 5.5 / high",
+            "ordered_fallbacks": [
+              "Cursor Agent / Grok 4.7 / xhigh",
+              "Codex CLI / GPT-6 Astra / xhigh",
+              "Muse Code / Muse WonderFull / xhigh"
+            ]
+          },
+          "test_engineer.assurance": {
+            "enabled": true,
+            "primary": "Codex CLI / GPT-6.1 Sol / xhigh",
+            "ordered_fallbacks": [
+              "Cursor Agent / Grok 4.7 / high",
+              "Claude Code / Claude Opus 5.5 / medium",
+              "Muse Code / Muse WonderFull / xhigh"
+            ],
+            "cadence": "lifecycle"
+          },
+          "integration_engineer.planning": {
+            "enabled": true,
+            "primary": "Claude Code / Claude Opus 5.5 / high",
+            "ordered_fallbacks": [
+              "Codex CLI / GPT-6 Astra / xhigh",
+              "Muse Code / Muse WonderFull / xhigh",
+              "Cursor Agent / Grok 4.7 / xhigh"
+            ]
+          },
+          "integration_engineer.execution": {
+            "enabled": true,
+            "primary": "Codex CLI / GPT-6.1 Sol / high",
+            "ordered_fallbacks": [
+              "Claude Code / Claude Opus 5.5 / medium",
+              "Cursor Agent / Grok 4.7 / high",
+              "Muse Code / Muse WonderFull / xhigh"
+            ],
+            "cadence": "lifecycle"
+          },
+          "requirements_engineer.planning": {
+            "enabled": true,
+            "primary": "Cursor Agent / Grok 4.7 / high",
+            "ordered_fallbacks": [
+              "Muse Code / Muse Wonder / xhigh",
+              "Codex CLI / GPT-6 Astra / high",
+              "Claude Code / Claude Opus 5.5 / medium"
+            ]
+          }
+        },
+        "development_strategy": {
+          "mode": "tdd"
+        },
+        "tdd_scope": "13 existing TDD pairs unchanged; spikes evidence-only; documentation-only slices keep their declared inspection method",
+        "concurrency": {
+          "dispatch_ready_independent_work": true,
+          "preserve_order_for_dependencies_interfaces_write_overlap_and_shared_mutable_resources": true
+        },
+        "planning_to_implementation_clean_session": true,
         "review": {
           "coverage_assist": {
             "enabled": true,
@@ -583,46 +730,20 @@ The step list is in the JSON block. Summary:
             "enabled": true
           }
         },
-        "backend_resolution": {
-          "coverage_assist": "OpenCodeReview delegation; TE help/provenance inspected; execution not_run here; missing/unavailable is typed gap",
-          "reverify": "reverify 0.11.0 selected; TE backend inventory inspected; exact-APK execution not_run; APK semantic grounding unproven, REVERIFY_CAPABILITY_GAP; no backend change or ATE substitute"
-        }
-      },
-      "heavyweight": {
-        "source_ref": "seit.json/frozen_profile_binding/heavyweight",
-        "role_routes_ref": "seit.json/frozen_profile_binding/heavyweight/roles",
-        "configuration_digest_sha256": "f2c555d5f1a30a855dfcce52d6361475da198af0fd79cd7dfbc7ec74845f8a73",
-        "review": {
-          "coverage_assist": {
-            "enabled": true,
-            "required": true
+        "holds": [
+          {
+            "id": "muse-contributor-mode",
+            "harness": "Muse Code",
+            "contributor_mode": "on",
+            "required_cli_args": [
+              "--contributor-mode",
+              "on"
+            ],
+            "effect": "Every Muse Code primary and fallback dispatch for opensource-hackathon must launch with --contributor-mode on. Freeze this requirement in the lifecycle binding and carry it into every Muse execution packet. Verify the exact per-run flag; if it cannot be honored, return a typed configuration gap. This profile-specific requirement does not change the global Muse setting."
           }
-        },
-        "deterministic_verification": {
-          "reverify": {
-            "enabled": true
-          }
-        },
-        "backend_resolution": {
-          "coverage_assist": "OpenCodeReview delegation; TE help/provenance inspected; execution not_run here; missing/unavailable is typed gap",
-          "reverify": "reverify 0.11.0 selected; TE backend inventory inspected; exact-APK execution not_run; APK semantic grounding unproven, REVERIFY_CAPABILITY_GAP; no backend change or ATE substitute"
-        }
-      },
-      "tech-writing": {
-        "source_ref": "seit.json/frozen_profile_binding/tech-writing",
-        "role_routes_ref": "seit.json/frozen_profile_binding/tech-writing/roles",
-        "configuration_digest_sha256": "8a6b57450b92f5658666150c7cdcb05553016240061befb226c0ae4eb83c94ce",
-        "review": {
-          "coverage_assist": {
-            "enabled": true,
-            "required": true
-          }
-        },
-        "deterministic_verification": {
-          "reverify": {
-            "enabled": true
-          }
-        },
+        ],
+        "fallback_activation": "ordered; only on verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks",
+        "assurance": "test_engineer.assurance and integration_engineer.execution enabled (cadence lifecycle) for every lane bound to this profile; no tech-writing exemption",
         "backend_resolution": {
           "coverage_assist": "OpenCodeReview delegation; TE help/provenance inspected; execution not_run here; missing/unavailable is typed gap",
           "reverify": "reverify 0.11.0 selected; TE backend inventory inspected; exact-APK execution not_run; APK semantic grounding unproven, REVERIFY_CAPABILITY_GAP; no backend change or ATE substitute"
@@ -687,7 +808,7 @@ The step list is in the JSON block. Summary:
     {"id": "deploy.1", "integration": "IE-P2-15", "slice": "P2-L02", "target": "aws-afc-dev stack afc-dev via profile afc-dev", "commit": "main HEAD at deploy (≥ merge.P2-B01)", "checks": ["CMD-STACK-OUTPUTS", "CMD-DEPLOYED-COMMIT", "CMD-DEPLOYED-SMOKE"], "rollback": "ROLLBACK_COMPLETE on create → sam delete (dev only) and retry; else redeploy deploy.last_green"},
     {"id": "deploy.2", "integration": "IE-P2-25", "slice": "P2-L03", "commit": "main HEAD with B04..B07 and lineup_source configuration", "checks": ["CMD-STACK-OUTPUTS", "CMD-DEPLOYED-COMMIT", "CMD-DEPLOYED-SMOKE", "CMD-DEPLOYED-TESTS"], "rollback": "redeploy deploy.last_green"},
     {"id": "deploy.fix.<n>", "integration": "IE-P2-32", "slice": "bug-triager fix (L03 command set re-run under aws-afc-dev)", "commit": "fix merge commit", "checks": ["CMD-DEPLOYED-COMMIT", "CMD-DEPLOYED-SMOKE", "CMD-DEPLOYED-TESTS"], "rollback": "redeploy deploy.last_green", "window_rule": "never during an in-progress game"},
-    {"id": "deploy.final", "integration": "IE-P2-40", "commit": "main HEAD after M4 (backend/ tree equals candidate.final)", "checks": ["CMD-DEPLOYED-COMMIT", "CMD-DEPLOYED-SMOKE", "CMD-DEPLOYED-TESTS"], "rollback": "redeploy deploy.last_green", "kept_until": "T_judge_access 2026-11-20"}
+    {"id": "deploy.final", "integration": "IE-P2-40", "commit": "main HEAD after W4 (backend/ tree equals candidate.final)", "checks": ["CMD-DEPLOYED-COMMIT", "CMD-DEPLOYED-SMOKE", "CMD-DEPLOYED-TESTS"], "rollback": "redeploy deploy.last_green", "kept_until": "T_judge_access 2026-11-20"}
   ],
   "anomaly_rollback_recovery": {
     "classification": [
@@ -727,10 +848,10 @@ The step list is in the JSON block. Summary:
     },
     {
       "id": "CO-M1",
-      "applies_to": "M1",
+      "applies_to": "W1",
       "time": "2026-10-14T20:00:00Z",
-      "rule": "last M1 slice merge; R1 by 2026-10-14T23:00:00Z",
-      "on_miss": "M1 exit remains unmet until all required slices land; preserve milestone dates and slice membership; record forecast and request explicit scope decision for any material omission, never release completion from a partial set"
+      "rule": "last Wave 1 slice merge; R1 by 2026-10-14T23:00:00Z",
+      "on_miss": "W1 exit remains unmet until all required slices land; preserve release-checkpoint dates and wave membership; record forecast and request explicit scope decision for any material omission, never release completion from a partial set"
     },
     {
       "id": "CO-X03-DESK",
@@ -741,7 +862,7 @@ The step list is in the JSON block. Summary:
     },
     {
       "id": "CO-M2",
-      "applies_to": "M2",
+      "applies_to": "W2",
       "time": "2026-10-17T01:00:00Z",
       "rule": "X06 verdict at T_yahoo then R2",
       "on_miss": "owner scope decision if > 12 h late"
@@ -755,10 +876,10 @@ The step list is in the JSON block. Summary:
     },
     {
       "id": "CO-M3",
-      "applies_to": "M3",
+      "applies_to": "W3",
       "time": "2026-10-19T12:00:00Z",
       "rule": "X09 record and R3 merged",
-      "on_miss": "R3 merges late; M4 entry waits"
+      "on_miss": "R3 merges late; Wave 4 entry waits"
     },
     {
       "id": "CO-SUNDAY-FIX",
@@ -776,7 +897,7 @@ The step list is in the JSON block. Summary:
     },
     {
       "id": "CO-M4",
-      "applies_to": "M4",
+      "applies_to": "W4",
       "time": "2026-10-21T23:00:00Z",
       "rule": "R4 merged",
       "on_miss": "owner scope decision"
@@ -804,7 +925,7 @@ The step list is in the JSON block. Summary:
     },
     {
       "id": "CO-M5",
-      "applies_to": "M5",
+      "applies_to": "W5",
       "time": "2026-10-23T12:00:00Z",
       "rule": "assessments returned; owner checklist handed over (7 h before T_deadline)",
       "on_miss": "owner informed immediately; submission proceeds on owner decision"
@@ -833,7 +954,7 @@ The step list is in the JSON block. Summary:
     ]
   },
   "lifecycle_assessment_inputs": {
-    "sessions": "Lifecycle cadence on candidate.final, fresh sessions rejecting author ancestry. Integration Engineer execution per lane profile: primary (Codex CLI / GPT-6.1 Sol / high), frontend (Claude Code / Claude Opus 5.5 / medium), heavyweight (Claude Code / Claude Opus 5.5 / medium), tech-writing (Claude Code / Claude Opus 5.5 / medium; snapshot has no cadence field, skill default lifecycle applies), bug-triager (Codex CLI / GPT-6.1 Sol / high). Assurance Test Engineer: primary (Codex CLI / GPT-6.1 Sol / xhigh), frontend (Codex CLI / GPT-6 Astra / high), heavyweight (Muse Code / Muse Spark 1.3 / max), bug-triager (Codex CLI / GPT-6.1 Sol / xhigh); tech-writing assurance is disabled in its snapshot (recorded, not substituted). A session whose route model authored a slice under assessment records that overlap; independence is by fresh session, per skill.",
+    "sessions": "Lifecycle cadence on candidate.final, fresh sessions rejecting author ancestry; routes from the frozen snapshots (DEC-AFC-SD-041). opensource-hackathon (tv-app-ui, backend, device-integration-spikes, spec-and-docs and the Scribe side lane): Integration Engineer execution Codex CLI / GPT-6.1 Sol / high (ordered fallbacks Claude Code / Claude Opus 5.5 / medium, Cursor Agent / Grok 4.7 / high, Muse Code / Muse WonderFull / xhigh), cadence lifecycle; Assurance Test Engineer Codex CLI / GPT-6.1 Sol / xhigh (ordered fallbacks Cursor Agent / Grok 4.7 / high, Claude Code / Claude Opus 5.5 / medium, Muse Code / Muse WonderFull / xhigh), cadence lifecycle. Both sessions are enabled for every lane bound to this profile, so assurance covers spec-and-docs slices too; the former tech-writing assurance exemption no longer applies. bug-triager (defects, unchanged): Integration Engineer execution Codex CLI / GPT-6.1 Sol / high (ordered fallbacks Claude Code / Claude Opus 5.5 / medium, Muse Code / Muse Spark 1.3 / max), cadence lifecycle; Assurance Test Engineer Codex CLI / GPT-6.1 Sol / xhigh (ordered fallbacks Claude Code / Claude Opus 5.5 / medium, Muse Code / Muse Spark 1.3 / max), cadence lifecycle. Every opensource-hackathon Muse Code primary or fallback launches with --contributor-mode on or returns a typed configuration gap. Fallbacks activate only on verified unavailability or usage/rate-limit exhaustion. A session whose route model authored a slice under assessment records that overlap; independence is by fresh session, per skill.",
     "inputs": [
       "final_candidate block and every configuration_identity record",
       "journey.json execution_receipts for IE-P2-1..44 (merge SHAs, command output, digests)",
@@ -852,7 +973,7 @@ The step list is in the JSON block. Summary:
       "D02 verdict freeze inventory; P2-L01 approved payload and exact slice-to-issue readback",
       "OA-8/tag readback or explicit OWNER_EVIDENCE_PENDING; REVERIFY_CAPABILITY_GAP where semantic proof ungrounded"
     ],
-    "approved_outcome": "technical plan §Outcome and the M5 exit criteria"
+    "approved_outcome": "technical plan §Outcome and the W5 exit criteria (GitHub milestone M13)"
   },
   "owner_dependencies": [
     {
@@ -881,7 +1002,7 @@ The step list is in the JSON block. Summary:
         "IE-P2-25",
         "P2-X09"
       ],
-      "latest_safe": "2026-10-15T12:00:00Z (M2); hard 2026-10-17T12:00:00Z"
+      "latest_safe": "2026-10-15T12:00:00Z (W2); hard 2026-10-17T12:00:00Z"
     },
     {
       "id": "OA-4",
@@ -896,7 +1017,7 @@ The step list is in the JSON block. Summary:
     },
     {
       "id": "OA-5",
-      "action": "LICENSE and visibility flip after M5 hygiene scan",
+      "action": "LICENSE and visibility flip after W5 hygiene scan",
       "blocks": [
         "IE-P2-39 judge access",
         "ruleset enforcement"
@@ -926,7 +1047,7 @@ The step list is in the JSON block. Summary:
         "publication",
         "AC-AFC-P2-APK-01 tagged-main subcriterion (OWNER_EVIDENCE_PENDING until tag readback)"
       ],
-      "latest_safe": "per milestone exit"
+      "latest_safe": "per wave release checkpoint W1..W5"
     },
     {
       "id": "OA-9",
@@ -997,7 +1118,8 @@ The step list is in the JSON block. Summary:
   "wave_gate_costs": [
     {
       "wave": 1,
-      "milestone": "M1",
+      "release_checkpoint": "W1",
+      "github_milestones": ["M01", "M02", "M03", "M04"],
       "integration_steps": [
         "IE-P2-1",
         "IE-P2-2",
@@ -1046,11 +1168,12 @@ The step list is in the JSON block. Summary:
         "SEIT-RISK-AFC-P2-12"
       ],
       "qualification_ref": "seit.json/procedures_and_commands/PROC-RELIABILITY",
-      "limits": "Planning forecast only, not measured/hardware benchmark; additive work budget, not wall-clock promise. M4 fixed increment 0; changed-suite requalification extra and replay <=300s estimate. M5 120s docs estimate excludes unmeasured final binary/deployed/independent assurance. Qualification five consecutive + two concurrent copies is separate from ordinary qualified gate reuse."
+      "limits": "Planning forecast only, not measured/hardware benchmark; additive work budget, not wall-clock promise. W4 fixed increment 0; changed-suite requalification extra and replay <=300s estimate. W5 120s docs estimate excludes unmeasured final binary/deployed/independent assurance. Qualification five consecutive + two concurrent copies is separate from ordinary qualified gate reuse."
     },
     {
       "wave": 2,
-      "milestone": "M2",
+      "release_checkpoint": "W2",
+      "github_milestones": ["M03", "M04", "M05", "M06"],
       "integration_steps": [
         "IE-P2-9",
         "IE-P2-10",
@@ -1119,11 +1242,12 @@ The step list is in the JSON block. Summary:
         "SEIT-RISK-AFC-P2-05"
       ],
       "qualification_ref": "seit.json/procedures_and_commands/PROC-RELIABILITY",
-      "limits": "Planning forecast only, not measured/hardware benchmark; additive work budget, not wall-clock promise. M4 fixed increment 0; changed-suite requalification extra and replay <=300s estimate. M5 120s docs estimate excludes unmeasured final binary/deployed/independent assurance. Qualification five consecutive + two concurrent copies is separate from ordinary qualified gate reuse."
+      "limits": "Planning forecast only, not measured/hardware benchmark; additive work budget, not wall-clock promise. W4 fixed increment 0; changed-suite requalification extra and replay <=300s estimate. W5 120s docs estimate excludes unmeasured final binary/deployed/independent assurance. Qualification five consecutive + two concurrent copies is separate from ordinary qualified gate reuse."
     },
     {
       "wave": 3,
-      "milestone": "M3",
+      "release_checkpoint": "W3",
+      "github_milestones": ["M07", "M08", "M09", "M10"],
       "integration_steps": [
         "IE-P2-21",
         "IE-P2-22",
@@ -1207,11 +1331,12 @@ The step list is in the JSON block. Summary:
         "SEIT-RISK-AFC-P2-05"
       ],
       "qualification_ref": "seit.json/procedures_and_commands/PROC-RELIABILITY",
-      "limits": "Planning forecast only, not measured/hardware benchmark; additive work budget, not wall-clock promise. M4 fixed increment 0; changed-suite requalification extra and replay <=300s estimate. M5 120s docs estimate excludes unmeasured final binary/deployed/independent assurance. Qualification five consecutive + two concurrent copies is separate from ordinary qualified gate reuse."
+      "limits": "Planning forecast only, not measured/hardware benchmark; additive work budget, not wall-clock promise. W4 fixed increment 0; changed-suite requalification extra and replay <=300s estimate. W5 120s docs estimate excludes unmeasured final binary/deployed/independent assurance. Qualification five consecutive + two concurrent copies is separate from ordinary qualified gate reuse."
     },
     {
       "wave": 4,
-      "milestone": "M4",
+      "release_checkpoint": "W4",
+      "github_milestones": ["M11"],
       "integration_steps": [
         "IE-P2-32",
         "IE-P2-33",
@@ -1245,11 +1370,12 @@ The step list is in the JSON block. Summary:
         "SEIT-AFC-P2-PATH-01"
       ],
       "qualification_ref": "seit.json/procedures_and_commands/PROC-RELIABILITY",
-      "limits": "Planning forecast only, not measured/hardware benchmark; additive work budget, not wall-clock promise. M4 fixed increment 0; changed-suite requalification extra and replay <=300s estimate. M5 120s docs estimate excludes unmeasured final binary/deployed/independent assurance. Qualification five consecutive + two concurrent copies is separate from ordinary qualified gate reuse."
+      "limits": "Planning forecast only, not measured/hardware benchmark; additive work budget, not wall-clock promise. W4 fixed increment 0; changed-suite requalification extra and replay <=300s estimate. W5 120s docs estimate excludes unmeasured final binary/deployed/independent assurance. Qualification five consecutive + two concurrent copies is separate from ordinary qualified gate reuse."
     },
     {
       "wave": 5,
-      "milestone": "M5",
+      "release_checkpoint": "W5",
+      "github_milestones": ["M12", "M13"],
       "integration_steps": [
         "IE-P2-37",
         "IE-P2-38",
@@ -1321,7 +1447,7 @@ The step list is in the JSON block. Summary:
         "SEIT-RISK-AFC-P2-12"
       ],
       "qualification_ref": "seit.json/procedures_and_commands/PROC-RELIABILITY",
-      "limits": "Planning forecast only, not measured/hardware benchmark; additive work budget, not wall-clock promise. M4 fixed increment 0; changed-suite requalification extra and replay <=300s estimate. M5 120s docs estimate excludes unmeasured final binary/deployed/independent assurance. Qualification five consecutive + two concurrent copies is separate from ordinary qualified gate reuse."
+      "limits": "Planning forecast only, not measured/hardware benchmark; additive work budget, not wall-clock promise. W4 fixed increment 0; changed-suite requalification extra and replay <=300s estimate. W5 120s docs estimate excludes unmeasured final binary/deployed/independent assurance. Qualification five consecutive + two concurrent copies is separate from ordinary qualified gate reuse."
     }
   ]
 }
