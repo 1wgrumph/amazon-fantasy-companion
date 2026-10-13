@@ -1,0 +1,148 @@
+COMMAND: uv run --script tools/spec/spec_build.py spec/amazon-fantasy-companion spec/amazon-fantasy-companion/amazon-fantasy-companion.md
+Traceback (most recent call last):
+  File "<repo-root>/tools/spec/spec_build.py", line 167, in <module>
+    sys.exit(main(sys.argv[1:]))
+             ^^^^^^^^^^^^^^^^^^
+  File "<repo-root>/tools/spec/spec_build.py", line 162, in main
+    build(Path(argv[0]), Path(argv[1]))
+  File "<repo-root>/tools/spec/spec_build.py", line 108, in build
+    raise ValueError(f"spec.yaml: revision {revision['rev']}: unknown changed section {section}")
+ValueError: spec.yaml: revision 0.3: unknown changed section Appendix A — Requirement Traceability Matrix
+EXIT: 1
+COMMAND: uv run --script tools/spec/spec_lint.py spec/amazon-fantasy-companion
+EXIT: 0
+COMMAND: uv run --script tools/spec/diagram.py lint spec/amazon-fantasy-companion
+EXIT: 0
+COMMAND: uv run --script tools/spec/spec_build.py spec/amazon-fantasy-companion /var/tmp/tmp.J7gWZoxHfX
+Traceback (most recent call last):
+  File "<repo-root>/tools/spec/spec_build.py", line 167, in <module>
+    sys.exit(main(sys.argv[1:]))
+             ^^^^^^^^^^^^^^^^^^
+  File "<repo-root>/tools/spec/spec_build.py", line 162, in main
+    build(Path(argv[0]), Path(argv[1]))
+  File "<repo-root>/tools/spec/spec_build.py", line 108, in build
+    raise ValueError(f"spec.yaml: revision {revision['rev']}: unknown changed section {section}")
+ValueError: spec.yaml: revision 0.3: unknown changed section Appendix A — Requirement Traceability Matrix
+EXIT: 1
+COMMAND: cmp spec/amazon-fantasy-companion/amazon-fantasy-companion.md /var/tmp/tmp.J7gWZoxHfX
+cmp: EOF on ‘/var/tmp/tmp.J7gWZoxHfX’ which is empty
+EXIT: 1
+COMMAND: python3 docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/ST-4/g5/check-links.py
+Relative links/anchors: 531 resolved; source links added: 184; product prose unchanged outside revision/provenance metadata
+UID coverage: 66/66; Appendix A: 66/66; unknown UIDs: 0
+Generated Appendix A: 66/66 rows have unlinked section references
+Traceback (most recent call last):
+  File "<repo-root>/docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/ST-4/g5/check-links.py", line 54, in <module>
+    assert not unlinked, 'Pinned builder emits plain section references; source edits cannot satisfy the all-reference condition'
+           ^^^^^^^^^^^^
+AssertionError: Pinned builder emits plain section references; source edits cannot satisfy the all-reference condition
+EXIT: 1
+COMMAND: python3 -c from\ pathlib\ import\ Path\;\ import\ re\;\ assert\ not\ any\(re.search\(r\"\\\*\\\*\(BLUF\|Frame\|Who\|What\|Why\|How\|When\|Where\):\?\\\*\\\*\"\,\ p.read_text\(\)\)\ for\ p\ in\ Path\(\"spec/amazon-fantasy-companion\"\).glob\(\"\*.md\"\)\)\;\ print\(\"Label\ grep\ clean\"\)
+Label grep clean
+EXIT: 0
+COMMAND: python3 tools/ci/check_paths.py
+EXIT: 0
+COMMAND: bash tools/ci/gate.sh
+Traceback (most recent call last):
+  File "<repo-root>/tools/spec/spec_build.py", line 167, in <module>
+    sys.exit(main(sys.argv[1:]))
+             ^^^^^^^^^^^^^^^^^^
+  File "<repo-root>/tools/spec/spec_build.py", line 162, in main
+    build(Path(argv[0]), Path(argv[1]))
+  File "<repo-root>/tools/spec/spec_build.py", line 108, in build
+    raise ValueError(f"spec.yaml: revision {revision['rev']}: unknown changed section {section}")
+ValueError: spec.yaml: revision 0.3: unknown changed section Appendix A — Requirement Traceability Matrix
+gate: spec: FAIL check exit 1
+gate: docs: PASS checks completed
+.github/workflows/ci.yml: PASS
+.....fatal: not a git repository (or any of the parent directories): .git
+........fatal: not a git repository (or any of the parent directories): .git
+...............F..F.FF....
+======================================================================
+FAIL: test_fresh_build_passes_and_stale_build_exits_1 (test_gate.AC_AFC_CI_04_Spec.test_fresh_build_passes_and_stale_build_exits_1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo-root>/tools/ci/tests/test_gate.py", line 188, in test_fresh_build_passes_and_stale_build_exits_1
+    self.assertTrue(built, 'spec area rebuild wrote no built file into the work tree')
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: [] is not true : spec area rebuild wrote no built file into the work tree
+
+======================================================================
+FAIL: test_staged_source_and_rebuilt_output_pass_before_commit (test_gate.AC_AFC_CI_04_Spec.test_staged_source_and_rebuilt_output_pass_before_commit)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo-root>/tools/ci/tests/test_gate.py", line 235, in test_staged_source_and_rebuilt_output_pass_before_commit
+    self.assertEqual(rc, 0, out)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: 1 != 0 : gate: spec: FAIL check exit 1
+Installed 1 package in 1ms
+Installed 1 package in 1ms
+Traceback (most recent call last):
+  File "/var/tmp/tmp58pkvqnp/repo/tools/spec/spec_build.py", line 167, in <module>
+    sys.exit(main(sys.argv[1:]))
+             ^^^^^^^^^^^^^^^^^^
+  File "/var/tmp/tmp58pkvqnp/repo/tools/spec/spec_build.py", line 162, in main
+    build(Path(argv[0]), Path(argv[1]))
+  File "/var/tmp/tmp58pkvqnp/repo/tools/spec/spec_build.py", line 108, in build
+    raise ValueError(f"spec.yaml: revision {revision['rev']}: unknown changed section {section}")
+ValueError: spec.yaml: revision 0.3: unknown changed section Appendix A — Requirement Traceability Matrix
+
+
+======================================================================
+FAIL: test_template_self_check_passes_and_removes_temp_dir (test_gate.AC_AFC_CI_04_Spec.test_template_self_check_passes_and_removes_temp_dir)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo-root>/tools/ci/tests/test_gate.py", line 180, in test_template_self_check_passes_and_removes_temp_dir
+    self.assertEqual(rc, 0, out)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: 1 != 0 : gate: spec: FAIL check exit 1
+Installed 1 package in 2ms
+Installed 1 package in 1ms
+Installed 1 package in 1ms
+Traceback (most recent call last):
+  File "/var/tmp/tmph3561vyz/repo/tools/spec/spec_build.py", line 167, in <module>
+    sys.exit(main(sys.argv[1:]))
+             ^^^^^^^^^^^^^^^^^^
+  File "/var/tmp/tmph3561vyz/repo/tools/spec/spec_build.py", line 162, in main
+    build(Path(argv[0]), Path(argv[1]))
+  File "/var/tmp/tmph3561vyz/repo/tools/spec/spec_build.py", line 108, in build
+    raise ValueError(f"spec.yaml: revision {revision['rev']}: unknown changed section {section}")
+ValueError: spec.yaml: revision 0.3: unknown changed section Appendix A — Requirement Traceability Matrix
+
+
+======================================================================
+FAIL: test_hook_git_env_does_not_reach_sentinel_repo (test_gate_isolation.D1_HookEnvironmentIsolation.test_hook_git_env_does_not_reach_sentinel_repo)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo-root>/tools/ci/tests/test_gate_isolation.py", line 63, in test_hook_git_env_does_not_reach_sentinel_repo
+    self.assertEqual(rc, 0, out)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: 1 != 0 : gate: spec: FAIL check exit 1
+gate: docs: PASS checks completed
+.github/workflows/ci.yml: PASS
+gate: hygiene: PASS checks completed
+Installed 1 package in 1ms
+Installed 1 package in 1ms
+Installed 1 package in 1ms
+Traceback (most recent call last):
+  File "/var/tmp/tmp5dc59gi7/repo/tools/spec/spec_build.py", line 167, in <module>
+    sys.exit(main(sys.argv[1:]))
+             ^^^^^^^^^^^^^^^^^^
+  File "/var/tmp/tmp5dc59gi7/repo/tools/spec/spec_build.py", line 162, in main
+    build(Path(argv[0]), Path(argv[1]))
+  File "/var/tmp/tmp5dc59gi7/repo/tools/spec/spec_build.py", line 108, in build
+    raise ValueError(f"spec.yaml: revision {revision['rev']}: unknown changed section {section}")
+ValueError: spec.yaml: revision 0.3: unknown changed section Appendix A — Requirement Traceability Matrix
+..
+----------------------------------------------------------------------
+Ran 2 tests in 0.011s
+
+OK
+
+
+----------------------------------------------------------------------
+Ran 39 tests in 9.621s
+
+FAILED (failures=4)
+gate: hygiene: FAIL check exit 1
+EXIT: 1

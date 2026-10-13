@@ -1,0 +1,33 @@
+COMMAND: uv run --script tools/spec/spec_build.py spec/amazon-fantasy-companion spec/amazon-fantasy-companion/amazon-fantasy-companion.md
+EXIT: 0
+COMMAND: uv run --script tools/spec/spec_lint.py spec/amazon-fantasy-companion
+EXIT: 0
+COMMAND: uv run --script tools/spec/diagram.py lint spec/amazon-fantasy-companion
+EXIT: 0
+COMMAND: uv run --script tools/spec/spec_build.py spec/amazon-fantasy-companion /var/tmp/tmp.AlLvziuAIb
+EXIT: 0
+COMMAND: cmp spec/amazon-fantasy-companion/amazon-fantasy-companion.md /var/tmp/tmp.AlLvziuAIb
+EXIT: 0
+COMMAND: python3 docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/ST-4/g5/check-links.py
+Relative links/anchors: 749 resolved; source links added: 184; product prose unchanged outside revision/provenance metadata
+UID coverage: 66/66; Appendix A: 66/66; unknown UIDs: 0
+Generated Appendix A: 0/66 rows have unlinked section references
+EXIT: 0
+COMMAND: python3 -c from\ pathlib\ import\ Path\;\ import\ re\;\ assert\ not\ any\(re.search\(r\"\\\*\\\*\(BLUF\|Frame\|Who\|What\|Why\|How\|When\|Where\):\?\\\*\\\*\"\,\ p.read_text\(\)\)\ for\ p\ in\ Path\(\"spec/amazon-fantasy-companion\"\).glob\(\"\*.md\"\)\)\;\ print\(\"Label\ grep\ clean\"\)
+Label grep clean
+EXIT: 0
+COMMAND: python3 tools/ci/check_paths.py
+EXIT: 0
+COMMAND: bash tools/ci/gate.sh
+gate: spec: PASS checks completed
+gate: docs: PASS checks completed
+.github/workflows/ci.yml: PASS
+.....fatal: not a git repository (or any of the parent directories): .git
+........fatal: not a git repository (or any of the parent directories): .git
+..........................
+----------------------------------------------------------------------
+Ran 39 tests in 12.020s
+
+OK
+gate: hygiene: PASS checks completed
+EXIT: 0

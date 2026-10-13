@@ -1,0 +1,35 @@
+{
+  "verdict": "PASS",
+  "origin": "https://github.com/alphazede/Alphazedehq",
+  "source_pin": "04678835350b529b44ab69ee5f805ca21cab5e76",
+  "scope": "skills/spec-authoring scripts and template; vendored tools/spec",
+  "prior_pin": "8f5c4c2a28da984b267611b62d0801666ab2d70f",
+  "checks": [
+    {
+      "command": "git merge-base --is-ancestor <source_pin> origin/main",
+      "exit": 0
+    },
+    {
+      "command": "git diff --exit-code <source_pin> 1eadf6e634533e842639324ec461088fa257d09d -- skills/spec-authoring",
+      "exit": 0
+    },
+    {
+      "command": "gitleaks dir <source-skill> --redact --no-banner",
+      "exit": 0
+    },
+    {
+      "command": "python3 <evidence>/check-vendor.py <prior_pin>",
+      "exit": 0
+    },
+    {
+      "command": "bash <evidence>/vendor-check.sh (CMD-SPEC-VENDOR)",
+      "exit": 0
+    }
+  ],
+  "static_inspection": "Delta from prior admitted pin is spec_build.py anchor allocation and linked trace rendering plus regression tests. No new dependency, download, credential access, telemetry or executable payload. vendor.sh unchanged; Git reads and atomic local directory replacement only. diagram subprocess invokes dot as before.",
+  "credential_findings": [],
+  "limitations": "No dynamic malware analysis or vulnerability database scan; Python source-only delta with unchanged dependencies.",
+  "prior_provenance": "g4/receipt.json and g5/prior-vendor-hashes.json",
+  "integrity": "Clean installed skill at exact reviewed merge pin; last skill commit has identical tree. Destination exact bytes/modes verified before upgrade.",
+  "vendor_cli": "Documented vendor.sh upgrade accepted pristine previous copy; selected last skill-changing commit 1eadf6e634533e842639324ec461088fa257d09d. Exact skill-tree equality proved against reviewed merge 04678835350b529b44ab69ee5f805ca21cab5e76; provenance marker records reviewed merge, all bytes/modes/hashes checked against it."
+}
