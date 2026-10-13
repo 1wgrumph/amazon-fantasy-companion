@@ -1,3 +1,125 @@
+# Current review checkpoint — 2026-10-13T15:27:30Z
+
+The chronology/profile delta is applied: **13 GitHub milestones,39 logical issues,
+52 slices,13 TDD pairs**, preserving **5 technical waves/releases,121 dependencies,
+44 integration steps,100 proofs,70 commands and63 active+3 withdrawn product UIDs**.
+Native1.1.7 package/schema/renderer checks and268 parent conservation checks pass;
+3 negative cases reject duplicate/missing issues and invalid milestone sizes.
+RE's4affected local rows are closed; correction_rounds2. IE32/32,TE22/22 and
+PI40/40 author checks passed. Original independent planning review1/1 and
+aggregate repair1/1 remain spent. No new independent review or assurance claimed.
+
+Package digest: `e02871029b86f8d0f2fdef6617feb989413883cc6bdb70e5dec3a47e64c86da8`.
+Profile full digest: `7d501eb8c103831a38c50d237b5d1e2e015a564b9ade8aef09a32dfc39b26ab1`.
+Payload digest: `f0b8d5bf26d3959948e65960fc2b06525a96f964ab3454633eb6c1aaeab9acdb`.
+
+**NEEDS_MORE_EVIDENCE:** no available CUA browser. The changed wave SVG was
+rasterized and visually inspected, and HTML content/renderer byte checks pass;
+full-page browser layout, phone-width and screenshots remain NOT_RUN. Owner
+acceptance of this gap is not recorded. The earlier Markdown precheck gap is
+resolved by the installed pure checker with a lossless in-memory projection;
+Markdown remains authoritative. See Phase2 evidence/chronology-profile-delta/.
+
+All children completed; no duplicate dispatch. Present this one revised package
+for integrated approval-or-change, with the visual gap and unchanged X04/R1
+timing risk. PR15 remains draft; merge and tracking creation await approval.
+Product execution, public export and release remain held under their separate
+owner boundaries. Final-ready remains2026-10-23T12:00Z; deadline19:00Z.
+
+Earlier status and queues below are historical, not current dispatch authority.
+
+---
+
+# Resume checkpoint — 2026-10-13T14:00:48Z
+
+**CONTRACT_FAILURE.** The owner-authorized Bearing 1.1.7 / `opensource-hackathon`
+profile migration is frozen in `journey.json`; its full digest is
+`7d501eb8c103831a38c50d237b5d1e2e015a564b9ade8aef09a32dfc39b26ab1`.
+Prior snapshots and review/repair budgets are preserved. No specialist was dispatched.
+
+Required RE precheck returned exit 1, `No requirement rows`, against the
+owner-authoritative Markdown register (DEC-AFC-SD-027); packaged SDoc positive
+control passes. See Phase 2 `evidence/profile-migration-041/contract-gap.json`.
+Resolve the Markdown-compatible precheck/lint contract before dispatch; plugin
+edits or register conversion are outside this handoff. Do not treat the old
+package's PASS as proof of the pending migration/chronology delta.
+
+The canonical 13-milestone rewrite, RE/TE/PI integration, new package freeze and
+Manifest remain pending. PR15 stays draft; no merge, tracking creation, product
+execution, runtime, or publication authority. No duplicate Opus review.
+The older queues below are historical and must not be restarted.
+
+---
+
+# Fresh-session handoff supersedes the work queue below
+
+Owner selected `opensource-hackathon` and Bearing1.1.7 (DEC-AFC-SD-041).
+Read `docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/HANDOFF-opensource-hackathon.md`
+in the Phase2 worktree or PR15. Opus chronology review completed;13milestone proposal
+saved and not yet applied. No active child. Do not restart the completed review.
+
+# Current planning-lead handoff — AFC-2026-10-11
+
+Updated 2026-10-13T07:44:19Z. Codex is current owner-appointed Planning and Design lead
+(DEC-AFC-SD-039) and controller. Do not duplicate historical dispatches.
+
+## Current state
+
+Phase2 is PLAN_REVIEW_READY, awaiting owner approval. Published candidate `51bc730a880105c9b21d37a7a2dc5da79ada875f`; hosted CI run38364783041 SUCCESS. No child is running. Single independent Muse Code / Muse Spark 1.3 / max
+review ACCEPT at de6db1e3e125f827aa079a6333ba453ec322d34b. Its two advisories were
+resolved in the single aggregate repair: stale TE status and an explicit D05
+carrier for existing hackathon-admin owner confirmations. Review rounds1/1,
+aggregate repairs1/1, no automatic rereview. Deterministic gates PASS,39tests.
+Final planning digest: `67ac7a9071859e8d4ef05b863c3e6e4d4931d2451a162abb5bb8115eeb1b7d46`.
+Tracking payload SHA256: `f485d8f62f72bf09c1e90c57493e03a178ec93ba7e9fc155cd776a32f736f5e9`.
+PR: https://github.com/1wgrumph/amazon-fantasy-companion/pull/15 (draft awaiting
+single integrated owner approval). No issues or milestones created.
+
+Plan directory: `docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/` in
+`$HOME/alphazede/worktrees/amazon-fantasy-companion-phase2-plan`, branch
+`plan/2026-10-12-afc-phase-2`. Complete63active+3withdrawnUIDs,100proofs,
+70commands,52slices,44integrationsteps,39issuegroups/13TDDpairs,5milestones,
+7embeddedviews. Read evidence/P2-review-repair/repair.json and the preserved
+original review under the controlling plan's evidence/P2-review/.
+
+## Next action
+
+Present the frozen package and exact tracking payload for the one integrated
+owner review. After explicit approval, record it, land PR15 through its green
+checks and run P2-L01 on its frozen route to create/read back 5 milestones and
+39 issues, reusing stable identities. Personal repository currently exempt from
+the AlphaZede filing helper; re-evaluate actual scope at filing time. Never
+retry an uncertain creation without searching/readback. Product/backend/device/
+spike/deployment execution remains held until a subsequent owner instruction.
+Publication, credentials, tags/releases, public export/history remain protected.
+Do not infer these from planning/tracking approval. Parent issue#1 stays open.
+
+Control journal remains journey.json in the original planning worktree. Its
+retired branch MUST NEVER BE PUSHED. Publish sanitized records via PR15's safe
+branch. Existing profile snapshots/capabilities and all spent budgets persist.
+Claude weekly limit caused frozen fallback activation for TE/IE; do not switch
+routes merely because time passed. All CLI children use stdin /dev/null unless
+actively streaming. Current review child is finished; check live processes and
+lease before resuming. Do not execute the old handoff's stale work queue.
+
+## Verified prerequisites and limits
+
+AFC#14 merged c2468c9; HQ#320 merged0467883; azedge#304 merged5ac113e;
+AFC#10 merged92f3ed1 (spec0.3,749links,66UIDs,byte-identical build). PR#11 was
+closed as redundant, not merged; its patch was already on main. Merged task
+worktrees/branches cleaned; ST4g4/g5-review evidence preserved. No spec release.
+Current package validators/schema/renderer/gate all PASS. Browser DOM confirms
+7SVGs,no horizontal overflow/no clipped SVG text; screenshot capture unavailable,
+not pixel-review PASS. BRAN unavailable. Tool qualification and APK semantic
+Reverify are future typed gaps, never runtime PASS. Q10/S8 external ledger is
+unrestored. Historical azedge workspace BrokenPipe flake was not reproduced and
+is not claimed fixed. Raw session logs stay private; historical byte normalization
+has a reversible ledger. Local preview is loopback45563, owned serverPID993698;
+keep only while useful for owner review, clean by exactPID, no broadpkill.
+
+---
+
+# Historical handoff from the preceding Orchestrator
 # Orchestrator handoff — AFC-2026-10-11 (next Orchestrator: Codex CLI)
 
 Source: Claude Code Orchestrator session 5cfe4230-d897-4ac4-b3d0-f27628781c70, 2026-10-12, stopped at the Claude session limit.

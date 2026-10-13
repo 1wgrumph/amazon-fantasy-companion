@@ -19,14 +19,14 @@ tags: [modeling, planning, afc, spec-track]
 - Model revision digest (sha256 over the four native sources concatenated in
   sorted filename order — `AFC-Data`, `AFC-Interfaces`, `AFC-States`,
   `AFC-Structure`):
-  - `14fb815b78c2c6817d556c36d351b22dd3996db5f5a7e34a87251ce69bfdcfe5`
-  (ST-3d revision; ST-3b/c revision was
-  `d16b0e3d0badb519dce178475a5a4b6694a736c0bbb0062d51a0270d64efb632`)
+  - `8f5798823b3a9463f8963c7c6fa2cf94d018189edd0ca6160123362d48a075ff`
+  (P2 delta revision; ST-3d revision was
+  `14fb815b78c2c6817d556c36d351b22dd3996db5f5a7e34a87251ce69bfdcfe5`)
 - Per-file sha256:
-  - AFC-Data.sysml `1d342eef5bb5656e0d33b2c3da742000cd1cb889324fc6a77e119bedf91bc3b0`
+  - AFC-Data.sysml `4fcb3174666f80f13e405230c5e0df2498d2c6d62ea584160bd249f966f14031`
   - AFC-Interfaces.sysml `504cfcb82dd83beca534d463dde1c07f2714d56ce26390c4519c5f55ac7a4851`
-  - AFC-States.sysml `7d25c0f1975c11faad3956e19c65e04c74aa971cbb271a01874cc9c6e6e50128`
-  - AFC-Structure.sysml `13d20b60f3d521e5748d91f555f43f319b76d87c0b8b0dad478091a29a8346b`
+  - AFC-States.sysml `3055e76043cf6c1b7763aa7804b61dfd9ec4a8095fb954ec4b77ee1dd9cd7904`
+  - AFC-Structure.sysml `54b87c488cadd65c825b6a66b3308cc7920bd7d32eb05cfa7ac789902dc0221c`
 - Native-or-derived status: the `.sysml` files above are the native sources.
   The four `.svg` views are derived projections: each cites this digest in its
   `<desc>` element and replaces nothing. This file and `allocation.md` are
@@ -49,6 +49,11 @@ tags: [modeling, planning, afc, spec-track]
   import into SysON project `afc-product-models` with zero errors and zero
   warnings; trigger bindings verified. See
   `specialists/sm-syson-receipt.md`.
+  P2 delta closure (DEC-AFC-SD-035): the four amended files re-import into
+  the new SysON project `afc-product-models-p2` with zero errors and zero
+  warnings; the `ScoringPreset` default binding resolves (Data reference
+  count rises 37 → 39 with no resolution warnings). See
+  `specialists/sm-p2-delta-receipt.md`.
 - `S8-LEDGER-MISSING` (observation, non-blocking): the standalone
   `engineering-methods/references/standards-receipts.md` ledger is absent
   from the skills tree (the `engineering-methods` skill directory does not
@@ -80,12 +85,12 @@ tags: [modeling, planning, afc, spec-track]
 |---|---|
 | Engineering question | Which parts and ports implement the product, and where does each live? |
 | Concern | Structure: TV app, backend functions, stores, external systems |
-| Source IDs | AFC-PR-001..065 (structure column via allocation.md Table 1); SD-003, SD-005, SD-007; C4, C6, C8, C9 |
+| Source IDs | AFC-PR-001..066 (structure column via allocation.md Table 1); SD-003, SD-005, SD-007; C4, C6, C8, C9 |
 | View type | Part/port structure (native `.sysml` + derived SVG projection) |
 | Selection rationale | ST-3 row (b) mandates structure (parts, ports); the register allocates every UID to ST-3a elements this view formalizes |
 | Canonical source | `models/AFC-Structure.sysml`, package AFCStructure |
 | Abstraction and omissions | Planned paths in `doc` comments only (greenfield: `tv-app/`, `backend/` do not exist yet); omits operation signatures, deployment mapping, and cross-package `import` bindings per decision 1 |
-| Interpretation | Boxes are parts; labeled ports bind to the interfaces in V-ST3b-2; `externals` members are endpoints, not repo code; `player` exists only under Mode A |
+| Interpretation | Boxes are parts; labeled ports bind to the interfaces in V-ST3b-2; `externals` members are endpoints, not repo code; no companion player — the panel falls back to full-screen (C5) |
 | Supported decision | ST-3c allocation of every UID to structure elements; ST-4 spec figures |
 
 Derived artifact: `models/view-structure.svg` (digest cited in `<desc>`).
@@ -111,7 +116,7 @@ Derived artifact: `models/view-interfaces.svg` (digest cited in `<desc>`).
 | Field | Content |
 |---|---|
 | Engineering question | What lifecycle does an alert, the panel mode, and the device link follow? |
-| Concern | States: alert lifecycle, panel Mode A/B, device link |
+| Concern | States: alert lifecycle, panel modeB/fullScreen, device link |
 | Source IDs | AFC-PR-014, 016..021, 023..028, 038, 041, 047, 048; C5 |
 | View type | State definition (native `.sysml` + derived SVG projection) |
 | Selection rationale | ST-3 row (b) mandates the state model; the register's filter, dedup, correction, fallback and link obligations need explicit lifecycles |
@@ -127,13 +132,13 @@ Derived artifact: `models/view-states.svg` (digest cited in `<desc>`).
 | Field | Content |
 |---|---|
 | Engineering question | What data items flow through the interfaces and states, and what fields ground them? |
-| Concern | Data: GameEvent, Alert, Lineup, PanelState, Settings, plus RoutingOutcome and DeviceCode |
-| Source IDs | AFC-PR-001, 002, 005..009, 012..014, 016..023, 025..027, 029, 031..035, 037..040, 042, 044, 046, 061, 064, 065 |
+| Concern | Data: GameEvent, Alert, Lineup, PanelState, Settings, ScoringPreset, plus RoutingOutcome and DeviceCode |
+| Source IDs | AFC-PR-001, 002, 005..010, 012..014, 016..023, 025..029, 031..035, 037..040, 042, 044, 046, 061, 064..066 |
 | View type | Item/enum definition (native `.sysml` + derived SVG projection) |
-| Selection rationale | ST-3 row (b) mandates the data model; these seven items are exactly the payloads the interfaces and states reference |
+| Selection rationale | ST-3 row (b) mandates the data model; these eight items are exactly the payloads the interfaces and states reference |
 | Canonical source | `models/AFC-Data.sysml`, package AFCData |
-| Abstraction and omissions | Attribute types are KerML-primitive placeholders (decision 3); no multiplicities beyond review-level reading; `Settings` groups fourteen separately-controlled settings as one item with fourteen attributes |
-| Interpretation | `GameEvent` is the ingest fact; `Alert` is the gated, context-carrying emission; `Lineup` has exactly one active source; `PanelState` is the rendered view of Lineup + feed under Settings; `RoutingOutcome` enumerates PR-031 exactly |
+| Abstraction and omissions | Attribute types are KerML-primitive placeholders (decision 3); no multiplicities beyond review-level reading; `Settings` groups fifteen separately-controlled settings as one item with fifteen attributes, `scoringPreset` defaulting to `halfPpr` |
+| Interpretation | `GameEvent` is the ingest fact; `Alert` is the gated, context-carrying emission; `Lineup` has exactly one active source; `PanelState` is the rendered view of Lineup + feed under Settings; `ScoringPreset` selects the manual-lineup preset (PR-065/066); `RoutingOutcome` enumerates PR-031 exactly |
 | Supported decision | ST-3c data allocation; ST-4 contract/data sections |
 
 Derived artifact: `models/view-data.svg` (digest cited in `<desc>`).

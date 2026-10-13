@@ -1,0 +1,47 @@
+Baseline with new regressions; original copy_repo and gate.sh
+command: python3 -m unittest -v test_gate.AC_AFC_CI_01.test_copy_repo_preserves_spec_linked_documents_and_omits_untracked_files test_gate.AC_AFC_CI_04_Spec.test_staged_source_and_rebuilt_output_pass_before_commit test_gate.AC_AFC_CI_04_Spec.test_staged_source_without_rebuilt_output_exits_1
+exit: 1
+test_copy_repo_preserves_spec_linked_documents_and_omits_untracked_files (test_gate.AC_AFC_CI_01.test_copy_repo_preserves_spec_linked_documents_and_omits_untracked_files) ... FAIL
+test_staged_source_and_rebuilt_output_pass_before_commit (test_gate.AC_AFC_CI_04_Spec.test_staged_source_and_rebuilt_output_pass_before_commit) ... FAIL
+test_staged_source_without_rebuilt_output_exits_1 (test_gate.AC_AFC_CI_04_Spec.test_staged_source_without_rebuilt_output_exits_1) ... ok
+
+======================================================================
+FAIL: test_copy_repo_preserves_spec_linked_documents_and_omits_untracked_files (test_gate.AC_AFC_CI_01.test_copy_repo_preserves_spec_linked_documents_and_omits_untracked_files)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/tools/ci/tests/test_gate.py", line 138, in test_copy_repo_preserves_spec_linked_documents_and_omits_untracked_files
+    self.assertEqual(rc, 0, out)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: 1 != 0 : spec/demo/01-introduction.md:14:DOC-LINK
+gate: docs: FAIL check exit 1
+
+
+======================================================================
+FAIL: test_staged_source_and_rebuilt_output_pass_before_commit (test_gate.AC_AFC_CI_04_Spec.test_staged_source_and_rebuilt_output_pass_before_commit)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/tools/ci/tests/test_gate.py", line 235, in test_staged_source_and_rebuilt_output_pass_before_commit
+    self.assertEqual(rc, 0, out)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: 1 != 0 : diff --git a/spec/demo/demo.md b/spec/demo/demo.md
+index e78a3bb..ba8ba28 100644
+--- a/spec/demo/demo.md
++++ b/spec/demo/demo.md
+@@ -77,6 +77,8 @@ matter. Add one captioned table (T1-T8) when 3 or more items share 2 or more
+ attributes, and one captioned figure (F1-F8) when 3 or more entities have a
+ relationship, a time order, or states.>
+
++Staged-source marker sentence added by the gate test.
++
+ ### 1.1 Background
+
+ <One assertive sentence: the problem and history that motivate the system.>
+gate: spec: FAIL check exit 1
+Installed 1 package in 1ms
+Installed 1 package in 1ms
+
+
+----------------------------------------------------------------------
+Ran 3 tests in 1.063s
+
+FAILED (failures=2)

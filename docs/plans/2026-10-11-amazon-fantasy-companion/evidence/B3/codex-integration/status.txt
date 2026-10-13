@@ -1,0 +1,14 @@
+AFC B3 codex-integration: changelog-only reconciliation of reviewed B3 with current main
+branch: afc/b3-appendix-links (PR alphazede/Alphazedehq#320)
+head: 995ffcd600723ee27e000e0acbbf24860f655830
+parents: 1eadf6e634533e842639324ec461088fa257d09d + fb2a015b6a7e25c03afe6f1ada3c6ebedc100308 (origin/main)
+author: Muse Code <1wgrumph+muse-code@gmail.com>, no Co-Authored-By
+merge-tree conflicts: CHANGELOG.md only (1 "changed in both"; all other paths auto-merged)
+resolution: CHANGELOG.md lines 1-39 byte-identical to origin/main; appended HEAD lines 22-24 (PR #320 Fixed bullet) byte-identical
+diff scope vs origin/main: CHANGELOG.md (+3), skills/spec-authoring/scripts/spec_build.py, skills/spec-authoring/tests/test_appendix_links.py
+verify:
+- git diff --check: clean
+- pytest skills/spec-authoring/tests (SPEC_AUTHORING_TRIGGER_RESULTS={"request_1":"MATCH","request_2":"NO_MATCH"}): 81 passed
+- tools/ci/local-gates.sh TMPDIR=/var/tmp/az: passed=2 (diff-check, secret-scan) failed=0 not-applicable=15
+push: origin afc/b3-appendix-links (ordinary push, no force)
+OCR: completed in B3-review-result.md; Reverify N/A (no compiled binary)

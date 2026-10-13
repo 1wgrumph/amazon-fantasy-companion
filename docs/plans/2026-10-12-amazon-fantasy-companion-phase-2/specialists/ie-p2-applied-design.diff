@@ -1,0 +1,29 @@
+145a146,147
+> - The API base URL comes from Gradle property afcApiBaseUrl into BuildConfig.AFC_API_BASE_URL; empty shows "Backend not configured"; on-device and release builds pass -PafcApiBaseUrl=<afc-dev stack output ApiUrl>; the APK carries no secret.
+> - P2-A01 creates `net/ApiClient.kt` and `net/Dto.kt` for every API operation and the stub screens and components with final signatures (AFC-STUB marker), so A02..A05 replace stubs without editing shared files; only P2-A05 edits `MainActivity.kt`.
+206,208c208,214
+<   schedules, parameters) with handler modules stubbed, so B02..B07 change
+<   only their `src/<module>/` and tests; any later template change takes the
+<   `backend-template` lease.
+---
+>   schedules, parameters, stack `afc-dev` in `samconfig.toml`), the
+>   `src/store/` accessors per table, the `src/pipeline/handler.py` chain
+>   (matcher.resolve → alert_policy.evaluate → provider_resolver.resolve →
+>   panel.project) and module stubs with final signatures, so B02..B07 change
+>   only their `src/<module>/` and tests; any later change to those shared
+>   files takes the `backend-template` lease. Deploys tag the stack with the
+>   deployed commit (`GitCommit=<sha>`).
+299,300c305
+< Until S09 (Phase 1) lands and `core.hooksPath` is set, implementers run the
+< gate manually before each commit.
+---
+> Phase 1 S09 has landed (origin/main 17b40b4) and `core.hooksPath=.githooks` is set, so local hooks run the gate.
+312a318
+> Text evidence (adb, dumpsys, run logs) uses the .txt suffix; the root .gitignore ignores *.log.
+430,433c436
+< (GAP) when the JDK or Android SDK is missing. `gate.sh backend`: when
+< `backend/` exists, runs `python3 -m pytest backend/tests/unit
+< backend/tests/contract` and `cfn-lint backend/template.yaml`; exit 3 when a
+< tool is missing. Deployed tests (`backend/tests/deployed`) are not gate
+---
+> (GAP) when the JDK or Android SDK is missing. `gate.sh backend`: when `backend/` exists, runs `python3.12 -m pytest backend/tests/unit backend/tests/contract` and `cfn-lint backend/template.yaml`; exit 3 when python3.12 or cfn-lint is missing. Deployed tests (`backend/tests/deployed`) are not gate

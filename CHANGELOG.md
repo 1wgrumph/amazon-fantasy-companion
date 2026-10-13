@@ -7,7 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add the Phase 2 delivery and verification package with 13 chronological
+  GitHub milestones, 39 work-issue drafts and 52 slices, preserving five
+  technical waves and release checkpoints; product execution remains held
+  pending a separate owner instruction
+  ([PR #15](https://github.com/1wgrumph/amazon-fantasy-companion/pull/15)).
+
 ### Changed
+
+- Freeze the complete `opensource-hackathon` profile under Bearing 1.1.7,
+  including capability settings and Muse contributor mode; preserve spent
+  review limits and validate the Markdown register through the native
+  precheck's in-memory interface
+  ([PR #15](https://github.com/1wgrumph/amazon-fantasy-companion/pull/15)).
 
 - Add architecture specification revision 0.3 with clickable references, per-revision changed sections and PR/diff links; update the vendored authoring tools ([PR #10](https://github.com/1wgrumph/amazon-fantasy-companion/pull/10), [diff](https://github.com/1wgrumph/amazon-fantasy-companion/pull/10/files)).
 

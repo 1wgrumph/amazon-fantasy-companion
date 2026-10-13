@@ -1,0 +1,105 @@
+--- before/amazon-fantasy-companion-phase-2-technical-plan.md
++++ after/amazon-fantasy-companion-phase-2-technical-plan.md
+@@ -55,6 +55,17 @@
+ below cover write sets, seams, gates, schedule, submission and the revision
+ record only.
+
++## Current task boundary
++
++The owner requested planning completion and GitHub issue/milestone
++organization, and appointed this Codex session planning lead (DEC-AFC-SD-039).
++The integrated review approves the proposed plan and, if stated in the
++approval, P2-L01 tracking setup. It does not start the app, backend, device
++spikes, deployment or submission. Those remain on an explicit execution hold
++until the owner requests the subsequent execution stage. This is the current
++task boundary, not an additional plan-review round. Releases, credentials,
++public export and other protected actions retain their separate authority.
++
+ ## Requirements register
+
+ A requirements register exists: the Markdown register
+@@ -228,7 +239,7 @@
+ - New product requirements. A behavior the register does not hold returns
+   to the owner as a scope question.
+ - Owner-only actions: credential creation or retrieval, AWS plan changes,
+-  repository visibility flip, the LICENSE decision and file, release
++  repository visibility flip, license choice (already settled as Apache-2.0), release
+   publication, video upload, external feedback, Devpost submission (C9).
+ - The engineering-methods S8 ledger restore (Q10): a separate Alphazedehq
+   task, not this Lifecycle.
+@@ -256,9 +267,9 @@
+ | `fire-tv-stick` | The single stick (adb, installs, provider sessions) | P2-X01..X04, X07, X09, X10, X11, X12; on-device visual review steps of P2-A01..A05 |
+ | `aws-afc-dev` | The Free-plan account deployment | P2-L02, P2-L03, deployed-API test runs, P2-X09, P2-X10 |
+ | `live-game-window` | A live NFL window | Shared by slices whose other leases are disjoint (P2-X05 host-only capture may hold it together with P2-X03, P2-X09, P2-X10 or P2-X12 on the stick); it serializes only competing demands on fire-tv-stick or aws-afc-dev during the game |
+-| `tv-app-manifest` | `tv-app/app/src/main/AndroidManifest.xml` | P2-A01 (creates, declaring every component and permission), then one of P2-A02..A05 at a time |
+-| `tv-app-gradle` | `tv-app/app/build.gradle.kts`, `tv-app/gradle/libs.versions.toml` | P2-A01 (creates); P2-A02..A05 own entries one at a time; P2-R1..R5 version bump |
+-| `backend-template` | `backend/template.yaml`, `backend/samconfig.toml`, `backend/requirements.txt`, `backend/requirements-dev.txt`, `backend/src/api/openapi.yaml`, `backend/src/store/`, `backend/src/pipeline/`, `backend/tests/conftest.py` | P2-B01 (creates); later edits one at a time, declared in the PR body |
++| `tv-app-manifest` | `tv-app/app/src/main/AndroidManifest.xml` | P2-A01T creates empty bootstrap manifest; P2-A01 completes every component and permission after verified red; then one of P2-A02..A05 at a time |
++| `tv-app-gradle` | `tv-app/app/build.gradle.kts`, `tv-app/gradle/libs.versions.toml` | P2-A01T creates empty build/test harness; P2-A01 completes runtime/build and release-signing configuration after verified red; P2-A02..A05 own entries one at a time; P2-R1..R5 version bump |
++| `backend-template` | `backend/template.yaml`, `backend/samconfig.toml`, `backend/requirements.txt`, `backend/requirements-dev.txt`, `backend/src/api/openapi.yaml`, `backend/src/store/`, `backend/src/pipeline/`, `backend/tests/conftest.py`, `backend/tests/deployed/conftest.py` | P2-B01T creates test/bootstrap/shared conftest under its bounded write set; P2-B01 creates the product shared artifacts; later authorized edits one at a time, declared in the PR body; module Test Implementers own distinct deployed directories and do not edit shared conftest without this lease. |
+ | `main-landing` | Merging to `main` and the `CHANGELOG.md` append | Landing procedure; one merge at a time; before each merge CMD-PR-CHECKS (every check on the head commit passes, including gate / hygiene and each path-selected gate / <area>); merge only with gh pr merge --rebase or --merge; delete the remote branch. While the repository is private, GitHub enforces no ruleset; after the OA-5 visibility flip the Orchestrator applies the main ruleset (PR-only, required checks, no squash). |
+
+ ### Milestones (D3; ready to create after approval)
+@@ -281,7 +292,11 @@
+ five milestones and the work issues defined by the frozen implementation
+ graph. One issue represents each logical deliverable; a Test Implementer
+ slice ending in T shares the Product Implementer's issue. Every slice maps
+-to exactly one issue and one milestone; P2-L01 itself tracks the setup work.
++to exactly one issue, and each issue has one final-completion milestone;
++P2-L01 itself tracks setup. X05 starts in Wave 1 and supplies M1's historical-
++fixture checkpoint, but its single issue belongs to M2 because the final
++live-timing verdict is due there. Passing the M1 checkpoint does not close
++that partially completed issue or claim live evidence.
+ An unselected conditional slice remains a labeled conditional issue, never
+ an implicitly authorized task. Existing matching issues are reused by stable
+ slice IDs; duplicate issues or milestones are not created.
+@@ -321,7 +336,7 @@
+ |---|---|
+ | Wave 1 | At approval: P2-X01 (needs OA-1; holds `fire-tv-stick`; its first install starts the spike_panel_max clock), P2-X05 (ESPN capture; first live capture TNF 10-15; earlier captures are labeled historical), P2-B01T, P2-D01, P2-G01T. P2-A01T becomes ready after P2-X01 qualifies the host build tools. As slots free: P2-L01, then P2-A01 after A01T, P2-B01 after B01T, P2-G01T at once (Phase 1 S09 merged on 2026-10-12, origin/main 17b40b4), P2-G01 after G01T. P2-A01 and P2-B01 land after P2-G01; P2-X05 PR 1 lands after P2-B01. P2-R1 after every other M1 slice has merged. |
+ | Wave 2 | P2-X04 holds fire-tv-stick from P2-X01's release until its verdict or first_install_at + spike_panel_max, without interruption; P2-A01's on-device review queues behind it and runs between P2-X04 and P2-X02. P2-X04 immediately after P2-X01 (stick), then P2-X02, P2-X03 PR 1 (desk evidence, then the stick is released) and P2-X07, all serialized on `fire-tv-stick`; P2-X03 PR 2 (Prime Video TNF check) holds the stick and `live-game-window` for the 2026-10-15 game only, while P2-X05 PR 2 captures the same game host-only; the stick chain counts as one agent. P2-B02T/B02 after P2-X05 PR 1 lands fixtures (completed games with historical provenance; no prior live-capture claim). P2-B03T/B03 after P2-B01. P2-A02T/A02 after P2-A01. P2-L02 after P2-B01 and OA-3. P2-X06: Yahoo path after P2-B03 is deployed (OA-2), manual path at T_yahoo; its verdict configures P2-L03. P2-R2 last (after P2-R1). |
+-| Wave 3 | Red slices first in critical-path order: P2-B05T, P2-B04T, P2-B06T, P2-A03T, P2-A05T; then greens as reds finish; then P2-B07T/B07, P2-A04T/A04. P2-A03 needs P2-X02; P2-A04 needs P2-X03 and P2-B06; P2-A05 needs P2-X04 and P2-B07. P2-L03 after B04..B07 merge. P2-X09 on Sun 2026-10-18 holds `fire-tv-stick`, `aws-afc-dev` and `live-game-window`. P2-R3 last. |
++| Wave 3 | Dispatch ready red slices under cap 5: P2-B04T first; P2-B05T after its verified red/shared-fixture handoff; P2-B06T, P2-A03T and P2-A05T when their own prerequisites hold. Greens follow their verified red receipts; P2-B07T/B07 and P2-A04T/A04 proceed as dependencies/leases permit. P2-A03 needs P2-X02; P2-A04 needs P2-X03 and P2-B06; P2-A05 needs P2-X04 and P2-B07. P2-L03 after B04..B07 merge. P2-X09 on Sun 2026-10-18 holds `fire-tv-stick`, `aws-afc-dev` and `live-game-window`. P2-R3 last. |
+ | Wave 4 | P2-X10 on Mon 2026-10-19 MNF (corrections, starter change, Sunday defects re-checked). P2-D02 after all required P2-X01..X07 verdicts and PR #10 merged, plus P2-X11 terminal disposition when selected; include every landed verdict through the specification freeze. P2-X11 only if OD-AFC-03 = yes and M3 exited on time; dropped at 2026-10-21T12:00:00Z if unverified. Defect slices dispatch per defect on bug-triager when their write set does not overlap a running slice. P2-R4 last. |
+ | Wave 5 | P2-D03, P2-D04, P2-D05 in parallel; P2-SCR1 after M4 (Scribe, not counted); P2-R5 after those four merge; P2-L05 at the P2-R5 merge commit; P2-X12 on the final APK in the Thu 2026-10-22 TNF window, landing a docs-only manifest PR after the candidate. |
+
+@@ -338,7 +353,7 @@
+   APP[Package approved] --> L01[P2-L01 milestones]
+   APP --> X01[P2-X01 device baseline]
+   APP --> X05[P2-X05 ESPN capture]
+-  APP --> A01T[P2-A01T] --> A01[P2-A01 tv scaffold]
++  X01 --> A01T[P2-A01T host preparation ready] --> A01[P2-A01 tv scaffold]
+   APP --> B01T[P2-B01T] --> B01[P2-B01 backend skeleton + link]
+   APP --> D01[P2-D01 Vnv areas]
+   S09[Phase 1 S09 gate, merged] --> G01T[P2-G01T] --> G01[P2-G01 tvapp/backend areas]
+@@ -371,6 +386,13 @@
+   L03[P2-L03 deploy] --> X09
+   X09 --> X10[P2-X10 MNF hardening]
+   X04 --> D02[P2-D02 spec revision]
++  X01 --> D02
++  X02 --> D02
++  X03 -->|final verdict| D02
++  X05 -->|final verdict| D02
++  X06 --> D02
++  X07 --> D02
++  X11[P2-X11 if selected] -->|selected terminal disposition| D02
+   X10 --> D03[P2-D03 README]
+   X10 --> D05[P2-D05 demo plan]
+   X10 --> D04[P2-D04 write-up]
+@@ -392,7 +414,7 @@
+ | OA-2 | Q7: Yahoo application submitted now; if approved, the owner stores the client id and secret as SSM SecureString parameters in aws-afc-dev and completes the OAuth consent in a browser. After P2-L02 reports the stack's ApiUrl, register the deployed /link callback as the Yahoo app redirect URI. | P2-X06 (by T_yahoo) | Yahoo path only; manual path proceeds (C6) |
+ | OA-3 | Q8: AWS Free-plan account created and the named CLI profile `afc-dev` configured on the development host. | P2-L02 (M2) | Deployed-API cases; local backend work proceeds |
+ | OA-4 | Provider apps installed and signed in on the stick: Prime Video; ESPN; DirecTV Stream (current subscription); YouTube TV if a subscription exists. | P2-X01's first install (Prime Video signed in at minimum; the spike_panel_max clock starts at that install); ESPN, DirecTV Stream and YouTube TV before P2-X03 | Provider routes without a session are recorded as `accessUnknown` or `appAbsent` |
+-| OA-5 | License: commit the Apache-2.0 `LICENSE` file (or authorize an agent pull request carrying the standard Apache-2.0 text) and flip the repository to public after the M5 secrets scan. | M5 judge access | Public judge access |
++| OA-5 | Authorize the exact public export and visibility change after the M5 history/content review. Apache-2.0 is already selected; P2-D03 prepares its standard LICENSE file as ordinary agent work. | M5 judge access | Public judge access; no public flip from a secrets scan alone |
+ | OA-6 | ESPN unofficial JSON terms reviewed for public submission (C3). | P2-D04 final (M5) | Final write-up wording |
+ | OA-7 | Devpost project draft, public demo video upload (YouTube or Vimeo), submission with Fire TV track and AWS Builder fields, before T_deadline; judge access kept through T_judge_access. | M5 handover | Submission |
+ | OA-8 | Authorize each release publication (P2-R1..R5) and any external feedback sending. | Each milestone exit | Release stays a prepared draft |
+@@ -469,7 +491,7 @@
+ | OD-AFC-P2-01 | Review cadence boundary for Phase 2. The frozen Reviewer cadence is `phase`. | **Apply the Phase 1 precedent (OA-AFC-A3 = A, DEC-AFC-APPROVAL-001):** each pull request is reviewed once at its own integration step. Listed so the owner can confirm it holds for Phase 2. |
+ | OD-AFC-P2-02 | Protected provider video cannot be captured by `adb` (RISK-AFC-P2-09). **A:** owner films the TV for shots showing provider video; on-device captures cover the companion UI; `dumpsys` window geometry evidences no overlap. **B:** demo and evidence use companion UI captures only, with provider video described, not shown. | **A.** The panel-beside-video and Watch moments are the two standout moments of issue #1; B would show neither. |
+ | OD-AFC-P2-03 | Release versioning for the per-milestone releases (DEC-AFC-SD-038). | Pre-releases `v0.1.0`..`v0.4.0` at M1..M4 and `v1.0.0` at M5, each a GitHub release on this repository drawn from `CHANGELOG.md`; each publication owner-authorized (OA-8). |
+-| OD-AFC-P2-04 | Timing of the visibility flip and LICENSE (OA-5). | Flip on 2026-10-22 after the M5 hygiene scan passes on `main`, so judge access and the public video link can be verified before T_deadline. |
++| OD-AFC-P2-04 | Timing of the visibility flip and LICENSE (OA-5). | Prepare for 2026-10-22, subject to owner authorization of the exact public surface/history. The private repository already contains planning prompts and profile routes; a secret/path scan alone does not authorize exporting those. If the existing history cannot be shared, return the bounded clean-export/history decision before any public flip. LICENSE preparation is agent work under the settled Apache-2.0 choice. |
+ | OD-AFC-P2-05 | Model alignment applied during planning (`tvApp.player` removed, `PanelMode.fullScreen`, AFC-PR-066 allocated; `specialists/sm-p2-delta-receipt.md`) and PR-047 allocation PLAYER → SHELL (`specialists/re-p2-delta-receipt.md`). The approved spec text predates them; P2-D02 revises spec §1.2.1, §4.1.12, §4.1.99, §4.7 and figure F7 to match. | **Approve** as Phase 2 design (spec §4.7 deferred this to Phase 2 design). |
+
+ Closed by owner decision before this package: Q4, Q5, Q9, P1..P3, D1

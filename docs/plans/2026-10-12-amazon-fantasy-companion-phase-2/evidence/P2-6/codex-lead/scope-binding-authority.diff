@@ -1,0 +1,30 @@
+--- before/authority.json
++++ after/authority.json
+@@ -50,7 +50,8 @@
+     "DEC-AFC-SD-036",
+     "DEC-AFC-SD-037",
+     "DEC-AFC-SD-038",
+-    "DEC-AFC-APPROVAL-ST5"
++    "DEC-AFC-APPROVAL-ST5",
++    "DEC-AFC-SD-039"
+   ],
+   "granting_owner_decisions_note": "Proposed execution envelope. Integrated planning/tracking approval does not activate product execution; the current-task hold stays until a subsequent owner execution instruction. Explicit tracking approval may authorize P2-L01 only. Record the exact package and instruction before making any grant effective.",
+   "allowed": {
+@@ -69,7 +70,7 @@
+       "adb to the owner's Fire TV stick on the local network: install and uninstall our debug and release APKs, input key events, screencap, screenrecord, dumpsys, getprop",
+       "sam build and sam deploy of backend/template.yaml to the owner's Free-plan account through the owner-configured named profile afc-dev, and run deployed tests against it",
+       "create GitHub milestones M1..M5 and read them back (P2-L01)",
+-      "file issues through the issue-label policy tool in this repository; close tracked issues after their fix merges and acceptance passes"
++      "After explicit planning/tracking approval, create the reviewed P2-L01 work issues through the repository-applicable workflow: mandatory issue-label helper when policy covers the target, otherwise native GitHub creation with body/label/target preflight and saved-state readback; close only fully accepted work, leaving partial work open"
+     ],
+     "paths": [
+       "tv-app/**",
+@@ -174,6 +175,7 @@
+     "planning_completion": true,
+     "tracking_setup": "P2-L01 only after explicit integrated approval",
+     "product_execution": "held until subsequent owner execution instruction",
+-    "publication": "separate owner authority; history/content scope review required"
++    "publication": "separate owner authority; history/content scope review required",
++    "filing_scope": "Current personal repository is outside the AlphaZede helper scope; re-evaluate at action time, preserve the policy and use the target repository workflow with identical validation obligations."
+   }
+ }

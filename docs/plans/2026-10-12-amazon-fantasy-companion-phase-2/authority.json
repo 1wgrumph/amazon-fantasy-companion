@@ -1,0 +1,181 @@
+{
+  "schema_version": "1",
+  "schema": "bearing-lite/authority.schema.json",
+  "id": "AUTH-AFC-2026-10-12-P2-001",
+  "state": "proposed",
+  "subject": {
+    "lifecycle": "AFC-2026-10-11",
+    "title": "Amazon Fantasy Companion Phase 2: implementation, milestones, submission",
+    "plan_dir": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/",
+    "deadline": "2026-10-23T19:00:00Z",
+    "phase": "Phase 2 (DEC-AFC-SD-023 P2-6/P2-7): product implementation from the approved spec, milestones M01..M13, submission readiness"
+  },
+  "repositories": [
+    {
+      "repository": "github:1wgrumph/amazon-fantasy-companion",
+      "role": "product and planning repository",
+      "landing": "PR to main; rebase or merge commit; never squash, never force-push, never commit on local main"
+    }
+  ],
+  "baseline": {
+    "repository": "github:1wgrumph/amazon-fantasy-companion",
+    "branch": "plan/2026-10-12-afc-phase-2",
+    "revision": "771c28958f78e611048528aedbd9ed4490f308e1",
+    "package": "the five-artifact Phase 2 planning package in the plan directory, bound by implementation.json journey_settings.planning_review.candidate_digest",
+    "revision_note": "PR #10 head (approved spec content, DEC-AFC-APPROVAL-ST5); the Orchestrator commits the package."
+  },
+  "requirement_register": {
+    "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/requirements-register.md",
+    "sha256": "2ded4228fc3f4703f6843a7d4e631cd884d2d945e860db6bfe8c6f3be3593b9b",
+    "form": "Markdown register (DEC-AFC-SD-027); 66 UIDs, 63 active"
+  },
+  "granting_owner_decisions": [
+    "DEC-AFC-SD-001",
+    "DEC-AFC-SD-003",
+    "DEC-AFC-SD-004",
+    "DEC-AFC-SD-005",
+    "DEC-AFC-SD-007",
+    "DEC-AFC-SD-008",
+    "DEC-AFC-SD-009",
+    "DEC-AFC-SD-010",
+    "DEC-AFC-SD-011",
+    "DEC-AFC-SD-012",
+    "DEC-AFC-PROFILE-001",
+    "DEC-AFC-SD-014",
+    "DEC-AFC-SD-023",
+    "DEC-AFC-SD-024",
+    "DEC-AFC-SD-025",
+    "DEC-AFC-SD-027",
+    "DEC-AFC-SD-035",
+    "DEC-AFC-SD-036",
+    "DEC-AFC-SD-037",
+    "DEC-AFC-SD-038",
+    "DEC-AFC-APPROVAL-ST5",
+    "DEC-AFC-SD-039"
+  ],
+  "granting_owner_decisions_note": "Proposed execution envelope. Integrated planning/tracking approval does not activate product execution; the current-task hold stays until a subsequent owner execution instruction. Explicit tracking approval may authorize P2-L01 only. Record the exact package and instruction before making any grant effective.",
+  "allowed": {
+    "scope": [
+      "Phase 2 slices of implementation.json within their write sets, dependencies and leases",
+      "Defect fixes dispatched on the bug-triager routes per DEC-AFC-SD-037 within write sets named by triage",
+      "Creating GitHub milestones M01..M13 exactly as approved (P2-L01)",
+      "Preparing (not publishing) one release per technical-wave checkpoint W1..W5 through release-process"
+    ],
+    "actions": [
+      "create worktrees under <workspace>/worktrees/ and branches",
+      "commit with the agent author identity",
+      "push lane branches, open pull requests, merge by rebase or merge commit after one Reviewer review, at most one repair round and a green gate",
+      "add the CHANGELOG.md [Unreleased] entry at landing",
+      "run scan-software-supply-chain and install scanned tools (Android command-line tools and platform-tools, AWS SAM CLI, cfn-lint, pinned Python test dependencies) on the development host",
+      "adb to the owner's Fire TV stick on the local network: install and uninstall our debug and release APKs, input key events, screencap, screenrecord, dumpsys, getprop",
+      "sam build and sam deploy of backend/template.yaml to the owner's Free-plan account through the owner-configured named profile afc-dev, and run deployed tests against it",
+      "create GitHub milestones M01..M13 and read them back (P2-L01)",
+      "After explicit planning/tracking approval, create the reviewed P2-L01 work issues through the repository-applicable workflow: mandatory issue-label helper when policy covers the target, otherwise native GitHub creation with body/label/target preflight and saved-state readback; close only fully accepted work, leaving partial work open"
+    ],
+    "paths": [
+      "tv-app/**",
+      "backend/**",
+      "spikes/**",
+      "evidence/visual/**",
+      "evidence/e2e/**",
+      "evidence/demo/**",
+      "tools/ci/**",
+      ".githooks/**",
+      ".github/workflows/**",
+      "docs/vnv/**",
+      "docs/developer-feedback/**",
+      "docs/submission/**",
+      "README.md",
+      "CHANGELOG.md",
+      "spec/amazon-fantasy-companion/** (P2-D02 only, after PR #10 merges)",
+      "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/**",
+      "LICENSE"
+    ]
+  },
+  "prohibited": {
+    "scope": [
+      "New product requirements or behavior outside the register (scope change returns to the owner)",
+      "Messaging and community features (AFC-PR-057)",
+      "Mode A sample footage or any companion video player (DEC-AFC-SD-035)",
+      "Any LLM or API-key service",
+      "Hardware performance benchmarking or measured performance claims"
+    ],
+    "actions": [
+      "AWS account creation, plan upgrade, payment method or any paid-only service (C4)",
+      "credential creation, retrieval, printing or copying (Yahoo client secret, OAuth tokens, AWS keys); agents use the named profile and SSM by role only",
+      "Yahoo developer application and OAuth consent (owner)",
+      "LICENSE decision, repository visibility flip, release publication, video upload, Devpost submission, judge/reviewer access, external feedback (C9)",
+      "squash merge, force-push, commit on local main, git switch, destructive git on unmerged work",
+      "route or profile change outside the frozen profiles and their fallback conditions",
+      "device purchase or platform switch (C1)",
+      "upstream issue or PR to any third-party project",
+      "Current-task hold: no Phase 2 product/backend/spike/deployment execution from planning or tracking approval alone; owner must request the subsequent execution stage. P2-L01 tracking setup may be explicitly approved separately from that hold."
+    ],
+    "paths": [
+      ".env",
+      ".env.*",
+      "any path outside the allowed list"
+    ]
+  },
+  "role_grants": [
+    {
+      "role": "Orchestrator",
+      "grant": "dispatch, leases, landing (including the CHANGELOG.md entry), owner stops, milestone creation, release preparation"
+    },
+    {
+      "role": "Product Implementer / Test Implementer / Light Implementer",
+      "grant": "the write set of the dispatched slice only"
+    },
+    {
+      "role": "Reviewer",
+      "grant": "read-only review of one candidate with OCR delegate mode and Reverify where applicable; no writes"
+    },
+    {
+      "role": "Test Engineer (assurance) and Integration Engineer (execution)",
+      "grant": "read-only assessment and the evidence files named in their packets"
+    },
+    {
+      "role": "Scribe",
+      "grant": "journey.json history and docs/developer-feedback/** transcription"
+    },
+    {
+      "role": "bug-triager Implementer / Reviewer",
+      "grant": "the triage-named write set of one defect; review read-only"
+    }
+  ],
+  "effective": false,
+  "expiry_conditions": [
+    "Phase 2 closeout recorded in the DoD Manifest",
+    "owner revocation or supersession of this envelope",
+    "a change to the approved package digest without owner re-approval",
+    "T_judge_access 2026-11-20 passes"
+  ],
+  "supersedes": [],
+  "approval_receipt": {
+    "status": "pending_integrated_review",
+    "decision_id": null,
+    "approved_at": null,
+    "package": "Phase 2 package at the candidate digest in implementation.json"
+  },
+  "continuation": {
+    "granted": false,
+    "owner_decision_id": "PENDING-DEC-AFC-APPROVAL-P2",
+    "exclusions": [
+      "scope_change",
+      "budget_exhaustion",
+      "owner_hold",
+      "owner_only_actions",
+      "route_or_profile_change",
+      "current_task_product_execution_hold"
+    ],
+    "expires_at": "2026-11-20T23:59:59Z"
+  },
+  "current_task_scope": {
+    "planning_lead_decision": "DEC-AFC-SD-039",
+    "planning_completion": true,
+    "tracking_setup": "P2-L01 only after explicit integrated approval",
+    "product_execution": "held until subsequent owner execution instruction",
+    "publication": "separate owner authority; history/content scope review required",
+    "filing_scope": "Current personal repository is outside the AlphaZede helper scope; re-evaluate at action time, preserve the policy and use the target repository workflow with identical validation obligations."
+  }
+}

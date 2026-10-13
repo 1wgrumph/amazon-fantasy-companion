@@ -14,7 +14,7 @@ Lifecycle AFC-ST-2026-10-12, step ST-2. Register of record per DEC-AFC-SD-027
 DEC-AFC-SD-035 delta (2026-10-12): P1/P2/P3 decided in place (PR-014/023/040); Q3 floor
 in PR-045; Q4 full-screen panel fallback in PR-047/048 with PR-049..051 withdrawn
 (UIDs retained, never renumbered); Q5 order and local-broadcast behavior in PR-029;
-Q9 recorded below; D1 closed by SD-035 delta 2 with PR-065 presets and PR-066 selection. See `specialists/re-sd035-receipt.md`.
+Q9 recorded below; D1 closed by SD-035 delta 2 with PR-065 presets and PR-066 selection. See `specialists/re-sd035-receipt.md`. Phase 2 design delta (2026-10-12): PR-047 reallocates PANEL, PLAYER to PANEL, SHELL and PLAYER is retired (no companion player); see `specialists/re-p2-delta-receipt.md`.
 
 Common fields: STATUS Draft, except AFC-PR-049..051 Withdrawn by DEC-AFC-SD-035 (2026-10-12); OWNER Amazon Fantasy Companion specification;
 VALIDATION_METHOD owner review at ST-5; EXPECTED_RESULT pending Phase 2 verification;
@@ -66,12 +66,13 @@ rationale column context; full assumption/constraint text remains in the ST-2 re
 
 SHELL MainActivity.kt; BUILD build.gradle.kts; MANIFEST AndroidManifest.xml; PROFILE ProfileSettingsScreen.kt;
 DETECTOR AppDetector.kt; ALERTSVC AlertService.kt; NOTIFIER AlertNotifier.kt; LAUNCHER WatchLauncher.kt;
-PANEL LineupPanel.kt; PLAYER CompanionPlayer.kt; IAC backend/template.yaml; AUTH backend/src/device_auth/;
+PANEL LineupPanel.kt; IAC backend/template.yaml; AUTH backend/src/device_auth/;
 API backend/src/api/; INGEST backend/src/feed_ingest/; REPLAY replay.py + fixtures/replay/;
 LINEUP backend/src/lineup/; MATCHER backend/src/matcher/; POLICY backend/src/alert_policy/;
 RESOLVER backend/src/provider_resolver/; PANELSVC backend/src/panel/; SECRET SSM SecureString;
-STORE DynamoDB profile/event tables. Every UID below allocates to ≥1 element; every element
-receives ≥1 UID.
+STORE DynamoDB profile/event tables. PLAYER retired by DEC-AFC-SD-035 (Phase 2 design: no companion player).
+Every active UID below allocates to ≥1 active element; every active element
+receives ≥1 UID. Withdrawn UIDs 049..051 carry no live allocation (historical PLAYER text retained).
 
 ## Register
 
@@ -123,7 +124,7 @@ receives ≥1 UID.
 | AFC-PR-044 | The lineup panel shall reflect the customer's team, league, and display settings. | The panel is a view of the customer's settings, not a second configuration. | Test, system, backend + TV panel. Positive: settings change appears on the panel. Negative: no panel content contradicts recorded settings. VCASE-AFC-PR-044. | PANEL, PANELSVC | #1 right-side panel (consistent with settings) |
 | AFC-PR-045 | The lineup panel shall present lineup text the owner accepts as legible from the couch on the target device, with body text at least 24 px and scores at least 32 px at 1080p. | Couch legibility is judged by the owner on the real target, with a numeric floor per SD-035 (Q3). | Demonstration, tv-app, real stick (SD-001). Positive: owner accepts lineup text as couch-legible in the demonstration and body text measures at least 24 px with scores at least 32 px at 1080p. Negative: owner rejection or under-size text fails the case. VCASE-AFC-PR-045. | PANEL | #1 right-side panel (legible from the couch); SD-035 (Q3) |
 | AFC-PR-046 | The system shall hold lineup panel state consistent with alerts across starter changes and scoring corrections. | Panel and alerts are two views of one truth. | Test, system, AWS deployment. Positive: starter change and correction reach both surfaces with identical corrected facts. Negative: no fact present in one surface and contradicted in the other (suppressed alerts do not break fact agreement; hidden panel refreshes on show). VCASE-AFC-PR-046. | PANELSVC, POLICY | #1 right-side panel (consistency rule) |
-| AFC-PR-047 | When the panel-beside-provider-video spike fails or exceeds 24 hours from first app install, the TV app shall present the lineup panel as a full screen in the companion app. | No Mode A footage per owner decision (SD-035, Q4): the product is alerts + Watch, and the panel fallback is a full screen in our own app. | Demonstration, tv-app, real stick (SD-001); evidence under evidence/visual/ (SD-024). Positive: full-screen lineup panel in the companion app. Negative: no stand-in video, no provider video claimed, and no silent substitution of phone screen, app-switch dashboard, or covering panel. VCASE-AFC-PR-047. | PANEL, PLAYER | #1 panel integration obligation; SD-006; SD-035 (Q4); C5 |
+| AFC-PR-047 | When the panel-beside-provider-video spike fails or exceeds 24 hours from first app install, the TV app shall present the lineup panel as a full screen in the companion app. | No Mode A footage per owner decision (SD-035, Q4): the product is alerts + Watch, and the panel fallback is a full screen in our own app. | Demonstration, tv-app, real stick (SD-001); evidence under evidence/visual/ (SD-024). Positive: full-screen lineup panel in the companion app. Negative: no stand-in video, no provider video claimed, and no silent substitution of phone screen, app-switch dashboard, or covering panel. VCASE-AFC-PR-047. | PANEL, SHELL | #1 panel integration obligation; SD-006; SD-035 (Q4); C5 |
 | AFC-PR-048 | While the lineup panel is shown full-screen in the companion app, the TV app shall route alerts and Watch actions to the real provider apps. | Full-screen panel degrades only the panel video route, never alerting or handoff. | Demonstration, system, real stick (SD-001). Positive: full-screen-panel alert Watch opens the real provider route. Negative: no alert or Watch trapped in the companion app. VCASE-AFC-PR-048. | NOTIFIER, LAUNCHER | SD-006; SD-035 (Q4) (alerts and Watch still go to real providers) |
 | AFC-PR-049 | WITHDRAWN by DEC-AFC-SD-035 (2026-10-12). Original: Mode A sample footage shall carry a CC-BY or CC0 license with credit. | Withdrawal rationale: owner answered NO Mode A sample footage (Q4); the product is alerts + Watch with a full-screen panel fallback per PR-047. UID retained, never renumbered. | Withdrawn — no verification (VCASE-AFC-PR-049 retired). | PLAYER | SD-006a (footage licensing); SD-035 (Q4 withdrawal) |
 | AFC-PR-050 | WITHDRAWN by DEC-AFC-SD-035 (2026-10-12). Original: Mode A playback shall display the label 'Sample footage — not a live broadcast'. | Withdrawal rationale: owner answered NO Mode A sample footage (Q4); no label needed without the footage. UID retained, never renumbered. | Withdrawn — no verification (VCASE-AFC-PR-050 retired). | PLAYER | SD-006a (footage labeling); SD-035 (Q4 withdrawal) |

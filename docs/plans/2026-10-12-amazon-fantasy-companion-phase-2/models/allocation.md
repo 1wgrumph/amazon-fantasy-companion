@@ -7,12 +7,13 @@ tags: [modeling, planning, afc, spec-track]
 
 # AFC allocation: register UID ↔ model element (ST-3c)
 
-Register of record: `requirements-register.md` (65 UIDs AFC-PR-001..065,
-gated PASS at ST-2b per DEC-AFC-SD-027). Model sources: `models/AFC-*.sysml`
-(packages AFCStructure, AFCInterfaces, AFCStates, AFCData), revision digest
-`14fb815b78c2c6817d556c36d351b22dd3996db5f5a7e34a87251ce69bfdcfe5`
-(ST-3d revision; ST-3b/c revision was
-`d16b0e3d0badb519dce178475a5a4b6694a736c0bbb0062d51a0270d64efb632`).
+Register of record: `requirements-register.md` (66 UIDs AFC-PR-001..066:
+63 active, AFC-PR-049..051 Withdrawn by DEC-AFC-SD-035, UIDs retained).
+Model sources: `models/AFC-*.sysml` (packages AFCStructure, AFCInterfaces,
+AFCStates, AFCData), revision digest
+`8f5798823b3a9463f8963c7c6fa2cf94d018189edd0ca6160123362d48a075ff`
+(P2 delta revision; ST-3d revision was
+`14fb815b78c2c6817d556c36d351b22dd3996db5f5a7e34a87251ce69bfdcfe5`).
 
 Element names are dotted paths as declared in the `.sysml` sources
 (`tvApp.panel`, `BackendDeviceLink`, `AlertLifecycle.matched`,
@@ -26,7 +27,14 @@ parent def allocation and is listed per item in Table 2 as `via <parent>`.
 Port defs inherit the allocation of their port usages; signals inherit the
 allocation of their consuming state def.
 
-## Table 1 — UID → model elements (65/65)
+P2 delta (DEC-AFC-SD-035): `tvApp.player` removed with withdrawn
+AFC-PR-049..051 (Mode A sample footage refused, no companion player);
+`PanelMode.modeA` renamed to `PanelMode.fullScreen`; `ScoringPreset`
+(`ppr`, `halfPpr`) and `Settings.scoringPreset` (default `halfPpr`)
+added for AFC-PR-065/066. Withdrawn UIDs appear in Table 1 as
+`Withdrawn (DEC-AFC-SD-035); no element` and attach to no Table 2 row.
+
+## Table 1 — UID → model elements (66/66: 63 active + 3 withdrawn)
 
 | UID | Model elements |
 |---|---|
@@ -76,11 +84,11 @@ allocation of their consuming state def.
 | AFC-PR-044 | tvApp.panel, backend.panelSvc, PanelState, Settings |
 | AFC-PR-045 | tvApp.panel |
 | AFC-PR-046 | backend.panelSvc, backend.policy, PanelState, Alert |
-| AFC-PR-047 | tvApp.panel, tvApp.player, PanelMode, PanelMode.modeB, PanelMode.modeA |
-| AFC-PR-048 | tvApp.notifier, tvApp.launcher, TvProviderLaunch, TvFireOSNotify, PanelMode.modeA |
-| AFC-PR-049 | tvApp.player |
-| AFC-PR-050 | tvApp.player |
-| AFC-PR-051 | tvApp.player |
+| AFC-PR-047 | tvApp.panel, PanelMode, PanelMode.modeB, PanelMode.fullScreen |
+| AFC-PR-048 | tvApp.notifier, tvApp.launcher, TvProviderLaunch, TvFireOSNotify, PanelMode.fullScreen |
+| AFC-PR-049 | Withdrawn (DEC-AFC-SD-035); no element |
+| AFC-PR-050 | Withdrawn (DEC-AFC-SD-035); no element |
+| AFC-PR-051 | Withdrawn (DEC-AFC-SD-035); no element |
 | AFC-PR-052 | tvApp, tvApp.shell, tvApp.manifest, TvFireOSNotify, externals.fireOSNotify |
 | AFC-PR-053 | tvApp.build |
 | AFC-PR-054 | backend, backend.iac |
@@ -94,9 +102,10 @@ allocation of their consuming state def.
 | AFC-PR-062 | tvApp.alertSvc, tvApp.panel |
 | AFC-PR-063 | tvApp.alertSvc, tvApp.panel, tvApp.detector |
 | AFC-PR-064 | backend.ingest, BackendEspn, externals.espn, GameEvent, stores.eventStore |
-| AFC-PR-065 | backend.panelSvc, backend.lineup, PanelState, Lineup |
+| AFC-PR-065 | backend.panelSvc, backend.lineup, PanelState, Lineup, ScoringPreset |
+| AFC-PR-066 | tvApp.profileUI, stores.profileStore, Settings, ScoringPreset |
 
-## Table 2 — model element → UIDs (161 elements)
+## Table 2 — model element → UIDs (164 elements)
 
 ### AFCStructure: port defs, parts, ports
 
@@ -116,13 +125,12 @@ allocation of their consuming state def.
 | tvApp.shell | AFC-PR-041, 052, 057 |
 | tvApp.build | AFC-PR-053, 056 |
 | tvApp.manifest | AFC-PR-015, 052 |
-| tvApp.profileUI | AFC-PR-002, 005, 009, 010, 016, 017, 018, 019, 020, 021, 022, 023, 034, 035, 037, 042, 044 |
+| tvApp.profileUI | AFC-PR-002, 005, 009, 010, 016, 017, 018, 019, 020, 021, 022, 023, 034, 035, 037, 042, 066 |
 | tvApp.detector | AFC-PR-003, 010, 063 |
 | tvApp.alertSvc | AFC-PR-015, 062, 063 |
 | tvApp.notifier | AFC-PR-015, 021, 022, 048, 061 |
 | tvApp.launcher | AFC-PR-030, 031, 032, 033, 035, 036, 048 |
 | tvApp.panel | AFC-PR-039, 040, 041, 042, 043, 044, 045, 047, 061, 062, 063 |
-| tvApp.player | AFC-PR-047, 049, 050, 051 |
 | tvApp.apiPort | AFC-PR-058 |
 | tvApp.notifyPort | AFC-PR-015 |
 | tvApp.launchPort | AFC-PR-030 |
@@ -141,7 +149,7 @@ allocation of their consuming state def.
 | backend.espnPort | AFC-PR-012 |
 | backend.yahooPort | AFC-PR-001 |
 | backend.linkPort | AFC-PR-038 |
-| stores.profileStore | AFC-PR-002, 005 |
+| stores.profileStore | AFC-PR-002, 005, 066 |
 | stores.eventStore | AFC-PR-012, 025, 064 |
 | stores.secrets | AFC-PR-055 |
 | stores.fixtures | AFC-PR-013 |
@@ -187,7 +195,7 @@ allocation of their consuming state def.
 | Element | UIDs or reason |
 |---|---|
 | AlertLifecycle | AFC-PR-014 |
-| PanelMode | AFC-PR-047 |
+| PanelMode | AFC-PR-041, 047 |
 | DeviceLink | AFC-PR-038 |
 | AlertLifecycle.detected | AFC-PR-014 |
 | AlertLifecycle.matched | AFC-PR-014, 024 |
@@ -197,7 +205,7 @@ allocation of their consuming state def.
 | AlertLifecycle.suppressed | AFC-PR-016, 017, 018, 019 |
 | AlertLifecycle.corrected | AFC-PR-026 |
 | PanelMode.modeB | AFC-PR-041, 047 |
-| PanelMode.modeA | AFC-PR-047, 048 |
+| PanelMode.fullScreen | AFC-PR-047, 048 |
 | DeviceLink.unlinked | AFC-PR-038 |
 | DeviceLink.codePending | AFC-PR-038 |
 | DeviceLink.linked | AFC-PR-038 |
@@ -219,7 +227,7 @@ allocation of their consuming state def.
 | AlertLifecycle.t_emitted_delivered | via AlertLifecycle |
 | AlertLifecycle.t_emitted_corrected | via AlertLifecycle |
 | AlertLifecycle.t_delivered_corrected | via AlertLifecycle |
-| PanelMode.t_modeB_modeA | via PanelMode |
+| PanelMode.t_modeB_fullScreen | via PanelMode |
 | DeviceLink.t_unlinked_pending | via DeviceLink |
 | DeviceLink.t_pending_linked | via DeviceLink |
 | DeviceLink.t_pending_expired | via DeviceLink |
@@ -230,10 +238,11 @@ allocation of their consuming state def.
 | Element | UIDs or reason |
 |---|---|
 | GameEvent | AFC-PR-008, 012, 013, 064 |
-| Alert | AFC-PR-014, 015, 023, 025, 026, 027, 029 |
+| Alert | AFC-PR-014, 015, 023, 025, 026, 027, 028, 029, 046 |
 | Lineup | AFC-PR-001, 006, 007, 039, 065 |
 | PanelState | AFC-PR-026, 039, 040, 042, 044, 046, 061, 065 |
-| Settings | AFC-PR-002, 005, 009, 016, 017, 018, 019, 020, 021, 022, 023, 034, 035, 037, 042, 044 |
+| Settings | AFC-PR-002, 005, 009, 010, 016, 017, 018, 019, 020, 021, 022, 023, 034, 035, 037, 042, 044, 066 |
+| ScoringPreset | AFC-PR-065, 066 |
 | RoutingOutcome | AFC-PR-031, 032, 033 |
 | DeviceCode | AFC-PR-038 |
 | GameEvent.score | via GameEvent |
@@ -270,6 +279,9 @@ allocation of their consuming state def.
 | Settings.switchingConfirm | via Settings |
 | Settings.panelPrefs | via Settings |
 | Settings.detectionOptIn | via Settings |
+| Settings.scoringPreset | via Settings |
+| ScoringPreset.ppr | via ScoringPreset |
+| ScoringPreset.halfPpr | via ScoringPreset |
 | RoutingOutcome.gameOpened | via RoutingOutcome |
 | RoutingOutcome.searchOpened | via RoutingOutcome |
 | RoutingOutcome.appHomeOpened | via RoutingOutcome |
@@ -281,13 +293,15 @@ allocation of their consuming state def.
 
 ## Coverage summary
 
-- Table 1: 65/65 register UIDs allocated to ≥1 model element.
-- Table 2: 161/161 model elements carry ≥1 UID, a `via <parent>`
+- Table 1: 66/66 register UIDs recorded (63 active allocated to ≥1 model
+  element; 3 withdrawn recorded with no element).
+- Table 2: 164/164 model elements carry ≥1 UID, a `via <parent>`
   inheritance, or a stated reason (1 reason: `externals` grouping).
-- Element counts: AFCStructure 50 (7 port defs, 4 tops, 31 subparts,
+- Element counts: AFCStructure 49 (7 port defs, 4 tops, 30 subparts,
   8 port usages); AFCInterfaces 24 (8 defs, 16 ends); AFCStates 38
-  (3 defs, 13 states, 10 signals, 12 transitions); AFCData 49 (7 defs,
-  36 attributes, 6 enum values).
+  (3 defs, 13 states, 10 signals, 12 transitions); AFCData 53 (8 defs,
+  37 attributes, 8 enum values).
 - Verified by the probe commands recorded in
-  `specialists/sm-st3bc-receipt.md` (UID coverage, dangling-reference,
-  back-consistency, SVG parse, C7 grep).
+  `specialists/sm-p2-delta-receipt.md` (UID coverage, withdrawn rows,
+  dangling-reference, back-consistency, SVG parse, digest match,
+  no-absolute-paths).

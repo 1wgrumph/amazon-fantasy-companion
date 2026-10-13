@@ -1,0 +1,2699 @@
+{
+  "status": "PROPOSED_NOT_APPROVED_NOT_SUBMITTED",
+  "source_revision": "7f000aff70e435b0cac923931fd818c69111f07d",
+  "approval_boundary": "Planning/tracking approval may authorize P2-L01 only after explicit approval and planning PR landing. Product/backend/spike/deployment and submission execution remain held until a subsequent owner execution instruction. Publication/public export requires separate exact-surface/history authority.",
+  "milestones": [
+    {
+      "stable_id": "M1",
+      "title": "Foundations and device baseline",
+      "due_on": "2026-10-14T23:00:00Z",
+      "due_explanation": "",
+      "description": "Milestone: M1\nDue UTC: 2026-10-14T23:00:00Z\nEntry: This package approved and landed (entry criterion 2); OA-1 (stick located, ADB enabled, model and Fire OS recorded) and OA-4 (Prime Video signed in) for P2-X01; Phase 1 S09 merged (met: origin/main 17b40b4).\nExit: Gate areas `tvapp` and `backend` on `main`; Vnv areas added; `tv-app/` scaffold builds and installs on the stick; backend skeleton with device-code link passes tests; P2-X01 verdict landed with first-install time; ESPN capture tool and first fixtures landed; milestones created and read back; release prepared (P2-R1).\nSlices: P2-L01, P2-X01, P2-X05, P2-D01, P2-G01T, P2-G01, P2-A01T, P2-A01, P2-B01T, P2-B01, P2-R1\n",
+      "saved_number": null,
+      "saved_url": null
+    },
+    {
+      "stable_id": "M2",
+      "title": "Spike verdicts and backend baseline",
+      "due_on": "2026-10-17T01:00:00Z",
+      "due_explanation": "(T_yahoo + 6 h for the P2-X06 verdict pull request and P2-R2)",
+      "description": "Milestone: M2\nDue UTC: 2026-10-17T01:00:00Z\nExplanation: (T_yahoo + 6 h for the P2-X06 verdict pull request and P2-R2)\nEntry: M1 exit for device and backend slices; OA-3 (AWS account and `afc-dev` profile) and OA-10 (link passphrase) for P2-L02; OA-4 (ESPN, DirecTV Stream, YouTube TV signed in) for P2-X03.\nExit: Verdicts landed for panel (within spike_panel_max), notification, provider links (TNF check included), detection, ESPN live timing, Yahoo or manual; ingest and lineup slices merged; profile/settings UI merged with visual review; backend deployed to aws-afc-dev with link and profile smoke; release prepared (P2-R2).\nSlices: P2-X04, P2-X02, P2-X03, P2-X07, P2-X06, P2-B02T, P2-B02, P2-B03T, P2-B03, P2-A02T, P2-A02, P2-L02, P2-R2\n",
+      "saved_number": null,
+      "saved_url": null
+    },
+    {
+      "stable_id": "M3",
+      "title": "End-to-end on the stick",
+      "due_on": "2026-10-19T12:00:00Z",
+      "due_explanation": "",
+      "description": "Milestone: M3\nDue UTC: 2026-10-19T12:00:00Z\nEntry: M2 verdicts; T_yahoo outcome applied.\nExit: On Sun 2026-10-18 with simultaneous live games: alert over provider playback → Watch → recorded routing outcome on the stick; panel in the verdict's mode with live points and freshness; matcher, policy, resolver, panel service, alert, Watch and panel UI merged; release prepared (P2-R3).\nSlices: P2-B04T, P2-B04, P2-B05T, P2-B05, P2-B06T, P2-B06, P2-B07T, P2-B07, P2-A03T, P2-A03, P2-A04T, P2-A04, P2-A05T, P2-A05, P2-L03, P2-X09, P2-R3\n",
+      "saved_number": null,
+      "saved_url": null
+    },
+    {
+      "stable_id": "M4",
+      "title": "Feature complete and hardened",
+      "due_on": "2026-10-21T23:00:00Z",
+      "due_explanation": "",
+      "description": "Milestone: M4\nDue UTC: 2026-10-21T23:00:00Z\nEntry: M3 exit.\nExit: Corrections and starter changes verified live or by labeled replay plus live check on Mon 2026-10-19; every active register case has passing evidence or an owner-accepted typed gap; no unresolved actionable review defect at any priority without explicit owner acceptance of residual risk; D1 revision landed (AC-AFC-P2-SPEC-01); Alexa stretch verdict if OD-AFC-03 = yes; release prepared (P2-R4).\nSlices: P2-X10, P2-D02, P2-X11, P2-R4\n",
+      "saved_number": null,
+      "saved_url": null
+    },
+    {
+      "stable_id": "M5",
+      "title": "Submission ready",
+      "due_on": "2026-10-23T12:00:00Z",
+      "due_explanation": "",
+      "description": "Milestone: M5\nDue UTC: 2026-10-23T12:00:00Z\nEntry: M4 exit; OA-5 (LICENSE file and visibility flip) before judge-access verification; OA-6 (ESPN terms) before the write-up is final.\nExit: README and setup verified from a clean checkout; write-up, demo plan and clips ready; developer feedback assembled and sanitized; final APK tagged, hashed and Reverify run; Assurance Test Engineer and Integration Engineer execution verdicts on the M5 candidate; release prepared (P2-R5); owner checklist for submission handed over.\nSlices: P2-D03, P2-D04, P2-D05, P2-SCR1, P2-R5, P2-L05, P2-X12\nOA-5 authorizes exact public export/history; LICENSE preparation is D03 agent work under settled Apache-2.0. Scans alone do not authorize visibility change.\n",
+      "saved_number": null,
+      "saved_url": null
+    }
+  ],
+  "issues": [
+    {
+      "stable_id": "AFC-2026-10-11/P2-L01",
+      "group": "P2-L01",
+      "slices": [
+        "P2-L01"
+      ],
+      "kind": "documentation",
+      "labels_proposed": [
+        "documentation"
+      ],
+      "title": "[P2-L01] After integrated approval, create/read back M1..M5 and one issue per logical deliverable, combining TDD pairs",
+      "milestone": "M1",
+      "body": "## Origin\n\nPhase 2 approved-planning candidate; stable ID `AFC-2026-10-11/P2-L01`. Slices: P2-L01.\n\n## Harness / version\n\nPlanning baseline `7f000aff70e435b0cac923931fd818c69111f07d`; execution tool pins and candidate identities will be recorded in the assigned slice evidence. No runtime execution claimed.\n\n## What\n\nAfter integrated approval, create/read back M1..M5 and one issue per logical deliverable, combining TDD pairs; use reviewed payloads, duplicate search, policy-tool dry-run/submit, labels and milestone/dependency readback; record slice-to-issue mapping.\n\n## Current evidence\n\nProspective plan and SEIT allocations only. Product execution remains held until a subsequent owner instruction.\n\n## Expected\n\nFinal-completion milestone: M1.\nRequirements: AC-AFC-P2-DX-01, AC-AFC-P2-LAND-01, AC-AFC-P2-MS-01, AC-AFC-P2-PATH-01, AC-AFC-P2-REL-01, AC-AFC-P2-REV-01, RISK-AFC-P2-10.\nProof rows: SEIT-AFC-P2-DX-01, SEIT-AFC-P2-LAND-01, SEIT-AFC-P2-MS-01, SEIT-AFC-P2-PATH-01, SEIT-AFC-P2-REL-01, SEIT-AFC-P2-REV-01, SEIT-RISK-AFC-P2-10.\n\n## Acceptance\n\nComplete every listed slice/proof duty in its allocated environment; retain typed gaps. Required review, gates and evidence must pass before closure. Partial work stays open.\nOwner blockers: Applicable OA/OD actions per approved plan\n",
+      "dependencies": [],
+      "proof_rows": [
+        "SEIT-AFC-P2-DX-01",
+        "SEIT-AFC-P2-LAND-01",
+        "SEIT-AFC-P2-MS-01",
+        "SEIT-AFC-P2-PATH-01",
+        "SEIT-AFC-P2-REL-01",
+        "SEIT-AFC-P2-REV-01",
+        "SEIT-RISK-AFC-P2-10"
+      ],
+      "requirement_ids": [
+        "AC-AFC-P2-DX-01",
+        "AC-AFC-P2-LAND-01",
+        "AC-AFC-P2-MS-01",
+        "AC-AFC-P2-PATH-01",
+        "AC-AFC-P2-REL-01",
+        "AC-AFC-P2-REV-01",
+        "RISK-AFC-P2-10"
+      ],
+      "conditional": false,
+      "saved_number": null,
+      "saved_url": null,
+      "reuse_rule": "Search all open and closed issues by stable ID and slice IDs; exactly one matching identity => reuse. Ambiguity/multiple matches => stop, never create another."
+    },
+    {
+      "stable_id": "AFC-2026-10-11/P2-X01",
+      "group": "P2-X01",
+      "slices": [
+        "P2-X01"
+      ],
+      "kind": "enhancement",
+      "labels_proposed": [
+        "enhancement"
+      ],
+      "title": "[P2-X01] SP-1: scan and install Android command-line and platform tools, connect adb to the stick, record model / Fire OS / API level, build and inst",
+      "milestone": "M1",
+      "body": "## Origin\n\nPhase 2 approved-planning candidate; stable ID `AFC-2026-10-11/P2-X01`. Slices: P2-X01.\n\n## Harness / version\n\nPlanning baseline `7f000aff70e435b0cac923931fd818c69111f07d`; execution tool pins and candidate identities will be recorded in the assigned slice evidence. No runtime execution claimed.\n\n## What\n\nSP-1: scan and install Android command-line and platform tools, connect adb to the stick, record model / Fire OS / API level, build and install the starter at its pinned commit, record `first_install_at`; stop at VERDICT.md. spikes/sp1-device/.gitignore ignores local.properties, .gradle/, build/; text evidence uses the .txt suffix. Qualify scanned JDK17, Android SDK/platform/build-tools (apkanalyzer/apksigner), Gradle wrapper and starter before A01T; record actual compatible pins.\n\n## Current evidence\n\nProspective plan and SEIT allocations only. Product execution remains held until a subsequent owner instruction.\n\n## Expected\n\nFinal-completion milestone: M1.\nRequirements: AC-AFC-P2-DX-01, AC-AFC-P2-LAND-01, AC-AFC-P2-PATH-01, AC-AFC-P2-REL-01, AC-AFC-P2-REV-01, AC-AFC-P2-SPIKE-01, AC-AFC-P2-SPIKE-02, AC-AFC-P2-SUPPLY-01, AFC-PR-052, AFC-PR-053, RISK-AFC-P2-01, RISK-AFC-P2-10.\nProof rows: SEIT-AFC-P2-DX-01, SEIT-AFC-P2-LAND-01, SEIT-AFC-P2-PATH-01, SEIT-AFC-P2-REL-01, SEIT-AFC-P2-REV-01, SEIT-AFC-P2-SPIKE-01, SEIT-AFC-P2-SPIKE-02, SEIT-AFC-P2-SUPPLY-01, SEIT-AFC-PR-052, SEIT-AFC-PR-053, SEIT-RISK-AFC-P2-01, SEIT-RISK-AFC-P2-10.\n\n## Acceptance\n\nComplete every listed slice/proof duty in its allocated environment; retain typed gaps. Required review, gates and evidence must pass before closure. Partial work stays open.\nOwner blockers: {\"owner_actions\": [\"OA-1\", \"OA-4\"], \"open_decisions\": []}\n",
+      "dependencies": [],
+      "proof_rows": [
+        "SEIT-AFC-P2-DX-01",
+        "SEIT-AFC-P2-LAND-01",
+        "SEIT-AFC-P2-PATH-01",
+        "SEIT-AFC-P2-REL-01",
+        "SEIT-AFC-P2-REV-01",
+        "SEIT-AFC-P2-SPIKE-01",
+        "SEIT-AFC-P2-SPIKE-02",
+        "SEIT-AFC-P2-SUPPLY-01",
+        "SEIT-AFC-PR-052",
+        "SEIT-AFC-PR-053",
+        "SEIT-RISK-AFC-P2-01",
+        "SEIT-RISK-AFC-P2-10"
+      ],
+      "requirement_ids": [
+        "AC-AFC-P2-DX-01",
+        "AC-AFC-P2-LAND-01",
+        "AC-AFC-P2-PATH-01",
+        "AC-AFC-P2-REL-01",
+        "AC-AFC-P2-REV-01",
+        "AC-AFC-P2-SPIKE-01",
+        "AC-AFC-P2-SPIKE-02",
+        "AC-AFC-P2-SUPPLY-01",
+        "AFC-PR-052",
+        "AFC-PR-053",
+        "RISK-AFC-P2-01",
+        "RISK-AFC-P2-10"
+      ],
+      "conditional": false,
+      "saved_number": null,
+      "saved_url": null,
+      "reuse_rule": "Search all open and closed issues by stable ID and slice IDs; exactly one matching identity => reuse. Ambiguity/multiple matches => stop, never create another."
+    },
+    {
+      "stable_id": "AFC-2026-10-11/P2-X05",
+      "group": "P2-X05",
+      "slices": [
+        "P2-X05"
+      ],
+      "kind": "enhancement",
+      "labels_proposed": [
+        "enhancement"
+      ],
+      "title": "[P2-X05] SP-5 in two pull requests. PR 1 (M1): record the ESPN scoreboard and summary endpoints and the capture tool",
+      "milestone": "M2",
+      "body": "## Origin\n\nPhase 2 approved-planning candidate; stable ID `AFC-2026-10-11/P2-X05`. Slices: P2-X05.\n\n## Harness / version\n\nPlanning baseline `7f000aff70e435b0cac923931fd818c69111f07d`; execution tool pins and candidate identities will be recorded in the assigned slice evidence. No runtime execution claimed.\n\n## What\n\nSP-5 in two pull requests. PR 1 (M1): record the ESPN scoreboard and summary endpoints and the capture tool; capture fixtures per CONTRACT-AFC-P2-FIXTURE from completed games (completed 2026-10-11 and 2026-10-12 games with historical/replay provenance; October 12 is no longer a remaining live opportunity; first planned live capture is TNF 2026-10-15); stop at an interim VERDICT.md (verdict PARTIAL, live timing pending) plus fixtures.…\n\n## Current evidence\n\nProspective plan and SEIT allocations only. Product execution remains held until a subsequent owner instruction.\n\n## Expected\n\nFinal-completion milestone: M2.\nRequirements: AC-AFC-P2-DX-01, AC-AFC-P2-LAND-01, AC-AFC-P2-PATH-01, AC-AFC-P2-REL-01, AC-AFC-P2-REV-01, AC-AFC-P2-SPIKE-01, AFC-PR-012, AFC-PR-013, AFC-PR-064, RISK-AFC-P2-05, RISK-AFC-P2-08, RISK-AFC-P2-10.\nProof rows: SEIT-AFC-P2-DX-01, SEIT-AFC-P2-LAND-01, SEIT-AFC-P2-PATH-01, SEIT-AFC-P2-REL-01, SEIT-AFC-P2-REV-01, SEIT-AFC-P2-SPIKE-01, SEIT-AFC-PR-012, SEIT-AFC-PR-013, SEIT-AFC-PR-064, SEIT-RISK-AFC-P2-05, SEIT-RISK-AFC-P2-08, SEIT-RISK-AFC-P2-10.\nDependencies (URLs substituted from saved mapping):\n- P2-B01: PR 1 landing only (IE-P2-F02)\n\n## Acceptance\n\nComplete every listed slice/proof duty in its allocated environment; retain typed gaps. Required review, gates and evidence must pass before closure. Partial work stays open.\nM1 checkpoint: historical fixtures only. Keep this issue open until M2 final live-timing/correction verdict and all acceptance evidence; M1 completion is not live proof.\nOwner blockers: Applicable OA/OD actions per approved plan\n",
+      "dependencies": [
+        {
+          "group": "P2-B01",
+          "source_slice": "P2-B01",
+          "target_slice": "P2-X05",
+          "condition": "PR 1 landing only (IE-P2-F02)",
+          "url": null
+        }
+      ],
+      "proof_rows": [
+        "SEIT-AFC-P2-DX-01",
+        "SEIT-AFC-P2-LAND-01",
+        "SEIT-AFC-P2-PATH-01",
+        "SEIT-AFC-P2-REL-01",
+        "SEIT-AFC-P2-REV-01",
+        "SEIT-AFC-P2-SPIKE-01",
+        "SEIT-AFC-PR-012",
+        "SEIT-AFC-PR-013",
+        "SEIT-AFC-PR-064",
+        "SEIT-RISK-AFC-P2-05",
+        "SEIT-RISK-AFC-P2-08",
+        "SEIT-RISK-AFC-P2-10"
+      ],
+      "requirement_ids": [
+        "AC-AFC-P2-DX-01",
+        "AC-AFC-P2-LAND-01",
+        "AC-AFC-P2-PATH-01",
+        "AC-AFC-P2-REL-01",
+        "AC-AFC-P2-REV-01",
+        "AC-AFC-P2-SPIKE-01",
+        "AFC-PR-012",
+        "AFC-PR-013",
+        "AFC-PR-064",
+        "RISK-AFC-P2-05",
+        "RISK-AFC-P2-08",
+        "RISK-AFC-P2-10"
+      ],
+      "conditional": false,
+      "saved_number": null,
+      "saved_url": null,
+      "reuse_rule": "Search all open and closed issues by stable ID and slice IDs; exactly one matching identity => reuse. Ambiguity/multiple matches => stop, never create another."
+    },
+    {
+      "stable_id": "AFC-2026-10-11/P2-D01",
+      "group": "P2-D01",
+      "slices": [
+        "P2-D01"
+      ],
+      "kind": "documentation",
+      "labels_proposed": [
+        "documentation"
+      ],
+      "title": "[P2-D01] Vnv areas tv-app, backend, device-integration and index update",
+      "milestone": "M1",
+      "body": "## Origin\n\nPhase 2 approved-planning candidate; stable ID `AFC-2026-10-11/P2-D01`. Slices: P2-D01.\n\n## Harness / version\n\nPlanning baseline `7f000aff70e435b0cac923931fd818c69111f07d`; execution tool pins and candidate identities will be recorded in the assigned slice evidence. No runtime execution claimed.\n\n## What\n\nVnv areas tv-app, backend, device-integration and index update; stop when the `docs` area passes.\n\n## Current evidence\n\nProspective plan and SEIT allocations only. Product execution remains held until a subsequent owner instruction.\n\n## Expected\n\nFinal-completion milestone: M1.\nRequirements: AC-AFC-P2-DX-01, AC-AFC-P2-LAND-01, AC-AFC-P2-PATH-01, AC-AFC-P2-REL-01, AC-AFC-P2-REV-01, AC-AFC-P2-VNV-01, RISK-AFC-P2-10.\nProof rows: SEIT-AFC-P2-DX-01, SEIT-AFC-P2-LAND-01, SEIT-AFC-P2-PATH-01, SEIT-AFC-P2-REL-01, SEIT-AFC-P2-REV-01, SEIT-AFC-P2-VNV-01, SEIT-RISK-AFC-P2-10.\n\n## Acceptance\n\nComplete every listed slice/proof duty in its allocated environment; retain typed gaps. Required review, gates and evidence must pass before closure. Partial work stays open.\nOwner blockers: Applicable OA/OD actions per approved plan\n",
+      "dependencies": [],
+      "proof_rows": [
+        "SEIT-AFC-P2-DX-01",
+        "SEIT-AFC-P2-LAND-01",
+        "SEIT-AFC-P2-PATH-01",
+        "SEIT-AFC-P2-REL-01",
+        "SEIT-AFC-P2-REV-01",
+        "SEIT-AFC-P2-VNV-01",
+        "SEIT-RISK-AFC-P2-10"
+      ],
+      "requirement_ids": [
+        "AC-AFC-P2-DX-01",
+        "AC-AFC-P2-LAND-01",
+        "AC-AFC-P2-PATH-01",
+        "AC-AFC-P2-REL-01",
+        "AC-AFC-P2-REV-01",
+        "AC-AFC-P2-VNV-01",
+        "RISK-AFC-P2-10"
+      ],
+      "conditional": false,
+      "saved_number": null,
+      "saved_url": null,
+      "reuse_rule": "Search all open and closed issues by stable ID and slice IDs; exactly one matching identity => reuse. Ambiguity/multiple matches => stop, never create another."
+    },
+    {
+      "stable_id": "AFC-2026-10-11/P2-G01",
+      "group": "P2-G01",
+      "slices": [
+        "P2-G01T",
+        "P2-G01"
+      ],
+      "kind": "enhancement",
+      "labels_proposed": [
+        "enhancement"
+      ],
+      "title": "[P2-G01] Implement the areas, hook arguments and Actions jobs",
+      "milestone": "M1",
+      "body": "## Origin\n\nPhase 2 approved-planning candidate; stable ID `AFC-2026-10-11/P2-G01`. Slices: P2-G01T, P2-G01.\n\n## Harness / version\n\nPlanning baseline `7f000aff70e435b0cac923931fd818c69111f07d`; execution tool pins and candidate identities will be recorded in the assigned slice evidence. No runtime execution claimed.\n\n## What\n\nImplement the areas, hook arguments and Actions jobs; scan new pinned actions; stop when G01T is green and the workflow checker passes. Qualify and bind SEIT coverage/mutation tools with positive/negative controls; unavailable remains a blocking typed gap.\n\n## Current evidence\n\nProspective plan and SEIT allocations only. Product execution remains held until a subsequent owner instruction.\n\n## Expected\n\nFinal-completion milestone: M1.\nRequirements: AC-AFC-P2-DX-01, AC-AFC-P2-GATE-01, AC-AFC-P2-LAND-01, AC-AFC-P2-PATH-01, AC-AFC-P2-REL-01, AC-AFC-P2-REV-01, AC-AFC-P2-SUPPLY-01, AFC-PR-056, RISK-AFC-P2-10, RISK-AFC-P2-11, RISK-AFC-P2-12.\nProof rows: SEIT-AFC-P2-DX-01, SEIT-AFC-P2-GATE-01, SEIT-AFC-P2-LAND-01, SEIT-AFC-P2-PATH-01, SEIT-AFC-P2-REL-01, SEIT-AFC-P2-REV-01, SEIT-AFC-P2-SUPPLY-01, SEIT-AFC-PR-056, SEIT-RISK-AFC-P2-10, SEIT-RISK-AFC-P2-11, SEIT-RISK-AFC-P2-12.\n\n## Acceptance\n\nComplete every listed slice/proof duty in its allocated environment; retain typed gaps. Required review, gates and evidence must pass before closure. Partial work stays open.\nOwner blockers: Applicable OA/OD actions per approved plan\n",
+      "dependencies": [],
+      "proof_rows": [
+        "SEIT-AFC-P2-DX-01",
+        "SEIT-AFC-P2-GATE-01",
+        "SEIT-AFC-P2-LAND-01",
+        "SEIT-AFC-P2-PATH-01",
+        "SEIT-AFC-P2-REL-01",
+        "SEIT-AFC-P2-REV-01",
+        "SEIT-AFC-P2-SUPPLY-01",
+        "SEIT-AFC-PR-056",
+        "SEIT-RISK-AFC-P2-10",
+        "SEIT-RISK-AFC-P2-11",
+        "SEIT-RISK-AFC-P2-12"
+      ],
+      "requirement_ids": [
+        "AC-AFC-P2-DX-01",
+        "AC-AFC-P2-GATE-01",
+        "AC-AFC-P2-LAND-01",
+        "AC-AFC-P2-PATH-01",
+        "AC-AFC-P2-REL-01",
+        "AC-AFC-P2-REV-01",
+        "AC-AFC-P2-SUPPLY-01",
+        "AFC-PR-056",
+        "RISK-AFC-P2-10",
+        "RISK-AFC-P2-11",
+        "RISK-AFC-P2-12"
+      ],
+      "conditional": false,
+      "saved_number": null,
+      "saved_url": null,
+      "reuse_rule": "Search all open and closed issues by stable ID and slice IDs; exactly one matching identity => reuse. Ambiguity/multiple matches => stop, never create another."
+    },
+    {
+      "stable_id": "AFC-2026-10-11/P2-A01",
+      "group": "P2-A01",
+      "slices": [
+        "P2-A01T",
+        "P2-A01"
+      ],
+      "kind": "enhancement",
+      "labels_proposed": [
+        "enhancement"
+      ],
+      "title": "[P2-A01] Scaffold `tv-app/` from the starter (scanned), rename package, minSdk 25, shell, ApiClient, LinkScreen, complete manifest and Gradle files",
+      "milestone": "M1",
+      "body": "## Origin\n\nPhase 2 approved-planning candidate; stable ID `AFC-2026-10-11/P2-A01`. Slices: P2-A01T, P2-A01.\n\n## Harness / version\n\nPlanning baseline `7f000aff70e435b0cac923931fd818c69111f07d`; execution tool pins and candidate identities will be recorded in the assigned slice evidence. No runtime execution claimed.\n\n## What\n\nScaffold `tv-app/` from the starter (scanned), rename package, minSdk 25, shell, ApiClient, LinkScreen, complete manifest and Gradle files; install on the stick and run PROC-VISUAL-REVIEW; stop when green and visual review captured.; net/ApiClient.kt and net/Dto.kt implement every CONTRACT-AFC-P2-API operation of backend/src/api/openapi.yaml with request and response types (envelope; Profile and Settings incl.…\n\n## Current evidence\n\nProspective plan and SEIT allocations only. Product execution remains held until a subsequent owner instruction.\n\n## Expected\n\nFinal-completion milestone: M1.\nRequirements: AC-AFC-P2-DX-01, AC-AFC-P2-LAND-01, AC-AFC-P2-PATH-01, AC-AFC-P2-REL-01, AC-AFC-P2-REV-01, AC-AFC-P2-SUPPLY-01, AC-AFC-P2-VIS-01, AFC-PR-038, AFC-PR-052, AFC-PR-053, AFC-PR-057, AFC-PR-063, RISK-AFC-P2-10.\nProof rows: SEIT-AFC-P2-DX-01, SEIT-AFC-P2-LAND-01, SEIT-AFC-P2-PATH-01, SEIT-AFC-P2-REL-01, SEIT-AFC-P2-REV-01, SEIT-AFC-P2-SUPPLY-01, SEIT-AFC-P2-VIS-01, SEIT-AFC-PR-038, SEIT-AFC-PR-052, SEIT-AFC-PR-053, SEIT-AFC-PR-057, SEIT-AFC-PR-063, SEIT-RISK-AFC-P2-10.\nDependencies (URLs substituted from saved mapping):\n- P2-X01: Qualified host JDK17/SDK/build-tools preparation receipt with pins and scans; no extra stick slot; missing tool/import/build/collection is preparation gap, not valid red\n- P2-G01: landing\n- P2-X01: SDK installed, stick usable\n- P2-B01: landing (ApiClient builds against openapi.yaml)\n- P2-X04: on-device review step only (stick priority, IE-P2-F07)\n\n## Acceptance\n\nComplete every listed slice/proof duty in its allocated environment; retain typed gaps. Required review, gates and evidence must pass before closure. Partial work stays open.\nOwner blockers: {\"owner_actions\": [\"OA-11\"], \"open_decisions\": []}\n",
+      "dependencies": [
+        {
+          "group": "P2-X01",
+          "source_slice": "P2-X01",
+          "target_slice": "P2-A01T",
+          "condition": "Qualified host JDK17/SDK/build-tools preparation receipt with pins and scans; no extra stick slot; missing tool/import/build/collection is preparation gap, not valid red",
+          "url": null
+        },
+        {
+          "group": "P2-G01",
+          "source_slice": "P2-G01",
+          "target_slice": "P2-A01",
+          "condition": "landing",
+          "url": null
+        },
+        {
+          "group": "P2-X01",
+          "source_slice": "P2-X01",
+          "target_slice": "P2-A01",
+          "condition": "SDK installed, stick usable",
+          "url": null
+        },
+        {
+          "group": "P2-B01",
+          "source_slice": "P2-B01",
+          "target_slice": "P2-A01",
+          "condition": "landing (ApiClient builds against openapi.yaml)",
+          "url": null
+        },
+        {
+          "group": "P2-X04",
+          "source_slice": "P2-X04",
+          "target_slice": "P2-A01",
+          "condition": "on-device review step only (stick priority, IE-P2-F07)",
+          "url": null
+        }
+      ],
+      "proof_rows": [
+        "SEIT-AFC-P2-DX-01",
+        "SEIT-AFC-P2-LAND-01",
+        "SEIT-AFC-P2-PATH-01",
+        "SEIT-AFC-P2-REL-01",
+        "SEIT-AFC-P2-REV-01",
+        "SEIT-AFC-P2-SUPPLY-01",
+        "SEIT-AFC-P2-VIS-01",
+        "SEIT-AFC-PR-038",
+        "SEIT-AFC-PR-052",
+        "SEIT-AFC-PR-053",
+        "SEIT-AFC-PR-057",
+        "SEIT-AFC-PR-063",
+        "SEIT-RISK-AFC-P2-10"
+      ],
+      "requirement_ids": [
+        "AC-AFC-P2-DX-01",
+        "AC-AFC-P2-LAND-01",
+        "AC-AFC-P2-PATH-01",
+        "AC-AFC-P2-REL-01",
+        "AC-AFC-P2-REV-01",
+        "AC-AFC-P2-SUPPLY-01",
+        "AC-AFC-P2-VIS-01",
+        "AFC-PR-038",
+        "AFC-PR-052",
+        "AFC-PR-053",
+        "AFC-PR-057",
+        "AFC-PR-063",
+        "RISK-AFC-P2-10"
+      ],
+      "conditional": false,
+      "saved_number": null,
+      "saved_url": null,
+      "reuse_rule": "Search all open and closed issues by stable ID and slice IDs; exactly one matching identity => reuse. Ambiguity/multiple matches => stop, never create another."
+    },
+    {
+      "stable_id": "AFC-2026-10-11/P2-B01",
+      "group": "P2-B01",
+      "slices": [
+        "P2-B01T",
+        "P2-B01"
+      ],
+      "kind": "enhancement",
+      "labels_proposed": [
+        "enhancement"
+      ],
+      "title": "[P2-B01] Complete `template.yaml` (every function, route, table, schedule, parameter), API router, OpenAPI file, device_auth, stubs for B02..B07 modu",
+      "milestone": "M1",
+      "body": "## Origin\n\nPhase 2 approved-planning candidate; stable ID `AFC-2026-10-11/P2-B01`. Slices: P2-B01T, P2-B01.\n\n## Harness / version\n\nPlanning baseline `7f000aff70e435b0cac923931fd818c69111f07d`; execution tool pins and candidate identities will be recorded in the assigned slice evidence. No runtime execution claimed.\n\n## What\n\nComplete `template.yaml` (every function, route, table, schedule, parameter), API router, OpenAPI file, device_auth, stubs for B02..B07 modules, pinned requirements (scanned); stop when green and `sam validate`/cfn-lint pass.; backend/src/store/ implements one accessor per table operation of DES-AFC-P2-BACKEND (Profiles, Links, Events, Alerts, Lineups, Panels) with item shapes from models/AFC-Data.sysml;…\n\n## Current evidence\n\nProspective plan and SEIT allocations only. Product execution remains held until a subsequent owner instruction.\n\n## Expected\n\nFinal-completion milestone: M1.\nRequirements: AC-AFC-P2-DX-01, AC-AFC-P2-LAND-01, AC-AFC-P2-PATH-01, AC-AFC-P2-REL-01, AC-AFC-P2-REV-01, AC-AFC-P2-SUPPLY-01, AFC-PR-038, AFC-PR-054, AFC-PR-055, AFC-PR-057, AFC-PR-058, AFC-PR-059, RISK-AFC-P2-07, RISK-AFC-P2-10.\nProof rows: SEIT-AFC-P2-DX-01, SEIT-AFC-P2-LAND-01, SEIT-AFC-P2-PATH-01, SEIT-AFC-P2-REL-01, SEIT-AFC-P2-REV-01, SEIT-AFC-P2-SUPPLY-01, SEIT-AFC-PR-038, SEIT-AFC-PR-054, SEIT-AFC-PR-055, SEIT-AFC-PR-057, SEIT-AFC-PR-058, SEIT-AFC-PR-059, SEIT-RISK-AFC-P2-07, SEIT-RISK-AFC-P2-10.\nDependencies (URLs substituted from saved mapping):\n- P2-G01: landing\n\n## Acceptance\n\nComplete every listed slice/proof duty in its allocated environment; retain typed gaps. Required review, gates and evidence must pass before closure. Partial work stays open.\nOwner blockers: Applicable OA/OD actions per approved plan\n",
+      "dependencies": [
+        {
+          "group": "P2-G01",
+          "source_slice": "P2-G01",
+          "target_slice": "P2-B01",
+          "condition": "landing",
+          "url": null
+        }
+      ],
+      "proof_rows": [
+        "SEIT-AFC-P2-DX-01",
+        "SEIT-AFC-P2-LAND-01",
+        "SEIT-AFC-P2-PATH-01",
+        "SEIT-AFC-P2-REL-01",
+        "SEIT-AFC-P2-REV-01",
+        "SEIT-AFC-P2-SUPPLY-01",
+        "SEIT-AFC-PR-038",
+        "SEIT-AFC-PR-054",
+        "SEIT-AFC-PR-055",
+        "SEIT-AFC-PR-057",
+        "SEIT-AFC-PR-058",
+        "SEIT-AFC-PR-059",
+        "SEIT-RISK-AFC-P2-07",
+        "SEIT-RISK-AFC-P2-10"
+      ],
+      "requirement_ids": [
+        "AC-AFC-P2-DX-01",
+        "AC-AFC-P2-LAND-01",
+        "AC-AFC-P2-PATH-01",
+        "AC-AFC-P2-REL-01",
+        "AC-AFC-P2-REV-01",
+        "AC-AFC-P2-SUPPLY-01",
+        "AFC-PR-038",
+        "AFC-PR-054",
+        "AFC-PR-055",
+        "AFC-PR-057",
+        "AFC-PR-058",
+        "AFC-PR-059",
+        "RISK-AFC-P2-07",
+        "RISK-AFC-P2-10"
+      ],
+      "conditional": false,
+      "saved_number": null,
+      "saved_url": null,
+      "reuse_rule": "Search all open and closed issues by stable ID and slice IDs; exactly one matching identity => reuse. Ambiguity/multiple matches => stop, never create another."
+    },
+    {
+      "stable_id": "AFC-2026-10-11/P2-R1",
+      "group": "P2-R1",
+      "slices": [
+        "P2-R1"
+      ],
+      "kind": "documentation",
+      "labels_proposed": [
+        "documentation"
+      ],
+      "title": "[P2-R1] Prepare release v0.1.0 via release-process (changelog section, version bump, notes, tag draft)",
+      "milestone": "M1",
+      "body": "## Origin\n\nPhase 2 approved-planning candidate; stable ID `AFC-2026-10-11/P2-R1`. Slices: P2-R1.\n\n## Harness / version\n\nPlanning baseline `7f000aff70e435b0cac923931fd818c69111f07d`; execution tool pins and candidate identities will be recorded in the assigned slice evidence. No runtime execution claimed.\n\n## What\n\nPrepare release v0.1.0 via release-process (changelog section, version bump, notes, tag draft); stop at draft; publish only on OA-8.\n\n## Current evidence\n\nProspective plan and SEIT allocations only. Product execution remains held until a subsequent owner instruction.\n\n## Expected\n\nFinal-completion milestone: M1.\nRequirements: AC-AFC-P2-DX-01, AC-AFC-P2-LAND-01, AC-AFC-P2-PATH-01, AC-AFC-P2-REL-01, AC-AFC-P2-REL-02, AC-AFC-P2-REV-01, RISK-AFC-P2-10.\nProof rows: SEIT-AFC-P2-DX-01, SEIT-AFC-P2-LAND-01, SEIT-AFC-P2-PATH-01, SEIT-AFC-P2-REL-01, SEIT-AFC-P2-REL-02, SEIT-AFC-P2-REV-01, SEIT-RISK-AFC-P2-10.\nDependencies (URLs substituted from saved mapping):\n- P2-L01: merged (every other slice of the milestone)\n- P2-X01: merged (every other slice of the milestone)\n- P2-X05: merged (every other slice of the milestone)\n- P2-D01: merged (every other slice of the milestone)\n- P2-G01: merged (every other slice of the milestone)\n- P2-G01: merged (every other slice of the milestone)\n- P2-A01: merged (every other slice of the milestone)\n- P2-A01: merged (every other slice of the milestone)\n- P2-B01: merged (every other slice of the milestone)\n- P2-B01: merged (every other slice of the milestone)\n\n## Acceptance\n\nComplete every listed slice/proof duty in its allocated environment; retain typed gaps. Required review, gates and evidence must pass before closure. Partial work stays open.\nOwner blockers: {\"owner_actions\": [\"OA-8\"], \"open_decisions\": []}\n",
+      "dependencies": [
+        {
+          "group": "P2-L01",
+          "source_slice": "P2-L01",
+          "target_slice": "P2-R1",
+          "condition": "merged (every other slice of the milestone)",
+          "url": null
+        },
+        {
+          "group": "P2-X01",
+          "source_slice": "P2-X01",
+          "target_slice": "P2-R1",
+          "condition": "merged (every other slice of the milestone)",
+          "url": null
+        },
+        {
+          "group": "P2-X05",
+          "source_slice": "P2-X05",
+          "target_slice": "P2-R1",
+          "condition": "merged (every other slice of the milestone)",
+          "url": null
+        },
+        {
+          "group": "P2-D01",
+          "source_slice": "P2-D01",
+          "target_slice": "P2-R1",
+          "condition": "merged (every other slice of the milestone)",
+          "url": null
+        },
+        {
+          "group": "P2-G01",
+          "source_slice": "P2-G01T",
+          "target_slice": "P2-R1",
+          "condition": "merged (every other slice of the milestone)",
+          "url": null
+        },
+        {
+          "group": "P2-G01",
+          "source_slice": "P2-G01",
+          "target_slice": "P2-R1",
+          "condition": "merged (every other slice of the milestone)",
+          "url": null
+        },
+        {
+          "group": "P2-A01",
+          "source_slice": "P2-A01T",
+          "target_slice": "P2-R1",
+          "condition": "merged (every other slice of the milestone)",
+          "url": null
+        },
+        {
+          "group": "P2-A01",
+          "source_slice": "P2-A01",
+          "target_slice": "P2-R1",
+          "condition": "merged (every other slice of the milestone)",
+          "url": null
+        },
+        {
+          "group": "P2-B01",
+          "source_slice": "P2-B01T",
+          "target_slice": "P2-R1",
+          "condition": "merged (every other slice of the milestone)",
+          "url": null
+        },
+        {
+          "group": "P2-B01",
+          "source_slice": "P2-B01",
+          "target_slice": "P2-R1",
+          "condition": "merged (every other slice of the milestone)",
+          "url": null
+        }
+      ],
+      "proof_rows": [
+        "SEIT-AFC-P2-DX-01",
+        "SEIT-AFC-P2-LAND-01",
+        "SEIT-AFC-P2-PATH-01",
+        "SEIT-AFC-P2-REL-01",
+        "SEIT-AFC-P2-REL-02",
+        "SEIT-AFC-P2-REV-01",
+        "SEIT-RISK-AFC-P2-10"
+      ],
+      "requirement_ids": [
+        "AC-AFC-P2-DX-01",
+        "AC-AFC-P2-LAND-01",
+        "AC-AFC-P2-PATH-01",
+        "AC-AFC-P2-REL-01",
+        "AC-AFC-P2-REL-02",
+        "AC-AFC-P2-REV-01",
+        "RISK-AFC-P2-10"
+      ],
+      "conditional": false,
+      "saved_number": null,
+      "saved_url": null,
+      "reuse_rule": "Search all open and closed issues by stable ID and slice IDs; exactly one matching identity => reuse. Ambiguity/multiple matches => stop, never create another."
+    },
+    {
+      "stable_id": "AFC-2026-10-11/P2-X04",
+      "group": "P2-X04",
+      "slices": [
+        "P2-X04"
+      ],
+      "kind": "enhancement",
+      "labels_proposed": [
+        "enhancement"
+      ],
+      "title": "[P2-X04] SP-4 panel beside provider video: try supported composition routes with Prime Video playing",
+      "milestone": "M2",
+      "body": "## Origin\n\nPhase 2 approved-planning candidate; stable ID `AFC-2026-10-11/P2-X04`. Slices: P2-X04.\n\n## Harness / version\n\nPlanning baseline `7f000aff70e435b0cac923931fd818c69111f07d`; execution tool pins and candidate identities will be recorded in the assigned slice evidence. No runtime execution claimed.\n\n## What\n\nSP-4 panel beside provider video: try supported composition routes with Prime Video playing; verdict modeB only with geometry + capture evidence of no overlap/crop; stop at the earlier of verdict or `first_install_at` + spike_panel_max. spikes/sp4-panel-video/.gitignore ignores local.properties, .gradle/, build/; text evidence uses the .txt suffix.\n\n## Current evidence\n\nProspective plan and SEIT allocations only. Product execution remains held until a subsequent owner instruction.\n\n## Expected\n\nFinal-completion milestone: M2.\nRequirements: AC-AFC-P2-DX-01, AC-AFC-P2-LAND-01, AC-AFC-P2-PATH-01, AC-AFC-P2-REL-01, AC-AFC-P2-REV-01, AC-AFC-P2-SPIKE-01, AC-AFC-P2-SPIKE-02, AFC-PR-041, AFC-PR-047, RISK-AFC-P2-04, RISK-AFC-P2-09, RISK-AFC-P2-10.\nProof rows: SEIT-AFC-P2-DX-01, SEIT-AFC-P2-LAND-01, SEIT-AFC-P2-PATH-01, SEIT-AFC-P2-REL-01, SEIT-AFC-P2-REV-01, SEIT-AFC-P2-SPIKE-01, SEIT-AFC-P2-SPIKE-02, SEIT-AFC-PR-041, SEIT-AFC-PR-047, SEIT-RISK-AFC-P2-04, SEIT-RISK-AFC-P2-09, SEIT-RISK-AFC-P2-10.\nDependencies (URLs substituted from saved mapping):\n- P2-X01: merged\n\n## Acceptance\n\nComplete every listed slice/proof duty in its allocated environment; retain typed gaps. Required review, gates and evidence must pass before closure. Partial work stays open.\nOwner blockers: {\"owner_actions\": [\"OA-4\"], \"open_decisions\": []}\n",
+      "dependencies": [
+        {
+          "group": "P2-X01",
+          "source_slice": "P2-X01",
+          "target_slice": "P2-X04",
+          "condition": "merged",
+          "url": null
+        }
+      ],
+      "proof_rows": [
+        "SEIT-AFC-P2-DX-01",
+        "SEIT-AFC-P2-LAND-01",
+        "SEIT-AFC-P2-PATH-01",
+        "SEIT-AFC-P2-REL-01",
+        "SEIT-AFC-P2-REV-01",
+        "SEIT-AFC-P2-SPIKE-01",
+        "SEIT-AFC-P2-SPIKE-02",
+        "SEIT-AFC-PR-041",
+        "SEIT-AFC-PR-047",
+        "SEIT-RISK-AFC-P2-04",
+        "SEIT-RISK-AFC-P2-09",
+        "SEIT-RISK-AFC-P2-10"
+      ],
+      "requirement_ids": [
+        "AC-AFC-P2-DX-01",
+        "AC-AFC-P2-LAND-01",
+        "AC-AFC-P2-PATH-01",
+        "AC-AFC-P2-REL-01",
+        "AC-AFC-P2-REV-01",
+        "AC-AFC-P2-SPIKE-01",
+        "AC-AFC-P2-SPIKE-02",
+        "AFC-PR-041",
+        "AFC-PR-047",
+        "RISK-AFC-P2-04",
+        "RISK-AFC-P2-09",
+        "RISK-AFC-P2-10"
+      ],
+      "conditional": false,
+      "saved_number": null,
+      "saved_url": null,
+      "reuse_rule": "Search all open and closed issues by stable ID and slice IDs; exactly one matching identity => reuse. Ambiguity/multiple matches => stop, never create another."
+    },
+    {
+      "stable_id": "AFC-2026-10-11/P2-X02",
+      "group": "P2-X02",
+      "slices": [
+        "P2-X02"
+      ],
+      "kind": "enhancement",
+      "labels_proposed": [
+        "enhancement"
+      ],
+      "title": "[P2-X02] SP-2 heads-up notification with Watch/Dismiss from a background service over Prime Video playback",
+      "milestone": "M2",
+      "body": "## Origin\n\nPhase 2 approved-planning candidate; stable ID `AFC-2026-10-11/P2-X02`. Slices: P2-X02.\n\n## Harness / version\n\nPlanning baseline `7f000aff70e435b0cac923931fd818c69111f07d`; execution tool pins and candidate identities will be recorded in the assigned slice evidence. No runtime execution claimed.\n\n## What\n\nSP-2 heads-up notification with Watch/Dismiss from a background service over Prime Video playback; stop at VERDICT.md. spikes/sp2-notify/.gitignore ignores local.properties, .gradle/, build/; text evidence uses the .txt suffix.\n\n## Current evidence\n\nProspective plan and SEIT allocations only. Product execution remains held until a subsequent owner instruction.\n\n## Expected\n\nFinal-completion milestone: M2.\nRequirements: AC-AFC-P2-DX-01, AC-AFC-P2-LAND-01, AC-AFC-P2-PATH-01, AC-AFC-P2-REL-01, AC-AFC-P2-REV-01, AC-AFC-P2-SPIKE-01, AFC-PR-015, AFC-PR-021, RISK-AFC-P2-02, RISK-AFC-P2-10.\nProof rows: SEIT-AFC-P2-DX-01, SEIT-AFC-P2-LAND-01, SEIT-AFC-P2-PATH-01, SEIT-AFC-P2-REL-01, SEIT-AFC-P2-REV-01, SEIT-AFC-P2-SPIKE-01, SEIT-AFC-PR-015, SEIT-AFC-PR-021, SEIT-RISK-AFC-P2-02, SEIT-RISK-AFC-P2-10.\nDependencies (URLs substituted from saved mapping):\n- P2-X04: merged\n\n## Acceptance\n\nComplete every listed slice/proof duty in its allocated environment; retain typed gaps. Required review, gates and evidence must pass before closure. Partial work stays open.\nOwner blockers: {\"owner_actions\": [\"OA-4\"], \"open_decisions\": []}\n",
+      "dependencies": [
+        {
+          "group": "P2-X04",
+          "source_slice": "P2-X04",
+          "target_slice": "P2-X02",
+          "condition": "merged",
+          "url": null
+        }
+      ],
+      "proof_rows": [
+        "SEIT-AFC-P2-DX-01",
+        "SEIT-AFC-P2-LAND-01",
+        "SEIT-AFC-P2-PATH-01",
+        "SEIT-AFC-P2-REL-01",
+        "SEIT-AFC-P2-REV-01",
+        "SEIT-AFC-P2-SPIKE-01",
+        "SEIT-AFC-PR-015",
+        "SEIT-AFC-PR-021",
+        "SEIT-RISK-AFC-P2-02",
+        "SEIT-RISK-AFC-P2-10"
+      ],
+      "requirement_ids": [
+        "AC-AFC-P2-DX-01",
+        "AC-AFC-P2-LAND-01",
+        "AC-AFC-P2-PATH-01",
+        "AC-AFC-P2-REL-01",
+        "AC-AFC-P2-REV-01",
+        "AC-AFC-P2-SPIKE-01",
+        "AFC-PR-015",
+        "AFC-PR-021",
+        "RISK-AFC-P2-02",
+        "RISK-AFC-P2-10"
+      ],
+      "conditional": false,
+      "saved_number": null,
+      "saved_url": null,
+      "reuse_rule": "Search all open and closed issues by stable ID and slice IDs; exactly one matching identity => reuse. Ambiguity/multiple matches => stop, never create another."
+    },
+    {
+      "stable_id": "AFC-2026-10-11/P2-X03",
+      "group": "P2-X03",
+      "slices": [
+        "P2-X03"
+      ],
+      "kind": "enhancement",
+      "labels_proposed": [
+        "enhancement"
+      ],
+      "title": "[P2-X03] SP-3 in two pull requests. PR 1: provider links in order Prime Video, ESPN, DirecTV Stream, YouTube TV, then local broadcast, with desk evid",
+      "milestone": "M2",
+      "body": "## Origin\n\nPhase 2 approved-planning candidate; stable ID `AFC-2026-10-11/P2-X03`. Slices: P2-X03.\n\n## Harness / version\n\nPlanning baseline `7f000aff70e435b0cac923931fd818c69111f07d`; execution tool pins and candidate identities will be recorded in the assigned slice evidence. No runtime execution claimed.\n\n## What\n\nSP-3 in two pull requests. PR 1: provider links in order Prime Video, ESPN, DirecTV Stream, YouTube TV, then local broadcast, with desk evidence (on-demand or live-channel content); write the registry per CONTRACT-AFC-P2-PROVIDER-REGISTRY with verified_outcome from that evidence; release fire-tv-stick; stop at an interim VERDICT.md (Prime Video TNF check pending) plus registry.…\n\n## Current evidence\n\nProspective plan and SEIT allocations only. Product execution remains held until a subsequent owner instruction.\n\n## Expected\n\nFinal-completion milestone: M2.\nRequirements: AC-AFC-P2-DX-01, AC-AFC-P2-LAND-01, AC-AFC-P2-PATH-01, AC-AFC-P2-REL-01, AC-AFC-P2-REV-01, AC-AFC-P2-SPIKE-01, AC-AFC-P2-SPIKE-03, AFC-PR-029, AFC-PR-030, AFC-PR-031, AFC-PR-048, RISK-AFC-P2-03, RISK-AFC-P2-08, RISK-AFC-P2-10.\nProof rows: SEIT-AFC-P2-DX-01, SEIT-AFC-P2-LAND-01, SEIT-AFC-P2-PATH-01, SEIT-AFC-P2-REL-01, SEIT-AFC-P2-REV-01, SEIT-AFC-P2-SPIKE-01, SEIT-AFC-P2-SPIKE-03, SEIT-AFC-PR-029, SEIT-AFC-PR-030, SEIT-AFC-PR-031, SEIT-AFC-PR-048, SEIT-RISK-AFC-P2-03, SEIT-RISK-AFC-P2-08, SEIT-RISK-AFC-P2-10.\nDependencies (URLs substituted from saved mapping):\n- P2-X02: merged\n- P2-B01: merged\n\n## Acceptance\n\nComplete every listed slice/proof duty in its allocated environment; retain typed gaps. Required review, gates and evidence must pass before closure. Partial work stays open.\nOwner blockers: {\"owner_actions\": [\"OA-4\"], \"open_decisions\": []}\n",
+      "dependencies": [
+        {
+          "group": "P2-X02",
+          "source_slice": "P2-X02",
+          "target_slice": "P2-X03",
+          "condition": "merged",
+          "url": null
+        },
+        {
+          "group": "P2-B01",
+          "source_slice": "P2-B01",
+          "target_slice": "P2-X03",
+          "condition": "merged",
+          "url": null
+        }
+      ],
+      "proof_rows": [
+        "SEIT-AFC-P2-DX-01",
+        "SEIT-AFC-P2-LAND-01",
+        "SEIT-AFC-P2-PATH-01",
+        "SEIT-AFC-P2-REL-01",
+        "SEIT-AFC-P2-REV-01",
+        "SEIT-AFC-P2-SPIKE-01",
+        "SEIT-AFC-P2-SPIKE-03",
+        "SEIT-AFC-PR-029",
+        "SEIT-AFC-PR-030",
+        "SEIT-AFC-PR-031",
+        "SEIT-AFC-PR-048",
+        "SEIT-RISK-AFC-P2-03",
+        "SEIT-RISK-AFC-P2-08",
+        "SEIT-RISK-AFC-P2-10"
+      ],
+      "requirement_ids": [
+        "AC-AFC-P2-DX-01",
+        "AC-AFC-P2-LAND-01",
+        "AC-AFC-P2-PATH-01",
+        "AC-AFC-P2-REL-01",
+        "AC-AFC-P2-REV-01",
+        "AC-AFC-P2-SPIKE-01",
+        "AC-AFC-P2-SPIKE-03",
+        "AFC-PR-029",
+        "AFC-PR-030",
+        "AFC-PR-031",
+        "AFC-PR-048",
+        "RISK-AFC-P2-03",
+        "RISK-AFC-P2-08",
+        "RISK-AFC-P2-10"
+      ],
+      "conditional": false,
+      "saved_number": null,
+      "saved_url": null,
+      "reuse_rule": "Search all open and closed issues by stable ID and slice IDs; exactly one matching identity => reuse. Ambiguity/multiple matches => stop, never create another."
+    },
+    {
+      "stable_id": "AFC-2026-10-11/P2-X07",
+      "group": "P2-X07",
+      "slices": [
+        "P2-X07"
+      ],
+      "kind": "enhancement",
+      "labels_proposed": [
+        "enhancement"
+      ],
+      "title": "[P2-X07] SP-7 installed-app and viewing-context detection on the stick's API level",
+      "milestone": "M2",
+      "body": "## Origin\n\nPhase 2 approved-planning candidate; stable ID `AFC-2026-10-11/P2-X07`. Slices: P2-X07.\n\n## Harness / version\n\nPlanning baseline `7f000aff70e435b0cac923931fd818c69111f07d`; execution tool pins and candidate identities will be recorded in the assigned slice evidence. No runtime execution claimed.\n\n## What\n\nSP-7 installed-app and viewing-context detection on the stick's API level; stop at VERDICT.md. spikes/sp7-detection/.gitignore ignores local.properties, .gradle/, build/; text evidence uses the .txt suffix.\n\n## Current evidence\n\nProspective plan and SEIT allocations only. Product execution remains held until a subsequent owner instruction.\n\n## Expected\n\nFinal-completion milestone: M2.\nRequirements: AC-AFC-P2-DX-01, AC-AFC-P2-LAND-01, AC-AFC-P2-PATH-01, AC-AFC-P2-REL-01, AC-AFC-P2-REV-01, AC-AFC-P2-SPIKE-01, AFC-PR-003, AFC-PR-010, RISK-AFC-P2-10.\nProof rows: SEIT-AFC-P2-DX-01, SEIT-AFC-P2-LAND-01, SEIT-AFC-P2-PATH-01, SEIT-AFC-P2-REL-01, SEIT-AFC-P2-REV-01, SEIT-AFC-P2-SPIKE-01, SEIT-AFC-PR-003, SEIT-AFC-PR-010, SEIT-RISK-AFC-P2-10.\nDependencies (URLs substituted from saved mapping):\n- P2-X03: desk part done, stick released\n\n## Acceptance\n\nComplete every listed slice/proof duty in its allocated environment; retain typed gaps. Required review, gates and evidence must pass before closure. Partial work stays open.\nOwner blockers: Applicable OA/OD actions per approved plan\n",
+      "dependencies": [
+        {
+          "group": "P2-X03",
+          "source_slice": "P2-X03",
+          "target_slice": "P2-X07",
+          "condition": "desk part done, stick released",
+          "url": null
+        }
+      ],
+      "proof_rows": [
+        "SEIT-AFC-P2-DX-01",
+        "SEIT-AFC-P2-LAND-01",
+        "SEIT-AFC-P2-PATH-01",
+        "SEIT-AFC-P2-REL-01",
+        "SEIT-AFC-P2-REV-01",
+        "SEIT-AFC-P2-SPIKE-01",
+        "SEIT-AFC-PR-003",
+        "SEIT-AFC-PR-010",
+        "SEIT-RISK-AFC-P2-10"
+      ],
+      "requirement_ids": [
+        "AC-AFC-P2-DX-01",
+        "AC-AFC-P2-LAND-01",
+        "AC-AFC-P2-PATH-01",
+        "AC-AFC-P2-REL-01",
+        "AC-AFC-P2-REV-01",
+        "AC-AFC-P2-SPIKE-01",
+        "AFC-PR-003",
+        "AFC-PR-010",
+        "RISK-AFC-P2-10"
+      ],
+      "conditional": false,
+      "saved_number": null,
+      "saved_url": null,
+      "reuse_rule": "Search all open and closed issues by stable ID and slice IDs; exactly one matching identity => reuse. Ambiguity/multiple matches => stop, never create another."
+    },
+    {
+      "stable_id": "AFC-2026-10-11/P2-X06",
+      "group": "P2-X06",
+      "slices": [
+        "P2-X06"
+      ],
+      "kind": "enhancement",
+      "labels_proposed": [
+        "enhancement"
+      ],
+      "title": "[P2-X06] SP-6 Yahoo: on approval, OAuth read of roster by week and settings via the owner-stored SSM secret",
+      "milestone": "M2",
+      "body": "## Origin\n\nPhase 2 approved-planning candidate; stable ID `AFC-2026-10-11/P2-X06`. Slices: P2-X06.\n\n## Harness / version\n\nPlanning baseline `7f000aff70e435b0cac923931fd818c69111f07d`; execution tool pins and candidate identities will be recorded in the assigned slice evidence. No runtime execution claimed.\n\n## What\n\nSP-6 Yahoo: on approval, OAuth read of roster by week and settings via the owner-stored SSM secret; at T_yahoo without approval, record a FAILS verdict for the Yahoo route selecting labeled manual entry; stop at VERDICT.md.\n\n## Current evidence\n\nProspective plan and SEIT allocations only. Product execution remains held until a subsequent owner instruction.\n\n## Expected\n\nFinal-completion milestone: M2.\nRequirements: AC-AFC-P2-DX-01, AC-AFC-P2-LAND-01, AC-AFC-P2-PATH-01, AC-AFC-P2-REL-01, AC-AFC-P2-REV-01, AC-AFC-P2-SPIKE-01, AFC-PR-001, AFC-PR-006, AFC-PR-007, RISK-AFC-P2-06, RISK-AFC-P2-10.\nProof rows: SEIT-AFC-P2-DX-01, SEIT-AFC-P2-LAND-01, SEIT-AFC-P2-PATH-01, SEIT-AFC-P2-REL-01, SEIT-AFC-P2-REV-01, SEIT-AFC-P2-SPIKE-01, SEIT-AFC-PR-001, SEIT-AFC-PR-006, SEIT-AFC-PR-007, SEIT-RISK-AFC-P2-06, SEIT-RISK-AFC-P2-10.\nDependencies (URLs substituted from saved mapping):\n- P2-L02: Yahoo path only (deployed role)\n- P2-B03: Yahoo path only\n\n## Acceptance\n\nComplete every listed slice/proof duty in its allocated environment; retain typed gaps. Required review, gates and evidence must pass before closure. Partial work stays open.\nOwner blockers: {\"owner_actions\": [\"OA-2\"], \"open_decisions\": []}\n",
+      "dependencies": [
+        {
+          "group": "P2-L02",
+          "source_slice": "P2-L02",
+          "target_slice": "P2-X06",
+          "condition": "Yahoo path only (deployed role)",
+          "url": null
+        },
+        {
+          "group": "P2-B03",
+          "source_slice": "P2-B03",
+          "target_slice": "P2-X06",
+          "condition": "Yahoo path only",
+          "url": null
+        }
+      ],
+      "proof_rows": [
+        "SEIT-AFC-P2-DX-01",
+        "SEIT-AFC-P2-LAND-01",
+        "SEIT-AFC-P2-PATH-01",
+        "SEIT-AFC-P2-REL-01",
+        "SEIT-AFC-P2-REV-01",
+        "SEIT-AFC-P2-SPIKE-01",
+        "SEIT-AFC-PR-001",
+        "SEIT-AFC-PR-006",
+        "SEIT-AFC-PR-007",
+        "SEIT-RISK-AFC-P2-06",
+        "SEIT-RISK-AFC-P2-10"
+      ],
+      "requirement_ids": [
+        "AC-AFC-P2-DX-01",
+        "AC-AFC-P2-LAND-01",
+        "AC-AFC-P2-PATH-01",
+        "AC-AFC-P2-REL-01",
+        "AC-AFC-P2-REV-01",
+        "AC-AFC-P2-SPIKE-01",
+        "AFC-PR-001",
+        "AFC-PR-006",
+        "AFC-PR-007",
+        "RISK-AFC-P2-06",
+        "RISK-AFC-P2-10"
+      ],
+      "conditional": false,
+      "saved_number": null,
+      "saved_url": null,
+      "reuse_rule": "Search all open and closed issues by stable ID and slice IDs; exactly one matching identity => reuse. Ambiguity/multiple matches => stop, never create another."
+    },
+    {
+      "stable_id": "AFC-2026-10-11/P2-B02",
+      "group": "P2-B02",
+      "slices": [
+        "P2-B02T",
+        "P2-B02"
+      ],
+      "kind": "enhancement",
+      "labels_proposed": [
+        "enhancement"
+      ],
+      "title": "[P2-B02] Implement `src/feed_ingest/` and `replay.py`",
+      "milestone": "M2",
+      "body": "## Origin\n\nPhase 2 approved-planning candidate; stable ID `AFC-2026-10-11/P2-B02`. Slices: P2-B02T, P2-B02.\n\n## Harness / version\n\nPlanning baseline `7f000aff70e435b0cac923931fd818c69111f07d`; execution tool pins and candidate identities will be recorded in the assigned slice evidence. No runtime execution claimed.\n\n## What\n\nImplement `src/feed_ingest/` and `replay.py`; stop when green.\n\n## Current evidence\n\nProspective plan and SEIT allocations only. Product execution remains held until a subsequent owner instruction.\n\n## Expected\n\nFinal-completion milestone: M2.\nRequirements: AC-AFC-P2-DX-01, AC-AFC-P2-LAND-01, AC-AFC-P2-PATH-01, AC-AFC-P2-REL-01, AC-AFC-P2-REV-01, AFC-PR-008, AFC-PR-011, AFC-PR-012, AFC-PR-013, AFC-PR-064, RISK-AFC-P2-05, RISK-AFC-P2-10.\nProof rows: SEIT-AFC-P2-DX-01, SEIT-AFC-P2-LAND-01, SEIT-AFC-P2-PATH-01, SEIT-AFC-P2-REL-01, SEIT-AFC-P2-REV-01, SEIT-AFC-PR-008, SEIT-AFC-PR-011, SEIT-AFC-PR-012, SEIT-AFC-PR-013, SEIT-AFC-PR-064, SEIT-RISK-AFC-P2-05, SEIT-RISK-AFC-P2-10.\nDependencies (URLs substituted from saved mapping):\n- P2-X05: PR 1 fixtures on main\n- P2-B01: merged\n\n## Acceptance\n\nComplete every listed slice/proof duty in its allocated environment; retain typed gaps. Required review, gates and evidence must pass before closure. Partial work stays open.\nOwner blockers: Applicable OA/OD actions per approved plan\n",
+      "dependencies": [
+        {
+          "group": "P2-X05",
+          "source_slice": "P2-X05",
+          "target_slice": "P2-B02T",
+          "condition": "PR 1 fixtures on main",
+          "url": null
+        },
+        {
+          "group": "P2-B01",
+          "source_slice": "P2-B01",
+          "target_slice": "P2-B02T",
+          "condition": "merged",
+          "url": null
+        }
+      ],
+      "proof_rows": [
+        "SEIT-AFC-P2-DX-01",
+        "SEIT-AFC-P2-LAND-01",
+        "SEIT-AFC-P2-PATH-01",
+        "SEIT-AFC-P2-REL-01",
+        "SEIT-AFC-P2-REV-01",
+        "SEIT-AFC-PR-008",
+        "SEIT-AFC-PR-011",
+        "SEIT-AFC-PR-012",
+        "SEIT-AFC-PR-013",
+        "SEIT-AFC-PR-064",
+        "SEIT-RISK-AFC-P2-05",
+        "SEIT-RISK-AFC-P2-10"
+      ],
+      "requirement_ids": [
+        "AC-AFC-P2-DX-01",
+        "AC-AFC-P2-LAND-01",
+        "AC-AFC-P2-PATH-01",
+        "AC-AFC-P2-REL-01",
+        "AC-AFC-P2-REV-01",
+        "AFC-PR-008",
+        "AFC-PR-011",
+        "AFC-PR-012",
+        "AFC-PR-013",
+        "AFC-PR-064",
+        "RISK-AFC-P2-05",
+        "RISK-AFC-P2-10"
+      ],
+      "conditional": false,
+      "saved_number": null,
+      "saved_url": null,
+      "reuse_rule": "Search all open and closed issues by stable ID and slice IDs; exactly one matching identity => reuse. Ambiguity/multiple matches => stop, never create another."
+    },
+    {
+      "stable_id": "AFC-2026-10-11/P2-B03",
+      "group": "P2-B03",
+      "slices": [
+        "P2-B03T",
+        "P2-B03"
+      ],
+      "kind": "enhancement",
+      "labels_proposed": [
+        "enhancement"
+      ],
+      "title": "[P2-B03] Implement `src/lineup/`",
+      "milestone": "M2",
+      "body": "## Origin\n\nPhase 2 approved-planning candidate; stable ID `AFC-2026-10-11/P2-B03`. Slices: P2-B03T, P2-B03.\n\n## Harness / version\n\nPlanning baseline `7f000aff70e435b0cac923931fd818c69111f07d`; execution tool pins and candidate identities will be recorded in the assigned slice evidence. No runtime execution claimed.\n\n## What\n\nImplement `src/lineup/`; stop when green.\n\n## Current evidence\n\nProspective plan and SEIT allocations only. Product execution remains held until a subsequent owner instruction.\n\n## Expected\n\nFinal-completion milestone: M2.\nRequirements: AC-AFC-P2-DX-01, AC-AFC-P2-LAND-01, AC-AFC-P2-PATH-01, AC-AFC-P2-REL-01, AC-AFC-P2-REV-01, AFC-PR-001, AFC-PR-006, AFC-PR-007, AFC-PR-065, RISK-AFC-P2-06, RISK-AFC-P2-10.\nProof rows: SEIT-AFC-P2-DX-01, SEIT-AFC-P2-LAND-01, SEIT-AFC-P2-PATH-01, SEIT-AFC-P2-REL-01, SEIT-AFC-P2-REV-01, SEIT-AFC-PR-001, SEIT-AFC-PR-006, SEIT-AFC-PR-007, SEIT-AFC-PR-065, SEIT-RISK-AFC-P2-06, SEIT-RISK-AFC-P2-10.\nDependencies (URLs substituted from saved mapping):\n- P2-B01: merged\n\n## Acceptance\n\nComplete every listed slice/proof duty in its allocated environment; retain typed gaps. Required review, gates and evidence must pass before closure. Partial work stays open.\nOwner blockers: Applicable OA/OD actions per approved plan\n",
+      "dependencies": [
+        {
+          "group": "P2-B01",
+          "source_slice": "P2-B01",
+          "target_slice": "P2-B03T",
+          "condition": "merged",
+          "url": null
+        }
+      ],
+      "proof_rows": [
+        "SEIT-AFC-P2-DX-01",
+        "SEIT-AFC-P2-LAND-01",
+        "SEIT-AFC-P2-PATH-01",
+        "SEIT-AFC-P2-REL-01",
+        "SEIT-AFC-P2-REV-01",
+        "SEIT-AFC-PR-001",
+        "SEIT-AFC-PR-006",
+        "SEIT-AFC-PR-007",
+        "SEIT-AFC-PR-065",
+        "SEIT-RISK-AFC-P2-06",
+        "SEIT-RISK-AFC-P2-10"
+      ],
+      "requirement_ids": [
+        "AC-AFC-P2-DX-01",
+        "AC-AFC-P2-LAND-01",
+        "AC-AFC-P2-PATH-01",
+        "AC-AFC-P2-REL-01",
+        "AC-AFC-P2-REV-01",
+        "AFC-PR-001",
+        "AFC-PR-006",
+        "AFC-PR-007",
+        "AFC-PR-065",
+        "RISK-AFC-P2-06",
+        "RISK-AFC-P2-10"
+      ],
+      "conditional": false,
+      "saved_number": null,
+      "saved_url": null,
+      "reuse_rule": "Search all open and closed issues by stable ID and slice IDs; exactly one matching identity => reuse. Ambiguity/multiple matches => stop, never create another."
+    },
+    {
+      "stable_id": "AFC-2026-10-11/P2-A02",
+      "group": "P2-A02",
+      "slices": [
+        "P2-A02T",
+        "P2-A02"
+      ],
+      "kind": "enhancement",
+      "labels_proposed": [
+        "enhancement"
+      ],
+      "title": "[P2-A02] Implement `profile/` and `detect/` per the P2-X07 verdict (unsupported detection → control hidden with stated limit)",
+      "milestone": "M2",
+      "body": "## Origin\n\nPhase 2 approved-planning candidate; stable ID `AFC-2026-10-11/P2-A02`. Slices: P2-A02T, P2-A02.\n\n## Harness / version\n\nPlanning baseline `7f000aff70e435b0cac923931fd818c69111f07d`; execution tool pins and candidate identities will be recorded in the assigned slice evidence. No runtime execution claimed.\n\n## What\n\nImplement `profile/` and `detect/` per the P2-X07 verdict (unsupported detection → control hidden with stated limit); visual review on the stick; stop when green and reviewed.\n\n## Current evidence\n\nProspective plan and SEIT allocations only. Product execution remains held until a subsequent owner instruction.\n\n## Expected\n\nFinal-completion milestone: M2.\nRequirements: AC-AFC-P2-DX-01, AC-AFC-P2-LAND-01, AC-AFC-P2-PATH-01, AC-AFC-P2-REL-01, AC-AFC-P2-REV-01, AC-AFC-P2-VIS-01, AFC-PR-002, AFC-PR-003, AFC-PR-005, AFC-PR-009, AFC-PR-010, AFC-PR-016, AFC-PR-017, AFC-PR-018, AFC-PR-019, AFC-PR-020, AFC-PR-021, AFC-PR-022, AFC-PR-023, AFC-PR-034, AFC-PR-035, AFC-PR-037, AFC-PR-042, AFC-PR-044, AFC-PR-066, RISK-AFC-P2-10.\nProof rows: SEIT-AFC-P2-DX-01, SEIT-AFC-P2-LAND-01, SEIT-AFC-P2-PATH-01, SEIT-AFC-P2-REL-01, SEIT-AFC-P2-REV-01, SEIT-AFC-P2-VIS-01, SEIT-AFC-PR-002, SEIT-AFC-PR-003, SEIT-AFC-PR-005, SEIT-AFC-PR-009, SEIT-AFC-PR-010, SEIT-AFC-PR-016, SEIT-AFC-PR-017, SEIT-AFC-PR-018, SEIT-AFC-PR-019, SEIT-AFC-PR-020, SEIT-AFC-PR-021, SEIT-AFC-PR-022, SEIT-AFC-PR-023, SEIT-AFC-PR-034, SEIT-AFC-PR-035, SEIT-AFC-PR-037, SEIT-AFC-PR-042, SEIT-AFC-PR-044, SEIT-AFC-PR-066, SEIT-RISK-AFC-P2-10.\nDependencies (URLs substituted from saved mapping):\n- P2-A01: merged\n- P2-X07: merged\n\n## Acceptance\n\nComplete every listed slice/proof duty in its allocated environment; retain typed gaps. Required review, gates and evidence must pass before closure. Partial work stays open.\nOwner blockers: Applicable OA/OD actions per approved plan\n",
+      "dependencies": [
+        {
+          "group": "P2-A01",
+          "source_slice": "P2-A01",
+          "target_slice": "P2-A02T",
+          "condition": "merged",
+          "url": null
+        },
+        {
+          "group": "P2-X07",
+          "source_slice": "P2-X07",
+          "target_slice": "P2-A02",
+          "condition": "merged",
+          "url": null
+        }
+      ],
+      "proof_rows": [
+        "SEIT-AFC-P2-DX-01",
+        "SEIT-AFC-P2-LAND-01",
+        "SEIT-AFC-P2-PATH-01",
+        "SEIT-AFC-P2-REL-01",
+        "SEIT-AFC-P2-REV-01",
+        "SEIT-AFC-P2-VIS-01",
+        "SEIT-AFC-PR-002",
+        "SEIT-AFC-PR-003",
+        "SEIT-AFC-PR-005",
+        "SEIT-AFC-PR-009",
+        "SEIT-AFC-PR-010",
+        "SEIT-AFC-PR-016",
+        "SEIT-AFC-PR-017",
+        "SEIT-AFC-PR-018",
+        "SEIT-AFC-PR-019",
+        "SEIT-AFC-PR-020",
+        "SEIT-AFC-PR-021",
+        "SEIT-AFC-PR-022",
+        "SEIT-AFC-PR-023",
+        "SEIT-AFC-PR-034",
+        "SEIT-AFC-PR-035",
+        "SEIT-AFC-PR-037",
+        "SEIT-AFC-PR-042",
+        "SEIT-AFC-PR-044",
+        "SEIT-AFC-PR-066",
+        "SEIT-RISK-AFC-P2-10"
+      ],
+      "requirement_ids": [
+        "AC-AFC-P2-DX-01",
+        "AC-AFC-P2-LAND-01",
+        "AC-AFC-P2-PATH-01",
+        "AC-AFC-P2-REL-01",
+        "AC-AFC-P2-REV-01",
+        "AC-AFC-P2-VIS-01",
+        "AFC-PR-002",
+        "AFC-PR-003",
+        "AFC-PR-005",
+        "AFC-PR-009",
+        "AFC-PR-010",
+        "AFC-PR-016",
+        "AFC-PR-017",
+        "AFC-PR-018",
+        "AFC-PR-019",
+        "AFC-PR-020",
+        "AFC-PR-021",
+        "AFC-PR-022",
+        "AFC-PR-023",
+        "AFC-PR-034",
+        "AFC-PR-035",
+        "AFC-PR-037",
+        "AFC-PR-042",
+        "AFC-PR-044",
+        "AFC-PR-066",
+        "RISK-AFC-P2-10"
+      ],
+      "conditional": false,
+      "saved_number": null,
+      "saved_url": null,
+      "reuse_rule": "Search all open and closed issues by stable ID and slice IDs; exactly one matching identity => reuse. Ambiguity/multiple matches => stop, never create another."
+    },
+    {
+      "stable_id": "AFC-2026-10-11/P2-L02",
+      "group": "P2-L02",
+      "slices": [
+        "P2-L02"
+      ],
+      "kind": "enhancement",
+      "labels_proposed": [
+        "enhancement"
+      ],
+      "title": "[P2-L02] `sam build` + `sam deploy` to aws-afc-dev with the `afc-dev` profile",
+      "milestone": "M2",
+      "body": "## Origin\n\nPhase 2 approved-planning candidate; stable ID `AFC-2026-10-11/P2-L02`. Slices: P2-L02.\n\n## Harness / version\n\nPlanning baseline `7f000aff70e435b0cac923931fd818c69111f07d`; execution tool pins and candidate identities will be recorded in the assigned slice evidence. No runtime execution claimed.\n\n## What\n\n`sam build` + `sam deploy` to aws-afc-dev with the `afc-dev` profile; run deployed link and profile smoke; deploy with sam deploy --config-env default --tags GitCommit=<sha> (stack afc-dev from samconfig.toml); record ApiUrl and the deployed commit; stop at the smoke receipt or at any Paid-plan prompt (class F).\n\n## Current evidence\n\nProspective plan and SEIT allocations only. Product execution remains held until a subsequent owner instruction.\n\n## Expected\n\nFinal-completion milestone: M2.\nRequirements: AC-AFC-P2-DX-01, AC-AFC-P2-LAND-01, AC-AFC-P2-PATH-01, AC-AFC-P2-REL-01, AC-AFC-P2-REV-01, AFC-PR-038, AFC-PR-054, RISK-AFC-P2-07, RISK-AFC-P2-10.\nProof rows: SEIT-AFC-P2-DX-01, SEIT-AFC-P2-LAND-01, SEIT-AFC-P2-PATH-01, SEIT-AFC-P2-REL-01, SEIT-AFC-P2-REV-01, SEIT-AFC-PR-038, SEIT-AFC-PR-054, SEIT-RISK-AFC-P2-07, SEIT-RISK-AFC-P2-10.\nDependencies (URLs substituted from saved mapping):\n- P2-B01: merged\n\n## Acceptance\n\nComplete every listed slice/proof duty in its allocated environment; retain typed gaps. Required review, gates and evidence must pass before closure. Partial work stays open.\nOwner blockers: {\"owner_actions\": [\"OA-3\"], \"open_decisions\": []}\n",
+      "dependencies": [
+        {
+          "group": "P2-B01",
+          "source_slice": "P2-B01",
+          "target_slice": "P2-L02",
+          "condition": "merged",
+          "url": null
+        }
+      ],
+      "proof_rows": [
+        "SEIT-AFC-P2-DX-01",
+        "SEIT-AFC-P2-LAND-01",
+        "SEIT-AFC-P2-PATH-01",
+        "SEIT-AFC-P2-REL-01",
+        "SEIT-AFC-P2-REV-01",
+        "SEIT-AFC-PR-038",
+        "SEIT-AFC-PR-054",
+        "SEIT-RISK-AFC-P2-07",
+        "SEIT-RISK-AFC-P2-10"
+      ],
+      "requirement_ids": [
+        "AC-AFC-P2-DX-01",
+        "AC-AFC-P2-LAND-01",
+        "AC-AFC-P2-PATH-01",
+        "AC-AFC-P2-REL-01",
+        "AC-AFC-P2-REV-01",
+        "AFC-PR-038",
+        "AFC-PR-054",
+        "RISK-AFC-P2-07",
+        "RISK-AFC-P2-10"
+      ],
+      "conditional": false,
+      "saved_number": null,
+      "saved_url": null,
+      "reuse_rule": "Search all open and closed issues by stable ID and slice IDs; exactly one matching identity => reuse. Ambiguity/multiple matches => stop, never create another."
+    },
+    {
+      "stable_id": "AFC-2026-10-11/P2-R2",
+      "group": "P2-R2",
+      "slices": [
+        "P2-R2"
+      ],
+      "kind": "documentation",
+      "labels_proposed": [
+        "documentation"
+      ],
+      "title": "[P2-R2] Prepare release v0.2.0 via release-process",
+      "milestone": "M2",
+      "body": "## Origin\n\nPhase 2 approved-planning candidate; stable ID `AFC-2026-10-11/P2-R2`. Slices: P2-R2.\n\n## Harness / version\n\nPlanning baseline `7f000aff70e435b0cac923931fd818c69111f07d`; execution tool pins and candidate identities will be recorded in the assigned slice evidence. No runtime execution claimed.\n\n## What\n\nPrepare release v0.2.0 via release-process; stop at draft.\n\n## Current evidence\n\nProspective plan and SEIT allocations only. Product execution remains held until a subsequent owner instruction.\n\n## Expected\n\nFinal-completion milestone: M2.\nRequirements: AC-AFC-P2-DX-01, AC-AFC-P2-LAND-01, AC-AFC-P2-PATH-01, AC-AFC-P2-REL-01, AC-AFC-P2-REL-02, AC-AFC-P2-REV-01, RISK-AFC-P2-10.\nProof rows: SEIT-AFC-P2-DX-01, SEIT-AFC-P2-LAND-01, SEIT-AFC-P2-PATH-01, SEIT-AFC-P2-REL-01, SEIT-AFC-P2-REL-02, SEIT-AFC-P2-REV-01, SEIT-RISK-AFC-P2-10.\nDependencies (URLs substituted from saved mapping):\n- P2-R1: merged\n- P2-X04: merged (every other slice of the milestone)\n- P2-X02: merged (every other slice of the milestone)\n- P2-X03: merged (every other slice of the milestone)\n- P2-X07: merged (every other slice of the milestone)\n- P2-X06: merged (every other slice of the milestone)\n- P2-B02: merged (every other slice of the milestone)\n- P2-B02: merged (every other slice of the milestone)\n- P2-B03: merged (every other slice of the milestone)\n- P2-B03: merged (every other slice of the milestone)\n- P2-A02: merged (every other slice of the milestone)\n- P2-A02: merged (every other slice of the milestone)\n- P2-L02: merged (every other slice of the milestone)\n\n## Acceptance\n\nComplete every listed slice/proof duty in its allocated environment; retain typed gaps. Required review, gates and evidence must pass before closure. Partial work stays open.\nOwner blockers: Applicable OA/OD actions per approved plan\n",
+      "dependencies": [
+        {
+          "group": "P2-R1",
+          "source_slice": "P2-R1",
+          "target_slice": "P2-R2",
+          "condition": "merged",
+          "url": null
+        },
+        {
+          "group": "P2-X04",
+          "source_slice": "P2-X04",
+          "target_slice": "P2-R2",
+          "condition": "merged (every other slice of the milestone)",
+          "url": null
+        },
+        {
+          "group": "P2-X02",
+          "source_slice": "P2-X02",
+          "target_slice": "P2-R2",
+          "condition": "merged (every other slice of the milestone)",
+          "url": null
+        },
+        {
+          "group": "P2-X03",
+          "source_slice": "P2-X03",
+          "target_slice": "P2-R2",
+          "condition": "merged (every other slice of the milestone)",
+          "url": null
+        },
+        {
+          "group": "P2-X07",
+          "source_slice": "P2-X07",
+          "target_slice": "P2-R2",
+          "condition": "merged (every other slice of the milestone)",
+          "url": null
+        },
+        {
+          "group": "P2-X06",
+          "source_slice": "P2-X06",
+          "target_slice": "P2-R2",
+          "condition": "merged (every other slice of the milestone)",
+          "url": null
+        },
+        {
+          "group": "P2-B02",
+          "source_slice": "P2-B02T",
+          "target_slice": "P2-R2",
+          "condition": "merged (every other slice of the milestone)",
+          "url": null
+        },
+        {
+          "group": "P2-B02",
+          "source_slice": "P2-B02",
+          "target_slice": "P2-R2",
+          "condition": "merged (every other slice of the milestone)",
+          "url": null
+        },
+        {
+          "group": "P2-B03",
+          "source_slice": "P2-B03T",
+          "target_slice": "P2-R2",
+          "condition": "merged (every other slice of the milestone)",
+          "url": null
+        },
+        {
+          "group": "P2-B03",
+          "source_slice": "P2-B03",
+          "target_slice": "P2-R2",
+          "condition": "merged (every other slice of the milestone)",
+          "url": null
+        },
+        {
+          "group": "P2-A02",
+          "source_slice": "P2-A02T",
+          "target_slice": "P2-R2",
+          "condition": "merged (every other slice of the milestone)",
+          "url": null
+        },
+        {
+          "group": "P2-A02",
+          "source_slice": "P2-A02",
+          "target_slice": "P2-R2",
+          "condition": "merged (every other slice of the milestone)",
+          "url": null
+        },
+        {
+          "group": "P2-L02",
+          "source_slice": "P2-L02",
+          "target_slice": "P2-R2",
+          "condition": "merged (every other slice of the milestone)",
+          "url": null
+        }
+      ],
+      "proof_rows": [
+        "SEIT-AFC-P2-DX-01",
+        "SEIT-AFC-P2-LAND-01",
+        "SEIT-AFC-P2-PATH-01",
+        "SEIT-AFC-P2-REL-01",
+        "SEIT-AFC-P2-REL-02",
+        "SEIT-AFC-P2-REV-01",
+        "SEIT-RISK-AFC-P2-10"
+      ],
+      "requirement_ids": [
+        "AC-AFC-P2-DX-01",
+        "AC-AFC-P2-LAND-01",
+        "AC-AFC-P2-PATH-01",
+        "AC-AFC-P2-REL-01",
+        "AC-AFC-P2-REL-02",
+        "AC-AFC-P2-REV-01",
+        "RISK-AFC-P2-10"
+      ],
+      "conditional": false,
+      "saved_number": null,
+      "saved_url": null,
+      "reuse_rule": "Search all open and closed issues by stable ID and slice IDs; exactly one matching identity => reuse. Ambiguity/multiple matches => stop, never create another."
+    },
+    {
+      "stable_id": "AFC-2026-10-11/P2-B04",
+      "group": "P2-B04",
+      "slices": [
+        "P2-B04T",
+        "P2-B04"
+      ],
+      "kind": "enhancement",
+      "labels_proposed": [
+        "enhancement"
+      ],
+      "title": "[P2-B04] Implement `src/matcher/`",
+      "milestone": "M3",
+      "body": "## Origin\n\nPhase 2 approved-planning candidate; stable ID `AFC-2026-10-11/P2-B04`. Slices: P2-B04T, P2-B04.\n\n## Harness / version\n\nPlanning baseline `7f000aff70e435b0cac923931fd818c69111f07d`; execution tool pins and candidate identities will be recorded in the assigned slice evidence. No runtime execution claimed.\n\n## What\n\nImplement `src/matcher/`; stop when green.\n\n## Current evidence\n\nProspective plan and SEIT allocations only. Product execution remains held until a subsequent owner instruction.\n\n## Expected\n\nFinal-completion milestone: M3.\nRequirements: AC-AFC-P2-DX-01, AC-AFC-P2-LAND-01, AC-AFC-P2-PATH-01, AC-AFC-P2-REL-01, AC-AFC-P2-REV-01, AFC-PR-024, AFC-PR-025, AFC-PR-026, RISK-AFC-P2-10.\nProof rows: SEIT-AFC-P2-DX-01, SEIT-AFC-P2-LAND-01, SEIT-AFC-P2-PATH-01, SEIT-AFC-P2-REL-01, SEIT-AFC-P2-REV-01, SEIT-AFC-PR-024, SEIT-AFC-PR-025, SEIT-AFC-PR-026, SEIT-RISK-AFC-P2-10.\nDependencies (URLs substituted from saved mapping):\n- P2-B02: merged\n- P2-B03: merged\n\n## Acceptance\n\nComplete every listed slice/proof duty in its allocated environment; retain typed gaps. Required review, gates and evidence must pass before closure. Partial work stays open.\nOwner blockers: Applicable OA/OD actions per approved plan\n",
+      "dependencies": [
+        {
+          "group": "P2-B02",
+          "source_slice": "P2-B02",
+          "target_slice": "P2-B04T",
+          "condition": "merged",
+          "url": null
+        },
+        {
+          "group": "P2-B03",
+          "source_slice": "P2-B03",
+          "target_slice": "P2-B04T",
+          "condition": "merged",
+          "url": null
+        }
+      ],
+      "proof_rows": [
+        "SEIT-AFC-P2-DX-01",
+        "SEIT-AFC-P2-LAND-01",
+        "SEIT-AFC-P2-PATH-01",
+        "SEIT-AFC-P2-REL-01",
+        "SEIT-AFC-P2-REV-01",
+        "SEIT-AFC-PR-024",
+        "SEIT-AFC-PR-025",
+        "SEIT-AFC-PR-026",
+        "SEIT-RISK-AFC-P2-10"
+      ],
+      "requirement_ids": [
+        "AC-AFC-P2-DX-01",
+        "AC-AFC-P2-LAND-01",
+        "AC-AFC-P2-PATH-01",
+        "AC-AFC-P2-REL-01",
+        "AC-AFC-P2-REV-01",
+        "AFC-PR-024",
+        "AFC-PR-025",
+        "AFC-PR-026",
+        "RISK-AFC-P2-10"
+      ],
+      "conditional": false,
+      "saved_number": null,
+      "saved_url": null,
+      "reuse_rule": "Search all open and closed issues by stable ID and slice IDs; exactly one matching identity => reuse. Ambiguity/multiple matches => stop, never create another."
+    },
+    {
+      "stable_id": "AFC-2026-10-11/P2-B05",
+      "group": "P2-B05",
+      "slices": [
+        "P2-B05T",
+        "P2-B05"
+      ],
+      "kind": "enhancement",
+      "labels_proposed": [
+        "enhancement"
+      ],
+      "title": "[P2-B05] Implement `src/alert_policy/`",
+      "milestone": "M3",
+      "body": "## Origin\n\nPhase 2 approved-planning candidate; stable ID `AFC-2026-10-11/P2-B05`. Slices: P2-B05T, P2-B05.\n\n## Harness / version\n\nPlanning baseline `7f000aff70e435b0cac923931fd818c69111f07d`; execution tool pins and candidate identities will be recorded in the assigned slice evidence. No runtime execution claimed.\n\n## What\n\nImplement `src/alert_policy/`; stop when green.\n\n## Current evidence\n\nProspective plan and SEIT allocations only. Product execution remains held until a subsequent owner instruction.\n\n## Expected\n\nFinal-completion milestone: M3.\nRequirements: AC-AFC-P2-DX-01, AC-AFC-P2-LAND-01, AC-AFC-P2-PATH-01, AC-AFC-P2-REL-01, AC-AFC-P2-REV-01, AFC-PR-008, AFC-PR-011, AFC-PR-014, AFC-PR-016, AFC-PR-017, AFC-PR-018, AFC-PR-019, AFC-PR-020, AFC-PR-023, AFC-PR-027, AFC-PR-028, AFC-PR-037, AFC-PR-060, RISK-AFC-P2-10.\nProof rows: SEIT-AFC-P2-DX-01, SEIT-AFC-P2-LAND-01, SEIT-AFC-P2-PATH-01, SEIT-AFC-P2-REL-01, SEIT-AFC-P2-REV-01, SEIT-AFC-PR-008, SEIT-AFC-PR-011, SEIT-AFC-PR-014, SEIT-AFC-PR-016, SEIT-AFC-PR-017, SEIT-AFC-PR-018, SEIT-AFC-PR-019, SEIT-AFC-PR-020, SEIT-AFC-PR-023, SEIT-AFC-PR-027, SEIT-AFC-PR-028, SEIT-AFC-PR-037, SEIT-AFC-PR-060, SEIT-RISK-AFC-P2-10.\nDependencies (URLs substituted from saved mapping):\n- P2-B04: Verified B04T red receipt and frozen shared-fixture inventory handed off; no red-only merge. B04 product landing remains required before B05 product landing.\n- P2-B04: merged\n\n## Acceptance\n\nComplete every listed slice/proof duty in its allocated environment; retain typed gaps. Required review, gates and evidence must pass before closure. Partial work stays open.\nOwner blockers: Applicable OA/OD actions per approved plan\n",
+      "dependencies": [
+        {
+          "group": "P2-B04",
+          "source_slice": "P2-B04T",
+          "target_slice": "P2-B05T",
+          "condition": "Verified B04T red receipt and frozen shared-fixture inventory handed off; no red-only merge. B04 product landing remains required before B05 product landing.",
+          "url": null
+        },
+        {
+          "group": "P2-B04",
+          "source_slice": "P2-B04",
+          "target_slice": "P2-B05",
+          "condition": "merged",
+          "url": null
+        }
+      ],
+      "proof_rows": [
+        "SEIT-AFC-P2-DX-01",
+        "SEIT-AFC-P2-LAND-01",
+        "SEIT-AFC-P2-PATH-01",
+        "SEIT-AFC-P2-REL-01",
+        "SEIT-AFC-P2-REV-01",
+        "SEIT-AFC-PR-008",
+        "SEIT-AFC-PR-011",
+        "SEIT-AFC-PR-014",
+        "SEIT-AFC-PR-016",
+        "SEIT-AFC-PR-017",
+        "SEIT-AFC-PR-018",
+        "SEIT-AFC-PR-019",
+        "SEIT-AFC-PR-020",
+        "SEIT-AFC-PR-023",
+        "SEIT-AFC-PR-027",
+        "SEIT-AFC-PR-028",
+        "SEIT-AFC-PR-037",
+        "SEIT-AFC-PR-060",
+        "SEIT-RISK-AFC-P2-10"
+      ],
+      "requirement_ids": [
+        "AC-AFC-P2-DX-01",
+        "AC-AFC-P2-LAND-01",
+        "AC-AFC-P2-PATH-01",
+        "AC-AFC-P2-REL-01",
+        "AC-AFC-P2-REV-01",
+        "AFC-PR-008",
+        "AFC-PR-011",
+        "AFC-PR-014",
+        "AFC-PR-016",
+        "AFC-PR-017",
+        "AFC-PR-018",
+        "AFC-PR-019",
+        "AFC-PR-020",
+        "AFC-PR-023",
+        "AFC-PR-027",
+        "AFC-PR-028",
+        "AFC-PR-037",
+        "AFC-PR-060",
+        "RISK-AFC-P2-10"
+      ],
+      "conditional": false,
+      "saved_number": null,
+      "saved_url": null,
+      "reuse_rule": "Search all open and closed issues by stable ID and slice IDs; exactly one matching identity => reuse. Ambiguity/multiple matches => stop, never create another."
+    },
+    {
+      "stable_id": "AFC-2026-10-11/P2-B06",
+      "group": "P2-B06",
+      "slices": [
+        "P2-B06T",
+        "P2-B06"
+      ],
+      "kind": "enhancement",
+      "labels_proposed": [
+        "enhancement"
+      ],
+      "title": "[P2-B06] Implement `src/provider_resolver/` (registry read-only)",
+      "milestone": "M3",
+      "body": "## Origin\n\nPhase 2 approved-planning candidate; stable ID `AFC-2026-10-11/P2-B06`. Slices: P2-B06T, P2-B06.\n\n## Harness / version\n\nPlanning baseline `7f000aff70e435b0cac923931fd818c69111f07d`; execution tool pins and candidate identities will be recorded in the assigned slice evidence. No runtime execution claimed.\n\n## What\n\nImplement `src/provider_resolver/` (registry read-only); stop when green.\n\n## Current evidence\n\nProspective plan and SEIT allocations only. Product execution remains held until a subsequent owner instruction.\n\n## Expected\n\nFinal-completion milestone: M3.\nRequirements: AC-AFC-P2-DX-01, AC-AFC-P2-LAND-01, AC-AFC-P2-PATH-01, AC-AFC-P2-REL-01, AC-AFC-P2-REV-01, AFC-PR-004, AFC-PR-029, AFC-PR-032, AFC-PR-033, AFC-PR-034, RISK-AFC-P2-03, RISK-AFC-P2-10.\nProof rows: SEIT-AFC-P2-DX-01, SEIT-AFC-P2-LAND-01, SEIT-AFC-P2-PATH-01, SEIT-AFC-P2-REL-01, SEIT-AFC-P2-REV-01, SEIT-AFC-PR-004, SEIT-AFC-PR-029, SEIT-AFC-PR-032, SEIT-AFC-PR-033, SEIT-AFC-PR-034, SEIT-RISK-AFC-P2-03, SEIT-RISK-AFC-P2-10.\nDependencies (URLs substituted from saved mapping):\n- P2-X03: PR 1 registry on main\n\n## Acceptance\n\nComplete every listed slice/proof duty in its allocated environment; retain typed gaps. Required review, gates and evidence must pass before closure. Partial work stays open.\nOwner blockers: Applicable OA/OD actions per approved plan\n",
+      "dependencies": [
+        {
+          "group": "P2-X03",
+          "source_slice": "P2-X03",
+          "target_slice": "P2-B06T",
+          "condition": "PR 1 registry on main",
+          "url": null
+        }
+      ],
+      "proof_rows": [
+        "SEIT-AFC-P2-DX-01",
+        "SEIT-AFC-P2-LAND-01",
+        "SEIT-AFC-P2-PATH-01",
+        "SEIT-AFC-P2-REL-01",
+        "SEIT-AFC-P2-REV-01",
+        "SEIT-AFC-PR-004",
+        "SEIT-AFC-PR-029",
+        "SEIT-AFC-PR-032",
+        "SEIT-AFC-PR-033",
+        "SEIT-AFC-PR-034",
+        "SEIT-RISK-AFC-P2-03",
+        "SEIT-RISK-AFC-P2-10"
+      ],
+      "requirement_ids": [
+        "AC-AFC-P2-DX-01",
+        "AC-AFC-P2-LAND-01",
+        "AC-AFC-P2-PATH-01",
+        "AC-AFC-P2-REL-01",
+        "AC-AFC-P2-REV-01",
+        "AFC-PR-004",
+        "AFC-PR-029",
+        "AFC-PR-032",
+        "AFC-PR-033",
+        "AFC-PR-034",
+        "RISK-AFC-P2-03",
+        "RISK-AFC-P2-10"
+      ],
+      "conditional": false,
+      "saved_number": null,
+      "saved_url": null,
+      "reuse_rule": "Search all open and closed issues by stable ID and slice IDs; exactly one matching identity => reuse. Ambiguity/multiple matches => stop, never create another."
+    },
+    {
+      "stable_id": "AFC-2026-10-11/P2-B07",
+      "group": "P2-B07",
+      "slices": [
+        "P2-B07T",
+        "P2-B07"
+      ],
+      "kind": "enhancement",
+      "labels_proposed": [
+        "enhancement"
+      ],
+      "title": "[P2-B07] Implement `src/panel/`",
+      "milestone": "M3",
+      "body": "## Origin\n\nPhase 2 approved-planning candidate; stable ID `AFC-2026-10-11/P2-B07`. Slices: P2-B07T, P2-B07.\n\n## Harness / version\n\nPlanning baseline `7f000aff70e435b0cac923931fd818c69111f07d`; execution tool pins and candidate identities will be recorded in the assigned slice evidence. No runtime execution claimed.\n\n## What\n\nImplement `src/panel/`; stop when green.\n\n## Current evidence\n\nProspective plan and SEIT allocations only. Product execution remains held until a subsequent owner instruction.\n\n## Expected\n\nFinal-completion milestone: M3.\nRequirements: AC-AFC-P2-DX-01, AC-AFC-P2-LAND-01, AC-AFC-P2-PATH-01, AC-AFC-P2-REL-01, AC-AFC-P2-REV-01, AFC-PR-039, AFC-PR-040, AFC-PR-044, AFC-PR-046, AFC-PR-065, RISK-AFC-P2-10.\nProof rows: SEIT-AFC-P2-DX-01, SEIT-AFC-P2-LAND-01, SEIT-AFC-P2-PATH-01, SEIT-AFC-P2-REL-01, SEIT-AFC-P2-REV-01, SEIT-AFC-PR-039, SEIT-AFC-PR-040, SEIT-AFC-PR-044, SEIT-AFC-PR-046, SEIT-AFC-PR-065, SEIT-RISK-AFC-P2-10.\nDependencies (URLs substituted from saved mapping):\n- P2-B04: merged\n\n## Acceptance\n\nComplete every listed slice/proof duty in its allocated environment; retain typed gaps. Required review, gates and evidence must pass before closure. Partial work stays open.\nOwner blockers: Applicable OA/OD actions per approved plan\n",
+      "dependencies": [
+        {
+          "group": "P2-B04",
+          "source_slice": "P2-B04",
+          "target_slice": "P2-B07T",
+          "condition": "merged",
+          "url": null
+        }
+      ],
+      "proof_rows": [
+        "SEIT-AFC-P2-DX-01",
+        "SEIT-AFC-P2-LAND-01",
+        "SEIT-AFC-P2-PATH-01",
+        "SEIT-AFC-P2-REL-01",
+        "SEIT-AFC-P2-REV-01",
+        "SEIT-AFC-PR-039",
+        "SEIT-AFC-PR-040",
+        "SEIT-AFC-PR-044",
+        "SEIT-AFC-PR-046",
+        "SEIT-AFC-PR-065",
+        "SEIT-RISK-AFC-P2-10"
+      ],
+      "requirement_ids": [
+        "AC-AFC-P2-DX-01",
+        "AC-AFC-P2-LAND-01",
+        "AC-AFC-P2-PATH-01",
+        "AC-AFC-P2-REL-01",
+        "AC-AFC-P2-REV-01",
+        "AFC-PR-039",
+        "AFC-PR-040",
+        "AFC-PR-044",
+        "AFC-PR-046",
+        "AFC-PR-065",
+        "RISK-AFC-P2-10"
+      ],
+      "conditional": false,
+      "saved_number": null,
+      "saved_url": null,
+      "reuse_rule": "Search all open and closed issues by stable ID and slice IDs; exactly one matching identity => reuse. Ambiguity/multiple matches => stop, never create another."
+    },
+    {
+      "stable_id": "AFC-2026-10-11/P2-A03",
+      "group": "P2-A03",
+      "slices": [
+        "P2-A03T",
+        "P2-A03"
+      ],
+      "kind": "enhancement",
+      "labels_proposed": [
+        "enhancement"
+      ],
+      "title": "[P2-A03] Implement `alerts/` on the P2-X02 route",
+      "milestone": "M3",
+      "body": "## Origin\n\nPhase 2 approved-planning candidate; stable ID `AFC-2026-10-11/P2-A03`. Slices: P2-A03T, P2-A03.\n\n## Harness / version\n\nPlanning baseline `7f000aff70e435b0cac923931fd818c69111f07d`; execution tool pins and candidate identities will be recorded in the assigned slice evidence. No runtime execution claimed.\n\n## What\n\nImplement `alerts/` on the P2-X02 route; instrumented test and visual review on the stick over provider playback; stop when green and reviewed.\n\n## Current evidence\n\nProspective plan and SEIT allocations only. Product execution remains held until a subsequent owner instruction.\n\n## Expected\n\nFinal-completion milestone: M3.\nRequirements: AC-AFC-P2-DX-01, AC-AFC-P2-LAND-01, AC-AFC-P2-PATH-01, AC-AFC-P2-REL-01, AC-AFC-P2-REV-01, AC-AFC-P2-VIS-01, AFC-PR-015, AFC-PR-021, AFC-PR-022, AFC-PR-027, AFC-PR-028, AFC-PR-032, AFC-PR-033, AFC-PR-061, AFC-PR-062, AFC-PR-063, RISK-AFC-P2-10.\nProof rows: SEIT-AFC-P2-DX-01, SEIT-AFC-P2-LAND-01, SEIT-AFC-P2-PATH-01, SEIT-AFC-P2-REL-01, SEIT-AFC-P2-REV-01, SEIT-AFC-P2-VIS-01, SEIT-AFC-PR-015, SEIT-AFC-PR-021, SEIT-AFC-PR-022, SEIT-AFC-PR-027, SEIT-AFC-PR-028, SEIT-AFC-PR-032, SEIT-AFC-PR-033, SEIT-AFC-PR-061, SEIT-AFC-PR-062, SEIT-AFC-PR-063, SEIT-RISK-AFC-P2-10.\nDependencies (URLs substituted from saved mapping):\n- P2-A02: merged\n- P2-X02: merged\n- P2-B05: merged\n\n## Acceptance\n\nComplete every listed slice/proof duty in its allocated environment; retain typed gaps. Required review, gates and evidence must pass before closure. Partial work stays open.\nOwner blockers: Applicable OA/OD actions per approved plan\n",
+      "dependencies": [
+        {
+          "group": "P2-A02",
+          "source_slice": "P2-A02",
+          "target_slice": "P2-A03T",
+          "condition": "merged",
+          "url": null
+        },
+        {
+          "group": "P2-X02",
+          "source_slice": "P2-X02",
+          "target_slice": "P2-A03T",
+          "condition": "merged",
+          "url": null
+        },
+        {
+          "group": "P2-B05",
+          "source_slice": "P2-B05",
+          "target_slice": "P2-A03",
+          "condition": "merged",
+          "url": null
+        }
+      ],
+      "proof_rows": [
+        "SEIT-AFC-P2-DX-01",
+        "SEIT-AFC-P2-LAND-01",
+        "SEIT-AFC-P2-PATH-01",
+        "SEIT-AFC-P2-REL-01",
+        "SEIT-AFC-P2-REV-01",
+        "SEIT-AFC-P2-VIS-01",
+        "SEIT-AFC-PR-015",
+        "SEIT-AFC-PR-021",
+        "SEIT-AFC-PR-022",
+        "SEIT-AFC-PR-027",
+        "SEIT-AFC-PR-028",
+        "SEIT-AFC-PR-032",
+        "SEIT-AFC-PR-033",
+        "SEIT-AFC-PR-061",
+        "SEIT-AFC-PR-062",
+        "SEIT-AFC-PR-063",
+        "SEIT-RISK-AFC-P2-10"
+      ],
+      "requirement_ids": [
+        "AC-AFC-P2-DX-01",
+        "AC-AFC-P2-LAND-01",
+        "AC-AFC-P2-PATH-01",
+        "AC-AFC-P2-REL-01",
+        "AC-AFC-P2-REV-01",
+        "AC-AFC-P2-VIS-01",
+        "AFC-PR-015",
+        "AFC-PR-021",
+        "AFC-PR-022",
+        "AFC-PR-027",
+        "AFC-PR-028",
+        "AFC-PR-032",
+        "AFC-PR-033",
+        "AFC-PR-061",
+        "AFC-PR-062",
+        "AFC-PR-063",
+        "RISK-AFC-P2-10"
+      ],
+      "conditional": false,
+      "saved_number": null,
+      "saved_url": null,
+      "reuse_rule": "Search all open and closed issues by stable ID and slice IDs; exactly one matching identity => reuse. Ambiguity/multiple matches => stop, never create another."
+    },
+    {
+      "stable_id": "AFC-2026-10-11/P2-A04",
+      "group": "P2-A04",
+      "slices": [
+        "P2-A04T",
+        "P2-A04"
+      ],
+      "kind": "enhancement",
+      "labels_proposed": [
+        "enhancement"
+      ],
+      "title": "[P2-A04] Implement `watch/`",
+      "milestone": "M3",
+      "body": "## Origin\n\nPhase 2 approved-planning candidate; stable ID `AFC-2026-10-11/P2-A04`. Slices: P2-A04T, P2-A04.\n\n## Harness / version\n\nPlanning baseline `7f000aff70e435b0cac923931fd818c69111f07d`; execution tool pins and candidate identities will be recorded in the assigned slice evidence. No runtime execution claimed.\n\n## What\n\nImplement `watch/`; on-device launch per provider and visual review; stop when green and reviewed.\n\n## Current evidence\n\nProspective plan and SEIT allocations only. Product execution remains held until a subsequent owner instruction.\n\n## Expected\n\nFinal-completion milestone: M3.\nRequirements: AC-AFC-P2-DX-01, AC-AFC-P2-LAND-01, AC-AFC-P2-PATH-01, AC-AFC-P2-REL-01, AC-AFC-P2-REV-01, AC-AFC-P2-VIS-01, AFC-PR-030, AFC-PR-031, AFC-PR-035, AFC-PR-036, AFC-PR-048, RISK-AFC-P2-03, RISK-AFC-P2-04, RISK-AFC-P2-10.\nProof rows: SEIT-AFC-P2-DX-01, SEIT-AFC-P2-LAND-01, SEIT-AFC-P2-PATH-01, SEIT-AFC-P2-REL-01, SEIT-AFC-P2-REV-01, SEIT-AFC-P2-VIS-01, SEIT-AFC-PR-030, SEIT-AFC-PR-031, SEIT-AFC-PR-035, SEIT-AFC-PR-036, SEIT-AFC-PR-048, SEIT-RISK-AFC-P2-03, SEIT-RISK-AFC-P2-04, SEIT-RISK-AFC-P2-10.\nDependencies (URLs substituted from saved mapping):\n- P2-A03: Verified A03T red receipt and required frozen interface/test inventory handed off; no red-only merge. Each green slice retains its own landed product prerequisites.\n- P2-X03: PR 1 registry on main\n- P2-B06: merged\n\n## Acceptance\n\nComplete every listed slice/proof duty in its allocated environment; retain typed gaps. Required review, gates and evidence must pass before closure. Partial work stays open.\nOwner blockers: Applicable OA/OD actions per approved plan\n",
+      "dependencies": [
+        {
+          "group": "P2-A03",
+          "source_slice": "P2-A03T",
+          "target_slice": "P2-A04T",
+          "condition": "Verified A03T red receipt and required frozen interface/test inventory handed off; no red-only merge. Each green slice retains its own landed product prerequisites.",
+          "url": null
+        },
+        {
+          "group": "P2-X03",
+          "source_slice": "P2-X03",
+          "target_slice": "P2-A04T",
+          "condition": "PR 1 registry on main",
+          "url": null
+        },
+        {
+          "group": "P2-B06",
+          "source_slice": "P2-B06",
+          "target_slice": "P2-A04",
+          "condition": "merged",
+          "url": null
+        }
+      ],
+      "proof_rows": [
+        "SEIT-AFC-P2-DX-01",
+        "SEIT-AFC-P2-LAND-01",
+        "SEIT-AFC-P2-PATH-01",
+        "SEIT-AFC-P2-REL-01",
+        "SEIT-AFC-P2-REV-01",
+        "SEIT-AFC-P2-VIS-01",
+        "SEIT-AFC-PR-030",
+        "SEIT-AFC-PR-031",
+        "SEIT-AFC-PR-035",
+        "SEIT-AFC-PR-036",
+        "SEIT-AFC-PR-048",
+        "SEIT-RISK-AFC-P2-03",
+        "SEIT-RISK-AFC-P2-04",
+        "SEIT-RISK-AFC-P2-10"
+      ],
+      "requirement_ids": [
+        "AC-AFC-P2-DX-01",
+        "AC-AFC-P2-LAND-01",
+        "AC-AFC-P2-PATH-01",
+        "AC-AFC-P2-REL-01",
+        "AC-AFC-P2-REV-01",
+        "AC-AFC-P2-VIS-01",
+        "AFC-PR-030",
+        "AFC-PR-031",
+        "AFC-PR-035",
+        "AFC-PR-036",
+        "AFC-PR-048",
+        "RISK-AFC-P2-03",
+        "RISK-AFC-P2-04",
+        "RISK-AFC-P2-10"
+      ],
+      "conditional": false,
+      "saved_number": null,
+      "saved_url": null,
+      "reuse_rule": "Search all open and closed issues by stable ID and slice IDs; exactly one matching identity => reuse. Ambiguity/multiple matches => stop, never create another."
+    },
+    {
+      "stable_id": "AFC-2026-10-11/P2-A05",
+      "group": "P2-A05",
+      "slices": [
+        "P2-A05T",
+        "P2-A05"
+      ],
+      "kind": "enhancement",
+      "labels_proposed": [
+        "enhancement"
+      ],
+      "title": "[P2-A05] Implement `panel/` and its shell hosting in the verdict's mode",
+      "milestone": "M3",
+      "body": "## Origin\n\nPhase 2 approved-planning candidate; stable ID `AFC-2026-10-11/P2-A05`. Slices: P2-A05T, P2-A05.\n\n## Harness / version\n\nPlanning baseline `7f000aff70e435b0cac923931fd818c69111f07d`; execution tool pins and candidate identities will be recorded in the assigned slice evidence. No runtime execution claimed.\n\n## What\n\nImplement `panel/` and its shell hosting in the verdict's mode; text-size measurement and visual review on the stick; stop when green and reviewed. Only P2-A05 edits MainActivity.kt.\n\n## Current evidence\n\nProspective plan and SEIT allocations only. Product execution remains held until a subsequent owner instruction.\n\n## Expected\n\nFinal-completion milestone: M3.\nRequirements: AC-AFC-P2-DX-01, AC-AFC-P2-LAND-01, AC-AFC-P2-PATH-01, AC-AFC-P2-REL-01, AC-AFC-P2-REV-01, AC-AFC-P2-VIS-01, AFC-PR-039, AFC-PR-040, AFC-PR-041, AFC-PR-042, AFC-PR-043, AFC-PR-044, AFC-PR-045, AFC-PR-046, AFC-PR-047, AFC-PR-061, AFC-PR-062, AFC-PR-063, RISK-AFC-P2-04, RISK-AFC-P2-09, RISK-AFC-P2-10.\nProof rows: SEIT-AFC-P2-DX-01, SEIT-AFC-P2-LAND-01, SEIT-AFC-P2-PATH-01, SEIT-AFC-P2-REL-01, SEIT-AFC-P2-REV-01, SEIT-AFC-P2-VIS-01, SEIT-AFC-PR-039, SEIT-AFC-PR-040, SEIT-AFC-PR-041, SEIT-AFC-PR-042, SEIT-AFC-PR-043, SEIT-AFC-PR-044, SEIT-AFC-PR-045, SEIT-AFC-PR-046, SEIT-AFC-PR-047, SEIT-AFC-PR-061, SEIT-AFC-PR-062, SEIT-AFC-PR-063, SEIT-RISK-AFC-P2-04, SEIT-RISK-AFC-P2-09, SEIT-RISK-AFC-P2-10.\nDependencies (URLs substituted from saved mapping):\n- P2-A02: merged\n- P2-X04: merged\n- P2-B07: merged\n\n## Acceptance\n\nComplete every listed slice/proof duty in its allocated environment; retain typed gaps. Required review, gates and evidence must pass before closure. Partial work stays open.\nOwner blockers: Applicable OA/OD actions per approved plan\n",
+      "dependencies": [
+        {
+          "group": "P2-A02",
+          "source_slice": "P2-A02",
+          "target_slice": "P2-A05T",
+          "condition": "merged",
+          "url": null
+        },
+        {
+          "group": "P2-X04",
+          "source_slice": "P2-X04",
+          "target_slice": "P2-A05T",
+          "condition": "merged",
+          "url": null
+        },
+        {
+          "group": "P2-B07",
+          "source_slice": "P2-B07",
+          "target_slice": "P2-A05",
+          "condition": "merged",
+          "url": null
+        }
+      ],
+      "proof_rows": [
+        "SEIT-AFC-P2-DX-01",
+        "SEIT-AFC-P2-LAND-01",
+        "SEIT-AFC-P2-PATH-01",
+        "SEIT-AFC-P2-REL-01",
+        "SEIT-AFC-P2-REV-01",
+        "SEIT-AFC-P2-VIS-01",
+        "SEIT-AFC-PR-039",
+        "SEIT-AFC-PR-040",
+        "SEIT-AFC-PR-041",
+        "SEIT-AFC-PR-042",
+        "SEIT-AFC-PR-043",
+        "SEIT-AFC-PR-044",
+        "SEIT-AFC-PR-045",
+        "SEIT-AFC-PR-046",
+        "SEIT-AFC-PR-047",
+        "SEIT-AFC-PR-061",
+        "SEIT-AFC-PR-062",
+        "SEIT-AFC-PR-063",
+        "SEIT-RISK-AFC-P2-04",
+        "SEIT-RISK-AFC-P2-09",
+        "SEIT-RISK-AFC-P2-10"
+      ],
+      "requirement_ids": [
+        "AC-AFC-P2-DX-01",
+        "AC-AFC-P2-LAND-01",
+        "AC-AFC-P2-PATH-01",
+        "AC-AFC-P2-REL-01",
+        "AC-AFC-P2-REV-01",
+        "AC-AFC-P2-VIS-01",
+        "AFC-PR-039",
+        "AFC-PR-040",
+        "AFC-PR-041",
+        "AFC-PR-042",
+        "AFC-PR-043",
+        "AFC-PR-044",
+        "AFC-PR-045",
+        "AFC-PR-046",
+        "AFC-PR-047",
+        "AFC-PR-061",
+        "AFC-PR-062",
+        "AFC-PR-063",
+        "RISK-AFC-P2-04",
+        "RISK-AFC-P2-09",
+        "RISK-AFC-P2-10"
+      ],
+      "conditional": false,
+      "saved_number": null,
+      "saved_url": null,
+      "reuse_rule": "Search all open and closed issues by stable ID and slice IDs; exactly one matching identity => reuse. Ambiguity/multiple matches => stop, never create another."
+    },
+    {
+      "stable_id": "AFC-2026-10-11/P2-L03",
+      "group": "P2-L03",
+      "slices": [
+        "P2-L03"
+      ],
+      "kind": "enhancement",
+      "labels_proposed": [
+        "enhancement"
+      ],
+      "title": "[P2-L03] Redeploy aws-afc-dev at the M3 backend head",
+      "milestone": "M3",
+      "body": "## Origin\n\nPhase 2 approved-planning candidate; stable ID `AFC-2026-10-11/P2-L03`. Slices: P2-L03.\n\n## Harness / version\n\nPlanning baseline `7f000aff70e435b0cac923931fd818c69111f07d`; execution tool pins and candidate identities will be recorded in the assigned slice evidence. No runtime execution claimed.\n\n## What\n\nRedeploy aws-afc-dev at the M3 backend head; deployed smoke and deployed suite; deploy with sam deploy --config-env default --tags GitCommit=<sha> (stack afc-dev from samconfig.toml); record ApiUrl and the deployed commit; stop at receipt.\n\n## Current evidence\n\nProspective plan and SEIT allocations only. Product execution remains held until a subsequent owner instruction.\n\n## Expected\n\nFinal-completion milestone: M3.\nRequirements: AC-AFC-P2-DX-01, AC-AFC-P2-LAND-01, AC-AFC-P2-PATH-01, AC-AFC-P2-REL-01, AC-AFC-P2-REV-01, AFC-PR-001, AFC-PR-004, AFC-PR-006, AFC-PR-007, AFC-PR-008, AFC-PR-011, AFC-PR-012, AFC-PR-013, AFC-PR-014, AFC-PR-020, AFC-PR-023, AFC-PR-024, AFC-PR-029, AFC-PR-054, AFC-PR-058, AFC-PR-059, AFC-PR-060, AFC-PR-064, AFC-PR-065, RISK-AFC-P2-05, RISK-AFC-P2-07, RISK-AFC-P2-10.\nProof rows: SEIT-AFC-P2-DX-01, SEIT-AFC-P2-LAND-01, SEIT-AFC-P2-PATH-01, SEIT-AFC-P2-REL-01, SEIT-AFC-P2-REV-01, SEIT-AFC-PR-001, SEIT-AFC-PR-004, SEIT-AFC-PR-006, SEIT-AFC-PR-007, SEIT-AFC-PR-008, SEIT-AFC-PR-011, SEIT-AFC-PR-012, SEIT-AFC-PR-013, SEIT-AFC-PR-014, SEIT-AFC-PR-020, SEIT-AFC-PR-023, SEIT-AFC-PR-024, SEIT-AFC-PR-029, SEIT-AFC-PR-054, SEIT-AFC-PR-058, SEIT-AFC-PR-059, SEIT-AFC-PR-060, SEIT-AFC-PR-064, SEIT-AFC-PR-065, SEIT-RISK-AFC-P2-05, SEIT-RISK-AFC-P2-07, SEIT-RISK-AFC-P2-10.\nDependencies (URLs substituted from saved mapping):\n- P2-B07: merged\n- P2-B06: merged\n- P2-B05: merged\n- P2-X06: deploy configuration of the active lineup source\n\n## Acceptance\n\nComplete every listed slice/proof duty in its allocated environment; retain typed gaps. Required review, gates and evidence must pass before closure. Partial work stays open.\nOwner blockers: Applicable OA/OD actions per approved plan\n",
+      "dependencies": [
+        {
+          "group": "P2-B07",
+          "source_slice": "P2-B07",
+          "target_slice": "P2-L03",
+          "condition": "merged",
+          "url": null
+        },
+        {
+          "group": "P2-B06",
+          "source_slice": "P2-B06",
+          "target_slice": "P2-L03",
+          "condition": "merged",
+          "url": null
+        },
+        {
+          "group": "P2-B05",
+          "source_slice": "P2-B05",
+          "target_slice": "P2-L03",
+          "condition": "merged",
+          "url": null
+        },
+        {
+          "group": "P2-X06",
+          "source_slice": "P2-X06",
+          "target_slice": "P2-L03",
+          "condition": "deploy configuration of the active lineup source",
+          "url": null
+        }
+      ],
+      "proof_rows": [
+        "SEIT-AFC-P2-DX-01",
+        "SEIT-AFC-P2-LAND-01",
+        "SEIT-AFC-P2-PATH-01",
+        "SEIT-AFC-P2-REL-01",
+        "SEIT-AFC-P2-REV-01",
+        "SEIT-AFC-PR-001",
+        "SEIT-AFC-PR-004",
+        "SEIT-AFC-PR-006",
+        "SEIT-AFC-PR-007",
+        "SEIT-AFC-PR-008",
+        "SEIT-AFC-PR-011",
+        "SEIT-AFC-PR-012",
+        "SEIT-AFC-PR-013",
+        "SEIT-AFC-PR-014",
+        "SEIT-AFC-PR-020",
+        "SEIT-AFC-PR-023",
+        "SEIT-AFC-PR-024",
+        "SEIT-AFC-PR-029",
+        "SEIT-AFC-PR-054",
+        "SEIT-AFC-PR-058",
+        "SEIT-AFC-PR-059",
+        "SEIT-AFC-PR-060",
+        "SEIT-AFC-PR-064",
+        "SEIT-AFC-PR-065",
+        "SEIT-RISK-AFC-P2-05",
+        "SEIT-RISK-AFC-P2-07",
+        "SEIT-RISK-AFC-P2-10"
+      ],
+      "requirement_ids": [
+        "AC-AFC-P2-DX-01",
+        "AC-AFC-P2-LAND-01",
+        "AC-AFC-P2-PATH-01",
+        "AC-AFC-P2-REL-01",
+        "AC-AFC-P2-REV-01",
+        "AFC-PR-001",
+        "AFC-PR-004",
+        "AFC-PR-006",
+        "AFC-PR-007",
+        "AFC-PR-008",
+        "AFC-PR-011",
+        "AFC-PR-012",
+        "AFC-PR-013",
+        "AFC-PR-014",
+        "AFC-PR-020",
+        "AFC-PR-023",
+        "AFC-PR-024",
+        "AFC-PR-029",
+        "AFC-PR-054",
+        "AFC-PR-058",
+        "AFC-PR-059",
+        "AFC-PR-060",
+        "AFC-PR-064",
+        "AFC-PR-065",
+        "RISK-AFC-P2-05",
+        "RISK-AFC-P2-07",
+        "RISK-AFC-P2-10"
+      ],
+      "conditional": false,
+      "saved_number": null,
+      "saved_url": null,
+      "reuse_rule": "Search all open and closed issues by stable ID and slice IDs; exactly one matching identity => reuse. Ambiguity/multiple matches => stop, never create another."
+    },
+    {
+      "stable_id": "AFC-2026-10-11/P2-X09",
+      "group": "P2-X09",
+      "slices": [
+        "P2-X09"
+      ],
+      "kind": "enhancement",
+      "labels_proposed": [
+        "enhancement"
+      ],
+      "title": "[P2-X09] Sunday 2026-10-18 live end-to-end on the stick: alert over provider playback → Watch → recorded outcome",
+      "milestone": "M3",
+      "body": "## Origin\n\nPhase 2 approved-planning candidate; stable ID `AFC-2026-10-11/P2-X09`. Slices: P2-X09.\n\n## Harness / version\n\nPlanning baseline `7f000aff70e435b0cac923931fd818c69111f07d`; execution tool pins and candidate identities will be recorded in the assigned slice evidence. No runtime execution claimed.\n\n## What\n\nSunday 2026-10-18 live end-to-end on the stick: alert over provider playback → Watch → recorded outcome; panel in the verdict's mode with live points and freshness; simultaneous games; stop at the run record (defects go to bug-triager).\n\n## Current evidence\n\nProspective plan and SEIT allocations only. Product execution remains held until a subsequent owner instruction.\n\n## Expected\n\nFinal-completion milestone: M3.\nRequirements: AC-AFC-P2-DX-01, AC-AFC-P2-LAND-01, AC-AFC-P2-PATH-01, AC-AFC-P2-REL-01, AC-AFC-P2-REV-01, AC-AFC-P2-VIS-01, AFC-PR-009, AFC-PR-015, AFC-PR-016, AFC-PR-017, AFC-PR-018, AFC-PR-019, AFC-PR-027, AFC-PR-028, AFC-PR-030, AFC-PR-031, AFC-PR-032, AFC-PR-033, AFC-PR-034, AFC-PR-037, AFC-PR-039, AFC-PR-040, AFC-PR-041, AFC-PR-044, AFC-PR-047, AFC-PR-048, AFC-PR-052, AFC-PR-066, RISK-AFC-P2-08, RISK-AFC-P2-09, RISK-AFC-P2-10.\nProof rows: SEIT-AFC-P2-DX-01, SEIT-AFC-P2-LAND-01, SEIT-AFC-P2-PATH-01, SEIT-AFC-P2-REL-01, SEIT-AFC-P2-REV-01, SEIT-AFC-P2-VIS-01, SEIT-AFC-PR-009, SEIT-AFC-PR-015, SEIT-AFC-PR-016, SEIT-AFC-PR-017, SEIT-AFC-PR-018, SEIT-AFC-PR-019, SEIT-AFC-PR-027, SEIT-AFC-PR-028, SEIT-AFC-PR-030, SEIT-AFC-PR-031, SEIT-AFC-PR-032, SEIT-AFC-PR-033, SEIT-AFC-PR-034, SEIT-AFC-PR-037, SEIT-AFC-PR-039, SEIT-AFC-PR-040, SEIT-AFC-PR-041, SEIT-AFC-PR-044, SEIT-AFC-PR-047, SEIT-AFC-PR-048, SEIT-AFC-PR-052, SEIT-AFC-PR-066, SEIT-RISK-AFC-P2-08, SEIT-RISK-AFC-P2-09, SEIT-RISK-AFC-P2-10.\nDependencies (URLs substituted from saved mapping):\n- P2-A03: merged\n- P2-A04: merged\n- P2-A05: merged\n- P2-L03: merged\n\n## Acceptance\n\nComplete every listed slice/proof duty in its allocated environment; retain typed gaps. Required review, gates and evidence must pass before closure. Partial work stays open.\nOwner blockers: Applicable OA/OD actions per approved plan\n",
+      "dependencies": [
+        {
+          "group": "P2-A03",
+          "source_slice": "P2-A03",
+          "target_slice": "P2-X09",
+          "condition": "merged",
+          "url": null
+        },
+        {
+          "group": "P2-A04",
+          "source_slice": "P2-A04",
+          "target_slice": "P2-X09",
+          "condition": "merged",
+          "url": null
+        },
+        {
+          "group": "P2-A05",
+          "source_slice": "P2-A05",
+          "target_slice": "P2-X09",
+          "condition": "merged",
+          "url": null
+        },
+        {
+          "group": "P2-L03",
+          "source_slice": "P2-L03",
+          "target_slice": "P2-X09",
+          "condition": "merged",
+          "url": null
+        }
+      ],
+      "proof_rows": [
+        "SEIT-AFC-P2-DX-01",
+        "SEIT-AFC-P2-LAND-01",
+        "SEIT-AFC-P2-PATH-01",
+        "SEIT-AFC-P2-REL-01",
+        "SEIT-AFC-P2-REV-01",
+        "SEIT-AFC-P2-VIS-01",
+        "SEIT-AFC-PR-009",
+        "SEIT-AFC-PR-015",
+        "SEIT-AFC-PR-016",
+        "SEIT-AFC-PR-017",
+        "SEIT-AFC-PR-018",
+        "SEIT-AFC-PR-019",
+        "SEIT-AFC-PR-027",
+        "SEIT-AFC-PR-028",
+        "SEIT-AFC-PR-030",
+        "SEIT-AFC-PR-031",
+        "SEIT-AFC-PR-032",
+        "SEIT-AFC-PR-033",
+        "SEIT-AFC-PR-034",
+        "SEIT-AFC-PR-037",
+        "SEIT-AFC-PR-039",
+        "SEIT-AFC-PR-040",
+        "SEIT-AFC-PR-041",
+        "SEIT-AFC-PR-044",
+        "SEIT-AFC-PR-047",
+        "SEIT-AFC-PR-048",
+        "SEIT-AFC-PR-052",
+        "SEIT-AFC-PR-066",
+        "SEIT-RISK-AFC-P2-08",
+        "SEIT-RISK-AFC-P2-09",
+        "SEIT-RISK-AFC-P2-10"
+      ],
+      "requirement_ids": [
+        "AC-AFC-P2-DX-01",
+        "AC-AFC-P2-LAND-01",
+        "AC-AFC-P2-PATH-01",
+        "AC-AFC-P2-REL-01",
+        "AC-AFC-P2-REV-01",
+        "AC-AFC-P2-VIS-01",
+        "AFC-PR-009",
+        "AFC-PR-015",
+        "AFC-PR-016",
+        "AFC-PR-017",
+        "AFC-PR-018",
+        "AFC-PR-019",
+        "AFC-PR-027",
+        "AFC-PR-028",
+        "AFC-PR-030",
+        "AFC-PR-031",
+        "AFC-PR-032",
+        "AFC-PR-033",
+        "AFC-PR-034",
+        "AFC-PR-037",
+        "AFC-PR-039",
+        "AFC-PR-040",
+        "AFC-PR-041",
+        "AFC-PR-044",
+        "AFC-PR-047",
+        "AFC-PR-048",
+        "AFC-PR-052",
+        "AFC-PR-066",
+        "RISK-AFC-P2-08",
+        "RISK-AFC-P2-09",
+        "RISK-AFC-P2-10"
+      ],
+      "conditional": false,
+      "saved_number": null,
+      "saved_url": null,
+      "reuse_rule": "Search all open and closed issues by stable ID and slice IDs; exactly one matching identity => reuse. Ambiguity/multiple matches => stop, never create another."
+    },
+    {
+      "stable_id": "AFC-2026-10-11/P2-R3",
+      "group": "P2-R3",
+      "slices": [
+        "P2-R3"
+      ],
+      "kind": "documentation",
+      "labels_proposed": [
+        "documentation"
+      ],
+      "title": "[P2-R3] Prepare release v0.3.0",
+      "milestone": "M3",
+      "body": "## Origin\n\nPhase 2 approved-planning candidate; stable ID `AFC-2026-10-11/P2-R3`. Slices: P2-R3.\n\n## Harness / version\n\nPlanning baseline `7f000aff70e435b0cac923931fd818c69111f07d`; execution tool pins and candidate identities will be recorded in the assigned slice evidence. No runtime execution claimed.\n\n## What\n\nPrepare release v0.3.0; stop at draft.\n\n## Current evidence\n\nProspective plan and SEIT allocations only. Product execution remains held until a subsequent owner instruction.\n\n## Expected\n\nFinal-completion milestone: M3.\nRequirements: AC-AFC-P2-DX-01, AC-AFC-P2-LAND-01, AC-AFC-P2-PATH-01, AC-AFC-P2-REL-01, AC-AFC-P2-REL-02, AC-AFC-P2-REV-01, RISK-AFC-P2-10.\nProof rows: SEIT-AFC-P2-DX-01, SEIT-AFC-P2-LAND-01, SEIT-AFC-P2-PATH-01, SEIT-AFC-P2-REL-01, SEIT-AFC-P2-REL-02, SEIT-AFC-P2-REV-01, SEIT-RISK-AFC-P2-10.\nDependencies (URLs substituted from saved mapping):\n- P2-R2: merged\n- P2-B04: merged (every other slice of the milestone)\n- P2-B04: merged (every other slice of the milestone)\n- P2-B05: merged (every other slice of the milestone)\n- P2-B05: merged (every other slice of the milestone)\n- P2-B06: merged (every other slice of the milestone)\n- P2-B06: merged (every other slice of the milestone)\n- P2-B07: merged (every other slice of the milestone)\n- P2-B07: merged (every other slice of the milestone)\n- P2-A03: merged (every other slice of the milestone)\n- P2-A03: merged (every other slice of the milestone)\n- P2-A04: merged (every other slice of the milestone)\n- P2-A04: merged (every other slice of the milestone)\n- P2-A05: merged (every other slice of the milestone)\n- P2-A05: merged (every other slice of the milestone)\n- P2-L03: merged (every other slice of the milestone)\n- P2-X09: merged (every other slice of the milestone)\n\n## Acceptance\n\nComplete every listed slice/proof duty in its allocated environment; retain typed gaps. Required review, gates and evidence must pass before closure. Partial work stays open.\nOwner blockers: Applicable OA/OD actions per approved plan\n",
+      "dependencies": [
+        {
+          "group": "P2-R2",
+          "source_slice": "P2-R2",
+          "target_slice": "P2-R3",
+          "condition": "merged",
+          "url": null
+        },
+        {
+          "group": "P2-B04",
+          "source_slice": "P2-B04T",
+          "target_slice": "P2-R3",
+          "condition": "merged (every other slice of the milestone)",
+          "url": null
+        },
+        {
+          "group": "P2-B04",
+          "source_slice": "P2-B04",
+          "target_slice": "P2-R3",
+          "condition": "merged (every other slice of the milestone)",
+          "url": null
+        },
+        {
+          "group": "P2-B05",
+          "source_slice": "P2-B05T",
+          "target_slice": "P2-R3",
+          "condition": "merged (every other slice of the milestone)",
+          "url": null
+        },
+        {
+          "group": "P2-B05",
+          "source_slice": "P2-B05",
+          "target_slice": "P2-R3",
+          "condition": "merged (every other slice of the milestone)",
+          "url": null
+        },
+        {
+          "group": "P2-B06",
+          "source_slice": "P2-B06T",
+          "target_slice": "P2-R3",
+          "condition": "merged (every other slice of the milestone)",
+          "url": null
+        },
+        {
+          "group": "P2-B06",
+          "source_slice": "P2-B06",
+          "target_slice": "P2-R3",
+          "condition": "merged (every other slice of the milestone)",
+          "url": null
+        },
+        {
+          "group": "P2-B07",
+          "source_slice": "P2-B07T",
+          "target_slice": "P2-R3",
+          "condition": "merged (every other slice of the milestone)",
+          "url": null
+        },
+        {
+          "group": "P2-B07",
+          "source_slice": "P2-B07",
+          "target_slice": "P2-R3",
+          "condition": "merged (every other slice of the milestone)",
+          "url": null
+        },
+        {
+          "group": "P2-A03",
+          "source_slice": "P2-A03T",
+          "target_slice": "P2-R3",
+          "condition": "merged (every other slice of the milestone)",
+          "url": null
+        },
+        {
+          "group": "P2-A03",
+          "source_slice": "P2-A03",
+          "target_slice": "P2-R3",
+          "condition": "merged (every other slice of the milestone)",
+          "url": null
+        },
+        {
+          "group": "P2-A04",
+          "source_slice": "P2-A04T",
+          "target_slice": "P2-R3",
+          "condition": "merged (every other slice of the milestone)",
+          "url": null
+        },
+        {
+          "group": "P2-A04",
+          "source_slice": "P2-A04",
+          "target_slice": "P2-R3",
+          "condition": "merged (every other slice of the milestone)",
+          "url": null
+        },
+        {
+          "group": "P2-A05",
+          "source_slice": "P2-A05T",
+          "target_slice": "P2-R3",
+          "condition": "merged (every other slice of the milestone)",
+          "url": null
+        },
+        {
+          "group": "P2-A05",
+          "source_slice": "P2-A05",
+          "target_slice": "P2-R3",
+          "condition": "merged (every other slice of the milestone)",
+          "url": null
+        },
+        {
+          "group": "P2-L03",
+          "source_slice": "P2-L03",
+          "target_slice": "P2-R3",
+          "condition": "merged (every other slice of the milestone)",
+          "url": null
+        },
+        {
+          "group": "P2-X09",
+          "source_slice": "P2-X09",
+          "target_slice": "P2-R3",
+          "condition": "merged (every other slice of the milestone)",
+          "url": null
+        }
+      ],
+      "proof_rows": [
+        "SEIT-AFC-P2-DX-01",
+        "SEIT-AFC-P2-LAND-01",
+        "SEIT-AFC-P2-PATH-01",
+        "SEIT-AFC-P2-REL-01",
+        "SEIT-AFC-P2-REL-02",
+        "SEIT-AFC-P2-REV-01",
+        "SEIT-RISK-AFC-P2-10"
+      ],
+      "requirement_ids": [
+        "AC-AFC-P2-DX-01",
+        "AC-AFC-P2-LAND-01",
+        "AC-AFC-P2-PATH-01",
+        "AC-AFC-P2-REL-01",
+        "AC-AFC-P2-REL-02",
+        "AC-AFC-P2-REV-01",
+        "RISK-AFC-P2-10"
+      ],
+      "conditional": false,
+      "saved_number": null,
+      "saved_url": null,
+      "reuse_rule": "Search all open and closed issues by stable ID and slice IDs; exactly one matching identity => reuse. Ambiguity/multiple matches => stop, never create another."
+    },
+    {
+      "stable_id": "AFC-2026-10-11/P2-X10",
+      "group": "P2-X10",
+      "slices": [
+        "P2-X10"
+      ],
+      "kind": "enhancement",
+      "labels_proposed": [
+        "enhancement"
+      ],
+      "title": "[P2-X10] Monday 2026-10-19 MNF hardening run: corrections and starter changes across alerts and panel, duplicate suppression, stale/unavailable behav",
+      "milestone": "M4",
+      "body": "## Origin\n\nPhase 2 approved-planning candidate; stable ID `AFC-2026-10-11/P2-X10`. Slices: P2-X10.\n\n## Harness / version\n\nPlanning baseline `7f000aff70e435b0cac923931fd818c69111f07d`; execution tool pins and candidate identities will be recorded in the assigned slice evidence. No runtime execution claimed.\n\n## What\n\nMonday 2026-10-19 MNF hardening run: corrections and starter changes across alerts and panel, duplicate suppression, stale/unavailable behavior, Sunday defects re-checked; labeled replay for repeatability; stop at the run record.\n\n## Current evidence\n\nProspective plan and SEIT allocations only. Product execution remains held until a subsequent owner instruction.\n\n## Expected\n\nFinal-completion milestone: M4.\nRequirements: AC-AFC-P2-DX-01, AC-AFC-P2-LAND-01, AC-AFC-P2-PATH-01, AC-AFC-P2-REL-01, AC-AFC-P2-REV-01, AFC-PR-025, AFC-PR-026, AFC-PR-040, AFC-PR-046, RISK-AFC-P2-08, RISK-AFC-P2-10.\nProof rows: SEIT-AFC-P2-DX-01, SEIT-AFC-P2-LAND-01, SEIT-AFC-P2-PATH-01, SEIT-AFC-P2-REL-01, SEIT-AFC-P2-REV-01, SEIT-AFC-PR-025, SEIT-AFC-PR-026, SEIT-AFC-PR-040, SEIT-AFC-PR-046, SEIT-RISK-AFC-P2-08, SEIT-RISK-AFC-P2-10.\nDependencies (URLs substituted from saved mapping):\n- P2-X09: merged\n\n## Acceptance\n\nComplete every listed slice/proof duty in its allocated environment; retain typed gaps. Required review, gates and evidence must pass before closure. Partial work stays open.\nOwner blockers: Applicable OA/OD actions per approved plan\n",
+      "dependencies": [
+        {
+          "group": "P2-X09",
+          "source_slice": "P2-X09",
+          "target_slice": "P2-X10",
+          "condition": "merged",
+          "url": null
+        }
+      ],
+      "proof_rows": [
+        "SEIT-AFC-P2-DX-01",
+        "SEIT-AFC-P2-LAND-01",
+        "SEIT-AFC-P2-PATH-01",
+        "SEIT-AFC-P2-REL-01",
+        "SEIT-AFC-P2-REV-01",
+        "SEIT-AFC-PR-025",
+        "SEIT-AFC-PR-026",
+        "SEIT-AFC-PR-040",
+        "SEIT-AFC-PR-046",
+        "SEIT-RISK-AFC-P2-08",
+        "SEIT-RISK-AFC-P2-10"
+      ],
+      "requirement_ids": [
+        "AC-AFC-P2-DX-01",
+        "AC-AFC-P2-LAND-01",
+        "AC-AFC-P2-PATH-01",
+        "AC-AFC-P2-REL-01",
+        "AC-AFC-P2-REV-01",
+        "AFC-PR-025",
+        "AFC-PR-026",
+        "AFC-PR-040",
+        "AFC-PR-046",
+        "RISK-AFC-P2-08",
+        "RISK-AFC-P2-10"
+      ],
+      "conditional": false,
+      "saved_number": null,
+      "saved_url": null,
+      "reuse_rule": "Search all open and closed issues by stable ID and slice IDs; exactly one matching identity => reuse. Ambiguity/multiple matches => stop, never create another."
+    },
+    {
+      "stable_id": "AFC-2026-10-11/P2-D02",
+      "group": "P2-D02",
+      "slices": [
+        "P2-D02"
+      ],
+      "kind": "documentation",
+      "labels_proposed": [
+        "documentation"
+      ],
+      "title": "[P2-D02] Revise D1: spike verdicts, aligned model names (§1.2.1, §4.1.12, §4.1.99, §4.7, figure F7), closed contract constants (§2.1, §4.2.3), revisi",
+      "milestone": "M4",
+      "body": "## Origin\n\nPhase 2 approved-planning candidate; stable ID `AFC-2026-10-11/P2-D02`. Slices: P2-D02.\n\n## Harness / version\n\nPlanning baseline `7f000aff70e435b0cac923931fd818c69111f07d`; execution tool pins and candidate identities will be recorded in the assigned slice evidence. No runtime execution claimed.\n\n## What\n\nRevise D1: spike verdicts, aligned model names (§1.2.1, §4.1.12, §4.1.99, §4.7, figure F7), closed contract constants (§2.1, §4.2.3), revision row with changed sections, PR and diff links; stop when `gate.sh spec` passes with a byte-identical rebuild. Include every landed required verdict through the specification freeze, never only X02..X04.\n\n## Current evidence\n\nProspective plan and SEIT allocations only. Product execution remains held until a subsequent owner instruction.\n\n## Expected\n\nFinal-completion milestone: M4.\nRequirements: AC-AFC-P2-DX-01, AC-AFC-P2-LAND-01, AC-AFC-P2-PATH-01, AC-AFC-P2-REL-01, AC-AFC-P2-REV-01, AC-AFC-P2-SPEC-01, RISK-AFC-P2-10.\nProof rows: SEIT-AFC-P2-DX-01, SEIT-AFC-P2-LAND-01, SEIT-AFC-P2-PATH-01, SEIT-AFC-P2-REL-01, SEIT-AFC-P2-REV-01, SEIT-AFC-P2-SPEC-01, SEIT-RISK-AFC-P2-10.\nDependencies (URLs substituted from saved mapping):\n- P2-X01: Final required verdict landed; include through specification freeze\n- P2-X05: PR 2 final live-timing verdict landed; historical PR 1 is not final live proof\n- P2-X06: Yahoo/manual final disposition verdict landed\n- P2-X07: Final detection verdict landed\n- P2-X11: Selected X11 terminal disposition and verdict when run; if unselected, recorded OD-AFC-03/no-offer disposition; never infer enabled voice evidence\n- P2-X04: merged\n- P2-X03: PR 2 final verdict\n- P2-X02: merged\n\n## Acceptance\n\nComplete every listed slice/proof duty in its allocated environment; retain typed gaps. Required review, gates and evidence must pass before closure. Partial work stays open.\nOwner blockers: Applicable OA/OD actions per approved plan\n",
+      "dependencies": [
+        {
+          "group": "P2-X01",
+          "source_slice": "P2-X01",
+          "target_slice": "P2-D02",
+          "condition": "Final required verdict landed; include through specification freeze",
+          "url": null
+        },
+        {
+          "group": "P2-X05",
+          "source_slice": "P2-X05",
+          "target_slice": "P2-D02",
+          "condition": "PR 2 final live-timing verdict landed; historical PR 1 is not final live proof",
+          "url": null
+        },
+        {
+          "group": "P2-X06",
+          "source_slice": "P2-X06",
+          "target_slice": "P2-D02",
+          "condition": "Yahoo/manual final disposition verdict landed",
+          "url": null
+        },
+        {
+          "group": "P2-X07",
+          "source_slice": "P2-X07",
+          "target_slice": "P2-D02",
+          "condition": "Final detection verdict landed",
+          "url": null
+        },
+        {
+          "group": "P2-X11",
+          "source_slice": "P2-X11",
+          "target_slice": "P2-D02",
+          "condition": "Selected X11 terminal disposition and verdict when run; if unselected, recorded OD-AFC-03/no-offer disposition; never infer enabled voice evidence",
+          "url": null
+        },
+        {
+          "group": "P2-X04",
+          "source_slice": "P2-X04",
+          "target_slice": "P2-D02",
+          "condition": "merged",
+          "url": null
+        },
+        {
+          "group": "P2-X03",
+          "source_slice": "P2-X03",
+          "target_slice": "P2-D02",
+          "condition": "PR 2 final verdict",
+          "url": null
+        },
+        {
+          "group": "P2-X02",
+          "source_slice": "P2-X02",
+          "target_slice": "P2-D02",
+          "condition": "merged",
+          "url": null
+        }
+      ],
+      "proof_rows": [
+        "SEIT-AFC-P2-DX-01",
+        "SEIT-AFC-P2-LAND-01",
+        "SEIT-AFC-P2-PATH-01",
+        "SEIT-AFC-P2-REL-01",
+        "SEIT-AFC-P2-REV-01",
+        "SEIT-AFC-P2-SPEC-01",
+        "SEIT-RISK-AFC-P2-10"
+      ],
+      "requirement_ids": [
+        "AC-AFC-P2-DX-01",
+        "AC-AFC-P2-LAND-01",
+        "AC-AFC-P2-PATH-01",
+        "AC-AFC-P2-REL-01",
+        "AC-AFC-P2-REV-01",
+        "AC-AFC-P2-SPEC-01",
+        "RISK-AFC-P2-10"
+      ],
+      "conditional": false,
+      "saved_number": null,
+      "saved_url": null,
+      "reuse_rule": "Search all open and closed issues by stable ID and slice IDs; exactly one matching identity => reuse. Ambiguity/multiple matches => stop, never create another."
+    },
+    {
+      "stable_id": "AFC-2026-10-11/P2-X11",
+      "group": "P2-X11",
+      "slices": [
+        "P2-X11"
+      ],
+      "kind": "enhancement",
+      "labels_proposed": [
+        "enhancement"
+      ],
+      "title": "[P2-X11] Conditional (OD-AFC-03 = yes and M3 on time): SP-8 Alexa announcement or tuning route",
+      "milestone": "M4",
+      "body": "## Origin\n\nPhase 2 approved-planning candidate; stable ID `AFC-2026-10-11/P2-X11`. Slices: P2-X11.\n\n## Harness / version\n\nPlanning baseline `7f000aff70e435b0cac923931fd818c69111f07d`; execution tool pins and candidate identities will be recorded in the assigned slice evidence. No runtime execution claimed.\n\n## What\n\nConditional (OD-AFC-03 = yes and M3 on time): SP-8 Alexa announcement or tuning route; drop at 2026-10-21T12:00:00Z if unverified; stop at VERDICT.md.\n\n## Current evidence\n\nProspective plan and SEIT allocations only. Product execution remains held until a subsequent owner instruction.\n\n## Expected\n\nFinal-completion milestone: M4.\nRequirements: AC-AFC-P2-DX-01, AC-AFC-P2-LAND-01, AC-AFC-P2-PATH-01, AC-AFC-P2-REL-01, AC-AFC-P2-REV-01, AC-AFC-P2-SPIKE-01, AFC-PR-022, AFC-PR-036, RISK-AFC-P2-10.\nProof rows: SEIT-AFC-P2-DX-01, SEIT-AFC-P2-LAND-01, SEIT-AFC-P2-PATH-01, SEIT-AFC-P2-REL-01, SEIT-AFC-P2-REV-01, SEIT-AFC-P2-SPIKE-01, SEIT-AFC-PR-022, SEIT-AFC-PR-036, SEIT-RISK-AFC-P2-10.\n\n## Acceptance\n\nComplete every listed slice/proof duty in its allocated environment; retain typed gaps. Required review, gates and evidence must pass before closure. Partial work stays open.\nConditional only: OD-AFC-03 and timing gates govern dispatch. Unselected/no-offer terminal disposition does not claim enabled voice proof.\nOwner blockers: {\"owner_actions\": [], \"open_decisions\": [\"OD-AFC-03\"]}\n",
+      "dependencies": [],
+      "proof_rows": [
+        "SEIT-AFC-P2-DX-01",
+        "SEIT-AFC-P2-LAND-01",
+        "SEIT-AFC-P2-PATH-01",
+        "SEIT-AFC-P2-REL-01",
+        "SEIT-AFC-P2-REV-01",
+        "SEIT-AFC-P2-SPIKE-01",
+        "SEIT-AFC-PR-022",
+        "SEIT-AFC-PR-036",
+        "SEIT-RISK-AFC-P2-10"
+      ],
+      "requirement_ids": [
+        "AC-AFC-P2-DX-01",
+        "AC-AFC-P2-LAND-01",
+        "AC-AFC-P2-PATH-01",
+        "AC-AFC-P2-REL-01",
+        "AC-AFC-P2-REV-01",
+        "AC-AFC-P2-SPIKE-01",
+        "AFC-PR-022",
+        "AFC-PR-036",
+        "RISK-AFC-P2-10"
+      ],
+      "conditional": true,
+      "saved_number": null,
+      "saved_url": null,
+      "reuse_rule": "Search all open and closed issues by stable ID and slice IDs; exactly one matching identity => reuse. Ambiguity/multiple matches => stop, never create another."
+    },
+    {
+      "stable_id": "AFC-2026-10-11/P2-R4",
+      "group": "P2-R4",
+      "slices": [
+        "P2-R4"
+      ],
+      "kind": "documentation",
+      "labels_proposed": [
+        "documentation"
+      ],
+      "title": "[P2-R4] Prepare release v0.4.0",
+      "milestone": "M4",
+      "body": "## Origin\n\nPhase 2 approved-planning candidate; stable ID `AFC-2026-10-11/P2-R4`. Slices: P2-R4.\n\n## Harness / version\n\nPlanning baseline `7f000aff70e435b0cac923931fd818c69111f07d`; execution tool pins and candidate identities will be recorded in the assigned slice evidence. No runtime execution claimed.\n\n## What\n\nPrepare release v0.4.0; stop at draft.\n\n## Current evidence\n\nProspective plan and SEIT allocations only. Product execution remains held until a subsequent owner instruction.\n\n## Expected\n\nFinal-completion milestone: M4.\nRequirements: AC-AFC-P2-DX-01, AC-AFC-P2-LAND-01, AC-AFC-P2-PATH-01, AC-AFC-P2-REL-01, AC-AFC-P2-REL-02, AC-AFC-P2-REV-01, RISK-AFC-P2-10.\nProof rows: SEIT-AFC-P2-DX-01, SEIT-AFC-P2-LAND-01, SEIT-AFC-P2-PATH-01, SEIT-AFC-P2-REL-01, SEIT-AFC-P2-REL-02, SEIT-AFC-P2-REV-01, SEIT-RISK-AFC-P2-10.\nDependencies (URLs substituted from saved mapping):\n- P2-R3: merged\n- P2-X10: merged (every other slice of the milestone)\n- P2-D02: merged (every other slice of the milestone)\n- P2-X11: merged (every other slice of the milestone)\n\n## Acceptance\n\nComplete every listed slice/proof duty in its allocated environment; retain typed gaps. Required review, gates and evidence must pass before closure. Partial work stays open.\nOwner blockers: Applicable OA/OD actions per approved plan\n",
+      "dependencies": [
+        {
+          "group": "P2-R3",
+          "source_slice": "P2-R3",
+          "target_slice": "P2-R4",
+          "condition": "merged",
+          "url": null
+        },
+        {
+          "group": "P2-X10",
+          "source_slice": "P2-X10",
+          "target_slice": "P2-R4",
+          "condition": "merged (every other slice of the milestone)",
+          "url": null
+        },
+        {
+          "group": "P2-D02",
+          "source_slice": "P2-D02",
+          "target_slice": "P2-R4",
+          "condition": "merged (every other slice of the milestone)",
+          "url": null
+        },
+        {
+          "group": "P2-X11",
+          "source_slice": "P2-X11",
+          "target_slice": "P2-R4",
+          "condition": "merged (every other slice of the milestone)",
+          "url": null
+        }
+      ],
+      "proof_rows": [
+        "SEIT-AFC-P2-DX-01",
+        "SEIT-AFC-P2-LAND-01",
+        "SEIT-AFC-P2-PATH-01",
+        "SEIT-AFC-P2-REL-01",
+        "SEIT-AFC-P2-REL-02",
+        "SEIT-AFC-P2-REV-01",
+        "SEIT-RISK-AFC-P2-10"
+      ],
+      "requirement_ids": [
+        "AC-AFC-P2-DX-01",
+        "AC-AFC-P2-LAND-01",
+        "AC-AFC-P2-PATH-01",
+        "AC-AFC-P2-REL-01",
+        "AC-AFC-P2-REL-02",
+        "AC-AFC-P2-REV-01",
+        "RISK-AFC-P2-10"
+      ],
+      "conditional": false,
+      "saved_number": null,
+      "saved_url": null,
+      "reuse_rule": "Search all open and closed issues by stable ID and slice IDs; exactly one matching identity => reuse. Ambiguity/multiple matches => stop, never create another."
+    },
+    {
+      "stable_id": "AFC-2026-10-11/P2-D03",
+      "group": "P2-D03",
+      "slices": [
+        "P2-D03"
+      ],
+      "kind": "documentation",
+      "labels_proposed": [
+        "documentation"
+      ],
+      "title": "[P2-D03] README: product, fresh setup (TV and backend), judge access, limitations from verdicts",
+      "milestone": "M5",
+      "body": "## Origin\n\nPhase 2 approved-planning candidate; stable ID `AFC-2026-10-11/P2-D03`. Slices: P2-D03.\n\n## Harness / version\n\nPlanning baseline `7f000aff70e435b0cac923931fd818c69111f07d`; execution tool pins and candidate identities will be recorded in the assigned slice evidence. No runtime execution claimed.\n\n## What\n\nREADME: product, fresh setup (TV and backend), judge access, limitations from verdicts; verified by a clean-checkout walkthrough; stop at PROC-README-FRESH-SETUP pass. Add the standard Apache-2.0 license file already selected by SD-035; this does not authorize publication.\n\n## Current evidence\n\nProspective plan and SEIT allocations only. Product execution remains held until a subsequent owner instruction.\n\n## Expected\n\nFinal-completion milestone: M5.\nRequirements: AC-AFC-P2-DX-01, AC-AFC-P2-LAND-01, AC-AFC-P2-PATH-01, AC-AFC-P2-REL-01, AC-AFC-P2-REV-01, AC-AFC-P2-SUB-01, AFC-PR-056, AFC-PR-057, RISK-AFC-P2-10, RISK-AFC-P2-12.\nProof rows: SEIT-AFC-P2-DX-01, SEIT-AFC-P2-LAND-01, SEIT-AFC-P2-PATH-01, SEIT-AFC-P2-REL-01, SEIT-AFC-P2-REV-01, SEIT-AFC-P2-SUB-01, SEIT-AFC-PR-056, SEIT-AFC-PR-057, SEIT-RISK-AFC-P2-10, SEIT-RISK-AFC-P2-12.\nDependencies (URLs substituted from saved mapping):\n- P2-X10: merged\n\n## Acceptance\n\nComplete every listed slice/proof duty in its allocated environment; retain typed gaps. Required review, gates and evidence must pass before closure. Partial work stays open.\nOwner blockers: Applicable OA/OD actions per approved plan\n",
+      "dependencies": [
+        {
+          "group": "P2-X10",
+          "source_slice": "P2-X10",
+          "target_slice": "P2-D03",
+          "condition": "merged",
+          "url": null
+        }
+      ],
+      "proof_rows": [
+        "SEIT-AFC-P2-DX-01",
+        "SEIT-AFC-P2-LAND-01",
+        "SEIT-AFC-P2-PATH-01",
+        "SEIT-AFC-P2-REL-01",
+        "SEIT-AFC-P2-REV-01",
+        "SEIT-AFC-P2-SUB-01",
+        "SEIT-AFC-PR-056",
+        "SEIT-AFC-PR-057",
+        "SEIT-RISK-AFC-P2-10",
+        "SEIT-RISK-AFC-P2-12"
+      ],
+      "requirement_ids": [
+        "AC-AFC-P2-DX-01",
+        "AC-AFC-P2-LAND-01",
+        "AC-AFC-P2-PATH-01",
+        "AC-AFC-P2-REL-01",
+        "AC-AFC-P2-REV-01",
+        "AC-AFC-P2-SUB-01",
+        "AFC-PR-056",
+        "AFC-PR-057",
+        "RISK-AFC-P2-10",
+        "RISK-AFC-P2-12"
+      ],
+      "conditional": false,
+      "saved_number": null,
+      "saved_url": null,
+      "reuse_rule": "Search all open and closed issues by stable ID and slice IDs; exactly one matching identity => reuse. Ambiguity/multiple matches => stop, never create another."
+    },
+    {
+      "stable_id": "AFC-2026-10-11/P2-D04",
+      "group": "P2-D04",
+      "slices": [
+        "P2-D04"
+      ],
+      "kind": "documentation",
+      "labels_proposed": [
+        "documentation"
+      ],
+      "title": "[P2-D04] Write-up from evidence: Fire TV and AWS Builder integrations, YouTube TV Fantasy View differentiation, SD-036 future direction with public c",
+      "milestone": "M5",
+      "body": "## Origin\n\nPhase 2 approved-planning candidate; stable ID `AFC-2026-10-11/P2-D04`. Slices: P2-D04.\n\n## Harness / version\n\nPlanning baseline `7f000aff70e435b0cac923931fd818c69111f07d`; execution tool pins and candidate identities will be recorded in the assigned slice evidence. No runtime execution claimed.\n\n## What\n\nWrite-up from evidence: Fire TV and AWS Builder integrations, YouTube TV Fantasy View differentiation, SD-036 future direction with public citations marked external context; stop at PROC-SUBMISSION-CHECK pass.\n\n## Current evidence\n\nProspective plan and SEIT allocations only. Product execution remains held until a subsequent owner instruction.\n\n## Expected\n\nFinal-completion milestone: M5.\nRequirements: AC-AFC-P2-DX-01, AC-AFC-P2-LAND-01, AC-AFC-P2-PATH-01, AC-AFC-P2-REL-01, AC-AFC-P2-REV-01, AC-AFC-P2-SUB-03, RISK-AFC-P2-10, RISK-AFC-P2-12.\nProof rows: SEIT-AFC-P2-DX-01, SEIT-AFC-P2-LAND-01, SEIT-AFC-P2-PATH-01, SEIT-AFC-P2-REL-01, SEIT-AFC-P2-REV-01, SEIT-AFC-P2-SUB-03, SEIT-RISK-AFC-P2-10, SEIT-RISK-AFC-P2-12.\nDependencies (URLs substituted from saved mapping):\n- P2-X10: merged\n\n## Acceptance\n\nComplete every listed slice/proof duty in its allocated environment; retain typed gaps. Required review, gates and evidence must pass before closure. Partial work stays open.\nOwner blockers: Applicable OA/OD actions per approved plan\n",
+      "dependencies": [
+        {
+          "group": "P2-X10",
+          "source_slice": "P2-X10",
+          "target_slice": "P2-D04",
+          "condition": "merged",
+          "url": null
+        }
+      ],
+      "proof_rows": [
+        "SEIT-AFC-P2-DX-01",
+        "SEIT-AFC-P2-LAND-01",
+        "SEIT-AFC-P2-PATH-01",
+        "SEIT-AFC-P2-REL-01",
+        "SEIT-AFC-P2-REV-01",
+        "SEIT-AFC-P2-SUB-03",
+        "SEIT-RISK-AFC-P2-10",
+        "SEIT-RISK-AFC-P2-12"
+      ],
+      "requirement_ids": [
+        "AC-AFC-P2-DX-01",
+        "AC-AFC-P2-LAND-01",
+        "AC-AFC-P2-PATH-01",
+        "AC-AFC-P2-REL-01",
+        "AC-AFC-P2-REV-01",
+        "AC-AFC-P2-SUB-03",
+        "RISK-AFC-P2-10",
+        "RISK-AFC-P2-12"
+      ],
+      "conditional": false,
+      "saved_number": null,
+      "saved_url": null,
+      "reuse_rule": "Search all open and closed issues by stable ID and slice IDs; exactly one matching identity => reuse. Ambiguity/multiple matches => stop, never create another."
+    },
+    {
+      "stable_id": "AFC-2026-10-11/P2-D05",
+      "group": "P2-D05",
+      "slices": [
+        "P2-D05"
+      ],
+      "kind": "documentation",
+      "labels_proposed": [
+        "documentation"
+      ],
+      "title": "[P2-D05] Demo plan ≤ 2 min 50 s with shot list (source per shot, UIDs shown), and the owner checklist",
+      "milestone": "M5",
+      "body": "## Origin\n\nPhase 2 approved-planning candidate; stable ID `AFC-2026-10-11/P2-D05`. Slices: P2-D05.\n\n## Harness / version\n\nPlanning baseline `7f000aff70e435b0cac923931fd818c69111f07d`; execution tool pins and candidate identities will be recorded in the assigned slice evidence. No runtime execution claimed.\n\n## What\n\nDemo plan ≤ 2 min 50 s with shot list (source per shot, UIDs shown), and the owner checklist; stop at PROC-SUBMISSION-CHECK pass.\n\n## Current evidence\n\nProspective plan and SEIT allocations only. Product execution remains held until a subsequent owner instruction.\n\n## Expected\n\nFinal-completion milestone: M5.\nRequirements: AC-AFC-P2-DX-01, AC-AFC-P2-LAND-01, AC-AFC-P2-PATH-01, AC-AFC-P2-REL-01, AC-AFC-P2-REV-01, AC-AFC-P2-SUB-02, AC-AFC-P2-SUB-04, RISK-AFC-P2-09, RISK-AFC-P2-10, RISK-AFC-P2-12.\nProof rows: SEIT-AFC-P2-DX-01, SEIT-AFC-P2-LAND-01, SEIT-AFC-P2-PATH-01, SEIT-AFC-P2-REL-01, SEIT-AFC-P2-REV-01, SEIT-AFC-P2-SUB-02, SEIT-AFC-P2-SUB-04, SEIT-RISK-AFC-P2-09, SEIT-RISK-AFC-P2-10, SEIT-RISK-AFC-P2-12.\nDependencies (URLs substituted from saved mapping):\n- P2-X10: merged\n\n## Acceptance\n\nComplete every listed slice/proof duty in its allocated environment; retain typed gaps. Required review, gates and evidence must pass before closure. Partial work stays open.\nOwner blockers: Applicable OA/OD actions per approved plan\n",
+      "dependencies": [
+        {
+          "group": "P2-X10",
+          "source_slice": "P2-X10",
+          "target_slice": "P2-D05",
+          "condition": "merged",
+          "url": null
+        }
+      ],
+      "proof_rows": [
+        "SEIT-AFC-P2-DX-01",
+        "SEIT-AFC-P2-LAND-01",
+        "SEIT-AFC-P2-PATH-01",
+        "SEIT-AFC-P2-REL-01",
+        "SEIT-AFC-P2-REV-01",
+        "SEIT-AFC-P2-SUB-02",
+        "SEIT-AFC-P2-SUB-04",
+        "SEIT-RISK-AFC-P2-09",
+        "SEIT-RISK-AFC-P2-10",
+        "SEIT-RISK-AFC-P2-12"
+      ],
+      "requirement_ids": [
+        "AC-AFC-P2-DX-01",
+        "AC-AFC-P2-LAND-01",
+        "AC-AFC-P2-PATH-01",
+        "AC-AFC-P2-REL-01",
+        "AC-AFC-P2-REV-01",
+        "AC-AFC-P2-SUB-02",
+        "AC-AFC-P2-SUB-04",
+        "RISK-AFC-P2-09",
+        "RISK-AFC-P2-10",
+        "RISK-AFC-P2-12"
+      ],
+      "conditional": false,
+      "saved_number": null,
+      "saved_url": null,
+      "reuse_rule": "Search all open and closed issues by stable ID and slice IDs; exactly one matching identity => reuse. Ambiguity/multiple matches => stop, never create another."
+    },
+    {
+      "stable_id": "AFC-2026-10-11/P2-X12",
+      "group": "P2-X12",
+      "slices": [
+        "P2-X12"
+      ],
+      "kind": "enhancement",
+      "labels_proposed": [
+        "enhancement"
+      ],
+      "title": "[P2-X12] Capture demo clips per the plan (adb screenrecord for companion UI",
+      "milestone": "M5",
+      "body": "## Origin\n\nPhase 2 approved-planning candidate; stable ID `AFC-2026-10-11/P2-X12`. Slices: P2-X12.\n\n## Harness / version\n\nPlanning baseline `7f000aff70e435b0cac923931fd818c69111f07d`; execution tool pins and candidate identities will be recorded in the assigned slice evidence. No runtime execution claimed.\n\n## What\n\nCapture demo clips per the plan (adb screenrecord for companion UI; owner camera shots listed for protected video), TNF 2026-10-22 live capture; record names and sha256 in the manifest; stop at manifest complete. evidence/demo/.gitignore ignores *.mp4 and *.mov; P2-X12 lands a docs-only manifest PR after the candidate.\n\n## Current evidence\n\nProspective plan and SEIT allocations only. Product execution remains held until a subsequent owner instruction.\n\n## Expected\n\nFinal-completion milestone: M5.\nRequirements: AC-AFC-P2-DX-01, AC-AFC-P2-LAND-01, AC-AFC-P2-PATH-01, AC-AFC-P2-REL-01, AC-AFC-P2-REV-01, AC-AFC-P2-SUB-02, AFC-PR-015, AFC-PR-030, AFC-PR-039, AFC-PR-041, AFC-PR-047, RISK-AFC-P2-09, RISK-AFC-P2-10.\nProof rows: SEIT-AFC-P2-DX-01, SEIT-AFC-P2-LAND-01, SEIT-AFC-P2-PATH-01, SEIT-AFC-P2-REL-01, SEIT-AFC-P2-REV-01, SEIT-AFC-P2-SUB-02, SEIT-AFC-PR-015, SEIT-AFC-PR-030, SEIT-AFC-PR-039, SEIT-AFC-PR-041, SEIT-AFC-PR-047, SEIT-RISK-AFC-P2-09, SEIT-RISK-AFC-P2-10.\nDependencies (URLs substituted from saved mapping):\n- P2-D05: merged\n- P2-L05: merged\n\n## Acceptance\n\nComplete every listed slice/proof duty in its allocated environment; retain typed gaps. Required review, gates and evidence must pass before closure. Partial work stays open.\nOwner blockers: {\"owner_actions\": [\"OA-9\"], \"open_decisions\": []}\n",
+      "dependencies": [
+        {
+          "group": "P2-D05",
+          "source_slice": "P2-D05",
+          "target_slice": "P2-X12",
+          "condition": "merged",
+          "url": null
+        },
+        {
+          "group": "P2-L05",
+          "source_slice": "P2-L05",
+          "target_slice": "P2-X12",
+          "condition": "merged",
+          "url": null
+        }
+      ],
+      "proof_rows": [
+        "SEIT-AFC-P2-DX-01",
+        "SEIT-AFC-P2-LAND-01",
+        "SEIT-AFC-P2-PATH-01",
+        "SEIT-AFC-P2-REL-01",
+        "SEIT-AFC-P2-REV-01",
+        "SEIT-AFC-P2-SUB-02",
+        "SEIT-AFC-PR-015",
+        "SEIT-AFC-PR-030",
+        "SEIT-AFC-PR-039",
+        "SEIT-AFC-PR-041",
+        "SEIT-AFC-PR-047",
+        "SEIT-RISK-AFC-P2-09",
+        "SEIT-RISK-AFC-P2-10"
+      ],
+      "requirement_ids": [
+        "AC-AFC-P2-DX-01",
+        "AC-AFC-P2-LAND-01",
+        "AC-AFC-P2-PATH-01",
+        "AC-AFC-P2-REL-01",
+        "AC-AFC-P2-REV-01",
+        "AC-AFC-P2-SUB-02",
+        "AFC-PR-015",
+        "AFC-PR-030",
+        "AFC-PR-039",
+        "AFC-PR-041",
+        "AFC-PR-047",
+        "RISK-AFC-P2-09",
+        "RISK-AFC-P2-10"
+      ],
+      "conditional": false,
+      "saved_number": null,
+      "saved_url": null,
+      "reuse_rule": "Search all open and closed issues by stable ID and slice IDs; exactly one matching identity => reuse. Ambiguity/multiple matches => stop, never create another."
+    },
+    {
+      "stable_id": "AFC-2026-10-11/P2-SCR1",
+      "group": "P2-SCR1",
+      "slices": [
+        "P2-SCR1"
+      ],
+      "kind": "documentation",
+      "labels_proposed": [
+        "documentation"
+      ],
+      "title": "[P2-SCR1] Assemble product feedback, feature requests and sanitized friction log from the observation log for every tool used",
+      "milestone": "M5",
+      "body": "## Origin\n\nPhase 2 approved-planning candidate; stable ID `AFC-2026-10-11/P2-SCR1`. Slices: P2-SCR1.\n\n## Harness / version\n\nPlanning baseline `7f000aff70e435b0cac923931fd818c69111f07d`; execution tool pins and candidate identities will be recorded in the assigned slice evidence. No runtime execution claimed.\n\n## What\n\nAssemble product feedback, feature requests and sanitized friction log from the observation log for every tool used; stop at PROC-SCRIBE-ASSEMBLY pass.\n\n## Current evidence\n\nProspective plan and SEIT allocations only. Product execution remains held until a subsequent owner instruction.\n\n## Expected\n\nFinal-completion milestone: M5.\nRequirements: AC-AFC-P2-DX-01, AC-AFC-P2-DX-02, AC-AFC-P2-LAND-01, AC-AFC-P2-PATH-01, AC-AFC-P2-REL-01, AC-AFC-P2-REV-01, RISK-AFC-P2-10, RISK-AFC-P2-12.\nProof rows: SEIT-AFC-P2-DX-01, SEIT-AFC-P2-DX-02, SEIT-AFC-P2-LAND-01, SEIT-AFC-P2-PATH-01, SEIT-AFC-P2-REL-01, SEIT-AFC-P2-REV-01, SEIT-RISK-AFC-P2-10, SEIT-RISK-AFC-P2-12.\nDependencies (URLs substituted from saved mapping):\n- P2-X10: merged\n\n## Acceptance\n\nComplete every listed slice/proof duty in its allocated environment; retain typed gaps. Required review, gates and evidence must pass before closure. Partial work stays open.\nOwner blockers: Applicable OA/OD actions per approved plan\n",
+      "dependencies": [
+        {
+          "group": "P2-X10",
+          "source_slice": "P2-X10",
+          "target_slice": "P2-SCR1",
+          "condition": "merged",
+          "url": null
+        }
+      ],
+      "proof_rows": [
+        "SEIT-AFC-P2-DX-01",
+        "SEIT-AFC-P2-DX-02",
+        "SEIT-AFC-P2-LAND-01",
+        "SEIT-AFC-P2-PATH-01",
+        "SEIT-AFC-P2-REL-01",
+        "SEIT-AFC-P2-REV-01",
+        "SEIT-RISK-AFC-P2-10",
+        "SEIT-RISK-AFC-P2-12"
+      ],
+      "requirement_ids": [
+        "AC-AFC-P2-DX-01",
+        "AC-AFC-P2-DX-02",
+        "AC-AFC-P2-LAND-01",
+        "AC-AFC-P2-PATH-01",
+        "AC-AFC-P2-REL-01",
+        "AC-AFC-P2-REV-01",
+        "RISK-AFC-P2-10",
+        "RISK-AFC-P2-12"
+      ],
+      "conditional": false,
+      "saved_number": null,
+      "saved_url": null,
+      "reuse_rule": "Search all open and closed issues by stable ID and slice IDs; exactly one matching identity => reuse. Ambiguity/multiple matches => stop, never create another."
+    },
+    {
+      "stable_id": "AFC-2026-10-11/P2-L05",
+      "group": "P2-L05",
+      "slices": [
+        "P2-L05"
+      ],
+      "kind": "enhancement",
+      "labels_proposed": [
+        "enhancement"
+      ],
+      "title": "[P2-L05] Build the release APK at the M5 candidate commit, signed with the development host's Android debug signing configuration (no new credential",
+      "milestone": "M5",
+      "body": "## Origin\n\nPhase 2 approved-planning candidate; stable ID `AFC-2026-10-11/P2-L05`. Slices: P2-L05.\n\n## Harness / version\n\nPlanning baseline `7f000aff70e435b0cac923931fd818c69111f07d`; execution tool pins and candidate identities will be recorded in the assigned slice evidence. No runtime execution claimed.\n\n## What\n\nBuild the release APK at the M5 candidate commit, signed with the development host's Android debug signing configuration (no new credential; README states sideload-only) unless the owner supplies a release keystore (OA-11); record sha256 and the signer certificate SHA-256 (CMD-APK-CERT); run Reverify on that APK for minSdk, package, permissions and services; stop at the receipt (Reverify failure is a typed gap).\n\n## Current evidence\n\nProspective plan and SEIT allocations only. Product execution remains held until a subsequent owner instruction.\n\n## Expected\n\nFinal-completion milestone: M5.\nRequirements: AC-AFC-P2-APK-01, AC-AFC-P2-DX-01, AC-AFC-P2-LAND-01, AC-AFC-P2-PATH-01, AC-AFC-P2-REL-01, AC-AFC-P2-REV-01, AFC-PR-053, AFC-PR-055, RISK-AFC-P2-10.\nProof rows: SEIT-AFC-P2-APK-01, SEIT-AFC-P2-DX-01, SEIT-AFC-P2-LAND-01, SEIT-AFC-P2-PATH-01, SEIT-AFC-P2-REL-01, SEIT-AFC-P2-REV-01, SEIT-AFC-PR-053, SEIT-AFC-PR-055, SEIT-RISK-AFC-P2-10.\nDependencies (URLs substituted from saved mapping):\n- P2-R5: merged\n\n## Acceptance\n\nComplete every listed slice/proof duty in its allocated environment; retain typed gaps. Required review, gates and evidence must pass before closure. Partial work stays open.\nOwner blockers: {\"owner_actions\": [\"OA-11\"], \"open_decisions\": []}\n",
+      "dependencies": [
+        {
+          "group": "P2-R5",
+          "source_slice": "P2-R5",
+          "target_slice": "P2-L05",
+          "condition": "merged",
+          "url": null
+        }
+      ],
+      "proof_rows": [
+        "SEIT-AFC-P2-APK-01",
+        "SEIT-AFC-P2-DX-01",
+        "SEIT-AFC-P2-LAND-01",
+        "SEIT-AFC-P2-PATH-01",
+        "SEIT-AFC-P2-REL-01",
+        "SEIT-AFC-P2-REV-01",
+        "SEIT-AFC-PR-053",
+        "SEIT-AFC-PR-055",
+        "SEIT-RISK-AFC-P2-10"
+      ],
+      "requirement_ids": [
+        "AC-AFC-P2-APK-01",
+        "AC-AFC-P2-DX-01",
+        "AC-AFC-P2-LAND-01",
+        "AC-AFC-P2-PATH-01",
+        "AC-AFC-P2-REL-01",
+        "AC-AFC-P2-REV-01",
+        "AFC-PR-053",
+        "AFC-PR-055",
+        "RISK-AFC-P2-10"
+      ],
+      "conditional": false,
+      "saved_number": null,
+      "saved_url": null,
+      "reuse_rule": "Search all open and closed issues by stable ID and slice IDs; exactly one matching identity => reuse. Ambiguity/multiple matches => stop, never create another."
+    },
+    {
+      "stable_id": "AFC-2026-10-11/P2-R5",
+      "group": "P2-R5",
+      "slices": [
+        "P2-R5"
+      ],
+      "kind": "documentation",
+      "labels_proposed": [
+        "documentation"
+      ],
+      "title": "[P2-R5] Prepare release v1.0.0 via release-process: move [Unreleased] under 1.0.0 and bump versionName/versionCode",
+      "milestone": "M5",
+      "body": "## Origin\n\nPhase 2 approved-planning candidate; stable ID `AFC-2026-10-11/P2-R5`. Slices: P2-R5.\n\n## Harness / version\n\nPlanning baseline `7f000aff70e435b0cac923931fd818c69111f07d`; execution tool pins and candidate identities will be recorded in the assigned slice evidence. No runtime execution claimed.\n\n## What\n\nPrepare release v1.0.0 via release-process: move [Unreleased] under 1.0.0 and bump versionName/versionCode; its merge commit is the M5 candidate; after P2-L05, put the APK sha256 in the draft release notes (no further commit); tag v1.0.0 names the candidate commit at publication; stop at draft; publish only on OA-8.\n\n## Current evidence\n\nProspective plan and SEIT allocations only. Product execution remains held until a subsequent owner instruction.\n\n## Expected\n\nFinal-completion milestone: M5.\nRequirements: AC-AFC-P2-DX-01, AC-AFC-P2-LAND-01, AC-AFC-P2-PATH-01, AC-AFC-P2-REL-01, AC-AFC-P2-REL-02, AC-AFC-P2-REV-01, RISK-AFC-P2-10.\nProof rows: SEIT-AFC-P2-DX-01, SEIT-AFC-P2-LAND-01, SEIT-AFC-P2-PATH-01, SEIT-AFC-P2-REL-01, SEIT-AFC-P2-REL-02, SEIT-AFC-P2-REV-01, SEIT-RISK-AFC-P2-10.\nDependencies (URLs substituted from saved mapping):\n- P2-D03: merged\n- P2-D04: merged\n- P2-D05: merged\n- P2-SCR1: merged\n- P2-R4: merged\n\n## Acceptance\n\nComplete every listed slice/proof duty in its allocated environment; retain typed gaps. Required review, gates and evidence must pass before closure. Partial work stays open.\nOwner blockers: {\"owner_actions\": [\"OA-8\"], \"open_decisions\": []}\n",
+      "dependencies": [
+        {
+          "group": "P2-D03",
+          "source_slice": "P2-D03",
+          "target_slice": "P2-R5",
+          "condition": "merged",
+          "url": null
+        },
+        {
+          "group": "P2-D04",
+          "source_slice": "P2-D04",
+          "target_slice": "P2-R5",
+          "condition": "merged",
+          "url": null
+        },
+        {
+          "group": "P2-D05",
+          "source_slice": "P2-D05",
+          "target_slice": "P2-R5",
+          "condition": "merged",
+          "url": null
+        },
+        {
+          "group": "P2-SCR1",
+          "source_slice": "P2-SCR1",
+          "target_slice": "P2-R5",
+          "condition": "merged",
+          "url": null
+        },
+        {
+          "group": "P2-R4",
+          "source_slice": "P2-R4",
+          "target_slice": "P2-R5",
+          "condition": "merged",
+          "url": null
+        }
+      ],
+      "proof_rows": [
+        "SEIT-AFC-P2-DX-01",
+        "SEIT-AFC-P2-LAND-01",
+        "SEIT-AFC-P2-PATH-01",
+        "SEIT-AFC-P2-REL-01",
+        "SEIT-AFC-P2-REL-02",
+        "SEIT-AFC-P2-REV-01",
+        "SEIT-RISK-AFC-P2-10"
+      ],
+      "requirement_ids": [
+        "AC-AFC-P2-DX-01",
+        "AC-AFC-P2-LAND-01",
+        "AC-AFC-P2-PATH-01",
+        "AC-AFC-P2-REL-01",
+        "AC-AFC-P2-REL-02",
+        "AC-AFC-P2-REV-01",
+        "RISK-AFC-P2-10"
+      ],
+      "conditional": false,
+      "saved_number": null,
+      "saved_url": null,
+      "reuse_rule": "Search all open and closed issues by stable ID and slice IDs; exactly one matching identity => reuse. Ambiguity/multiple matches => stop, never create another."
+    }
+  ],
+  "labels_note": "Exactly one kind proposed. Resolve actual existing labels with the policy tool at authorized dry-run; preserve policy-added labels. Missing label/permission is a gap, never create arbitrary labels or file unlabeled.",
+  "payload_edit_rule": "After approval only mechanical substitutions of known issue/milestone numbers and dependency URLs; changed scope/acceptance returns for review.",
+  "saved_mapping": "P2-L01 records stable group ID, every slice, issue number/URL, final milestone number, dependency URLs, saved labels/body digest, reuse/create result; Orchestrator transcribes to journey. All remain null here."
+}

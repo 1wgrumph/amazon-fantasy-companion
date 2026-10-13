@@ -1,0 +1,181 @@
+{
+  "outcome": "REPAIRABLE_FAILURE",
+  "lease_id": "ST-4-g4",
+  "generation": 4,
+  "head": "8f46cb5280146073c4de088d31a1fe0279131f2c",
+  "base": "771c28958f78e611048528aedbd9ed4490f308e1",
+  "branch": "afc/st4-spec",
+  "claim": "Partial author realization; product changes uncommitted; only authorized origin/main merge committed. No push, PR edit, independent review or merge.",
+  "changed_paths": [
+    "CHANGELOG.md",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/ST-4/g4/check-links.py",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/ST-4/g4/receipt.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/ST-4/g4/vendor-check.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/ST-4/g4/verification.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/ST-4/g4/verify.sh",
+    "spec/amazon-fantasy-companion/01-introduction.md",
+    "spec/amazon-fantasy-companion/01.1-background.md",
+    "spec/amazon-fantasy-companion/01.1.1-identification.md",
+    "spec/amazon-fantasy-companion/01.2-baseline.md",
+    "spec/amazon-fantasy-companion/01.2.1-baselines.md",
+    "spec/amazon-fantasy-companion/01.3-feature-set.md",
+    "spec/amazon-fantasy-companion/01.4-scope.md",
+    "spec/amazon-fantasy-companion/01.4.1-purpose-and-scope.md",
+    "spec/amazon-fantasy-companion/01.4.2-stakeholders.md",
+    "spec/amazon-fantasy-companion/01.6-terms.md",
+    "spec/amazon-fantasy-companion/01.6.1-requirements.md",
+    "spec/amazon-fantasy-companion/02-open-items.md",
+    "spec/amazon-fantasy-companion/02.1-risks.md",
+    "spec/amazon-fantasy-companion/04.1-feature-decomposition.md",
+    "spec/amazon-fantasy-companion/04.1.12-panel-video.md",
+    "spec/amazon-fantasy-companion/04.1.13-withdrawn-requirements.md",
+    "spec/amazon-fantasy-companion/04.1.2-lineup-source.md",
+    "spec/amazon-fantasy-companion/04.1.3-monitoring.md",
+    "spec/amazon-fantasy-companion/04.1.9-controls.md",
+    "spec/amazon-fantasy-companion/04.1.99-allocation.md",
+    "spec/amazon-fantasy-companion/04.2.2-external-interfaces.md",
+    "spec/amazon-fantasy-companion/04.2.3-interfaces-and-contracts.md",
+    "spec/amazon-fantasy-companion/04.3-data-model.md",
+    "spec/amazon-fantasy-companion/04.4-performance.md",
+    "spec/amazon-fantasy-companion/04.6-architecture-views.md",
+    "spec/amazon-fantasy-companion/04.7-model-correspondence.md",
+    "spec/amazon-fantasy-companion/04.8-rationale.md",
+    "spec/amazon-fantasy-companion/05.3-security-interfaces.md",
+    "spec/amazon-fantasy-companion/07-verification.md",
+    "spec/amazon-fantasy-companion/07.1-verification-approach.md",
+    "spec/amazon-fantasy-companion/07.1.1-verification.md",
+    "spec/amazon-fantasy-companion/07.1.10-verification.md",
+    "spec/amazon-fantasy-companion/07.1.11-verification.md",
+    "spec/amazon-fantasy-companion/07.1.12-verification.md",
+    "spec/amazon-fantasy-companion/07.1.13-verification.md",
+    "spec/amazon-fantasy-companion/07.1.14-verification.md",
+    "spec/amazon-fantasy-companion/07.1.15-verification.md",
+    "spec/amazon-fantasy-companion/07.1.2-verification.md",
+    "spec/amazon-fantasy-companion/07.1.3-verification.md",
+    "spec/amazon-fantasy-companion/07.1.4-verification.md",
+    "spec/amazon-fantasy-companion/07.1.5-verification.md",
+    "spec/amazon-fantasy-companion/07.1.6-verification.md",
+    "spec/amazon-fantasy-companion/07.1.7-verification.md",
+    "spec/amazon-fantasy-companion/07.1.8-verification.md",
+    "spec/amazon-fantasy-companion/07.1.9-verification.md",
+    "spec/amazon-fantasy-companion/amazon-fantasy-companion.md",
+    "spec/amazon-fantasy-companion/spec.yaml",
+    "tools/spec/VENDORED.md",
+    "tools/spec/spec_build.py",
+    "tools/spec/spec_lint.py",
+    "tools/spec/template/spec.yaml"
+  ],
+  "link_count_added": {
+    "source": 144,
+    "relative_links_and_anchors_resolved": 491
+  },
+  "uid_coverage": "66/66; appendix 66/66; no unknown UIDs",
+  "commands": [
+    {
+      "command": "git fetch origin && git merge --no-edit origin/main",
+      "exit": 0
+    },
+    {
+      "command": "CMD-SPEC-VENDOR (8f5c4c2a28da984b267611b62d0801666ab2d70f)",
+      "exit": 0,
+      "tail": "exit=0; exact command in vendor-check.txt"
+    },
+    {
+      "command": "uv run --script tools/spec/spec_build.py spec/amazon-fantasy-companion <output> (twice), cmp <outputs>",
+      "exit": 0,
+      "tail": "No output; byte-identical"
+    },
+    {
+      "command": "uv run --script tools/spec/spec_lint.py spec/amazon-fantasy-companion",
+      "exit": 0,
+      "tail": "No findings"
+    },
+    {
+      "command": "uv run --script tools/spec/diagram.py lint spec/amazon-fantasy-companion",
+      "exit": 0,
+      "tail": "No findings"
+    },
+    {
+      "command": "python3 docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/ST-4/g4/check-links.py",
+      "exit": 1,
+      "tail": "491 relative links/anchors resolved; 144 source links added; 66/66 UIDs; 66 appendix rows lack linked sections"
+    },
+    {
+      "command": "Label-pattern scan (exact invocation in verification.txt)",
+      "exit": 0,
+      "tail": "Label grep clean"
+    },
+    {
+      "command": "python3 tools/ci/check_paths.py",
+      "exit": 0,
+      "tail": "No findings"
+    },
+    {
+      "command": "bash tools/ci/gate.sh",
+      "exit": 1,
+      "tail": "docs PASS; spec FAIL (uncommitted build differs from HEAD); hygiene FAIL (34 tests, one isolation-fixture failure)"
+    }
+  ],
+  "failures": [
+    {
+      "id": "ST4-G4-F1",
+      "class": "tool / pinned-contract conflict",
+      "evidence": "Pinned tools/spec/spec_build.py joins trace[req] section names as plain text in Appendix A. check-links.py reproduces all 66 rows lacking clickable section references. Source lint checks sections, not generated Appendix A.",
+      "required_repair": "Orchestrator routes shared builder repair and generated-output regression; then supplies an updated approved vendor pin. Editing the current vendor or generated file would violate identity or reproducibility."
+    },
+    {
+      "id": "ST4-G4-F2",
+      "class": "test fixture outside write set",
+      "evidence": "test_hook_git_env_does_not_reach_sentinel_repo fails DOC-LINK because gate_support.copy_repo explicitly excludes docs/plans while copying the spec that links there. Actual repository docs check passes.",
+      "required_repair": "Orchestrator dispatches tools/ci/tests fixture repair and regression covering a spec linked to repository documents."
+    },
+    {
+      "id": "ST4-G4-F3",
+      "class": "gate workflow outside write set",
+      "evidence": "spec gate compares regenerated output with HEAD, so intentional uncommitted generated changes fail before commit. No hook bypass attempted.",
+      "required_repair": "Handle repository pre-commit generated-output policy through its gate owner; no commit/push while other blockers remain."
+    }
+  ],
+  "changelog_history": "PRs #2..#9 recorded using GitHub merged titles/dates. PR #11 is OPEN with mergedAt=null, so not falsely recorded as merged.",
+  "vendor_notes": "Source checkout latest skill commit ae13d813 has exactly the requested 8f5c4c2 skill tree. Ran unmodified vendor script, recorded equivalent pinned commit 8f5c4c2, then passed CMD-SPEC-VENDOR. First pristine guard failure was VENDORED.md mode 0664; normalized to 0644 after byte verification. Pre-existing Python caches preserved outside repo. MIT notice unchanged; THIRD_PARTY_NOTICES.md unchanged.",
+  "supply_chain": {
+    "verdict": "PASS",
+    "origin": "alphazede/Alphazedehq commit 8f5c4c2a28da984b267611b62d0801666ab2d70f",
+    "checks": "Clean source tree and exact Git identity, source delta inspection (pure Markdown/YAML parsing and rendering), gitleaks dir --redact exit 0, exact vendor comparison exit 0",
+    "credential_findings": [],
+    "limitations": "No dynamic malware analysis; no new binaries or dependencies; existing pinned PyYAML unchanged."
+  },
+  "capabilities": {
+    "profile": "tech-writing",
+    "configuration_digest_sha256": "8a6b57450b92f5658666150c7cdcb05553016240061befb226c0ae4eb83c94ce",
+    "review.coverage_assist": {
+      "enabled": true,
+      "required": true,
+      "backend": "OpenCodeReview delegation",
+      "execution": "not_run: assigned author only; reviewer tool availability not probed; not passing review evidence"
+    },
+    "deterministic_verification.reverify": {
+      "enabled": true,
+      "execution": "not_applicable: Markdown/Python-source claim, no compiled binary claim"
+    }
+  },
+  "developer_feedback": {
+    "worked_well": "Source lint caught 16 unlinked references plus 3 missing revision fields. Revision history links validate exact section headings and rebuild deterministically.",
+    "needs_work": "Generated Appendix A section references are not clickable and are outside source lint coverage. Gate fixture omits actual linked documents.",
+    "would_build_again": true
+  },
+  "create_lean_skill": {
+    "outcome": "NO_CHANGE",
+    "proof": "Existing spec-authoring owns this exact workflow; strongest peer use-requirements-system owns SDoc/hosted revisions, so a new skill duplicates existing ownership.",
+    "matching_request": "Link and rebuild a Markdown architecture specification: matched and exercised.",
+    "non_matching_request": "Publish a hosted SDoc revision: excluded; no host review invoked.",
+    "creator_scripts": "No skill creation/modification; initialization and metadata generation not applicable."
+  },
+  "limitations": [
+    "BRAN unavailable: no native policy.",
+    "Approved content retained; only links plus revision/provenance metadata adjusted.",
+    "144 source links added, but all-reference acceptance remains incomplete due to generated Appendix A.",
+    "Scope decision/register/models untouched. No upstream issue filed or nested triage started."
+  ],
+  "candidate_sha256": "0d8cc7f5c7aada10c27165bda9309c77e2ed730c80b7aa40f50e7baf75745b8b"
+}
