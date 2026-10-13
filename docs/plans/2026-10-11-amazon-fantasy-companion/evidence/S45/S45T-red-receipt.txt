@@ -1,0 +1,48 @@
+S45T red receipt (lease S45T-g1)
+head: 2262a1c795ec59a4a23672fe8b6a1fd48c337a99
+base: 23f0bb28a9ef9e0ec6ca1d4ec130489e8c569beb
+command: python3 skills/setup-pre-commit/tests/test_gate_template.py -v  (generated fake credential redacted as <FAKE>)
+test_hook_git_env_does_not_reach_other_repository (__main__.GateTemplateTests.test_hook_git_env_does_not_reach_other_repository) ... FAIL
+test_hygiene_reports_rule_ids_without_line_text (__main__.GateTemplateTests.test_hygiene_reports_rule_ids_without_line_text) ... FAIL
+
+======================================================================
+FAIL: test_hook_git_env_does_not_reach_other_repository (__main__.GateTemplateTests.test_hook_git_env_does_not_reach_other_repository)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "$HOME/alphazede/worktrees/alphazedehq-afc-s45/skills/setup-pre-commit/tests/test_gate_template.py", line 77, in test_hook_git_env_does_not_reach_other_repository
+    self.assertEqual(snapshot(), before,
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+                     "gate passed hook GIT_DIR/GIT_INDEX_FILE to a fixture repository\n"
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                     f"sentinel log:\n{log}gate output:\n{out}")
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'HEA[793 chars]efs/heads/main': b'005a1c90a8398f287c84c4d7e6f46d01062a211b\n'} != {'HEA[793 chars]efs/heads/main': b'489389c2f8fb081233a413520cf4a2eae178fb94\n'}
+Diff is 1115 characters long. Set self.maxDiff to None to see it. : gate passed hook GIT_DIR/GIT_INDEX_FILE to a fixture repository
+sentinel log:
+005a1c9 fixture
+489389c baseline
+gate output:
+gate: fixture: PASS checks completed
+
+
+======================================================================
+FAIL: test_hygiene_reports_rule_ids_without_line_text (__main__.GateTemplateTests.test_hygiene_reports_rule_ids_without_line_text)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "$HOME/alphazede/worktrees/alphazedehq-afc-s45/skills/setup-pre-commit/tests/test_gate_template.py", line 89, in test_hygiene_reports_rule_ids_without_line_text
+    self.assertNotIn(fake, out, "hygiene output echoed the staged line text")
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: '<FAKE>' unexpectedly found in 'notes.md:2: trailing whitespace.\n+aws_key = <FAKE>   \ngate: hygiene: FAIL check exit 2\n' : hygiene output echoed the staged line text
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.044s
+
+FAILED (failures=2)
+
+unchanged suites: bash skills/setup-pre-commit/tests/test-install-hooks.sh -> exit 0; test_setup_pre_commit.py creator test OK (trigger test needs evaluator results env, pre-existing)
+
+sha256:
+51558d776a50c13e07e6dd637bb6881235643da9956897ed29ad6f01f8e62f44  skills/setup-pre-commit/tests/test_gate_template.py
+e80ac66079a35113b20b6434b1ccc7bda0e4c7ee62d1a980da0d070fc4135c71  skills/setup-pre-commit/tests/test-install-hooks.sh
+152498b5fd65481dd02b9fc2044caff4f7cc5e0e727189bf3192d881ee8877ad  skills/setup-pre-commit/tests/test_setup_pre_commit.py
+e8ae00e31e82b4155c1601d7923e661166d05301b1854ac8414765b394c70ba1  skills/setup-pre-commit/tests/trigger-requests.json

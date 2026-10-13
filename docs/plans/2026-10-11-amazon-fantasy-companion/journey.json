@@ -314,6 +314,64 @@
       "decided_at": "2026-10-12T08:16:44Z",
       "decision": "Package digest after applying DEC-AFC-SD-032 (SysON direct import, no keyed tools): a018168f575741b5f53bbe7fac4bcb13128e31f37f69d73ba2433cf8d09d5144.",
       "source": "Orchestrator receipt of owner decision DEC-AFC-SD-032"
+    },
+    {
+      "id": "DEC-AFC-SD-033",
+      "status": "confirmed",
+      "decided_at": "2026-10-12T11:20:44Z",
+      "decision": "ST-4 (D1 spec authoring) starts now in parallel with S09; its exit is unchanged: `gate.sh spec` PASS on main after S09 lands, byte-identical rebuild.",
+      "source": "Owner: 'Start now'"
+    },
+    {
+      "id": "DEC-AFC-SD-034",
+      "status": "confirmed",
+      "decided_at": "2026-10-12T11:58:20Z",
+      "decision": "spec-authoring sections read like a real specification: no printed BLUF or Who/What/Why/How/When/Where labels. The opening sentence states the section's point. An unprinted writer's checklist guides each section: Decision (what it decides/defines), Concern (driving requirement/stakeholder concern, cite UIDs), Mechanism (how it works: interfaces, dependencies), Rationale (why this option, alternatives rejected), Verification (how it is proven). Fix the shared skill (rule, template, lint, tests), then rewrite the AFC spec. Inherited from the GridMarket kit; GridMarket's own spec is not changed by this Lifecycle.",
+      "source": "Owner at ST-5 spec review: 'the 5 qs are wrong and the bluf all both should not be explicit it should read like a real spec'; chose 'Yes, use those 5'"
+    },
+    {
+      "id": "DEC-AFC-SD-035",
+      "at": "2026-10-12T12:26:30Z",
+      "source": "owner answers to spec open items (AskUserQuestion, this session)",
+      "answers": {
+        "Q2/P2": "excitement_levels = Off / Mild / Hype (three fixed levels)",
+        "Q3": "numeric legibility minimum in addition to owner acceptance: body text >= 24px, scores >= 32px at 1080p",
+        "Q4": "no Mode A footage. If the spike shows the panel cannot sit beside a provider's live video, the demo is alerts + Watch only and the panel is a full screen in our app. Owner rationale: the product is a tune-in alert system; Watch must know the broadcast channel and whether the customer can watch it (location + subscription, or the provider's own out-of-region / not-in-plan answer)",
+        "Q5": "provider spike order: Prime Video (TNF), ESPN app, DirecTV Stream app (owner's current subscription), YouTube TV (owner may switch later). Local broadcast (CBS/FOX/NBC): show the channel; offer a provider app that carries it, otherwise no deep link",
+        "competitive": "owner asked to confirm YouTube TV does not already do this: YouTube TV Fantasy View (NFL.com/Yahoo) shows roster scores beside the game; no evidence of tune-in alerts or cross-provider Watch. Submission must state this differentiation",
+        "Q6": "stick found; exact model and Fire OS version still to be recorded",
+        "Q7": "Yahoo application not yet submitted",
+        "Q8": "AWS Free-plan account not yet created",
+        "Q9": "license Apache-2.0",
+        "Q10": "restore the missing engineering-methods S8 ledger (Alphazedehq skills task)",
+        "P1": "close_game_margin = within 8 points in the 4th quarter or overtime",
+        "P3": "stale_after = 60 seconds",
+        "D1": "owner 2026-10-12: 'we give the user options 2 of the most popular scoring fantasy modes' \u2014 manual-lineup scoring is a customer-selectable preset of exactly two: PPR (1 pt/reception; ESPN and Sleeper default) and Half-PPR (0.5 pt/reception; Yahoo default). Each preset is a documented statistic/coefficient table (AFC-PR-065); other coefficients identical (1 pt/10 rush+rec yds, 6 per rush/rec TD, 1 pt/25 pass yds, 4 per pass TD, -1 INT, -2 fumble lost). Default preset: Half-PPR. Yahoo leagues use Yahoo's own league scoring."
+      }
+    },
+    {
+      "id": "DEC-AFC-SD-036",
+      "at": "2026-10-12T12:41:50Z",
+      "source": "owner 2026-10-12: 'also we discuss how this can also potientially be used in AWS analytics channel and with Amazon new basketball contract with the NBA also'",
+      "decision": "Discussion only, no new requirements or build scope. The spec (rationale / future-direction text) and the hackathon submission write-up discuss extensibility to (1) an AWS-powered sports analytics viewing experience on Prime Video (e.g. the analytics-focused alternate TNF stream and AWS-powered Next Gen Stats) and (2) Amazon's NBA media-rights package on Prime Video. Claims about those offerings must cite public sources and be marked as external context, not product capability; the architecture section notes which components are sport-agnostic (alert policy, Watch handoff, panel) versus NFL-specific (feed adapter, scoring presets)."
+    },
+    {
+      "id": "DEC-AFC-SD-037",
+      "at": "2026-10-12T12:43:44Z",
+      "source": "owner 2026-10-12: 'in the agents.md file I have a new way to use bugs triage ... I think we need it in here to make sure we fix bugs effciently with our tight squeeze we have'",
+      "decision": "Dated visible amendment to the frozen routing: defects found during this Lifecycle (failing gate/landing, acceptance check, flaky test, review finding) are triaged with bug-hunter-triage and their fix and review dispatch on the bug-triager profile routes (Implementer Muse Code / Muse Spark 1.3 / max; Reviewer Codex CLI / GPT-6 Astra / high). Planned slices keep their lane profiles. Packets keeping a lane route for a defect state BUG_ROUTE. Written to Hackathons/AGENTS.md (workspace rule #20). In-flight S09-g6 (finishing an already-written repair) is not re-routed."
+    },
+    {
+      "id": "DEC-AFC-SD-038",
+      "at": "2026-10-12T13:17:35Z",
+      "source": "owner 2026-10-12: 'yes make sure this is used here and also add to all agents.md on this computer to use this in a push and maybe also in the other skills to use this release process'",
+      "decision": "Revision-record rule: every landed PR adds a CHANGELOG.md [Unreleased] entry linking the PR (ship-pull-request does it); spec-authoring revision rows list changed sections and link PR + diff (lint-enforced); releases via release-process. Canonical workspace AGENTS.md rule #21 (added), Hackathons/AGENTS.md (added); pointer sections in each repo AGENTS.md (Alphazedehq, requirements-system, azedge, betbot, odi-graph, maestro) by PR; skills spec-authoring, ship-pull-request, setup-a-repo (seed CHANGELOG.md), release-process (notes from changelog). Applies to this repo: CHANGELOG.md and a release per spec revision; owner authorizes AFC spec releases ('make sure this is used here')."
+    },
+    {
+      "id": "DEC-AFC-APPROVAL-ST5",
+      "at": "2026-10-12T13:17:35Z",
+      "source": "owner 2026-10-12: 'ok I am done reviewing everything else was sound and once that has been done you can continue to the next steps of coming up with the implementation plan'",
+      "decision": "ST-5 spec approval of PR #10 candidate 771c28958f78e611048528aedbd9ed4490f308e1 content, conditional on ST5-F1 (clickable links: external docs, issues, in-document section cross-references; skill rule + lint) and ST5-F2 (revision rows with changed sections + PR/diff links) being applied and verified deterministically. Owner authorizes starting Phase 2 Planning and Design (implementation plan + milestones) now."
     }
   ],
   "open_decisions": [],
@@ -374,6 +432,19 @@
       "dispatched_at": "2026-10-11T23:25:16Z",
       "result": "pending",
       "packet": "specialists/pd-resume-prompt.md"
+    },
+    {
+      "stage": "planning_and_design",
+      "phase": 2,
+      "role": "planning_and_design",
+      "host": "Claude Code headless (claude -p, Claude Opus 5.5, effort high, BEARING_ROLE=planning_and_design)",
+      "dispatched_at": "2026-10-12T13:18:26Z",
+      "result": "pending",
+      "packet": "specialists/pd-phase2-prompt.md",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-phase2-plan",
+      "branch": "plan/2026-10-12-afc-phase-2",
+      "base_sha": "771c28958f78e611048528aedbd9ed4490f308e1",
+      "authority": "DEC-AFC-APPROVAL-ST5"
     }
   ],
   "profile_selection": {
@@ -2263,6 +2334,1020 @@
       "at": "2026-10-12T08:16:44Z",
       "kind": "wave_receipt",
       "detail": "Wave 1 landed in Alphazedehq: S02 #303, S01 #306, S03 #304 (repair: EOF blank line), S06 #305 (repair: agents/openai.yaml default_prompt); all reviewed PASS (Muse, OCR) and local-gates PASS on merged heads. S07 #3 merged earlier. requirements-system #532 (S06 reciprocal non-trigger): local-gates cargo-test fails on different unrelated runtime tests each run (flaky under host load); re-run pending. Spec track: ST-3d SysON import PASS (project 2a033855-6bae-4fe1-975c-00bbb9419100), 65/65 allocation."
+    },
+    {
+      "at": "2026-10-12T08:17:56Z",
+      "kind": "dispatch_record",
+      "lease_id": "S06L-g1",
+      "slice": "S06L",
+      "generation": 1,
+      "repository": "1wgrumph/amazon-fantasy-companion",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-s06l",
+      "branch": "afc/s06l-skill-links",
+      "base": "72e99989aa1b93d3afb0fbd4a3d6deb2dd7991be",
+      "base_sha": "72e99989aa1b93d3afb0fbd4a3d6deb2dd7991be",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06L/",
+      "authority": "AUTH-AFC-2026-10-11-002",
+      "package_digest": "a018168f575741b5f53bbe7fac4bcb13128e31f37f69d73ba2433cf8d09d5144",
+      "leases": [
+        "harness-configs",
+        "alphazedehq-main-checkout"
+      ]
+    },
+    {
+      "at": "2026-10-12T08:17:56Z",
+      "kind": "dispatch_record",
+      "lease_id": "S42-g1",
+      "slice": "S42",
+      "generation": 1,
+      "repository": "1wgrumph/amazon-fantasy-companion",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-s42",
+      "branch": "afc/s42-vendor-spec-tools",
+      "base": "72e99989aa1b93d3afb0fbd4a3d6deb2dd7991be",
+      "base_sha": "72e99989aa1b93d3afb0fbd4a3d6deb2dd7991be",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S42/",
+      "authority": "AUTH-AFC-2026-10-11-002",
+      "package_digest": "a018168f575741b5f53bbe7fac4bcb13128e31f37f69d73ba2433cf8d09d5144",
+      "leases": [
+        "alphazedehq-main-checkout"
+      ]
+    },
+    {
+      "at": "2026-10-12T08:17:56Z",
+      "kind": "dispatch_record",
+      "lease_id": "S11T-g1",
+      "slice": "S11T",
+      "generation": 1,
+      "repository": "alphazede/Alphazedehq",
+      "worktree": "$HOME/alphazede/worktrees/alphazedehq-afc-s11t",
+      "branch": "afc/s11t-ci-gate-hook-tests",
+      "base": "ac47f0eca149eb281e41a6bdd9d490221c7a14cf",
+      "base_sha": "ac47f0eca149eb281e41a6bdd9d490221c7a14cf",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S11T/",
+      "authority": "AUTH-AFC-2026-10-11-002",
+      "package_digest": "a018168f575741b5f53bbe7fac4bcb13128e31f37f69d73ba2433cf8d09d5144",
+      "leases": []
+    },
+    {
+      "at": "2026-10-12T08:29:19Z",
+      "kind": "dispatch_record",
+      "lease_id": "S09T-g1",
+      "slice": "S09T",
+      "generation": 1,
+      "repository": "1wgrumph/amazon-fantasy-companion",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-s09t",
+      "branch": "afc/s09t-gate-tests",
+      "base": "5e59270b8320d6085039f26b64f14897736845f6",
+      "base_sha": "5e59270b8320d6085039f26b64f14897736845f6",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S09T/",
+      "authority": "AUTH-AFC-2026-10-11-002",
+      "package_digest": "a018168f575741b5f53bbe7fac4bcb13128e31f37f69d73ba2433cf8d09d5144",
+      "leases": []
+    },
+    {
+      "at": "2026-10-12T08:35:49Z",
+      "kind": "dispatch_record",
+      "lease_id": "S09-g1",
+      "slice": "S09",
+      "generation": 1,
+      "repository": "1wgrumph/amazon-fantasy-companion",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-s09",
+      "branch": "afc/s09-gate",
+      "base": "8b4cd9dfeafa4dd1e268a1d7c1b78dc03a1b2eb7",
+      "base_sha": "8b4cd9dfeafa4dd1e268a1d7c1b78dc03a1b2eb7",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S09/",
+      "authority": "AUTH-AFC-2026-10-11-002",
+      "package_digest": "a018168f575741b5f53bbe7fac4bcb13128e31f37f69d73ba2433cf8d09d5144",
+      "leases": []
+    },
+    {
+      "at": "2026-10-12T08:42:07Z",
+      "kind": "orchestrator_defect",
+      "detail": "S02-fix g1 dispatched without a dispatch_record; returned CONTRACT_FAILURE before editing. S09-g1 CONTRACT_FAILURE: merged setup-a-repo check-workflows.py rejects directory input that CMD-WORKFLOW-CHECK and S09T require. Both D4-B defects folded into S02-fix g2."
+    },
+    {
+      "at": "2026-10-12T08:42:07Z",
+      "kind": "dispatch_record",
+      "lease_id": "S02-fix-g2",
+      "slice": "S02",
+      "generation": 2,
+      "purpose": "post-merge integration defect fix (D4-B): gate.sh --area -> positional; check-workflows.py directory input",
+      "repository": "alphazede/Alphazedehq",
+      "worktree": "$HOME/alphazede/worktrees/alphazedehq-afc-s02-fix",
+      "branch": "afc/s02-fix-gate-area",
+      "base": "ac47f0eca149eb281e41a6bdd9d490221c7a14cf",
+      "base_sha": "ac47f0eca149eb281e41a6bdd9d490221c7a14cf",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S02-fix/",
+      "authority": "AUTH-AFC-2026-10-11-002",
+      "package_digest": "a018168f575741b5f53bbe7fac4bcb13128e31f37f69d73ba2433cf8d09d5144",
+      "leases": [
+        "alphazedehq-skills/setup-a-repo"
+      ]
+    },
+    {
+      "at": "2026-10-12T11:20:44Z",
+      "kind": "dispatch_record",
+      "lease_id": "ST-4-g1",
+      "slice": "ST-4",
+      "generation": 1,
+      "repository": "1wgrumph/amazon-fantasy-companion",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-st4",
+      "branch": "afc/st4-spec",
+      "base": "5e59270b8320d6085039f26b64f14897736845f6",
+      "base_sha": "5e59270b8320d6085039f26b64f14897736845f6",
+      "evidence_dir": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/ST-4/",
+      "authority": "AUTH-AFC-2026-10-11-002",
+      "package_digest": "a018168f575741b5f53bbe7fac4bcb13128e31f37f69d73ba2433cf8d09d5144"
+    },
+    {
+      "at": "2026-10-12T11:20:44Z",
+      "kind": "dispatch_record",
+      "lease_id": "S09-g2",
+      "slice": "S09",
+      "generation": 2,
+      "repository": "1wgrumph/amazon-fantasy-companion",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-s09",
+      "branch": "afc/s09-gate",
+      "base": "8b4cd9dfeafa4dd1e268a1d7c1b78dc03a1b2eb7",
+      "base_sha": "8b4cd9dfeafa4dd1e268a1d7c1b78dc03a1b2eb7",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S09/",
+      "authority": "AUTH-AFC-2026-10-11-002",
+      "package_digest": "a018168f575741b5f53bbe7fac4bcb13128e31f37f69d73ba2433cf8d09d5144",
+      "leases": []
+    },
+    {
+      "at": "2026-10-12T11:37:56Z",
+      "kind": "wave_receipt",
+      "detail": "ST-4 PASS: spec draft PR #10 (65/65 UIDs). S09-g2 CONTRACT_FAILURE: S09T valid fixture uses `tools/ci/gate.sh <area>` but the shared contract (setup-pre-commit SKILL.md) and merged checker require `bash tools/ci/gate.sh <area>`; test defect returned to Test Implementer (S09T-g2)."
+    },
+    {
+      "at": "2026-10-12T11:37:56Z",
+      "kind": "dispatch_record",
+      "lease_id": "S09T-g2",
+      "slice": "S09T",
+      "generation": 2,
+      "repository": "1wgrumph/amazon-fantasy-companion",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-s09t",
+      "branch": "afc/s09t-gate-tests",
+      "base": "8b4cd9dfeafa4dd1e268a1d7c1b78dc03a1b2eb7",
+      "base_sha": "8b4cd9dfeafa4dd1e268a1d7c1b78dc03a1b2eb7",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S09T/",
+      "authority": "AUTH-AFC-2026-10-11-002",
+      "package_digest": "a018168f575741b5f53bbe7fac4bcb13128e31f37f69d73ba2433cf8d09d5144"
+    },
+    {
+      "at": "2026-10-12T11:44:57Z",
+      "kind": "review_receipt",
+      "detail": "ST-4 spec review (Muse, OCR): reviewer wrote PASS with one P3 finding F1 (stale file counts in evidence/ST-4/verification.txt); per workspace rule a fixable finding is REPAIR_REQUIRED; one repair round dispatched."
+    },
+    {
+      "at": "2026-10-12T11:44:57Z",
+      "kind": "dispatch_record",
+      "lease_id": "ST-4-g2",
+      "slice": "ST-4",
+      "generation": 2,
+      "purpose": "repair F1",
+      "repository": "1wgrumph/amazon-fantasy-companion",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-st4",
+      "branch": "afc/st4-spec",
+      "base": "b39553be846d7905ea4f0b0028082d6979cab402",
+      "base_sha": "b39553be846d7905ea4f0b0028082d6979cab402",
+      "evidence_dir": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/ST-4/",
+      "authority": "AUTH-AFC-2026-10-11-002"
+    },
+    {
+      "at": "2026-10-12T11:44:58Z",
+      "kind": "dispatch_record",
+      "lease_id": "S09-g3",
+      "slice": "S09",
+      "generation": 3,
+      "repository": "1wgrumph/amazon-fantasy-companion",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-s09",
+      "branch": "afc/s09-gate",
+      "base": "7f12bca11e61cfdd1f5d98725e6580fb5c33ab14",
+      "base_sha": "7f12bca11e61cfdd1f5d98725e6580fb5c33ab14",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S09/",
+      "authority": "AUTH-AFC-2026-10-11-002",
+      "package_digest": "a018168f575741b5f53bbe7fac4bcb13128e31f37f69d73ba2433cf8d09d5144",
+      "leases": []
+    },
+    {
+      "at": "2026-10-12T11:58:20Z",
+      "kind": "dispatch_record",
+      "lease_id": "S06-fix-g1",
+      "slice": "S06",
+      "generation": 5,
+      "purpose": "SD-034 section form fix in spec-authoring",
+      "repository": "alphazede/Alphazedehq",
+      "worktree": "$HOME/alphazede/worktrees/alphazedehq-afc-s06-fix",
+      "branch": "afc/s06-fix-section-prose",
+      "base": "120dee00207425201aa77d1f42f3756ee6bc406e",
+      "base_sha": "120dee00207425201aa77d1f42f3756ee6bc406e",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06-fix/",
+      "authority": "AUTH-AFC-2026-10-11-002",
+      "leases": [
+        "alphazedehq-skills/spec-authoring"
+      ]
+    },
+    {
+      "at": "2026-10-12T12:09:38Z",
+      "kind": "dispatch_record",
+      "lease_id": "S09T-g3",
+      "slice": "S09T",
+      "generation": 3,
+      "repository": "1wgrumph/amazon-fantasy-companion",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-s09",
+      "branch": "afc/s09-gate",
+      "base": "733d00fa8beea517211a38c20b25ed1c71d9e169",
+      "base_sha": "733d00fa8beea517211a38c20b25ed1c71d9e169",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S09T/g3/",
+      "authority": "AUTH-AFC-2026-10-11-002",
+      "package_digest": "a018168f575741b5f53bbe7fac4bcb13128e31f37f69d73ba2433cf8d09d5144",
+      "route": "Claude Code / Claude Opus 5.5 / medium (primary test_implementer)",
+      "note": "S09-g3 CONTRACT_FAILURE + Orchestrator-observed hook env leak D1; candidate 733d00f committed by Orchestrator --no-verify; first launch aborted by Orchestrator (pre-push leak repolluted branch, base f9b049b was junk); relaunched on clean base; core.hooksPath unset",
+      "remote_branch": "afc/s09-gate-r2"
+    },
+    {
+      "at": "2026-10-12T12:09:38Z",
+      "kind": "orchestrator_note",
+      "id": "NOTE-AFC-CMD-COVERAGE-EXCLUDE",
+      "text": "CMD-COVERAGE-CI --exclude tools/ci/check_workflows.py does not match in diff-cover 9.7.2 (matches basename or absolute path). Plan-command defect; fix in next plan delta together with CMD-PATH-SCAN-PLAN pattern. S09 proceeds with the vendored checker counted, which is stricter."
+    },
+    {
+      "at": "2026-10-12T12:12:22Z",
+      "kind": "dispatch_record",
+      "lease_id": "S42-g2",
+      "slice": "S42",
+      "generation": 2,
+      "repository": "1wgrumph/amazon-fantasy-companion",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-s42",
+      "branch": "afc/s42-revendor-prose",
+      "base": "5e59270b8320d6085039f26b64f14897736845f6",
+      "base_sha": "5e59270b8320d6085039f26b64f14897736845f6",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S42/",
+      "authority": "AUTH-AFC-2026-10-11-002",
+      "package_digest": "a018168f575741b5f53bbe7fac4bcb13128e31f37f69d73ba2433cf8d09d5144",
+      "leases": [
+        "alphazedehq-main-checkout"
+      ]
+    },
+    {
+      "at": "2026-10-12T12:20:08Z",
+      "kind": "return_record",
+      "lease_id": "S09T-g3",
+      "outcome": "PASS (red receipt)",
+      "head": "2b275766ef67c63f697f4d7022038115863364aa",
+      "receipt": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S09T/g3/return.json"
+    },
+    {
+      "at": "2026-10-12T12:20:08Z",
+      "kind": "return_record",
+      "lease_id": "S06-fix-g1",
+      "outcome": "PASS; independent review PASS (packets/S06-fix-review-result.md); merged Alphazedehq #309 c24e4a36131c03dcda283b5431990cf14e603e68"
+    },
+    {
+      "at": "2026-10-12T12:20:08Z",
+      "kind": "dispatch_record",
+      "lease_id": "S09-g4",
+      "slice": "S09",
+      "generation": 4,
+      "repository": "1wgrumph/amazon-fantasy-companion",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-s09",
+      "branch": "afc/s09-gate",
+      "remote_branch": "afc/s09-gate-r2",
+      "base": "2b275766ef67c63f697f4d7022038115863364aa",
+      "base_sha": "2b275766ef67c63f697f4d7022038115863364aa",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S09/g4/",
+      "authority": "AUTH-AFC-2026-10-11-002",
+      "package_digest": "a018168f575741b5f53bbe7fac4bcb13128e31f37f69d73ba2433cf8d09d5144",
+      "route": "Codex CLI / GPT-6.1 Sol / high (primary implementer)"
+    },
+    {
+      "repository": "1wgrumph/amazon-fantasy-companion",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-s09",
+      "branch": "afc/s09-gate",
+      "remote_branch": "afc/s09-gate-r2",
+      "authority": "AUTH-AFC-2026-10-11-002",
+      "package_digest": "a018168f575741b5f53bbe7fac4bcb13128e31f37f69d73ba2433cf8d09d5144",
+      "at": "2026-10-12T12:43:13Z",
+      "kind": "dispatch_record",
+      "lease_id": "S09T-g4",
+      "slice": "S09T",
+      "generation": 4,
+      "base": "2b275766ef67c63f697f4d7022038115863364aa",
+      "base_sha": "2b275766ef67c63f697f4d7022038115863364aa",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S09T/g4/",
+      "route": "Claude Code / Claude Opus 5.5 / medium",
+      "note": "recorded late by Orchestrator (omitted before dispatch)"
+    },
+    {
+      "at": "2026-10-12T12:43:13Z",
+      "kind": "return_record",
+      "lease_id": "S09T-g4",
+      "outcome": "PASS",
+      "head": "ad0f8576b58cf8b9acb5bc4592fb722496500aea"
+    },
+    {
+      "at": "2026-10-12T12:43:13Z",
+      "kind": "return_record",
+      "lease_id": "S09-g4",
+      "outcome": "CONTRACT_FAILURE (test fixture missing origin/main; fixed by S09T-g4)",
+      "receipt": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S09/g4/return.json"
+    },
+    {
+      "at": "2026-10-12T12:43:13Z",
+      "kind": "return_record",
+      "lease_id": "S09-g5",
+      "outcome": "CONTRACT_FAILURE (no dispatch record; Orchestrator omission)",
+      "receipt": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S09/g5/return.json"
+    },
+    {
+      "repository": "1wgrumph/amazon-fantasy-companion",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-s09",
+      "branch": "afc/s09-gate",
+      "remote_branch": "afc/s09-gate-r2",
+      "authority": "AUTH-AFC-2026-10-11-002",
+      "package_digest": "a018168f575741b5f53bbe7fac4bcb13128e31f37f69d73ba2433cf8d09d5144",
+      "at": "2026-10-12T12:43:13Z",
+      "kind": "dispatch_record",
+      "lease_id": "S09-g6",
+      "slice": "S09",
+      "generation": 6,
+      "base": "ad0f8576b58cf8b9acb5bc4592fb722496500aea",
+      "base_sha": "ad0f8576b58cf8b9acb5bc4592fb722496500aea",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S09/g6/",
+      "route": "Codex CLI / GPT-6.1 Sol / high",
+      "note": "uncommitted g4 gate.sh change, diff sha256 b94ac96f3fa8fca1dfff3201f0de0ae859dd47ea647eb4b78a340d20534ecd0f"
+    },
+    {
+      "at": "2026-10-12T12:48:24Z",
+      "kind": "return_record",
+      "lease_id": "ST-2-sd035",
+      "outcome": "PASS",
+      "head": "429e064524820ba0fdf4c56a1e2b4d58b5fbdb11",
+      "route": "Muse Code / Muse Spark 1.3 / max"
+    },
+    {
+      "at": "2026-10-12T12:48:24Z",
+      "kind": "return_record",
+      "lease_id": "ST-2-sd035-d1",
+      "outcome": "PASS (AFC-PR-065 presets; new AFC-PR-066; register 66 UIDs)",
+      "head": "4d9b549696408ddaa5f432bac4911cbc349cb874"
+    },
+    {
+      "at": "2026-10-12T12:48:24Z",
+      "kind": "dispatch_record",
+      "lease_id": "ST-4-g3",
+      "slice": "ST-4",
+      "generation": 3,
+      "repository": "1wgrumph/amazon-fantasy-companion",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-st4",
+      "branch": "afc/st4-spec",
+      "base": "4d9b549696408ddaa5f432bac4911cbc349cb874",
+      "base_sha": "4d9b549696408ddaa5f432bac4911cbc349cb874",
+      "evidence_dir": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/ST-4/g3/",
+      "authority": "AUTH-AFC-2026-10-11-002",
+      "decisions": [
+        "DEC-AFC-SD-034",
+        "DEC-AFC-SD-035",
+        "DEC-AFC-SD-036"
+      ],
+      "route": "Codex CLI / GPT-6 Astra / medium (tech-writing implementer)"
+    },
+    {
+      "at": "2026-10-12T13:12:27Z",
+      "kind": "owner_review_feedback",
+      "stage": "ST-5",
+      "candidate": "PR #10 771c28958f78e611048528aedbd9ed4490f308e1",
+      "status": "collecting; owner still reviewing, hold changes",
+      "items": [
+        {
+          "id": "ST5-F1",
+          "text": "owner: 'I think we need hyperlinks when you are referencing either to the document or to other sections in the document this might need to ge in the skill. I know what #Issue 1 is but someone else wouldn't so clickable links would be nice'",
+          "disposition": "pending batch: spec-authoring skill rule+lint for clickable references (external docs, issues, in-document section cross-references), then AFC spec relink"
+        },
+        {
+          "id": "ST5-F2",
+          "text": "owner: 'Do we have release standard for when we push so they can see the changes in the revs of the push?'",
+          "finding": "Partial: spec-authoring gives a Revision History table (rev, date, author, one-line summary) from spec.yaml; no per-revision change list, no link to the PR/commit/diff, no tag. Repo has no CHANGELOG or GitHub releases yet; Alphazedehq release-process skill covers versioned releases.",
+          "disposition": "pending owner answer on proposal; batch with ST5-F1"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T13:18:55Z",
+      "kind": "dispatch_record",
+      "lease_id": "S43-g1",
+      "slice": "S43",
+      "generation": 1,
+      "repository": "alphazede/Alphazedehq",
+      "worktree": "$HOME/alphazede/worktrees/alphazedehq-afc-s43",
+      "branch": "afc/s43-revision-record",
+      "base": "23f0bb28a9ef9e0ec6ca1d4ec130489e8c569beb",
+      "base_sha": "23f0bb28a9ef9e0ec6ca1d4ec130489e8c569beb",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S43/",
+      "authority": "DEC-AFC-SD-038; DEC-AFC-APPROVAL-ST5 (ST5-F1, ST5-F2)",
+      "route": "Codex CLI / GPT-6.1 Sol / high (primary implementer)"
+    },
+    {
+      "at": "2026-10-12T13:19:34Z",
+      "kind": "dispatch_record",
+      "lease_id": "S44-g1",
+      "slice": "S44",
+      "generation": 1,
+      "repositories": {
+        "alphazede/requirements-system": "69f0f8b5b07694d5ce1f1c6ef79e14f7e07d194b",
+        "alphazede/azedge": "a82244bfbd2688dac740c231fc2550a327d008f7",
+        "1wgrumph/betbot": "8ac179dfd08671093aa60f36ff9cdd5d100cb503",
+        "alphazede/odi-graph": "eb1ced2e63f1276ed8499d942d8c4e39f1212c93",
+        "alphazede/maestro": "1207ba060792fd93aca46fca27eb6430d612dd00"
+      },
+      "worktrees": "$HOME/alphazede/worktrees/<repo>-afc-s44",
+      "branch": "afc/s44-revision-record",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S44/",
+      "authority": "DEC-AFC-SD-038",
+      "route": "Muse Code / Muse Spark 1.3 / max (primary light_implementer)"
+    },
+    {
+      "at": "2026-10-12T13:23:29Z",
+      "kind": "review_record",
+      "unit": "S09T+S09 pair",
+      "candidate": "be366cc2612edfa56ef20ff018a35bd12d95f3af",
+      "verdict": "REPAIR_REQUIRED",
+      "findings": [
+        "R1 P1 test-only test_gate.py stale template anchor",
+        "R2 P2 product gate.sh diff --check echoes content"
+      ],
+      "route": "Muse Code / Muse Spark 1.3 / max",
+      "result": "packets/S09-pair-review-result.md",
+      "plan_command_defects": [
+        "CMD-PR-CHECKS gh pr checks --json unsupported in gh 2.46.0"
+      ]
+    },
+    {
+      "at": "2026-10-12T13:23:29Z",
+      "kind": "triage_record",
+      "skill": "bug-hunter-triage",
+      "items": {
+        "R1": {
+          "route": "valid-actionable",
+          "class": "test-only",
+          "origin": "S09T test coupled to vendored template prose",
+          "escape": "PR #9 not re-run against main after S42-g2 re-vendor"
+        },
+        "R2": {
+          "route": "valid-actionable",
+          "class": "product",
+          "origin": "inherited from shared D4-A setup-pre-commit gate template",
+          "escape": "design-silent, untested failure output",
+          "prevention": "regression test here + same fix in Alphazedehq skills/setup-pre-commit template"
+        }
+      }
+    },
+    {
+      "at": "2026-10-12T13:23:29Z",
+      "kind": "dispatch_record",
+      "lease_id": "S09T-r1",
+      "slice": "S09T",
+      "repair_round": 1,
+      "repository": "1wgrumph/amazon-fantasy-companion",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-s09",
+      "branch": "afc/s09-gate",
+      "pr_branch": "afc/s09t-gate-tests",
+      "base": "be366cc2612edfa56ef20ff018a35bd12d95f3af",
+      "base_sha": "be366cc2612edfa56ef20ff018a35bd12d95f3af",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S09T/r1/",
+      "authority": "AUTH-AFC-2026-10-11-002; DEC-AFC-SD-037",
+      "route": "Claude Code / Claude Opus 5.5 / medium (bug-triager test_implementer)"
+    },
+    {
+      "at": "2026-10-12T13:25:05Z",
+      "kind": "return_record",
+      "lease_id": "S09T-r1",
+      "outcome": "PASS (R1 fixed; R2 red)",
+      "head": "36f82f425b0cdd6b57ce2d7223522d9f2b3f2a06",
+      "note": "evidence/S09T/r1/suite-r2-red.txt contains a generated fake AKIA value; redact before committing evidence"
+    },
+    {
+      "at": "2026-10-12T13:25:05Z",
+      "kind": "dispatch_record",
+      "lease_id": "S09-r1",
+      "slice": "S09",
+      "repair_round": 1,
+      "repository": "1wgrumph/amazon-fantasy-companion",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-s09",
+      "branch": "afc/s09-gate",
+      "pr_branch": "afc/s09t-gate-tests",
+      "base": "36f82f425b0cdd6b57ce2d7223522d9f2b3f2a06",
+      "base_sha": "36f82f425b0cdd6b57ce2d7223522d9f2b3f2a06",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S09/r1/",
+      "authority": "AUTH-AFC-2026-10-11-002; DEC-AFC-SD-037",
+      "route": "Muse Code / Muse Spark 1.3 / max (bug-triager implementer)"
+    },
+    {
+      "at": "2026-10-12T13:29:04Z",
+      "kind": "landing_record",
+      "unit": "S09T+S09 (PR #9)",
+      "outcome": "MERGED",
+      "merge_head": "17b40b4bdf8214b300bee05d594e13100d5d0d93",
+      "candidate": "2f6aa18e1b728f438e4d047ae3f35c7afdd27e24",
+      "tree_equal": true,
+      "verification": "Orchestrator re-ran unittest 34 OK and gate.sh all areas PASS; hosted checks run 38255792206 all pass",
+      "post": "install-hooks.sh re-run; core.hooksPath=.githooks restored; worktrees s09/s09t removed; afc/s09-gate-r2 deleted"
+    },
+    {
+      "at": "2026-10-12T13:29:33Z",
+      "kind": "dispatch_record",
+      "lease_id": "S45T-g1",
+      "slice": "S45T",
+      "generation": 1,
+      "repository": "alphazede/Alphazedehq",
+      "worktree": "$HOME/alphazede/worktrees/alphazedehq-afc-s45",
+      "branch": "afc/s45-gate-template-bugs",
+      "base": "23f0bb28a9ef9e0ec6ca1d4ec130489e8c569beb",
+      "base_sha": "23f0bb28a9ef9e0ec6ca1d4ec130489e8c569beb",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S45/",
+      "authority": "DEC-AFC-SD-037 (prevention for D1, R2)",
+      "route": "Claude Code / Claude Opus 5.5 / medium (bug-triager test_implementer)"
+    },
+    {
+      "at": "2026-10-12T13:31:34Z",
+      "kind": "return_record",
+      "lease_id": "S45T-g1",
+      "outcome": "PASS (2 red)",
+      "head": "2262a1c795ec59a4a23672fe8b6a1fd48c337a99"
+    },
+    {
+      "at": "2026-10-12T13:31:34Z",
+      "kind": "dispatch_record",
+      "lease_id": "S45-g1",
+      "slice": "S45",
+      "generation": 1,
+      "repository": "alphazede/Alphazedehq",
+      "worktree": "$HOME/alphazede/worktrees/alphazedehq-afc-s45",
+      "branch": "afc/s45-gate-template-bugs",
+      "base": "2262a1c795ec59a4a23672fe8b6a1fd48c337a99",
+      "base_sha": "2262a1c795ec59a4a23672fe8b6a1fd48c337a99",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S45/",
+      "authority": "DEC-AFC-SD-037",
+      "route": "Muse Code / Muse Spark 1.3 / max (bug-triager implementer)"
+    },
+    {
+      "at": "2026-10-12T13:38:26Z",
+      "kind": "return_record",
+      "lease_id": "S43-g1",
+      "outcome": "PASS",
+      "head": "68172c3e987d1825efff3b9fead02ff05d3a9def",
+      "pr": "alphazede/Alphazedehq#316"
+    },
+    {
+      "at": "2026-10-12T13:38:26Z",
+      "kind": "review_record",
+      "unit": "S43",
+      "candidate": "68172c3e987d1825efff3b9fead02ff05d3a9def",
+      "verdict": "REPAIR_REQUIRED",
+      "findings": [
+        "S43-R1 P3 AGENTS.md:364 relative link escapes checkout"
+      ],
+      "route": "Muse Code / Muse Spark 1.3 / max",
+      "result": "packets/S43-review-result.md",
+      "afc_spec_lint_probe": "19 findings, 0 false positives, 0 false negatives"
+    },
+    {
+      "at": "2026-10-12T13:38:26Z",
+      "kind": "dispatch_record",
+      "lease_id": "S43-r1",
+      "slice": "S43",
+      "repair_round": 1,
+      "repository": "alphazede/Alphazedehq",
+      "worktree": "$HOME/alphazede/worktrees/alphazedehq-afc-s43",
+      "branch": "afc/s43-revision-record",
+      "base": "68172c3e987d1825efff3b9fead02ff05d3a9def",
+      "base_sha": "68172c3e987d1825efff3b9fead02ff05d3a9def",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S43/",
+      "route": "Muse Code / Muse Spark 1.3 / max (bug-triager implementer)"
+    },
+    {
+      "at": "2026-10-12T13:40:24Z",
+      "kind": "review_record",
+      "unit": "S45T+S45",
+      "candidate": "df7a7e8f44165ee196e6112518814ac5cdc17aa9",
+      "verdict": "REPAIR_REQUIRED",
+      "findings": [
+        "S45-R1 P2 hygiene regex leaks colon-shaped content lines",
+        "S45-R2 P2 installer suite incompatible with new hygiene exit/shape"
+      ],
+      "route": "Codex CLI / GPT-6 Astra / high (bug-triager reviewer)",
+      "result": "packets/S45-review-result.md"
+    },
+    {
+      "at": "2026-10-12T13:40:24Z",
+      "kind": "triage_record",
+      "skill": "bug-hunter-triage",
+      "items": {
+        "B1": {
+          "route": "valid-actionable",
+          "class": "product/security",
+          "where": "1wgrumph/amazon-fantasy-companion main tools/ci/gate.sh since 17b40b4",
+          "origin": "R2 fix filtered all diff --check lines instead of headers only",
+          "escape": "R2 regression used a non-colon payload; S09 one-round review budget spent before S45 review found the shape"
+        }
+      }
+    },
+    {
+      "at": "2026-10-12T13:40:24Z",
+      "kind": "dispatch_record",
+      "lease_id": "S45T-r1",
+      "slice": "S45T",
+      "repair_round": 1,
+      "repository": "alphazede/Alphazedehq",
+      "worktree": "$HOME/alphazede/worktrees/alphazedehq-afc-s45",
+      "branch": "afc/s45-gate-template-bugs",
+      "base": "df7a7e8f44165ee196e6112518814ac5cdc17aa9",
+      "base_sha": "df7a7e8f44165ee196e6112518814ac5cdc17aa9",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S45/r1/",
+      "route": "Claude Code / Claude Opus 5.5 / medium (bug-triager test_implementer)"
+    },
+    {
+      "at": "2026-10-12T13:40:24Z",
+      "kind": "dispatch_record",
+      "lease_id": "B1T-g1",
+      "slice": "B1T",
+      "generation": 1,
+      "repository": "1wgrumph/amazon-fantasy-companion",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-b1",
+      "branch": "afc/b1-hygiene-colon-leak",
+      "base": "17b40b4bdf8214b300bee05d594e13100d5d0d93",
+      "base_sha": "17b40b4bdf8214b300bee05d594e13100d5d0d93",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/B1/",
+      "route": "Claude Code / Claude Opus 5.5 / medium (bug-triager test_implementer)"
+    },
+    {
+      "at": "2026-10-12T13:41:29Z",
+      "kind": "landing_record",
+      "unit": "S43 (Alphazedehq #316)",
+      "outcome": "MERGED",
+      "merge_head": "8f5c4c2a28da984b267611b62d0801666ab2d70f",
+      "verification": "repair S43-r1 one line; local-gates PASS on 136e300"
+    },
+    {
+      "at": "2026-10-12T13:41:29Z",
+      "kind": "dispatch_record",
+      "lease_id": "ST-4-g4",
+      "slice": "ST-4",
+      "generation": 4,
+      "repository": "1wgrumph/amazon-fantasy-companion",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-st4",
+      "branch": "afc/st4-spec",
+      "base": "771c28958f78e611048528aedbd9ed4490f308e1",
+      "base_sha": "771c28958f78e611048528aedbd9ed4490f308e1",
+      "evidence_dir": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/ST-4/g4/",
+      "authority": "DEC-AFC-APPROVAL-ST5 conditions ST5-F1, ST5-F2; DEC-AFC-SD-038",
+      "route": "Codex CLI / GPT-6 Astra / medium (tech-writing implementer)"
+    },
+    {
+      "at": "2026-10-12T13:42:31Z",
+      "kind": "dispatch_record",
+      "lease_id": "S45-r1",
+      "repository": "alphazede/Alphazedehq",
+      "worktree": "$HOME/alphazede/worktrees/alphazedehq-afc-s45",
+      "branch": "afc/s45-gate-template-bugs",
+      "base": "e7662f872a1d741071de4cf4697d048791d6058a",
+      "base_sha": "e7662f872a1d741071de4cf4697d048791d6058a",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S45-r1/",
+      "route": "Muse Code / Muse Spark 1.3 / max (bug-triager implementer)"
+    },
+    {
+      "at": "2026-10-12T13:42:31Z",
+      "kind": "dispatch_record",
+      "lease_id": "B1-g1",
+      "repository": "1wgrumph/amazon-fantasy-companion",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-b1",
+      "branch": "afc/b1-hygiene-colon-leak",
+      "base": "41fa6e3aed774f0822b1555f994c9138f1a1fc0c",
+      "base_sha": "41fa6e3aed774f0822b1555f994c9138f1a1fc0c",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/B1-g1/",
+      "route": "Muse Code / Muse Spark 1.3 / max (bug-triager implementer)"
+    },
+    {
+      "at": "2026-10-12T13:46:54Z",
+      "kind": "landing_record",
+      "unit": "S45T+S45 (Alphazedehq #317)",
+      "outcome": "MERGED",
+      "verification": "Orchestrator re-ran test_gate_template 3/3, test-install-hooks.sh 0, local-gates PASS at 655abd2; CHANGELOG entry added",
+      "repair_rounds": 1
+    },
+    {
+      "at": "2026-10-12T13:47:22Z",
+      "kind": "return_record",
+      "lease_id": "B1-g1",
+      "outcome": "PASS",
+      "head": "a22dab4a07cf4b26fecf9244e278c05d70003349",
+      "pr": "1wgrumph/amazon-fantasy-companion#12"
+    },
+    {
+      "at": "2026-10-12T13:50:18Z",
+      "kind": "return_record",
+      "lease_id": "ST-4-g4",
+      "outcome": "REPAIRABLE_FAILURE (uncommitted work kept in worktree)",
+      "failures": [
+        "ST4-G4-F1 builder Appendix A unlinked sections (shared skill)",
+        "ST4-G4-F2 AFC gate_support.copy_repo excludes docs/plans",
+        "ST4-G4-F3 AFC spec gate compares build to HEAD not index"
+      ],
+      "receipt": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/ST-4/g4/receipt.json (st4 worktree)"
+    },
+    {
+      "at": "2026-10-12T13:50:18Z",
+      "kind": "triage_record",
+      "skill": "bug-hunter-triage",
+      "items": {
+        "B3 (F1)": {
+          "route": "valid-actionable",
+          "class": "product (shared builder)",
+          "origin": "PR #316 link rule covered sources not generated content",
+          "escape": "lint checks sources only"
+        },
+        "B2a (F2)": {
+          "route": "valid-actionable",
+          "class": "test-only",
+          "origin": "S09T gate_support.copy_repo excludes docs/plans",
+          "escape": "no spec linked to repo documents before"
+        },
+        "B2b (F3)": {
+          "route": "valid-actionable",
+          "class": "product (AFC gate spec area)",
+          "origin": "S09 spec area compares build to HEAD",
+          "escape": "pre-commit with staged generated output never exercised"
+        },
+        "serialization": "B2 waits for B1 (PR #12) because both touch tools/ci/gate.sh and test_gate.py"
+      }
+    },
+    {
+      "at": "2026-10-12T13:50:18Z",
+      "kind": "dispatch_record",
+      "lease_id": "B3T-g1",
+      "repository": "alphazede/Alphazedehq",
+      "worktree": "$HOME/alphazede/worktrees/alphazedehq-afc-b3",
+      "branch": "afc/b3-appendix-links",
+      "base": "c323c56f556cf708b7104838d2f2977af015fe67",
+      "base_sha": "c323c56f556cf708b7104838d2f2977af015fe67",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/B3/",
+      "route": "Claude Code / Claude Opus 5.5 / medium (bug-triager test_implementer)"
+    },
+    {
+      "at": "2026-10-12T13:52:16Z",
+      "kind": "return_record",
+      "lease_id": "B3T-g1",
+      "outcome": "PASS (red)",
+      "head": "9b0ca5e2d3d64b9898148f051057da0b3ad959e0"
+    },
+    {
+      "at": "2026-10-12T13:52:16Z",
+      "kind": "dispatch_record",
+      "lease_id": "B3-g1",
+      "repository": "alphazede/Alphazedehq",
+      "worktree": "$HOME/alphazede/worktrees/alphazedehq-afc-b3",
+      "branch": "afc/b3-appendix-links",
+      "base": "9b0ca5e2d3d64b9898148f051057da0b3ad959e0",
+      "base_sha": "9b0ca5e2d3d64b9898148f051057da0b3ad959e0",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/B3/",
+      "route": "Muse Code / Muse Spark 1.3 / max (bug-triager implementer)"
+    },
+    {
+      "at": "2026-10-12T13:57:40Z",
+      "kind": "return_record",
+      "lease_id": "S44-g1",
+      "outcome": "4 PASS, azedge REPAIRABLE (allowlist)",
+      "prs": {
+        "requirements-system": 540,
+        "azedge": 304,
+        "betbot": 69,
+        "odi-graph": 19,
+        "maestro": 96
+      }
+    },
+    {
+      "at": "2026-10-12T13:57:40Z",
+      "kind": "landing_record",
+      "unit": "S44 docs-only (COE-ELSD-030 deterministic self-review)",
+      "merged": [
+        "1wgrumph/betbot#69",
+        "alphazede/odi-graph#19",
+        "alphazede/maestro#96"
+      ],
+      "note": "maestro gate failed 3x under load: 'unpacker error' pushing to /tmp scratch repos; /tmp tmpfs has usrquota and is filled by other sessions' azedge temp dirs; PASS 10/10 with TMPDIR=/var/tmp/az. Classified environment (BUG_ROUTE not-a-bug); bottleneck candidate for an enhancement issue."
+    },
+    {
+      "at": "2026-10-12T13:57:40Z",
+      "kind": "dispatch_record",
+      "lease_id": "S44-azedge-r1",
+      "repository": "alphazede/azedge",
+      "worktree": "$HOME/alphazede/worktrees/azedge-afc-s44",
+      "branch": "afc/s44-revision-record",
+      "base": "45c3fa92",
+      "base_sha": "45c3fa92",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S44/azedge/",
+      "route": "Muse Code / Muse Spark 1.3 / max (light_implementer)"
+    },
+    {
+      "at": "2026-10-12T13:58:38Z",
+      "kind": "return_record",
+      "lease_id": "B3-g1",
+      "outcome": "PASS",
+      "head": "2b46eae6e855629ef161075ba32bf76d9c7cc0c1",
+      "pr": "alphazede/Alphazedehq#320"
+    },
+    {
+      "at": "2026-10-12T13:58:38Z",
+      "kind": "review_record",
+      "unit": "B1 (AFC #12)",
+      "candidate": "a22dab4a07cf4b26fecf9244e278c05d70003349",
+      "verdict": "REPAIR_REQUIRED",
+      "findings": [
+        "B1-R1 P3 gate.sh:43 '+'-prefixed filename loses location header"
+      ],
+      "route": "Codex CLI / GPT-6 Astra / high",
+      "result": "packets/B1-review-result.md",
+      "also_affects": "Alphazedehq skills/setup-pre-commit/templates/gate.sh (merged c323c56) -> defect B4"
+    },
+    {
+      "at": "2026-10-12T13:58:38Z",
+      "kind": "dispatch_record",
+      "lease_id": "B3-review",
+      "route": "Codex CLI / GPT-6 Astra / high (bug-triager reviewer)",
+      "candidate": "2b46eae6e855629ef161075ba32bf76d9c7cc0c1"
+    },
+    {
+      "at": "2026-10-12T13:58:38Z",
+      "kind": "dispatch_record",
+      "lease_id": "B1T-r1",
+      "targets": {
+        "1wgrumph/amazon-fantasy-companion": {
+          "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-b1",
+          "branch": "afc/b1-hygiene-colon-leak",
+          "base_sha": "a22dab4a07cf4b26fecf9244e278c05d70003349"
+        },
+        "alphazede/Alphazedehq": {
+          "worktree": "$HOME/alphazede/worktrees/alphazedehq-afc-b4",
+          "branch": "afc/b4-plus-filename-location",
+          "base_sha": "c323c56f556cf708b7104838d2f2977af015fe67"
+        }
+      },
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/B1/r1/, evidence/B4/",
+      "route": "Claude Code / Claude Opus 5.5 / medium (bug-triager test_implementer)"
+    },
+    {
+      "at": "2026-10-12T14:01:50Z",
+      "kind": "return_record",
+      "lease_id": "B1T-r1",
+      "outcome": "PASS (red in both)",
+      "heads": {
+        "afc": "dee825ca1f3620ad26cc782500c904ae954067c0",
+        "alphazedehq": "afd348c7173f03675f3b44815f34583cecb961a7"
+      },
+      "note": "AFC red push used --no-verify (pre-push gate runs the intended red test); accepted"
+    },
+    {
+      "at": "2026-10-12T14:01:50Z",
+      "kind": "dispatch_record",
+      "lease_id": "B1-r1",
+      "targets": {
+        "1wgrumph/amazon-fantasy-companion": {
+          "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-b1",
+          "branch": "afc/b1-hygiene-colon-leak",
+          "base_sha": "dee825ca1f3620ad26cc782500c904ae954067c0"
+        },
+        "alphazede/Alphazedehq": {
+          "worktree": "$HOME/alphazede/worktrees/alphazedehq-afc-b4",
+          "branch": "afc/b4-plus-filename-location",
+          "base_sha": "afd348c7173f03675f3b44815f34583cecb961a7"
+        }
+      },
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/B1/r1/, evidence/B4/",
+      "route": "Muse Code / Muse Spark 1.3 / max (bug-triager implementer)"
+    },
+    {
+      "at": "2026-10-12T14:05:52Z",
+      "kind": "review_record",
+      "unit": "B3 (Alphazedehq #320)",
+      "candidate": "2b46eae6e855629ef161075ba32bf76d9c7cc0c1",
+      "verdict": "REPAIR_REQUIRED",
+      "findings": [
+        "B3-R1 P2 duplicate headings link to last occurrence",
+        "B3-R2 P2 slug collisions wrong targets"
+      ],
+      "route": "Codex CLI / GPT-6 Astra / high",
+      "result": "packets/B3-review-result.md"
+    },
+    {
+      "at": "2026-10-12T14:05:52Z",
+      "kind": "dispatch_record",
+      "lease_id": "B3T-r1",
+      "repository": "alphazede/Alphazedehq",
+      "worktree": "$HOME/alphazede/worktrees/alphazedehq-afc-b3",
+      "branch": "afc/b3-appendix-links",
+      "base": "2b46eae6e855629ef161075ba32bf76d9c7cc0c1",
+      "base_sha": "2b46eae6e855629ef161075ba32bf76d9c7cc0c1",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/B3/r1/",
+      "route": "Claude Code / Claude Opus 5.5 / medium (bug-triager test_implementer)"
+    },
+    {
+      "at": "2026-10-12T14:07:59Z",
+      "kind": "return_record",
+      "lease_id": "B3T-r1",
+      "outcome": "PASS (red)",
+      "head": "f19f44a57d13c5cd6dfebfd3dce429c7a70ceb4b"
+    },
+    {
+      "at": "2026-10-12T14:07:59Z",
+      "kind": "return_record",
+      "lease_id": "B1-r1",
+      "outcome": "PASS both",
+      "heads": {
+        "afc": "4573351d9638d947a83a6b4a0109042808d641bb",
+        "alphazedehq": "66d3276061e6561dac5982b36f383b56a265d3b1"
+      },
+      "prs": [
+        "1wgrumph/amazon-fantasy-companion#12",
+        "alphazede/Alphazedehq#322"
+      ]
+    },
+    {
+      "at": "2026-10-12T14:07:59Z",
+      "kind": "dispatch_record",
+      "lease_id": "B3-r1",
+      "repository": "alphazede/Alphazedehq",
+      "worktree": "$HOME/alphazede/worktrees/alphazedehq-afc-b3",
+      "branch": "afc/b3-appendix-links",
+      "base": "f19f44a57d13c5cd6dfebfd3dce429c7a70ceb4b",
+      "base_sha": "f19f44a57d13c5cd6dfebfd3dce429c7a70ceb4b",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/B3/r1/",
+      "route": "Muse Code / Muse Spark 1.3 / max (bug-triager implementer)"
+    },
+    {
+      "at": "2026-10-12T14:09:02Z",
+      "kind": "landing_record",
+      "units": [
+        "B1 (AFC #12)",
+        "B4 (Alphazedehq #322)"
+      ],
+      "outcome": "MERGED",
+      "verification": "one review (B1) + one repair round; Orchestrator re-ran AFC 36 tests + gate PASS, hosted checks pass; template 4 tests + installer suite + local-gates PASS; B4 is the identical parser in the shared template (repair of the same reviewed finding)"
+    },
+    {
+      "at": "2026-10-12T14:09:35Z",
+      "kind": "dispatch_record",
+      "lease_id": "B2T-g1",
+      "repository": "1wgrumph/amazon-fantasy-companion",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-b2",
+      "branch": "afc/b2-gate-spec-staged",
+      "base": "423496ee642982841d1748d102abd05a7d93edcc",
+      "base_sha": "423496ee642982841d1748d102abd05a7d93edcc",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/B2/",
+      "route": "Claude Code / Claude Opus 5.5 / medium (bug-triager test_implementer)"
+    },
+    {
+      "at": "2026-10-12T15:51:51Z",
+      "kind": "return_record",
+      "lease_id": "B3-r1",
+      "outcome": "PASS (agent-reported)",
+      "head": "1eadf6e",
+      "pr": "alphazede/Alphazedehq#320"
+    },
+    {
+      "at": "2026-10-12T15:51:51Z",
+      "kind": "return_record",
+      "lease_id": "S44-azedge-r1",
+      "outcome": "PASS (agent-reported)",
+      "head": "b8604b5d",
+      "pr": "alphazede/azedge#304",
+      "note": "agent-reported pre-existing flaky test provider_reads_once_per_admitted_attempt (BrokenPipe ~1/3 parallel runs)"
+    },
+    {
+      "at": "2026-10-12T15:51:51Z",
+      "kind": "return_record",
+      "lease_id": "B2T-g1",
+      "outcome": "ENVIRONMENT_FAILURE (Claude session limit; nothing committed)"
+    },
+    {
+      "at": "2026-10-12T15:51:51Z",
+      "kind": "return_record",
+      "lease_id": "PD-phase2",
+      "outcome": "ENVIRONMENT_FAILURE (Claude session limit; partial artifacts in phase2-plan worktree)"
+    },
+    {
+      "at": "2026-10-12T15:51:51Z",
+      "kind": "landing_record",
+      "unit": "S44 requirements-system #540",
+      "outcome": "MERGED",
+      "merge_head": "a79f46594f17dfafd93f11ab1973f9a6b1ec83d5",
+      "via": "merge-queue.sh land 540"
+    },
+    {
+      "at": "2026-10-12T15:51:51Z",
+      "kind": "handoff",
+      "path": "$HOME/.claude/state/handoff-5cfe4230-d897-4ac4-b3d0-f27628781c70.md"
     }
   ],
   "planning_review": {

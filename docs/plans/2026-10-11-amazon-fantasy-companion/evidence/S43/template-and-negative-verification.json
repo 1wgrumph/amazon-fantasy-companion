@@ -1,0 +1,132 @@
+{
+  "head": "68172c3e987d1825efff3b9fead02ff05d3a9def",
+  "commands": [
+    {
+      "command": [
+        "python3",
+        "skills/spec-authoring/scripts/spec_build.py",
+        "skills/spec-authoring/template",
+        "$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S43/template-first.md"
+      ],
+      "exit_code": 0,
+      "expected_exit": 0,
+      "output_tail": []
+    },
+    {
+      "command": [
+        "python3",
+        "skills/spec-authoring/scripts/spec_build.py",
+        "skills/spec-authoring/template",
+        "$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S43/template-second.md"
+      ],
+      "exit_code": 0,
+      "expected_exit": 0,
+      "output_tail": []
+    },
+    {
+      "command": [
+        "cmp",
+        "$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S43/template-first.md",
+        "$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S43/template-second.md"
+      ],
+      "exit_code": 0,
+      "expected_exit": 0,
+      "output_tail": []
+    },
+    {
+      "command": [
+        "python3",
+        "skills/spec-authoring/scripts/spec_lint.py",
+        "skills/spec-authoring/template"
+      ],
+      "exit_code": 0,
+      "expected_exit": 0,
+      "output_tail": []
+    },
+    {
+      "command": [
+        "python3",
+        "skills/spec-authoring/scripts/spec_lint.py",
+        "skills/spec-authoring/tests/fixtures/negative/issue"
+      ],
+      "exit_code": 1,
+      "expected_exit": 1,
+      "output_tail": [
+        "skills/spec-authoring/tests/fixtures/negative/issue/01-references.md: unlinked issue/PR reference: #123"
+      ]
+    },
+    {
+      "command": [
+        "python3",
+        "skills/spec-authoring/scripts/spec_lint.py",
+        "skills/spec-authoring/tests/fixtures/negative/section"
+      ],
+      "exit_code": 1,
+      "expected_exit": 1,
+      "output_tail": [
+        "skills/spec-authoring/tests/fixtures/negative/section/01-references.md: unlinked section reference: section 4.2"
+      ]
+    },
+    {
+      "command": [
+        "python3",
+        "skills/spec-authoring/scripts/spec_lint.py",
+        "skills/spec-authoring/tests/fixtures/negative/document"
+      ],
+      "exit_code": 1,
+      "expected_exit": 1,
+      "output_tail": [
+        "skills/spec-authoring/tests/fixtures/negative/document/01-references.md: unlinked document/file reference: design.md"
+      ]
+    },
+    {
+      "command": [
+        "python3",
+        "skills/spec-authoring/scripts/spec_lint.py",
+        "skills/spec-authoring/tests/fixtures/negative/revision"
+      ],
+      "exit_code": 1,
+      "expected_exit": 1,
+      "output_tail": [
+        "skills/spec-authoring/tests/fixtures/negative/revision/spec.yaml: revision 0.2: changes must list changed sections",
+        "skills/spec-authoring/tests/fixtures/negative/revision/spec.yaml: revision 0.2: links.pr must be a PR URL",
+        "skills/spec-authoring/tests/fixtures/negative/revision/spec.yaml: revision 0.2: links.diff must be a diff/compare URL"
+      ]
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "expected_exit": 0,
+      "output_tail": []
+    },
+    {
+      "command": "Scan all changed committed files for /home/",
+      "exit_code": 0,
+      "output_tail": [
+        "No absolute home paths in 20 changed files"
+      ]
+    }
+  ],
+  "skill_sizes": {
+    "spec-authoring": {
+      "lines": 48,
+      "words": 359
+    },
+    "ship-pull-request": {
+      "lines": 55,
+      "words": 429
+    },
+    "setup-a-repo": {
+      "lines": 58,
+      "words": 441
+    },
+    "release-process": {
+      "lines": 59,
+      "words": 399
+    }
+  }
+}

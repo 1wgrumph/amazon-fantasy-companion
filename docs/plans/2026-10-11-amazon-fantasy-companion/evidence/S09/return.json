@@ -1,0 +1,168 @@
+{
+  "outcome": "CONTRACT_FAILURE",
+  "lease_id": "S09-g1",
+  "slice": "S09",
+  "generation": 1,
+  "at": "2026-10-12T08:41:21.220551+00:00",
+  "authority": "AUTH-AFC-2026-10-11-002",
+  "package_digest": "a018168f575741b5f53bbe7fac4bcb13128e31f37f69d73ba2433cf8d09d5144",
+  "branch": "afc/s09-gate",
+  "base": "8b4cd9dfeafa4dd1e268a1d7c1b78dc03a1b2eb7",
+  "head_sha": "8b4cd9dfeafa4dd1e268a1d7c1b78dc03a1b2eb7",
+  "draft_pr_url": null,
+  "changed_paths": [],
+  "receipt_paths": [
+    "evidence/S09/return.json",
+    "evidence/S09/REPRO-FILE.log",
+    "evidence/S09/REPRO-DIRECTORY.log"
+  ],
+  "commands": [
+    {
+      "id": "REPRO-FILE",
+      "command": "python3 $HOME/alphazede/Alphazedehq/skills/setup-a-repo/scripts/check-workflows.py $HOME/alphazede/Alphazedehq/skills/setup-a-repo/templates/ci.yml",
+      "candidate_sha": "8b4cd9dfeafa4dd1e268a1d7c1b78dc03a1b2eb7",
+      "checker_source_commit": "7090d44a60218f928e3bc4d4b12ef33f0ba232d7",
+      "exit_code": 0,
+      "output_tail": "$HOME/alphazede/Alphazedehq/skills/setup-a-repo/templates/ci.yml: PASS"
+    },
+    {
+      "id": "REPRO-DIRECTORY",
+      "command": "python3 $HOME/alphazede/Alphazedehq/skills/setup-a-repo/scripts/check-workflows.py $HOME/alphazede/Alphazedehq/skills/setup-a-repo/templates",
+      "candidate_sha": "8b4cd9dfeafa4dd1e268a1d7c1b78dc03a1b2eb7",
+      "checker_source_commit": "7090d44a60218f928e3bc4d4b12ef33f0ba232d7",
+      "exit_code": 1,
+      "output_tail": "$HOME/alphazede/Alphazedehq/skills/setup-a-repo/templates: unreadable, malformed or unsupported workflow structure"
+    }
+  ],
+  "required_commands": {
+    "CMD-SCAN": {
+      "status": "NOT_RUN",
+      "exit_code": null,
+      "reason": "Packet stop rule reached at contract preflight; no implementation or acquisition performed"
+    },
+    "CMD-GATE-HYGIENE": {
+      "status": "NOT_RUN",
+      "exit_code": null,
+      "reason": "Packet stop rule reached at contract preflight; no implementation or acquisition performed"
+    },
+    "CMD-GATE-DOCS": {
+      "status": "NOT_RUN",
+      "exit_code": null,
+      "reason": "Packet stop rule reached at contract preflight; no implementation or acquisition performed"
+    },
+    "CMD-GATE-SPEC": {
+      "status": "NOT_RUN",
+      "exit_code": null,
+      "reason": "Packet stop rule reached at contract preflight; no implementation or acquisition performed"
+    },
+    "CMD-WORKFLOW-CHECK": {
+      "status": "NOT_RUN",
+      "exit_code": null,
+      "reason": "Packet stop rule reached at contract preflight; no implementation or acquisition performed"
+    },
+    "CMD-GATE-ALL": {
+      "status": "NOT_RUN",
+      "exit_code": null,
+      "reason": "Packet stop rule reached at contract preflight; no implementation or acquisition performed"
+    },
+    "CMD-PR-CHECKS": {
+      "status": "NOT_RUN",
+      "exit_code": null,
+      "reason": "Packet stop rule reached at contract preflight; no implementation or acquisition performed"
+    },
+    "CMD-CI-VENDOR-PIN": {
+      "status": "NOT_RUN",
+      "exit_code": null,
+      "reason": "Packet stop rule reached at contract preflight; no implementation or acquisition performed"
+    },
+    "CMD-COVERAGE-CI": {
+      "status": "NOT_RUN",
+      "exit_code": null,
+      "reason": "Packet stop rule reached at contract preflight; no implementation or acquisition performed"
+    },
+    "CMD-MUTATION-CI": {
+      "status": "NOT_RUN",
+      "exit_code": null,
+      "reason": "Packet stop rule reached at contract preflight; no implementation or acquisition performed"
+    }
+  },
+  "blocker": {
+    "id": "S09-CONTRACT-WORKFLOW-DIRECTORY",
+    "classification": "plan-command",
+    "affected_command": "python3 tools/ci/check_workflows.py .github/workflows/; rc=$?; echo \"exit=$rc\"; (exit $rc)",
+    "conflicting_command": "CMD-CI-VENDOR-PIN requires tools/ci/check_workflows.py to equal the merged D4-B source byte-for-byte",
+    "source_commit": "7090d44a60218f928e3bc4d4b12ef33f0ba232d7",
+    "source_sha256": "04d4eaeb59f0aee7ae5910f177bd3feacf1c39b4b034a8ec3618b56be5d1b24b",
+    "source_evidence": "main(paths) calls Path(path).read_text for every argument; no directory expansion; OSError maps to unreadable, malformed or unsupported workflow structure",
+    "test_evidence": "tools/ci/tests/test_workflows.py:test_committed_workflows_pass_the_checker passes the .github/workflows directory and requires exit 0",
+    "exact_error": "$HOME/alphazede/Alphazedehq/skills/setup-a-repo/templates: unreadable, malformed or unsupported workflow structure",
+    "resolution_needed": "Reconcile directory input with the frozen vendor pin through the orchestrator: corrected file-input commands and tests, or a merged directory-capable checker with an explicitly amended pin. Do not edit tests or the prescribed commands under this lease."
+  },
+  "proof_rows": {
+    "SEIT-AFC-CI-01.U": "NOT_RUN: stopped before implementation on incompatible workflow-checker directory contract",
+    "SEIT-AFC-CI-01.K": "NOT_RUN: stopped before implementation on incompatible workflow-checker directory contract",
+    "SEIT-AFC-CI-01.A": "NEEDS_MORE_EVIDENCE: requires merged main candidate / subsequent PR; neither exists for S09",
+    "SEIT-AFC-CI-02.W": "CONTRACT_FAILURE: pinned checker reads each argument as a file; prescribed directory input exits 1",
+    "SEIT-AFC-CI-02.P": "NEEDS_MORE_EVIDENCE: requires merged main candidate / subsequent PR; neither exists for S09",
+    "SEIT-AFC-CI-03": "NOT_RUN: stopped before implementation on incompatible workflow-checker directory contract",
+    "SEIT-AFC-CI-04.U": "NOT_RUN: stopped before implementation on incompatible workflow-checker directory contract",
+    "SEIT-AFC-CI-04.S": "NOT_RUN: stopped before implementation on incompatible workflow-checker directory contract",
+    "SEIT-AFC-CI-04.D": "NOT_RUN: stopped before implementation on incompatible workflow-checker directory contract",
+    "SEIT-AFC-PATH-01.H": "NOT_RUN: stopped before implementation on incompatible workflow-checker directory contract",
+    "SEIT-AFC-RISK-08": "NOT_RUN: stopped before implementation on incompatible workflow-checker directory contract",
+    "SEIT-AFC-RISK-11.H": "NOT_RUN: stopped before implementation on incompatible workflow-checker directory contract",
+    "SEIT-AFC-RISK-13.G": "NOT_RUN: stopped before implementation on incompatible workflow-checker directory contract"
+  },
+  "remaining_risks": [
+    "S09 is unimplemented; S09T remains at its red baseline.",
+    "No local gates, coverage, mutation, hook installation, or hosted PR checks ran.",
+    "No Actions budget or artifact acquisition evidence was generated."
+  ],
+  "scope_notes": {
+    "bran": "unavailable: no native policy; ordinary repository discovery used",
+    "review": "NOT_RUN: author implementation packet only; phase review remains with the configured independent reviewer",
+    "coverage_assist": "Preserved: required OCR delegate mode at phase review; not run by implementer",
+    "reverify": "not applicable: no compiled binary built or claimed",
+    "scan": "No acquisition, vendoring, import, or update performed. Reproduction used an unchanged installed helper, exempt from invocation-only rescanning by the scan skill."
+  },
+  "create_lean_skill": {
+    "outcome": "NO_CHANGE",
+    "strongest_peer": "bearing-lite:implementer",
+    "proof": "Existing Implementer owns approved bounded CI implementation. No skill target or skill write authority in S09. Creating a duplicate would violate the skill preconditions and exact write set.",
+    "matching_request": "Implement this approved S09 CI packet: existing Implementer match.",
+    "non_matching_request": "Author a new standalone skill: outside this packet and Implementer authority.",
+    "creator_scripts": "NOT_RUN: no skill candidate created"
+  },
+  "developer_feedback": {
+    "id": "S09-CONTRACT-WORKFLOW-DIRECTORY",
+    "timestamp": "2026-10-12T08:41:21.220599+00:00",
+    "reporting_role": "Product Implementer",
+    "task_or_packet": "S09-g1",
+    "tool_api_sdk": "D4-B workflow checker",
+    "version": "7090d44a60218f928e3bc4d4b12ef33f0ba232d7",
+    "device_os": "owner workstation / Linux",
+    "evidence": "evidence/S09/REPRO-FILE.log; evidence/S09/REPRO-DIRECTORY.log",
+    "classification": "plan-command contract failure",
+    "used_for": "CI workflow structural validation",
+    "what_worked_well": "Individual workflow template passes; source matches merged pin exactly",
+    "what_needs_work": "Directory input required by S09 commands and tests contradicts checker file-only interface",
+    "onboarding_from_zero_to_hello_world": "n/a",
+    "would_build_again_yes_no_and_why": "unknown",
+    "aws_services_used_and_how": "n/a",
+    "task_attempted": "Preflight frozen checker against S09 verification contract",
+    "steps_taken": "Verify pinned source digest; run installed checker on workflow file and parent directory",
+    "expected_result": "Directory invocation exits 0 for valid workflows",
+    "actual_result": "File exits 0; directory exits 1 with unreadable, malformed or unsupported workflow structure",
+    "severity_rating": "blocks S09",
+    "workaround_used": "none: command changes and test edits prohibited",
+    "actionable_suggestion": "Reconcile the frozen checker pin, directory command, and red-test directory call before redispatch",
+    "time_cost": "unknown",
+    "feature_request": {
+      "id": "n/a",
+      "tool": "n/a",
+      "description": "n/a",
+      "why_it_matters": "n/a",
+      "priority": "n/a"
+    }
+  }
+}
