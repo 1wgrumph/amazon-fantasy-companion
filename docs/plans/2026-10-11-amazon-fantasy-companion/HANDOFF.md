@@ -1,102 +1,61 @@
 # Current planning-lead handoff — AFC-2026-10-11
 
-Updated 2026-10-13T05:39:44Z. Current Codex controller is active; check the lease and live
-children before any resume. Do not duplicate work from the historical handoff
-below. Owner said **begin**, then **“You are the planning lead now”**; recorded
-as DEC-AFC-SD-039. Scope is planning completion and, after integrated approval,
-GitHub issue/milestone organization. Product execution stays on hold.
+Updated 2026-10-13T07:44:19Z. Codex is current owner-appointed Planning and Design lead
+(DEC-AFC-SD-039) and controller. Do not duplicate historical dispatches.
 
-## Verified completed prerequisites
+## Current state
 
-- AFC PR #14 (B2) merged `c2468c9e7850745f1245bf4cfc81e55047e3fb55`:
-  39 tests, independent red/green + OCR, all four hosted checks.
-- Alphazedehq PR #320 (B3) merged `04678835350b529b44ab69ee5f805ca21cab5e76`:
-  81 tests, prior review/repair preserved, local gate, changelog-only integration.
-- azedge PR #304 merged `5ac113e343df448b23cff28cab6e3938ec64a2de`:
-  independent review, foundation check, fast gates 29 PASS / 12 SKIP.
-  Previously reported workspace-test flake is not claimed fixed or reproduced.
-- AFC PR #10 merged `92f3ed1a0d178d2704c0efdc073ad332dc67b79f`:
-  ST5-F1/F2 satisfied, spec0.3, 749 links/anchors, 66 UIDs, byte-identical build,
-  independent amendment review, gate39tests and hosted4/4. No release/tag.
-- PR #11 was actually OPEN, contrary to the old handoff. Closed as redundant:
-  its patch579b951 is already on main as d259c169. No obsolete vendor merge.
-- Merged task worktrees/local/remote branches cleaned. ST4 g4 and g5-review
-  untracked evidence preserved byte-for-byte in control evidence/ST-4/preserved
-  and restored to the Phase2 plan's canonical evidence/ST-4 paths.
+Phase2 is PLAN_REVIEW_READY. Single independent Muse Code / Muse Spark 1.3 / max
+review ACCEPT at de6db1e3e125f827aa079a6333ba453ec322d34b. Its two advisories were
+resolved in the single aggregate repair: stale TE status and an explicit D05
+carrier for existing hackathon-admin owner confirmations. Review rounds1/1,
+aggregate repairs1/1, no automatic rereview. Deterministic gates PASS,39tests.
+Final planning digest: `67ac7a9071859e8d4ef05b863c3e6e4d4931d2451a162abb5bb8115eeb1b7d46`.
+Tracking payload SHA256: `f485d8f62f72bf09c1e90c57493e03a178ec93ba7e9fc155cd776a32f736f5e9`.
+PR: https://github.com/1wgrumph/amazon-fantasy-companion/pull/15 (draft awaiting
+single integrated owner approval). No issues or milestones created.
 
-## Current planning work
+Plan directory: `docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/` in
+`$HOME/alphazede/worktrees/amazon-fantasy-companion-phase2-plan`, branch
+`plan/2026-10-12-afc-phase-2`. Complete63active+3withdrawnUIDs,100proofs,
+70commands,52slices,44integrationsteps,39issuegroups/13TDDpairs,5milestones,
+7embeddedviews. Read evidence/P2-review-repair/repair.json and the preserved
+original review under the controlling plan's evidence/P2-review/.
 
-Control remains journey.json in this planning worktree. Its retired branch
-**must never be pushed**. Publish sanitized records from a safe current branch.
+## Next action
 
-Phase2 worktree: `$HOME/alphazede/worktrees/amazon-fantasy-companion-phase2-plan`,
-branch `plan/2026-10-12-afc-phase-2`, HEAD
-`7f000aff70e435b0cac923931fd818c69111f07d` (main/spec merge; gate passed).
-Plan directory: `docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/`.
-All current planning artifacts are uncommitted; preserve them.
+Present the frozen package and exact tracking payload for the one integrated
+owner review. After explicit approval, record it, land PR15 through its green
+checks and run P2-L01 on its frozen route to create/read back 5 milestones and
+39 issues, reusing stable identities. Personal repository currently exempt from
+the AlphaZede filing helper; re-evaluate actual scope at filing time. Never
+retry an uncertain creation without searching/readback. Product/backend/device/
+spike/deployment execution remains held until a subsequent owner instruction.
+Publication, credentials, tags/releases, public export/history remain protected.
+Do not infer these from planning/tracking approval. Parent issue#1 stays open.
 
-- Technical plan/design/graph corrected by current lead. Full63active product
-  UIDs retained, 3 withdrawn; 52 slices, 44 integration steps, 39 issue groups,
-  13 TDD pairs, five milestones. X05's issue closes in M2; M1 is its historical
-  fixture checkpoint. Product-execution hold is explicit in proposed authority.
-- TE initial authorship + finalization: 100 proof cases; finalization has70
-  command IDs and concrete prospective tool ownership/report/threshold bindings.
-  Runtime qualification and APK Reverify semantics remain typed gaps.
-- IE correction2 is complete. Do not reset its spent correction count.
-  Exact source corrections applied; transition evidence is in
-  `evidence/P2-6/codex-lead/`. No independent Phase2 planning review spent yet.
-- PI generated implementation.json and the Manifest, but final refresh is
-  still required. It incorrectly disabled four required SysML views after an
-  XML-prolog renderer refusal. Parent rejected that workaround. Light packet
-  removed only their39-byte XML declarations; XML trees and SysML source hashes
-  are unchanged; all four pass the renderer sanitizer. Final PI must restore
-  selected/required=true and embed all seven views, never omit required views.
-- **Active owning TE continuation:** `specialists/te-p2-filing-binding-prompt.md`
-  and its local run log. It corrects only tracking command binding and current
-  source/authority hashes after the actual helper-scope refusal. Same frozen
-  Codex CLI / GPT-6 Astra / xhigh session; no new review/assurance.
-- The helper policy does not cover this personal repository. All39 helper
-  dry-runs refused on scope before inspecting bodies; not passing checks.
-  `specialists/filing-scope-resolution.md` and
-  `evidence/github-work-items/repository-preflight.json` record39 passing
-  local body/label/target checks, zero submissions, no policy change.
-  After approval use the repository-applicable workflow; re-evaluate scope at
-  action time and use the mandatory helper if policy then covers the target.
-- Draft39issue bodies and5milestone payloads are under
-  `evidence/github-work-items/`. Refresh their final source digest/mappings
-  against the finalized package before approval; nothing created remotely.
+Control journal remains journey.json in the original planning worktree. Its
+retired branch MUST NEVER BE PUSHED. Publish sanitized records via PR15's safe
+branch. Existing profile snapshots/capabilities and all spent budgets persist.
+Claude weekly limit caused frozen fallback activation for TE/IE; do not switch
+routes merely because time passed. All CLI children use stdin /dev/null unless
+actively streaming. Current review child is finished; check live processes and
+lease before resuming. Do not execute the old handoff's stale work queue.
 
-## Next actions, in order
+## Verified prerequisites and limits
 
-1. Wait for and verify the active TE filing-binding receipt; preserve100proofs,
-   70commands, all frozen routes/capabilities and source transition history.
-2. Dispatch bounded PI refresh on frozen Muse Code / Muse Spark1.3 / max using
-   TE `evidence/te-p2-finalize/pi-refresh.json` plus the latest binding receipt.
-   Restore required views; normalize M2 due_on to `2026-10-17T01:00:00Z` with
-   its explanation separate; preserve X05 checkpoint semantics and scope-aware
-   filing. Split the overly long register path/hash identity value for readable
-   layout without changing source authority. Regenerate/freeze/render/check.
-3. Validate issue/milestone drafts, sanitized evidence, complete source coverage
-   and proposed authority. Exclude raw agent run logs. One known control-copy
-   home path is in evidence/S44/azedge-review/review.md; sanitize for publication.
-4. Commit/push the planning candidate (never local main or retired control
-   branch), open its PR, and run the **one** independent planning-review slot
-   on frozen primary Muse Code / Muse Spark1.3 / max. At most one aggregate
-   repair, deterministic closure, no automatic second review.
-5. Present the complete package and concrete tracking drafts for one integrated
-   owner approval. Only that approval can authorize tracking creation; it does
-   not start product code/spikes/deployment. Complete authorized tracking after
-   approval; preserve all protected publication/credential boundaries.
-
-Local loopback preview exists for the current Manifest. Browser DOM/navigation
-work; screenshots timed out three times (capture gap, never a visual PASS).
-The preview must be refreshed after final PI rendering. Keep no intermediate
-browser tab as a final deliverable. No app, backend, AWS or device work ran.
-
-Claude weekly usage limit was confirmed; existing specialist fallbacks were
-used. Do not switch routes for configuration/runtime errors. Every codex exec
-must receive stdin from /dev/null unless actively supplying input. Keep raw
-agent logs local and use the existing frozen snapshots, not live-profile edits.
+AFC#14 merged c2468c9; HQ#320 merged0467883; azedge#304 merged5ac113e;
+AFC#10 merged92f3ed1 (spec0.3,749links,66UIDs,byte-identical build). PR#11 was
+closed as redundant, not merged; its patch was already on main. Merged task
+worktrees/branches cleaned; ST4g4/g5-review evidence preserved. No spec release.
+Current package validators/schema/renderer/gate all PASS. Browser DOM confirms
+7SVGs,no horizontal overflow/no clipped SVG text; screenshot capture unavailable,
+not pixel-review PASS. BRAN unavailable. Tool qualification and APK semantic
+Reverify are future typed gaps, never runtime PASS. Q10/S8 external ledger is
+unrestored. Historical azedge workspace BrokenPipe flake was not reproduced and
+is not claimed fixed. Raw session logs stay private; historical byte normalization
+has a reversible ledger. Local preview is loopback45563, owned serverPID993698;
+keep only while useful for owner review, clean by exactPID, no broadpkill.
 
 ---
 

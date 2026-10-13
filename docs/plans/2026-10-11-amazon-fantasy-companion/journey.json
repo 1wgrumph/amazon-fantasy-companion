@@ -7,7 +7,7 @@
     "planning_repository": "github:1wgrumph/amazon-fantasy-companion",
     "tracking_issue": "1wgrumph/amazon-fantasy-companion#1",
     "deadline": "2026-10-23T19:00:00Z",
-    "current_activity": "Phase2 planning package ready for sanitization, commit and first independent planning review; no product execution or remote tracking creation"
+    "current_activity": "Phase2 planning review ACCEPT; one aggregate advisory repair PASS; preparing single integrated owner approval of planning and 39issue/5milestone tracking payload; product execution held"
   },
   "checkout_lease": {
     "journey": "AFC-2026-10-11",
@@ -20,7 +20,9 @@
     "generation": 1,
     "state": "active",
     "resumed_at": "2026-10-13T03:31:42Z",
-    "liveness": "INACTIVE predecessor; explicit owner begin; no task child process observed"
+    "liveness": "INACTIVE predecessor; explicit owner begin; no task child process observed",
+    "heartbeat_at": "2026-10-13T07:44:19Z",
+    "active_candidate": "de6db1e3e125f827aa079a6333ba453ec322d34b"
   },
   "stages": {
     "intake": "accepted",
@@ -454,6 +456,17 @@
       "branch": "plan/2026-10-12-afc-phase-2",
       "base_sha": "771c28958f78e611048528aedbd9ed4490f308e1",
       "authority": "DEC-AFC-APPROVAL-ST5"
+    },
+    {
+      "stage": "planning_and_design",
+      "phase": 2,
+      "role": "planning_and_design",
+      "host": "Codex current owner-appointed lead DEC-AFC-SD-039",
+      "at": "2026-10-13T07:44:19Z",
+      "result": "PLAN_REVIEW_READY",
+      "candidate_digest": "67ac7a9071859e8d4ef05b863c3e6e4d4931d2451a162abb5bb8115eeb1b7d46",
+      "evidence": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-review-repair",
+      "supersedes": "Historical Phase2 pending author-launch status; does not rewrite original launch receipt"
     }
   ],
   "profile_selection": {
@@ -3976,6 +3989,49 @@
       "outcome": "CANDIDATE_READY",
       "evidence": "Phase2 evidence/task-route-projection/receipt.json",
       "verification": "52route tuples and dependencies copied; both native/frozen helpers PASS same02c41e2c digest;7views embedded; no source/SEIT change"
+    },
+    {
+      "at": "2026-10-13T07:06:43Z",
+      "kind": "dispatch_record",
+      "lease_id": "P2-planning-review",
+      "role": "reviewer",
+      "route": "Muse Code / Muse Spark 1.3 / max",
+      "candidate": "de6db1e3e125f827aa079a6333ba453ec322d34b",
+      "candidate_digest": "02c41e2cc4553126bd0a5aeaa554104b488e68177eba4cb650694af2d4c16226",
+      "base_sha": "92f3ed1a0d178d2704c0efdc073ad332dc67b79f",
+      "packet": "packets/P2-planning-review.md",
+      "review": {
+        "coverage_assist": {
+          "enabled": true,
+          "required": true,
+          "backend": "ocr delegation"
+        }
+      },
+      "deterministic_verification": {
+        "reverify": {
+          "enabled": true,
+          "applicability": "not applicable; no compiled binary"
+        }
+      }
+    },
+    {
+      "at": "2026-10-13T07:44:19Z",
+      "kind": "review_aggregation_record",
+      "lease_id": "P2-planning-review",
+      "reviewed_revision": "de6db1e3e125f827aa079a6333ba453ec322d34b",
+      "reviewed_digest": "02c41e2cc4553126bd0a5aeaa554104b488e68177eba4cb650694af2d4c16226",
+      "verdict": "ACCEPT",
+      "completed_rounds": 1,
+      "aggregated_repairs": 1,
+      "advisories_resolved": [
+        "ADV-P2R-001",
+        "ADV-P2R-002"
+      ],
+      "repaired_digest": "67ac7a9071859e8d4ef05b863c3e6e4d4931d2451a162abb5bb8115eeb1b7d46",
+      "deterministic_gate": "PASS",
+      "evidence": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-review-repair",
+      "owner_approval": "pending",
+      "product_execution": "held"
     }
   ],
   "planning_review": {
@@ -4183,5 +4239,75 @@
       "impact": "Planning proceeds to integration; typed gaps (source reconciliation, Reverify capability, owner evidence) stay visible",
       "uncertainty": "IE run duration unknown; reconciliation outcome pending"
     }
-  ]
+  ],
+  "planning_review_phase2": {
+    "candidate_ref": "plan/2026-10-12-afc-phase-2",
+    "candidate_revision": "de6db1e3e125f827aa079a6333ba453ec322d34b",
+    "candidate_digest": "02c41e2cc4553126bd0a5aeaa554104b488e68177eba4cb650694af2d4c16226",
+    "authoring_base_revision": "7f000aff70e435b0cac923931fd818c69111f07d",
+    "reviewer_slots": [
+      {
+        "slot_id": "planning-review",
+        "primary_route_ref": "Muse Code / Muse Spark 1.3 / max",
+        "fallback_route_refs": [
+          "Codex CLI / GPT-6 Astra / high",
+          "Claude Code / Fable / high"
+        ]
+      }
+    ],
+    "round_number": 1,
+    "completed_rounds": 1,
+    "aggregated_repairs": 1,
+    "artifacts": {
+      "amazon-fantasy-companion-phase-2-technical-plan.md": "6a2520ea8e235b1c21210b801bb2570803678ec013123935b7d9ea8e752a5464",
+      "design.md": "7fe2a5ca0cabd66846ff00ac2294547296cc18cc2af1bbc26a279cf5ddc94dfa",
+      "seit.json": "ba2868264e752eed27679ea514b54c79a8741119616eca77d424b367ec465135",
+      "implementation.json": "cf46c7588e66133f73b86785918e1a84a2e57c6a23536005d4c6c5cd8575998b",
+      "amazon-fantasy-companion-phase-2-dod-manifest.html": "fc39124fc09bf26b70b6cbb0f3abb5bd5083d6db5a78c1158288cf5dfbd1502b",
+      "authority.json": "d90a47e99672100dde8484059869a59e4f9a1477834b2c2c4213dd49db78f5dd",
+      "evidence/github-work-items/github-work-items.json": "95caddfe2b85067e2a22a3c1e7d46180193f3c67c59aa91b34d552d9116b8c4b"
+    },
+    "capabilities": {
+      "coverage_assist": {
+        "enabled": true,
+        "required": true
+      }
+    },
+    "deterministic_verification": {
+      "reverify": {
+        "enabled": true
+      }
+    },
+    "publication_note": "Embedded7f000af revision records the authoring base. This dispatch freezes the complete published Git snapshot above plus source/SEIT digest and full artifact hashes; review this commit, not the bare authoring-base tree.",
+    "verdict": "ACCEPT",
+    "review_receipt": "evidence/P2-review/reviewer/receipt.json",
+    "aggregation_complete": true,
+    "deterministic_gate": "PASS",
+    "repaired_candidate_digest": "67ac7a9071859e8d4ef05b863c3e6e4d4931d2451a162abb5bb8115eeb1b7d46",
+    "repaired_artifacts": {
+      "amazon-fantasy-companion-phase-2-technical-plan.md": "6a2520ea8e235b1c21210b801bb2570803678ec013123935b7d9ea8e752a5464",
+      "design.md": "7fe2a5ca0cabd66846ff00ac2294547296cc18cc2af1bbc26a279cf5ddc94dfa",
+      "seit.json": "5d52c1aefaa105404dde3acd51f90a2ee78b54604b51dede56429b81074e6f1d",
+      "implementation.json": "1b15dca951356cd881e666c8abff41520ccf69db5c4a59d52f1378e7bb87c7f1",
+      "amazon-fantasy-companion-phase-2-dod-manifest.html": "e71cc51a2e71d6d1499d01d7d4682566408d0dbfade0c21d27b1c4ffc69a9ba2",
+      "authority.json": "d90a47e99672100dde8484059869a59e4f9a1477834b2c2c4213dd49db78f5dd",
+      "evidence/github-work-items/github-work-items.json": "f485d8f62f72bf09c1e90c57493e03a178ec93ba7e9fc155cd776a32f736f5e9"
+    },
+    "repair_evidence": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-review-repair",
+    "presentation_gate": {
+      "outcome": "PASS",
+      "reason": "repair_gate_passed"
+    },
+    "note": "Review tuple above remains the exact original reviewed commit. One bounded advisory repair deterministically verified; no automatic second review."
+  },
+  "integrated_review_phase2": {
+    "round": 1,
+    "status": "ready_to_present",
+    "candidate_digest": "67ac7a9071859e8d4ef05b863c3e6e4d4931d2451a162abb5bb8115eeb1b7d46",
+    "tracking_payload_sha256": "f485d8f62f72bf09c1e90c57493e03a178ec93ba7e9fc155cd776a32f736f5e9",
+    "milestones": 5,
+    "issues": 39,
+    "approval_scope": "Planning package plus P2-L01 GitHub tracking after PR landing only; product execution held pending subsequent owner instruction",
+    "owner_decision": null
+  }
 }
