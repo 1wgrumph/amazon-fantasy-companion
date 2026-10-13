@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added the owner-requested chronological milestone proposal and a fresh-session
+  handoff for Bearing 1.1.7 with the `opensource-hackathon` profile; applying
+  the proposal and profile migration remains pending
+  ([PR #15](https://github.com/1wgrumph/amazon-fantasy-companion/pull/15)).
+
 - Added the Phase 2 delivery and verification plan, five milestone definitions,
   39 work-issue drafts, and sanitized Lifecycle evidence; product execution
   remains held pending a subsequent owner instruction

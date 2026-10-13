@@ -1,0 +1,1732 @@
+{
+ "schema": "afc-p2-chronology-proposal/1",
+ "status": "PROPOSAL_ONLY — not applied; no canonical artifact, payload, GitHub or journey write",
+ "owner_decision": "DEC-AFC-SD-040",
+ "reviewer": "Claude Code / Claude Opus 5.5 / high (fresh session)",
+ "candidate": {
+  "branch": "plan/2026-10-12-afc-phase-2",
+  "revision": "51bc730a880105c9b21d37a7a2dc5da79ada875f",
+  "base": "92f3ed1a0d178d2704c0efdc073ad332dc67b79f",
+  "plan_digest": "67ac7a9071859e8d4ef05b863c3e6e4d4931d2451a162abb5bb8115eeb1b7d46",
+  "tracking_payload_sha256": "f485d8f62f72bf09c1e90c57493e03a178ec93ba7e9fc155cd776a32f736f5e9",
+  "implementation_sha256": "1b15dca951356cd881e666c8abff41520ccf69db5c4a59d52f1378e7bb87c7f1"
+ },
+ "rule": {
+  "target_per_milestone": 3,
+  "allowed_min": 2,
+  "allowed_max": 6,
+  "no_scope_change": true,
+  "no_issue_merge_or_split": true
+ },
+ "counts": {
+  "milestones": 13,
+  "issues": 39,
+  "slices": 52,
+  "tdd_pairs": 13,
+  "per_milestone": {
+   "M01": 3,
+   "M02": 2,
+   "M03": 3,
+   "M04": 4,
+   "M05": 3,
+   "M06": 3,
+   "M07": 3,
+   "M08": 3,
+   "M09": 2,
+   "M10": 2,
+   "M11": 4,
+   "M12": 4,
+   "M13": 3
+  }
+ },
+ "milestones": [
+  {
+   "id": "M01",
+   "title": "M01 Day one: tracking, verification guidance and product gate",
+   "due_on": "2026-10-14T20:00:00Z",
+   "github_due_date": "2026-10-14",
+   "due_basis": "CO-M1 (last Wave 1 merge 2026-10-14T20:00:00Z)",
+   "waves": [
+    "Wave 1"
+   ],
+   "live_windows": [],
+   "start": "Owner integrated approval recorded and planning PR merged to main (IE-P2-1).",
+   "finish_and_acceptance": "13 milestones and 39 issues created and read back (CMD-MILESTONES-READBACK, PROC-TRACKING-SETUP); Vnv areas pass CMD-GATE-DOCS; gate areas tvapp/backend on main with CMD-WORKFLOW-CHECK and supply-chain scan PASS.",
+   "owner_prerequisites": [
+    "Integrated planning/tracking approval"
+   ],
+   "resources": [
+    "main-landing"
+   ],
+   "issues": [
+    {
+     "order": 1,
+     "issue": "P2-L01",
+     "slices": [
+      "P2-L01"
+     ],
+     "conditional": false,
+     "starts_when": "parallel-ready at start",
+     "note": "after integrated approval AND planning PR landing (IE-P2-1); lands with D01 in IE-P2-2",
+     "old_milestone": "M1",
+     "new_title": "[M01] P2-L01: Set up milestones and work issues"
+    },
+    {
+     "order": 2,
+     "issue": "P2-D01",
+     "slices": [
+      "P2-D01"
+     ],
+     "conditional": false,
+     "starts_when": "parallel-ready at start (no predecessor)",
+     "note": "docs gate area passes",
+     "old_milestone": "M1",
+     "new_title": "[M01] P2-D01: Add product verification guidance"
+    },
+    {
+     "order": 3,
+     "issue": "P2-G01",
+     "slices": [
+      "P2-G01T",
+      "P2-G01"
+     ],
+     "conditional": false,
+     "starts_when": "parallel-ready at start",
+     "note": "G01T red receipt then G01 green in one pair worktree; Phase 1 S09 merged (met); its landing unblocks B01 and A01 landings",
+     "old_milestone": "M1",
+     "new_title": "[M01] P2-G01: Extend the shared gate for the TV app and backend"
+    }
+   ],
+   "predecessor_milestones": []
+  },
+  {
+   "id": "M02",
+   "title": "M02 Fire TV stick qualified and backend skeleton with device linking",
+   "due_on": "2026-10-14T20:00:00Z",
+   "github_due_date": "2026-10-14",
+   "due_basis": "CO-M1 (last Wave 1 merge); X01 latest start CO-STICK-START 2026-10-14T03:15:00Z",
+   "waves": [
+    "Wave 1"
+   ],
+   "live_windows": [],
+   "start": "Same start as M01 (planning PR merged); X01 is the time-critical item; only P2-B01 landing waits for P2-G01.",
+   "finish_and_acceptance": "P2-X01 verdict landed with device identity, qualified host tools and first_install_at; backend skeleton with device-code link green (CMD-GATE-BACKEND, CMD-SAM-VALIDATE) and contracts.b01 recorded.",
+   "owner_prerequisites": [
+    "OA-1",
+    "OA-4 (Prime Video signed in)"
+   ],
+   "resources": [
+    "fire-tv-stick (X01)",
+    "backend-template",
+    "main-landing"
+   ],
+   "issues": [
+    {
+     "order": 1,
+     "issue": "P2-X01",
+     "slices": [
+      "P2-X01"
+     ],
+     "conditional": false,
+     "starts_when": "parallel-ready at start (same moment as M01): OA-1 and OA-4 (Prime Video) before first install",
+     "note": "holds fire-tv-stick; first_install_at starts the 24 h panel clock; qualifies host JDK17/SDK/build-tools for A01T",
+     "old_milestone": "M1",
+     "new_title": "[M02] P2-X01: Qualify the Fire TV device and build tools"
+    },
+    {
+     "order": 2,
+     "issue": "P2-B01",
+     "slices": [
+      "P2-B01T",
+      "P2-B01"
+     ],
+     "conditional": false,
+     "starts_when": "B01T red parallel-ready at start; B01 lands after P2-G01 landing (M01)",
+     "note": "contract freeze contracts.b01 at merge",
+     "old_milestone": "M1",
+     "new_title": "[M02] P2-B01: Build the backend foundation and device linking"
+    }
+   ],
+   "predecessor_milestones": [
+    {
+     "milestone": "M01",
+     "conditions": [
+      "P2-G01 -> P2-B01: landing"
+     ],
+     "forward": false
+    }
+   ]
+  },
+  {
+   "id": "M03",
+   "title": "M03 Panel spike, TV app scaffold and release v0.1.0",
+   "due_on": "2026-10-14T23:00:00Z",
+   "github_due_date": "2026-10-14",
+   "due_basis": "Existing M1 due / CO-M1 rule \"R1 by 2026-10-14T23:00:00Z\"; CO-PANEL = first_install_at + 24 h",
+   "waves": [
+    "Wave 2 (X04)",
+    "Wave 1 (A01, R1)"
+   ],
+   "live_windows": [],
+   "start": "P2-X01 merged (stick released to X04).",
+   "finish_and_acceptance": "X04 verdict landed (modeB with geometry evidence, or TIMEBOX/fullScreen); tv-app scaffold green, installed and visually reviewed on the stick; X05 PR 1 fixtures on main; v0.1.0 release prepared (Wave 1 exit = release checkpoint W1).",
+   "owner_prerequisites": [
+    "OA-4 (Prime Video) for X04",
+    "OA-8 only to publish v0.1.0"
+   ],
+   "resources": [
+    "fire-tv-stick (X04 then A01 review)",
+    "tv-app-manifest",
+    "tv-app-gradle",
+    "main-landing (R1)"
+   ],
+   "issues": [
+    {
+     "order": 1,
+     "issue": "P2-X04",
+     "slices": [
+      "P2-X04"
+     ],
+     "conditional": false,
+     "starts_when": "after P2-X01 merged; holds fire-tv-stick without interruption until verdict or first_install_at + 24 h",
+     "note": "verdict selects panel_mode",
+     "old_milestone": "M2",
+     "new_title": "[M03] P2-X04: Prove the lineup panel beside provider video"
+    },
+    {
+     "order": 2,
+     "issue": "P2-A01",
+     "slices": [
+      "P2-A01T",
+      "P2-A01"
+     ],
+     "conditional": false,
+     "starts_when": "A01T after X01 host-tool receipt (may start during M01/M02); A01 lands after G01 and B01; its on-device review runs only after X04 releases the stick",
+     "note": "visual review of shell and error states",
+     "old_milestone": "M1",
+     "new_title": "[M03] P2-A01: Build the TV app foundation and device linking"
+    },
+    {
+     "order": 3,
+     "issue": "P2-R1",
+     "slices": [
+      "P2-R1"
+     ],
+     "conditional": false,
+     "starts_when": "last: every other Wave 1 slice merged, including the X05 PR 1 historical-fixture checkpoint; holds main-landing",
+     "note": "v0.1.0 draft; publication is OA-8",
+     "old_milestone": "M1",
+     "new_title": "[M03] P2-R1: Prepare the milestone 1 release"
+    }
+   ],
+   "predecessor_milestones": [
+    {
+     "milestone": "M01",
+     "conditions": [
+      "P2-D01 -> P2-R1: merged (every other slice of the milestone)",
+      "P2-G01 -> P2-A01: landing",
+      "P2-G01 -> P2-R1: merged (every other slice of the milestone)",
+      "P2-G01T -> P2-R1: merged (every other slice of the milestone)",
+      "P2-L01 -> P2-R1: merged (every other slice of the milestone)"
+     ],
+     "forward": false
+    },
+    {
+     "milestone": "M02",
+     "conditions": [
+      "P2-B01 -> P2-A01: landing (ApiClient builds against openapi.yaml)",
+      "P2-B01 -> P2-R1: merged (every other slice of the milestone)",
+      "P2-B01T -> P2-R1: merged (every other slice of the milestone)",
+      "P2-X01 -> P2-A01: Qualified host JDK17/SDK/build-tools preparation receipt with pins and scans; no extra stick slot; missing tool/import/build/collection is preparation gap, not valid red",
+      "P2-X01 -> P2-A01: SDK installed, stick usable",
+      "P2-X01 -> P2-R1: merged (every other slice of the milestone)",
+      "P2-X01 -> P2-X04: merged"
+     ],
+     "forward": false
+    },
+    {
+     "milestone": "M04",
+     "conditions": [
+      "P2-X05 -> P2-R1: X05 PR 1 historical fixtures merged (IE-P2-6); final live timing belongs to M2 and does not block R1"
+     ],
+     "forward": true
+    }
+   ]
+  },
+  {
+   "id": "M04",
+   "title": "M04 Stick spikes and Thursday Oct 15 live checks",
+   "due_on": "2026-10-17T01:00:00Z",
+   "github_due_date": "2026-10-17",
+   "due_basis": "Existing M2 due / CO-M2; internal CO-X03-DESK 2026-10-15T20:00:00Z; TNF kickoff ~2026-10-16T00:15Z (recheck)",
+   "waves": [
+    "Wave 2",
+    "Wave 1 (X05 start)"
+   ],
+   "live_windows": [
+    "Thu 2026-10-15 TNF"
+   ],
+   "start": "Stick released by P2-X04 and the P2-A01 review step (M03).",
+   "finish_and_acceptance": "Final notification, provider-link (TNF included), detection and ESPN live-timing verdicts landed; registry.v2 and fixtures.v2 digests recorded.",
+   "owner_prerequisites": [
+    "OA-4 (ESPN, DirecTV Stream, YouTube TV) before X03"
+   ],
+   "resources": [
+    "fire-tv-stick chain (one agent)",
+    "live-game-window (TNF 10-15)"
+   ],
+   "issues": [
+    {
+     "order": 1,
+     "issue": "P2-X02",
+     "slices": [
+      "P2-X02"
+     ],
+     "conditional": false,
+     "starts_when": "after P2-X04 merged and the A01 review slot (stick order)",
+     "note": "RISK-AFC-P2-02 class C stop if no heads-up route",
+     "old_milestone": "M2",
+     "new_title": "[M04] P2-X02: Prove notifications over provider playback"
+    },
+    {
+     "order": 2,
+     "issue": "P2-X03",
+     "slices": [
+      "P2-X03"
+     ],
+     "conditional": false,
+     "starts_when": "PR 1 desk after X02 merged and B01 merged, stick released by CO-X03-DESK; PR 2 live Prime Video TNF check holds stick + live-game-window for the game only",
+     "note": "registry.v1 at PR 1, registry.v2 at PR 2",
+     "old_milestone": "M2",
+     "new_title": "[M04] P2-X03: Verify provider game and channel links"
+    },
+    {
+     "order": 3,
+     "issue": "P2-X07",
+     "slices": [
+      "P2-X07"
+     ],
+     "conditional": false,
+     "starts_when": "after X03 PR 1 desk part done and stick released (may run before X03 PR 1 lands)",
+     "note": "detect_support verdict",
+     "old_milestone": "M2",
+     "new_title": "[M04] P2-X07: Verify supported app and viewing-context detection"
+    },
+    {
+     "order": 4,
+     "issue": "P2-X05",
+     "slices": [
+      "P2-X05"
+     ],
+     "conditional": false,
+     "starts_when": "started at approval (Wave 1); PR 1 historical fixtures land after B01 (early checkpoint CP-X05-HIST); PR 2 host-only TNF capture shares live-game-window with X03 PR 2",
+     "note": "final live-timing verdict closes the issue",
+     "old_milestone": "M2",
+     "new_title": "[M04] P2-X05: Capture NFL feed fixtures and verify live updates"
+    }
+   ],
+   "predecessor_milestones": [
+    {
+     "milestone": "M02",
+     "conditions": [
+      "P2-B01 -> P2-X03: merged",
+      "P2-B01 -> P2-X05: PR 1 landing only (IE-P2-F02)"
+     ],
+     "forward": false
+    },
+    {
+     "milestone": "M03",
+     "conditions": [
+      "P2-X04 -> P2-X02: merged"
+     ],
+     "forward": false
+    }
+   ]
+  },
+  {
+   "id": "M05",
+   "title": "M05 Feed ingest, lineup sources and first AWS deploy",
+   "due_on": "2026-10-17T01:00:00Z",
+   "github_due_date": "2026-10-17",
+   "due_basis": "Wave 2 exit / CO-M2; Yahoo path needs B03 deployed before T_yahoo 2026-10-16T19:00:00Z",
+   "waves": [
+    "Wave 2"
+   ],
+   "live_windows": [],
+   "start": "P2-B01 merged (runs in parallel with M03 and M04; backend lane).",
+   "finish_and_acceptance": "Ingest and lineup slices merged; backend deployed to aws-afc-dev with link and profile smoke (deploy.1).",
+   "owner_prerequisites": [
+    "OA-3",
+    "OA-10"
+   ],
+   "resources": [
+    "aws-afc-dev (L02)",
+    "backend-template (shared edits only)"
+   ],
+   "issues": [
+    {
+     "order": 1,
+     "issue": "P2-B03",
+     "slices": [
+      "P2-B03T",
+      "P2-B03"
+     ],
+     "conditional": false,
+     "starts_when": "parallel-ready once P2-B01 merged (M02)",
+     "note": "both sources from recorded responses; presets",
+     "old_milestone": "M2",
+     "new_title": "[M05] P2-B03: Implement lineup sources and scoring presets"
+    },
+    {
+     "order": 2,
+     "issue": "P2-L02",
+     "slices": [
+      "P2-L02"
+     ],
+     "conditional": false,
+     "starts_when": "parallel-ready once P2-B01 merged and OA-3/OA-10 done; deploy main HEAD; redeploy when B03 lands for the Yahoo path",
+     "note": "link/profile smoke; ApiUrl recorded",
+     "old_milestone": "M2",
+     "new_title": "[M05] P2-L02: Deploy the backend baseline and verify linking"
+    },
+    {
+     "order": 3,
+     "issue": "P2-B02",
+     "slices": [
+      "P2-B02T",
+      "P2-B02"
+     ],
+     "conditional": false,
+     "starts_when": "after CP-X05-HIST (X05 PR 1 fixtures on main) and B01",
+     "note": "fixtures.v1 red; v2 cases if landed",
+     "old_milestone": "M2",
+     "new_title": "[M05] P2-B02: Implement validated feed ingestion and replay"
+    }
+   ],
+   "predecessor_milestones": [
+    {
+     "milestone": "M02",
+     "conditions": [
+      "P2-B01 -> P2-B02: merged",
+      "P2-B01 -> P2-B03: merged",
+      "P2-B01 -> P2-L02: merged"
+     ],
+     "forward": false
+    },
+    {
+     "milestone": "M04",
+     "conditions": [
+      "P2-X05 -> P2-B02: PR 1 fixtures on main"
+     ],
+     "forward": false
+    }
+   ]
+  },
+  {
+   "id": "M06",
+   "title": "M06 Profile settings, lineup-source verdict and release v0.2.0",
+   "due_on": "2026-10-17T01:00:00Z",
+   "github_due_date": "2026-10-17",
+   "due_basis": "Existing M2 due / CO-M2 (\"X06 verdict at T_yahoo then R2\")",
+   "waves": [
+    "Wave 2"
+   ],
+   "live_windows": [],
+   "start": "P2-A01 merged; M05 deploy available.",
+   "finish_and_acceptance": "Profile/settings UI merged with visual review; Yahoo or manual verdict landed; v0.2.0 prepared (release checkpoint W2).",
+   "owner_prerequisites": [
+    "OA-2 (optional Yahoo path)",
+    "OA-8 only to publish v0.2.0"
+   ],
+   "resources": [
+    "fire-tv-stick (A02 instrumented/review)",
+    "aws-afc-dev (X06 SSM by role only)",
+    "tv-app-manifest",
+    "tv-app-gradle",
+    "main-landing (R2)"
+   ],
+   "issues": [
+    {
+     "order": 1,
+     "issue": "P2-A02",
+     "slices": [
+      "P2-A02T",
+      "P2-A02"
+     ],
+     "conditional": false,
+     "starts_when": "A02T after P2-A01 merged (M03); A02 after P2-X07 merged (M04); visual review needs P2-L02 (M05) and a stick slot",
+     "note": "detector per detect_support",
+     "old_milestone": "M2",
+     "new_title": "[M06] P2-A02: Build profile settings and customer controls"
+    },
+    {
+     "order": 2,
+     "issue": "P2-X06",
+     "slices": [
+      "P2-X06"
+     ],
+     "conditional": false,
+     "starts_when": "Yahoo path after OA-2 and B03 deployed (M05); otherwise manual path at T_yahoo 2026-10-16T19:00:00Z",
+     "note": "lineup_source verdict configures L03",
+     "old_milestone": "M2",
+     "new_title": "[M06] P2-X06: Verify Yahoo access or the manual-lineup fallback"
+    },
+    {
+     "order": 3,
+     "issue": "P2-R2",
+     "slices": [
+      "P2-R2"
+     ],
+     "conditional": false,
+     "starts_when": "last: every other Wave 2 slice merged and P2-R1 merged; holds main-landing",
+     "note": "v0.2.0 draft",
+     "old_milestone": "M2",
+     "new_title": "[M06] P2-R2: Prepare the milestone 2 release"
+    }
+   ],
+   "predecessor_milestones": [
+    {
+     "milestone": "M03",
+     "conditions": [
+      "P2-A01 -> P2-A02: merged",
+      "P2-R1 -> P2-R2: merged",
+      "P2-X04 -> P2-R2: merged (every other slice of the milestone)"
+     ],
+     "forward": false
+    },
+    {
+     "milestone": "M04",
+     "conditions": [
+      "P2-X02 -> P2-R2: merged (every other slice of the milestone)",
+      "P2-X03 -> P2-R2: merged (every other slice of the milestone)",
+      "P2-X07 -> P2-A02: merged",
+      "P2-X07 -> P2-R2: merged (every other slice of the milestone)"
+     ],
+     "forward": false
+    },
+    {
+     "milestone": "M05",
+     "conditions": [
+      "P2-B02 -> P2-R2: merged (every other slice of the milestone)",
+      "P2-B02T -> P2-R2: merged (every other slice of the milestone)",
+      "P2-B03 -> P2-R2: merged (every other slice of the milestone)",
+      "P2-B03 -> P2-X06: Yahoo path only",
+      "P2-B03T -> P2-R2: merged (every other slice of the milestone)",
+      "P2-L02 -> P2-R2: merged (every other slice of the milestone)",
+      "P2-L02 -> P2-X06: Yahoo path only (deployed role)"
+     ],
+     "forward": false
+    }
+   ]
+  },
+  {
+   "id": "M07",
+   "title": "M07 Event matching, alert policy and panel service",
+   "due_on": "2026-10-18T09:00:00Z",
+   "github_due_date": "2026-10-18",
+   "due_basis": "CO-M3-CODE",
+   "waves": [
+    "Wave 3"
+   ],
+   "live_windows": [],
+   "start": "Wave 3 entry as written: W2 spike verdicts landed and T_yahoo outcome applied (M04, M06); B02/B03 merged (M05).",
+   "finish_and_acceptance": "Matcher, policy and panel service merged with CMD-CONTRACT-FROZEN PASS.",
+   "owner_prerequisites": [],
+   "resources": [
+    "backend-template (shared edits only)"
+   ],
+   "issues": [
+    {
+     "order": 1,
+     "issue": "P2-B04",
+     "slices": [
+      "P2-B04T",
+      "P2-B04"
+     ],
+     "conditional": false,
+     "starts_when": "first: after B02 and B03 merged and Wave 3 entry",
+     "note": "one alert per resolved event; corrections",
+     "old_milestone": "M3",
+     "new_title": "[M07] P2-B04: Match player identities and handle duplicate or corrected events"
+    },
+    {
+     "order": 2,
+     "issue": "P2-B05",
+     "slices": [
+      "P2-B05T",
+      "P2-B05"
+     ],
+     "conditional": false,
+     "starts_when": "B05T after verified B04T red/shared-fixture handoff; B05 lands after B04 merged",
+     "note": "alert policy",
+     "old_milestone": "M3",
+     "new_title": "[M07] P2-B05: Apply the personalized alert policy"
+    },
+    {
+     "order": 3,
+     "issue": "P2-B07",
+     "slices": [
+      "P2-B07T",
+      "P2-B07"
+     ],
+     "conditional": false,
+     "starts_when": "after B04 merged (parallel with B05)",
+     "note": "panel service",
+     "old_milestone": "M3",
+     "new_title": "[M07] P2-B07: Serve consistent lineup and scoring panels"
+    }
+   ],
+   "predecessor_milestones": [
+    {
+     "milestone": "M04",
+     "conditions": [
+      "Wave 3 entry"
+     ],
+     "forward": false
+    },
+    {
+     "milestone": "M05",
+     "conditions": [
+      "P2-B02 -> P2-B04: merged",
+      "P2-B03 -> P2-B04: merged"
+     ],
+     "forward": false
+    },
+    {
+     "milestone": "M06",
+     "conditions": [
+      "Wave 3 entry"
+     ],
+     "forward": false
+    }
+   ]
+  },
+  {
+   "id": "M08",
+   "title": "M08 Provider resolver, TV alerts and Watch",
+   "due_on": "2026-10-18T09:00:00Z",
+   "github_due_date": "2026-10-18",
+   "due_basis": "CO-M3-CODE",
+   "waves": [
+    "Wave 3"
+   ],
+   "live_windows": [],
+   "start": "Wave 3 entry (same as M07); runs in parallel with M07.",
+   "finish_and_acceptance": "Resolver, alert UI and Watch merged with instrumented runs and visual review on the stick.",
+   "owner_prerequisites": [
+    "OA-4 sessions for per-provider launch"
+   ],
+   "resources": [
+    "fire-tv-stick (instrumented red runs and reviews)",
+    "tv-app-manifest",
+    "tv-app-gradle"
+   ],
+   "issues": [
+    {
+     "order": 1,
+     "issue": "P2-B06",
+     "slices": [
+      "P2-B06T",
+      "P2-B06"
+     ],
+     "conditional": false,
+     "starts_when": "parallel-ready at Wave 3 entry (needs only X03 PR 1 registry and B01)",
+     "note": "registry read-only",
+     "old_milestone": "M3",
+     "new_title": "[M08] P2-B06: Resolve viewing providers, channels and access"
+    },
+    {
+     "order": 2,
+     "issue": "P2-A03",
+     "slices": [
+      "P2-A03T",
+      "P2-A03"
+     ],
+     "conditional": false,
+     "starts_when": "A03T after A02 and X02 merged (parallel-ready); A03 lands after P2-B05 merged (M07)",
+     "note": "alerts over provider playback",
+     "old_milestone": "M3",
+     "new_title": "[M08] P2-A03: Display personalized TV alerts"
+    },
+    {
+     "order": 3,
+     "issue": "P2-A04",
+     "slices": [
+      "P2-A04T",
+      "P2-A04"
+     ],
+     "conditional": false,
+     "starts_when": "A04T after verified A03T red and X03 PR 1 registry; A04 lands after P2-B06 merged",
+     "note": "one RoutingOutcome per attempt",
+     "old_milestone": "M3",
+     "new_title": "[M08] P2-A04: Open Watch destinations and report observed outcomes"
+    }
+   ],
+   "predecessor_milestones": [
+    {
+     "milestone": "M04",
+     "conditions": [
+      "P2-X02 -> P2-A03: merged",
+      "P2-X03 -> P2-A04: PR 1 registry on main",
+      "P2-X03 -> P2-B06: PR 1 registry on main",
+      "Wave 3 entry"
+     ],
+     "forward": false
+    },
+    {
+     "milestone": "M06",
+     "conditions": [
+      "P2-A02 -> P2-A03: merged",
+      "Wave 3 entry"
+     ],
+     "forward": false
+    },
+    {
+     "milestone": "M07",
+     "conditions": [
+      "P2-B05 -> P2-A03: merged"
+     ],
+     "forward": false
+    }
+   ]
+  },
+  {
+   "id": "M09",
+   "title": "M09 TV lineup panel and integrated backend deploy",
+   "due_on": "2026-10-18T11:00:00Z",
+   "github_due_date": "2026-10-18",
+   "due_basis": "CO-M3-CODE rule (A05 merged by 2026-10-18T09:00:00Z; L03 by 2026-10-18T11:00:00Z)",
+   "waves": [
+    "Wave 3"
+   ],
+   "live_windows": [],
+   "start": "Wave 3 entry; A05T in parallel with M07/M08.",
+   "finish_and_acceptance": "Panel UI merged in the verdict mode; aws-afc-dev redeployed at the M3 backend head with deployed suite PASS.",
+   "owner_prerequisites": [],
+   "resources": [
+    "aws-afc-dev (L03)",
+    "fire-tv-stick (A05 runs/review)",
+    "tv-app-manifest",
+    "tv-app-gradle"
+   ],
+   "issues": [
+    {
+     "order": 1,
+     "issue": "P2-A05",
+     "slices": [
+      "P2-A05T",
+      "P2-A05"
+     ],
+     "conditional": false,
+     "starts_when": "A05T after A02 and X04 merged (parallel-ready at Wave 3 entry); A05 lands after P2-B07 merged (M07)",
+     "note": "only A05 edits MainActivity.kt",
+     "old_milestone": "M3",
+     "new_title": "[M09] P2-A05: Build the accessible lineup panel"
+    },
+    {
+     "order": 2,
+     "issue": "P2-L03",
+     "slices": [
+      "P2-L03"
+     ],
+     "conditional": false,
+     "starts_when": "after B05, B06, B07 merged; X06 lineup_source applied as deploy configuration; backend stub scan clean",
+     "note": "deploy.2",
+     "old_milestone": "M3",
+     "new_title": "[M09] P2-L03: Deploy and verify the integrated backend"
+    }
+   ],
+   "predecessor_milestones": [
+    {
+     "milestone": "M03",
+     "conditions": [
+      "P2-X04 -> P2-A05: merged"
+     ],
+     "forward": false
+    },
+    {
+     "milestone": "M04",
+     "conditions": [
+      "Wave 3 entry"
+     ],
+     "forward": false
+    },
+    {
+     "milestone": "M06",
+     "conditions": [
+      "P2-A02 -> P2-A05: merged",
+      "P2-X06 -> P2-L03: deploy configuration of the active lineup source",
+      "Wave 3 entry"
+     ],
+     "forward": false
+    },
+    {
+     "milestone": "M07",
+     "conditions": [
+      "P2-B05 -> P2-L03: merged",
+      "P2-B07 -> P2-A05: merged",
+      "P2-B07 -> P2-L03: merged"
+     ],
+     "forward": false
+    },
+    {
+     "milestone": "M08",
+     "conditions": [
+      "P2-B06 -> P2-L03: merged"
+     ],
+     "forward": false
+    }
+   ]
+  },
+  {
+   "id": "M10",
+   "title": "M10 Sunday Oct 18 live end-to-end and release v0.3.0",
+   "due_on": "2026-10-19T12:00:00Z",
+   "github_due_date": "2026-10-19",
+   "due_basis": "CO-M3; rehearsal IE-P2-29 cut-off 2026-10-18T15:00:00Z",
+   "waves": [
+    "Wave 3"
+   ],
+   "live_windows": [
+    "Sun 2026-10-18"
+   ],
+   "start": "M08 and M09 complete.",
+   "finish_and_acceptance": "Sunday run record: alert over playback -> Watch -> recorded outcome; panel live; v0.3.0 prepared (release checkpoint W3).",
+   "owner_prerequisites": [
+    "OA-4 sessions live",
+    "OA-10 linked device",
+    "OA-8 only to publish v0.3.0"
+   ],
+   "resources": [
+    "fire-tv-stick",
+    "aws-afc-dev",
+    "live-game-window",
+    "main-landing (R3)"
+   ],
+   "issues": [
+    {
+     "order": 1,
+     "issue": "P2-X09",
+     "slices": [
+      "P2-X09"
+     ],
+     "conditional": false,
+     "starts_when": "after A03, A04, A05 and L03 merged and the IE-P2-29 rehearsal; holds stick, aws-afc-dev, live-game-window",
+     "note": "run record; defects to bug-triager",
+     "old_milestone": "M3",
+     "new_title": "[M10] P2-X09: Demonstrate the Sunday end-to-end flow"
+    },
+    {
+     "order": 2,
+     "issue": "P2-R3",
+     "slices": [
+      "P2-R3"
+     ],
+     "conditional": false,
+     "starts_when": "last: every other Wave 3 slice merged and P2-R2; holds main-landing",
+     "note": "v0.3.0 draft",
+     "old_milestone": "M3",
+     "new_title": "[M10] P2-R3: Prepare the milestone 3 release"
+    }
+   ],
+   "predecessor_milestones": [
+    {
+     "milestone": "M04",
+     "conditions": [
+      "Wave 3 entry"
+     ],
+     "forward": false
+    },
+    {
+     "milestone": "M06",
+     "conditions": [
+      "P2-R2 -> P2-R3: merged",
+      "Wave 3 entry"
+     ],
+     "forward": false
+    },
+    {
+     "milestone": "M07",
+     "conditions": [
+      "P2-B04 -> P2-R3: merged (every other slice of the milestone)",
+      "P2-B04T -> P2-R3: merged (every other slice of the milestone)",
+      "P2-B05 -> P2-R3: merged (every other slice of the milestone)",
+      "P2-B05T -> P2-R3: merged (every other slice of the milestone)",
+      "P2-B07 -> P2-R3: merged (every other slice of the milestone)",
+      "P2-B07T -> P2-R3: merged (every other slice of the milestone)"
+     ],
+     "forward": false
+    },
+    {
+     "milestone": "M08",
+     "conditions": [
+      "P2-A03 -> P2-R3: merged (every other slice of the milestone)",
+      "P2-A03 -> P2-X09: merged",
+      "P2-A03T -> P2-R3: merged (every other slice of the milestone)",
+      "P2-A04 -> P2-R3: merged (every other slice of the milestone)",
+      "P2-A04 -> P2-X09: merged",
+      "P2-A04T -> P2-R3: merged (every other slice of the milestone)",
+      "P2-B06 -> P2-R3: merged (every other slice of the milestone)",
+      "P2-B06T -> P2-R3: merged (every other slice of the milestone)"
+     ],
+     "forward": false
+    },
+    {
+     "milestone": "M09",
+     "conditions": [
+      "P2-A05 -> P2-R3: merged (every other slice of the milestone)",
+      "P2-A05 -> P2-X09: merged",
+      "P2-A05T -> P2-R3: merged (every other slice of the milestone)",
+      "P2-L03 -> P2-R3: merged (every other slice of the milestone)",
+      "P2-L03 -> P2-X09: merged"
+     ],
+     "forward": false
+    }
+   ]
+  },
+  {
+   "id": "M11",
+   "title": "M11 Monday Oct 19 hardening, conditional Alexa, spec revision and release v0.4.0",
+   "due_on": "2026-10-21T23:00:00Z",
+   "github_due_date": "2026-10-21",
+   "due_basis": "CO-M4; CO-SUNDAY-FIX 2026-10-19T20:00:00Z; CO-ALEXA 2026-10-21T12:00:00Z",
+   "waves": [
+    "Wave 4"
+   ],
+   "live_windows": [
+    "Mon 2026-10-19 MNF"
+   ],
+   "start": "Wave 4 entry: Wave 3 exit (P2-R3 merged).",
+   "finish_and_acceptance": "Corrections/starter changes verified; D1 revision landed; X11 disposition recorded; no unresolved actionable review defect without owner acceptance; v0.4.0 prepared (release checkpoint W4).",
+   "owner_prerequisites": [
+    "OD-AFC-03 decision",
+    "OA-10 linked device",
+    "OA-8 only to publish v0.4.0"
+   ],
+   "resources": [
+    "fire-tv-stick (X10 then X11)",
+    "aws-afc-dev",
+    "live-game-window",
+    "main-landing (R4)"
+   ],
+   "issues": [
+    {
+     "order": 1,
+     "issue": "P2-X10",
+     "slices": [
+      "P2-X10"
+     ],
+     "conditional": false,
+     "starts_when": "after X09 merged and Sunday defect fixes (IE-P2-32, bug-triager, no pre-allocated issue); MNF ~2026-10-20T00:15Z",
+     "note": "run record",
+     "old_milestone": "M4",
+     "new_title": "[M11] P2-X10: Verify corrections and the Monday live flow"
+    },
+    {
+     "order": 2,
+     "issue": "P2-X11",
+     "slices": [
+      "P2-X11"
+     ],
+     "conditional": true,
+     "starts_when": "CONDITIONAL: only if OD-AFC-03 = yes and Wave 3 exited on time; dropped at 2026-10-21T12:00:00Z if unverified; serialized with X10 on the stick",
+     "note": "terminal disposition or recorded no-offer",
+     "old_milestone": "M4",
+     "new_title": "[M11] P2-X11: Evaluate the conditional Alexa route"
+    },
+    {
+     "order": 3,
+     "issue": "P2-D02",
+     "slices": [
+      "P2-D02"
+     ],
+     "conditional": false,
+     "starts_when": "after X01..X07 final verdicts and the X11 terminal disposition (IE-P2-34 runs after IE-P2-35)",
+     "note": "gate.sh spec byte-identical rebuild",
+     "old_milestone": "M4",
+     "new_title": "[M11] P2-D02: Update the specification with verified integration verdicts"
+    },
+    {
+     "order": 4,
+     "issue": "P2-R4",
+     "slices": [
+      "P2-R4"
+     ],
+     "conditional": false,
+     "starts_when": "last: X10, D02 and X11 disposition merged/recorded and P2-R3; holds main-landing",
+     "note": "v0.4.0 draft",
+     "old_milestone": "M4",
+     "new_title": "[M11] P2-R4: Prepare the milestone 4 release"
+    }
+   ],
+   "predecessor_milestones": [
+    {
+     "milestone": "M02",
+     "conditions": [
+      "P2-X01 -> P2-D02: Final required verdict landed; include through specification freeze"
+     ],
+     "forward": false
+    },
+    {
+     "milestone": "M03",
+     "conditions": [
+      "P2-X04 -> P2-D02: merged"
+     ],
+     "forward": false
+    },
+    {
+     "milestone": "M04",
+     "conditions": [
+      "P2-X02 -> P2-D02: merged",
+      "P2-X03 -> P2-D02: PR 2 final verdict",
+      "P2-X05 -> P2-D02: PR 2 final live-timing verdict landed; historical PR 1 is not final live proof",
+      "P2-X07 -> P2-D02: Final detection verdict landed"
+     ],
+     "forward": false
+    },
+    {
+     "milestone": "M06",
+     "conditions": [
+      "P2-X06 -> P2-D02: Yahoo/manual final disposition verdict landed"
+     ],
+     "forward": false
+    },
+    {
+     "milestone": "M10",
+     "conditions": [
+      "P2-R3 -> P2-R4: merged",
+      "P2-X09 -> P2-X10: merged",
+      "Wave 4 entry"
+     ],
+     "forward": false
+    }
+   ]
+  },
+  {
+   "id": "M12",
+   "title": "M12 Submission documents and developer feedback",
+   "due_on": "2026-10-22T16:00:00Z",
+   "github_due_date": "2026-10-22",
+   "due_basis": "CO-M5-DOCS",
+   "waves": [
+    "Wave 5"
+   ],
+   "live_windows": [],
+   "start": "Wave 5 entry as written: Wave 4 exit (P2-R4 merged).",
+   "finish_and_acceptance": "README, write-up, demo plan, owner checklist and sanitized developer feedback merged.",
+   "owner_prerequisites": [
+    "OA-6 before the write-up is final"
+   ],
+   "resources": [
+    "main-landing"
+   ],
+   "issues": [
+    {
+     "order": 1,
+     "issue": "P2-D03",
+     "slices": [
+      "P2-D03"
+     ],
+     "conditional": false,
+     "starts_when": "parallel-ready at Wave 5 entry (X10 merged)",
+     "note": "clean-checkout setup walkthrough; LICENSE file",
+     "old_milestone": "M5",
+     "new_title": "[M12] P2-D03: Prepare setup documentation, license and judge access"
+    },
+    {
+     "order": 2,
+     "issue": "P2-D04",
+     "slices": [
+      "P2-D04"
+     ],
+     "conditional": false,
+     "starts_when": "parallel-ready at Wave 5 entry; final wording after OA-6",
+     "note": "write-up",
+     "old_milestone": "M5",
+     "new_title": "[M12] P2-D04: Prepare the hackathon write-up"
+    },
+    {
+     "order": 3,
+     "issue": "P2-D05",
+     "slices": [
+      "P2-D05"
+     ],
+     "conditional": false,
+     "starts_when": "parallel-ready at Wave 5 entry",
+     "note": "demo plan <= 2 min 50 s and owner checklist",
+     "old_milestone": "M5",
+     "new_title": "[M12] P2-D05: Prepare the demo plan and submission checklist"
+    },
+    {
+     "order": 4,
+     "issue": "P2-SCR1",
+     "slices": [
+      "P2-SCR1"
+     ],
+     "conditional": false,
+     "starts_when": "after Wave 4 exit (Scribe side lane, not counted against the cap)",
+     "note": "feedback and friction log",
+     "old_milestone": "M5",
+     "new_title": "[M12] P2-SCR1: Assemble developer feedback and the friction log"
+    }
+   ],
+   "predecessor_milestones": [
+    {
+     "milestone": "M11",
+     "conditions": [
+      "P2-X10 -> P2-D03: merged",
+      "P2-X10 -> P2-D04: merged",
+      "P2-X10 -> P2-D05: merged",
+      "P2-X10 -> P2-SCR1: merged",
+      "Wave 5 entry"
+     ],
+     "forward": false
+    }
+   ]
+  },
+  {
+   "id": "M13",
+   "title": "M13 Release candidate v1.0.0, final APK, demo capture and handover",
+   "due_on": "2026-10-23T12:00:00Z",
+   "github_due_date": "2026-10-23",
+   "due_basis": "CO-M5 (7 h before T_deadline 2026-10-23T19:00:00Z); R5 2026-10-22T17:00:00Z, L05 2026-10-22T19:00:00Z, CO-DEMO 2026-10-23T06:00:00Z",
+   "waves": [
+    "Wave 5"
+   ],
+   "live_windows": [
+    "Thu 2026-10-22 TNF"
+   ],
+   "start": "M12 complete; IE-P2-39 (OA-5) and IE-P2-40 (final deploy if backend changed) run here as non-issue steps.",
+   "finish_and_acceptance": "Final APK built, hashed and Reverify run; demo manifest landed; Assurance Test Engineer and Integration Engineer verdicts (IE-P2-44); owner checklist handed over.",
+   "owner_prerequisites": [
+    "OA-5",
+    "OA-9 (if OD-AFC-P2-02 = A)",
+    "OA-11 (optional)",
+    "OA-8 to publish v1.0.0",
+    "OA-7 after handover"
+   ],
+   "resources": [
+    "fire-tv-stick (X12)",
+    "aws-afc-dev (IE-P2-40 if needed)",
+    "live-game-window (TNF 10-22)",
+    "main-landing (R5)"
+   ],
+   "issues": [
+    {
+     "order": 1,
+     "issue": "P2-R5",
+     "slices": [
+      "P2-R5"
+     ],
+     "conditional": false,
+     "starts_when": "first: D03, D04, D05, SCR1 and P2-R4 merged; its merge commit is candidate.final",
+     "note": "v1.0.0 draft; tag at OA-8",
+     "old_milestone": "M5",
+     "new_title": "[M13] P2-R5: Prepare the milestone 5 release"
+    },
+    {
+     "order": 2,
+     "issue": "P2-L05",
+     "slices": [
+      "P2-L05"
+     ],
+     "conditional": false,
+     "starts_when": "after P2-R5 merged",
+     "note": "APK sha256, signer cert, Reverify receipt or typed gap",
+     "old_milestone": "M5",
+     "new_title": "[M13] P2-L05: Build and inspect the final APK"
+    },
+    {
+     "order": 3,
+     "issue": "P2-X12",
+     "slices": [
+      "P2-X12"
+     ],
+     "conditional": false,
+     "starts_when": "after P2-D05 (M12) and P2-L05; TNF 2026-10-22 live window; docs-only manifest PR after the candidate",
+     "note": "clip manifest",
+     "old_milestone": "M5",
+     "new_title": "[M13] P2-X12: Capture the demo on the final APK"
+    }
+   ],
+   "predecessor_milestones": [
+    {
+     "milestone": "M11",
+     "conditions": [
+      "P2-R4 -> P2-R5: merged",
+      "Wave 5 entry"
+     ],
+     "forward": false
+    },
+    {
+     "milestone": "M12",
+     "conditions": [
+      "P2-D03 -> P2-R5: merged",
+      "P2-D04 -> P2-R5: merged",
+      "P2-D05 -> P2-R5: merged",
+      "P2-D05 -> P2-X12: merged",
+      "P2-SCR1 -> P2-R5: merged"
+     ],
+     "forward": false
+    }
+   ]
+  }
+ ],
+ "early_checkpoints": [
+  {
+   "id": "CP-X05-HIST",
+   "issue": "P2-X05",
+   "issue_milestone": "M04",
+   "what": "X05 PR 1 historical-fixture checkpoint (fixtures.v1, interim PARTIAL verdict; IE-P2-6)",
+   "lands_after": "P2-B01 merged (M02)",
+   "consumed_by": [
+    "P2-R1 (M03)",
+    "P2-B02 (M05)"
+   ],
+   "forward": [
+    "P2-R1"
+   ]
+  },
+  {
+   "id": "CP-X03-REG",
+   "issue": "P2-X03",
+   "issue_milestone": "M04",
+   "what": "X03 PR 1 desk evidence + registry.v1 (IE-P2-11); stick released",
+   "lands_after": "P2-X02 merged, P2-B01 merged",
+   "consumed_by": [
+    "P2-X07 (M04)",
+    "P2-B06 (M08)",
+    "P2-A04 (M08)"
+   ],
+   "forward": []
+  }
+ ],
+ "release_checkpoints": [
+  {
+   "checkpoint": "W1",
+   "wave": "Wave 1",
+   "release": "P2-R1 v0.1.0",
+   "closes_in": "M03",
+   "old": "M1",
+   "due": "2026-10-14T23:00:00Z"
+  },
+  {
+   "checkpoint": "W2",
+   "wave": "Wave 2",
+   "release": "P2-R2 v0.2.0",
+   "closes_in": "M06",
+   "old": "M2",
+   "due": "2026-10-17T01:00:00Z"
+  },
+  {
+   "checkpoint": "W3",
+   "wave": "Wave 3",
+   "release": "P2-R3 v0.3.0",
+   "closes_in": "M10",
+   "old": "M3",
+   "due": "2026-10-19T12:00:00Z"
+  },
+  {
+   "checkpoint": "W4",
+   "wave": "Wave 4",
+   "release": "P2-R4 v0.4.0",
+   "closes_in": "M11",
+   "old": "M4",
+   "due": "2026-10-21T23:00:00Z"
+  },
+  {
+   "checkpoint": "W5",
+   "wave": "Wave 5",
+   "release": "P2-R5 v1.0.0 (candidate.final)",
+   "closes_in": "M13",
+   "old": "M5",
+   "due": "2026-10-23T12:00:00Z"
+  }
+ ],
+ "integration_step_milestone": {
+  "IE-P2-1": "M01 (entry)",
+  "IE-P2-2": "M01",
+  "IE-P2-3": "M01",
+  "IE-P2-4": "M02",
+  "IE-P2-5": "M02",
+  "IE-P2-6": "M04 (CP-X05-HIST, executes during M02/M03)",
+  "IE-P2-7": "M03",
+  "IE-P2-8": "M03",
+  "IE-P2-9": "M03",
+  "IE-P2-10": "M04",
+  "IE-P2-11": "M04 (CP-X03-REG)",
+  "IE-P2-12": "M04",
+  "IE-P2-13": "M05",
+  "IE-P2-14": "M05",
+  "IE-P2-15": "M05",
+  "IE-P2-16": "M04",
+  "IE-P2-17": "M04",
+  "IE-P2-18": "M06",
+  "IE-P2-19": "M06",
+  "IE-P2-20": "M06",
+  "IE-P2-21": "M07",
+  "IE-P2-22": "M07",
+  "IE-P2-23": "M08",
+  "IE-P2-24": "M07",
+  "IE-P2-25": "M09",
+  "IE-P2-26": "M08",
+  "IE-P2-27": "M08",
+  "IE-P2-28": "M09",
+  "IE-P2-29": "M10",
+  "IE-P2-30": "M10",
+  "IE-P2-31": "M10",
+  "IE-P2-32": "M11",
+  "IE-P2-33": "M11",
+  "IE-P2-35": "M11",
+  "IE-P2-34": "M11",
+  "IE-P2-36": "M11",
+  "IE-P2-37": "M12",
+  "IE-P2-38": "M12",
+  "IE-P2-39": "M13",
+  "IE-P2-40": "M13",
+  "IE-P2-41": "M13",
+  "IE-P2-42": "M13",
+  "IE-P2-43": "M13",
+  "IE-P2-44": "M13"
+ },
+ "old_to_new": {
+  "P2-L01": {
+   "old": "M1",
+   "new": "M01",
+   "old_title": "[M1] P2-L01: Set up milestones and work issues",
+   "new_title": "[M01] P2-L01: Set up milestones and work issues",
+   "stable_id": "AFC-2026-10-11/P2-L01"
+  },
+  "P2-X01": {
+   "old": "M1",
+   "new": "M02",
+   "old_title": "[M1] P2-X01: Qualify the Fire TV device and build tools",
+   "new_title": "[M02] P2-X01: Qualify the Fire TV device and build tools",
+   "stable_id": "AFC-2026-10-11/P2-X01"
+  },
+  "P2-X05": {
+   "old": "M2",
+   "new": "M04",
+   "old_title": "[M2] P2-X05: Capture NFL feed fixtures and verify live updates",
+   "new_title": "[M04] P2-X05: Capture NFL feed fixtures and verify live updates",
+   "stable_id": "AFC-2026-10-11/P2-X05"
+  },
+  "P2-D01": {
+   "old": "M1",
+   "new": "M01",
+   "old_title": "[M1] P2-D01: Add product verification guidance",
+   "new_title": "[M01] P2-D01: Add product verification guidance",
+   "stable_id": "AFC-2026-10-11/P2-D01"
+  },
+  "P2-G01": {
+   "old": "M1",
+   "new": "M01",
+   "old_title": "[M1] P2-G01: Extend the shared gate for the TV app and backend",
+   "new_title": "[M01] P2-G01: Extend the shared gate for the TV app and backend",
+   "stable_id": "AFC-2026-10-11/P2-G01"
+  },
+  "P2-A01": {
+   "old": "M1",
+   "new": "M03",
+   "old_title": "[M1] P2-A01: Build the TV app foundation and device linking",
+   "new_title": "[M03] P2-A01: Build the TV app foundation and device linking",
+   "stable_id": "AFC-2026-10-11/P2-A01"
+  },
+  "P2-B01": {
+   "old": "M1",
+   "new": "M02",
+   "old_title": "[M1] P2-B01: Build the backend foundation and device linking",
+   "new_title": "[M02] P2-B01: Build the backend foundation and device linking",
+   "stable_id": "AFC-2026-10-11/P2-B01"
+  },
+  "P2-R1": {
+   "old": "M1",
+   "new": "M03",
+   "old_title": "[M1] P2-R1: Prepare the milestone 1 release",
+   "new_title": "[M03] P2-R1: Prepare the milestone 1 release",
+   "stable_id": "AFC-2026-10-11/P2-R1"
+  },
+  "P2-X04": {
+   "old": "M2",
+   "new": "M03",
+   "old_title": "[M2] P2-X04: Prove the lineup panel beside provider video",
+   "new_title": "[M03] P2-X04: Prove the lineup panel beside provider video",
+   "stable_id": "AFC-2026-10-11/P2-X04"
+  },
+  "P2-X02": {
+   "old": "M2",
+   "new": "M04",
+   "old_title": "[M2] P2-X02: Prove notifications over provider playback",
+   "new_title": "[M04] P2-X02: Prove notifications over provider playback",
+   "stable_id": "AFC-2026-10-11/P2-X02"
+  },
+  "P2-X03": {
+   "old": "M2",
+   "new": "M04",
+   "old_title": "[M2] P2-X03: Verify provider game and channel links",
+   "new_title": "[M04] P2-X03: Verify provider game and channel links",
+   "stable_id": "AFC-2026-10-11/P2-X03"
+  },
+  "P2-X07": {
+   "old": "M2",
+   "new": "M04",
+   "old_title": "[M2] P2-X07: Verify supported app and viewing-context detection",
+   "new_title": "[M04] P2-X07: Verify supported app and viewing-context detection",
+   "stable_id": "AFC-2026-10-11/P2-X07"
+  },
+  "P2-X06": {
+   "old": "M2",
+   "new": "M06",
+   "old_title": "[M2] P2-X06: Verify Yahoo access or the manual-lineup fallback",
+   "new_title": "[M06] P2-X06: Verify Yahoo access or the manual-lineup fallback",
+   "stable_id": "AFC-2026-10-11/P2-X06"
+  },
+  "P2-B02": {
+   "old": "M2",
+   "new": "M05",
+   "old_title": "[M2] P2-B02: Implement validated feed ingestion and replay",
+   "new_title": "[M05] P2-B02: Implement validated feed ingestion and replay",
+   "stable_id": "AFC-2026-10-11/P2-B02"
+  },
+  "P2-B03": {
+   "old": "M2",
+   "new": "M05",
+   "old_title": "[M2] P2-B03: Implement lineup sources and scoring presets",
+   "new_title": "[M05] P2-B03: Implement lineup sources and scoring presets",
+   "stable_id": "AFC-2026-10-11/P2-B03"
+  },
+  "P2-A02": {
+   "old": "M2",
+   "new": "M06",
+   "old_title": "[M2] P2-A02: Build profile settings and customer controls",
+   "new_title": "[M06] P2-A02: Build profile settings and customer controls",
+   "stable_id": "AFC-2026-10-11/P2-A02"
+  },
+  "P2-L02": {
+   "old": "M2",
+   "new": "M05",
+   "old_title": "[M2] P2-L02: Deploy the backend baseline and verify linking",
+   "new_title": "[M05] P2-L02: Deploy the backend baseline and verify linking",
+   "stable_id": "AFC-2026-10-11/P2-L02"
+  },
+  "P2-R2": {
+   "old": "M2",
+   "new": "M06",
+   "old_title": "[M2] P2-R2: Prepare the milestone 2 release",
+   "new_title": "[M06] P2-R2: Prepare the milestone 2 release",
+   "stable_id": "AFC-2026-10-11/P2-R2"
+  },
+  "P2-B04": {
+   "old": "M3",
+   "new": "M07",
+   "old_title": "[M3] P2-B04: Match player identities and handle duplicate or corrected events",
+   "new_title": "[M07] P2-B04: Match player identities and handle duplicate or corrected events",
+   "stable_id": "AFC-2026-10-11/P2-B04"
+  },
+  "P2-B05": {
+   "old": "M3",
+   "new": "M07",
+   "old_title": "[M3] P2-B05: Apply the personalized alert policy",
+   "new_title": "[M07] P2-B05: Apply the personalized alert policy",
+   "stable_id": "AFC-2026-10-11/P2-B05"
+  },
+  "P2-B06": {
+   "old": "M3",
+   "new": "M08",
+   "old_title": "[M3] P2-B06: Resolve viewing providers, channels and access",
+   "new_title": "[M08] P2-B06: Resolve viewing providers, channels and access",
+   "stable_id": "AFC-2026-10-11/P2-B06"
+  },
+  "P2-B07": {
+   "old": "M3",
+   "new": "M07",
+   "old_title": "[M3] P2-B07: Serve consistent lineup and scoring panels",
+   "new_title": "[M07] P2-B07: Serve consistent lineup and scoring panels",
+   "stable_id": "AFC-2026-10-11/P2-B07"
+  },
+  "P2-A03": {
+   "old": "M3",
+   "new": "M08",
+   "old_title": "[M3] P2-A03: Display personalized TV alerts",
+   "new_title": "[M08] P2-A03: Display personalized TV alerts",
+   "stable_id": "AFC-2026-10-11/P2-A03"
+  },
+  "P2-A04": {
+   "old": "M3",
+   "new": "M08",
+   "old_title": "[M3] P2-A04: Open Watch destinations and report observed outcomes",
+   "new_title": "[M08] P2-A04: Open Watch destinations and report observed outcomes",
+   "stable_id": "AFC-2026-10-11/P2-A04"
+  },
+  "P2-A05": {
+   "old": "M3",
+   "new": "M09",
+   "old_title": "[M3] P2-A05: Build the accessible lineup panel",
+   "new_title": "[M09] P2-A05: Build the accessible lineup panel",
+   "stable_id": "AFC-2026-10-11/P2-A05"
+  },
+  "P2-L03": {
+   "old": "M3",
+   "new": "M09",
+   "old_title": "[M3] P2-L03: Deploy and verify the integrated backend",
+   "new_title": "[M09] P2-L03: Deploy and verify the integrated backend",
+   "stable_id": "AFC-2026-10-11/P2-L03"
+  },
+  "P2-X09": {
+   "old": "M3",
+   "new": "M10",
+   "old_title": "[M3] P2-X09: Demonstrate the Sunday end-to-end flow",
+   "new_title": "[M10] P2-X09: Demonstrate the Sunday end-to-end flow",
+   "stable_id": "AFC-2026-10-11/P2-X09"
+  },
+  "P2-R3": {
+   "old": "M3",
+   "new": "M10",
+   "old_title": "[M3] P2-R3: Prepare the milestone 3 release",
+   "new_title": "[M10] P2-R3: Prepare the milestone 3 release",
+   "stable_id": "AFC-2026-10-11/P2-R3"
+  },
+  "P2-X10": {
+   "old": "M4",
+   "new": "M11",
+   "old_title": "[M4] P2-X10: Verify corrections and the Monday live flow",
+   "new_title": "[M11] P2-X10: Verify corrections and the Monday live flow",
+   "stable_id": "AFC-2026-10-11/P2-X10"
+  },
+  "P2-D02": {
+   "old": "M4",
+   "new": "M11",
+   "old_title": "[M4] P2-D02: Update the specification with verified integration verdicts",
+   "new_title": "[M11] P2-D02: Update the specification with verified integration verdicts",
+   "stable_id": "AFC-2026-10-11/P2-D02"
+  },
+  "P2-X11": {
+   "old": "M4",
+   "new": "M11",
+   "old_title": "[M4] P2-X11: Evaluate the conditional Alexa route",
+   "new_title": "[M11] P2-X11: Evaluate the conditional Alexa route",
+   "stable_id": "AFC-2026-10-11/P2-X11"
+  },
+  "P2-R4": {
+   "old": "M4",
+   "new": "M11",
+   "old_title": "[M4] P2-R4: Prepare the milestone 4 release",
+   "new_title": "[M11] P2-R4: Prepare the milestone 4 release",
+   "stable_id": "AFC-2026-10-11/P2-R4"
+  },
+  "P2-D03": {
+   "old": "M5",
+   "new": "M12",
+   "old_title": "[M5] P2-D03: Prepare setup documentation, license and judge access",
+   "new_title": "[M12] P2-D03: Prepare setup documentation, license and judge access",
+   "stable_id": "AFC-2026-10-11/P2-D03"
+  },
+  "P2-D04": {
+   "old": "M5",
+   "new": "M12",
+   "old_title": "[M5] P2-D04: Prepare the hackathon write-up",
+   "new_title": "[M12] P2-D04: Prepare the hackathon write-up",
+   "stable_id": "AFC-2026-10-11/P2-D04"
+  },
+  "P2-D05": {
+   "old": "M5",
+   "new": "M12",
+   "old_title": "[M5] P2-D05: Prepare the demo plan and submission checklist",
+   "new_title": "[M12] P2-D05: Prepare the demo plan and submission checklist",
+   "stable_id": "AFC-2026-10-11/P2-D05"
+  },
+  "P2-X12": {
+   "old": "M5",
+   "new": "M13",
+   "old_title": "[M5] P2-X12: Capture the demo on the final APK",
+   "new_title": "[M13] P2-X12: Capture the demo on the final APK",
+   "stable_id": "AFC-2026-10-11/P2-X12"
+  },
+  "P2-SCR1": {
+   "old": "M5",
+   "new": "M12",
+   "old_title": "[M5] P2-SCR1: Assemble developer feedback and the friction log",
+   "new_title": "[M12] P2-SCR1: Assemble developer feedback and the friction log",
+   "stable_id": "AFC-2026-10-11/P2-SCR1"
+  },
+  "P2-L05": {
+   "old": "M5",
+   "new": "M13",
+   "old_title": "[M5] P2-L05: Build and inspect the final APK",
+   "new_title": "[M13] P2-L05: Build and inspect the final APK",
+   "stable_id": "AFC-2026-10-11/P2-L05"
+  },
+  "P2-R5": {
+   "old": "M5",
+   "new": "M13",
+   "old_title": "[M5] P2-R5: Prepare the milestone 5 release",
+   "new_title": "[M13] P2-R5: Prepare the milestone 5 release",
+   "stable_id": "AFC-2026-10-11/P2-R5"
+  }
+ },
+ "unchanged": [
+  "39 stable issue IDs and stable_id values",
+  "52 slices, 13 TDD pairs, slice IDs, roles, routes, write sets, leases",
+  "121 slice dependencies and their conditions",
+  "100 proof IDs/methods, 70 command IDs, 63 active + 3 withdrawn UIDs",
+  "5 waves, wave gate costs, 44 integration step IDs/order",
+  "5 releases v0.1.0..v1.0.0 (P2-R1..R5)",
+  "all cut-off times, live windows, T_yahoo, final-ready and T_deadline",
+  "frozen profiles, OCR coverage-assist and Reverify settings",
+  "X11 stays a visible conditional issue"
+ ],
+ "ordering_traps": [
+  {
+   "id": "T1",
+   "summary": "A01 (W1) on-device review waits for X04 (W2) stick release; R1 needs A01, so R1 due 2026-10-14T23:00:00Z is infeasible if X04 uses its full first_install_at+24h timebox after a 10-14 first install",
+   "resolution": "X04, A01, R1 grouped in M03 so the chain is visible; date unchanged; owner schedule risk W-1"
+  },
+  {
+   "id": "T2",
+   "summary": "Wave 2 entry \"M1 exit for device and backend slices\" read as R1 merged forms a cycle R1<-A01<-X04<-M1 exit",
+   "resolution": "Reword to lane prerequisites (X01 merged for X04; B01 merged for backend W2; A01 merged for A02); clarification only"
+  },
+  {
+   "id": "T3",
+   "summary": "Single X05 issue spans approval start to TNF verdict",
+   "resolution": "Kept as the one tracked forward checkpoint CP-X05-HIST"
+  },
+  {
+   "id": "T4",
+   "summary": "gen_impl.py:379-392 derives R1..R4 \"every other slice\" dependencies from technical-plan milestone-table membership",
+   "resolution": "Keep the five-row release-checkpoint table as the MS_OF source; never feed it the 13-row table"
+  },
+  {
+   "id": "T5",
+   "summary": "IE-P2-34 (D02) executes after IE-P2-35 (X11); ID order misleads",
+   "resolution": "M11 orders X11 before D02"
+  },
+  {
+   "id": "T6",
+   "summary": "SCR1 predecessor stated as both X10 (arrow) and M4 exit (text)",
+   "resolution": "Stricter W4 exit kept (Wave 5 entry); SCR1 in M12"
+  },
+  {
+   "id": "T7",
+   "summary": "Wave 3 and Wave 5 entries are stricter than slice arrows (e.g. B06T, D03..D05)",
+   "resolution": "Preserved as written; early-start clarification left to parent/owner"
+  },
+  {
+   "id": "T8",
+   "summary": "\"M1\"..\"M5\" next to \"M01\"..\"M13\" is ambiguous",
+   "resolution": "Rename the technical grouping to wave exits W1..W5 in text; keep CO-M1..CO-M5 IDs stable"
+  }
+ ],
+ "prior_decisions_review": {
+  "prior_decision_count": 49,
+  "fix_count_five": [],
+  "concern_milestones_without_count": [
+   "DEC-AFC-SD-010",
+   "DEC-AFC-SD-012",
+   "DEC-AFC-SD-023",
+   "DEC-AFC-APPROVAL-ST5",
+   "DEC-AFC-SD-039"
+  ],
+  "related_no_count": [
+   "DEC-AFC-SD-038"
+  ],
+  "five_originates_in": [
+   "technical plan D3 milestone table",
+   "AC-AFC-P2-MS-01",
+   "AC-AFC-P2-REL-02",
+   "RISK-AFC-P2-13",
+   "OD-AFC-P2-03 (open)",
+   "DES-AFC-P2-REVREC wording",
+   "derived SEIT/implementation/payload/HTML/authority projections"
+  ],
+  "superseded_by": "DEC-AFC-SD-040 (count and grouping only; scope unchanged; spent review/repair budgets stay spent)"
+ },
+ "source_changes": [
+  {
+   "artifact": "technical plan",
+   "change": "Milestones table -> five-row release-checkpoint table (keep Slices column); add 13-row GitHub milestone table; reword AC-AFC-P2-MS-01, AC-AFC-P2-REL-02, RISK-AFC-P2-13; GitHub organization text; Wave 2 entry; owner-action Needed-by, Exit criteria 2, OD-AFC-P2-03 Mn->Wn; Outcome bullet"
+  },
+  {
+   "artifact": "design.md",
+   "change": "Lines 32 and 331: milestone release/exit -> wave release/exit"
+  },
+  {
+   "artifact": "specialists/slice-graph.md",
+   "change": "Column \"M, wave\" -> \"GitHub milestone, wave\"; L01 goal M01..M13; R1..R4 and note \"every other Wave n slice\"; X11/SCR1/D02 Mn -> Wn; X05->R1 condition M2 -> M04"
+  },
+  {
+   "artifact": "seit.json",
+   "change": "Text only: CMD-MILESTONES-CREATE, CMD-MILESTONES-READBACK, PROC-TRACKING-SETUP, SEIT-AFC-P2-MS-01 for 13; tracking_workflow.milestones=13 and groups; wave-meaning Mn tokens -> Wn (14 visual proofs, SPIKE-01, CMD-STUB-SCAN, PROC-VISUAL-REVIEW, levels, wave_gate_costs); IDs/counts unchanged"
+  },
+  {
+   "artifact": "integration-plan.md + implementation.json",
+   "change": "slice/step milestone = GitHub milestone (integration_step_milestone map), wave unchanged; releases[].checkpoint; work_issues groups; regenerate via gen_impl.py with MS_OF from checkpoint table, new 13-row parse, replaced fixed asserts, close-out grouped by wave"
+  },
+  {
+   "artifact": "evidence/github-work-items",
+   "change": "13 milestones from this proposal; 39 titles prefix-only; body milestone line + one Sequence line; X05 acceptance bullet; dependencies unchanged; new hashes; payload-supersession records f485d8f6 as superseded"
+  },
+  {
+   "artifact": "authority.json",
+   "change": "M1..M5 -> M01..M13 via write_authority.py; owner approves with package"
+  },
+  {
+   "artifact": "HTML manifest + views",
+   "change": "Relabel p2-program-waves.svg to waves/release checkpoints W1..W5; add one plain \"GitHub milestones in order\" table; DOM overflow recheck"
+  },
+  {
+   "artifact": "historical receipts",
+   "change": "None: verify.py, check_delta.py, TE/PI/IE receipts and P2-review evidence stay historical; a new delta validator covers the new candidate"
+  },
+  {
+   "artifact": "journey.json (controlling)",
+   "change": "After owner acceptance: record SD-040 application, new digest and payload hash"
+  }
+ ],
+ "affected_command_and_proof_text": [
+  "CMD-MILESTONES-CREATE",
+  "CMD-MILESTONES-READBACK",
+  "PROC-TRACKING-SETUP",
+  "SEIT-AFC-P2-MS-01",
+  "IE-P2-2 entry text",
+  "CO-M1..CO-M5 descriptions (wave exits)"
+ ],
+ "warnings": [
+  {
+   "id": "W-1",
+   "text": "R1/M03 due 2026-10-14T23:00:00Z infeasible under full X04 timebox after a 10-14 first install; owner decision, no silent date change"
+  },
+  {
+   "id": "W-2",
+   "text": "Approval/landing latency consumes margin to CO-STICK-START 2026-10-14T03:15:00Z"
+  },
+  {
+   "id": "W-3",
+   "text": "Existing Wave 3 compression: entry after T_yahoo 2026-10-16T19:00:00Z, code by 2026-10-18T09:00:00Z, one stick; issue counts are not workload; no effort estimate made"
+  },
+  {
+   "id": "W-4",
+   "text": "GitHub due_on is day precision; exact UTC times only in descriptions; Mnn prefix keeps order"
+  },
+  {
+   "id": "W-5",
+   "text": "Reworded Lifecycle-local AC rows (MS-01, REL-02, RISK-13) need RE/TE acknowledgement in the parent delta"
+  },
+  {
+   "id": "W-6",
+   "text": "OCR excluded all .md sources (unsupported_ext): typed coverage gap; reviewed directly. Reverify not applicable (no binary)"
+  }
+ ],
+ "review_capabilities": {
+  "ocr": {
+   "tool": "open-code-review v1.13.0",
+   "preview": "exit 0; 68 reviewable / 240; .md excluded unsupported_ext",
+   "rule": "exit 0; 3 rule groups",
+   "findings": "no candidate defects; generator coupling points recorded",
+   "raw_outputs": "private temp, not committed"
+  },
+  "reverify": "not applicable — planning sources, no compiled binary",
+  "bran": "unavailable (no .bran/policy.yaml)"
+ },
+ "checks": "evidence/chronology-opus-review/checks.md: C01..C20 PASS (C15 failed on first draft; regrouped M01/M02)"
+}

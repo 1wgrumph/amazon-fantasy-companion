@@ -1,3 +1,10 @@
+# Fresh-session handoff supersedes the work queue below
+
+Owner selected `opensource-hackathon` and Bearing1.1.7 (DEC-AFC-SD-041).
+Read `docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/HANDOFF-opensource-hackathon.md`
+in the Phase2 worktree or PR15. Opus chronology review completed;13milestone proposal
+saved and not yet applied. No active child. Do not restart the completed review.
+
 # Current planning-lead handoff — AFC-2026-10-11
 
 Updated 2026-10-13T07:44:19Z. Codex is current owner-appointed Planning and Design lead
@@ -5,7 +12,7 @@ Updated 2026-10-13T07:44:19Z. Codex is current owner-appointed Planning and Desi
 
 ## Current state
 
-Phase2 is PLAN_REVIEW_READY. Single independent Muse Code / Muse Spark 1.3 / max
+Phase2 is PLAN_REVIEW_READY, awaiting owner approval. Published candidate `51bc730a880105c9b21d37a7a2dc5da79ada875f`; hosted CI run38364783041 SUCCESS. No child is running. Single independent Muse Code / Muse Spark 1.3 / max
 review ACCEPT at de6db1e3e125f827aa079a6333ba453ec322d34b. Its two advisories were
 resolved in the single aggregate repair: stale TE status and an explicit D05
 carrier for existing hackathon-admin owner confirmations. Review rounds1/1,

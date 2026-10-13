@@ -7,7 +7,7 @@
     "planning_repository": "github:1wgrumph/amazon-fantasy-companion",
     "tracking_issue": "1wgrumph/amazon-fantasy-companion#1",
     "deadline": "2026-10-23T19:00:00Z",
-    "current_activity": "Phase2 planning review ACCEPT; one aggregate advisory repair PASS; preparing single integrated owner approval of planning and 39issue/5milestone tracking payload; product execution held"
+    "current_activity": "Fresh-session handoff requested; resume chronology revision and explicit opensource-hackathon profile migration under Bearing1.1.7; no active child"
   },
   "checkout_lease": {
     "journey": "AFC-2026-10-11",
@@ -18,11 +18,11 @@
     "candidate_revision": "0b987de5eac88bbcf903a7de73d2d58e545652cb",
     "acquired_at": "2026-10-11T19:21:56Z",
     "generation": 1,
-    "state": "active",
+    "state": "waiting_owner",
     "resumed_at": "2026-10-13T03:31:42Z",
-    "liveness": "INACTIVE predecessor; explicit owner begin; no task child process observed",
-    "heartbeat_at": "2026-10-13T07:44:19Z",
-    "active_candidate": "de6db1e3e125f827aa079a6333ba453ec322d34b"
+    "liveness": "Current controller handing off by owner request; chronology child COMPLETED exit0; resume existing generation after liveness check, do not duplicate",
+    "heartbeat_at": "2026-10-13T13:43:31Z",
+    "active_candidate": "51bc730a880105c9b21d37a7a2dc5da79ada875f"
   },
   "stages": {
     "intake": "accepted",
@@ -383,6 +383,18 @@
       "at": "2026-10-13T03:55:05Z",
       "source": "Owner this session: \"You are the planning lead now\"",
       "decision": "The current Codex session is the Planning and Design lead as well as the controlling Orchestrator. This supersedes the interrupted Claude planning-lead dispatch and closes the pending lead-route question. Retain frozen specialist profiles, selected capabilities, independent planning review and all spent bounds. Complete program planning and prepare issue/milestone organization; no Phase 2 product execution before integrated approval."
+    },
+    {
+      "id": "DEC-AFC-SD-040",
+      "at": "2026-10-13T12:51:31Z",
+      "decision": "Owner requests a fresh Claude Opus high session to review and revise overloaded milestones into a clearer chronological dependency order. Target3 issues per milestone; permitted range2\u20136 (+3/-1). Preserve full intended scope. This explicitly authorizes the additional focused chronology review after the prior planning review/repair; prior spent budgets remain historical, not reset. Planning/tracking approval not granted; product execution remains held.",
+      "source": "Current user message; exact request retained in packet"
+    },
+    {
+      "id": "DEC-AFC-SD-041",
+      "at": "2026-10-13T13:43:31Z",
+      "decision": "Owner requests a fresh-session handoff after updating Bearing and selects the newly combined profile instead of the previous Lifecycle profiles. Final requested name is opensource-hackathon (owner is renaming hackathon). Authorizes dated visible migration to the selected named profile and installed Bearing1.1.7 in the fresh session, including role/session routes, cadences, capabilities and holds; preserve prior snapshots and spent review/repair records. Current session prepares handoff only; no product execution or tracking approval granted.",
+      "source": "Current user requests for fresh session and opensource-hackathon rename"
     }
   ],
   "open_decisions": [],
@@ -4032,6 +4044,63 @@
       "evidence": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-review-repair",
       "owner_approval": "pending",
       "product_execution": "held"
+    },
+    {
+      "at": "2026-10-13T07:47:39Z",
+      "kind": "planning_publication_record",
+      "candidate_revision": "51bc730a880105c9b21d37a7a2dc5da79ada875f",
+      "pr": "https://github.com/1wgrumph/amazon-fantasy-companion/pull/15",
+      "state": "draft; awaiting integrated owner approval",
+      "local_gate": "PASS spec/docs/hygiene39tests",
+      "staged_hygiene": "PASS22files;gitleaks0;privatehome0;rawagentlogs0",
+      "hosted_ci": {
+        "run_id": 38364783041,
+        "head_sha": "51bc730a880105c9b21d37a7a2dc5da79ada875f",
+        "conclusion": "success",
+        "docs": "PASS",
+        "hygiene": "PASS",
+        "spec": "SKIP path filter;localfullspecPASS"
+      },
+      "worktree": "clean",
+      "issues_created": 0,
+      "milestones_created": 0,
+      "note": "This closing readback is appended to control after publication; sync with next authorized record publication. Do not push retired control branch."
+    },
+    {
+      "at": "2026-10-13T12:51:31Z",
+      "kind": "dispatch_record",
+      "lease_id": "P2-chronology-opus-review",
+      "role": "owner-requested planning chronology reviewer",
+      "route": "Claude Code / Claude Opus 5.5 / high",
+      "candidate": "51bc730a880105c9b21d37a7a2dc5da79ada875f",
+      "packet": "packets/P2-chronology-opus-review.md",
+      "authority": "DEC-AFC-SD-040",
+      "review": {
+        "coverage_assist": {
+          "enabled": true,
+          "required": true,
+          "backend": "ocr delegation"
+        }
+      },
+      "deterministic_verification": {
+        "reverify": {
+          "enabled": true,
+          "applicability": "not applicable; planning sources no binary"
+        }
+      }
+    },
+    {
+      "at": "2026-10-13T13:43:31Z",
+      "kind": "return_record",
+      "lease_id": "P2-chronology-opus-review",
+      "route": "Claude Code / Claude Opus 5.5 / high",
+      "outcome": "PASS",
+      "scope": "Proposal only; not integrated artifact acceptance",
+      "process_exit": 0,
+      "evidence": "Phase2 specialists/chronology-opus-review.md; evidence/chronology-opus-review/{proposal.json,checks.md}",
+      "result": "13milestones with3,2,3,4,3,3,3,3,2,2,4,4,3 issues;39issues52slices;5waves/releases preserved;20/20 agent-reported proposalchecks",
+      "limitations": "Parent did not rerun all20checks; milestone revision/profile migration not applied; timing risk remains",
+      "child_state": "COMPLETED; do not relaunch review"
     }
   ],
   "planning_review": {
@@ -4302,12 +4371,23 @@
   },
   "integrated_review_phase2": {
     "round": 1,
-    "status": "ready_to_present",
+    "status": "CHANGE_REQUESTED",
     "candidate_digest": "67ac7a9071859e8d4ef05b863c3e6e4d4931d2451a162abb5bb8115eeb1b7d46",
     "tracking_payload_sha256": "f485d8f62f72bf09c1e90c57493e03a178ec93ba7e9fc155cd776a32f736f5e9",
     "milestones": 5,
     "issues": 39,
     "approval_scope": "Planning package plus P2-L01 GitHub tracking after PR landing only; product execution held pending subsequent owner instruction",
-    "owner_decision": null
+    "owner_decision": "DEC-AFC-SD-040",
+    "candidate_revision": "51bc730a880105c9b21d37a7a2dc5da79ada875f",
+    "pr": "https://github.com/1wgrumph/amazon-fantasy-companion/pull/15",
+    "presented_at": "2026-10-13T07:47:39Z"
+  },
+  "profile_migration_pending": {
+    "authority": "DEC-AFC-SD-041",
+    "selected_name": "opensource-hackathon",
+    "observed_catalog_name": "opensource-hackathon",
+    "observation_ref": "Phase2 evidence/fresh-session-handoff/profile-observation.json",
+    "activated": false,
+    "next": "Fresh session resolves final named entry, validates installed1.1.7 contract, records visible amendment/digest/full snapshot before dispatch; global profile not edited by this session"
   }
 }
