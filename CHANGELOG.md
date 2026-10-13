@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add V&V guidance areas for the TV app, backend and device integration,
+  and update the V&V index so every path keeps one owning area
+  ([PR #56](https://github.com/1wgrumph/amazon-fantasy-companion/pull/56)).
+
 - Create and verify all 13 Phase 2 milestones and 39 work issues with
   dependency links; reconcile three calendar dates while preserving exact
   deadlines ([PR #55](https://github.com/1wgrumph/amazon-fantasy-companion/pull/55)).
