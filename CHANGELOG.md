@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added the Phase 2 delivery and verification plan, five milestone definitions,
+  39 work-issue drafts, and sanitized Lifecycle evidence; product execution
+  remains held pending a subsequent owner instruction
+  ([PR #15](https://github.com/1wgrumph/amazon-fantasy-companion/pull/15)).
+
 ### Changed
 
 - Add architecture specification revision 0.3 with clickable references, per-revision changed sections and PR/diff links; update the vendored authoring tools ([PR #10](https://github.com/1wgrumph/amazon-fantasy-companion/pull/10), [diff](https://github.com/1wgrumph/amazon-fantasy-companion/pull/10/files)).
