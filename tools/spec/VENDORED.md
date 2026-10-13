@@ -1,8 +1,8 @@
 # Vendored specification tools
 
 Source repository: https://github.com/alphazede/Alphazedehq
-Source commit: c24e4a36131c03dcda283b5431990cf14e603e68
-Skill tree: d97986b6351ada4e20807d6bebed213033fb3c56
+Source commit: 04678835350b529b44ab69ee5f805ca21cab5e76
+Skill tree: 16985771a0d94444ad1b3f0c3f9d6391ecce2063
 
 ## MIT notice (GridMarket)
 
