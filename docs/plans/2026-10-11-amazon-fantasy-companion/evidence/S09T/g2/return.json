@@ -1,0 +1,28 @@
+{
+  "outcome": "PASS",
+  "lease_id": "S09T-g2",
+  "slice": "S09T",
+  "branch": "afc/s09t-gate-tests",
+  "base": "8b4cd9dfeafa4dd1e268a1d7c1b78dc03a1b2eb7",
+  "head": "7f12bca11e61cfdd1f5d98725e6580fb5c33ab14",
+  "draft_pr": "https://github.com/1wgrumph/amazon-fantasy-companion/pull/9",
+  "changed_paths": ["tools/ci/tests/test_workflows.py", "tools/ci/tests/test_gate.py"],
+  "repair": "VALID fixture and secret-violation anchor use `bash tools/ci/gate.sh <area>`; new negative fixture 'bare gate invocation' (bare `tools/ci/gate.sh hygiene` -> exit 1 naming 'shared gate'); test_ci_area_jobs_invoke_gate_with_their_area now requires the exact line `bash tools/ci/gate.sh <area>` (the old regex accepted the bare form).",
+  "fixture_check": "Against merged Alphazedehq skills/setup-a-repo/scripts/check-workflows.py: VALID exit 0; all 8 violations exit 1 and name their rule word.",
+  "bare_form_grep": "git grep -nE '[^h] tools/ci/gate\\.sh' tools/ci/tests -> only test_workflows.py:78 (the negative fixture)",
+  "commands": [{"id": "CMD-RED", "suite": "gate", "exit": 1, "log": "CMD-RED.log", "tail": "Ran 25 tests; FAILED (failures=26); 0 errors; all 26 AssertionError naming a missing product file (gate.sh 10, check_paths.py 6, check_workflows.py 4, check_docs.py 3, ci.yml 1, .githooks/pre-commit 1, .githooks/pre-push 1); candidate HEAD 8b4cd9d + ' M test_gate.py, M test_workflows.py' (pre-commit run)"}],
+  "test_file_sha256": {
+    "gate_support.py": "c8e8b124cc14507016c1dce0ae660ef1fe7bd86df37b98276be41867a993984f",
+    "test_check_docs.py": "ef8d866851e71fea66155bb441a099b109e682a94eaeea5948e7905ec72a9e70",
+    "test_check_paths.py": "adc48487b182c05a6c10a0b1faff63887d64fa640b831b250442db3568882215",
+    "test_gate.py": "b207dc2b0a489648442c412049f60268356143ec4918435c89e3a542d5a07eee",
+    "test_workflows.py": "49872153573e4130ad3ba8fa37d1685d285cbff57771ab4b6a12c81d91a4b2db"
+  },
+  "blocker": null,
+  "developer_feedback": {
+    "observations": "`gh pr edit` fails on this repo with a Projects (classic) GraphQL deprecation error; used `gh api -X PATCH repos/.../pulls/9` instead.",
+    "tools": ["python3 unittest", "git", "gh api"],
+    "devpost_product_feedback": "n/a",
+    "time_cost": "unknown"
+  }
+}

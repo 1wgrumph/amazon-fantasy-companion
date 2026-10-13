@@ -9,6 +9,7 @@ import subprocess
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from gate_support import REPO, commit_all, copy_repo, git, path_without, run_gate, write
 
@@ -89,6 +90,29 @@ class AC_AFC_CI_01(unittest.TestCase):
         for line in findings:
             self.assertRegex(line, r'^[^:]+:[0-9]+:[A-Z0-9-]+$')
 
+    def test_hygiene_whitespace_finding_does_not_echo_colon_shaped_line_text(self):
+        repo = copy_repo(self.tmp / 'repo')
+        token = 'review_' + secrets.token_hex(8)  # content shaped like a file:line location
+        write(repo, {'notes.md': f'first line\n{token}:123:payload   \n'})
+        git(repo, 'add', 'notes.md')
+        rc, out = run_gate(self, repo, 'hygiene')  # out is stdout + stderr
+        self.assertEqual(rc, 1, out.replace(token, '<token>'))
+        self.assertFalse(token in out, 'hygiene output echoed colon-shaped staged line text:\n'
+                         + out.replace(token, '<token>'))
+
+    def test_hygiene_whitespace_finding_keeps_location_for_plus_leading_filename(self):
+        # B1-R1: git's header for a file named "+..." starts with "+" like a content line.
+        repo = copy_repo(self.tmp / 'repo')
+        token = 'review_' + secrets.token_hex(8) + ':7:payload'
+        write(repo, {'+plus.txt': f'{token}   \n'})
+        git(repo, 'add', '+plus.txt')
+        rc, out = run_gate(self, repo, 'hygiene')  # out is stdout + stderr
+        shown = out.replace(token, '<token>')
+        self.assertEqual(rc, 1, shown)
+        self.assertFalse(token in out, 'hygiene output echoed staged line text:\n' + shown)
+        self.assertTrue('+plus.txt:1:WS-CHECK' in out.splitlines(),
+                        'hygiene finding lost its +plus.txt location:\n' + shown)
+
     def test_docs_area_exits_1_on_seeded_broken_link(self):
         repo = copy_repo(self.tmp / 'repo')
         write(repo, {'BROKEN.md': '# Broken\n\n[gone](docs/does-not-exist.md)\n'})
@@ -96,6 +120,26 @@ class AC_AFC_CI_01(unittest.TestCase):
         rc, out = run_gate(self, repo, 'docs')
         self.assertEqual(rc, 1, out)
         self.assertIn('gate: docs: FAIL', out)
+
+    def test_copy_repo_preserves_spec_linked_documents_and_omits_untracked_files(self):
+        upstream = copy_repo(self.tmp / 'upstream')
+        source = upstream / 'spec' / 'demo'
+        shutil.copytree(upstream / 'tools' / 'spec' / 'template', source)
+        section = source / '01-introduction.md'
+        section.write_text(section.read_text(encoding='utf-8')
+                           + '\n[Plan](../../docs/plans/fixture.md)\n', encoding='utf-8')
+        write(upstream, {'docs/plans/fixture.md': '# Fixture plan\n'})
+        commit_all(upstream)
+        write(upstream, {'docs/plans/untracked.txt': 'Untracked content must stay out.\n'})
+        # Select a real Git fixture as the copy source; the copier and docs gate are unchanged.
+        with patch('gate_support.REPO', upstream):
+            repo = copy_repo(self.tmp / 'copy')
+        rc, out = run_gate(self, repo, 'docs')
+        self.assertEqual(rc, 0, out)
+        self.assertIn('gate: docs: PASS', out)
+        self.assertEqual((repo / 'docs/plans/fixture.md').read_text(encoding='utf-8'),
+                         '# Fixture plan\n')
+        self.assertFalse((repo / 'docs/plans/untracked.txt').exists())
 
     def test_missing_tools_spec_exits_3_with_gap(self):
         repo = copy_repo(self.tmp / 'repo')
@@ -161,6 +205,38 @@ class AC_AFC_CI_04_Spec(unittest.TestCase):
         source = self.add_spec()
         write(source, {'08-bad.md': 'no front matter\n'})
         commit_all(self.repo)
+        rc, out = run_gate(self, self.repo, 'spec')
+        self.assertEqual(rc, 1, out)
+        self.assertIn('gate: spec: FAIL', out)
+
+    def build_spec(self, source):
+        output = source / f'{source.name}.md'
+        result = subprocess.run(['uv', 'run', '--script', 'tools/spec/spec_build.py',
+                                 str(source), str(output)], cwd=self.repo,
+                                capture_output=True, text=True, timeout=900)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        return output
+
+    def stage_source_change(self):
+        source = self.add_spec()
+        self.build_spec(source)
+        commit_all(self.repo)
+        section = source / '01-introduction.md'
+        section.write_text(section.read_text(encoding='utf-8')
+                           + '\nStaged-source marker sentence added by the gate test.\n', encoding='utf-8')
+        git(self.repo, 'add', str(section.relative_to(self.repo)))
+        return source
+
+    def test_staged_source_and_rebuilt_output_pass_before_commit(self):
+        source = self.stage_source_change()
+        output = self.build_spec(source)
+        git(self.repo, 'add', str(output.relative_to(self.repo)))
+        rc, out = run_gate(self, self.repo, 'spec')
+        self.assertEqual(rc, 0, out)
+        self.assertIn('gate: spec: PASS', out)
+
+    def test_staged_source_without_rebuilt_output_exits_1(self):
+        self.stage_source_change()
         rc, out = run_gate(self, self.repo, 'spec')
         self.assertEqual(rc, 1, out)
         self.assertIn('gate: spec: FAIL', out)

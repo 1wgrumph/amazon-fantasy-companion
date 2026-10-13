@@ -1,0 +1,29 @@
+..F.Skill is valid!
+.E
+======================================================================
+ERROR: test_trigger_classifications (test_setup_pre_commit.SetupPreCommitTests.test_trigger_classifications)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "$HOME/alphazede/worktrees/alphazedehq-afc-b4/skills/setup-pre-commit/tests/test_setup_pre_commit.py", line 45, in test_trigger_classifications
+    results = json.loads(Path(os.environ["SETUP_PRE_COMMIT_TRIGGER_RESULTS"]).read_text())
+                              ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen os>", line 709, in __getitem__
+KeyError: 'SETUP_PRE_COMMIT_TRIGGER_RESULTS'
+
+======================================================================
+FAIL: test_hygiene_keeps_location_for_plus_leading_filename (test_gate_template.GateTemplateTests.test_hygiene_keeps_location_for_plus_leading_filename)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "$HOME/alphazede/worktrees/alphazedehq-afc-b4/skills/setup-pre-commit/tests/test_gate_template.py", line 118, in test_hygiene_keeps_location_for_plus_leading_filename
+    self.assertTrue("+plus.txt:1:WS-CHECK" in out.splitlines(),
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                    "hygiene finding lost its +plus.txt location:\n" + shown)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False is not true : hygiene finding lost its +plus.txt location:
+gate: hygiene: FAIL check exit 1
+
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.251s
+
+FAILED (failures=1, errors=1)

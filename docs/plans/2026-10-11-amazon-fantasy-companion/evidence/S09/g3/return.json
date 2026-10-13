@@ -1,0 +1,254 @@
+{
+  "outcome": "CONTRACT_FAILURE",
+  "lease_id": "S09-g3",
+  "lifecycle": "AFC-2026-10-11",
+  "authority": "AUTH-AFC-2026-10-11-002",
+  "package_digest": "a018168f575741b5f53bbe7fac4bcb13128e31f37f69d73ba2433cf8d09d5144",
+  "branch": "afc/s09-gate",
+  "head_sha": "7f12bca11e61cfdd1f5d98725e6580fb5c33ab14",
+  "base": "7f12bca11e61cfdd1f5d98725e6580fb5c33ab14",
+  "candidate_state": "staged, uncommitted",
+  "candidate_diff_sha256": "475a9b1113543b1a283ad990a740a3711a564d918d8522de3883190f4a076740",
+  "draft_pr_url": "n/a; NOT_RUN",
+  "changed_paths": [
+    ".githooks/pre-commit",
+    ".githooks/pre-push",
+    ".github/workflows/ci.yml",
+    "tools/ci/VENDORED.md",
+    "tools/ci/check_docs.py",
+    "tools/ci/check_paths.py",
+    "tools/ci/check_workflows.py",
+    "tools/ci/gate.sh"
+  ],
+  "commands": [
+    {
+      "id": "CMD-GATE-HYGIENE",
+      "command": "tools/ci/gate.sh hygiene; rc=$?; echo \"exit=$rc\"; (exit $rc)",
+      "exit_code": 0,
+      "output_tail": ".github/workflows/ci.yml: PASS\ngate: hygiene: PASS checks completed\nexit=0\n.........................\n----------------------------------------------------------------------\nRan 25 tests in 4.947s\n\nOK\n",
+      "candidate_sha": "7f12bca11e61cfdd1f5d98725e6580fb5c33ab14",
+      "working_diff_sha256": "475a9b1113543b1a283ad990a740a3711a564d918d8522de3883190f4a076740",
+      "at": "2026-10-12T11:54:18.536385+00:00"
+    },
+    {
+      "id": "CMD-GATE-DOCS",
+      "command": "tools/ci/gate.sh docs; rc=$?; echo \"exit=$rc\"; (exit $rc)",
+      "exit_code": 0,
+      "output_tail": "gate: docs: PASS checks completed\nexit=0\n",
+      "candidate_sha": "7f12bca11e61cfdd1f5d98725e6580fb5c33ab14",
+      "working_diff_sha256": "475a9b1113543b1a283ad990a740a3711a564d918d8522de3883190f4a076740",
+      "at": "2026-10-12T11:54:18.624818+00:00"
+    },
+    {
+      "id": "CMD-GATE-SPEC",
+      "command": "tools/ci/gate.sh spec; rc=$?; echo \"exit=$rc\"; (exit $rc)",
+      "exit_code": 0,
+      "output_tail": "gate: spec: PASS checks completed\nexit=0\nInstalled 1 package in 0.56ms\nInstalled 1 package in 0.29ms\nInstalled 1 package in 0.53ms\n",
+      "candidate_sha": "7f12bca11e61cfdd1f5d98725e6580fb5c33ab14",
+      "working_diff_sha256": "475a9b1113543b1a283ad990a740a3711a564d918d8522de3883190f4a076740",
+      "at": "2026-10-12T11:54:19.187691+00:00"
+    },
+    {
+      "id": "CMD-WORKFLOW-CHECK",
+      "command": "python3 tools/ci/check_workflows.py .github/workflows/; rc=$?; echo \"exit=$rc\"; (exit $rc)",
+      "exit_code": 0,
+      "output_tail": ".github/workflows/ci.yml: PASS\nexit=0\n",
+      "candidate_sha": "7f12bca11e61cfdd1f5d98725e6580fb5c33ab14",
+      "working_diff_sha256": "475a9b1113543b1a283ad990a740a3711a564d918d8522de3883190f4a076740",
+      "at": "2026-10-12T11:54:19.228216+00:00"
+    },
+    {
+      "id": "CMD-GATE-ALL",
+      "command": "tools/ci/gate.sh; rc=$?; echo \"exit=$rc\"; (exit $rc)",
+      "exit_code": 0,
+      "output_tail": "gate: spec: PASS checks completed\ngate: docs: PASS checks completed\n.github/workflows/ci.yml: PASS\ngate: hygiene: PASS checks completed\nexit=0\nInstalled 1 package in 0.29ms\nInstalled 1 package in 0.31ms\nInstalled 1 package in 0.54ms\n.........................\n----------------------------------------------------------------------\nRan 25 tests in 5.032s\n\nOK\n",
+      "candidate_sha": "7f12bca11e61cfdd1f5d98725e6580fb5c33ab14",
+      "working_diff_sha256": "475a9b1113543b1a283ad990a740a3711a564d918d8522de3883190f4a076740",
+      "at": "2026-10-12T11:54:26.249166+00:00"
+    },
+    {
+      "id": "CMD-CI-VENDOR-PIN",
+      "command": "git -C $HOME/alphazede/Alphazedehq show 120dee00207425201aa77d1f42f3756ee6bc406e:skills/setup-a-repo/scripts/check-workflows.py | diff - tools/ci/check_workflows.py && grep -qF 448d40c3dbb6fd9dceb66d575c66ee89fb45f6e4 tools/ci/VENDORED.md && grep -qF 120dee00207425201aa77d1f42f3756ee6bc406e tools/ci/VENDORED.md; rc=$?; echo \"exit=$rc\"; (exit $rc)",
+      "exit_code": 0,
+      "output_tail": "exit=0\n",
+      "candidate_sha": "7f12bca11e61cfdd1f5d98725e6580fb5c33ab14",
+      "working_diff_sha256": "475a9b1113543b1a283ad990a740a3711a564d918d8522de3883190f4a076740",
+      "at": "2026-10-12T11:54:26.259232+00:00"
+    },
+    {
+      "id": "CMD-COVERAGE-CI",
+      "command": "uv run --no-project --with 'coverage>=7,<8' --with 'diff-cover>=9,<10' sh -c 'coverage run --branch --source=tools/ci -m unittest discover -s tools/ci/tests && coverage xml -o $HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S09/g3/coverage-ci.xml && diff-cover $HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S09/g3/coverage-ci.xml --compare-branch=origin/main --include \"tools/ci/*.py\" --exclude tools/ci/check_workflows.py --fail-under=90'; rc=$?; echo \"exit=$rc\"; (exit $rc)",
+      "exit_code": 1,
+      "output_tail": "-------------\nDiff Coverage\nDiff: origin/main...HEAD, staged and unstaged changes\n-------------\ntools/ci/check_docs.py (83.7%): Missing lines 22-23,48-50,54-55\ntools/ci/check_paths.py (81.6%): Missing lines 36,39,50-52,56-57\ntools/ci/check_workflows.py (88.0%): Missing lines 24,48,67,89,94,110,133,142,156-157,168-169,172-173\n-------------\nTotal:   198 lines\nMissing: 28 lines\nCoverage: 85%\n-------------\n\nexit=1\nInstalled 7 packages in 5ms\n.........................\n----------------------------------------------------------------------\nRan 25 tests in 9.170s\n\nOK\nCombined 9 files, skipped 9\nWrote XML report to $HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S09/g3/coverage-ci.xml\nFailure. Coverage is below 90%.\n",
+      "candidate_sha": "7f12bca11e61cfdd1f5d98725e6580fb5c33ab14",
+      "at": "2026-10-12T11:57:41.285017+00:00",
+      "environment": {
+        "UV_OFFLINE": "1",
+        "UV_NO_CACHE": "1",
+        "UV_FIND_LINKS": "/tmp/afc-s09-g3-metrics-wheels-4onmfgui",
+        "UV_PYTHON": "/usr/bin/python3",
+        "PYTHONPATH": "/tmp/afc-s09-g3-metrics-wheels-4onmfgui/host-yaml",
+        "COVERAGE_RCFILE": "$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S09/g3/coverage.rc"
+      }
+    }
+  ],
+  "proof_rows": {
+    "SEIT-AFC-CI-01.U": {
+      "status": "PASS_AUTHOR_CHECK",
+      "evidence": "CMD-GATE-HYGIENE; 25 S09T tests green, same test-file SHA256 as repaired base"
+    },
+    "SEIT-AFC-CI-01.K": {
+      "status": "PASS_AUTHOR_CHECK",
+      "evidence": "D4-A install-hooks.sh exit 0; core.hooksPath=.githooks; both executable installer hook bodies invoke bash tools/ci/gate.sh --changed"
+    },
+    "SEIT-AFC-CI-01.A": {
+      "status": "NOT_RUN",
+      "reason": "Main merge commit does not exist; local CMD-GATE-ALL PASS is diagnostic only"
+    },
+    "SEIT-AFC-CI-02.W": {
+      "status": "PASS_AUTHOR_CHECK",
+      "evidence": "CMD-WORKFLOW-CHECK exit 0; all eight workflow negative fixtures green in S09T"
+    },
+    "SEIT-AFC-CI-02.P": {
+      "status": "NOT_RUN",
+      "reason": "No PR created; subsequent PR is integration evidence"
+    },
+    "SEIT-AFC-CI-03": {
+      "status": "PASS_AUTHOR_CHECK",
+      "evidence": "S09T generated fixtures for all 8 rule ids, placeholders and --files pass"
+    },
+    "SEIT-AFC-CI-04.U": {
+      "status": "PASS_AUTHOR_CHECK",
+      "evidence": "S09T spec fixture fresh/stale builds, missing tools, removed template scratch, document heading and link tests pass"
+    },
+    "SEIT-AFC-CI-04.S": {
+      "status": "PASS_AUTHOR_CHECK",
+      "evidence": "CMD-GATE-SPEC exit 0; no spec/<name> in this candidate; template self-check PASS"
+    },
+    "SEIT-AFC-CI-04.D": {
+      "status": "PASS_AUTHOR_CHECK",
+      "evidence": "CMD-GATE-DOCS exit 0 over tracked Markdown and S07 guidance"
+    },
+    "SEIT-AFC-PATH-01.H": {
+      "status": "PASS_AUTHOR_CHECK",
+      "evidence": "CMD-GATE-HYGIENE exit 0; candidate tracked files have no PATH-HOME findings"
+    },
+    "SEIT-AFC-RISK-08": {
+      "status": "NEEDS_MORE_EVIDENCE",
+      "reason": "Billing usage API HTTP 404 with missing user scope; entitlement/remaining usage unknown, no paid overage enabled"
+    },
+    "SEIT-AFC-RISK-11.H": {
+      "status": "PARTIAL",
+      "reason": "Local hygiene PASS; no hosted merge evidence"
+    },
+    "SEIT-AFC-RISK-13.G": {
+      "status": "PASS_ADMISSION",
+      "evidence": "Before-use PASS receipts for vendored checker, spec wheels, all 3 SHA-pinned Actions and coverage/diff-cover/mutmut closure; mutmut not used"
+    }
+  },
+  "coverage_detail": {
+    "tools/ci/check_docs.py": {
+      "executed_lines": 36,
+      "total_lines": 43,
+      "percent": 83.72,
+      "missing_lines": [
+        22,
+        23,
+        48,
+        49,
+        50,
+        54,
+        55
+      ]
+    },
+    "tools/ci/check_paths.py": {
+      "executed_lines": 31,
+      "total_lines": 38,
+      "percent": 81.58,
+      "missing_lines": [
+        36,
+        39,
+        50,
+        51,
+        52,
+        56,
+        57
+      ]
+    },
+    "tools/ci/check_workflows.py": {
+      "executed_lines": 103,
+      "total_lines": 117,
+      "percent": 88.03,
+      "missing_lines": [
+        24,
+        48,
+        67,
+        89,
+        94,
+        110,
+        133,
+        142,
+        156,
+        157,
+        168,
+        169,
+        172,
+        173
+      ]
+    }
+  },
+  "local_checker_statement_coverage": 82.72,
+  "mutation": "NOT_RUN: packet STOP on CONTRACT_FAILURE",
+  "shell_coverage": "TOOL_MISSING: kcov absent",
+  "shell_mutation": "TOOL_MISSING: no shell mutation tool on host",
+  "blocker": "CMD-COVERAGE-CI --exclude tools/ci/check_workflows.py does not exclude the vendored checker in diff-cover 9.7.2. The unchanged command reports it (88.0%) and exits 1 at 85%; matcher checks basename or absolute path. Local checker coverage separately is 82.72%, below 90%.",
+  "remaining_risks": [
+    "Coverage threshold unmet; mutation not run",
+    "No commit, push, draft PR or hosted gate evidence",
+    "Remaining Actions allowance and paid-overage hard stop not read back; authentication unchanged",
+    "Independent OCR review and Assurance Test Engineer checks not run by implementer",
+    "Main/subsequent-PR acceptance remains integration work"
+  ],
+  "review_capabilities": {
+    "coverage_assist": "Required OCR delegate mode preserved for independent phase reviewer; NOT_RUN by implementer",
+    "deterministic_verification.reverify": "Not applicable: locally authored product is shell/Python/YAML; no compiled binary built or claimed",
+    "review_budget": "n=1,k=1,c=0 preserved; author checks spend no review/repair budget",
+    "profile": "primary",
+    "configuration_digest_sha256": "b81a141be5b9d83cbecbb34df460b0f25929c2ae0df165f16ff529acfc50bafa"
+  },
+  "developer_feedback": {
+    "ID": "unknown",
+    "Timestamp": "2026-10-12T11:59:57.680043+00:00",
+    "Reporting role": "Product Implementer",
+    "Task or packet": "S09-g3",
+    "Tool/API/SDK": "diff-cover; GitHub billing API",
+    "Version": "diff-cover 9.7.2; billing REST API",
+    "Device/OS": "owner workstation, Linux; exact distribution unknown",
+    "Evidence": "CMD-COVERAGE-CI.txt; contract-failure.md",
+    "Classification": "plan-command defect and evidence gap",
+    "Used for": "Changed-line coverage of shared CI checkers",
+    "What worked well": "All 25 immutable S09T tests and all local gate areas pass; offline scanned wheel resolution works",
+    "What needs work": "Relative --exclude does not match the vendored checker; local checkers below threshold",
+    "Onboarding (zero to hello world)": "unknown",
+    "Would build again (Yes/No and why)": "unknown",
+    "AWS services used and how": "n/a",
+    "Task attempted": "Execute supplied coverage command without altering it",
+    "Steps taken": "Acquire and scan exact tool closure; run supplied command with offline wheel environment; inspect output and pinned matcher source",
+    "Expected result": "Vendored checker excluded and changed-line coverage >=90%",
+    "Actual result": "Vendored checker included; command exit 1, coverage 85%; local checkers also below90",
+    "Severity rating": "Blocker",
+    "Workaround used": "n/a; command not changed",
+    "Actionable suggestion": "Correct exclusion syntax in the packet and resolve required uncovered behaviors through Test Implementer or an explicit contract correction",
+    "Feature requests": {
+      "ID": "n/a",
+      "Tool": "n/a",
+      "Description": "n/a",
+      "Why it matters to this project": "n/a",
+      "Priority": "n/a"
+    }
+  },
+  "bran_status": "unavailable: no native policy; ordinary discovery used",
+  "create_lean_skill": "NO_CHANGE: existing Bearing Implementer owns bounded product implementation; skill paths outside exact write set",
+  "test_files_unchanged": true,
+  "at": "2026-10-12T11:59:57.682984+00:00"
+}

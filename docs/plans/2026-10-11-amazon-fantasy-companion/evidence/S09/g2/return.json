@@ -1,0 +1,166 @@
+{
+  "outcome": "CONTRACT_FAILURE",
+  "lease_id": "S09-g2",
+  "generation": 2,
+  "lifecycle": "AFC-2026-10-11",
+  "authority": "AUTH-AFC-2026-10-11-002",
+  "package_digest": "a018168f575741b5f53bbe7fac4bcb13128e31f37f69d73ba2433cf8d09d5144",
+  "branch": "afc/s09-gate",
+  "base_sha": "8b4cd9dfeafa4dd1e268a1d7c1b78dc03a1b2eb7",
+  "head_sha": "8b4cd9dfeafa4dd1e268a1d7c1b78dc03a1b2eb7",
+  "draft_pr_url": null,
+  "changed_paths": [],
+  "evidence_paths": [
+    "evidence/S09/g2/scan-d4b-checker.md",
+    "evidence/S09/g2/workflow-invocation-reproduction.txt",
+    "evidence/S09/g2/return.json"
+  ],
+  "blocker": "CMD-CI-VENDOR-PIN requires exact D4-B checker. That file requires run == 'bash tools/ci/gate.sh <area>'. Frozen S09T VALID uses run == 'tools/ci/gate.sh <area>' and fails its positive assertion. This packet prohibits changing tests; changing the checker violates exact vendor equality. Both obligations cannot pass in the approved write set.",
+  "classification": "plan/test-contract incompatibility",
+  "commands": [
+    {
+      "command": "git status --short && git branch --show-current && git rev-parse HEAD",
+      "exit_code": 0,
+      "output_tail": "clean; afc/s09-gate; 8b4cd9dfeafa4dd1e268a1d7c1b78dc03a1b2eb7",
+      "candidate_sha": "8b4cd9dfeafa4dd1e268a1d7c1b78dc03a1b2eb7"
+    },
+    {
+      "command": "gh pr view 308 --repo alphazede/Alphazedehq --json state,mergedAt,mergeCommit,url",
+      "exit_code": 0,
+      "output_tail": "MERGED; 120dee00207425201aa77d1f42f3756ee6bc406e; 2026-10-12T08:52:30Z",
+      "candidate_sha": "8b4cd9dfeafa4dd1e268a1d7c1b78dc03a1b2eb7"
+    },
+    {
+      "command": "clamscan --no-summary /tmp/afc-s09-g2-checker-271lit48/check-workflows.py",
+      "exit_code": 0,
+      "output_tail": "check-workflows.py: OK",
+      "candidate_sha": "8b4cd9dfeafa4dd1e268a1d7c1b78dc03a1b2eb7"
+    },
+    {
+      "command": "gitleaks dir /tmp/afc-s09-g2-checker-271lit48 --redact --no-banner",
+      "exit_code": 0,
+      "output_tail": "no leaks found",
+      "candidate_sha": "8b4cd9dfeafa4dd1e268a1d7c1b78dc03a1b2eb7"
+    },
+    {
+      "command_id": "CMD-SCAN",
+      "exit_code": 0,
+      "output_tail": "exit=0; PASS receipt written before first use",
+      "candidate_sha": "8b4cd9dfeafa4dd1e268a1d7c1b78dc03a1b2eb7"
+    },
+    {
+      "command": "Focused test_workflows.AC_AFC_CI_02.test_valid_fixture_passes against scanned exact checker export",
+      "exit_code": 1,
+      "output_tail": "FAILED (failures=1); spec: require shared gate with positional area; hygiene: require shared gate with positional area",
+      "candidate_sha": "8b4cd9dfeafa4dd1e268a1d7c1b78dc03a1b2eb7"
+    },
+    {
+      "command": "python3 /tmp/afc-s09-g2-checker-271lit48/check-workflows.py /tmp/afc-s09-g2-checker-271lit48/ci.yml",
+      "fixture": "unmodified S09T VALID",
+      "exit_code": 1,
+      "output_tail": "spec: require shared gate with positional area; hygiene: require shared gate with positional area",
+      "candidate_sha": "8b4cd9dfeafa4dd1e268a1d7c1b78dc03a1b2eb7"
+    },
+    {
+      "command": "python3 /tmp/afc-s09-g2-checker-271lit48/check-workflows.py /tmp/afc-s09-g2-checker-271lit48/ci.yml",
+      "fixture": "temporary Bash-invocation control",
+      "exit_code": 0,
+      "output_tail": "ci.yml: PASS",
+      "candidate_sha": "8b4cd9dfeafa4dd1e268a1d7c1b78dc03a1b2eb7"
+    }
+  ],
+  "proof_rows": {
+    "SEIT-AFC-CI-01.U": {
+      "status": "NOT_RUN",
+      "reason": "Mandatory CONTRACT_FAILURE stop before implementation"
+    },
+    "SEIT-AFC-CI-01.K": {
+      "status": "NOT_RUN",
+      "reason": "Mandatory CONTRACT_FAILURE stop before implementation"
+    },
+    "SEIT-AFC-CI-01.A": {
+      "status": "NOT_RUN",
+      "reason": "Mandatory CONTRACT_FAILURE stop before implementation"
+    },
+    "SEIT-AFC-CI-02.W": {
+      "status": "CONTRACT_FAILURE",
+      "reason": "Required checker rejects positive S09T VALID; Bash control passes. Committed-workflow command NOT_RUN."
+    },
+    "SEIT-AFC-CI-02.P": {
+      "status": "NOT_RUN",
+      "reason": "Mandatory CONTRACT_FAILURE stop before implementation"
+    },
+    "SEIT-AFC-CI-03": {
+      "status": "NOT_RUN",
+      "reason": "Mandatory CONTRACT_FAILURE stop before implementation"
+    },
+    "SEIT-AFC-CI-04.U": {
+      "status": "NOT_RUN",
+      "reason": "Mandatory CONTRACT_FAILURE stop before implementation"
+    },
+    "SEIT-AFC-CI-04.S": {
+      "status": "NOT_RUN",
+      "reason": "Mandatory CONTRACT_FAILURE stop before implementation"
+    },
+    "SEIT-AFC-CI-04.D": {
+      "status": "NOT_RUN",
+      "reason": "Mandatory CONTRACT_FAILURE stop before implementation"
+    },
+    "SEIT-AFC-PATH-01.H": {
+      "status": "NOT_RUN",
+      "reason": "Mandatory CONTRACT_FAILURE stop before implementation"
+    },
+    "SEIT-AFC-RISK-08": {
+      "status": "NOT_RUN",
+      "reason": "Mandatory CONTRACT_FAILURE stop before implementation"
+    },
+    "SEIT-AFC-RISK-11.H": {
+      "status": "NOT_RUN",
+      "reason": "Mandatory CONTRACT_FAILURE stop before implementation"
+    },
+    "SEIT-AFC-RISK-13.G": {
+      "status": "PARTIAL",
+      "reason": "Checker admission scan PASS; Action/coverage/diff-cover/mutmut admission scans NOT_RUN, artifacts unused."
+    }
+  },
+  "verification_commands_not_run": [
+    "CMD-GATE-HYGIENE",
+    "CMD-GATE-DOCS",
+    "CMD-GATE-SPEC",
+    "CMD-WORKFLOW-CHECK",
+    "CMD-GATE-ALL",
+    "CMD-PR-CHECKS",
+    "CMD-CI-VENDOR-PIN",
+    "CMD-COVERAGE-CI",
+    "CMD-MUTATION-CI",
+    "CMD-HOOKSPATH",
+    "PROC-ACTIONS-BUDGET"
+  ],
+  "remaining_risks": [
+    "CI implementation, full green suite, coverage, mutation, hooks, hosted budget and PR evidence remain outstanding.",
+    "Checker scan only: Actions and newly acquired Python tools have not been admitted or used."
+  ],
+  "next_required_correction": "Reconcile checker accepted invocation and S09T valid fixture in the owning packet, preserving security rules and exact vendor pin, then redispatch S09.",
+  "bran_status": "unavailable — no native .bran/policy.yaml",
+  "independent_review": "NOT_RUN — author packet only",
+  "reverify": "not applicable — no compiled binary claim",
+  "create_lean_skill": {
+    "outcome": "BLOCKED",
+    "reason": "Skill requires target location and write authority, neither supplied. Current product implementation task is an explicit non-trigger; bearing-lite implementer already owns this behavior. No duplicate created.",
+    "matching_request_test": "NOT_RUN — no authorized skill candidate",
+    "non_matching_request_test": "Current S09 product request excluded by skill description",
+    "creator_scripts": "NOT_RUN — no skill target"
+  },
+  "developer_feedback": {
+    "kind": "Friction Log Entry",
+    "observation": "Exact Bash-prefixed gate invocation equality rejects frozen positive workflow fixture.",
+    "impact": "S09-g2 blocked before implementation.",
+    "evidence": "workflow-invocation-reproduction.txt",
+    "time_lost": "unknown",
+    "frequency": "one observed reproduction with passing control",
+    "workaround": "n/a — test and checker changes prohibited",
+    "devpost_product_feedback": "n/a",
+    "feature_request": "n/a",
+    "recommendation": "Reconcile invocation spelling before redispatch."
+  }
+}

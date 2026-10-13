@@ -39,8 +39,11 @@ run_area() {
             ws_rc=$?
             if (( ws_rc != 0 )); then
                 # Report file:line:rule-id only; never echo matched line text.
+                # Pair headers with "+" content lines by position: only a
+                # blank-at-EOF header has no following content line, and a
+                # "+"-named file's header starts with "+" like content.
                 # Unparseable git errors still fail closed (no false PASS).
-                ws=$(printf '%s\n' "$ws_out" | sed -n 's/^\([^:][^:]*:[0-9][0-9]*\):.*/\1:WS-CHECK/p' | sort -u)
+                ws=$(printf '%s\n' "$ws_out" | awk '{ if (skip) { skip = 0; if (/^\+/) next } if (match($0, /^[^:][^:]*:[0-9]+:/)) { print substr($0, 1, RLENGTH - 1) ":WS-CHECK"; if ($0 !~ /: new blank line at EOF\.$/) skip = 1 } }' | sort -u)
                 [[ -n "$ws" ]] && printf '%s\n' "$ws"
                 return 1
             fi
@@ -64,7 +67,7 @@ run_area() {
                 output="${source}$(basename "$source").md"
                 spec_check "$source" "$output" || return "$?"
                 git ls-files --error-unmatch "$output" >/dev/null 2>&1 || return 1
-                git diff --exit-code HEAD -- "$output" || return 1
+                git diff --exit-code -- "$output" || return 1
             done
             if (( ! found )); then
                 [[ -d tools/spec/template ]] || { echo 'tools/spec template missing'; return 3; }
