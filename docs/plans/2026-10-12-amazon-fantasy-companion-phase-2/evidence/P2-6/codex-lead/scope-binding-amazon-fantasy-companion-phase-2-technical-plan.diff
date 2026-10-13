@@ -1,0 +1,31 @@
+--- before/amazon-fantasy-companion-phase-2-technical-plan.md
++++ after/amazon-fantasy-companion-phase-2-technical-plan.md
+@@ -220,9 +220,9 @@
+ | RISK-AFC-P2-08 | If a live window is missed or a game produces no qualifying event, then the slice shall use labeled replay of captured fixtures for repeatability and schedule the live check in the next live window; replay never stands in for live notification or provider behavior evidence. | #1 §Judging alignment; C2 | inspection | P2-X03, P2-X05, P2-X09, P2-X10 | Only four live windows remain after approval. | Replay for logic; live windows reserved for device evidence. |
+ | RISK-AFC-P2-09 | If `adb` screencap or screenrecord returns black or blank frames for protected provider video, then the visual evidence shall combine the companion UI capture with window geometry from `dumpsys` and, if OD-AFC-P2-02 = A, an owner camera capture of the screen (OA-9); the demo plan shall mark any owner-filmed shots as owner-filmed and, if OD-AFC-P2-02 = B, shall use companion UI captures only for those shots. | Rule 16; AFC-PR-041; issue #1 demo | inspection | P2-X04, P2-X09, P2-X12, P2-D05 | Provider apps commonly use secure surfaces that screen capture cannot read. | Geometry plus owner camera capture under A, companion UI only under B (OD-AFC-P2-02). |
+ | RISK-AFC-P2-10 | If a selected route reaches a confirmed usage or rate limit, then the Orchestrator shall record the evidence and activate only the next approved fallback of the frozen profile with a class B receipt preserving coverage-assist and Reverify settings, or queue the slice; other errors shall not trigger a route switch. | Frozen profiles; owner-stops class B | inspection | All dispatches | Muse quota exhaustion occurred on 2026-10-11. | Next approved fallback or queue. |
+-| RISK-AFC-P2-11 | If Phase 1 slice S09 (gate entrypoint) has not merged when a Phase 2 slice is ready to land, then the slice shall wait for S09 and P2-G01; it shall not land without a green gate run, and development continues on its branch with local test evidence. | Phase 1 plan; AC-AFC-P2-LAND-01 | inspection | P2-G01; landing | S09 is still in flight (PR #9 holds S09T). | Landing waits; work does not. |
++| RISK-AFC-P2-11 | If Phase 1 slice S09 (gate entrypoint) has not merged when a Phase 2 slice is ready to land, then the slice shall wait for S09 and P2-G01; it shall not land without a green gate run, and development continues on its branch with local test evidence. | Phase 1 plan; AC-AFC-P2-LAND-01 | inspection | P2-G01; landing | S09 has merged; the Phase 2 product gate extension P2-G01 remains a prerequisite. | Landing waits; work does not. |
+ | RISK-AFC-P2-12 | When a secret, account detail, customer data or absolute local path is detected in material bound for the repository, release, video or submission, the program shall block that merge or publication until sanitized, and if exposure has occurred shall record the artifact without reproducing the value and notify the owner for rotation. | Rules 2 and 12; AFC-PR-055, -056; C9 | test, inspection | `hygiene` area; P2-D03..P2-D05, P2-SCR1 | Yahoo tokens, AWS profile names and provider account names can leak into captures and logs. | Block and sanitize; rotation is the owner's action. |
+-| RISK-AFC-P2-13 | If a milestone exit is at risk of missing its due time by more than 12 h, then the Orchestrator shall present the owner a scope-reduction decision using the priority order in §Program plan, not cut scope silently. | AC-AFC-P2-SCHED-01; Phase 1 RISK-AFC-17 | inspection | Orchestrator wave receipts | Eleven days remain; device spikes and live windows are fixed. | Owner decides cuts. |
++| RISK-AFC-P2-13 | If a milestone exit is at risk of missing its due time by more than 12 h, then the Orchestrator shall present the owner a scope-reduction decision using the priority order in §Program plan, not cut scope silently. | AC-AFC-P2-SCHED-01; Phase 1 RISK-AFC-17 | inspection | Orchestrator wave receipts | The deadline, device spikes and live windows constrain the schedule; the as-of remaining time is stated in Program plan. | Owner decides cuts. |
+
+ ## Exclusions
+
+@@ -306,9 +306,14 @@
+ acceptance and evidence checks, milestone, and owner-only blockers. Issue
+ bodies use Origin, Harness / version, What, Current evidence, Expected, and
+ Acceptance sections. Product additions use enhancement; documentation-only
+-work uses documentation. Filing uses the configured issue-label policy tool:
+-dry-run each body, then submit only after approval, and read back saved
+-labels, bodies, milestone assignments and issue URLs. Dependencies are linked
++work uses documentation. Check the configured issue-label policy scope at action time. The current
++personal repository is outside that helper's scope; use the repository-native
++GitHub issue workflow after a read-only canonical-target/permission, body and
++existing-label preflight. If policy then covers the repository, use its
++mandatory helper dry-run and submit path instead. Never modify or bypass a
++covered-repository guard. Create only after approval, inspect an uncertain
++submission before any retry, and read back saved labels, bodies, milestone
++assignments and issue URLs. Dependencies are linked
+ after all identities are known. The resulting slice-to-issue mapping is
+ recorded in journey.json. Publishing or executing the product is separate.

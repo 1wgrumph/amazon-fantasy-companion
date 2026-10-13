@@ -1,12 +1,12 @@
 package AFCData {
     doc /*
     * Amazon Fantasy Companion data model: GameEvent, Alert, Lineup,
-    * PanelState, Settings, plus RoutingOutcome (the six provider-launch
-    * outcomes) and DeviceCode (the device-link payload). Language
+    * PanelState, Settings, ScoringPreset, plus RoutingOutcome (the six
+    * provider-launch outcomes) and DeviceCode (the device-link payload). Language
     * authority: OMG SysML v2 formal/2026-03-02 (bibliographic identity
     * per sysml-v2-validation.md receipt SRC-EMV-SYSMLV2). No local
     * normative-coverage claim; no AZEdge fixture used. Sources:
-    * requirements-register.md AFC-PR-001..065; sm-contextual-pass.md
+    * requirements-register.md AFC-PR-001..066; sm-contextual-pass.md
     * section 3 (data interfaces). Allocation of every item below to
     * register UIDs: models/allocation.md. Attributes inherit their item
     * allocation; enum values inherit their enum allocation.
@@ -82,6 +82,13 @@ package AFCData {
         attribute switchingConfirm : String;
         attribute panelPrefs : String;
         attribute detectionOptIn : String;
+        attribute scoringPreset : ScoringPreset default ScoringPreset::halfPpr;
+    }
+
+    enum def ScoringPreset {
+        doc /* Manual-lineup scoring preset: PPR or Half-PPR, default Half-PPR (PR-065, PR-066). */
+        enum ppr;
+        enum halfPpr;
     }
 
     enum def RoutingOutcome {

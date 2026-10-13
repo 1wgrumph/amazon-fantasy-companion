@@ -1,0 +1,43 @@
+B2 g2 product verification (Muse Code) — branch afc/b2-gate-spec-staged
+base 46f662dd6e1da7c89f9e3fc41fc97690efee729f
+merge 87721eb (origin/main 3be60fc, docs/plans records only)
+fix 3ee029e02d23d70098b84ee9157379e5ac1f4d5b (tools/ci/gate.sh:70)
+head 9752ef28d69c2a6a7a5aa3c835920bc95dce2b27 (CHANGELOG PR #14 link)
+PR https://github.com/1wgrumph/amazon-fantasy-companion/pull/14 (draft)
+
+Callers inspected before change (all invoke the same entrypoint):
+- .githooks/pre-commit -> bash tools/ci/gate.sh --changed
+- .githooks/pre-push -> bash tools/ci/gate.sh --changed
+- .github/workflows/ci.yml spec job -> bash tools/ci/gate.sh spec
+  (docs/hygiene jobs likewise; spec area reached via `spec` and `--changed`)
+
+RED (baseline, base commit, before fix):
+$ env -u GIT_INDEX_FILE -u GIT_DIR TMPDIR=/var/tmp/az PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tools/ci/tests -v
+exit=1
+FAIL: test_staged_source_and_rebuilt_output_pass_before_commit (test_gate.AC_AFC_CI_04_Spec.test_staged_source_and_rebuilt_output_pass_before_commit)
+AssertionError: 1 != 0 : rebuilt output differs from HEAD ... gate: spec: FAIL check exit 1
+Ran 39 tests in 7.636s — FAILED (failures=1)
+
+GREEN (after one-line fix, uncommitted then committed):
+$ env -u GIT_INDEX_FILE -u GIT_DIR TMPDIR=/var/tmp/az PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tools/ci/tests -v
+exit=0
+test_staged_source_and_rebuilt_output_pass_before_commit (test_gate.AC_AFC_CI_04_Spec) ... ok
+test_staged_source_without_rebuilt_output_exits_1 (test_gate.AC_AFC_CI_04_Spec) ... ok
+test_copy_repo_preserves_spec_linked_documents_and_omits_untracked_files (test_gate.AC_AFC_CI_01) ... ok
+Ran 39 tests in 8.785s — OK
+
+$ bash tools/ci/gate.sh
+gate_exit=0
+gate: spec: PASS checks completed
+gate: docs: PASS checks completed
+gate: hygiene: PASS checks completed
+
+$ git diff --check
+diff_check=PASS
+
+Hooks: pre-commit and pre-push ran green on both commits and both pushes;
+no --no-verify. Tests frozen: gate_support.py and test_gate.py sha256 match
+B2T-g2-codex-receipt.json exactly.
+
+Prevention: the frozen staged pair (positive rebuilt-staged passes, negative
+missing-rebuild fails) fails the suite on any HEAD-vs-index regression.

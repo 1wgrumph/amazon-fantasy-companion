@@ -4,7 +4,7 @@ package AFCStructure {
     * Language authority: OMG SysML v2 formal/2026-03-02 (bibliographic
     * identity per sysml-v2-validation.md receipt SRC-EMV-SYSMLV2). No local
     * normative-coverage claim; no AZEdge fixture used.
-    * Sources: requirements-register.md AFC-PR-001..065; sm-contextual-pass.md
+    * Sources: requirements-register.md AFC-PR-001..066; sm-contextual-pass.md
     * section 2 (placements), section 3 (interfaces), section 4 (constraints).
     * Allocation of every part/port below to register UIDs: models/allocation.md.
     * This package is self-contained: linkage to AFCInterfaces, AFCStates and
@@ -58,9 +58,6 @@ package AFCStructure {
 
         part panel;
         // Right-side lineup panel. Planned: panel/LineupPanel.kt.
-
-        part player;
-        // Companion player, Mode A fallback only. Planned: player/CompanionPlayer.kt.
     }
 
     part backend {

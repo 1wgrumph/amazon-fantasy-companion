@@ -6,18 +6,21 @@
     "status": "implementation",
     "planning_repository": "github:1wgrumph/amazon-fantasy-companion",
     "tracking_issue": "1wgrumph/amazon-fantasy-companion#1",
-    "deadline": "2026-10-23T19:00:00Z"
+    "deadline": "2026-10-23T19:00:00Z",
+    "current_activity": "Phase2 planning package ready for sanitization, commit and first independent planning review; no product execution or remote tracking creation"
   },
   "checkout_lease": {
     "journey": "AFC-2026-10-11",
-    "controller": "Claude Code Orchestrator (Claude Opus 5.5)",
+    "controller": "Codex CLI Orchestrator",
     "repository": "github:1wgrumph/amazon-fantasy-companion",
     "checkout": "$HOME/alphazede/worktrees/amazon-fantasy-companion-planning",
     "branch": "plan/2026-10-11-amazon-fantasy-companion",
-    "candidate_revision": "2c13a6bf560e87d11864cc6234f48e40dd9cf529",
+    "candidate_revision": "0b987de5eac88bbcf903a7de73d2d58e545652cb",
     "acquired_at": "2026-10-11T19:21:56Z",
     "generation": 1,
-    "state": "active"
+    "state": "active",
+    "resumed_at": "2026-10-13T03:31:42Z",
+    "liveness": "INACTIVE predecessor; explicit owner begin; no task child process observed"
   },
   "stages": {
     "intake": "accepted",
@@ -372,6 +375,12 @@
       "at": "2026-10-12T13:17:35Z",
       "source": "owner 2026-10-12: 'ok I am done reviewing everything else was sound and once that has been done you can continue to the next steps of coming up with the implementation plan'",
       "decision": "ST-5 spec approval of PR #10 candidate 771c28958f78e611048528aedbd9ed4490f308e1 content, conditional on ST5-F1 (clickable links: external docs, issues, in-document section cross-references; skill rule + lint) and ST5-F2 (revision rows with changed sections + PR/diff links) being applied and verified deterministically. Owner authorizes starting Phase 2 Planning and Design (implementation plan + milestones) now."
+    },
+    {
+      "id": "DEC-AFC-SD-039",
+      "at": "2026-10-13T03:55:05Z",
+      "source": "Owner this session: \"You are the planning lead now\"",
+      "decision": "The current Codex session is the Planning and Design lead as well as the controlling Orchestrator. This supersedes the interrupted Claude planning-lead dispatch and closes the pending lead-route question. Retain frozen specialist profiles, selected capabilities, independent planning review and all spent bounds. Complete program planning and prepare issue/milestone organization; no Phase 2 product execution before integrated approval."
     }
   ],
   "open_decisions": [],
@@ -3348,6 +3357,625 @@
       "at": "2026-10-12T15:51:51Z",
       "kind": "handoff",
       "path": "$HOME/.claude/state/handoff-5cfe4230-d897-4ac4-b3d0-f27628781c70.md"
+    },
+    {
+      "at": "2026-10-13T03:31:42Z",
+      "kind": "dispatch_record",
+      "lease_id": "B2T-g2",
+      "role": "test_implementer",
+      "route": "Claude Code / Claude Opus 5.5 / medium",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-b2",
+      "branch": "afc/b2-gate-spec-staged",
+      "base_sha": "423496ee642982841d1748d102abd05a7d93edcc",
+      "packet": "packets/B2T-g2.md",
+      "review": {
+        "coverage_assist": {
+          "enabled": true,
+          "required": true,
+          "backend": "ocr delegation"
+        }
+      },
+      "deterministic_verification": {
+        "reverify": {
+          "enabled": true,
+          "applicability": "binary claims only"
+        }
+      }
+    },
+    {
+      "at": "2026-10-13T03:31:42Z",
+      "kind": "dispatch_record",
+      "lease_id": "pd-phase2-resume",
+      "role": "planning_and_design",
+      "route": "Claude Code / Claude Opus 5.5 / high",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-phase2-plan",
+      "branch": "plan/2026-10-12-afc-phase-2",
+      "base_sha": "771c28958f78e611048528aedbd9ed4490f308e1",
+      "packet": "specialists/pd-phase2-resume.md",
+      "review": {
+        "coverage_assist": {
+          "enabled": true,
+          "required": true,
+          "backend": "ocr delegation"
+        }
+      },
+      "deterministic_verification": {
+        "reverify": {
+          "enabled": true,
+          "applicability": "binary claims only"
+        }
+      }
+    },
+    {
+      "at": "2026-10-13T03:33:11Z",
+      "kind": "return_record",
+      "lease_id": "B2T-g2",
+      "outcome": "ENVIRONMENT_FAILURE",
+      "reason": "Claude weekly usage limit; reported reset 2am America/Chicago",
+      "evidence": "packets/B2T-g2-run.log"
+    },
+    {
+      "at": "2026-10-13T03:33:11Z",
+      "kind": "return_record",
+      "lease_id": "pd-phase2-resume",
+      "outcome": "ENVIRONMENT_FAILURE",
+      "reason": "Claude weekly usage limit; reported reset 2am America/Chicago",
+      "evidence": "specialists/pd-phase2-resume-run.log"
+    },
+    {
+      "at": "2026-10-13T03:33:11Z",
+      "kind": "dispatch_record",
+      "lease_id": "B2T-g2-codex",
+      "role": "test_implementer",
+      "route": "Codex CLI / GPT-6.1 Sol / high",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-b2",
+      "branch": "afc/b2-gate-spec-staged",
+      "base_sha": "423496ee642982841d1748d102abd05a7d93edcc",
+      "packet": "packets/B2T-g2-codex.md",
+      "review": {
+        "coverage_assist": {
+          "enabled": true,
+          "required": true,
+          "backend": "ocr delegation"
+        }
+      },
+      "deterministic_verification": {
+        "reverify": {
+          "enabled": true,
+          "applicability": "binary claims only"
+        }
+      },
+      "fallback_evidence": "packets/B2T-g2-run.log"
+    },
+    {
+      "at": "2026-10-13T03:34:40Z",
+      "kind": "dispatch_record",
+      "lease_id": "B3-integrate",
+      "route": "Muse Code / Muse Spark 1.3 / max (light_implementer)",
+      "base_sha": "1eadf6e634533e842639324ec461088fa257d09d",
+      "main_sha": "fb2a015b6a7e25c03afe6f1ada3c6ebedc100308",
+      "packet": "packets/B3-integrate.md",
+      "review": {
+        "coverage_assist": {
+          "enabled": true,
+          "required": true
+        }
+      },
+      "deterministic_verification": {
+        "reverify": {
+          "enabled": true
+        }
+      }
+    },
+    {
+      "at": "2026-10-13T03:35:38Z",
+      "kind": "dispatch_record",
+      "lease_id": "S44-azedge-review",
+      "route": "Muse Code / Muse Spark 1.3 / max (tech-writing reviewer)",
+      "base_sha": "a82244bfbd2688dac740c231fc2550a327d008f7",
+      "candidate": "b8604b5db6448b72b2cc2068ebe69383b3d1a00b",
+      "packet": "packets/S44-azedge-review.md",
+      "review": {
+        "coverage_assist": {
+          "enabled": true,
+          "required": true,
+          "backend": "ocr delegation"
+        }
+      },
+      "deterministic_verification": {
+        "reverify": {
+          "enabled": true,
+          "applicability": "not applicable; shell/docs only"
+        }
+      }
+    },
+    {
+      "at": "2026-10-13T03:36:09Z",
+      "kind": "dispatch_record",
+      "lease_id": "TE-p2-codex",
+      "role": "test_engineer.planning",
+      "route": "Codex CLI / GPT-6 Astra / xhigh",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-phase2-plan",
+      "packet": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/specialists/te-p2-codex-prompt.md",
+      "fallback_evidence": "specialists/pd-phase2-resume-run.log",
+      "base_sha": "771c28958f78e611048528aedbd9ed4490f308e1",
+      "review": {
+        "coverage_assist": {
+          "enabled": true,
+          "required": true
+        }
+      },
+      "deterministic_verification": {
+        "reverify": {
+          "enabled": true
+        }
+      }
+    },
+    {
+      "at": "2026-10-13T03:37:43Z",
+      "kind": "dispatch_record",
+      "lease_id": "SCR-codex-resume",
+      "route": "Muse Code / Muse Spark 1.3 / max (scribe)",
+      "packet": "packets/SCR-codex-resume.md",
+      "write_set": [
+        "journey.json history",
+        "docs/developer-feedback/**"
+      ]
+    },
+    {
+      "at": "2026-10-13T03:40:57Z",
+      "kind": "return_record",
+      "lease_id": "B2T-g2-codex",
+      "outcome": "PASS expected red",
+      "head": "46f662dd6e1da7c89f9e3fc41fc97690efee729f",
+      "root_verification": "39 tests, exactly positive staged-output test fails; root rerun exit 1 expected"
+    },
+    {
+      "at": "2026-10-13T03:40:57Z",
+      "kind": "landing_record",
+      "unit": "B3",
+      "pr": "alphazede/Alphazedehq#320",
+      "outcome": "MERGED",
+      "merge_head": "04678835350b529b44ab69ee5f805ca21cab5e76",
+      "candidate": "995ffcd600723ee27e000e0acbbf24860f655830",
+      "verification": "81 tests; root merge gate PASS; code/test bytes unchanged from independently reviewed repair",
+      "merge_method": "merge commit; GitHub rejected rebase as not rebasable",
+      "cleanup": "worktree/local/remote branch removed; ancestor and clean state verified"
+    },
+    {
+      "at": "2026-10-13T03:40:57Z",
+      "kind": "return_record",
+      "lease_id": "SCR-codex-resume",
+      "outcome": "READY",
+      "evidence": "docs/developer-feedback/scribe-2026-10-13-g1-resume.md"
+    },
+    {
+      "at": "2026-10-13T03:40:57Z",
+      "kind": "dispatch_record",
+      "lease_id": "B2-g2",
+      "route": "Muse Code / Muse Spark 1.3 / max (bug-triager implementer)",
+      "base_sha": "46f662dd6e1da7c89f9e3fc41fc97690efee729f",
+      "packet": "packets/B2-g2.md",
+      "review": {
+        "coverage_assist": {
+          "enabled": true,
+          "required": true,
+          "backend": "ocr delegation"
+        }
+      },
+      "deterministic_verification": {
+        "reverify": {
+          "enabled": true
+        }
+      }
+    },
+    {
+      "at": "2026-10-13T03:49:00Z",
+      "kind": "return_record",
+      "lease_id": "B2-g2",
+      "outcome": "CANDIDATE_READY",
+      "head": "9752ef28d69c2a6a7a5aa3c835920bc95dce2b27",
+      "pr": "1wgrumph/amazon-fantasy-companion#14",
+      "tests": "39/39; hosted checks 4/4"
+    },
+    {
+      "at": "2026-10-13T03:49:00Z",
+      "kind": "dispatch_record",
+      "lease_id": "B2-review",
+      "route": "Codex CLI / GPT-6 Astra / high",
+      "base_sha": "3be60fca776f61ce620a83ea3c18f29bc9ee4472",
+      "candidate": "9752ef28d69c2a6a7a5aa3c835920bc95dce2b27",
+      "packet": "packets/B2-review.md",
+      "review": {
+        "coverage_assist": {
+          "enabled": true,
+          "required": true,
+          "backend": "ocr delegation"
+        }
+      },
+      "deterministic_verification": {
+        "reverify": {
+          "enabled": true,
+          "applicability": "not applicable; source only"
+        }
+      }
+    },
+    {
+      "at": "2026-10-13T03:55:05Z",
+      "kind": "review_record",
+      "unit": "B2",
+      "candidate": "9752ef28d69c2a6a7a5aa3c835920bc95dce2b27",
+      "verdict": "PASS",
+      "evidence": "packets/B2-review-result.md",
+      "review_rounds": 1,
+      "repair_rounds": 0
+    },
+    {
+      "at": "2026-10-13T03:55:05Z",
+      "kind": "landing_record",
+      "unit": "B2",
+      "pr": "1wgrumph/amazon-fantasy-companion#14",
+      "outcome": "MERGED",
+      "merge_head": "c2468c9e7850745f1245bf4cfc81e55047e3fb55",
+      "verification": "root gate exit0; reviewer39/39 plus independent red/green and OCR; hosted4/4"
+    },
+    {
+      "at": "2026-10-13T03:55:05Z",
+      "kind": "dispatch_record",
+      "lease_id": "ST-4-g5",
+      "role": "implementer",
+      "route": "Codex CLI / GPT-6 Astra / medium (tech-writing)",
+      "base_sha": "8f46cb5280146073c4de088d31a1fe0279131f2c",
+      "packet": "packets/ST-4-g5.md",
+      "dependencies": [
+        "B2 #14 merged c2468c9",
+        "B3 #320 merged 0467883"
+      ],
+      "review": {
+        "coverage_assist": {
+          "enabled": true,
+          "required": true,
+          "backend": "ocr delegation"
+        }
+      },
+      "deterministic_verification": {
+        "reverify": {
+          "enabled": true
+        }
+      }
+    },
+    {
+      "at": "2026-10-13T03:58:52Z",
+      "kind": "landing_record",
+      "unit": "S44 azedge",
+      "pr": "alphazede/azedge#304",
+      "outcome": "MERGED",
+      "merge_head": "5ac113e343df448b23cff28cab6e3938ec64a2de",
+      "candidate": "b8604b5db6448b72b2cc2068ebe69383b3d1a00b",
+      "verification": "independent OCR + foundation16PASS + local fast gates29PASS12SKIP; root verified exact file hashes and remote identity; qualified gate reused per workspace rule22",
+      "cleanup": "worktree and local branch already removed by automatic cleanup; remote absence verified",
+      "remaining_observation": "prior provider_reads_once_per_admitted_attempt flake not reproduced by scoped fast gate; no claim it was fixed"
+    },
+    {
+      "at": "2026-10-13T04:04:44Z",
+      "kind": "return_record",
+      "lease_id": "ST-4-g5",
+      "outcome": "CANDIDATE_READY",
+      "head": "2090e2dc3f804c983e0ddc25cc506f9f98922824",
+      "product_head": "531eea3b5487c52fd83602ef510cdd702af0b632",
+      "pr": "1wgrumph/amazon-fantasy-companion#10"
+    },
+    {
+      "at": "2026-10-13T04:04:44Z",
+      "kind": "dispatch_record",
+      "lease_id": "ST-4-g5-review",
+      "route": "Muse Code / Muse Spark 1.3 / max (tech-writing reviewer)",
+      "base_sha": "771c28958f78e611048528aedbd9ed4490f308e1",
+      "candidate": "2090e2dc3f804c983e0ddc25cc506f9f98922824",
+      "packet": "packets/ST-4-g5-review.md",
+      "review": {
+        "coverage_assist": {
+          "enabled": true,
+          "required": true,
+          "backend": "ocr delegation"
+        }
+      },
+      "deterministic_verification": {
+        "reverify": {
+          "enabled": true,
+          "applicability": "not applicable; source only"
+        }
+      }
+    },
+    {
+      "at": "2026-10-13T04:13:22Z",
+      "kind": "return_record",
+      "lease_id": "TE-p2-codex",
+      "outcome": "PASS planning authorship;9 reconciliation findings",
+      "counts": {
+        "proof_cases": 100,
+        "active_product": 63,
+        "local": 37,
+        "commands": 64,
+        "slices": 52,
+        "integration_steps": 44
+      }
+    },
+    {
+      "at": "2026-10-13T04:13:22Z",
+      "kind": "planning_correction",
+      "unit": "P2 author completion",
+      "authority": "DEC-AFC-SD-039 + current requested issues/milestones + routine write-set corrections",
+      "evidence": "Phase2 evidence/P2-6/codex-lead/",
+      "scope": "no new product requirements; retain all63activeUIDs and52sliceidentities"
+    },
+    {
+      "at": "2026-10-13T04:13:22Z",
+      "kind": "closeout_record",
+      "unit": "PR11 redundant",
+      "outcome": "CLOSED, branchdeleted",
+      "evidence": "git cherry origin/main origin/afc/s42-revendor-prose returned -579b951; main d259c169 exactpatch and c24e4a3 vendor pin verified"
+    },
+    {
+      "at": "2026-10-13T04:13:22Z",
+      "kind": "dispatch_record",
+      "lease_id": "IE-p2-codex-delta",
+      "role": "integration_engineer.planning",
+      "route": "Codex CLI / GPT-6.1 Sol / xhigh",
+      "fallback_evidence": "specialists/pd-phase2-resume-run.log",
+      "packet": "Phase2 specialists/ie-p2-codex-delta-prompt.md",
+      "base_sha": "771c28958f78e611048528aedbd9ed4490f308e1",
+      "review": {
+        "coverage_assist": {
+          "enabled": true,
+          "required": true
+        }
+      },
+      "deterministic_verification": {
+        "reverify": {
+          "enabled": true
+        }
+      }
+    },
+    {
+      "at": "2026-10-13T04:20:58Z",
+      "kind": "review_record",
+      "unit": "ST5-F1/F2 amendment",
+      "lease_id": "ST-4-g5-review",
+      "candidate": "2090e2dc3f804c983e0ddc25cc506f9f98922824",
+      "verdict": "PASS",
+      "evidence": "packets/ST-4-g5-review-result.md",
+      "review_rounds": 1,
+      "repair_rounds": 0
+    },
+    {
+      "at": "2026-10-13T04:20:58Z",
+      "kind": "landing_record",
+      "unit": "ST-4 / ST5 conditions",
+      "pr": "1wgrumph/amazon-fantasy-companion#10",
+      "outcome": "MERGED",
+      "merge_head": "92f3ed1a0d178d2704c0efdc073ad332dc67b79f",
+      "verification": "independent749links/anchors,66UIDs,byteidenticalbuild,approvedprosepreserved,39tests,hosted4/4; root exacthead/hashreadback",
+      "cleanup": "untracked g4/g5-review evidence copied and byte-verified to evidence/ST-4/preserved; mergedworktree/local/remote branch removed",
+      "publication": "No release/tag/public visibility change; deferred owner authority remains separate"
+    },
+    {
+      "at": "2026-10-13T04:42:23Z",
+      "kind": "return_record",
+      "lease_id": "IE-p2-codex-delta",
+      "outcome": "READY author delta",
+      "evidence": "Phase2 specialists/ie-p2-codex-delta-receipt.md",
+      "counts": {
+        "steps": 44,
+        "slices": 52,
+        "groups": 39,
+        "changed_fields": 60
+      },
+      "correction_round": 2
+    },
+    {
+      "at": "2026-10-13T04:42:23Z",
+      "kind": "planning_correction",
+      "unit": "IE exact source closure + planning base sync",
+      "evidence": "Phase2 evidence/P2-6/codex-lead/exact-source-closure.json",
+      "head": "7f000aff70e435b0cac923931fd818c69111f07d",
+      "gate": "merge commit gate PASS39tests",
+      "no_budget_reset": true
+    },
+    {
+      "at": "2026-10-13T04:42:23Z",
+      "kind": "dispatch_record",
+      "lease_id": "PI-p2-codex",
+      "role": "plan_integrator",
+      "route": "Muse Code / Muse Spark 1.3 / max",
+      "base_sha": "7f000aff70e435b0cac923931fd818c69111f07d",
+      "packet": "Phase2 specialists/pi-p2-codex-prompt.md",
+      "review": {
+        "coverage_assist": {
+          "enabled": true,
+          "required": true
+        }
+      },
+      "deterministic_verification": {
+        "reverify": {
+          "enabled": true
+        }
+      },
+      "next": "Existing Planning TE finalizes after this reconciliation; independent planning review remains unspent"
+    },
+    {
+      "at": "2026-10-13T04:44:36Z",
+      "kind": "dispatch_record",
+      "lease_id": "SCR-planning-progress",
+      "role": "scribe",
+      "route": "Muse Code / Muse Spark 1.3 / max",
+      "packet": "packets/SCR-planning-progress.md"
+    },
+    {
+      "at": "2026-10-13T05:03:19Z",
+      "kind": "return_record",
+      "lease_id": "SCR-planning-progress",
+      "outcome": "READY",
+      "history": "append6to14",
+      "evidence": "docs/developer-feedback/scribe-2026-10-13-g2-progress.md"
+    },
+    {
+      "at": "2026-10-13T05:03:19Z",
+      "kind": "return_record",
+      "lease_id": "PI-p2-codex",
+      "outcome": "RECONCILED_FOR_TE; required-view selection must be restored",
+      "evidence": "Phase2 specialists/pi-p2-codex-receipt.md",
+      "counts": {
+        "slices": 52,
+        "proof_cases": 100,
+        "issue_groups": 39
+      },
+      "correction": "Parent rejects disabling required SysML views to bypass renderer; exact SVG packaging correction precedes TE finalization"
+    },
+    {
+      "at": "2026-10-13T05:03:19Z",
+      "kind": "dispatch_record",
+      "lease_id": "SVG-prolog",
+      "role": "light_implementer",
+      "route": "Muse Code / Muse Spark 1.3 / max (primary)",
+      "base_sha": "7f000aff70e435b0cac923931fd818c69111f07d",
+      "packet": "Phase2 specialists/svg-prolog-prompt.md",
+      "write_set": [
+        "models/view-data.svg",
+        "models/view-interfaces.svg",
+        "models/view-states.svg",
+        "models/view-structure.svg",
+        "evidence/svg-prolog/receipt.json"
+      ]
+    },
+    {
+      "at": "2026-10-13T05:07:30Z",
+      "kind": "return_record",
+      "lease_id": "SVG-prolog",
+      "outcome": "ASSET_READY",
+      "evidence": "Phase2 evidence/svg-prolog/receipt.json",
+      "verification": "4exactprefix removals; identical remainingbytes/XML trees; all4sysml hashesunchanged"
+    },
+    {
+      "at": "2026-10-13T05:07:30Z",
+      "kind": "dispatch_record",
+      "lease_id": "TE-p2-finalize",
+      "role": "test_engineer.planning",
+      "route": "Codex CLI / GPT-6 Astra / xhigh (same resumed planning session)",
+      "fallback_evidence": "specialists/pd-phase2-resume-run.log",
+      "base_sha": "7f000aff70e435b0cac923931fd818c69111f07d",
+      "packet": "Phase2 specialists/te-p2-finalize-prompt.md",
+      "review": {
+        "coverage_assist": {
+          "enabled": true,
+          "required": true
+        }
+      },
+      "deterministic_verification": {
+        "reverify": {
+          "enabled": true
+        }
+      },
+      "purpose": "Owning-role finalization after PI; not independent assurance or a new review round"
+    },
+    {
+      "at": "2026-10-13T05:35:44Z",
+      "kind": "return_record",
+      "lease_id": "TE-p2-finalize",
+      "outcome": "PASS planning-only finalization",
+      "evidence": "Phase2 specialists/te-p2-finalize-receipt.md",
+      "remaining": "Actual repository filing scope binding requires bounded correction; all runtime gaps retained"
+    },
+    {
+      "at": "2026-10-13T05:35:44Z",
+      "kind": "policy_resolution",
+      "unit": "Personal repository issue filing",
+      "classification": "Scope nonmatch; not product defect or permission bypass",
+      "evidence": "Phase2 specialists/filing-scope-resolution.md",
+      "remote_writes": 0
+    },
+    {
+      "at": "2026-10-13T05:35:44Z",
+      "kind": "dispatch_record",
+      "lease_id": "TE-p2-filing-binding",
+      "role": "test_engineer.planning",
+      "route": "Codex CLI / GPT-6 Astra / xhigh (same resumed session)",
+      "base_sha": "7f000aff70e435b0cac923931fd818c69111f07d",
+      "packet": "Phase2 specialists/te-p2-filing-binding-prompt.md",
+      "scope": "Tracking command binding and current source hashes only; 100 proofs/70 command IDs unchanged"
+    },
+    {
+      "at": "2026-10-13T05:54:52Z",
+      "kind": "return_record",
+      "lease_id": "TE-p2-filing-binding",
+      "outcome": "PASS planning-only",
+      "evidence": "Phase2 specialists/te-p2-filing-binding-receipt.md",
+      "proofs": 100,
+      "commands": 70,
+      "remote_writes": 0
+    },
+    {
+      "at": "2026-10-13T05:54:52Z",
+      "kind": "planning_payload_selection",
+      "authority": "Current P&D lead DEC-AFC-SD-039",
+      "path": "Phase2 evidence/github-work-items/github-work-items.json",
+      "sha256": "95caddfe2b85067e2a22a3c1e7d46180193f3c67c59aa91b34d552d9116b8c4b",
+      "status": "REVIEW_PAYLOAD not approved/submitted",
+      "evidence": "Phase2 evidence/github-work-items/payload-supersession.json"
+    },
+    {
+      "at": "2026-10-13T05:54:52Z",
+      "kind": "dispatch_record",
+      "lease_id": "PI-p2-final-refresh",
+      "role": "plan_integrator",
+      "route": "Muse Code / Muse Spark 1.3 / max (same frozen primary)",
+      "base_sha": "7f000aff70e435b0cac923931fd818c69111f07d",
+      "packet": "Phase2 specialists/pi-p2-final-refresh-prompt.md",
+      "review": {
+        "coverage_assist": {
+          "enabled": true,
+          "required": true
+        }
+      },
+      "deterministic_verification": {
+        "reverify": {
+          "enabled": true
+        }
+      },
+      "scope": "Mechanical projection/render/payload binding; one independent planning review remains"
+    },
+    {
+      "at": "2026-10-13T06:14:22Z",
+      "kind": "return_record",
+      "lease_id": "PI-p2-final-refresh",
+      "outcome": "Author PLAN_REVIEW_READY; parent native freeze rejected missing task routes",
+      "evidence": "Phase2 specialists/pi-p2-final-refresh-receipt.md",
+      "digest": "02c41e2cc4553126bd0a5aeaa554104b488e68177eba4cb650694af2d4c16226"
+    },
+    {
+      "at": "2026-10-13T06:14:22Z",
+      "kind": "verification_gap",
+      "unit": "Parent freeze check",
+      "finding": "52 manifest task rows lack route; old .claude helper passes while .codex native helper rejects",
+      "classification": "Planning projection completion; no product/harness bug assertion or policy/tool change"
+    },
+    {
+      "at": "2026-10-13T06:14:22Z",
+      "kind": "dispatch_record",
+      "lease_id": "TASK-route-projection",
+      "role": "light_implementer",
+      "route": "Muse Code / Muse Spark 1.3 / max",
+      "base_sha": "7f000aff70e435b0cac923931fd818c69111f07d",
+      "packet": "Phase2 specialists/task-route-projection-prompt.md",
+      "scope": "Copy existing route tuples and dependency lists; check both helpers"
+    },
+    {
+      "at": "2026-10-13T06:24:20Z",
+      "kind": "return_record",
+      "lease_id": "TASK-route-projection",
+      "outcome": "CANDIDATE_READY",
+      "evidence": "Phase2 evidence/task-route-projection/receipt.json",
+      "verification": "52route tuples and dependencies copied; both native/frozen helpers PASS same02c41e2c digest;7views embedded; no source/SEIT change"
     }
   ],
   "planning_review": {
@@ -3401,5 +4029,159 @@
     "approved_candidate": "173e005",
     "approved_manifest_digest": "4128aa9cdacd1fca06edfb68652258730db107eb6213f6dca3faf9e9cca55e84",
     "approved_at": "2026-10-12T02:17:01Z"
-  }
+  },
+  "history": [
+    {
+      "at": "2026-10-13T03:31:42Z",
+      "kind": "session_resume",
+      "generation": 1,
+      "orchestrator": "Codex CLI Orchestrator",
+      "owner_direction": "Owner said 'begin' after clarifying immediate scope: finish spec/blockers and program planning, present the integrated package, then create planned issues and milestones only after approval. Product implementation is outside this stage.",
+      "note": "No change to frozen role routes or review budgets. The verbatim owner statement time was not recorded; 'at' is the verified lease resume marker, not the statement time.",
+      "evidence": "checkout_lease.resumed_at, HANDOFF.md"
+    },
+    {
+      "at": "2026-10-13T03:33:11Z",
+      "kind": "observation",
+      "tool": "Claude Code",
+      "task": "Resume existing work: B2T-g2 (B2 red tests) and pd-phase2-resume (Phase 2 Planning and Design)",
+      "classification": "Verified account usage exhaustion; not a product bug",
+      "observation": "Both runs exited 1 with 'You've hit your weekly limit; resets 2am (America/Chicago)'. Result: blocked, no new artifacts from these runs.",
+      "evidence": "packets/B2T-g2-run.log, specialists/pd-phase2-resume-run.log, return_records at this timestamp",
+      "impact": "B2 test work and Phase 2 planning-lead work could not proceed on their primary Claude routes",
+      "workaround": "Frozen ordered fallbacks for B2 Test Implementer and TE; owner route question for the planning lead (no configured P&D fallback)",
+      "uncertainty": "Run durations unknown; reset time is the vendor-reported 2am America/Chicago, not independently verified"
+    },
+    {
+      "kind": "owner_question_pending",
+      "record_note": "Event form without typed question timestamps: the actual asked UTC time is unavailable and is not fabricated, per packet authorization. Not an owner_stop record.",
+      "question": "For the planning lead (no configured P&D fallback): run on Codex CLI / GPT-6.1 Sol / high, or wait for the Claude reset?",
+      "asked_at": null,
+      "answered_at": null,
+      "status": "answer pending"
+    },
+    {
+      "at": "2026-10-13T03:34:40Z",
+      "kind": "observation",
+      "tool": "Deterministic gates (pytest, local-gates.sh) run by root",
+      "task": "B3 verification of reviewed repair head 1eadf6e",
+      "classification": "Verification receipt; not a defect or review round",
+      "observation": "81 tests PASS; local-gates exit 0 with 2 applicable PASS and 15 N/A. Only CHANGELOG.md conflicts with newer main (shown by git merge-tree); B3-integrate dispatched for mechanical preserve-both resolution.",
+      "evidence": "evidence/B3/codex-verify/ (pytest.txt, local-gates.txt), dispatch_record B3-integrate",
+      "impact": "B3 proceeds to mechanical integration; no new review or product repair",
+      "workaround": "None needed",
+      "uncertainty": "Verification ran before the B3-integrate dispatch; its exact run time was not recorded"
+    },
+    {
+      "at": "2026-10-13T03:36:09Z",
+      "kind": "observation",
+      "tool": "Codex CLI (frozen first fallbacks)",
+      "task": "B2 test specialist (B2T-g2-codex, dispatched 2026-10-13T03:33:11Z) and TE planning (TE-p2-codex, dispatched 2026-10-13T03:36:09Z)",
+      "classification": "Fallback activation receipts (Class B); work in flight, not complete",
+      "observation": "Both roles run on their frozen first fallbacks. Completeness is not claimed.",
+      "evidence": "dispatch_records B2T-g2-codex (route Codex CLI / GPT-6.1 Sol / high) and TE-p2-codex (route Codex CLI / GPT-6 Astra / xhigh) in execution_receipts",
+      "impact": "Blocked B2/TE work resumes on approved routes pending the owner's planning-lead route answer",
+      "workaround": "None; this is the workaround",
+      "uncertainty": "Return outcomes unknown at transcription time"
+    },
+    {
+      "at": "2026-10-13T03:37:43Z",
+      "kind": "observation",
+      "tool": "BRAN",
+      "task": "Scribe repository context for AFC transcription",
+      "classification": "Capability unavailable for this repository (no native policy); not a failure",
+      "observation": "BRAN unavailable for AFC. Direct repository reads used instead. Existing configured BRAN continues for HQ/azedge where applicable.",
+      "evidence": "SCR-codex-resume dispatch packet",
+      "impact": "None on this transcription; reads completed directly",
+      "workaround": "Direct repository reads",
+      "uncertainty": "Whether a native AFC BRAN policy will be configured later is unknown"
+    },
+    {
+      "at": "2026-10-13T03:40:57Z",
+      "kind": "observation",
+      "tool": "Alphazedehq PR pipeline + deterministic gates",
+      "task": "B3 landing (Alphazedehq#320, merge 0467883)",
+      "classification": "Landing receipt; not a defect or review round",
+      "observation": "MERGED 04678835350b529b44ab69ee5f805ca21cab5e76. 81 tests; root merge gate PASS; code/test bytes unchanged from the independently reviewed repair; CHANGELOG-only conflict with newer main resolved preserve-both (merge commit; GitHub rejected rebase as not rebasable). Worktree/local/remote branch removed; ancestor and clean state verified.",
+      "evidence": "landing_record B3; dispatch B3-integrate",
+      "impact": "B3 closed; ST-4 g5 later re-vendors to this pin",
+      "uncertainty": "B3-integrate run duration unknown"
+    },
+    {
+      "at": "2026-10-13T03:55:05Z",
+      "kind": "owner_decision_recorded",
+      "decision": "DEC-AFC-SD-039",
+      "observation": "Owner asked why a lead-route question was raised despite profiles, then stated 'You are the planning lead now'. The current Codex session is the Planning and Design lead; the pending lead-route question is closed, not a specialist-profile amendment. Root continues configured roles/fallbacks. User task remains planning plus approved tracking setup; no product execution.",
+      "evidence": "decisions DEC-AFC-SD-039",
+      "classification": "Orchestration friction; not a vendor bug",
+      "note": "Owner question/statement timestamps unknown, not fabricated. Supersedes the pending owner_question_pending history record.",
+      "impact": "Planning-lead route settled; TE/IE proceed on frozen fallbacks"
+    },
+    {
+      "at": "2026-10-13T03:55:05Z",
+      "kind": "observation",
+      "tool": "Reviewer gates + hosted CI",
+      "task": "B2 landing (amazon-fantasy-companion#14, merge c2468c9)",
+      "classification": "Landing receipt; not a defect or review round",
+      "observation": "MERGED c2468c9e7850745f1245bf4cfc81e55047e3fb55 after one independent review PASS (zero findings, zero repairs). Reviewer 39/39 plus independent six-case red/green reproduction and OCR rules for all four files; hosted checks 4/4.",
+      "evidence": "review_record B2 (packets/B2-review-result.md); landing_record B2",
+      "impact": "B2 closed; B2T-g2-codex red work and B2-g2 repair both landed",
+      "uncertainty": "Landing-run duration unknown"
+    },
+    {
+      "at": "2026-10-13T03:58:52Z",
+      "kind": "observation",
+      "tool": "Reviewer gates (foundation-contracts, local-gates --fast)",
+      "task": "S44 landing (azedge#304, merge 5ac113e)",
+      "classification": "Landing receipt with explicit non-claims; not a defect or review round",
+      "observation": "MERGED 5ac113e343df448b23cff28cab6e3938ec64a2de. Independent OCR + foundation 16 PASS + local fast gates 29 PASS / 12 SKIP; root verified exact file hashes and remote identity. No claim the 12 skipped suites (incl. workspace-tests) ran; prior provider_reads_once_per_admitted_attempt flake not reproduced, not claimed fixed. Remote absence verified after automatic worktree cleanup.",
+      "evidence": "landing_record S44 azedge; packets/S44-azedge-review-result.md",
+      "impact": "S44 closed; workspace rule #21 live in azedge",
+      "uncertainty": "None added beyond the receipt"
+    },
+    {
+      "at": "2026-10-13T04:13:22Z",
+      "kind": "observation",
+      "tool": "git cherry + patch comparison",
+      "task": "PR11 redundant closeout",
+      "classification": "Closeout receipt; correctly never merged",
+      "observation": "PR11 CLOSED and branch deleted: patch 579b951 equivalent to already-main d259c169 (git cherry returned -); c24e4a3 vendor pin verified. Not falsely marked merged; correctly absent from CHANGELOG history.",
+      "evidence": "closeout_record PR11 redundant; packets/ST-4-g5-review-result.md PR11 section",
+      "impact": "No duplicate re-vendor in history",
+      "uncertainty": "None"
+    },
+    {
+      "at": "2026-10-13T04:13:22Z",
+      "kind": "observation",
+      "tool": "Codex CLI (TE planning, frozen first fallback)",
+      "task": "TE initial planning authorship PASS + root source corrections",
+      "classification": "Planning authorship PASS with nine reconciliation findings; not review, runtime, or acceptance",
+      "observation": "TE-p2-codex PASS: 100 proof cases (63 active product + 37 lifecycle-local), 64 commands, 52 slices, 44 integration steps; findings TE-P2-F01..F09. Root applied source corrections (P2 author completion; no new product requirements; all 63 active UIDs and 52 slice identities retained) and dispatched IE-p2-codex-delta.",
+      "evidence": "return_record TE-p2-codex; planning_correction P2 author completion; Phase2 specialists/te-p2-codex-receipt.md",
+      "impact": "Planning proceeds to IE correction 2; findings bound for Plan Integrator",
+      "uncertainty": "TE run duration unknown"
+    },
+    {
+      "at": "2026-10-13T04:20:58Z",
+      "kind": "observation",
+      "tool": "Independent review + hosted CI",
+      "task": "ST-4 / ST5-conditions landing (amazon-fantasy-companion#10, merge 92f3ed1)",
+      "classification": "Landing receipt; not a defect or review round",
+      "observation": "MERGED 92f3ed1a0d178d2704c0efdc073ad332dc67b79f after one independent review PASS (zero findings, zero repairs). Independent 749 links/anchors, 66/66 UIDs, byte-identical rebuild, approved prose preserved, 39 tests, hosted 4/4; root exact head/hash readback. Untracked g4/g5-review evidence byte-preserved; g5 author evidence on main at Phase 2 canonical relative paths. Merged worktree/local/remote removed. No release/tag/visibility change (deferred owner authority).",
+      "evidence": "review_record ST-4-g5-review (packets/ST-4-g5-review-result.md); landing_record ST-4; main evidence/ST-4/g5/receipt.json",
+      "impact": "ST5-F1/F2 conditions satisfied; spec amendment live on main",
+      "uncertainty": "Landing-run duration unknown"
+    },
+    {
+      "at": "2026-10-13T04:42:23Z",
+      "kind": "observation",
+      "tool": "Codex CLI (IE planning continuation, frozen first fallback)",
+      "task": "IE correction 2 READY + Plan Integrator running",
+      "classification": "Author delta READY for parent reconciliation; not integrated readiness, review, assurance, or acceptance",
+      "observation": "IE-p2-codex-delta READY: 44 steps, 52 slices, 39 logical issue groups (13 TDD pairs share issues), 60 changed fields; D02 waits for every required final verdict. Root synced planning base (head 7f000af, merge gate PASS 39 tests). Plan Integrator PI-p2-codex dispatched and running; TE finalization and independent planning review remain; no new independent planning review yet. Q10/S8 engineering-methods ledger is external, outside this write set, not restored.",
+      "evidence": "return_record IE-p2-codex-delta; planning_correction IE exact source closure; dispatch_record PI-p2-codex; Phase2 specialists/ie-p2-codex-delta-receipt.md",
+      "impact": "Planning proceeds to integration; typed gaps (source reconciliation, Reverify capability, owner evidence) stay visible",
+      "uncertainty": "IE run duration unknown; reconciliation outcome pending"
+    }
+  ]
 }

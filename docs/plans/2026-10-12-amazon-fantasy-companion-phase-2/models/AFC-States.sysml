@@ -4,7 +4,7 @@ package AFCStates {
     * device link. Language authority: OMG SysML v2 formal/2026-03-02
     * (bibliographic identity per sysml-v2-validation.md receipt
     * SRC-EMV-SYSMLV2). No local normative-coverage claim; no AZEdge
-    * fixture used. Sources: requirements-register.md AFC-PR-001..065;
+    * fixture used. Sources: requirements-register.md AFC-PR-001..066;
     * sm-contextual-pass.md section 3. Allocation of every state machine,
     * state and signal below to register UIDs: models/allocation.md.
     * Transitions are behavior owned by their state def and inherit its
@@ -55,20 +55,21 @@ package AFCStates {
 
     state def PanelMode {
         doc /*
-        * Panel presentation mode, owned by tvApp.panel with tvApp.player.
+        * Panel presentation mode, owned by tvApp.panel.
         * modeB: lineup panel beside provider video, broadcast unobscured
-        * (PR-041). modeA: panel-beside-provider-video spike failed or
-        * exceeded 24 h from first install (C5): panel beside the companion
-        * player with labeled sample footage (PR-047). No return transition:
-        * C5 names fallback only. Under modeA, alerts and Watch actions
-        * still route to the real provider apps (PR-048).
+        * (PR-041). fullScreen: panel-beside-provider-video spike failed
+        * or exceeded 24 h from first install (C5): full-screen lineup
+        * panel in the companion app, no stand-in video (PR-047).
+        * No return transition: C5 names fallback only. Under fullScreen,
+        * alerts and Watch actions still route to the real provider apps
+        * (PR-048).
         */
         entry; then modeB;
 
         state modeB;
-        state modeA;
+        state fullScreen;
 
-        transition t_modeB_modeA first modeB accept spikeFailed then modeA;
+        transition t_modeB_fullScreen first modeB accept spikeFailed then fullScreen;
     }
 
     state def DeviceLink {

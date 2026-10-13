@@ -1,0 +1,98 @@
+--- before/design.md
++++ after/design.md
+@@ -115,7 +115,7 @@
+ | SP-2 heads-up notification | P2-X02 | Does a background service's high-importance notification with actions appear over Prime Video playback without foregrounding our app? | 6 h | AFC-PR-015 route; RISK-AFC-P2-02 |
+ | SP-3 provider links | P2-X03 | Per provider in order Prime Video (TNF), ESPN, DirecTV Stream, YouTube TV, then local broadcast: package identity, documented launch intent/URI, observed outcome; live Prime Video TNF check on 2026-10-15 | 10 h plus the TNF window | Provider registry (CONTRACT-AFC-P2-PROVIDER-REGISTRY); AFC-PR-029..031 |
+ | SP-7 detection | P2-X07 | Which installed-app facts are readable (package manager on the stick's API level); is current-viewing context exposed by a supported API? | 3 h | AFC-PR-003, -010 (unsupported → control hidden, limitation recorded) |
+-| SP-5 ESPN feed | P2-X05 | Scoreboard and summary endpoints, schema, update timing, correction evidence; fixture capture | Live windows MNF 10-12 (if approved) and TNF 10-15 | Fixture format; feed_poll_interval check; AFC-PR-012, -013, -064 |
++| SP-5 ESPN feed | P2-X05 | Scoreboard and summary endpoints, schema, update timing, correction evidence; fixture capture | First planned live window TNF 10-15; earlier games labeled historical | Fixture format; feed_poll_interval check; AFC-PR-012, -013, -064 |
+ | SP-6 Yahoo | P2-X06 | Approved and OAuth read works (roster by week, settings), or manual at T_yahoo | Until T_yahoo | C6; AFC-PR-001, -006, -007 |
+ | SP-8 Alexa (stretch) | P2-X11 | Verified Alexa route for announcements or tuning (C8) | Drop at 2026-10-21T12:00:00Z | AFC-PR-022, -036 |
+
+@@ -167,9 +167,12 @@
+ confirmation is on, a confirm dialog precedes launch. Launch uses only the
+ registry's intent or URI for the provider (CONTRACT-AFC-P2-PROVIDER-REGISTRY);
+ an absent package yields `appAbsent`; a refused launch or provider denial
+-yields `playbackDenied` with the provider's reason; otherwise the outcome is
+-the registry entry's `verified_outcome`, which P2-X03 sets from on-device
+-evidence (`gameOpened` only where game arrival was observed). Each attempt
++yields `playbackDenied` with the provider's reason; otherwise a supported provider response for this attempt determines the
++outcome. A successful launch call and the registry's historical
++`verified_outcome` alone never establish `gameOpened`. When the current
++destination/playback cannot be verified, report `accessUnknown` with that
++reason; do not invent provider callbacks or an extra enum. P2-X03 records
++any supported outcome-observation mechanism and its limits. Each attempt
+ reports exactly one RoutingOutcome back through the API (AFC-PR-031) and
+ shows it to the customer. Alexa-assisted tuning is offered only if P2-X11
+ verifies it (AFC-PR-036). Under PanelMode.fullScreen, Watch leaves our app
+@@ -259,8 +262,9 @@
+ name + team + position with an explicit mapping table and recorded
+ confidence; unmatched players show unavailable rather than guessed
+ (AFC-PR-024). Event identity is ESPN game id + play id; an alert is keyed by
+-(profile, event id, alert type), so a re-fetched unchanged event emits
+-nothing (AFC-PR-025). A correction is a new revision of the same event id;
++(profile, event id), so a re-fetched unchanged event emits
++nothing (AFC-PR-025). If multiple alert types match one event, merge their
++context into that single alert; never emit one alert per type. A correction is a new revision of the same event id;
+ it revises the existing alert and panel facts in place and emits no new
+ alert (AFC-PR-026, -046).
+
+@@ -270,7 +274,7 @@
+ alert types (AFC-PR-016) → game-day periods (AFC-PR-019) → quiet hours
+ (AFC-PR-018) → frequency, alert_min_gap per game (AFC-PR-017) → spoiler
+ delay (AFC-PR-020) → emit (AFC-PR-014). Alert types: red-zone opportunity
+-(possession inside red_zone_yards by a team with a relevant starter;
++(possession strictly inside red_zone_yards by a team with a relevant starter;
+ wording per AFC-PR-028), player score (scoring play listing a relevant
+ starter), close game (margin ≤ close_game_margin in the 4th quarter or
+ overtime, once per game per entry into that state). Commentary (OD-AFC-02):
+@@ -355,6 +359,13 @@
+   spec-and-docs = tech-writing, defects = bug-triager. Light slices use the
+   Light Implementer of their lane profile; the Scribe uses the planning
+   profile `primary` Scribe route.
++- Before valid red tests, the Test Implementer prepares only the minimal
++  scanned build/test harness and interface scaffolding needed to collect
++  and run the tests; it implements none of the tested feature behavior.
++  Missing tools, imports or collection are preparation failures, not red.
++  A01T waits for X01's qualified JDK17/SDK/build-tools; B01T owns pinned
++  Python test dependencies. Bootstrap files and test hashes are frozen in
++  the red receipt before the Product Implementer continues.
+ - `tdd` lanes split each feature into a Test Implementer slice (`<id>T`,
+   red: failing tests plus the CMD-RED receipt with each test file's sha256,
+   left uncommitted in the shared pair worktree) and a Product Implementer
+@@ -373,6 +384,24 @@
+   Reviewer Codex CLI / GPT-6 Astra / high) with the DEC-AFC-SD-037 packet
+   fields; a lane-route defect packet states `BUG_ROUTE: <reason>`.
+
++### Planning completion controls
++
++TE-P2-F01 allocates deployed tests to their owning Test Implementers:
++B01T owns shared deployed conftest and auth/API cases under backend-template;
++B02T..B07T own disjoint feed_ingest, lineup, matcher, alert_policy,
++provider_resolver and panel deployed-test directories. A02T owns profile
++and detection instrumented tests. No acceptance case is dropped.
++
++P2-G01T/G01 own qualification and gate binding of the SEIT coverage and
++mutation tools, with build/dependency configuration under the existing
++backend-template and tv-app-gradle leases. Pin and scan each tool before
++use; check a known positive and negative fixture and publish exact commands,
++report paths, source scopes and cost. A01T/A01 own the Android report task;
++B01T/B01 own Python test dependencies. Unavailable tools remain typed gaps
++and block the affected gate; they are never substituted with a unit-test
++PASS. APK semantic Reverify support remains unproven and is surfaced at the
++integrated review, with selected backend preserved.
++
+ ## Contracts
+
+ ### CONTRACT-AFC-P2-API — TV ↔ backend v1
+@@ -411,7 +440,9 @@
+ `intent` | `uri`; `value` template with `{channel}` / `{event}` placeholders
+ only where documented), `doc_source`, `verified_outcome` (one RoutingOutcome
+ value observed on the stick), `channels_carried` (for local broadcast),
+-`verified_at`. Order of entries is the spike order; selection order is the
++`verified_at`. `verified_outcome` describes the spike observation only, not
++a current launch result. The registry also records the documented current-
++attempt observation mechanism or explicitly none. Order of entries is the spike order; selection order is the
+ customer's preference.
+
+ ### CONTRACT-AFC-P2-FIXTURE — Replay fixture

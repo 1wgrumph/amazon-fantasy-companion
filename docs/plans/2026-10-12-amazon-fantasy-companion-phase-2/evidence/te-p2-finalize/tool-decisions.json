@@ -1,0 +1,77 @@
+{
+  "sources": {
+    "checked_at": "2026-10-13",
+    "sources": [
+      {
+        "id": "TOOL-COVERAGE-RUN",
+        "url": "https://coverage.readthedocs.io/en/latest/commands/cmd_run.html",
+        "support": "coverage run supports module execution, data-file and configured source scope; record admitted version before use."
+      },
+      {
+        "id": "TOOL-COVERAGE-XML",
+        "url": "https://coverage.readthedocs.io/en/latest/commands/cmd_xml.html",
+        "support": "coverage xml emits Cobertura-compatible XML; explicit output and data-file options; qualify path mapping."
+      },
+      {
+        "id": "TOOL-DIFF-COVER",
+        "url": "https://github.com/Bachmann1234/diff_cover/blob/main/README.rst",
+        "support": "Accepts Cobertura/JaCoCo XML, explicit diff file, fail-under and JaCoCo source roots; missing report lines need separate completeness check."
+      },
+      {
+        "id": "TOOL-ANDROID-COVERAGE",
+        "url": "https://developer.android.com/studio/test/coverage-report",
+        "support": "AGP coverage enablement and variant-specific reports documented; exact pinned AGP tasks and output require qualification."
+      },
+      {
+        "id": "TOOL-GRADLE-JACOCO",
+        "url": "https://docs.gradle.org/current/userguide/jacoco_plugin.html",
+        "support": "JacocoReport supports XML and explicit task dependency/data/class/source configuration. Java automatic task wiring is not an Android guarantee."
+      },
+      {
+        "id": "TOOL-MUTMUT",
+        "url": "https://mutmut.readthedocs.io/en/latest/",
+        "support": "mutmut run and export-cicd-stats documented; bounded source_paths/test selection in config. Requires fork; 3+ focuses function mutation, not arbitrary module-level code."
+      },
+      {
+        "id": "TOOL-PIT-ANDROID-LIMIT",
+        "url": "https://github.com/szpak/gradle-pitest-plugin/blob/master/README.md#can-i-use-gradle-pitest-plugin-with-my-android-application",
+        "support": "Ordinary Java plugin explicitly does not directly support Android; not selected for AFC."
+      },
+      {
+        "id": "TOOL-PIT-ANDROID-FORK",
+        "url": "https://github.com/koral--/gradle-pitest-plugin",
+        "support": "Experimental Android fork pl.droidsonroids.pitest documents pitest<Variant> tasks and per-variant reports; compatibility with AFC pinned AGP/Kotlin/JDK remains unproven."
+      }
+    ],
+    "admission": "Documentation only, no package acquired/installed. Current docs establish command/report design, not compatibility or admission of a version."
+  },
+  "plan": {
+    "status": "OWNERS_AND_PROSPECTIVE_COMMANDS_BOUND; EXECUTION_NOT_RUN",
+    "owners": {
+      "P2-G01T": "positive/negative qualification controls in tools/ci/tests/coverage and mutation",
+      "P2-G01": "repo wrappers/evaluators/config in tools/ci/coverage and mutation; bind exact commands to gate-chain",
+      "P2-A01T/P2-A01": "existing Android build/report configuration and native qualification under tv-app-gradle lease",
+      "P2-B01T/P2-B01": "Python deps/config/native qualification under backend-template"
+    },
+    "qualifier": "PROC-GATE-TOOL-QUALIFY",
+    "commands": [
+      "CMD-COVERAGE-BACKEND",
+      "CMD-COVERAGE-TVAPP",
+      "CMD-MUTATION-BACKEND",
+      "CMD-MUTATION-TVAPP"
+    ],
+    "remaining_gaps": [
+      "PYTHON_COVERAGE_QUALIFICATION_PENDING",
+      "PYTHON_MUTATION_QUALIFICATION_PENDING",
+      "PYTHON_NONFUNCTION_MUTATION_GAP when applicable",
+      "ANDROID_COVERAGE_COMPATIBILITY_GAP",
+      "ANDROID_MUTATION_COMPATIBILITY_GAP",
+      "SHELL_GATE_CAPABILITY_GAP",
+      "REVERIFY_CAPABILITY_GAP"
+    ],
+    "shell_disposition": "G01-owned changed shell gate logic has no admitted coverage/mutation backend in the bounded evidence. SHELL_GATE_CAPABILITY_GAP remains for those claims; do not count Python/Kotlin reports or ordinary gate tests as shell coverage/mutation. G01 must qualify a documented backend in its existing paths or return exact gap before claiming the gate.",
+    "pins": "Actual version locks/digests/scans are early-slice deliverables, not invented here. No acquisition or installation during planning.",
+    "cost": "IE wave ordinary gate estimates unchanged; new tool qualification and mutation runtime cost are additional unmeasured work, bounded per procedure and reported in runtime wave receipt.",
+    "backend_protection": "Frozen OCR delegate and Reverify 0.11.0 unchanged. APK semantics unproven; no alternate backend, APK claim kind, string/ZIP or ATE substitute."
+  }
+}

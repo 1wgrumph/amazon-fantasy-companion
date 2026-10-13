@@ -1,0 +1,80 @@
+{
+  "packet": "XML-declaration normalization (planning asset, not-a-bug)",
+  "authority": "DEC-AFC-SD-039",
+  "bug_route": "not-a-bug",
+  "transformation": "removed exact prefix <?xml version=\"1.0\" encoding=\"UTF-8\"?> followed by LF (39 bytes) from each of the 4 files; no other byte changed",
+  "files": [
+    {
+      "file": "models/view-data.svg",
+      "old_sha256": "70f524ffadbc726e0f2eddf1daf76ae75588167eb1d129d4d100167ed980d909",
+      "new_sha256": "95736a5395946bdbdb96f50547a273c12dab82ddd9ee6882591d13ef04998918",
+      "transformation": "removed exact 39-byte prefix <?xml version=\"1.0\" encoding=\"UTF-8\"?>\\n; all remaining bytes unchanged",
+      "assertions": {
+        "exact_prefix_present": true,
+        "remainder_bytes_unchanged": true,
+        "xml_element_serialization_identical": true,
+        "disk_write_verified": true
+      }
+    },
+    {
+      "file": "models/view-interfaces.svg",
+      "old_sha256": "a36f182c8d3f8bb429e032be1900db9640cf9893a22a11f8223fa2e424752ef2",
+      "new_sha256": "e60fdae3777d721ee96d042dfb0c1a17a07d3630f94d22c71f4fc42bc5fc3312",
+      "transformation": "removed exact 39-byte prefix <?xml version=\"1.0\" encoding=\"UTF-8\"?>\\n; all remaining bytes unchanged",
+      "assertions": {
+        "exact_prefix_present": true,
+        "remainder_bytes_unchanged": true,
+        "xml_element_serialization_identical": true,
+        "disk_write_verified": true
+      }
+    },
+    {
+      "file": "models/view-states.svg",
+      "old_sha256": "b25bdcbb60f0e704072c1037c1fe70d30be872bc1a81bb018bcf078252bc8560",
+      "new_sha256": "fd42d255e7f87796a4d6086a6d13096ddcee2fab47f9c7e0594434aa6d0d278e",
+      "transformation": "removed exact 39-byte prefix <?xml version=\"1.0\" encoding=\"UTF-8\"?>\\n; all remaining bytes unchanged",
+      "assertions": {
+        "exact_prefix_present": true,
+        "remainder_bytes_unchanged": true,
+        "xml_element_serialization_identical": true,
+        "disk_write_verified": true
+      }
+    },
+    {
+      "file": "models/view-structure.svg",
+      "old_sha256": "b3ff61d868d9d082bad125feeb4abe4b306c7685ff513dfc9d5c664da514b00e",
+      "new_sha256": "d6c53107c4aa1fdf8dc9976933918f50a6be312e48102594c1b62e138586ff2b",
+      "transformation": "removed exact 39-byte prefix <?xml version=\"1.0\" encoding=\"UTF-8\"?>\\n; all remaining bytes unchanged",
+      "assertions": {
+        "exact_prefix_present": true,
+        "remainder_bytes_unchanged": true,
+        "xml_element_serialization_identical": true,
+        "disk_write_verified": true
+      }
+    }
+  ],
+  "sysml_model_hashes": {
+    "models/AFC-Data.sysml": {
+      "before": "4fcb3174666f80f13e405230c5e0df2498d2c6d62ea584160bd249f966f14031",
+      "after": "4fcb3174666f80f13e405230c5e0df2498d2c6d62ea584160bd249f966f14031",
+      "unchanged": true
+    },
+    "models/AFC-Interfaces.sysml": {
+      "before": "504cfcb82dd83beca534d463dde1c07f2714d56ce26390c4519c5f55ac7a4851",
+      "after": "504cfcb82dd83beca534d463dde1c07f2714d56ce26390c4519c5f55ac7a4851",
+      "unchanged": true
+    },
+    "models/AFC-States.sysml": {
+      "before": "3055e76043cf6c1b7763aa7804b61dfd9ec4a8095fb954ec4b77ee1dd9cd7904",
+      "after": "3055e76043cf6c1b7763aa7804b61dfd9ec4a8095fb954ec4b77ee1dd9cd7904",
+      "unchanged": true
+    },
+    "models/AFC-Structure.sysml": {
+      "before": "54b87c488cadd65c825b6a66b3308cc7920bd7d32eb05cfa7ac789902dc0221c",
+      "after": "54b87c488cadd65c825b6a66b3308cc7920bd7d32eb05cfa7ac789902dc0221c",
+      "unchanged": true
+    }
+  },
+  "equivalence_assertions": "4/4 files: exact-prefix assert, remainder-bytes assert, XML element-serialization identity assert, disk-write assert \u2014 all passed",
+  "developer_feedback": "no new observation; tools used: python3, xml.etree.ElementTree (parse/serialize), hashlib sha256"
+}

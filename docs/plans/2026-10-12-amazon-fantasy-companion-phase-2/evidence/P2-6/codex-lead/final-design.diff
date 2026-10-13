@@ -1,0 +1,20 @@
+--- before/design.md
++++ after/design.md
+@@ -38,7 +38,7 @@
+ ```
+ CHANGELOG.md                         revision record (landing procedure; DES-AFC-P2-REVREC)
+ README.md                            product, setup, judge access, limitations (P2-D03)
+-LICENSE                              Apache-2.0 (owner action OA-5)
++LICENSE                              Apache-2.0, selected SD-035 (P2-D03 prepares; OA-5 controls publication)
+ tools/ci/gate.sh                     + areas tvapp, backend (P2-G01; CONTRACT-AFC-P2-GATE-AREAS)
+ tools/ci/tests/                      gate tests for the new areas (P2-G01T)
+ .github/workflows/ci.yml             + jobs gate / tvapp, gate / backend (P2-G01)
+@@ -463,7 +463,7 @@
+ ### CONTRACT-AFC-P2-GATE-AREAS — Product gate areas
+
+ Extends CONTRACT-AFC-GATE (Phase 1). `gate.sh tvapp`: when `tv-app/` exists,
+-runs `./gradlew -p tv-app testDebugUnitTest lintDebug assembleDebug`; exit 3
++runs `./tv-app/gradlew -p tv-app testDebugUnitTest lintDebug assembleDebug`; exit 3
+ (GAP) when the JDK or Android SDK is missing. `gate.sh backend`: when `backend/` exists, runs `python3.12 -m pytest backend/tests/unit backend/tests/contract` and `cfn-lint backend/template.yaml`; exit 3 when python3.12 or cfn-lint is missing. Deployed tests (`backend/tests/deployed`) are not gate
+ checks; they run against aws-afc-dev as SEIT procedures. When the area's
+ directory does not exist: exit 0 with `gate: <area>: PASS no <dir>/ tree`.
