@@ -1,3 +1,24 @@
+# Resume checkpoint — 2026-10-13T14:00:48Z
+
+**CONTRACT_FAILURE.** The owner-authorized Bearing 1.1.7 / `opensource-hackathon`
+profile migration is frozen in `journey.json`; its full digest is
+`7d501eb8c103831a38c50d237b5d1e2e015a564b9ade8aef09a32dfc39b26ab1`.
+Prior snapshots and review/repair budgets are preserved. No specialist was dispatched.
+
+Required RE precheck returned exit 1, `No requirement rows`, against the
+owner-authoritative Markdown register (DEC-AFC-SD-027); packaged SDoc positive
+control passes. See Phase 2 `evidence/profile-migration-041/contract-gap.json`.
+Resolve the Markdown-compatible precheck/lint contract before dispatch; plugin
+edits or register conversion are outside this handoff. Do not treat the old
+package's PASS as proof of the pending migration/chronology delta.
+
+The canonical 13-milestone rewrite, RE/TE/PI integration, new package freeze and
+Manifest remain pending. PR15 stays draft; no merge, tracking creation, product
+execution, runtime, or publication authority. No duplicate Opus review.
+The older queues below are historical and must not be restarted.
+
+---
+
 # Fresh-session handoff supersedes the work queue below
 
 Owner selected `opensource-hackathon` and Bearing1.1.7 (DEC-AFC-SD-041).

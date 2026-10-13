@@ -1,0 +1,31 @@
+{
+  "outcome": "CONTRACT_FAILURE",
+  "route": "blocked-boundary",
+  "classification": "tooling contract; no product defect",
+  "version": "Bearing 1.1.7",
+  "origin": "Required register precheck accepts REQUIREMENT blocks in SDoc; DEC-AFC-SD-027 keeps the AFC register in Markdown. Earlier 1.1.6 receipts used Markdown inspection and recorded SDoc lint not applicable.",
+  "reproduction": {
+    "command": "node <bearing-lite-1.1.7>/hooks/register-precheck.cjs docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/requirements-register.md docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/amazon-fantasy-companion-phase-2-technical-plan.md .",
+    "exit_code": 1,
+    "finding": "No requirement rows",
+    "evidence": "register-precheck.json"
+  },
+  "positive_control": {
+    "command": "node <bearing-lite-1.1.7>/hooks/register-precheck.cjs <bearing-lite-1.1.7>/test/fixtures/register-precheck/valid.sdoc <bearing-lite-1.1.7>/test/fixtures/register-precheck/plan.md <bearing-lite-1.1.7>/test/fixtures/register-precheck",
+    "exit_code": 0,
+    "outcome": "PASS",
+    "evidence": "register-precheck-positive-control.json"
+  },
+  "projection_assessment": "A validation-only SDoc projection was considered but not generated. Installed lint-sdoc.py --profile library enforces COE namespace at lines 814-819, whereas stable AFC IDs must remain unchanged. No supported Markdown adapter or project-register exception is documented by the installed precheck contract. No claim that all possible adapters were tested.",
+  "stop_basis": "Handoff STOP: reproducible contract/environment gap preventing honest evidence; installed skills/requirements-engineer/references/precheck.md: Exit 1 blocks dispatch.",
+  "protected_constraints": [
+    "No plugin edits/install",
+    "No register authority/format change",
+    "No dropped scope or rewritten identities",
+    "No spent-budget reset"
+  ],
+  "next_action": "Resolve a Markdown-compatible Bearing 1.1.7 precheck/lint contract (or explicit bounded owner amendment) before Requirements Engineer dispatch; retain frozen selected route.",
+  "dispatches_started": 0,
+  "product_execution": "HELD",
+  "milestone_rewrite": "NOT_APPLIED"
+}
