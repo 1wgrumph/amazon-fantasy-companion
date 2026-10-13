@@ -3,8 +3,9 @@
 ## Scope
 
 Repository-relative paths: `tools/ci/**`, `.githooks/**`, `.github/workflows/**`,
-`docs/**`, and root `*.md`. Exclude `docs/developer-feedback/**` and
-`docs/vnv/spec/**` and `docs/vnv/developer-feedback/**`, owned by those areas.
+`docs/**`, and root `*.md`. Exclude `docs/developer-feedback/**`,
+`docs/vnv/spec/**`, `docs/vnv/developer-feedback/**`, `docs/vnv/tv-app/**`,
+`docs/vnv/backend/**` and `docs/vnv/device-integration/**`, owned by those areas.
 This includes the Vnv index and `docs/vnv/ci-cd/**`.
 
 ## Tools
