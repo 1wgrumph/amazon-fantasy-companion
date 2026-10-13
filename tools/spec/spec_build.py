@@ -29,6 +29,7 @@ from spec_lint import (
     CAPTION,
     HEADING,
     prose_lines,
+    revision_findings,
     section_files,
     split_front_matter,
 )
@@ -37,11 +38,19 @@ APPENDIX_A = "Appendix A — Requirement Traceability Matrix"
 
 
 def slug(heading: str, seen: dict[str, int]) -> str:
-    """GitHub heading anchor, with -1, -2 suffixes for repeats."""
+    """GitHub heading anchor, with -1, -2 suffixes until the anchor is unused.
+
+    ``seen`` keys are every emitted anchor; values count each base's
+    collisions, so a later heading keeps advancing past anchors that suffixed
+    repeats already reserved (github-slugger rule).
+    """
     base = re.sub(r"[^\w\- ]", "", heading.lower()).replace(" ", "-")
-    count = seen.get(base, 0)
-    seen[base] = count + 1
-    return f"{base}-{count}" if count else base
+    anchor = base
+    while anchor in seen:
+        seen[base] = seen.get(base, 0) + 1
+        anchor = f"{base}-{seen[base]}"
+    seen.setdefault(anchor, 0)
+    return anchor
 
 
 def cell(text: str) -> str:
@@ -55,9 +64,13 @@ def build(src_dir: Path, out_path: Path) -> None:
         if not meta.get(key):
             raise ValueError(f"spec.yaml: {key} is required")
     revisions = meta["revisions"]
+    if findings := revision_findings(meta):
+        raise ValueError("spec.yaml: " + "; ".join(findings))
 
     toc, tables, figures, trace, bodies = [], [], [], {}, []
     seen: dict[str, int] = {}
+    section_anchors: dict[str, str] = {}
+    slug(str(meta["title"]), seen)
     for key in (
         "Revision History",
         "Table of Contents",
@@ -71,11 +84,12 @@ def build(src_dir: Path, out_path: Path) -> None:
             body.strip("\n").splitlines(),
             prose_lines(body.strip("\n")),
         )
-        section = ""
+        section, anchor = "", ""
         for i, line in enumerate(visible):
             if heading := HEADING.match(line):
                 level, section = len(heading[1]), heading[2].strip()
                 anchor = slug(section, seen)
+                section_anchors.setdefault(section, anchor)
                 toc.append(f"{'  ' * max(level - 2, 0)}- [{section}](#{anchor})")
             elif caption := CAPTION.match(line):
                 kind, cls, text = caption.groups()
@@ -83,9 +97,22 @@ def build(src_dir: Path, out_path: Path) -> None:
                 listed.append(f"- {kind} {len(listed) + 1} ({cls}): {text} — {section}")
                 body_lines[i] = f"**{kind} {len(listed)} ({cls}): {text}**"
         for requirement in (front or {}).get("requirements") or []:
-            trace.setdefault(str(requirement), []).append(section)
+            trace.setdefault(str(requirement), []).append((section, anchor))
         bodies.append("\n".join(body_lines))
     toc.append(f"- [{APPENDIX_A}](#{slug(APPENDIX_A, seen)})")
+    revision_rows = []
+    for revision in revisions:
+        changed = []
+        for section in revision.get("changes", []):
+            if section not in section_anchors:
+                raise ValueError(f"spec.yaml: revision {revision['rev']}: unknown changed section {section}")
+            changed.append(f"[{cell(section)}](#{section_anchors[section]})")
+        links = revision.get("links", {})
+        linked = [f"[{label}]({links[key]})" for key, label in (("pr", "PR"), ("diff", "Diff")) if links.get(key)]
+        revision_rows.append("| " + " | ".join([
+            cell(revision['rev']), cell(revision.get('date', '')), cell(revision.get('author', '')),
+            cell(revision.get('summary', '')), ", ".join(changed), " · ".join(linked),
+        ]) + " |")
 
     out = [
         f"# {meta['title']}",
@@ -97,13 +124,9 @@ def build(src_dir: Path, out_path: Path) -> None:
         "",
         "## Revision History",
         "",
-        "| Rev | Date | Author | Summary |",
-        "|---|---|---|---|",
-        *(
-            f"| {cell(r['rev'])} | {cell(r.get('date', ''))} | {cell(r.get('author', ''))} "
-            f"| {cell(r.get('summary', ''))} |"
-            for r in revisions
-        ),
+        "| Rev | Date | Author | Summary | Changed sections | Links |",
+        "|---|---|---|---|---|---|",
+        *revision_rows,
         "",
         "## Table of Contents",
         "",
@@ -121,7 +144,12 @@ def build(src_dir: Path, out_path: Path) -> None:
     for body in bodies:
         out += [body, ""]
     out += [f"## {APPENDIX_A}", "", "| Requirement | Sections |", "|---|---|"]
-    out += [f"| {cell(req)} | {cell(', '.join(trace[req]))} |" for req in sorted(trace)]
+    out += [
+        "| " + cell(req) + " | "
+        + ", ".join(f"[{cell(s)}](#{a})" for s, a in trace[req])
+        + " |"
+        for req in sorted(trace)
+    ]
     if not trace:
         out.append("| None | — |")
     out_path.write_text("\n".join(out) + "\n")

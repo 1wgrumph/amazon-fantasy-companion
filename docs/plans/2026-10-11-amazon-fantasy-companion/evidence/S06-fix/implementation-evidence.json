@@ -1,0 +1,74 @@
+{
+  "lease_id": "S06-fix-g1",
+  "dispatch_generation": 5,
+  "decision": "DEC-AFC-SD-034",
+  "method": "test",
+  "baseline": "120dee00207425201aa77d1f42f3756ee6bc406e",
+  "red": {
+    "command": "python3 -m pytest skills/spec-authoring/tests/test_spec_tools.py -q",
+    "exit": 1,
+    "result": "34 failed, 3 passed on original lint with revised contract fixtures/tests"
+  },
+  "comment_probe": {
+    "result": "Build preserves <!-- SD034-COMMENT-PROBE --> verbatim; use authorized no-comment fallback",
+    "exit": 0
+  },
+  "peer_comparison": {
+    "peer": "use-requirements-system",
+    "decision": "Retain spec-authoring ownership of Markdown sources/build/lint; peer owns SDoc and governed host workflows. No copied procedure."
+  },
+  "trigger_evaluation": {
+    "evaluator": "independent trigger_check agent",
+    "request_1": "MATCH: Markdown section authoring and build",
+    "request_2": "NO_MATCH: SDoc workbench publication"
+  },
+  "skill_size": {
+    "lines": 47,
+    "words": 349
+  },
+  "creator_validation": "Installed quick_validate.py invoked by existing stock test on portable metadata; BRAN validates full HQ metadata. Generic validator does not accept HQ-specific keys.",
+  "failure_classification": [
+    "Initial full test run: vendoring refused dirty skill as designed; requires committed candidate.",
+    "Initial trigger test: evaluator result path not yet supplied; configuration prerequisite, not product bug."
+  ],
+  "review": {
+    "coverage_assist": {
+      "enabled": true,
+      "required": true,
+      "status": "not_run: implementer candidate; independent code review belongs to orchestrator"
+    },
+    "reverify": {
+      "enabled": true,
+      "status": "not_applicable: Python and Markdown changes; no compiled binary claim"
+    }
+  },
+  "developer_feedback": {
+    "ID": "S06-fix-SD034",
+    "timestamp": "2026-10-12T12:02:08.933202+00:00",
+    "reporting_role": "Product Implementer / tech-writing",
+    "task_or_packet": "S06-fix-g1",
+    "tool_API_SDK": "spec-authoring / spec_lint.py / spec_build.py",
+    "version": "candidate recorded in receipt.json",
+    "device_OS": "Linux 7.0.0-38-generic",
+    "evidence": [
+      "red.txt",
+      "skill-tests.txt",
+      "template-built.md",
+      "local-gates.txt"
+    ],
+    "classification": "owner-requested authoring contract correction",
+    "used_for": "Markdown specification section form",
+    "what_worked_well": "Existing templates and direct lint API enabled red/green regression coverage without new dependencies.",
+    "what_needs_work": "Former lint forced visible writer scaffolding; corrected by SD-034.",
+    "onboarding_from_zero_to_hello_world": "Not exercised; existing installed toolchain.",
+    "would_build_again": "Yes: deterministic build and lint are reusable.",
+    "AWS_services_used_and_how": "None",
+    "task_attempted": "Replace printed BLUF/Frame with natural opening prose and private checklist",
+    "steps_taken": "Inspect, reproduce old lint mismatch, revise fixtures/rules/templates/lint, verify, draft PR",
+    "expected_result": "Ordinary prose accepted; old labels and missing opening prose rejected",
+    "actual_result": "See verification receipt",
+    "severity_rating": "Not applicable: owner-directed contract change",
+    "workaround_used": "Authorized no-comment fallback because build preserves HTML comments",
+    "actionable_suggestion": "Use updated shared skill for subsequent AFC spec rewrite"
+  }
+}

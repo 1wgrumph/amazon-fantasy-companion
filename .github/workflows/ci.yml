@@ -1,0 +1,80 @@
+name: CI
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  changes:
+    name: Detect changes
+    runs-on: ubuntu-latest
+    outputs:
+      spec: ${{ steps.filter.outputs.spec }}
+      docs: ${{ steps.filter.outputs.docs }}
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: dorny/paths-filter@0e4a8c6effa4802afeda77dc8d303f8176d7dfad # v3
+        id: filter
+        with:
+          token: ''
+          base: ${{ github.event_name == 'pull_request' && github.base_ref || github.ref }}
+          filters: |
+            spec:
+              - 'spec/**'
+              - 'tools/spec/**'
+              - 'tools/ci/**'
+              - '.githooks/**'
+              - '.github/workflows/**'
+            docs:
+              - 'docs/**'
+              - '**/*.md'
+              - 'tools/ci/**'
+              - '.githooks/**'
+              - '.github/workflows/**'
+  spec:
+    name: gate / spec
+    needs: changes
+    if: ${{ needs.changes.outputs.spec == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78 # v7
+        with:
+          version: '0.11.6'
+          checksum: '0c6bab77a67a445dc849ed5e8ee8d3cb333b6e2eba863643ce1e228075f27943'
+          enable-cache: false
+      - run: sudo apt-get update && sudo apt-get install -y graphviz
+      - run: bash tools/ci/gate.sh spec
+  docs:
+    name: gate / docs
+    needs: changes
+    if: ${{ needs.changes.outputs.docs == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+        with:
+          persist-credentials: false
+      - run: bash tools/ci/gate.sh docs
+  hygiene:
+    name: gate / hygiene
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78 # v7
+        with:
+          version: '0.11.6'
+          checksum: '0c6bab77a67a445dc849ed5e8ee8d3cb333b6e2eba863643ce1e228075f27943'
+          enable-cache: false
+      - run: sudo apt-get update && sudo apt-get install -y graphviz python3-yaml
+      - run: bash tools/ci/gate.sh hygiene

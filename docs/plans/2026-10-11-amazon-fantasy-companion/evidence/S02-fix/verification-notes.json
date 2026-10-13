@@ -1,0 +1,57 @@
+{
+  "lease_id": "S02-fix-g2",
+  "base_sha": "ac47f0eca149eb281e41a6bdd9d490221c7a14cf",
+  "method": "test",
+  "named_behaviors": [
+    "positional gate area for code and hygiene",
+    "directory scans both workflow extensions and rejects any invalid workflow",
+    "empty directory fails",
+    "existing file input preserved"
+  ],
+  "red_evidence": "regression-red.log",
+  "green_evidence": [
+    "unittest.log",
+    "pytest.log",
+    "directory.log"
+  ],
+  "trigger_evaluation": {
+    "kind": "author inspection, not independent assurance",
+    "matching_request": "write a GitHub Actions workflow for this repository that pins actions and runs on pull requests",
+    "matching_result": "MATCH",
+    "non_matching_request": "install local pre-commit hooks for this repository",
+    "non_matching_result": "NO_MATCH: route to setup-pre-commit",
+    "results": "trigger-results.json"
+  },
+  "skill_comparison": {
+    "strongest_peer": "skills/setup-pre-commit/SKILL.md",
+    "result": "Reuse its positional gate interface; preserve its ownership of hook installation. No copied or duplicated skill.",
+    "lines": 59,
+    "words": 421,
+    "creator_validation": "Stock suite calls installed quick_validate.py on portable metadata; HQ fields remain verified by BRAN. No initialization or metadata regeneration needed."
+  },
+  "bran_status": "hit",
+  "bran_refs": [
+    "skills/setup-a-repo/SKILL.md",
+    "skills/setup-a-repo/scripts/check-workflows.py",
+    "skills/setup-pre-commit/references/gate-contract.md"
+  ],
+  "bran_coverage": "strict validation passed; raw bounded reads required to inspect callers and test code",
+  "review": {
+    "status": "NOT_RUN",
+    "reason": "Implementer diagnostic evidence only; configured phase review remains with orchestrator",
+    "coverage_assist": "enabled=true, required=true; OCR delegate required at independent review; not_run here",
+    "reverify": "enabled=true; not applicable to this candidate: Python/YAML changes, no compiled binary claim"
+  },
+  "developer_feedback": {
+    "observations": "no new observations",
+    "tools": [
+      "BRAN 0.2.0",
+      "Python unittest",
+      "pytest",
+      "installed skill-creator quick_validate.py",
+      "Git",
+      "GitHub CLI",
+      "local-gates.sh"
+    ]
+  }
+}

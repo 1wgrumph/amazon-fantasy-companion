@@ -1,0 +1,20 @@
+.....fatal: not a git repository (or any of the parent directories): .git
+........fatal: not a git repository (or any of the parent directories): .git
+........F..............
+======================================================================
+FAIL: test_hygiene_whitespace_finding_keeps_location_for_plus_leading_filename (test_gate.AC_AFC_CI_01.test_hygiene_whitespace_finding_keeps_location_for_plus_leading_filename)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "$HOME/alphazede/worktrees/amazon-fantasy-companion-b1/tools/ci/tests/test_gate.py", line 112, in test_hygiene_whitespace_finding_keeps_location_for_plus_leading_filename
+    self.assertTrue('+plus.txt:1:WS-CHECK' in out.splitlines(),
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                    'hygiene finding lost its +plus.txt location:\n' + shown)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False is not true : hygiene finding lost its +plus.txt location:
+gate: hygiene: FAIL check exit 1
+
+
+----------------------------------------------------------------------
+Ran 36 tests in 10.571s
+
+FAILED (failures=1)

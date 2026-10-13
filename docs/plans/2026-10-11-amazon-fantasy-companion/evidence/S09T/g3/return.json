@@ -1,0 +1,33 @@
+{
+  "verdict": "PASS",
+  "lease_id": "S09T-g3",
+  "base": "733d00fa8beea517211a38c20b25ed1c71d9e169",
+  "head": "2b275766ef67c63f697f4d7022038115863364aa",
+  "pushed": "origin/afc/s09-gate-r2 (733d00f..2b27576, plain push, --no-verify)",
+  "changed_paths": ["tools/ci/tests/gate_support.py", "tools/ci/tests/test_check_docs.py", "tools/ci/tests/test_check_paths.py", "tools/ci/tests/test_gate_isolation.py"],
+  "red_receipt": {
+    "test_id": "test_gate_isolation.D1_HookEnvironmentIsolation.test_hook_git_env_does_not_reach_sentinel_repo",
+    "kind": "AssertionError (failure, not error)",
+    "assertion": "snapshot(sentinel/.git) != before: gate.sh --changed wrote to the repository named by hook GIT_DIR/GIT_INDEX_FILE; sentinel log gains a second 'fixture' commit",
+    "receipt": "unittest.txt"
+  },
+  "unittest": "env -u GIT_INDEX_FILE -u GIT_DIR python3 -m unittest discover -s tools/ci/tests -v: Ran 33, FAILED (failures=1) exit=1; only the D1 test fails",
+  "coverage": {
+    "command": "CMD-COVERAGE-CI with environment of S09/g3/coverage-command.json (UV_OFFLINE, UV_FIND_LINKS scanned wheels, UV_PYTHON=/usr/bin/python3, PYTHONPATH host-yaml), COVERAGE_RCFILE=S09T/g3/coverage.rc",
+    "cmd_exit": 1,
+    "cmd_exit_reason": "unittest exits 1 on the D1 red test, so the && chain stops before xml/diff-cover (CMD-COVERAGE-CI.txt)",
+    "report_from_same_data": "coverage-report.txt: check_docs.py 100% (43 stmts, 20 branches), check_paths.py 100% (38 stmts, 18 branches); diff-cover 92% total, exit 0 (check_workflows.py 88% counted because the --exclude defect noted in the packet)",
+    "environment_note": "default uv python is 3.10 (no contextlib.chdir, no yaml): 28 errors; the recorded S09 g3 environment was used instead"
+  },
+  "sha256": {
+    "tools/ci/tests/gate_support.py": "99ae8dc1a7789db386ccf2ee4d86ac9989fd06dde542b5ca43d293862a8c20b5",
+    "tools/ci/tests/test_check_docs.py": "e07e4ff5b5ba59877bbe239e3388a7060f4314b8541a4763fe8331d89ad0ca4a",
+    "tools/ci/tests/test_check_paths.py": "bc65263723df80f21b11916148ba1396065bb3b0217cfa9d506cad487d12ab29",
+    "tools/ci/tests/test_gate_isolation.py": "3bb610b9fb0c83d279798de9c760e03aa1ec15863e01aad01317d2f58455f67c"
+  },
+  "worktree_log_after": "2b27576 S09T g3 / 733d00f S09 g3 / 7f12bca S09T g2 (no fixture commits)",
+  "developer_feedback": {
+    "observation": "CMD-COVERAGE-CI is not reproducible from seit.json alone: uv picks a managed Python 3.10 without PyYAML, and the S09 env (offline wheel dir in /tmp, UV_PYTHON, PYTHONPATH, COVERAGE_RCFILE) lives only in an evidence receipt. Also the && chain hides coverage numbers whenever any test is red.",
+    "tools": ["uv", "coverage 7.16.2", "diff-cover 9.7.2", "python3 3.14.4"]
+  }
+}
