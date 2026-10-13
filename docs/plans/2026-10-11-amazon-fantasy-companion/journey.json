@@ -11,18 +11,33 @@
   },
   "checkout_lease": {
     "journey": "AFC-2026-10-11",
-    "controller": "Codex current API session / Planning Lead",
+    "controller": "Claude Code Orchestrator (Claude Opus 5.5) / Phase 2 execution",
     "repository": "github:1wgrumph/amazon-fantasy-companion",
-    "checkout": "$HOME/alphazede/worktrees/amazon-fantasy-companion-planning",
-    "branch": "plan/2026-10-11-amazon-fantasy-companion",
-    "candidate_revision": "0b987de5eac88bbcf903a7de73d2d58e545652cb",
-    "acquired_at": "2026-10-11T19:21:56Z",
-    "generation": 1,
+    "checkout": "$HOME/alphazede/worktrees/amazon-fantasy-companion-implementation",
+    "branch": "afc/p2-implementation",
+    "candidate_revision": "4994aad44ace64f3c9434f73461f3fe2d12f694b",
+    "acquired_at": "2026-10-13T23:51:05Z",
+    "generation": 2,
     "state": "active",
-    "resumed_at": "2026-10-13T13:54:42Z",
-    "liveness": "Review complete; no agent active; landing tracking receipts PR55; product held",
-    "heartbeat_at": "2026-10-13T18:39:48.397549+00:00",
-    "active_candidate": "88db101edb61a08dedea8037e4e9207d262a7e0f"
+    "generation_increment": {
+      "from_generation": 1,
+      "reason": "Planning controller idle (liveness 'no agent active; product held'); owner execution instruction 2026-10-13 'yes we can begin what is left in milestone 01' starts Phase 2 execution under a new controller.",
+      "prior_lease": {
+        "journey": "AFC-2026-10-11",
+        "controller": "Codex current API session / Planning Lead",
+        "repository": "github:1wgrumph/amazon-fantasy-companion",
+        "checkout": "$HOME/alphazede/worktrees/amazon-fantasy-companion-planning",
+        "branch": "plan/2026-10-11-amazon-fantasy-companion",
+        "candidate_revision": "0b987de5eac88bbcf903a7de73d2d58e545652cb",
+        "acquired_at": "2026-10-11T19:21:56Z",
+        "generation": 1,
+        "state": "active",
+        "resumed_at": "2026-10-13T13:54:42Z",
+        "liveness": "Review complete; no agent active; landing tracking receipts PR55; product held",
+        "heartbeat_at": "2026-10-13T18:39:48.397549+00:00",
+        "active_candidate": "88db101edb61a08dedea8037e4e9207d262a7e0f"
+      }
+    }
   },
   "stages": {
     "intake": "accepted",
@@ -3530,6 +3545,40 @@
       "process_disposition": "Complete frozen ACCEPT receipt and all verification outputs persisted before timeout. Parent verified every candidate hash, parsed every review JSON, matched both gate log hashes and all OCR preview/rule hashes, and inspected exit0 gate/readback outputs. No role switch or duplicate review.",
       "evidence": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-L01/closeout-receipt.json",
       "product_execution": "held"
+    },
+    {
+      "at": "2026-10-13T23:51:05Z",
+      "kind": "dispatch_lease",
+      "lease_id": "P2-D01-g1",
+      "journey": "AFC-2026-10-11",
+      "generation": 2,
+      "slice": "P2-D01",
+      "milestone": "M01",
+      "role": "implementer",
+      "route": "Claude Code / Claude Opus 5.5 / medium",
+      "repository": "github:1wgrumph/amazon-fantasy-companion",
+      "checkout": "$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-d01",
+      "branch": "afc/p2-d01",
+      "candidate_revision": "4994aad44ace64f3c9434f73461f3fe2d12f694b",
+      "state": "active",
+      "authority": "AUTH-AFC-2026-10-12-P2-001 + owner execution instruction 2026-10-13 (M01 only)"
+    },
+    {
+      "at": "2026-10-13T23:51:05Z",
+      "kind": "dispatch_lease",
+      "lease_id": "P2-G01T-g1",
+      "journey": "AFC-2026-10-11",
+      "generation": 2,
+      "slice": "P2-G01T",
+      "milestone": "M01",
+      "role": "test_implementer",
+      "route": "Codex CLI / GPT-6.1 Sol / high",
+      "repository": "github:1wgrumph/amazon-fantasy-companion",
+      "checkout": "$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-g01",
+      "branch": "afc/p2-g01",
+      "candidate_revision": "4994aad44ace64f3c9434f73461f3fe2d12f694b",
+      "state": "active",
+      "authority": "AUTH-AFC-2026-10-12-P2-001 + owner execution instruction 2026-10-13 (M01 only)"
     }
   ],
   "planning_review": {
