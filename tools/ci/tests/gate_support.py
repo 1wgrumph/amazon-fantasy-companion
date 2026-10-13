@@ -81,15 +81,15 @@ def init_repo(root, files=None):
 
 
 def copy_repo(root):
-    """Copy this repository's files into a new git repo at root.
+    """Copy this repository's tracked files into a new git repo at root.
 
     tools/ci/tests is replaced by one passing stub test so a hygiene run in the
-    copy does not recurse into these tests; docs/plans is left out as unrelated.
+    copy does not recurse into these tests; linked repository documents are kept.
     """
-    listed = subprocess.run(['git', 'ls-files', '-co', '--exclude-standard', '-z'],
+    listed = subprocess.run(['git', 'ls-files', '-z'],
                             cwd=REPO, check=True, capture_output=True).stdout.decode()
     for rel in filter(None, listed.split('\0')):
-        if rel.startswith((str(TESTS) + '/', 'docs/plans/')) or not (REPO / rel).is_file():
+        if rel.startswith(str(TESTS) + '/') or not (REPO / rel).is_file():
             continue
         target = Path(root) / rel
         target.parent.mkdir(parents=True, exist_ok=True)
