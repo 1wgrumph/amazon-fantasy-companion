@@ -1,0 +1,39 @@
+{
+  "id": "BUG-AFC-L01-DATE-001",
+  "route": "valid-actionable",
+  "classification": "tracking workflow / data projection, not app product code",
+  "observed": [
+    {
+      "id": "M04",
+      "number": 4,
+      "approved_due": "2026-10-17T01:00:00Z",
+      "observed_due": "2026-10-16T00:00:00Z",
+      "title_equal": true,
+      "description_equal": true
+    },
+    {
+      "id": "M05",
+      "number": 5,
+      "approved_due": "2026-10-17T01:00:00Z",
+      "observed_due": "2026-10-16T00:00:00Z",
+      "title_equal": true,
+      "description_equal": true
+    },
+    {
+      "id": "M06",
+      "number": 6,
+      "approved_due": "2026-10-17T01:00:00Z",
+      "observed_due": "2026-10-16T00:00:00Z",
+      "title_equal": true,
+      "description_equal": true
+    }
+  ],
+  "origin": "Initial driver sent exact UTC deadline as GitHub due_on; observed API date field is day-only and three early-UTC timestamps read back as previous day. Exact causal normalization layer is not yet proven.",
+  "escape": "Read-only preflight could validate payload but not transport normalization against absent objects; final readback caught it.",
+  "provenance_correction": "The one Light Implementer apply created all13/39 starting from zero (preflight.mode=apply existing counts0; created_at16:33..16:34). Worker note attributing creation to a prior session is unsupported and not adopted. No independent remote editor is inferred.",
+  "approval": "DEC-AFC-P2-APPROVAL-001 permits exact approved calendar-date reconciliation; deadlines/descriptions/payload stay unchanged",
+  "method": "Existing real-dependency deterministic readback is the red/green check; no mock or new product test. Test Implementer confirms red first under frozen bug-triager TDD routing.",
+  "frozen_bug_profile_digest": "6ca3ffccea9bae0e26f960b075e7a7fe2ffc01048474f1c8a70c31d8e748138b",
+  "docs": "https://docs.github.com/en/rest/issues/milestones#create-a-milestone",
+  "rule": "Preserve all13milestones39issues; repair affected dates only, never recreate, delete, change title/description or weaken date equality."
+}

@@ -1,0 +1,93 @@
+{
+  "approval": "DEC-AFC-P2-APPROVAL-001 permits exact approved calendar-date reconciliation; deadlines/descriptions/payload unchanged",
+  "authority_notes": "Remote PATCH limited to milestones 4,5,6 due_on field only. No issue changes/closures, no milestone creation/deletion, no title/description/state edits, no commits/pushes. Red/stop/approval/initial-preflight records untouched.",
+  "bug_route": "frozen-lifecycle-profile bug-triager 6ca3ffccea9bae0e26f960b075e7a7fe2ffc01048474f1c8a70c31d8e748138b",
+  "cause": "Upstream normalization layer not proven; no cause invented. Observed: API due_on field is calendar-day significant; early-UTC timestamps read back as previous day.",
+  "changed_paths": [
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-L01/tracking.py",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-L01/date-fix-before.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-L01/date-fix-probe.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-L01/date-fix-after.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-L01/date-fix-receipt.json"
+  ],
+  "commands": [
+    {
+      "command": "gh api repos/1wgrumph/amazon-fantasy-companion/milestones/{4,5,6} (GET)",
+      "exit": 0,
+      "purpose": "step 1 before-confirmation"
+    },
+    {
+      "command": "echo '{\"due_on\":\"2026-10-17T12:00:00Z\"}' | gh api repos/1wgrumph/amazon-fantasy-companion/milestones/4 --method PATCH --input -",
+      "exit": 0,
+      "purpose": "step 2 qualified probe, PATCH due_on only"
+    },
+    {
+      "command": "gh api repos/1wgrumph/amazon-fantasy-companion/milestones/4 (GET)",
+      "exit": 0,
+      "purpose": "step 2 probe readback"
+    },
+    {
+      "command": "echo '{\"due_on\":\"2026-10-17T12:00:00Z\"}' | gh api repos/1wgrumph/amazon-fantasy-companion/milestones/5 --method PATCH --input -",
+      "exit": 0,
+      "purpose": "step 3 reconcile #5"
+    },
+    {
+      "command": "echo '{\"due_on\":\"2026-10-17T12:00:00Z\"}' | gh api repos/1wgrumph/amazon-fantasy-companion/milestones/6 --method PATCH --input -",
+      "exit": 0,
+      "purpose": "step 3 reconcile #6"
+    },
+    {
+      "command": "gh api 'repos/1wgrumph/amazon-fantasy-companion/milestones?state=all&per_page=100&page=1' (GET)",
+      "exit": 0,
+      "purpose": "step 3 all-13 readback"
+    },
+    {
+      "command": "python3 docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-L01/tracking.py verify",
+      "exit": 0,
+      "output": "TRACKING_READBACK_PASS: 13 milestones, 39 issues, 52 slices, 13 TDD pairs; all open",
+      "purpose": "step 5 frozen green check"
+    }
+  ],
+  "developer_feedback": "PATCH responses and GET readbacks agree: sent 2026-10-17T12:00:00Z, stored/read back 2026-10-17T00:00:00Z (calendar 2026-10-17). Early-UTC send values are not retried or guessed beyond the single qualified encoding. Titles/descriptions/states byte-identical before and after; only due_on day changed.",
+  "driver_sha256": {
+    "current": "126ba40862a77cc7007c8aaeca9a7223dd9664253bdd4ffb32f2ef6df79a5914",
+    "original_red": "c0e58de95de3e31cd04ad7f92837628ce9ebbac1940eabebabcd0874c40e8051"
+  },
+  "evidence": [
+    "date-fix-before.json",
+    "date-fix-probe.json",
+    "date-fix-after.json",
+    "readback.json (script-produced)",
+    "preflight.json (script-produced)"
+  ],
+  "green": {
+    "command": "python3 docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-L01/tracking.py verify",
+    "counts": {
+      "issues": 39,
+      "milestones": 13,
+      "slices": 52,
+      "tdd_pairs": 13
+    },
+    "exit": 0,
+    "output": "TRACKING_READBACK_PASS: 13 milestones, 39 issues, 52 slices, 13 TDD pairs; all open"
+  },
+  "id": "BUG-AFC-L01-DATE-001",
+  "prevention": {
+    "code": "milestone POSTs send item['due_on'][:10]+'T12:00:00Z' for the API calendar field; match_milestone date equality still strict; duplicate/approval/permission/policy guards intact",
+    "existing_revalidation": "final readback re-GETs and strict-matches all milestones/issues before PASS, so no mid-run revalidation added",
+    "inspection": "future POST path uses qualified encoding; exact UTC deadline remains only in untouched description/payload"
+  },
+  "red": {
+    "command": "python3 docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-L01/tracking.py verify",
+    "exit": 1,
+    "record": "date-red.json (immutable, untouched)",
+    "safe_error": "RuntimeError: Existing milestone differs from approval: M04"
+  },
+  "role": "Bug-triager Implementer",
+  "verdict": "CANDIDATE_READY",
+  "wire": {
+    "readback_due_on": "2026-10-17T00:00:00Z",
+    "readback_source": "PATCH response + GET readback",
+    "sent_due_on": "2026-10-17T12:00:00Z"
+  }
+}
