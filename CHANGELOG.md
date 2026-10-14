@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Extend the shared gate with `tvapp` and `backend` areas, their CI jobs
+  and backend coverage and mutation checks with qualified tooling
+  ([PR #57](https://github.com/1wgrumph/amazon-fantasy-companion/pull/57)).
+
 - Add V&V guidance areas for the TV app, backend and device integration,
   and update the V&V index so every path keeps one owning area
   ([PR #56](https://github.com/1wgrumph/amazon-fantasy-companion/pull/56)).
