@@ -1,0 +1,67 @@
+Reproduction: run new native-tool tests with PATH=/usr/bin:/bin (hygiene declares no mutmut/diff-cover install). Test runner uses installed backend-tests Python; no install.
+.FFF                                                                     [100%]
+=================================== FAILURES ===================================
+_______ MutationEnv.test_test_read_data_file_reaches_mutants_end_to_end ________
+
+self = <test_bug2_mutenv.MutationEnv testMethod=test_test_read_data_file_reaches_mutants_end_to_end>
+
+    def test_test_read_data_file_reaches_mutants_end_to_end(self):
+        read_data = ('from pathlib import Path\n\n\ndef test_data():\n'
+                     '    assert (Path(__file__).parents[2] / "data" / "threshold.txt").read_text()'
+                     ' == "3\\n"\n')
+        write(self.repo, {'backend/src/control.py': CONTROL,
+                          'backend/tests/unit/test_control.py': BOTH,
+                          'backend/tests/unit/test_data.py': read_data,
+                          'backend/data/threshold.txt': '3\n'})
+        self.commit()
+        result = subprocess.run(['bash', 'tools/ci/mutation/backend.sh', self.base, str(self.out)],
+                                cwd=self.repo, capture_output=True, text=True, timeout=600)
+        out = result.stdout + result.stderr
+        print(f'mutation adapter exit={result.returncode}: {out.strip().splitlines()[-1:]}')
+>       self.assertEqual(result.returncode, 0, out)
+E       AssertionError: 3 != 0 : GAP required tool missing: mutmut
+
+tools/ci/tests/test_bug2_mutenv.py:112: AssertionError
+----------------------------- Captured stdout call -----------------------------
+mutation adapter exit=3: ['GAP required tool missing: mutmut']
+___ CoverageEmptyModule.test_docstring_only_changed_file_is_nothing_to_cover ___
+
+self = <test_bug3_covempty.CoverageEmptyModule testMethod=test_docstring_only_changed_file_is_nothing_to_cover>
+
+    def test_docstring_only_changed_file_is_nothing_to_cover(self):
+        self.candidate({'backend/src/control.py': CONTROL,
+                        'backend/src/empty.py': '"""Docstring only; no executable statements."""\n',
+                        'backend/tests/unit/test_control.py': BOTH})
+        rc, out = self.run_adapter()
+>       self.assertEqual(rc, 0, out)
+E       AssertionError: 3 != 0 : GAP required tool missing: diff-cover
+
+tools/ci/tests/test_bug3_covempty.py:69: AssertionError
+----------------------------- Captured stdout call -----------------------------
+coverage adapter exit=3: ['GAP required tool missing: diff-cover']
+_ CoverageEmptyModule.test_statement_bearing_file_missing_from_report_is_still_gap _
+
+self = <test_bug3_covempty.CoverageEmptyModule testMethod=test_statement_bearing_file_missing_from_report_is_still_gap>
+
+    def test_statement_bearing_file_missing_from_report_is_still_gap(self):
+        # A deletion-only change adds no lines, so diff-cover maps nothing for
+        # the file; with statements present that stays REPORT_INCOMPLETE.
+        self.candidate({'backend/src/control.py': CONTROL.replace('    if ok:\n', '    dead = 99\n    if ok:\n'),
+                        'backend/tests/unit/test_control.py': BOTH})
+        self.base = git(self.repo, 'rev-parse', 'HEAD')
+        self.candidate({'backend/src/control.py': CONTROL})
+        rc, out = self.run_adapter()
+        self.assertEqual(rc, 3, out)
+>       self.assertIn('unmapped changed files: backend/src/control.py', out)
+E       AssertionError: 'unmapped changed files: backend/src/control.py' not found in 'GAP required tool missing: diff-cover\n'
+
+tools/ci/tests/test_bug3_covempty.py:81: AssertionError
+----------------------------- Captured stdout call -----------------------------
+coverage adapter exit=3: ['GAP required tool missing: diff-cover']
+=========================== short test summary info ============================
+FAILED tools/ci/tests/test_bug2_mutenv.py::MutationEnv::test_test_read_data_file_reaches_mutants_end_to_end
+FAILED tools/ci/tests/test_bug3_covempty.py::CoverageEmptyModule::test_docstring_only_changed_file_is_nothing_to_cover
+FAILED tools/ci/tests/test_bug3_covempty.py::CoverageEmptyModule::test_statement_bearing_file_missing_from_report_is_still_gap
+3 failed, 1 passed in 0.24s
+
+exit=1; wall_seconds=0.677

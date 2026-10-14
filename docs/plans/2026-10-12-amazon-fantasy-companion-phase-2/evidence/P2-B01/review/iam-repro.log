@@ -1,0 +1,16 @@
+{
+  "crud_policy_allows_delete_item": true,
+  "crud_policy_allows_batch_write": true,
+  "candidate_store_operations": [
+    "get_item",
+    "put_item",
+    "query",
+    "update_item"
+  ],
+  "candidate_deletion_operations": [],
+  "api_alerts_operations": [
+    "alert_policy.pending (stub, planned read)"
+  ],
+  "policy_excerpt_origin": "SAM CLI 1.169.0 installed policy_templates.json; reproduced offline",
+  "least_privilege_failure": "ApiFunction grants write/delete on AlertsTable although this API has only GET /v1/alerts; all CRUD grants include DeleteItem despite no accessor or endpoint deleting items."
+}

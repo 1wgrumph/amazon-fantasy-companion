@@ -1,0 +1,12 @@
+link-page GET status 200 headers {'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store', 'x-frame-options': 'DENY', 'referrer-policy': 'no-referrer', 'content-security-policy': "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'self'; form-action 'self'; frame-ancestors 'none'"}
+issue_code_length 8 alphabet_size 32
+confirm_status 200
+poll_response_dropped status 200 state linked token_present True
+retry_poll {'statusCode': 200, 'headers': {'content-type': 'application/json', 'cache-control': 'no-store'}, 'body': '{"state": "linked"}'}
+TV_without_delivered_token GET_profile_status 401
+size_boundary request_bytes 65536 PUT_status 200 PUT_response_bytes 65632 GET_status 200 GET_response_bytes 65632
+persisted_revision 1
+malformed_profile_type list status 503 error {'code': 'unavailable', 'message': 'The service is temporarily unavailable.'}
+malformed_profile_type dict status 503 error {'code': 'unavailable', 'message': 'The service is temporarily unavailable.'}
+malformed_profile_type int status 403 error {'code': 'forbidden', 'message': 'This device is not linked to that profile.'}
+malformed_profile_type NoneType status 403 error {'code': 'forbidden', 'message': 'This device is not linked to that profile.'}

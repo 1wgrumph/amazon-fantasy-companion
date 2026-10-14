@@ -1,0 +1,82 @@
+x__bearer__mutmut_10
+--- original
++++ survivor
+@@ -1,3 +1,3 @@
+-def x__bearer__mutmut_orig(headers):
+-    scheme, _, token = headers.get('authorization', '').partition(' ')
++def x__bearer__mutmut_10(headers):
++    scheme, _, token = headers.get('authorization', 'XXXX').partition(' ')
+     return token.strip() if scheme.lower() == 'bearer' else ''
+
+x__bearer__mutmut_18
+--- original
++++ survivor
+@@ -1,3 +1,3 @@
+-def x__bearer__mutmut_orig(headers):
++def x__bearer__mutmut_18(headers):
+     scheme, _, token = headers.get('authorization', '').partition(' ')
+-    return token.strip() if scheme.lower() == 'bearer' else ''
++    return token.strip() if scheme.lower() == 'bearer' else 'XXXX'
+
+x_issue__mutmut_18
+--- original
++++ survivor
+@@ -1,9 +1,9 @@
+-def x_issue__mutmut_orig():
++def x_issue__mutmut_18():
+     """Create a pending code (unambiguous base-32, 40 bits) and its polling handle."""
+     expires = int(time.time()) + int(os.environ['DEVICE_CODE_TTL_SECONDS'])
+     for _ in range(3):
+         code = ''.join((secrets.choice('ABCDEFGHJKLMNPQRSTUVWXYZ23456789') for _ in range(8)))
+-        handle = secrets.token_urlsafe(32)
++        handle = secrets.token_urlsafe(None)
+         if store.put_link(code, _digest(handle), expires):
+             return {'code': code, 'expires': _rfc3339(expires), 'handle': handle}
+     raise RuntimeError('Could not allocate a unique device code')
+
+x_poll__mutmut_38
+--- original
++++ survivor
+@@ -1,4 +1,4 @@
+-def x_poll__mutmut_orig(handle):
++def x_poll__mutmut_38(handle):
+     """Report the link state; the first poll after confirmation carries the session token."""
+     link = store.find_link(_digest(handle))
+     if link is None:
+@@ -6,7 +6,7 @@
+     if link['state'] == 'codePending':
+         return {'state': 'expired' if link['expiresAt'] <= time.time() else 'codePending'}
+     if link['state'] == 'confirmed' and store.complete_link(link['code']):
+-        token = secrets.token_urlsafe(32)
++        token = secrets.token_urlsafe(None)
+         store.put_session(_digest(token), link['profileId'], _rfc3339(time.time()))
+         return {'state': 'linked', 'sessionToken': token}
+     return {'state': 'linked'}
+
+x_complete_link__mutmut_22
+--- original
++++ survivor
+@@ -1,3 +1,3 @@
+-def x_complete_link__mutmut_orig(code):
++def x_complete_link__mutmut_22(code):
+     """Move a confirmed code to linked exactly once, so one poll receives the session."""
+-    return _written(_table('LINKS_TABLE').update_item, Key={'pk': 'code#' + code}, UpdateExpression='SET #state = :linked', ConditionExpression='#state = :confirmed', ExpressionAttributeNames={'#state': 'state'}, ExpressionAttributeValues={':linked': 'linked', ':confirmed': 'confirmed'})
++    return _written(_table('LINKS_TABLE').update_item, Key={'pk': 'code#' + code}, UpdateExpression='set #state = :linked', ConditionExpression='#state = :confirmed', ExpressionAttributeNames={'#state': 'state'}, ExpressionAttributeValues={':linked': 'linked', ':confirmed': 'confirmed'})
+
+x_get_session__mutmut_14
+--- original
++++ survivor
+@@ -1,2 +1,2 @@
+-def x_get_session__mutmut_orig(session_hash):
+-    return _table('LINKS_TABLE').get_item(Key={'pk': 'session#' + session_hash}, ConsistentRead=True).get('Item')
++def x_get_session__mutmut_14(session_hash):
++    return _table('LINKS_TABLE').get_item(Key={'pk': 'session#' + session_hash}, ConsistentRead=False).get('Item')
+
+x_get_session__mutmut_5
+--- original
++++ survivor
+@@ -1,2 +1,2 @@
+-def x_get_session__mutmut_orig(session_hash):
+-    return _table('LINKS_TABLE').get_item(Key={'pk': 'session#' + session_hash}, ConsistentRead=True).get('Item')
++def x_get_session__mutmut_5(session_hash):
++    return _table('LINKS_TABLE').get_item(Key={'pk': 'session#' + session_hash}).get('Item')
