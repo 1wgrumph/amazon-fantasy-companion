@@ -51,6 +51,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Fix the deployed-test network guard so smoke tests reach the configured
+  API host (resolved and rotating addresses) while every other destination
+  stays blocked ([#64](https://github.com/1wgrumph/amazon-fantasy-companion/pull/64)).
 - Spec gate compares the rebuilt output against the staged index instead of
   HEAD, so a correctly regenerated staged output passes before commit
   ([PR](https://github.com/1wgrumph/amazon-fantasy-companion/pull/14)).
