@@ -4001,7 +4001,12 @@
       "scope": "R01-R06 + R07 CSP hash hardening (lead e)",
       "branch": "afc/p2-b01",
       "base_head": "f71f72b",
-      "state": "active"
+      "state": "released",
+      "outcome": "PASS (agent)",
+      "commits": [
+        "7eaa700",
+        "b706f9a"
+      ]
     },
     {
       "kind": "owner_decision",
@@ -4009,6 +4014,18 @@
       "date": "2026-10-14",
       "decision": "Upgrade + verify: accept the INDETERMINATE Gradle plugin closure (AGP 8.2.2, Kotlin 1.9.0) for the X01 spike build only; P2-A01 moves tv-app/ to current AGP/Kotlin, adds Gradle dependency verification (verification-metadata.xml checked before plugins run), and rescans.",
       "source": "AskUserQuestion answer 'Upgrade + verify (Recommended)'"
+    },
+    {
+      "kind": "dispatch_lease",
+      "lease": "BUG-AFC-B01-AUTH-002-fix",
+      "date": "2026-10-14",
+      "role": "implementer (bug-triager)",
+      "route": "muse-code/muse-spark-1.3/max",
+      "defect": "repair 7eaa700 lets a linked polling handle mint unlimited non-expiring sessions (no expiresAt check, no per-link session limit)",
+      "found_by": "orchestrator code inspection of repair1",
+      "branch": "afc/p2-b01",
+      "base_head": "b706f9a",
+      "state": "active"
     }
   ],
   "planning_review": {
