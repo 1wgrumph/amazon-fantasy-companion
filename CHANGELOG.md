@@ -29,6 +29,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Record the Phase 2 execution lease and the M01 dispatch, review and
+  closeout receipts in the Lifecycle control journey
+  ([PR #58](https://github.com/1wgrumph/amazon-fantasy-companion/pull/58)).
+
 - Freeze the complete `opensource-hackathon` profile under Bearing 1.1.7,
   including capability settings and Muse contributor mode; preserve spent
   review limits and validate the Markdown register through the native
