@@ -497,6 +497,13 @@
         "opensource-hackathon": "d5aabda1f44e2808c53112794afb5a7978ad02f930c100cf58002277d9423eea",
         "bug-triager": "17595374280cb0b4e1df8ded00287ebf0c3c747a846bbf9dfec094a1d8809acb"
       }
+    },
+    {
+      "id": "DEC-AFC-SD-046",
+      "status": "orchestrator_ruling",
+      "at": "2026-10-14T15:24:09Z",
+      "decision": "Stub retirement: a slice that replaces a P2-B01 AFC-STUB module may remove only its own module's rows from backend/tests/unit/test_pipeline_and_stubs.py STUBS and backend/tests/contract/test_backend_template.py parametrize list. Applies to B02, B03, B04, B05, B06, B07. All other pins stay.",
+      "reason": "Plan write sets omitted stub retirement (BUG-AFC-B03-STUBPIN-001); stubs name their owning slice, so retirement by that slice is the design intent. No guard weakened for other modules."
     }
   ],
   "open_decisions": [],
@@ -6417,6 +6424,18 @@
         "UTP (instrumented test runner) netty closure not admitted: HIGH/CRITICAL incl. CVE-2026-75595 -> owner decision needed before A03-A05 connectedDebugAndroidTest",
         "device steps: PENDING-DEVICE.txt (install, PROC-VISUAL-REVIEW)"
       ]
+    },
+    {
+      "kind": "bug",
+      "id": "BUG-AFC-L02-DEPLOYED-PIN-001",
+      "date": "2026-10-14",
+      "route": "codex/gpt-6.1-sol/high",
+      "branch": "afc/bug-deployed-pin",
+      "commit": "1739809",
+      "orchestrator_verified": [
+        "new guard test 11 failed on old conftest, 26 passed on fix"
+      ],
+      "state": "in review"
     }
   ],
   "planning_review": {
