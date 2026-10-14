@@ -1,0 +1,278 @@
+{
+  "schema_version": "1",
+  "slice": "P2-A01T",
+  "role": "test_implementer",
+  "issue": 22,
+  "milestone": "M03",
+  "outcome": "OWNER_DECISION_REQUIRED",
+  "mutation_result": "PARTIAL: evidence only, no red candidate",
+  "branch": "afc/p2-a01",
+  "base_revision": "75afca022f967945a70bf715beb2a7c98e65ed9d",
+  "candidate_ref": "containing evidence commit on afc/p2-a01; see git log for receipt.json",
+  "route": "Codex CLI / GPT-6.1 Sol / high, preserved",
+  "authority": "Session P2-A01T packet; SD-041; active controller dispatch lease",
+  "stop_reason": "The current mutually documented compatible closure reports 10 unreviewed HIGH/CRITICAL; newest stable Android lint compiler 32.4.1 retains 5 embedded HIGH. No named residual risk approved for tv-app. Packet explicitly stops at unresolvable scan verdict.",
+  "supply_chain_verdict": "INDETERMINATE",
+  "owner_decision_needed": "Disposition of the named embedded build-host findings (false-positive/reachability review or explicit residual-risk decision), or an authorized alternative admitted toolchain. Separately patch and rescan the remaining jose4j, Bouncy Castle and JDOM findings before any admission. No exemption inferred from X01.",
+  "changed_paths_scope": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/ only",
+  "commands": [
+    {
+      "id": "RESOLVE-ATTEMPT-1",
+      "command": "JAVA_HOME=$HOME/.local/share/afc-tools/jdk-17.0.20.1+1 GRADLE_USER_HOME=$HOME/.gradle/afc-p2-a01t timeout 1500 bash $HOME/.gradle/wrapper/dists/gradle-8.2-bin/bbg7u40eoinfdyxsxr3z4i7ta/gradle-8.2/bin/gradle -p $HOME/.local/share/afc-tools/downloads/p2-a01t/resolve --no-daemon --max-workers=2 --write-verification-metadata sha256 resolveClosure",
+      "exit": 1,
+      "classification": "preparation/configuration: inert resolver lacked JVM compatibility rules; not behavioral red",
+      "evidence": "resolve-attempt1.txt"
+    },
+    {
+      "id": "RESOLVE-ATTEMPT-2",
+      "command": "JAVA_HOME=$HOME/.local/share/afc-tools/jdk-17.0.20.1+1 GRADLE_USER_HOME=$HOME/.gradle/afc-p2-a01t timeout 1500 bash $HOME/.gradle/wrapper/dists/gradle-8.2-bin/bbg7u40eoinfdyxsxr3z4i7ta/gradle-8.2/bin/gradle -p $HOME/.local/share/afc-tools/downloads/p2-a01t/resolve --no-daemon --max-workers=2 --write-verification-metadata sha256 resolveClosure",
+      "exit": 0,
+      "classification": "passive artifact resolution only; registered compatibility rules via Gradle core java-gradle-plugin",
+      "evidence": "resolve-attempt2.txt"
+    },
+    {
+      "id": "PROC-GATE-TOOL-QUALIFY",
+      "command": "PATH=$HOME/.local/share/afc-tools/backend-tests/bin:$PATH timeout 1500 bash -c \"python3 -m unittest discover -s tools/ci/tests/coverage -v && python3 -m unittest discover -s tools/ci/tests/mutation -v\"",
+      "exit": 0,
+      "counts": {
+        "coverage": 12,
+        "mutation": 13
+      },
+      "scope": "Existing Python/native reporter and repository adapter controls; Android-native coverage/mutation not established",
+      "evidence": "tool-qualification.txt"
+    },
+    {
+      "id": "REPOSITORY-GATE-BASELINE",
+      "command": "PATH=$HOME/.local/share/afc-tools/backend-tests/bin:$PATH bash tools/ci/gate.sh",
+      "environment": {
+        "JAVA_HOME": "$HOME/.local/share/afc-tools/jdk-17.0.20.1+1",
+        "ANDROID_HOME": "$HOME/.local/share/afc-tools/android-sdk",
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "exit": 0,
+      "counts": {
+        "hygiene": 61,
+        "backend": 158
+      },
+      "areas": {
+        "spec": "PASS checks completed",
+        "docs": "PASS checks completed",
+        "hygiene": "PASS checks completed",
+        "tvapp": "PASS no tv-app/ tree",
+        "backend": "PASS checks completed"
+      },
+      "scope": "Baseline regression only; tvapp empty-tree PASS closes no test requirement",
+      "evidence": "gate-baseline.txt"
+    },
+    {
+      "id": "CMD-RED",
+      "command": "./tv-app/gradlew -p tv-app testDebugUnitTest --tests <test_selector>",
+      "exit": null,
+      "status": "NOT_RUN: scan admission stop before harness/tests authored"
+    },
+    {
+      "id": "STRICT-CHECKSUM-NEGATIVE-CONTROL",
+      "exit": null,
+      "status": "NOT_RUN: closure not admitted; strict tv-app harness and scratch corruption control not created"
+    }
+  ],
+  "red_counts": {
+    "assertion_failures": null,
+    "compilation_errors": null,
+    "collection_errors": null,
+    "status": "NOT_RUN; no suite exists, not zero-error evidence"
+  },
+  "frozen_test_sha256s": {},
+  "bootstrap_sha256s": {},
+  "installs_scan_table": [
+    {
+      "tool_or_artifact_set": "Qualified X01 JDK",
+      "version": "17.0.20.1+1",
+      "sha256": "3808d1d15e3ec6bd5b84057fb5d84c33d8a1536a258146bcea2e603fc726e08e",
+      "location": "$HOME/.local/share/afc-tools/jdk-17.0.20.1+1",
+      "verdict": "PASS by unchanged X01 qualification; reused, not installed"
+    },
+    {
+      "tool_or_artifact_set": "Qualified X01 Android platform",
+      "version": "android-34 rev 3 ext7",
+      "sha256": "16fdb74c55e59ae3ef52def135aec713508467bd56d7dabcd8c9be31fa8b20f3",
+      "location": "$HOME/.local/share/afc-tools/android-sdk/platforms/android-34",
+      "verdict": "PASS by unchanged X01 qualification; reused"
+    },
+    {
+      "tool_or_artifact_set": "Passive resolver Gradle",
+      "version": "8.2",
+      "sha256": "38f66cd6eef217b4c35855bb11ea4e9fbc53594ccccb5fb82dfd317ef8c2c5a3",
+      "location": "$HOME/.gradle/wrapper/dists/gradle-8.2-bin",
+      "verdict": "PASS by unchanged X01 qualification; core plugin only, external plugins never applied"
+    },
+    {
+      "tool_or_artifact_set": "Candidate Gradle distribution",
+      "version": "9.7.0",
+      "sha256": "84fbba45c7f4c64abc77460e1c00f541e9f960e3c7ed2538f1ede19eacd873ae",
+      "location": "$HOME/.local/share/afc-tools/downloads/p2-a01t/qualified/gradle-9.7.0",
+      "verdict": "PASS: official SHA256, safe ZIP inventory, ClamAV exit 0 / 710 files / 0 infected; never executed",
+      "origin_url": "https://services.gradle.org/distributions/gradle-9.7.0-bin.zip",
+      "official_checksum_url": "https://services.gradle.org/distributions/gradle-9.7.0-bin.zip.sha256"
+    },
+    {
+      "tool_or_artifact_set": "Android Build Tools",
+      "version": "36.0.0",
+      "sha256": "5d9ac77fb6ff43d9da518a337b4fcf8f9097113df531d99ccefe80ef7ce8250b",
+      "location": "$HOME/.local/share/afc-tools/android-sdk/build-tools/36.0.0",
+      "verdict": "PASS: official SHA1, safe ZIP inventory, ClamAV exit 0 / 168 files / 0 infected; installed user-scope, not executed",
+      "origin_url": "https://dl.google.com/android/repository/build-tools_r36_linux.zip",
+      "official_checksum": "SHA1 b0b6376977657e8ad9b969bacf4093601da2c6fb from repository2-3.xml"
+    },
+    {
+      "tool_or_artifact_set": "Gradle plugin/test/lint closure, 124 artifacts",
+      "version": "AGP 9.3.1; KGP 2.4.21; coroutines 1.11.0; org.json 20260814; JUnit 4.13.2; SnakeYAML 2.7; lint-gradle 32.3.1; aapt2 9.3.1-15703166 linux",
+      "sha256": "bb287cf020f5c7b20bbc09eacb88c574fc3e8f94ca121b61037224c3d282ee3e",
+      "sha256_meaning": "SHA256 of the sorted artifact checksum manifest; each file hash is in artifact-sha256s.txt",
+      "location": "$HOME/.local/share/afc-tools/downloads/p2-a01t/resolve/build/closure",
+      "verdict": "INDETERMINATE; 10 unreviewed HIGH/CRITICAL; malware scan incomplete (exit 143 after required stop); not admitted or executed"
+    },
+    {
+      "tool_or_artifact_set": "Newest stable lint compiler",
+      "version": "32.4.1",
+      "sha256": "f7605ecd8e5157f1df689951e0f200ff7ccb0b1443e8c4ab35a595cb1ccdc886",
+      "location": "$HOME/.local/share/afc-tools/downloads/p2-a01t/newer-compiler",
+      "verdict": "INDETERMINATE; official SHA1 matched; same 5 embedded HIGH findings; not admitted or executed"
+    }
+  ],
+  "acceptance_to_evidence": [
+    {
+      "row": 1,
+      "status": "NOT_MET",
+      "evidence": "No tests or scaffolding authored after scan stop."
+    },
+    {
+      "row": 2,
+      "status": "NOT_RUN",
+      "evidence": "CMD-RED not run; no valid behavioral red counts."
+    },
+    {
+      "row": 3,
+      "status": "OWNER_DECISION_REQUIRED",
+      "evidence": "supply-chain.json, closure-trivy.json, newer-compiler-trivy.json; generated verification metadata remains passive acquisition evidence outside repo. No product wrapper/strict harness admitted."
+    },
+    {
+      "row": 4,
+      "status": "PARTIAL",
+      "evidence": "receipt.json plus artifact-sha256s.txt and installs_scan_table; no test hashes/CMD-RED output available."
+    },
+    {
+      "row": 5,
+      "status": "PARTIAL",
+      "evidence": "gate-baseline.txt exit 0 and tool-qualification.txt exit 0; empty-tree TV PASS is not intended-red evidence; no Android-native qualification claim."
+    }
+  ],
+  "remaining_obligations": [
+    "Resolve or obtain owner disposition for named supply-chain findings; admit a verified/scanned closure.",
+    "Generate official-checksummed wrapper and strict tv-app verification-metadata.xml; demonstrate corrupted scratch checksum rejects resolution.",
+    "Author minimal build/test harness and empty interfaces, then required red tests; run CMD-RED with assertion failures only.",
+    "Freeze test/bootstrap hashes and retain identical test IDs for P2-A01 green.",
+    "Run repository gate with tvapp failing only on intended red; preserve existing-area PASS.",
+    "Record Android-native qualification as a separate typed capability gap where required; no Python substitution."
+  ],
+  "remaining_risks": [
+    "Reachability and false-positive status of scanner findings not assessed; no security vulnerability confirmation claim.",
+    "Offline Java identity index stale; archive inventory not a clean full-coverage verdict.",
+    "Closure ClamAV was terminated after required scan stop; malware completion is not PASS."
+  ],
+  "developer_feedback": [
+    {
+      "id": "DX-P2-A01T-001",
+      "observation": "Trivy filesystem mode reported zero language-specific files for a JAR-only tree. Archive-aware rootfs mode detected 98 package identities and 10 HIGH/CRITICAL. Configuration cause, not reproduced product defect.",
+      "evidence": "supply-chain.json; closure-trivy.json"
+    },
+    {
+      "id": "DX-P2-A01T-002",
+      "observation": "Newest stable Android lint compiler 32.4.1 still embeds protobuf/JLine identities and classes associated with 5 HIGH findings. A transitive version constraint cannot replace bundled classes.",
+      "evidence": "newer-compiler-trivy.json; supply-chain.json"
+    },
+    {
+      "id": "DX-P2-A01T-003",
+      "observation": "PROC-GATE-TOOL-QUALIFY passes 25 existing controls, but this checkout has no tools/ci/coverage/tvapp.sh or tools/ci/mutation/tvapp.sh. No Android-native qualification PASS claimed.",
+      "evidence": "tool-qualification.txt; docs/vnv/tv-app/AGENTS.md"
+    }
+  ],
+  "review_capabilities": {
+    "coverage_assist": "OCR delegate mode remains selected for independent phase review; not run by author",
+    "reverify": "not applicable: evidence/test preparation only; no compiled APK attribute claim"
+  },
+  "skills_creation": "NO_CHANGE: existing scan-software-supply-chain owns artifact admission; implementer owns bounded mutation. New installed skill would duplicate ownership and has no authorized target in this test packet. Matching request = qualify externally acquired Gradle closure (used with actual evidence); non-matching = implement LinkScreen from local source (scan skill excludes ordinary local code). No skill installation or validation-success claim.",
+  "evidence_sha256s": {
+    "artifact-sha256s.txt": "bb287cf020f5c7b20bbc09eacb88c574fc3e8f94ca121b61037224c3d282ee3e",
+    "buildtools-clam.txt": "400a0feb924422c8bc206d72e0b033bea141fb89136261bedf08343d5596401b",
+    "closure-clam.txt": "1c0e7f5ecf9cefae65e001e46134e95f80c8dfed45383d1f0aa6e9a69d655a18",
+    "closure-trivy.json": "27942b43e852e9c7bdbd64490827a2228b206fa8119af2ceb4c083a55dbbd6e5",
+    "gate-baseline.txt": "47a1b2e58d7a0c169c519cf87ea257e45657a0c7225ea72901471943f329f47e",
+    "gradle-9.7-clam.txt": "660bd7ed3671069a74b1994b07f4fb4141104d227c36473819aa35b2d28f5299",
+    "inert-resolver.gradle": "57315b53fc932c258b4e67f529b6bf77e546f8d9ffd48ba43f43c64c2dd11d3f",
+    "lease-validation.json": "ef5f34d7397fd2a08c202d82b9f0a313ac82c9650866acb290c8dc0207c80eea",
+    "newer-compiler-trivy.json": "fdd48d26ec6f3601b75263295c42adab20c856b4c1dba6ea825cd26579eb750d",
+    "proof-row-inputs.json": "b27c5bc6b8b09d1348263387619562cb35d3bad0c8555b29f05d787e14e12025",
+    "resolve-attempt1.txt": "bd03a9c0438cc0ca37bf5bab80c6820596932264aabfc7e6cdcaee7e479ca452",
+    "resolve-attempt2.txt": "e77b48df5d1038efcc8edd2378bcd13f052514eb30f6712fce211612ea5c1dd9",
+    "resolved-artifacts.tsv": "67e6482993ac13e20e64db2b6c4377a56a8a0e0808814b582657152d45656b9a",
+    "supply-chain.json": "cc7c1363fa560d698115eb10164aa605ea8e7328f1e26d10ff9f01eb8a89a9f9",
+    "tool-qualification.txt": "659da2311cdb3396082722edb788b55658806d8afb5945bfb1153a39edea1052"
+  },
+  "precommit_lease_revalidation": {
+    "status": "PASS",
+    "dispatch": {
+      "kind": "dispatch_lease",
+      "lease": "P2-A01T",
+      "date": "2026-10-14",
+      "role": "test_implementer",
+      "route": "codex/gpt-6.1-sol/high",
+      "branch": "afc/p2-a01",
+      "base": "75afca0",
+      "scope": "red suite + SD-041 Gradle closure (current AGP/Kotlin, strict verification-metadata, scan)",
+      "resource_leases": [
+        "tv-app-manifest",
+        "tv-app-gradle"
+      ],
+      "state": "active"
+    },
+    "parent_generation": 2,
+    "controller_sha256": "570d0e23226b0def2ed9c37c90c2bb639c87e68b898641fd4e5ebc64f806023d",
+    "candidate_revision": "75afca022f967945a70bf715beb2a7c98e65ed9d"
+  },
+  "changed_paths": [
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/artifact-sha256s.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/buildtools-clam.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/closure-clam.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/closure-trivy.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/gate-baseline.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/gradle-9.7-clam.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/inert-resolver.gradle",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/lease-validation.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/newer-compiler-trivy.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/proof-row-inputs.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/receipt.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/resolve-attempt1.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/resolve-attempt2.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/resolved-artifacts.tsv",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/supply-chain.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/tool-qualification.txt"
+  ],
+  "resolver_attempt1_raw_sha256": "81d700b0f4ea9e6c901d4b493d3908ba4fde394482f550a0bcbdcf056a96a969",
+  "bran_status": "unavailable: no native .bran/policy.yaml; ordinary discovery used",
+  "prior_host_qualification": "P2-X01 part A commit 8a5bf7f: spikes/sp1-device/toolchain-pins.txt and scan-verdicts.txt",
+  "evidence_validation": [
+    {
+      "command": "python3 tools/ci/check_docs.py",
+      "exit": 0
+    },
+    {
+      "command": "python3 tools/ci/check_paths.py --files <every P2-A01T evidence file>",
+      "exit": 0
+    },
+    {
+      "command": "git diff --cached --check",
+      "exit": 0
+    }
+  ]
+}

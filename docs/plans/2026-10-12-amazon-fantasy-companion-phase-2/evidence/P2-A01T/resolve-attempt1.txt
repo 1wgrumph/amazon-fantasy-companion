@@ -1,0 +1,55 @@
+
+Welcome to Gradle 8.2!
+
+Here are the highlights of this release:
+ - Kotlin DSL: new reference documentation, assignment syntax by default
+ - Kotlin DSL is now the default with Gradle init
+ - Improved suggestions to resolve errors in console output
+
+For more details see https://docs.gradle.org/8.2/release-notes.html
+
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.2/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build
+> Task :resolveClosure FAILED
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':resolveClosure'.
+> Could not resolve all files for configuration ':closure'.
+   > Could not resolve org.jetbrains.kotlin:kotlin-gradle-plugin:2.4.21.
+     Required by:
+         project :
+      > No matching variant of org.jetbrains.kotlin:kotlin-gradle-plugin:2.4.21 was found. The consumer was configured to find attribute 'org.gradle.usage' with value 'java-runtime', attribute 'org.gradle.category' with value 'library', attribute 'org.gradle.dependency.bundling' with value 'external', attribute 'org.gradle.jvm.version' with value '17', attribute 'org.gradle.plugin.api-version' with value '9.7.0' but:
+          - Variant 'apiElementsWithFixedAttribute' capability org.jetbrains.kotlin:kotlin-gradle-plugin:2.4.21 declares attribute 'org.gradle.category' with value 'library', attribute 'org.gradle.dependency.bundling' with value 'external':
+              - Incompatible because this component declares attribute 'org.gradle.jvm.version' with value '8', attribute 'org.gradle.usage' with value 'java-api' and the consumer needed attribute 'org.gradle.jvm.version' with value '17', attribute 'org.gradle.usage' with value 'java-runtime'
+              - Other compatible attribute:
+                  - Doesn't say anything about org.gradle.plugin.api-version (required '9.7.0')
+          - Variant 'gradle80ApiElements' capability org.jetbrains.kotlin:kotlin-gradle-plugin:2.4.21 declares attribute 'org.gradle.category' with value 'library', attribute 'org.gradle.dependency.bundling' with value 'external', attribute 'org.gradle.plugin.api-version' with value '8.0':
+              - Incompatible because this component declares attribute 'org.gradle.jvm.version' with value '8', attribute 'org.gradle.usage' with value 'java-api' and the consumer needed attribute 'org.gradle.jvm.version' with value '17', attribute 'org.gradle.usage' with value 'java-runtime'
+          - Variant 'gradle80JavadocElements' capability org.jetbrains.kotlin:kotlin-gradle-plugin:2.4.21 declares attribute 'org.gradle.dependency.bundling' with value 'external', attribute 'org.gradle.plugin.api-version' with value '8.0', attribute 'org.gradle.usage' with value 'java-runtime':
+[Repeated variant explanations omitted; original output hash is in receipt.json.]
+              - Incompatible because this component declares attribute 'org.gradle.jvm.version' with value '8', attribute 'org.gradle.usage' with value 'java-api' and the consumer needed attribute 'org.gradle.jvm.version' with value '17', attribute 'org.gradle.usage' with value 'java-runtime'
+              - Other compatible attribute:
+                  - Doesn't say anything about org.gradle.plugin.api-version (required '9.7.0')
+          - Variant 'androidRuntimeElements' capabilities com.google.collections:google-collections:33.4.0-jre and com.google.guava:guava:33.4.0-jre declares attribute 'org.gradle.category' with value 'library', attribute 'org.gradle.dependency.bundling' with value 'external', attribute 'org.gradle.usage' with value 'java-runtime':
+              - Incompatible because this component declares attribute 'org.gradle.jvm.version' with value '8' and the consumer needed attribute 'org.gradle.jvm.version' with value '17'
+              - Other compatible attribute:
+                  - Doesn't say anything about org.gradle.plugin.api-version (required '9.7.0')
+          - Variant 'jreApiElements' capabilities com.google.collections:google-collections:33.4.0-jre and com.google.guava:guava:33.4.0-jre declares attribute 'org.gradle.category' with value 'library', attribute 'org.gradle.dependency.bundling' with value 'external':
+              - Incompatible because this component declares attribute 'org.gradle.jvm.version' with value '8', attribute 'org.gradle.usage' with value 'java-api' and the consumer needed attribute 'org.gradle.jvm.version' with value '17', attribute 'org.gradle.usage' with value 'java-runtime'
+              - Other compatible attribute:
+                  - Doesn't say anything about org.gradle.plugin.api-version (required '9.7.0')
+          - Variant 'jreRuntimeElements' capabilities com.google.collections:google-collections:33.4.0-jre and com.google.guava:guava:33.4.0-jre declares attribute 'org.gradle.category' with value 'library', attribute 'org.gradle.dependency.bundling' with value 'external', attribute 'org.gradle.usage' with value 'java-runtime':
+              - Incompatible because this component declares attribute 'org.gradle.jvm.version' with value '8' and the consumer needed attribute 'org.gradle.jvm.version' with value '17'
+              - Other compatible attribute:
+                  - Doesn't say anything about org.gradle.plugin.api-version (required '9.7.0')
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 13s
+1 actionable task: 1 executed
