@@ -403,6 +403,59 @@ and block the affected gate; they are never substituted with a unit-test
 PASS. APK semantic Reverify support remains unproven and is surfaced at the
 integrated review, with selected backend preserved.
 
+### DES-AFC-P2-VEGA — Vega OS port (P2-V01, M14)
+
+- `vega-app/` is a React Native for Vega project in TypeScript, created from
+  the template of the pinned, scanned Vega SDK. It sits beside `tv-app/` and
+  shares no files with it; `tv-app/` and `backend/` stay untouched
+  (AC-AFC-P2-VEGA-06). The React Native for Vega line follows the pinned SDK
+  default (0.72 unless 0.83 is the default) and is recorded.
+- Layout mirrors DES-AFC-P2-TV, one module per Fire OS package:
+  `src/net/apiClient.ts` and `src/net/dto.ts` (every CONTRACT-AFC-P2-API
+  operation and the envelope rules, including rejecting older revisions);
+  `src/link/`, `src/profile/`, `src/detect/`, `src/alerts/`, `src/watch/`
+  and `src/panel/` hold the same behaviors as A01..A05; `src/auth/tokenStore.ts`.
+- Network: `fetch` with api_timeout through an AbortController, and
+  api_retry_max with exponential backoff for idempotent calls only. There is
+  no automatic retry of link confirmation or Watch. The API base URL is a
+  build-time value (`AFC_API_BASE_URL`); empty shows "Backend not configured".
+  The package carries no secret.
+- Token storage (Vega equivalent of the A01 rule): the session token lives
+  only in app-private storage, written and read only by `tokenStore.ts`. The
+  Vega supported-libraries list (0.24) has no keychain or secure-storage
+  library, so the store is the app-sandboxed `@amazon-devices/react-native-mmkv`
+  (or AsyncStorage when MMKV is unavailable). The plan makes no encryption
+  claim, matching A01's "app-private storage". The token is never logged,
+  never in the `.vpkg`, never in a capture (AC-AFC-P2-VEGA-04).
+- Off the render path: network, JSON parsing and scoring display
+  computation are async; components apply state only. Queues and history are
+  bounded as in DES-AFC-P2-TV (AFC-PR-061..063).
+- Focus and remote: every control is focusable with D-pad, select and back
+  (TVFocusGuideView and the Vega remote event handler). Text sizes follow
+  AFC-PR-045 at the VVD's 1080p output.
+- Alerts: the long-poll client and presentation logic port as is. Delivery
+  over third-party playback depends on a Vega route (local notifications on
+  RN 0.72 through `expo-notifications`, or headless service plus in-app
+  toast). An unverified route is recorded as `unknown` or `limited by
+  simulator`, never claimed (mirrors AFC-PR-015 and RISK-AFC-P2-02).
+- Watch: `Linking.canOpenURL` and `Linking.openURL` with the registry's
+  documented URI for Vega, or `amzns://apps?...` for the provider app. A
+  missing app gives `appAbsent`; an unverifiable arrival gives
+  `accessUnknown`. Exactly one RoutingOutcome is reported per attempt.
+  Provider apps and DRM playback are not available on the VVD on Ubuntu.
+- Detection: no installed-apps library is listed. The candidate is
+  `canOpenURL` per provider; when it is unsupported, the control is hidden
+  with a stated limit, as in the P2-X07 rule.
+- Panel: the full-screen panel is the only mode on the VVD. modeB needs
+  provider video and is not supported there.
+- Gate: new area `vegaapp` in `tools/ci/gate.sh` (npm ci plus Jest;
+  `PASS no vega-app/ tree` before landing; GAP when node or npm is missing),
+  with a path-filtered CI job. `.vpkg` build and VVD runs are SEIT procedures.
+- Verification target: the VVD on the Ubuntu x86_64 KVM host. A physical
+  Vega OS stick is used only after OA-12 (AC-AFC-P2-VEGA-05). The visual
+  review follows DES-AFC-P2-VISUAL with CMD-VVD-INPUT and CMD-VVD-SCREENCAP
+  under `evidence/visual/P2-V01/`.
+
 ## Contracts
 
 ### CONTRACT-AFC-P2-API — TV ↔ backend v1

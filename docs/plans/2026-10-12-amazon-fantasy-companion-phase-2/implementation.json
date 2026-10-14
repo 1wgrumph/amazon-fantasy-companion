@@ -1357,6 +1357,18 @@
    "entry": "W4 exit; OA-5 (LICENSE file and visibility flip) before judge-access verification; OA-6 (ESPN terms) before the write-up is final.",
    "exit": "README and setup verified from a clean checkout; write-up, demo plan and clips ready; developer feedback assembled and sanitized; final APK tagged, hashed and Reverify run; Assurance Test Engineer and Integration Engineer execution verdicts on the W5 candidate; release prepared (P2-R5); owner checklist for submission handed over.",
    "dispatch_order": "P2-D03, P2-D04, P2-D05 in parallel; P2-SCR1 after W4 (Scribe, not counted); P2-R5 after those four merge; P2-L05 at the P2-R5 merge commit; P2-X12 on the final APK in the Thu 2026-10-22 TNF window, landing a docs-only manifest PR after the candidate."
+  },
+  {
+   "id": "Wave V (M14 side lane)",
+   "checkpoint": "none (off the W1..W5 release path; never an entry or exit criterion of W4, W5, M12 or M13)",
+   "slice_ids": [
+    "P2-V01T",
+    "P2-V01"
+   ],
+   "due_on": "2026-10-21T00:00:00Z",
+   "entry": "P2-A01..P2-A05 merged (W3 tv-app slices); P2-L03 merged for VVD system runs; PROC-VEGA-PREPARE receipt; OA-13 answered if the installer shows license terms.",
+   "exit": "P2-V01 merged with gate green including area vegaapp, VVD visual review under evidence/visual/P2-V01/ and the per-feature verdict table; or the slice reported in progress with its limits (RISK-AFC-P2-14).",
+   "dispatch_order": "P2-V01T as soon as P2-A05 merges; P2-V01 after its red receipt. Shares no lease with the Fire OS chain except aws-afc-dev (read-only API use during VVD runs) and counts against impl_agent_cap. Inclusion in the submission only under RISK-AFC-P2-14."
   }
  ],
  "dependencies": [
@@ -1964,6 +1976,41 @@
    "from": "P2-X11",
    "to": "P2-R4",
    "condition": "merged (every other slice of the technical wave)"
+  },
+  {
+   "from": "P2-A01",
+   "to": "P2-V01T",
+   "condition": "Merged on main; V01T derives its Vega tests from this slice's landed T-pair test IDs (PROC-VEGA-PARITY)"
+  },
+  {
+   "from": "P2-A02",
+   "to": "P2-V01T",
+   "condition": "Merged on main; V01T derives its Vega tests from this slice's landed T-pair test IDs (PROC-VEGA-PARITY)"
+  },
+  {
+   "from": "P2-A03",
+   "to": "P2-V01T",
+   "condition": "Merged on main; V01T derives its Vega tests from this slice's landed T-pair test IDs (PROC-VEGA-PARITY)"
+  },
+  {
+   "from": "P2-A04",
+   "to": "P2-V01T",
+   "condition": "Merged on main; V01T derives its Vega tests from this slice's landed T-pair test IDs (PROC-VEGA-PARITY)"
+  },
+  {
+   "from": "P2-A05",
+   "to": "P2-V01T",
+   "condition": "Merged on main; V01T derives its Vega tests from this slice's landed T-pair test IDs (PROC-VEGA-PARITY)"
+  },
+  {
+   "from": "P2-V01T",
+   "to": "P2-V01",
+   "condition": "Red receipt with frozen test hashes (CMD-RED-VEGA); missing install/import/collection is a preparation gap, not valid red"
+  },
+  {
+   "from": "P2-L03",
+   "to": "P2-V01",
+   "condition": "aws-afc-dev redeployed at the Wave 3 backend head; VVD system runs use that ApiUrl; no backend change by V01"
   }
  ],
  "slices": [
@@ -10221,6 +10268,534 @@
     "rule": "Every dispatch packet and return carries a developer_feedback section the Scribe can ingest, listing observations with IDs and evidence, or 'no new observations' naming the tools exercised."
    },
    "development_strategy": "light"
+  },
+  {
+   "id": "P2-V01T",
+   "role": "Test Implementer",
+   "goal": "Red Jest tests (Jest 29.7.0, the version the Vega supported-libraries list names) under `vega-app/`, derived one-to-one from the landed A01T..A05T behaviors so the Vega app matches the Fire OS app feature for feature: ApiClient envelope, revision rejection, api_timeout, api_retry_max with retry only for idempotent calls and no automatic retry of link confirmation or Watch; link screen states (code shown, expired, linked, Backend not configured, network error); profile selections persist across restart and every A02T control (types, frequency, quiet hours, game-day, spoiler, presentation, voice gate, excitement Off/Mild/Hype, provider preference, switching confirmation, detection opt-in, team/league, scoring preset PPR/Half-PPR default Half-PPR) and the detector report through the Vega detection route (unsupported detection hides the control with a stated limit); alert long-poll cursor, bounded queue, presentation selection, Watch/Dismiss actions, alert text (context, no on-field claim, unknown access), voice gated off without a verified route, coalesced updates; Watch: registry route execution, exactly one RoutingOutcome per attempt, appAbsent on a missing app, accessUnknown when current arrival is unverified, no relaunch after an uncertain outcome, switching confirmation honored, Alexa tuning hidden; panel rows/total/progress/basis, stale and unavailable labels, remote show/hide and team/league switch, every element focusable, text floor, mode per the X04 verdict, changed-row updates only, bounded state; session token written and read only through the token-store module and never passed to a logger; network and parsing never synchronous on the render path. Write the parity table mapping every A01T..A05T test ID to its V01T test ID (a missing or extra mapping fails); token values in tests and recorded responses are generated at run time or are shorter than 32 characters (hygiene CRED-* shapes); stop at CMD-RED-VEGA. Added bootstrap paths are limited to a buildable Jest harness and empty interface scaffolding; no tested feature behavior; freeze hashes before green.",
+   "goal_source_notes": "Red Jest tests (Jest 29.7.0, the version the Vega supported-libraries list names) under `vega-app/`, derived one-to-one from the landed A01T..A05T behaviors so the Vega app matches the Fire OS app feature for feature: ApiClient envelope, revision rejection, api_timeout, api_retry_max with retry only for idempotent calls and no automatic retry of link confirmation or Watch; link screen states (code shown, expired, linked, Backend not configured, network error); profile selections persist across restart and every A02T control (types, frequency, quiet hours, game-day, spoiler, presentation, voice gate, excitement Off/Mild/Hype, provider preference, switching confirmation, detection opt-in, team/league, scoring preset PPR/Half-PPR default Half-PPR) and the detector report through the Vega detection route (unsupported detection hides the control with a stated limit); alert long-poll cursor, bounded queue, presentation selection, Watch/Dismiss actions, alert text (context, no on-field claim, unknown access), voice gated off without a verified route, coalesced updates; Watch: registry route execution, exactly one RoutingOutcome per attempt, appAbsent on a missing app, accessUnknown when current arrival is unverified, no relaunch after an uncertain outcome, switching confirmation honored, Alexa tuning hidden; panel rows/total/progress/basis, stale and unavailable labels, remote show/hide and team/league switch, every element focusable, text floor, mode per the X04 verdict, changed-row updates only, bounded state; session token written and read only through the token-store module and never passed to a logger; network and parsing never synchronous on the render path. Write the parity table mapping every A01T..A05T test ID to its V01T test ID (a missing or extra mapping fails); token values in tests and recorded responses are generated at run time or are shorter than 32 characters (hygiene CRED-* shapes); stop at CMD-RED-VEGA. Added bootstrap paths are limited to a buildable Jest harness and empty interface scaffolding; no tested feature behavior; freeze hashes before green.",
+   "type": "test",
+   "requirement_ids": [
+    "AFC-PR-002",
+    "AFC-PR-003",
+    "AFC-PR-005",
+    "AFC-PR-009",
+    "AFC-PR-010",
+    "AFC-PR-015",
+    "AFC-PR-016",
+    "AFC-PR-017",
+    "AFC-PR-018",
+    "AFC-PR-019",
+    "AFC-PR-020",
+    "AFC-PR-021",
+    "AFC-PR-022",
+    "AFC-PR-023",
+    "AFC-PR-027",
+    "AFC-PR-028",
+    "AFC-PR-030",
+    "AFC-PR-031",
+    "AFC-PR-032",
+    "AFC-PR-033",
+    "AFC-PR-034",
+    "AFC-PR-035",
+    "AFC-PR-036",
+    "AFC-PR-037",
+    "AFC-PR-038",
+    "AFC-PR-039",
+    "AFC-PR-040",
+    "AFC-PR-041",
+    "AFC-PR-042",
+    "AFC-PR-043",
+    "AFC-PR-044",
+    "AFC-PR-045",
+    "AFC-PR-046",
+    "AFC-PR-047",
+    "AFC-PR-048",
+    "AFC-PR-057",
+    "AFC-PR-061",
+    "AFC-PR-062",
+    "AFC-PR-063",
+    "AFC-PR-066",
+    "AC-AFC-P2-DX-01",
+    "AC-AFC-P2-LAND-01",
+    "AC-AFC-P2-PATH-01",
+    "AC-AFC-P2-REL-01",
+    "AC-AFC-P2-REV-01",
+    "AC-AFC-P2-VEGA-01",
+    "AC-AFC-P2-VEGA-04",
+    "RISK-AFC-P2-10"
+   ],
+   "design_ids": [
+    "DES-AFC-P2-VEGA",
+    "CONTRACT-AFC-P2-API",
+    "CONTRACT-AFC-P2-ENVELOPE"
+   ],
+   "seit_proof_rows": [
+    "SEIT-AFC-P2-DX-01",
+    "SEIT-AFC-P2-LAND-01",
+    "SEIT-AFC-P2-PATH-01",
+    "SEIT-AFC-P2-REL-01",
+    "SEIT-AFC-P2-REV-01",
+    "SEIT-AFC-P2-VEGA-01",
+    "SEIT-AFC-P2-VEGA-04",
+    "SEIT-AFC-PR-002",
+    "SEIT-AFC-PR-003",
+    "SEIT-AFC-PR-005",
+    "SEIT-AFC-PR-009",
+    "SEIT-AFC-PR-010",
+    "SEIT-AFC-PR-015",
+    "SEIT-AFC-PR-016",
+    "SEIT-AFC-PR-017",
+    "SEIT-AFC-PR-018",
+    "SEIT-AFC-PR-019",
+    "SEIT-AFC-PR-020",
+    "SEIT-AFC-PR-021",
+    "SEIT-AFC-PR-022",
+    "SEIT-AFC-PR-023",
+    "SEIT-AFC-PR-027",
+    "SEIT-AFC-PR-028",
+    "SEIT-AFC-PR-030",
+    "SEIT-AFC-PR-031",
+    "SEIT-AFC-PR-032",
+    "SEIT-AFC-PR-033",
+    "SEIT-AFC-PR-034",
+    "SEIT-AFC-PR-035",
+    "SEIT-AFC-PR-036",
+    "SEIT-AFC-PR-037",
+    "SEIT-AFC-PR-038",
+    "SEIT-AFC-PR-039",
+    "SEIT-AFC-PR-040",
+    "SEIT-AFC-PR-041",
+    "SEIT-AFC-PR-042",
+    "SEIT-AFC-PR-043",
+    "SEIT-AFC-PR-044",
+    "SEIT-AFC-PR-045",
+    "SEIT-AFC-PR-046",
+    "SEIT-AFC-PR-047",
+    "SEIT-AFC-PR-048",
+    "SEIT-AFC-PR-057",
+    "SEIT-AFC-PR-061",
+    "SEIT-AFC-PR-062",
+    "SEIT-AFC-PR-063",
+    "SEIT-AFC-PR-066",
+    "SEIT-RISK-AFC-P2-10"
+   ],
+   "design_lenses": [
+    "Developer feedback",
+    "Revision record",
+    "Contract-first",
+    "Lightweight device",
+    "Security controls"
+   ],
+   "model_route": {
+    "snapshot_profile": "opensource-hackathon",
+    "snapshot_role": "test_implementer",
+    "configuration_digest_sha256": "d5aabda1f44e2808c53112794afb5a7978ad02f930c100cf58002277d9423eea",
+    "harness": "Muse Code",
+    "model": "Muse WonderFull",
+    "reasoning": "high",
+    "ordered_fallbacks": [
+     {
+      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+      "harness": "Codex CLI",
+      "model": "GPT-6.1 Sol",
+      "reasoning": "high"
+     },
+     {
+      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+      "harness": "Claude Code",
+      "model": "Claude Opus 5.5",
+      "reasoning": "medium"
+     }
+    ]
+   },
+   "reasoning_level": {
+    "level": "high",
+    "reason": "opensource-hackathon test_implementer route as amended by DEC-AFC-SD-045 (Muse WonderFull one level down to high); Muse CLI id muse-wonder-full-1.0, launched with --contributor-mode on (muse-contributor-mode hold); no per-slice override."
+   },
+   "review_path": {
+    "reviewer_cadence": "phase",
+    "reviewer_route": {
+     "snapshot_profile": "opensource-hackathon",
+     "snapshot_role": "reviewer",
+     "configuration_digest_sha256": "d5aabda1f44e2808c53112794afb5a7978ad02f930c100cf58002277d9423eea",
+     "harness": "Claude Code",
+     "model": "Claude Opus 5.5",
+     "reasoning": "medium",
+     "ordered_fallbacks": [
+      {
+       "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+       "harness": "Muse Code",
+       "model": "Muse Spark 1.3",
+       "reasoning": "max"
+      },
+      {
+       "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+       "harness": "Claude Code",
+       "model": "Claude Opus 5.5",
+       "reasoning": "high"
+      }
+     ]
+    },
+    "review_unit": "Phase 2 integration step IE-P2-V01 (review boundary unit per OD-AFC-P2-01; the P2-V01 PR is reviewed once at its own step, in a fresh session that is not the implementer's)",
+    "test_engineer_assurance": "lifecycle",
+    "integration_engineer_execution": "lifecycle",
+    "coverage_assist": "OCR delegate mode (ocr delegate preview --from <base> --to <head>; ocr delegate rule <files>), required",
+    "coverage_assist_command_id": "CMD-OCR-DELEGATE",
+    "reverify": "Reverify: not applicable \u2014 this slice authors red tests and receipts, not a compiled binary",
+    "review_cardinality": "n=1, k=1, c=0 (one independent review, one repair round, deterministic verification decides)",
+    "skills": [
+     "`$HOME/.claude/plugins/cache/bearing-lite/bearing-lite/1.1.7/skills/reviewer/SKILL.md`",
+     "`$HOME/.claude/skills/vnv-review/SKILL.md`"
+    ],
+    "landing_skill": "`$HOME/.claude/skills/ship-pull-request/SKILL.md` (rebase or merge commit, never squash)"
+   },
+   "write_set": [
+    "vega-app/__tests__/",
+    "vega-app/package.json",
+    "vega-app/package-lock.json",
+    "vega-app/jest.config.js",
+    "vega-app/babel.config.js",
+    "vega-app/tsconfig.json",
+    "vega-app/manifest.toml",
+    "vega-app/.gitignore",
+    "vega-app/src/",
+    "tools/ci/tests/test_gate_vegaapp.py",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-V01T/"
+   ],
+   "command_ids": [
+    "CMD-RED-VEGA",
+    "PROC-VEGA-PREPARE",
+    "PROC-VEGA-PARITY",
+    "PROC-GATE-TOOL-QUALIFY"
+   ],
+   "stop_condition": "stop at CMD-RED-VEGA. Added bootstrap paths are limited to a buildable Jest harness and empty interface scaffolding; no tested feature behavior; freeze hashes before green. Stop and return ENVIRONMENT_FAILURE with the exact error if the pinned Vega SDK or its Jest preset cannot be installed under PROC-VEGA-PREPARE; never edit tv-app/ or backend/.",
+   "human_decision": null,
+   "authority_id": "AUTH-AFC-2026-10-12-P2-001",
+   "work_class": "judgement",
+   "work_class_reason": "Authors failing tests and red receipts; test design is decided in session.",
+   "lane": "tv-app-ui",
+   "lane_profile": "opensource-hackathon",
+   "milestone": "M14",
+   "wave": "Wave V (M14 side lane)",
+   "depends_on": [
+    "P2-A01",
+    "P2-A02",
+    "P2-A03",
+    "P2-A04",
+    "P2-A05"
+   ],
+   "depends_on_text": "P2-A01..P2-A05 merged (the port targets the finished Fire OS app and derives its tests from the landed A01T..A05T test IDs); PROC-VEGA-PREPARE receipt with pinned, scanned SDK; owner answer to OA-13 if the installer shows license terms",
+   "leases": [
+    "vega-app-config"
+   ],
+   "repo": "1wgrumph/amazon-fantasy-companion",
+   "skills": [
+    "`$HOME/.claude/plugins/cache/bearing-lite/bearing-lite/1.1.7/skills/implementer/SKILL.md`",
+    "`$HOME/.claude/skills/write-tests/SKILL.md`",
+    "`$HOME/.agents/skills/test-engineering/SKILL.md`",
+    "`$HOME/.claude/skills/scan-software-supply-chain/SKILL.md`"
+   ],
+   "spec_sections": [
+    "spec \u00a74.1.10",
+    "spec \u00a74.2.3",
+    "spec \u00a74.4",
+    "spec \u00a76"
+   ],
+   "developer_feedback_required": true,
+   "developer_feedback": {
+    "requirement_id": "AC-AFC-P2-DX-01",
+    "check_command_id": "CMD-DX-PRESENCE",
+    "rule": "Every dispatch packet and return carries a developer_feedback section the Scribe can ingest, listing observations with IDs and evidence, or 'no new observations' naming the tools exercised. P2-V01 returns record Vega SDK, Vega CLI and Vega Virtual Device observations (issue #59 acceptance)."
+   },
+   "development_strategy": "tdd"
+  },
+  {
+   "id": "P2-V01",
+   "role": "Product Implementer",
+   "goal": "Scaffold `vega-app/` (React Native for Vega, TypeScript) from the scanned template of the pinned Vega SDK (PROC-VEGA-PREPARE, CMD-SUPPLY-SCAN); record the SDK, CLI, React Native for Vega (0.72 line unless the pinned SDK defaults to 0.83) and VVD versions. Port the finished Fire OS app's Link, Profile/Settings with detection, Alerts, Watch and Lineup Panel against the unchanged CONTRACT-AFC-P2-API and CONTRACT-AFC-P2-ENVELOPE (`backend/src/api/openapi.yaml` read-only); the API base URL comes from build-time configuration and empty shows \"Backend not configured\"; the session token goes through `vega-app/src/auth/tokenStore.ts` (DES-AFC-P2-VEGA) and is never logged; add gate area `vegaapp` to `tools/ci/gate.sh` and its path-filtered CI job; build the x86_64 .vpkg (CMD-VEGA-BUILD), install and run it on the Vega Virtual Device against aws-afc-dev (CMD-VVD-START, CMD-VVD-INSTALL), drive and capture every changed state (PROC-VISUAL-REVIEW with CMD-VVD-INPUT and CMD-VVD-SCREENCAP) under `evidence/visual/P2-V01/`, and record the per-feature verdict table (PROC-VEGA-FEATURE-VERDICT: works / limited by simulator / not supported / unknown). Optional physical path (AC-AFC-P2-VEGA-05): only if OA-12 confirms the replacement stick runs Vega OS, build armv7 and repeat install, drive and capture on it with CMD-VEGA-DEVICE-INSTALL. Stop when green, VVD visual review captured and verdicts recorded.",
+   "goal_source_notes": "Scaffold `vega-app/` (React Native for Vega, TypeScript) from the scanned template of the pinned Vega SDK (PROC-VEGA-PREPARE, CMD-SUPPLY-SCAN); record the SDK, CLI, React Native for Vega (0.72 line unless the pinned SDK defaults to 0.83) and VVD versions. Port the finished Fire OS app's Link, Profile/Settings with detection, Alerts, Watch and Lineup Panel against the unchanged CONTRACT-AFC-P2-API and CONTRACT-AFC-P2-ENVELOPE (`backend/src/api/openapi.yaml` read-only); the API base URL comes from build-time configuration and empty shows \"Backend not configured\"; the session token goes through `vega-app/src/auth/tokenStore.ts` (DES-AFC-P2-VEGA) and is never logged; add gate area `vegaapp` to `tools/ci/gate.sh` and its path-filtered CI job; build the x86_64 .vpkg (CMD-VEGA-BUILD), install and run it on the Vega Virtual Device against aws-afc-dev (CMD-VVD-START, CMD-VVD-INSTALL), drive and capture every changed state (PROC-VISUAL-REVIEW with CMD-VVD-INPUT and CMD-VVD-SCREENCAP) under `evidence/visual/P2-V01/`, and record the per-feature verdict table (PROC-VEGA-FEATURE-VERDICT: works / limited by simulator / not supported / unknown). Optional physical path (AC-AFC-P2-VEGA-05): only if OA-12 confirms the replacement stick runs Vega OS, build armv7 and repeat install, drive and capture on it with CMD-VEGA-DEVICE-INSTALL. Stop when green, VVD visual review captured and verdicts recorded.",
+   "type": "product",
+   "requirement_ids": [
+    "AFC-PR-002",
+    "AFC-PR-003",
+    "AFC-PR-005",
+    "AFC-PR-009",
+    "AFC-PR-010",
+    "AFC-PR-015",
+    "AFC-PR-016",
+    "AFC-PR-017",
+    "AFC-PR-018",
+    "AFC-PR-019",
+    "AFC-PR-020",
+    "AFC-PR-021",
+    "AFC-PR-022",
+    "AFC-PR-023",
+    "AFC-PR-027",
+    "AFC-PR-028",
+    "AFC-PR-030",
+    "AFC-PR-031",
+    "AFC-PR-032",
+    "AFC-PR-033",
+    "AFC-PR-034",
+    "AFC-PR-035",
+    "AFC-PR-036",
+    "AFC-PR-037",
+    "AFC-PR-038",
+    "AFC-PR-039",
+    "AFC-PR-040",
+    "AFC-PR-041",
+    "AFC-PR-042",
+    "AFC-PR-043",
+    "AFC-PR-044",
+    "AFC-PR-045",
+    "AFC-PR-046",
+    "AFC-PR-047",
+    "AFC-PR-048",
+    "AFC-PR-057",
+    "AFC-PR-061",
+    "AFC-PR-062",
+    "AFC-PR-063",
+    "AFC-PR-066",
+    "AC-AFC-P2-DX-01",
+    "AC-AFC-P2-LAND-01",
+    "AC-AFC-P2-PATH-01",
+    "AC-AFC-P2-REL-01",
+    "AC-AFC-P2-REV-01",
+    "AC-AFC-P2-SUPPLY-01",
+    "AC-AFC-P2-VIS-01",
+    "AC-AFC-P2-VEGA-01",
+    "AC-AFC-P2-VEGA-02",
+    "AC-AFC-P2-VEGA-03",
+    "AC-AFC-P2-VEGA-04",
+    "AC-AFC-P2-VEGA-05",
+    "AC-AFC-P2-VEGA-06",
+    "RISK-AFC-P2-10",
+    "RISK-AFC-P2-14",
+    "RISK-AFC-P2-15"
+   ],
+   "design_ids": [
+    "DES-AFC-P2-VEGA",
+    "DES-AFC-P2-VISUAL",
+    "CONTRACT-AFC-P2-API",
+    "CONTRACT-AFC-P2-ENVELOPE",
+    "CONTRACT-AFC-P2-GATE-AREAS"
+   ],
+   "seit_proof_rows": [
+    "SEIT-AFC-P2-DX-01",
+    "SEIT-AFC-P2-LAND-01",
+    "SEIT-AFC-P2-PATH-01",
+    "SEIT-AFC-P2-REL-01",
+    "SEIT-AFC-P2-REV-01",
+    "SEIT-AFC-P2-SUPPLY-01",
+    "SEIT-AFC-P2-VEGA-01",
+    "SEIT-AFC-P2-VEGA-02",
+    "SEIT-AFC-P2-VEGA-03",
+    "SEIT-AFC-P2-VEGA-04",
+    "SEIT-AFC-P2-VEGA-05",
+    "SEIT-AFC-P2-VEGA-06",
+    "SEIT-AFC-P2-VIS-01",
+    "SEIT-AFC-PR-002",
+    "SEIT-AFC-PR-003",
+    "SEIT-AFC-PR-005",
+    "SEIT-AFC-PR-009",
+    "SEIT-AFC-PR-010",
+    "SEIT-AFC-PR-015",
+    "SEIT-AFC-PR-016",
+    "SEIT-AFC-PR-017",
+    "SEIT-AFC-PR-018",
+    "SEIT-AFC-PR-019",
+    "SEIT-AFC-PR-020",
+    "SEIT-AFC-PR-021",
+    "SEIT-AFC-PR-022",
+    "SEIT-AFC-PR-023",
+    "SEIT-AFC-PR-027",
+    "SEIT-AFC-PR-028",
+    "SEIT-AFC-PR-030",
+    "SEIT-AFC-PR-031",
+    "SEIT-AFC-PR-032",
+    "SEIT-AFC-PR-033",
+    "SEIT-AFC-PR-034",
+    "SEIT-AFC-PR-035",
+    "SEIT-AFC-PR-036",
+    "SEIT-AFC-PR-037",
+    "SEIT-AFC-PR-038",
+    "SEIT-AFC-PR-039",
+    "SEIT-AFC-PR-040",
+    "SEIT-AFC-PR-041",
+    "SEIT-AFC-PR-042",
+    "SEIT-AFC-PR-043",
+    "SEIT-AFC-PR-044",
+    "SEIT-AFC-PR-045",
+    "SEIT-AFC-PR-046",
+    "SEIT-AFC-PR-047",
+    "SEIT-AFC-PR-048",
+    "SEIT-AFC-PR-057",
+    "SEIT-AFC-PR-061",
+    "SEIT-AFC-PR-062",
+    "SEIT-AFC-PR-063",
+    "SEIT-AFC-PR-066",
+    "SEIT-RISK-AFC-P2-10",
+    "SEIT-RISK-AFC-P2-14",
+    "SEIT-RISK-AFC-P2-15"
+   ],
+   "design_lenses": [
+    "Developer feedback",
+    "Revision record",
+    "Contract-first",
+    "Lightweight device",
+    "Couch UI",
+    "Honest outcome",
+    "Security controls",
+    "Owner boundary"
+   ],
+   "model_route": {
+    "snapshot_profile": "opensource-hackathon",
+    "snapshot_role": "implementer",
+    "configuration_digest_sha256": "d5aabda1f44e2808c53112794afb5a7978ad02f930c100cf58002277d9423eea",
+    "harness": "Claude Code",
+    "model": "Claude Opus 5.5",
+    "reasoning": "medium",
+    "ordered_fallbacks": [
+     {
+      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+      "harness": "Muse Code",
+      "model": "Muse WonderFull",
+      "reasoning": "high"
+     },
+     {
+      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+      "harness": "Codex CLI",
+      "model": "GPT-6.1 Sol",
+      "reasoning": "high"
+     }
+    ]
+   },
+   "reasoning_level": {
+    "level": "medium",
+    "reason": "opensource-hackathon implementer route (unchanged by DEC-AFC-SD-043/044/045); no per-slice override."
+   },
+   "review_path": {
+    "reviewer_cadence": "phase",
+    "reviewer_route": {
+     "snapshot_profile": "opensource-hackathon",
+     "snapshot_role": "reviewer",
+     "configuration_digest_sha256": "d5aabda1f44e2808c53112794afb5a7978ad02f930c100cf58002277d9423eea",
+     "harness": "Claude Code",
+     "model": "Claude Opus 5.5",
+     "reasoning": "medium",
+     "ordered_fallbacks": [
+      {
+       "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+       "harness": "Muse Code",
+       "model": "Muse Spark 1.3",
+       "reasoning": "max"
+      },
+      {
+       "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+       "harness": "Claude Code",
+       "model": "Claude Opus 5.5",
+       "reasoning": "high"
+      }
+     ]
+    },
+    "review_unit": "Phase 2 integration step IE-P2-V01 (review boundary unit per OD-AFC-P2-01; the P2-V01 PR is reviewed once at its own step, in a fresh session that is not the implementer's)",
+    "test_engineer_assurance": "lifecycle",
+    "integration_engineer_execution": "lifecycle",
+    "coverage_assist": "OCR delegate mode (ocr delegate preview --from <base> --to <head>; ocr delegate rule <files>), required",
+    "coverage_assist_command_id": "CMD-OCR-DELEGATE",
+    "reverify": "CMD-REVERIFY-VPKG on the exact built .vpkg (VEGA_REVERIFY_CAPABILITY_GAP expected: .vpkg semantic grounding unproven with the installed reverify; a failure or unavailability is a typed gap, never PASS)",
+    "review_cardinality": "n=1, k=1, c=0 (one independent review, one repair round, deterministic verification decides)",
+    "skills": [
+     "`$HOME/.claude/plugins/cache/bearing-lite/bearing-lite/1.1.7/skills/reviewer/SKILL.md`",
+     "`$HOME/.claude/skills/vnv-review/SKILL.md`"
+    ],
+    "landing_skill": "`$HOME/.claude/skills/ship-pull-request/SKILL.md` (rebase or merge commit, never squash)"
+   },
+   "write_set": [
+    "vega-app/",
+    "tools/ci/gate.sh",
+    "tools/ci/tests/test_gate_vegaapp.py",
+    ".github/workflows/ci.yml",
+    "docs/vnv/vega-app/AGENTS.md",
+    "docs/vnv/AGENTS.md",
+    "THIRD_PARTY_NOTICES.md",
+    "evidence/visual/P2-V01/",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-V01/"
+   ],
+   "command_ids": [
+    "CMD-GATE-VEGAAPP",
+    "CMD-VEGA-UNIT",
+    "CMD-VEGA-BUILD",
+    "CMD-VVD-START",
+    "CMD-VVD-INSTALL",
+    "CMD-VVD-INPUT",
+    "CMD-VVD-SCREENCAP",
+    "PROC-VISUAL-REVIEW",
+    "PROC-VEGA-FEATURE-VERDICT",
+    "PROC-VEGA-PARITY",
+    "CMD-VEGA-DEVICE-INSTALL",
+    "CMD-REVERIFY-VPKG",
+    "CMD-SUPPLY-SCAN",
+    "PROC-VEGA-PREPARE",
+    "PROC-GATE-TOOL-QUALIFY",
+    "CMD-COVERAGE-VEGAAPP",
+    "CMD-MUTATION-VEGAAPP",
+    "CMD-TREE-EQUAL",
+    "CMD-CONTRACT-FROZEN"
+   ],
+   "stop_condition": "stop when green, VVD visual review captured and the per-feature verdict table recorded. Stop without merging if any change reaches tv-app/, backend/, the final APK path or an M13 slice (CMD-TREE-EQUAL against the base commit). Stop and return OWNER_DECISION_REQUIRED if the SDK install presents license terms (OA-13), the host cannot run the VVD (RISK-AFC-P2-15), or a physical-device step needs the owner's Amazon developer login (OA-12).",
+   "human_decision": {
+    "owner_actions": [
+     "OA-10",
+     "OA-12",
+     "OA-13"
+    ],
+    "open_decisions": []
+   },
+   "authority_id": "AUTH-AFC-2026-10-12-P2-001",
+   "work_class": "judgement",
+   "work_class_reason": "Authors product code, verdicts or prose; content and limits are decided in session.",
+   "lane": "tv-app-ui",
+   "lane_profile": "opensource-hackathon",
+   "milestone": "M14",
+   "wave": "Wave V (M14 side lane)",
+   "depends_on": [
+    "P2-V01T",
+    "P2-A01",
+    "P2-A02",
+    "P2-A03",
+    "P2-A04",
+    "P2-A05",
+    "P2-L03"
+   ],
+   "depends_on_text": "P2-V01T red receipt; P2-A01..P2-A05 merged; P2-L03 (aws-afc-dev at the Wave 3 backend head) for VVD runs against the deployed API; linked-state capture needs the owner's OA-10 passphrase entry; physical-device path only after OA-12",
+   "leases": [
+    "vega-virtual-device",
+    "vega-app-config",
+    "aws-afc-dev",
+    "vega-tv-stick (conditional, AC-AFC-P2-VEGA-05)"
+   ],
+   "repo": "1wgrumph/amazon-fantasy-companion",
+   "skills": [
+    "`$HOME/.claude/plugins/cache/bearing-lite/bearing-lite/1.1.7/skills/implementer/SKILL.md`",
+    "`$HOME/.claude/skills/write-tests/SKILL.md`",
+    "`$HOME/alphazede/Alphazedehq/skills/visual-review/SKILL.md`",
+    "`$HOME/.claude/skills/scan-software-supply-chain/SKILL.md`"
+   ],
+   "spec_sections": [
+    "spec \u00a74.1.10",
+    "spec \u00a74.2.3",
+    "spec \u00a74.4",
+    "spec \u00a76"
+   ],
+   "developer_feedback_required": true,
+   "developer_feedback": {
+    "requirement_id": "AC-AFC-P2-DX-01",
+    "check_command_id": "CMD-DX-PRESENCE",
+    "rule": "Every dispatch packet and return carries a developer_feedback section the Scribe can ingest, listing observations with IDs and evidence, or 'no new observations' naming the tools exercised. P2-V01 returns record Vega SDK, Vega CLI and Vega Virtual Device observations (issue #59 acceptance)."
+   },
+   "development_strategy": "tdd"
   }
  ],
  "integration_plan": {
@@ -11396,6 +11971,36 @@
     ],
     "rollback": "a failing assessment finding \u2192 bug-triager in the current round; candidate re-forms at the fix merge (R5 version stays) with IE-P2-42 rebuilt; owner told of any W5 slip (RISK-AFC-P2-13)",
     "exit": "W5 technical closeout only when final capture/evidence and required independent assessments complete; owner checklist handed over; pending tag/publication subcriteria remain explicitly pending until OA-8, never complete by planning PASS"
+   },
+   {
+    "id": "IE-P2-V01",
+    "milestone": "M14",
+    "wave": "Wave V (M14 side lane)",
+    "order": 45,
+    "merges": [
+     "P2-V01"
+    ],
+    "after": [
+     "IE-P2-28",
+     "IE-P2-29"
+    ],
+    "entry_criteria": [
+     "P2-A01..P2-A05 merged; P2-L03 merged",
+     "P2-V01T red receipt with frozen hashes (CMD-RED-VEGA) and parity table (PROC-VEGA-PARITY)",
+     "PROC-VEGA-PREPARE receipt: pinned SDK version, installer digest, scan verdict",
+     "vega-virtual-device lease"
+    ],
+    "post_step_vv": [
+     "CMD-GATE-VEGAAPP and CMD-MAIN-GATE",
+     "CMD-VEGA-BUILD x86_64 with ApiUrl; .vpkg sha256",
+     "CMD-VVD-START, CMD-VVD-INSTALL",
+     "PROC-VISUAL-REVIEW on the VVD (CMD-VVD-INPUT, CMD-VVD-SCREENCAP)",
+     "PROC-VEGA-FEATURE-VERDICT",
+     "CMD-TREE-EQUAL for tv-app/ and backend/ against the base commit; CMD-CONTRACT-FROZEN for openapi.yaml",
+     "conditional: CMD-VEGA-DEVICE-INSTALL on a Vega OS stick after OA-12"
+    ],
+    "rollback": "revert the P2-V01 PR; uninstall the app from the VVD; Fire OS artifacts are untouched by construction",
+    "exit": "M14 exit, or P2-V01 reported in progress with limits (RISK-AFC-P2-14)"
    }
   ],
   "configuration_identity": {
@@ -12711,6 +13316,38 @@
      "IE-P2-43",
      "IE-P2-44"
     ]
+   },
+   {
+    "wave": "V",
+    "release_checkpoint": "none",
+    "github_milestones": [
+     "M14"
+    ],
+    "slices": [
+     "P2-V01T",
+     "P2-V01"
+    ],
+    "added_gate_seconds": 180,
+    "estimate_source": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/amazon-fantasy-companion-phase-2-technical-plan.md#m14-vega-os-port-p2-v01",
+    "estimate_text": "Gate area vegaapp (npm ci plus Jest) estimated <=3 min, path-selected on vega-app/ only; VVD boot, install and capture (~5-10 min) are SEIT procedures under the vega-virtual-device lease, never gate checks; actual times recorded by V01.",
+    "resource_groups": [
+     "host-node-jest",
+     "vega-virtual-device",
+     "aws-afc-dev"
+    ],
+    "seit_case_resource_groups": [
+     "host-node-jest; unique temporary root per test",
+     "vega-virtual-device (one VVD per host; cross-process lock); aws-afc-dev for system runs"
+    ],
+    "resource_case_refs": [
+     "SEIT-AFC-P2-VEGA-01",
+     "SEIT-AFC-P2-VEGA-02",
+     "SEIT-AFC-P2-VEGA-03",
+     "SEIT-AFC-P2-VEGA-04",
+     "SEIT-AFC-P2-VEGA-05"
+    ],
+    "qualification_ref": "PROC-GATE-TOOL-QUALIFY",
+    "limits": "Engine-backed VVD tests meet rule 22(A): 5 consecutive runs and one run of two concurrent copies before review, or the concurrency case is a typed gap because the VVD is single-instance (lease-serialized)."
    }
   ],
   "wave_gate_costs_note": "PI copy projection: wave_gate_costs entries list step_ids (renamed from the source block's integration_steps key so freeze reference-key resolution, which maps that key name to slice ids, does not misread IE step ids as slice refs). Values and order identical to specialists/integration-plan.md.",
@@ -12741,14 +13378,17 @@
    "vcase": "VCASE-AFC-PR-002",
    "design_ids": [
     "DES-AFC-P2-TV",
-    "DES-AFC-P2-VISUAL"
+    "DES-AFC-P2-VISUAL",
+    "DES-AFC-P2-VEGA"
    ],
    "seit_rows": [
     "SEIT-AFC-PR-002"
    ],
    "slices": [
     "P2-A02T",
-    "P2-A02"
+    "P2-A02",
+    "P2-V01T",
+    "P2-V01"
    ],
    "lifecycle_level_bindings": [],
    "ownership": "register reference"
@@ -12758,7 +13398,8 @@
    "design_ids": [
     "DES-AFC-P2-SPIKES",
     "DES-AFC-P2-TV",
-    "DES-AFC-P2-VISUAL"
+    "DES-AFC-P2-VISUAL",
+    "DES-AFC-P2-VEGA"
    ],
    "seit_rows": [
     "SEIT-AFC-PR-003"
@@ -12766,7 +13407,9 @@
    "slices": [
     "P2-X07",
     "P2-A02T",
-    "P2-A02"
+    "P2-A02",
+    "P2-V01T",
+    "P2-V01"
    ],
    "lifecycle_level_bindings": [],
    "ownership": "register reference"
@@ -12793,14 +13436,17 @@
    "vcase": "VCASE-AFC-PR-005",
    "design_ids": [
     "DES-AFC-P2-TV",
-    "DES-AFC-P2-VISUAL"
+    "DES-AFC-P2-VISUAL",
+    "DES-AFC-P2-VEGA"
    ],
    "seit_rows": [
     "SEIT-AFC-PR-005"
    ],
    "slices": [
     "P2-A02T",
-    "P2-A02"
+    "P2-A02",
+    "P2-V01T",
+    "P2-V01"
    ],
    "lifecycle_level_bindings": [],
    "ownership": "register reference"
@@ -12874,7 +13520,8 @@
     "DES-AFC-P2-PANEL",
     "DES-AFC-P2-TV",
     "DES-AFC-P2-VISUAL",
-    "DES-AFC-P2-WATCH"
+    "DES-AFC-P2-WATCH",
+    "DES-AFC-P2-VEGA"
    ],
    "seit_rows": [
     "SEIT-AFC-PR-009"
@@ -12882,7 +13529,9 @@
    "slices": [
     "P2-A02T",
     "P2-A02",
-    "P2-X09"
+    "P2-X09",
+    "P2-V01T",
+    "P2-V01"
    ],
    "lifecycle_level_bindings": [],
    "ownership": "register reference"
@@ -12892,7 +13541,8 @@
    "design_ids": [
     "DES-AFC-P2-SPIKES",
     "DES-AFC-P2-TV",
-    "DES-AFC-P2-VISUAL"
+    "DES-AFC-P2-VISUAL",
+    "DES-AFC-P2-VEGA"
    ],
    "seit_rows": [
     "SEIT-AFC-PR-010"
@@ -12900,7 +13550,9 @@
    "slices": [
     "P2-X07",
     "P2-A02T",
-    "P2-A02"
+    "P2-A02",
+    "P2-V01T",
+    "P2-V01"
    ],
    "lifecycle_level_bindings": [],
    "ownership": "register reference"
@@ -12994,7 +13646,8 @@
     "DES-AFC-P2-SPIKES",
     "DES-AFC-P2-SUB",
     "DES-AFC-P2-VISUAL",
-    "DES-AFC-P2-WATCH"
+    "DES-AFC-P2-WATCH",
+    "DES-AFC-P2-VEGA"
    ],
    "seit_rows": [
     "SEIT-AFC-PR-015"
@@ -13004,7 +13657,9 @@
     "P2-A03T",
     "P2-A03",
     "P2-X09",
-    "P2-X12"
+    "P2-X12",
+    "P2-V01T",
+    "P2-V01"
    ],
    "lifecycle_level_bindings": [],
    "ownership": "register reference"
@@ -13017,7 +13672,8 @@
     "DES-AFC-P2-POLICY",
     "DES-AFC-P2-TV",
     "DES-AFC-P2-VISUAL",
-    "DES-AFC-P2-WATCH"
+    "DES-AFC-P2-WATCH",
+    "DES-AFC-P2-VEGA"
    ],
    "seit_rows": [
     "SEIT-AFC-PR-016"
@@ -13027,7 +13683,9 @@
     "P2-A02",
     "P2-B05T",
     "P2-B05",
-    "P2-X09"
+    "P2-X09",
+    "P2-V01T",
+    "P2-V01"
    ],
    "lifecycle_level_bindings": [],
    "ownership": "register reference"
@@ -13040,7 +13698,8 @@
     "DES-AFC-P2-POLICY",
     "DES-AFC-P2-TV",
     "DES-AFC-P2-VISUAL",
-    "DES-AFC-P2-WATCH"
+    "DES-AFC-P2-WATCH",
+    "DES-AFC-P2-VEGA"
    ],
    "seit_rows": [
     "SEIT-AFC-PR-017"
@@ -13050,7 +13709,9 @@
     "P2-A02",
     "P2-B05T",
     "P2-B05",
-    "P2-X09"
+    "P2-X09",
+    "P2-V01T",
+    "P2-V01"
    ],
    "lifecycle_level_bindings": [],
    "ownership": "register reference"
@@ -13063,7 +13724,8 @@
     "DES-AFC-P2-POLICY",
     "DES-AFC-P2-TV",
     "DES-AFC-P2-VISUAL",
-    "DES-AFC-P2-WATCH"
+    "DES-AFC-P2-WATCH",
+    "DES-AFC-P2-VEGA"
    ],
    "seit_rows": [
     "SEIT-AFC-PR-018"
@@ -13073,7 +13735,9 @@
     "P2-A02",
     "P2-B05T",
     "P2-B05",
-    "P2-X09"
+    "P2-X09",
+    "P2-V01T",
+    "P2-V01"
    ],
    "lifecycle_level_bindings": [],
    "ownership": "register reference"
@@ -13086,7 +13750,8 @@
     "DES-AFC-P2-POLICY",
     "DES-AFC-P2-TV",
     "DES-AFC-P2-VISUAL",
-    "DES-AFC-P2-WATCH"
+    "DES-AFC-P2-WATCH",
+    "DES-AFC-P2-VEGA"
    ],
    "seit_rows": [
     "SEIT-AFC-PR-019"
@@ -13096,7 +13761,9 @@
     "P2-A02",
     "P2-B05T",
     "P2-B05",
-    "P2-X09"
+    "P2-X09",
+    "P2-V01T",
+    "P2-V01"
    ],
    "lifecycle_level_bindings": [],
    "ownership": "register reference"
@@ -13107,7 +13774,8 @@
     "DES-AFC-P2-BACKEND",
     "DES-AFC-P2-POLICY",
     "DES-AFC-P2-TV",
-    "DES-AFC-P2-VISUAL"
+    "DES-AFC-P2-VISUAL",
+    "DES-AFC-P2-VEGA"
    ],
    "seit_rows": [
     "SEIT-AFC-PR-020"
@@ -13117,7 +13785,9 @@
     "P2-A02",
     "P2-B05T",
     "P2-B05",
-    "P2-L03"
+    "P2-L03",
+    "P2-V01T",
+    "P2-V01"
    ],
    "lifecycle_level_bindings": [],
    "ownership": "register reference"
@@ -13128,7 +13798,8 @@
     "DES-AFC-P2-ALERTPATH",
     "DES-AFC-P2-SPIKES",
     "DES-AFC-P2-TV",
-    "DES-AFC-P2-VISUAL"
+    "DES-AFC-P2-VISUAL",
+    "DES-AFC-P2-VEGA"
    ],
    "seit_rows": [
     "SEIT-AFC-PR-021"
@@ -13138,7 +13809,9 @@
     "P2-A02T",
     "P2-A02",
     "P2-A03T",
-    "P2-A03"
+    "P2-A03",
+    "P2-V01T",
+    "P2-V01"
    ],
    "lifecycle_level_bindings": [],
    "ownership": "register reference"
@@ -13149,7 +13822,8 @@
     "DES-AFC-P2-ALERTPATH",
     "DES-AFC-P2-SPIKES",
     "DES-AFC-P2-TV",
-    "DES-AFC-P2-VISUAL"
+    "DES-AFC-P2-VISUAL",
+    "DES-AFC-P2-VEGA"
    ],
    "seit_rows": [
     "SEIT-AFC-PR-022"
@@ -13159,7 +13833,9 @@
     "P2-A02",
     "P2-A03T",
     "P2-A03",
-    "P2-X11"
+    "P2-X11",
+    "P2-V01T",
+    "P2-V01"
    ],
    "lifecycle_level_bindings": [],
    "ownership": "register reference"
@@ -13170,7 +13846,8 @@
     "DES-AFC-P2-BACKEND",
     "DES-AFC-P2-POLICY",
     "DES-AFC-P2-TV",
-    "DES-AFC-P2-VISUAL"
+    "DES-AFC-P2-VISUAL",
+    "DES-AFC-P2-VEGA"
    ],
    "seit_rows": [
     "SEIT-AFC-PR-023"
@@ -13180,7 +13857,9 @@
     "P2-A02",
     "P2-B05T",
     "P2-B05",
-    "P2-L03"
+    "P2-L03",
+    "P2-V01T",
+    "P2-V01"
    ],
    "lifecycle_level_bindings": [],
    "ownership": "register reference"
@@ -13243,7 +13922,8 @@
     "DES-AFC-P2-PANEL",
     "DES-AFC-P2-POLICY",
     "DES-AFC-P2-VISUAL",
-    "DES-AFC-P2-WATCH"
+    "DES-AFC-P2-WATCH",
+    "DES-AFC-P2-VEGA"
    ],
    "seit_rows": [
     "SEIT-AFC-PR-027"
@@ -13253,7 +13933,9 @@
     "P2-B05",
     "P2-A03T",
     "P2-A03",
-    "P2-X09"
+    "P2-X09",
+    "P2-V01T",
+    "P2-V01"
    ],
    "lifecycle_level_bindings": [],
    "ownership": "register reference"
@@ -13265,7 +13947,8 @@
     "DES-AFC-P2-PANEL",
     "DES-AFC-P2-POLICY",
     "DES-AFC-P2-VISUAL",
-    "DES-AFC-P2-WATCH"
+    "DES-AFC-P2-WATCH",
+    "DES-AFC-P2-VEGA"
    ],
    "seit_rows": [
     "SEIT-AFC-PR-028"
@@ -13275,7 +13958,9 @@
     "P2-B05",
     "P2-A03T",
     "P2-A03",
-    "P2-X09"
+    "P2-X09",
+    "P2-V01T",
+    "P2-V01"
    ],
    "lifecycle_level_bindings": [],
    "ownership": "register reference"
@@ -13310,7 +13995,8 @@
     "DES-AFC-P2-SPIKES",
     "DES-AFC-P2-SUB",
     "DES-AFC-P2-VISUAL",
-    "DES-AFC-P2-WATCH"
+    "DES-AFC-P2-WATCH",
+    "DES-AFC-P2-VEGA"
    ],
    "seit_rows": [
     "SEIT-AFC-PR-030"
@@ -13320,7 +14006,9 @@
     "P2-A04T",
     "P2-A04",
     "P2-X09",
-    "P2-X12"
+    "P2-X12",
+    "P2-V01T",
+    "P2-V01"
    ],
    "lifecycle_level_bindings": [],
    "ownership": "register reference"
@@ -13333,7 +14021,8 @@
     "DES-AFC-P2-PANEL",
     "DES-AFC-P2-SPIKES",
     "DES-AFC-P2-VISUAL",
-    "DES-AFC-P2-WATCH"
+    "DES-AFC-P2-WATCH",
+    "DES-AFC-P2-VEGA"
    ],
    "seit_rows": [
     "SEIT-AFC-PR-031"
@@ -13342,7 +14031,9 @@
     "P2-X03",
     "P2-A04T",
     "P2-A04",
-    "P2-X09"
+    "P2-X09",
+    "P2-V01T",
+    "P2-V01"
    ],
    "lifecycle_level_bindings": [],
    "ownership": "register reference"
@@ -13355,7 +14046,8 @@
     "DES-AFC-P2-PANEL",
     "DES-AFC-P2-RESOLVE",
     "DES-AFC-P2-VISUAL",
-    "DES-AFC-P2-WATCH"
+    "DES-AFC-P2-WATCH",
+    "DES-AFC-P2-VEGA"
    ],
    "seit_rows": [
     "SEIT-AFC-PR-032"
@@ -13365,7 +14057,9 @@
     "P2-B06",
     "P2-A03T",
     "P2-A03",
-    "P2-X09"
+    "P2-X09",
+    "P2-V01T",
+    "P2-V01"
    ],
    "lifecycle_level_bindings": [],
    "ownership": "register reference"
@@ -13378,7 +14072,8 @@
     "DES-AFC-P2-PANEL",
     "DES-AFC-P2-RESOLVE",
     "DES-AFC-P2-VISUAL",
-    "DES-AFC-P2-WATCH"
+    "DES-AFC-P2-WATCH",
+    "DES-AFC-P2-VEGA"
    ],
    "seit_rows": [
     "SEIT-AFC-PR-033"
@@ -13388,7 +14083,9 @@
     "P2-B06",
     "P2-A03T",
     "P2-A03",
-    "P2-X09"
+    "P2-X09",
+    "P2-V01T",
+    "P2-V01"
    ],
    "lifecycle_level_bindings": [],
    "ownership": "register reference"
@@ -13402,7 +14099,8 @@
     "DES-AFC-P2-RESOLVE",
     "DES-AFC-P2-TV",
     "DES-AFC-P2-VISUAL",
-    "DES-AFC-P2-WATCH"
+    "DES-AFC-P2-WATCH",
+    "DES-AFC-P2-VEGA"
    ],
    "seit_rows": [
     "SEIT-AFC-PR-034"
@@ -13412,7 +14110,9 @@
     "P2-A02",
     "P2-B06T",
     "P2-B06",
-    "P2-X09"
+    "P2-X09",
+    "P2-V01T",
+    "P2-V01"
    ],
    "lifecycle_level_bindings": [],
    "ownership": "register reference"
@@ -13423,7 +14123,8 @@
     "CONTRACT-AFC-P2-PROVIDER-REGISTRY",
     "DES-AFC-P2-TV",
     "DES-AFC-P2-VISUAL",
-    "DES-AFC-P2-WATCH"
+    "DES-AFC-P2-WATCH",
+    "DES-AFC-P2-VEGA"
    ],
    "seit_rows": [
     "SEIT-AFC-PR-035"
@@ -13432,7 +14133,9 @@
     "P2-A02T",
     "P2-A02",
     "P2-A04T",
-    "P2-A04"
+    "P2-A04",
+    "P2-V01T",
+    "P2-V01"
    ],
    "lifecycle_level_bindings": [],
    "ownership": "register reference"
@@ -13443,7 +14146,8 @@
     "CONTRACT-AFC-P2-PROVIDER-REGISTRY",
     "DES-AFC-P2-SPIKES",
     "DES-AFC-P2-VISUAL",
-    "DES-AFC-P2-WATCH"
+    "DES-AFC-P2-WATCH",
+    "DES-AFC-P2-VEGA"
    ],
    "seit_rows": [
     "SEIT-AFC-PR-036"
@@ -13451,7 +14155,9 @@
    "slices": [
     "P2-A04T",
     "P2-A04",
-    "P2-X11"
+    "P2-X11",
+    "P2-V01T",
+    "P2-V01"
    ],
    "lifecycle_level_bindings": [],
    "ownership": "register reference"
@@ -13464,7 +14170,8 @@
     "DES-AFC-P2-POLICY",
     "DES-AFC-P2-TV",
     "DES-AFC-P2-VISUAL",
-    "DES-AFC-P2-WATCH"
+    "DES-AFC-P2-WATCH",
+    "DES-AFC-P2-VEGA"
    ],
    "seit_rows": [
     "SEIT-AFC-PR-037"
@@ -13474,7 +14181,9 @@
     "P2-A02",
     "P2-B05T",
     "P2-B05",
-    "P2-X09"
+    "P2-X09",
+    "P2-V01T",
+    "P2-V01"
    ],
    "lifecycle_level_bindings": [],
    "ownership": "register reference"
@@ -13487,7 +14196,8 @@
     "DES-AFC-P2-AUTH",
     "DES-AFC-P2-BACKEND",
     "DES-AFC-P2-TV",
-    "DES-AFC-P2-VISUAL"
+    "DES-AFC-P2-VISUAL",
+    "DES-AFC-P2-VEGA"
    ],
    "seit_rows": [
     "SEIT-AFC-PR-038"
@@ -13497,7 +14207,9 @@
     "P2-A01",
     "P2-B01T",
     "P2-B01",
-    "P2-L02"
+    "P2-L02",
+    "P2-V01T",
+    "P2-V01"
    ],
    "lifecycle_level_bindings": [],
    "ownership": "register reference"
@@ -13510,7 +14222,8 @@
     "DES-AFC-P2-PANELSVC",
     "DES-AFC-P2-SUB",
     "DES-AFC-P2-VISUAL",
-    "DES-AFC-P2-WATCH"
+    "DES-AFC-P2-WATCH",
+    "DES-AFC-P2-VEGA"
    ],
    "seit_rows": [
     "SEIT-AFC-PR-039"
@@ -13521,7 +14234,9 @@
     "P2-A05T",
     "P2-A05",
     "P2-X09",
-    "P2-X12"
+    "P2-X12",
+    "P2-V01T",
+    "P2-V01"
    ],
    "lifecycle_level_bindings": [],
    "ownership": "register reference"
@@ -13534,7 +14249,8 @@
     "DES-AFC-P2-PANEL",
     "DES-AFC-P2-PANELSVC",
     "DES-AFC-P2-VISUAL",
-    "DES-AFC-P2-WATCH"
+    "DES-AFC-P2-WATCH",
+    "DES-AFC-P2-VEGA"
    ],
    "seit_rows": [
     "SEIT-AFC-PR-040"
@@ -13545,7 +14261,9 @@
     "P2-A05T",
     "P2-A05",
     "P2-X09",
-    "P2-X10"
+    "P2-X10",
+    "P2-V01T",
+    "P2-V01"
    ],
    "lifecycle_level_bindings": [],
    "ownership": "register reference"
@@ -13559,7 +14277,8 @@
     "DES-AFC-P2-SPIKES",
     "DES-AFC-P2-SUB",
     "DES-AFC-P2-VISUAL",
-    "DES-AFC-P2-WATCH"
+    "DES-AFC-P2-WATCH",
+    "DES-AFC-P2-VEGA"
    ],
    "seit_rows": [
     "SEIT-AFC-PR-041"
@@ -13569,7 +14288,9 @@
     "P2-A05T",
     "P2-A05",
     "P2-X09",
-    "P2-X12"
+    "P2-X12",
+    "P2-V01T",
+    "P2-V01"
    ],
    "lifecycle_level_bindings": [],
    "ownership": "register reference"
@@ -13579,7 +14300,8 @@
    "design_ids": [
     "DES-AFC-P2-PANEL",
     "DES-AFC-P2-TV",
-    "DES-AFC-P2-VISUAL"
+    "DES-AFC-P2-VISUAL",
+    "DES-AFC-P2-VEGA"
    ],
    "seit_rows": [
     "SEIT-AFC-PR-042"
@@ -13588,7 +14310,9 @@
     "P2-A02T",
     "P2-A02",
     "P2-A05T",
-    "P2-A05"
+    "P2-A05",
+    "P2-V01T",
+    "P2-V01"
    ],
    "lifecycle_level_bindings": [],
    "ownership": "register reference"
@@ -13597,14 +14321,17 @@
    "vcase": "VCASE-AFC-PR-043",
    "design_ids": [
     "DES-AFC-P2-PANEL",
-    "DES-AFC-P2-VISUAL"
+    "DES-AFC-P2-VISUAL",
+    "DES-AFC-P2-VEGA"
    ],
    "seit_rows": [
     "SEIT-AFC-PR-043"
    ],
    "slices": [
     "P2-A05T",
-    "P2-A05"
+    "P2-A05",
+    "P2-V01T",
+    "P2-V01"
    ],
    "lifecycle_level_bindings": [],
    "ownership": "register reference"
@@ -13617,7 +14344,8 @@
     "DES-AFC-P2-PANELSVC",
     "DES-AFC-P2-TV",
     "DES-AFC-P2-VISUAL",
-    "DES-AFC-P2-WATCH"
+    "DES-AFC-P2-WATCH",
+    "DES-AFC-P2-VEGA"
    ],
    "seit_rows": [
     "SEIT-AFC-PR-044"
@@ -13629,7 +14357,9 @@
     "P2-B07",
     "P2-A05T",
     "P2-A05",
-    "P2-X09"
+    "P2-X09",
+    "P2-V01T",
+    "P2-V01"
    ],
    "lifecycle_level_bindings": [],
    "ownership": "register reference"
@@ -13638,14 +14368,17 @@
    "vcase": "VCASE-AFC-PR-045",
    "design_ids": [
     "DES-AFC-P2-PANEL",
-    "DES-AFC-P2-VISUAL"
+    "DES-AFC-P2-VISUAL",
+    "DES-AFC-P2-VEGA"
    ],
    "seit_rows": [
     "SEIT-AFC-PR-045"
    ],
    "slices": [
     "P2-A05T",
-    "P2-A05"
+    "P2-A05",
+    "P2-V01T",
+    "P2-V01"
    ],
    "lifecycle_level_bindings": [],
    "ownership": "register reference"
@@ -13656,7 +14389,8 @@
     "DES-AFC-P2-MATCH",
     "DES-AFC-P2-PANEL",
     "DES-AFC-P2-PANELSVC",
-    "DES-AFC-P2-VISUAL"
+    "DES-AFC-P2-VISUAL",
+    "DES-AFC-P2-VEGA"
    ],
    "seit_rows": [
     "SEIT-AFC-PR-046"
@@ -13666,7 +14400,9 @@
     "P2-B07",
     "P2-A05T",
     "P2-A05",
-    "P2-X10"
+    "P2-X10",
+    "P2-V01T",
+    "P2-V01"
    ],
    "lifecycle_level_bindings": [],
    "ownership": "register reference"
@@ -13680,7 +14416,8 @@
     "DES-AFC-P2-SPIKES",
     "DES-AFC-P2-SUB",
     "DES-AFC-P2-VISUAL",
-    "DES-AFC-P2-WATCH"
+    "DES-AFC-P2-WATCH",
+    "DES-AFC-P2-VEGA"
    ],
    "seit_rows": [
     "SEIT-AFC-PR-047"
@@ -13690,7 +14427,9 @@
     "P2-A05T",
     "P2-A05",
     "P2-X09",
-    "P2-X12"
+    "P2-X12",
+    "P2-V01T",
+    "P2-V01"
    ],
    "lifecycle_level_bindings": [],
    "ownership": "register reference"
@@ -13703,7 +14442,8 @@
     "DES-AFC-P2-PANEL",
     "DES-AFC-P2-SPIKES",
     "DES-AFC-P2-VISUAL",
-    "DES-AFC-P2-WATCH"
+    "DES-AFC-P2-WATCH",
+    "DES-AFC-P2-VEGA"
    ],
    "seit_rows": [
     "SEIT-AFC-PR-048"
@@ -13712,7 +14452,9 @@
     "P2-X03",
     "P2-A04T",
     "P2-A04",
-    "P2-X09"
+    "P2-X09",
+    "P2-V01T",
+    "P2-V01"
    ],
    "lifecycle_level_bindings": [],
    "ownership": "register reference"
@@ -13832,7 +14574,8 @@
     "DES-AFC-P2-BACKEND",
     "DES-AFC-P2-SUB",
     "DES-AFC-P2-TV",
-    "DES-AFC-P2-VISUAL"
+    "DES-AFC-P2-VISUAL",
+    "DES-AFC-P2-VEGA"
    ],
    "seit_rows": [
     "SEIT-AFC-PR-057"
@@ -13842,7 +14585,9 @@
     "P2-A01",
     "P2-B01T",
     "P2-B01",
-    "P2-D03"
+    "P2-D03",
+    "P2-V01T",
+    "P2-V01"
    ],
    "lifecycle_level_bindings": [],
    "ownership": "register reference"
@@ -13907,7 +14652,8 @@
    "design_ids": [
     "DES-AFC-P2-ALERTPATH",
     "DES-AFC-P2-PANEL",
-    "DES-AFC-P2-VISUAL"
+    "DES-AFC-P2-VISUAL",
+    "DES-AFC-P2-VEGA"
    ],
    "seit_rows": [
     "SEIT-AFC-PR-061"
@@ -13916,7 +14662,9 @@
     "P2-A03T",
     "P2-A03",
     "P2-A05T",
-    "P2-A05"
+    "P2-A05",
+    "P2-V01T",
+    "P2-V01"
    ],
    "lifecycle_level_bindings": [],
    "ownership": "register reference"
@@ -13926,7 +14674,8 @@
    "design_ids": [
     "DES-AFC-P2-ALERTPATH",
     "DES-AFC-P2-PANEL",
-    "DES-AFC-P2-VISUAL"
+    "DES-AFC-P2-VISUAL",
+    "DES-AFC-P2-VEGA"
    ],
    "seit_rows": [
     "SEIT-AFC-PR-062"
@@ -13935,7 +14684,9 @@
     "P2-A03T",
     "P2-A03",
     "P2-A05T",
-    "P2-A05"
+    "P2-A05",
+    "P2-V01T",
+    "P2-V01"
    ],
    "lifecycle_level_bindings": [],
    "ownership": "register reference"
@@ -13948,7 +14699,8 @@
     "DES-AFC-P2-ALERTPATH",
     "DES-AFC-P2-PANEL",
     "DES-AFC-P2-TV",
-    "DES-AFC-P2-VISUAL"
+    "DES-AFC-P2-VISUAL",
+    "DES-AFC-P2-VEGA"
    ],
    "seit_rows": [
     "SEIT-AFC-PR-063"
@@ -13958,7 +14710,9 @@
     "P2-A01",
     "P2-A03T",
     "P2-A03",
-    "P2-A05"
+    "P2-A05",
+    "P2-V01T",
+    "P2-V01"
    ],
    "lifecycle_level_bindings": [],
    "ownership": "register reference"
@@ -14012,7 +14766,8 @@
     "DES-AFC-P2-PANEL",
     "DES-AFC-P2-TV",
     "DES-AFC-P2-VISUAL",
-    "DES-AFC-P2-WATCH"
+    "DES-AFC-P2-WATCH",
+    "DES-AFC-P2-VEGA"
    ],
    "seit_rows": [
     "SEIT-AFC-PR-066"
@@ -14020,7 +14775,9 @@
    "slices": [
     "P2-A02T",
     "P2-A02",
-    "P2-X09"
+    "P2-X09",
+    "P2-V01T",
+    "P2-V01"
    ],
    "lifecycle_level_bindings": [],
    "ownership": "register reference"
@@ -14208,7 +14965,9 @@
     "P2-X12",
     "P2-SCR1",
     "P2-L05",
-    "P2-R5"
+    "P2-R5",
+    "P2-V01T",
+    "P2-V01"
    ],
    "lifecycle_level_bindings": [],
    "ownership": "Lifecycle-local"
@@ -14297,7 +15056,9 @@
     "P2-X12",
     "P2-SCR1",
     "P2-L05",
-    "P2-R5"
+    "P2-R5",
+    "P2-V01T",
+    "P2-V01"
    ],
    "lifecycle_level_bindings": [],
    "ownership": "Lifecycle-local"
@@ -14320,7 +15081,8 @@
     "P2-A03",
     "P2-A04",
     "P2-A05",
-    "P2-X09"
+    "P2-X09",
+    "P2-V01"
    ],
    "lifecycle_level_bindings": [],
    "ownership": "Lifecycle-local"
@@ -14419,7 +15181,9 @@
     "P2-X12",
     "P2-SCR1",
     "P2-L05",
-    "P2-R5"
+    "P2-R5",
+    "P2-V01T",
+    "P2-V01"
    ],
    "lifecycle_level_bindings": [],
    "ownership": "Lifecycle-local"
@@ -14443,7 +15207,8 @@
     "P2-X01",
     "P2-G01",
     "P2-A01",
-    "P2-B01"
+    "P2-B01",
+    "P2-V01"
    ],
    "lifecycle_level_bindings": [],
    "ownership": "Lifecycle-local"
@@ -14532,7 +15297,9 @@
     "P2-X12",
     "P2-SCR1",
     "P2-L05",
-    "P2-R5"
+    "P2-R5",
+    "P2-V01T",
+    "P2-V01"
    ],
    "lifecycle_level_bindings": [],
    "ownership": "Lifecycle-local"
@@ -14725,7 +15492,9 @@
     "P2-X12",
     "P2-SCR1",
     "P2-L05",
-    "P2-R5"
+    "P2-R5",
+    "P2-V01T",
+    "P2-V01"
    ],
    "lifecycle_level_bindings": [],
    "ownership": "Lifecycle-local"
@@ -15016,7 +15785,9 @@
     "P2-X12",
     "P2-SCR1",
     "P2-L05",
-    "P2-R5"
+    "P2-R5",
+    "P2-V01T",
+    "P2-V01"
    ],
    "lifecycle_level_bindings": [],
    "ownership": "Lifecycle-local"
@@ -15065,6 +15836,117 @@
    "lifecycle_level_bindings": [],
    "ownership": "Lifecycle-local",
    "note": "Planning/Orchestrator control; no implementation slice (planning_control_proof_rows)"
+  },
+  "AC-AFC-P2-VEGA-01": {
+   "design_ids": [
+    "DES-AFC-P2-VEGA",
+    "CONTRACT-AFC-P2-API",
+    "CONTRACT-AFC-P2-ENVELOPE"
+   ],
+   "seit_rows": [
+    "SEIT-AFC-P2-VEGA-01"
+   ],
+   "slices": [
+    "P2-V01T",
+    "P2-V01"
+   ],
+   "lifecycle_level_bindings": [],
+   "ownership": "Lifecycle-local"
+  },
+  "AC-AFC-P2-VEGA-02": {
+   "design_ids": [
+    "DES-AFC-P2-VEGA"
+   ],
+   "seit_rows": [
+    "SEIT-AFC-P2-VEGA-02"
+   ],
+   "slices": [
+    "P2-V01"
+   ],
+   "lifecycle_level_bindings": [],
+   "ownership": "Lifecycle-local"
+  },
+  "AC-AFC-P2-VEGA-03": {
+   "design_ids": [
+    "DES-AFC-P2-VEGA",
+    "DES-AFC-P2-VISUAL"
+   ],
+   "seit_rows": [
+    "SEIT-AFC-P2-VEGA-03"
+   ],
+   "slices": [
+    "P2-V01"
+   ],
+   "lifecycle_level_bindings": [],
+   "ownership": "Lifecycle-local"
+  },
+  "AC-AFC-P2-VEGA-04": {
+   "design_ids": [
+    "DES-AFC-P2-VEGA"
+   ],
+   "seit_rows": [
+    "SEIT-AFC-P2-VEGA-04"
+   ],
+   "slices": [
+    "P2-V01T",
+    "P2-V01"
+   ],
+   "lifecycle_level_bindings": [],
+   "ownership": "Lifecycle-local"
+  },
+  "AC-AFC-P2-VEGA-05": {
+   "design_ids": [
+    "DES-AFC-P2-VEGA",
+    "DES-AFC-P2-VISUAL"
+   ],
+   "seit_rows": [
+    "SEIT-AFC-P2-VEGA-05"
+   ],
+   "slices": [
+    "P2-V01"
+   ],
+   "lifecycle_level_bindings": [],
+   "ownership": "Lifecycle-local"
+  },
+  "AC-AFC-P2-VEGA-06": {
+   "design_ids": [
+    "DES-AFC-P2-VEGA",
+    "CONTRACT-AFC-P2-API"
+   ],
+   "seit_rows": [
+    "SEIT-AFC-P2-VEGA-06"
+   ],
+   "slices": [
+    "P2-V01"
+   ],
+   "lifecycle_level_bindings": [],
+   "ownership": "Lifecycle-local"
+  },
+  "RISK-AFC-P2-14": {
+   "design_ids": [
+    "DES-AFC-P2-VEGA"
+   ],
+   "seit_rows": [
+    "SEIT-RISK-AFC-P2-14"
+   ],
+   "slices": [
+    "P2-V01"
+   ],
+   "lifecycle_level_bindings": [],
+   "ownership": "Lifecycle-local"
+  },
+  "RISK-AFC-P2-15": {
+   "design_ids": [
+    "DES-AFC-P2-VEGA"
+   ],
+   "seit_rows": [
+    "SEIT-RISK-AFC-P2-15"
+   ],
+   "slices": [
+    "P2-V01"
+   ],
+   "lifecycle_level_bindings": [],
+   "ownership": "Lifecycle-local"
   }
  },
  "assurance": {
@@ -15465,6 +16347,16 @@
     "P2-R5",
     "P2-L05",
     "P2-X12"
+   ]
+  },
+  {
+   "id": "M14",
+   "title": "M14 Vega OS port on the Vega Virtual Device",
+   "due_on": "2026-10-21T00:00:00Z",
+   "entry": "Owner SD-040 (2026-10-13); P2-A01..P2-A05 merged; planning delta P2-V01-plan passed planning review.",
+   "exit": "Vega app builds as .vpkg, runs on the VVD against aws-afc-dev, each ported feature has test evidence, screenshots and a recorded verdict; independent review, one repair round, gates and visual review complete; changelog entry linked; Vega developer feedback recorded. Off the M13 critical path.",
+   "issues": [
+    "P2-V01"
    ]
   }
  ],
@@ -15926,6 +16818,19 @@
     "body_file": "evidence/github-work-items/issues/P2-R5.md",
     "stable_id": "AFC-2026-10-11/P2-R5",
     "kind": "documentation"
+   },
+   {
+    "issue": "P2-V01",
+    "slices": [
+     "P2-V01T",
+     "P2-V01"
+    ],
+    "milestone": "M14",
+    "body_file": null,
+    "stable_id": "AFC-2026-10-11/P2-V01",
+    "kind": "enhancement",
+    "github_issue": 59,
+    "note": "Issue #59 already exists in GitHub milestone 14 (owner SD-040); no payload body file; no tracking write by this delta."
    }
   ]
  },
@@ -17973,6 +18878,86 @@
     "seit_rows": 1,
     "slices": [],
     "status": "planned"
+   },
+   {
+    "id": "AC-AFC-P2-VEGA-01",
+    "statement": "The Vega OS build of the TV app shall implement the device linking, profile settings with detection, alerts, Watch and lineup panel behaviors of P2-A01..P2-A05 against the unchanged CONTRACT-AFC-P2-API and CONTRACT-AFC-P2-ENVELOPE, with each Vega test traced to the Fire OS test of the same behavior.",
+    "source": "Issue #59; owner SD-040; owner 2026-10-14 \"Should match up with what we have\"",
+    "verification": "test",
+    "allocation": "P2-V01T, P2-V01",
+    "ownership": "Lifecycle-local",
+    "seit_rows": 1,
+    "slices": [
+     "P2-V01T",
+     "P2-V01"
+    ],
+    "status": "planned"
+   },
+   {
+    "id": "AC-AFC-P2-VEGA-02",
+    "statement": "The Vega app shall build as a `.vpkg` from a pinned Vega SDK version that passed a scan-software-supply-chain receipt before first use, with its sha256, SDK version and target architecture recorded and no token or credential in the package.",
+    "source": "Issue #59; workspace rule 23; AC-AFC-P2-SUPPLY-01",
+    "verification": "inspection",
+    "allocation": "P2-V01",
+    "ownership": "Lifecycle-local",
+    "seit_rows": 1,
+    "slices": [
+     "P2-V01"
+    ],
+    "status": "planned"
+   },
+   {
+    "id": "AC-AFC-P2-VEGA-03",
+    "statement": "Each ported feature shall have Vega test evidence, Vega Virtual Device screenshots under `evidence/visual/P2-V01/` and a recorded verdict of works, limited by simulator, not supported or unknown; an unverified feature stays unknown.",
+    "source": "Issue #59 acceptance; AC-AFC-P2-VIS-01; rule 16",
+    "verification": "demonstration",
+    "allocation": "P2-V01",
+    "ownership": "Lifecycle-local",
+    "seit_rows": 1,
+    "slices": [
+     "P2-V01"
+    ],
+    "status": "planned"
+   },
+   {
+    "id": "AC-AFC-P2-VEGA-04",
+    "statement": "The Vega app shall keep its device session token only in app-private storage through a single token-store module, send it only as the bearer credential, and never write it to a log, the package or a capture.",
+    "source": "DES-AFC-P2-TV token rule (AFC-PR-055 TV side); RISK-AFC-P2-12",
+    "verification": "test, inspection",
+    "allocation": "P2-V01T, P2-V01",
+    "ownership": "Lifecycle-local",
+    "seit_rows": 1,
+    "slices": [
+     "P2-V01T",
+     "P2-V01"
+    ],
+    "status": "planned"
+   },
+   {
+    "id": "AC-AFC-P2-VEGA-05",
+    "statement": "If the owner confirms that the replacement Fire TV stick runs Vega OS (OA-12), the Vega app shall also be installed, driven and captured on that device and its rows added to the verdict table; otherwise this criterion is not applicable.",
+    "source": "Owner fact 2026-10-14 (stick lost, replacement may ship Vega OS); conditional, does not change SD-040",
+    "verification": "demonstration",
+    "allocation": "P2-V01",
+    "ownership": "Lifecycle-local",
+    "seit_rows": 1,
+    "slices": [
+     "P2-V01"
+    ],
+    "status": "planned"
+   },
+   {
+    "id": "AC-AFC-P2-VEGA-06",
+    "statement": "P2-V01 shall change nothing under `tv-app/` or `backend/`, the frozen OpenAPI contract, the final APK path or any M12/M13 slice artifact.",
+    "source": "Issue #59 (does not change the Fire OS deliverables, the final APK or the M13 critical path)",
+    "verification": "inspection",
+    "allocation": "P2-V01",
+    "ownership": "Lifecycle-local",
+    "seit_rows": 1,
+    "slices": [
+     "P2-V01"
+    ],
+    "status": "planned"
    }
   ],
   "architecture": [
@@ -19760,6 +20745,66 @@
     "milestone": "M13",
     "issue": "P2-R5 (M13)",
     "status": "planned"
+   },
+   {
+    "id": "P2-V01T",
+    "role": "Test Implementer",
+    "route": "Muse Code / Muse WonderFull / high (muse-wonder-full-1.0, --contributor-mode on)",
+    "depends_on": [
+     "P2-A01",
+     "P2-A02",
+     "P2-A03",
+     "P2-A04",
+     "P2-A05"
+    ],
+    "write_set": [
+     "vega-app/__tests__/",
+     "vega-app/package.json",
+     "vega-app/package-lock.json",
+     "vega-app/jest.config.js",
+     "vega-app/babel.config.js",
+     "vega-app/tsconfig.json",
+     "vega-app/manifest.toml",
+     "vega-app/.gitignore",
+     "vega-app/src/",
+     "tools/ci/tests/test_gate_vegaapp.py",
+     "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-V01T/"
+    ],
+    "wave": "Wave V (M14 side lane)",
+    "lane": "tv-app-ui",
+    "milestone": "M14",
+    "issue": "P2-V01 (M14, #59)",
+    "status": "planned"
+   },
+   {
+    "id": "P2-V01",
+    "role": "Product Implementer",
+    "route": "Claude Code / Claude Opus 5.5 / medium",
+    "depends_on": [
+     "P2-V01T",
+     "P2-A01",
+     "P2-A02",
+     "P2-A03",
+     "P2-A04",
+     "P2-A05",
+     "P2-L03"
+    ],
+    "write_set": [
+     "vega-app/",
+     "tools/ci/gate.sh",
+     "tools/ci/tests/test_gate_vegaapp.py",
+     ".github/workflows/ci.yml",
+     "docs/vnv/vega-app/AGENTS.md",
+     "docs/vnv/AGENTS.md",
+     "THIRD_PARTY_NOTICES.md",
+     "evidence/visual/P2-V01/",
+     "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-V01/"
+    ],
+    "wave": "Wave V (M14 side lane)",
+    "lane": "tv-app-ui",
+    "milestone": "M14",
+    "issue": "P2-V01 (M14, #59)",
+    "status": "planned"
    }
   ],
   "assurance_cadence": {
@@ -20009,6 +21054,22 @@
     "recovery": "Owner decides cuts.",
     "allocation": "Orchestrator wave receipts",
     "status": "planned"
+   },
+   {
+    "id": "RISK-AFC-P2-14",
+    "risk": "M14 starts after A01..A05 (W3) with nine days to T_deadline and competes for the five-agent cap.",
+    "control": "If P2-V01 is not merged with its verdict table before the M12 submission documents are finalized (due 2026-10-22T16:00:00Z), then the submission shall describe the Vega build as in progress with its stated limits, and no M12 or M13 slice shall wait for it.",
+    "recovery": "Report in progress with limits; Fire OS path unaffected.",
+    "allocation": "P2-V01, P2-D04",
+    "status": "planned"
+   },
+   {
+    "id": "RISK-AFC-P2-15",
+    "risk": "The host runs Ubuntu 26.04, newer than the documented test matrix.",
+    "control": "If the Vega SDK or Vega Virtual Device cannot install or run on the Ubuntu 26.04 x86_64 KVM host, then P2-V01 shall stop with the exact unmet requirement and raise an owner decision; no agent shall change the host OS, use sudo or install a system package.",
+    "recovery": "Owner decides: host package install, a 24.04 VM with nested KVM, or M14 reported as blocked.",
+    "allocation": "P2-V01T, P2-V01",
+    "status": "planned"
    }
   ],
   "authority": [
@@ -20157,5 +21218,25 @@
     "status": "open_for_integrated_review"
    }
   ]
- }
+ },
+ "planning_deltas": [
+  {
+   "id": "P2-V01-plan",
+   "date": "2026-10-14",
+   "issue": 59,
+   "milestone": "M14",
+   "authority": "Owner SD-040 (issue #59); owner 2026-10-14 \"Should match up with what we have\"; DEC-AFC-SD-043/044/045 routes",
+   "receipt": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-V01-plan/receipt.md",
+   "status": "pending planning review",
+   "rule": "Additive only: no existing slice field changed; Fire OS slices, waves W1..W5, M01..M13, releases and the final APK path unchanged.",
+   "approved_candidate_digest": "e02871029b86f8d0f2fdef6617feb989413883cc6bdb70e5dec3a47e64c86da8",
+   "delta_candidate_digest": "ac95cc862e27aef934c351d36d2103e7f3c2f9dfaee8b2fb5e55c520c8d7382d",
+   "digest_note": "journey_settings.planning_review.candidate_digest and source_baseline planning_inputs keep the approved binding (DEC-AFC-P2-APPROVAL-001). plan-package.cjs reports digest_mismatch for the technical plan, design and register and candidate_digest_mismatch until the Plan Integrator rebinds them after planning review and regenerates the DoD Manifest HTML.",
+   "planning_inputs_after": {
+    "amazon-fantasy-companion-phase-2-technical-plan.md": "d7bf7fe0cbba80fb327daa8c2e6aac9d92da606e11ed170c0b39fed6761e154f",
+    "design.md": "9ede2ebcb5647a761016a2b1e145fd844f803065509d185e57ae3c4734f26ea3",
+    "requirements-register.md": "22ee4c1e80573bbbbdcdef6af520dedba8d60a003082c02f694b77b18d37cc15"
+   }
+  }
+ ]
 }

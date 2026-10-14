@@ -552,3 +552,140 @@ TDD, cadence, concurrency, clean-session transition, OCR and Reverify. Every
 Muse primary or fallback requires `--contributor-mode on`. Confirmed usage/rate
 limits alone may activate frozen fallbacks; other errors preserve the route.
 The separate bug-triager binding and all spent review/repair limits remain.
+
+## M14 Vega OS port (P2-V01)
+
+Planning delta P2-V01-plan, 2026-10-14 (issue #59, GitHub milestone M14).
+Authority: owner SD-040 (2026-10-13), "lets just stick with Fire OS and add an
+extra milestone to get this working on Vega OS"; owner 2026-10-14, "Should
+match up with what we have". Fire OS on the owner's stick stays the primary
+target (SD-003). This section is additive: no Fire OS slice, wave W1..W5,
+milestone M01..M13, release or final APK step changes. Receipt:
+`evidence/P2-V01-plan/receipt.md`.
+
+### Outcome and scope
+
+P2-V01 ports the finished TV app (device linking, profile settings with
+detection, alerts, Watch and the lineup panel from P2-A01..P2-A05) to Vega OS
+with React Native for Vega, packaged as a `.vpkg`, against the unchanged
+backend API (CONTRACT-AFC-P2-API, CONTRACT-AFC-P2-ENVELOPE). It is verified
+on the Vega Virtual Device (VVD) on the Ubuntu x86_64 KVM development host,
+and optionally on a physical Vega OS stick (AC-AFC-P2-VEGA-05). Each feature
+gets a verdict: works, limited by simulator, not supported, or unknown.
+
+Out of scope: any change under `tv-app/` or `backend/`, the frozen OpenAPI
+contract, the final APK, and every M12/M13 slice.
+
+### Requirements (Lifecycle-local, Vega)
+
+Behavior shared with the Fire OS app reuses the register UIDs by reference
+(mapping in `requirements-register.md` §Vega OS port mapping). New IDs cover
+only Vega-specific items.
+
+| ID | Statement | Source | Verification | Allocation |
+|---|---|---|---|---|
+| AC-AFC-P2-VEGA-01 | The Vega OS build of the TV app shall implement the device linking, profile settings with detection, alerts, Watch and lineup panel behaviors of P2-A01..P2-A05 against the unchanged CONTRACT-AFC-P2-API and CONTRACT-AFC-P2-ENVELOPE, with each Vega test traced to the Fire OS test of the same behavior. | Issue #59; owner SD-040; owner 2026-10-14 "Should match up with what we have" | test | P2-V01T, P2-V01 |
+| AC-AFC-P2-VEGA-02 | The Vega app shall build as a `.vpkg` from a pinned Vega SDK version that passed a scan-software-supply-chain receipt before first use, with its sha256, SDK version and target architecture recorded and no token or credential in the package. | Issue #59; workspace rule 23; AC-AFC-P2-SUPPLY-01 | inspection | P2-V01 |
+| AC-AFC-P2-VEGA-03 | Each ported feature shall have Vega test evidence, Vega Virtual Device screenshots under `evidence/visual/P2-V01/` and a recorded verdict of works, limited by simulator, not supported or unknown; an unverified feature stays unknown. | Issue #59 acceptance; AC-AFC-P2-VIS-01; rule 16 | demonstration | P2-V01 |
+| AC-AFC-P2-VEGA-04 | The Vega app shall keep its device session token only in app-private storage through a single token-store module, send it only as the bearer credential, and never write it to a log, the package or a capture. | DES-AFC-P2-TV token rule (AFC-PR-055 TV side); RISK-AFC-P2-12 | test, inspection | P2-V01T, P2-V01 |
+| AC-AFC-P2-VEGA-05 | If the owner confirms that the replacement Fire TV stick runs Vega OS (OA-12), the Vega app shall also be installed, driven and captured on that device and its rows added to the verdict table; otherwise this criterion is not applicable. | Owner fact 2026-10-14 (stick lost, replacement may ship Vega OS); conditional, does not change SD-040 | demonstration | P2-V01 |
+| AC-AFC-P2-VEGA-06 | P2-V01 shall change nothing under `tv-app/` or `backend/`, the frozen OpenAPI contract, the final APK path or any M12/M13 slice artifact. | Issue #59 (does not change the Fire OS deliverables, the final APK or the M13 critical path) | inspection | P2-V01 |
+
+### Risks (Vega)
+
+| ID | Statement (control) | Source | Verification | Allocation | Risk (rationale) | Response |
+|---|---|---|---|---|---|---|
+| RISK-AFC-P2-14 | If P2-V01 is not merged with its verdict table before the M12 submission documents are finalized (due 2026-10-22T16:00:00Z), then the submission shall describe the Vega build as in progress with its stated limits, and no M12 or M13 slice shall wait for it. | Issue #59 Expected; T_deadline 2026-10-23T19:00:00Z | inspection | P2-V01, P2-D04 | M14 starts after A01..A05 (W3) with nine days to T_deadline and competes for the five-agent cap. | Report in progress with limits; Fire OS path unaffected. |
+| RISK-AFC-P2-15 | If the Vega SDK or Vega Virtual Device cannot install or run on the Ubuntu 26.04 x86_64 KVM host, then P2-V01 shall stop with the exact unmet requirement and raise an owner decision; no agent shall change the host OS, use sudo or install a system package. | Vega docs list Ubuntu 20.04, 22.04, 24.04 x86_64 (CI page) and 20.04+ (install page); libpython3.8-dev has no candidate on 26.04; workspace rule 23 | inspection | P2-V01T, P2-V01 | The host runs Ubuntu 26.04, newer than the documented test matrix. | Owner decides: host package install, a 24.04 VM with nested KVM, or M14 reported as blocked. |
+
+### Milestone, wave, lane and leases
+
+| Milestone | Title | Due (UTC) | Entry criteria | Exit criteria | Issues in order |
+|---|---|---|---|---|---|
+| M14 | M14 Vega OS port on the Vega Virtual Device | 2026-10-21T00:00:00Z (GitHub due date) | P2-A01..P2-A05 merged; this delta passed planning review. | `.vpkg` builds and runs on the VVD against aws-afc-dev; each feature has test evidence, screenshots and a verdict; review, one repair round, gates and visual review complete; changelog entry linked; Vega developer feedback recorded. | P2-V01 (#59) |
+
+- Wave: `Wave V (M14 side lane)`, outside the W1..W5 release checkpoints. It
+  is never an entry or exit criterion of W4, W5, M12 or M13.
+- Lane: `tv-app-ui` (opensource-hackathon, tdd). Integration step IE-P2-V01
+  follows IE-P2-28 and IE-P2-29.
+- Dispatch: P2-V01T as soon as P2-A05 merges; P2-V01 after its red receipt.
+  Both count against impl_agent_cap (5).
+- Added gate time: area `vegaapp` (npm ci plus Jest) is estimated at 3 min
+  or less, and runs only on changes under `vega-app/`. VVD boot, install and
+  capture are SEIT procedures under a lease, never gate checks.
+
+| Lease | Resource | Holders |
+|---|---|---|
+| `vega-virtual-device` | The single VVD instance on the development host | P2-V01 VVD runs and visual review |
+| `vega-app-config` | `vega-app/package.json`, `vega-app/package-lock.json`, `vega-app/manifest.toml`, `vega-app/jest.config.js` | P2-V01T creates the harness; P2-V01 completes it after verified red |
+| `vega-tv-stick` (conditional) | A physical Vega OS stick, only if OA-12 confirms the replacement runs Vega OS | P2-V01 physical-device path |
+
+P2-V01 also takes `aws-afc-dev` for read-only API use during VVD system runs.
+It never deploys.
+
+### Routes (opensource-hackathon as amended by DEC-AFC-SD-043/044/045)
+
+| Slice | Role | Primary route | Ordered fallbacks |
+|---|---|---|---|
+| P2-V01T | Test Implementer | Muse Code / Muse WonderFull / high (CLI id `muse-wonder-full-1.0`, `--contributor-mode on`) | Codex CLI / GPT-6.1 Sol / high; Claude Code / Claude Opus 5.5 / medium |
+| P2-V01 | Product Implementer | Claude Code / Claude Opus 5.5 / medium | Muse Code / Muse WonderFull / high; Codex CLI / GPT-6.1 Sol / high |
+| P2-V01 review | Reviewer | Claude Code / Claude Opus 5.5 / medium, in a fresh session separate from the implementer | Muse Code / Muse Spark 1.3 / max; Claude Code / Claude Opus 5.5 / high |
+
+Snapshot sha256 `d5aabda1f44e2808c53112794afb5a7978ad02f930c100cf58002277d9423eea`
+(DEC-AFC-SD-045). OCR delegate mode is required in review. Reverify runs on
+the exact `.vpkg` (CMD-REVERIFY-VPKG). An unproven `.vpkg` capability is
+recorded as a typed gap, never as PASS.
+
+### Commands (Vega toolchain; definitions in `seit.json`)
+
+| ID | Purpose |
+|---|---|
+| PROC-VEGA-PREPARE | Download, scan, then install the pinned SDK, CLI and VVD in user scope (`NONINTERACTIVE=true`, `VEGA_SDK_VERSION`) |
+| CMD-RED-VEGA | CMD-RED receipt contract for the Jest suite |
+| PROC-VEGA-PARITY | A01T..A05T test ID to V01T test ID parity table |
+| CMD-GATE-VEGAAPP | `bash tools/ci/gate.sh vegaapp` (area added by P2-V01) |
+| CMD-VEGA-UNIT | `npm --prefix vega-app test -- --ci` |
+| CMD-VEGA-BUILD | `npm run build:app`, producing `build/<arch>-<type>/<app>_<arch>.vpkg`, then sha256 |
+| CMD-VVD-START | `vega virtual-device start --timeout 120` and status |
+| CMD-VVD-INSTALL | `vega device install-app` and `launch-app` on VirtualDevice |
+| CMD-VVD-INPUT | `inputd-cli button_press` D-pad, select and back |
+| CMD-VVD-SCREENCAP | Device-side screenshot, or a labeled host-window capture (documentation conflict recorded) |
+| PROC-VEGA-FEATURE-VERDICT | Per-feature verdict table |
+| CMD-VEGA-DEVICE-INSTALL | Conditional armv7 install on a Vega OS stick (OA-12) |
+| CMD-REVERIFY-VPKG | Reverify on the exact `.vpkg` |
+| CMD-COVERAGE-VEGAAPP | Jest Cobertura output plus diff-cover at 90% or more of changed lines (qualification pending) |
+| CMD-MUTATION-VEGAAPP | StrykerJS candidate. This is a typed gap (`VEGA_MUTATION_TOOL_GAP`) until it is pinned, scanned and qualified |
+
+PROC-VISUAL-REVIEW keeps its pass criteria on the VVD (`vega_binding` in
+`seit.json`). Screenshots go under `evidence/visual/P2-V01/`.
+
+### Per-feature verdict table (prospective)
+
+| Feature | Fire OS slice | Expected on the VVD (from the Vega 0.24 docs) | Observed |
+|---|---|---|---|
+| Device linking | P2-A01 | works | not_run |
+| Profile settings and detection | P2-A02 | Settings: works. Installed-app detection: unknown, because the supported list has no installed-apps library. Provider apps are absent on the VVD. | not_run |
+| Alerts | P2-A03 | In-app presentation: unknown. `expo-notifications` covers RN 0.72 local notifications only. Heads-up over provider playback: limited by simulator. | not_run |
+| Watch | P2-A04 | Outcome reporting and confirmation: works. Provider launch: limited by simulator (`appAbsent`; no DRM playback on the VVD on Ubuntu). | not_run |
+| Lineup panel | P2-A05 | Full-screen panel: works. modeB: not supported on the VVD. Text floor: unknown until the capture resolution is mapped. | not_run |
+
+Only observed VVD or Vega-stick evidence sets a verdict. An unverified row
+stays unknown.
+
+### Owner-action entry criteria (Vega)
+
+| ID | Owner action | Needed by | Blocks if absent |
+|---|---|---|---|
+| OA-12 (conditional) | Confirm whether the replacement stick runs Vega OS. If it does, run `vega devmode login` (Amazon developer account in a browser) and `vega devmode enable-device --code <code>` on it. | P2-V01 physical path | AC-AFC-P2-VEGA-05 is not applicable; the VVD path proceeds |
+| OA-13 (conditional) | Accept the Vega SDK license or terms if the installer shows any. The 0.24 install and CI pages name none. | PROC-VEGA-PREPARE | P2-V01T and P2-V01 cannot start |
+
+OA-10 (link passphrase entry) is reused for the VVD linked-state capture.
+
+### Schedule
+
+As of 2026-10-14, T_deadline is 2026-10-23T19:00:00Z. M14 starts after
+P2-A05 merges (M09, due 2026-10-18T11:00:00Z). Its GitHub due date is
+2026-10-21. The M12 submission documents are due 2026-10-22T16:00:00Z.
+RISK-AFC-P2-14 controls inclusion: Vega is named in the submission only if
+P2-V01 is verified before the M12 documents are finalized. Otherwise the
+submission reports it as in progress, with its limits stated.
