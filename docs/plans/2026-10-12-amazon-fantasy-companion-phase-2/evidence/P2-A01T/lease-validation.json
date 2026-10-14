@@ -1,6 +1,6 @@
 {
   "controller_journey": "$HOME/alphazede/worktrees/amazon-fantasy-companion-implementation/docs/plans/2026-10-11-amazon-fantasy-companion/journey.json",
-  "controller_sha256": "570d0e23226b0def2ed9c37c90c2bb639c87e68b898641fd4e5ebc64f806023d",
+  "controller_sha256": "fe29877c3af8c2d327278a431ab34b1665bac75d3de4843854181ff25ffdae05",
   "dispatch": {
     "kind": "dispatch_lease",
     "lease": "P2-A01T",
@@ -14,15 +14,22 @@
       "tv-app-manifest",
       "tv-app-gradle"
     ],
-    "state": "active"
+    "state": "active",
+    "attempt1": {
+      "commit": "18c39de",
+      "outcome": "OWNER_DECISION_REQUIRED",
+      "reason": "10 HIGH/CRITICAL in AGP 9.3.1/KGP 2.4.21 closure"
+    }
   },
   "parent_generation": 2,
   "repository": "github:1wgrumph/amazon-fantasy-companion",
-  "candidate_revision": "75afca022f967945a70bf715beb2a7c98e65ed9d",
-  "next_action": "Resolve and scan AGP 9.4.1 plus Kotlin 2.4.21 closure before plugin execution; admit with strict verification, then author behavioral red tests.",
+  "candidate_revision": "18c39de99446eb7c015a17ab5a67c7b86fcc5939",
+  "next_action": "Return frozen P2-A01T red boundary to controller; P2-A01 realizes behavior on unchanged test IDs/hashes. No push/PR/merge or device actions in this packet.",
   "scope_corrections": [
     "Session authority permits tv-app/.gitignore and commits red tests with --no-verify, superseding older plan text."
   ],
   "coverage_assist": "OCR delegate mode required at independent phase review; not an author review",
-  "reverify": "not applicable: red tests and receipts; no APK attribute claims"
+  "reverify": "not applicable: red tests and receipts; no APK attribute claims",
+  "resume_decision": "SD-042 (2026-10-14): patch 5, accept 5; session authority unchanged",
+  "precommit_revalidation": "PASS: same repository/worktree/branch/generation/active dispatch/route; current HEAD is acknowledged attempt1 candidate"
 }

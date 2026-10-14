@@ -1,0 +1,58 @@
+{
+  "method": "test",
+  "selection": "Approved P2-A01T goal and SEIT CMD-RED; supporting host tests only, no substitution for registered device demonstrations/inspections.",
+  "real_dependency": "JDK17 HttpURLConnection against JDK HttpServer with an OS-bound local listener, and committed OpenAPI schemas. FixtureCalibrationTest proves actual 200 envelope and 503 structured-error transport.",
+  "fixtures": "Generated at runtime from committed OpenAPI required fields, status codes and design quantities. Malformed/oversize and stale/version inputs are explicit contract negatives, not invented limits.",
+  "coverage": {
+    "minSdk 25": [
+      "ShellContractTest.buildDeclaresMinSdk25"
+    ],
+    "all API operations": [
+      "ApiOperationsTest.sendsFrozenOperationAndDecodesJson"
+    ],
+    "envelope and identity/revision": [
+      "EnvelopeTest",
+      "EnvelopeRequiredFieldTest",
+      "EnvelopeSourceTest"
+    ],
+    "timeouts": [
+      "ApiPolicyTest.setsNormalTimeoutsOnRealConnection",
+      "ApiPolicyTest.setsLongPollReadTimeoutAboveServerWait"
+    ],
+    "retry rules": [
+      "ApiRetryTest",
+      "ApiNoRetryTest",
+      "ApiPolicyTest.retriesPutWithTheSameRevisionAndBody",
+      "ApiPolicyTest.defaultBackoffWaitsAtLeastThePrescribedOneSecond"
+    ],
+    "link code/pending/expired/linked/unlinked": [
+      "LinkScreenTest"
+    ],
+    "no messaging surfaces": [
+      "ShellContractTest.exposesOnlyLinkProfileAndPanelNavigation",
+      "ShellContractTest.noMessagingEndpointsInFrozenContract"
+    ],
+    "I/O off main": [
+      "ApiPolicyTest.opensAndReadsNetworkOffCallingUiThread"
+    ],
+    "token hygiene": [
+      "ShellContractTest.committedTestTokensDoNotMatchCredentialShapes",
+      "LinkScreenTest.linkedStateContinuesWithoutDisplayingSessionToken"
+    ]
+  },
+  "bootstrap_scope": "Buildable Android test harness, neutral ApiClient/LinkScreen/Shell results and DTO signatures only; no feature implementation. Build minSdk and nonbehavioral manifest scaffolding are necessary preparation.",
+  "resource_group": "No shared resource; each test owns OS-bound listener and executor. No devices/cloud/credential access.",
+  "forecast_suite_seconds": 30,
+  "reliability_plan": "Run FixtureCalibrationTest five consecutive times plus two concurrent independent JVM/Gradle scratch copies; actual red behavior receipt uses all com.afc.companion.* tests.",
+  "sources": {
+    "backend/src/api/openapi.yaml": "835e0757658fe46a826dc7da1bdb021d0883d85e257c7982f8cc41c439466ebe",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/design.md": "07bcfb0d7ac4b08a386ea242b23a6afec76c89a0eb5ddcd14c3f1976da776c6f",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/amazon-fantasy-companion-phase-2-technical-plan.md": "1c33c214324bbb6f7c6a31ee460eff3e5697516b27792a694000cf1669d2bc0f"
+  },
+  "fixture_observation": "Connection observer delegates to real HttpURLConnection; actual response-code/input/output stream calls record their thread. No canned client transport response.",
+  "method_selection_skills": "Test Engineering read: retain registered inspections/demonstrations, use explicit approved CMD-RED method=test for supporting implementation boundary.",
+  "reliability_result": "All ten frozen test classes: 5 sequential + 2 concurrent JVMs produce identical 60/44 expected behavioral-red counts and no unexpected errors.",
+  "actual_red_suite_seconds": 0.35,
+  "forecast_green_suite_seconds": 5,
+  "gate_cost": "Final Gradle TV step about 5s warm, plus 1s default real backoff when implemented; fixture JVM red runs 0.338-0.380s. No hardware benchmark."
+}

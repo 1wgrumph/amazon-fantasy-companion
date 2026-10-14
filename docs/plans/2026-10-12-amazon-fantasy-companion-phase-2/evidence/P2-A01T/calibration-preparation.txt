@@ -1,0 +1,45 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.7.0/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preDebugBuild UP-TO-DATE
+> Task :app:generateDebugResources
+> Task :app:packageDebugResources
+> Task :app:processDebugNavigationResources
+> Task :app:javaPreCompileDebug
+> Task :app:checkDebugAarMetadata
+> Task :app:mapDebugSourceSetPaths
+> Task :app:parseDebugLocalResources
+> Task :app:compileDebugNavigationResources
+> Task :app:mergeDebugResources
+> Task :app:generateDebugRFile
+> Task :app:createDebugCompatibleScreenManifests
+> Task :app:compileDebugKotlin FAILED
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:compileDebugKotlin' (registered by plugin 'com.android.internal.application').
+> Could not isolate parameters org.jetbrains.kotlin.gradle.internal.transforms.ClasspathEntrySnapshotTransform$Parameters_Decorated@5d9711b1 of artifact transform ClasspathEntrySnapshotTransform
+   > Could not isolate value org.jetbrains.kotlin.gradle.internal.transforms.ClasspathEntrySnapshotTransform$Parameters_Decorated@5d9711b1 of type ClasspathEntrySnapshotTransform.Parameters
+      > Could not resolve all files for configuration ':app:kotlinBuildToolsApiClasspath'.
+         > Could not resolve org.jetbrains.kotlin:kotlin-build-tools-compat:2.4.21.
+           Required by:
+               project ':app'
+            > No cached version of org.jetbrains.kotlin:kotlin-build-tools-compat:2.4.21 available for offline mode.
+            > No cached version of org.jetbrains.kotlin:kotlin-build-tools-compat:2.4.21 available for offline mode.
+         > Could not resolve org.jetbrains.kotlin:kotlin-build-tools-impl:2.4.21.
+           Required by:
+               project ':app'
+            > No cached version of org.jetbrains.kotlin:kotlin-build-tools-impl:2.4.21 available for offline mode.
+            > No cached version of org.jetbrains.kotlin:kotlin-build-tools-impl:2.4.21 available for offline mode.
+
+* Try:
+> Run the 'artifactTransforms' report task to view details about registered transforms.
+> Review the documentation on Artifact Transforms at https://docs.gradle.org/9.7.0/userguide/artifact_transforms.html.
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 4s
+12 actionable tasks: 12 executed

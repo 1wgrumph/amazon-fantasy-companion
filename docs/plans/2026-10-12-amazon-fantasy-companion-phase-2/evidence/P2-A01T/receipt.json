@@ -4,86 +4,259 @@
   "role": "test_implementer",
   "issue": 22,
   "milestone": "M03",
-  "outcome": "OWNER_DECISION_REQUIRED",
-  "mutation_result": "PARTIAL: evidence only, no red candidate",
+  "outcome": "PASS",
+  "mutation_result": "CANDIDATE_READY at author red boundary, not independent assurance",
   "branch": "afc/p2-a01",
   "base_revision": "75afca022f967945a70bf715beb2a7c98e65ed9d",
-  "candidate_ref": "containing evidence commit on afc/p2-a01; see git log for receipt.json",
+  "parent_candidate_revision": "18c39de99446eb7c015a17ab5a67c7b86fcc5939",
+  "candidate_ref": "The containing commit on afc/p2-a01; returned SHA binds this receipt and frozen test/bootstrap files.",
   "route": "Codex CLI / GPT-6.1 Sol / high, preserved",
-  "authority": "Session P2-A01T packet; SD-041; active controller dispatch lease",
-  "stop_reason": "The current mutually documented compatible closure reports 10 unreviewed HIGH/CRITICAL; newest stable Android lint compiler 32.4.1 retains 5 embedded HIGH. No named residual risk approved for tv-app. Packet explicitly stops at unresolvable scan verdict.",
-  "supply_chain_verdict": "INDETERMINATE",
-  "owner_decision_needed": "Disposition of the named embedded build-host findings (false-positive/reachability review or explicit residual-risk decision), or an authorized alternative admitted toolchain. Separately patch and rescan the remaining jose4j, Bouncy Castle and JDOM findings before any admission. No exemption inferred from X01.",
-  "changed_paths_scope": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/ only",
-  "commands": [
+  "authority": "Original session packet AUTH-AFC-2026-10-12-P2-001, same active P2-A01T dispatch/generation 2; SD-041 plus SD-042 patch-five/accept-five amendment",
+  "prior_attempt": {
+    "commit": "18c39de",
+    "outcome": "OWNER_DECISION_REQUIRED",
+    "superseded_by": "SD-042 (2026-10-14)"
+  },
+  "stop_reason": "Expected CMD-RED boundary; no product behavior implemented",
+  "supply_chain_verdict": "PASS_WITH_SD042_ACCEPTED_RESIDUALS",
+  "accepted_build_host_findings": [
     {
-      "id": "RESOLVE-ATTEMPT-1",
-      "command": "JAVA_HOME=$HOME/.local/share/afc-tools/jdk-17.0.20.1+1 GRADLE_USER_HOME=$HOME/.gradle/afc-p2-a01t timeout 1500 bash $HOME/.gradle/wrapper/dists/gradle-8.2-bin/bbg7u40eoinfdyxsxr3z4i7ta/gradle-8.2/bin/gradle -p $HOME/.local/share/afc-tools/downloads/p2-a01t/resolve --no-daemon --max-workers=2 --write-verification-metadata sha256 resolveClosure",
-      "exit": 1,
-      "classification": "preparation/configuration: inert resolver lacked JVM compatibility rules; not behavioral red",
-      "evidence": "resolve-attempt1.txt"
+      "id": "CVE-2021-22569",
+      "package": "com.google.protobuf:protobuf-java",
+      "version": "2.6.1",
+      "severity": "HIGH",
+      "artifact": "kotlin-compiler-32.3.1.jar",
+      "status": "ACCEPTED_BUILD_HOST_RESIDUAL",
+      "decision": "SD-042",
+      "reachability_rationale": "Bundled protobuf parser is build-host Kotlin/lint tooling operating on the checked-out sources and admitted dependencies, not runtime API payloads. Host builds are offline and noninteractive. A malicious source/dependency can still reach parser paths; no fixed compiler release removes these classes. Owner accepts that residual exposure, not a false-positive determination."
     },
     {
-      "id": "RESOLVE-ATTEMPT-2",
-      "command": "JAVA_HOME=$HOME/.local/share/afc-tools/jdk-17.0.20.1+1 GRADLE_USER_HOME=$HOME/.gradle/afc-p2-a01t timeout 1500 bash $HOME/.gradle/wrapper/dists/gradle-8.2-bin/bbg7u40eoinfdyxsxr3z4i7ta/gradle-8.2/bin/gradle -p $HOME/.local/share/afc-tools/downloads/p2-a01t/resolve --no-daemon --max-workers=2 --write-verification-metadata sha256 resolveClosure",
+      "id": "CVE-2024-7254",
+      "package": "com.google.protobuf:protobuf-java",
+      "version": "2.6.1",
+      "severity": "HIGH",
+      "artifact": "kotlin-compiler-32.3.1.jar",
+      "status": "ACCEPTED_BUILD_HOST_RESIDUAL",
+      "decision": "SD-042",
+      "reachability_rationale": "Bundled protobuf parser is build-host Kotlin/lint tooling operating on the checked-out sources and admitted dependencies, not runtime API payloads. Host builds are offline and noninteractive. A malicious source/dependency can still reach parser paths; no fixed compiler release removes these classes. Owner accepts that residual exposure, not a false-positive determination."
+    },
+    {
+      "id": "CVE-2026-77422",
+      "package": "org.jline:jline-builtins",
+      "version": "3.24.1",
+      "severity": "HIGH",
+      "artifact": "kotlin-compiler-32.3.1.jar",
+      "status": "ACCEPTED_BUILD_HOST_RESIDUAL",
+      "decision": "SD-042",
+      "reachability_rationale": "Bundled JLine console grep/Telnet modules are build-host tooling. This harness starts noninteractive offline Gradle/Kotlin builds, does not start a JLine Telnet server or execute user-supplied console grep regex, and never packages this compiler in the app runtime. A different build-host invocation could expose the vulnerable features; accepted by the owner, not proven unreachable universally."
+    },
+    {
+      "id": "CVE-2026-56740",
+      "package": "org.jline:jline-remote-telnet",
+      "version": "3.24.1",
+      "severity": "HIGH",
+      "artifact": "kotlin-compiler-32.3.1.jar",
+      "status": "ACCEPTED_BUILD_HOST_RESIDUAL",
+      "decision": "SD-042",
+      "reachability_rationale": "Bundled JLine console grep/Telnet modules are build-host tooling. This harness starts noninteractive offline Gradle/Kotlin builds, does not start a JLine Telnet server or execute user-supplied console grep regex, and never packages this compiler in the app runtime. A different build-host invocation could expose the vulnerable features; accepted by the owner, not proven unreachable universally."
+    },
+    {
+      "id": "CVE-2026-56741",
+      "package": "org.jline:jline-remote-telnet",
+      "version": "3.24.1",
+      "severity": "HIGH",
+      "artifact": "kotlin-compiler-32.3.1.jar",
+      "status": "ACCEPTED_BUILD_HOST_RESIDUAL",
+      "decision": "SD-042",
+      "reachability_rationale": "Bundled JLine console grep/Telnet modules are build-host tooling. This harness starts noninteractive offline Gradle/Kotlin builds, does not start a JLine Telnet server or execute user-supplied console grep regex, and never packages this compiler in the app runtime. A different build-host invocation could expose the vulnerable features; accepted by the owner, not proven unreachable universally."
+    }
+  ],
+  "unreviewed_high_critical": 0,
+  "credential_findings": "none; no secret rule fired; test tokens generated at runtime",
+  "commands": [
+    {
+      "id": "RESOLVE-SD042",
+      "command": "JAVA_HOME=$HOME/.local/share/afc-tools/jdk-17.0.20.1+1 GRADLE_USER_HOME=$HOME/.gradle/afc-p2-a01t timeout 1500 bash $HOME/.local/share/afc-tools/downloads/p2-a01t/qualified/gradle-9.7.0/bin/gradle -p $HOME/.local/share/afc-tools/downloads/p2-a01t/resolve --no-daemon --max-workers=2 --write-verification-metadata sha256 resolveClosure",
       "exit": 0,
-      "classification": "passive artifact resolution only; registered compatibility rules via Gradle core java-gradle-plugin",
-      "evidence": "resolve-attempt2.txt"
+      "classification": "Passive acquisition only; independent configurations preserve versions hidden by a merged graph",
+      "evidence": [
+        "inert-resolver-sd042.gradle",
+        "resolve-sd042.txt",
+        "resolve-full-configurations.txt"
+      ]
+    },
+    {
+      "id": "SCAN-CLOSURE",
+      "command": "trivy rootfs --disable-telemetry --scanners vuln --skip-db-update --skip-java-db-update --offline-scan --list-all-pkgs --format json <resolved closure>; trivy sbom --disable-telemetry --scanners vuln --skip-db-update --offline-scan --format json <native-coordinate BOM>",
+      "exit": 0,
+      "classification": "135 artifacts; exactly 5 accepted HIGH in embedded compiler; 0 unreviewed HIGH/CRITICAL",
+      "evidence": [
+        "final-closure-trivy.json",
+        "final-native-trivy.json",
+        "final-artifact-sha256s.txt"
+      ]
+    },
+    {
+      "id": "SCAN-MALWARE",
+      "command": "clamscan --recursive --max-scantime=0 --max-files=100000 --alert-exceeds-max=yes <artifact sets>",
+      "exit": 0,
+      "classification": "135 hash-bound files (124 + 3 + 1 + 7); 0 infected; unchanged first-set hashes reconciled before each delta admission",
+      "evidence": [
+        "patched-closure-clam.txt",
+        "script-delta-clam.txt",
+        "annotations-delta-clam.txt",
+        "compiler-delta-clam.txt"
+      ]
+    },
+    {
+      "id": "WRAPPER-GENERATE",
+      "command": "qualified Gradle 9.7.0 wrapper --gradle-version 9.7.0 --distribution-type bin --gradle-distribution-sha256-sum 84fbba45c7f4c64abc77460e1c00f541e9f960e3c7ed2538f1ede19eacd873ae",
+      "exit": 0,
+      "evidence": [
+        "wrapper-generate.txt",
+        "wrapper-integrity.json",
+        "wrapper-version.txt"
+      ]
+    },
+    {
+      "id": "STRICT-OFFLINE-POSITIVE",
+      "command": "./tv-app/gradlew -p tv-app --no-daemon --max-workers=2 --offline help",
+      "exit": 0,
+      "evidence": "harness-help-final.txt"
+    },
+    {
+      "id": "CALIBRATE-REAL-HTTP",
+      "command": "./tv-app/gradlew -p tv-app --no-daemon --max-workers=2 --offline testDebugUnitTest --tests com.afc.companion.FixtureCalibrationTest",
+      "exit": 0,
+      "evidence": "calibration-final.txt",
+      "counts": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0
+      }
+    },
+    {
+      "id": "CMD-RED",
+      "command": "./tv-app/gradlew -p tv-app --no-daemon --max-workers=2 --offline testDebugUnitTest --tests 'com.afc.companion.*'",
+      "exit": 1,
+      "classification": "Expected missing-behavior assertions only",
+      "counts": {
+        "tests": 60,
+        "failures": 44,
+        "errors": 0,
+        "skipped": 0
+      },
+      "evidence": [
+        "cmd-red.txt",
+        "cmd-red-junit/",
+        "red-test-cases.json"
+      ],
+      "baseline_head": "18c39de99446eb7c015a17ab5a67c7b86fcc5939"
+    },
+    {
+      "id": "STRICT-CHECKSUM-NEGATIVE-CONTROL",
+      "command": "./tv-app/gradlew -p <owned scratch copy> --no-daemon --max-workers=2 --offline --no-configuration-cache help",
+      "exit": 1,
+      "classification": "PASS expected rejection of corrupted gradle-9.3.1.jar SHA256 before applying external plugin; actual metadata unchanged; scratch discarded",
+      "evidence": [
+        "checksum-negative.json",
+        "checksum-negative.txt"
+      ]
+    },
+    {
+      "id": "PROC-RELIABILITY",
+      "command": "JDK17 org.junit.runner.JUnitCore over same ten compiled test classes and verified Gradle-exported runtime classpath; five sequential JVMs then two concurrent JVMs",
+      "exit": 0,
+      "child_exits": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "classification": "All seven reproduce 60 tests / 44 assertion failures / 0 unexpected errors, including passing real HTTP peer calibration",
+      "evidence": "reliability.json"
     },
     {
       "id": "PROC-GATE-TOOL-QUALIFY",
-      "command": "PATH=$HOME/.local/share/afc-tools/backend-tests/bin:$PATH timeout 1500 bash -c \"python3 -m unittest discover -s tools/ci/tests/coverage -v && python3 -m unittest discover -s tools/ci/tests/mutation -v\"",
+      "command": "PATH=$HOME/.local/share/afc-tools/backend-tests/bin:$PATH python3 -m unittest discover -s tools/ci/tests/coverage -v && python3 -m unittest discover -s tools/ci/tests/mutation -v",
       "exit": 0,
       "counts": {
         "coverage": 12,
         "mutation": 13
       },
-      "scope": "Existing Python/native reporter and repository adapter controls; Android-native coverage/mutation not established",
-      "evidence": "tool-qualification.txt"
+      "scope": "Generic/native reporter and Python repository-adapter controls only; Android-native coverage/mutation adapters are absent and NOT qualified. No substitution for Android assurance.",
+      "capability_gap": "ANDROID_NATIVE_COVERAGE_MUTATION_NOT_QUALIFIED: tools/ci/coverage/tvapp.sh and tools/ci/mutation/tvapp.sh absent; outside this test packet write authority. Future affected assurance gates remain held.",
+      "evidence": "tool-qualification-resume.txt"
     },
     {
-      "id": "REPOSITORY-GATE-BASELINE",
+      "id": "REPOSITORY-GATE-FORMATTING-ATTEMPT",
       "command": "PATH=$HOME/.local/share/afc-tools/backend-tests/bin:$PATH bash tools/ci/gate.sh",
-      "environment": {
-        "JAVA_HOME": "$HOME/.local/share/afc-tools/jdk-17.0.20.1+1",
-        "ANDROID_HOME": "$HOME/.local/share/afc-tools/android-sdk",
-        "PYTHONDONTWRITEBYTECODE": "1"
-      },
-      "exit": 0,
-      "counts": {
-        "hygiene": 61,
-        "backend": 158
-      },
+      "exit": 1,
+      "classification": "spec/docs/backend PASS; tvapp intended red; hygiene FAIL on log whitespace and generated CRLF, corrected without changing tests",
+      "evidence": [
+        "gate-formatting-attempt.txt",
+        "evidence-normalization.json"
+      ]
+    },
+    {
+      "id": "REPOSITORY-GATE",
+      "command": "PATH=$HOME/.local/share/afc-tools/backend-tests/bin:$PATH bash tools/ci/gate.sh",
+      "exit": 1,
+      "status": "PASS acceptance: only intended tvapp behavioral red; every pre-existing area passes",
+      "evidence": "gate-final.txt",
       "areas": {
         "spec": "PASS checks completed",
         "docs": "PASS checks completed",
         "hygiene": "PASS checks completed",
-        "tvapp": "PASS no tv-app/ tree",
+        "tvapp": "FAIL check exit 1",
         "backend": "PASS checks completed"
       },
-      "scope": "Baseline regression only; tvapp empty-tree PASS closes no test requirement",
-      "evidence": "gate-baseline.txt"
-    },
-    {
-      "id": "CMD-RED",
-      "command": "./tv-app/gradlew -p tv-app testDebugUnitTest --tests <test_selector>",
-      "exit": null,
-      "status": "NOT_RUN: scan admission stop before harness/tests authored"
-    },
-    {
-      "id": "STRICT-CHECKSUM-NEGATIVE-CONTROL",
-      "exit": null,
-      "status": "NOT_RUN: closure not admitted; strict tv-app harness and scratch corruption control not created"
+      "counts": {
+        "hygiene": 61,
+        "backend": 158,
+        "tvapp_collected": 60,
+        "tvapp_assertion_failures": 44
+      },
+      "classification": "Expected red-boundary exit 1; no compilation/collection/tool errors"
     }
   ],
   "red_counts": {
-    "assertion_failures": null,
-    "compilation_errors": null,
-    "collection_errors": null,
-    "status": "NOT_RUN; no suite exists, not zero-error evidence"
+    "tests": 60,
+    "assertion_failures": 44,
+    "passed": 16,
+    "skipped": 0,
+    "compilation_errors": 0,
+    "collection_errors": 0,
+    "unexpected_test_errors": 0
   },
-  "frozen_test_sha256s": {},
-  "bootstrap_sha256s": {},
+  "frozen_test_sha256s": {
+    "tv-app/app/src/test/java/com/afc/companion/ApiOperationsTest.kt": "a68cb4a5bc8bf7f6bea4c2408a36bf4eceb6f74e396b3c6657c3f1871beb0500",
+    "tv-app/app/src/test/java/com/afc/companion/ApiPolicyTest.kt": "d4adb23485c1c411a2a97deb293041b98f7c4087703c9799ce72961534379294",
+    "tv-app/app/src/test/java/com/afc/companion/ContractFixtures.kt": "ac07254ff8686d1f57838fa4d22ce65936576588c041bc3dd7410e6bdf6a16d8",
+    "tv-app/app/src/test/java/com/afc/companion/EnvelopeTest.kt": "23c6338311fdf3316e339b19232912035bff151c55e1271162e5bef00b170fed",
+    "tv-app/app/src/test/java/com/afc/companion/FixtureCalibrationTest.kt": "50a3a2cde3ef443b5ef236340b28b02856b47fc5709c3949826aa39e998787fe",
+    "tv-app/app/src/test/java/com/afc/companion/LinkScreenTest.kt": "630935586874beb653068c8d07a4b9c8d0ada05fd6368244784cc54bccd24382",
+    "tv-app/app/src/test/java/com/afc/companion/ShellContractTest.kt": "6937824801454d13249aa503c25399ede3d212b8541f22baa70dd1794b994d6f"
+  },
+  "bootstrap_sha256s": {
+    "tv-app/.gitignore": "b7c3f9c134b7c92544650733509fddc9e00a19351d9a18c55c39103474eeb091",
+    "tv-app/app/build.gradle.kts": "a2cb151944ad8eda3596bfc2f44b2a9f20e7728cde5df85be6b89f676db62a5b",
+    "tv-app/app/src/main/AndroidManifest.xml": "eaf123582566013496c5705c52ba491f7c916ba642ce668e748b68fb372ee04b",
+    "tv-app/app/src/main/java/com/afc/companion/Shell.kt": "49d4562786b848899aac91f506af498f09667e9665e702ecaf3ff0c7eb2a5950",
+    "tv-app/app/src/main/java/com/afc/companion/link/LinkScreen.kt": "f0e42d22fa73b3bc0f59c6306f51056c45cc4748d7ee6b604c332fc7f690beb8",
+    "tv-app/app/src/main/java/com/afc/companion/net/ApiClient.kt": "cbef2bdb5994373b251a65b37a3b1d194b008e890013563119f3dfb7d2e3ac75",
+    "tv-app/build.gradle.kts": "b9774620831e807d4392e512a1b47ac0d3546e2dc43b41e608ab0dead284ca38",
+    "tv-app/gradle/verification-metadata.xml": "32ae2ac7b029727fd5c0bf0ece953ebf29b31300c6249a16cb4b4ab3b907f67c",
+    "tv-app/gradle/wrapper/gradle-wrapper.jar": "7a9ce74cff467ca1bf60a4fcd9f05185acceda4d0f382434d393e17864262c5d",
+    "tv-app/gradle/wrapper/gradle-wrapper.properties": "da66a5ffe08e2edfed40553bb83548943a0b522603a833852bce317699e6fa9c",
+    "tv-app/gradlew": "a5a5c199ba02189ae8c46a334223371a20599d9c298ef65e7540ede4a3f72d59",
+    "tv-app/gradlew.bat": "59328c7a17f673b1a63040bfb380a0c749e5d6df3406f7f18641060314cd9aa1",
+    "tv-app/settings.gradle.kts": "c910a001b6981aa05957cb2de43d04652f057ec6b8e596c3e61eefb86b749e2b"
+  },
+  "frozen_openapi_sha256": "835e0757658fe46a826dc7da1bdb021d0883d85e257c7982f8cc41c439466ebe",
   "installs_scan_table": [
     {
       "tool_or_artifact_set": "Qualified X01 JDK",
@@ -100,18 +273,11 @@
       "verdict": "PASS by unchanged X01 qualification; reused"
     },
     {
-      "tool_or_artifact_set": "Passive resolver Gradle",
-      "version": "8.2",
-      "sha256": "38f66cd6eef217b4c35855bb11ea4e9fbc53594ccccb5fb82dfd317ef8c2c5a3",
-      "location": "$HOME/.gradle/wrapper/dists/gradle-8.2-bin",
-      "verdict": "PASS by unchanged X01 qualification; core plugin only, external plugins never applied"
-    },
-    {
       "tool_or_artifact_set": "Candidate Gradle distribution",
       "version": "9.7.0",
       "sha256": "84fbba45c7f4c64abc77460e1c00f541e9f960e3c7ed2538f1ede19eacd873ae",
       "location": "$HOME/.local/share/afc-tools/downloads/p2-a01t/qualified/gradle-9.7.0",
-      "verdict": "PASS: official SHA256, safe ZIP inventory, ClamAV exit 0 / 710 files / 0 infected; never executed",
+      "verdict": "PASS: official distribution SHA256, prior safe inventory/ClamAV qualification reused for identical bytes; wrapper executed and pinned.",
       "origin_url": "https://services.gradle.org/distributions/gradle-9.7.0-bin.zip",
       "official_checksum_url": "https://services.gradle.org/distributions/gradle-9.7.0-bin.zip.sha256"
     },
@@ -125,60 +291,212 @@
       "official_checksum": "SHA1 b0b6376977657e8ad9b969bacf4093601da2c6fb from repository2-3.xml"
     },
     {
-      "tool_or_artifact_set": "Gradle plugin/test/lint closure, 124 artifacts",
-      "version": "AGP 9.3.1; KGP 2.4.21; coroutines 1.11.0; org.json 20260814; JUnit 4.13.2; SnakeYAML 2.7; lint-gradle 32.3.1; aapt2 9.3.1-15703166 linux",
-      "sha256": "bb287cf020f5c7b20bbc09eacb88c574fc3e8f94ca121b61037224c3d282ee3e",
-      "sha256_meaning": "SHA256 of the sorted artifact checksum manifest; each file hash is in artifact-sha256s.txt",
-      "location": "$HOME/.local/share/afc-tools/downloads/p2-a01t/resolve/build/closure",
-      "verdict": "INDETERMINATE; 10 unreviewed HIGH/CRITICAL; malware scan incomplete (exit 143 after required stop); not admitted or executed"
+      "tool_or_artifact_set": "Generated Gradle wrapper JAR",
+      "version": "9.7.0",
+      "sha256": "7a9ce74cff467ca1bf60a4fcd9f05185acceda4d0f382434d393e17864262c5d",
+      "location": "tv-app/gradle/wrapper/gradle-wrapper.jar",
+      "verdict": "PASS official Gradle wrapper checksum matched; bytes from qualified distribution"
     },
     {
-      "tool_or_artifact_set": "Newest stable lint compiler",
-      "version": "32.4.1",
-      "sha256": "f7605ecd8e5157f1df689951e0f200ff7ccb0b1443e8c4ab35a595cb1ccdc886",
-      "location": "$HOME/.local/share/afc-tools/downloads/p2-a01t/newer-compiler",
-      "verdict": "INDETERMINATE; official SHA1 matched; same 5 embedded HIGH findings; not admitted or executed"
+      "tool_or_artifact_set": "Resolved build/plugin/compiler/lint/test closure, 135 artifacts",
+      "version": "AGP 9.3.1; KGP 2.4.21; Gradle DSL Kotlin 2.4.0; BC family 1.85; jose4j 0.9.6; JDOM 2.0.6.1; per-coordinate inventory attached",
+      "sha256": "ac7061bf1f7fc954ba181420ab0694a7bd5ad054a69b6a177236d7ac9930c336",
+      "sha256_meaning": "Sorted SHA256 manifest; every artifact digest present",
+      "location": "$HOME/.local/share/afc-tools/downloads/p2-a01t/resolve/build/closure",
+      "verdict": "PASS with explicitly accepted SD-042 residuals; 0 unreviewed HIGH/CRITICAL; malware 0/135; strict checksum metadata before plugin execution",
+      "inventory": "final-resolved-artifacts.tsv",
+      "individual_hashes": "final-artifact-sha256s.txt"
+    },
+    {
+      "tool_or_artifact_set": "org.bitbucket.b_c:jose4j:0.9.6",
+      "version": "0.9.6",
+      "sha256": "7314af50cde9c99e8eaf43eee617a23edcc6bb43036221064355094999d837ef",
+      "location": "$HOME/.local/share/afc-tools/downloads/p2-a01t/resolve/build/closure/jose4j-0.9.6.jar",
+      "verdict": "PASS published checksum matched; included in completed vulnerability and malware scans",
+      "integrity_evidence": "replacement-integrity.json"
+    },
+    {
+      "tool_or_artifact_set": "org.bouncycastle:bcpkix-jdk18on:1.85",
+      "version": "1.85",
+      "sha256": "c9f82b2d4e99c4bbdfccf684e52cc06ea06a0b567bfd0d08f9c5a3f417055996",
+      "location": "$HOME/.local/share/afc-tools/downloads/p2-a01t/resolve/build/closure/bcpkix-jdk18on-1.85.jar",
+      "verdict": "PASS published checksum matched; included in completed vulnerability and malware scans",
+      "integrity_evidence": "replacement-integrity.json"
+    },
+    {
+      "tool_or_artifact_set": "org.bouncycastle:bcprov-jdk18on:1.85",
+      "version": "1.85",
+      "sha256": "20af26bf6060bb8005cc2389916812c1e0e998dc48d2ced7131b89461b54cff7",
+      "location": "$HOME/.local/share/afc-tools/downloads/p2-a01t/resolve/build/closure/bcprov-jdk18on-1.85.jar",
+      "verdict": "PASS published checksum matched; included in completed vulnerability and malware scans",
+      "integrity_evidence": "replacement-integrity.json"
+    },
+    {
+      "tool_or_artifact_set": "org.bouncycastle:bcutil-jdk18on:1.85",
+      "version": "1.85",
+      "sha256": "590f55ed5d68529239898a4a5c4f730b6e37f45d1cfa3fbe51f8485abe32c42d",
+      "location": "$HOME/.local/share/afc-tools/downloads/p2-a01t/resolve/build/closure/bcutil-jdk18on-1.85.jar",
+      "verdict": "PASS published checksum matched; included in completed vulnerability and malware scans",
+      "integrity_evidence": "replacement-integrity.json"
+    },
+    {
+      "tool_or_artifact_set": "org.jdom:jdom2:2.0.6.1",
+      "version": "2.0.6.1",
+      "sha256": "0b20f45e3a0fd8f0d12cdc5316b06776e902b1365db00118876f9175c60f302c",
+      "location": "$HOME/.local/share/afc-tools/downloads/p2-a01t/resolve/build/closure/jdom2-2.0.6.1.jar",
+      "verdict": "PASS published checksum matched; included in completed vulnerability and malware scans",
+      "integrity_evidence": "replacement-integrity.json"
+    },
+    {
+      "tool_or_artifact_set": "org.jetbrains.kotlin:kotlin-reflect:2.4.0",
+      "version": "2.4.0",
+      "sha256": "f0d8e8908624eb4478bb131e9f887366680d2e239741195e548fa5c906963b90",
+      "location": "$HOME/.local/share/afc-tools/downloads/p2-a01t/resolve/build/closure/kotlin-reflect-2.4.0.jar",
+      "verdict": "PASS published checksum matched; included in completed vulnerability and malware scans",
+      "integrity_evidence": "script-delta-integrity.json"
+    },
+    {
+      "tool_or_artifact_set": "org.jetbrains.kotlin:kotlin-stdlib:2.4.0",
+      "version": "2.4.0",
+      "sha256": "ccb14ff83fabcb11458b798dbc9824748ccdffeec79c9aba789e6ed1cda86b1c",
+      "location": "$HOME/.local/share/afc-tools/downloads/p2-a01t/resolve/build/closure/kotlin-stdlib-2.4.0.jar",
+      "verdict": "PASS published checksum matched; included in completed vulnerability and malware scans",
+      "integrity_evidence": "script-delta-integrity.json"
+    },
+    {
+      "tool_or_artifact_set": "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.9.0",
+      "version": "1.9.0",
+      "sha256": "ad89c2892235e670f222d819cb3d81188143cb19a05b59df9889ae4269f5c70a",
+      "location": "$HOME/.local/share/afc-tools/downloads/p2-a01t/resolve/build/closure/kotlinx-coroutines-core-jvm-1.9.0.jar",
+      "verdict": "PASS published checksum matched; included in completed vulnerability and malware scans",
+      "integrity_evidence": "script-delta-integrity.json"
+    },
+    {
+      "tool_or_artifact_set": "org.apache.httpcomponents:httpclient:4.5.6",
+      "version": "4.5.6",
+      "sha256": "c03f813195e7a80e3608d0ddd8da80b21696a4c92a6a2298865bf149071551c7",
+      "location": "$HOME/.local/share/afc-tools/downloads/p2-a01t/resolve/build/closure/httpclient-4.5.6.jar",
+      "verdict": "PASS published checksum matched; included in completed vulnerability and malware scans",
+      "integrity_evidence": "compiler-delta-integrity.json"
+    },
+    {
+      "tool_or_artifact_set": "org.jetbrains.kotlin:kotlin-build-tools-compat:2.4.21",
+      "version": "2.4.21",
+      "sha256": "9e71ba89b6d26e46a087d4f8b64bc2f0a774282ea779fc08b26527d0a80d4fe8",
+      "location": "$HOME/.local/share/afc-tools/downloads/p2-a01t/resolve/build/closure/kotlin-build-tools-compat-2.4.21.jar",
+      "verdict": "PASS published checksum matched; included in completed vulnerability and malware scans",
+      "integrity_evidence": "compiler-delta-integrity.json"
+    },
+    {
+      "tool_or_artifact_set": "org.jetbrains.kotlin:kotlin-build-tools-cri-impl:2.4.21",
+      "version": "2.4.21",
+      "sha256": "d1849f9b98033f5333905409074ca90e6a0e17258cd0eb8befa47d795e695841",
+      "location": "$HOME/.local/share/afc-tools/downloads/p2-a01t/resolve/build/closure/kotlin-build-tools-cri-impl-2.4.21.jar",
+      "verdict": "PASS published checksum matched; included in completed vulnerability and malware scans",
+      "integrity_evidence": "compiler-delta-integrity.json"
+    },
+    {
+      "tool_or_artifact_set": "org.jetbrains.kotlin:kotlin-build-tools-impl:2.4.21",
+      "version": "2.4.21",
+      "sha256": "3152b3e1fbaa4d48f3681734a2c0efc438359a48c8a3c5cac00d874670de1377",
+      "location": "$HOME/.local/share/afc-tools/downloads/p2-a01t/resolve/build/closure/kotlin-build-tools-impl-2.4.21.jar",
+      "verdict": "PASS published checksum matched; included in completed vulnerability and malware scans",
+      "integrity_evidence": "compiler-delta-integrity.json"
+    },
+    {
+      "tool_or_artifact_set": "org.jetbrains.kotlin:kotlin-reflect:1.6.10",
+      "version": "1.6.10",
+      "sha256": "3277ac102ae17aad10a55abec75ff5696c8d109790396434b496e75087854203",
+      "location": "$HOME/.local/share/afc-tools/downloads/p2-a01t/resolve/build/closure/kotlin-reflect-1.6.10.jar",
+      "verdict": "PASS published checksum matched; included in completed vulnerability and malware scans",
+      "integrity_evidence": "compiler-delta-integrity.json"
+    },
+    {
+      "tool_or_artifact_set": "org.jetbrains.kotlin:kotlin-stdlib:2.2.10",
+      "version": "2.2.10",
+      "sha256": "9c67cc79efd6b9215b49d2a4308f5f3433537376c7c88e89bdd6729bd096e61a",
+      "location": "$HOME/.local/share/afc-tools/downloads/p2-a01t/resolve/build/closure/kotlin-stdlib-2.2.10.jar",
+      "verdict": "PASS published checksum matched; included in completed vulnerability and malware scans",
+      "integrity_evidence": "compiler-delta-integrity.json"
+    },
+    {
+      "tool_or_artifact_set": "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.8.0",
+      "version": "1.8.0",
+      "sha256": "9860906a1937490bf5f3b06d2f0e10ef451e65b95b269f22daf68a3d1f5065c5",
+      "location": "$HOME/.local/share/afc-tools/downloads/p2-a01t/resolve/build/closure/kotlinx-coroutines-core-jvm-1.8.0.jar",
+      "verdict": "PASS published checksum matched; included in completed vulnerability and malware scans",
+      "integrity_evidence": "compiler-delta-integrity.json"
+    },
+    {
+      "tool_or_artifact_set": "org.jetbrains:annotations:13.0",
+      "version": "13.0",
+      "sha256": "ace2a10dc8e2d5fd34925ecac03e4988b2c0f851650c94b8cef49ba1bd111478",
+      "location": "$HOME/.local/share/afc-tools/downloads/p2-a01t/resolve/build/closure/annotations-13.0.jar",
+      "verdict": "PASS published checksum matched; malware 0/1, no HIGH/CRITICAL",
+      "integrity_evidence": "annotations-delta-integrity.json"
     }
   ],
   "acceptance_to_evidence": [
     {
       "row": 1,
-      "status": "NOT_MET",
-      "evidence": "No tests or scaffolding authored after scan stop."
+      "status": "MET",
+      "evidence": [
+        "test-coverage.json",
+        "red-test-cases.json",
+        "frozen-hashes.json"
+      ],
+      "scope": "All requested host behaviors have frozen tests; real-device demonstration and Compose visual acceptance remain product/later-stage work."
     },
     {
       "row": 2,
-      "status": "NOT_RUN",
-      "evidence": "CMD-RED not run; no valid behavioral red counts."
+      "status": "MET",
+      "evidence": [
+        "cmd-red.txt",
+        "cmd-red-junit/",
+        "red-test-cases.json"
+      ],
+      "counts": "60 collected; 44 AssertionError/ComparisonFailure; 0 compilation/collection errors; neutral scaffolding only"
     },
     {
       "row": 3,
-      "status": "OWNER_DECISION_REQUIRED",
-      "evidence": "supply-chain.json, closure-trivy.json, newer-compiler-trivy.json; generated verification metadata remains passive acquisition evidence outside repo. No product wrapper/strict harness admitted."
+      "status": "MET_WITH_ACCEPTED_RESIDUAL",
+      "evidence": [
+        "sd042-disposition.json",
+        "final-closure-trivy.json",
+        "final-native-trivy.json",
+        "wrapper-integrity.json",
+        "checksum-negative.json",
+        "tv-app/gradle/verification-metadata.xml"
+      ],
+      "scope": "SD-041 strict metadata and pinned wrapper; SD-042 forces intact; no new HIGH/CRITICAL."
     },
     {
       "row": 4,
-      "status": "PARTIAL",
-      "evidence": "receipt.json plus artifact-sha256s.txt and installs_scan_table; no test hashes/CMD-RED output available."
+      "status": "MET",
+      "evidence": [
+        "receipt.json",
+        "frozen-hashes.json",
+        "final-artifact-sha256s.txt",
+        "red-test-cases.json"
+      ]
     },
     {
       "row": 5,
-      "status": "PARTIAL",
-      "evidence": "gate-baseline.txt exit 0 and tool-qualification.txt exit 0; empty-tree TV PASS is not intended-red evidence; no Android-native qualification claim."
+      "status": "MET_REPORTING_BOUNDARY",
+      "evidence": [
+        "gate-final.txt",
+        "tool-qualification-resume.txt"
+      ],
+      "qualification_scope": "Assigned qualification command completes 25 controls; absent Android-native adapters remain a typed downstream assurance gap, never PASS.",
+      "scope": "All pre-existing gate areas pass; tvapp fails only intended red assertions. Qualification result recorded with Android-native assurance gap retained."
     }
   ],
-  "remaining_obligations": [
-    "Resolve or obtain owner disposition for named supply-chain findings; admit a verified/scanned closure.",
-    "Generate official-checksummed wrapper and strict tv-app verification-metadata.xml; demonstrate corrupted scratch checksum rejects resolution.",
-    "Author minimal build/test harness and empty interfaces, then required red tests; run CMD-RED with assertion failures only.",
-    "Freeze test/bootstrap hashes and retain identical test IDs for P2-A01 green.",
-    "Run repository gate with tvapp failing only on intended red; preserve existing-area PASS.",
-    "Record Android-native qualification as a separate typed capability gap where required; no Python substitution."
-  ],
+  "remaining_obligations": [],
   "remaining_risks": [
-    "Reachability and false-positive status of scanner findings not assessed; no security vulnerability confirmation claim.",
-    "Offline Java identity index stale; archive inventory not a clean full-coverage verdict.",
-    "Closure ClamAV was terminated after required scan stop; malware completion is not PASS."
+    "Five embedded build-host HIGH findings explicitly accepted under SD-042; no clean-vulnerability or universally-unreachable claim.",
+    "Archive Java identity DB is stale; all 135 external artifact coordinates also scanned against current vulnerability DB. Unknown/unidentified embedded code is not proven safe by a scanner.",
+    "Android-native coverage/mutation qualification remains unavailable in this checkout; no Android assurance PASS claimed.",
+    "No device, visual, APK-content or deployed-backend acceptance performed; these are outside this host-only red packet."
   ],
   "developer_feedback": [
     {
@@ -195,32 +513,62 @@
       "id": "DX-P2-A01T-003",
       "observation": "PROC-GATE-TOOL-QUALIFY passes 25 existing controls, but this checkout has no tools/ci/coverage/tvapp.sh or tools/ci/mutation/tvapp.sh. No Android-native qualification PASS claimed.",
       "evidence": "tool-qualification.txt; docs/vnv/tv-app/AGENTS.md"
+    },
+    {
+      "id": "DX-P2-A01T-004",
+      "observation": "One merged passive Gradle closure hides versions selected in separate Kotlin DSL/compiler/lint configurations. Strict metadata rejected omitted artifacts before application; split passive configurations match the actual execution graphs. No confirmed upstream defect or route switch.",
+      "evidence": [
+        "harness-help-attempt2.txt",
+        "app-dependencies-preparation.txt",
+        "inert-resolver-sd042.gradle",
+        "resolve-full-configurations.txt"
+      ]
+    },
+    {
+      "id": "DX-P2-A01T-005",
+      "observation": "Android SDK compile surface lacks JVM-only JSONObject.similar and Files.readString in host-test compilation; installed SnakeYAML structural comparison and Files.readAllBytes preserve assertions. Preparation error corrected before valid CMD-RED.",
+      "evidence": [
+        "calibration-compile.txt",
+        "calibration-final.txt"
+      ]
+    },
+    {
+      "id": "DX-P2-A01T-006",
+      "observation": "Generated Windows wrapper CRLF and Gradle log trailing spaces fail the existing whitespace gate. Line-ending/whitespace normalization preserves tested source, diagnostics and wrapper JAR checksum.",
+      "evidence": [
+        "gate-formatting-attempt.txt",
+        "evidence-normalization.json"
+      ]
     }
   ],
   "review_capabilities": {
-    "coverage_assist": "OCR delegate mode remains selected for independent phase review; not run by author",
-    "reverify": "not applicable: evidence/test preparation only; no compiled APK attribute claim"
+    "coverage_assist": {
+      "selected": "OCR delegate mode, required at independent phase review",
+      "backend": "OpenCodeReview delegate",
+      "availability": "NOT_RUN_IN_AUTHOR_ROLE; resolve at IE-P2-7 review dispatch, not claimed as passing evidence"
+    },
+    "deterministic_verification.reverify": {
+      "selected": "not applicable for this red-test slice per frozen review_path",
+      "reason": "No APK/static compiled-binary attribute claim; ordinary ATE reliability runs are not substituted for Reverify."
+    },
+    "snapshot_profile": "opensource-hackathon",
+    "configuration_digest_sha256": "11c4478edb7b0c94da196cdc8be2317f498378724ae041bde0c108832b1e2036",
+    "independent_review": "NOT_RUN: author cannot self-certify; one phase review remains assigned to IE-P2-7"
   },
-  "skills_creation": "NO_CHANGE: existing scan-software-supply-chain owns artifact admission; implementer owns bounded mutation. New installed skill would duplicate ownership and has no authorized target in this test packet. Matching request = qualify externally acquired Gradle closure (used with actual evidence); non-matching = implement LinkScreen from local source (scan skill excludes ordinary local code). No skill installation or validation-success claim.",
-  "evidence_sha256s": {
-    "artifact-sha256s.txt": "bb287cf020f5c7b20bbc09eacb88c574fc3e8f94ca121b61037224c3d282ee3e",
-    "buildtools-clam.txt": "400a0feb924422c8bc206d72e0b033bea141fb89136261bedf08343d5596401b",
-    "closure-clam.txt": "1c0e7f5ecf9cefae65e001e46134e95f80c8dfed45383d1f0aa6e9a69d655a18",
-    "closure-trivy.json": "27942b43e852e9c7bdbd64490827a2228b206fa8119af2ceb4c083a55dbbd6e5",
-    "gate-baseline.txt": "47a1b2e58d7a0c169c519cf87ea257e45657a0c7225ea72901471943f329f47e",
-    "gradle-9.7-clam.txt": "660bd7ed3671069a74b1994b07f4fb4141104d227c36473819aa35b2d28f5299",
-    "inert-resolver.gradle": "57315b53fc932c258b4e67f529b6bf77e546f8d9ffd48ba43f43c64c2dd11d3f",
-    "lease-validation.json": "ef5f34d7397fd2a08c202d82b9f0a313ac82c9650866acb290c8dc0207c80eea",
-    "newer-compiler-trivy.json": "fdd48d26ec6f3601b75263295c42adab20c856b4c1dba6ea825cd26579eb750d",
-    "proof-row-inputs.json": "b27c5bc6b8b09d1348263387619562cb35d3bad0c8555b29f05d787e14e12025",
-    "resolve-attempt1.txt": "bd03a9c0438cc0ca37bf5bab80c6820596932264aabfc7e6cdcaee7e479ca452",
-    "resolve-attempt2.txt": "e77b48df5d1038efcc8edd2378bcd13f052514eb30f6712fce211612ea5c1dd9",
-    "resolved-artifacts.tsv": "67e6482993ac13e20e64db2b6c4377a56a8a0e0808814b582657152d45656b9a",
-    "supply-chain.json": "cc7c1363fa560d698115eb10164aa605ea8e7328f1e26d10ff9f01eb8a89a9f9",
-    "tool-qualification.txt": "659da2311cdb3396082722edb788b55658806d8afb5945bfb1153a39edea1052"
+  "bran_status": "unavailable: no native .bran/policy.yaml; ordinary discovery used",
+  "skills_creation": {
+    "outcome": "NO_CHANGE",
+    "strongest_peer": "scan-software-supply-chain; paired with the existing Implementer and Write Tests owners",
+    "comparison": "Existing installed skills already own admission, bounded mutation, and tests. A new owner would duplicate them and has no separate authorized skill target in this packet. No installed skill changed.",
+    "matching_request_test": "Qualify externally acquired Gradle closure: scan skill matched and executed with official checksum, vulnerability and malware evidence.",
+    "nonmatching_request_test": "Author local shell/link tests: supply-chain skill excludes ordinary locally authored code; Write Tests handled the source work.",
+    "creator_scripts": "Not invoked: no new skill candidate, initialization or metadata generation warranted under create-lean-skill preconditions; no generic-validator PASS claimed."
   },
+  "evidence_output_policy": "Captured logs replace the private home with $HOME and trim whitespace/blank EOF lines; diagnostics, counts, status and test identities preserved. Raw/normalized digests retained for formatting correction.",
+  "prior_host_qualification": "P2-X01 part A commit 8a5bf7f: spikes/sp1-device/toolchain-pins.txt and scan-verdicts.txt",
   "precommit_lease_revalidation": {
-    "status": "PASS",
+    "controller_journey": "$HOME/alphazede/worktrees/amazon-fantasy-companion-implementation/docs/plans/2026-10-11-amazon-fantasy-companion/journey.json",
+    "controller_sha256": "fe29877c3af8c2d327278a431ab34b1665bac75d3de4843854181ff25ffdae05",
     "dispatch": {
       "kind": "dispatch_lease",
       "lease": "P2-A01T",
@@ -234,44 +582,240 @@
         "tv-app-manifest",
         "tv-app-gradle"
       ],
-      "state": "active"
+      "state": "active",
+      "attempt1": {
+        "commit": "18c39de",
+        "outcome": "OWNER_DECISION_REQUIRED",
+        "reason": "10 HIGH/CRITICAL in AGP 9.3.1/KGP 2.4.21 closure"
+      }
     },
     "parent_generation": 2,
-    "controller_sha256": "570d0e23226b0def2ed9c37c90c2bb639c87e68b898641fd4e5ebc64f806023d",
-    "candidate_revision": "75afca022f967945a70bf715beb2a7c98e65ed9d"
+    "repository": "github:1wgrumph/amazon-fantasy-companion",
+    "candidate_revision": "18c39de99446eb7c015a17ab5a67c7b86fcc5939",
+    "next_action": "Return frozen P2-A01T red boundary to controller; P2-A01 realizes behavior on unchanged test IDs/hashes. No push/PR/merge or device actions in this packet.",
+    "scope_corrections": [
+      "Session authority permits tv-app/.gitignore and commits red tests with --no-verify, superseding older plan text."
+    ],
+    "coverage_assist": "OCR delegate mode required at independent phase review; not an author review",
+    "reverify": "not applicable: red tests and receipts; no APK attribute claims",
+    "resume_decision": "SD-042 (2026-10-14): patch 5, accept 5; session authority unchanged",
+    "precommit_revalidation": "PASS: same repository/worktree/branch/generation/active dispatch/route; current HEAD is acknowledged attempt1 candidate"
   },
-  "changed_paths": [
-    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/artifact-sha256s.txt",
-    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/buildtools-clam.txt",
-    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/closure-clam.txt",
-    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/closure-trivy.json",
-    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/gate-baseline.txt",
-    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/gradle-9.7-clam.txt",
-    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/inert-resolver.gradle",
-    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/lease-validation.json",
-    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/newer-compiler-trivy.json",
-    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/proof-row-inputs.json",
-    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/receipt.json",
-    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/resolve-attempt1.txt",
-    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/resolve-attempt2.txt",
-    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/resolved-artifacts.tsv",
-    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/supply-chain.json",
-    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/tool-qualification.txt"
+  "capability_gaps": [
+    {
+      "id": "ANDROID_NATIVE_COVERAGE_MUTATION_NOT_QUALIFIED",
+      "status": "GAP",
+      "scope": "Downstream Android assurance; exact assigned PROC-GATE-TOOL-QUALIFY passes generic/Python controls only",
+      "evidence": "tool-qualification-resume.txt"
+    }
   ],
-  "resolver_attempt1_raw_sha256": "81d700b0f4ea9e6c901d4b493d3908ba4fde394482f550a0bcbdcf056a96a969",
-  "bran_status": "unavailable: no native .bran/policy.yaml; ordinary discovery used",
-  "prior_host_qualification": "P2-X01 part A commit 8a5bf7f: spikes/sp1-device/toolchain-pins.txt and scan-verdicts.txt",
+  "changed_paths": [
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/acceptance-validation.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/annotations-delta-clam.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/annotations-delta-integrity.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/annotations-delta-trivy-output.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/annotations-delta-trivy.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/app-dependencies-preparation.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/calibration-compile.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/calibration-final.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/calibration-preparation.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/checksum-negative.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/checksum-negative.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/cmd-red-junit/TEST-com.afc.companion.ApiNoRetryTest.xml",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/cmd-red-junit/TEST-com.afc.companion.ApiOperationsTest.xml",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/cmd-red-junit/TEST-com.afc.companion.ApiPolicyTest.xml",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/cmd-red-junit/TEST-com.afc.companion.ApiRetryTest.xml",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/cmd-red-junit/TEST-com.afc.companion.EnvelopeRequiredFieldTest.xml",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/cmd-red-junit/TEST-com.afc.companion.EnvelopeSourceTest.xml",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/cmd-red-junit/TEST-com.afc.companion.EnvelopeTest.xml",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/cmd-red-junit/TEST-com.afc.companion.FixtureCalibrationTest.xml",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/cmd-red-junit/TEST-com.afc.companion.LinkScreenTest.xml",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/cmd-red-junit/TEST-com.afc.companion.ShellContractTest.xml",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/cmd-red.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/compiler-delta-clam.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/compiler-delta-integrity.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/compiler-delta-trivy-output.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/compiler-delta-trivy.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/evidence-normalization.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/final-artifact-sha256s.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/final-closure-trivy-output.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/final-closure-trivy.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/final-native-bom.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/final-native-trivy-output.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/final-native-trivy.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/final-resolved-artifacts.tsv",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/frozen-hashes.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/gate-final.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/gate-formatting-attempt.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/harness-help-attempt1.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/harness-help-attempt2.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/harness-help-attempt3.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/harness-help-final.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/inert-resolver-sd042.gradle",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/lease-validation.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/patched-artifact-sha256s.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/patched-closure-clam.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/patched-closure-trivy.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/patched-native-bom.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/patched-native-trivy-output.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/patched-native-trivy.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/patched-resolved-artifacts.tsv",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/patched-trivy-output.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/receipt.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/red-test-cases.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/reliability-classpath-prepare.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/reliability-concurrent-1.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/reliability-concurrent-2.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/reliability-sequential-1.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/reliability-sequential-2.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/reliability-sequential-3.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/reliability-sequential-4.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/reliability-sequential-5.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/reliability.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/replacement-integrity.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/resolve-annotations-delta.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/resolve-compiler-delta.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/resolve-full-configurations.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/resolve-script-delta.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/resolve-sd042.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/runtime-classpath.gradle",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/script-delta-clam.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/script-delta-integrity.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/script-delta-trivy-output.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/script-delta-trivy.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/sd042-disposition.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/test-coverage.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/tool-qualification-resume.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/wrapper-generate.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/wrapper-integrity.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01T/wrapper-version.txt",
+    "tv-app/.gitignore",
+    "tv-app/app/build.gradle.kts",
+    "tv-app/app/src/main/AndroidManifest.xml",
+    "tv-app/app/src/main/java/com/afc/companion/Shell.kt",
+    "tv-app/app/src/main/java/com/afc/companion/link/LinkScreen.kt",
+    "tv-app/app/src/main/java/com/afc/companion/net/ApiClient.kt",
+    "tv-app/app/src/test/java/com/afc/companion/ApiOperationsTest.kt",
+    "tv-app/app/src/test/java/com/afc/companion/ApiPolicyTest.kt",
+    "tv-app/app/src/test/java/com/afc/companion/ContractFixtures.kt",
+    "tv-app/app/src/test/java/com/afc/companion/EnvelopeTest.kt",
+    "tv-app/app/src/test/java/com/afc/companion/FixtureCalibrationTest.kt",
+    "tv-app/app/src/test/java/com/afc/companion/LinkScreenTest.kt",
+    "tv-app/app/src/test/java/com/afc/companion/ShellContractTest.kt",
+    "tv-app/build.gradle.kts",
+    "tv-app/gradle/verification-metadata.xml",
+    "tv-app/gradle/wrapper/gradle-wrapper.jar",
+    "tv-app/gradle/wrapper/gradle-wrapper.properties",
+    "tv-app/gradlew",
+    "tv-app/gradlew.bat",
+    "tv-app/settings.gradle.kts"
+  ],
+  "candidate_source_diff_sha256": "4384b080c1f0827a0ccbe67da69d4543fba33392bc68e020b5e2c472e9165f94",
+  "evidence_sha256s": {
+    "acceptance-validation.json": "47b00eb5a0792ff392e174804ba96bda2bf774d8a795ab653f98f7975160eb28",
+    "annotations-delta-clam.txt": "befb8813fbf47b7f182e29ce0d7ea2d8f06c27e077731dbdc1389953d0369a4c",
+    "annotations-delta-integrity.json": "fafa0813e4de53e599f5a9e0cc120a7afa4e54fb921bdb3ddc6a9fd4dec73782",
+    "annotations-delta-trivy-output.txt": "7cf1b3764b2e4b3e9567aecc06d7f877ca4a787d86b7ff47c7fcd8acb4683f24",
+    "annotations-delta-trivy.json": "c7e392d3c8c988a3eb169a3aec3a61c11db2d675526ad3121f757c0e7c1145d0",
+    "app-dependencies-preparation.txt": "009151defd75b29056c861c80c4493a56e4c7c8d3ad6f34c9a77c82a214e9509",
+    "artifact-sha256s.txt": "bb287cf020f5c7b20bbc09eacb88c574fc3e8f94ca121b61037224c3d282ee3e",
+    "buildtools-clam.txt": "400a0feb924422c8bc206d72e0b033bea141fb89136261bedf08343d5596401b",
+    "calibration-compile.txt": "26caa8398dbefe70ce5b9f4ed8aae20348187397b568af8e5d8bfd52403cf98f",
+    "calibration-final.txt": "a503725f81e406c27c3592238f061f6ea01a1b5a2b1fc1a3aa3b8e065b2465f5",
+    "calibration-preparation.txt": "a61470f9cc8db14281b998622d9fba3c98a800d379aa162a7373e792015b5ff6",
+    "checksum-negative.json": "613f4acdfa23c45b558e0d7672b33faf18f4a3b667f640b96db93b53732f77a5",
+    "checksum-negative.txt": "5fd25bd64ff5c4937df348a95592742752fd269b9ebfc86bfad85ce10b8c549a",
+    "closure-clam.txt": "1c0e7f5ecf9cefae65e001e46134e95f80c8dfed45383d1f0aa6e9a69d655a18",
+    "closure-trivy.json": "27942b43e852e9c7bdbd64490827a2228b206fa8119af2ceb4c083a55dbbd6e5",
+    "cmd-red-junit/TEST-com.afc.companion.ApiNoRetryTest.xml": "4a2536438595a4f6ad64c93351d72a071d10bb2475e6855227d9f9e9a16e7620",
+    "cmd-red-junit/TEST-com.afc.companion.ApiOperationsTest.xml": "62f7b008cf8b76b602a3c12b5aa11f0c4ff384a5b4bcf40744249642163934fc",
+    "cmd-red-junit/TEST-com.afc.companion.ApiPolicyTest.xml": "a57bf5393a47c5a83e8df938d8cd8cf07f7952a9440ce82ee89d0b4de729878c",
+    "cmd-red-junit/TEST-com.afc.companion.ApiRetryTest.xml": "938b6538d88d014a8d86c400623b870469002493212c7cb5d33c7dca069e488f",
+    "cmd-red-junit/TEST-com.afc.companion.EnvelopeRequiredFieldTest.xml": "2452531911b4487ff1ff8b18829b79d66035ffb3c1ffcddff17cff017ace6d2e",
+    "cmd-red-junit/TEST-com.afc.companion.EnvelopeSourceTest.xml": "c1ba3d3f00e7d8d2016a4874fa8451b99d0f643e9651d66e8c07cbb11a050245",
+    "cmd-red-junit/TEST-com.afc.companion.EnvelopeTest.xml": "1e21fb8b00691c47db9f8079a54e2c1313fab319f132d847ae84ba5f4d11fe8b",
+    "cmd-red-junit/TEST-com.afc.companion.FixtureCalibrationTest.xml": "f04dffaa6d9a93c1dd2d6b0201db6d007dcab2dd63ebe06b38b7c43d07c82fc8",
+    "cmd-red-junit/TEST-com.afc.companion.LinkScreenTest.xml": "634fec3b41a75cc5c1de702f35b01b8bfb7140071073e0be19c98e2005540031",
+    "cmd-red-junit/TEST-com.afc.companion.ShellContractTest.xml": "c44c2ccf93be3da0c575daf45491b95c0d49a2b2e50d2277c52d179e3a8bf529",
+    "cmd-red.txt": "841383941b0bfbe60f5d450c69e80ccbcee55134142175cf05e414f99afb9909",
+    "compiler-delta-clam.txt": "90fe022a6b0585b7d487b70a3246e80c7b8acc308c4b397a58d8e931a7c377a4",
+    "compiler-delta-integrity.json": "cf55b286996acc4d01f616a902c04e0aebb004b3a46b9ef70e15ba8398e433e9",
+    "compiler-delta-trivy-output.txt": "151a0bc7e0e89641a02a1a9fad048f49399ac6b52b08b50f0ee9c78ffa3b8db1",
+    "compiler-delta-trivy.json": "83db69e03bc99f9212b0f158d2b53c016af2ac70c68865a5e18b48a27a7ce98c",
+    "evidence-normalization.json": "f5c1345549108c37113a3b0f380657a4085d005ec8d48ce2ffeef2478f782924",
+    "final-artifact-sha256s.txt": "ac7061bf1f7fc954ba181420ab0694a7bd5ad054a69b6a177236d7ac9930c336",
+    "final-closure-trivy-output.txt": "763c45af76b88cc4debfc11c71c33519d348646b65711178b0a9113993cdb05b",
+    "final-closure-trivy.json": "a05c3e320672bae43d861a1b623159c12ae853c1571755dc9d52673487a1706d",
+    "final-native-bom.json": "f9b2c5aeea9e9f292b569670584fd383f24c1be56e9d69bb24aec59ab50cc842",
+    "final-native-trivy-output.txt": "295c9640f1f374cca3fb037f41000cd66f94cd4ec443bcac790eba812a059e46",
+    "final-native-trivy.json": "198ee5e86087bb59ac52460ba23d6231bda57136eafc2c6fbfa0ed710b95c62f",
+    "final-resolved-artifacts.tsv": "e459b5aca478c5e95bb86dafc3c99adf56a141ebee34e8ea5947de13992dde60",
+    "frozen-hashes.json": "731f3725fcc9916a673c3f7a3ee60749606001b5803d1f5651a569cf2d763ac5",
+    "gate-baseline.txt": "47a1b2e58d7a0c169c519cf87ea257e45657a0c7225ea72901471943f329f47e",
+    "gate-final.txt": "d00f2013ff3fe4b7ff637f7b9aad817960fac6a2ef431458f2feec64522e6c49",
+    "gate-formatting-attempt.txt": "fdbd40b782e7130592a0057f70cecdd2154a3a360375211f48b7d001a37ae032",
+    "gradle-9.7-clam.txt": "660bd7ed3671069a74b1994b07f4fb4141104d227c36473819aa35b2d28f5299",
+    "harness-help-attempt1.txt": "7f05a8dc04392a5b93270a013489c2ad5d898d52d278c426e3b53fdc69bf2274",
+    "harness-help-attempt2.txt": "e2810c8629e2dfcb52827ac04b0a0ef9ae9cfbbba66e741d5a878a3b75932059",
+    "harness-help-attempt3.txt": "9a8ce71d04b31acbfae4851d40404ba0017c5a14d50c1a30d42b36533c7c8c66",
+    "harness-help-final.txt": "b60d11b3574bd94a4d6d5b68bc9afbebe4787c03e47c7f37bd84d507000807a9",
+    "inert-resolver-sd042.gradle": "38e64d7044e84610cb6e31667cec6e1ab0b4db1397efc234f6bf403fd2c4b114",
+    "inert-resolver.gradle": "57315b53fc932c258b4e67f529b6bf77e546f8d9ffd48ba43f43c64c2dd11d3f",
+    "lease-validation.json": "a10cf4a299c3e5a8e5686119f26f2e232814e8f6e206330ee72ca2b5639f18d5",
+    "newer-compiler-trivy.json": "fdd48d26ec6f3601b75263295c42adab20c856b4c1dba6ea825cd26579eb750d",
+    "patched-artifact-sha256s.txt": "b21555a2dcb7119ee61726e9457f64322fc07ea9a31306a3ed49a7223dc96baf",
+    "patched-closure-clam.txt": "46db1f4359ceddd292b011585eb546c1a72a0867caf8da32abbdade4d85ddc21",
+    "patched-closure-trivy.json": "1a0fa400f4f7d6e32b645d4b84e53eb904937f42a801b2135dc17efcb56a9e00",
+    "patched-native-bom.json": "dfe0a6891e2daffb52f0755b0c6d2f9f28802c59b488a873f4670b5d1fb10b81",
+    "patched-native-trivy-output.txt": "930b0c147a000132afd0876f161904f90faa4b22be73137d3ad72ff6b20d2f88",
+    "patched-native-trivy.json": "a0e42f3f1f2758ea066919f656467236fd4e55fd8d4c95714fe308a5f90213d2",
+    "patched-resolved-artifacts.tsv": "3d2939c23df0823090aca1ba6d81069c95c5f5daefe87ae013362f2587b2bb17",
+    "patched-trivy-output.txt": "ce7bba1b0316b660e87bea98baae22a5286c3884627bc721d90d28c3003c0177",
+    "proof-row-inputs.json": "b27c5bc6b8b09d1348263387619562cb35d3bad0c8555b29f05d787e14e12025",
+    "red-test-cases.json": "2fbd7bf26a4f0eab7c96f821c0f735462da27ca00456cc98d7e5e1d59ecdf8ce",
+    "reliability-classpath-prepare.txt": "104b7f8584c8a76c9fe2fe92ae56d48b0cec0c8f72a765fa2f3c9f82854449b9",
+    "reliability-concurrent-1.txt": "5de29d37b485db607d0244c878ce9a4cc2e9cd591abe7ba39b5ef07f9d0b1aa9",
+    "reliability-concurrent-2.txt": "f8a76b0eaf50ff4fd0884d7ec99b84a3be80072add9ef254930f266600cbf234",
+    "reliability-sequential-1.txt": "1e6a14d8538529896eb7ee5830fcce83c8638bf392867f9a45626664cc83c32b",
+    "reliability-sequential-2.txt": "0fb02e869c57290cc089c9e68fa23d5039938dd60df421d2c0f4db1ed394d9c4",
+    "reliability-sequential-3.txt": "d7f7eba7819cae7533fc412bf4996697c823d5f6017581bcf5ef7329f39eaec6",
+    "reliability-sequential-4.txt": "a6533efecf3447fe897f4b46b283e56f001fad1ea5457a3930f0626a3d22fd09",
+    "reliability-sequential-5.txt": "d7f7eba7819cae7533fc412bf4996697c823d5f6017581bcf5ef7329f39eaec6",
+    "reliability.json": "2d522fed9f362bf8c362ab0a7e650e84d8e050ed01d3761903bc024c799e1d45",
+    "replacement-integrity.json": "1cf9094fed261b193c59c8a53474725a7ea9c9d222b062ae00e7483ac8de62b9",
+    "resolve-annotations-delta.txt": "cf935abd10d1fa11934e07b40695f43de86c6ba77c03a25f1994728c7fb09986",
+    "resolve-attempt1.txt": "bd03a9c0438cc0ca37bf5bab80c6820596932264aabfc7e6cdcaee7e479ca452",
+    "resolve-attempt2.txt": "e77b48df5d1038efcc8edd2378bcd13f052514eb30f6712fce211612ea5c1dd9",
+    "resolve-compiler-delta.txt": "1c32b7fe85577593f79781e570fc3a2af0ce198c4e48b2bce910ef6a25201ceb",
+    "resolve-full-configurations.txt": "1c32b7fe85577593f79781e570fc3a2af0ce198c4e48b2bce910ef6a25201ceb",
+    "resolve-script-delta.txt": "afd3ab59ca0fa3f7ebd2db661991af9c146e72511f30ec3a7bde7fe2c2e0637a",
+    "resolve-sd042.txt": "067d47bf702a9f3f7e4fa1d10182f42ab3afdd2c6be89896eb8bc2d3d691f556",
+    "resolved-artifacts.tsv": "67e6482993ac13e20e64db2b6c4377a56a8a0e0808814b582657152d45656b9a",
+    "runtime-classpath.gradle": "69bc53fb9ea24e48de458c71a922e6a7bf76e02173e8510362305e30df33903e",
+    "script-delta-clam.txt": "ddf13eed36c1b344e071bea09c3d4c7a3a9bff98efe5a3fd43a67632a855d1a1",
+    "script-delta-integrity.json": "728ac24b5ed1518db498a7d4ab0180e6575bfbad08552c58a8ad101db3548721",
+    "script-delta-trivy-output.txt": "024fcefa4cc0c3ea039982133d0b47f4fb49749e01ee6f25a1360735900fb453",
+    "script-delta-trivy.json": "c6b126bc04356047d9534bc013462cc157549ab34d0ece75b3a55da855f4ba19",
+    "sd042-disposition.json": "490f5c3a1b5977bd9cf97947bcc4128fd2c78a96066b1dd064cb9e16e2374213",
+    "supply-chain.json": "cc7c1363fa560d698115eb10164aa605ea8e7328f1e26d10ff9f01eb8a89a9f9",
+    "test-coverage.json": "d57f240a9316c1870146e08b5eb184d6d19818f18eab874292c1a89fe1440be2",
+    "tool-qualification-resume.txt": "eeb7cee8c79ee825454b35c01d14fe65258af95644d1976e4f7f6215250d2629",
+    "tool-qualification.txt": "659da2311cdb3396082722edb788b55658806d8afb5945bfb1153a39edea1052",
+    "wrapper-generate.txt": "236f717b8ed842a15bd6838c72af85eed0144467ac089678449696c7017b429e",
+    "wrapper-integrity.json": "6fded0fac7401544702a1b4b2bd1e169f5944c3adff71c4ba9a956d0729327a7",
+    "wrapper-version.txt": "a3762536824f79c1b00110413034e10c98c2b49709b69e403bc87a4f215e522c"
+  },
   "evidence_validation": [
+    {
+      "command": "git diff --cached --check",
+      "exit": 0
+    },
     {
       "command": "python3 tools/ci/check_docs.py",
       "exit": 0
     },
     {
-      "command": "python3 tools/ci/check_paths.py --files <every P2-A01T evidence file>",
-      "exit": 0
-    },
-    {
-      "command": "git diff --cached --check",
+      "command": "python3 tools/ci/check_paths.py --files <all staged packet files>",
       "exit": 0
     }
   ]
