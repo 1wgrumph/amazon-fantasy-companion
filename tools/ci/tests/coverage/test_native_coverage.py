@@ -11,6 +11,9 @@ import unittest
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
+PROBE_TOOL = 'diff-cover'  # must name a tool in the adapter's `for tool in ...` line
+ADAPTER_SH = Path(__file__).resolve().parent.parent.parent / 'coverage' / 'backend.sh'
+
 
 class NativeCoverage(unittest.TestCase):
     def setUp(self):
@@ -60,10 +63,19 @@ class NativeCoverage(unittest.TestCase):
         self.assertFalse((self.tmp / 'coverage.xml').exists())
 
     def test_diff_cover_binding_is_available(self):
-        result = subprocess.run(['python3.12', '-m', 'diff_cover', '--version'],
+        exe = shutil.which(PROBE_TOOL)
+        self.assertIsNotNone(exe, 'GAP DIFF_COVER_UNAVAILABLE: diff-cover not on PATH')
+        result = subprocess.run([exe, '--version'],
                                 capture_output=True, text=True, timeout=60)
         self.assertEqual(result.returncode, 0,
                          'GAP DIFF_COVER_UNAVAILABLE: ' + result.stdout + result.stderr)
+
+    def test_probe_executable_matches_adapter(self):
+        line = next(line for line in ADAPTER_SH.read_text(encoding='utf-8').splitlines()
+                    if line.startswith('for tool in '))
+        tools = line.split('for tool in ')[1].split(';')[0].split()
+        self.assertIn(PROBE_TOOL, tools,
+                      f'probe/adapter drift: {PROBE_TOOL!r} not in adapter tools {tools}')
 
 
 if __name__ == '__main__':
