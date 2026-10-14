@@ -1,11 +1,17 @@
 """Offline tests for capture.py: no network, a fake fetch stands in for ESPN."""
 
 import hashlib
+import io
 import json
+import os
 import sys
 import tempfile
 import unittest
+import urllib.request
+import urllib.response
+from email.message import Message
 from pathlib import Path
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import capture  # noqa: E402
@@ -97,6 +103,97 @@ class CaptureTest(unittest.TestCase):
             capture.http_get('https://example.com/x', 10)
         with self.assertRaisesRegex(capture.CaptureError, 'non-ESPN'):
             capture.http_get('http://site.api.espn.com/x', 10)
+
+    def test_http_get_rejects_302_without_following_redirect(self):
+        urls = []
+
+        def open_response(handler, request):
+            urls.append(request.full_url)
+            headers = Message()
+            headers['Location'] = 'https://example.com/feed'
+            status = 302 if request.full_url == SB_URL else 200
+            response = urllib.response.addinfourl(io.BytesIO(b'{}'), headers, request.full_url, status)
+            response.msg = 'Found' if status == 302 else 'OK'
+            return response
+
+        with patch.object(urllib.request, '_opener', None), \
+                patch.object(urllib.request.HTTPSHandler, 'https_open', open_response), \
+                patch.object(urllib.request.HTTPHandler, 'http_open', open_response):
+            with self.assertRaisesRegex(capture.CaptureError, 'HTTP 302'):
+                capture.http_get(SB_URL, 10)
+        self.assertEqual(urls, [SB_URL])
+
+    def test_http_get_checks_response_scheme_and_host(self):
+        for url in ('https://example.com/feed', 'http://site.api.espn.com/feed'):
+            with self.subTest(url=url):
+                response = urllib.response.addinfourl(io.BytesIO(b'{}'), Message(), url, 200)
+                response.msg = 'OK'
+                with patch.object(urllib.request, '_opener', None), \
+                        patch.object(urllib.request.HTTPSHandler, 'https_open', return_value=response):
+                    with self.assertRaisesRegex(capture.CaptureError, 'response URL'):
+                        capture.http_get(SB_URL, 10)
+
+    def test_http_get_accepts_same_origin_response(self):
+        response = urllib.response.addinfourl(io.BytesIO(b'{}'), Message(), SB_URL, 200)
+        response.msg = 'OK'
+        with patch.object(urllib.request, '_opener', None), \
+                patch.object(urllib.request.HTTPSHandler, 'https_open', return_value=response):
+            self.assertEqual(capture.http_get(SB_URL, 10), (200, b'{}'))
+
+    def test_non_object_event_is_rejected(self):
+        with self.assertRaisesRegex(capture.CaptureError, 'event is not an object'):
+            self.run_capture({SB_URL: (200, scoreboard(1))})
+        self.assertFalse(self.out.exists())
+
+    def test_non_object_status_type_is_rejected(self):
+        bad_event = event('101')
+        bad_event['competitions'][0]['status']['type'] = 'x'
+        with self.assertRaisesRegex(capture.CaptureError, 'has no status'):
+            self.run_capture({SB_URL: (200, scoreboard(bad_event))})
+        self.assertFalse(self.out.exists())
+
+    def test_event_state_rejects_non_object_values(self):
+        for value in (1, {'competitions': [1]}, {'competitions': [{'status': 'x'}]}):
+            with self.subTest(event=value):
+                with self.assertRaisesRegex(capture.CaptureError, 'has no status'):
+                    capture.event_state(value)
+
+    def test_event_id_with_trailing_newline_is_rejected(self):
+        with self.assertRaisesRegex(capture.CaptureError, 'unsafe event id'):
+            self.run_capture({SB_URL: (200, scoreboard(event('101\n'))),
+                              capture.SUMMARY_URL.format(event='101\n'): (200, summary('101\n'))})
+        self.assertFalse(self.out.exists())
+
+    def test_date_with_trailing_newline_is_rejected_before_fetch(self):
+        feed = FakeFeed({capture.SCOREBOARD_URL.format(date=DATE + '\n'): (200, scoreboard())})
+        with self.assertRaisesRegex(capture.CaptureError, 'bad date'):
+            capture.capture([DATE + '\n'], None, 'historical', self.out, 1024, fetch=feed)
+        self.assertEqual(feed.urls, [])
+
+    def test_verify_reports_non_object_index_header(self):
+        game_dir = self.out / '101'
+        game_dir.mkdir(parents=True)
+        (game_dir / 'index.json').write_text('[]')
+        self.assertEqual(capture.verify(self.out), ['101: bad index header'])
+
+    def test_verify_reports_non_object_file_entries(self):
+        game_dir = self.out / '101'
+        game_dir.mkdir(parents=True)
+        for entry in (1, 'x', None, []):
+            with self.subTest(entry=entry):
+                (game_dir / 'index.json').write_text(json.dumps({
+                    'schema': capture.INDEX_SCHEMA, 'game_id': '101', 'files': [entry]}))
+                self.assertEqual(capture.verify(self.out), ['101: files entry is not an object'])
+
+    def test_atomic_write_uses_readable_permissions_subject_to_umask(self):
+        path = Path(self.tmp.name) / 'body.json'
+        previous_umask = os.umask(0o027)
+        try:
+            capture.write_atomic(path, b'{}')
+        finally:
+            os.umask(previous_umask)
+        self.assertEqual(path.stat().st_mode & 0o777, 0o640)
+        self.assertEqual(path.read_bytes(), b'{}')
 
     def test_historical_skips_unfinished_games(self):
         feed, written = self.run_capture({SB_URL: (200, scoreboard(event('101', completed=False)))})

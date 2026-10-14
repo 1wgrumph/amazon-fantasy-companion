@@ -42,12 +42,17 @@ MIN_INTERVAL_S = 1.0
 INDEX_SCHEMA = 'afc.replay-index.v1'
 PROVENANCE = {'historical': 'historical-replay', 'live': 'live'}
 FILE_RE = re.compile(r'^(\d{3})-(scoreboard|summary)\.json$')
-ID_RE = re.compile(r'^\d{1,12}$')
-DATE_RE = re.compile(r'^\d{8}$')
+ID_RE = re.compile(r'\A\d{1,12}\Z')
+DATE_RE = re.compile(r'\A\d{8}\Z')
 
 
 class CaptureError(Exception):
     pass
+
+
+class NoRedirect(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        return None
 
 
 def utc_now():
@@ -62,7 +67,10 @@ def http_get(url, max_bytes):
     request = urllib.request.Request(url, headers={
         'Accept': 'application/json', 'User-Agent': 'afc-sp5-capture/1'})
     try:
-        with urllib.request.urlopen(request, timeout=30) as response:
+        with urllib.request.build_opener(NoRedirect()).open(request, timeout=30) as response:
+            actual = urllib.parse.urlsplit(response.geturl())
+            if (actual.scheme, actual.hostname) != (parts.scheme, parts.hostname):
+                raise CaptureError(f'refused response URL: {response.geturl()}')
             body = response.read(max_bytes + 1)
             status = response.status
     except urllib.error.HTTPError as error:
@@ -96,9 +104,20 @@ def validate(kind, status, body, max_bytes, event=None):
 
 def event_state(event):
     try:
-        return event['competitions'][0]['status']['type']
+        if not isinstance(event, dict):
+            raise TypeError
+        competition = event['competitions'][0]
+        if not isinstance(competition, dict):
+            raise TypeError
+        status = competition['status']
+        if not isinstance(status, dict):
+            raise TypeError
+        state = status['type']
+        if not isinstance(state, dict):
+            raise TypeError
+        return state
     except (KeyError, IndexError, TypeError):
-        raise CaptureError(f'scoreboard: event {event.get("id")} has no status') from None
+        raise CaptureError('scoreboard: event has no status') from None
 
 
 def write_atomic(path, data):
@@ -106,6 +125,9 @@ def write_atomic(path, data):
     try:
         with os.fdopen(fd, 'wb') as handle:
             handle.write(data)
+        umask = os.umask(0)
+        os.umask(umask)
+        os.chmod(tmp, 0o644 & ~umask)
         os.replace(tmp, path)
     except BaseException:
         if os.path.exists(tmp):
@@ -172,6 +194,8 @@ def capture(dates, events, provenance_key, out, max_bytes, fetch=None, sleep=tim
             raise CaptureError(f'bad date {date!r}, expected YYYYMMDD')
         sb_url, sb_at, sb_status, sb_body, sb = get('scoreboard', SCOREBOARD_URL.format(date=date))
         for event in sb['events']:
+            if not isinstance(event, dict):
+                raise CaptureError('scoreboard: event is not an object')
             game_id = str(event.get('id', ''))
             if not ID_RE.match(game_id):
                 raise CaptureError(f'scoreboard: unsafe event id {game_id!r}')
@@ -205,11 +229,17 @@ def verify(out):
         except ValueError:
             problems.append(f'{game_dir.name}: index.json is not valid JSON')
             continue
+        if not isinstance(index, dict):
+            problems.append(f'{game_dir.name}: bad index header')
+            continue
         if index.get('schema') != INDEX_SCHEMA or index.get('game_id') != game_dir.name:
             problems.append(f'{game_dir.name}: bad index header')
         listed = set()
         last_seq = 0
         for entry in index.get('files', []):
+            if not isinstance(entry, dict):
+                problems.append(f'{game_dir.name}: files entry is not an object')
+                continue
             name = entry.get('file', '')
             listed.add(name)
             match = FILE_RE.match(name)

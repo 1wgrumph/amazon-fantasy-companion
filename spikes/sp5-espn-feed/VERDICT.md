@@ -22,8 +22,8 @@ correction behaviour of AFC-PR-012.
 
 | Route | Documentation source | Observed result |
 |---|---|---|
-| Scoreboard `GET https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=YYYYMMDD` | ESPN unofficial public JSON (SD-004); no published contract | HTTP 200, `application/json;charset=UTF-8`, no auth. 2026-10-11: 13 events, 117,614 bytes. 2026-10-12: 1 event, 23,199 bytes. Every event `STATUS_FINAL`. |
-| Summary `GET https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=<id>` | ESPN unofficial public JSON (SD-004) | HTTP 200 for all 14 events. 624,582 to 679,842 bytes each. `header.id` equals the event id. `cache-control: max-age=1`. |
+| Scoreboard `GET https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=YYYYMMDD` | ESPN unofficial public JSON (SD-004); no published contract | HTTP 200, no auth. Header `application/json;charset=UTF-8`: observed during the 2026-10-14 probe, not retained. 2026-10-11: 13 events, 117,614 bytes. 2026-10-12: 1 event, 23,199 bytes. Every event `STATUS_FINAL`. |
+| Summary `GET https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=<id>` | ESPN unofficial public JSON (SD-004) | HTTP 200 for all 14 events. 530,832 to 679,842 bytes each. `header.id` equals the event id. Header `cache-control: max-age=1`: observed during the 2026-10-14 probe, not retained. |
 
 ## Observed result
 
