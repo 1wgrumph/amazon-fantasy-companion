@@ -576,3 +576,111 @@ stateDiagram-v2
   [*] --> modeB
   modeB --> fullScreen: spikeFailed (P2-X04 FAILS or TIMEBOX)
 ```
+
+
+## Vega-primary design amendment (proposed)
+
+### DES-AFC-P2-VPRIMARY — Same contracts, conditional primary target
+
+This is an additive alternative to DES-AFC-P2-VEGA, activated only by the
+owner's platform choice and integrated candidate approval. The Kotlin
+implementation is reference material, not executable input to Vega. The
+V01T/V01 pair implements the existing register behavior directly in the
+previously planned TypeScript module layout. A01 test identities are used
+where present; A02–A05 behavior is traced directly to register/VCASE IDs
+until tests exist. No test is invented as a historical source.
+
+The API boundary, data ownership, retry bounds, bearer token containment,
+monotonic envelopes, six RoutingOutcome values and backend compute remain
+unchanged by the Vega port. SD-048 supersedes DES-AFC-P2-AUTH's older
+passphrase paragraph: TV code only, confirmed on the phone/browser.
+`origin/main` still has a passphrase field on 2026-10-14; the common backend
+must reconcile that settled decision and qualify it before the system
+linking case. This is shared prerequisite work, not Vega-specific expansion.
+
+Proposed platform configuration: use the RN 0.72 line for the notification
+probe rather than inheriting an RN 0.83 default that lacks the library.
+Do not execute an automatic downgrade. Exact SDK/RN/library/OS pins need a
+supply-chain and compatibility receipt at X01; the 0.24 library list and
+notification API version table conflict. A documented, verified pairing is
+required. Failed qualification is RISK-AFC-P2-16/17, not a hidden SDK switch.
+
+### Feature parity (all application observations unknown / not_run)
+
+The APIs below are candidates or documented surfaces, not evidence of
+application parity. URLs and retrieval dates: [source ledger](evidence/P2-VEGA-PRIMARY-plan/sources.md).
+
+| Feature / source slice | Vega API / design used | Proven now | Unknown / required physical evidence | VVD limitations and acceptance |
+|---|---|---|---|---|
+| Linking / A01 | React Native `fetch` + `AbortController` candidate; app-private MMKV or AsyncStorage through tokenStore; phone/browser code confirmation | Existing API shape and SD-048 decision; storage libraries listed (VP-S06). No Vega runtime proof. | Code shown/expired/confirmed, restart, session rejection, no logged tokens, no passphrase; exact network/storage runtime compatibility | Can test API, expiry and UI after SDK qualification; Ubuntu VVD WebView unsupported (VP-S08), so use phone/browser; no Amazon login required merely for this API path. |
+| Profile settings / A02 | React Native controls, TVFocusGuideView, same profile/settings API; Linking.canOpenURL only as a candidate for known provider component resolution | Focus and linking APIs documented (VP-S05/06/12), not detection truth or entitlement | Persist/reload every setting; installed/absent providers and allowed context detection; unknown context uses profile-assumption; no private foreground-app enumeration | UI/state/restart can be checked. Provider availability and current-viewing detection are not established on VVD; record unknown or unsupported; hidden conditional control needs a stated limit. |
+| Alerts / A03 | Existing long-poll client plus RN UI; candidate `@amazon-devices/expo-notifications.scheduleNotificationAsync` immediate local notification, dismiss methods | API docs expose local methods, no push/triggers/badges; RN 0.83 unsupported; API version table conflicts with 0.24 overview (VP-S04/06) | Background execution/long-poll lifetime, Watch/Dismiss actions, notification response/launch mechanism, quiet hours, spoiler delay, over-provider presentation. No supported action/background route is proven by these docs. | Notification library explicitly does not work on VVD (VP-S04). In-app rendering and policy plumbing can be checked; it cannot close AFC-PR-015 or prove notification actions. Physical failure blocks primary acceptance unless owner amends scope. |
+| Watch / A04 | `@amazon-devices/expo-linking` / RN Linking.canOpenURL/openURL; documented `pkg://<component>` candidate for app launch, provider-specific game URI only after X03 proof | Launch API documented (VP-S05/12); promise resolution proves neither game arrival nor paid access | Each provider's Vega component, game/channel URI, current-attempt observation and exactly one existing outcome; no Android intent assumption | Missing app/error and honest outcome paths can be tested; no sports-provider entitlement/game playback proof. Ubuntu VVD DRM unsupported (VP-S09); an absent provider does not establish a production failure. |
+| Lineup panel / A05 | RN View/Text/list and TVFocusGuideView, existing panel API; fullScreen rendering; platform composition API remains unknown | RN UI/focus support documented (VP-S06); existing AFC-PR-047 fallback already approved | Actual 1080p text floor, remote focus, freshness/revisions, real video geometry for modeB; no verified cross-app composition API | Full-screen layout and stale/replay labels testable. No provider-video modeB proof; start 24-hour primary first-install clock and record X04 FAILS/TIMEBOX before selecting fallback. |
+
+Profile parity includes leagues/teams/starters/specific players/favorites,
+provider preferences and explicit access confirmation, all alert types and
+frequency, quiet hours and game-day periods, spoiler delay, notification
+presentation, voice enablement only on a verified route, Off/Mild/Hype,
+detection enablement, panel selection/visibility and scoring preset/manual
+lineup controls. Existing register mappings own the detailed statements;
+no setting disappears just because its Kotlin slice was not started.
+
+Security/accuracy invariants: a false or failed canOpenURL result is not
+sufficient by itself to assert a provider is absent when the URI is
+unverified; report accessUnknown until X03/X07 establish the mechanism.
+Never map generic app launch to gameOpened. Store only the app session in
+app-private storage, make no encryption assertion, and never copy tokens,
+account screens or provider credentials into evidence. SDK debug tools and
+AWS identities stay separate from customer sessions.
+
+### Backend work required, without a Vega contract fork
+
+| Existing owner / slice | Work retained or needed | Boundary |
+|---|---|---|
+| B01 follow-up + L02 smoke | Reconcile SD-048 code-only confirmation in shared OpenAPI, implementation, phone page and tests; redeploy through existing authorized backend process; freeze the resulting common contract | Already-decided requirement reconciliation; no new Vega endpoint, passphrase fallback, session type or service. No edit by this author or V01. |
+| B02 / X05 | Finish ingest/replay with live/replay provenance | X05 PR1 landed per local origin/main; no recapture or claim of completed live timing from fixtures alone. |
+| B03 / X06 | Finish reviewed lineup/settings source and Yahoo/manual disposition | Manual fallback and OAuth authority unchanged. |
+| B04/B05/B07 | Complete matcher, policy and panel service, preserve freshness and control semantics | Same API and test obligations for either TV platform. |
+| X03 → B06 | Populate existing registry fields with verified Vega URI/component data and outcomes | `launch.type=uri` already exists. Keep field schema; do not claim Android package names or intent strings work on Vega. If Vega cannot fit the existing contract, stop for a named contract decision. |
+| L03 / final deploy step | Deploy and qualify the same shared backend against exact TV candidate | `aws-afc-dev` lease and existing credential/DB boundaries; B01 being live does not establish all later endpoints work. |
+
+The primary contingency selects one TV target per deployment; it does not
+add a multi-platform registry discriminator. If both clients must be served
+simultaneously and URI values differ, that is unresolved contract work,
+not authorized by this delta. V01 has no backend write permission. X03's
+existing data-only registry permission remains with X03.
+
+### Conditional integration and proof binding
+
+Same slices, no duplicated IDs: X01 qualifies Vega; V01T freezes tests;
+V01 starts the foundation without waiting for A01–A05 merges. V01's
+completion dependencies are X02/X03/X04/X07 and L03; its physical behavior
+cannot be accepted early. Probes use their own scanned harnesses under
+existing spike write sets and never depend on V01's completion. X09 follows
+V01 and L03; X10 follows X09; L05 and X12 bind the R5 candidate.
+
+Each affected slice's `vega_primary_contingency.overrides` uses existing
+house field names. Unspecified fields inherit the original slice, including
+role, selected route, reasoning, review path and authority identifier.
+`completion_dependencies` distinguishes work that can start from work that
+can close; the effective completion graph includes both. Inactive A0x rows
+are preserved and are not treated as satisfied predecessors. Existing
+backend graph and shared-resource serialization remain.
+
+Review capabilities remain selected: `review.coverage_assist` = OCR
+OpenCodeReview delegate mode; `deterministic_verification.reverify` = the
+frozen reverify backend on exact .vpkg binaries (CMD-REVERIFY-VPKG).
+Presence of the executable in the prior host check is not qualification.
+Availability is not_run for this packet; unsupported package semantics are
+VEGA_REVERIFY_CAPABILITY_GAP, never ordinary test evidence or PASS. This
+plan-only authoring does not make a binary claim, so executing Reverify here
+is not applicable. No new independent review is dispatched in this session.
+
+VVD has a cross-process `vega-virtual-device` lock; physical probes and
+captures use `vega-tv-stick`; deployments/system mutations serialize on
+`aws-afc-dev`. Use isolated fixture profiles/temp roots and bounded readiness.
+Five sequential runs and two concurrent invocations (serialized at the VVD
+lock, with separate evidence roots) qualify engine suites; if that cannot
+run, retain a typed gap. V01 adds the existing 180-second forecast gate cost;
+physical/VVD runs remain explicit SEIT procedures, not hidden CI work.

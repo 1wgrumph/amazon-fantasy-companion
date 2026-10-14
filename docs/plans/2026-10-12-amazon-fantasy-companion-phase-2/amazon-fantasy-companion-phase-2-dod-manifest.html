@@ -652,7 +652,7 @@
         <span class="stamp stamp-warn">Not authority</span>
       </div>
       <h1>Amazon Fantasy Companion — Definition of Done Manifest (AFC-2026-10-11, Phase 2)</h1>
-      <p class="lede">Planning projection of implementation.json for the single integrated owner review. The five planning artifacts remain authoritative.</p>
+      <p class="lede">Planning-only conditional delta; historical baseline and proposed overrides are both visible. Unknown/not_run is never PASS.</p>
     </header>
     <div class="layout">
       <nav class="toc" aria-label="Manifest sections">
@@ -673,7 +673,7 @@
         <section class="block" id="s1" aria-labelledby="h-s1">
           <h2 id="h-s1"><span class="secno">1</span>BLUF and Lifecycle state</h2>
           <div class="bluf">
-            <p><strong>Phase 2 implementation plan from the approved spec (DEC-AFC-APPROVAL-ST5): 52 slices in 5 waves on four lanes plus light work and the Scribe side lane, organized in 13 GitHub milestones M01..M13 with releases closing at W1..W5; 63 active register UIDs and 37 Lifecycle-local rows traced to 100 SEIT proof cases (70 commands). Schedule refreshed at 2026-10-13T04:00:00Z: 10 days and 15 hours remain to T_deadline; remaining live windows Thu 2026-10-15, Sun 2026-10-18, Mon 2026-10-19 and Thu 2026-10-22. Spikes run first and are time-boxed; 10 open owner items await the integrated review. P2-X11 conditional on OD-AFC-03 = yes. Product execution is held until a subsequent owner execution instruction (DEC-AFC-SD-039); this package covers planning completion and issue/milestone organization only.</strong></p>
+            <p><strong>Vega-primary contingency proposed on 2026-10-14; Fire OS remains active under SD-040 until owner selection. Existing V01T/V01 move ahead of A01-A05 in the alternative. Physical alerts/Watch acceptance is a hard convergence point; handover target 2026-10-23T12:00Z, deadline 19:00Z. SD-048 is code-only. No execution authorization or review budget reset.</strong></p>
             <p><strong>Lifecycle state.</strong> <span class="status status-plan"><span class="mark" aria-hidden="true"></span>planning</span></p>
             <p>This manifest compares authorized intent with planned work, evidence, and gaps. It does not grant execution, acceptance, release, or deployment.</p>
           <ul class="legend status-key" aria-label="Status key">
@@ -698,16 +698,16 @@
             <dt>Plan directory</dt>
             <dd><code>docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/</code></dd>
             <dt>Candidate ref</dt>
-            <dd><code>plan/2026-10-12-afc-phase-2</code></dd>
+            <dd><code>afc/p2-vega-primary-plan</code></dd>
             <dt>Authoring baseline revision</dt>
-            <dd><code>14120d1d24e71c95e50cbc7a2e4edec1a5d7f5a7</code></dd>
+            <dd><code>5097585749dec6bfa8a1972137dc1eda0d230717</code></dd>
             <dt>Candidate digest</dt>
-            <dd><code>e02871029b86f8d0f2fdef6617feb989413883cc6bdb70e5dec3a47e64c86da8</code></dd>
+            <dd><code>3ea492c5821d3a47649cbb59428d95ba0f6409506d5901c07aaf259374ebf867</code></dd>
             <dt>Authority</dt>
             <dd><code>AUTH-AFC-2026-10-12-P2-001 (proposed, effective=false)</code></dd>
             <dt>Requirement register</dt>
             <dd><code>requirements-register.md (authority.json#/requirement_register)</code></dd>
-            <dt>Register digest</dt>
+            <dt>Historical authority register digest (not updated authority)</dt>
             <dd><code>sha256:2ded4228fc3f4703f6843a7d4e631cd884d2d945e860db6bfe8c6f3be3593b9b</code></dd>
             <dt>Model combined digest</dt>
             <dd><code>8f5798823b3a9463f8963c7c6fa2cf94d018189edd0ca6160123362d48a075ff</code></dd>
@@ -718,7 +718,9 @@
             <dt>Profile opensource-hackathon full sha256</dt>
             <dd><code>7d501eb8c103831a38c50d237b5d1e2e015a564b9ade8aef09a32dfc39b26ab1</code></dd>
             <dt>seit.json</dt>
-            <dd><code>8db198397d019aa44310a7132b5b1dd98ef53f33b622fbb3ac34b7732c00c848</code></dd>
+            <dd><code>f52973c2a2ba9f225ec12040f87ac00731415019d650f20bd37fb82f9ed25226</code></dd>
+            <dt>Contingency authority</dt>
+            <dd><code>Planning-only owner packet 2026-10-14; proposed/not activated; prior candidate bindings retained in evidence/P2-VEGA-PRIMARY-plan/prior-bindings.json</code></dd>
             <dt>Manifest file</dt>
             <dd><code>amazon-fantasy-companion-phase-2-dod-manifest.html</code></dd>
             <dt>Template</dt>
@@ -733,22 +735,35 @@
         <section class="block" id="s3" aria-labelledby="h-s3">
           <h2 id="h-s3"><span class="secno">3</span>Outcome, scope, exclusions, and Definition of Done</h2>
           <h3>Planned outcome</h3>
-          <p>Phase 2 builds and submits the product the approved specification describes (`spec/amazon-fantasy-companion/amazon-fantasy-companion.md`, owner approval DEC-AFC-APPROVAL-ST5). When it is done: - **A Fire TV app** (Kotlin/Gradle, from the starter `AmazonAppDev/hello-world-fire-tv`, minSdk 25) runs on the owner&#39;s 2018 stick on Fire OS (SD-001, SD-003). It links to the backend by device code, holds the customer&#39;s profile and every customer control, shows a heads-up alert with Watch and Dismiss over a provider app&#39;s playback, opens the resolved provider game or channel and reports the routing outcome, and shows the right-side lineup panel beside provider video, or the full-screen panel when the spike shows that route does not exist (AFC-PR-047, DEC-AFC-SD-035). - **An AWS serverless backend** on the owner&#39;s new Free-plan account (SD-005, C4) ingests ESPN&#39;s unofficial public JSON (SD-004) with labeled replay (C2), reads the lineup from Yahoo or labeled manual entry after T_yahoo (C6) with the PPR / Half-PPR presets (AFC-PR-065), matches identities, applies the alert policy (close game within 8 points in the 4th quarter or overtime, stale after 60 s, excitement Off / Mild / Hype), resolves the provider and channel and serves the panel. - **Spikes run first and are time-boxed.** Each writes a verdict that records exactly which routes work on the real stick (issue #1 §Development integration obligation). Their verdicts select the panel mode, the provider link contracts and the notification route before product code depends on them. - **The submission is ready before T_deadline:** README and setup instructions, judge access through T_judge_access, a demo video plan under three minutes, a write-up (with the YouTube TV Fantasy View differentiation and the DEC-AFC-SD-036 future direction, cited, discussion only), and the developer feedback assembled from the Scribe log (DEC-AFC-SD-025). The owner submits. - **Every landed slice is visible in the revision record** (DEC-AFC-SD-038): a `CHANGELOG.md` `[Unreleased]` entry linking its pull request, and one release per technical wave prepared through the `release-process` skill. The owner authorizes each publication. - **GitHub milestones M01..M13** (D3) are defined here and created only after this package is approved (P2-7). Every slice traces register UIDs (`requirements-register.md`) and spec sections. Phase 2 adds no product requirement; Lifecycle-local criteria below cover write sets, seams, gates, schedule, submission and the revision record only.</p>
+          <p>Conditional primary proposal: the same five-feature companion runs as a Vega .vpkg on a confirmed physical Vega stick, with VVD development evidence and the unchanged shared backend. SD-048 means TV-code-only confirmation. Physical alerts and Watch remain required. The following original Fire OS outcome is preserved as the unselected baseline until VP-OD-01: Phase 2 builds and submits the product the approved specification describes (`spec/amazon-fantasy-companion/amazon-fantasy-companion.md`, owner approval DEC-AFC-APPROVAL-ST5). When it is done: - **A Fire TV app** (Kotlin/Gradle, from the starter `AmazonAppDev/hello-world-fire-tv`, minSdk 25) runs on the owner&#39;s 2018 stick on Fire OS (SD-001, SD-003). It links to the backend by device code, holds the customer&#39;s profile and every customer control, shows a heads-up alert with Watch and Dismiss over a provider app&#39;s playback, opens the resolved provider game or channel and reports the routing outcome, and shows the right-side lineup panel beside provider video, or the full-screen panel when the spike shows that route does not exist (AFC-PR-047, DEC-AFC-SD-035). - **An AWS serverless backend** on the owner&#39;s new Free-plan account (SD-005, C4) ingests ESPN&#39;s unofficial public JSON (SD-004) with labeled replay (C2), reads the lineup from Yahoo or labeled manual entry after T_yahoo (C6) with the PPR / Half-PPR presets (AFC-PR-065), matches identities, applies the alert policy (close game within 8 points in the 4th quarter or overtime, stale after 60 s, excitement Off / Mild / Hype), resolves the provider and channel and serves the panel. - **Spikes run first and are time-boxed.** Each writes a verdict that records exactly which routes work on the real stick (issue #1 §Development integration obligation). Their verdicts select the panel mode, the provider link contracts and the notification route before product code depends on them. - **The submission is ready before T_deadline:** README and setup instructions, judge access through T_judge_access, a demo video plan under three minutes, a write-up (with the YouTube TV Fantasy View differentiation and the DEC-AFC-SD-036 future direction, cited, discussion only), and the developer feedback assembled from the Scribe log (DEC-AFC-SD-025). The owner submits. - **Every landed slice is visible in the revision record** (DEC-AFC-SD-038): a `CHANGELOG.md` `[Unreleased]` entry linking its pull request, and one release per technical wave prepared through the `release-process` skill. The owner authorizes each publication. - **GitHub milestones M01..M13** (D3) are defined here and created only after this package is approved (P2-7). Every slice traces register UIDs (`requirements-register.md`) and spec sections. Phase 2 adds no product requirement; Lifecycle-local criteria below cover write sets, seams, gates, schedule, submission and the revision record only.</p>
           <h3>Scope</h3>
           <ul class="plain">
-            <li>M01 M01 Day one: tracking, verification guidance and product gate (due 2026-10-14T20:00:00Z): issues in order P2-L01, P2-D01, P2-G01; entry: Owner integrated approval recorded and planning PR merged to main (IE-P2-1).</li>
-            <li>M02 M02 Fire TV stick qualified and backend skeleton with device linking (due 2026-10-14T20:00:00Z): issues in order P2-X01, P2-B01; entry: Same start as M01 (planning PR merged); X01 is the time-critical item; only P2-B01 landing waits for P2-G01.</li>
-            <li>M03 M03 Panel spike, TV app scaffold and release v0.1.0 (due 2026-10-14T23:00:00Z): issues in order P2-X04, P2-A01, P2-R1; entry: P2-X01 merged (stick released to X04).</li>
-            <li>M04 M04 Stick spikes and Thursday Oct 15 live checks (due 2026-10-17T01:00:00Z): issues in order P2-X02, P2-X03, P2-X07, P2-X05; entry: Stick released by P2-X04 and the P2-A01 review step (M03).</li>
-            <li>M05 M05 Feed ingest, lineup sources and first AWS deploy (due 2026-10-17T01:00:00Z): issues in order P2-B03, P2-L02, P2-B02; entry: P2-B01 merged (runs in parallel with M03 and M04; backend lane).</li>
-            <li>M06 M06 Profile settings, lineup-source verdict and release v0.2.0 (due 2026-10-17T01:00:00Z): issues in order P2-A02, P2-X06, P2-R2; entry: P2-A01 merged; M05 deploy available.</li>
-            <li>M07 M07 Event matching, alert policy and panel service (due 2026-10-18T09:00:00Z): issues in order P2-B04, P2-B05, P2-B07; entry: Wave 3 entry as written: W2 spike verdicts landed and T_yahoo outcome applied (M04, M06); B02/B03 merged (M05).</li>
-            <li>M08 M08 Provider resolver, TV alerts and Watch (due 2026-10-18T09:00:00Z): issues in order P2-B06, P2-A03, P2-A04; entry: Wave 3 entry (same as M07); runs in parallel with M07.</li>
-            <li>M09 M09 TV lineup panel and integrated backend deploy (due 2026-10-18T11:00:00Z): issues in order P2-A05, P2-L03; entry: Wave 3 entry; A05T in parallel with M07/M08.</li>
-            <li>M10 M10 Sunday Oct 18 live end-to-end and release v0.3.0 (due 2026-10-19T12:00:00Z): issues in order P2-X09, P2-R3; entry: M08 and M09 complete.</li>
-            <li>M11 M11 Monday Oct 19 hardening, conditional Alexa, spec revision and release v0.4.0 (due 2026-10-21T23:00:00Z): issues in order P2-X10, P2-X11, P2-D02, P2-R4; entry: Wave 4 entry: Wave 3 exit (P2-R3 merged).</li>
-            <li>M12 M12 Submission documents and developer feedback (due 2026-10-22T16:00:00Z): issues in order P2-D03, P2-D04, P2-D05, P2-SCR1; entry: Wave 5 entry as written: Wave 4 exit (P2-R4 merged).</li>
-            <li>M13 M13 Release candidate v1.0.0, final APK, demo capture and handover (due 2026-10-23T12:00:00Z): issues in order P2-R5, P2-L05, P2-X12; entry: M12 complete; IE-P2-39 (OA-5) and IE-P2-40 (final deploy if backend changed) run here as non-issue steps.</li>
+            <li>Historical Fire OS baseline (not Vega schedule): M01 M01 Day one: tracking, verification guidance and product gate (due 2026-10-14T20:00:00Z): issues in order P2-L01, P2-D01, P2-G01; entry: Owner integrated approval recorded and planning PR merged to main (IE-P2-1).</li>
+            <li>Historical Fire OS baseline (not Vega schedule): M02 M02 Fire TV stick qualified and backend skeleton with device linking (due 2026-10-14T20:00:00Z): issues in order P2-X01, P2-B01; entry: Same start as M01 (planning PR merged); X01 is the time-critical item; only P2-B01 landing waits for P2-G01.</li>
+            <li>Historical Fire OS baseline (not Vega schedule): M03 M03 Panel spike, TV app scaffold and release v0.1.0 (due 2026-10-14T23:00:00Z): issues in order P2-X04, P2-A01, P2-R1; entry: P2-X01 merged (stick released to X04).</li>
+            <li>Historical Fire OS baseline (not Vega schedule): M04 M04 Stick spikes and Thursday Oct 15 live checks (due 2026-10-17T01:00:00Z): issues in order P2-X02, P2-X03, P2-X07, P2-X05; entry: Stick released by P2-X04 and the P2-A01 review step (M03).</li>
+            <li>Historical Fire OS baseline (not Vega schedule): M05 M05 Feed ingest, lineup sources and first AWS deploy (due 2026-10-17T01:00:00Z): issues in order P2-B03, P2-L02, P2-B02; entry: P2-B01 merged (runs in parallel with M03 and M04; backend lane).</li>
+            <li>Historical Fire OS baseline (not Vega schedule): M06 M06 Profile settings, lineup-source verdict and release v0.2.0 (due 2026-10-17T01:00:00Z): issues in order P2-A02, P2-X06, P2-R2; entry: P2-A01 merged; M05 deploy available.</li>
+            <li>Historical Fire OS baseline (not Vega schedule): M07 M07 Event matching, alert policy and panel service (due 2026-10-18T09:00:00Z): issues in order P2-B04, P2-B05, P2-B07; entry: Wave 3 entry as written: W2 spike verdicts landed and T_yahoo outcome applied (M04, M06); B02/B03 merged (M05).</li>
+            <li>Historical Fire OS baseline (not Vega schedule): M08 M08 Provider resolver, TV alerts and Watch (due 2026-10-18T09:00:00Z): issues in order P2-B06, P2-A03, P2-A04; entry: Wave 3 entry (same as M07); runs in parallel with M07.</li>
+            <li>Historical Fire OS baseline (not Vega schedule): M09 M09 TV lineup panel and integrated backend deploy (due 2026-10-18T11:00:00Z): issues in order P2-A05, P2-L03; entry: Wave 3 entry; A05T in parallel with M07/M08.</li>
+            <li>Historical Fire OS baseline (not Vega schedule): M10 M10 Sunday Oct 18 live end-to-end and release v0.3.0 (due 2026-10-19T12:00:00Z): issues in order P2-X09, P2-R3; entry: M08 and M09 complete.</li>
+            <li>Historical Fire OS baseline (not Vega schedule): M11 M11 Monday Oct 19 hardening, conditional Alexa, spec revision and release v0.4.0 (due 2026-10-21T23:00:00Z): issues in order P2-X10, P2-X11, P2-D02, P2-R4; entry: Wave 4 entry: Wave 3 exit (P2-R3 merged).</li>
+            <li>Historical Fire OS baseline (not Vega schedule): M12 M12 Submission documents and developer feedback (due 2026-10-22T16:00:00Z): issues in order P2-D03, P2-D04, P2-D05, P2-SCR1; entry: Wave 5 entry as written: Wave 4 exit (P2-R4 merged).</li>
+            <li>Historical Fire OS baseline (not Vega schedule): M13 M13 Release candidate v1.0.0, final APK, demo capture and handover (due 2026-10-23T12:00:00Z): issues in order P2-R5, P2-L05, P2-X12; entry: M12 complete; IE-P2-39 (OA-5) and IE-P2-40 (final deploy if backend changed) run here as non-issue steps.</li>
+            <li>Conditional Vega-primary alternative: preserve all baseline slices and apply only the explicit per-task overrides after owner selection; no new TV implementation pair.</li>
+            <li>Vega-primary critical path (UTC): Oct 14 by 20:00 — Review this delta; platform/host/terms decision; preserve SD-048 — Approved target and candidate, or execution stays held. No assumption that the lost stick will reappear.</li>
+            <li>Vega-primary critical path (UTC): Oct 14 20:00–Oct 15 12:00 — X01 / PROC-VEGA-PREPARE: scan installer and transitive SDK/VVD/Watchman artifacts before first use; pin and install user scope — Version/hash/origin/scan/location receipts; license or unscannable installer blocks install. Ubuntu 26.04 failure triggers owner-supported-host choice.</li>
+            <li>Vega-primary critical path (UTC): Oct 15 by 16:00 — X01 VVD qualification; V01T after B01/G01 contract and tooling readiness — Boot, architecture-correct hello-world/harness install, D-pad/back, network and capture receipt. No SDK install PASS inferred from docs.</li>
+            <li>Vega-primary critical path (UTC): Oct 15–16; physical stick needed by Oct 15 20:00 — OA-12 identity and owner developer login; X04 then X02→X03→X07; V01T red/frozen tests in parallel — Physical model/OS/architecture and provider-account readiness; X04 closes by first_install_at + 24h. Early X04 verdict needed for Oct 15 evening live proof; missed window requires forecast reassessment against Oct 22, never backdating.</li>
+            <li>Vega-primary critical path (UTC): Oct 16–17 by 23:00 — V01 foundation→settings→alerts/Watch/panel; B02/B03→B04/B05/B06/B07; L03 deploy — V01 may start after V01T, but cannot close before X02/X03/X04/X07 and L03 evidence. Existing backend contracts, red/green receipts, screenshot states; all five parity verdicts.</li>
+            <li>Vega-primary critical path (UTC): Oct 18 by 12:00; live window Oct 18–19 — V01 qualified candidate, X09 physical end-to-end, R1/R2/R3 draft checkpoints — Alert over playback→Watch→honest result; panel, simultaneous games and controls. Replay is labeled and cannot close a missing live requirement.</li>
+            <li>Vega-primary critical path (UTC): Oct 19–21 by 23:00 — X10 hardening, bounded review/repair, D02 spec target/limits, X11 disposition, R4 — Corrections/reconnect/expiry/quiet-hours checks; retained OCR and Reverify evidence, unresolved gaps visible.</li>
+            <li>Vega-primary critical path (UTC): Oct 22 by 16:00 — D03–D05/SCR1 submission documents and feedback, R5 candidate preparation — Evidence-backed copy and demo storyboard; D04 inclusion ownership F1 resolved before closure. If primary Vega failed, stop and obtain an explicit submission-scope decision.</li>
+            <li>Vega-primary critical path (UTC): Oct 22 rehearsal; Oct 23 00:00–05:00 live capture window — L05 exact .vpkg build after R5, X12 capture on that hash; reserve time for TNF from original plan — Sanitized clip/hash manifest, platform/device labels and capture provenance. Documented demo plan may precede final clips; no unpublished artifact claimed public.</li>
+            <li>Vega-primary critical path (UTC): Oct 23 by 12:00 — Final ATE/IE evidence and owner handover — Seven-hour buffer to 19:00Z. No unsupported, unknown, not_run or capability gap counted as PASS.</li>
+            <li>Vega-primary critical path (UTC): Oct 23 19:00 — Submission deadline — Owner publication/upload/judge-access/submission authority remains separate.</li>
+            <li>Manifest task table projects the proposed Vega completion graph. Baseline field values remain in implementation.json and each task baseline_projection; nothing is active until owner selection. V01 can start after V01T, but its displayed completion prerequisites must all close before acceptance.</li>
           </ul>
           <h3>Exclusions</h3>
           <ul class="plain">
@@ -797,6 +812,12 @@
                   <td>The owner checklist for publication and submission is handed over; the DoD Manifest closeout is appended. Owner-only actions are listed, not performed.</td>
                   <td>Owner checklist handover; DoD Manifest closeout section</td>
                   <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">DOD-VPRIMARY</th>
+                  <td>Conditional primary readiness requires physical alerts/Watch proof, five-feature parity, shared SD-048 contract readiness, exact final .vpkg/demo hash and resolved owner decisions; no side-lane in-progress fallback. F1 remains open.</td>
+                  <td>Conditional SEIT physical/contract/artifact receipts; queued owner choices.</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>proposed; not_run</span></td>
                 </tr>
               </tbody>
             </table>
@@ -1437,6 +1458,78 @@
                   <td>AC-AFC-P2-SCHED-01; Phase 1 RISK-AFC-17</td>
                   <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
                 </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">AC-AFC-P2-VEGA-01</th>
+                  <td>The Vega OS build of the TV app shall implement the device linking, profile settings with detection, alerts, Watch and lineup panel behaviors of P2-A01..P2-A05 against the unchanged CONTRACT-AFC-P2-API and CONTRACT-AFC-P2-ENVELOPE, with each Vega test traced to the Fire OS test of the same behavior.</td>
+                  <td>Issue #59; owner SD-040; owner 2026-10-14 &quot;Should match up with what we have&quot;</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">AC-AFC-P2-VEGA-02</th>
+                  <td>The Vega app shall build as a `.vpkg` from a pinned Vega SDK version that passed a scan-software-supply-chain receipt before first use, with its sha256, SDK version and target architecture recorded and no token or credential in the package.</td>
+                  <td>Issue #59; workspace rule 23; AC-AFC-P2-SUPPLY-01</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">AC-AFC-P2-VEGA-03</th>
+                  <td>Each ported feature shall have Vega test evidence, Vega Virtual Device screenshots under `evidence/visual/P2-V01/` and a recorded verdict of works, limited by simulator, not supported or unknown; an unverified feature stays unknown.</td>
+                  <td>Issue #59 acceptance; AC-AFC-P2-VIS-01; rule 16</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">AC-AFC-P2-VEGA-04</th>
+                  <td>The Vega app shall keep its device session token only in app-private storage through a single token-store module, send it only as the bearer credential, and never write it to a log, the package or a capture.</td>
+                  <td>DES-AFC-P2-TV token rule (AFC-PR-055 TV side); RISK-AFC-P2-12</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">AC-AFC-P2-VEGA-05</th>
+                  <td>If the owner confirms that the replacement Fire TV stick runs Vega OS (OA-12), the Vega app shall also be installed, driven and captured on that device and its rows added to the verdict table; otherwise this criterion is not applicable.</td>
+                  <td>Owner fact 2026-10-14 (stick lost, replacement may ship Vega OS); conditional, does not change SD-040</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">AC-AFC-P2-VEGA-06</th>
+                  <td>P2-V01 shall change nothing under `tv-app/` or `backend/`, the frozen OpenAPI contract, the final APK path or any M12/M13 slice artifact.</td>
+                  <td>Issue #59 (does not change the Fire OS deliverables, the final APK or the M13 critical path)</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">AC-AFC-P2-VPRIMARY-01</th>
+                  <td>The primary-target contingency shall preserve existing slice identities, roles, routes and review bounds and identify every replaced dependency and retained acceptance obligation before dispatch.</td>
+                  <td>Current owner packet objectives 1 and 6</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>proposed; not_run</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">AC-AFC-P2-VPRIMARY-02</th>
+                  <td>Primary Vega acceptance shall bind each of the five feature verdicts to its register/VCASE source, exact candidate and execution environment; only physical evidence shall close third-party playback and provider handoff claims.</td>
+                  <td>Objectives 2 and 3; AFC-PR-015/030/048/052 by reference</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>proposed; not_run</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">AC-AFC-P2-VPRIMARY-03</th>
+                  <td>The Vega client shall use the common API contract after the settled SD-048 reconciliation, with no Vega-only endpoint, session format, routing outcome or backend service.</td>
+                  <td>Objective 4; SD-048</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>proposed; not_run</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">AC-AFC-P2-VPRIMARY-04</th>
+                  <td>Final Vega package and demo evidence shall name the same candidate, target architecture and package hash, preserve capture provenance and expose every remaining acceptance gap before owner submission.</td>
+                  <td>Objectives 2 and 6</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>proposed; not_run</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">RISK-AFC-P2-16</th>
+                  <td>A missing physical Vega device, unverified background alert route, SDK compatibility conflict or missed primary checkpoint shall remain a blocking primary-acceptance gap unless the owner explicitly amends the named requirement or target.</td>
+                  <td>Objective 5</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>proposed; not_run</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">RISK-AFC-P2-17</th>
+                  <td>An SDK/Watchman install shall proceed only with pinned provenance and an ALLOW/PASS scan before execution, resolved terms, and user scope; unsupported host/tool or .vpkg verification capability remains a typed gap.</td>
+                  <td>Objective 5; rule 23; RISK-AFC-P2-15</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>proposed; not_run</span></td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -1609,6 +1702,12 @@
                   <td>Product gate areas: Extends CONTRACT-AFC-GATE (Phase 1). `gate.sh tvapp`: when `tv-app/` exists, runs `./tv-app/gradlew -p tv-app testDebugUnitTest lintDebug assembleDebug`; exit 3 (GAP) when the JDK or Android SDK is missing. `gate.sh backend`: when `backend/` exists, runs `python3.12 -m pytest backend/tests/unit backend/tests/contract` and `cfn-lint backend/template.yaml`; exit 3 when python3.12 or cfn-lint is miss</td>
                   <td>—</td>
                   <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">DES-AFC-P2-VPRIMARY</th>
+                  <td>Same API and five features through V01T/V01; registered behavior sources replace unbuilt Kotlin tests. Physical device proves alerts/Watch; code-only linking. Full design/parity/contract details in design.md.</td>
+                  <td>CONTRACT-AFC-P2-API, CONTRACT-AFC-P2-ENVELOPE</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>proposed</span></td>
                 </tr>
               </tbody>
             </table>
@@ -2247,7 +2346,7 @@
                   <td>Product Implementer</td>
                   <td></td>
                   <td>spikes/sp1-device/, evidence/visual/sp1-device/</td>
-                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>proposed Vega binding; not approved</span></td>
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">P2-X05</th>
@@ -2282,14 +2381,14 @@
                   <td>Test Implementer</td>
                   <td>P2-X01</td>
                   <td>tv-app/app/src/test/, tv-app/settings.gradle.kts, tv-app/build.gradle.kts, tv-app/gradle/, tv-app/gradlew, tv-app/gradlew.bat, tv-app/app/build.gradle.kts, tv-app/app/src/main/AndroidManifest.xml, tv-app/app/src/main/java/com/afc/companion/</td>
-                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>inactive if Vega selected; preserved reference</span></td>
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">P2-A01</th>
                   <td>Product Implementer</td>
                   <td>P2-X01, P2-G01, P2-A01T, P2-B01, P2-X04</td>
                   <td>tv-app/, THIRD_PARTY_NOTICES.md, evidence/visual/P2-A01/</td>
-                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>inactive if Vega selected; preserved reference</span></td>
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">P2-B01T</th>
@@ -2303,42 +2402,42 @@
                   <td>Product Implementer</td>
                   <td>P2-G01, P2-B01T</td>
                   <td>backend/template.yaml, backend/samconfig.toml, backend/requirements.txt, backend/requirements-dev.txt, backend/.gitignore, backend/src/, backend/tests/, backend/fixtures/</td>
-                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>proposed Vega binding; not approved</span></td>
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">P2-R1</th>
                   <td>Light Implementer</td>
-                  <td>P2-L01, P2-X01, P2-X05, P2-D01, P2-G01T, P2-G01, P2-A01T, P2-A01, P2-B01T, P2-B01</td>
-                  <td>CHANGELOG.md, tv-app/app/build.gradle.kts</td>
-                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                  <td>P2-L01, P2-X01, P2-X05, P2-D01, P2-G01T, P2-G01, P2-V01, P2-B01T, P2-B01</td>
+                  <td>CHANGELOG.md, vega-app/package.json, vega-app/manifest.toml</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>proposed Vega binding; not approved</span></td>
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">P2-X04</th>
                   <td>Product Implementer</td>
                   <td>P2-X01</td>
                   <td>spikes/sp4-panel-video/, evidence/visual/sp4-panel-video/</td>
-                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>proposed Vega binding; not approved</span></td>
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">P2-X02</th>
                   <td>Product Implementer</td>
                   <td>P2-X04</td>
                   <td>spikes/sp2-notify/, evidence/visual/sp2-notify/</td>
-                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>proposed Vega binding; not approved</span></td>
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">P2-X03</th>
                   <td>Product Implementer</td>
                   <td>P2-B01, P2-X02</td>
                   <td>spikes/sp3-provider-links/, evidence/visual/sp3-provider-links/, backend/src/provider_resolver/registry.json</td>
-                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>proposed Vega binding; not approved</span></td>
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">P2-X07</th>
                   <td>Product Implementer</td>
                   <td>P2-X03</td>
                   <td>spikes/sp7-detection/, evidence/visual/sp7-detection/</td>
-                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>proposed Vega binding; not approved</span></td>
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">P2-X06</th>
@@ -2380,28 +2479,28 @@
                   <td>Test Implementer</td>
                   <td>P2-A01</td>
                   <td>tv-app/app/src/test/java/com/afc/companion/profile/, tv-app/app/src/test/java/com/afc/companion/detect/, tv-app/app/src/androidTest/java/com/afc/companion/profile/, tv-app/app/src/androidTest/java/com/afc/companion/detect/</td>
-                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>inactive if Vega selected; preserved reference</span></td>
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">P2-A02</th>
                   <td>Product Implementer</td>
                   <td>P2-X07, P2-A02T</td>
                   <td>tv-app/app/src/main/java/com/afc/companion/profile/, tv-app/app/src/main/java/com/afc/companion/detect/, evidence/visual/P2-A02/, tv-app/app/src/main/AndroidManifest.xml, tv-app/app/build.gradle.kts, tv-app/gradle/libs.versions.toml</td>
-                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>inactive if Vega selected; preserved reference</span></td>
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">P2-L02</th>
                   <td>Light Implementer</td>
                   <td>P2-B01</td>
                   <td>docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-L02/</td>
-                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>proposed Vega binding; not approved</span></td>
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">P2-R2</th>
                   <td>Light Implementer</td>
-                  <td>P2-R1, P2-X04, P2-X02, P2-X03, P2-X07, P2-X06, P2-B02T, P2-B02, P2-B03T, P2-B03, P2-A02T, P2-A02, P2-L02</td>
-                  <td>CHANGELOG.md, tv-app/app/build.gradle.kts</td>
-                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                  <td>P2-R1, P2-X04, P2-X02, P2-X03, P2-X07, P2-X06, P2-B02T, P2-B02, P2-B03T, P2-B03, P2-V01, P2-L02</td>
+                  <td>CHANGELOG.md, vega-app/package.json, vega-app/manifest.toml</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>proposed Vega binding; not approved</span></td>
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">P2-B04T</th>
@@ -2436,14 +2535,14 @@
                   <td>Test Implementer</td>
                   <td>P2-X03</td>
                   <td>backend/tests/unit/provider_resolver/, backend/tests/deployed/provider_resolver/</td>
-                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>proposed Vega binding; not approved</span></td>
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">P2-B06</th>
                   <td>Product Implementer</td>
                   <td>P2-B06T</td>
                   <td>backend/src/provider_resolver/</td>
-                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>proposed Vega binding; not approved</span></td>
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">P2-B07T</th>
@@ -2464,140 +2563,154 @@
                   <td>Test Implementer</td>
                   <td>P2-X02, P2-A02</td>
                   <td>tv-app/app/src/test/java/com/afc/companion/alerts/, tv-app/app/src/androidTest/java/com/afc/companion/alerts/</td>
-                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>inactive if Vega selected; preserved reference</span></td>
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">P2-A03</th>
                   <td>Product Implementer</td>
                   <td>P2-B05, P2-A03T</td>
                   <td>tv-app/app/src/main/java/com/afc/companion/alerts/, evidence/visual/P2-A03/, tv-app/app/src/main/AndroidManifest.xml, tv-app/app/build.gradle.kts, tv-app/gradle/libs.versions.toml</td>
-                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>inactive if Vega selected; preserved reference</span></td>
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">P2-A04T</th>
                   <td>Test Implementer</td>
                   <td>P2-X03, P2-A03T</td>
                   <td>tv-app/app/src/test/java/com/afc/companion/watch/, tv-app/app/src/androidTest/java/com/afc/companion/watch/</td>
-                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>inactive if Vega selected; preserved reference</span></td>
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">P2-A04</th>
                   <td>Product Implementer</td>
                   <td>P2-B06, P2-A04T</td>
                   <td>tv-app/app/src/main/java/com/afc/companion/watch/, evidence/visual/P2-A04/, tv-app/app/src/main/AndroidManifest.xml, tv-app/app/build.gradle.kts, tv-app/gradle/libs.versions.toml</td>
-                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>inactive if Vega selected; preserved reference</span></td>
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">P2-A05T</th>
                   <td>Test Implementer</td>
                   <td>P2-X04, P2-A02</td>
                   <td>tv-app/app/src/test/java/com/afc/companion/panel/, tv-app/app/src/androidTest/java/com/afc/companion/panel/</td>
-                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>inactive if Vega selected; preserved reference</span></td>
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">P2-A05</th>
                   <td>Product Implementer</td>
                   <td>P2-B07, P2-A05T</td>
                   <td>tv-app/app/src/main/java/com/afc/companion/panel/, tv-app/app/src/main/java/com/afc/companion/MainActivity.kt, evidence/visual/P2-A05/, tv-app/app/src/main/AndroidManifest.xml, tv-app/app/build.gradle.kts, tv-app/gradle/libs.versions.toml</td>
-                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>inactive if Vega selected; preserved reference</span></td>
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">P2-L03</th>
                   <td>Light Implementer</td>
                   <td>P2-X06, P2-B05, P2-B06, P2-B07</td>
                   <td>docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-L03/</td>
-                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>proposed Vega binding; not approved</span></td>
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">P2-X09</th>
                   <td>Product Implementer</td>
-                  <td>P2-A03, P2-A04, P2-A05, P2-L03</td>
+                  <td>P2-V01, P2-L03</td>
                   <td>evidence/e2e/2026-10-18/, evidence/visual/e2e-2026-10-18/</td>
-                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>proposed Vega binding; not approved</span></td>
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">P2-R3</th>
                   <td>Light Implementer</td>
-                  <td>P2-R2, P2-B04T, P2-B04, P2-B05T, P2-B05, P2-B06T, P2-B06, P2-B07T, P2-B07, P2-A03T, P2-A03, P2-A04T, P2-A04, P2-A05T, P2-A05, P2-L03, P2-X09</td>
-                  <td>CHANGELOG.md, tv-app/app/build.gradle.kts</td>
-                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                  <td>P2-R2, P2-B04T, P2-B04, P2-B05T, P2-B05, P2-B06T, P2-B06, P2-B07T, P2-B07, P2-V01, P2-L03, P2-X09</td>
+                  <td>CHANGELOG.md, vega-app/package.json, vega-app/manifest.toml</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>proposed Vega binding; not approved</span></td>
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">P2-X10</th>
                   <td>Product Implementer</td>
                   <td>P2-X09</td>
                   <td>evidence/e2e/2026-10-19/, evidence/visual/e2e-2026-10-19/</td>
-                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>proposed Vega binding; not approved</span></td>
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">P2-D02</th>
                   <td>Product Implementer</td>
                   <td>P2-X01, P2-X05, P2-X04, P2-X02, P2-X03, P2-X07, P2-X06, P2-X11</td>
                   <td>spec/amazon-fantasy-companion/</td>
-                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>proposed Vega binding; not approved</span></td>
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">P2-X11</th>
                   <td>Product Implementer</td>
                   <td></td>
                   <td>spikes/sp8-alexa/</td>
-                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>proposed Vega binding; not approved</span></td>
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">P2-R4</th>
                   <td>Light Implementer</td>
                   <td>P2-R3, P2-X10, P2-D02, P2-X11</td>
-                  <td>CHANGELOG.md, tv-app/app/build.gradle.kts</td>
-                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                  <td>CHANGELOG.md, vega-app/package.json, vega-app/manifest.toml</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>proposed Vega binding; not approved</span></td>
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">P2-D03</th>
                   <td>Product Implementer</td>
                   <td>P2-X10</td>
                   <td>README.md, LICENSE</td>
-                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>proposed Vega binding; not approved</span></td>
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">P2-D04</th>
                   <td>Product Implementer</td>
                   <td>P2-X10</td>
                   <td>docs/submission/writeup.md</td>
-                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>proposed Vega binding; not approved</span></td>
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">P2-D05</th>
                   <td>Product Implementer</td>
                   <td>P2-X10</td>
                   <td>docs/submission/demo-plan.md, docs/submission/owner-checklist.md</td>
-                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>proposed Vega binding; not approved</span></td>
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">P2-X12</th>
                   <td>Product Implementer</td>
-                  <td>P2-D05, P2-L05</td>
+                  <td>P2-L05</td>
                   <td>evidence/demo/</td>
-                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>proposed Vega binding; not approved</span></td>
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">P2-SCR1</th>
                   <td>Scribe</td>
                   <td>P2-X10</td>
                   <td>docs/developer-feedback/</td>
-                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>proposed Vega binding; not approved</span></td>
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">P2-L05</th>
                   <td>Light Implementer</td>
                   <td>P2-R5</td>
                   <td>docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-L05/</td>
-                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>proposed Vega binding; not approved</span></td>
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">P2-R5</th>
                   <td>Light Implementer</td>
                   <td>P2-R4, P2-D03, P2-D04, P2-D05, P2-SCR1</td>
-                  <td>CHANGELOG.md, tv-app/app/build.gradle.kts</td>
-                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                  <td>CHANGELOG.md, vega-app/package.json, vega-app/manifest.toml</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>proposed Vega binding; not approved</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">P2-V01T</th>
+                  <td>Test Implementer</td>
+                  <td>P2-X01, P2-G01, P2-B01</td>
+                  <td>vega-app/__tests__/, vega-app/package.json, vega-app/package-lock.json, vega-app/jest.config.js, vega-app/babel.config.js, vega-app/tsconfig.json, vega-app/manifest.toml, vega-app/.gitignore, vega-app/src/, tools/ci/tests/test_gate_vegaapp.py, docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-V01T/</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>proposed Vega binding; not approved</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">P2-V01</th>
+                  <td>Product Implementer</td>
+                  <td>P2-V01T, P2-X02, P2-X03, P2-X04, P2-X07, P2-L03</td>
+                  <td>vega-app/, tools/ci/gate.sh, tools/ci/tests/test_gate_vegaapp.py, .github/workflows/ci.yml, docs/vnv/vega-app/AGENTS.md, docs/vnv/AGENTS.md, THIRD_PARTY_NOTICES.md, evidence/visual/P2-V01/, docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-V01/</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>proposed Vega binding; not approved</span></td>
                 </tr>
               </tbody>
             </table>
@@ -2883,6 +2996,27 @@
                   <td>Codex CLI / GPT-6 Astra / xhigh (first fallback)</td>
                   <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>PASS planning authorship (te-p2-codex-receipt.md)</span></td>
                 </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">Test Implementer</th>
+                  <td>P2-V01T existing amended frozen route</td>
+                  <td>Muse Code / Muse WonderFull / high</td>
+                  <td>Muse Code / Muse WonderFull / high</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>inherited; no dispatch or route change in this packet</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">Product Implementer</th>
+                  <td>P2-V01 existing amended frozen route</td>
+                  <td>Claude Code / Claude Opus 5.5 / medium</td>
+                  <td>Claude Code / Claude Opus 5.5 / medium</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>inherited; no dispatch or route change in this packet</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">Reviewer</th>
+                  <td>V01 independent implementation review (separate from planning review)</td>
+                  <td>Claude Code / Claude Opus 5.5 / medium</td>
+                  <td>Claude Code / Claude Opus 5.5 / medium</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>not_run; frozen review/repair bounds retained; OCR delegation required</span></td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -2954,6 +3088,48 @@
                   <td>5 SEIT rows bound; commands PROC-BUG-TRIAGE, PROC-LIFECYCLE-CONTROLS</td>
                   <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
                 </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">VV-VEGA-PRIMARY</th>
+                  <td>inspection, test, demonstration</td>
+                  <td>Inherited phase review and lifecycle ATE/IE; no review executed here</td>
+                  <td>SEIT-AFC-P2-VPRIMARY-01..04; SEIT-RISK-AFC-P2-16/17; original registered proof retained. Gate and freeze establish author realization only.</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>proposed; not_run</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">Parity: Linking / A01</th>
+                  <td>API: React Native `fetch` + `AbortController` candidate; app-private MMKV or AsyncStorage through tokenStore; phone/browser code confirmation</td>
+                  <td>Unknown/not_run; documentation is not application proof.</td>
+                  <td>Documented: Existing API shape and SD-048 decision; storage libraries listed (VP-S06). No Vega runtime proof. Required: Code shown/expired/confirmed, restart, session rejection, no logged tokens, no passphrase; exact network/storage runtime compatibility Simulator: Can test API, expiry and UI after SDK qualification; Ubuntu VVD WebView unsupported (VP-S08), so use phone/browser; no Amazon login required merely for this API path.</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>not_run</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">Parity: Profile settings / A02</th>
+                  <td>API: React Native controls, TVFocusGuideView, same profile/settings API; Linking.canOpenURL only as a candidate for known provider component resolution</td>
+                  <td>Unknown/not_run; documentation is not application proof.</td>
+                  <td>Documented: Focus and linking APIs documented (VP-S05/06/12), not detection truth or entitlement Required: Persist/reload every setting; installed/absent providers and allowed context detection; unknown context uses profile-assumption; no private foreground-app enumeration Simulator: UI/state/restart can be checked. Provider availability and current-viewing detection are not established on VVD; record unknown or unsupported; hidden conditional control needs a stated limit.</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>not_run</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">Parity: Alerts / A03</th>
+                  <td>API: Existing long-poll client plus RN UI; candidate `@amazon-devices/expo-notifications.scheduleNotificationAsync` immediate local notification, dismiss methods</td>
+                  <td>Unknown/not_run; documentation is not application proof.</td>
+                  <td>Documented: API docs expose local methods, no push/triggers/badges; RN 0.83 unsupported; API version table conflicts with 0.24 overview (VP-S04/06) Required: Background execution/long-poll lifetime, Watch/Dismiss actions, notification response/launch mechanism, quiet hours, spoiler delay, over-provider presentation. No supported action/background route is proven by these docs. Simulator: Notification library explicitly does not work on VVD (VP-S04). In-app rendering and policy plumbing can be checked; it cannot close AFC-PR-015 or prove notification actions. Physical failure blocks primary acceptance unless owner amends scope.</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>not_run</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">Parity: Watch / A04</th>
+                  <td>API: `@amazon-devices/expo-linking` / RN Linking.canOpenURL/openURL; documented `pkg://&lt;component&gt;` candidate for app launch, provider-specific game URI only after X03 proof</td>
+                  <td>Unknown/not_run; documentation is not application proof.</td>
+                  <td>Documented: Launch API documented (VP-S05/12); promise resolution proves neither game arrival nor paid access Required: Each provider&#39;s Vega component, game/channel URI, current-attempt observation and exactly one existing outcome; no Android intent assumption Simulator: Missing app/error and honest outcome paths can be tested; no sports-provider entitlement/game playback proof. Ubuntu VVD DRM unsupported (VP-S09); an absent provider does not establish a production failure.</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>not_run</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">Parity: Lineup panel / A05</th>
+                  <td>API: RN View/Text/list and TVFocusGuideView, existing panel API; fullScreen rendering; platform composition API remains unknown</td>
+                  <td>Unknown/not_run; documentation is not application proof.</td>
+                  <td>Documented: RN UI/focus support documented (VP-S06); existing AFC-PR-047 fallback already approved Required: Actual 1080p text floor, remote focus, freshness/revisions, real video geometry for modeB; no verified cross-app composition API Simulator: Full-screen layout and stale/replay labels testable. No provider-video modeB proof; start 24-hour primary first-install clock and record X04 FAILS/TIMEBOX before selecting fallback.</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>not_run</span></td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -2994,7 +3170,7 @@
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">seit.json</th>
-                  <td>100 proof cases, 70 commands, gate declarations</td>
+                  <td>114 proof cases, 91 commands including V01 and conditional primary additions; original fields preserved.</td>
                   <td>Planning Test Engineer</td>
                   <td>planning</td>
                   <td>check_seit.py cross-check</td>
@@ -3002,7 +3178,7 @@
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">implementation.json</th>
-                  <td>52 slices, waves, dependencies, traceability</td>
+                  <td>54 existing slices; 37 additive conditional bindings; no new slice IDs; proposed start/completion/integration graphs.</td>
                   <td>Plan Integrator</td>
                   <td>planning</td>
                   <td>schema + plan-package freeze</td>
@@ -3063,6 +3239,14 @@
                   <td>continuous; W5</td>
                   <td>PROC-SCRIBE-ASSEMBLY</td>
                   <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">P2 Vega-primary contingency</th>
+                  <td>Technical plan, design, register allocation appendix, slice graph, SEIT, implementation and Manifest plus delta evidence; no product or public export change.</td>
+                  <td>Planning and Design</td>
+                  <td>2026-10-14 planning delta</td>
+                  <td>Repository gate, additive/graph inspection, schema delta and package freeze; independent review pending</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>proposed</span></td>
                 </tr>
               </tbody>
             </table>
@@ -3204,6 +3388,51 @@
                   <td>—</td>
                   <td>—</td>
                 </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">RISK-AFC-P2-14</th>
+                  <td>M14 starts after A01..A05 (W3) with nine days to T_deadline and competes for the five-agent cap.</td>
+                  <td>If P2-V01 is not merged with its verdict table before the M12 submission documents are finalized (due 2026-10-22T16:00:00Z), then the submission shall describe the Vega build as in progress with its stated limits, and no M12 or M13 slice shall wait for it. Conditional primary override: failed Vega blocks submission readiness; D04 closure ownership remains VP-OD-05/F1, not approved.</td>
+                  <td>Report in progress with limits; Fire OS path unaffected.</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                  <td>—</td>
+                  <td>—</td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">RISK-AFC-P2-15</th>
+                  <td>The host runs Ubuntu 26.04, newer than the documented test matrix.</td>
+                  <td>If the Vega SDK or Vega Virtual Device cannot install or run on the Ubuntu 26.04 x86_64 KVM host, then P2-V01 shall stop with the exact unmet requirement and raise an owner decision; no agent shall change the host OS, use sudo or install a system package.</td>
+                  <td>Owner decides: host package install, a 24.04 VM with nested KVM, or M14 reported as blocked.</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                  <td>—</td>
+                  <td>—</td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">RISK-AFC-P2-16</th>
+                  <td>A missing physical Vega device, unverified background alert route, SDK compatibility conflict or missed primary checkpoint shall remain a blocking primary-acceptance gap unless the owner explicitly amends the named requirement or target.</td>
+                  <td>No sudo/system install, no implicit license acceptance, no unscanned execution. Missing Watchman/SDK/provenance or .vpkg semantics is typed gap. Missed primary checkpoint or physical failure returns owner scope/target decision; no in-progress side-lane claim used as primary acceptance.</td>
+                  <td>Retain typed gap and return only the affected owner decision; no silent feature or proof reduction.</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>proposed</span></td>
+                  <td>—</td>
+                  <td>—</td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">RISK-AFC-P2-17</th>
+                  <td>An SDK/Watchman install shall proceed only with pinned provenance and an ALLOW/PASS scan before execution, resolved terms, and user scope; unsupported host/tool or .vpkg verification capability remains a typed gap.</td>
+                  <td>No sudo/system install, no implicit license acceptance, no unscanned execution. Missing Watchman/SDK/provenance or .vpkg semantics is typed gap. Missed primary checkpoint or physical failure returns owner scope/target decision; no in-progress side-lane claim used as primary acceptance.</td>
+                  <td>Retain typed gap and return only the affected owner decision; no silent feature or proof reduction.</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>proposed</span></td>
+                  <td>—</td>
+                  <td>—</td>
+                </tr>
+                <tr class="row-gap">
+                  <th scope="row" class="id">Inherited schema gap</th>
+                  <td>Original V01T and V01 goal strings exceed the house-schema 512-character cap at base 5097585.</td>
+                  <td>Additive-only delta preserves them; proposed primary override goals meet schema; no new schema findings. Full unmaterialized document is not claimed schema PASS.</td>
+                  <td>Materialize the approved concise primary goals; if Fire OS selected, losslessly normalize summaries retaining original goal_source_notes. No new owner intent required.</td>
+                  <td><span class="status status-gap"><span class="mark" aria-hidden="true"></span>baseline gap; schema-validation.json</span></td>
+                  <td>—</td>
+                  <td>—</td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -3292,10 +3521,10 @@
                   <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>pending</span></td>
                 </tr>
                 <tr class="row-hold">
-                  <th scope="row" class="id">OA-10: Store the manual-mode link passphrase as an SSM SecureString parameter in aws-afc-dev under the name P2-B01&#39;s template declares, and perform the /link confirmation for the stick when P2-L02 smoke, P2-X09, P2-X10 or a data-clearing APK rollback needs a linked device.</th>
+                  <th scope="row" class="id">SD-048 supersedes OA-10 passphrase provisioning: confirm TV code only, no passphrase.</th>
                   <td>William Rumph</td>
-                  <td>needed by P2-L02 link smoke (W2); blocks: Deployed link confirmation; linked-device live runs</td>
-                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>pending</span></td>
+                  <td>Owner task packet 2026-10-14; shared backend reconciliation pending, no new owner question.</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>settled owner decision; implementation proof pending</span></td>
                 </tr>
                 <tr class="row-hold">
                   <th scope="row" class="id">OA-11 (optional): Supply a release signing keystore for the submitted APK.</th>
@@ -3368,6 +3597,42 @@
                   <td>William Rumph</td>
                   <td>recommendation: **Approve** as Phase 2 design (spec §4.7 deferred this to Phase 2 design).</td>
                   <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>open_for_integrated_review</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">VP-OD-01: Choose target and AFC-PR-052/053 amendment; no automatic switch.</th>
+                  <td>William Rumph</td>
+                  <td>P2-VEGA-PRIMARY-plan proposal; queued, not answered</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>NEEDS_OWNER_DECISION</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">VP-OD-02: Owner SDK terms handling if encountered; NONINTERACTIVE cannot bypass.</th>
+                  <td>William Rumph</td>
+                  <td>P2-VEGA-PRIMARY-plan proposal; queued, not answered</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>NEEDS_OWNER_DECISION</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">VP-OD-03: Ubuntu 26.04 user-scope qualification/Watchman versus supported host; no sudo.</th>
+                  <td>William Rumph</td>
+                  <td>P2-VEGA-PRIMARY-plan proposal; queued, not answered</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>NEEDS_OWNER_DECISION</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">VP-OD-04: Replacement Vega identity/arrival and owner developer/provider login.</th>
+                  <td>William Rumph</td>
+                  <td>P2-VEGA-PRIMARY-plan proposal; queued, not answered</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>NEEDS_OWNER_DECISION</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">VP-OD-05: F1: P2-D04 closes RISK-AFC-P2-14, V01 supplies evidence; primary failure is a stop.</th>
+                  <td>William Rumph</td>
+                  <td>P2-VEGA-PRIMARY-plan proposal; queued, not answered</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>NEEDS_OWNER_DECISION</span></td>
+                </tr>
+                <tr class="row-gap">
+                  <th scope="row" class="id">Review capabilities</th>
+                  <td>Inherited frozen profile</td>
+                  <td>OCR OpenCodeReview delegate mode required; Reverify 0.11.0 on exact .vpkg claims, semantic support unproven. No ordinary test substitution. Plan-only author made no binary claim.</td>
+                  <td><span class="status status-gap"><span class="mark" aria-hidden="true"></span>not_run; capability gap remains explicit</span></td>
                 </tr>
               </tbody>
             </table>

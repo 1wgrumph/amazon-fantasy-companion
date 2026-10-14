@@ -1,0 +1,42 @@
+{
+  "outcome": "DELTA_SCHEMA_PASS_WITH_BASELINE_GAPS",
+  "reports": [
+    {
+      "artifact": "implementation.json",
+      "baseline_findings": [
+        {
+          "path": "slices/52/goal",
+          "validator": "maxLength",
+          "message": "goal exceeds 512 characters"
+        },
+        {
+          "path": "slices/53/goal",
+          "validator": "maxLength",
+          "message": "goal exceeds 512 characters"
+        }
+      ],
+      "candidate_findings": [
+        {
+          "path": "slices/52/goal",
+          "validator": "maxLength",
+          "message": "goal exceeds 512 characters"
+        },
+        {
+          "path": "slices/53/goal",
+          "validator": "maxLength",
+          "message": "goal exceeds 512 characters"
+        }
+      ],
+      "new_findings": [],
+      "materialized_primary_schema_findings": []
+    },
+    {
+      "artifact": "seit.json",
+      "baseline_findings": [],
+      "candidate_findings": [],
+      "new_findings": []
+    }
+  ],
+  "classification": "BUG_ROUTE: not-a-bug \u2014 prospective author plan validation, not a product/harness failure. Two overlong baseline V01 goal fields reproduce at 5097585 and remain unchanged by additive-only scope; proposed primary overrides meet schema. Author-introduced row shape and positive-duration constraints corrected before freeze.",
+  "next_action": "Controller materializes approved concise primary goals, or losslessly normalizes side-lane summaries retaining goal_source_notes if Fire OS selected. No owner intent needed for lossless normalization. Full unmaterialized document is not claimed schema PASS."
+}

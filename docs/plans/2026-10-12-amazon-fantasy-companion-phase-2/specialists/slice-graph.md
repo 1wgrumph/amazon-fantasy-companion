@@ -247,3 +247,25 @@ verified red-receipt completion in the shared pair worktree, never a separate
 red-only PR merge. Existing product-to-product dependencies still require
 landing. The Plan Integrator consumes exact command IDs/costs from the final
 SEIT and Integration Engineer delta. No review/repair budget is reset.
+
+
+## Vega-primary conditional projection (2026-10-14)
+
+Existing rows/edges remain the Fire OS/side-lane baseline. The owner-requested
+primary alternative is specified in each affected implementation slice's
+`vega_primary_contingency`, with the same house fields and inherited routes.
+No additional slice IDs. See the technical-plan disposition and dated
+critical path, and evidence/P2-VEGA-PRIMARY-plan/effective-graph.json.
+
+On activation only: X01 → V01T → V01 (start); X01 → X04 → X02 → X03 → X07;
+B01 → X03; X03 → B06T → B06; backend chain → L03; X02/X03/X04/X07/L03 →
+V01 (close); V01/L03 → X09 → X10; R5 → L05 → X12. A01–A05/T are inactive
+primary work, preserved as source. R1–R5 dependencies are projected with
+A0x edges replaced by V01; checkpoint dates move as the technical plan says.
+No gate treats an inactive slice as passed. X04's timed fullScreen fallback
+is preserved, not a weakened acceptance criterion.
+
+All reviewer/repair counts and frozen model/harness routes are inherited.
+OCR delegation remains required; Reverify applies to .vpkg package claims
+and unavailability is a typed gap. New proposal does not reset prior F1 or
+spent planning review budgets.

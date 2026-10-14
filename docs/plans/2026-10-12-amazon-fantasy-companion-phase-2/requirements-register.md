@@ -184,3 +184,22 @@ technical plan §M14 Vega OS port. No new register UID is added.
 
 Not mirrored: AFC-PR-052 (Fire OS on the 2018 stick) and AFC-PR-053 (minSdk 25) have no Vega equivalent.
 The Vega packaging rule is AC-AFC-P2-VEGA-02.
+
+
+## Vega-primary conditional allocation (2026-10-14, not activated)
+
+The register statements above are preserved. The five-feature Vega mapping
+above remains the source inventory, with all listed UIDs retained. The
+primary alternative changes realization and proof environment only after
+VP-OD-01; it does not manufacture passed VCASEs. Lifecycle-local
+AC-AFC-P2-VPRIMARY-01..04 and RISK-AFC-P2-16/17 belong to the technical plan.
+
+| Coverage set | Proposed primary realization / proof | Status |
+|---|---|---|
+| Every UID mirrored by the five rows in Vega OS port mapping | Same V01T/V01 IDs; requirement/VCASE source replaces nonexistent A02T–A05T test source. Available A01 tests remain reference evidence. Physical X02/X03/X04/X07/X09 prove provider-dependent claims. | Proposed; every application observation not_run |
+| AFC-PR-015, 030, 048 | Physical alert/action/playback and real provider game/channel handoff | Blocking physical evidence, no simulator substitute |
+| AFC-PR-041, 047 | Physical geometry proof for modeB, or existing timed fullScreen fallback | No new video route or silent waiver |
+| AFC-PR-052, 053 | P2-D02 must record an owner-approved Vega target/model/OS and manifest compatibility allocation instead of Fire OS 2018/minSdk 25 | NEEDS_OWNER_DECISION VP-OD-01; unchanged here |
+| AFC-PR-038, 054, 055, 058, 059, 063 | Shared API/session/security/compute controls; SD-048 code-only confirmation reconciled in backend before integrated proof | SD-048 settled; implementation verification pending |
+| All other backend, submission, feedback and lifecycle UIDs | Original allocations retained; downstream slices target the selected artifact and truthful evidence | Not removed by TV contingency |
+| RISK-AFC-P2-14 | Proposed P2-D04 closure, V01 verdict evidence supplier; no “in progress” substitute when Vega is primary | NEEDS_OWNER_DECISION VP-OD-05 / F1 remains open |
