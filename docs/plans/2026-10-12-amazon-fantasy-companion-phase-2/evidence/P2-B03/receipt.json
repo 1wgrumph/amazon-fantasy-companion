@@ -337,5 +337,224 @@
    }
   ],
   "supersedes": "The CONTRACT_FAILURE and GAP results above are historical; acceptance 1-5 are met by this continuation."
+ },
+ "independent_review_repair": {
+  "outcome": "PASS",
+  "baseline": "20a570ad747f0235156d4a1c2146923cc298de8f",
+  "base": "75afca0",
+  "formal_gate_base": "1ac5846",
+  "profile": "bug-triager",
+  "route": "Codex CLI / GPT-6.1 Sol / high",
+  "role": "Bug-triager Implementer",
+  "repair_round": 1,
+  "authority": "Owner packet 2026-10-14: F1-F4, A1-A2; lineup product, non-frozen lineup tests, P2-B03 evidence only",
+  "branch": "afc/p2-b03",
+  "next_action": "Commit only completed authorized evidence with Codex environment and hooks ON; return to orchestrator, no further review or landing authorized",
+  "lease_evidence": "Owner assigned this exact clean worktree/branch/HEAD; no separate B03 checkout lease file discovered; no lifecycle control state changed",
+  "review_capabilities": {
+   "coverage_assist": "Independent review consumed via owner REPAIR_REQUIRED packet; no new review authorized or performed",
+   "reverify": "not_applicable: Python source repair, no compiled-binary claim"
+  },
+  "bran_status": "unavailable: no native .bran/policy.yaml",
+  "regression_summary": {
+   "baseline_exit_code": 1,
+   "baseline_result": "11 failed, 9 passed on 20a570a",
+   "green_exit_code": 0,
+   "green_result": "20 passed",
+   "boundary_proof_exit_code": 0,
+   "boundary_proof_result": "5 reported F2/F3 mutants fail targeted tests (each pytest child exit 1)",
+   "boundary_interpretation": "F2/F3 are tests missing boundaries; correct original behavior passes on 20a570a. Red evidence is the exact reported mutant, not a manufactured product regression.",
+   "initial_test_correction": "First run had one incorrect full-payload equality assertion for leagues. Corrected to the public projection; authoritative red rerun uses the same test bytes as green."
+  },
+  "origin": "P2-B03 realization; input-validation product defects (F1/F4/A1/A2), missing boundary assertions (F2/F3)",
+  "missed_detection": "Frozen examples covered normal keys/weeks and scoring; no non-string manual athlete IDs, dot-only keys, stored Yahoo preset rejection or DynamoDB numeric scoring case. Prior size case hit duplicate rejection and did not isolate the ESPN roster guard; Yahoo exact week-one, URL and settings size edges were unpinned.",
+  "method": "test: committed recorded Yahoo corpus, prescribed hostile-input and size boundaries, existing offline Moto stored-lineup fixture, real boto3 DynamoDB numeric deserializer",
+  "resource_group": "none: in-process tests; no browser, engine, server, live network or AWS; new regression suite 0.58s, full backend suite 20.42s",
+  "test_sha256": "f1bdcd1c98aaddbf564c6a783b8ad8adaac82c9cac1b8680b64446fe5fe66547",
+  "findings": [
+   {
+    "id": "F1",
+    "fix": "Type-check manual athlete_id before dictionary membership",
+    "tests": [
+     "test_manual_unhashable_athlete_id_is_value_error"
+    ],
+    "red": "review-red.txt",
+    "green": "review-green.txt"
+   },
+   {
+    "id": "F2",
+    "fix": "Pin existing ESPN roster size guard with distinct athletes and no lineup entries; no product change needed",
+    "tests": [
+     "test_manual_espn_roster_at_size_limit_is_accepted",
+     "test_manual_oversize_espn_roster_is_rejected_without_duplicates"
+    ],
+    "red": "review-boundary-red.txt (removed-bound mutant)",
+    "green": "review-green.txt"
+   },
+   {
+    "id": "F3",
+    "fix": "Pin existing week-one acceptance, full leagues URL and both 200/201 settings limits; no product change needed",
+    "tests": [
+     "test_yahoo_week_one_is_accepted",
+     "test_yahoo_leagues_url_is_exact",
+     "test_yahoo_settings_at_size_limit_is_accepted",
+     "test_yahoo_settings_above_size_limit_is_rejected"
+    ],
+    "red": "review-boundary-red.txt (4 boundary/URL mutants)",
+    "green": "review-green.txt"
+   },
+   {
+    "id": "F4",
+    "fix": "Reject empty dot segments before any Yahoo transport call",
+    "tests": [
+     "test_yahoo_empty_dot_segments_are_rejected_before_request",
+     "test_yahoo_valid_dot_separated_keys_are_accepted"
+    ],
+    "red": "review-red.txt",
+    "green": "review-green.txt"
+   },
+   {
+    "id": "A1",
+    "fix": "Reject any preset field in stored Yahoo scoring",
+    "tests": [
+     "test_stored_yahoo_scoring_rejects_manual_preset"
+    ],
+    "red": "review-red.txt",
+    "green": "review-green.txt"
+   },
+   {
+    "id": "A2",
+    "fix": "Normalize stat numbers to existing float scoring arithmetic",
+    "tests": [
+     "test_dynamodb_decimal_stats_score_like_int_and_float"
+    ],
+    "red": "review-red.txt",
+    "green": "review-green.txt"
+   }
+  ],
+  "ordering_correction": "Formal mutation archives committed HEAD, so commit gated source/tests first, then run formal gates and commit evidence. No branch switch, reset, amend or hook bypass.",
+  "gate_result": {
+   "exit_code": 0,
+   "output": "review-gate.txt",
+   "backend": "297 passed"
+  },
+  "candidate_commit": "78b7b6d4bb316bca3b024f2acee75bd9306e7f4b",
+  "commands": [
+   {
+    "id": "RED",
+    "command": "PATH=$HOME/.local/share/afc-tools/backend-tests/bin:$PATH PYTHONDONTWRITEBYTECODE=1 timeout 1500 python3.12 -m pytest backend/tests/unit/lineup/test_review_regressions.py -q -p no:cacheprovider --tb=short",
+    "exit_code": 1,
+    "result": "11 failed, 9 passed on unchanged 20a570a product source",
+    "output": "review-red.txt"
+   },
+   {
+    "id": "BOUNDARY-MUTANT-RED",
+    "command": "PATH=$HOME/.local/share/afc-tools/backend-tests/bin:$PATH PYTHONDONTWRITEBYTECODE=1 python3.12 docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B03/review-boundary-proof.py",
+    "exit_code": 0,
+    "result": "5 in-memory baseline mutants each fail exactly their target test, pytest exit 1",
+    "output": "review-boundary-red.txt",
+    "native_result": "review-boundary-proof.json"
+   },
+   {
+    "id": "GREEN",
+    "command": "same command and test bytes as RED",
+    "exit_code": 0,
+    "result": "20 passed",
+    "output": "review-green.txt"
+   },
+   {
+    "id": "FROZEN-HASHES",
+    "command": "PYTHONDONTWRITEBYTECODE=1 python3 docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B03T/verify_receipt.py docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B03T/receipt.json",
+    "exit_code": 0,
+    "result": "PASS; 11 frozen files unchanged",
+    "output": "review-frozen-hashes.json"
+   },
+   {
+    "id": "GATE",
+    "command": "PATH=$HOME/.local/share/afc-tools/backend-tests/bin:$PATH PYTHONDONTWRITEBYTECODE=1 timeout 1500 bash tools/ci/gate.sh",
+    "exit_code": 0,
+    "result": "297 passed; all areas PASS; tvapp no tree",
+    "output": "review-gate.txt"
+   },
+   {
+    "id": "CANDIDATE-COMMIT",
+    "command": "git commit -m \"fix: repair P2-B03 lineup validation and boundary tests\" (Codex author and committer environment, hooks ON)",
+    "exit_code": 0,
+    "result": "78b7b6d; pre-commit gate PASS, 297 passed",
+    "output": "review-candidate-commit.txt"
+   },
+   {
+    "id": "COVERAGE",
+    "command": "PATH=$HOME/.local/share/afc-tools/backend-tests/bin:$PATH PYTHONDONTWRITEBYTECODE=1 timeout 1500 bash tools/ci/coverage/backend.sh 1ac5846 docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B03/review-coverage",
+    "exit_code": 0,
+    "result": "PASS changed-line coverage 100% (threshold 90%)",
+    "output": "review-coverage.txt",
+    "native_result": "review-coverage/coverage-result.json",
+    "candidate": "78b7b6d4bb316bca3b024f2acee75bd9306e7f4b"
+   },
+   {
+    "id": "MUTATION",
+    "command": "PATH=$HOME/.local/share/afc-tools/mutmut-backend/bin:$PATH PYTHONDONTWRITEBYTECODE=1 timeout 1500 bash tools/ci/mutation/backend.sh 1ac5846 docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B03/review-mutation",
+    "exit_code": 0,
+    "result": "mutation score 83.42% (threshold 70%)",
+    "output": "review-mutation.txt",
+    "native_result": "review-mutation/mutation-result.json",
+    "candidate": "78b7b6d4bb316bca3b024f2acee75bd9306e7f4b"
+   },
+   {
+    "id": "NORMALIZED-COVERAGE-EVALUATION",
+    "command": "python3 tools/ci/coverage/evaluate.py 1ac5846 <review-coverage/coverage.xml> <review-coverage>",
+    "exit_code": 0,
+    "result": "PASS 100%; coverage XML source path normalized to dot, candidate and source digests unchanged"
+   }
+  ],
+  "not_run": [
+   "new independent review (one repair round only)",
+   "deployed/network/AWS verification",
+   "push/PR/branch change"
+  ],
+  "installs": [],
+  "mutation_summary": {
+   "killed": 458,
+   "survived": 91,
+   "total": 549,
+   "no_tests": 0,
+   "skipped": 0,
+   "suspicious": 0,
+   "timeout": 0,
+   "check_was_interrupted_by_user": 0,
+   "segfault": 0
+  },
+  "acceptance": [
+   {
+    "id": 1,
+    "status": "MET with explicit boundary interpretation",
+    "evidence": "F1/F4/A1/A2: 11 baseline failures -> same tests green; F2/F3: correct baseline behavior, 5 targeted reported mutants fail -> unmutated tests green. 20 total regression cases; all six findings addressed."
+   },
+   {
+    "id": 2,
+    "status": "MET",
+    "evidence": "review-frozen-hashes.json: verify_receipt PASS, 11 unchanged"
+   },
+   {
+    "id": 3,
+    "status": "MET",
+    "evidence": "review-gate.txt: gate exit 0, 297 passed"
+   },
+   {
+    "id": 4,
+    "status": "MET",
+    "evidence": "review-coverage/coverage-result.json: PASS 100%; review-mutation/mutation-result.json: PASS 83.42%, no timeouts"
+   },
+   {
+    "id": 5,
+    "status": "MET",
+    "evidence": "this independent_review_repair key, finding-to-fix-to-test-to-evidence mapping"
+   }
+  ],
+  "evidence_normalization": "Text logs replace private home prefix with $HOME and trim trailing whitespace; coverage XML source uses repository-relative dot, evaluator rerun PASS; source bindings, outcomes and native statistics preserved. Generated .coverage DB removed after XML export.",
+  "scope_validation": "Product/test candidate 78b7b6d has only the four lineup modules and new test_review_regressions.py; evidence commit is restricted to P2-B03. Final path audit in review-path-audit.json and worker return.",
+  "evidence_commit": "Final evidence commit with hooks ON; exit and SHA in worker return (cannot embed self-referential commit SHA)",
+  "removed_untracked_pycache": []
  }
 }
