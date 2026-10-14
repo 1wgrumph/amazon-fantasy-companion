@@ -177,3 +177,28 @@ version 0.24 (LATEST), with SDK example version 0.24.9311.
 - Tools exercised: git (read), gh issue view (read), WebFetch and WebSearch
   (developer.amazon.com), node `plan-package.cjs`, python3, and
   `tools/ci/gate.sh`.
+
+## Correction round 1 (planning review CHANGE_REQUESTED, exact_text)
+
+The planning review returned CHANGE_REQUESTED. This round applies the
+exact_text findings F2 to F8 and the two note fixes in one mechanical pass,
+with no regate. F1 (owner of RISK-AFC-P2-14 on P2-D04) is not applied: it
+waits on an owner answer.
+
+| Finding | Changed location |
+|---|---|
+| F2 | `seit.json` PROC-VEGA-PREPARE `command` split into three steps, plus new `command_steps`: download and sha256; CMD-SUPPLY-SCAN ALLOW; NONINTERACTIVE install and `~/vega/bin/vega --version` |
+| F3 | `seit.json` PROC-VEGA-PREPARE `procedure_steps[2]`: inspect `get_vvm.sh` for license or terms handling; OA-13 stop |
+| F4 | `seit.json` PROC-VEGA-PREPARE: `. ~/vega/env` and `vega sdk list` removed (`command`, `pass`); `procedure_steps[1]` now pins from the docs (S3), and uses `list-remote` only if `vega --help` lists it |
+| F5 | `seit.json` CMD-VVD-SCREENCAP `pass`: copy subcommand and host capture tool recorded; VEGA_SCREENCAP_GAP |
+| F6 | `implementation.json` P2-V01 `stop_condition`: OA-12 now waits only for the physical sub-path; the VVD path continues |
+| F7 | `implementation.json` P2-V01 `goal` and `goal_source_notes`: start with completing the V01T harness; `specialists/slice-graph.md` P2-V01 row updated to match |
+| F8a | `requirements-register.md` Vega mapping "Not mirrored" line: AFC-PR-052 and AFC-PR-053 |
+| F8b | `implementation.json` P2-V01T `human_decision` = OA-13 |
+| F8c | `seit.json` CMD-VEGA-DEVICE-INSTALL `command` uses `-p ... --device` and `launch-app --device` |
+| Note 1 | `seit.json` CMD-COVERAGE-VEGAAPP `command` is now the native Jest plus diff-cover chain; `description` updated |
+| Note 2 | `implementation.json` P2-V01 `reasoning_level.reason`: Muse CLI id `muse-wonder-full-1.0` with `--contributor-mode on` for the WonderFull fallback |
+
+Delta candidate digest after this round: `fff19b952ab24a3fc0c0aa7a839f5e85effb13745c42ed99a53304e38fcd45c1`. The
+structural check against `75afca0` still shows only added paths for
+existing JSON values and slices.

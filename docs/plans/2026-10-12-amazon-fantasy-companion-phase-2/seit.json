@@ -2974,8 +2974,8 @@
     },
     {
       "id": "PROC-VEGA-PREPARE",
-      "command": "curl -fsSL -o <scan_dir>/get_vvm.sh https://sdk-installer.vega.labcollab.net/get_vvm.sh && sha256sum <scan_dir>/get_vvm.sh && NONINTERACTIVE=true VEGA_SDK_VERSION=<pinned_sdk_version> bash <scan_dir>/get_vvm.sh < /dev/null && . ~/vega/env && vega --version && vega sdk list",
-      "pass": "Installer digest and pinned VEGA_SDK_VERSION recorded; CMD-SUPPLY-SCAN ALLOW/PASS for the installer and each downloaded SDK/VVD artifact before first execution; `vega --version` prints the pinned Active SDK Version and CLI version. User scope only (~/vega); no sudo or system package. A license or terms prompt, a required system package, BLOCK/INDETERMINATE scan, or an unsupported-host error stops with OWNER_DECISION_REQUIRED (OA-13, RISK-AFC-P2-15). Missing tool, missing article, unsupported capability, zero collected cases, skipped required case or not_run is a typed gap, never PASS. Record safe error, phase and exit status.",
+      "command": "Step 1: curl -fsSL -o <scan_dir>/get_vvm.sh https://sdk-installer.vega.labcollab.net/get_vvm.sh && sha256sum <scan_dir>/get_vvm.sh ; Step 2: CMD-SUPPLY-SCAN on <scan_dir>/get_vvm.sh; must return ALLOW ; Step 3: NONINTERACTIVE=true VEGA_SDK_VERSION=<pinned_sdk_version> bash <scan_dir>/get_vvm.sh < /dev/null && ~/vega/bin/vega --version",
+      "pass": "Installer digest and pinned VEGA_SDK_VERSION recorded; CMD-SUPPLY-SCAN ALLOW/PASS for the installer and each downloaded SDK/VVD artifact before first execution; `~/vega/bin/vega --version` prints the pinned Active SDK Version and CLI version. User scope only (~/vega); no sudo or system package. A license or terms prompt, a required system package, BLOCK/INDETERMINATE scan, or an unsupported-host error stops with OWNER_DECISION_REQUIRED (OA-13, RISK-AFC-P2-15). Missing tool, missing article, unsupported capability, zero collected cases, skipped required case or not_run is a typed gap, never PASS. Record safe error, phase and exit status.",
       "description": "Prepare the Vega SDK, CLI and Vega Virtual Device on the Ubuntu x86_64 KVM host (workspace rule 23). The installer is downloaded and scanned before it runs; it is never piped from the network into bash.",
       "used_by": [
         "IE-P2-V01",
@@ -2987,9 +2987,14 @@
       "execution_status": "not_run (prospective procedure; help/preparation inspection is not execution)",
       "procedure_steps": [
         "Record host: uname -a, lsb_release -a, /dev/kvm access, free disk >= 20 GB (docs), node --version >= 18, native (non-snap) curl, lz4, watchman.",
-        "Pin VEGA_SDK_VERSION to the newest 0.24.x build `vega sdk list-remote` reports at dispatch (docs example 0.24.9311); record it with the installer sha256.",
-        "Run scan-software-supply-chain on the installer and on each archive it fetches; NONINTERACTIVE=true must not accept license terms on the owner's behalf: if terms appear, stop (OA-13).",
+        "Pin VEGA_SDK_VERSION to the 0.24.x build named in the docs at dispatch (S3 example 0.24.9311); use `vega sdk list-remote` only if `vega --help` lists it.",
+        "Run scan-software-supply-chain on the installer and on each archive it fetches; NONINTERACTIVE=true must not accept license terms on the owner's behalf: if terms appear, stop (OA-13). During the scan, inspect get_vvm.sh for license, EULA, terms or accept handling. If the NONINTERACTIVE path accepts or skips any terms, stop with OWNER_DECISION_REQUIRED (OA-13) before running it.",
         "Missing system packages (libpython3.8-dev has no candidate on Ubuntu 26.04; watchman absent) are installed only in user scope after scan, or the owner decides; native debugging (libpython3.8) is not needed for build, Jest or VVD run and its absence is recorded, not worked around."
+      ],
+      "command_steps": [
+        "curl -fsSL -o <scan_dir>/get_vvm.sh https://sdk-installer.vega.labcollab.net/get_vvm.sh && sha256sum <scan_dir>/get_vvm.sh",
+        "CMD-SUPPLY-SCAN on <scan_dir>/get_vvm.sh; must return ALLOW",
+        "NONINTERACTIVE=true VEGA_SDK_VERSION=<pinned_sdk_version> bash <scan_dir>/get_vvm.sh < /dev/null && ~/vega/bin/vega --version"
       ]
     },
     {
@@ -3092,7 +3097,7 @@
     {
       "id": "CMD-VVD-SCREENCAP",
       "command": "vega device shell -d VirtualDevice gwsi-tool-screenshooter /tmp/<state>.png && <pull per installed CLI> evidence/visual/P2-V01/<state>.png",
-      "pass": "Valid PNG at the VVD output resolution showing the named state with sanitized fixture data. Docs conflict (VDA reference documents gwsi-tool-screenshooter; the Fire OS porting guide says screenshot support is not available on a VVD): if the device-side capture fails, a host capture of the VVD window labeled `host-window` is admissible for companion UI only, with the reason recorded; neither proves pixel sizes for AFC-PR-045 unless the resolution mapping is recorded.",
+      "pass": "Valid PNG at the VVD output resolution showing the named state with sanitized fixture data. Docs conflict (VDA reference documents gwsi-tool-screenshooter; the Fire OS porting guide says screenshot support is not available on a VVD): if the device-side capture fails, a host capture of the VVD window labeled `host-window` is admissible for companion UI only, with the reason recorded; neither proves pixel sizes for AFC-PR-045 unless the resolution mapping is recorded. PROC-VEGA-PREPARE records the resolved device-to-host copy subcommand (from `vega device --help`) and a host capture tool. Any tool installed goes through CMD-SUPPLY-SCAN in user scope. If neither route captures, record VEGA_SCREENCAP_GAP with the exact error. That is a typed gap, never PASS, and the affected verdicts stay `unknown`.",
       "description": "Capture every changed state on the VVD; create evidence/visual/P2-V01/ first.",
       "used_by": [
         "IE-P2-V01",
@@ -3117,7 +3122,7 @@
     },
     {
       "id": "CMD-VEGA-DEVICE-INSTALL",
-      "command": "vega device list && vega device -d <vega_stick_serial> install-app --packagePath vega-app/build/armv7-<build_type>/<app_name>_armv7.vpkg && vega device -d <vega_stick_serial> launch-app --appName <component_id>",
+      "command": "vega device install-app -p vega-app/build/armv7-<build_type>/<app_name>_armv7.vpkg --device <vega_stick_serial> && vega device launch-app --device <vega_stick_serial> --appName <component_id>",
       "pass": "Conditional on OA-12 (replacement stick confirmed Vega OS; owner ran `vega devmode login` and `vega devmode enable-device --code <code>`). Install and launch succeed for the exact armv7 .vpkg sha256; capture per DES-AFC-P2-VISUAL. Not run when the stick is Fire OS: record `not applicable — stick runs Fire OS`, never PASS.",
       "description": "Optional physical Vega OS device verification path (AC-AFC-P2-VEGA-05).",
       "used_by": [
@@ -3142,9 +3147,9 @@
     },
     {
       "id": "CMD-COVERAGE-VEGAAPP",
-      "command": "bash tools/ci/coverage/vegaapp.sh <base_sha> <evidence_dir>",
+      "command": "npm --prefix vega-app test -- --ci --coverage --coverageReporters=cobertura && git diff <base_sha> HEAD -- vega-app/src > <evidence_dir>/changed.diff && diff-cover vega-app/coverage/cobertura-coverage.xml --diff-file=<evidence_dir>/changed.diff --fail-under=90",
       "pass": "Jest coverage (cobertura XML) for exact candidate handwritten TypeScript under vega-app/src; changed-line result >=90% via diff-cover. Missing tool/report, stale candidate, zero-test denominator, unmapped changed executable source or not_run is a typed gap/nonzero, never PASS.",
-      "description": "Follows the CMD-COVERAGE-TVAPP pattern; wrapper added by P2-V01 under tools/ci/coverage/ only if P2-V01 write set is extended at planning review, otherwise the native commands below run directly and the wrapper is a recorded gap.",
+      "description": "Follows the CMD-COVERAGE-TVAPP pattern with the native Jest plus diff-cover chain run directly; no wrapper script outside the P2-V01 write set.",
       "used_by": [
         "IE-P2-V01",
         "P2-V01"

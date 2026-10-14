@@ -182,5 +182,5 @@ technical plan §M14 Vega OS port. No new register UID is added.
 | Watch | P2-A04T, P2-A04 | AFC-PR-030, -031, -035, -036, -048 |
 | Lineup panel | P2-A05T, P2-A05 | AFC-PR-039, -040, -041, -042, -043, -044, -045, -046, -047, -061, -062 |
 
-Not mirrored: AFC-PR-053 (the Fire OS build declares minSdk 25) has no Vega
-equivalent. The Vega packaging rule is AC-AFC-P2-VEGA-02.
+Not mirrored: AFC-PR-052 (Fire OS on the 2018 stick) and AFC-PR-053 (minSdk 25) have no Vega equivalent.
+The Vega packaging rule is AC-AFC-P2-VEGA-02.

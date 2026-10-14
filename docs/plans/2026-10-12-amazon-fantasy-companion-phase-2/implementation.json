@@ -10470,7 +10470,12 @@
     "PROC-GATE-TOOL-QUALIFY"
    ],
    "stop_condition": "stop at CMD-RED-VEGA. Added bootstrap paths are limited to a buildable Jest harness and empty interface scaffolding; no tested feature behavior; freeze hashes before green. Stop and return ENVIRONMENT_FAILURE with the exact error if the pinned Vega SDK or its Jest preset cannot be installed under PROC-VEGA-PREPARE; never edit tv-app/ or backend/.",
-   "human_decision": null,
+   "human_decision": {
+    "owner_actions": [
+     "OA-13"
+    ],
+    "open_decisions": []
+   },
    "authority_id": "AUTH-AFC-2026-10-12-P2-001",
    "work_class": "judgement",
    "work_class_reason": "Authors failing tests and red receipts; test design is decided in session.",
@@ -10513,8 +10518,8 @@
   {
    "id": "P2-V01",
    "role": "Product Implementer",
-   "goal": "Scaffold `vega-app/` (React Native for Vega, TypeScript) from the scanned template of the pinned Vega SDK (PROC-VEGA-PREPARE, CMD-SUPPLY-SCAN); record the SDK, CLI, React Native for Vega (0.72 line unless the pinned SDK defaults to 0.83) and VVD versions. Port the finished Fire OS app's Link, Profile/Settings with detection, Alerts, Watch and Lineup Panel against the unchanged CONTRACT-AFC-P2-API and CONTRACT-AFC-P2-ENVELOPE (`backend/src/api/openapi.yaml` read-only); the API base URL comes from build-time configuration and empty shows \"Backend not configured\"; the session token goes through `vega-app/src/auth/tokenStore.ts` (DES-AFC-P2-VEGA) and is never logged; add gate area `vegaapp` to `tools/ci/gate.sh` and its path-filtered CI job; build the x86_64 .vpkg (CMD-VEGA-BUILD), install and run it on the Vega Virtual Device against aws-afc-dev (CMD-VVD-START, CMD-VVD-INSTALL), drive and capture every changed state (PROC-VISUAL-REVIEW with CMD-VVD-INPUT and CMD-VVD-SCREENCAP) under `evidence/visual/P2-V01/`, and record the per-feature verdict table (PROC-VEGA-FEATURE-VERDICT: works / limited by simulator / not supported / unknown). Optional physical path (AC-AFC-P2-VEGA-05): only if OA-12 confirms the replacement stick runs Vega OS, build armv7 and repeat install, drive and capture on it with CMD-VEGA-DEVICE-INSTALL. Stop when green, VVD visual review captured and verdicts recorded.",
-   "goal_source_notes": "Scaffold `vega-app/` (React Native for Vega, TypeScript) from the scanned template of the pinned Vega SDK (PROC-VEGA-PREPARE, CMD-SUPPLY-SCAN); record the SDK, CLI, React Native for Vega (0.72 line unless the pinned SDK defaults to 0.83) and VVD versions. Port the finished Fire OS app's Link, Profile/Settings with detection, Alerts, Watch and Lineup Panel against the unchanged CONTRACT-AFC-P2-API and CONTRACT-AFC-P2-ENVELOPE (`backend/src/api/openapi.yaml` read-only); the API base URL comes from build-time configuration and empty shows \"Backend not configured\"; the session token goes through `vega-app/src/auth/tokenStore.ts` (DES-AFC-P2-VEGA) and is never logged; add gate area `vegaapp` to `tools/ci/gate.sh` and its path-filtered CI job; build the x86_64 .vpkg (CMD-VEGA-BUILD), install and run it on the Vega Virtual Device against aws-afc-dev (CMD-VVD-START, CMD-VVD-INSTALL), drive and capture every changed state (PROC-VISUAL-REVIEW with CMD-VVD-INPUT and CMD-VVD-SCREENCAP) under `evidence/visual/P2-V01/`, and record the per-feature verdict table (PROC-VEGA-FEATURE-VERDICT: works / limited by simulator / not supported / unknown). Optional physical path (AC-AFC-P2-VEGA-05): only if OA-12 confirms the replacement stick runs Vega OS, build armv7 and repeat install, drive and capture on it with CMD-VEGA-DEVICE-INSTALL. Stop when green, VVD visual review captured and verdicts recorded.",
+   "goal": "Complete the `vega-app/` harness that P2-V01T created. Take any remaining template files (index.js, metro.config.js, app.json, assets/) from the scanned template of the pinned SDK without changing frozen test files. Record the SDK, CLI, React Native for Vega (0.72 line unless the pinned SDK defaults to 0.83) and VVD versions. Port the finished Fire OS app's Link, Profile/Settings with detection, Alerts, Watch and Lineup Panel against the unchanged CONTRACT-AFC-P2-API and CONTRACT-AFC-P2-ENVELOPE (`backend/src/api/openapi.yaml` read-only); the API base URL comes from build-time configuration and empty shows \"Backend not configured\"; the session token goes through `vega-app/src/auth/tokenStore.ts` (DES-AFC-P2-VEGA) and is never logged; add gate area `vegaapp` to `tools/ci/gate.sh` and its path-filtered CI job; build the x86_64 .vpkg (CMD-VEGA-BUILD), install and run it on the Vega Virtual Device against aws-afc-dev (CMD-VVD-START, CMD-VVD-INSTALL), drive and capture every changed state (PROC-VISUAL-REVIEW with CMD-VVD-INPUT and CMD-VVD-SCREENCAP) under `evidence/visual/P2-V01/`, and record the per-feature verdict table (PROC-VEGA-FEATURE-VERDICT: works / limited by simulator / not supported / unknown). Optional physical path (AC-AFC-P2-VEGA-05): only if OA-12 confirms the replacement stick runs Vega OS, build armv7 and repeat install, drive and capture on it with CMD-VEGA-DEVICE-INSTALL. Stop when green, VVD visual review captured and verdicts recorded.",
+   "goal_source_notes": "Complete the `vega-app/` harness that P2-V01T created. Take any remaining template files (index.js, metro.config.js, app.json, assets/) from the scanned template of the pinned SDK without changing frozen test files. Record the SDK, CLI, React Native for Vega (0.72 line unless the pinned SDK defaults to 0.83) and VVD versions. Port the finished Fire OS app's Link, Profile/Settings with detection, Alerts, Watch and Lineup Panel against the unchanged CONTRACT-AFC-P2-API and CONTRACT-AFC-P2-ENVELOPE (`backend/src/api/openapi.yaml` read-only); the API base URL comes from build-time configuration and empty shows \"Backend not configured\"; the session token goes through `vega-app/src/auth/tokenStore.ts` (DES-AFC-P2-VEGA) and is never logged; add gate area `vegaapp` to `tools/ci/gate.sh` and its path-filtered CI job; build the x86_64 .vpkg (CMD-VEGA-BUILD), install and run it on the Vega Virtual Device against aws-afc-dev (CMD-VVD-START, CMD-VVD-INSTALL), drive and capture every changed state (PROC-VISUAL-REVIEW with CMD-VVD-INPUT and CMD-VVD-SCREENCAP) under `evidence/visual/P2-V01/`, and record the per-feature verdict table (PROC-VEGA-FEATURE-VERDICT: works / limited by simulator / not supported / unknown). Optional physical path (AC-AFC-P2-VEGA-05): only if OA-12 confirms the replacement stick runs Vega OS, build armv7 and repeat install, drive and capture on it with CMD-VEGA-DEVICE-INSTALL. Stop when green, VVD visual review captured and verdicts recorded.",
    "type": "product",
    "requirement_ids": [
     "AFC-PR-002",
@@ -10673,7 +10678,7 @@
    },
    "reasoning_level": {
     "level": "medium",
-    "reason": "opensource-hackathon implementer route (unchanged by DEC-AFC-SD-043/044/045); no per-slice override."
+    "reason": "opensource-hackathon implementer route (unchanged by DEC-AFC-SD-043/044/045); no per-slice override. Its Muse Code / Muse WonderFull fallback uses CLI id muse-wonder-full-1.0, launched with --contributor-mode on (muse-contributor-mode hold)."
    },
    "review_path": {
     "reviewer_cadence": "phase",
@@ -10744,7 +10749,7 @@
     "CMD-TREE-EQUAL",
     "CMD-CONTRACT-FROZEN"
    ],
-   "stop_condition": "stop when green, VVD visual review captured and the per-feature verdict table recorded. Stop without merging if any change reaches tv-app/, backend/, the final APK path or an M13 slice (CMD-TREE-EQUAL against the base commit). Stop and return OWNER_DECISION_REQUIRED if the SDK install presents license terms (OA-13), the host cannot run the VVD (RISK-AFC-P2-15), or a physical-device step needs the owner's Amazon developer login (OA-12).",
+   "stop_condition": "stop when green, VVD visual review captured and the per-feature verdict table recorded. Stop without merging if any change reaches tv-app/, backend/, the final APK path or an M13 slice (CMD-TREE-EQUAL against the base commit). Stop and return OWNER_DECISION_REQUIRED if the SDK install presents license terms (OA-13) or the host cannot run the VVD (RISK-AFC-P2-15). If a physical-device step needs the owner's developer login (OA-12), record AC-AFC-P2-VEGA-05 as pending OA-12 and continue the VVD path. Only the physical sub-path waits.",
    "human_decision": {
     "owner_actions": [
      "OA-10",
@@ -21230,13 +21235,38 @@
    "status": "pending planning review",
    "rule": "Additive only: no existing slice field changed; Fire OS slices, waves W1..W5, M01..M13, releases and the final APK path unchanged.",
    "approved_candidate_digest": "e02871029b86f8d0f2fdef6617feb989413883cc6bdb70e5dec3a47e64c86da8",
-   "delta_candidate_digest": "ac95cc862e27aef934c351d36d2103e7f3c2f9dfaee8b2fb5e55c520c8d7382d",
+   "delta_candidate_digest": "fff19b952ab24a3fc0c0aa7a839f5e85effb13745c42ed99a53304e38fcd45c1",
    "digest_note": "journey_settings.planning_review.candidate_digest and source_baseline planning_inputs keep the approved binding (DEC-AFC-P2-APPROVAL-001). plan-package.cjs reports digest_mismatch for the technical plan, design and register and candidate_digest_mismatch until the Plan Integrator rebinds them after planning review and regenerates the DoD Manifest HTML.",
    "planning_inputs_after": {
     "amazon-fantasy-companion-phase-2-technical-plan.md": "d7bf7fe0cbba80fb327daa8c2e6aac9d92da606e11ed170c0b39fed6761e154f",
     "design.md": "9ede2ebcb5647a761016a2b1e145fd844f803065509d185e57ae3c4734f26ea3",
-    "requirements-register.md": "22ee4c1e80573bbbbdcdef6af520dedba8d60a003082c02f694b77b18d37cc15"
-   }
+    "requirements-register.md": "49a5737de72c338498fc00db600b13c15538b2d53197d788d0d8466a30b1f720"
+   },
+   "corrections": [
+    {
+     "round": 1,
+     "date": "2026-10-14",
+     "source": "planning review CHANGE_REQUESTED",
+     "class": "exact_text",
+     "findings_applied": [
+      "F2",
+      "F3",
+      "F4",
+      "F5",
+      "F6",
+      "F7",
+      "F8a",
+      "F8b",
+      "F8c",
+      "note: CMD-COVERAGE-VEGAAPP native chain",
+      "note: P2-V01 Muse CLI id"
+     ],
+     "not_applied": {
+      "F1": "waits on owner answer (RISK-AFC-P2-14 owner on P2-D04)"
+     },
+     "regate": "not required (exact_text)"
+    }
+   ]
   }
  ]
 }
