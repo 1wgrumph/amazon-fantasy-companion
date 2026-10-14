@@ -35,5 +35,188 @@
   "supported_not_closed": ["SEIT-AFC-PR-001", "SEIT-AFC-PR-006", "SEIT-AFC-PR-007", "SEIT-AFC-PR-065"],
   "closing_slices": "PR rows at P2-L03 (deployed); DX at P2-SCR1; LAND/REL at P2-R5; REV at P2-L05; PATH at P2-G01; RISK-10 at P2-6"
  },
- "review_capabilities": {"coverage_assist": "not_run; allocated to IE-P2-14", "reverify": "not applicable: no compiled-binary claim"}
+ "review_capabilities": {"coverage_assist": "not_run; allocated to IE-P2-14", "reverify": "not applicable: no compiled-binary claim"},
+ "stubpin_repair": {
+  "outcome": "REPAIRABLE_FAILURE",
+  "at": "2026-10-14T15:34:17.236545+00:00",
+  "bug_id": "BUG-AFC-B03-STUBPIN-001",
+  "classification": "plan defect; test-only repair",
+  "authority": "owner bounded packet; DEC-AFC-SD-046",
+  "role": "Bug-triager Implementer",
+  "profile": "bug-triager",
+  "route": "Codex CLI / GPT-6.1 Sol / high",
+  "baseline": "26656b7ad7c911edecba0ab364b41c2d692f55f0",
+  "candidate_commit": "d729f83f706031ab3f7835181bb94e9a31fc2568",
+  "branch": "afc/p2-b03",
+  "next_action": "Return to orchestrator for a bounded mutation-scope repair packet; no product or tooling repair attempted",
+  "scope_correction": "Retired only lineup owning-slice entries in the two P2-B01 tests; all other entries preserved",
+  "commands": [
+   {
+    "id": "RED-GATE",
+    "command": "PATH=$HOME/.local/share/afc-tools/backend-tests/bin:$PATH timeout 1500 bash tools/ci/gate.sh",
+    "exit_code": 1,
+    "candidate": "26656b7ad7c911edecba0ab364b41c2d692f55f0",
+    "result": "2 failed, 273 passed; exactly the two lineup pin IDs",
+    "output": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B03-STUBPIN-001/red-gate.txt"
+   },
+   {
+    "id": "GREEN-GATE",
+    "command": "PATH=$HOME/.local/share/afc-tools/backend-tests/bin:$PATH timeout 1500 bash tools/ci/gate.sh",
+    "exit_code": 0,
+    "result": "273 passed; spec/docs/hygiene/backend PASS; tvapp PASS no tree",
+    "output": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B03-STUBPIN-001/green-gate.txt"
+   },
+   {
+    "id": "PREVENTION",
+    "command": "PYTHONDONTWRITEBYTECODE=1 python3 docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B03-STUBPIN-001/prevention.py",
+    "exit_code": 0,
+    "experiment_exit_code": 1,
+    "result": "B02 scratch non-stub: both pin tests fail; all B02/B04-B07 rows unchanged; scratch removed",
+    "output": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B03-STUBPIN-001/prevention-result.json"
+   },
+   {
+    "id": "CANDIDATE-COMMIT",
+    "command": "git commit -m \"test: retire lineup stub pins for P2-B03\" (backend-tests PATH; author env Codex; hooks enabled)",
+    "exit_code": 0,
+    "result": "pre-commit gate PASS; 273 backend tests passed",
+    "output": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B03-STUBPIN-001/candidate-commit.txt"
+   },
+   {
+    "id": "CMD-COVERAGE-BACKEND",
+    "command": "PATH=$HOME/.local/share/afc-tools/backend-tests/bin:$PATH timeout 1500 bash tools/ci/coverage/backend.sh 1ac5846 docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B03/stubpin-repair/coverage",
+    "exit_code": 0,
+    "candidate": "d729f83f706031ab3f7835181bb94e9a31fc2568",
+    "result": "changed-line coverage 100% (threshold 90%)",
+    "output": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B03-STUBPIN-001/formal-coverage.txt",
+    "native_result": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B03/stubpin-repair/coverage/coverage-result.json"
+   },
+   {
+    "id": "CMD-MUTATION-BACKEND",
+    "command": "PATH=$HOME/.local/share/afc-tools/mutmut-backend/bin:$HOME/.local/share/afc-tools/backend-tests/bin:$PATH timeout 1500 bash tools/ci/mutation/backend.sh 1ac5846 docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B03/stubpin-repair/mutation",
+    "exit_code": 3,
+    "candidate": "d729f83f706031ab3f7835181bb94e9a31fc2568",
+    "result": "GAP PYTHON_NONFUNCTION_MUTATION_GAP: changed module-level behavior in backend/src/lineup/__init__.py has no mutant binding",
+    "output": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B03-STUBPIN-001/formal-mutation.txt",
+    "native_result": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B03/stubpin-repair/mutation/mutation-result.json",
+    "survivors": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B03/stubpin-repair/mutation/survivors.txt"
+   },
+   {
+    "id": "FROZEN-HASHES",
+    "command": "python3 docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B03T/verify_receipt.py docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B03T/receipt.json",
+    "exit_code": 0,
+    "result": "PASS; all 11 frozen files unchanged; red-receipt 77 failed cases + 3 deployed skips retained",
+    "output": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B03-STUBPIN-001/frozen-hashes.json"
+   },
+   {
+    "id": "EVIDENCE-COMMIT-FIRST",
+    "command": "git commit -m \"docs: record P2-B03 stub-pin repair and mutation scope gap\"",
+    "exit_code": 1,
+    "result": "pre-commit rejected trailing whitespace in red-gate.txt lines 57/58; docs and backend PASS (273 passed). No commit created. Log whitespace normalized before retry."
+   },
+   {
+    "id": "EVIDENCE-COMMIT-SECOND",
+    "command": "git commit -m \"docs: record P2-B03 stub-pin repair and mutation scope gap\"",
+    "exit_code": 1,
+    "result": "pre-commit rejected native log/XML home paths (PATH-HOME-POSIX); backend 273 passed. No commit created. Logs replace home with $HOME; XML source normalized to repository-relative dot; bound source hashes unchanged."
+   }
+  ],
+  "origin": "P2-B01 stub-pin tests combined with P2 write sets omitted owning-slice retirement",
+  "missed_detection": "No stub-replacing slice had executed before B03; the B03T-only suite did not exercise older stub pins",
+  "raw_mutation_statistics": {
+   "killed": 344,
+   "survived": 92,
+   "total": 436,
+   "timeouts": 0,
+   "raw_kill_rate": 0.7889908256880734,
+   "formal_pass": false,
+   "reason": "raw score cannot close changed module-level behavior with no mutant binding"
+  },
+  "blocker": {
+   "type": "PYTHON_NONFUNCTION_MUTATION_GAP",
+   "file": "backend/src/lineup/__init__.py",
+   "lines": [
+    11,
+    12
+   ],
+   "behavior": [
+    "PRESET_LABELS",
+    "DEFAULT_SETTING"
+   ],
+   "detail": "PYTHON_NONFUNCTION_MUTATION_GAP: changed module-level behavior in backend/src/lineup/__init__.py has no mutant binding",
+   "required_authority": "backend/src or tools/ci mutation-scope repair; both prohibited in this packet",
+   "survivors": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B03/stubpin-repair/mutation/survivors.txt"
+  },
+  "ordering_correction": "Mutation wrapper archives committed HEAD; committed the green two-line test repair with hooks ON before coverage/mutation, then committed evidence separately. No branch switch, reset or amend.",
+  "review_capabilities": {
+   "coverage_assist": "not_run: no independent review performed; remains allocated to orchestrator review",
+   "reverify": "not_applicable: no compiled-binary claim"
+  },
+  "bran_status": "unavailable: no native .bran/policy.yaml",
+  "acceptance": [
+   {
+    "id": 1,
+    "status": "MET",
+    "evidence": "two-entry-only diff; prevention AST comparisons"
+   },
+   {
+    "id": 2,
+    "status": "MET",
+    "evidence": "red-gate.txt / green-gate.txt / prevention-result.json"
+   },
+   {
+    "id": 3,
+    "status": "UNMET",
+    "evidence": "full gate exit 0; coverage PASS 100%; mutation GAP exit 3"
+   },
+   {
+    "id": 4,
+    "status": "MET",
+    "evidence": "frozen-hashes.json PASS 11 files"
+   },
+   {
+    "id": 5,
+    "status": "MET",
+    "evidence": "this new receipt key and BUG-AFC-B03-STUBPIN-001/receipt.md"
+   },
+   {
+    "id": 6,
+    "status": "candidate commit MET; evidence commit result in worker return",
+    "evidence": "candidate-commit.txt; .githooks/pre-commit unchanged, no --no-verify"
+   }
+  ],
+  "scope_validation": "Only the two named test entries and authorized evidence directories changed; final git diff path audit in worker return",
+  "not_run": [
+   "independent review",
+   "deployed/AWS tests",
+   "push/PR/landing"
+  ],
+  "installs": [],
+  "changed_paths": [
+   "backend/tests/contract/test_backend_template.py",
+   "backend/tests/unit/test_pipeline_and_stubs.py",
+   "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B03-STUBPIN-001/candidate-commit.txt",
+   "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B03-STUBPIN-001/formal-coverage.txt",
+   "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B03-STUBPIN-001/formal-mutation.txt",
+   "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B03-STUBPIN-001/frozen-hashes.json",
+   "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B03-STUBPIN-001/green-gate.txt",
+   "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B03-STUBPIN-001/path-audit.json",
+   "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B03-STUBPIN-001/prevention-result.json",
+   "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B03-STUBPIN-001/prevention.py",
+   "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B03-STUBPIN-001/prevention.txt",
+   "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B03-STUBPIN-001/receipt.md",
+   "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B03-STUBPIN-001/red-gate.txt",
+   "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B03-STUBPIN-001/session.json",
+   "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B03/receipt.json",
+   "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B03/stubpin-repair/coverage/coverage-result.json",
+   "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B03/stubpin-repair/coverage/coverage.xml",
+   "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B03/stubpin-repair/coverage/diff-cover.json",
+   "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B03/stubpin-repair/mutation/mutation-result.json",
+   "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B03/stubpin-repair/mutation/mutmut-cicd-stats.json",
+   "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B03/stubpin-repair/mutation/mutmut-results.txt",
+   "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B03/stubpin-repair/mutation/mutmut-run.txt",
+   "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B03/stubpin-repair/mutation/survivors.txt"
+  ],
+  "evidence_log_normalization": "Removed trailing whitespace only from two pytest traceback lines; first evidence-commit hook exit 1 WS-CHECK; backend 273 passed; retry with hooks ON",
+  "evidence_path_normalization": "Native text logs replace absolute home prefix with $HOME; coverage XML source normalized to repository-relative dot; evaluator rerun against normalized XML; no outcomes or source hash bindings changed"
+ }
 }
