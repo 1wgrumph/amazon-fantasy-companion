@@ -6,18 +6,25 @@ unset GIT_DIR GIT_WORK_TREE GIT_INDEX_FILE GIT_PREFIX GIT_COMMON_DIR \
     GIT_OBJECT_DIRECTORY GIT_ALTERNATE_OBJECT_DIRECTORIES GIT_IMPLICIT_WORK_TREE \
     GIT_GRAFT_FILE GIT_SHALLOW_FILE GIT_INTERNAL_SUPER_PREFIX
 
-# Extend these three definitions together from the repository's check inventory.
-areas=(spec docs hygiene)
+# Extend these definitions together from the repository's check inventory.
+areas=(spec docs hygiene tvapp backend)
+# Product areas pass with a fixed detail only while their tree does not exist.
+area_tree() {
+    case "$1" in
+        tvapp) printf 'tv-app' ;;
+        backend) printf 'backend' ;;
+    esac
+}
 area_matches() {
     case "$1" in
         hygiene) return 0 ;;
-        spec|docs)
+        spec|docs|tvapp|backend)
             case "$2" in
                 tools/ci/*|.github/workflows/*|.githooks/*) return 0 ;;
             esac ;;
     esac
     case "$1:$2" in
-        spec:spec/*|spec:tools/spec/*|docs:docs/*|docs:*.md) return 0 ;;
+        spec:spec/*|spec:tools/spec/*|docs:docs/*|docs:*.md|tvapp:tv-app/*|backend:backend/*) return 0 ;;
     esac
     return 1
 }
@@ -51,6 +58,26 @@ run_area() {
             python3 tools/ci/check_workflows.py .github/workflows/ || return "$?"
             python3 -m unittest discover -s tools/ci/tests ;;
         docs) python3 tools/ci/check_docs.py ;;
+        tvapp)
+            if [[ -n "${JAVA_HOME:-}" ]]; then
+                [[ -x "$JAVA_HOME/bin/java" ]] || { printf 'required tool missing: java (JAVA_HOME)\n'; return 3; }
+            else
+                need java || return "$?"
+            fi
+            # shortcut: tv-app/local.properties sdk.dir is not read, so a local-only SDK reports GAP; read it if developers rely on it.
+            local sdk=${ANDROID_HOME:-${ANDROID_SDK_ROOT:-}}
+            [[ -n "$sdk" && -d "$sdk" ]] || { printf 'required tool missing: Android SDK (ANDROID_HOME or ANDROID_SDK_ROOT)\n'; return 3; }
+            [[ -x tv-app/gradlew ]] || { printf 'tv-app/gradlew missing or not executable\n'; return 1; }
+            # Subcheck exits are normalized so a tool's own exit 3 never reads as GAP.
+            ./tv-app/gradlew -p tv-app testDebugUnitTest lintDebug assembleDebug || return 1 ;;
+        backend)
+            need python3.12 || return "$?"
+            need cfn-lint || return "$?"
+            python3.12 -m pytest --version >/dev/null 2>&1 \
+                || { printf 'required tool missing: python3.12 -m pytest\n'; return 3; }
+            # Deployed tests run against AWS as SEIT procedures, never in the gate.
+            python3.12 -m pytest backend/tests/unit backend/tests/contract || return 1
+            cfn-lint backend/template.yaml || return 1 ;;
         spec)
             local source output found=0
             for source in spec_build.py spec_lint.py diagram.py; do
@@ -130,6 +157,11 @@ for area in "${areas[@]}"; do
             if area_matches "$area" "$path"; then affected=1; break; fi
         done
         ((affected)) || continue
+    fi
+    tree=$(area_tree "$area")
+    if [[ -n "$tree" && ! -e "$tree" ]]; then
+        printf 'gate: %s: PASS no %s/ tree\n' "$area" "$tree"
+        continue
     fi
     # A subshell prevents a check's exit from hiding later area results.
     (run_area "$area")
