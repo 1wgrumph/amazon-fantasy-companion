@@ -9,14 +9,28 @@ never logged or stored.
 
 import re
 
-API = "https://fantasysports.yahooapis.com/fantasy/v2/"
-BENCH_SLOTS = frozenset({"BN", "IR", "NA"})
-MAX_ITEMS = 200  # far above any real roster/league list; bounds hostile payloads
-_KEY = re.compile(r"^[A-Za-z0-9._]{1,64}$")
+
+
+def _api():
+    return "https://fantasysports.yahooapis.com/fantasy/v2/"
+
+
+def _bench_slots():
+    return frozenset({"BN", "IR", "NA"})
+
+
+def _max_items():
+    return 200  # far above any real roster/league list; bounds hostile payloads
+
+
+def __getattr__(name):
+    if name == "MAX_ITEMS":
+        return _max_items()
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
 
 def _key(value, what):
-    if not isinstance(value, str) or not _KEY.match(value):
+    if not isinstance(value, str) or not re.fullmatch(r"[A-Za-z0-9._]{1,64}", value):
         raise ValueError(f"Invalid Yahoo {what}")
     return value
 
@@ -24,7 +38,7 @@ def _key(value, what):
 def _get(transport, token, path):
     if not isinstance(token, str) or not token:
         raise ValueError("Yahoo access token is required")
-    payload = transport.request("GET", API + path, {"Authorization": "Bearer " + token})
+    payload = transport.request("GET", _api() + path, {"Authorization": "Bearer " + token})
     if not isinstance(payload, dict):
         raise ValueError("Yahoo response is not a JSON object")
     return payload
@@ -32,7 +46,7 @@ def _get(transport, token, path):
 
 def _items(payload, name):
     items = payload.get(name)
-    if not isinstance(items, list) or len(items) > MAX_ITEMS:
+    if not isinstance(items, list) or len(items) > _max_items():
         raise ValueError(f"Yahoo response has no bounded {name} list")
     if not all(isinstance(item, dict) for item in items):
         raise ValueError(f"Yahoo {name} entry is not a JSON object")
@@ -80,8 +94,8 @@ def get_roster(transport, token, team_key, week):
             raise ValueError("Yahoo player positions must be strings")
         players.append(player)
     return {"team_key": team_key, "week": week,
-            "starters": [p for p in players if p["slot"] not in BENCH_SLOTS],
-            "bench": [p for p in players if p["slot"] in BENCH_SLOTS]}
+            "starters": [p for p in players if p["slot"] not in _bench_slots()],
+            "bench": [p for p in players if p["slot"] in _bench_slots()]}
 
 
 def get_settings(transport, token, league_key):
@@ -89,12 +103,12 @@ def get_settings(transport, token, league_key):
     payload = _get(transport, token, f"league/{league_key}/settings")
     _echo(payload, "league_key", league_key)
     modifiers = payload.get("stat_modifiers")
-    if not isinstance(modifiers, dict) or len(modifiers) > MAX_ITEMS or not all(
+    if not isinstance(modifiers, dict) or len(modifiers) > _max_items() or not all(
             isinstance(k, str) and isinstance(v, (int, float)) and not isinstance(v, bool)
             for k, v in modifiers.items()):
         raise ValueError("Yahoo settings have no valid stat_modifiers")
     slots = payload.get("roster_slots")
-    if not isinstance(slots, list) or len(slots) > MAX_ITEMS or not all(
+    if not isinstance(slots, list) or len(slots) > _max_items() or not all(
             isinstance(s, str) for s in slots):
         raise ValueError("Yahoo settings have no valid roster_slots")
     return {"league_key": league_key, "stat_modifiers": dict(modifiers),

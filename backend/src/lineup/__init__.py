@@ -7,9 +7,13 @@ carry the Yahoo league scoring verbatim (AFC-PR-065).
 
 import store
 
-# Settings.scoringPreset enum (frozen openapi) to CONTRACT-AFC-P2-PRESETS labels.
-PRESET_LABELS = {"ppr": "PPR", "halfPpr": "Half-PPR"}
-DEFAULT_SETTING = "halfPpr"
+
+def _preset_label(stored):
+    """Settings.scoringPreset enum (frozen openapi) to a CONTRACT-AFC-P2-PRESETS label."""
+    labels = {"ppr": "PPR", "halfPpr": "Half-PPR"}
+    if stored not in labels:
+        raise ValueError(f"Unknown stored scoring preset: {stored!r}")
+    return labels[stored]
 
 
 def active_lineup(profile_id):
@@ -22,10 +26,8 @@ def active_lineup(profile_id):
     source = row.get("source")
     if source == "manual":
         profile = store.get_profile(profile_id) or {}
-        stored = profile.get("settings", {}).get("scoringPreset", DEFAULT_SETTING)
-        if stored not in PRESET_LABELS:
-            raise ValueError(f"Unknown stored scoring preset: {stored!r}")
-        scoring = {"preset": PRESET_LABELS[stored]}
+        stored = profile.get("settings", {}).get("scoringPreset", "halfPpr")
+        scoring = {"preset": _preset_label(stored)}
     elif source == "yahoo":
         scoring = row.get("scoring")
         if not isinstance(scoring, dict):

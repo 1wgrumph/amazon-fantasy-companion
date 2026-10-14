@@ -1,18 +1,35 @@
-"""AFC-PR-006 labeled manual entry from ESPN rosters when Yahoo is not approved."""
+"""AFC-PR-006 labeled manual entry from ESPN rosters when Yahoo is not approved.
+
+Constants are function-scoped for the mutation gate; T_YAHOO and MAX_ENTRIES
+stay readable as module attributes.
+"""
 
 from datetime import datetime, timezone
 
 from lineup import presets
 
-T_YAHOO = "2026-10-16T19:00:00Z"
-MAX_ENTRIES = 200
-_FORMAT = "%Y-%m-%dT%H:%M:%SZ"
+
+
+def _t_yahoo():
+    return "2026-10-16T19:00:00Z"
+
+
+def _max_entries():
+    return 200
+
+
+def __getattr__(name):
+    if name == "T_YAHOO":
+        return _t_yahoo()
+    if name == "MAX_ENTRIES":
+        return _max_entries()
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
 
 def _instant(value):
     if not isinstance(value, str):
         raise ValueError("Timestamp must be an RFC 3339 UTC string")
-    return datetime.strptime(value, _FORMAT).replace(tzinfo=timezone.utc)
+    return datetime.strptime(value, "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc)
 
 
 def activation(now_iso, yahoo_approved):
@@ -22,14 +39,14 @@ def activation(now_iso, yahoo_approved):
         raise ValueError("yahoo_approved must be a boolean")
     if yahoo_approved:
         return "yahoo"
-    return "manual" if now >= _instant(T_YAHOO) else "pending"
+    return "manual" if now >= _instant(_t_yahoo()) else "pending"
 
 
 def build(espn_roster, entries, preset):
     """A manual Lineup of ESPN roster players, labeled manual with its preset."""
     if preset not in presets.TABLES:
         raise ValueError(f"Unknown scoring preset: {preset!r}")
-    if not isinstance(espn_roster, list) or len(espn_roster) > MAX_ENTRIES:
+    if not isinstance(espn_roster, list) or len(espn_roster) > _max_entries():
         raise ValueError("ESPN roster must be a bounded list")
     names = {}
     for player in espn_roster:
@@ -37,7 +54,7 @@ def build(espn_roster, entries, preset):
                 and player["athlete_id"] and isinstance(player.get("name"), str)):
             raise ValueError("ESPN roster entry needs an athlete_id and name")
         names[player["athlete_id"]] = player["name"]
-    if not isinstance(entries, list) or len(entries) > MAX_ENTRIES:
+    if not isinstance(entries, list) or len(entries) > _max_entries():
         raise ValueError("Lineup entries must be a bounded list")
     starters = []
     for entry in entries:

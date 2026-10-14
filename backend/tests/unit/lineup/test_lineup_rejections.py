@@ -134,3 +134,17 @@ def test_profile_without_a_preset_setting_defaults_to_half_ppr(api):
                       "starters": [], "updatedAt": "2026-10-14T12:00:00Z",
                       "scoring": {"ignored": Decimal("1")}})
     assert lineup.active_lineup("owner")["scoring"] == {"preset": "Half-PPR"}
+
+
+@pytest.mark.parametrize("module", ["lineup.presets", "lineup.manual", "lineup.yahoo"])
+def test_unknown_module_attributes_still_raise_attribute_error(module):
+    import importlib
+    with pytest.raises(AttributeError):
+        importlib.import_module(module).NOT_A_CONSTANT
+
+
+def test_module_constants_keep_their_values():
+    from lineup import presets
+    assert presets.DEFAULT_PRESET in presets.TABLES
+    assert manual.T_YAHOO == "2026-10-16T19:00:00Z" and manual.MAX_ENTRIES == 200
+    assert yahoo.MAX_ITEMS == 200
