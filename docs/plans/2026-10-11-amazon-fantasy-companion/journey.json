@@ -504,6 +504,13 @@
       "at": "2026-10-14T15:24:09Z",
       "decision": "Stub retirement: a slice that replaces a P2-B01 AFC-STUB module may remove only its own module's rows from backend/tests/unit/test_pipeline_and_stubs.py STUBS and backend/tests/contract/test_backend_template.py parametrize list. Applies to B02, B03, B04, B05, B06, B07. All other pins stay.",
       "reason": "Plan write sets omitted stub retirement (BUG-AFC-B03-STUBPIN-001); stubs name their owning slice, so retirement by that slice is the design intent. No guard weakened for other modules."
+    },
+    {
+      "id": "DEC-AFC-SD-047",
+      "status": "confirmed",
+      "at": "2026-10-14T15:43:50Z",
+      "owner_statement": "(a) you authorize me to load it from SSM into that variable for the smoke run only, never printing it",
+      "decision": "Agents running deployed smoke (L02/L03) may read SSM SecureString /afc/dev/link-passphrase (profile afc-dev, us-east-2) into AFC_DEPLOYED_LINK_PASSPHRASE for the smoke process only; never print, log, store or commit the value. The owner creates/sets the parameter."
     }
   ],
   "open_decisions": [],
