@@ -1,0 +1,94 @@
+[
+  {
+    "id": "baseline-39",
+    "argv": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tools/ci/tests",
+      "-p",
+      "test_check*.py",
+      "-v"
+    ],
+    "exit": 0,
+    "seconds": 1.547,
+    "output": "baseline-39.txt"
+  },
+  {
+    "id": "legacy-gate",
+    "argv": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tools/ci/tests",
+      "-p",
+      "test_gate*.py",
+      "-v"
+    ],
+    "exit": 0,
+    "seconds": 12.737,
+    "output": "legacy-gate.txt"
+  },
+  {
+    "id": "legacy-workflows",
+    "argv": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tools/ci/tests",
+      "-p",
+      "test_workflows.py",
+      "-v"
+    ],
+    "exit": 0,
+    "seconds": 0.303,
+    "output": "legacy-workflows.txt"
+  },
+  {
+    "id": "PROC-GATE-TOOL-QUALIFY",
+    "argv": [
+      "bash",
+      "-c",
+      "python3 -m unittest discover -s tools/ci/tests/coverage -v && python3 -m unittest discover -s tools/ci/tests/mutation -v"
+    ],
+    "exit": 1,
+    "seconds": 0.374,
+    "output": "PROC-GATE-TOOL-QUALIFY.txt"
+  },
+  {
+    "id": "mutation-diagnostic",
+    "argv": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tools/ci/tests/mutation",
+      "-v"
+    ],
+    "exit": 1,
+    "seconds": 0.053,
+    "output": "mutation-diagnostic.txt"
+  },
+  {
+    "id": "CMD-RED",
+    "argv": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tools/ci/tests",
+      "-v"
+    ],
+    "exit": 1,
+    "seconds": 18.865,
+    "output": "CMD-RED.txt"
+  }
+]

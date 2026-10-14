@@ -1,0 +1,2946 @@
+{
+  "SchemaVersion": 2,
+  "Trivy": {
+    "Version": "0.71.0"
+  },
+  "ReportID": "01a137e2-d3fb-70c6-ab51-cdd19459873c",
+  "CreatedAt": "2026-10-13T19:49:34.715051836-05:00",
+  "ArtifactID": "sha256:cefe40c34134ad380ad6a0204f75384ff3d487bf9b75fa7ac549d21bb7e17d0e",
+  "ArtifactName": "/tmp/r07-python",
+  "ArtifactType": "repository",
+  "Metadata": {
+    "RepoURL": "https://github.com/actions/setup-python.git",
+    "Tags": [
+      "v7",
+      "v7.0.0"
+    ],
+    "Commit": "5fda3b95a4ea91299a34e894583c3862153e4b97",
+    "CommitMsg": "Pin SHA commits and update docs with latest versions (#1338)\n\n* Update GitHub Actions to use checkout and setup-python actions version 7\n\n* Fix formatting in publish-immutable-actions.yml",
+    "Author": "Haritha \u003c73516759+HarithaVattikuti@users.noreply.github.com\u003e",
+    "Committer": "GitHub \u003cnoreply@github.com\u003e"
+  },
+  "Results": [
+    {
+      "Target": "__tests__/data/Pipfile.lock",
+      "Class": "lang-pkgs",
+      "Type": "pipenv",
+      "Packages": [
+        {
+          "Name": "flake8",
+          "Identifier": {
+            "PURL": "pkg:pypi/flake8@6.0.0",
+            "UID": "713d83a1bb85c9c5"
+          },
+          "Version": "6.0.0",
+          "Locations": [
+            {
+              "StartLine": 19,
+              "EndLine": 27
+            }
+          ],
+          "AnalyzedBy": "pipenv"
+        },
+        {
+          "Name": "mccabe",
+          "Identifier": {
+            "PURL": "pkg:pypi/mccabe@0.7.0",
+            "UID": "1bd24e2b194dd9ec"
+          },
+          "Version": "0.7.0",
+          "Locations": [
+            {
+              "StartLine": 28,
+              "EndLine": 35
+            }
+          ],
+          "AnalyzedBy": "pipenv"
+        },
+        {
+          "Name": "numpy",
+          "Identifier": {
+            "PURL": "pkg:pypi/numpy@2.4.6",
+            "UID": "b15bd922c8bcb4ff"
+          },
+          "Version": "2.4.6",
+          "Locations": [
+            {
+              "StartLine": 36,
+              "EndLine": 114
+            }
+          ],
+          "AnalyzedBy": "pipenv"
+        },
+        {
+          "Name": "pycodestyle",
+          "Identifier": {
+            "PURL": "pkg:pypi/pycodestyle@2.10.0",
+            "UID": "a9fd5631baf2b617"
+          },
+          "Version": "2.10.0",
+          "Locations": [
+            {
+              "StartLine": 115,
+              "EndLine": 122
+            }
+          ],
+          "AnalyzedBy": "pipenv"
+        },
+        {
+          "Name": "pyflakes",
+          "Identifier": {
+            "PURL": "pkg:pypi/pyflakes@3.0.1",
+            "UID": "6ca8d4fc8cc9c7bc"
+          },
+          "Version": "3.0.1",
+          "Locations": [
+            {
+              "StartLine": 123,
+              "EndLine": 130
+            }
+          ],
+          "AnalyzedBy": "pipenv"
+        }
+      ]
+    },
+    {
+      "Target": "__tests__/data/poetry.lock",
+      "Class": "lang-pkgs",
+      "Type": "poetry",
+      "Packages": [
+        {
+          "ID": "flake8@4.0.1",
+          "Name": "flake8",
+          "Identifier": {
+            "PURL": "pkg:pypi/flake8@4.0.1",
+            "UID": "c3e26da7c047e479"
+          },
+          "Version": "4.0.1",
+          "Relationship": "direct",
+          "DependsOn": [
+            "mccabe@0.6.1",
+            "pycodestyle@2.8.0",
+            "pyflakes@2.4.0"
+          ],
+          "AnalyzedBy": "poetry"
+        },
+        {
+          "ID": "packaging@24.2",
+          "Name": "packaging",
+          "Identifier": {
+            "PURL": "pkg:pypi/packaging@24.2",
+            "UID": "7eb7723932fdf29b"
+          },
+          "Version": "24.2",
+          "Relationship": "direct",
+          "AnalyzedBy": "poetry"
+        },
+        {
+          "ID": "pyinstaller@6.10.0",
+          "Name": "pyinstaller",
+          "Identifier": {
+            "PURL": "pkg:pypi/pyinstaller@6.10.0",
+            "UID": "937ee0894956d3b9"
+          },
+          "Version": "6.10.0",
+          "Relationship": "direct",
+          "DependsOn": [
+            "altgraph@0.17.4",
+            "importlib-metadata@8.5.0",
+            "macholib@1.16.3",
+            "packaging@24.2",
+            "pefile@2024.8.26",
+            "pyinstaller-hooks-contrib@2025.1",
+            "pywin32-ctypes@0.2.3",
+            "setuptools@80.9.0"
+          ],
+          "AnalyzedBy": "poetry"
+        },
+        {
+          "ID": "setuptools@80.9.0",
+          "Name": "setuptools",
+          "Identifier": {
+            "PURL": "pkg:pypi/setuptools@80.9.0",
+            "UID": "72d815898d9d658d"
+          },
+          "Version": "80.9.0",
+          "Relationship": "direct",
+          "AnalyzedBy": "poetry"
+        },
+        {
+          "ID": "altgraph@0.17.4",
+          "Name": "altgraph",
+          "Identifier": {
+            "PURL": "pkg:pypi/altgraph@0.17.4",
+            "UID": "e707b56b399f0464"
+          },
+          "Version": "0.17.4",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "poetry"
+        },
+        {
+          "ID": "importlib-metadata@8.5.0",
+          "Name": "importlib-metadata",
+          "Identifier": {
+            "PURL": "pkg:pypi/importlib-metadata@8.5.0",
+            "UID": "ade0bbb6fa16f73e"
+          },
+          "Version": "8.5.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "zipp@3.20.2"
+          ],
+          "AnalyzedBy": "poetry"
+        },
+        {
+          "ID": "macholib@1.16.3",
+          "Name": "macholib",
+          "Identifier": {
+            "PURL": "pkg:pypi/macholib@1.16.3",
+            "UID": "743b8409a34504b9"
+          },
+          "Version": "1.16.3",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "altgraph@0.17.4"
+          ],
+          "AnalyzedBy": "poetry"
+        },
+        {
+          "ID": "mccabe@0.6.1",
+          "Name": "mccabe",
+          "Identifier": {
+            "PURL": "pkg:pypi/mccabe@0.6.1",
+            "UID": "496014e3fd60d9de"
+          },
+          "Version": "0.6.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "poetry"
+        },
+        {
+          "ID": "pefile@2024.8.26",
+          "Name": "pefile",
+          "Identifier": {
+            "PURL": "pkg:pypi/pefile@2024.8.26",
+            "UID": "4368d3d52333bb5b"
+          },
+          "Version": "2024.8.26",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "poetry"
+        },
+        {
+          "ID": "pycodestyle@2.8.0",
+          "Name": "pycodestyle",
+          "Identifier": {
+            "PURL": "pkg:pypi/pycodestyle@2.8.0",
+            "UID": "6645d5612ec4c820"
+          },
+          "Version": "2.8.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "poetry"
+        },
+        {
+          "ID": "pyflakes@2.4.0",
+          "Name": "pyflakes",
+          "Identifier": {
+            "PURL": "pkg:pypi/pyflakes@2.4.0",
+            "UID": "e5bf21474591b5ea"
+          },
+          "Version": "2.4.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "poetry"
+        },
+        {
+          "ID": "pyinstaller-hooks-contrib@2025.1",
+          "Name": "pyinstaller-hooks-contrib",
+          "Identifier": {
+            "PURL": "pkg:pypi/pyinstaller-hooks-contrib@2025.1",
+            "UID": "927de46b1b376c82"
+          },
+          "Version": "2025.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "importlib-metadata@8.5.0",
+            "packaging@24.2",
+            "setuptools@80.9.0"
+          ],
+          "AnalyzedBy": "poetry"
+        },
+        {
+          "ID": "pywin32-ctypes@0.2.3",
+          "Name": "pywin32-ctypes",
+          "Identifier": {
+            "PURL": "pkg:pypi/pywin32-ctypes@0.2.3",
+            "UID": "31f50995511eaabf"
+          },
+          "Version": "0.2.3",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "poetry"
+        },
+        {
+          "ID": "zipp@3.20.2",
+          "Name": "zipp",
+          "Identifier": {
+            "PURL": "pkg:pypi/zipp@3.20.2",
+            "UID": "c11da7b691724c23"
+          },
+          "Version": "3.20.2",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "poetry"
+        }
+      ]
+    },
+    {
+      "Target": "__tests__/data/requirements.txt",
+      "Class": "lang-pkgs",
+      "Type": "pip",
+      "Packages": [
+        {
+          "Name": "altgraph",
+          "Identifier": {
+            "PURL": "pkg:pypi/altgraph@0.17.2",
+            "UID": "b6f3f868035c63c6"
+          },
+          "Version": "0.17.2",
+          "Locations": [
+            {
+              "StartLine": 1,
+              "EndLine": 1
+            }
+          ],
+          "AnalyzedBy": "pip"
+        },
+        {
+          "Name": "certifi",
+          "Identifier": {
+            "PURL": "pkg:pypi/certifi@2024.7.4",
+            "UID": "ee673e92f47c5941"
+          },
+          "Version": "2024.7.4",
+          "Locations": [
+            {
+              "StartLine": 3,
+              "EndLine": 3
+            }
+          ],
+          "AnalyzedBy": "pip"
+        },
+        {
+          "Name": "chardet",
+          "Identifier": {
+            "PURL": "pkg:pypi/chardet@3.0.4",
+            "UID": "a5616da83155ab8d"
+          },
+          "Version": "3.0.4",
+          "Locations": [
+            {
+              "StartLine": 5,
+              "EndLine": 5
+            }
+          ],
+          "AnalyzedBy": "pip"
+        },
+        {
+          "Name": "docutils",
+          "Identifier": {
+            "PURL": "pkg:pypi/docutils@0.16",
+            "UID": "1f24d4dcf7d6dfb1"
+          },
+          "Version": "0.16",
+          "Locations": [
+            {
+              "StartLine": 7,
+              "EndLine": 7
+            }
+          ],
+          "AnalyzedBy": "pip"
+        },
+        {
+          "Name": "future",
+          "Identifier": {
+            "PURL": "pkg:pypi/future@0.18.2",
+            "UID": "264d949a6a1c987f"
+          },
+          "Version": "0.18.2",
+          "Locations": [
+            {
+              "StartLine": 9,
+              "EndLine": 9
+            }
+          ],
+          "AnalyzedBy": "pip"
+        },
+        {
+          "Name": "idna",
+          "Identifier": {
+            "PURL": "pkg:pypi/idna@3.15",
+            "UID": "78c3cf3889e1e366"
+          },
+          "Version": "3.15",
+          "Locations": [
+            {
+              "StartLine": 11,
+              "EndLine": 11
+            }
+          ],
+          "AnalyzedBy": "pip"
+        },
+        {
+          "Name": "itsdangerous",
+          "Identifier": {
+            "PURL": "pkg:pypi/itsdangerous@1.1.0",
+            "UID": "74ae473cab2db6fe"
+          },
+          "Version": "1.1.0",
+          "Locations": [
+            {
+              "StartLine": 13,
+              "EndLine": 13
+            }
+          ],
+          "AnalyzedBy": "pip"
+        },
+        {
+          "Name": "kivy",
+          "Identifier": {
+            "PURL": "pkg:pypi/kivy@1.11.1",
+            "UID": "c56ebe7d2d9d0c1a"
+          },
+          "Version": "1.11.1",
+          "Locations": [
+            {
+              "StartLine": 25,
+              "EndLine": 25
+            }
+          ],
+          "AnalyzedBy": "pip"
+        },
+        {
+          "Name": "kivy-deps-angle",
+          "Identifier": {
+            "PURL": "pkg:pypi/kivy-deps-angle@0.3.0",
+            "UID": "4933d459598fa956"
+          },
+          "Version": "0.3.0",
+          "Locations": [
+            {
+              "StartLine": 15,
+              "EndLine": 15
+            }
+          ],
+          "AnalyzedBy": "pip"
+        },
+        {
+          "Name": "kivy-deps.glew",
+          "Identifier": {
+            "PURL": "pkg:pypi/kivy-deps.glew@0.1.12",
+            "UID": "1727a5cbafcace6c"
+          },
+          "Version": "0.1.12",
+          "Locations": [
+            {
+              "StartLine": 17,
+              "EndLine": 17
+            }
+          ],
+          "AnalyzedBy": "pip"
+        },
+        {
+          "Name": "kivy-deps.gstreamer",
+          "Identifier": {
+            "PURL": "pkg:pypi/kivy-deps.gstreamer@0.1.17",
+            "UID": "52e45248c7fd2c6d"
+          },
+          "Version": "0.1.17",
+          "Locations": [
+            {
+              "StartLine": 19,
+              "EndLine": 19
+            }
+          ],
+          "AnalyzedBy": "pip"
+        },
+        {
+          "Name": "kivy-deps.sdl2",
+          "Identifier": {
+            "PURL": "pkg:pypi/kivy-deps.sdl2@0.1.22",
+            "UID": "d4bbf8ba187fb42c"
+          },
+          "Version": "0.1.22",
+          "Locations": [
+            {
+              "StartLine": 21,
+              "EndLine": 21
+            }
+          ],
+          "AnalyzedBy": "pip"
+        },
+        {
+          "Name": "kivy-garden",
+          "Identifier": {
+            "PURL": "pkg:pypi/kivy-garden@0.1.4",
+            "UID": "b551ef840aca426a"
+          },
+          "Version": "0.1.4",
+          "Locations": [
+            {
+              "StartLine": 23,
+              "EndLine": 23
+            }
+          ],
+          "AnalyzedBy": "pip"
+        },
+        {
+          "Name": "packaging",
+          "Identifier": {
+            "PURL": "pkg:pypi/packaging@21.0",
+            "UID": "d3016ec876d638f6"
+          },
+          "Version": "21.0",
+          "Locations": [
+            {
+              "StartLine": 27,
+              "EndLine": 27
+            }
+          ],
+          "AnalyzedBy": "pip"
+        },
+        {
+          "Name": "pdf2image",
+          "Identifier": {
+            "PURL": "pkg:pypi/pdf2image@1.12.1",
+            "UID": "c5103e35432e0538"
+          },
+          "Version": "1.12.1",
+          "Locations": [
+            {
+              "StartLine": 29,
+              "EndLine": 29
+            }
+          ],
+          "AnalyzedBy": "pip"
+        },
+        {
+          "Name": "pefile",
+          "Identifier": {
+            "PURL": "pkg:pypi/pefile@2021.9.3",
+            "UID": "7f6622c0c102d942"
+          },
+          "Version": "2021.9.3",
+          "Locations": [
+            {
+              "StartLine": 31,
+              "EndLine": 31
+            }
+          ],
+          "AnalyzedBy": "pip"
+        },
+        {
+          "Name": "pygments",
+          "Identifier": {
+            "PURL": "pkg:pypi/pygments@2.20.0",
+            "UID": "8fc241906b7adab0"
+          },
+          "Version": "2.20.0",
+          "Locations": [
+            {
+              "StartLine": 35,
+              "EndLine": 35
+            }
+          ],
+          "AnalyzedBy": "pip"
+        },
+        {
+          "Name": "pyinstaller",
+          "Identifier": {
+            "PURL": "pkg:pypi/pyinstaller@6.10.0",
+            "UID": "3896910ae117df37"
+          },
+          "Version": "6.10.0",
+          "Locations": [
+            {
+              "StartLine": 37,
+              "EndLine": 37
+            }
+          ],
+          "AnalyzedBy": "pip"
+        },
+        {
+          "Name": "pyparsing",
+          "Identifier": {
+            "PURL": "pkg:pypi/pyparsing@2.4.7",
+            "UID": "931db07114c3cf8d"
+          },
+          "Version": "2.4.7",
+          "Locations": [
+            {
+              "StartLine": 39,
+              "EndLine": 39
+            }
+          ],
+          "AnalyzedBy": "pip"
+        },
+        {
+          "Name": "pywin32-ctypes",
+          "Identifier": {
+            "PURL": "pkg:pypi/pywin32-ctypes@0.2.0",
+            "UID": "4e999da5c968db58"
+          },
+          "Version": "0.2.0",
+          "Locations": [
+            {
+              "StartLine": 41,
+              "EndLine": 41
+            }
+          ],
+          "AnalyzedBy": "pip"
+        },
+        {
+          "Name": "requests",
+          "Identifier": {
+            "PURL": "pkg:pypi/requests@2.33.0",
+            "UID": "82adcb3d845d8577"
+          },
+          "Version": "2.33.0",
+          "Locations": [
+            {
+              "StartLine": 43,
+              "EndLine": 43
+            }
+          ],
+          "AnalyzedBy": "pip"
+        },
+        {
+          "Name": "urllib3",
+          "Identifier": {
+            "PURL": "pkg:pypi/urllib3@2.7.0",
+            "UID": "49de110eac679ff0"
+          },
+          "Version": "2.7.0",
+          "Locations": [
+            {
+              "StartLine": 45,
+              "EndLine": 45
+            }
+          ],
+          "AnalyzedBy": "pip"
+        },
+        {
+          "Name": "xlrd",
+          "Identifier": {
+            "PURL": "pkg:pypi/xlrd@1.2.0",
+            "UID": "23d0ee56789488b0"
+          },
+          "Version": "1.2.0",
+          "Locations": [
+            {
+              "StartLine": 47,
+              "EndLine": 47
+            }
+          ],
+          "AnalyzedBy": "pip"
+        }
+      ],
+      "Vulnerabilities": [
+        {
+          "VulnerabilityID": "CVE-2022-40899",
+          "VendorIDs": [
+            "GHSA-v3c5-jqr6-7qm8"
+          ],
+          "PkgName": "future",
+          "PkgIdentifier": {
+            "PURL": "pkg:pypi/future@0.18.2",
+            "UID": "264d949a6a1c987f"
+          },
+          "InstalledVersion": "0.18.2",
+          "FixedVersion": "0.18.3",
+          "Status": "fixed",
+          "SeveritySource": "ghsa",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2022-40899",
+          "DataSource": {
+            "ID": "ghsa",
+            "Name": "GitHub Security Advisory pip",
+            "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Apip"
+          },
+          "Fingerprint": "sha256:83bc69962b4afca0d989198a83cb4f211eda0bb7dbfdc0c69d83f4767b5bc83f",
+          "Title": "python-future: remote attackers can cause denial of service via crafted Set-Cookie header from malicious web server",
+          "Description": "An issue discovered in Python Charmers Future 0.18.2 and earlier allows remote attackers to cause a denial of service via crafted Set-Cookie header from malicious web server.",
+          "Severity": "HIGH",
+          "CweIDs": [
+            "CWE-400"
+          ],
+          "VendorSeverity": {
+            "amazon": 2,
+            "ghsa": 3,
+            "nvd": 3,
+            "redhat": 2,
+            "ubuntu": 2
+          },
+          "CVSS": {
+            "ghsa": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+              "V40Vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+              "V3Score": 7.5,
+              "V40Score": 8.7
+            },
+            "nvd": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+              "V3Score": 7.5
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+              "V3Score": 7.5
+            }
+          },
+          "References": [
+            "https://access.redhat.com/security/cve/CVE-2022-40899",
+            "https://github.com/PythonCharmers/python-future",
+            "https://github.com/PythonCharmers/python-future/blob/master/src/future/backports/http/cookiejar.py#L215",
+            "https://github.com/PythonCharmers/python-future/commit/c91d70b34ef0402aef3e9d04364ba98509dca76f",
+            "https://github.com/PythonCharmers/python-future/pull/610",
+            "https://github.com/pypa/advisory-database/tree/main/vulns/future/PYSEC-2022-42991.yaml",
+            "https://github.com/python/cpython/pull/17157",
+            "https://nvd.nist.gov/vuln/detail/CVE-2022-40899",
+            "https://pypi.org/project/future",
+            "https://pypi.org/project/future/",
+            "https://pyup.io/posts/pyup-discovers-redos-vulnerabilities-in-top-python-packages",
+            "https://pyup.io/posts/pyup-discovers-redos-vulnerabilities-in-top-python-packages/",
+            "https://ubuntu.com/security/notices/USN-5833-1",
+            "https://www.cve.org/CVERecord?id=CVE-2022-40899"
+          ],
+          "PublishedDate": "2022-12-23T00:15:14.11Z",
+          "LastModifiedDate": "2026-06-17T05:02:13.347Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2026-97687",
+          "VendorIDs": [
+            "GHSA-8988-9cw3-xx77"
+          ],
+          "PkgName": "urllib3",
+          "PkgIdentifier": {
+            "PURL": "pkg:pypi/urllib3@2.7.0",
+            "UID": "49de110eac679ff0"
+          },
+          "InstalledVersion": "2.7.0",
+          "FixedVersion": "2.8.0",
+          "Status": "fixed",
+          "SeveritySource": "ghsa",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-97687",
+          "DataSource": {
+            "ID": "ghsa",
+            "Name": "GitHub Security Advisory pip",
+            "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Apip"
+          },
+          "Fingerprint": "sha256:b0d8747222766683153bf1728b1f35b97a49c260d545da776a0b444fbc5cf140",
+          "Title": "urllib3: urllib3: Traffic interception via HTTPS proxy TLS configuration override",
+          "Description": "urllib3 is an HTTP client library for Python. From 1.26.0 until 2.8.0, the proxy_ssl_context, proxy_assert_hostname, proxy_assert_fingerprint, ssl_context, cert_reqs, verify_mode, use_forwarding_for_https=True, and CERT_NONE configuration paths fail to remain separated because target-server TLS settings are incorrectly applied to the HTTPS proxy connection. The trigger is that an application uses an HTTPS proxy and configures target-server TLS settings that must remain separate from the proxy TLS handshake, including HTTPS forwarding with target-specific identity or credentials. Applying cert_reqs=CERT_NONE can overwrite proxy_ssl_context.verify_mode in place, and the mutation persists so later connections reusing the same context may connect to the HTTPS proxy without certificate verification. The attack mechanism is that an attacker intercepts and impersonates the HTTPS proxy after the effective proxy policy accepts the attacker's certificate. The impact is that the attacker can observe or modify forwarded traffic or receive a target TLS client certificate, while CONNECT tunneling still preserves the separate end-to-end target TLS connection. This issue is fixed in version 2.8.0.",
+          "Severity": "HIGH",
+          "CweIDs": [
+            "CWE-295",
+            "CWE-440"
+          ],
+          "VendorSeverity": {
+            "ghsa": 3,
+            "redhat": 3
+          },
+          "CVSS": {
+            "ghsa": {
+              "V40Vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:P/VC:H/VI:H/VA:N/SC:N/SI:N/SA:N",
+              "V40Score": 7.6
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N",
+              "V3Score": 7.4
+            }
+          },
+          "References": [
+            "https://access.redhat.com/security/cve/CVE-2026-97687",
+            "https://advisory.echohq.com/cve/CVE-2026-97687",
+            "https://github.com/urllib3/urllib3",
+            "https://github.com/urllib3/urllib3/commit/07408cec79d1856d81bb42c74a904a24fdb9e465",
+            "https://github.com/urllib3/urllib3/commit/b6447295fff7b38fdffc67e0df9712d60cef3cc3",
+            "https://github.com/urllib3/urllib3/pull/5093",
+            "https://github.com/urllib3/urllib3/releases/tag/2.8.0",
+            "https://github.com/urllib3/urllib3/security/advisories/GHSA-8988-9cw3-xx77",
+            "https://nvd.nist.gov/vuln/detail/CVE-2026-97687",
+            "https://www.cve.org/CVERecord?id=CVE-2026-97687"
+          ],
+          "PublishedDate": "2026-09-29T16:17:18.517Z",
+          "LastModifiedDate": "2026-09-30T21:17:19.473Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2026-97689",
+          "VendorIDs": [
+            "GHSA-vxq7-64xx-v4gw"
+          ],
+          "PkgName": "urllib3",
+          "PkgIdentifier": {
+            "PURL": "pkg:pypi/urllib3@2.7.0",
+            "UID": "49de110eac679ff0"
+          },
+          "InstalledVersion": "2.7.0",
+          "FixedVersion": "2.8.0",
+          "Status": "fixed",
+          "SeveritySource": "ghsa",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-97689",
+          "DataSource": {
+            "ID": "ghsa",
+            "Name": "GitHub Security Advisory pip",
+            "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Apip"
+          },
+          "Fingerprint": "sha256:4ad2b6944a608e4aca3302a426848b7603f65a3b457013ef0977adacafb60376",
+          "Title": "urllib3: urllib3: Denial of Service via unbounded memory allocation in chunk parser",
+          "Description": "urllib3 is an HTTP client library for Python. From 1.10.3 until 2.8.0, the HTTPResponse.read_chunked and HTTPResponse.stream methods can allocate unbounded memory because the streaming chunk parser buffers the chunk-size field until newline or EOF without a length bound. The trigger is that a malicious server returns Transfer-Encoding: chunked followed by a very long run of bytes without a newline. The attack mechanism is that a malicious HTTP server sends a very long unterminated chunk-size line. The impact is that unbounded memory allocation can exhaust the client process. This issue is fixed in version 2.8.0.",
+          "Severity": "HIGH",
+          "CweIDs": [
+            "CWE-770"
+          ],
+          "VendorSeverity": {
+            "amazon": 3,
+            "azure": 3,
+            "ghsa": 3,
+            "redhat": 3
+          },
+          "CVSS": {
+            "ghsa": {
+              "V40Vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:H",
+              "V40Score": 8.9
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+              "V3Score": 7.5
+            }
+          },
+          "References": [
+            "https://access.redhat.com/security/cve/CVE-2026-97689",
+            "https://advisory.echohq.com/cve/CVE-2026-97689",
+            "https://github.com/urllib3/urllib3",
+            "https://github.com/urllib3/urllib3/commit/cd770b059b543be29298ea5c52afb0b1b090f5ed",
+            "https://github.com/urllib3/urllib3/releases/tag/2.8.0",
+            "https://github.com/urllib3/urllib3/security/advisories/GHSA-vxq7-64xx-v4gw",
+            "https://nvd.nist.gov/vuln/detail/CVE-2026-97689",
+            "https://www.cve.org/CVERecord?id=CVE-2026-97689"
+          ],
+          "PublishedDate": "2026-09-29T16:17:18.837Z",
+          "LastModifiedDate": "2026-09-30T19:38:27.293Z"
+        }
+      ]
+    },
+    {
+      "Target": "package-lock.json",
+      "Class": "lang-pkgs",
+      "Type": "npm",
+      "Packages": [
+        {
+          "ID": "@actions/cache@6.2.0",
+          "Name": "@actions/cache",
+          "Identifier": {
+            "PURL": "pkg:npm/%40actions/cache@6.2.0",
+            "UID": "321856155aef02dd"
+          },
+          "Version": "6.2.0",
+          "Licenses": [
+            "MIT"
+          ],
+          "Relationship": "direct",
+          "DependsOn": [
+            "@actions/core@3.0.1",
+            "@actions/exec@3.0.0",
+            "@actions/glob@0.6.1",
+            "@actions/http-client@4.0.1",
+            "@actions/io@3.0.2",
+            "@azure/core-rest-pipeline@1.24.0",
+            "@azure/storage-blob@12.32.0",
+            "@protobuf-ts/runtime-rpc@2.11.1",
+            "semver@7.8.5"
+          ],
+          "Locations": [
+            {
+              "StartLine": 44,
+              "EndLine": 60
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "@actions/core@3.0.1",
+          "Name": "@actions/core",
+          "Identifier": {
+            "PURL": "pkg:npm/%40actions/core@3.0.1",
+            "UID": "5d149c3182fc324f"
+          },
+          "Version": "3.0.1",
+          "Licenses": [
+            "MIT"
+          ],
+          "Relationship": "direct",
+          "DependsOn": [
+            "@actions/exec@3.0.0",
+            "@actions/http-client@4.0.1"
+          ],
+          "Locations": [
+            {
+              "StartLine": 99,
+              "EndLine": 108
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "@actions/exec@3.0.0",
+          "Name": "@actions/exec",
+          "Identifier": {
+            "PURL": "pkg:npm/%40actions/exec@3.0.0",
+            "UID": "32397938a2ae5627"
+          },
+          "Version": "3.0.0",
+          "Licenses": [
+            "MIT"
+          ],
+          "Relationship": "direct",
+          "DependsOn": [
+            "@actions/io@3.0.2"
+          ],
+          "Locations": [
+            {
+              "StartLine": 109,
+              "EndLine": 117
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "@actions/glob@0.7.0",
+          "Name": "@actions/glob",
+          "Identifier": {
+            "PURL": "pkg:npm/%40actions/glob@0.7.0",
+            "UID": "a0d64bb42443457e"
+          },
+          "Version": "0.7.0",
+          "Licenses": [
+            "MIT"
+          ],
+          "Relationship": "direct",
+          "DependsOn": [
+            "@actions/core@3.0.1",
+            "minimatch@10.2.5"
+          ],
+          "Locations": [
+            {
+              "StartLine": 118,
+              "EndLine": 127
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "@actions/http-client@4.0.1",
+          "Name": "@actions/http-client",
+          "Identifier": {
+            "PURL": "pkg:npm/%40actions/http-client@4.0.1",
+            "UID": "a1c74bf56d7fe54c"
+          },
+          "Version": "4.0.1",
+          "Licenses": [
+            "MIT"
+          ],
+          "Relationship": "direct",
+          "DependsOn": [
+            "tunnel@0.0.6",
+            "undici@6.27.0"
+          ],
+          "Locations": [
+            {
+              "StartLine": 128,
+              "EndLine": 137
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "@actions/io@3.0.2",
+          "Name": "@actions/io",
+          "Identifier": {
+            "PURL": "pkg:npm/%40actions/io@3.0.2",
+            "UID": "5deaa2fd6df6cb27"
+          },
+          "Version": "3.0.2",
+          "Licenses": [
+            "MIT"
+          ],
+          "Relationship": "direct",
+          "Locations": [
+            {
+              "StartLine": 138,
+              "EndLine": 143
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "@actions/tool-cache@4.0.0",
+          "Name": "@actions/tool-cache",
+          "Identifier": {
+            "PURL": "pkg:npm/%40actions/tool-cache@4.0.0",
+            "UID": "56b8be30c186b4c9"
+          },
+          "Version": "4.0.0",
+          "Licenses": [
+            "MIT"
+          ],
+          "Relationship": "direct",
+          "DependsOn": [
+            "@actions/core@3.0.1",
+            "@actions/exec@3.0.0",
+            "@actions/http-client@4.0.1",
+            "@actions/io@3.0.2",
+            "semver@7.8.5"
+          ],
+          "Locations": [
+            {
+              "StartLine": 144,
+              "EndLine": 156
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "@iarna/toml@3.0.0",
+          "Name": "@iarna/toml",
+          "Identifier": {
+            "PURL": "pkg:npm/%40iarna/toml@3.0.0",
+            "UID": "a803f59f6591774c"
+          },
+          "Version": "3.0.0",
+          "Licenses": [
+            "ISC"
+          ],
+          "Relationship": "direct",
+          "Locations": [
+            {
+              "StartLine": 1090,
+              "EndLine": 1095
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "semver@7.8.5",
+          "Name": "semver",
+          "Identifier": {
+            "PURL": "pkg:npm/semver@7.8.5",
+            "UID": "8e5c9ae094675a6d"
+          },
+          "Version": "7.8.5",
+          "Licenses": [
+            "ISC"
+          ],
+          "Relationship": "direct",
+          "Locations": [
+            {
+              "StartLine": 5491,
+              "EndLine": 5502
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "@actions/glob@0.6.1",
+          "Name": "@actions/glob",
+          "Identifier": {
+            "PURL": "pkg:npm/%40actions/glob@0.6.1",
+            "UID": "19327162cce03066"
+          },
+          "Version": "0.6.1",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "@actions/core@3.0.1",
+            "minimatch@3.1.5"
+          ],
+          "Locations": [
+            {
+              "StartLine": 61,
+              "EndLine": 70
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "@azure/abort-controller@2.1.2",
+          "Name": "@azure/abort-controller",
+          "Identifier": {
+            "PURL": "pkg:npm/%40azure/abort-controller@2.1.2",
+            "UID": "8492553009a7c17b"
+          },
+          "Version": "2.1.2",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "tslib@2.8.1"
+          ],
+          "Locations": [
+            {
+              "StartLine": 157,
+              "EndLine": 168
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "@azure/core-auth@1.10.1",
+          "Name": "@azure/core-auth",
+          "Identifier": {
+            "PURL": "pkg:npm/%40azure/core-auth@1.10.1",
+            "UID": "8647c3c1eac5ea73"
+          },
+          "Version": "1.10.1",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "@azure/abort-controller@2.1.2",
+            "@azure/core-util@1.13.1",
+            "tslib@2.8.1"
+          ],
+          "Locations": [
+            {
+              "StartLine": 169,
+              "EndLine": 182
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "@azure/core-client@1.10.2",
+          "Name": "@azure/core-client",
+          "Identifier": {
+            "PURL": "pkg:npm/%40azure/core-client@1.10.2",
+            "UID": "5e614f92af010047"
+          },
+          "Version": "1.10.2",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "@azure/abort-controller@2.1.2",
+            "@azure/core-auth@1.10.1",
+            "@azure/core-rest-pipeline@1.24.0",
+            "@azure/core-tracing@1.3.1",
+            "@azure/core-util@1.13.1",
+            "@azure/logger@1.3.0",
+            "tslib@2.8.1"
+          ],
+          "Locations": [
+            {
+              "StartLine": 183,
+              "EndLine": 200
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "@azure/core-http-compat@2.4.0",
+          "Name": "@azure/core-http-compat",
+          "Identifier": {
+            "PURL": "pkg:npm/%40azure/core-http-compat@2.4.0",
+            "UID": "48d73508000a602d"
+          },
+          "Version": "2.4.0",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "@azure/abort-controller@2.1.2",
+            "@azure/core-client@1.10.2",
+            "@azure/core-rest-pipeline@1.24.0"
+          ],
+          "Locations": [
+            {
+              "StartLine": 201,
+              "EndLine": 216
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "@azure/core-lro@2.7.2",
+          "Name": "@azure/core-lro",
+          "Identifier": {
+            "PURL": "pkg:npm/%40azure/core-lro@2.7.2",
+            "UID": "2303b37b064a12e1"
+          },
+          "Version": "2.7.2",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "@azure/abort-controller@2.1.2",
+            "@azure/core-util@1.13.1",
+            "@azure/logger@1.3.0",
+            "tslib@2.8.1"
+          ],
+          "Locations": [
+            {
+              "StartLine": 217,
+              "EndLine": 231
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "@azure/core-paging@1.6.2",
+          "Name": "@azure/core-paging",
+          "Identifier": {
+            "PURL": "pkg:npm/%40azure/core-paging@1.6.2",
+            "UID": "e1d81e0363b9419e"
+          },
+          "Version": "1.6.2",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "tslib@2.8.1"
+          ],
+          "Locations": [
+            {
+              "StartLine": 232,
+              "EndLine": 243
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "@azure/core-rest-pipeline@1.24.0",
+          "Name": "@azure/core-rest-pipeline",
+          "Identifier": {
+            "PURL": "pkg:npm/%40azure/core-rest-pipeline@1.24.0",
+            "UID": "4d859a4ff3a04f5d"
+          },
+          "Version": "1.24.0",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "@azure/abort-controller@2.1.2",
+            "@azure/core-auth@1.10.1",
+            "@azure/core-tracing@1.3.1",
+            "@azure/core-util@1.13.1",
+            "@azure/logger@1.3.0",
+            "@typespec/ts-http-runtime@0.3.6",
+            "tslib@2.8.1"
+          ],
+          "Locations": [
+            {
+              "StartLine": 244,
+              "EndLine": 261
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "@azure/core-tracing@1.3.1",
+          "Name": "@azure/core-tracing",
+          "Identifier": {
+            "PURL": "pkg:npm/%40azure/core-tracing@1.3.1",
+            "UID": "ca3474f66d60289f"
+          },
+          "Version": "1.3.1",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "tslib@2.8.1"
+          ],
+          "Locations": [
+            {
+              "StartLine": 262,
+              "EndLine": 273
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "@azure/core-util@1.13.1",
+          "Name": "@azure/core-util",
+          "Identifier": {
+            "PURL": "pkg:npm/%40azure/core-util@1.13.1",
+            "UID": "61550da85b43779e"
+          },
+          "Version": "1.13.1",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "@azure/abort-controller@2.1.2",
+            "@typespec/ts-http-runtime@0.3.6",
+            "tslib@2.8.1"
+          ],
+          "Locations": [
+            {
+              "StartLine": 274,
+              "EndLine": 287
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "@azure/core-xml@1.5.1",
+          "Name": "@azure/core-xml",
+          "Identifier": {
+            "PURL": "pkg:npm/%40azure/core-xml@1.5.1",
+            "UID": "d355cdde2385cc58"
+          },
+          "Version": "1.5.1",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "fast-xml-parser@5.9.3",
+            "tslib@2.8.1"
+          ],
+          "Locations": [
+            {
+              "StartLine": 288,
+              "EndLine": 300
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "@azure/logger@1.3.0",
+          "Name": "@azure/logger",
+          "Identifier": {
+            "PURL": "pkg:npm/%40azure/logger@1.3.0",
+            "UID": "ef4d01e4c243980e"
+          },
+          "Version": "1.3.0",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "@typespec/ts-http-runtime@0.3.6",
+            "tslib@2.8.1"
+          ],
+          "Locations": [
+            {
+              "StartLine": 301,
+              "EndLine": 313
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "@azure/storage-blob@12.32.0",
+          "Name": "@azure/storage-blob",
+          "Identifier": {
+            "PURL": "pkg:npm/%40azure/storage-blob@12.32.0",
+            "UID": "1f1a6bb43a3b1a23"
+          },
+          "Version": "12.32.0",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "@azure/abort-controller@2.1.2",
+            "@azure/core-auth@1.10.1",
+            "@azure/core-client@1.10.2",
+            "@azure/core-http-compat@2.4.0",
+            "@azure/core-lro@2.7.2",
+            "@azure/core-paging@1.6.2",
+            "@azure/core-rest-pipeline@1.24.0",
+            "@azure/core-tracing@1.3.1",
+            "@azure/core-util@1.13.1",
+            "@azure/core-xml@1.5.1",
+            "@azure/logger@1.3.0",
+            "@azure/storage-common@12.4.0",
+            "events@3.3.0",
+            "tslib@2.8.1"
+          ],
+          "Locations": [
+            {
+              "StartLine": 314,
+              "EndLine": 338
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "@azure/storage-common@12.4.0",
+          "Name": "@azure/storage-common",
+          "Identifier": {
+            "PURL": "pkg:npm/%40azure/storage-common@12.4.0",
+            "UID": "b6ef3bcf506f6bae"
+          },
+          "Version": "12.4.0",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "@azure/abort-controller@2.1.2",
+            "@azure/core-auth@1.10.1",
+            "@azure/core-http-compat@2.4.0",
+            "@azure/core-rest-pipeline@1.24.0",
+            "@azure/core-tracing@1.3.1",
+            "@azure/core-util@1.13.1",
+            "@azure/logger@1.3.0",
+            "events@3.3.0",
+            "tslib@2.8.1"
+          ],
+          "Locations": [
+            {
+              "StartLine": 339,
+              "EndLine": 358
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "@nodable/entities@2.2.0",
+          "Name": "@nodable/entities",
+          "Identifier": {
+            "PURL": "pkg:npm/%40nodable/entities@2.2.0",
+            "UID": "4f60bcc25be81f8b"
+          },
+          "Version": "2.2.0",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "Locations": [
+            {
+              "StartLine": 1617,
+              "EndLine": 1628
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "@protobuf-ts/runtime@2.11.1",
+          "Name": "@protobuf-ts/runtime",
+          "Identifier": {
+            "PURL": "pkg:npm/%40protobuf-ts/runtime@2.11.1",
+            "UID": "f8946d22a849fc3c"
+          },
+          "Version": "2.11.1",
+          "Licenses": [
+            "(Apache-2.0 AND BSD-3-Clause)"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "Locations": [
+            {
+              "StartLine": 1653,
+              "EndLine": 1658
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "@protobuf-ts/runtime-rpc@2.11.1",
+          "Name": "@protobuf-ts/runtime-rpc",
+          "Identifier": {
+            "PURL": "pkg:npm/%40protobuf-ts/runtime-rpc@2.11.1",
+            "UID": "8eb54400f80a8902"
+          },
+          "Version": "2.11.1",
+          "Licenses": [
+            "Apache-2.0"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "@protobuf-ts/runtime@2.11.1"
+          ],
+          "Locations": [
+            {
+              "StartLine": 1659,
+              "EndLine": 1667
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "@typespec/ts-http-runtime@0.3.6",
+          "Name": "@typespec/ts-http-runtime",
+          "Identifier": {
+            "PURL": "pkg:npm/%40typespec/ts-http-runtime@0.3.6",
+            "UID": "3724542ca9aaf95c"
+          },
+          "Version": "0.3.6",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "http-proxy-agent@7.0.2",
+            "https-proxy-agent@7.0.6",
+            "tslib@2.8.1"
+          ],
+          "Locations": [
+            {
+              "StartLine": 2073,
+              "EndLine": 2086
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "agent-base@7.1.4",
+          "Name": "agent-base",
+          "Identifier": {
+            "PURL": "pkg:npm/agent-base@7.1.4",
+            "UID": "bcf486d74f2bbd42"
+          },
+          "Version": "7.1.4",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "Locations": [
+            {
+              "StartLine": 2440,
+              "EndLine": 2448
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "anynum@1.0.1",
+          "Name": "anynum",
+          "Identifier": {
+            "PURL": "pkg:npm/anynum@1.0.1",
+            "UID": "15c4068b619a4517"
+          },
+          "Version": "1.0.1",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "Locations": [
+            {
+              "StartLine": 2538,
+              "EndLine": 2549
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "balanced-match@1.0.2",
+          "Name": "balanced-match",
+          "Identifier": {
+            "PURL": "pkg:npm/balanced-match@1.0.2",
+            "UID": "ebecf3921724149f"
+          },
+          "Version": "1.0.2",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "Locations": [
+            {
+              "StartLine": 71,
+              "EndLine": 76
+            },
+            {
+              "StartLine": 3817,
+              "EndLine": 3823
+            },
+            {
+              "StartLine": 5847,
+              "EndLine": 5853
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "balanced-match@4.0.4",
+          "Name": "balanced-match",
+          "Identifier": {
+            "PURL": "pkg:npm/balanced-match@4.0.4",
+            "UID": "a3fb878545570934"
+          },
+          "Version": "4.0.4",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "Locations": [
+            {
+              "StartLine": 2659,
+              "EndLine": 2667
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "brace-expansion@1.1.15",
+          "Name": "brace-expansion",
+          "Identifier": {
+            "PURL": "pkg:npm/brace-expansion@1.1.15",
+            "UID": "c93d2f18b5cb6e86"
+          },
+          "Version": "1.1.15",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "balanced-match@1.0.2",
+            "concat-map@0.0.1"
+          ],
+          "Locations": [
+            {
+              "StartLine": 77,
+              "EndLine": 86
+            },
+            {
+              "StartLine": 5854,
+              "EndLine": 5864
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "brace-expansion@5.0.6",
+          "Name": "brace-expansion",
+          "Identifier": {
+            "PURL": "pkg:npm/brace-expansion@5.0.6",
+            "UID": "e87eff626d8efa71"
+          },
+          "Version": "5.0.6",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "balanced-match@4.0.4"
+          ],
+          "Locations": [
+            {
+              "StartLine": 2681,
+              "EndLine": 2692
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "concat-map@0.0.1",
+          "Name": "concat-map",
+          "Identifier": {
+            "PURL": "pkg:npm/concat-map@0.0.1",
+            "UID": "5d0fe502b3de28c9"
+          },
+          "Version": "0.0.1",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "Locations": [
+            {
+              "StartLine": 2964,
+              "EndLine": 2969
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "debug@4.4.3",
+          "Name": "debug",
+          "Identifier": {
+            "PURL": "pkg:npm/debug@4.4.3",
+            "UID": "2e8e71aa587fbd31"
+          },
+          "Version": "4.4.3",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "ms@2.1.3"
+          ],
+          "Locations": [
+            {
+              "StartLine": 2992,
+              "EndLine": 3008
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "events@3.3.0",
+          "Name": "events",
+          "Identifier": {
+            "PURL": "pkg:npm/events@3.3.0",
+            "UID": "cd1a6c1720b635ca"
+          },
+          "Version": "3.3.0",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "Locations": [
+            {
+              "StartLine": 3480,
+              "EndLine": 3488
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "fast-xml-builder@1.2.0",
+          "Name": "fast-xml-builder",
+          "Identifier": {
+            "PURL": "pkg:npm/fast-xml-builder@1.2.0",
+            "UID": "a54f65fc3529063a"
+          },
+          "Version": "1.2.0",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "path-expression-matcher@1.6.0",
+            "xml-naming@0.1.0"
+          ],
+          "Locations": [
+            {
+              "StartLine": 3569,
+              "EndLine": 3584
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "fast-xml-parser@5.9.3",
+          "Name": "fast-xml-parser",
+          "Identifier": {
+            "PURL": "pkg:npm/fast-xml-parser@5.9.3",
+            "UID": "28eb41ee3962657f"
+          },
+          "Version": "5.9.3",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "@nodable/entities@2.2.0",
+            "fast-xml-builder@1.2.0",
+            "is-unsafe@1.0.1",
+            "path-expression-matcher@1.6.0",
+            "strnum@2.4.1",
+            "xml-naming@0.1.0"
+          ],
+          "Locations": [
+            {
+              "StartLine": 3585,
+              "EndLine": 3607
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "http-proxy-agent@7.0.2",
+          "Name": "http-proxy-agent",
+          "Identifier": {
+            "PURL": "pkg:npm/http-proxy-agent@7.0.2",
+            "UID": "a954d20786d77b32"
+          },
+          "Version": "7.0.2",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "agent-base@7.1.4",
+            "debug@4.4.3"
+          ],
+          "Locations": [
+            {
+              "StartLine": 3916,
+              "EndLine": 3928
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "https-proxy-agent@7.0.6",
+          "Name": "https-proxy-agent",
+          "Identifier": {
+            "PURL": "pkg:npm/https-proxy-agent@7.0.6",
+            "UID": "9ef1faea17c00b5c"
+          },
+          "Version": "7.0.6",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "agent-base@7.1.4",
+            "debug@4.4.3"
+          ],
+          "Locations": [
+            {
+              "StartLine": 3929,
+              "EndLine": 3941
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "is-unsafe@1.0.1",
+          "Name": "is-unsafe",
+          "Identifier": {
+            "PURL": "pkg:npm/is-unsafe@1.0.1",
+            "UID": "1b79efd58fdfe3a5"
+          },
+          "Version": "1.0.1",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "Locations": [
+            {
+              "StartLine": 4074,
+              "EndLine": 4085
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "minimatch@10.2.5",
+          "Name": "minimatch",
+          "Identifier": {
+            "PURL": "pkg:npm/minimatch@10.2.5",
+            "UID": "92e0f24912235572"
+          },
+          "Version": "10.2.5",
+          "Licenses": [
+            "BlueOak-1.0.0"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "brace-expansion@5.0.6"
+          ],
+          "Locations": [
+            {
+              "StartLine": 4959,
+              "EndLine": 4973
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "minimatch@3.1.5",
+          "Name": "minimatch",
+          "Identifier": {
+            "PURL": "pkg:npm/minimatch@3.1.5",
+            "UID": "67e57a5636a719b"
+          },
+          "Version": "3.1.5",
+          "Licenses": [
+            "ISC"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "brace-expansion@1.1.15"
+          ],
+          "Locations": [
+            {
+              "StartLine": 87,
+              "EndLine": 98
+            },
+            {
+              "StartLine": 5887,
+              "EndLine": 5899
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "ms@2.1.3",
+          "Name": "ms",
+          "Identifier": {
+            "PURL": "pkg:npm/ms@2.1.3",
+            "UID": "b2a3a43db6a07ac4"
+          },
+          "Version": "2.1.3",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "Locations": [
+            {
+              "StartLine": 4994,
+              "EndLine": 4999
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "path-expression-matcher@1.6.0",
+          "Name": "path-expression-matcher",
+          "Identifier": {
+            "PURL": "pkg:npm/path-expression-matcher@1.6.0",
+            "UID": "38886526e3284dfc"
+          },
+          "Version": "1.6.0",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "Locations": [
+            {
+              "StartLine": 5192,
+              "EndLine": 5206
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "strnum@2.4.1",
+          "Name": "strnum",
+          "Identifier": {
+            "PURL": "pkg:npm/strnum@2.4.1",
+            "UID": "ea18ecdc47cc5380"
+          },
+          "Version": "2.4.1",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "anynum@1.0.1"
+          ],
+          "Locations": [
+            {
+              "StartLine": 5774,
+              "EndLine": 5788
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "tslib@2.8.1",
+          "Name": "tslib",
+          "Identifier": {
+            "PURL": "pkg:npm/tslib@2.8.1",
+            "UID": "2660ada4e083e932"
+          },
+          "Version": "2.8.1",
+          "Licenses": [
+            "0BSD"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "Locations": [
+            {
+              "StartLine": 6003,
+              "EndLine": 6008
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "tunnel@0.0.6",
+          "Name": "tunnel",
+          "Identifier": {
+            "PURL": "pkg:npm/tunnel@0.0.6",
+            "UID": "6c6ed570676f0913"
+          },
+          "Version": "0.0.6",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "Locations": [
+            {
+              "StartLine": 6009,
+              "EndLine": 6017
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "undici@6.27.0",
+          "Name": "undici",
+          "Identifier": {
+            "PURL": "pkg:npm/undici@6.27.0",
+            "UID": "39bf17fc45f75f6f"
+          },
+          "Version": "6.27.0",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "Locations": [
+            {
+              "StartLine": 6082,
+              "EndLine": 6090
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "xml-naming@0.1.0",
+          "Name": "xml-naming",
+          "Identifier": {
+            "PURL": "pkg:npm/xml-naming@0.1.0",
+            "UID": "2de292a160c69aff"
+          },
+          "Version": "0.1.0",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "Locations": [
+            {
+              "StartLine": 6351,
+              "EndLine": 6365
+            }
+          ],
+          "AnalyzedBy": "npm"
+        }
+      ],
+      "Vulnerabilities": [
+        {
+          "VulnerabilityID": "CVE-2026-102276",
+          "VendorIDs": [
+            "GHSA-6j4f-fj2g-mc7p"
+          ],
+          "PkgID": "brace-expansion@1.1.15",
+          "PkgName": "brace-expansion",
+          "PkgIdentifier": {
+            "PURL": "pkg:npm/brace-expansion@1.1.15",
+            "UID": "c93d2f18b5cb6e86"
+          },
+          "InstalledVersion": "1.1.15",
+          "FixedVersion": "5.0.10, 3.0.7, 2.1.5, 1.1.19",
+          "Status": "fixed",
+          "SeveritySource": "ghsa",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-102276",
+          "DataSource": {
+            "ID": "ghsa",
+            "Name": "GitHub Security Advisory npm",
+            "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Anpm"
+          },
+          "Fingerprint": "sha256:7d2fcf303f835fe3d5fc5891a67535ff226ec831491df1df9c37a856e20efbae",
+          "Title": "brace-expansion: brace-expansion: Denial of Service via stack exhaustion from crafted brace patterns",
+          "Description": "The brace-expansion library generates arbitrary strings containing a common prefix and suffix. Prior to 1.1.19, 2.1.5, 3.0.7, and 5.0.10, crafted brace patterns can exhaust the native stack in parseCommaParts because parseCommaParts recursively processes the remainder once per brace group and uses push.apply to pass every element of a very large comma-part array as a function argument. Patterns containing many comma-separated brace groups trigger the recursive path, while the large array triggers the argument-array path without deep recursion. These paths cause recursive and argument-array native stack exhaustion before max or maxLength can limit output, potentially terminating the Node.js process in a process-terminating denial of service. This issue is fixed in versions 1.1.19, 2.1.5, 3.0.7, and 5.0.10.",
+          "Severity": "HIGH",
+          "CweIDs": [
+            "CWE-400",
+            "CWE-674"
+          ],
+          "VendorSeverity": {
+            "ghsa": 3,
+            "redhat": 3
+          },
+          "CVSS": {
+            "ghsa": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+              "V3Score": 7.5
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+              "V3Score": 7.5
+            }
+          },
+          "References": [
+            "https://access.redhat.com/security/cve/CVE-2026-102276",
+            "https://advisory.echohq.com/cve/CVE-2026-102276",
+            "https://github.com/juliangruber/brace-expansion",
+            "https://github.com/juliangruber/brace-expansion/commit/0bcbfc0a5928c3073d48f42999d1ce4fc1c42fbc",
+            "https://github.com/juliangruber/brace-expansion/commit/316359e6019c39b3254c8ba8e25dc586a480652c",
+            "https://github.com/juliangruber/brace-expansion/commit/5171e681c0922b7ae8bfaf9a331e309107be6edc",
+            "https://github.com/juliangruber/brace-expansion/commit/6735c94873ca570bcdd6a0690033bdd3126379d3",
+            "https://github.com/juliangruber/brace-expansion/security/advisories/GHSA-6j4f-fj2g-mc7p",
+            "https://nvd.nist.gov/vuln/detail/CVE-2026-102276",
+            "https://www.cve.org/CVERecord?id=CVE-2026-102276"
+          ],
+          "PublishedDate": "2026-09-28T21:17:16.033Z",
+          "LastModifiedDate": "2026-09-30T19:57:08.043Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2026-102278",
+          "VendorIDs": [
+            "GHSA-qhr7-859c-m2p7"
+          ],
+          "PkgID": "brace-expansion@1.1.15",
+          "PkgName": "brace-expansion",
+          "PkgIdentifier": {
+            "PURL": "pkg:npm/brace-expansion@1.1.15",
+            "UID": "c93d2f18b5cb6e86"
+          },
+          "InstalledVersion": "1.1.15",
+          "FixedVersion": "5.0.11, 3.0.8, 2.1.6, 1.1.20",
+          "Status": "fixed",
+          "SeveritySource": "ghsa",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-102278",
+          "DataSource": {
+            "ID": "ghsa",
+            "Name": "GitHub Security Advisory npm",
+            "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Anpm"
+          },
+          "Fingerprint": "sha256:0a87dbbd2c90d5c1b0856cb6417a9cea14b821b52c4eb1f67cbdfea45e20c749",
+          "Title": "brace-expansion: brace-expansion: Denial of Service via uncontrolled recursion in nested brace patterns",
+          "Description": "The brace-expansion library generates arbitrary strings containing a common prefix and suffix. Prior to 1.1.20, 2.1.6, 3.0.8, and 5.0.11, deeply nested brace groups cause expand_() to recurse once per nesting level at comma-member and single-set expansion sites, exhausting the native stack before output limits can apply and potentially terminating the Node.js process. expand_ performs uncontrolled recursion for nested brace alternatives and single-part sets. deeply nested brace groups supplied as an untrusted pattern. expand_ is affected. expand is affected. Comma members is affected. Single set is affected. native stack exhaustion during nested sub-expansion. process-terminating denial of service. This issue is fixed in versions 1.1.20, 2.1.6, 3.0.8, and 5.0.11.",
+          "Severity": "HIGH",
+          "CweIDs": [
+            "CWE-400",
+            "CWE-674"
+          ],
+          "VendorSeverity": {
+            "ghsa": 3,
+            "redhat": 3
+          },
+          "CVSS": {
+            "ghsa": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+              "V3Score": 7.5
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:H",
+              "V3Score": 6.5
+            }
+          },
+          "References": [
+            "https://access.redhat.com/security/cve/CVE-2026-102278",
+            "https://advisory.echohq.com/cve/CVE-2026-102278",
+            "https://github.com/juliangruber/brace-expansion",
+            "https://github.com/juliangruber/brace-expansion/commit/1efee7c397c191da6287a78ec19512476a966a7b",
+            "https://github.com/juliangruber/brace-expansion/commit/935d78f32f335b2ff76578e5c5e877d31ae9888c",
+            "https://github.com/juliangruber/brace-expansion/commit/de84f144e9816f30e25fc8179e2e1249ab6df0db",
+            "https://github.com/juliangruber/brace-expansion/security/advisories/GHSA-qhr7-859c-m2p7",
+            "https://nvd.nist.gov/vuln/detail/CVE-2026-102278",
+            "https://www.cve.org/CVERecord?id=CVE-2026-102278"
+          ],
+          "PublishedDate": "2026-09-28T21:17:16.517Z",
+          "LastModifiedDate": "2026-10-01T15:17:25.593Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2026-13149",
+          "VendorIDs": [
+            "GHSA-3jxr-9vmj-r5cp"
+          ],
+          "PkgID": "brace-expansion@1.1.15",
+          "PkgName": "brace-expansion",
+          "PkgIdentifier": {
+            "PURL": "pkg:npm/brace-expansion@1.1.15",
+            "UID": "c93d2f18b5cb6e86"
+          },
+          "InstalledVersion": "1.1.15",
+          "FixedVersion": "5.0.7, 1.1.16, 2.1.2",
+          "Status": "fixed",
+          "SeveritySource": "ghsa",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-13149",
+          "DataSource": {
+            "ID": "ghsa",
+            "Name": "GitHub Security Advisory npm",
+            "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Anpm"
+          },
+          "Fingerprint": "sha256:d55ae6788c52c7bcf5aa415b204b729a06138dfa36b249e681cc1d3d60071f79",
+          "Title": "brace-expansion: Brace-expansion: Denial of Service due to exponential-time complexity",
+          "Description": "brace-expansion through 5.0.6 is vulnerable to denial of service. The expand() function exhibits exponential-time complexity in the number of consecutive non-expanding '{}' brace groups. An attacker who passes a crafted string to expand(), directly or transitively, can cause significant CPU consumption and event-loop blocking. The max option does not mitigate this, as it bounds the output size rather than the recursion work.",
+          "Severity": "HIGH",
+          "CweIDs": [
+            "CWE-400",
+            "CWE-407"
+          ],
+          "VendorSeverity": {
+            "alma": 3,
+            "amazon": 3,
+            "ghsa": 3,
+            "oracle-oval": 3,
+            "redhat": 3,
+            "rocky": 3
+          },
+          "CVSS": {
+            "ghsa": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L",
+              "V40Vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N/E:P/S:N/AU:Y/R:U/V:D/RE:M/U:Amber",
+              "V3Score": 5.3,
+              "V40Score": 7.7
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+              "V3Score": 7.5
+            }
+          },
+          "References": [
+            "https://access.redhat.com/errata/RHSA-2026:47058",
+            "https://access.redhat.com/errata/RHSA-2026:47060",
+            "https://access.redhat.com/security/cve/CVE-2026-13149",
+            "https://advisory.echohq.com/cve/CVE-2026-13149",
+            "https://bugzilla.redhat.com/2494813",
+            "https://bugzilla.redhat.com/2498116",
+            "https://bugzilla.redhat.com/2498120",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2494813",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2498116",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2498120",
+            "https://creativecommons.org/licenses/by/4.0/",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-13149",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-59873",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-59874",
+            "https://errata.almalinux.org/8/ALSA-2026-47060.html",
+            "https://errata.rockylinux.org/RLSA-2026:47058",
+            "https://github.com/juliangruber/brace-expansion",
+            "https://github.com/juliangruber/brace-expansion/commit/835d6be91201122d9adffb0c0c8c094189ace265",
+            "https://github.com/juliangruber/brace-expansion/commit/c7e33ec13ac1a684c116720843ce24e208611754",
+            "https://github.com/juliangruber/brace-expansion/commit/d74e63030c012e3b7ae81657b8d665619cd51b95",
+            "https://github.com/juliangruber/brace-expansion/pull/122",
+            "https://github.com/juliangruber/brace-expansion/pull/123",
+            "https://github.com/juliangruber/brace-expansion/releases/tag/v1.1.16",
+            "https://github.com/juliangruber/brace-expansion/releases/tag/v2.1.2",
+            "https://github.com/juliangruber/brace-expansion/releases/tag/v5.0.7",
+            "https://github.com/juliangruber/brace-expansion/security/advisories/GHSA-3jxr-9vmj-r5cp",
+            "https://linux.oracle.com/cve/CVE-2026-13149.html",
+            "https://linux.oracle.com/errata/ELSA-2026-48034.html",
+            "https://nvd.nist.gov/vuln/detail/CVE-2026-13149",
+            "https://www.cve.org/CVERecord?id=CVE-2026-13149",
+            "https://www.npmjs.com/package/brace-expansion"
+          ],
+          "PublishedDate": "2026-06-30T10:16:34.56Z",
+          "LastModifiedDate": "2026-07-08T12:17:20.087Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2026-14257",
+          "VendorIDs": [
+            "GHSA-mh99-v99m-4gvg"
+          ],
+          "PkgID": "brace-expansion@1.1.15",
+          "PkgName": "brace-expansion",
+          "PkgIdentifier": {
+            "PURL": "pkg:npm/brace-expansion@1.1.15",
+            "UID": "c93d2f18b5cb6e86"
+          },
+          "InstalledVersion": "1.1.15",
+          "FixedVersion": "5.0.8, 3.0.3, 2.1.3, 1.1.17",
+          "Status": "fixed",
+          "SeveritySource": "ghsa",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-14257",
+          "DataSource": {
+            "ID": "ghsa",
+            "Name": "GitHub Security Advisory npm",
+            "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Anpm"
+          },
+          "Fingerprint": "sha256:3b9d637dfa3d9bfce31ede60c327520b8d81b6f688aa33cda2fdc4808ffae8ad",
+          "Title": "brace-expansion: Brace-expansion: Denial of Service via memory exhaustion in expand() function",
+          "Description": "brace-expansion through 5.0.7 is vulnerable to denial of service via memory exhaustion. The expand() function limits the number of results with a max option (default 100,000) but does not bound the length of each result string. By chaining multiple brace groups, an attacker keeps the result count under the limit while making each result progressively longer, so total memory scales with both count and string length until the process hits a fatal, uncatchable out-of-memory error. About 7.5 KB of input ('{a,b}'.repeat(1500)) crashes a default Node.js process. Any application that passes attacker-influenced strings to brace-expansion.expand() - directly or transitively via minimatch / glob brace patterns - can be crashed by a small request. Fixed in 5.0.8 by adding a maxLength option (default 4,000,000) that bounds accumulated output and intermediate arrays.",
+          "Severity": "HIGH",
+          "CweIDs": [
+            "CWE-400",
+            "CWE-770"
+          ],
+          "VendorSeverity": {
+            "alma": 3,
+            "ghsa": 3,
+            "oracle-oval": 3,
+            "redhat": 3,
+            "rocky": 3
+          },
+          "CVSS": {
+            "ghsa": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+              "V3Score": 7.5
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+              "V3Score": 7.5
+            }
+          },
+          "References": [
+            "https://access.redhat.com/errata/RHSA-2026:54530",
+            "https://access.redhat.com/errata/RHSA-2026:55603",
+            "https://access.redhat.com/security/cve/CVE-2026-14257",
+            "https://advisory.echohq.com/cve/CVE-2026-14257",
+            "https://bugzilla.redhat.com/2506433",
+            "https://bugzilla.redhat.com/2510722",
+            "https://bugzilla.redhat.com/2510801",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2487258",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2487269",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2506433",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2507593",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2510722",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2510801",
+            "https://creativecommons.org/licenses/by/4.0/",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-11822",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-11824",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-14257",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-54272",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-69152",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-69192",
+            "https://errata.almalinux.org/8/ALSA-2026-54530.html",
+            "https://errata.rockylinux.org/RLSA-2026:55603",
+            "https://github.com/advisories/GHSA-mh99-v99m-4gvg",
+            "https://github.com/juliangruber/brace-expansion",
+            "https://github.com/juliangruber/brace-expansion/commit/139d015104e71433ad52a41d19467c48ecbb2c7d",
+            "https://github.com/juliangruber/brace-expansion/commit/a1bd33999ea75262c4749fff3bbb0d1372bd07b5",
+            "https://github.com/juliangruber/brace-expansion/commit/cb4b9e47cc2ec777c14b2b4492fb431a56f6a031",
+            "https://github.com/juliangruber/brace-expansion/commit/d13ff455a58b0d56704f0111e3c2a0b16ceb06eb",
+            "https://github.com/juliangruber/brace-expansion/pull/129",
+            "https://github.com/juliangruber/brace-expansion/pull/130",
+            "https://github.com/juliangruber/brace-expansion/pull/136",
+            "https://github.com/juliangruber/brace-expansion/security/advisories/GHSA-mh99-v99m-4gvg",
+            "https://linux.oracle.com/cve/CVE-2026-14257.html",
+            "https://linux.oracle.com/errata/ELSA-2026-58819.html",
+            "https://nvd.nist.gov/vuln/detail/CVE-2026-14257",
+            "https://www.cve.org/CVERecord?id=CVE-2026-14257",
+            "https://www.npmjs.com/package/brace-expansion"
+          ],
+          "PublishedDate": "2026-07-23T14:17:00.25Z",
+          "LastModifiedDate": "2026-08-27T18:52:15.293Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2026-69152",
+          "VendorIDs": [
+            "GHSA-rgw5-rvv9-x895"
+          ],
+          "PkgID": "brace-expansion@1.1.15",
+          "PkgName": "brace-expansion",
+          "PkgIdentifier": {
+            "PURL": "pkg:npm/brace-expansion@1.1.15",
+            "UID": "c93d2f18b5cb6e86"
+          },
+          "InstalledVersion": "1.1.15",
+          "FixedVersion": "1.1.18, 2.1.4, 3.0.6, 5.0.9",
+          "Status": "fixed",
+          "SeveritySource": "ghsa",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-69152",
+          "DataSource": {
+            "ID": "ghsa",
+            "Name": "GitHub Security Advisory npm",
+            "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Anpm"
+          },
+          "Fingerprint": "sha256:4db6780d5acad68911907fee67c1603c0aa9b05ac2e38ac35715ab476e364379",
+          "Title": "brace-expansion: DoS via unbounded intermediate arrays, bypassing the CVE-2026-14257 mitigation",
+          "Description": "The brace-expansion library generates arbitrary strings containing a common prefix and suffix. Prior to 1.1.18, 2.1.4, 3.0.6, and 5.0.9, expand() does not apply maxLength while constructing comma-alternative intermediate arrays or padded sequences, allowing attacker-controlled input to exhaust memory or block the event loop. The fix for CVE-2026-14257 is bypassed by the vulnerability. This issue is fixed in versions 1.1.18, 2.1.4, 3.0.6, and 5.0.9.",
+          "Severity": "HIGH",
+          "CweIDs": [
+            "CWE-400",
+            "CWE-770"
+          ],
+          "VendorSeverity": {
+            "alma": 3,
+            "ghsa": 3,
+            "oracle-oval": 3,
+            "redhat": 3,
+            "rocky": 3
+          },
+          "CVSS": {
+            "ghsa": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+              "V3Score": 7.5
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+              "V3Score": 7.5
+            }
+          },
+          "References": [
+            "https://access.redhat.com/errata/RHSA-2026:54530",
+            "https://access.redhat.com/errata/RHSA-2026:55603",
+            "https://access.redhat.com/security/cve/CVE-2026-69152",
+            "https://advisory.echohq.com/cve/CVE-2026-69152",
+            "https://bugzilla.redhat.com/2506433",
+            "https://bugzilla.redhat.com/2510722",
+            "https://bugzilla.redhat.com/2510801",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2487258",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2487269",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2506433",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2507593",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2510722",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2510801",
+            "https://creativecommons.org/licenses/by/4.0/",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-11822",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-11824",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-14257",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-54272",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-69152",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-69192",
+            "https://errata.almalinux.org/8/ALSA-2026-54530.html",
+            "https://errata.rockylinux.org/RLSA-2026:55603",
+            "https://github.com/juliangruber/brace-expansion",
+            "https://github.com/juliangruber/brace-expansion/commit/139d015104e71433ad52a41d19467c48ecbb2c7d",
+            "https://github.com/juliangruber/brace-expansion/commit/1e30c930238d7162802d88a94189182def178dac",
+            "https://github.com/juliangruber/brace-expansion/commit/688a99eeaab02627c2b89ba8ba4821fecfa659cf",
+            "https://github.com/juliangruber/brace-expansion/commit/cb4b9e47cc2ec777c14b2b4492fb431a56f6a031",
+            "https://github.com/juliangruber/brace-expansion/security/advisories/GHSA-rgw5-rvv9-x895",
+            "https://linux.oracle.com/cve/CVE-2026-69152.html",
+            "https://linux.oracle.com/errata/ELSA-2026-58819.html",
+            "https://nvd.nist.gov/vuln/detail/CVE-2026-69152",
+            "https://www.cve.org/CVERecord?id=CVE-2026-69152"
+          ],
+          "PublishedDate": "2026-08-03T17:16:45.953Z",
+          "LastModifiedDate": "2026-08-05T14:58:28.177Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2026-102276",
+          "VendorIDs": [
+            "GHSA-6j4f-fj2g-mc7p"
+          ],
+          "PkgID": "brace-expansion@5.0.6",
+          "PkgName": "brace-expansion",
+          "PkgIdentifier": {
+            "PURL": "pkg:npm/brace-expansion@5.0.6",
+            "UID": "e87eff626d8efa71"
+          },
+          "InstalledVersion": "5.0.6",
+          "FixedVersion": "5.0.10, 3.0.7, 2.1.5, 1.1.19",
+          "Status": "fixed",
+          "SeveritySource": "ghsa",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-102276",
+          "DataSource": {
+            "ID": "ghsa",
+            "Name": "GitHub Security Advisory npm",
+            "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Anpm"
+          },
+          "Fingerprint": "sha256:2cda0b70b9230783ef60e41b69998059cfd701dd6ecc39c5bc93e05dad20a2ba",
+          "Title": "brace-expansion: brace-expansion: Denial of Service via stack exhaustion from crafted brace patterns",
+          "Description": "The brace-expansion library generates arbitrary strings containing a common prefix and suffix. Prior to 1.1.19, 2.1.5, 3.0.7, and 5.0.10, crafted brace patterns can exhaust the native stack in parseCommaParts because parseCommaParts recursively processes the remainder once per brace group and uses push.apply to pass every element of a very large comma-part array as a function argument. Patterns containing many comma-separated brace groups trigger the recursive path, while the large array triggers the argument-array path without deep recursion. These paths cause recursive and argument-array native stack exhaustion before max or maxLength can limit output, potentially terminating the Node.js process in a process-terminating denial of service. This issue is fixed in versions 1.1.19, 2.1.5, 3.0.7, and 5.0.10.",
+          "Severity": "HIGH",
+          "CweIDs": [
+            "CWE-400",
+            "CWE-674"
+          ],
+          "VendorSeverity": {
+            "ghsa": 3,
+            "redhat": 3
+          },
+          "CVSS": {
+            "ghsa": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+              "V3Score": 7.5
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+              "V3Score": 7.5
+            }
+          },
+          "References": [
+            "https://access.redhat.com/security/cve/CVE-2026-102276",
+            "https://advisory.echohq.com/cve/CVE-2026-102276",
+            "https://github.com/juliangruber/brace-expansion",
+            "https://github.com/juliangruber/brace-expansion/commit/0bcbfc0a5928c3073d48f42999d1ce4fc1c42fbc",
+            "https://github.com/juliangruber/brace-expansion/commit/316359e6019c39b3254c8ba8e25dc586a480652c",
+            "https://github.com/juliangruber/brace-expansion/commit/5171e681c0922b7ae8bfaf9a331e309107be6edc",
+            "https://github.com/juliangruber/brace-expansion/commit/6735c94873ca570bcdd6a0690033bdd3126379d3",
+            "https://github.com/juliangruber/brace-expansion/security/advisories/GHSA-6j4f-fj2g-mc7p",
+            "https://nvd.nist.gov/vuln/detail/CVE-2026-102276",
+            "https://www.cve.org/CVERecord?id=CVE-2026-102276"
+          ],
+          "PublishedDate": "2026-09-28T21:17:16.033Z",
+          "LastModifiedDate": "2026-09-30T19:57:08.043Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2026-102278",
+          "VendorIDs": [
+            "GHSA-qhr7-859c-m2p7"
+          ],
+          "PkgID": "brace-expansion@5.0.6",
+          "PkgName": "brace-expansion",
+          "PkgIdentifier": {
+            "PURL": "pkg:npm/brace-expansion@5.0.6",
+            "UID": "e87eff626d8efa71"
+          },
+          "InstalledVersion": "5.0.6",
+          "FixedVersion": "5.0.11, 3.0.8, 2.1.6, 1.1.20",
+          "Status": "fixed",
+          "SeveritySource": "ghsa",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-102278",
+          "DataSource": {
+            "ID": "ghsa",
+            "Name": "GitHub Security Advisory npm",
+            "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Anpm"
+          },
+          "Fingerprint": "sha256:399b7f88f461e541459ec99ef27295bd42b803e0b76f71532890be085e665e64",
+          "Title": "brace-expansion: brace-expansion: Denial of Service via uncontrolled recursion in nested brace patterns",
+          "Description": "The brace-expansion library generates arbitrary strings containing a common prefix and suffix. Prior to 1.1.20, 2.1.6, 3.0.8, and 5.0.11, deeply nested brace groups cause expand_() to recurse once per nesting level at comma-member and single-set expansion sites, exhausting the native stack before output limits can apply and potentially terminating the Node.js process. expand_ performs uncontrolled recursion for nested brace alternatives and single-part sets. deeply nested brace groups supplied as an untrusted pattern. expand_ is affected. expand is affected. Comma members is affected. Single set is affected. native stack exhaustion during nested sub-expansion. process-terminating denial of service. This issue is fixed in versions 1.1.20, 2.1.6, 3.0.8, and 5.0.11.",
+          "Severity": "HIGH",
+          "CweIDs": [
+            "CWE-400",
+            "CWE-674"
+          ],
+          "VendorSeverity": {
+            "ghsa": 3,
+            "redhat": 3
+          },
+          "CVSS": {
+            "ghsa": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+              "V3Score": 7.5
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:H",
+              "V3Score": 6.5
+            }
+          },
+          "References": [
+            "https://access.redhat.com/security/cve/CVE-2026-102278",
+            "https://advisory.echohq.com/cve/CVE-2026-102278",
+            "https://github.com/juliangruber/brace-expansion",
+            "https://github.com/juliangruber/brace-expansion/commit/1efee7c397c191da6287a78ec19512476a966a7b",
+            "https://github.com/juliangruber/brace-expansion/commit/935d78f32f335b2ff76578e5c5e877d31ae9888c",
+            "https://github.com/juliangruber/brace-expansion/commit/de84f144e9816f30e25fc8179e2e1249ab6df0db",
+            "https://github.com/juliangruber/brace-expansion/security/advisories/GHSA-qhr7-859c-m2p7",
+            "https://nvd.nist.gov/vuln/detail/CVE-2026-102278",
+            "https://www.cve.org/CVERecord?id=CVE-2026-102278"
+          ],
+          "PublishedDate": "2026-09-28T21:17:16.517Z",
+          "LastModifiedDate": "2026-10-01T15:17:25.593Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2026-13149",
+          "VendorIDs": [
+            "GHSA-3jxr-9vmj-r5cp"
+          ],
+          "PkgID": "brace-expansion@5.0.6",
+          "PkgName": "brace-expansion",
+          "PkgIdentifier": {
+            "PURL": "pkg:npm/brace-expansion@5.0.6",
+            "UID": "e87eff626d8efa71"
+          },
+          "InstalledVersion": "5.0.6",
+          "FixedVersion": "5.0.7, 1.1.16, 2.1.2",
+          "Status": "fixed",
+          "SeveritySource": "ghsa",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-13149",
+          "DataSource": {
+            "ID": "ghsa",
+            "Name": "GitHub Security Advisory npm",
+            "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Anpm"
+          },
+          "Fingerprint": "sha256:1080b633646e21433267d6a145796e300e0e0014c0563cda5f55e4dc58be1f3b",
+          "Title": "brace-expansion: Brace-expansion: Denial of Service due to exponential-time complexity",
+          "Description": "brace-expansion through 5.0.6 is vulnerable to denial of service. The expand() function exhibits exponential-time complexity in the number of consecutive non-expanding '{}' brace groups. An attacker who passes a crafted string to expand(), directly or transitively, can cause significant CPU consumption and event-loop blocking. The max option does not mitigate this, as it bounds the output size rather than the recursion work.",
+          "Severity": "HIGH",
+          "CweIDs": [
+            "CWE-400",
+            "CWE-407"
+          ],
+          "VendorSeverity": {
+            "alma": 3,
+            "amazon": 3,
+            "ghsa": 3,
+            "oracle-oval": 3,
+            "redhat": 3,
+            "rocky": 3
+          },
+          "CVSS": {
+            "ghsa": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L",
+              "V40Vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N/E:P/S:N/AU:Y/R:U/V:D/RE:M/U:Amber",
+              "V3Score": 5.3,
+              "V40Score": 7.7
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+              "V3Score": 7.5
+            }
+          },
+          "References": [
+            "https://access.redhat.com/errata/RHSA-2026:47058",
+            "https://access.redhat.com/errata/RHSA-2026:47060",
+            "https://access.redhat.com/security/cve/CVE-2026-13149",
+            "https://advisory.echohq.com/cve/CVE-2026-13149",
+            "https://bugzilla.redhat.com/2494813",
+            "https://bugzilla.redhat.com/2498116",
+            "https://bugzilla.redhat.com/2498120",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2494813",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2498116",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2498120",
+            "https://creativecommons.org/licenses/by/4.0/",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-13149",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-59873",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-59874",
+            "https://errata.almalinux.org/8/ALSA-2026-47060.html",
+            "https://errata.rockylinux.org/RLSA-2026:47058",
+            "https://github.com/juliangruber/brace-expansion",
+            "https://github.com/juliangruber/brace-expansion/commit/835d6be91201122d9adffb0c0c8c094189ace265",
+            "https://github.com/juliangruber/brace-expansion/commit/c7e33ec13ac1a684c116720843ce24e208611754",
+            "https://github.com/juliangruber/brace-expansion/commit/d74e63030c012e3b7ae81657b8d665619cd51b95",
+            "https://github.com/juliangruber/brace-expansion/pull/122",
+            "https://github.com/juliangruber/brace-expansion/pull/123",
+            "https://github.com/juliangruber/brace-expansion/releases/tag/v1.1.16",
+            "https://github.com/juliangruber/brace-expansion/releases/tag/v2.1.2",
+            "https://github.com/juliangruber/brace-expansion/releases/tag/v5.0.7",
+            "https://github.com/juliangruber/brace-expansion/security/advisories/GHSA-3jxr-9vmj-r5cp",
+            "https://linux.oracle.com/cve/CVE-2026-13149.html",
+            "https://linux.oracle.com/errata/ELSA-2026-48034.html",
+            "https://nvd.nist.gov/vuln/detail/CVE-2026-13149",
+            "https://www.cve.org/CVERecord?id=CVE-2026-13149",
+            "https://www.npmjs.com/package/brace-expansion"
+          ],
+          "PublishedDate": "2026-06-30T10:16:34.56Z",
+          "LastModifiedDate": "2026-07-08T12:17:20.087Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2026-14257",
+          "VendorIDs": [
+            "GHSA-mh99-v99m-4gvg"
+          ],
+          "PkgID": "brace-expansion@5.0.6",
+          "PkgName": "brace-expansion",
+          "PkgIdentifier": {
+            "PURL": "pkg:npm/brace-expansion@5.0.6",
+            "UID": "e87eff626d8efa71"
+          },
+          "InstalledVersion": "5.0.6",
+          "FixedVersion": "5.0.8, 3.0.3, 2.1.3, 1.1.17",
+          "Status": "fixed",
+          "SeveritySource": "ghsa",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-14257",
+          "DataSource": {
+            "ID": "ghsa",
+            "Name": "GitHub Security Advisory npm",
+            "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Anpm"
+          },
+          "Fingerprint": "sha256:a80bc027ca4eccc4c3024b26e25143ab54f1f9c8e4e6fcd70fe8ec4d9b5cae58",
+          "Title": "brace-expansion: Brace-expansion: Denial of Service via memory exhaustion in expand() function",
+          "Description": "brace-expansion through 5.0.7 is vulnerable to denial of service via memory exhaustion. The expand() function limits the number of results with a max option (default 100,000) but does not bound the length of each result string. By chaining multiple brace groups, an attacker keeps the result count under the limit while making each result progressively longer, so total memory scales with both count and string length until the process hits a fatal, uncatchable out-of-memory error. About 7.5 KB of input ('{a,b}'.repeat(1500)) crashes a default Node.js process. Any application that passes attacker-influenced strings to brace-expansion.expand() - directly or transitively via minimatch / glob brace patterns - can be crashed by a small request. Fixed in 5.0.8 by adding a maxLength option (default 4,000,000) that bounds accumulated output and intermediate arrays.",
+          "Severity": "HIGH",
+          "CweIDs": [
+            "CWE-400",
+            "CWE-770"
+          ],
+          "VendorSeverity": {
+            "alma": 3,
+            "ghsa": 3,
+            "oracle-oval": 3,
+            "redhat": 3,
+            "rocky": 3
+          },
+          "CVSS": {
+            "ghsa": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+              "V3Score": 7.5
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+              "V3Score": 7.5
+            }
+          },
+          "References": [
+            "https://access.redhat.com/errata/RHSA-2026:54530",
+            "https://access.redhat.com/errata/RHSA-2026:55603",
+            "https://access.redhat.com/security/cve/CVE-2026-14257",
+            "https://advisory.echohq.com/cve/CVE-2026-14257",
+            "https://bugzilla.redhat.com/2506433",
+            "https://bugzilla.redhat.com/2510722",
+            "https://bugzilla.redhat.com/2510801",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2487258",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2487269",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2506433",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2507593",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2510722",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2510801",
+            "https://creativecommons.org/licenses/by/4.0/",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-11822",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-11824",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-14257",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-54272",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-69152",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-69192",
+            "https://errata.almalinux.org/8/ALSA-2026-54530.html",
+            "https://errata.rockylinux.org/RLSA-2026:55603",
+            "https://github.com/advisories/GHSA-mh99-v99m-4gvg",
+            "https://github.com/juliangruber/brace-expansion",
+            "https://github.com/juliangruber/brace-expansion/commit/139d015104e71433ad52a41d19467c48ecbb2c7d",
+            "https://github.com/juliangruber/brace-expansion/commit/a1bd33999ea75262c4749fff3bbb0d1372bd07b5",
+            "https://github.com/juliangruber/brace-expansion/commit/cb4b9e47cc2ec777c14b2b4492fb431a56f6a031",
+            "https://github.com/juliangruber/brace-expansion/commit/d13ff455a58b0d56704f0111e3c2a0b16ceb06eb",
+            "https://github.com/juliangruber/brace-expansion/pull/129",
+            "https://github.com/juliangruber/brace-expansion/pull/130",
+            "https://github.com/juliangruber/brace-expansion/pull/136",
+            "https://github.com/juliangruber/brace-expansion/security/advisories/GHSA-mh99-v99m-4gvg",
+            "https://linux.oracle.com/cve/CVE-2026-14257.html",
+            "https://linux.oracle.com/errata/ELSA-2026-58819.html",
+            "https://nvd.nist.gov/vuln/detail/CVE-2026-14257",
+            "https://www.cve.org/CVERecord?id=CVE-2026-14257",
+            "https://www.npmjs.com/package/brace-expansion"
+          ],
+          "PublishedDate": "2026-07-23T14:17:00.25Z",
+          "LastModifiedDate": "2026-08-27T18:52:15.293Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2026-69152",
+          "VendorIDs": [
+            "GHSA-rgw5-rvv9-x895"
+          ],
+          "PkgID": "brace-expansion@5.0.6",
+          "PkgName": "brace-expansion",
+          "PkgIdentifier": {
+            "PURL": "pkg:npm/brace-expansion@5.0.6",
+            "UID": "e87eff626d8efa71"
+          },
+          "InstalledVersion": "5.0.6",
+          "FixedVersion": "1.1.18, 2.1.4, 3.0.6, 5.0.9",
+          "Status": "fixed",
+          "SeveritySource": "ghsa",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-69152",
+          "DataSource": {
+            "ID": "ghsa",
+            "Name": "GitHub Security Advisory npm",
+            "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Anpm"
+          },
+          "Fingerprint": "sha256:b7d8a23442f5b4774c7430368c57f1932c07dd4e934e7eaaee8960f55c09f838",
+          "Title": "brace-expansion: DoS via unbounded intermediate arrays, bypassing the CVE-2026-14257 mitigation",
+          "Description": "The brace-expansion library generates arbitrary strings containing a common prefix and suffix. Prior to 1.1.18, 2.1.4, 3.0.6, and 5.0.9, expand() does not apply maxLength while constructing comma-alternative intermediate arrays or padded sequences, allowing attacker-controlled input to exhaust memory or block the event loop. The fix for CVE-2026-14257 is bypassed by the vulnerability. This issue is fixed in versions 1.1.18, 2.1.4, 3.0.6, and 5.0.9.",
+          "Severity": "HIGH",
+          "CweIDs": [
+            "CWE-400",
+            "CWE-770"
+          ],
+          "VendorSeverity": {
+            "alma": 3,
+            "ghsa": 3,
+            "oracle-oval": 3,
+            "redhat": 3,
+            "rocky": 3
+          },
+          "CVSS": {
+            "ghsa": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+              "V3Score": 7.5
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+              "V3Score": 7.5
+            }
+          },
+          "References": [
+            "https://access.redhat.com/errata/RHSA-2026:54530",
+            "https://access.redhat.com/errata/RHSA-2026:55603",
+            "https://access.redhat.com/security/cve/CVE-2026-69152",
+            "https://advisory.echohq.com/cve/CVE-2026-69152",
+            "https://bugzilla.redhat.com/2506433",
+            "https://bugzilla.redhat.com/2510722",
+            "https://bugzilla.redhat.com/2510801",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2487258",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2487269",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2506433",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2507593",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2510722",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2510801",
+            "https://creativecommons.org/licenses/by/4.0/",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-11822",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-11824",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-14257",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-54272",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-69152",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-69192",
+            "https://errata.almalinux.org/8/ALSA-2026-54530.html",
+            "https://errata.rockylinux.org/RLSA-2026:55603",
+            "https://github.com/juliangruber/brace-expansion",
+            "https://github.com/juliangruber/brace-expansion/commit/139d015104e71433ad52a41d19467c48ecbb2c7d",
+            "https://github.com/juliangruber/brace-expansion/commit/1e30c930238d7162802d88a94189182def178dac",
+            "https://github.com/juliangruber/brace-expansion/commit/688a99eeaab02627c2b89ba8ba4821fecfa659cf",
+            "https://github.com/juliangruber/brace-expansion/commit/cb4b9e47cc2ec777c14b2b4492fb431a56f6a031",
+            "https://github.com/juliangruber/brace-expansion/security/advisories/GHSA-rgw5-rvv9-x895",
+            "https://linux.oracle.com/cve/CVE-2026-69152.html",
+            "https://linux.oracle.com/errata/ELSA-2026-58819.html",
+            "https://nvd.nist.gov/vuln/detail/CVE-2026-69152",
+            "https://www.cve.org/CVERecord?id=CVE-2026-69152"
+          ],
+          "PublishedDate": "2026-08-03T17:16:45.953Z",
+          "LastModifiedDate": "2026-08-05T14:58:28.177Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2026-73569",
+          "VendorIDs": [
+            "GHSA-8r6m-32jq-jx6q"
+          ],
+          "PkgID": "fast-xml-parser@5.9.3",
+          "PkgName": "fast-xml-parser",
+          "PkgIdentifier": {
+            "PURL": "pkg:npm/fast-xml-parser@5.9.3",
+            "UID": "28eb41ee3962657f"
+          },
+          "InstalledVersion": "5.9.3",
+          "FixedVersion": "5.10.1",
+          "Status": "fixed",
+          "SeveritySource": "ghsa",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-73569",
+          "DataSource": {
+            "ID": "ghsa",
+            "Name": "GitHub Security Advisory npm",
+            "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Anpm"
+          },
+          "Fingerprint": "sha256:9c8c3c706736784167df90a55363318910a1b16306a76b1931356dcbd1f3fc8b",
+          "Title": "fast-xml-parser: fast-xml-parser: Denial of Service via repeated DOCTYPE declarations",
+          "Description": "fast-xml-parser allows users to process XML from JS object without C/C++ based libraries or callbacks. From 5.9.3 until 5.10.1, src/xmlparser/OrderedObjParser.js processes multiple DOCTYPE declarations within a single XML document and passes each declaration's entities through addInputEntities(). addInputEntities() resets maxTotalExpansions and maxExpandedLength every time it is called, allowing additional DOCTYPE declarations to repeatedly reset the configured entity-expansion limits during one parse operation. A crafted XML document can then cause excessive CPU use, event-loop blocking, memory exhaustion, and process termination. This issue is fixed in version 5.10.1.",
+          "Severity": "HIGH",
+          "CweIDs": [
+            "CWE-776"
+          ],
+          "VendorSeverity": {
+            "ghsa": 3,
+            "redhat": 3
+          },
+          "CVSS": {
+            "ghsa": {
+              "V40Vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+              "V40Score": 8.7
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+              "V3Score": 7.5
+            }
+          },
+          "References": [
+            "https://access.redhat.com/security/cve/CVE-2026-73569",
+            "https://github.com/NaturalIntelligence/fast-xml-parser",
+            "https://github.com/NaturalIntelligence/fast-xml-parser/commit/4e546e03987662de5495d050b5fba26bea65383f",
+            "https://github.com/NaturalIntelligence/fast-xml-parser/releases/tag/v5.10.1",
+            "https://github.com/NaturalIntelligence/fast-xml-parser/security/advisories/GHSA-8r6m-32jq-jx6q",
+            "https://nvd.nist.gov/vuln/detail/CVE-2026-73569",
+            "https://www.cve.org/CVERecord?id=CVE-2026-73569"
+          ],
+          "PublishedDate": "2026-08-13T18:18:19.803Z",
+          "LastModifiedDate": "2026-09-18T20:09:01.757Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2026-19534",
+          "VendorIDs": [
+            "GHSA-rfgv-xxqx-mfg5"
+          ],
+          "PkgID": "undici@6.27.0",
+          "PkgName": "undici",
+          "PkgIdentifier": {
+            "PURL": "pkg:npm/undici@6.27.0",
+            "UID": "39bf17fc45f75f6f"
+          },
+          "InstalledVersion": "6.27.0",
+          "FixedVersion": "6.28.1, 7.29.1, 8.10.2",
+          "Status": "fixed",
+          "SeveritySource": "ghsa",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-19534",
+          "DataSource": {
+            "ID": "ghsa",
+            "Name": "GitHub Security Advisory npm",
+            "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Anpm"
+          },
+          "Fingerprint": "sha256:c154825fcf60dcdfcaf1f301d87434d1e8866f4bbc311632358aed1150760c56",
+          "Title": "undici: undici: Denial of Service via unrequested WebSocket subprotocol",
+          "Description": "undici's WebSocket client crashes the whole Node.js process during the opening handshake when a server responds with a subprotocol that the client never requested. A default WebSocket connection sends no subprotocol, but if the server's 101 response includes a Sec-WebSocket-Protocol header, undici dereferences a null value while checking it against the requested list and throws an uncaught TypeError. Because that code runs inside a microtask with no surrounding error handling, the exception propagates and terminates the process under Node's default behavior, instead of gracefully failing the connection as required by the WebSocket protocol. Any application that opens a WebSocket to an attacker-controlled or compromised server, or over a plaintext connection subject to a machine-in-the-middle, can be crashed remotely without authentication in the default configuration. This affects undici versions from 6.7.0 up to 6.28.1, from 7.0.0 up to 7.29.1, and from 8.0.0 up to 8.10.2. Users should upgrade to undici 6.28.1, 7.29.1, or 8.10.2.",
+          "Severity": "HIGH",
+          "CweIDs": [
+            "CWE-248",
+            "CWE-252"
+          ],
+          "VendorSeverity": {
+            "alma": 3,
+            "amazon": 3,
+            "ghsa": 3,
+            "oracle-oval": 3,
+            "redhat": 3,
+            "rocky": 3
+          },
+          "CVSS": {
+            "ghsa": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+              "V3Score": 7.5
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+              "V3Score": 7.5
+            }
+          },
+          "References": [
+            "https://access.redhat.com/errata/RHSA-2026:75870",
+            "https://access.redhat.com/errata/RHSA-2026:76750",
+            "https://access.redhat.com/security/cve/CVE-2026-19534",
+            "https://advisory.echohq.com/cve/CVE-2026-19534",
+            "https://bugzilla.redhat.com/2481394",
+            "https://bugzilla.redhat.com/2528759",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2481394",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2528759",
+            "https://cna.openjsf.org/security-advisories.html",
+            "https://creativecommons.org/licenses/by/4.0/",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-19534",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-9496",
+            "https://errata.almalinux.org/8/ALSA-2026-75870.html",
+            "https://errata.rockylinux.org/RLSA-2026:76750",
+            "https://github.com/nodejs/undici",
+            "https://github.com/nodejs/undici/commit/2af0faf88b906d3127a360c3ac75164c0f95e5a5",
+            "https://github.com/nodejs/undici/commit/6615e0175e9b635bcd2e3e87a47daa82f6f5b728",
+            "https://github.com/nodejs/undici/commit/66e12816064cf3068f63bd134748b7fc4e779bad",
+            "https://github.com/nodejs/undici/releases/tag/v6.28.1",
+            "https://github.com/nodejs/undici/releases/tag/v7.29.1",
+            "https://github.com/nodejs/undici/releases/tag/v8.10.2",
+            "https://github.com/nodejs/undici/security/advisories/GHSA-rfgv-xxqx-mfg5",
+            "https://linux.oracle.com/cve/CVE-2026-19534.html",
+            "https://linux.oracle.com/errata/ELSA-2026-76750.html",
+            "https://nvd.nist.gov/vuln/detail/CVE-2026-19534",
+            "https://www.cve.org/CVERecord?id=CVE-2026-19534"
+          ],
+          "PublishedDate": "2026-09-04T18:17:51.647Z",
+          "LastModifiedDate": "2026-09-16T20:41:08.75Z"
+        }
+      ]
+    }
+  ]
+}

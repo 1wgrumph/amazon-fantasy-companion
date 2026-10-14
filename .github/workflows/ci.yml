@@ -15,6 +15,8 @@ jobs:
     outputs:
       spec: ${{ steps.filter.outputs.spec }}
       docs: ${{ steps.filter.outputs.docs }}
+      tvapp: ${{ steps.filter.outputs.tvapp }}
+      backend: ${{ steps.filter.outputs.backend }}
     steps:
       - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
         with:
@@ -35,6 +37,16 @@ jobs:
             docs:
               - 'docs/**'
               - '**/*.md'
+              - 'tools/ci/**'
+              - '.githooks/**'
+              - '.github/workflows/**'
+            tvapp:
+              - 'tv-app/**'
+              - 'tools/ci/**'
+              - '.githooks/**'
+              - '.github/workflows/**'
+            backend:
+              - 'backend/**'
               - 'tools/ci/**'
               - '.githooks/**'
               - '.github/workflows/**'
@@ -64,6 +76,35 @@ jobs:
         with:
           persist-credentials: false
       - run: bash tools/ci/gate.sh docs
+  tvapp:
+    name: gate / tvapp
+    needs: changes
+    if: ${{ needs.changes.outputs.tvapp == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+        with:
+          persist-credentials: false
+      # Never enable the cache input: bundled glob DoS advisories are reachable only through it.
+      - uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
+        with:
+          distribution: temurin
+          java-version: '17'
+      - run: bash tools/ci/gate.sh tvapp
+  backend:
+    name: gate / backend
+    needs: changes
+    if: ${{ needs.changes.outputs.backend == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+        with:
+          persist-credentials: false
+      # Never enable the cache input: bundled glob DoS advisories are reachable only through it.
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+      - run: bash tools/ci/gate.sh backend
   hygiene:
     name: gate / hygiene
     runs-on: ubuntu-latest
@@ -76,5 +117,5 @@ jobs:
           version: '0.11.6'
           checksum: '0c6bab77a67a445dc849ed5e8ee8d3cb333b6e2eba863643ce1e228075f27943'
           enable-cache: false
-      - run: sudo apt-get update && sudo apt-get install -y graphviz python3-yaml
+      - run: sudo apt-get update && sudo apt-get install -y graphviz python3-yaml python3-pytest
       - run: bash tools/ci/gate.sh hygiene

@@ -1,0 +1,30 @@
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+_____________ NativeCoverage.test_diff_cover_binding_is_available ______________
+
+self = <test_native_coverage.NativeCoverage testMethod=test_diff_cover_binding_is_available>
+
+    def test_diff_cover_binding_is_available(self):
+        result = subprocess.run(['python3.12', '-m', 'diff_cover', '--version'],
+                                capture_output=True, text=True, timeout=60)
+>       self.assertEqual(result.returncode, 0,
+                         'GAP DIFF_COVER_UNAVAILABLE: ' + result.stdout + result.stderr)
+E       AssertionError: 1 != 0 : GAP DIFF_COVER_UNAVAILABLE: /usr/bin/python3.12: No module named diff_cover.__main__; 'diff_cover' is a package and cannot be directly executed
+
+tools/ci/tests/coverage/test_native_coverage.py:65: AssertionError
+_______________ NativeMutation.test_mutmut_binding_is_available ________________
+
+self = <test_native_mutation.NativeMutation testMethod=test_mutmut_binding_is_available>
+
+    def test_mutmut_binding_is_available(self):
+        result = subprocess.run(['python3.12', '-m', 'mutmut', '--version'],
+                                capture_output=True, text=True, timeout=60)
+>       self.assertEqual(result.returncode, 0,
+                         'GAP MUTMUT_UNAVAILABLE: ' + result.stdout + result.stderr)
+E       AssertionError: 1 != 0 : GAP MUTMUT_UNAVAILABLE: /usr/bin/python3.12: No module named mutmut
+
+tools/ci/tests/mutation/test_native_mutation.py:15: AssertionError
+=========================== short test summary info ============================
+FAILED tools/ci/tests/coverage/test_native_coverage.py::NativeCoverage::test_diff_cover_binding_is_available
+FAILED tools/ci/tests/mutation/test_native_mutation.py::NativeMutation::test_mutmut_binding_is_available
+2 failed in 0.09s

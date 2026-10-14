@@ -1,0 +1,1356 @@
+{
+  "SchemaVersion": 2,
+  "Trivy": {
+    "Version": "0.71.0"
+  },
+  "ReportID": "01a137e2-d3ba-71c0-aed0-9bc720616312",
+  "CreatedAt": "2026-10-13T19:49:34.650115517-05:00",
+  "ArtifactID": "sha256:49259f787f66f3bbe2609ca7312e40f3d7b42757ca7ab677180ca46b632e1a55",
+  "ArtifactName": "/tmp/r07-java",
+  "ArtifactType": "repository",
+  "Metadata": {
+    "RepoURL": "https://github.com/actions/setup-java.git",
+    "Tags": [
+      "v6",
+      "v6.0.1"
+    ],
+    "Commit": "de7274f081f381c8f8158605e0321c36c376e2e6",
+    "CommitMsg": "Avoid macOS GPG socket overflow on long runner paths (#1266)\n\n* Initial plan\n\n* Fix signature verification GPG homes on long runner paths\n\n* Keep macOS GPG verification homes within socket limits\n\nUse /tmp for signature verification on macOS while preserving runner temp behavior elsewhere. Cover long and canonical OS temp paths and regenerate action bundles.\n\nCo-authored-by: Copilot App \u003c223556219+Copilot@users.noreply.github.com\u003e\nCopilot-Session: 32d31c8d-ddbc-4e57-a5c3-f70588fef3f3\n\n---------\n\nCo-authored-by: copilot-swe-agent[bot] \u003c198982749+Copilot@users.noreply.github.com\u003e\nCo-authored-by: Bruno Borges \u003cbrborges@microsoft.com\u003e\nCo-authored-by: Copilot App \u003c223556219+Copilot@users.noreply.github.com\u003e\nCopilot-Session: 32d31c8d-ddbc-4e57-a5c3-f70588fef3f3",
+    "Author": "Copilot \u003c198982749+Copilot@users.noreply.github.com\u003e",
+    "Committer": "GitHub \u003cnoreply@github.com\u003e"
+  },
+  "Results": [
+    {
+      "Target": "__tests__/cache/maven/pom.xml",
+      "Class": "lang-pkgs",
+      "Type": "pom",
+      "Packages": [
+        {
+          "ID": "io.github.actions:setup-java-maven-example:1.0.0-SNAPSHOT::38688ad5",
+          "Name": "io.github.actions:setup-java-maven-example",
+          "Identifier": {
+            "PURL": "pkg:maven/io.github.actions/setup-java-maven-example@1.0.0-SNAPSHOT",
+            "UID": "a26b8b9db841a31f"
+          },
+          "Version": "1.0.0-SNAPSHOT",
+          "Relationship": "root",
+          "AnalyzedBy": "pom"
+        }
+      ]
+    },
+    {
+      "Target": "__tests__/cache/maven2/pom.xml",
+      "Class": "lang-pkgs",
+      "Type": "pom",
+      "Packages": [
+        {
+          "ID": "io.github.actions:setup-java-maven2-example:1.0.0-SNAPSHOT::fdd6dda8",
+          "Name": "io.github.actions:setup-java-maven2-example",
+          "Identifier": {
+            "PURL": "pkg:maven/io.github.actions/setup-java-maven2-example@1.0.0-SNAPSHOT",
+            "UID": "69d557696080f171"
+          },
+          "Version": "1.0.0-SNAPSHOT",
+          "Relationship": "root",
+          "DependsOn": [
+            "org.apache.commons:commons-lang3:3.12.0::d1f43ae9"
+          ],
+          "AnalyzedBy": "pom"
+        },
+        {
+          "ID": "org.apache.commons:commons-lang3:3.12.0::d1f43ae9",
+          "Name": "org.apache.commons:commons-lang3",
+          "Identifier": {
+            "PURL": "pkg:maven/org.apache.commons/commons-lang3@3.12.0",
+            "UID": "e90d617346572100"
+          },
+          "Version": "3.12.0",
+          "Licenses": [
+            "Apache-2.0"
+          ],
+          "Relationship": "direct",
+          "Locations": [
+            {
+              "StartLine": 9,
+              "EndLine": 13
+            }
+          ],
+          "AnalyzedBy": "pom"
+        }
+      ]
+    },
+    {
+      "Target": "package-lock.json",
+      "Class": "lang-pkgs",
+      "Type": "npm",
+      "Packages": [
+        {
+          "ID": "@actions/cache@6.2.0",
+          "Name": "@actions/cache",
+          "Identifier": {
+            "PURL": "pkg:npm/%40actions/cache@6.2.0",
+            "UID": "b3ee481008690358"
+          },
+          "Version": "6.2.0",
+          "Licenses": [
+            "MIT"
+          ],
+          "Relationship": "direct",
+          "DependsOn": [
+            "@actions/core@3.0.1",
+            "@actions/exec@3.0.0",
+            "@actions/glob@0.7.0",
+            "@actions/http-client@4.0.1",
+            "@actions/io@3.0.2",
+            "@azure/core-rest-pipeline@1.25.0",
+            "@azure/storage-blob@12.33.0",
+            "@protobuf-ts/runtime-rpc@2.11.1",
+            "semver@7.8.5"
+          ],
+          "Locations": [
+            {
+              "StartLine": 46,
+              "EndLine": 62
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "@actions/core@3.0.1",
+          "Name": "@actions/core",
+          "Identifier": {
+            "PURL": "pkg:npm/%40actions/core@3.0.1",
+            "UID": "56528562d75f2f41"
+          },
+          "Version": "3.0.1",
+          "Licenses": [
+            "MIT"
+          ],
+          "Relationship": "direct",
+          "DependsOn": [
+            "@actions/exec@3.0.0",
+            "@actions/http-client@4.0.1"
+          ],
+          "Locations": [
+            {
+              "StartLine": 63,
+              "EndLine": 72
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "@actions/exec@3.0.0",
+          "Name": "@actions/exec",
+          "Identifier": {
+            "PURL": "pkg:npm/%40actions/exec@3.0.0",
+            "UID": "dfbd992ca055fbd5"
+          },
+          "Version": "3.0.0",
+          "Licenses": [
+            "MIT"
+          ],
+          "Relationship": "direct",
+          "DependsOn": [
+            "@actions/io@3.0.2"
+          ],
+          "Locations": [
+            {
+              "StartLine": 73,
+              "EndLine": 81
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "@actions/glob@0.7.0",
+          "Name": "@actions/glob",
+          "Identifier": {
+            "PURL": "pkg:npm/%40actions/glob@0.7.0",
+            "UID": "6bd3b81fd9c225b0"
+          },
+          "Version": "0.7.0",
+          "Licenses": [
+            "MIT"
+          ],
+          "Relationship": "direct",
+          "DependsOn": [
+            "@actions/core@3.0.1",
+            "minimatch@10.2.6"
+          ],
+          "Locations": [
+            {
+              "StartLine": 82,
+              "EndLine": 91
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "@actions/http-client@4.0.1",
+          "Name": "@actions/http-client",
+          "Identifier": {
+            "PURL": "pkg:npm/%40actions/http-client@4.0.1",
+            "UID": "cb3ce3ee17bc8a61"
+          },
+          "Version": "4.0.1",
+          "Licenses": [
+            "MIT"
+          ],
+          "Relationship": "direct",
+          "DependsOn": [
+            "tunnel@0.0.6",
+            "undici@6.28.0"
+          ],
+          "Locations": [
+            {
+              "StartLine": 92,
+              "EndLine": 101
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "@actions/io@3.0.2",
+          "Name": "@actions/io",
+          "Identifier": {
+            "PURL": "pkg:npm/%40actions/io@3.0.2",
+            "UID": "e27ab64594dea1e6"
+          },
+          "Version": "3.0.2",
+          "Licenses": [
+            "MIT"
+          ],
+          "Relationship": "direct",
+          "Locations": [
+            {
+              "StartLine": 102,
+              "EndLine": 107
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "@actions/tool-cache@4.0.0",
+          "Name": "@actions/tool-cache",
+          "Identifier": {
+            "PURL": "pkg:npm/%40actions/tool-cache@4.0.0",
+            "UID": "4fd8fe5bd2a56ee4"
+          },
+          "Version": "4.0.0",
+          "Licenses": [
+            "MIT"
+          ],
+          "Relationship": "direct",
+          "DependsOn": [
+            "@actions/core@3.0.1",
+            "@actions/exec@3.0.0",
+            "@actions/http-client@4.0.1",
+            "@actions/io@3.0.2",
+            "semver@7.8.5"
+          ],
+          "Locations": [
+            {
+              "StartLine": 108,
+              "EndLine": 120
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "fast-xml-parser@5.11.0",
+          "Name": "fast-xml-parser",
+          "Identifier": {
+            "PURL": "pkg:npm/fast-xml-parser@5.11.0",
+            "UID": "62feca9923f0a020"
+          },
+          "Version": "5.11.0",
+          "Licenses": [
+            "MIT"
+          ],
+          "Relationship": "direct",
+          "DependsOn": [
+            "@nodable/entities@3.0.0",
+            "fast-xml-builder@1.3.0",
+            "is-unsafe@2.0.0",
+            "path-expression-matcher@1.6.2",
+            "strnum@2.4.2",
+            "xml-naming@0.3.0"
+          ],
+          "Locations": [
+            {
+              "StartLine": 3690,
+              "EndLine": 3712
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "semver@7.8.5",
+          "Name": "semver",
+          "Identifier": {
+            "PURL": "pkg:npm/semver@7.8.5",
+            "UID": "16ed031ef3d1a852"
+          },
+          "Version": "7.8.5",
+          "Licenses": [
+            "ISC"
+          ],
+          "Relationship": "direct",
+          "Locations": [
+            {
+              "StartLine": 5563,
+              "EndLine": 5574
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "@azure/abort-controller@2.2.0",
+          "Name": "@azure/abort-controller",
+          "Identifier": {
+            "PURL": "pkg:npm/%40azure/abort-controller@2.2.0",
+            "UID": "1e28e273276454e3"
+          },
+          "Version": "2.2.0",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "tslib@2.8.1"
+          ],
+          "Locations": [
+            {
+              "StartLine": 121,
+              "EndLine": 132
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "@azure/core-auth@1.11.0",
+          "Name": "@azure/core-auth",
+          "Identifier": {
+            "PURL": "pkg:npm/%40azure/core-auth@1.11.0",
+            "UID": "3169fec49c02620c"
+          },
+          "Version": "1.11.0",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "@azure/abort-controller@2.2.0",
+            "@azure/core-util@1.14.0",
+            "tslib@2.8.1"
+          ],
+          "Locations": [
+            {
+              "StartLine": 133,
+              "EndLine": 146
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "@azure/core-client@1.11.0",
+          "Name": "@azure/core-client",
+          "Identifier": {
+            "PURL": "pkg:npm/%40azure/core-client@1.11.0",
+            "UID": "413936d2982f9947"
+          },
+          "Version": "1.11.0",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "@azure/abort-controller@2.2.0",
+            "@azure/core-auth@1.11.0",
+            "@azure/core-rest-pipeline@1.25.0",
+            "@azure/core-tracing@1.4.0",
+            "@azure/core-util@1.14.0",
+            "@azure/logger@1.4.0",
+            "tslib@2.8.1"
+          ],
+          "Locations": [
+            {
+              "StartLine": 147,
+              "EndLine": 164
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "@azure/core-http-compat@2.5.0",
+          "Name": "@azure/core-http-compat",
+          "Identifier": {
+            "PURL": "pkg:npm/%40azure/core-http-compat@2.5.0",
+            "UID": "d3fd9a7e8c7477b6"
+          },
+          "Version": "2.5.0",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "@azure/abort-controller@2.2.0",
+            "@azure/core-client@1.11.0",
+            "@azure/core-rest-pipeline@1.25.0"
+          ],
+          "Locations": [
+            {
+              "StartLine": 165,
+              "EndLine": 180
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "@azure/core-lro@2.7.2",
+          "Name": "@azure/core-lro",
+          "Identifier": {
+            "PURL": "pkg:npm/%40azure/core-lro@2.7.2",
+            "UID": "499b9c24a1dc8378"
+          },
+          "Version": "2.7.2",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "@azure/abort-controller@2.2.0",
+            "@azure/core-util@1.14.0",
+            "@azure/logger@1.4.0",
+            "tslib@2.8.1"
+          ],
+          "Locations": [
+            {
+              "StartLine": 181,
+              "EndLine": 195
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "@azure/core-paging@1.7.0",
+          "Name": "@azure/core-paging",
+          "Identifier": {
+            "PURL": "pkg:npm/%40azure/core-paging@1.7.0",
+            "UID": "42f4cfa6d6d82752"
+          },
+          "Version": "1.7.0",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "tslib@2.8.1"
+          ],
+          "Locations": [
+            {
+              "StartLine": 196,
+              "EndLine": 207
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "@azure/core-rest-pipeline@1.25.0",
+          "Name": "@azure/core-rest-pipeline",
+          "Identifier": {
+            "PURL": "pkg:npm/%40azure/core-rest-pipeline@1.25.0",
+            "UID": "bd93813b67701eb"
+          },
+          "Version": "1.25.0",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "@azure/abort-controller@2.2.0",
+            "@azure/core-auth@1.11.0",
+            "@azure/core-tracing@1.4.0",
+            "@azure/core-util@1.14.0",
+            "@azure/logger@1.4.0",
+            "@typespec/ts-http-runtime@0.3.7",
+            "tslib@2.8.1"
+          ],
+          "Locations": [
+            {
+              "StartLine": 208,
+              "EndLine": 225
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "@azure/core-tracing@1.4.0",
+          "Name": "@azure/core-tracing",
+          "Identifier": {
+            "PURL": "pkg:npm/%40azure/core-tracing@1.4.0",
+            "UID": "b2a4fd14170f6025"
+          },
+          "Version": "1.4.0",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "tslib@2.8.1"
+          ],
+          "Locations": [
+            {
+              "StartLine": 226,
+              "EndLine": 237
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "@azure/core-util@1.14.0",
+          "Name": "@azure/core-util",
+          "Identifier": {
+            "PURL": "pkg:npm/%40azure/core-util@1.14.0",
+            "UID": "34bb87f984a76ab8"
+          },
+          "Version": "1.14.0",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "@azure/abort-controller@2.2.0",
+            "@typespec/ts-http-runtime@0.3.7",
+            "tslib@2.8.1"
+          ],
+          "Locations": [
+            {
+              "StartLine": 238,
+              "EndLine": 251
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "@azure/core-xml@1.6.0",
+          "Name": "@azure/core-xml",
+          "Identifier": {
+            "PURL": "pkg:npm/%40azure/core-xml@1.6.0",
+            "UID": "ba400f7bb21e8b23"
+          },
+          "Version": "1.6.0",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "fast-xml-parser@5.11.0",
+            "tslib@2.8.1"
+          ],
+          "Locations": [
+            {
+              "StartLine": 252,
+              "EndLine": 264
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "@azure/logger@1.4.0",
+          "Name": "@azure/logger",
+          "Identifier": {
+            "PURL": "pkg:npm/%40azure/logger@1.4.0",
+            "UID": "9655fbc0a5e51bed"
+          },
+          "Version": "1.4.0",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "@typespec/ts-http-runtime@0.3.7",
+            "tslib@2.8.1"
+          ],
+          "Locations": [
+            {
+              "StartLine": 265,
+              "EndLine": 277
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "@azure/storage-blob@12.33.0",
+          "Name": "@azure/storage-blob",
+          "Identifier": {
+            "PURL": "pkg:npm/%40azure/storage-blob@12.33.0",
+            "UID": "46220ae2bb29820c"
+          },
+          "Version": "12.33.0",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "@azure/abort-controller@2.2.0",
+            "@azure/core-auth@1.11.0",
+            "@azure/core-client@1.11.0",
+            "@azure/core-http-compat@2.5.0",
+            "@azure/core-lro@2.7.2",
+            "@azure/core-paging@1.7.0",
+            "@azure/core-rest-pipeline@1.25.0",
+            "@azure/core-tracing@1.4.0",
+            "@azure/core-util@1.14.0",
+            "@azure/core-xml@1.6.0",
+            "@azure/logger@1.4.0",
+            "@azure/storage-common@12.4.1",
+            "events@3.3.0",
+            "tslib@2.8.1"
+          ],
+          "Locations": [
+            {
+              "StartLine": 278,
+              "EndLine": 302
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "@azure/storage-common@12.4.1",
+          "Name": "@azure/storage-common",
+          "Identifier": {
+            "PURL": "pkg:npm/%40azure/storage-common@12.4.1",
+            "UID": "2a6f21bb05015d41"
+          },
+          "Version": "12.4.1",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "@azure/abort-controller@2.2.0",
+            "@azure/core-auth@1.11.0",
+            "@azure/core-http-compat@2.5.0",
+            "@azure/core-rest-pipeline@1.25.0",
+            "@azure/core-tracing@1.4.0",
+            "@azure/core-util@1.14.0",
+            "@azure/logger@1.4.0",
+            "events@3.3.0",
+            "tslib@2.8.1"
+          ],
+          "Locations": [
+            {
+              "StartLine": 303,
+              "EndLine": 322
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "@nodable/entities@3.0.0",
+          "Name": "@nodable/entities",
+          "Identifier": {
+            "PURL": "pkg:npm/%40nodable/entities@3.0.0",
+            "UID": "86221611abf0f2b"
+          },
+          "Version": "3.0.0",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "Locations": [
+            {
+              "StartLine": 1557,
+              "EndLine": 1568
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "@protobuf-ts/runtime@2.11.1",
+          "Name": "@protobuf-ts/runtime",
+          "Identifier": {
+            "PURL": "pkg:npm/%40protobuf-ts/runtime@2.11.1",
+            "UID": "4313ae2674152ce4"
+          },
+          "Version": "2.11.1",
+          "Licenses": [
+            "(Apache-2.0 AND BSD-3-Clause)"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "Locations": [
+            {
+              "StartLine": 1582,
+              "EndLine": 1587
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "@protobuf-ts/runtime-rpc@2.11.1",
+          "Name": "@protobuf-ts/runtime-rpc",
+          "Identifier": {
+            "PURL": "pkg:npm/%40protobuf-ts/runtime-rpc@2.11.1",
+            "UID": "d83d6120b59bd7b2"
+          },
+          "Version": "2.11.1",
+          "Licenses": [
+            "Apache-2.0"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "@protobuf-ts/runtime@2.11.1"
+          ],
+          "Locations": [
+            {
+              "StartLine": 1588,
+              "EndLine": 1596
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "@typespec/ts-http-runtime@0.3.7",
+          "Name": "@typespec/ts-http-runtime",
+          "Identifier": {
+            "PURL": "pkg:npm/%40typespec/ts-http-runtime@0.3.7",
+            "UID": "2c5909c99d69c5ed"
+          },
+          "Version": "0.3.7",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "http-proxy-agent@7.0.2",
+            "https-proxy-agent@7.0.6",
+            "tslib@2.8.1"
+          ],
+          "Locations": [
+            {
+              "StartLine": 2136,
+              "EndLine": 2149
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "agent-base@7.1.4",
+          "Name": "agent-base",
+          "Identifier": {
+            "PURL": "pkg:npm/agent-base@7.1.4",
+            "UID": "36833094d21c2b9e"
+          },
+          "Version": "7.1.4",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "Locations": [
+            {
+              "StartLine": 2533,
+              "EndLine": 2541
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "anynum@1.0.1",
+          "Name": "anynum",
+          "Identifier": {
+            "PURL": "pkg:npm/anynum@1.0.1",
+            "UID": "bb33246b3c7fe564"
+          },
+          "Version": "1.0.1",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "Locations": [
+            {
+              "StartLine": 2628,
+              "EndLine": 2639
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "balanced-match@4.0.4",
+          "Name": "balanced-match",
+          "Identifier": {
+            "PURL": "pkg:npm/balanced-match@4.0.4",
+            "UID": "576ad7b008138c35"
+          },
+          "Version": "4.0.4",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "Locations": [
+            {
+              "StartLine": 2749,
+              "EndLine": 2757
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "brace-expansion@5.0.9",
+          "Name": "brace-expansion",
+          "Identifier": {
+            "PURL": "pkg:npm/brace-expansion@5.0.9",
+            "UID": "8528328694e32956"
+          },
+          "Version": "5.0.9",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "balanced-match@4.0.4"
+          ],
+          "Locations": [
+            {
+              "StartLine": 2771,
+              "EndLine": 2782
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "debug@4.4.3",
+          "Name": "debug",
+          "Identifier": {
+            "PURL": "pkg:npm/debug@4.4.3",
+            "UID": "349473871ef816f3"
+          },
+          "Version": "4.4.3",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "ms@2.1.3"
+          ],
+          "Locations": [
+            {
+              "StartLine": 3013,
+              "EndLine": 3029
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "events@3.3.0",
+          "Name": "events",
+          "Identifier": {
+            "PURL": "pkg:npm/events@3.3.0",
+            "UID": "1062bd4cd71b0f7d"
+          },
+          "Version": "3.3.0",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "Locations": [
+            {
+              "StartLine": 3585,
+              "EndLine": 3593
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "fast-xml-builder@1.3.0",
+          "Name": "fast-xml-builder",
+          "Identifier": {
+            "PURL": "pkg:npm/fast-xml-builder@1.3.0",
+            "UID": "7a7163758e0020fb"
+          },
+          "Version": "1.3.0",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "path-expression-matcher@1.6.2",
+            "xml-naming@0.3.0"
+          ],
+          "Locations": [
+            {
+              "StartLine": 3674,
+              "EndLine": 3689
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "http-proxy-agent@7.0.2",
+          "Name": "http-proxy-agent",
+          "Identifier": {
+            "PURL": "pkg:npm/http-proxy-agent@7.0.2",
+            "UID": "130b6d63267cc314"
+          },
+          "Version": "7.0.2",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "agent-base@7.1.4",
+            "debug@4.4.3"
+          ],
+          "Locations": [
+            {
+              "StartLine": 3984,
+              "EndLine": 3996
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "https-proxy-agent@7.0.6",
+          "Name": "https-proxy-agent",
+          "Identifier": {
+            "PURL": "pkg:npm/https-proxy-agent@7.0.6",
+            "UID": "53c55f744aa039ca"
+          },
+          "Version": "7.0.6",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "agent-base@7.1.4",
+            "debug@4.4.3"
+          ],
+          "Locations": [
+            {
+              "StartLine": 3997,
+              "EndLine": 4009
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "is-unsafe@2.0.0",
+          "Name": "is-unsafe",
+          "Identifier": {
+            "PURL": "pkg:npm/is-unsafe@2.0.0",
+            "UID": "7e797ed00e47365c"
+          },
+          "Version": "2.0.0",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "Locations": [
+            {
+              "StartLine": 4139,
+              "EndLine": 4150
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "minimatch@10.2.6",
+          "Name": "minimatch",
+          "Identifier": {
+            "PURL": "pkg:npm/minimatch@10.2.6",
+            "UID": "f9a1299eae0f3f5c"
+          },
+          "Version": "10.2.6",
+          "Licenses": [
+            "BlueOak-1.0.0"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "brace-expansion@5.0.9"
+          ],
+          "Locations": [
+            {
+              "StartLine": 5048,
+              "EndLine": 5062
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "ms@2.1.3",
+          "Name": "ms",
+          "Identifier": {
+            "PURL": "pkg:npm/ms@2.1.3",
+            "UID": "f983caa07e07b93f"
+          },
+          "Version": "2.1.3",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "Locations": [
+            {
+              "StartLine": 5083,
+              "EndLine": 5088
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "path-expression-matcher@1.6.2",
+          "Name": "path-expression-matcher",
+          "Identifier": {
+            "PURL": "pkg:npm/path-expression-matcher@1.6.2",
+            "UID": "3ef3025899b1180c"
+          },
+          "Version": "1.6.2",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "Locations": [
+            {
+              "StartLine": 5271,
+              "EndLine": 5285
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "strnum@2.4.2",
+          "Name": "strnum",
+          "Identifier": {
+            "PURL": "pkg:npm/strnum@2.4.2",
+            "UID": "cf9b1d1b0f0bff8e"
+          },
+          "Version": "2.4.2",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "anynum@1.0.1"
+          ],
+          "Locations": [
+            {
+              "StartLine": 5757,
+              "EndLine": 5771
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "tslib@2.8.1",
+          "Name": "tslib",
+          "Identifier": {
+            "PURL": "pkg:npm/tslib@2.8.1",
+            "UID": "42a598cac2139efc"
+          },
+          "Version": "2.8.1",
+          "Licenses": [
+            "0BSD"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "Locations": [
+            {
+              "StartLine": 5943,
+              "EndLine": 5948
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "tunnel@0.0.6",
+          "Name": "tunnel",
+          "Identifier": {
+            "PURL": "pkg:npm/tunnel@0.0.6",
+            "UID": "3fad113dc9e3a0fa"
+          },
+          "Version": "0.0.6",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "Locations": [
+            {
+              "StartLine": 5949,
+              "EndLine": 5957
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "undici@6.28.0",
+          "Name": "undici",
+          "Identifier": {
+            "PURL": "pkg:npm/undici@6.28.0",
+            "UID": "19b9ea84b37baaca"
+          },
+          "Version": "6.28.0",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "Locations": [
+            {
+              "StartLine": 6022,
+              "EndLine": 6030
+            }
+          ],
+          "AnalyzedBy": "npm"
+        },
+        {
+          "ID": "xml-naming@0.3.0",
+          "Name": "xml-naming",
+          "Identifier": {
+            "PURL": "pkg:npm/xml-naming@0.3.0",
+            "UID": "cb16ae8830eb5d80"
+          },
+          "Version": "0.3.0",
+          "Licenses": [
+            "MIT"
+          ],
+          "Indirect": true,
+          "Relationship": "indirect",
+          "Locations": [
+            {
+              "StartLine": 6207,
+              "EndLine": 6221
+            }
+          ],
+          "AnalyzedBy": "npm"
+        }
+      ],
+      "Vulnerabilities": [
+        {
+          "VulnerabilityID": "CVE-2026-102276",
+          "VendorIDs": [
+            "GHSA-6j4f-fj2g-mc7p"
+          ],
+          "PkgID": "brace-expansion@5.0.9",
+          "PkgName": "brace-expansion",
+          "PkgIdentifier": {
+            "PURL": "pkg:npm/brace-expansion@5.0.9",
+            "UID": "8528328694e32956"
+          },
+          "InstalledVersion": "5.0.9",
+          "FixedVersion": "5.0.10, 3.0.7, 2.1.5, 1.1.19",
+          "Status": "fixed",
+          "SeveritySource": "ghsa",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-102276",
+          "DataSource": {
+            "ID": "ghsa",
+            "Name": "GitHub Security Advisory npm",
+            "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Anpm"
+          },
+          "Fingerprint": "sha256:d01a04c847a305d94d9fcbf681dab533760deea3e6f6df0f5a00d521c0dc8377",
+          "Title": "brace-expansion: brace-expansion: Denial of Service via stack exhaustion from crafted brace patterns",
+          "Description": "The brace-expansion library generates arbitrary strings containing a common prefix and suffix. Prior to 1.1.19, 2.1.5, 3.0.7, and 5.0.10, crafted brace patterns can exhaust the native stack in parseCommaParts because parseCommaParts recursively processes the remainder once per brace group and uses push.apply to pass every element of a very large comma-part array as a function argument. Patterns containing many comma-separated brace groups trigger the recursive path, while the large array triggers the argument-array path without deep recursion. These paths cause recursive and argument-array native stack exhaustion before max or maxLength can limit output, potentially terminating the Node.js process in a process-terminating denial of service. This issue is fixed in versions 1.1.19, 2.1.5, 3.0.7, and 5.0.10.",
+          "Severity": "HIGH",
+          "CweIDs": [
+            "CWE-400",
+            "CWE-674"
+          ],
+          "VendorSeverity": {
+            "ghsa": 3,
+            "redhat": 3
+          },
+          "CVSS": {
+            "ghsa": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+              "V3Score": 7.5
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+              "V3Score": 7.5
+            }
+          },
+          "References": [
+            "https://access.redhat.com/security/cve/CVE-2026-102276",
+            "https://advisory.echohq.com/cve/CVE-2026-102276",
+            "https://github.com/juliangruber/brace-expansion",
+            "https://github.com/juliangruber/brace-expansion/commit/0bcbfc0a5928c3073d48f42999d1ce4fc1c42fbc",
+            "https://github.com/juliangruber/brace-expansion/commit/316359e6019c39b3254c8ba8e25dc586a480652c",
+            "https://github.com/juliangruber/brace-expansion/commit/5171e681c0922b7ae8bfaf9a331e309107be6edc",
+            "https://github.com/juliangruber/brace-expansion/commit/6735c94873ca570bcdd6a0690033bdd3126379d3",
+            "https://github.com/juliangruber/brace-expansion/security/advisories/GHSA-6j4f-fj2g-mc7p",
+            "https://nvd.nist.gov/vuln/detail/CVE-2026-102276",
+            "https://www.cve.org/CVERecord?id=CVE-2026-102276"
+          ],
+          "PublishedDate": "2026-09-28T21:17:16.033Z",
+          "LastModifiedDate": "2026-09-30T19:57:08.043Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2026-102278",
+          "VendorIDs": [
+            "GHSA-qhr7-859c-m2p7"
+          ],
+          "PkgID": "brace-expansion@5.0.9",
+          "PkgName": "brace-expansion",
+          "PkgIdentifier": {
+            "PURL": "pkg:npm/brace-expansion@5.0.9",
+            "UID": "8528328694e32956"
+          },
+          "InstalledVersion": "5.0.9",
+          "FixedVersion": "5.0.11, 3.0.8, 2.1.6, 1.1.20",
+          "Status": "fixed",
+          "SeveritySource": "ghsa",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-102278",
+          "DataSource": {
+            "ID": "ghsa",
+            "Name": "GitHub Security Advisory npm",
+            "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Anpm"
+          },
+          "Fingerprint": "sha256:9f5739c2472ab0834de8b413741343061ed952c0f950d62513edcfcc6327f85e",
+          "Title": "brace-expansion: brace-expansion: Denial of Service via uncontrolled recursion in nested brace patterns",
+          "Description": "The brace-expansion library generates arbitrary strings containing a common prefix and suffix. Prior to 1.1.20, 2.1.6, 3.0.8, and 5.0.11, deeply nested brace groups cause expand_() to recurse once per nesting level at comma-member and single-set expansion sites, exhausting the native stack before output limits can apply and potentially terminating the Node.js process. expand_ performs uncontrolled recursion for nested brace alternatives and single-part sets. deeply nested brace groups supplied as an untrusted pattern. expand_ is affected. expand is affected. Comma members is affected. Single set is affected. native stack exhaustion during nested sub-expansion. process-terminating denial of service. This issue is fixed in versions 1.1.20, 2.1.6, 3.0.8, and 5.0.11.",
+          "Severity": "HIGH",
+          "CweIDs": [
+            "CWE-400",
+            "CWE-674"
+          ],
+          "VendorSeverity": {
+            "ghsa": 3,
+            "redhat": 3
+          },
+          "CVSS": {
+            "ghsa": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+              "V3Score": 7.5
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:H",
+              "V3Score": 6.5
+            }
+          },
+          "References": [
+            "https://access.redhat.com/security/cve/CVE-2026-102278",
+            "https://advisory.echohq.com/cve/CVE-2026-102278",
+            "https://github.com/juliangruber/brace-expansion",
+            "https://github.com/juliangruber/brace-expansion/commit/1efee7c397c191da6287a78ec19512476a966a7b",
+            "https://github.com/juliangruber/brace-expansion/commit/935d78f32f335b2ff76578e5c5e877d31ae9888c",
+            "https://github.com/juliangruber/brace-expansion/commit/de84f144e9816f30e25fc8179e2e1249ab6df0db",
+            "https://github.com/juliangruber/brace-expansion/security/advisories/GHSA-qhr7-859c-m2p7",
+            "https://nvd.nist.gov/vuln/detail/CVE-2026-102278",
+            "https://www.cve.org/CVERecord?id=CVE-2026-102278"
+          ],
+          "PublishedDate": "2026-09-28T21:17:16.517Z",
+          "LastModifiedDate": "2026-10-01T15:17:25.593Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2026-19534",
+          "VendorIDs": [
+            "GHSA-rfgv-xxqx-mfg5"
+          ],
+          "PkgID": "undici@6.28.0",
+          "PkgName": "undici",
+          "PkgIdentifier": {
+            "PURL": "pkg:npm/undici@6.28.0",
+            "UID": "19b9ea84b37baaca"
+          },
+          "InstalledVersion": "6.28.0",
+          "FixedVersion": "6.28.1, 7.29.1, 8.10.2",
+          "Status": "fixed",
+          "SeveritySource": "ghsa",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-19534",
+          "DataSource": {
+            "ID": "ghsa",
+            "Name": "GitHub Security Advisory npm",
+            "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Anpm"
+          },
+          "Fingerprint": "sha256:65a97bf6ca8ec32788968ef4e2b7c17a01b0f10afb707510c76fded6f30269de",
+          "Title": "undici: undici: Denial of Service via unrequested WebSocket subprotocol",
+          "Description": "undici's WebSocket client crashes the whole Node.js process during the opening handshake when a server responds with a subprotocol that the client never requested. A default WebSocket connection sends no subprotocol, but if the server's 101 response includes a Sec-WebSocket-Protocol header, undici dereferences a null value while checking it against the requested list and throws an uncaught TypeError. Because that code runs inside a microtask with no surrounding error handling, the exception propagates and terminates the process under Node's default behavior, instead of gracefully failing the connection as required by the WebSocket protocol. Any application that opens a WebSocket to an attacker-controlled or compromised server, or over a plaintext connection subject to a machine-in-the-middle, can be crashed remotely without authentication in the default configuration. This affects undici versions from 6.7.0 up to 6.28.1, from 7.0.0 up to 7.29.1, and from 8.0.0 up to 8.10.2. Users should upgrade to undici 6.28.1, 7.29.1, or 8.10.2.",
+          "Severity": "HIGH",
+          "CweIDs": [
+            "CWE-248",
+            "CWE-252"
+          ],
+          "VendorSeverity": {
+            "alma": 3,
+            "amazon": 3,
+            "ghsa": 3,
+            "oracle-oval": 3,
+            "redhat": 3,
+            "rocky": 3
+          },
+          "CVSS": {
+            "ghsa": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+              "V3Score": 7.5
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+              "V3Score": 7.5
+            }
+          },
+          "References": [
+            "https://access.redhat.com/errata/RHSA-2026:75870",
+            "https://access.redhat.com/errata/RHSA-2026:76750",
+            "https://access.redhat.com/security/cve/CVE-2026-19534",
+            "https://advisory.echohq.com/cve/CVE-2026-19534",
+            "https://bugzilla.redhat.com/2481394",
+            "https://bugzilla.redhat.com/2528759",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2481394",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2528759",
+            "https://cna.openjsf.org/security-advisories.html",
+            "https://creativecommons.org/licenses/by/4.0/",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-19534",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-9496",
+            "https://errata.almalinux.org/8/ALSA-2026-75870.html",
+            "https://errata.rockylinux.org/RLSA-2026:76750",
+            "https://github.com/nodejs/undici",
+            "https://github.com/nodejs/undici/commit/2af0faf88b906d3127a360c3ac75164c0f95e5a5",
+            "https://github.com/nodejs/undici/commit/6615e0175e9b635bcd2e3e87a47daa82f6f5b728",
+            "https://github.com/nodejs/undici/commit/66e12816064cf3068f63bd134748b7fc4e779bad",
+            "https://github.com/nodejs/undici/releases/tag/v6.28.1",
+            "https://github.com/nodejs/undici/releases/tag/v7.29.1",
+            "https://github.com/nodejs/undici/releases/tag/v8.10.2",
+            "https://github.com/nodejs/undici/security/advisories/GHSA-rfgv-xxqx-mfg5",
+            "https://linux.oracle.com/cve/CVE-2026-19534.html",
+            "https://linux.oracle.com/errata/ELSA-2026-76750.html",
+            "https://nvd.nist.gov/vuln/detail/CVE-2026-19534",
+            "https://www.cve.org/CVERecord?id=CVE-2026-19534"
+          ],
+          "PublishedDate": "2026-09-04T18:17:51.647Z",
+          "LastModifiedDate": "2026-09-16T20:41:08.75Z"
+        }
+      ]
+    }
+  ]
+}
