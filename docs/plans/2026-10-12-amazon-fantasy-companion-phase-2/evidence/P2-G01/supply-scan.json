@@ -3,7 +3,7 @@
   "scanners": {
     "clamscan": "/usr/bin/clamscan",
     "gitleaks": "--redact",
-    "trivy": "0.71.0 --offline-scan --skip-db-update, DB UpdatedAt 2026-10-10T01:03Z (3 days; NextUpdate passed)"
+    "trivy": "0.71.0, DB UpdatedAt 2026-10-13T19:11:46Z (fresh; NextUpdate 2026-10-14T19:11:46Z), downloaded 2026-10-14T00:49:07Z from mirror.gcr.io/aquasec/trivy-db:2 to user cache ~/.cache/trivy/db"
   },
   "credential_findings": "No named-prefix secrets. All gitleaks hits are entropy-only generic-api-key matches inside ncc-bundled dist JS (base64 wasm blob, Azure SDK 'AccountKey=REDACTED' redaction regex, JSDoc example 'apiToken = \"abc123xyz456\"'): false positives, discard.",
   "actions": [
@@ -50,11 +50,28 @@
       "trivy_high_critical": [
         "brace-expansion 1.1.15/5.0.6 CVE-2026-102276, -102278, -13149, -14257, -69152 HIGH",
         "fast-xml-parser 5.9.3 CVE-2026-73569 HIGH",
-        "undici 6.27.0 CVE-2026-19534 HIGH"
+        "undici 6.27.0 CVE-2026-19534 HIGH",
+        "__tests__/data/requirements.txt fixture only: future 0.18.2 CVE-2022-40899 HIGH",
+        "__tests__/data/requirements.txt fixture only: urllib3 2.7.0 CVE-2026-97687, -97689 HIGH"
       ],
       "verdict": "PASS",
-      "reachability": "DoS-class. brace-expansion reached only via glob.hashFiles/create in cache-distributions (cache input not set); fast-xml-parser not used by setup-python source (bundled via @azure cache client); undici WebSocket path unused. Latest release; no fixed alternative."
+      "reachability": "DoS-class. brace-expansion reached only via glob.hashFiles/create in cache-distributions (cache input not set); fast-xml-parser not used by setup-python source (bundled via @azure cache client); undici WebSocket path unused. Latest release; no fixed alternative. New fixture-only items: __tests__/data/requirements.txt is a sample consumed only by the action's own cache-restore tests; runtime is node24 dist/. Not installed or executed; unreachable."
     }
   ],
-  "residual_risk": "Reachability is static source reasoning, not proof. A future edit enabling `cache:` makes the brace-expansion DoS reachable from repo-controlled glob patterns (self-DoS of the job only)."
+  "residual_risk": "Reachability is static source reasoning, not proof. A future edit enabling `cache:` makes the brace-expansion DoS reachable from repo-controlled glob patterns (self-DoS of the job only).",
+  "refresh": {
+    "date_utc": "2026-10-14",
+    "reason": "G01-R07: prior DB UpdatedAt 2026-10-10 with NextUpdate passed",
+    "command": "trivy fs --scanners vuln --severity HIGH,CRITICAL --format json",
+    "exits": {
+      "setup-java": 0,
+      "setup-python": 0
+    },
+    "evidence": [
+      "evidence/P2-G01/repair1/R07-trivy-setup-java.json",
+      "evidence/P2-G01/repair1/R07-trivy-setup-python.json",
+      "evidence/P2-G01/repair1/R07-trivy-version.json"
+    ],
+    "bytes": "cloned pins verified identical to recorded sha256 runtime hashes"
+  }
 }

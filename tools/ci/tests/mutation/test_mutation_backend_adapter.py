@@ -5,6 +5,7 @@ admitted `mutmut` on PATH (3.8.0 venv) and its pytest; no engine, network or AWS
 """
 
 import json
+import os
 import shutil
 import subprocess
 import tempfile
@@ -48,11 +49,12 @@ class BackendMutationAdapter(unittest.TestCase):
         git(self.repo, 'add', '-A')
         git(self.repo, 'commit', '-q', '--no-verify', '-m', 'fixture')
 
-    def run_adapter(self, files):
+    def run_adapter(self, files, env=None):
         write(self.repo, files)
         self.commit()
+        run_env = dict(os.environ, **env) if env else None
         result = subprocess.run(['bash', 'tools/ci/mutation/backend.sh', self.base, str(self.out)],
-                                cwd=self.repo, capture_output=True, text=True, timeout=600)
+                                cwd=self.repo, capture_output=True, text=True, timeout=600, env=run_env)
         out = result.stdout + result.stderr
         print(f'mutation adapter exit={result.returncode}: {out.strip().splitlines()[-1:]}')
         return result.returncode, out
@@ -90,19 +92,84 @@ class BackendMutationAdapter(unittest.TestCase):
         self.assertEqual(rc, 3, out)
         self.assertIn('EMPTY_INVENTORY', out)
 
-    def test_changed_file_without_mutants_is_wrong_mapping_gap(self):
+    def test_changed_module_level_without_mutants_is_nonfunction_gap(self):
         rc, out = self.run_adapter({'backend/src/control.py': CONTROL, 'backend/src/constants.py': 'LIMIT = 3\n',
                                     'backend/tests/unit/test_control.py': BOTH})
         self.assertEqual(rc, 3, out)
-        self.assertIn('no mutants for changed files: backend/src/constants.py', out)
+        self.assertIn('PYTHON_NONFUNCTION_MUTATION_GAP', out)
+
+    def test_mixed_module_level_change_is_nonfunction_gap(self):
+        rc, out = self.run_adapter({'backend/src/control.py': 'LIMIT = 3\n\n' + CONTROL,
+                                    'backend/tests/unit/test_control.py': BOTH})
+        self.assertEqual(rc, 3, out)
+        self.assertIn('PYTHON_NONFUNCTION_MUTATION_GAP', out)
+        self.assertIn('backend/src/control.py', out)
+
+    def test_unchanged_functions_do_not_dilute_changed_score(self):
+        two = CONTROL + CONTROL.replace('verdict', 'verdict2')
+        two_tests = BOTH + BOTH.replace('verdict', 'verdict2').replace('test_verdict', 'test_verdict2')
+        write(self.repo, {'backend/src/control.py': two, 'backend/tests/unit/test_control.py': two_tests})
+        self.commit()
+        base = git(self.repo, 'rev-parse', 'HEAD')
+        write(self.repo, {'backend/src/control.py': two + '\n\ndef untested():\n    return "untested"\n'})
+        self.commit()
+        result = subprocess.run(['bash', 'tools/ci/mutation/backend.sh', base, str(self.out)],
+                                cwd=self.repo, capture_output=True, text=True, timeout=600)
+        out = result.stdout + result.stderr
+        print(f'mutation adapter exit={result.returncode}: {out.strip().splitlines()[-1:]}')
+        self.assertEqual(result.returncode, 1, out)
+        scored = self.result()
+        self.assertEqual(scored['status'], 'FAIL')
+        self.assertEqual(scored['score'], 0)
+        self.assertEqual(scored['scored_mutants'], 2)
+        self.assertGreater(scored['mutants'], scored['scored_mutants'])
+        self.assertIn('control.x_verdict__mutmut_1', scored['inventory'])
+
+    def test_mutant_outside_changed_behavior_is_scope_gap(self):
+        write(self.repo, {'backend/src/control.py': CONTROL})
+        self.commit()
+        self.out.mkdir()
+        (self.out / 'mutmut-results.txt').write_text('    control.x_ghost__mutmut_1: killed\n')
+        (self.out / 'mutmut-cicd-stats.json').write_text(json.dumps(
+            {'killed': 1, 'survived': 0, 'total': 1, 'no_tests': 0}))
+        result = subprocess.run(['python3', 'tools/ci/mutation/evaluate.py', str(self.out),
+                                 'backend/src/control.py', self.base, '0'],
+                                cwd=self.repo, capture_output=True, text=True, timeout=60)
+        self.assertEqual(result.returncode, 3, result.stdout + result.stderr)
+        self.assertIn('MUTATION_SCOPE_GAP', result.stdout)
+
+    def test_truncated_inventory_rejects(self):
+        rc, out = self.run_adapter({'backend/src/control.py': CONTROL, 'backend/tests/unit/test_control.py': BOTH})
+        self.assertEqual(rc, 0, out)
+        lines = (self.out / 'mutmut-results.txt').read_text().splitlines(keepends=True)
+        first = next(i for i, line in enumerate(lines) if '__mutmut_' in line)
+        (self.out / 'mutmut-results.txt').write_text(''.join(lines[:first + 1]))
+        result = subprocess.run(['python3', 'tools/ci/mutation/evaluate.py', str(self.out),
+                                 'backend/src/control.py', self.base, '0'],
+                                cwd=self.repo, capture_output=True, text=True, timeout=60)
+        self.assertEqual(result.returncode, 3, result.stdout + result.stderr)
+        self.assertIn('inventory/stats count mismatch', result.stdout)
+
+    def test_owned_workspace_is_removed(self):
+        tmpdir = self.tmp / 'tmpdir'
+        tmpdir.mkdir()
+        before = set(os.listdir(tmpdir))
+        rc, out = self.run_adapter({'backend/src/control.py': CONTROL,
+                                    'backend/tests/unit/test_control.py': BOTH},
+                                   env={'TMPDIR': str(tmpdir)})
+        self.assertEqual(rc, 0, out)
+        self.assertEqual(set(os.listdir(tmpdir)) - before, set(), 'adapter leaked its workdir')
 
     def test_timeout_or_error_is_unresolved_never_killed(self):
+        write(self.repo, {'backend/src/control.py': CONTROL})
+        self.commit()
         self.out.mkdir()
         (self.out / 'mutmut-results.txt').write_text('    control.x_verdict__mutmut_1: timeout\n')
         (self.out / 'mutmut-cicd-stats.json').write_text(json.dumps(
             {'killed': 0, 'survived': 0, 'total': 1, 'no_tests': 0, 'timeout': 1}))
-        for argv in ([str(self.out), 'backend/src/control.py', '0'], [str(self.out), 'backend/src/control.py', '124']):
-            with self.subTest(run_exit=argv[2]):
+        for argv in ([str(self.out), 'backend/src/control.py', self.base, '0'],
+                    [str(self.out), 'backend/src/control.py', self.base, '124']):
+            with self.subTest(run_exit=argv[3]):
                 result = subprocess.run(['python3', 'tools/ci/mutation/evaluate.py', *argv], cwd=self.repo,
                                         capture_output=True, text=True, timeout=60)
                 self.assertEqual(result.returncode, 3, result.stdout + result.stderr)

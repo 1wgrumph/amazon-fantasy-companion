@@ -14,7 +14,10 @@ mkdir -p "$out" || exit 3
 out=$(cd "$out" && pwd) || exit 3
 rm -f "$out/mutmut-cicd-stats.json" "$out/mutmut-results.txt" "$out/mutmut-run.txt" "$out/mutation-result.json"
 changed=$(git diff --no-renames --name-only --diff-filter=AM "$base...HEAD" -- backend/src | grep '\.py$')
-[[ -n "$changed" ]] || exec python3 tools/ci/mutation/evaluate.py "$out" ''
+if [[ -z "$changed" ]]; then
+    python3 tools/ci/mutation/evaluate.py "$out" '' "$base"
+    exit $?
+fi
 grep -qs '^\[tool\.mutmut\]' backend/pyproject.toml \
     && { echo 'GAP CONFIG_CONFLICT: backend/pyproject.toml [tool.mutmut] would override the bounded scope'; exit 3; }
 work=$(mktemp -d) || exit 3
@@ -28,6 +31,10 @@ git archive HEAD backend | tar -x -C "$work" || exit 3
 # shortcut: one fixed 1800 s bound for the whole run; size it per changed scope if real runs approach it.
 (cd "$work/backend" && timeout 1800 mutmut run) > "$out/mutmut-run.txt" 2>&1
 rc=$?
-(cd "$work/backend" && mutmut export-cicd-stats && mutmut results --all true) >> "$out/mutmut-results.txt" 2>&1
-cp "$work/backend/mutants/mutmut-cicd-stats.json" "$out/" 2>/dev/null
-exec python3 tools/ci/mutation/evaluate.py "$out" "$changed" "$rc"
+(cd "$work/backend" && mutmut export-cicd-stats && mutmut results --all true) >> "$out/mutmut-results.txt" 2>&1 \
+    || { echo 'GAP REPORT_INCOMPLETE: mutmut export/results failed'; exit 3; }
+cp "$work/backend/mutants/mutmut-cicd-stats.json" "$out/" 2>/dev/null \
+    || { echo 'GAP REPORT_INCOMPLETE: mutmut stats absent'; exit 3; }
+# No exec: the EXIT trap must remove the owned workspace on PASS, FAIL and GAP.
+python3 tools/ci/mutation/evaluate.py "$out" "$changed" "$base" "$rc"
+exit $?

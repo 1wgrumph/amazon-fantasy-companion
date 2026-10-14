@@ -20,4 +20,19 @@ python3.12 -m coverage run --rcfile=/dev/null --source=backend/src --data-file="
     -m pytest backend/tests/unit backend/tests/contract || { echo 'FAIL backend tests failed under coverage'; exit 1; }
 python3.12 -m coverage xml --rcfile=/dev/null --data-file="$out/.coverage" -o "$out/coverage.xml" \
     || { echo 'GAP REPORT_INCOMPLETE: no native coverage XML'; exit 3; }
+candidate=$(git rev-parse HEAD) || exit 3
+# Bind the report to the measured source so a stale same-file XML cannot pass.
+python3 - "$out/coverage.xml" "$candidate" <<'EOF' \
+    || { echo 'GAP REPORT_INCOMPLETE: cannot bind coverage report'; exit 3; }
+import hashlib
+import json
+import sys
+from pathlib import Path
+xml, candidate = Path(sys.argv[1]), sys.argv[2]
+files = {p.as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
+         for p in sorted(Path('backend/src').rglob('*.py'))}
+binding = json.dumps({'candidate': candidate, 'files': files}, sort_keys=True)
+with xml.open('a', encoding='utf-8') as f:
+    f.write(f'<!-- afc-coverage-binding {binding} -->\n')
+EOF
 exec python3 tools/ci/coverage/evaluate.py "$base" "$out/coverage.xml" "$out"

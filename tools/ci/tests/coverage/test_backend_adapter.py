@@ -102,7 +102,23 @@ class BackendCoverageAdapter(unittest.TestCase):
         result = subprocess.run(['python3', 'tools/ci/coverage/evaluate.py', self.base, str(self.tmp / 'stale.xml'),
                                  str(self.out)], cwd=self.repo, capture_output=True, text=True, timeout=120)
         self.assertEqual(result.returncode, 3, result.stdout + result.stderr)
-        self.assertIn('unmapped changed files: backend/src/control.py', result.stdout)
+        self.assertIn('lacks source binding', result.stdout)
+
+    def test_stale_same_file_xml_rejects(self):
+        # XML bound to an earlier candidate cannot pass a changed same-file report.
+        self.candidate({'backend/src/control.py': CONTROL, 'backend/tests/unit/test_control.py': BOTH})
+        rc, out = self.run_adapter()
+        self.assertEqual(rc, 0, out)
+        stale = self.tmp / 'stale.xml'
+        stale.write_bytes((self.out / 'coverage.xml').read_bytes())
+        base = git(self.repo, 'rev-parse', 'HEAD')
+        self.candidate({'backend/src/control.py': CONTROL.replace('"covered"', '"new"')
+                        + '\n\ndef untested():\n    return "new logic"\n',
+                        'backend/tests/unit/test_control.py': BOTH.replace('"covered"', '"new"')})
+        result = subprocess.run(['python3', 'tools/ci/coverage/evaluate.py', base, str(stale), str(self.out)],
+                                cwd=self.repo, capture_output=True, text=True, timeout=120)
+        self.assertEqual(result.returncode, 3, result.stdout + result.stderr)
+        self.assertIn('bound to another candidate', result.stdout)
 
     def test_failing_tests_fail_before_report(self):
         self.candidate({'backend/src/control.py': CONTROL,

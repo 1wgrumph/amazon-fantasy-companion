@@ -6,13 +6,16 @@ Every changed backend/src Python file must be mapped in the diff-cover result;
 an empty denominator, absent or stale report is a GAP, never PASS.
 """
 
+import hashlib
 import json
+import re
 import subprocess
 import sys
 from pathlib import Path
 
 THRESHOLD = 90.0
 SOURCE = 'backend/src/'
+BINDING = re.compile(r'<!-- afc-coverage-binding (\{.*\}) -->')
 
 
 def verdict(out, status, detail, **extra):
@@ -38,6 +41,25 @@ def main(argv):
     changed = sorted(p for p in diff.stdout.splitlines() if p.endswith('.py'))
     if not changed:
         return verdict(out, 'GAP', 'EMPTY_DENOMINATOR: no changed backend/src Python files', candidate=candidate)
+    match = BINDING.search(xml.read_text())
+    if not match:
+        return verdict(out, 'GAP', 'REPORT_INCOMPLETE: coverage report lacks source binding',
+                       candidate=candidate, base=base, changed=changed)
+    try:
+        binding = json.loads(match.group(1))
+    except json.JSONDecodeError:
+        return verdict(out, 'GAP', 'REPORT_INCOMPLETE: coverage report has invalid source binding',
+                       candidate=candidate, base=base, changed=changed)
+    if binding.get('candidate') != candidate:
+        return verdict(out, 'GAP', 'REPORT_INCOMPLETE: coverage report bound to another candidate',
+                       candidate=candidate, base=base, changed=changed)
+    digests = binding.get('files', {})
+    stale = [p for p in changed
+             if digests.get(p) != (hashlib.sha256(Path(p).read_bytes()).hexdigest()
+                                   if Path(p).is_file() else None)]
+    if stale:
+        return verdict(out, 'GAP', 'REPORT_INCOMPLETE: stale coverage report for: ' + ', '.join(stale),
+                       candidate=candidate, base=base, changed=changed, stale=stale)
     report = out / 'diff-cover.json'
     run = subprocess.run(['diff-cover', str(xml), f'--compare-branch={base}', '--ignore-staged',
                           '--ignore-unstaged', f'--format=json:{report}'], capture_output=True, text=True)
