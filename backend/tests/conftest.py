@@ -8,7 +8,6 @@ sessions and synthetic secrets belong to one test and are discarded on exit.
 
 import importlib
 import json
-import secrets
 import socket
 import sys
 from pathlib import Path
@@ -76,7 +75,6 @@ def offline(monkeypatch):
 def api(monkeypatch, offline):
     with mock_aws():
         dynamodb = boto3.resource("dynamodb", region_name="us-east-1")
-        ssm = boto3.client("ssm", region_name="us-east-1")
         template = (document("template.yaml") if (BACKEND / "template.yaml").exists()
                     else {})
         refs = {k: v.get("Default", "test-" + k)
@@ -129,10 +127,6 @@ def api(monkeypatch, offline):
         env = resolve(env)
         for key, value in env.items():
             monkeypatch.setenv(key, str(value))
-        passphrase = secrets.token_urlsafe(16)
-        secret_names = [str(v) for k, v in env.items() if "passphrase" in k.lower()]
-        for name in secret_names:
-            ssm.put_parameter(Name=name, Value=passphrase, Type="SecureString")
         ssm_reads = []
         original_call = BaseClient._make_api_call
 
@@ -190,7 +184,7 @@ def api(monkeypatch, offline):
             return tables[name]
 
         yield SimpleNamespace(request=request, table=table, tables=tables, ttls=ttls,
-                              passphrase=passphrase, ssm_reads=ssm_reads, secret_names=secret_names)
+                              ssm_reads=ssm_reads)
 
 
 def assert_error(status, body, expected, code=None):
@@ -211,10 +205,8 @@ def issue(api):
     return body
 
 
-def confirm(api, code, passphrase=None, profile="owner"):
-    return api.request("POST", "/v1/link/confirm", {
-        "code": code, "passphrase": api.passphrase if passphrase is None else passphrase,
-        "profileId": profile})
+def confirm(api, code, profile="owner"):
+    return api.request("POST", "/v1/link/confirm", {"code": code, "profileId": profile})
 
 
 def link_device(api, profile="owner"):

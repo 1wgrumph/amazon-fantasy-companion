@@ -1,7 +1,7 @@
 """DES-AFC-P2-AUTH device-code linking and bearer sessions.
 
 The TV gets an 8-character code and a separate polling handle. The customer
-confirms the code on a phone with the owner passphrase held in SSM SecureString.
+confirms the code on a phone with the code alone (DEC-AFC-SD-048: test device).
 While the device-code window is open, every poll after confirmation receives
 a 256-bit opaque session token, so a dropped response is recoverable by retry;
 each token supersedes the previous one and no token is minted after expiry;
@@ -9,13 +9,10 @@ only SHA-256 hashes of the handle and the tokens are stored.
 """
 
 import hashlib
-import hmac
 import os
 import secrets
 import time
 from datetime import datetime, timezone
-
-import boto3
 
 import store
 
@@ -61,12 +58,8 @@ def poll(handle):
     return {"state": "linked", "sessionToken": token}
 
 
-def confirm(code, passphrase, profile_id):
-    """Return "linked", "unauthorized" (wrong passphrase) or "gone" (unknown, used or expired)."""
-    secret = boto3.client("ssm").get_parameter(
-        Name=os.environ["LINK_PASSPHRASE_PARAMETER"], WithDecryption=True)["Parameter"]["Value"]
-    if not hmac.compare_digest(passphrase.encode(), secret.encode()):
-        return "unauthorized"
+def confirm(code, profile_id):
+    """Return "linked" or "gone" (unknown, used or expired)."""
     if store.confirm_link(code.strip().upper(), profile_id, int(time.time())):
         return "linked"
     return "gone"

@@ -114,11 +114,10 @@ def test_future_module_stubs_surface_503_not_implemented(api, path):
     _, token = link_device(api)
     status, body = api.request("GET", path, token=token, query={"profileId": "owner"})
     assert_error(status, body, 503, "not_implemented")
-    assert api.passphrase not in str(body)
 
 
 def test_phone_link_page_exposes_customer_confirmation_form(api):
     status, page = api.request("GET", "/link")
     assert status == 200 and isinstance(page, str)
-    assert "<form" in page and "code" in page and "passphrase" in page
-    assert api.passphrase not in page, "The page must never embed the owner passphrase"
+    assert "<form" in page and 'name="code"' in page
+    assert 'type="password"' not in page, "Code-only linking (DEC-AFC-SD-048) has no secret field"

@@ -72,8 +72,7 @@ def test_template_routes_tv_and_link_page_and_bounds_link_attempts():
 def test_template_uses_ssm_parameter_names_instead_of_embedded_secret_values():
     template = document("template.yaml")
     params = template.get("Parameters", {})
-    names = {name for name in params if any(w in name.lower() for w in ["passphrase", "secret", "token"])}
-    assert any("passphrase" in n.lower() for n in names)
+    names = {name for name in params if any(w in name.lower() for w in ["secret", "token"])}
     assert any("yahoo" in n.lower() and "secret" in n.lower() for n in names)
     assert any("yahoo" in n.lower() and "token" in n.lower() for n in names)
     for name in names:
