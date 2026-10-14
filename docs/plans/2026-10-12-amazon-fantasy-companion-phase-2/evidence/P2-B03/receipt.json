@@ -18,24 +18,89 @@
   "verified_with_change": "Scratch copy with the 2-line change: 273 passed, 0 failed (backend/tests/unit + backend/tests/contract)."
  },
  "commands": [
-  {"id": "CMD-GREEN", "command": "python3.12 -m pytest <4 frozen B03T unit files> -q -p no:cacheprovider (cwd backend)", "exit_code": 0, "result": "77 passed; same ids as P2-B03T CMD-RED", "output": "CMD-GREEN.txt", "junit": "CMD-GREEN.xml"},
-  {"id": "CMD-DEPLOYED-lineup", "command": "python3.12 -m pytest tests/deployed/lineup -q -rs (cwd backend)", "exit_code": 0, "result": "3 skipped NOT_RUN (no AFC_DEPLOYED_API_URL); closes at P2-L03", "output": "CMD-DEPLOYED-lineup.txt"},
-  {"id": "CMD-GATE-BACKEND (pytest)", "command": "python3.12 -m pytest tests/unit tests/contract -q -rf (cwd backend)", "exit_code": 1, "result": "273 passed, 2 failed (the two B01 stub-pin tests above); 156 other prior tests pass, 77 frozen + 40 new extra-coverage tests pass", "output": "CMD-GATE-BACKEND-pytest.txt"},
-  {"id": "gate all areas", "command": "bash tools/ci/gate.sh", "exit_code": 1, "result": "spec, docs, hygiene PASS; tvapp PASS no tree; backend FAIL (same 2 tests)", "output": "CMD-GATE-ALL.txt"},
-  {"id": "CMD-COVERAGE-BACKEND", "command": "bash tools/ci/coverage/backend.sh 1ac5846 <scratch>", "exit_code": 1, "result": "FAIL backend tests failed under coverage (same 2 tests); formal changed-line verdict not produced", "output": "CMD-COVERAGE-BACKEND.txt"},
-  {"id": "coverage diagnostic", "command": "coverage run --branch --source=src/lineup -m pytest tests/unit tests/contract with the 2 stub-pin tests deselected", "exit_code": 0, "result": "100% line and branch on src/lineup (136 stmts, 66 branches); diagnostic only, not the formal gate"},
-  {"id": "CMD-MUTATION-BACKEND", "command": "bash tools/ci/mutation/backend.sh 1ac5846 <dir>", "exit_code": null, "result": "not_run formally: needs a green baseline suite; GAP until the B01 test change lands"},
-  {"id": "mutation diagnostic", "command": "mutmut 3.8.0 (afc-tools/mutmut-backend venv) on a scratch copy with the 2-line B01 change, wrapper-equivalent setup.cfg, only_mutate src/lineup/*.py", "exit_code": 0, "result": "344 killed / 436 = 78.9% (threshold 70%); 0 timeouts", "output": "mutation-diagnostic-cicd-stats.json", "survivors": "mutation-diagnostic-survivors.txt"},
-  {"id": "frozen hashes", "command": "sha256 of the 11 files in P2-B03T receipt", "exit_code": 0, "result": "11/11 match; git diff 1ac5846 -- backend/tests shows only the new test_lineup_rejections.py"},
-  {"id": "path scan", "command": "python3 tools/ci/check_paths.py", "exit_code": 0}
+  {
+   "id": "CMD-GREEN",
+   "command": "python3.12 -m pytest <4 frozen B03T unit files> -q -p no:cacheprovider (cwd backend)",
+   "exit_code": 0,
+   "result": "77 passed; same ids as P2-B03T CMD-RED",
+   "output": "CMD-GREEN.txt",
+   "junit": "CMD-GREEN.xml"
+  },
+  {
+   "id": "CMD-DEPLOYED-lineup",
+   "command": "python3.12 -m pytest tests/deployed/lineup -q -rs (cwd backend)",
+   "exit_code": 0,
+   "result": "3 skipped NOT_RUN (no AFC_DEPLOYED_API_URL); closes at P2-L03",
+   "output": "CMD-DEPLOYED-lineup.txt"
+  },
+  {
+   "id": "CMD-GATE-BACKEND (pytest)",
+   "command": "python3.12 -m pytest tests/unit tests/contract -q -rf (cwd backend)",
+   "exit_code": 1,
+   "result": "273 passed, 2 failed (the two B01 stub-pin tests above); 156 other prior tests pass, 77 frozen + 40 new extra-coverage tests pass",
+   "output": "CMD-GATE-BACKEND-pytest.txt"
+  },
+  {
+   "id": "gate all areas",
+   "command": "bash tools/ci/gate.sh",
+   "exit_code": 1,
+   "result": "spec, docs, hygiene PASS; tvapp PASS no tree; backend FAIL (same 2 tests)",
+   "output": "CMD-GATE-ALL.txt"
+  },
+  {
+   "id": "CMD-COVERAGE-BACKEND",
+   "command": "bash tools/ci/coverage/backend.sh 1ac5846 <scratch>",
+   "exit_code": 1,
+   "result": "FAIL backend tests failed under coverage (same 2 tests); formal changed-line verdict not produced",
+   "output": "CMD-COVERAGE-BACKEND.txt"
+  },
+  {
+   "id": "coverage diagnostic",
+   "command": "coverage run --branch --source=src/lineup -m pytest tests/unit tests/contract with the 2 stub-pin tests deselected",
+   "exit_code": 0,
+   "result": "100% line and branch on src/lineup (136 stmts, 66 branches); diagnostic only, not the formal gate"
+  },
+  {
+   "id": "CMD-MUTATION-BACKEND",
+   "command": "bash tools/ci/mutation/backend.sh 1ac5846 <dir>",
+   "exit_code": null,
+   "result": "not_run formally: needs a green baseline suite; GAP until the B01 test change lands"
+  },
+  {
+   "id": "mutation diagnostic",
+   "command": "mutmut 3.8.0 (afc-tools/mutmut-backend venv) on a scratch copy with the 2-line B01 change, wrapper-equivalent setup.cfg, only_mutate src/lineup/*.py",
+   "exit_code": 0,
+   "result": "344 killed / 436 = 78.9% (threshold 70%); 0 timeouts",
+   "output": "mutation-diagnostic-cicd-stats.json",
+   "survivors": "mutation-diagnostic-survivors.txt"
+  },
+  {
+   "id": "frozen hashes",
+   "command": "sha256 of the 11 files in P2-B03T receipt",
+   "exit_code": 0,
+   "result": "11/11 match; git diff 1ac5846 -- backend/tests shows only the new test_lineup_rejections.py"
+  },
+  {
+   "id": "path scan",
+   "command": "python3 tools/ci/check_paths.py",
+   "exit_code": 0
+  }
  ],
  "negative_check": "test_yahoo_client.py malformed/oversize roster and settings rejection tests pass (ValueError); test_lineup_rejections.py adds key-injection, echo-mismatch and type cases",
  "trust_boundaries": "Yahoo payloads validated for type, required keys, request echo (team_key/week/league_key) and size (MAX_ITEMS 200); keys matched by ^[A-Za-z0-9._]{1,64}$ before URL use; only GET; bearer token placed only in the Authorization header, never logged or stored",
  "proof_rows": {
-  "supported_not_closed": ["SEIT-AFC-PR-001", "SEIT-AFC-PR-006", "SEIT-AFC-PR-007", "SEIT-AFC-PR-065"],
+  "supported_not_closed": [
+   "SEIT-AFC-PR-001",
+   "SEIT-AFC-PR-006",
+   "SEIT-AFC-PR-007",
+   "SEIT-AFC-PR-065"
+  ],
   "closing_slices": "PR rows at P2-L03 (deployed); DX at P2-SCR1; LAND/REL at P2-R5; REV at P2-L05; PATH at P2-G01; RISK-10 at P2-6"
  },
- "review_capabilities": {"coverage_assist": "not_run; allocated to IE-P2-14", "reverify": "not applicable: no compiled-binary claim"},
+ "review_capabilities": {
+  "coverage_assist": "not_run; allocated to IE-P2-14",
+  "reverify": "not applicable: no compiled-binary claim"
+ },
  "stubpin_repair": {
   "outcome": "REPAIRABLE_FAILURE",
   "at": "2026-10-14T15:34:17.236545+00:00",
@@ -218,5 +283,59 @@
   ],
   "evidence_log_normalization": "Removed trailing whitespace only from two pytest traceback lines; first evidence-commit hook exit 1 WS-CHECK; backend 273 passed; retry with hooks ON",
   "evidence_path_normalization": "Native text logs replace absolute home prefix with $HOME; coverage XML source normalized to repository-relative dot; evaluator rerun against normalized XML; no outcomes or source hash bindings changed"
+ },
+ "continuation_r2": {
+  "outcome": "PASS",
+  "context": "Orchestrator retired the lineup stub pins (d729f83, DEC-AFC-SD-046) at 706adda; formal mutation then returned GAP PYTHON_NONFUNCTION_MUTATION_GAP for module-level constants in backend/src/lineup/__init__.py",
+  "change": "ff652a4 moves every lineup module-level constant (preset tables, default preset, T_YAHOO, limits, Yahoo API base, bench slots, key regex, settings-to-label map) into functions; TABLES, DEFAULT_PRESET, T_YAHOO, MAX_ENTRIES and MAX_ITEMS remain module attributes via PEP 562 __getattr__. Key check now uses re.fullmatch (stricter: also rejects a trailing newline). 4 extra tests for the attribute surface.",
+  "commands": [
+   {
+    "id": "lineup unit tests",
+    "command": "python3.12 -m pytest tests/unit/lineup -q (cwd backend)",
+    "exit_code": 0,
+    "result": "121 passed (77 frozen + 44 extra)"
+   },
+   {
+    "id": "gate all areas",
+    "command": "PATH=$HOME/.local/share/afc-tools/backend-tests/bin:$PATH bash tools/ci/gate.sh",
+    "exit_code": 0,
+    "result": "spec, docs, hygiene, backend PASS; tvapp PASS no tree; 277 passed",
+    "output": "CMD-GATE-ALL-r2.txt"
+   },
+   {
+    "id": "CMD-COVERAGE-BACKEND",
+    "command": "bash tools/ci/coverage/backend.sh 1ac5846 <scratch>",
+    "exit_code": 0,
+    "verdict": "PASS changed-line coverage 100% (threshold 90%)",
+    "output": "CMD-COVERAGE-BACKEND-r2.txt",
+    "result_json": "coverage-result-r2.json"
+   },
+   {
+    "id": "CMD-MUTATION-BACKEND",
+    "command": "PATH=$HOME/.local/share/afc-tools/mutmut-backend/bin:$PATH bash tools/ci/mutation/backend.sh 1ac5846 <scratch>",
+    "exit_code": 0,
+    "verdict": "PASS mutation score 81.75% (threshold 70%)",
+    "scored_mutants": 537,
+    "survivors": 98,
+    "timeouts": 0,
+    "output": "CMD-MUTATION-BACKEND-r2.txt",
+    "result_json": "mutation-result-r2.json",
+    "stats": "mutmut-cicd-stats-r2.json"
+   },
+   {
+    "id": "verify_receipt",
+    "command": "python3 evidence/P2-B03T/verify_receipt.py evidence/P2-B03T/receipt.json",
+    "exit_code": 0,
+    "result": "PASS, 11 frozen files unchanged",
+    "output": "verify_receipt-r2.txt"
+   },
+   {
+    "id": "commit ff652a4",
+    "command": "git commit (hooks on)",
+    "exit_code": 0,
+    "result": "pre-commit gate PASS"
+   }
+  ],
+  "supersedes": "The CONTRACT_FAILURE and GAP results above are historical; acceptance 1-5 are met by this continuation."
  }
 }
