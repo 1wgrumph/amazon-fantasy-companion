@@ -1,0 +1,8 @@
+Visual review: /link page (P2-B01 candidate b706f9a, link.html + _link_page headers), 2026-10-14, orchestrator (Claude Code / Claude Opus 5.5).
+Host: local stub server on 127.0.0.1 serving the handler's exact headers (incl. CSP script-src sha256 hash) and body; /v1/link/confirm stubbed (GOODCODE -> 200 linked, else 410 code_expired).
+Flows (Chrome, desktop viewport 1235x641):
+- load: title "Link your TV"; accessible labels TV code / Link passphrase / Profile, submit button; no console errors.
+- error state: BADCODE1 -> status "This code is expired, used or unknown." (proves hashed inline script runs under CSP; no native form navigation).
+- success state: GOODCODE -> status "Linked. Return to your TV." Screenshot link-desktop-1235-linked.jpg.
+Phone width 390x844 (headless Chrome, extension screenshot timed out): single column, 16px gutters, full-width inputs, no horizontal scroll. Screenshot link-phone-390.png.
+Result: PASS. Gap: phone-width interactive states not screenshotted (same DOM/script as desktop).
