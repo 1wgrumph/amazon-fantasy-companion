@@ -511,6 +511,15 @@
       "at": "2026-10-14T15:43:50Z",
       "owner_statement": "(a) you authorize me to load it from SSM into that variable for the smoke run only, never printing it",
       "decision": "Agents running deployed smoke (L02/L03) may read SSM SecureString /afc/dev/link-passphrase (profile afc-dev, us-east-2) into AFC_DEPLOYED_LINK_PASSPHRASE for the smoke process only; never print, log, store or commit the value. The owner creates/sets the parameter."
+    },
+    {
+      "id": "DEC-AFC-SD-048",
+      "status": "confirmed",
+      "at": "2026-10-14T15:52:11Z",
+      "owner_statement": "We don't need security for a test device. Just use the tv code",
+      "decision": "Remove the link passphrase. Linking = TV shows device code, phone /link page confirms with the code only. Keep existing code expiry, attempt limits and one-live-session rules. Remove the SSM passphrase parameter, its IAM grant and AFC_DEPLOYED_LINK_PASSPHRASE from deployed tests. Supersedes DEC-AFC-SD-047 (passphrase from SSM).",
+      "delivery": "Small change slice: tests first (update B01 linking tests), then code, then one review, redeploy afc-dev, rerun L02 smoke.",
+      "residual_risk_accepted": "A person who guesses a live device code within its expiry window could link to the demo profile; demo profile holds no money or personal data."
     }
   ],
   "open_decisions": [],
