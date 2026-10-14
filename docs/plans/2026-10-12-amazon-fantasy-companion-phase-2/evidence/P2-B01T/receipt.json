@@ -1,0 +1,407 @@
+{
+  "outcome": "CONTRACT_FAILURE",
+  "scope": "Red boundary verified; local commit blocked by pre-existing gate fixture contamination once backend is staged",
+  "lifecycle": "AFC-2026-10-11",
+  "phase": 2,
+  "wave": 1,
+  "milestone": "M02",
+  "issue": 20,
+  "slice_id": "P2-B01T",
+  "authority_id": "AUTH-AFC-2026-10-12-P2-001",
+  "lease_id": "P2-B01T-g2",
+  "lease": {
+    "at": "2026-10-14T02:59:04Z",
+    "kind": "dispatch_lease",
+    "lease_id": "P2-B01T-g2",
+    "journey": "AFC-2026-10-11",
+    "generation": 2,
+    "slice": "P2-B01T",
+    "milestone": "M02",
+    "role": "test_implementer",
+    "route": "Codex CLI / GPT-6.1 Sol / high",
+    "repository": "github:1wgrumph/amazon-fantasy-companion",
+    "checkout": "$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01",
+    "branch": "afc/p2-b01",
+    "candidate_revision": "884df103e1ee7f8b53c674864db349cd00875283",
+    "resource_leases": [
+      "backend-template"
+    ],
+    "state": "active",
+    "authority": "AUTH-AFC-2026-10-12-P2-001 + owner execution instruction 2026-10-13 'LEts get it done all the way and close the the issues up to until you need my device' (stick-free work through all milestones)"
+  },
+  "lease_source": "$HOME/alphazede/worktrees/amazon-fantasy-companion-implementation/docs/plans/2026-10-11-amazon-fantasy-companion/journey.json",
+  "lease_source_sha256": "b6a006d61510e7f6aeec93b496bc72ebf9e4455b1db12c3064a2506d1ce2face",
+  "branch": "afc/p2-b01",
+  "baseline": "884df103e1ee7f8b53c674864db349cd00875283",
+  "candidate_binding": "Precommit red working delta; committed receipt is bound to its containing local commit",
+  "route": "Codex CLI / GPT-6.1 Sol / high",
+  "profile": {
+    "name": "opensource-hackathon",
+    "sha256": "7d501eb8c103831a38c50d237b5d1e2e015a564b9ade8aef09a32dfc39b26ab1",
+    "live_catalog_read": false
+  },
+  "review_capabilities": {
+    "coverage_assist": {
+      "enabled": true,
+      "required": true,
+      "backend": "OCR OpenCodeReview delegate mode",
+      "status": "not_run; allocated to independent review at IE-P2-5, never claimed PASS"
+    },
+    "reverify": {
+      "enabled": true,
+      "backend": "reverify 0.11.0",
+      "status": "not_applicable",
+      "reason": "red tests/source contracts, no compiled-binary claim"
+    }
+  },
+  "bran_status": "unavailable: no native .bran/policy.yaml; ordinary repository discovery used",
+  "method": "SEIT supporting TDD method=test; registered proof methods/environments unchanged",
+  "frozen_test_sha256": {
+    "backend/tests/conftest.py": "9a2fa26b355f5f3ddcda93081607496328abf902eedb27721b29d12096227f0e",
+    "backend/tests/contract/test_api_contract.py": "b3e635ea54bb01679a4c2ed634e63c781b7b10d80ae4b2bbdb6309b269c705b5",
+    "backend/tests/contract/test_backend_template.py": "c58e8ae3fd066baf2329350edecc859c94d6ba0c9a48f92191e7062fdffb5ded",
+    "backend/tests/unit/test_device_auth.py": "9f57021ffc36d0027d097915ea6ee10b0348023e626810e040def3c98e78a6f6"
+  },
+  "bootstrap_sha256": {
+    "backend/requirements-dev.txt": "1e0807d9345496ada449319ec2f40a0b75f4c419347aad7ebb3b3ebd6e68d82f",
+    "backend/pyproject.toml": "2e8a59c03dfc7e69f163f52a16d0629953fdbf96fbc3fcce8ad95ac996992c98",
+    "backend/src/api/__init__.py": "66cec3ec6bf496f3fa1e4f6fdbcbff7c691910ddbd1a32e5ccc986986801b8eb",
+    "backend/src/api/handler.py": "59fb02b68d5f9b448ac19d139b292a0aed179bdde04c41f7dac1569955e006cd"
+  },
+  "red": {
+    "command_id": "CMD-RED",
+    "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 $HOME/.local/share/afc-tools/backend-tests/bin/python3.12 -m pytest backend/tests/unit backend/tests/contract -v -p no:cacheprovider --tb=short --junitxml=docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/CMD-RED.xml",
+    "exit_code": 1,
+    "output": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/CMD-RED.txt",
+    "junit": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/CMD-RED.xml",
+    "failed": 65,
+    "passed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "elapsed_seconds": 3.57,
+    "failure_class": "All JUnit messages begin AssertionError; pytest 8.4.2 omits the failure type attribute",
+    "test_ids": [
+      "tests/unit/test_device_auth.py::test_issue_has_8_character_unambiguous_base32_code_and_600_second_expiry",
+      "tests/unit/test_device_auth.py::test_pending_poll_cannot_authorize_the_device",
+      "tests/unit/test_device_auth.py::test_correct_ssm_passphrase_confirms_once_and_returns_256_bit_session",
+      "tests/unit/test_device_auth.py::test_wrong_passphrase_rejects_confirmation_and_leaves_code_pending",
+      "tests/unit/test_device_auth.py::test_missing_passphrase_cannot_confirm",
+      "tests/unit/test_device_auth.py::test_expired_code_rejects_confirm_and_reports_expired_poll",
+      "tests/unit/test_device_auth.py::test_completed_code_cannot_be_replayed_or_rebound_to_another_profile",
+      "tests/unit/test_device_auth.py::test_every_protected_route_requires_a_session[GET-/v1/profile]",
+      "tests/unit/test_device_auth.py::test_every_protected_route_requires_a_session[PUT-/v1/profile]",
+      "tests/unit/test_device_auth.py::test_every_protected_route_requires_a_session[GET-/v1/alerts]",
+      "tests/unit/test_device_auth.py::test_every_protected_route_requires_a_session[GET-/v1/panel]",
+      "tests/unit/test_device_auth.py::test_every_protected_route_requires_a_session[GET-/v1/providers]",
+      "tests/unit/test_device_auth.py::test_every_protected_route_requires_a_session[POST-/v1/routing-outcome]",
+      "tests/unit/test_device_auth.py::test_every_protected_route_requires_a_session[POST-/v1/installed-apps]",
+      "tests/unit/test_device_auth.py::test_every_protected_route_rejects_an_unknown_session[GET-/v1/profile]",
+      "tests/unit/test_device_auth.py::test_every_protected_route_rejects_an_unknown_session[PUT-/v1/profile]",
+      "tests/unit/test_device_auth.py::test_every_protected_route_rejects_an_unknown_session[GET-/v1/alerts]",
+      "tests/unit/test_device_auth.py::test_every_protected_route_rejects_an_unknown_session[GET-/v1/panel]",
+      "tests/unit/test_device_auth.py::test_every_protected_route_rejects_an_unknown_session[GET-/v1/providers]",
+      "tests/unit/test_device_auth.py::test_every_protected_route_rejects_an_unknown_session[POST-/v1/routing-outcome]",
+      "tests/unit/test_device_auth.py::test_every_protected_route_rejects_an_unknown_session[POST-/v1/installed-apps]",
+      "tests/unit/test_device_auth.py::test_every_protected_route_rejects_a_foreign_profile[GET-/v1/profile]",
+      "tests/unit/test_device_auth.py::test_every_protected_route_rejects_a_foreign_profile[PUT-/v1/profile]",
+      "tests/unit/test_device_auth.py::test_every_protected_route_rejects_a_foreign_profile[GET-/v1/alerts]",
+      "tests/unit/test_device_auth.py::test_every_protected_route_rejects_a_foreign_profile[GET-/v1/panel]",
+      "tests/unit/test_device_auth.py::test_every_protected_route_rejects_a_foreign_profile[GET-/v1/providers]",
+      "tests/unit/test_device_auth.py::test_every_protected_route_rejects_a_foreign_profile[POST-/v1/routing-outcome]",
+      "tests/unit/test_device_auth.py::test_every_protected_route_rejects_a_foreign_profile[POST-/v1/installed-apps]",
+      "tests/unit/test_device_auth.py::test_known_session_can_reach_its_own_profile",
+      "tests/unit/test_device_auth.py::test_repeated_link_issues_do_not_reuse_codes_or_handles",
+      "tests/contract/test_api_contract.py::test_openapi_contains_exact_tv_operations_without_excluded_social_endpoints",
+      "tests/contract/test_api_contract.py::test_openapi_protected_operations_require_http_bearer_auth[/v1/profile-methods0]",
+      "tests/contract/test_api_contract.py::test_openapi_protected_operations_require_http_bearer_auth[/v1/alerts-methods1]",
+      "tests/contract/test_api_contract.py::test_openapi_protected_operations_require_http_bearer_auth[/v1/panel-methods2]",
+      "tests/contract/test_api_contract.py::test_openapi_protected_operations_require_http_bearer_auth[/v1/providers-methods3]",
+      "tests/contract/test_api_contract.py::test_openapi_protected_operations_require_http_bearer_auth[/v1/routing-outcome-methods4]",
+      "tests/contract/test_api_contract.py::test_openapi_protected_operations_require_http_bearer_auth[/v1/installed-apps-methods5]",
+      "tests/contract/test_api_contract.py::test_entity_response_schemas_preserve_the_versioned_envelope[/v1/profile]",
+      "tests/contract/test_api_contract.py::test_entity_response_schemas_preserve_the_versioned_envelope[/v1/alerts]",
+      "tests/contract/test_api_contract.py::test_entity_response_schemas_preserve_the_versioned_envelope[/v1/panel]",
+      "tests/contract/test_api_contract.py::test_openapi_declares_safe_structured_errors_for_all_contract_statuses[/v1/link-post-400]",
+      "tests/contract/test_api_contract.py::test_openapi_declares_safe_structured_errors_for_all_contract_statuses[/v1/profile-get-401]",
+      "tests/contract/test_api_contract.py::test_openapi_declares_safe_structured_errors_for_all_contract_statuses[/v1/profile-get-403]",
+      "tests/contract/test_api_contract.py::test_openapi_declares_safe_structured_errors_for_all_contract_statuses[/v1/profile-put-409]",
+      "tests/contract/test_api_contract.py::test_openapi_declares_safe_structured_errors_for_all_contract_statuses[/v1/link/confirm-post-410]",
+      "tests/contract/test_api_contract.py::test_openapi_declares_safe_structured_errors_for_all_contract_statuses[/v1/link-post-429]",
+      "tests/contract/test_api_contract.py::test_openapi_declares_safe_structured_errors_for_all_contract_statuses[/v1/panel-get-503]",
+      "tests/contract/test_api_contract.py::test_malformed_body_returns_400_without_partial_link_mutation[/v1/link-{]",
+      "tests/contract/test_api_contract.py::test_malformed_body_returns_400_without_partial_link_mutation[/v1/link/confirm-[]]",
+      "tests/contract/test_api_contract.py::test_body_larger_than_64_kib_is_rejected_before_any_link_mutation",
+      "tests/contract/test_api_contract.py::test_future_module_stubs_surface_503_not_implemented[/v1/alerts]",
+      "tests/contract/test_api_contract.py::test_future_module_stubs_surface_503_not_implemented[/v1/panel]",
+      "tests/contract/test_api_contract.py::test_future_module_stubs_surface_503_not_implemented[/v1/providers]",
+      "tests/contract/test_api_contract.py::test_phone_link_page_exposes_customer_confirmation_form",
+      "tests/contract/test_backend_template.py::test_template_declares_only_the_approved_free_plan_service_set",
+      "tests/contract/test_backend_template.py::test_template_declares_every_function_and_on_demand_table",
+      "tests/contract/test_backend_template.py::test_template_routes_tv_and_link_page_and_bounds_link_attempts",
+      "tests/contract/test_backend_template.py::test_template_uses_ssm_parameter_names_instead_of_embedded_secret_values",
+      "tests/contract/test_backend_template.py::test_future_backend_modules_have_explicit_unimplemented_public_interfaces[feed_ingest]",
+      "tests/contract/test_backend_template.py::test_future_backend_modules_have_explicit_unimplemented_public_interfaces[lineup]",
+      "tests/contract/test_backend_template.py::test_future_backend_modules_have_explicit_unimplemented_public_interfaces[matcher]",
+      "tests/contract/test_backend_template.py::test_future_backend_modules_have_explicit_unimplemented_public_interfaces[alert_policy]",
+      "tests/contract/test_backend_template.py::test_future_backend_modules_have_explicit_unimplemented_public_interfaces[provider_resolver]",
+      "tests/contract/test_backend_template.py::test_future_backend_modules_have_explicit_unimplemented_public_interfaces[panel]",
+      "tests/contract/test_backend_template.py::test_complete_store_and_policy_chain_stay_backend_side"
+    ],
+    "output_sha256": "946144cb95be2f4d8dcf57e6034e1ab6c9df7e3eb72fe57240ef195f29e7d8b3",
+    "sanitization": "Only local home prefix replaced with $HOME"
+  },
+  "existing_suite": {
+    "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python3.12 -m pytest -q tools -p no:cacheprovider",
+    "exit_code": 0,
+    "tests": 75,
+    "output": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/repo-suite.txt",
+    "scope": "Pre-stage diagnostic only: 75 passed; superseded by staged-tree failure, not a valid precommit PASS"
+  },
+  "tool_qualification": {
+    "command_id": "PROC-GATE-TOOL-QUALIFY",
+    "coverage_exit_code": 0,
+    "mutation_exit_code": 0,
+    "outputs": [
+      "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/qualify-coverage.txt",
+      "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/qualify-mutation.txt"
+    ],
+    "scope": "G01 native/repo adapter positive/negative controls; actual backend coverage/mutation deferred to P2-B01 green"
+  },
+  "installation_receipt": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/supply-scan.json",
+  "resource_group": "host-pytest; fresh per-test Moto state; sockets blocked; no engine/server/AWS/device",
+  "gate_cost": {
+    "red_seconds": 3.57,
+    "planning_budget_seconds": 120,
+    "seven_execution_qualification": "not applicable: no engine/server/driver/browser started"
+  },
+  "proof_rows": [
+    {
+      "id": "SEIT-AFC-PR-038",
+      "registered_method": "demonstration",
+      "red_support": "Auth/API/template/source assertions frozen",
+      "formal_row_status": "not_closed_by_red_slice",
+      "closing_slice": "P2-L02"
+    },
+    {
+      "id": "SEIT-AFC-PR-054",
+      "registered_method": "inspection",
+      "red_support": "Auth/API/template/source assertions frozen",
+      "formal_row_status": "not_closed_by_red_slice",
+      "closing_slice": "P2-L03"
+    },
+    {
+      "id": "SEIT-AFC-PR-055",
+      "registered_method": "inspection",
+      "red_support": "Auth/API/template/source assertions frozen",
+      "formal_row_status": "not_closed_by_red_slice",
+      "closing_slice": "P2-L05"
+    },
+    {
+      "id": "SEIT-AFC-PR-057",
+      "registered_method": "inspection",
+      "red_support": "Auth/API/template/source assertions frozen",
+      "formal_row_status": "not_closed_by_red_slice",
+      "closing_slice": "P2-D03"
+    },
+    {
+      "id": "SEIT-AFC-PR-058",
+      "registered_method": "test",
+      "red_support": "Auth/API/template/source assertions frozen",
+      "formal_row_status": "not_closed_by_red_slice",
+      "closing_slice": "P2-L03"
+    },
+    {
+      "id": "SEIT-AFC-PR-059",
+      "registered_method": "inspection",
+      "red_support": "Auth/API/template/source assertions frozen",
+      "formal_row_status": "not_closed_by_red_slice",
+      "closing_slice": "P2-L03"
+    },
+    {
+      "id": "SEIT-AFC-P2-LAND-01",
+      "registered_method": "inspection",
+      "red_support": "Packet/evidence obligation preserved",
+      "formal_row_status": "not_closed_by_red_slice",
+      "closing_slice": "P2-R5"
+    },
+    {
+      "id": "SEIT-AFC-P2-REV-01",
+      "registered_method": "inspection",
+      "red_support": "Packet/evidence obligation preserved",
+      "formal_row_status": "not_closed_by_red_slice",
+      "closing_slice": "P2-L05"
+    },
+    {
+      "id": "SEIT-AFC-P2-PATH-01",
+      "registered_method": "test",
+      "red_support": "Staged path/credential-shape scanner and gate hygiene pass; existing scanner controls unchanged",
+      "formal_row_status": "not_closed_by_red_slice",
+      "closing_slice": "P2-G01"
+    },
+    {
+      "id": "SEIT-AFC-P2-REL-01",
+      "registered_method": "inspection",
+      "red_support": "Packet/evidence obligation preserved",
+      "formal_row_status": "not_closed_by_red_slice",
+      "closing_slice": "P2-R5"
+    },
+    {
+      "id": "SEIT-AFC-P2-DX-01",
+      "registered_method": "inspection",
+      "red_support": "Packet/evidence obligation preserved",
+      "formal_row_status": "not_closed_by_red_slice",
+      "closing_slice": "P2-SCR1"
+    },
+    {
+      "id": "SEIT-RISK-AFC-P2-10",
+      "registered_method": "inspection",
+      "red_support": "Packet/evidence obligation preserved",
+      "formal_row_status": "not_closed_by_red_slice",
+      "closing_slice": "P2-6"
+    }
+  ],
+  "handoff_contract_choices": [
+    "HTTP API v2 Lambda event, template ApiFunction.Handler; empty scaffold api.handler.lambda_handler.",
+    "Link fields code/expires/handle; poll handle; states codePending/linked/expired; confirm code/passphrase/profileId; opaque sessionToken in confirmation or linked poll.",
+    "Foreign selector profileId in query/body; templates own env/secret parameter names and key schemas.",
+    "Logical table IDs from design, with optional Table suffix; Links template TTL mutated deterministically for expiry test.",
+    "600-second code TTL from approved plan; no new session lifetime imposed.",
+    "409/429 schemas plus API throttling declarations support future runtime cases; no fabricated profile-revision/rate policy behavior."
+  ],
+  "scope_reconciliation": [
+    "Current owner packet authorizes local --no-verify red commit, superseding older uncommitted-red plan wording.",
+    "No [tool.mutmut] section: installed G01 wrapper rejects CONFIG_CONFLICT and writes its own bounded disposable setup.cfg.",
+    "Baseline Actions backend job has no dependency install step; outside worker write set, prerequisite handed to orchestrator; no gate weakened."
+  ],
+  "deferred": [
+    "P2-B01 green on unchanged frozen tests, SAM/cfn-lint, coverage/mutation and deps in isolated mutmut venv",
+    "Independent OCR review at IE-P2-5",
+    "Device demonstration P2-L02; deployment/Free-plan/backend placement P2-L03",
+    "Exact APK/parameter secret inspection P2-L05; complete social UI/source inspection P2-D03",
+    "Orchestrator landing/changelog and allocated lifecycle proof closure"
+  ],
+  "developer_feedback": {
+    "observations": [
+      {
+        "id": "P2B01T-DX-001",
+        "tool": "Python scanner launchers",
+        "observation": "Bare launchers bound a different Python environment; explicit python3.12 -m binding worked. Bandit stdout progress is not JSON; use -o. No route change.",
+        "evidence": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/supply-scan.json"
+      },
+      {
+        "id": "P2B01T-DX-002",
+        "tool": "pytest/Moto",
+        "observation": "65 all-assertion red cases collect and run offline in 3.57 seconds with fresh in-process tables and SSM parameters.",
+        "evidence": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/CMD-RED.xml"
+      },
+      {
+        "id": "P2B01T-DX-003",
+        "tool": "G01 gate/workflow",
+        "observation": "Backend job assumes prepared dependencies but includes no installation step; orchestrator must resolve prerequisite before landing within authorized write scope.",
+        "evidence": ".github/workflows/ci.yml backend job; tools/ci/gate.sh backend branch"
+      },
+      {
+        "id": "P2B01T-DX-004",
+        "tool": "pytest JUnit",
+        "observation": "pytest 8.4.2 JUnit failures omit type; classifier must inspect AssertionError-prefixed messages and explicit error/skipped nodes.",
+        "evidence": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/CMD-RED.xml"
+      },
+      {
+        "id": "P2B01T-DX-005",
+        "tool": "G01 gate fixtures",
+        "observation": "copy_repo includes new staged backend files, so product-gate protocol/absence fixtures inherit the red suite. Pre-stage tests passing does not qualify the staged candidate. Shared fixture correction is outside this packet write set.",
+        "evidence": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/CMD-GATE-HYGIENE.txt"
+      }
+    ],
+    "tools_exercised": [
+      "git",
+      "python3.12",
+      "pytest",
+      "boto3/botocore",
+      "Moto",
+      "PyYAML",
+      "coverage",
+      "diff-cover",
+      "mutmut",
+      "ClamAV",
+      "gitleaks",
+      "pip-audit",
+      "bandit",
+      "skill-creator scripts"
+    ]
+  },
+  "hygiene": {
+    "command": "bash tools/ci/gate.sh hygiene",
+    "exit_code": 1,
+    "output": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/CMD-GATE-HYGIENE.txt",
+    "path_scan_exit_code": 0,
+    "staged_whitespace_exit_code": 0,
+    "scope": "Path/workflow checks pass; legacy unittest gate fixtures fail after staged backend is copied",
+    "unit_tests_run": 50,
+    "failures": 7,
+    "errors": 1
+  },
+  "commit_shas": [],
+  "contract_failure": {
+    "required_path": "tools/ci/tests/gate_support.py",
+    "evidence": [
+      "tools/ci/tests/gate_support.py:copy_repo uses git ls-files to copy staged backend tree",
+      "tools/ci/tests/test_product_gate.py:absence/empty/protocol cases assume copied repo has no backend tree",
+      "tools/ci/tests/test_gate_isolation.py:copied sentinel backend causes product gate execution"
+    ],
+    "gate_output": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/CMD-GATE-HYGIENE.txt",
+    "exact_errors": [
+      "FileExistsError: backend tree already exists in empty-tree fixture",
+      "AssertionError: absent-tree fixture found backend/",
+      "ModuleNotFoundError: No module named moto in copied fixtures using global Python 3.12"
+    ],
+    "disposition": "Stop under exact write-set boundary; no repair of tools/ci/tests, no commit, no GitHub action; orchestrator owns next packet",
+    "bug_route": "assigned worker reports evidence only; do not launch nested triage"
+  },
+  "existing_suite_staged": {
+    "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python3.12 -m pytest -q tools -p no:cacheprovider",
+    "exit_code": 1,
+    "passed": 70,
+    "failed": 5,
+    "elapsed_seconds": 40.15,
+    "output": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/repo-suite-staged.txt",
+    "classification": "gate fixture contamination after tracked backend inventory grows; outside exact write set",
+    "output_sanitization": "Private home prefix replaced and trailing whitespace stripped; failure content/results preserved"
+  },
+  "next_action": "Orchestrator dispatches bounded correction of tools/ci/tests/gate_support.py fixture copying, then revalidates the staged 75-test suite and resumes local red commit. No authority expanded by this receipt.",
+  "source_delta_binding": {
+    "command": "git diff --cached --binary HEAD -- backend",
+    "sha256": "e4329049ec82188de2b78e62b336a6d9f92250076482ee8727253e0e0af4fcc2",
+    "scope": "source/test/bootstrap staged delta matches frozen hashes; excludes evidence to avoid self-reference"
+  },
+  "changed_paths": [
+    "backend/pyproject.toml",
+    "backend/requirements-dev.txt",
+    "backend/src/api/__init__.py",
+    "backend/src/api/handler.py",
+    "backend/tests/conftest.py",
+    "backend/tests/contract/test_api_contract.py",
+    "backend/tests/contract/test_backend_template.py",
+    "backend/tests/unit/test_device_auth.py",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/CMD-GATE-HYGIENE.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/CMD-RED.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/CMD-RED.xml",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/afc-red-receipt/SKILL.md",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/afc-red-receipt/agents/openai.yaml",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/afc-red-receipt/scripts/verify_receipt.py",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/collect.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/commands.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/dependency-audit.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/dependency-protocol-proof.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/harness-selfcheck.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/path-check.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/qualify-coverage.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/qualify-mutation.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/receipt.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/record_receipt.py",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/repo-suite-staged.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/repo-suite.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/skill-validation.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/supply-scan.json"
+  ]
+}
