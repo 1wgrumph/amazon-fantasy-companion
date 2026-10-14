@@ -36,4 +36,4 @@ def score(preset, stats):
     unknown = set(stats) - set(table)
     if unknown:
         raise ValueError("Statistics without a preset row: " + ", ".join(sorted(unknown)))
-    return sum(table[stat] * value for stat, value in stats.items())
+    return sum(table[stat] * float(value) for stat, value in stats.items())

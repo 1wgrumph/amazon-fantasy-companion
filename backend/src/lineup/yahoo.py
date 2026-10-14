@@ -30,7 +30,8 @@ def __getattr__(name):
 
 
 def _key(value, what):
-    if not isinstance(value, str) or not re.fullmatch(r"[A-Za-z0-9._]{1,64}", value):
+    if (not isinstance(value, str) or not re.fullmatch(r"[A-Za-z0-9._]{1,64}", value)
+            or "" in value.split(".")):
         raise ValueError(f"Invalid Yahoo {what}")
     return value
 

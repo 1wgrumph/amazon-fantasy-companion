@@ -30,7 +30,7 @@ def active_lineup(profile_id):
         scoring = {"preset": _preset_label(stored)}
     elif source == "yahoo":
         scoring = row.get("scoring")
-        if not isinstance(scoring, dict):
+        if not isinstance(scoring, dict) or "preset" in scoring:
             raise ValueError("Stored Yahoo lineup has no league scoring")
     else:
         raise ValueError(f"Unknown stored lineup source: {source!r}")

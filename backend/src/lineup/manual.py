@@ -58,7 +58,8 @@ def build(espn_roster, entries, preset):
         raise ValueError("Lineup entries must be a bounded list")
     starters = []
     for entry in entries:
-        if not isinstance(entry, dict) or not isinstance(entry.get("slot"), str) or not entry["slot"]:
+        if (not isinstance(entry, dict) or not isinstance(entry.get("athlete_id"), str)
+                or not isinstance(entry.get("slot"), str) or not entry["slot"]):
             raise ValueError("Lineup entry needs an athlete_id and slot")
         athlete = entry.get("athlete_id")
         if athlete not in names:
