@@ -45,7 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Link a TV with its device code alone (DEC-AFC-SD-048): drop the link
   passphrase from the `/link` page, the confirm API and its OpenAPI
   contract, and remove the SSM passphrase parameter, its env var and IAM
-  grant; code expiry, throttling and one-session-per-link stay (PR #TBD).
+  grant; code expiry, throttling and one-session-per-link stay ([#66](https://github.com/1wgrumph/amazon-fantasy-companion/pull/66)).
 - Record the Phase 2 execution lease and the M01 dispatch, review and
   closeout receipts in the Lifecycle control journey
   ([PR #58](https://github.com/1wgrumph/amazon-fantasy-companion/pull/58)).
