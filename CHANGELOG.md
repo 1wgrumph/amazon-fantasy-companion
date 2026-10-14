@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add lineup sources and scoring presets: read-only Yahoo client, manual
+  lineup with T_yahoo activation, one active source per profile, PPR and
+  Half-PPR tables with Half-PPR as default ([#65](https://github.com/1wgrumph/amazon-fantasy-companion/pull/65)).
 - Add the ESPN feed capture tool and historical replay fixtures for 14
   completed games, with an interim SP-5 verdict ([#63](https://github.com/1wgrumph/amazon-fantasy-companion/pull/63)).
 - Add the 2026-10-14 developer friction-log catch-up (ten observations in
