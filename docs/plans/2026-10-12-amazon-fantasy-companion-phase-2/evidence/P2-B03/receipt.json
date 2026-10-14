@@ -1,0 +1,39 @@
+{
+ "outcome": "CONTRACT_FAILURE",
+ "slice_id": "P2-B03",
+ "issue": 28,
+ "milestone": "M05",
+ "lifecycle": "AFC-2026-10-11",
+ "authority_id": "AUTH-AFC-2026-10-12-P2-001",
+ "route": "Claude Code / Claude Opus 5.5 / medium",
+ "branch": "afc/p2-b03",
+ "baseline": "1ac5846 (P2-B03T red suite)",
+ "contract_failure": {
+  "summary": "Two prior P2-B01 tests pin lineup as an unimplemented AFC-STUB; implementing src/lineup/ necessarily turns them red. Both files are outside the B03 write set.",
+  "tests": [
+   "backend/tests/unit/test_pipeline_and_stubs.py::test_stubs_name_their_owning_slice[lineup-active_lineup-1-P2-B03]",
+   "backend/tests/contract/test_backend_template.py::test_future_backend_modules_have_explicit_unimplemented_public_interfaces[lineup]"
+  ],
+  "required_change": "Drop the lineup entry from STUBS in test_pipeline_and_stubs.py and from the parametrize list in test_backend_template.py (2 lines); exact diff in proposed-b01-test-change.diff. Same pattern will recur for B02/B04-B07.",
+  "verified_with_change": "Scratch copy with the 2-line change: 273 passed, 0 failed (backend/tests/unit + backend/tests/contract)."
+ },
+ "commands": [
+  {"id": "CMD-GREEN", "command": "python3.12 -m pytest <4 frozen B03T unit files> -q -p no:cacheprovider (cwd backend)", "exit_code": 0, "result": "77 passed; same ids as P2-B03T CMD-RED", "output": "CMD-GREEN.txt", "junit": "CMD-GREEN.xml"},
+  {"id": "CMD-DEPLOYED-lineup", "command": "python3.12 -m pytest tests/deployed/lineup -q -rs (cwd backend)", "exit_code": 0, "result": "3 skipped NOT_RUN (no AFC_DEPLOYED_API_URL); closes at P2-L03", "output": "CMD-DEPLOYED-lineup.txt"},
+  {"id": "CMD-GATE-BACKEND (pytest)", "command": "python3.12 -m pytest tests/unit tests/contract -q -rf (cwd backend)", "exit_code": 1, "result": "273 passed, 2 failed (the two B01 stub-pin tests above); 156 other prior tests pass, 77 frozen + 40 new extra-coverage tests pass", "output": "CMD-GATE-BACKEND-pytest.txt"},
+  {"id": "gate all areas", "command": "bash tools/ci/gate.sh", "exit_code": 1, "result": "spec, docs, hygiene PASS; tvapp PASS no tree; backend FAIL (same 2 tests)", "output": "CMD-GATE-ALL.txt"},
+  {"id": "CMD-COVERAGE-BACKEND", "command": "bash tools/ci/coverage/backend.sh 1ac5846 <scratch>", "exit_code": 1, "result": "FAIL backend tests failed under coverage (same 2 tests); formal changed-line verdict not produced", "output": "CMD-COVERAGE-BACKEND.txt"},
+  {"id": "coverage diagnostic", "command": "coverage run --branch --source=src/lineup -m pytest tests/unit tests/contract with the 2 stub-pin tests deselected", "exit_code": 0, "result": "100% line and branch on src/lineup (136 stmts, 66 branches); diagnostic only, not the formal gate"},
+  {"id": "CMD-MUTATION-BACKEND", "command": "bash tools/ci/mutation/backend.sh 1ac5846 <dir>", "exit_code": null, "result": "not_run formally: needs a green baseline suite; GAP until the B01 test change lands"},
+  {"id": "mutation diagnostic", "command": "mutmut 3.8.0 (afc-tools/mutmut-backend venv) on a scratch copy with the 2-line B01 change, wrapper-equivalent setup.cfg, only_mutate src/lineup/*.py", "exit_code": 0, "result": "344 killed / 436 = 78.9% (threshold 70%); 0 timeouts", "output": "mutation-diagnostic-cicd-stats.json", "survivors": "mutation-diagnostic-survivors.txt"},
+  {"id": "frozen hashes", "command": "sha256 of the 11 files in P2-B03T receipt", "exit_code": 0, "result": "11/11 match; git diff 1ac5846 -- backend/tests shows only the new test_lineup_rejections.py"},
+  {"id": "path scan", "command": "python3 tools/ci/check_paths.py", "exit_code": 0}
+ ],
+ "negative_check": "test_yahoo_client.py malformed/oversize roster and settings rejection tests pass (ValueError); test_lineup_rejections.py adds key-injection, echo-mismatch and type cases",
+ "trust_boundaries": "Yahoo payloads validated for type, required keys, request echo (team_key/week/league_key) and size (MAX_ITEMS 200); keys matched by ^[A-Za-z0-9._]{1,64}$ before URL use; only GET; bearer token placed only in the Authorization header, never logged or stored",
+ "proof_rows": {
+  "supported_not_closed": ["SEIT-AFC-PR-001", "SEIT-AFC-PR-006", "SEIT-AFC-PR-007", "SEIT-AFC-PR-065"],
+  "closing_slices": "PR rows at P2-L03 (deployed); DX at P2-SCR1; LAND/REL at P2-R5; REV at P2-L05; PATH at P2-G01; RISK-10 at P2-6"
+ },
+ "review_capabilities": {"coverage_assist": "not_run; allocated to IE-P2-14", "reverify": "not applicable: no compiled-binary claim"}
+}

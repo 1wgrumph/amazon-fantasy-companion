@@ -1,0 +1,82 @@
+........................................................................ [ 26%]
+........................................................................ [ 52%]
+..................F..................................................... [ 78%]
+..................................................F........              [100%]
+=================================== FAILURES ===================================
+______ test_stubs_name_their_owning_slice[lineup-active_lineup-1-P2-B03] _______
+
+api = namespace(request=<function api.<locals>.request at 0x760436a9c180>, table=<function api.<locals>.table at 0x760436a9f...inksTable': 'expiresAt'}, passphrase='XWNFXsvQHf4IiIkU4W8btg', ssm_reads=[], secret_names=['/afc/dev/link-passphrase'])
+module = 'lineup', function = 'active_lineup', arity = 1, slice_id = 'P2-B03'
+
+    @pytest.mark.parametrize("module,function,arity,slice_id", STUBS)
+    def test_stubs_name_their_owning_slice(api, module, function, arity, slice_id):
+        target = getattr(importlib.import_module(module), function)
+        with pytest.raises(NotImplementedError) as error:
+>           target(*[None] * arity)
+
+tests/unit/test_pipeline_and_stubs.py:70: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+profile_id = None
+
+    def active_lineup(profile_id):
+        """The profile's one active Lineup (source, team, league, starters, scoring), or None."""
+        if not isinstance(profile_id, str) or not profile_id:
+>           raise ValueError("profile_id must be a non-empty string")
+E           ValueError: profile_id must be a non-empty string
+
+src/lineup/__init__.py:18: ValueError
+_ test_future_backend_modules_have_explicit_unimplemented_public_interfaces[lineup] _
+
+module = 'lineup'
+
+    @pytest.mark.parametrize("module", ["feed_ingest", "lineup", "matcher", "alert_policy",
+                                         "provider_resolver", "panel"])
+    def test_future_backend_modules_have_explicit_unimplemented_public_interfaces(module):
+        files = list((BACKEND / "src" / module).rglob("*.py"))
+        assert files, f"Backend must contain the future {module} interface"
+        public_stubs = []
+        for file in files:
+            source = file.read_text()
+            tree = ast.parse(source)
+            for node in tree.body:
+                if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)) and not node.name.startswith("_"):
+                    raises = [x for x in ast.walk(node) if isinstance(x, ast.Raise)]
+                    if "AFC-STUB" in ast.get_source_segment(source, node) and any(
+                        isinstance(x.exc, ast.Call) and isinstance(x.exc.func, ast.Name) and
+                        x.exc.func.id == "NotImplementedError" for x in raises):
+                        public_stubs.append(node.name)
+>       assert public_stubs, "Future behavior must remain explicit AFC-STUB/NotImplementedError"
+E       AssertionError: Future behavior must remain explicit AFC-STUB/NotImplementedError
+E       assert []
+
+tests/contract/test_backend_template.py:104: AssertionError
+=============================== warnings summary ===============================
+tests/unit/lineup/test_active_lineup.py: 117 warnings
+tests/unit/lineup/test_lineup_rejections.py: 20 warnings
+tests/unit/test_bug_auth002.py: 42 warnings
+tests/unit/test_device_auth.py: 324 warnings
+tests/unit/test_device_auth_units.py: 133 warnings
+tests/unit/test_pipeline_and_stubs.py: 87 warnings
+tests/unit/test_router.py: 870 warnings
+tests/unit/test_store.py: 92 warnings
+tests/contract/test_api_contract.py: 109 warnings
+  $HOME/.local/lib/python3.12/site-packages/botocore/auth.py:424: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    datetime_now = datetime.datetime.utcnow()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+============================= slowest 10 durations =============================
+0.51s setup    tests/unit/lineup/test_active_lineup.py::test_no_stored_lineup_returns_none
+0.30s setup    tests/unit/test_router.py::test_profile_envelope_exactly_at_64kib_is_stored
+0.30s setup    tests/unit/test_router.py::test_stored_profile_timestamps_are_returned_unchanged
+0.29s setup    tests/unit/test_router.py::test_stub_routes_receive_the_session_profile_and_query
+0.29s setup    tests/unit/test_router.py::test_valid_routing_outcomes_reach_the_resolver_stub[accessUnknown]
+0.28s setup    tests/unit/test_router.py::test_every_settings_attribute_is_accepted[presentation]
+0.28s setup    tests/unit/test_router.py::test_every_settings_attribute_is_accepted[alertTypes]
+0.28s setup    tests/unit/test_router.py::test_every_settings_attribute_is_accepted[switchingConfirm]
+0.27s setup    tests/unit/test_router.py::test_invalid_profile_updates_change_nothing[body2]
+0.27s setup    tests/unit/test_router.py::test_valid_routing_outcomes_reach_the_resolver_stub[gameOpened]
+=========================== short test summary info ============================
+FAILED tests/unit/test_pipeline_and_stubs.py::test_stubs_name_their_owning_slice[lineup-active_lineup-1-P2-B03]
+FAILED tests/contract/test_backend_template.py::test_future_backend_modules_have_explicit_unimplemented_public_interfaces[lineup]
+2 failed, 273 passed, 1794 warnings in 20.68s
