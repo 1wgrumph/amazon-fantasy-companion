@@ -1,0 +1,2085 @@
+{
+  "findings": [
+    {
+      "id": "B01-R01",
+      "severity": "P1",
+      "category": "test-only / CI",
+      "file": "tools/ci/tests/test_bug2_mutenv.py",
+      "line": 108,
+      "title": "Provision native tools in the hygiene CI job",
+      "defect": "The new top-level unittest-discovered mutation and coverage regressions require mutmut and diff-cover, but the hygiene Actions job installs only graphviz, python3-yaml and python3-pytest. The new requirements install is in the separate backend job and cannot provision hygiene.",
+      "scenario": "A clean hygiene runner discovers these new tests and fails before exercising their behavior. With PATH=/usr/bin:/bin and the already installed Python test runner, the candidate produces 3 failed / 1 passed: missing mutmut, missing diff-cover, and the expected semantic coverage GAP replaced by missing-tool GAP.",
+      "evidence": [
+        "ci-hygiene-repro.log",
+        ".github/workflows/ci.yml:107",
+        ".github/workflows/ci.yml:121",
+        "tools/ci/tests/test_bug3_covempty.py:58"
+      ],
+      "suggested_fix": "Provision the required native-tool closure, pinned and hash-verified, in the job that executes these tests; preserve the native positive and negative cases rather than skipping them. Keep the quick hygiene gate's added cost explicit.",
+      "write_set": [
+        ".github/workflows/ci.yml",
+        "tools/ci/tests/test_bug2_mutenv.py",
+        "tools/ci/tests/test_bug3_covempty.py",
+        "a checked-in hash-pinned CI tool requirements file"
+      ],
+      "introduced_by": "f71f72b",
+      "escape": "The repair's clean environment simulation exercised gate backend, while full hygiene was run only on an already provisioned host.",
+      "seit_refs": [
+        "P2-B01 / CMD-GATE-HYGIENE",
+        "DES-AFC-P2-GATE",
+        "AC-AFC-P2-LAND-01"
+      ],
+      "verification": "In a fresh isolated environment with only declared CI dependencies, hygiene and the native mutation/coverage regression tests pass; missing-tool negative checks still fail closed."
+    },
+    {
+      "id": "B01-R02",
+      "severity": "P2",
+      "category": "product",
+      "file": "backend/src/device_auth/__init__.py",
+      "line": 47,
+      "title": "Make linked-token delivery recoverable on poll retry",
+      "defect": "The first GET poll irrevocably completes the link and returns the only copy of the bearer token. Every later poll returns linked without a token. The completion write also precedes session persistence.",
+      "scenario": "Confirm a device, let the first GET /v1/link execute but discard its response (ordinary connection loss), then repeat the same GET. It returns HTTP 200 {state: linked} with no token, while a TV that never received the token still gets 401 from GET /v1/profile. The user must start a new link flow despite the server reporting success.",
+      "evidence": [
+        "behavior-repro.log",
+        "backend/src/store/__init__.py:85",
+        "backend/tests/unit/test_device_auth_units.py:48",
+        "backend/src/api/openapi.yaml:31"
+      ],
+      "suggested_fix": "Make completion and token delivery retryable while preserving one-time customer confirmation and hash-only credential storage. Ensure persistence cannot leave a completed link without a usable session; revise the test and OpenAPI wording that codify one-shot delivery.",
+      "write_set": [
+        "backend/src/device_auth/__init__.py",
+        "backend/src/store/__init__.py",
+        "backend/src/api/openapi.yaml",
+        "backend/tests/unit/test_device_auth_units.py",
+        "backend/tests/unit/test_device_auth.py"
+      ],
+      "introduced_by": "9cd216c",
+      "escape": "Tests retain the first response and explicitly assert that later polls omit the token; no dropped-response/retry scenario is exercised.",
+      "seit_refs": [
+        "SEIT-AFC-PR-038",
+        "SEIT-AFC-PR-058",
+        "DES-AFC-P2-AUTH",
+        "CONTRACT-AFC-P2-API"
+      ],
+      "verification": "Discard a successful linked poll response and retry; the same authorized device can still obtain a usable session, with no raw secret persisted and no confirm replay or foreign-profile access."
+    },
+    {
+      "id": "B01-R03",
+      "severity": "P2",
+      "category": "product",
+      "file": "backend/src/api/handler.py",
+      "line": 183,
+      "title": "Enforce the response-size contract before saving a profile",
+      "defect": "Only request size is checked. The profile envelope adds bytes after a maximum-size accepted request, and _respond serializes without any response bound.",
+      "scenario": "PUT /v1/profile with revision 0 and fantasySelections='x'*65490 serialized with compact separators is exactly 65,536 bytes. It returns 200 with a 65,632-byte body, persists revision 1, and GET returns the same oversized body. This violates CONTRACT-AFC-P2-API's request and response limit.",
+      "evidence": [
+        "behavior-repro.log",
+        "backend/src/api/handler.py:115",
+        "backend/tests/conftest.py:180",
+        "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/design.md:416"
+      ],
+      "suggested_fix": "Validate the serialized profile envelope's byte length before mutation, and enforce the response cap consistently. Reject an update that cannot be returned within the contract without persisting it. Cover escaping/UTF-8 expansion as well as ASCII.",
+      "write_set": [
+        "backend/src/api/handler.py",
+        "backend/tests/unit/test_router.py"
+      ],
+      "introduced_by": "9cd216c",
+      "escape": "The added exact-limit test uses POST /v1/link, whose response is small, rather than a profile that echoes user data inside a larger envelope.",
+      "seit_refs": [
+        "SEIT-AFC-PR-057",
+        "SEIT-AFC-PR-058",
+        "CONTRACT-AFC-P2-API",
+        "CONTRACT-AFC-P2-ENVELOPE"
+      ],
+      "verification": "Boundary-sized updates either return a <=65,536-byte envelope or return a structured 400 with the prior profile unchanged; subsequent GET responses stay within the limit."
+    },
+    {
+      "id": "B01-R04",
+      "severity": "P2",
+      "category": "product",
+      "file": "backend/src/api/handler.py",
+      "line": 57,
+      "title": "Validate profile selector types before set construction",
+      "defect": "An authenticated request's body.profileId is inserted into a Python set before validation. JSON arrays and objects are unhashable and fall into the generic service-unavailable handler.",
+      "scenario": "An authenticated PUT /v1/profile with {profileId: [], revision: 1, data: {}} (or profileId: {}) returns 503 unavailable instead of the required 400 malformed input. The service logs TypeError and a client may retry a permanently invalid request.",
+      "evidence": [
+        "behavior-repro.log",
+        "backend/src/api/handler.py:39"
+      ],
+      "suggested_fix": "Validate explicitly supplied profile selectors against the ProfileId string contract before comparing them, and compare values without requiring caller-controlled values to be hashable.",
+      "write_set": [
+        "backend/src/api/handler.py",
+        "backend/tests/unit/test_router.py"
+      ],
+      "introduced_by": "9cd216c",
+      "escape": "Foreign-profile tests only pass strings; malformed JSON tests validate the top-level object but not selector types.",
+      "seit_refs": [
+        "SEIT-AFC-PR-058",
+        "CONTRACT-AFC-P2-API"
+      ],
+      "verification": "Array/object/null/non-string selectors return structured 400 without mutation; a valid foreign string remains 403 and a valid own-profile request still succeeds."
+    },
+    {
+      "id": "B01-R05",
+      "severity": "P2",
+      "category": "product / security configuration",
+      "file": "backend/template.yaml",
+      "line": 76,
+      "title": "Restrict DynamoDB grants to each function's operations",
+      "defect": "DynamoDBCrudPolicy gives ApiFunction write/delete/batch-write access to Alerts although its alerts route only reads. Every CRUD grant also includes deletion even though the shared store exposes only get, put, update and query and no current or declared delete operation.",
+      "scenario": "The generated execution role authorizes ApiFunction to forge or delete any profile's alert records, and gives other CRUD roles unnecessary delete capability. If code or a dependency in a function is compromised, IAM does not contain it to its assigned data operations. Offline inspection of SAM 1.169.0's actual policy template proves these Allow actions; this is not a claim of a demonstrated remote code-execution exploit.",
+      "evidence": [
+        "iam-policy-proof.json",
+        "iam-repro.log",
+        "backend/template.yaml:74",
+        "backend/template.yaml:107",
+        "backend/template.yaml:119",
+        "docs/vnv/backend/AGENTS.md:39"
+      ],
+      "suggested_fix": "Replace broad CRUD templates with explicit per-function action/resource statements derived from the table-operation inventory. Give the API only read access to Alerts, remove unneeded DeleteItem/BatchWriteItem grants, and preserve the required Links index and stream permissions.",
+      "write_set": [
+        "backend/template.yaml",
+        "backend/tests/contract/test_backend_template.py"
+      ],
+      "introduced_by": "9cd216c",
+      "escape": "Template tests validate service types, routes and SSM presence, but never inspect expanded DynamoDB actions by function.",
+      "seit_refs": [
+        "DES-AFC-P2-BACKEND",
+        "SEIT-AFC-PR-055",
+        "backend VnV guidance / least-privilege IAM"
+      ],
+      "verification": "Offline expanded-role inspection proves required operations remain allowed and unrelated writes/deletes are absent; SAM lint and backend tests remain green."
+    },
+    {
+      "id": "B01-R06",
+      "severity": "P2",
+      "category": "test-only / plan conformance",
+      "file": "backend/tests/conftest.py",
+      "line": 1,
+      "title": "Deliver the deployed auth/API test allocation owned by B01T",
+      "defect": "Only the offline Moto fixture and unit/contract suites were delivered. The shared deployed fixture and device_auth/api test directories explicitly assigned to P2-B01T are absent, without an owner scope amendment deferring their authorship.",
+      "scenario": "The next deployed verification command cannot collect B01's auth/API cases: python3.12 -m pytest --collect-only -q -p no:cacheprovider backend/tests/deployed exits 4 with 'file or directory not found' and no tests. Deferring actual deployed execution to L02/L03 does not deliver the test artifacts those slices must execute.",
+      "evidence": [
+        "deployed-collection.log",
+        "inventory.json",
+        "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/design.md:390",
+        "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/seit.json:planned_evidence_ownership",
+        "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/implementation.json:P2-B01T.write_set"
+      ],
+      "suggested_fix": "Author the allocated deployed conftest and auth/API cases against the declared contracts, keep them separate from the offline gate, and record execution as NOT_RUN until the authorized dev-stack lease and owner actions are available. Do not replace deployed evidence with Moto results.",
+      "write_set": [
+        "backend/tests/deployed/conftest.py",
+        "backend/tests/deployed/device_auth/",
+        "backend/tests/deployed/api/",
+        "B01T/B01 evidence inventory",
+        "backend/tests/conftest.py (only if needed to scope offline fixtures)"
+      ],
+      "introduced_by": "c0fdaaa (omitted slice deliverables)",
+      "escape": "The red inventory froze 65 offline assertions but did not reconcile the explicit deployed-path allocation in the approved planning package.",
+      "seit_refs": [
+        "SEIT-AFC-PR-038",
+        "SEIT-AFC-PR-055",
+        "SEIT-AFC-PR-058",
+        "TE-P2-F01",
+        "seit.planned_evidence_ownership"
+      ],
+      "verification": "Offline collection finds the named deployed cases without contacting AWS; actual execution remains a separately recorded L02/L03 obligation, with absent prerequisites a typed gap rather than PASS."
+    }
+  ],
+  "leads": [
+    {
+      "id": "a",
+      "classification": "not_a_defect",
+      "title": "Device/user-code brute force",
+      "proof": "backend/template.yaml:64-66 configures DefaultRouteSettings at rate 5 and burst 10, and the frozen template test checks both are nonzero. device_auth.issue selects eight characters independently from 32 symbols (40 bits), expires the pending code after 600 s, and creates a separate 256-bit polling handle. confirm validates the SSM passphrase before it can bind a code. Guessing a displayed code alone cannot retrieve the bearer session. API Gateway limits are best-effort targets, not a strict per-code attempt counter; real deployed enforcement is still unverified.",
+      "sources": [
+        "backend/template.yaml:64",
+        "backend/src/device_auth/__init__.py:29",
+        "backend/src/device_auth/__init__.py:54",
+        "backend/tests/contract/test_backend_template.py:53",
+        "behavior-repro.log"
+      ],
+      "external": "https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-throttling.html"
+    },
+    {
+      "id": "b",
+      "classification": "not_a_defect",
+      "title": "Remote device-code phishing",
+      "proof": "This manual, single-owner design necessarily grants access to the client whose code the authenticated owner confirms. /link says 'Link your TV', explicitly tells the user to enter the code shown on their TV, leaves the code empty, and requires a deliberate submit plus the SSM passphrase; it does not prefill or auto-confirm a query-supplied code. A victim deliberately entering an attacker's code can still authorize that client, an inherent social-engineering risk of device flows rather than a demonstrated bypass of this contract. The current possession instruction is meaningful mitigation. Stronger warnings/device context could harden it, but are not treated as a missing normative requirement or fixable product defect in B01.",
+      "sources": [
+        "backend/src/api/link.html:16",
+        "backend/src/api/link.html:20",
+        "backend/src/api/link.html:25",
+        "backend/src/device_auth/__init__.py:54",
+        "link-page.html"
+      ],
+      "external": "https://www.rfc-editor.org/rfc/rfc8628.html#section-5.4"
+    },
+    {
+      "id": "c",
+      "classification": "confirmed_defect",
+      "finding_ids": [
+        "B01-R05"
+      ],
+      "title": "DynamoDB least privilege",
+      "proof": "The table resources are scoped, but actions are broader than each function needs. SAM's installed policy template expands DynamoDBCrudPolicy to Allow DeleteItem and BatchWriteItem, including ApiFunction on Alerts. No API operation writes/deletes generated alerts and no store accessor deletes any item.",
+      "sources": [
+        "backend/template.yaml:76",
+        "iam-policy-proof.json",
+        "iam-repro.log"
+      ],
+      "external": "https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-policy-template-list.html#dynamodbcrudpolicy"
+    },
+    {
+      "id": "d",
+      "classification": "not_a_defect",
+      "title": "Pipeline no-mutate pragma",
+      "proof": "The exclusion is explicit and narrowly justified by the frozen AST contract in test_backend_template.py:107-122, which requires direct calls in the handler body that mutmut replaces with a trampoline. The added behavioral test executes INSERT/MODIFY/REMOVE and empty batches, verifies call order/arguments and verifies routed alerts in Moto DynamoDB. The four future-module substitutes are explicit monkeypatches and do not pretend to be deployed module evidence. Thus this is not hidden untested wiring. Its limitation remains real: the native mutation inventory measures _game_events but contains zero lambda_handler mutants, so the reported score must not be described as native mutation coverage of the pipeline orchestration. Revisit this exemption when the stubs are realized.",
+      "sources": [
+        "backend/src/pipeline/handler.py:17",
+        "backend/tests/contract/test_backend_template.py:107",
+        "backend/tests/unit/test_pipeline_and_stubs.py:17",
+        "coverage-result.json",
+        "rerun-mutation-result.json"
+      ]
+    },
+    {
+      "id": "e",
+      "classification": "not_a_defect",
+      "title": "Inline-script Content-Security-Policy",
+      "proof": "unsafe-inline is replaceable with a hash/nonce or a separate same-origin script; it is not intrinsically necessary. However the handler returns a constant local HTML file, never interpolates request/secret content, the script writes responses with textContent, code is manually entered, and framing is denied. No reachable HTML/script injection was found. The current policy is a defense-in-depth weakness, not an evidenced XSS defect; a script hash would be a small optional hardening change.",
+      "sources": [
+        "backend/src/api/handler.py:154",
+        "backend/src/api/link.html:29",
+        "backend/src/api/link.html:41",
+        "link-page.html"
+      ]
+    },
+    {
+      "id": "f",
+      "classification": "not_a_defect",
+      "title": "Disabled ingest schedule default",
+      "proof": "The complete minute schedule exists and its State references an ENABLED/DISABLED parameter. B01 deliberately ships an unimplemented ingest stub, while live activation is separately controlled. Starting with DISABLED avoids invoking that stub continuously and is consistent with only running for relevant live games after B02/activation. It is not evidence that game-window activation is implemented or accepted.",
+      "sources": [
+        "backend/template.yaml:33",
+        "backend/template.yaml:158",
+        "backend/src/feed_ingest/__init__.py:11",
+        "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/receipt.json"
+      ]
+    },
+    {
+      "id": "g",
+      "classification": "not_a_defect",
+      "title": "Mutation retries and loaded-host timeouts",
+      "proof": "The final adapter changes the documented timeout_constant/timeout_multiplier from defaults to 5/30. Earlier exit-3 runs were not accepted as passes; timeouts remain UNRESOLVED. An independent final-config run on the exact candidate exited 0 in 641.745 seconds, scoring 1376 killed / 1383 with 7 survivors and zero timeouts or unresolved states; observed host load immediately afterward was about 19.5/24.4/20.5 (1/5/15 min), not a controlled stress qualification. This supports a repaired timeout calibration, not a confirmed continuing flaky gate. The first two raw logs are absent from the committed evidence, so their disjoint-timeout explanation remains author-reported, and this is one verification run rather than a statistical reliability claim.",
+      "sources": [
+        "tools/ci/mutation/backend.sh:47",
+        "tools/ci/mutation/evaluate.py:178",
+        "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B01-TOOL-001/receipt.json",
+        "mutation-command.json"
+      ]
+    }
+  ],
+  "survivor_review": [
+    {
+      "ids": [
+        "api.handler.x__bearer__mutmut_10"
+      ],
+      "classification": "equivalent API behavior for reachable requests",
+      "reason": "Absent header defaults to XXXX instead of empty; neither is bearer, so the returned token is still empty."
+    },
+    {
+      "ids": [
+        "api.handler.x__bearer__mutmut_18"
+      ],
+      "classification": "equivalent authorization result, extra DynamoDB lookup",
+      "reason": "A non-bearer scheme returns XXXX instead of empty; sessions are created from 256-bit random tokens, so this cannot authenticate a legitimately issued session. It does add a pointless lookup and is not byte-for-byte behavior equivalence."
+    },
+    {
+      "ids": [
+        "device_auth.x_issue__mutmut_18",
+        "device_auth.x_poll__mutmut_38"
+      ],
+      "classification": "equivalent in this pinned Python 3.12 runtime",
+      "reason": "secrets.token_urlsafe(None) uses DEFAULT_ENTROPY=32 bytes in the installed standard library. The production code correctly requests 32 explicitly."
+    },
+    {
+      "ids": [
+        "store.x_complete_link__mutmut_22"
+      ],
+      "classification": "keyword-case equivalent",
+      "reason": "Changes DynamoDB update-expression SET to set; the observed update semantics remain unchanged."
+    },
+    {
+      "ids": [
+        "store.x_get_session__mutmut_14",
+        "store.x_get_session__mutmut_5"
+      ],
+      "classification": "non-equivalent in real DynamoDB; emulator coverage limitation",
+      "reason": "False or omitted ConsistentRead permits eventual reads, unlike the candidate's required strongly consistent immediate session lookup. Moto does not model that propagation delay. These survivors are not proof of production equivalence; they remain in the scored denominator, so the 99.49% threshold arithmetic is conservative."
+    }
+  ],
+  "developer_feedback": [
+    {
+      "id": "B01-REV-DX-01",
+      "observation": "A provisioned local host masked the hygiene job's new native-tool dependencies. Clean-environment qualification must follow the actual job that owns each test, not just gate backend.",
+      "evidence": "ci-hygiene-repro.log"
+    },
+    {
+      "id": "B01-REV-DX-02",
+      "observation": "141 passing backend tests, 100% changed-line coverage and 99.49% generated-mutant score did not catch lost poll responses, response-envelope expansion or malformed profile selector types.",
+      "evidence": "behavior-repro.log"
+    },
+    {
+      "id": "B01-REV-DX-03",
+      "observation": "The pipeline AST contract constrains mutmut's trampoline transformation. The explicit handler exclusion preserves that contract, but native mutation coverage of orchestration must not be claimed; its present evidence is behavioral wiring plus line coverage.",
+      "evidence": "backend/src/pipeline/handler.py:17; survivor-diffs.log; rerun-mutation-result.json"
+    },
+    {
+      "id": "B01-REV-DX-04",
+      "observation": "The deployed B01T test allocation was lost between the planning write set and the red inventory. Distinguish authoring a test from executing it later under a dev-stack lease.",
+      "evidence": "deployed-collection.log; design.md:390; seit.planned_evidence_ownership"
+    },
+    {
+      "id": "B01-REV-DX-05",
+      "observation": "Two surviving consistency mutants are not production equivalents. Moto makes them indistinguishable; keep that simulator limit visible even though the mutation score clears its threshold.",
+      "evidence": "survivor-diffs.log"
+    }
+  ],
+  "limitations": [
+    {
+      "type": "VISUAL_REVIEW_NOT_RUN",
+      "detail": "Only the requested handler-rendered link-page.html was produced. Browser desktop/phone flow and screenshots remain with the orchestrator as specified in the packet; HTML generation is not visual acceptance."
+    },
+    {
+      "type": "DEPLOYED_VERIFICATION_NOT_RUN",
+      "detail": "No credentials, AWS account calls, device calls, installs or GitHub actions were performed. Real API Gateway throttling/429 payloads, IAM enforcement, DynamoDB consistency/TTL and deployment behavior are not closed by Moto or SAM lint."
+    },
+    {
+      "type": "MUTATION_SCOPE_LIMIT",
+      "detail": "The pipeline lambda_handler is deliberately excluded from native mutation for the frozen AST contract; its behavioral wiring and real Moto persistence are tested. The 99.49% score covers generated mutants, not every behavior or runtime boundary."
+    },
+    {
+      "type": "HISTORICAL_EVIDENCE_LIMIT",
+      "detail": "Author receipts describe the first two timeout runs, but their complete native raw logs are not committed. This review independently reran the final timeout configuration once, successfully."
+    },
+    {
+      "type": "SUPPLY_REVIEW_LIMIT",
+      "detail": "Existing supply-scan receipts and hash-pin structures were inspected; no new acquisition, install, full advisory refresh, compiled-extension analysis or fresh artifact download was performed."
+    },
+    {
+      "type": "BRAN_UNAVAILABLE",
+      "detail": "No native .bran/policy.yaml; ordinary bounded repository discovery used."
+    }
+  ],
+  "role": "Bearing Lite Reviewer",
+  "route": "Codex CLI / GPT-6 Astra / high",
+  "lease_id": "P2-B01-review",
+  "review_unit": "IE-P2-5 (P2-B01T + P2-B01 and in-round fixture/tool repairs)",
+  "issue": 20,
+  "candidate_ref": "f71f72ba975d3c5218fe0ad0f2cbe9932bc5a537",
+  "base_ref": "884df103e1ee7f8b53c674864db349cd00875283",
+  "branch": "afc/p2-b01",
+  "started_at": "2026-10-14T05:52:27Z",
+  "skill": "/home/spectre/.claude/plugins/cache/bearing-lite/bearing-lite/1.1.7/skills/reviewer/SKILL.md",
+  "frozen_review_capabilities": {
+    "coverage_assist": {
+      "enabled": true,
+      "required": true,
+      "backend": "OCR OpenCodeReview delegation",
+      "availability": "available; preview and rule calls all exit 0",
+      "status": "applied"
+    },
+    "reverify": {
+      "enabled": true,
+      "backend": "reverify 0.11.0 (frozen declaration)",
+      "status": "not_applicable",
+      "reason": "Python Lambda source, tests, SAM and CI configuration; no compiled-binary claim. Not probed or substituted."
+    }
+  },
+  "next_action": "Return the frozen REPAIR_REQUIRED receipt to the parent. One bounded repair may address all six findings through the configured bug-triager authority; deterministic verification then closes this review unit. No second independent review or publication authority is granted.",
+  "method": "Independent code/contract inspection plus reproducible in-process behavioral demonstrations and the requested existing deterministic checks. Narrow Test Engineering inspection of test quality and scope (NASA SEH Appendix I adapted method, SRC-EMV-NASA-SEH/S8 reference named by the skill; no NASA text used as additional product requirements).",
+  "verdict": "REPAIR_REQUIRED",
+  "status": "frozen",
+  "finished_at": "2026-10-14T06:13:14.491999+00:00",
+  "review_round": 1,
+  "repair_rounds_executed_by_reviewer": 0,
+  "finding_ids": [
+    "B01-R01",
+    "B01-R02",
+    "B01-R03",
+    "B01-R04",
+    "B01-R05",
+    "B01-R06"
+  ],
+  "changed_paths": [
+    ".github/workflows/ci.yml",
+    "backend/.gitignore",
+    "backend/pyproject.toml",
+    "backend/requirements-dev.txt",
+    "backend/requirements.txt",
+    "backend/samconfig.toml",
+    "backend/src/alert_policy/__init__.py",
+    "backend/src/api/__init__.py",
+    "backend/src/api/handler.py",
+    "backend/src/api/link.html",
+    "backend/src/api/openapi.yaml",
+    "backend/src/device_auth/__init__.py",
+    "backend/src/feed_ingest/__init__.py",
+    "backend/src/lineup/__init__.py",
+    "backend/src/matcher/__init__.py",
+    "backend/src/panel/__init__.py",
+    "backend/src/pipeline/handler.py",
+    "backend/src/provider_resolver/__init__.py",
+    "backend/src/provider_resolver/registry.json",
+    "backend/src/requirements.txt",
+    "backend/src/store/__init__.py",
+    "backend/template.yaml",
+    "backend/tests/conftest.py",
+    "backend/tests/contract/test_api_contract.py",
+    "backend/tests/contract/test_backend_template.py",
+    "backend/tests/unit/test_device_auth.py",
+    "backend/tests/unit/test_device_auth_units.py",
+    "backend/tests/unit/test_pipeline_and_stubs.py",
+    "backend/tests/unit/test_router.py",
+    "backend/tests/unit/test_store.py",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B01-TOOL-001/CMD-COVERAGE-BACKEND.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B01-TOOL-001/CMD-MUTATION-BACKEND.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B01-TOOL-001/backend-tests-freeze.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B01-TOOL-001/closure.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B01-TOOL-001/coverage-result.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B01-TOOL-001/hashes.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B01-TOOL-001/mutation-result.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B01-TOOL-001/mutmut-backend-freeze.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B01-TOOL-001/mutmut-backend-hashes.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B01-TOOL-001/mutmut-backend-requirements.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B01-TOOL-001/mutmut-cicd-stats.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B01-TOOL-001/pip-audit-backend.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B01-TOOL-001/pip-audit-mutmut-only.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B01-TOOL-001/receipt.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B01-TOOL-001/supply-scan.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/CMD-COVERAGE-BACKEND-base-884df10.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/CMD-COVERAGE-BACKEND.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/CMD-GATE-ALL.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/CMD-GATE-BACKEND.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/CMD-GATE-HYGIENE.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/CMD-MUTATION-BACKEND-shim.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/CMD-MUTATION-BACKEND.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/CMD-SAM-VALIDATE.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/PROC-GATE-TOOL-QUALIFY.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/cfn-lint.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/coverage-result-base-884df10.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/coverage-result.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/frozen-tests.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/mutation-diagnostic-cicd-stats.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/mutation-diagnostic-result.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/mutation-result.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/mutmut-shim.sh",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/receipt.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/supply-scan.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/tools-pytest.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/CMD-GATE-HYGIENE.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/CMD-RED.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/CMD-RED.xml",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/afc-red-receipt/SKILL.md",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/afc-red-receipt/agents/openai.yaml",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/afc-red-receipt/scripts/verify_receipt.py",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/collect.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/commands.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/dependency-audit.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/dependency-protocol-proof.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/harness-selfcheck.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/path-check.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/qualify-coverage.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/qualify-mutation.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/receipt.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/record_receipt.py",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/repo-suite-staged.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/repo-suite.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/skill-validation.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/supply-scan.json",
+    "tools/ci/coverage/evaluate.py",
+    "tools/ci/mutation/backend.sh",
+    "tools/ci/tests/gate_support.py",
+    "tools/ci/tests/test_bug1_cideps.py",
+    "tools/ci/tests/test_bug2_mutenv.py",
+    "tools/ci/tests/test_bug3_covempty.py",
+    "tools/ci/tests/test_gate_support.py"
+  ],
+  "candidate_file_sha256": {
+    ".github/workflows/ci.yml": "933b03af7478463452866f541559199c3af367007e83ca4e5c2f81928b577d83",
+    "backend/.gitignore": "89e08eafcc8d72ad0e272259ef7d2e8bc12833d1291835038b2f59f4e9c29ee2",
+    "backend/pyproject.toml": "2e8a59c03dfc7e69f163f52a16d0629953fdbf96fbc3fcce8ad95ac996992c98",
+    "backend/requirements-dev.txt": "d95d58b060eebce85295993c92c84523944cc993414d216742341e051cc68250",
+    "backend/requirements.txt": "57b7d61e332d6de474105be3842da5ce2d8018c7288b6bf5b75d150db6b4b36a",
+    "backend/samconfig.toml": "282321dd142aa919414fe78c0c4cb33c6d9e8a43bdf17e85ccb1fd80dd0b0eb0",
+    "backend/src/alert_policy/__init__.py": "49dde31c657c687e5bc85832638d165b82e6460981feba8a5e99bff46c9b7d5b",
+    "backend/src/api/__init__.py": "66cec3ec6bf496f3fa1e4f6fdbcbff7c691910ddbd1a32e5ccc986986801b8eb",
+    "backend/src/api/handler.py": "b68a1cff5e7cd4811380bfa0786889c60be92003d33e6b1cf44da8a95dec2adb",
+    "backend/src/api/link.html": "1df3357df88fce2ac9fd45d962b6351ff0576be48ef0b5208c35f86257cf90f2",
+    "backend/src/api/openapi.yaml": "0bbf094e61c81e9e0a421488890fec50f57146d8f90b6d50095a1b1235f2d5c7",
+    "backend/src/device_auth/__init__.py": "9c59af3b402902d2389ee100983e8f620dd7d5c4f01d75fe725434cab26a8cb4",
+    "backend/src/feed_ingest/__init__.py": "b8ff8c55d5fae635581904ca9ae5a037b42e944b5df8b098578b1e5bd0b738fa",
+    "backend/src/lineup/__init__.py": "18d010a9c7fb6a48234a1ba5c47a9f173e371099f9c636db81fca97bc2b1a38e",
+    "backend/src/matcher/__init__.py": "d1a8dcbe369131a2f77f8d0733b36c23b487bbe27f306c2daa11fe886165beaa",
+    "backend/src/panel/__init__.py": "26b5e0c394afdcc483f1dbe02446e45b6cecf3e6efead50248d1579595da079c",
+    "backend/src/pipeline/handler.py": "b3cded944af5665bbf68161683d78c7296a001e261889701568d616600210abd",
+    "backend/src/provider_resolver/__init__.py": "c404bdb74084bc415c9f5f2cbfecf8a409289a10ddd875516a3d6da013444f44",
+    "backend/src/provider_resolver/registry.json": "adbefa0e1e6dcbffa55aecf7d5d009c99b9301994370272bbfdff4db894b65eb",
+    "backend/src/requirements.txt": "405eb4f1ad7ab21088f906843d5058d736573bd7d711bb4853463701b60b18e8",
+    "backend/src/store/__init__.py": "2c1bb81392cdbd100278d0d77eb286c17505c09a870d6af6269763d3ece0a48f",
+    "backend/template.yaml": "1201894ebe409560260be33695c22e8b315c48d1135f48c3a8203aa26ec79833",
+    "backend/tests/conftest.py": "9a2fa26b355f5f3ddcda93081607496328abf902eedb27721b29d12096227f0e",
+    "backend/tests/contract/test_api_contract.py": "b3e635ea54bb01679a4c2ed634e63c781b7b10d80ae4b2bbdb6309b269c705b5",
+    "backend/tests/contract/test_backend_template.py": "c58e8ae3fd066baf2329350edecc859c94d6ba0c9a48f92191e7062fdffb5ded",
+    "backend/tests/unit/test_device_auth.py": "9f57021ffc36d0027d097915ea6ee10b0348023e626810e040def3c98e78a6f6",
+    "backend/tests/unit/test_device_auth_units.py": "f81dd26dd80d5e3201887914b859d55ab3952ae6f4e44774102a3c623acf1a9e",
+    "backend/tests/unit/test_pipeline_and_stubs.py": "e164fdef8153a930f9f96d0162315c7bb5cb176fd1f9d483ed6b7920036d48e9",
+    "backend/tests/unit/test_router.py": "97c09114a2efabd0a45b05c625c717007537668a4560076034c05ccc43995ca7",
+    "backend/tests/unit/test_store.py": "db025579f3739ae534d3b6573b4aab7a0f16ad4f333600fbd3c9554b15fdbc7e",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B01-TOOL-001/CMD-COVERAGE-BACKEND.txt": "eb7c3624d63d310d6b3149ca532b5235cca6b4b00fd780cd1bf8c46fe9b165e0",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B01-TOOL-001/CMD-MUTATION-BACKEND.txt": "867937d5c4bc2128f9a57cc5ec83510b35ff5ebb51a919b3bf8d3cd65942669c",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B01-TOOL-001/backend-tests-freeze.txt": "83e5606c0c693e5c9d8ebb868492c2155daaa63d603437df9b3358b332a1f1d6",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B01-TOOL-001/closure.txt": "a8de017fb93af1baead6ea64f9b163932c758ec20d5f16bdb30d5301eacf67f3",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B01-TOOL-001/coverage-result.json": "fec7598e8308266d7d3a93186821c120f756c8931ea86efef5ad1a2fdf91c693",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B01-TOOL-001/hashes.json": "f6ae2d2882c5090624a8d06c0e4ba9225417662dd80d875d1a4ccc11a12a5351",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B01-TOOL-001/mutation-result.json": "1f87b2024e94d597f0dc462bb71d8f5850bc560999ea4577856fb55684a95759",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B01-TOOL-001/mutmut-backend-freeze.txt": "5ebf0a153a4ec4c695875bceca13db5863fbe346642d8ca6051e0f4066d527ba",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B01-TOOL-001/mutmut-backend-hashes.json": "cc58e30079f5955b4ddf3018bf59c5713bcb1b05cb7bf73445c68b00a9044abb",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B01-TOOL-001/mutmut-backend-requirements.txt": "722d1e204d25348d91d53d2bab9e3e3d5c3442d6d4705b0fe898a6c7785613e7",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B01-TOOL-001/mutmut-cicd-stats.json": "f99d21860a551011864d08906f043481c7df0c73bc204d9a2b490814ee771a01",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B01-TOOL-001/pip-audit-backend.json": "4f5e936a5b3d1a7070f5d4d638ee49f88035a3b6903f6d188693ef92296ede26",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B01-TOOL-001/pip-audit-mutmut-only.json": "c71ab8f6a567f049b7254300af40815b06d2e08b3c6378bae661514d7938d63e",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B01-TOOL-001/receipt.json": "2a067233a0a47b51d353ee13a1bc171acd62f0caeab393b2e8776bf90b7ef91e",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B01-TOOL-001/supply-scan.json": "6f3169993c994b92d43a3326573d79b774ca6a26dedb58078183febd8a6bc3b3",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/CMD-COVERAGE-BACKEND-base-884df10.txt": "f92bee6f7359828eac5d819f584c52a54012bf384deb9c8b715400859d941ff7",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/CMD-COVERAGE-BACKEND.txt": "faf6d9ee1792912acebbad67da5159dd8f2a22cc72e7e202b722aeb47c3fc680",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/CMD-GATE-ALL.txt": "dece295c751fb5e2939939727d51c015b1121dbcea46fbab8598d77d74ad4a2b",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/CMD-GATE-BACKEND.txt": "edbd7d0dcea3efc6ab6a911b02c0bce3f1e03a6902cf253085ea3e09d5ef7fb2",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/CMD-GATE-HYGIENE.txt": "2327b1b6015b4ad677045eaa14470a1b3b7822090b9541c0bf8f3b1e47f59350",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/CMD-MUTATION-BACKEND-shim.txt": "e94294ece6c3174ce0dafbbcfcdefd7c5ad4a75ab3d5466b23a06db9577ee9e1",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/CMD-MUTATION-BACKEND.txt": "450b6aa445a5928d4eceb1b4c1d1924c30b957418af3026303d789b0a98ec84b",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/CMD-SAM-VALIDATE.txt": "7bb58c5f351c24dce0731ec82fed6a9914fe21964d4fa495b9ee33889a842c36",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/PROC-GATE-TOOL-QUALIFY.txt": "f368090a0a2a2cf58326d26aebe5ddcecb34a89ce4468eea78ad2e1d671ba8f7",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/cfn-lint.txt": "d35ab90b078b296fdccff78978193295fcc54719ea49140d8badf5685014cce5",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/coverage-result-base-884df10.json": "baeb66cffcd62d62c422fadca147e81b52838f56217fd0bac85fb6009522afbe",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/coverage-result.json": "ec72a127231e6e4e05f4680ba1c7bc3764ee3c2783452f54aa1d1c440bbfd1ea",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/frozen-tests.json": "9bfdcff44b50733681ae8f62e7b1e3684e2021a1d367cef349c2755252d1d1c1",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/mutation-diagnostic-cicd-stats.json": "f99d21860a551011864d08906f043481c7df0c73bc204d9a2b490814ee771a01",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/mutation-diagnostic-result.json": "5d2ed6c895210703a73c1d35a2f81520494194225192fd5b37ee48d02907b445",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/mutation-result.json": "f99cf4dfcd96aecb3673eb70d6843cb40c4fcec0348b21f4cf91875a96c12a06",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/mutmut-shim.sh": "6457faea23c49c10ee8ed8f5cecd723f65c4bd53e12d0bd3856cad4073fe3c91",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/receipt.json": "e1ffa053fc436ee619990452d423768058ba4f6dc172cc9cb3943f3f0c751aa9",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/supply-scan.json": "420d9402ad1eac4328db6b39234d1f0ca3084a541c70b969fece4a8c72f03c94",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/tools-pytest.txt": "590a9fe07624b645507ebd48fbd7428c05b688c0afdad62802114939f3905dfa",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/CMD-GATE-HYGIENE.txt": "8ab764437d4194442a28825b57a8c81fcec90e3b6db939f50329fd9511a106a9",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/CMD-RED.txt": "946144cb95be2f4d8dcf57e6034e1ab6c9df7e3eb72fe57240ef195f29e7d8b3",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/CMD-RED.xml": "e80457a525268e7014295070c9870d57ae01b2b201cd8bdb8f8c84fa06b1fd76",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/afc-red-receipt/SKILL.md": "43861fae238c3fd4c344107ae5801b711c461c8aa801bdc25c04df7a18a22878",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/afc-red-receipt/agents/openai.yaml": "21d3afa551be37880073d35e2db110742ebb8ecd5c8d92f7c8125a18f1e86dbd",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/afc-red-receipt/scripts/verify_receipt.py": "bbb5d2bb08237c026cca189e242916b322bf17427dbe211a674726198919ca6a",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/collect.txt": "69a92bddca2b034b8a79fe1d207627e7c10a7c4e717bfd0fc0feca86e623b83a",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/commands.json": "82aafd9f23ef67b07926e018a32b4baebe892ce17d5186224ca26e1dede4eec8",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/dependency-audit.json": "dc8bd4b0a746017eee036be559dedde00c0f4be8ed3ebd7c7a7f0a166221c2ef",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/dependency-protocol-proof.json": "13cd4e582da016b2188db9d1c3e9410cf86ad0b5c894f60c2101ce4f65bf6aaf",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/harness-selfcheck.txt": "3e1bae7233d243eba7948a6229ccbf840382140805403d38bdb6b16669eb0112",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/path-check.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/qualify-coverage.txt": "6a3d28034e6c9654f891ff148ced944c593c6d5a84742d13a38b47c542697128",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/qualify-mutation.txt": "8fbad199c80d9c18822d3ee33115c865dbeaba7a91477124cee733713c814d71",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/receipt.json": "ba17c6cb74002bc9a96091166f2fa4718c58429ea0f061e40e467fdd2ace1f5c",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/record_receipt.py": "81a121acc2377134590f9ea3f09e0bc9c8a4701005ee87566beb93e8a917ac20",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/repo-suite-staged.txt": "b9d9da4c0644cb0aa572086e8815c6e7bb3ef14f821887b4d190e8e19543dd32",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/repo-suite.txt": "686cf38cf38bcc07c06f390ee242fbbe5e1445fee5b097b23e51ec7de6220ad2",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/skill-validation.json": "694c8eae4e7a5ff95cb7f5b04db8e3efb49759fe187c3a95b08a2ddbc5016c62",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/supply-scan.json": "5ffbe19f3abed3f02f3d30c866111247890057ba0f4dc015a41845933a72e9ca",
+    "tools/ci/coverage/evaluate.py": "5c0cb151727c41a9b7e21f59ce83b2cfa6b897683ab72388bd1b362381140444",
+    "tools/ci/mutation/backend.sh": "56cae0f5603feeb6102a38aa2c2b887335225d88d35ab366406c67ebd3d18599",
+    "tools/ci/tests/gate_support.py": "7d6d42ee0c64d9572b808e07dd8f717e0a3617d6d4fbd6466a066960fc746888",
+    "tools/ci/tests/test_bug1_cideps.py": "07306bc85a7586576e402f6b2aeddb3c87c67e9e2453ddde33a13b072535ac43",
+    "tools/ci/tests/test_bug2_mutenv.py": "2f12626a04a0f2c949c00db62474202e977de79db6306d50afeaba369581f80a",
+    "tools/ci/tests/test_bug3_covempty.py": "45727d2fd4bfeeb3b4579b2403708f4af0cfa25c549aa2ae36d24f3336dd1d1b",
+    "tools/ci/tests/test_gate_support.py": "19e8e5ac9ef5d06bd908436343b11d56818c665644747606827ecfbafd922e6b"
+  },
+  "binding": {
+    "lease": [
+      {
+        "kind": "dispatch_lease",
+        "lease": "P2-B01-review",
+        "date": "2026-10-14",
+        "role": "reviewer",
+        "route": "codex/gpt-6-astra/high",
+        "route_note": "primary cursor/grok-4.7-high: 'You're out of usage' 2026-10-14",
+        "candidate": "f71f72ba975d3c5218fe0ad0f2cbe9932bc5a537",
+        "base": "884df103e1ee7f8b53c674864db349cd00875283",
+        "ocr": "delegate mode",
+        "reverify": "not applicable — no compiled-binary claim",
+        "state": "active",
+        "owner_continue": "2026-10-14 'No contine finish ms02' (overrides compaction handoff)"
+      }
+    ],
+    "plan_input_sha256": {
+      "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/implementation.json": "ae2b224ceb242d6a45e8d0564feee1c93e79e555e0d4e2ca045b8ed4b3c64c9a",
+      "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/design.md": "07bcfb0d7ac4b08a386ea242b23a6afec76c89a0eb5ddcd14c3f1976da776c6f",
+      "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/seit.json": "8db198397d019aa44310a7132b5b1dd98ef53f33b622fbb3ac34b7732c00c848",
+      "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/amazon-fantasy-companion-phase-2-technical-plan.md": "1c33c214324bbb6f7c6a31ee460eff3e5697516b27792a694000cf1669d2bc0f",
+      "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/models/AFC-Data.sysml": "4fcb3174666f80f13e405230c5e0df2498d2c6d62ea584160bd249f966f14031"
+    },
+    "base_to_candidate_diff_sha256": "6e877dbf83220ad02e0b425a082eed5528356361afe9752b5ebdf7604b09030a",
+    "author_ancestry": "Fresh reviewer session as dispatched; no author work performed in this session. Authors in unit are Codex (B01T), Claude Code (B01), Muse Code (repairs).",
+    "assurance_boundary": "IE-P2-5; n=1 k=1 c=0; ATE/IE cadence lifecycle, so latest author/gate-chain and parent verification receipts consumed here rather than claiming a nonexistent per-slice ATE receipt.",
+    "secrets_DEFAULT_ENTROPY": 32
+  },
+  "final_integrity": {
+    "HEAD": "f71f72ba975d3c5218fe0ad0f2cbe9932bc5a537",
+    "tracked_changed_during_review": [],
+    "tracked_diff": [],
+    "staged_diff": [],
+    "git_status": [
+      "?? tools/ci/__pycache__/",
+      "?? tools/ci/tests/__pycache__/",
+      "?? tools/ci/tests/coverage/__pycache__/",
+      "?? tools/ci/tests/mutation/__pycache__/",
+      "?? tools/spec/__pycache__/",
+      "?? tools/spec/azdiagram/__pycache__/"
+    ],
+    "temporary_cleanup": "All four owned TemporaryDirectory contexts (verification, coverage, CI reproduction, mutation) exited and removed their contents. Unrelated scratch directories were not touched."
+  },
+  "commands": [
+    {
+      "name": "gate",
+      "command": "bash tools/ci/gate.sh",
+      "exit": 0,
+      "wall_seconds": 93.098,
+      "log": "gate.log"
+    },
+    {
+      "name": "tools-pytest",
+      "command": "python3.12 -m pytest -q -p no:cacheprovider tools",
+      "exit": 0,
+      "wall_seconds": 111.402,
+      "log": "tools-pytest.log"
+    },
+    {
+      "name": "sam-validate",
+      "command": "sam validate --lint -t backend/template.yaml",
+      "exit": 0,
+      "wall_seconds": 3.721,
+      "log": "sam-validate.log"
+    },
+    {
+      "name": "actionlint",
+      "command": "actionlint",
+      "exit": 0,
+      "wall_seconds": 0.016,
+      "log": "actionlint.log"
+    },
+    {
+      "command": "bash tools/ci/coverage/backend.sh 884df10 <owned tmpdir>/coverage",
+      "exit": 0,
+      "wall_seconds": 58.346,
+      "log": "coverage.log"
+    },
+    {
+      "command": "PATH=$HOME/.local/share/afc-tools/mutmut-backend/bin:$PATH bash tools/ci/mutation/backend.sh 884df10 <owned tmpdir>/out",
+      "exit": 0,
+      "wall_seconds": 641.745,
+      "log": "mutation-wrapper.log"
+    },
+    {
+      "command": "ocr delegate preview --from 884df103e1ee7f8b53c674864db349cd00875283 --to f71f72ba975d3c5218fe0ad0f2cbe9932bc5a537",
+      "exit": 0,
+      "log": "ocr-preview.log"
+    },
+    {
+      "command": "ocr delegate rule <each of all 92 changed paths>",
+      "exit": 0,
+      "log": "ocr-index.json",
+      "calls": 92
+    },
+    {
+      "command": "PATH=/usr/bin:/bin $HOME/.local/share/afc-tools/backend-tests/bin/python3.12 -m pytest -q -p no:cacheprovider tools/ci/tests/test_bug2_mutenv.py tools/ci/tests/test_bug3_covempty.py",
+      "exit": 1,
+      "log": "ci-hygiene-repro.log",
+      "result": "Expected defect reproduction: 3 failed, 1 passed; no mutmut/diff-cover declared for hygiene"
+    },
+    {
+      "command": "python3.12 -m pytest --collect-only -q -p no:cacheprovider backend/tests/deployed",
+      "exit": 4,
+      "log": "deployed-collection.log",
+      "result": "Expected defect reproduction: directory absent; no test executed"
+    },
+    {
+      "command": "In-process HTTP API v2 handler demonstration via committed offline Moto fixture; GET /link written to link-page.html; lost poll response, 65536-byte profile PUT and malformed profile selectors",
+      "exit": 0,
+      "log": "behavior-repro.log",
+      "result": "Product failures reproduced; no network, real credentials or AWS account"
+    },
+    {
+      "command": "Offline inspection of installed SAM 1.169.0 DynamoDBCrudPolicy and candidate store/router operations",
+      "exit": 0,
+      "log": "iam-repro.log"
+    },
+    {
+      "command": "Read-only source/hash/JSON/frozen-red inventory inspection",
+      "exit": 0,
+      "log": "inventory.json"
+    }
+  ],
+  "ocr_per_file": [
+    {
+      "path": ".github/workflows/ci.yml",
+      "exit": 0,
+      "log": "ocr-rule-000.log",
+      "rule_groups": [
+        "### Rule Group 1: system / .github/workflows/**/*.{yaml,yml}"
+      ],
+      "preview_exclusion": null,
+      "review_observation": "Workflow security/pins unchanged; new backend dependency install is hash-verified. Hygiene dependency omission: B01-R01.",
+      "finding_ids": [
+        "B01-R01"
+      ]
+    },
+    {
+      "path": "backend/.gitignore",
+      "exit": 0,
+      "log": "ocr-rule-001.log",
+      "rule_groups": [
+        "### Rule Group 1: system / default"
+      ],
+      "preview_exclusion": null,
+      "review_observation": "SAM/bytecode/pytest build artifacts ignored; no sensitive path or credential.",
+      "finding_ids": []
+    },
+    {
+      "path": "backend/pyproject.toml",
+      "exit": 0,
+      "log": "ocr-rule-002.log",
+      "rule_groups": [
+        "### Rule Group 1: system / default"
+      ],
+      "preview_exclusion": null,
+      "review_observation": "Offline unit/contract selection and src import path are explicit; deployed allocation is absent (B01-R06).",
+      "finding_ids": []
+    },
+    {
+      "path": "backend/requirements-dev.txt",
+      "exit": 0,
+      "log": "ocr-rule-003.log",
+      "rule_groups": [
+        "### Rule Group 1: system / default"
+      ],
+      "preview_exclusion": "unsupported_ext or default_path; nevertheless manually reviewed",
+      "review_observation": "42 exact pins, 824 SHA-256 entries; compared with dependency/supply receipts. No new download or install.",
+      "finding_ids": []
+    },
+    {
+      "path": "backend/requirements.txt",
+      "exit": 0,
+      "log": "ocr-rule-004.log",
+      "rule_groups": [
+        "### Rule Group 1: system / default"
+      ],
+      "preview_exclusion": "unsupported_ext or default_path; nevertheless manually reviewed",
+      "review_observation": "Six exact runtime pins and wheel hashes; AWS SDK comes from Lambda runtime as explicitly documented.",
+      "finding_ids": []
+    },
+    {
+      "path": "backend/samconfig.toml",
+      "exit": 0,
+      "log": "ocr-rule-005.log",
+      "rule_groups": [
+        "### Rule Group 1: system / default"
+      ],
+      "preview_exclusion": null,
+      "review_observation": "afc-dev stack and deploy-only profile; validate remains credential-free; no embedded secrets.",
+      "finding_ids": []
+    },
+    {
+      "path": "backend/src/alert_policy/__init__.py",
+      "exit": 0,
+      "log": "ocr-rule-006.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{py,pyi,ipynb}"
+      ],
+      "preview_exclusion": null,
+      "review_observation": "Explicit AFC-STUB/final-signature module (or docstring-only package); no future feature completion claimed. Stub behavior tested; no secrets or absolute home paths.",
+      "finding_ids": []
+    },
+    {
+      "path": "backend/src/api/__init__.py",
+      "exit": 0,
+      "log": "ocr-rule-007.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{py,pyi,ipynb}"
+      ],
+      "preview_exclusion": null,
+      "review_observation": "Explicit AFC-STUB/final-signature module (or docstring-only package); no future feature completion claimed. Stub behavior tested; no secrets or absolute home paths.",
+      "finding_ids": []
+    },
+    {
+      "path": "backend/src/api/handler.py",
+      "exit": 0,
+      "log": "ocr-rule-008.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{py,pyi,ipynb}"
+      ],
+      "preview_exclusion": null,
+      "review_observation": "Router/auth/envelope/validation reviewed with callers. B01-R03 (response cap), B01-R04 (selector type); R02 affects polling contract. CSP lead (e) assessed.",
+      "finding_ids": [
+        "B01-R03",
+        "B01-R04"
+      ]
+    },
+    {
+      "path": "backend/src/api/link.html",
+      "exit": 0,
+      "log": "ocr-rule-009.log",
+      "rule_groups": [
+        "### Rule Group 1: system / default"
+      ],
+      "preview_exclusion": null,
+      "review_observation": "Static manual code/passphrase form, textContent rendering, no query auto-confirm; leads (b)/(e). Rendered output saved.",
+      "finding_ids": []
+    },
+    {
+      "path": "backend/src/api/openapi.yaml",
+      "exit": 0,
+      "log": "ocr-rule-010.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{yaml,yml}"
+      ],
+      "preview_exclusion": null,
+      "review_observation": "Route/security/error/entity shape reviewed against design. One-shot poll wording contributes to B01-R02; response bound relates to B01-R03.",
+      "finding_ids": [
+        "B01-R02"
+      ]
+    },
+    {
+      "path": "backend/src/device_auth/__init__.py",
+      "exit": 0,
+      "log": "ocr-rule-011.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{py,pyi,ipynb}"
+      ],
+      "preview_exclusion": null,
+      "review_observation": "40-bit code/256-bit handle/session, SSM compare, expiry/confirm replay and bearer binding inspected. B01-R02; leads (a)/(b).",
+      "finding_ids": [
+        "B01-R02"
+      ]
+    },
+    {
+      "path": "backend/src/feed_ingest/__init__.py",
+      "exit": 0,
+      "log": "ocr-rule-012.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{py,pyi,ipynb}"
+      ],
+      "preview_exclusion": null,
+      "review_observation": "Explicit AFC-STUB/final-signature module (or docstring-only package); no future feature completion claimed. Stub behavior tested; no secrets or absolute home paths.",
+      "finding_ids": []
+    },
+    {
+      "path": "backend/src/lineup/__init__.py",
+      "exit": 0,
+      "log": "ocr-rule-013.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{py,pyi,ipynb}"
+      ],
+      "preview_exclusion": null,
+      "review_observation": "Explicit AFC-STUB/final-signature module (or docstring-only package); no future feature completion claimed. Stub behavior tested; no secrets or absolute home paths.",
+      "finding_ids": []
+    },
+    {
+      "path": "backend/src/matcher/__init__.py",
+      "exit": 0,
+      "log": "ocr-rule-014.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{py,pyi,ipynb}"
+      ],
+      "preview_exclusion": null,
+      "review_observation": "Explicit AFC-STUB/final-signature module (or docstring-only package); no future feature completion claimed. Stub behavior tested; no secrets or absolute home paths.",
+      "finding_ids": []
+    },
+    {
+      "path": "backend/src/panel/__init__.py",
+      "exit": 0,
+      "log": "ocr-rule-015.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{py,pyi,ipynb}"
+      ],
+      "preview_exclusion": null,
+      "review_observation": "Explicit AFC-STUB/final-signature module (or docstring-only package); no future feature completion claimed. Stub behavior tested; no secrets or absolute home paths.",
+      "finding_ids": []
+    },
+    {
+      "path": "backend/src/pipeline/handler.py",
+      "exit": 0,
+      "log": "ocr-rule-016.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{py,pyi,ipynb}"
+      ],
+      "preview_exclusion": null,
+      "review_observation": "Explicit ordered chain, real Moto alert persistence test, documented no-mutate exception. Lead (d); no claim of native orchestration mutation coverage.",
+      "finding_ids": []
+    },
+    {
+      "path": "backend/src/provider_resolver/__init__.py",
+      "exit": 0,
+      "log": "ocr-rule-017.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{py,pyi,ipynb}"
+      ],
+      "preview_exclusion": null,
+      "review_observation": "Explicit AFC-STUB/final-signature module (or docstring-only package); no future feature completion claimed. Stub behavior tested; no secrets or absolute home paths.",
+      "finding_ids": []
+    },
+    {
+      "path": "backend/src/provider_resolver/registry.json",
+      "exit": 0,
+      "log": "ocr-rule-018.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{json,json5}"
+      ],
+      "preview_exclusion": null,
+      "review_observation": "Empty contract-shaped registry; no invented provider URI.",
+      "finding_ids": []
+    },
+    {
+      "path": "backend/src/requirements.txt",
+      "exit": 0,
+      "log": "ocr-rule-019.log",
+      "rule_groups": [
+        "### Rule Group 1: system / default"
+      ],
+      "preview_exclusion": "unsupported_ext or default_path; nevertheless manually reviewed",
+      "review_observation": "Relative include points SAM at pinned parent runtime requirements; no absolute-home dependency.",
+      "finding_ids": []
+    },
+    {
+      "path": "backend/src/store/__init__.py",
+      "exit": 0,
+      "log": "ocr-rule-020.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{py,pyi,ipynb}"
+      ],
+      "preview_exclusion": null,
+      "review_observation": "Conditional profile/link writes, hashes, consistent session read, table key operations and field whitelists reviewed. Non-atomic completion contributes to B01-R02; IAM operation inventory supports R05.",
+      "finding_ids": [
+        "B01-R02"
+      ]
+    },
+    {
+      "path": "backend/template.yaml",
+      "exit": 0,
+      "log": "ocr-rule-021.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{yaml,yml}"
+      ],
+      "preview_exclusion": null,
+      "review_observation": "Routes, tables/index/TTL, env names, stream, schedule and policy templates inspected; SAM lint passes. B01-R05; leads (a)/(c)/(f).",
+      "finding_ids": [
+        "B01-R05"
+      ]
+    },
+    {
+      "path": "backend/tests/conftest.py",
+      "exit": 0,
+      "log": "ocr-rule-022.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{py,pyi,ipynb}"
+      ],
+      "preview_exclusion": null,
+      "review_observation": "Explicit in-process Moto with real botocore protocol, fresh synthetic state, network/credential-file guards; deployed fixture allocation omitted (B01-R06).",
+      "finding_ids": [
+        "B01-R06"
+      ]
+    },
+    {
+      "path": "backend/tests/contract/test_api_contract.py",
+      "exit": 0,
+      "log": "ocr-rule-023.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{py,pyi,ipynb}"
+      ],
+      "preview_exclusion": "unsupported_ext or default_path; nevertheless manually reviewed",
+      "review_observation": "Frozen hash unchanged; meaningful positive/negative API and envelope assertions. No deployed/rate-limit enforcement claim.",
+      "finding_ids": []
+    },
+    {
+      "path": "backend/tests/contract/test_backend_template.py",
+      "exit": 0,
+      "log": "ocr-rule-024.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{py,pyi,ipynb}"
+      ],
+      "preview_exclusion": "unsupported_ext or default_path; nevertheless manually reviewed",
+      "review_observation": "Frozen hash unchanged; service, route, throttle and structural chain assertions. IAM verb coverage missing (R05); AST constraint explains lead (d).",
+      "finding_ids": [
+        "B01-R05"
+      ]
+    },
+    {
+      "path": "backend/tests/unit/test_device_auth.py",
+      "exit": 0,
+      "log": "ocr-rule-025.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{py,pyi,ipynb}"
+      ],
+      "preview_exclusion": "unsupported_ext or default_path; nevertheless manually reviewed",
+      "review_observation": "Frozen hash unchanged; 65-case red inventory includes auth/expiry/replay/foreign-profile behavior; no dropped-response coverage (R02).",
+      "finding_ids": [
+        "B01-R02"
+      ]
+    },
+    {
+      "path": "backend/tests/unit/test_device_auth_units.py",
+      "exit": 0,
+      "log": "ocr-rule-026.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{py,pyi,ipynb}"
+      ],
+      "preview_exclusion": "unsupported_ext or default_path; nevertheless manually reviewed",
+      "review_observation": "Additional edge cases; explicit substitutes for collisions/clock. First-poll-only assertion codifies R02.",
+      "finding_ids": [
+        "B01-R02"
+      ]
+    },
+    {
+      "path": "backend/tests/unit/test_pipeline_and_stubs.py",
+      "exit": 0,
+      "log": "ocr-rule-027.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{py,pyi,ipynb}"
+      ],
+      "preview_exclusion": "unsupported_ext or default_path; nevertheless manually reviewed",
+      "review_observation": "Explicit future-module monkeypatches, ordered call/argument assertions and Moto persistence; honest wiring-only evidence, not implemented future-module proof.",
+      "finding_ids": []
+    },
+    {
+      "path": "backend/tests/unit/test_router.py",
+      "exit": 0,
+      "log": "ocr-rule-028.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{py,pyi,ipynb}"
+      ],
+      "preview_exclusion": "unsupported_ext or default_path; nevertheless manually reviewed",
+      "review_observation": "Behavioral validation/revision/stub routing checks; lacks response-size and malformed-selector boundaries (R03/R04). Explicit substitutes are visible.",
+      "finding_ids": [
+        "B01-R03",
+        "B01-R04"
+      ]
+    },
+    {
+      "path": "backend/tests/unit/test_store.py",
+      "exit": 0,
+      "log": "ocr-rule-029.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{py,pyi,ipynb}"
+      ],
+      "preview_exclusion": "unsupported_ext or default_path; nevertheless manually reviewed",
+      "review_observation": "Moto-backed conditional/table operation assertions; no IAM/real consistency equivalence claim. Two consistency survivors remain genuine emulator limits.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B01-TOOL-001/CMD-COVERAGE-BACKEND.txt",
+      "exit": 0,
+      "log": "ocr-rule-030.log",
+      "rule_groups": [
+        "### Rule Group 1: system / default"
+      ],
+      "preview_exclusion": "unsupported_ext or default_path; nevertheless manually reviewed",
+      "review_observation": "Evidence/helper artifact reviewed under its returned rules; JSON/XML structure or log claims checked in grouped context, no product/production acceptance inferred.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B01-TOOL-001/CMD-MUTATION-BACKEND.txt",
+      "exit": 0,
+      "log": "ocr-rule-031.log",
+      "rule_groups": [
+        "### Rule Group 1: system / default"
+      ],
+      "preview_exclusion": "unsupported_ext or default_path; nevertheless manually reviewed",
+      "review_observation": "Historical native diagnostic/receipt distinguished from final exact-candidate rerun; timeout failures not promoted to PASS; survivor/scope limits stated.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B01-TOOL-001/backend-tests-freeze.txt",
+      "exit": 0,
+      "log": "ocr-rule-032.log",
+      "rule_groups": [
+        "### Rule Group 1: system / default"
+      ],
+      "preview_exclusion": "unsupported_ext or default_path; nevertheless manually reviewed",
+      "review_observation": "Generated dependency evidence grouped: key/pin/hash structure and declared provenance inspected; no fresh acquisition/scan claim.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B01-TOOL-001/closure.txt",
+      "exit": 0,
+      "log": "ocr-rule-033.log",
+      "rule_groups": [
+        "### Rule Group 1: system / default"
+      ],
+      "preview_exclusion": "unsupported_ext or default_path; nevertheless manually reviewed",
+      "review_observation": "Generated dependency evidence grouped: key/pin/hash structure and declared provenance inspected; no fresh acquisition/scan claim.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B01-TOOL-001/coverage-result.json",
+      "exit": 0,
+      "log": "ocr-rule-034.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{json,json5}"
+      ],
+      "preview_exclusion": null,
+      "review_observation": "Evidence/helper artifact reviewed under its returned rules; JSON/XML structure or log claims checked in grouped context, no product/production acceptance inferred.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B01-TOOL-001/hashes.json",
+      "exit": 0,
+      "log": "ocr-rule-035.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{json,json5}"
+      ],
+      "preview_exclusion": null,
+      "review_observation": "Generated dependency evidence grouped: key/pin/hash structure and declared provenance inspected; no fresh acquisition/scan claim.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B01-TOOL-001/mutation-result.json",
+      "exit": 0,
+      "log": "ocr-rule-036.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{json,json5}"
+      ],
+      "preview_exclusion": null,
+      "review_observation": "Historical native diagnostic/receipt distinguished from final exact-candidate rerun; timeout failures not promoted to PASS; survivor/scope limits stated.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B01-TOOL-001/mutmut-backend-freeze.txt",
+      "exit": 0,
+      "log": "ocr-rule-037.log",
+      "rule_groups": [
+        "### Rule Group 1: system / default"
+      ],
+      "preview_exclusion": "unsupported_ext or default_path; nevertheless manually reviewed",
+      "review_observation": "Generated dependency evidence grouped: key/pin/hash structure and declared provenance inspected; no fresh acquisition/scan claim.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B01-TOOL-001/mutmut-backend-hashes.json",
+      "exit": 0,
+      "log": "ocr-rule-038.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{json,json5}"
+      ],
+      "preview_exclusion": null,
+      "review_observation": "Generated dependency evidence grouped: key/pin/hash structure and declared provenance inspected; no fresh acquisition/scan claim.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B01-TOOL-001/mutmut-backend-requirements.txt",
+      "exit": 0,
+      "log": "ocr-rule-039.log",
+      "rule_groups": [
+        "### Rule Group 1: system / default"
+      ],
+      "preview_exclusion": "unsupported_ext or default_path; nevertheless manually reviewed",
+      "review_observation": "Generated dependency evidence grouped: key/pin/hash structure and declared provenance inspected; no fresh acquisition/scan claim.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B01-TOOL-001/mutmut-cicd-stats.json",
+      "exit": 0,
+      "log": "ocr-rule-040.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{json,json5}"
+      ],
+      "preview_exclusion": null,
+      "review_observation": "Evidence/helper artifact reviewed under its returned rules; JSON/XML structure or log claims checked in grouped context, no product/production acceptance inferred.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B01-TOOL-001/pip-audit-backend.json",
+      "exit": 0,
+      "log": "ocr-rule-041.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{json,json5}"
+      ],
+      "preview_exclusion": null,
+      "review_observation": "Evidence/helper artifact reviewed under its returned rules; JSON/XML structure or log claims checked in grouped context, no product/production acceptance inferred.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B01-TOOL-001/pip-audit-mutmut-only.json",
+      "exit": 0,
+      "log": "ocr-rule-042.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{json,json5}"
+      ],
+      "preview_exclusion": null,
+      "review_observation": "Evidence/helper artifact reviewed under its returned rules; JSON/XML structure or log claims checked in grouped context, no product/production acceptance inferred.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B01-TOOL-001/receipt.json",
+      "exit": 0,
+      "log": "ocr-rule-043.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{json,json5}"
+      ],
+      "preview_exclusion": null,
+      "review_observation": "Bounded evidence/receipt inspected against frozen hashes, 65 all-assertion red cases and actual final commands; acceptance/deferred authorship distinction yields R06.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/BUG-AFC-B01-TOOL-001/supply-scan.json",
+      "exit": 0,
+      "log": "ocr-rule-044.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{json,json5}"
+      ],
+      "preview_exclusion": null,
+      "review_observation": "Evidence/helper artifact reviewed under its returned rules; JSON/XML structure or log claims checked in grouped context, no product/production acceptance inferred.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/CMD-COVERAGE-BACKEND-base-884df10.txt",
+      "exit": 0,
+      "log": "ocr-rule-045.log",
+      "rule_groups": [
+        "### Rule Group 1: system / default"
+      ],
+      "preview_exclusion": "unsupported_ext or default_path; nevertheless manually reviewed",
+      "review_observation": "Evidence/helper artifact reviewed under its returned rules; JSON/XML structure or log claims checked in grouped context, no product/production acceptance inferred.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/CMD-COVERAGE-BACKEND.txt",
+      "exit": 0,
+      "log": "ocr-rule-046.log",
+      "rule_groups": [
+        "### Rule Group 1: system / default"
+      ],
+      "preview_exclusion": "unsupported_ext or default_path; nevertheless manually reviewed",
+      "review_observation": "Evidence/helper artifact reviewed under its returned rules; JSON/XML structure or log claims checked in grouped context, no product/production acceptance inferred.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/CMD-GATE-ALL.txt",
+      "exit": 0,
+      "log": "ocr-rule-047.log",
+      "rule_groups": [
+        "### Rule Group 1: system / default"
+      ],
+      "preview_exclusion": "unsupported_ext or default_path; nevertheless manually reviewed",
+      "review_observation": "Evidence/helper artifact reviewed under its returned rules; JSON/XML structure or log claims checked in grouped context, no product/production acceptance inferred.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/CMD-GATE-BACKEND.txt",
+      "exit": 0,
+      "log": "ocr-rule-048.log",
+      "rule_groups": [
+        "### Rule Group 1: system / default"
+      ],
+      "preview_exclusion": "unsupported_ext or default_path; nevertheless manually reviewed",
+      "review_observation": "Evidence/helper artifact reviewed under its returned rules; JSON/XML structure or log claims checked in grouped context, no product/production acceptance inferred.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/CMD-GATE-HYGIENE.txt",
+      "exit": 0,
+      "log": "ocr-rule-049.log",
+      "rule_groups": [
+        "### Rule Group 1: system / default"
+      ],
+      "preview_exclusion": "unsupported_ext or default_path; nevertheless manually reviewed",
+      "review_observation": "Evidence/helper artifact reviewed under its returned rules; JSON/XML structure or log claims checked in grouped context, no product/production acceptance inferred.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/CMD-MUTATION-BACKEND-shim.txt",
+      "exit": 0,
+      "log": "ocr-rule-050.log",
+      "rule_groups": [
+        "### Rule Group 1: system / default"
+      ],
+      "preview_exclusion": "unsupported_ext or default_path; nevertheless manually reviewed",
+      "review_observation": "Historical native diagnostic/receipt distinguished from final exact-candidate rerun; timeout failures not promoted to PASS; survivor/scope limits stated.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/CMD-MUTATION-BACKEND.txt",
+      "exit": 0,
+      "log": "ocr-rule-051.log",
+      "rule_groups": [
+        "### Rule Group 1: system / default"
+      ],
+      "preview_exclusion": "unsupported_ext or default_path; nevertheless manually reviewed",
+      "review_observation": "Historical native diagnostic/receipt distinguished from final exact-candidate rerun; timeout failures not promoted to PASS; survivor/scope limits stated.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/CMD-SAM-VALIDATE.txt",
+      "exit": 0,
+      "log": "ocr-rule-052.log",
+      "rule_groups": [
+        "### Rule Group 1: system / default"
+      ],
+      "preview_exclusion": "unsupported_ext or default_path; nevertheless manually reviewed",
+      "review_observation": "Evidence/helper artifact reviewed under its returned rules; JSON/XML structure or log claims checked in grouped context, no product/production acceptance inferred.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/PROC-GATE-TOOL-QUALIFY.txt",
+      "exit": 0,
+      "log": "ocr-rule-053.log",
+      "rule_groups": [
+        "### Rule Group 1: system / default"
+      ],
+      "preview_exclusion": "unsupported_ext or default_path; nevertheless manually reviewed",
+      "review_observation": "Evidence/helper artifact reviewed under its returned rules; JSON/XML structure or log claims checked in grouped context, no product/production acceptance inferred.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/cfn-lint.txt",
+      "exit": 0,
+      "log": "ocr-rule-054.log",
+      "rule_groups": [
+        "### Rule Group 1: system / default"
+      ],
+      "preview_exclusion": "unsupported_ext or default_path; nevertheless manually reviewed",
+      "review_observation": "Evidence/helper artifact reviewed under its returned rules; JSON/XML structure or log claims checked in grouped context, no product/production acceptance inferred.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/coverage-result-base-884df10.json",
+      "exit": 0,
+      "log": "ocr-rule-055.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{json,json5}"
+      ],
+      "preview_exclusion": null,
+      "review_observation": "Evidence/helper artifact reviewed under its returned rules; JSON/XML structure or log claims checked in grouped context, no product/production acceptance inferred.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/coverage-result.json",
+      "exit": 0,
+      "log": "ocr-rule-056.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{json,json5}"
+      ],
+      "preview_exclusion": null,
+      "review_observation": "Evidence/helper artifact reviewed under its returned rules; JSON/XML structure or log claims checked in grouped context, no product/production acceptance inferred.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/frozen-tests.json",
+      "exit": 0,
+      "log": "ocr-rule-057.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{json,json5}"
+      ],
+      "preview_exclusion": null,
+      "review_observation": "Evidence/helper artifact reviewed under its returned rules; JSON/XML structure or log claims checked in grouped context, no product/production acceptance inferred.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/mutation-diagnostic-cicd-stats.json",
+      "exit": 0,
+      "log": "ocr-rule-058.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{json,json5}"
+      ],
+      "preview_exclusion": null,
+      "review_observation": "Historical native diagnostic/receipt distinguished from final exact-candidate rerun; timeout failures not promoted to PASS; survivor/scope limits stated.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/mutation-diagnostic-result.json",
+      "exit": 0,
+      "log": "ocr-rule-059.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{json,json5}"
+      ],
+      "preview_exclusion": null,
+      "review_observation": "Historical native diagnostic/receipt distinguished from final exact-candidate rerun; timeout failures not promoted to PASS; survivor/scope limits stated.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/mutation-result.json",
+      "exit": 0,
+      "log": "ocr-rule-060.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{json,json5}"
+      ],
+      "preview_exclusion": null,
+      "review_observation": "Historical native diagnostic/receipt distinguished from final exact-candidate rerun; timeout failures not promoted to PASS; survivor/scope limits stated.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/mutmut-shim.sh",
+      "exit": 0,
+      "log": "ocr-rule-061.log",
+      "rule_groups": [
+        "### Rule Group 1: system / default"
+      ],
+      "preview_exclusion": null,
+      "review_observation": "Evidence/helper artifact reviewed under its returned rules; JSON/XML structure or log claims checked in grouped context, no product/production acceptance inferred.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/receipt.json",
+      "exit": 0,
+      "log": "ocr-rule-062.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{json,json5}"
+      ],
+      "preview_exclusion": null,
+      "review_observation": "Bounded evidence/receipt inspected against frozen hashes, 65 all-assertion red cases and actual final commands; acceptance/deferred authorship distinction yields R06.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/supply-scan.json",
+      "exit": 0,
+      "log": "ocr-rule-063.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{json,json5}"
+      ],
+      "preview_exclusion": null,
+      "review_observation": "Evidence/helper artifact reviewed under its returned rules; JSON/XML structure or log claims checked in grouped context, no product/production acceptance inferred.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/tools-pytest.txt",
+      "exit": 0,
+      "log": "ocr-rule-064.log",
+      "rule_groups": [
+        "### Rule Group 1: system / default"
+      ],
+      "preview_exclusion": "unsupported_ext or default_path; nevertheless manually reviewed",
+      "review_observation": "Evidence/helper artifact reviewed under its returned rules; JSON/XML structure or log claims checked in grouped context, no product/production acceptance inferred.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/CMD-GATE-HYGIENE.txt",
+      "exit": 0,
+      "log": "ocr-rule-065.log",
+      "rule_groups": [
+        "### Rule Group 1: system / default"
+      ],
+      "preview_exclusion": "unsupported_ext or default_path; nevertheless manually reviewed",
+      "review_observation": "Evidence/helper artifact reviewed under its returned rules; JSON/XML structure or log claims checked in grouped context, no product/production acceptance inferred.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/CMD-RED.txt",
+      "exit": 0,
+      "log": "ocr-rule-066.log",
+      "rule_groups": [
+        "### Rule Group 1: system / default"
+      ],
+      "preview_exclusion": "unsupported_ext or default_path; nevertheless manually reviewed",
+      "review_observation": "Bounded evidence/receipt inspected against frozen hashes, 65 all-assertion red cases and actual final commands; acceptance/deferred authorship distinction yields R06.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/CMD-RED.xml",
+      "exit": 0,
+      "log": "ocr-rule-067.log",
+      "rule_groups": [
+        "### Rule Group 1: system / default"
+      ],
+      "preview_exclusion": null,
+      "review_observation": "Bounded evidence/receipt inspected against frozen hashes, 65 all-assertion red cases and actual final commands; acceptance/deferred authorship distinction yields R06.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/afc-red-receipt/SKILL.md",
+      "exit": 0,
+      "log": "ocr-rule-068.log",
+      "rule_groups": [
+        "### Rule Group 1: system / default"
+      ],
+      "preview_exclusion": "unsupported_ext or default_path; nevertheless manually reviewed",
+      "review_observation": "Evidence/helper artifact reviewed under its returned rules; JSON/XML structure or log claims checked in grouped context, no product/production acceptance inferred.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/afc-red-receipt/agents/openai.yaml",
+      "exit": 0,
+      "log": "ocr-rule-069.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{yaml,yml}"
+      ],
+      "preview_exclusion": null,
+      "review_observation": "Evidence/helper artifact reviewed under its returned rules; JSON/XML structure or log claims checked in grouped context, no product/production acceptance inferred.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/afc-red-receipt/scripts/verify_receipt.py",
+      "exit": 0,
+      "log": "ocr-rule-070.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{py,pyi,ipynb}"
+      ],
+      "preview_exclusion": null,
+      "review_observation": "Bounded evidence/receipt inspected against frozen hashes, 65 all-assertion red cases and actual final commands; acceptance/deferred authorship distinction yields R06.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/collect.txt",
+      "exit": 0,
+      "log": "ocr-rule-071.log",
+      "rule_groups": [
+        "### Rule Group 1: system / default"
+      ],
+      "preview_exclusion": "unsupported_ext or default_path; nevertheless manually reviewed",
+      "review_observation": "Evidence/helper artifact reviewed under its returned rules; JSON/XML structure or log claims checked in grouped context, no product/production acceptance inferred.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/commands.json",
+      "exit": 0,
+      "log": "ocr-rule-072.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{json,json5}"
+      ],
+      "preview_exclusion": null,
+      "review_observation": "Bounded evidence/receipt inspected against frozen hashes, 65 all-assertion red cases and actual final commands; acceptance/deferred authorship distinction yields R06.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/dependency-audit.json",
+      "exit": 0,
+      "log": "ocr-rule-073.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{json,json5}"
+      ],
+      "preview_exclusion": null,
+      "review_observation": "Evidence/helper artifact reviewed under its returned rules; JSON/XML structure or log claims checked in grouped context, no product/production acceptance inferred.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/dependency-protocol-proof.json",
+      "exit": 0,
+      "log": "ocr-rule-074.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{json,json5}"
+      ],
+      "preview_exclusion": null,
+      "review_observation": "Evidence/helper artifact reviewed under its returned rules; JSON/XML structure or log claims checked in grouped context, no product/production acceptance inferred.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/harness-selfcheck.txt",
+      "exit": 0,
+      "log": "ocr-rule-075.log",
+      "rule_groups": [
+        "### Rule Group 1: system / default"
+      ],
+      "preview_exclusion": "unsupported_ext or default_path; nevertheless manually reviewed",
+      "review_observation": "Evidence/helper artifact reviewed under its returned rules; JSON/XML structure or log claims checked in grouped context, no product/production acceptance inferred.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/path-check.txt",
+      "exit": 0,
+      "log": "ocr-rule-076.log",
+      "rule_groups": [
+        "### Rule Group 1: system / default"
+      ],
+      "preview_exclusion": "unsupported_ext or default_path; nevertheless manually reviewed",
+      "review_observation": "Evidence/helper artifact reviewed under its returned rules; JSON/XML structure or log claims checked in grouped context, no product/production acceptance inferred.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/qualify-coverage.txt",
+      "exit": 0,
+      "log": "ocr-rule-077.log",
+      "rule_groups": [
+        "### Rule Group 1: system / default"
+      ],
+      "preview_exclusion": "unsupported_ext or default_path; nevertheless manually reviewed",
+      "review_observation": "Evidence/helper artifact reviewed under its returned rules; JSON/XML structure or log claims checked in grouped context, no product/production acceptance inferred.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/qualify-mutation.txt",
+      "exit": 0,
+      "log": "ocr-rule-078.log",
+      "rule_groups": [
+        "### Rule Group 1: system / default"
+      ],
+      "preview_exclusion": "unsupported_ext or default_path; nevertheless manually reviewed",
+      "review_observation": "Historical native diagnostic/receipt distinguished from final exact-candidate rerun; timeout failures not promoted to PASS; survivor/scope limits stated.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/receipt.json",
+      "exit": 0,
+      "log": "ocr-rule-079.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{json,json5}"
+      ],
+      "preview_exclusion": null,
+      "review_observation": "Bounded evidence/receipt inspected against frozen hashes, 65 all-assertion red cases and actual final commands; acceptance/deferred authorship distinction yields R06.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/record_receipt.py",
+      "exit": 0,
+      "log": "ocr-rule-080.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{py,pyi,ipynb}"
+      ],
+      "preview_exclusion": null,
+      "review_observation": "Bounded evidence/receipt inspected against frozen hashes, 65 all-assertion red cases and actual final commands; acceptance/deferred authorship distinction yields R06.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/repo-suite-staged.txt",
+      "exit": 0,
+      "log": "ocr-rule-081.log",
+      "rule_groups": [
+        "### Rule Group 1: system / default"
+      ],
+      "preview_exclusion": "unsupported_ext or default_path; nevertheless manually reviewed",
+      "review_observation": "Evidence/helper artifact reviewed under its returned rules; JSON/XML structure or log claims checked in grouped context, no product/production acceptance inferred.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/repo-suite.txt",
+      "exit": 0,
+      "log": "ocr-rule-082.log",
+      "rule_groups": [
+        "### Rule Group 1: system / default"
+      ],
+      "preview_exclusion": "unsupported_ext or default_path; nevertheless manually reviewed",
+      "review_observation": "Evidence/helper artifact reviewed under its returned rules; JSON/XML structure or log claims checked in grouped context, no product/production acceptance inferred.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/skill-validation.json",
+      "exit": 0,
+      "log": "ocr-rule-083.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{json,json5}"
+      ],
+      "preview_exclusion": null,
+      "review_observation": "Evidence/helper artifact reviewed under its returned rules; JSON/XML structure or log claims checked in grouped context, no product/production acceptance inferred.",
+      "finding_ids": []
+    },
+    {
+      "path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/supply-scan.json",
+      "exit": 0,
+      "log": "ocr-rule-084.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{json,json5}"
+      ],
+      "preview_exclusion": null,
+      "review_observation": "Evidence/helper artifact reviewed under its returned rules; JSON/XML structure or log claims checked in grouped context, no product/production acceptance inferred.",
+      "finding_ids": []
+    },
+    {
+      "path": "tools/ci/coverage/evaluate.py",
+      "exit": 0,
+      "log": "ocr-rule-085.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{py,pyi,ipynb}"
+      ],
+      "preview_exclusion": null,
+      "review_observation": "New AST classification only excludes statement-free modules; stale/binding/denominator guards retained. Final exact-candidate wrapper passes 281 changed lines.",
+      "finding_ids": []
+    },
+    {
+      "path": "tools/ci/mutation/backend.sh",
+      "exit": 0,
+      "log": "ocr-rule-086.log",
+      "rule_groups": [
+        "### Rule Group 1: system / default"
+      ],
+      "preview_exclusion": null,
+      "review_observation": "Interpreter selection, top-level also_copy, cleanup and calibrated timeout reviewed; exact-candidate native run passes, unresolved timeouts still fail closed.",
+      "finding_ids": []
+    },
+    {
+      "path": "tools/ci/tests/gate_support.py",
+      "exit": 0,
+      "log": "ocr-rule-087.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{py,pyi,ipynb}"
+      ],
+      "preview_exclusion": null,
+      "review_observation": "Fixture copies exclude real product trees but retain gate tools/docs; own fresh temporary repositories, no candidate mutation.",
+      "finding_ids": []
+    },
+    {
+      "path": "tools/ci/tests/test_bug1_cideps.py",
+      "exit": 0,
+      "log": "ocr-rule-088.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{py,pyi,ipynb}"
+      ],
+      "preview_exclusion": "unsupported_ext or default_path; nevertheless manually reviewed",
+      "review_observation": "Static pin/install ordering assertions useful for backend; omission of hygiene job qualification escapes these checks (R01).",
+      "finding_ids": []
+    },
+    {
+      "path": "tools/ci/tests/test_bug2_mutenv.py",
+      "exit": 0,
+      "log": "ocr-rule-089.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{py,pyi,ipynb}"
+      ],
+      "preview_exclusion": "unsupported_ext or default_path; nevertheless manually reviewed",
+      "review_observation": "Fake executable is explicitly labeled and paired with native end-to-end data-copy check. Native tool needed in hygiene CI (R01).",
+      "finding_ids": [
+        "B01-R01"
+      ]
+    },
+    {
+      "path": "tools/ci/tests/test_bug3_covempty.py",
+      "exit": 0,
+      "log": "ocr-rule-090.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{py,pyi,ipynb}"
+      ],
+      "preview_exclusion": "unsupported_ext or default_path; nevertheless manually reviewed",
+      "review_observation": "Native positive and negative coverage fixtures, fresh temp roots and fail-closed assertions. Missing CI native dependency (R01).",
+      "finding_ids": [
+        "B01-R01"
+      ]
+    },
+    {
+      "path": "tools/ci/tests/test_gate_support.py",
+      "exit": 0,
+      "log": "ocr-rule-091.log",
+      "rule_groups": [
+        "### Rule Group 1: system / **/*.{py,pyi,ipynb}"
+      ],
+      "preview_exclusion": "unsupported_ext or default_path; nevertheless manually reviewed",
+      "review_observation": "Real fixture repo with explicit REPO rebinding; verifies product-tree isolation.",
+      "finding_ids": []
+    }
+  ],
+  "red_receipt_verification": {
+    "red_case_count": 65,
+    "assertion_failure_count": 65,
+    "error_count": 0,
+    "skipped_count": 0,
+    "frozen_red_files": {
+      "backend/tests/conftest.py": true,
+      "backend/tests/contract/test_api_contract.py": true,
+      "backend/tests/contract/test_backend_template.py": true,
+      "backend/tests/unit/test_device_auth.py": true
+    }
+  },
+  "coverage": {
+    "status": "PASS",
+    "detail": "changed-line coverage 100% (threshold 90%)",
+    "threshold": 90.0,
+    "candidate": "f71f72ba975d3c5218fe0ad0f2cbe9932bc5a537",
+    "base": "884df10",
+    "changed": [
+      "backend/src/alert_policy/__init__.py",
+      "backend/src/api/__init__.py",
+      "backend/src/api/handler.py",
+      "backend/src/device_auth/__init__.py",
+      "backend/src/feed_ingest/__init__.py",
+      "backend/src/lineup/__init__.py",
+      "backend/src/matcher/__init__.py",
+      "backend/src/panel/__init__.py",
+      "backend/src/pipeline/handler.py",
+      "backend/src/provider_resolver/__init__.py",
+      "backend/src/store/__init__.py"
+    ],
+    "total_num_lines": 281,
+    "percent": 100,
+    "nothing_to_cover": [
+      "backend/src/api/__init__.py"
+    ]
+  },
+  "mutation": {
+    "status": "PASS",
+    "detail": "mutation score 99.49% (threshold 70%)",
+    "threshold": 0.7,
+    "score": 0.9949385394070861,
+    "survivors": [
+      "api.handler.x__bearer__mutmut_10",
+      "api.handler.x__bearer__mutmut_18",
+      "device_auth.x_issue__mutmut_18",
+      "device_auth.x_poll__mutmut_38",
+      "store.x_complete_link__mutmut_22",
+      "store.x_get_session__mutmut_14",
+      "store.x_get_session__mutmut_5"
+    ],
+    "scored_mutants": 1383,
+    "changed_functions": {
+      "backend/src/alert_policy/__init__.py": [
+        "_pending",
+        "evaluate",
+        "pending"
+      ],
+      "backend/src/api/__init__.py": [],
+      "backend/src/api/handler.py": [
+        "ApiError.__init__",
+        "_alerts",
+        "_bearer",
+        "_dispatch",
+        "_error",
+        "_installed_apps",
+        "_json",
+        "_link_confirm",
+        "_link_issue",
+        "_link_page",
+        "_link_poll",
+        "_now",
+        "_number",
+        "_panel",
+        "_profile",
+        "_profile_get",
+        "_profile_put",
+        "_providers",
+        "_raw_body",
+        "_respond",
+        "_routes",
+        "_routing_outcome",
+        "_text",
+        "lambda_handler"
+      ],
+      "backend/src/device_auth/__init__.py": [
+        "_digest",
+        "_rfc3339",
+        "authenticate",
+        "confirm",
+        "issue",
+        "poll"
+      ],
+      "backend/src/feed_ingest/__init__.py": [
+        "_pending",
+        "lambda_handler"
+      ],
+      "backend/src/lineup/__init__.py": [
+        "_pending",
+        "active_lineup"
+      ],
+      "backend/src/matcher/__init__.py": [
+        "_pending",
+        "resolve"
+      ],
+      "backend/src/panel/__init__.py": [
+        "_pending",
+        "project",
+        "snapshot"
+      ],
+      "backend/src/pipeline/handler.py": [
+        "_game_events",
+        "lambda_handler"
+      ],
+      "backend/src/provider_resolver/__init__.py": [
+        "_pending",
+        "record_installed_apps",
+        "record_outcome",
+        "resolve"
+      ],
+      "backend/src/store/__init__.py": [
+        "_dynamodb",
+        "_shaped",
+        "_table",
+        "_written",
+        "complete_link",
+        "confirm_link",
+        "find_link",
+        "get_event",
+        "get_lineup",
+        "get_panel",
+        "get_profile",
+        "get_session",
+        "list_alerts",
+        "put_alert",
+        "put_event",
+        "put_lineup",
+        "put_link",
+        "put_panel",
+        "put_profile",
+        "put_session"
+      ]
+    },
+    "changed": [
+      "backend/src/alert_policy/__init__.py",
+      "backend/src/api/__init__.py",
+      "backend/src/api/handler.py",
+      "backend/src/device_auth/__init__.py",
+      "backend/src/feed_ingest/__init__.py",
+      "backend/src/lineup/__init__.py",
+      "backend/src/matcher/__init__.py",
+      "backend/src/panel/__init__.py",
+      "backend/src/pipeline/handler.py",
+      "backend/src/provider_resolver/__init__.py",
+      "backend/src/store/__init__.py"
+    ],
+    "stats": {
+      "killed": 1376,
+      "survived": 7,
+      "total": 1383,
+      "no_tests": 0,
+      "skipped": 0,
+      "suspicious": 0,
+      "timeout": 0,
+      "check_was_interrupted_by_user": 0,
+      "segfault": 0
+    },
+    "mutants": 1383
+  },
+  "command_environment": {
+    "PATH_for_gate_pytest_coverage": "$HOME/.local/share/afc-tools/backend-tests/bin:$PATH",
+    "PATH_for_mutation": "$HOME/.local/share/afc-tools/mutmut-backend/bin:$PATH",
+    "guards": [
+      "PYTHONDONTWRITEBYTECODE=1",
+      "PYTEST_ADDOPTS=-p no:cacheprovider",
+      "AWS_SHARED_CREDENTIALS_FILE=/dev/null",
+      "AWS_CONFIG_FILE=/dev/null",
+      "AWS_EC2_METADATA_DISABLED=true",
+      "SAM_CLI_TELEMETRY=0 for required verification runner; AWS credential/profile variables removed there"
+    ],
+    "per_command_deadline_seconds": 1200
+  },
+  "blocker": "Six introduced actionable findings; parent repair required. Live/deployed and browser acceptance remain separate recorded obligations.",
+  "authority_observed": "Candidate read-only; no commits, pushes, branch changes, GitHub, real credentials, AWS account operations, adb or installs. Writes confined to the authorized review evidence directory plus cleaned owned temporary directories.",
+  "receipt_path": "/home/spectre/alphazede/worktrees/amazon-fantasy-companion-implementation/docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/review/receipt.json",
+  "review_path": "/home/spectre/alphazede/worktrees/amazon-fantasy-companion-implementation/docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/review/review.md",
+  "visual_input": "/home/spectre/alphazede/worktrees/amazon-fantasy-companion-implementation/docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01/review/link-page.html",
+  "incident_classification": "Reviewer probe syntax/path errors were corrected as review-harness errors, not filed as product bugs. Focused failures in ci-hygiene-repro.log and deployed-collection.log are deliberate reproductions.",
+  "evidence_sha256": {
+    "actionlint.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "behavior-repro.log": "95b96091065558730ba12dab64e07926a639fc4e78af978a4f78bf7aa283fff5",
+    "binding.json": "adf8ec8a5b4e6a22bb75f9348d7db814c86dd1a0fd9238e5a7533eabbb22945b",
+    "ci-hygiene-repro.log": "aa9f2c56a4935b39a4ac005b0af3afc8921fe81e50d66eca7b93ac8d5a79a690",
+    "commands.json": "636ce535b40ba1d65a7ca7c472d77830af0d505d78d0f6d85fb56ccd3c65f4db",
+    "coverage-command.json": "07371b281870751ab28d31580a422e7aa3d97beeb0920fec421879f53d608546",
+    "coverage-result.json": "e28e0fdb28ecd0a28eb0e6864dc5f17c708825aac9c6944eae4aa5ca3708f6c9",
+    "coverage.log": "3b2bacc4e19234ced4560eb709efc98c21f72a8e32081ff451023657a38ba18b",
+    "coverage.xml": "0934a9469f6fadc2f97c0b4d305afe1afc80cb477a0399a3e18153b08ac03460",
+    "deployed-collection.log": "fa0523959369db76db69a5c1a3bddc916f50ae52f59bb179bd869b3283e6a61b",
+    "diff-cover.json": "f522b841faa99afc8793b43f4fcd6043d8eace82a4869365b37e951f6fb38965",
+    "final-integrity.json": "511a0295d0dc658a35e4e490634c43251756c1b9f56f14a7e5a44c93ac61fa07",
+    "gate.log": "d043cd990a16aa04289f1ef507052faf42e5e05a26d95a4ba84552d4784db435",
+    "iam-policy-proof.json": "b5400493ac93c8ceea9d58694fa9a6b63831be8fbe8cabdd5935d1c60e252dd6",
+    "iam-repro.log": "08d0c1ecc72b6f0c1f6d983d679a3558b93a62393fba2b70fc253027ba80107b",
+    "inventory.json": "570ea6b0f6e25c1513bb4b8b5204655f22b73a5b567ea2cfd6e8a45fc126f6d1",
+    "link-page.html": "1df3357df88fce2ac9fd45d962b6351ff0576be48ef0b5208c35f86257cf90f2",
+    "mutation-command.json": "0ae490f84b9a12070ca285ec9d0e6f39a2946fb0a46e55f56727bdca46b792c4",
+    "mutation-host-context.log": "5d932e0248a6afd067386ff204a3a7574e27abf70f6ba9e5d781ff28afc00243",
+    "mutation-wrapper.log": "c6c4ed598be6396619e027ba02eddf527983073aa22c08c293d09b58feb65911",
+    "ocr-index.json": "b6e5883bb307985e1970dae660bf46c8ee850426bdfe439f33555bd0f2133f23",
+    "ocr-preview.log": "5bac35a1f1f59861dc0901100dee23d4794bcfc42ea1b23e32dd82fbaa871682",
+    "ocr-rule-000.log": "dd58c2031a4e70fb5b8d6e8a4d30933a2932f774c01359f6ab94276de5bd1dd0",
+    "ocr-rule-001.log": "3545e15f0a67d3498c0c68c1a5c2517c0c1b9980073e3a2819fa072555074d84",
+    "ocr-rule-002.log": "88d873d77e51f1471f048dc2fbdf0478404dad7564c89166172d7c4d43197bb8",
+    "ocr-rule-003.log": "fa42eec1bd993ea90d545f01b8815730045371301aec2bf23f1fb71b87f4dafc",
+    "ocr-rule-004.log": "3142391457d677d05aabfc0c4a99a793ed2e53e29d7ab58f90c256975e9122a5",
+    "ocr-rule-005.log": "21df201d9d692438b2424a0b3325ebdec5c9c48570af435afc4f78d15b84d7b5",
+    "ocr-rule-006.log": "4d9865563a64c9613d0f1ee4089a0907242a0962823c3b8ffd36d6be59d45f0f",
+    "ocr-rule-007.log": "6134e8971cacf6f91e9e023d0654ab1b256c5e3f180b66e6eb6add5effd26edc",
+    "ocr-rule-008.log": "e5493c48a5e72e6de4ed4ecacc9ccae4463ea77edd96e583c879ec5c01d455b4",
+    "ocr-rule-009.log": "4238650bdd518fb3006af9b77509f39d0dd97cb9d28a1acc0002a19ff31c0a07",
+    "ocr-rule-010.log": "f8f947615b71bc3c3c9b29a17baa429ca23bb647b9207a23e72aa5fce625529d",
+    "ocr-rule-011.log": "edae4ac3374cf8903e31b4bbd49162dd9f762e0627f0770f1f5d9703718dbaf8",
+    "ocr-rule-012.log": "90592a1c06d904aa2e3643c3f9d8643691822d931f6e70c72c414f54db5a7d2b",
+    "ocr-rule-013.log": "f6919780c28f938683075e49833e287e80a0c9e7f180694b8f7011ac4804707a",
+    "ocr-rule-014.log": "682ba68bdaded6f58afc0ccb70fae9e98006d89b1203aee6cb1a20dfa36851c9",
+    "ocr-rule-015.log": "1c23c5fa0139dfeeecf2418252c655b11f45bae98b38e9dfc14bc04ded17efe2",
+    "ocr-rule-016.log": "7dfc6cb105da2e0555ba7670a058bed172fc15a7ad13012fdc5681536ba54610",
+    "ocr-rule-017.log": "a745ab6e04d14514e5dd071d4f6f81d02b13620b843f74995b4713fdce97ac76",
+    "ocr-rule-018.log": "56e80d133a5b4a0a8d5a055bfdcbef6543ee15be8025978b5942330a45a1bb7b",
+    "ocr-rule-019.log": "06247130ce04c69357cbf2af25cfd5b269fbdd5b3d71e3ef95aff02df107cea7",
+    "ocr-rule-020.log": "67f72b9ec834d173d093d6a4af72f5a032b8cb39efbfa0082001626ede2ddd8c",
+    "ocr-rule-021.log": "ff3a366ad8167998e5503ac93f16947a618258680aed96ffd01c84a691b9cc32",
+    "ocr-rule-022.log": "50a32caa6063c2c31003b0b82fab72aeabbb34bfea54841e54a71e445db081d3",
+    "ocr-rule-023.log": "b403c9a47f4380da7b6a2e0664811d89129d2f7379cda08a830d458c0e819a95",
+    "ocr-rule-024.log": "d8858b8d81925febff840f62bed10612b0e52c89e3892a8c691cad5f6f64361d",
+    "ocr-rule-025.log": "276b10a46fa21be5999b7c21d70a2c7901bf3c2bfe4cd71a15b072b033e544dc",
+    "ocr-rule-026.log": "8c1497d6fd27f80393a058fe5371a27316a47afd01131054dc94f017a3febd38",
+    "ocr-rule-027.log": "c3c18ed583cbd25d8776a0dfbff99b84da2a2c0925b43840ef4f3fa93a032697",
+    "ocr-rule-028.log": "c7a39e1c475c99f01f477e2e41bf05b2b23d1c5564999def4cbebb31120e3a75",
+    "ocr-rule-029.log": "2dd6d5ab72e086c91e09dd2dc0116790bfda16ffaa2aa95bf91cb1d08398236d",
+    "ocr-rule-030.log": "264d4b0f70155469a22ee4c636b1af45d7f6d6fdc6569c15058a36b9125bdc32",
+    "ocr-rule-031.log": "caef2c679daf70c524fe942e38b5c72e2b6a23063c08c89f611f10aab79a5323",
+    "ocr-rule-032.log": "e5effaab2aea72df074f23b36127763ddd8e11a0b8419466f965937b795c3f0f",
+    "ocr-rule-033.log": "f4a56b8ea4456a80941515101a067ecdd7a599a2cfdfdd5b38496ea540108a2f",
+    "ocr-rule-034.log": "b340f7a9052eb414c81463d3df94bd94ab4235438832a398a2436a2143c5ded2",
+    "ocr-rule-035.log": "2370a7afd730446c4635f0981f81fa41c043781532637bc70b6b58cb28d24bbf",
+    "ocr-rule-036.log": "38f3b442926aa690fed8637e67f4ae7e6da658808a9207d2e2085505f8e2a07e",
+    "ocr-rule-037.log": "a8b8c4e3f2ca7fe4230af031ed520c03526e47efb5045c406ba7fcfbdb2789f7",
+    "ocr-rule-038.log": "1d73886a0ac5957b484536e2378f255ed9168e97e658ba318f056a530cb83a16",
+    "ocr-rule-039.log": "32106027a515462061a8670da564ee0c7b1165ee49b8c5af277137074e893567",
+    "ocr-rule-040.log": "50d8cb3687971f8a6a65fbbc27984e381f1d5d9eb87b5f848066105834bb66a6",
+    "ocr-rule-041.log": "06910f5fccbcd9237704443a67e993e2f3fd217a1d8ea808fef59e6d130a02bb",
+    "ocr-rule-042.log": "7637c158c53247a03bf5ce294e1146f57c81b12e130ba3b911b925bf9ebba0c1",
+    "ocr-rule-043.log": "bcd6f21400416aeba5f37f70eb2b1ededb2c3ad9d9a23e79a4ebda6055e735f3",
+    "ocr-rule-044.log": "2f4cc8091b55f49242fd25361e7892012af8901c58c19e367a442f703ca7064a",
+    "ocr-rule-045.log": "7d53c1a9fc1bb33de0bc1e20ca133bc6a0a136c15a95b49152839ad79a7d0699",
+    "ocr-rule-046.log": "4691aa5b6373585f045c5dde5c29d0f07a78b07e54f4e63d598de87b42a741f9",
+    "ocr-rule-047.log": "3471a257d3969e5995a16dc28c36edd245967d812934a39ddd1a3d3d5fc7091a",
+    "ocr-rule-048.log": "0f54941ba8e48ecfd21e3b195247abaa0e170903ec5cb63bff8377e675e34ce4",
+    "ocr-rule-049.log": "c073c24d0fc3e7845d0de982a345f71a5776866bf32f259a5a69128c19e8b6f0",
+    "ocr-rule-050.log": "ae1cf62b7e1bb85ce6e6c9c8f70732974d35e7b2a1fee3b389fb7592c6c788bd",
+    "ocr-rule-051.log": "8560b9f3f5cea17fbe18f634e2f922ea16ed282d108fd85532805b9c3962b533",
+    "ocr-rule-052.log": "2a9fbf96b9ee1ccabadbc9915951436720c37fdad88c243f4de5e3230be93464",
+    "ocr-rule-053.log": "77180856ec0fea713d61c9ff95224553eee967b8f180775a559c3d8f55454a2a",
+    "ocr-rule-054.log": "12bf363bd5a95db9237c86356675ab44e7317a3afa7a088924b186e8da519215",
+    "ocr-rule-055.log": "a60c8ca09b14347586d564d2f7042139c962cae3d19cbb6cea58fc8c77debbff",
+    "ocr-rule-056.log": "0fa95aa1f63d1b587808cf23ea74668ae643fde15c9e7a6713be63f7fb1051da",
+    "ocr-rule-057.log": "a9686b62672bb125aa09dbcc0213ddd3bc47698433b3ddfaf9c6678f4ccd3424",
+    "ocr-rule-058.log": "bfaafa045e41f2b5f82d00c91246819b90a99fe523a433a661e5977485a34343",
+    "ocr-rule-059.log": "156b47f95b9afd6c518dab6794786d983a3bbb589ca1949ba17133f47a384c8b",
+    "ocr-rule-060.log": "2e5927503a4cb7edd259bebe4e86befd2104f6dd76a3dd422866d8c619d8e22a",
+    "ocr-rule-061.log": "c89ca7e8c7e4bb4aef136fc4c2ae117c6b7246da6d8f9e70b1646e2c12189286",
+    "ocr-rule-062.log": "2e65edb4a64d6e480d3eefea9a8a405cef921f765ad3c73dd6b372798702a892",
+    "ocr-rule-063.log": "f71bb607ba8361b227ebefcb0160fdc6ebebb59351733438abd51bcf1196b3fb",
+    "ocr-rule-064.log": "9f758e52cdfd3159ea338307e6a9a82f2ea6d02b5943b9df56703eb010174a50",
+    "ocr-rule-065.log": "919795a28fd38393937c4bf26b5915cff84ceb3f81b0bd3acf77cb6e248dcdc6",
+    "ocr-rule-066.log": "072f14a803506ca3bb440968861b0b22773d8f290108c0b5ee52cefe581839b9",
+    "ocr-rule-067.log": "946167b45f0bae651fbd0c79b7d846a484600345b34e49a02a74f53acb8e0b93",
+    "ocr-rule-068.log": "1609a80c1b32a65bf5cab10073a3367e455a921c6aa57e8f9bbf4e7c86403b29",
+    "ocr-rule-069.log": "2b8578dab161bf7a2fa265a2b9c04a94d6e84e62d84da014dc46bddf113d4d12",
+    "ocr-rule-070.log": "e8924663a35d697e60b36e79fc77382b54acd583cd5eb211a1c2d4e127b113bf",
+    "ocr-rule-071.log": "6631e928fd7662a5c23eb4edc47a83d9e1b7f193c7451e03bdffa933bf9ed001",
+    "ocr-rule-072.log": "afdde3d14dddcc8dd677042d62c7c6c8acb5d4de21c33e38b2f02631169f7ac4",
+    "ocr-rule-073.log": "215508f408e5138e434a6e828384bc07b3b7409dcc5c7263087acf2c69900e01",
+    "ocr-rule-074.log": "3af7afd063ebea7712dd85dd1cca22c0808086cb323347445ff75c348fbf10c5",
+    "ocr-rule-075.log": "48b512a6afc8c9963a70f61b4fdaed3af746cd1776e4cf77ca9e29d1df437e7b",
+    "ocr-rule-076.log": "f7b41e3b0728a68cf5bccfd9aa828c4fb9cb251c98ca127dd5188ddbb484dda2",
+    "ocr-rule-077.log": "72925e6439e4c745187b498f7f207f108cfc89f697bcc394d827f3d5a219d1d4",
+    "ocr-rule-078.log": "0d0465384cb83a169df70d2ae5d95ec9ac07c8f6c999c9a09e1505697dfa78ea",
+    "ocr-rule-079.log": "0981d3b076b036ace6d53476c9c467dc9dc661d759d19e8259f8bdab5bc717a3",
+    "ocr-rule-080.log": "b526bbca3f06482d3f9c06b6c48678435812bfad18dce68833f7baad818c6f71",
+    "ocr-rule-081.log": "cb074cdea0c4fe8e8e2623373715c1760640a944d0b2d5d7977c58df644fa6b5",
+    "ocr-rule-082.log": "e088245a7d7a9297b75aea388c6a8e3532e60c8734d126a2613f8df6585e2797",
+    "ocr-rule-083.log": "bcd3c3e33dcaff2bc5c8100d2cf8ee246befb87f59be25b93eeed0a089da638b",
+    "ocr-rule-084.log": "412c9b791a926c33aea6f8d6143e123fdfb8a85994ea7bfdb4360479b3f160a5",
+    "ocr-rule-085.log": "c25274f75e8e54e4fded11f844b743deb0e6a14b4c021ba329d5f3604d06fc5c",
+    "ocr-rule-086.log": "76f5b7d4f107169ad16c0d0151199b3d9a19338b7524938f24af9b5f0e958ef8",
+    "ocr-rule-087.log": "cc86c587e5d8bc9f741632a050890fc05e6115185775809824a062347a475e6c",
+    "ocr-rule-088.log": "4915ca6ba1345c8b27b95d23b20ee6dd59b83cffa764a834ab7e887b940483fe",
+    "ocr-rule-089.log": "51ab392d3835b3885e48c3f87e0c700c757e6322856db8c558eb76e8a9e0c7a5",
+    "ocr-rule-090.log": "78116b1f1ca379daa07305c933e14f55af55760b96d923d4b5fc424c4a8ba89b",
+    "ocr-rule-091.log": "a8acbc5df42de9db155a20993da4fccb4ad2630bda5a35e4290d85a11d758758",
+    "red-receipt-proof.json": "eb93416799fc1b4e3081b2f3e3b47e9b7b99972fe9d9ca52c64e289362230f69",
+    "requirements-inspection.log": "88c455ee0158cd421b30478315ad2477088d1a8bcaf9cf09b38f5fca904c3c31",
+    "rerun-mutation-result.json": "1f87b2024e94d597f0dc462bb71d8f5850bc560999ea4577856fb55684a95759",
+    "rerun-mutmut-cicd-stats.json": "f99d21860a551011864d08906f043481c7df0c73bc204d9a2b490814ee771a01",
+    "rerun-mutmut-results.txt": "059d04a2d0b158fb3246cbcc79cbdfe591cc29450be10e8d0eb78c299763e16e",
+    "rerun-mutmut-run.txt": "f8505f7b2bf765592e15ea2add477a23e6299adefb434def9a5c3efb4a5a5d48",
+    "sam-validate.log": "fd8adfbe79aab078c11b4138ab438e4052e331bd8b71b1353f84934d4056917e",
+    "survivor-diffs.log": "2fb793d6b4b1ade004aff8ef606a63b8866bc7391a41a31cff031bdb60ad21f8",
+    "tools-pytest.log": "991bc8ad83aee0b40db02093195581574cf9bbd5da78069ba588740e57ad5ff0"
+  },
+  "review_md_sha256": "eb4fccc97a843810af87a55eea4472eb96f992db0e48fafe3faf080da90eef4f"
+}

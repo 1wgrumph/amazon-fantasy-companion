@@ -3958,8 +3958,17 @@
       "base": "884df103e1ee7f8b53c674864db349cd00875283",
       "ocr": "delegate mode",
       "reverify": "not applicable \u2014 no compiled-binary claim",
-      "state": "active",
-      "owner_continue": "2026-10-14 'No contine finish ms02' (overrides compaction handoff)"
+      "state": "released",
+      "owner_continue": "2026-10-14 'No contine finish ms02' (overrides compaction handoff)",
+      "verdict": "REPAIR_REQUIRED",
+      "findings": [
+        "R01 CI hygiene tools",
+        "R02 token retry",
+        "R03 response cap",
+        "R04 selector type",
+        "R05 IAM least privilege",
+        "R06 deployed tests missing"
+      ]
     },
     {
       "kind": "dispatch_lease",
@@ -3970,6 +3979,17 @@
       "scope": "host toolchain qualification + starter build; no device steps (OA-1 pending)",
       "branch": "afc/p2-x01",
       "base": "884df10",
+      "state": "active"
+    },
+    {
+      "kind": "dispatch_lease",
+      "lease": "P2-B01-repair1",
+      "date": "2026-10-14",
+      "role": "implementer (bug-triager)",
+      "route": "muse-code/muse-spark-1.3/max",
+      "scope": "R01-R06 + R07 CSP hash hardening (lead e)",
+      "branch": "afc/p2-b01",
+      "base_head": "f71f72b",
       "state": "active"
     }
   ],
