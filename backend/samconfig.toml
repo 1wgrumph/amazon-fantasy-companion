@@ -1,0 +1,20 @@
+# SAM CLI configuration (DES-AFC-P2-BACKEND). Deploys are owner-run under P2-L03;
+# pass the deployed commit as a tag: sam deploy --tags GitCommit=<sha>.
+version = 0.1
+
+[default.global.parameters]
+stack_name = "afc-dev"
+
+[default.build.parameters]
+cached = true
+
+[default.validate.parameters]
+lint = true
+
+[default.deploy.parameters]
+stack_name = "afc-dev"
+profile = "afc-dev"
+capabilities = "CAPABILITY_IAM"
+resolve_s3 = true
+confirm_changeset = true
+fail_on_empty_changeset = false

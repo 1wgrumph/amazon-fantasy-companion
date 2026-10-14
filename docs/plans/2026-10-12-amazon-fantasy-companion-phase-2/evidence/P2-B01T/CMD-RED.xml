@@ -1,0 +1,804 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="65" skipped="0" tests="65" time="3.559" timestamp="2026-10-13T22:15:33.212875-05:00" hostname="spectre-dev"><testcase classname="tests.unit.test_device_auth" name="test_issue_has_8_character_unambiguous_base32_code_and_600_second_expiry" time="0.121"><failure message="AssertionError: POST /v1/link: API behavior is not implemented (AFC-STUB)&#10;assert False">backend/tests/conftest.py:169: in request
+    response = handler(event, SimpleNamespace(aws_request_id="afc-test"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/api/handler.py:6: in lambda_handler
+    raise NotImplementedError("AFC-STUB: API router has not been implemented")
+E   NotImplementedError: AFC-STUB: API router has not been implemented
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/test_device_auth.py:25: in test_issue_has_8_character_unambiguous_base32_code_and_600_second_expiry
+    device = issue(api)
+             ^^^^^^^^^^
+backend/tests/conftest.py:207: in issue
+    status, body = api.request("POST", "/v1/link")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:171: in request
+    assert False, f"{method} {path}: API behavior is not implemented (AFC-STUB)"
+E   AssertionError: POST /v1/link: API behavior is not implemented (AFC-STUB)
+E   assert False</failure></testcase><testcase classname="tests.unit.test_device_auth" name="test_pending_poll_cannot_authorize_the_device" time="0.056"><failure message="AssertionError: POST /v1/link: API behavior is not implemented (AFC-STUB)&#10;assert False">backend/tests/conftest.py:169: in request
+    response = handler(event, SimpleNamespace(aws_request_id="afc-test"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/api/handler.py:6: in lambda_handler
+    raise NotImplementedError("AFC-STUB: API router has not been implemented")
+E   NotImplementedError: AFC-STUB: API router has not been implemented
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/test_device_auth.py:38: in test_pending_poll_cannot_authorize_the_device
+    device = issue(api)
+             ^^^^^^^^^^
+backend/tests/conftest.py:207: in issue
+    status, body = api.request("POST", "/v1/link")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:171: in request
+    assert False, f"{method} {path}: API behavior is not implemented (AFC-STUB)"
+E   AssertionError: POST /v1/link: API behavior is not implemented (AFC-STUB)
+E   assert False</failure></testcase><testcase classname="tests.unit.test_device_auth" name="test_correct_ssm_passphrase_confirms_once_and_returns_256_bit_session" time="0.055"><failure message="AssertionError: POST /v1/link: API behavior is not implemented (AFC-STUB)&#10;assert False">backend/tests/conftest.py:169: in request
+    response = handler(event, SimpleNamespace(aws_request_id="afc-test"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/api/handler.py:6: in lambda_handler
+    raise NotImplementedError("AFC-STUB: API router has not been implemented")
+E   NotImplementedError: AFC-STUB: API router has not been implemented
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/test_device_auth.py:47: in test_correct_ssm_passphrase_confirms_once_and_returns_256_bit_session
+    _, token = link_device(api)
+               ^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:221: in link_device
+    device = issue(api)
+             ^^^^^^^^^^
+backend/tests/conftest.py:207: in issue
+    status, body = api.request("POST", "/v1/link")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:171: in request
+    assert False, f"{method} {path}: API behavior is not implemented (AFC-STUB)"
+E   AssertionError: POST /v1/link: API behavior is not implemented (AFC-STUB)
+E   assert False</failure></testcase><testcase classname="tests.unit.test_device_auth" name="test_wrong_passphrase_rejects_confirmation_and_leaves_code_pending" time="0.058"><failure message="AssertionError: POST /v1/link: API behavior is not implemented (AFC-STUB)&#10;assert False">backend/tests/conftest.py:169: in request
+    response = handler(event, SimpleNamespace(aws_request_id="afc-test"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/api/handler.py:6: in lambda_handler
+    raise NotImplementedError("AFC-STUB: API router has not been implemented")
+E   NotImplementedError: AFC-STUB: API router has not been implemented
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/test_device_auth.py:63: in test_wrong_passphrase_rejects_confirmation_and_leaves_code_pending
+    device = issue(api)
+             ^^^^^^^^^^
+backend/tests/conftest.py:207: in issue
+    status, body = api.request("POST", "/v1/link")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:171: in request
+    assert False, f"{method} {path}: API behavior is not implemented (AFC-STUB)"
+E   AssertionError: POST /v1/link: API behavior is not implemented (AFC-STUB)
+E   assert False</failure></testcase><testcase classname="tests.unit.test_device_auth" name="test_missing_passphrase_cannot_confirm" time="0.110"><failure message="AssertionError: POST /v1/link: API behavior is not implemented (AFC-STUB)&#10;assert False">backend/tests/conftest.py:169: in request
+    response = handler(event, SimpleNamespace(aws_request_id="afc-test"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/api/handler.py:6: in lambda_handler
+    raise NotImplementedError("AFC-STUB: API router has not been implemented")
+E   NotImplementedError: AFC-STUB: API router has not been implemented
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/test_device_auth.py:74: in test_missing_passphrase_cannot_confirm
+    device = issue(api)
+             ^^^^^^^^^^
+backend/tests/conftest.py:207: in issue
+    status, body = api.request("POST", "/v1/link")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:171: in request
+    assert False, f"{method} {path}: API behavior is not implemented (AFC-STUB)"
+E   AssertionError: POST /v1/link: API behavior is not implemented (AFC-STUB)
+E   assert False</failure></testcase><testcase classname="tests.unit.test_device_auth" name="test_expired_code_rejects_confirm_and_reports_expired_poll" time="0.057"><failure message="AssertionError: POST /v1/link: API behavior is not implemented (AFC-STUB)&#10;assert False">backend/tests/conftest.py:169: in request
+    response = handler(event, SimpleNamespace(aws_request_id="afc-test"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/api/handler.py:6: in lambda_handler
+    raise NotImplementedError("AFC-STUB: API router has not been implemented")
+E   NotImplementedError: AFC-STUB: API router has not been implemented
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/test_device_auth.py:83: in test_expired_code_rejects_confirm_and_reports_expired_poll
+    device = issue(api)
+             ^^^^^^^^^^
+backend/tests/conftest.py:207: in issue
+    status, body = api.request("POST", "/v1/link")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:171: in request
+    assert False, f"{method} {path}: API behavior is not implemented (AFC-STUB)"
+E   AssertionError: POST /v1/link: API behavior is not implemented (AFC-STUB)
+E   assert False</failure></testcase><testcase classname="tests.unit.test_device_auth" name="test_completed_code_cannot_be_replayed_or_rebound_to_another_profile" time="0.052"><failure message="AssertionError: POST /v1/link: API behavior is not implemented (AFC-STUB)&#10;assert False">backend/tests/conftest.py:169: in request
+    response = handler(event, SimpleNamespace(aws_request_id="afc-test"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/api/handler.py:6: in lambda_handler
+    raise NotImplementedError("AFC-STUB: API router has not been implemented")
+E   NotImplementedError: AFC-STUB: API router has not been implemented
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/test_device_auth.py:100: in test_completed_code_cannot_be_replayed_or_rebound_to_another_profile
+    device, token = link_device(api)
+                    ^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:221: in link_device
+    device = issue(api)
+             ^^^^^^^^^^
+backend/tests/conftest.py:207: in issue
+    status, body = api.request("POST", "/v1/link")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:171: in request
+    assert False, f"{method} {path}: API behavior is not implemented (AFC-STUB)"
+E   AssertionError: POST /v1/link: API behavior is not implemented (AFC-STUB)
+E   assert False</failure></testcase><testcase classname="tests.unit.test_device_auth" name="test_every_protected_route_requires_a_session[GET-/v1/profile]" time="0.054"><failure message="AssertionError: GET /v1/profile: API behavior is not implemented (AFC-STUB)&#10;assert False">backend/tests/conftest.py:169: in request
+    response = handler(event, SimpleNamespace(aws_request_id="afc-test"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/api/handler.py:6: in lambda_handler
+    raise NotImplementedError("AFC-STUB: API router has not been implemented")
+E   NotImplementedError: AFC-STUB: API router has not been implemented
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/test_device_auth.py:109: in test_every_protected_route_requires_a_session
+    status, body = api.request(method, path)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:171: in request
+    assert False, f"{method} {path}: API behavior is not implemented (AFC-STUB)"
+E   AssertionError: GET /v1/profile: API behavior is not implemented (AFC-STUB)
+E   assert False</failure></testcase><testcase classname="tests.unit.test_device_auth" name="test_every_protected_route_requires_a_session[PUT-/v1/profile]" time="0.078"><failure message="AssertionError: PUT /v1/profile: API behavior is not implemented (AFC-STUB)&#10;assert False">backend/tests/conftest.py:169: in request
+    response = handler(event, SimpleNamespace(aws_request_id="afc-test"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/api/handler.py:6: in lambda_handler
+    raise NotImplementedError("AFC-STUB: API router has not been implemented")
+E   NotImplementedError: AFC-STUB: API router has not been implemented
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/test_device_auth.py:109: in test_every_protected_route_requires_a_session
+    status, body = api.request(method, path)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:171: in request
+    assert False, f"{method} {path}: API behavior is not implemented (AFC-STUB)"
+E   AssertionError: PUT /v1/profile: API behavior is not implemented (AFC-STUB)
+E   assert False</failure></testcase><testcase classname="tests.unit.test_device_auth" name="test_every_protected_route_requires_a_session[GET-/v1/alerts]" time="0.060"><failure message="AssertionError: GET /v1/alerts: API behavior is not implemented (AFC-STUB)&#10;assert False">backend/tests/conftest.py:169: in request
+    response = handler(event, SimpleNamespace(aws_request_id="afc-test"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/api/handler.py:6: in lambda_handler
+    raise NotImplementedError("AFC-STUB: API router has not been implemented")
+E   NotImplementedError: AFC-STUB: API router has not been implemented
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/test_device_auth.py:109: in test_every_protected_route_requires_a_session
+    status, body = api.request(method, path)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:171: in request
+    assert False, f"{method} {path}: API behavior is not implemented (AFC-STUB)"
+E   AssertionError: GET /v1/alerts: API behavior is not implemented (AFC-STUB)
+E   assert False</failure></testcase><testcase classname="tests.unit.test_device_auth" name="test_every_protected_route_requires_a_session[GET-/v1/panel]" time="0.062"><failure message="AssertionError: GET /v1/panel: API behavior is not implemented (AFC-STUB)&#10;assert False">backend/tests/conftest.py:169: in request
+    response = handler(event, SimpleNamespace(aws_request_id="afc-test"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/api/handler.py:6: in lambda_handler
+    raise NotImplementedError("AFC-STUB: API router has not been implemented")
+E   NotImplementedError: AFC-STUB: API router has not been implemented
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/test_device_auth.py:109: in test_every_protected_route_requires_a_session
+    status, body = api.request(method, path)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:171: in request
+    assert False, f"{method} {path}: API behavior is not implemented (AFC-STUB)"
+E   AssertionError: GET /v1/panel: API behavior is not implemented (AFC-STUB)
+E   assert False</failure></testcase><testcase classname="tests.unit.test_device_auth" name="test_every_protected_route_requires_a_session[GET-/v1/providers]" time="0.177"><failure message="AssertionError: GET /v1/providers: API behavior is not implemented (AFC-STUB)&#10;assert False">backend/tests/conftest.py:169: in request
+    response = handler(event, SimpleNamespace(aws_request_id="afc-test"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/api/handler.py:6: in lambda_handler
+    raise NotImplementedError("AFC-STUB: API router has not been implemented")
+E   NotImplementedError: AFC-STUB: API router has not been implemented
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/test_device_auth.py:109: in test_every_protected_route_requires_a_session
+    status, body = api.request(method, path)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:171: in request
+    assert False, f"{method} {path}: API behavior is not implemented (AFC-STUB)"
+E   AssertionError: GET /v1/providers: API behavior is not implemented (AFC-STUB)
+E   assert False</failure></testcase><testcase classname="tests.unit.test_device_auth" name="test_every_protected_route_requires_a_session[POST-/v1/routing-outcome]" time="0.054"><failure message="AssertionError: POST /v1/routing-outcome: API behavior is not implemented (AFC-STUB)&#10;assert False">backend/tests/conftest.py:169: in request
+    response = handler(event, SimpleNamespace(aws_request_id="afc-test"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/api/handler.py:6: in lambda_handler
+    raise NotImplementedError("AFC-STUB: API router has not been implemented")
+E   NotImplementedError: AFC-STUB: API router has not been implemented
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/test_device_auth.py:109: in test_every_protected_route_requires_a_session
+    status, body = api.request(method, path)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:171: in request
+    assert False, f"{method} {path}: API behavior is not implemented (AFC-STUB)"
+E   AssertionError: POST /v1/routing-outcome: API behavior is not implemented (AFC-STUB)
+E   assert False</failure></testcase><testcase classname="tests.unit.test_device_auth" name="test_every_protected_route_requires_a_session[POST-/v1/installed-apps]" time="0.058"><failure message="AssertionError: POST /v1/installed-apps: API behavior is not implemented (AFC-STUB)&#10;assert False">backend/tests/conftest.py:169: in request
+    response = handler(event, SimpleNamespace(aws_request_id="afc-test"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/api/handler.py:6: in lambda_handler
+    raise NotImplementedError("AFC-STUB: API router has not been implemented")
+E   NotImplementedError: AFC-STUB: API router has not been implemented
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/test_device_auth.py:109: in test_every_protected_route_requires_a_session
+    status, body = api.request(method, path)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:171: in request
+    assert False, f"{method} {path}: API behavior is not implemented (AFC-STUB)"
+E   AssertionError: POST /v1/installed-apps: API behavior is not implemented (AFC-STUB)
+E   assert False</failure></testcase><testcase classname="tests.unit.test_device_auth" name="test_every_protected_route_rejects_an_unknown_session[GET-/v1/profile]" time="0.056"><failure message="AssertionError: GET /v1/profile: API behavior is not implemented (AFC-STUB)&#10;assert False">backend/tests/conftest.py:169: in request
+    response = handler(event, SimpleNamespace(aws_request_id="afc-test"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/api/handler.py:6: in lambda_handler
+    raise NotImplementedError("AFC-STUB: API router has not been implemented")
+E   NotImplementedError: AFC-STUB: API router has not been implemented
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/test_device_auth.py:115: in test_every_protected_route_rejects_an_unknown_session
+    status, body = api.request(method, path, token="unknown-test-session")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:171: in request
+    assert False, f"{method} {path}: API behavior is not implemented (AFC-STUB)"
+E   AssertionError: GET /v1/profile: API behavior is not implemented (AFC-STUB)
+E   assert False</failure></testcase><testcase classname="tests.unit.test_device_auth" name="test_every_protected_route_rejects_an_unknown_session[PUT-/v1/profile]" time="0.060"><failure message="AssertionError: PUT /v1/profile: API behavior is not implemented (AFC-STUB)&#10;assert False">backend/tests/conftest.py:169: in request
+    response = handler(event, SimpleNamespace(aws_request_id="afc-test"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/api/handler.py:6: in lambda_handler
+    raise NotImplementedError("AFC-STUB: API router has not been implemented")
+E   NotImplementedError: AFC-STUB: API router has not been implemented
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/test_device_auth.py:115: in test_every_protected_route_rejects_an_unknown_session
+    status, body = api.request(method, path, token="unknown-test-session")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:171: in request
+    assert False, f"{method} {path}: API behavior is not implemented (AFC-STUB)"
+E   AssertionError: PUT /v1/profile: API behavior is not implemented (AFC-STUB)
+E   assert False</failure></testcase><testcase classname="tests.unit.test_device_auth" name="test_every_protected_route_rejects_an_unknown_session[GET-/v1/alerts]" time="0.060"><failure message="AssertionError: GET /v1/alerts: API behavior is not implemented (AFC-STUB)&#10;assert False">backend/tests/conftest.py:169: in request
+    response = handler(event, SimpleNamespace(aws_request_id="afc-test"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/api/handler.py:6: in lambda_handler
+    raise NotImplementedError("AFC-STUB: API router has not been implemented")
+E   NotImplementedError: AFC-STUB: API router has not been implemented
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/test_device_auth.py:115: in test_every_protected_route_rejects_an_unknown_session
+    status, body = api.request(method, path, token="unknown-test-session")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:171: in request
+    assert False, f"{method} {path}: API behavior is not implemented (AFC-STUB)"
+E   AssertionError: GET /v1/alerts: API behavior is not implemented (AFC-STUB)
+E   assert False</failure></testcase><testcase classname="tests.unit.test_device_auth" name="test_every_protected_route_rejects_an_unknown_session[GET-/v1/panel]" time="0.057"><failure message="AssertionError: GET /v1/panel: API behavior is not implemented (AFC-STUB)&#10;assert False">backend/tests/conftest.py:169: in request
+    response = handler(event, SimpleNamespace(aws_request_id="afc-test"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/api/handler.py:6: in lambda_handler
+    raise NotImplementedError("AFC-STUB: API router has not been implemented")
+E   NotImplementedError: AFC-STUB: API router has not been implemented
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/test_device_auth.py:115: in test_every_protected_route_rejects_an_unknown_session
+    status, body = api.request(method, path, token="unknown-test-session")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:171: in request
+    assert False, f"{method} {path}: API behavior is not implemented (AFC-STUB)"
+E   AssertionError: GET /v1/panel: API behavior is not implemented (AFC-STUB)
+E   assert False</failure></testcase><testcase classname="tests.unit.test_device_auth" name="test_every_protected_route_rejects_an_unknown_session[GET-/v1/providers]" time="0.192"><failure message="AssertionError: GET /v1/providers: API behavior is not implemented (AFC-STUB)&#10;assert False">backend/tests/conftest.py:169: in request
+    response = handler(event, SimpleNamespace(aws_request_id="afc-test"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/api/handler.py:6: in lambda_handler
+    raise NotImplementedError("AFC-STUB: API router has not been implemented")
+E   NotImplementedError: AFC-STUB: API router has not been implemented
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/test_device_auth.py:115: in test_every_protected_route_rejects_an_unknown_session
+    status, body = api.request(method, path, token="unknown-test-session")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:171: in request
+    assert False, f"{method} {path}: API behavior is not implemented (AFC-STUB)"
+E   AssertionError: GET /v1/providers: API behavior is not implemented (AFC-STUB)
+E   assert False</failure></testcase><testcase classname="tests.unit.test_device_auth" name="test_every_protected_route_rejects_an_unknown_session[POST-/v1/routing-outcome]" time="0.057"><failure message="AssertionError: POST /v1/routing-outcome: API behavior is not implemented (AFC-STUB)&#10;assert False">backend/tests/conftest.py:169: in request
+    response = handler(event, SimpleNamespace(aws_request_id="afc-test"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/api/handler.py:6: in lambda_handler
+    raise NotImplementedError("AFC-STUB: API router has not been implemented")
+E   NotImplementedError: AFC-STUB: API router has not been implemented
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/test_device_auth.py:115: in test_every_protected_route_rejects_an_unknown_session
+    status, body = api.request(method, path, token="unknown-test-session")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:171: in request
+    assert False, f"{method} {path}: API behavior is not implemented (AFC-STUB)"
+E   AssertionError: POST /v1/routing-outcome: API behavior is not implemented (AFC-STUB)
+E   assert False</failure></testcase><testcase classname="tests.unit.test_device_auth" name="test_every_protected_route_rejects_an_unknown_session[POST-/v1/installed-apps]" time="0.059"><failure message="AssertionError: POST /v1/installed-apps: API behavior is not implemented (AFC-STUB)&#10;assert False">backend/tests/conftest.py:169: in request
+    response = handler(event, SimpleNamespace(aws_request_id="afc-test"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/api/handler.py:6: in lambda_handler
+    raise NotImplementedError("AFC-STUB: API router has not been implemented")
+E   NotImplementedError: AFC-STUB: API router has not been implemented
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/test_device_auth.py:115: in test_every_protected_route_rejects_an_unknown_session
+    status, body = api.request(method, path, token="unknown-test-session")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:171: in request
+    assert False, f"{method} {path}: API behavior is not implemented (AFC-STUB)"
+E   AssertionError: POST /v1/installed-apps: API behavior is not implemented (AFC-STUB)
+E   assert False</failure></testcase><testcase classname="tests.unit.test_device_auth" name="test_every_protected_route_rejects_a_foreign_profile[GET-/v1/profile]" time="0.064"><failure message="AssertionError: POST /v1/link: API behavior is not implemented (AFC-STUB)&#10;assert False">backend/tests/conftest.py:169: in request
+    response = handler(event, SimpleNamespace(aws_request_id="afc-test"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/api/handler.py:6: in lambda_handler
+    raise NotImplementedError("AFC-STUB: API router has not been implemented")
+E   NotImplementedError: AFC-STUB: API router has not been implemented
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/test_device_auth.py:121: in test_every_protected_route_rejects_a_foreign_profile
+    _, token = link_device(api)
+               ^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:221: in link_device
+    device = issue(api)
+             ^^^^^^^^^^
+backend/tests/conftest.py:207: in issue
+    status, body = api.request("POST", "/v1/link")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:171: in request
+    assert False, f"{method} {path}: API behavior is not implemented (AFC-STUB)"
+E   AssertionError: POST /v1/link: API behavior is not implemented (AFC-STUB)
+E   assert False</failure></testcase><testcase classname="tests.unit.test_device_auth" name="test_every_protected_route_rejects_a_foreign_profile[PUT-/v1/profile]" time="0.055"><failure message="AssertionError: POST /v1/link: API behavior is not implemented (AFC-STUB)&#10;assert False">backend/tests/conftest.py:169: in request
+    response = handler(event, SimpleNamespace(aws_request_id="afc-test"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/api/handler.py:6: in lambda_handler
+    raise NotImplementedError("AFC-STUB: API router has not been implemented")
+E   NotImplementedError: AFC-STUB: API router has not been implemented
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/test_device_auth.py:121: in test_every_protected_route_rejects_a_foreign_profile
+    _, token = link_device(api)
+               ^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:221: in link_device
+    device = issue(api)
+             ^^^^^^^^^^
+backend/tests/conftest.py:207: in issue
+    status, body = api.request("POST", "/v1/link")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:171: in request
+    assert False, f"{method} {path}: API behavior is not implemented (AFC-STUB)"
+E   AssertionError: POST /v1/link: API behavior is not implemented (AFC-STUB)
+E   assert False</failure></testcase><testcase classname="tests.unit.test_device_auth" name="test_every_protected_route_rejects_a_foreign_profile[GET-/v1/alerts]" time="0.059"><failure message="AssertionError: POST /v1/link: API behavior is not implemented (AFC-STUB)&#10;assert False">backend/tests/conftest.py:169: in request
+    response = handler(event, SimpleNamespace(aws_request_id="afc-test"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/api/handler.py:6: in lambda_handler
+    raise NotImplementedError("AFC-STUB: API router has not been implemented")
+E   NotImplementedError: AFC-STUB: API router has not been implemented
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/test_device_auth.py:121: in test_every_protected_route_rejects_a_foreign_profile
+    _, token = link_device(api)
+               ^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:221: in link_device
+    device = issue(api)
+             ^^^^^^^^^^
+backend/tests/conftest.py:207: in issue
+    status, body = api.request("POST", "/v1/link")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:171: in request
+    assert False, f"{method} {path}: API behavior is not implemented (AFC-STUB)"
+E   AssertionError: POST /v1/link: API behavior is not implemented (AFC-STUB)
+E   assert False</failure></testcase><testcase classname="tests.unit.test_device_auth" name="test_every_protected_route_rejects_a_foreign_profile[GET-/v1/panel]" time="0.166"><failure message="AssertionError: POST /v1/link: API behavior is not implemented (AFC-STUB)&#10;assert False">backend/tests/conftest.py:169: in request
+    response = handler(event, SimpleNamespace(aws_request_id="afc-test"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/api/handler.py:6: in lambda_handler
+    raise NotImplementedError("AFC-STUB: API router has not been implemented")
+E   NotImplementedError: AFC-STUB: API router has not been implemented
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/test_device_auth.py:121: in test_every_protected_route_rejects_a_foreign_profile
+    _, token = link_device(api)
+               ^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:221: in link_device
+    device = issue(api)
+             ^^^^^^^^^^
+backend/tests/conftest.py:207: in issue
+    status, body = api.request("POST", "/v1/link")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:171: in request
+    assert False, f"{method} {path}: API behavior is not implemented (AFC-STUB)"
+E   AssertionError: POST /v1/link: API behavior is not implemented (AFC-STUB)
+E   assert False</failure></testcase><testcase classname="tests.unit.test_device_auth" name="test_every_protected_route_rejects_a_foreign_profile[GET-/v1/providers]" time="0.054"><failure message="AssertionError: POST /v1/link: API behavior is not implemented (AFC-STUB)&#10;assert False">backend/tests/conftest.py:169: in request
+    response = handler(event, SimpleNamespace(aws_request_id="afc-test"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/api/handler.py:6: in lambda_handler
+    raise NotImplementedError("AFC-STUB: API router has not been implemented")
+E   NotImplementedError: AFC-STUB: API router has not been implemented
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/test_device_auth.py:121: in test_every_protected_route_rejects_a_foreign_profile
+    _, token = link_device(api)
+               ^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:221: in link_device
+    device = issue(api)
+             ^^^^^^^^^^
+backend/tests/conftest.py:207: in issue
+    status, body = api.request("POST", "/v1/link")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:171: in request
+    assert False, f"{method} {path}: API behavior is not implemented (AFC-STUB)"
+E   AssertionError: POST /v1/link: API behavior is not implemented (AFC-STUB)
+E   assert False</failure></testcase><testcase classname="tests.unit.test_device_auth" name="test_every_protected_route_rejects_a_foreign_profile[POST-/v1/routing-outcome]" time="0.059"><failure message="AssertionError: POST /v1/link: API behavior is not implemented (AFC-STUB)&#10;assert False">backend/tests/conftest.py:169: in request
+    response = handler(event, SimpleNamespace(aws_request_id="afc-test"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/api/handler.py:6: in lambda_handler
+    raise NotImplementedError("AFC-STUB: API router has not been implemented")
+E   NotImplementedError: AFC-STUB: API router has not been implemented
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/test_device_auth.py:121: in test_every_protected_route_rejects_a_foreign_profile
+    _, token = link_device(api)
+               ^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:221: in link_device
+    device = issue(api)
+             ^^^^^^^^^^
+backend/tests/conftest.py:207: in issue
+    status, body = api.request("POST", "/v1/link")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:171: in request
+    assert False, f"{method} {path}: API behavior is not implemented (AFC-STUB)"
+E   AssertionError: POST /v1/link: API behavior is not implemented (AFC-STUB)
+E   assert False</failure></testcase><testcase classname="tests.unit.test_device_auth" name="test_every_protected_route_rejects_a_foreign_profile[POST-/v1/installed-apps]" time="0.054"><failure message="AssertionError: POST /v1/link: API behavior is not implemented (AFC-STUB)&#10;assert False">backend/tests/conftest.py:169: in request
+    response = handler(event, SimpleNamespace(aws_request_id="afc-test"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/api/handler.py:6: in lambda_handler
+    raise NotImplementedError("AFC-STUB: API router has not been implemented")
+E   NotImplementedError: AFC-STUB: API router has not been implemented
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/test_device_auth.py:121: in test_every_protected_route_rejects_a_foreign_profile
+    _, token = link_device(api)
+               ^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:221: in link_device
+    device = issue(api)
+             ^^^^^^^^^^
+backend/tests/conftest.py:207: in issue
+    status, body = api.request("POST", "/v1/link")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:171: in request
+    assert False, f"{method} {path}: API behavior is not implemented (AFC-STUB)"
+E   AssertionError: POST /v1/link: API behavior is not implemented (AFC-STUB)
+E   assert False</failure></testcase><testcase classname="tests.unit.test_device_auth" name="test_known_session_can_reach_its_own_profile" time="0.055"><failure message="AssertionError: POST /v1/link: API behavior is not implemented (AFC-STUB)&#10;assert False">backend/tests/conftest.py:169: in request
+    response = handler(event, SimpleNamespace(aws_request_id="afc-test"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/api/handler.py:6: in lambda_handler
+    raise NotImplementedError("AFC-STUB: API router has not been implemented")
+E   NotImplementedError: AFC-STUB: API router has not been implemented
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/test_device_auth.py:128: in test_known_session_can_reach_its_own_profile
+    _, token = link_device(api)
+               ^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:221: in link_device
+    device = issue(api)
+             ^^^^^^^^^^
+backend/tests/conftest.py:207: in issue
+    status, body = api.request("POST", "/v1/link")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:171: in request
+    assert False, f"{method} {path}: API behavior is not implemented (AFC-STUB)"
+E   AssertionError: POST /v1/link: API behavior is not implemented (AFC-STUB)
+E   assert False</failure></testcase><testcase classname="tests.unit.test_device_auth" name="test_repeated_link_issues_do_not_reuse_codes_or_handles" time="0.063"><failure message="AssertionError: POST /v1/link: API behavior is not implemented (AFC-STUB)&#10;assert False">backend/tests/conftest.py:169: in request
+    response = handler(event, SimpleNamespace(aws_request_id="afc-test"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/api/handler.py:6: in lambda_handler
+    raise NotImplementedError("AFC-STUB: API router has not been implemented")
+E   NotImplementedError: AFC-STUB: API router has not been implemented
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/test_device_auth.py:136: in test_repeated_link_issues_do_not_reuse_codes_or_handles
+    first, second = issue(api), issue(api)
+                    ^^^^^^^^^^
+backend/tests/conftest.py:207: in issue
+    status, body = api.request("POST", "/v1/link")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:171: in request
+    assert False, f"{method} {path}: API behavior is not implemented (AFC-STUB)"
+E   AssertionError: POST /v1/link: API behavior is not implemented (AFC-STUB)
+E   assert False</failure></testcase><testcase classname="tests.contract.test_api_contract" name="test_openapi_contains_exact_tv_operations_without_excluded_social_endpoints" time="0.000"><failure message="AssertionError: Required backend contract artifact is absent: src/api/openapi.yaml&#10;assert False&#10; +  where False = is_file()&#10; +    where is_file = PosixPath('$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01/backend/src/api/openapi.yaml').is_file">backend/tests/contract/test_api_contract.py:42: in test_openapi_contains_exact_tv_operations_without_excluded_social_endpoints
+    doc = document("src/api/openapi.yaml")
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:43: in document
+    assert path.is_file(), f"Required backend contract artifact is absent: {relative}"
+E   AssertionError: Required backend contract artifact is absent: src/api/openapi.yaml
+E   assert False
+E    +  where False = is_file()
+E    +    where is_file = PosixPath('$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01/backend/src/api/openapi.yaml').is_file</failure></testcase><testcase classname="tests.contract.test_api_contract" name="test_openapi_protected_operations_require_http_bearer_auth[/v1/profile-methods0]" time="0.000"><failure message="AssertionError: Required backend contract artifact is absent: src/api/openapi.yaml&#10;assert False&#10; +  where False = is_file()&#10; +    where is_file = PosixPath('$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01/backend/src/api/openapi.yaml').is_file">backend/tests/contract/test_api_contract.py:52: in test_openapi_protected_operations_require_http_bearer_auth
+    doc = document("src/api/openapi.yaml")
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:43: in document
+    assert path.is_file(), f"Required backend contract artifact is absent: {relative}"
+E   AssertionError: Required backend contract artifact is absent: src/api/openapi.yaml
+E   assert False
+E    +  where False = is_file()
+E    +    where is_file = PosixPath('$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01/backend/src/api/openapi.yaml').is_file</failure></testcase><testcase classname="tests.contract.test_api_contract" name="test_openapi_protected_operations_require_http_bearer_auth[/v1/alerts-methods1]" time="0.000"><failure message="AssertionError: Required backend contract artifact is absent: src/api/openapi.yaml&#10;assert False&#10; +  where False = is_file()&#10; +    where is_file = PosixPath('$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01/backend/src/api/openapi.yaml').is_file">backend/tests/contract/test_api_contract.py:52: in test_openapi_protected_operations_require_http_bearer_auth
+    doc = document("src/api/openapi.yaml")
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:43: in document
+    assert path.is_file(), f"Required backend contract artifact is absent: {relative}"
+E   AssertionError: Required backend contract artifact is absent: src/api/openapi.yaml
+E   assert False
+E    +  where False = is_file()
+E    +    where is_file = PosixPath('$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01/backend/src/api/openapi.yaml').is_file</failure></testcase><testcase classname="tests.contract.test_api_contract" name="test_openapi_protected_operations_require_http_bearer_auth[/v1/panel-methods2]" time="0.000"><failure message="AssertionError: Required backend contract artifact is absent: src/api/openapi.yaml&#10;assert False&#10; +  where False = is_file()&#10; +    where is_file = PosixPath('$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01/backend/src/api/openapi.yaml').is_file">backend/tests/contract/test_api_contract.py:52: in test_openapi_protected_operations_require_http_bearer_auth
+    doc = document("src/api/openapi.yaml")
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:43: in document
+    assert path.is_file(), f"Required backend contract artifact is absent: {relative}"
+E   AssertionError: Required backend contract artifact is absent: src/api/openapi.yaml
+E   assert False
+E    +  where False = is_file()
+E    +    where is_file = PosixPath('$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01/backend/src/api/openapi.yaml').is_file</failure></testcase><testcase classname="tests.contract.test_api_contract" name="test_openapi_protected_operations_require_http_bearer_auth[/v1/providers-methods3]" time="0.000"><failure message="AssertionError: Required backend contract artifact is absent: src/api/openapi.yaml&#10;assert False&#10; +  where False = is_file()&#10; +    where is_file = PosixPath('$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01/backend/src/api/openapi.yaml').is_file">backend/tests/contract/test_api_contract.py:52: in test_openapi_protected_operations_require_http_bearer_auth
+    doc = document("src/api/openapi.yaml")
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:43: in document
+    assert path.is_file(), f"Required backend contract artifact is absent: {relative}"
+E   AssertionError: Required backend contract artifact is absent: src/api/openapi.yaml
+E   assert False
+E    +  where False = is_file()
+E    +    where is_file = PosixPath('$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01/backend/src/api/openapi.yaml').is_file</failure></testcase><testcase classname="tests.contract.test_api_contract" name="test_openapi_protected_operations_require_http_bearer_auth[/v1/routing-outcome-methods4]" time="0.000"><failure message="AssertionError: Required backend contract artifact is absent: src/api/openapi.yaml&#10;assert False&#10; +  where False = is_file()&#10; +    where is_file = PosixPath('$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01/backend/src/api/openapi.yaml').is_file">backend/tests/contract/test_api_contract.py:52: in test_openapi_protected_operations_require_http_bearer_auth
+    doc = document("src/api/openapi.yaml")
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:43: in document
+    assert path.is_file(), f"Required backend contract artifact is absent: {relative}"
+E   AssertionError: Required backend contract artifact is absent: src/api/openapi.yaml
+E   assert False
+E    +  where False = is_file()
+E    +    where is_file = PosixPath('$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01/backend/src/api/openapi.yaml').is_file</failure></testcase><testcase classname="tests.contract.test_api_contract" name="test_openapi_protected_operations_require_http_bearer_auth[/v1/installed-apps-methods5]" time="0.000"><failure message="AssertionError: Required backend contract artifact is absent: src/api/openapi.yaml&#10;assert False&#10; +  where False = is_file()&#10; +    where is_file = PosixPath('$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01/backend/src/api/openapi.yaml').is_file">backend/tests/contract/test_api_contract.py:52: in test_openapi_protected_operations_require_http_bearer_auth
+    doc = document("src/api/openapi.yaml")
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:43: in document
+    assert path.is_file(), f"Required backend contract artifact is absent: {relative}"
+E   AssertionError: Required backend contract artifact is absent: src/api/openapi.yaml
+E   assert False
+E    +  where False = is_file()
+E    +    where is_file = PosixPath('$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01/backend/src/api/openapi.yaml').is_file</failure></testcase><testcase classname="tests.contract.test_api_contract" name="test_entity_response_schemas_preserve_the_versioned_envelope[/v1/profile]" time="0.000"><failure message="AssertionError: Required backend contract artifact is absent: src/api/openapi.yaml&#10;assert False&#10; +  where False = is_file()&#10; +    where is_file = PosixPath('$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01/backend/src/api/openapi.yaml').is_file">backend/tests/contract/test_api_contract.py:64: in test_entity_response_schemas_preserve_the_versioned_envelope
+    doc = document("src/api/openapi.yaml")
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:43: in document
+    assert path.is_file(), f"Required backend contract artifact is absent: {relative}"
+E   AssertionError: Required backend contract artifact is absent: src/api/openapi.yaml
+E   assert False
+E    +  where False = is_file()
+E    +    where is_file = PosixPath('$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01/backend/src/api/openapi.yaml').is_file</failure></testcase><testcase classname="tests.contract.test_api_contract" name="test_entity_response_schemas_preserve_the_versioned_envelope[/v1/alerts]" time="0.000"><failure message="AssertionError: Required backend contract artifact is absent: src/api/openapi.yaml&#10;assert False&#10; +  where False = is_file()&#10; +    where is_file = PosixPath('$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01/backend/src/api/openapi.yaml').is_file">backend/tests/contract/test_api_contract.py:64: in test_entity_response_schemas_preserve_the_versioned_envelope
+    doc = document("src/api/openapi.yaml")
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:43: in document
+    assert path.is_file(), f"Required backend contract artifact is absent: {relative}"
+E   AssertionError: Required backend contract artifact is absent: src/api/openapi.yaml
+E   assert False
+E    +  where False = is_file()
+E    +    where is_file = PosixPath('$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01/backend/src/api/openapi.yaml').is_file</failure></testcase><testcase classname="tests.contract.test_api_contract" name="test_entity_response_schemas_preserve_the_versioned_envelope[/v1/panel]" time="0.000"><failure message="AssertionError: Required backend contract artifact is absent: src/api/openapi.yaml&#10;assert False&#10; +  where False = is_file()&#10; +    where is_file = PosixPath('$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01/backend/src/api/openapi.yaml').is_file">backend/tests/contract/test_api_contract.py:64: in test_entity_response_schemas_preserve_the_versioned_envelope
+    doc = document("src/api/openapi.yaml")
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:43: in document
+    assert path.is_file(), f"Required backend contract artifact is absent: {relative}"
+E   AssertionError: Required backend contract artifact is absent: src/api/openapi.yaml
+E   assert False
+E    +  where False = is_file()
+E    +    where is_file = PosixPath('$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01/backend/src/api/openapi.yaml').is_file</failure></testcase><testcase classname="tests.contract.test_api_contract" name="test_openapi_declares_safe_structured_errors_for_all_contract_statuses[/v1/link-post-400]" time="0.000"><failure message="AssertionError: Required backend contract artifact is absent: src/api/openapi.yaml&#10;assert False&#10; +  where False = is_file()&#10; +    where is_file = PosixPath('$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01/backend/src/api/openapi.yaml').is_file">backend/tests/contract/test_api_contract.py:89: in test_openapi_declares_safe_structured_errors_for_all_contract_statuses
+    doc = document("src/api/openapi.yaml")
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:43: in document
+    assert path.is_file(), f"Required backend contract artifact is absent: {relative}"
+E   AssertionError: Required backend contract artifact is absent: src/api/openapi.yaml
+E   assert False
+E    +  where False = is_file()
+E    +    where is_file = PosixPath('$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01/backend/src/api/openapi.yaml').is_file</failure></testcase><testcase classname="tests.contract.test_api_contract" name="test_openapi_declares_safe_structured_errors_for_all_contract_statuses[/v1/profile-get-401]" time="0.000"><failure message="AssertionError: Required backend contract artifact is absent: src/api/openapi.yaml&#10;assert False&#10; +  where False = is_file()&#10; +    where is_file = PosixPath('$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01/backend/src/api/openapi.yaml').is_file">backend/tests/contract/test_api_contract.py:89: in test_openapi_declares_safe_structured_errors_for_all_contract_statuses
+    doc = document("src/api/openapi.yaml")
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:43: in document
+    assert path.is_file(), f"Required backend contract artifact is absent: {relative}"
+E   AssertionError: Required backend contract artifact is absent: src/api/openapi.yaml
+E   assert False
+E    +  where False = is_file()
+E    +    where is_file = PosixPath('$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01/backend/src/api/openapi.yaml').is_file</failure></testcase><testcase classname="tests.contract.test_api_contract" name="test_openapi_declares_safe_structured_errors_for_all_contract_statuses[/v1/profile-get-403]" time="0.000"><failure message="AssertionError: Required backend contract artifact is absent: src/api/openapi.yaml&#10;assert False&#10; +  where False = is_file()&#10; +    where is_file = PosixPath('$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01/backend/src/api/openapi.yaml').is_file">backend/tests/contract/test_api_contract.py:89: in test_openapi_declares_safe_structured_errors_for_all_contract_statuses
+    doc = document("src/api/openapi.yaml")
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:43: in document
+    assert path.is_file(), f"Required backend contract artifact is absent: {relative}"
+E   AssertionError: Required backend contract artifact is absent: src/api/openapi.yaml
+E   assert False
+E    +  where False = is_file()
+E    +    where is_file = PosixPath('$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01/backend/src/api/openapi.yaml').is_file</failure></testcase><testcase classname="tests.contract.test_api_contract" name="test_openapi_declares_safe_structured_errors_for_all_contract_statuses[/v1/profile-put-409]" time="0.000"><failure message="AssertionError: Required backend contract artifact is absent: src/api/openapi.yaml&#10;assert False&#10; +  where False = is_file()&#10; +    where is_file = PosixPath('$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01/backend/src/api/openapi.yaml').is_file">backend/tests/contract/test_api_contract.py:89: in test_openapi_declares_safe_structured_errors_for_all_contract_statuses
+    doc = document("src/api/openapi.yaml")
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:43: in document
+    assert path.is_file(), f"Required backend contract artifact is absent: {relative}"
+E   AssertionError: Required backend contract artifact is absent: src/api/openapi.yaml
+E   assert False
+E    +  where False = is_file()
+E    +    where is_file = PosixPath('$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01/backend/src/api/openapi.yaml').is_file</failure></testcase><testcase classname="tests.contract.test_api_contract" name="test_openapi_declares_safe_structured_errors_for_all_contract_statuses[/v1/link/confirm-post-410]" time="0.000"><failure message="AssertionError: Required backend contract artifact is absent: src/api/openapi.yaml&#10;assert False&#10; +  where False = is_file()&#10; +    where is_file = PosixPath('$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01/backend/src/api/openapi.yaml').is_file">backend/tests/contract/test_api_contract.py:89: in test_openapi_declares_safe_structured_errors_for_all_contract_statuses
+    doc = document("src/api/openapi.yaml")
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:43: in document
+    assert path.is_file(), f"Required backend contract artifact is absent: {relative}"
+E   AssertionError: Required backend contract artifact is absent: src/api/openapi.yaml
+E   assert False
+E    +  where False = is_file()
+E    +    where is_file = PosixPath('$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01/backend/src/api/openapi.yaml').is_file</failure></testcase><testcase classname="tests.contract.test_api_contract" name="test_openapi_declares_safe_structured_errors_for_all_contract_statuses[/v1/link-post-429]" time="0.000"><failure message="AssertionError: Required backend contract artifact is absent: src/api/openapi.yaml&#10;assert False&#10; +  where False = is_file()&#10; +    where is_file = PosixPath('$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01/backend/src/api/openapi.yaml').is_file">backend/tests/contract/test_api_contract.py:89: in test_openapi_declares_safe_structured_errors_for_all_contract_statuses
+    doc = document("src/api/openapi.yaml")
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:43: in document
+    assert path.is_file(), f"Required backend contract artifact is absent: {relative}"
+E   AssertionError: Required backend contract artifact is absent: src/api/openapi.yaml
+E   assert False
+E    +  where False = is_file()
+E    +    where is_file = PosixPath('$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01/backend/src/api/openapi.yaml').is_file</failure></testcase><testcase classname="tests.contract.test_api_contract" name="test_openapi_declares_safe_structured_errors_for_all_contract_statuses[/v1/panel-get-503]" time="0.000"><failure message="AssertionError: Required backend contract artifact is absent: src/api/openapi.yaml&#10;assert False&#10; +  where False = is_file()&#10; +    where is_file = PosixPath('$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01/backend/src/api/openapi.yaml').is_file">backend/tests/contract/test_api_contract.py:89: in test_openapi_declares_safe_structured_errors_for_all_contract_statuses
+    doc = document("src/api/openapi.yaml")
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:43: in document
+    assert path.is_file(), f"Required backend contract artifact is absent: {relative}"
+E   AssertionError: Required backend contract artifact is absent: src/api/openapi.yaml
+E   assert False
+E    +  where False = is_file()
+E    +    where is_file = PosixPath('$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01/backend/src/api/openapi.yaml').is_file</failure></testcase><testcase classname="tests.contract.test_api_contract" name="test_malformed_body_returns_400_without_partial_link_mutation[/v1/link-{]" time="0.060"><failure message="AssertionError: POST /v1/link: API behavior is not implemented (AFC-STUB)&#10;assert False">backend/tests/conftest.py:169: in request
+    response = handler(event, SimpleNamespace(aws_request_id="afc-test"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/api/handler.py:6: in lambda_handler
+    raise NotImplementedError("AFC-STUB: API router has not been implemented")
+E   NotImplementedError: AFC-STUB: API router has not been implemented
+
+During handling of the above exception, another exception occurred:
+backend/tests/contract/test_api_contract.py:100: in test_malformed_body_returns_400_without_partial_link_mutation
+    status, body = api.request("POST", path, raw=raw)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:171: in request
+    assert False, f"{method} {path}: API behavior is not implemented (AFC-STUB)"
+E   AssertionError: POST /v1/link: API behavior is not implemented (AFC-STUB)
+E   assert False</failure></testcase><testcase classname="tests.contract.test_api_contract" name="test_malformed_body_returns_400_without_partial_link_mutation[/v1/link/confirm-[]]" time="0.082"><failure message="AssertionError: POST /v1/link/confirm: API behavior is not implemented (AFC-STUB)&#10;assert False">backend/tests/conftest.py:169: in request
+    response = handler(event, SimpleNamespace(aws_request_id="afc-test"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/api/handler.py:6: in lambda_handler
+    raise NotImplementedError("AFC-STUB: API router has not been implemented")
+E   NotImplementedError: AFC-STUB: API router has not been implemented
+
+During handling of the above exception, another exception occurred:
+backend/tests/contract/test_api_contract.py:100: in test_malformed_body_returns_400_without_partial_link_mutation
+    status, body = api.request("POST", path, raw=raw)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:171: in request
+    assert False, f"{method} {path}: API behavior is not implemented (AFC-STUB)"
+E   AssertionError: POST /v1/link/confirm: API behavior is not implemented (AFC-STUB)
+E   assert False</failure></testcase><testcase classname="tests.contract.test_api_contract" name="test_body_larger_than_64_kib_is_rejected_before_any_link_mutation" time="0.085"><failure message="AssertionError: POST /v1/link: API behavior is not implemented (AFC-STUB)&#10;assert False">backend/tests/conftest.py:169: in request
+    response = handler(event, SimpleNamespace(aws_request_id="afc-test"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/api/handler.py:6: in lambda_handler
+    raise NotImplementedError("AFC-STUB: API router has not been implemented")
+E   NotImplementedError: AFC-STUB: API router has not been implemented
+
+During handling of the above exception, another exception occurred:
+backend/tests/contract/test_api_contract.py:107: in test_body_larger_than_64_kib_is_rejected_before_any_link_mutation
+    status, body = api.request("POST", "/v1/link", raw='{"padding":"' + "x" * 65536 + '"}')
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:171: in request
+    assert False, f"{method} {path}: API behavior is not implemented (AFC-STUB)"
+E   AssertionError: POST /v1/link: API behavior is not implemented (AFC-STUB)
+E   assert False</failure></testcase><testcase classname="tests.contract.test_api_contract" name="test_future_module_stubs_surface_503_not_implemented[/v1/alerts]" time="0.093"><failure message="AssertionError: POST /v1/link: API behavior is not implemented (AFC-STUB)&#10;assert False">backend/tests/conftest.py:169: in request
+    response = handler(event, SimpleNamespace(aws_request_id="afc-test"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/api/handler.py:6: in lambda_handler
+    raise NotImplementedError("AFC-STUB: API router has not been implemented")
+E   NotImplementedError: AFC-STUB: API router has not been implemented
+
+During handling of the above exception, another exception occurred:
+backend/tests/contract/test_api_contract.py:114: in test_future_module_stubs_surface_503_not_implemented
+    _, token = link_device(api)
+               ^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:221: in link_device
+    device = issue(api)
+             ^^^^^^^^^^
+backend/tests/conftest.py:207: in issue
+    status, body = api.request("POST", "/v1/link")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:171: in request
+    assert False, f"{method} {path}: API behavior is not implemented (AFC-STUB)"
+E   AssertionError: POST /v1/link: API behavior is not implemented (AFC-STUB)
+E   assert False</failure></testcase><testcase classname="tests.contract.test_api_contract" name="test_future_module_stubs_surface_503_not_implemented[/v1/panel]" time="0.087"><failure message="AssertionError: POST /v1/link: API behavior is not implemented (AFC-STUB)&#10;assert False">backend/tests/conftest.py:169: in request
+    response = handler(event, SimpleNamespace(aws_request_id="afc-test"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/api/handler.py:6: in lambda_handler
+    raise NotImplementedError("AFC-STUB: API router has not been implemented")
+E   NotImplementedError: AFC-STUB: API router has not been implemented
+
+During handling of the above exception, another exception occurred:
+backend/tests/contract/test_api_contract.py:114: in test_future_module_stubs_surface_503_not_implemented
+    _, token = link_device(api)
+               ^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:221: in link_device
+    device = issue(api)
+             ^^^^^^^^^^
+backend/tests/conftest.py:207: in issue
+    status, body = api.request("POST", "/v1/link")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:171: in request
+    assert False, f"{method} {path}: API behavior is not implemented (AFC-STUB)"
+E   AssertionError: POST /v1/link: API behavior is not implemented (AFC-STUB)
+E   assert False</failure></testcase><testcase classname="tests.contract.test_api_contract" name="test_future_module_stubs_surface_503_not_implemented[/v1/providers]" time="0.091"><failure message="AssertionError: POST /v1/link: API behavior is not implemented (AFC-STUB)&#10;assert False">backend/tests/conftest.py:169: in request
+    response = handler(event, SimpleNamespace(aws_request_id="afc-test"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/api/handler.py:6: in lambda_handler
+    raise NotImplementedError("AFC-STUB: API router has not been implemented")
+E   NotImplementedError: AFC-STUB: API router has not been implemented
+
+During handling of the above exception, another exception occurred:
+backend/tests/contract/test_api_contract.py:114: in test_future_module_stubs_surface_503_not_implemented
+    _, token = link_device(api)
+               ^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:221: in link_device
+    device = issue(api)
+             ^^^^^^^^^^
+backend/tests/conftest.py:207: in issue
+    status, body = api.request("POST", "/v1/link")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:171: in request
+    assert False, f"{method} {path}: API behavior is not implemented (AFC-STUB)"
+E   AssertionError: POST /v1/link: API behavior is not implemented (AFC-STUB)
+E   assert False</failure></testcase><testcase classname="tests.contract.test_api_contract" name="test_phone_link_page_exposes_customer_confirmation_form" time="0.218"><failure message="AssertionError: GET /link: API behavior is not implemented (AFC-STUB)&#10;assert False">backend/tests/conftest.py:169: in request
+    response = handler(event, SimpleNamespace(aws_request_id="afc-test"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/api/handler.py:6: in lambda_handler
+    raise NotImplementedError("AFC-STUB: API router has not been implemented")
+E   NotImplementedError: AFC-STUB: API router has not been implemented
+
+During handling of the above exception, another exception occurred:
+backend/tests/contract/test_api_contract.py:121: in test_phone_link_page_exposes_customer_confirmation_form
+    status, page = api.request("GET", "/link")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:171: in request
+    assert False, f"{method} {path}: API behavior is not implemented (AFC-STUB)"
+E   AssertionError: GET /link: API behavior is not implemented (AFC-STUB)
+E   assert False</failure></testcase><testcase classname="tests.contract.test_backend_template" name="test_template_declares_only_the_approved_free_plan_service_set" time="0.000"><failure message="AssertionError: Required backend contract artifact is absent: template.yaml&#10;assert False&#10; +  where False = is_file()&#10; +    where is_file = PosixPath('$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01/backend/template.yaml').is_file">backend/tests/contract/test_backend_template.py:25: in test_template_declares_only_the_approved_free_plan_service_set
+    template = document("template.yaml")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:43: in document
+    assert path.is_file(), f"Required backend contract artifact is absent: {relative}"
+E   AssertionError: Required backend contract artifact is absent: template.yaml
+E   assert False
+E    +  where False = is_file()
+E    +    where is_file = PosixPath('$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01/backend/template.yaml').is_file</failure></testcase><testcase classname="tests.contract.test_backend_template" name="test_template_declares_every_function_and_on_demand_table" time="0.000"><failure message="AssertionError: Required backend contract artifact is absent: template.yaml&#10;assert False&#10; +  where False = is_file()&#10; +    where is_file = PosixPath('$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01/backend/template.yaml').is_file">backend/tests/contract/test_backend_template.py:34: in test_template_declares_every_function_and_on_demand_table
+    template = document("template.yaml")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:43: in document
+    assert path.is_file(), f"Required backend contract artifact is absent: {relative}"
+E   AssertionError: Required backend contract artifact is absent: template.yaml
+E   assert False
+E    +  where False = is_file()
+E    +    where is_file = PosixPath('$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01/backend/template.yaml').is_file</failure></testcase><testcase classname="tests.contract.test_backend_template" name="test_template_routes_tv_and_link_page_and_bounds_link_attempts" time="0.000"><failure message="AssertionError: Required backend contract artifact is absent: template.yaml&#10;assert False&#10; +  where False = is_file()&#10; +    where is_file = PosixPath('$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01/backend/template.yaml').is_file">backend/tests/contract/test_backend_template.py:54: in test_template_routes_tv_and_link_page_and_bounds_link_attempts
+    template = document("template.yaml")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:43: in document
+    assert path.is_file(), f"Required backend contract artifact is absent: {relative}"
+E   AssertionError: Required backend contract artifact is absent: template.yaml
+E   assert False
+E    +  where False = is_file()
+E    +    where is_file = PosixPath('$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01/backend/template.yaml').is_file</failure></testcase><testcase classname="tests.contract.test_backend_template" name="test_template_uses_ssm_parameter_names_instead_of_embedded_secret_values" time="0.000"><failure message="AssertionError: Required backend contract artifact is absent: template.yaml&#10;assert False&#10; +  where False = is_file()&#10; +    where is_file = PosixPath('$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01/backend/template.yaml').is_file">backend/tests/contract/test_backend_template.py:73: in test_template_uses_ssm_parameter_names_instead_of_embedded_secret_values
+    template = document("template.yaml")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/conftest.py:43: in document
+    assert path.is_file(), f"Required backend contract artifact is absent: {relative}"
+E   AssertionError: Required backend contract artifact is absent: template.yaml
+E   assert False
+E    +  where False = is_file()
+E    +    where is_file = PosixPath('$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01/backend/template.yaml').is_file</failure></testcase><testcase classname="tests.contract.test_backend_template" name="test_future_backend_modules_have_explicit_unimplemented_public_interfaces[feed_ingest]" time="0.000"><failure message="AssertionError: Backend must contain the future feed_ingest interface&#10;assert []">backend/tests/contract/test_backend_template.py:92: in test_future_backend_modules_have_explicit_unimplemented_public_interfaces
+    assert files, f"Backend must contain the future {module} interface"
+E   AssertionError: Backend must contain the future feed_ingest interface
+E   assert []</failure></testcase><testcase classname="tests.contract.test_backend_template" name="test_future_backend_modules_have_explicit_unimplemented_public_interfaces[lineup]" time="0.000"><failure message="AssertionError: Backend must contain the future lineup interface&#10;assert []">backend/tests/contract/test_backend_template.py:92: in test_future_backend_modules_have_explicit_unimplemented_public_interfaces
+    assert files, f"Backend must contain the future {module} interface"
+E   AssertionError: Backend must contain the future lineup interface
+E   assert []</failure></testcase><testcase classname="tests.contract.test_backend_template" name="test_future_backend_modules_have_explicit_unimplemented_public_interfaces[matcher]" time="0.000"><failure message="AssertionError: Backend must contain the future matcher interface&#10;assert []">backend/tests/contract/test_backend_template.py:92: in test_future_backend_modules_have_explicit_unimplemented_public_interfaces
+    assert files, f"Backend must contain the future {module} interface"
+E   AssertionError: Backend must contain the future matcher interface
+E   assert []</failure></testcase><testcase classname="tests.contract.test_backend_template" name="test_future_backend_modules_have_explicit_unimplemented_public_interfaces[alert_policy]" time="0.000"><failure message="AssertionError: Backend must contain the future alert_policy interface&#10;assert []">backend/tests/contract/test_backend_template.py:92: in test_future_backend_modules_have_explicit_unimplemented_public_interfaces
+    assert files, f"Backend must contain the future {module} interface"
+E   AssertionError: Backend must contain the future alert_policy interface
+E   assert []</failure></testcase><testcase classname="tests.contract.test_backend_template" name="test_future_backend_modules_have_explicit_unimplemented_public_interfaces[provider_resolver]" time="0.000"><failure message="AssertionError: Backend must contain the future provider_resolver interface&#10;assert []">backend/tests/contract/test_backend_template.py:92: in test_future_backend_modules_have_explicit_unimplemented_public_interfaces
+    assert files, f"Backend must contain the future {module} interface"
+E   AssertionError: Backend must contain the future provider_resolver interface
+E   assert []</failure></testcase><testcase classname="tests.contract.test_backend_template" name="test_future_backend_modules_have_explicit_unimplemented_public_interfaces[panel]" time="0.000"><failure message="AssertionError: Backend must contain the future panel interface&#10;assert []">backend/tests/contract/test_backend_template.py:92: in test_future_backend_modules_have_explicit_unimplemented_public_interfaces
+    assert files, f"Backend must contain the future {module} interface"
+E   AssertionError: Backend must contain the future panel interface
+E   assert []</failure></testcase><testcase classname="tests.contract.test_backend_template" name="test_complete_store_and_policy_chain_stay_backend_side" time="0.000"><failure message="AssertionError: P2-B01 must realize shared store accessors&#10;assert []">backend/tests/contract/test_backend_template.py:109: in test_complete_store_and_policy_chain_stay_backend_side
+    assert files, "P2-B01 must realize shared store accessors"
+E   AssertionError: P2-B01 must realize shared store accessors
+E   assert []</failure></testcase></testsuite></testsuites>

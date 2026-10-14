@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add the backend foundation: SAM HTTP API with throttling, Lambda router
+  and response envelope, DynamoDB store, device-code linking with a
+  passphrase-confirmed phone page, bounded session retry, least-privilege
+  per-function grants, pipeline and module stubs, and hash-pinned CI
+  dependencies ([PR #60](https://github.com/1wgrumph/amazon-fantasy-companion/pull/60)).
+
 - Extend the shared gate with `tvapp` and `backend` areas, their CI jobs
   and backend coverage and mutation checks with qualified tooling
   ([PR #57](https://github.com/1wgrumph/amazon-fantasy-companion/pull/57)).

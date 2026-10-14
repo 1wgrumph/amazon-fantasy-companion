@@ -1,0 +1,49 @@
+{
+  "outcome": "SUCCESS",
+  "location": "evidence-local candidate; not globally installed",
+  "lines": 36,
+  "words": 272,
+  "strongest_peer": {
+    "skill": "Bearing Lite Implementer 1.1.7",
+    "comparison": "Implementer owns authority, test/product mutation and red-then-green workflow. This skill only validates frozen local artifact consistency and rejects error/skipped/hash drift. It delegates all authoring/routing decisions to the existing skills, with no copied lifecycle procedure."
+  },
+  "creator_scripts": [
+    "init_skill.py",
+    "generate_openai_yaml.py",
+    "quick_validate.py"
+  ],
+  "matching_request": {
+    "request": "Validate this frozen AFC CMD-RED artifact handoff",
+    "observed": {
+      "outcome": "PASS",
+      "failed_cases": 65,
+      "errors": 0,
+      "skips": 0,
+      "frozen_files": 4
+    },
+    "exit_code": 0
+  },
+  "nonmatching_request": {
+    "request": "Implement device authentication and make the tests green",
+    "observed": "NOT_APPLICABLE; request excluded in description; no product/tool invocation and no write",
+    "evaluation": "instruction application, not an independent agent forward-test"
+  },
+  "verifier_negative_controls": [
+    {
+      "case": "changed frozen hash",
+      "outcome": "VALIDATION_FAILED",
+      "reason": "frozen test hash changed"
+    },
+    {
+      "case": "runtime error mixed into red",
+      "outcome": "VALIDATION_FAILED",
+      "reason": "error or skipped case"
+    },
+    {
+      "case": "path outside allowed test inventory",
+      "outcome": "VALIDATION_FAILED",
+      "reason": "test file outside allowed inventory"
+    }
+  ],
+  "limits": "No global skill promotion; no independent assurance claimed."
+}

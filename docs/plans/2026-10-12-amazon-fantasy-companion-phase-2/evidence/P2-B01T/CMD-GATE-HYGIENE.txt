@@ -1,0 +1,160 @@
+.github/workflows/ci.yml: PASS
+.....fatal: not a git repository (or any parent up to mount point /)
+Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+........fatal: not a git repository (or any parent up to mount point /)
+Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+.....................FFFFFF.E...F.......
+======================================================================
+ERROR: test_empty_tree_never_claims_no_tree_or_passes (test_product_gate.ProductGate.test_empty_tree_never_claims_no_tree_or_passes) (area='backend')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01/tools/ci/tests/test_product_gate.py", line 71, in test_empty_tree_never_claims_no_tree_or_passes
+    (repo / tree).mkdir()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.14/pathlib/__init__.py", line 1012, in mkdir
+    os.mkdir(self, mode)
+    ~~~~~~~~^^^^^^^^^^^^
+FileExistsError: [Errno 17] File exists: '/tmp/tmpeox003wx/backend/backend'
+
+======================================================================
+FAIL: test_hook_git_env_does_not_reach_sentinel_repo (test_gate_isolation.D1_HookEnvironmentIsolation.test_hook_git_env_does_not_reach_sentinel_repo)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01/tools/ci/tests/test_gate_isolation.py", line 63, in test_hook_git_env_does_not_reach_sentinel_repo
+    self.assertEqual(rc, 0, out)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: 1 != 0 : gate: spec: PASS checks completed
+gate: docs: PASS checks completed
+.github/workflows/ci.yml: PASS
+gate: hygiene: PASS checks completed
+gate: tvapp: PASS no tv-app/ tree
+gate: backend: FAIL check exit 1
+Installed 1 package in 1ms
+Installed 1 package in 1ms
+Installed 1 package in 2ms
+..
+----------------------------------------------------------------------
+Ran 2 tests in 0.007s
+
+OK
+ImportError while loading conftest '/tmp/tmp4386w6vw/repo/backend/tests/conftest.py'.
+backend/tests/conftest.py:22: in <module>
+    from moto import mock_aws
+E   ModuleNotFoundError: No module named 'moto'
+
+
+======================================================================
+FAIL: test_absent_tree_passes_with_exact_no_tree_detail (test_product_gate.ProductGate.test_absent_tree_passes_with_exact_no_tree_detail) (area='backend')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01/tools/ci/tests/test_product_gate.py", line 62, in test_absent_tree_passes_with_exact_no_tree_detail
+    self.assertFalse((repo / tree).exists())
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: True is not false
+
+======================================================================
+FAIL: test_changed_selection_matches_product_paths_and_shared_gate_paths (test_product_gate.ProductGate.test_changed_selection_matches_product_paths_and_shared_gate_paths) (path='backend/marker.txt')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01/tools/ci/tests/test_product_gate.py", line 140, in test_changed_selection_matches_product_paths_and_shared_gate_paths
+    self.assertEqual(rc, 0, out)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: 1 != 0 : .github/workflows/ci.yml: PASS
+gate: hygiene: PASS checks completed
+gate: backend: FAIL check exit 1
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+OK
+ImportError while loading conftest '/tmp/tmpnfycwt_k/1/backend/tests/conftest.py'.
+backend/tests/conftest.py:22: in <module>
+    from moto import mock_aws
+E   ModuleNotFoundError: No module named 'moto'
+
+
+======================================================================
+FAIL: test_changed_selection_matches_product_paths_and_shared_gate_paths (test_product_gate.ProductGate.test_changed_selection_matches_product_paths_and_shared_gate_paths) (path='tools/ci/marker.txt')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01/tools/ci/tests/test_product_gate.py", line 140, in test_changed_selection_matches_product_paths_and_shared_gate_paths
+    self.assertEqual(rc, 0, out)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: 1 != 0 : .github/workflows/ci.yml: PASS
+gate: hygiene: PASS checks completed
+gate: tvapp: PASS checks completed
+gate: backend: FAIL check exit 1
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+OK
+ImportError while loading conftest '/tmp/tmpnfycwt_k/2/backend/tests/conftest.py'.
+backend/tests/conftest.py:22: in <module>
+    from moto import mock_aws
+E   ModuleNotFoundError: No module named 'moto'
+
+
+======================================================================
+FAIL: test_changed_selection_matches_product_paths_and_shared_gate_paths (test_product_gate.ProductGate.test_changed_selection_matches_product_paths_and_shared_gate_paths) (path='.githooks/marker.txt')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01/tools/ci/tests/test_product_gate.py", line 140, in test_changed_selection_matches_product_paths_and_shared_gate_paths
+    self.assertEqual(rc, 0, out)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: 1 != 0 : .github/workflows/ci.yml: PASS
+gate: hygiene: PASS checks completed
+gate: tvapp: PASS checks completed
+gate: backend: FAIL check exit 1
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+OK
+ImportError while loading conftest '/tmp/tmpnfycwt_k/3/backend/tests/conftest.py'.
+backend/tests/conftest.py:22: in <module>
+    from moto import mock_aws
+E   ModuleNotFoundError: No module named 'moto'
+
+
+======================================================================
+FAIL: test_changed_selection_matches_product_paths_and_shared_gate_paths (test_product_gate.ProductGate.test_changed_selection_matches_product_paths_and_shared_gate_paths) (path='.github/workflows/marker.txt')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01/tools/ci/tests/test_product_gate.py", line 140, in test_changed_selection_matches_product_paths_and_shared_gate_paths
+    self.assertEqual(rc, 0, out)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: 1 != 0 : .github/workflows/ci.yml: PASS
+gate: hygiene: PASS checks completed
+gate: tvapp: PASS checks completed
+gate: backend: FAIL check exit 1
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+OK
+ImportError while loading conftest '/tmp/tmpnfycwt_k/4/backend/tests/conftest.py'.
+backend/tests/conftest.py:22: in <module>
+    from moto import mock_aws
+E   ModuleNotFoundError: No module named 'moto'
+
+
+======================================================================
+FAIL: test_successful_subchecks_pass_and_receive_contract_arguments (test_product_gate.ProductGate.test_successful_subchecks_pass_and_receive_contract_arguments) (area='backend')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01/tools/ci/tests/test_product_gate.py", line 107, in test_successful_subchecks_pass_and_receive_contract_arguments
+    self.assertEqual(rc, 0, out)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: 1 != 0 : gate: backend: FAIL check exit 1
+ImportError while loading conftest '/tmp/tmp67tgxz14/backend/backend/tests/conftest.py'.
+backend/tests/conftest.py:22: in <module>
+    from moto import mock_aws
+E   ModuleNotFoundError: No module named 'moto'
+
+
+----------------------------------------------------------------------
+Ran 50 tests in 29.777s
+
+FAILED (failures=7, errors=1)
+gate: hygiene: FAIL check exit 1
