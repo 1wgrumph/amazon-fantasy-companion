@@ -85,11 +85,14 @@ def copy_repo(root):
 
     tools/ci/tests is replaced by one passing stub test so a hygiene run in the
     copy does not recurse into these tests; linked repository documents are kept.
+    Real product trees (backend/, tv-app/) are excluded; tests needing one
+    create their own fixture.
     """
     listed = subprocess.run(['git', 'ls-files', '-z'],
                             cwd=REPO, check=True, capture_output=True).stdout.decode()
     for rel in filter(None, listed.split('\0')):
-        if rel.startswith(str(TESTS) + '/') or not (REPO / rel).is_file():
+        if (rel.startswith(str(TESTS) + '/') or rel.startswith('backend/')
+                or rel.startswith('tv-app/') or not (REPO / rel).is_file()):
             continue
         target = Path(root) / rel
         target.parent.mkdir(parents=True, exist_ok=True)
