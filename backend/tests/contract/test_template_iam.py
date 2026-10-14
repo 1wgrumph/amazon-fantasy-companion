@@ -1,9 +1,11 @@
 """DES-AFC-P2-BACKEND least-privilege IAM: expanded DynamoDB actions per function.
 
 Every function grants only the table operations its store accessors use (get,
-put, update, query); the API reads but never writes Alerts; no function holds
-DeleteItem, BatchWriteItem or any other unneeded DynamoDB action. The Links
-handle-index Query resource and the Events stream consumer stay intact.
+put, update, query); the API reads but never writes Alerts; only ApiFunction
+holds DeleteItem, solely on LinksTable to supersede a prior session of the
+same link; no function holds BatchWriteItem or any other unneeded DynamoDB
+action. The Links handle-index Query resource and the Events stream consumer
+stay intact.
 """
 
 import json
@@ -25,7 +27,7 @@ EXPANDED = {
 }
 EXPECTED = {
     "ApiFunction": {"ProfilesTable": {"GetItem", "PutItem"},
-                    "LinksTable": {"GetItem", "PutItem", "UpdateItem", "Query"},
+                    "LinksTable": {"GetItem", "PutItem", "UpdateItem", "Query", "DeleteItem"},
                     "AlertsTable": {"Query"},
                     "LineupsTable": {"GetItem", "PutItem"},
                     "EventsTable": {"GetItem"},
@@ -75,16 +77,21 @@ def test_each_function_grants_only_its_store_operations():
             f"{function} still uses a broad DynamoDB policy template"
         actions, _ = grants(policies)
         assert actions == expected, f"{function} DynamoDB grants changed: {actions}"
-        assert set().union(*actions.values()) <= {"GetItem", "PutItem", "UpdateItem", "Query"}
+        assert set().union(*actions.values()) <= {"GetItem", "PutItem", "UpdateItem", "Query",
+                                                 "DeleteItem"}
 
 
-def test_api_never_writes_alerts_and_nothing_deletes_or_batch_writes():
+def test_api_never_writes_alerts_and_only_supersedes_link_sessions():
     template = document("template.yaml")
     policies = template["Resources"]["ApiFunction"]["Properties"]["Policies"]
     actions, _ = grants(policies)
     assert actions["AlertsTable"] == {"Query"}, "ApiFunction must be read-only on Alerts"
-    blob = json.dumps(template["Resources"])
-    assert "DeleteItem" not in blob and "BatchWriteItem" not in blob
+    assert "BatchWriteItem" not in json.dumps(template["Resources"])
+    for function in EXPECTED:
+        granted, _ = grants(template["Resources"][function]["Properties"]["Policies"])
+        deleters = {table for table, ops in granted.items() if "DeleteItem" in ops}
+        assert deleters == ({"LinksTable"} if function == "ApiFunction" else set()), \
+            f"{function} must not delete outside superseding a link session"
 
 
 def test_links_index_query_and_events_stream_are_preserved():

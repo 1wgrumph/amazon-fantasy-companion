@@ -71,12 +71,12 @@ def test_linked_poll_retry_keeps_confirm_one_time_and_hashes_only(api, auth):
     retry = auth.poll(device["handle"])
     assert retry["state"] == "linked"
     assert isinstance(retry.get("sessionToken"), str) and retry["sessionToken"]
-    assert auth.authenticate(token) == "owner"
+    assert auth.authenticate(token) is None, "a retry supersedes the previous token"
     assert auth.authenticate(retry["sessionToken"]) == "owner"
     assert auth.poll("unknown-handle") == {"state": "unlinked"}
     assert auth.confirm(device["code"], api.passphrase, "owner") == "gone"
     sessions = [x for x in api.table("Links").scan()["Items"] if "sessionHash" in x]
-    assert len(sessions) == 2 and all(s["profileId"] == "owner" for s in sessions)
+    assert len(sessions) == 1 and all(s["profileId"] == "owner" for s in sessions)
     assert all(s["linkedAt"].endswith("Z") and len(s["linkedAt"]) == 20 for s in sessions)
 
 

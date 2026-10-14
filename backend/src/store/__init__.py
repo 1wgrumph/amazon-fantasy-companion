@@ -92,6 +92,18 @@ def complete_link(code):
         ExpressionAttributeValues={":linked": "linked", ":confirmed": "confirmed"})
 
 
+def record_link_session(code, session_hash):
+    """Record the link's current session hash, returning the superseded one (if any)."""
+    response = _table("LINKS_TABLE").update_item(
+        Key={"pk": "code#" + code}, UpdateExpression="SET currentSessionHash = :hash",
+        ExpressionAttributeValues={":hash": session_hash}, ReturnValues="ALL_OLD")
+    return response.get("Attributes", {}).get("currentSessionHash")
+
+
+def delete_session(session_hash):
+    _table("LINKS_TABLE").delete_item(Key={"pk": "session#" + session_hash})
+
+
 def put_session(session_hash, profile_id, linked_at):
     _table("LINKS_TABLE").put_item(Item={"pk": "session#" + session_hash,
                                          "sessionHash": session_hash,

@@ -76,7 +76,7 @@ Resources:
               Action: [dynamodb:GetItem, dynamodb:PutItem]
               Resource: [!GetAtt ProfilesTable.Arn]
             - Effect: Allow
-              Action: [dynamodb:GetItem, dynamodb:PutItem, dynamodb:UpdateItem, dynamodb:Query]
+              Action: [dynamodb:GetItem, dynamodb:PutItem, dynamodb:UpdateItem, dynamodb:Query, dynamodb:DeleteItem]
               Resource: [!GetAtt LinksTable.Arn, !Sub "${LinksTable.Arn}/index/*"]
             - Effect: Allow
               Action: [dynamodb:Query]
