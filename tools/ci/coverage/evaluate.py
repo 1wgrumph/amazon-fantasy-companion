@@ -2,10 +2,12 @@
 """Changed-line coverage verdict from native Cobertura XML via diff-cover.
 
 usage: evaluate.py BASE COVERAGE_XML OUT_DIR. Exit 0 PASS, 1 FAIL, 3 GAP.
-Every changed backend/src Python file must be mapped in the diff-cover result;
-an empty denominator, absent or stale report is a GAP, never PASS.
+Every changed backend/src Python file must be mapped in the diff-cover result,
+except files with zero executable statements (nothing to cover); an empty
+denominator, absent or stale report is a GAP, never PASS.
 """
 
+import ast
 import hashlib
 import json
 import re
@@ -23,6 +25,22 @@ def verdict(out, status, detail, **extra):
         json.dumps({'status': status, 'detail': detail, 'threshold': THRESHOLD, **extra}, indent=2) + '\n')
     print(f'{status} {detail}')
     return {'PASS': 0, 'FAIL': 1}.get(status, 3)
+
+
+def has_statements(path):
+    """True when the HEAD blob holds any statement besides the module docstring.
+    Unreadable or unparseable files fail closed (counted as having statements)."""
+    src = subprocess.run(['git', 'show', f'HEAD:{path}'], capture_output=True, text=True)
+    if src.returncode:
+        return True
+    try:
+        body = ast.parse(src.stdout).body
+    except SyntaxError:
+        return True
+    if (body and isinstance(body[0], ast.Expr) and isinstance(body[0].value, ast.Constant)
+            and isinstance(body[0].value.value, str)):
+        body = body[1:]
+    return bool(body)
 
 
 def main(argv):
@@ -68,10 +86,14 @@ def main(argv):
                        + (run.stderr.strip().splitlines() or [''])[-1])
     data = json.loads(report.read_text())
     stats = data.get('src_stats', {})
-    # A changed file absent from the report (stale XML, outside --source) is never 100% of nothing.
+    # A changed file absent from the report (stale XML, outside --source) is never 100% of nothing,
+    # unless it holds zero executable statements (a docstring-only module has no coverable lines).
     unmapped = [p for p in changed if p not in stats]
+    nothing_to_cover = sorted(p for p in unmapped if not has_statements(p))
+    unmapped = [p for p in unmapped if p not in nothing_to_cover]
     common = dict(candidate=candidate, base=base, changed=changed,
-                  total_num_lines=data.get('total_num_lines'), percent=data.get('total_percent_covered'))
+                  total_num_lines=data.get('total_num_lines'), percent=data.get('total_percent_covered'),
+                  nothing_to_cover=nothing_to_cover)
     if unmapped:
         return verdict(out, 'GAP', 'REPORT_INCOMPLETE: unmapped changed files: ' + ', '.join(unmapped),
                        unmapped=unmapped, **common)
