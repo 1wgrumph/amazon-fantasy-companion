@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add the ESPN feed capture tool and historical replay fixtures for 14
+  completed games, with an interim SP-5 verdict ([#63](https://github.com/1wgrumph/amazon-fantasy-companion/pull/63)).
+- Add the 2026-10-14 developer friction-log catch-up (ten observations in
+  the house format) ([#62](https://github.com/1wgrumph/amazon-fantasy-companion/pull/62)).
 - Add the backend foundation: SAM HTTP API with throttling, Lambda router
   and response envelope, DynamoDB store, device-code linking with a
   passphrase-confirmed phone page, bounded session retry, least-privilege
@@ -49,6 +53,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Fix the deployed-test network guard so smoke tests reach the configured
+  API host (resolved and rotating addresses) while every other destination
+  stays blocked ([#64](https://github.com/1wgrumph/amazon-fantasy-companion/pull/64)).
 - Spec gate compares the rebuilt output against the staged index instead of
   HEAD, so a correctly regenerated staged output passes before commit
   ([PR](https://github.com/1wgrumph/amazon-fantasy-companion/pull/14)).
