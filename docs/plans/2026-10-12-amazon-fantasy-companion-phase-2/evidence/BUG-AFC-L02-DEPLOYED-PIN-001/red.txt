@@ -1,0 +1,108 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.2, pluggy-1.6.0 -- <home>/.local/share/afc-tools/backend-tests/bin/python3.12
+cachedir: .pytest_cache
+rootdir: <repo>/backend
+configfile: pyproject.toml
+plugins: cov-7.1.0, anyio-4.13.0, asyncio-1.3.0, mock-3.15.1, typeguard-4.4.4
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 26 items
+
+backend/tests/unit/test_deployed_guard.py::test_resolved_api_addresses_are_allowed[connect-2-address0] FAILED [  3%]
+backend/tests/unit/test_deployed_guard.py::test_resolved_api_addresses_are_allowed[connect-2-address1] FAILED [  7%]
+backend/tests/unit/test_deployed_guard.py::test_resolved_api_addresses_are_allowed[connect-10-address2] FAILED [ 11%]
+backend/tests/unit/test_deployed_guard.py::test_resolved_api_addresses_are_allowed[connect_ex-2-address0] PASSED [ 15%]
+backend/tests/unit/test_deployed_guard.py::test_resolved_api_addresses_are_allowed[connect_ex-2-address1] PASSED [ 19%]
+backend/tests/unit/test_deployed_guard.py::test_resolved_api_addresses_are_allowed[connect_ex-10-address2] PASSED [ 23%]
+backend/tests/unit/test_deployed_guard.py::test_other_destinations_are_rejected[connect-2-address0] PASSED [ 26%]
+backend/tests/unit/test_deployed_guard.py::test_other_destinations_are_rejected[connect-10-address1] PASSED [ 30%]
+backend/tests/unit/test_deployed_guard.py::test_other_destinations_are_rejected[connect-2-address2] PASSED [ 34%]
+backend/tests/unit/test_deployed_guard.py::test_other_destinations_are_rejected[connect-2-address3] FAILED [ 38%]
+backend/tests/unit/test_deployed_guard.py::test_other_destinations_are_rejected[connect-1-guard-test.sock0] PASSED [ 42%]
+backend/tests/unit/test_deployed_guard.py::test_other_destinations_are_rejected[connect-1-guard-test.sock1] PASSED [ 46%]
+backend/tests/unit/test_deployed_guard.py::test_other_destinations_are_rejected[connect-1-address6] PASSED [ 50%]
+backend/tests/unit/test_deployed_guard.py::test_other_destinations_are_rejected[connect_ex-2-address0] FAILED [ 53%]
+backend/tests/unit/test_deployed_guard.py::test_other_destinations_are_rejected[connect_ex-10-address1] FAILED [ 57%]
+backend/tests/unit/test_deployed_guard.py::test_other_destinations_are_rejected[connect_ex-2-address2] FAILED [ 61%]
+backend/tests/unit/test_deployed_guard.py::test_other_destinations_are_rejected[connect_ex-2-address3] FAILED [ 65%]
+backend/tests/unit/test_deployed_guard.py::test_other_destinations_are_rejected[connect_ex-1-guard-test.sock0] FAILED [ 69%]
+backend/tests/unit/test_deployed_guard.py::test_other_destinations_are_rejected[connect_ex-1-guard-test.sock1] FAILED [ 73%]
+backend/tests/unit/test_deployed_guard.py::test_other_destinations_are_rejected[connect_ex-1-address6] FAILED [ 76%]
+backend/tests/unit/test_deployed_guard.py::test_without_url_all_connections_are_rejected[connect-2-address0] PASSED [ 80%]
+backend/tests/unit/test_deployed_guard.py::test_without_url_all_connections_are_rejected[connect-10-address1] PASSED [ 84%]
+backend/tests/unit/test_deployed_guard.py::test_without_url_all_connections_are_rejected[connect-1-guard-test.sock] PASSED [ 88%]
+backend/tests/unit/test_deployed_guard.py::test_without_url_all_connections_are_rejected[connect_ex-2-address0] PASSED [ 92%]
+backend/tests/unit/test_deployed_guard.py::test_without_url_all_connections_are_rejected[connect_ex-10-address1] PASSED [ 96%]
+backend/tests/unit/test_deployed_guard.py::test_without_url_all_connections_are_rejected[connect_ex-1-guard-test.sock] PASSED [100%]
+
+=================================== FAILURES ===================================
+_________ test_resolved_api_addresses_are_allowed[connect-2-address0] __________
+backend/tests/unit/test_deployed_guard.py:54: in test_resolved_api_addresses_are_allowed
+    assert getattr(sock, guard.method)(address) == (0 if guard.method == "connect_ex" else None)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/deployed/conftest.py:38: in pinned_connect
+    raise AssertionError(f"Deployed test may only contact {host}")
+E   AssertionError: Deployed test may only contact api.example.invalid
+_________ test_resolved_api_addresses_are_allowed[connect-2-address1] __________
+backend/tests/unit/test_deployed_guard.py:54: in test_resolved_api_addresses_are_allowed
+    assert getattr(sock, guard.method)(address) == (0 if guard.method == "connect_ex" else None)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/deployed/conftest.py:38: in pinned_connect
+    raise AssertionError(f"Deployed test may only contact {host}")
+E   AssertionError: Deployed test may only contact api.example.invalid
+_________ test_resolved_api_addresses_are_allowed[connect-10-address2] _________
+backend/tests/unit/test_deployed_guard.py:54: in test_resolved_api_addresses_are_allowed
+    assert getattr(sock, guard.method)(address) == (0 if guard.method == "connect_ex" else None)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/deployed/conftest.py:38: in pinned_connect
+    raise AssertionError(f"Deployed test may only contact {host}")
+E   AssertionError: Deployed test may only contact api.example.invalid
+___________ test_other_destinations_are_rejected[connect-2-address3] ___________
+backend/tests/unit/test_deployed_guard.py:69: in test_other_destinations_are_rejected
+    with socket.socket(family) as sock, pytest.raises(AssertionError, match="may only contact"):
+E   Failed: DID NOT RAISE <class 'AssertionError'>
+_________ test_other_destinations_are_rejected[connect_ex-2-address0] __________
+backend/tests/unit/test_deployed_guard.py:69: in test_other_destinations_are_rejected
+    with socket.socket(family) as sock, pytest.raises(AssertionError, match="may only contact"):
+E   Failed: DID NOT RAISE <class 'AssertionError'>
+_________ test_other_destinations_are_rejected[connect_ex-10-address1] _________
+backend/tests/unit/test_deployed_guard.py:69: in test_other_destinations_are_rejected
+    with socket.socket(family) as sock, pytest.raises(AssertionError, match="may only contact"):
+E   Failed: DID NOT RAISE <class 'AssertionError'>
+_________ test_other_destinations_are_rejected[connect_ex-2-address2] __________
+backend/tests/unit/test_deployed_guard.py:69: in test_other_destinations_are_rejected
+    with socket.socket(family) as sock, pytest.raises(AssertionError, match="may only contact"):
+E   Failed: DID NOT RAISE <class 'AssertionError'>
+_________ test_other_destinations_are_rejected[connect_ex-2-address3] __________
+backend/tests/unit/test_deployed_guard.py:69: in test_other_destinations_are_rejected
+    with socket.socket(family) as sock, pytest.raises(AssertionError, match="may only contact"):
+E   Failed: DID NOT RAISE <class 'AssertionError'>
+_____ test_other_destinations_are_rejected[connect_ex-1-guard-test.sock0] ______
+backend/tests/unit/test_deployed_guard.py:69: in test_other_destinations_are_rejected
+    with socket.socket(family) as sock, pytest.raises(AssertionError, match="may only contact"):
+E   Failed: DID NOT RAISE <class 'AssertionError'>
+_____ test_other_destinations_are_rejected[connect_ex-1-guard-test.sock1] ______
+backend/tests/unit/test_deployed_guard.py:69: in test_other_destinations_are_rejected
+    with socket.socket(family) as sock, pytest.raises(AssertionError, match="may only contact"):
+E   Failed: DID NOT RAISE <class 'AssertionError'>
+_________ test_other_destinations_are_rejected[connect_ex-1-address6] __________
+backend/tests/unit/test_deployed_guard.py:69: in test_other_destinations_are_rejected
+    with socket.socket(family) as sock, pytest.raises(AssertionError, match="may only contact"):
+E   Failed: DID NOT RAISE <class 'AssertionError'>
+============================= slowest 10 durations =============================
+
+(10 durations < 0.005s hidden.  Use -vv to show these durations.)
+=========================== short test summary info ============================
+FAILED backend/tests/unit/test_deployed_guard.py::test_resolved_api_addresses_are_allowed[connect-2-address0]
+FAILED backend/tests/unit/test_deployed_guard.py::test_resolved_api_addresses_are_allowed[connect-2-address1]
+FAILED backend/tests/unit/test_deployed_guard.py::test_resolved_api_addresses_are_allowed[connect-10-address2]
+FAILED backend/tests/unit/test_deployed_guard.py::test_other_destinations_are_rejected[connect-2-address3]
+FAILED backend/tests/unit/test_deployed_guard.py::test_other_destinations_are_rejected[connect_ex-2-address0]
+FAILED backend/tests/unit/test_deployed_guard.py::test_other_destinations_are_rejected[connect_ex-10-address1]
+FAILED backend/tests/unit/test_deployed_guard.py::test_other_destinations_are_rejected[connect_ex-2-address2]
+FAILED backend/tests/unit/test_deployed_guard.py::test_other_destinations_are_rejected[connect_ex-2-address3]
+FAILED backend/tests/unit/test_deployed_guard.py::test_other_destinations_are_rejected[connect_ex-1-guard-test.sock0]
+FAILED backend/tests/unit/test_deployed_guard.py::test_other_destinations_are_rejected[connect_ex-1-guard-test.sock1]
+FAILED backend/tests/unit/test_deployed_guard.py::test_other_destinations_are_rejected[connect_ex-1-address6]
+======================== 11 failed, 15 passed in 0.06s =========================
+
+exit_code=1

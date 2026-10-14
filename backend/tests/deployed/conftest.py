@@ -32,14 +32,23 @@ def offline(monkeypatch):
         monkeypatch.setattr(socket.socket, "connect_ex", reject)
         return
     host = urlsplit(base).hostname
+    if not host:
+        raise AssertionError("AFC_DEPLOYED_API_URL must include a host")
+    allowed = {(family, address[0])
+               for family, _, _, _, address in socket.getaddrinfo(host, None, type=socket.SOCK_STREAM)
+               if family in (socket.AF_INET, socket.AF_INET6)}
 
-    def pinned_connect(self, address, *args, **kwargs):
-        if address[0] != host:
-            raise AssertionError(f"Deployed test may only contact {host}")
-        return original(self, address, *args, **kwargs)
+    def pin(original):
+        def pinned_connect(self, address, *args, **kwargs):
+            if (self.family not in (socket.AF_INET, socket.AF_INET6)
+                    or not isinstance(address, tuple) or not address
+                    or (self.family, address[0]) not in allowed):
+                raise AssertionError(f"Deployed test may only contact {host}")
+            return original(self, address, *args, **kwargs)
+        return pinned_connect
 
-    original = socket.socket.connect
-    monkeypatch.setattr(socket.socket, "connect", pinned_connect)
+    for method in ("connect", "connect_ex"):
+        monkeypatch.setattr(socket.socket, method, pin(getattr(socket.socket, method)))
 
 
 @pytest.fixture(scope="session")
