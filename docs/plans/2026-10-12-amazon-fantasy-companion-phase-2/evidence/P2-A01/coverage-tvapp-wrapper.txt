@@ -1,2 +1,10 @@
 bash: tools/ci/coverage/tvapp.sh: No such file or directory
 exit=127
+
+--- G01-deferred wrapper landed (candidate a1d31ef6535e039c535badb061b5f1d0c1f58660, 2026-10-14) ---
+command: JAVA_HOME=$HOME/.local/share/afc-tools/jdk-17.0.20.1+1 ANDROID_HOME=$HOME/.local/share/afc-tools/android-sdk GRADLE_USER_HOME=$HOME/.gradle/afc-p2-a01t AFC_GRADLE_ARGS="--offline --no-daemon --max-workers=2" bash tools/ci/coverage/tvapp.sh 75afca0 <evidence_dir>
+FAIL changed-line coverage 69% (threshold 90%)
+exit=1
+classification: threshold (not tool, not data). 333 changed executable lines, 102 missed, 69% < 90%.
+results: coverage-tvapp-result.json, coverage-tvapp-diffcover.json
+negative check: same output dir with jacoco.xml renamed -> evaluate.py --profile=tvapp: "GAP REPORT_INCOMPLETE: coverage XML absent: jacoco.xml" exit=3

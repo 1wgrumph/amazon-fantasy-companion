@@ -249,5 +249,73 @@
     "Changed-line coverage for Compose UI and Android components cannot reach 90% with JVM unit tests; it needs instrumented coverage on the stick (plan allows same-candidate instrumentation data under the stick lock).",
     "Alert and PanelState data schemas are not in openapi.yaml; Dto.kt reads data.route as a ProviderRoute for alerts (absent means access unknown) and keeps panel data opaque for P2-A05/P2-B05/P2-B07 to fix."
   ],
-  "device_pending": "PENDING-DEVICE.txt"
+  "device_pending": "PENDING-DEVICE.txt",
+  "tvapp_wrappers": {
+    "appended": "2026-10-14 by the tv-app wrapper packet (G01-deferred CMD-COVERAGE-TVAPP / CMD-MUTATION-TVAPP); earlier receipt content unchanged",
+    "route": "Claude Code / Claude Opus 5.5 / medium",
+    "wrapper_commit": "a1d31ef6535e039c535badb061b5f1d0c1f58660",
+    "candidate_tv_app": "tv-app/ unchanged from 90e7654",
+    "env": "JAVA_HOME=$HOME/.local/share/afc-tools/jdk-17.0.20.1+1 ANDROID_HOME=$HOME/.local/share/afc-tools/android-sdk GRADLE_USER_HOME=$HOME/.gradle/afc-p2-a01t AFC_GRADLE_ARGS='--offline --no-daemon --max-workers=2'",
+    "commands": [
+      {
+        "id": "CMD-COVERAGE-TVAPP",
+        "command": "bash tools/ci/coverage/tvapp.sh 75afca0 <evidence_dir>",
+        "exit": 1,
+        "result": "FAIL changed-line coverage 69% (threshold 90%); 333 changed executable lines, 102 missed",
+        "classification": "threshold; host JVM unit tests cannot execute Compose UI, Android components or AFC-STUB files",
+        "missed_lines": {
+          "MainActivity.kt": "32,34-42,45,49-53,57-75 (35)",
+          "link/LinkScreen.kt": "80-90,92-103,105 (24, LinkView composable)",
+          "ui/theme/Theme.kt": "17-20,23-24,28-32 (11)",
+          "panel/LineupPanel.kt": "14,18-22 (6)",
+          "profile/ProfileSettingsScreen.kt": "15-19 (5)",
+          "net/SessionStore.kt": "7-8,10,12,14 (5)",
+          "alerts/AlertService.kt": "8-9,12-13 (4)",
+          "watch/WatchActivity.kt": "7,9-11 (4)",
+          "alerts/AlertNotifier.kt": "7-8 (2)",
+          "detect/AppDetector.kt": "7-8 (2)",
+          "watch/WatchLauncher.kt": "8-9 (2)",
+          "net/ApiClient.kt": "61 (1)",
+          "net/Dto.kt": "114 (1)"
+        },
+        "host_ceiling": "Covering ApiClient.kt:61 and Dto.kt:114 host-side gives 233/333 = 70%; 90% needs on-device instrumented coverage (CMD-TVAPP-INSTRUMENTED, no Fire TV stick available)",
+        "evidence": [
+          "coverage-tvapp-wrapper.txt",
+          "coverage-tvapp-result.json",
+          "coverage-tvapp-diffcover.json"
+        ]
+      },
+      {
+        "id": "CMD-MUTATION-TVAPP",
+        "command": "bash tools/ci/mutation/tvapp.sh 75afca0 <evidence_dir>",
+        "exit": 3,
+        "result": "GAP ANDROID_MUTATION_COMPATIBILITY_GAP: PIT run exit 1 (task 'pitestDebug' not found in project ':app')",
+        "classification": "tool; no PIT plugin applied in tv-app and no Android PIT fork pin admitted",
+        "evidence": [
+          "mutation-tvapp-wrapper.txt",
+          "mutation-tvapp-result.json",
+          "mutation-tvapp-pitest-run.txt"
+        ]
+      },
+      {
+        "id": "NEGATIVE-MISSING-JACOCO",
+        "command": "python3 tools/ci/coverage/evaluate.py 75afca0 <copy>/jacoco.xml <copy> --profile=tvapp (jacoco.xml renamed)",
+        "exit": 3,
+        "result": "GAP REPORT_INCOMPLETE: coverage XML absent: jacoco.xml"
+      },
+      {
+        "id": "TOOLS-PYTEST",
+        "command": "python3.12 -m pytest -q -p no:cacheprovider tools",
+        "exit": 0,
+        "result": "107 passed (21 new tvapp adapter controls)"
+      },
+      {
+        "id": "REPOSITORY-GATE",
+        "command": "bash tools/ci/gate.sh",
+        "exit": 0,
+        "result": "spec, docs, hygiene, tvapp, backend PASS"
+      }
+    ],
+    "wiring": "Not wired into gate.sh or .github/workflows: neither the SEIT commands table nor the G01 receipt places coverage/mutation in a gate area, and the backend wrappers are likewise invoked only by slice and assurance gate-chains."
+  }
 }
