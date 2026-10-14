@@ -1,0 +1,14 @@
+$ sam deploy --help (relevant excerpt)
+    --resolve-s3 / --no-resolve-s3  Automatically resolve AWS S3 bucket for
+                                    non-guided deployments. Enabling this
+                                    option will also create a managed default
+                                    AWS S3 bucket for you. If one does not
+                                    provide a --s3-bucket value, the managed
+                                    bucket will be used. Do not use --guided
+                                    with this option.
+
+exit=0
+
+backend/samconfig.toml: resolve_s3 = true; no s3_bucket supplied.
+Deployment NOT_RUN: managed default bucket provisioning is outside the afc-dev-only stack contract. No managed-stack describe or mutation attempted.
+Official AWS reference: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/using-sam-cli-deploy.html
