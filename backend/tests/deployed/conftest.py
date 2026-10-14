@@ -3,8 +3,7 @@
 These tests address a deployed afc-dev stack over HTTPS only; they never use
 the offline Moto fixture and never run in the repository gate. Without
 AFC_DEPLOYED_API_URL every test skips (NOT_RUN) and no connection is opened.
-Confirm-flow tests additionally need AFC_DEPLOYED_LINK_PASSPHRASE, supplied
-only at authorized L02/L03 execution time, never committed.
+Confirm-flow tests link with the TV code alone (DEC-AFC-SD-048).
 """
 
 import os
@@ -91,13 +90,10 @@ def deployed(offline):
 
 @pytest.fixture(scope="session")
 def linked(deployed):
-    passphrase = os.environ.get("AFC_DEPLOYED_LINK_PASSPHRASE", "")
-    if not passphrase:
-        pytest.skip("NOT_RUN: linking needs AFC_DEPLOYED_LINK_PASSPHRASE at L02/L03 time")
     status, device = call(deployed.base, "POST", "/v1/link")
     assert status == 201, device
     status, _ = call(deployed.base, "POST", "/v1/link/confirm", {
-        "code": device["code"], "passphrase": passphrase, "profileId": deployed.profile})
+        "code": device["code"], "profileId": deployed.profile})
     assert status == 200, device
     status, polled = call(deployed.base, "GET", "/v1/link?handle=" + device["handle"])
     assert status == 200 and polled.get("state") == "linked", polled
