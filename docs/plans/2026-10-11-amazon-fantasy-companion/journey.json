@@ -37,7 +37,9 @@
         "heartbeat_at": "2026-10-13T18:39:48.397549+00:00",
         "active_candidate": "88db101edb61a08dedea8037e4e9207d262a7e0f"
       }
-    }
+    },
+    "liveness": "M01 complete; no agent active; awaiting owner instruction for further milestones",
+    "heartbeat_at": "2026-10-14T01:03:23Z"
   },
   "stages": {
     "intake": "accepted",
@@ -3560,7 +3562,7 @@
       "checkout": "$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-d01",
       "branch": "afc/p2-d01",
       "candidate_revision": "4994aad44ace64f3c9434f73461f3fe2d12f694b",
-      "state": "active",
+      "state": "released",
       "authority": "AUTH-AFC-2026-10-12-P2-001 + owner execution instruction 2026-10-13 (M01 only)"
     },
     {
@@ -3577,7 +3579,7 @@
       "checkout": "$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-g01",
       "branch": "afc/p2-g01",
       "candidate_revision": "4994aad44ace64f3c9434f73461f3fe2d12f694b",
-      "state": "active",
+      "state": "released",
       "authority": "AUTH-AFC-2026-10-12-P2-001 + owner execution instruction 2026-10-13 (M01 only)"
     },
     {
@@ -3602,7 +3604,7 @@
       "branch": "afc/p2-d01",
       "candidate_revision": "f965305",
       "base": "4994aad44ace64f3c9434f73461f3fe2d12f694b",
-      "state": "active",
+      "state": "released",
       "budget": "1 review + 1 repair"
     },
     {
@@ -3644,7 +3646,7 @@
       "checkout": "$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-g01",
       "branch": "afc/p2-g01",
       "candidate_revision": "51acc5c65cdc72a50b78bf6f10712d2a8b55539b",
-      "state": "active"
+      "state": "released"
     },
     {
       "at": "2026-10-14T00:13:54Z",
@@ -3698,7 +3700,7 @@
       "checkout": "$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-g01",
       "branch": "afc/p2-g01",
       "candidate_revision": "df50318",
-      "state": "active",
+      "state": "released",
       "write_set": [
         "tools/ci/tests/coverage/test_native_coverage.py",
         "tools/ci/tests/mutation/test_native_mutation.py",
@@ -3734,7 +3736,7 @@
       "branch": "afc/p2-g01",
       "candidate_revision": "83603fe",
       "base": "4994aad44ace64f3c9434f73461f3fe2d12f694b",
-      "state": "active",
+      "state": "released",
       "budget": "1 review + 1 repair"
     },
     {
@@ -3767,8 +3769,46 @@
       "checkout": "$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-g01",
       "branch": "afc/p2-g01",
       "candidate_revision": "83603fe",
-      "state": "active",
+      "state": "released",
       "repairs_spent": "1/1"
+    },
+    {
+      "at": "2026-10-14T01:03:23Z",
+      "kind": "repair_return",
+      "lease_id": "P2-G01-repair1",
+      "outcome": "PASS",
+      "candidate": "c94a486",
+      "findings_fixed": [
+        "G01-R01",
+        "G01-R02",
+        "G01-R03",
+        "G01-R04",
+        "G01-R05",
+        "G01-R06",
+        "G01-R07"
+      ],
+      "orchestrator_verification": "pytest 75 passed; gate.sh exit 0 (tvapp/backend PASS no tree); actionlint 0; frozen G01T test_gate/test_workflows/test_product_gate byte-identical to 51acc5c"
+    },
+    {
+      "at": "2026-10-14T01:03:23Z",
+      "kind": "milestone_closeout",
+      "milestone": "M01",
+      "prs": {
+        "56": "d86daa46fafb278f834fe395141a433b214a6989",
+        "57": "71a99e7b4185d11f4cb422484ca495be2ba22d43"
+      },
+      "issues_closed": [
+        16,
+        17,
+        18
+      ],
+      "ci": "PR57 6/6 green",
+      "reviews": {
+        "P2-D01": "ACCEPT (Muse fallback)",
+        "P2-G01T+G01": "REPAIR_REQUIRED 7 -> repaired 1/1 (Codex Astra owner amendment)"
+      },
+      "cleanup": "worktrees, local and remote branches afc/p2-d01, afc/p2-g01 removed",
+      "installs": "diff_cover 10.6.0, cfn-lint 1.57.2 (python3.12 user site), mutmut 3.8.0 (venv ~/.local/share/afc-tools/mutmut), click 8.1.8 restored for semgrep; Trivy DB refreshed 2026-10-13"
     }
   ],
   "planning_review": {
