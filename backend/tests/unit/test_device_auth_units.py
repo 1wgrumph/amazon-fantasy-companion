@@ -4,7 +4,9 @@ import hashlib
 
 import pytest
 
-from conftest import link_device
+from conftest import confirm as confirm_http
+from conftest import issue as issue_http
+from conftest import link_device, scalar_values
 
 
 @pytest.fixture
@@ -45,14 +47,55 @@ def test_code_is_pending_until_the_expiry_second(auth, monkeypatch):
     assert auth.poll(device["handle"]) == {"state": "expired"}
 
 
-def test_only_the_first_linked_poll_carries_the_session(api, auth):
+def test_dropped_linked_poll_response_is_recoverable_by_retry(api):
+    device = issue_http(api)
+    status, _ = confirm_http(api, device["code"])
+    assert status in (200, 201)
+    status, first = api.request("GET", "/v1/link", query={"handle": device["handle"]})
+    assert status == 200 and first.get("state") == "linked" and "sessionToken" in first
+    # The first response is lost on the wire; the same device retries.
+    status, retry = api.request("GET", "/v1/link", query={"handle": device["handle"]})
+    assert status == 200 and retry.get("state") == "linked"
+    assert isinstance(retry.get("sessionToken"), str) and retry["sessionToken"]
+    status, body = api.request("GET", "/v1/profile", token=retry["sessionToken"])
+    assert status == 200 and body["id"] == "owner"
+    status, foreign = api.request("GET", "/v1/link", query={"handle": "unknown-handle"})
+    assert status == 200 and foreign == {"state": "unlinked"}
+    values = scalar_values(api.table("Links").scan()["Items"])
+    assert hashlib.sha256(retry["sessionToken"].encode()).hexdigest() in values
+    assert retry["sessionToken"] not in values and api.passphrase not in values
+
+
+def test_linked_poll_retry_keeps_confirm_one_time_and_hashes_only(api, auth):
     device, token = link_device(api)
-    assert auth.poll(device["handle"]) == {"state": "linked"}
-    assert auth.poll("unknown-handle") == {"state": "unlinked"}
+    retry = auth.poll(device["handle"])
+    assert retry["state"] == "linked"
+    assert isinstance(retry.get("sessionToken"), str) and retry["sessionToken"]
     assert auth.authenticate(token) == "owner"
-    [session] = [x for x in api.table("Links").scan()["Items"] if "sessionHash" in x]
-    assert session["profileId"] == "owner"
-    assert session["linkedAt"].endswith("Z") and len(session["linkedAt"]) == 20
+    assert auth.authenticate(retry["sessionToken"]) == "owner"
+    assert auth.poll("unknown-handle") == {"state": "unlinked"}
+    assert auth.confirm(device["code"], api.passphrase, "owner") == "gone"
+    sessions = [x for x in api.table("Links").scan()["Items"] if "sessionHash" in x]
+    assert len(sessions) == 2 and all(s["profileId"] == "owner" for s in sessions)
+    assert all(s["linkedAt"].endswith("Z") and len(s["linkedAt"]) == 20 for s in sessions)
+
+
+def test_failed_session_write_leaves_the_link_recoverable(api, auth, monkeypatch):
+    import store
+    device = issue_http(api)
+    assert auth.confirm(device["code"], api.passphrase, "owner") == "linked"
+    real, calls = store.put_session, []
+    def flaky(*args):
+        calls.append(args)
+        if len(calls) == 1:
+            raise RuntimeError("DynamoDB unavailable")
+        return real(*args)
+    monkeypatch.setattr(store, "put_session", flaky)
+    with pytest.raises(RuntimeError):
+        auth.poll(device["handle"])
+    retry = auth.poll(device["handle"])
+    assert retry["state"] == "linked"
+    assert auth.authenticate(retry["sessionToken"]) == "owner"
 
 
 def test_confirm_normalizes_the_typed_code(api, auth):

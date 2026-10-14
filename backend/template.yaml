@@ -71,12 +71,25 @@ Resources:
       Handler: api.handler.lambda_handler
       Description: Router for every /v1 route and the /link page.
       Policies:
-        - DynamoDBCrudPolicy: {TableName: !Ref ProfilesTable}
-        - DynamoDBCrudPolicy: {TableName: !Ref LinksTable}
-        - DynamoDBCrudPolicy: {TableName: !Ref AlertsTable}
-        - DynamoDBCrudPolicy: {TableName: !Ref LineupsTable}
-        - DynamoDBReadPolicy: {TableName: !Ref EventsTable}
-        - DynamoDBReadPolicy: {TableName: !Ref PanelsTable}
+        - Statement:
+            - Effect: Allow
+              Action: [dynamodb:GetItem, dynamodb:PutItem]
+              Resource: [!GetAtt ProfilesTable.Arn]
+            - Effect: Allow
+              Action: [dynamodb:GetItem, dynamodb:PutItem, dynamodb:UpdateItem, dynamodb:Query]
+              Resource: [!GetAtt LinksTable.Arn, !Sub "${LinksTable.Arn}/index/*"]
+            - Effect: Allow
+              Action: [dynamodb:Query]
+              Resource: [!GetAtt AlertsTable.Arn]
+            - Effect: Allow
+              Action: [dynamodb:GetItem, dynamodb:PutItem]
+              Resource: [!GetAtt LineupsTable.Arn]
+            - Effect: Allow
+              Action: [dynamodb:GetItem]
+              Resource: [!GetAtt EventsTable.Arn]
+            - Effect: Allow
+              Action: [dynamodb:GetItem]
+              Resource: [!GetAtt PanelsTable.Arn]
         - Statement:
             - Effect: Allow
               Action: [ssm:GetParameter]
@@ -104,9 +117,16 @@ Resources:
       Description: ESPN ingest while a profile-relevant game is in progress.
       Timeout: 60
       Policies:
-        - DynamoDBCrudPolicy: {TableName: !Ref EventsTable}
-        - DynamoDBReadPolicy: {TableName: !Ref ProfilesTable}
-        - DynamoDBReadPolicy: {TableName: !Ref LineupsTable}
+        - Statement:
+            - Effect: Allow
+              Action: [dynamodb:GetItem, dynamodb:PutItem]
+              Resource: [!GetAtt EventsTable.Arn]
+            - Effect: Allow
+              Action: [dynamodb:GetItem]
+              Resource: [!GetAtt ProfilesTable.Arn]
+            - Effect: Allow
+              Action: [dynamodb:GetItem]
+              Resource: [!GetAtt LineupsTable.Arn]
 
   PolicyFunction:
     Type: AWS::Serverless::Function
@@ -114,11 +134,22 @@ Resources:
       Handler: pipeline.handler.lambda_handler
       Description: Events stream consumer (matcher, policy, provider route, panel).
       Policies:
-        - DynamoDBReadPolicy: {TableName: !Ref ProfilesTable}
-        - DynamoDBReadPolicy: {TableName: !Ref EventsTable}
-        - DynamoDBCrudPolicy: {TableName: !Ref AlertsTable}
-        - DynamoDBCrudPolicy: {TableName: !Ref LineupsTable}
-        - DynamoDBCrudPolicy: {TableName: !Ref PanelsTable}
+        - Statement:
+            - Effect: Allow
+              Action: [dynamodb:GetItem]
+              Resource: [!GetAtt ProfilesTable.Arn]
+            - Effect: Allow
+              Action: [dynamodb:GetItem]
+              Resource: [!GetAtt EventsTable.Arn]
+            - Effect: Allow
+              Action: [dynamodb:PutItem, dynamodb:Query]
+              Resource: [!GetAtt AlertsTable.Arn]
+            - Effect: Allow
+              Action: [dynamodb:GetItem, dynamodb:PutItem]
+              Resource: [!GetAtt LineupsTable.Arn]
+            - Effect: Allow
+              Action: [dynamodb:GetItem, dynamodb:PutItem]
+              Resource: [!GetAtt PanelsTable.Arn]
         - Statement:
             - Effect: Allow
               Action: [ssm:GetParameter]

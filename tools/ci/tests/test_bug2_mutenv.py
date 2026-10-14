@@ -15,6 +15,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
+import yaml
+
 REPO = Path(__file__).resolve().parents[3]
 CONTROL = 'def verdict(ok):\n    if ok:\n        return "covered"\n    return "uncovered"\n'
 BOTH = ('from control import verdict\n\n\ndef test_verdict():\n'
@@ -96,6 +98,22 @@ class MutationEnv(unittest.TestCase):
         self.assertIn('template.yaml', also, 'template.yaml missing from also_copy: ' + str(also))
         self.assertIn('data', also, 'nested data dir missing from also_copy: ' + str(also))
 
+    def test_missing_mutmut_fails_closed(self):
+        write(self.repo, {'backend/src/control.py': CONTROL,
+                          'backend/tests/unit/test_control.py': BOTH})
+        self.commit()
+        stub = self.tmp / 'noutil'
+        stub.mkdir()
+        for tool in ['python3', 'python3.12', 'git', 'tar', 'timeout']:
+            (stub / tool).symlink_to(shutil.which(tool))
+        env = dict(os.environ, PATH=str(stub))
+        result = subprocess.run([shutil.which('bash'), 'tools/ci/mutation/backend.sh',
+                                 self.base, str(self.out)],
+                                cwd=self.repo, capture_output=True, text=True, timeout=120, env=env)
+        out = result.stdout + result.stderr
+        self.assertEqual(result.returncode, 3, out)
+        self.assertIn('GAP required tool missing: mutmut', out)
+
     def test_test_read_data_file_reaches_mutants_end_to_end(self):
         read_data = ('from pathlib import Path\n\n\ndef test_data():\n'
                      '    assert (Path(__file__).parents[2] / "data" / "threshold.txt").read_text()'
@@ -111,6 +129,44 @@ class MutationEnv(unittest.TestCase):
         print(f'mutation adapter exit={result.returncode}: {out.strip().splitlines()[-1:]}')
         self.assertEqual(result.returncode, 0, out)
         self.assertEqual(json.loads((self.out / 'mutation-result.json').read_text())['status'], 'PASS')
+
+
+def stanzas(text):
+    """Logical requirement lines with backslash continuations joined."""
+    out, buf = [], ''
+    for line in text.splitlines():
+        stripped = line.strip()
+        if not stripped or stripped.startswith('#'):
+            continue
+        if stripped.endswith('\\'):
+            buf += stripped[:-1] + ' '
+        else:
+            out.append(buf + stripped)
+            buf = ''
+    if buf.strip():
+        out.append(buf.strip())
+    return out
+
+
+class HygieneCIDeps(unittest.TestCase):
+    def test_hygiene_requirements_are_hash_pinned(self):
+        reqs = [s for s in stanzas((REPO / 'tools/ci/requirements-hygiene.txt').read_text())
+                if not s.startswith('-')]
+        self.assertTrue(reqs, 'requirements-hygiene.txt names no packages')
+        unpinned = [s.split(';')[0].strip()
+                    for s in reqs if '--hash=sha256:' not in s]
+        self.assertEqual(unpinned, [],
+                         'requirements without hashes cannot use --require-hashes: '
+                         + ', '.join(unpinned))
+
+    def test_ci_hygiene_job_installs_hygiene_requirements_hash_verified_before_gate(self):
+        steps = yaml.safe_load((REPO / '.github/workflows/ci.yml').read_text())['jobs']['hygiene']['steps']
+        runs = [s.get('run', '') for s in steps]
+        gate = next(i for i, r in enumerate(runs) if r == 'bash tools/ci/gate.sh hygiene')
+        install = [i for i, r in enumerate(runs)
+                   if '--require-hashes' in r and 'requirements-hygiene.txt' in r]
+        self.assertTrue(install, 'hygiene job installs no hash-verified requirements')
+        self.assertLess(install[0], gate, 'dependency install must precede the gate')
 
 
 if __name__ == '__main__':

@@ -2,8 +2,9 @@
 
 The TV gets an 8-character code and a separate polling handle. The customer
 confirms the code on a phone with the owner passphrase held in SSM SecureString.
-The first poll after confirmation receives a 256-bit opaque session token; only
-SHA-256 hashes of the handle and the token are stored.
+Every poll after confirmation receives a 256-bit opaque session token, so a
+dropped response is recoverable by retry; only SHA-256 hashes of the handle
+and the tokens are stored.
 """
 
 import hashlib
@@ -38,17 +39,18 @@ def issue():
 
 
 def poll(handle):
-    """Report the link state; the first poll after confirmation carries the session token."""
+    """Report the link state; every linked poll carries a usable session token."""
     link = store.find_link(_digest(handle))
     if link is None:
         return {"state": "unlinked"}
     if link["state"] == "codePending":
         return {"state": "expired" if link["expiresAt"] <= time.time() else "codePending"}
-    if link["state"] == "confirmed" and store.complete_link(link["code"]):
-        token = secrets.token_urlsafe(32)
-        store.put_session(_digest(token), link["profileId"], _rfc3339(time.time()))
-        return {"state": "linked", "sessionToken": token}
-    return {"state": "linked"}
+    # The session is persisted before the idempotent completion write, so a
+    # failed poll never leaves a completed link without a usable session.
+    token = secrets.token_urlsafe(32)
+    store.put_session(_digest(token), link["profileId"], _rfc3339(time.time()))
+    store.complete_link(link["code"])
+    return {"state": "linked", "sessionToken": token}
 
 
 def confirm(code, passphrase, profile_id):

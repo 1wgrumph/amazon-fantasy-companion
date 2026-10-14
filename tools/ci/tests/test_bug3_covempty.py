@@ -7,6 +7,7 @@ statements but is missing from the report must still yield GAP.
 """
 
 import json
+import os
 import shutil
 import subprocess
 import tempfile
@@ -60,6 +61,21 @@ class CoverageEmptyModule(unittest.TestCase):
 
     def result(self):
         return json.loads((self.out / 'coverage-result.json').read_text())
+
+    def test_missing_diff_cover_fails_closed(self):
+        self.candidate({'backend/src/control.py': CONTROL,
+                        'backend/tests/unit/test_control.py': BOTH})
+        stub = self.tmp / 'noutil'
+        stub.mkdir()
+        for tool in ['python3', 'python3.12', 'git']:
+            (stub / tool).symlink_to(shutil.which(tool))
+        env = dict(os.environ, PATH=str(stub))
+        result = subprocess.run([shutil.which('bash'), 'tools/ci/coverage/backend.sh',
+                                 self.base, str(self.out)],
+                                cwd=self.repo, capture_output=True, text=True, timeout=120, env=env)
+        out = result.stdout + result.stderr
+        self.assertEqual(result.returncode, 3, out)
+        self.assertIn('GAP required tool missing: diff-cover', out)
 
     def test_docstring_only_changed_file_is_nothing_to_cover(self):
         self.candidate({'backend/src/control.py': CONTROL,

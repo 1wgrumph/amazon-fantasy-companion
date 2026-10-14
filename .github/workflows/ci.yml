@@ -118,5 +118,10 @@ jobs:
           version: '0.11.6'
           checksum: '0c6bab77a67a445dc849ed5e8ee8d3cb333b6e2eba863643ce1e228075f27943'
           enable-cache: false
-      - run: sudo apt-get update && sudo apt-get install -y graphviz python3-yaml python3-pytest
+      # Never enable the cache input: bundled glob DoS advisories are reachable only through it.
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+      - run: sudo apt-get update && sudo apt-get install -y graphviz
+      - run: python3.12 -m pip install --require-hashes -r tools/ci/requirements-hygiene.txt
       - run: bash tools/ci/gate.sh hygiene

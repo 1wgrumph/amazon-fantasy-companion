@@ -89,6 +89,20 @@ def test_bearer_scheme_is_case_insensitive_and_other_schemes_refused(api, owner)
     assert status == 403
 
 
+@pytest.mark.parametrize("selector", [[], {}, 1, True, None])
+def test_non_string_profile_selectors_are_rejected_without_mutation(api, owner, selector):
+    before = api.table("Profiles").scan()["Items"]
+    status, response = call("PUT", "/v1/profile",
+                            json.dumps({"profileId": selector, "revision": 0, "data": {}}), owner)
+    assert status == 400
+    assert error_of(response) == {"code": "invalid_request",
+                                  "message": "Field profileId must be a string."}
+    assert api.table("Profiles").scan()["Items"] == before
+    status, response = call("GET", "/v1/profile", token=owner, query={"profileId": selector})
+    assert status == 400
+    assert error_of(response)["code"] == "invalid_request"
+
+
 def test_profile_reads_defaults_and_writes_with_revision_checks(api, owner):
     status, response = call("GET", "/v1/profile", token=owner)
     body = json.loads(response["body"])
@@ -121,6 +135,58 @@ def test_invalid_profile_updates_change_nothing(api, owner, body):
     assert error_of(response) == {"code": "invalid_request",
                                   "message": "Profile needs revision and valid Settings data."}
     assert api.table("Profiles").scan()["Items"] == []
+
+
+def test_oversize_profile_envelope_is_rejected_without_mutation(api, owner):
+    assert call("PUT", "/v1/profile", json.dumps({"revision": 0, "data": {"scoringPreset": "ppr"}}),
+                owner)[0] == 200
+    pad = 65536 - len(json.dumps({"revision": 1, "data": {"fantasySelections": ""}}).encode())
+    body = json.dumps({"revision": 1, "data": {"fantasySelections": "x" * pad}})
+    assert len(body.encode()) == 65536
+    status, response = call("PUT", "/v1/profile", body, owner)
+    assert status == 400
+    assert error_of(response) == {"code": "payload_too_large",
+                                  "message": "Profile response would exceed 64 KiB."}
+    [item] = api.table("Profiles").scan()["Items"]
+    assert item["revision"] == 1 and item["settings"] == {"scoringPreset": "ppr"}
+    status, response = call("GET", "/v1/profile", token=owner)
+    assert status == 200 and json.loads(response["body"])["revision"] == 1
+
+
+def test_profile_envelope_exactly_at_64kib_is_stored(api, owner):
+    import api.handler
+    probe = {"revision": 1, "updatedAt": "2020-01-01T00:00:00Z",
+             "settings": {"fantasySelections": ""}}
+    room = 65536 - len(json.dumps(api.handler._profile("owner", probe)).encode())
+    value = "é" * (room // 6) + "x" * (room % 6)  # dumps escapes é as \u00e9: 6 bytes
+    body = json.dumps({"revision": 0, "data": {"fantasySelections": value}})
+    assert len(body.encode()) < 65536
+    status, response = call("PUT", "/v1/profile", body, owner)
+    assert status == 200
+    assert len(response["body"].encode()) == 65536
+
+
+def test_response_cap_counts_serialized_bytes_not_characters(api, owner):
+    overhead = len(json.dumps({"revision": 0, "data": {"fantasySelections": ""}}).encode())
+    value = "é" * ((65536 - overhead - 10) // 2) + '"\\\n'
+    body = json.dumps({"revision": 0, "data": {"fantasySelections": value}}, ensure_ascii=False)
+    assert len(body.encode()) <= 65536  # raw UTF-8 request fits
+    assert len(body) < 65536  # character counting claims the response fits too
+    status, response = call("PUT", "/v1/profile", body, owner)
+    assert status == 400
+    assert error_of(response) == {"code": "payload_too_large",
+                                  "message": "Profile response would exceed 64 KiB."}
+    assert api.table("Profiles").scan()["Items"] == []
+
+
+def test_oversize_json_responses_fail_closed(api):
+    import api.handler
+    with pytest.raises(api.handler.ApiError) as error:
+        api.handler._respond(200, {"pad": "x" * 70000})
+    assert (error.value.status, error.value.code, error.value.message) == (
+        503, "unavailable", "The response exceeds the 64 KiB contract.")
+    exact = api.handler._respond(200, {"pad": "x" * (65536 - len('{"pad": ""}'))})
+    assert len(exact["body"].encode()) == 65536
 
 
 @pytest.mark.parametrize("field", sorted([
@@ -229,6 +295,8 @@ def test_link_poll_requires_a_handle(api):
 
 
 def test_link_page_is_framed_by_strict_headers(api):
+    import base64
+    import hashlib
     status, response = call("GET", "/link")
     assert status == 200
     headers = response["headers"]
@@ -236,9 +304,18 @@ def test_link_page_is_framed_by_strict_headers(api):
     assert headers["cache-control"] == "no-store" and headers["x-frame-options"] == "DENY"
     assert headers["referrer-policy"] == "no-referrer"
     assert headers["content-security-policy"] == (
-        "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; "
-        "connect-src 'self'; form-action 'self'; frame-ancestors 'none'")
+        "default-src 'none'; script-src 'sha256-r5vvOH35j5Xp1ecjHhZ7oNRmS7/Xlp/C7RNPviHqeT8='; "
+        "style-src 'unsafe-inline'; connect-src 'self'; form-action 'self'; "
+        "frame-ancestors 'none'")
+    script_src = [d for d in headers["content-security-policy"].split("; ")
+                  if d.startswith("script-src ")][0]
+    assert "'unsafe-inline'" not in script_src
+    [script] = response["body"].split("<script>")[1:]
+    script = script.split("</script>")[0]
+    digest = base64.b64encode(hashlib.sha256(script.encode()).digest()).decode()
+    assert f"'sha256-{digest}'" in script_src
     assert 'action="/v1/link/confirm"' in response["body"]
+    assert 'addEventListener("submit"' in response["body"]
 
 
 def test_only_decimal_values_are_serialized_as_numbers(api):

@@ -28,7 +28,7 @@ paths:
         "429": {$ref: "#/components/responses/TooManyRequests"}
         "503": {$ref: "#/components/responses/Unavailable"}
     get:
-      summary: Poll link state by handle; the first linked poll carries the session token.
+      summary: Poll link state by handle; every linked poll carries a usable session token.
       security: []
       parameters:
         - {name: handle, in: query, required: true, schema: {type: string, maxLength: 256}}

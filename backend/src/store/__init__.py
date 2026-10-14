@@ -83,7 +83,7 @@ def confirm_link(code, profile_id, now):
 
 
 def complete_link(code):
-    """Move a confirmed code to linked exactly once, so one poll receives the session."""
+    """Move a confirmed code to linked; already-linked codes stay linked."""
     return _written(
         _table("LINKS_TABLE").update_item, Key={"pk": "code#" + code},
         UpdateExpression="SET #state = :linked",

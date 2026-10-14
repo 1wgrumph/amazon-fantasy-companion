@@ -54,9 +54,12 @@ def _dispatch(event):
         if profile_id is None:
             raise ApiError(401, "unauthenticated", "A linked device session is required.")
     body = _json(raw)
-    if profile_id is not None and {query.get("profileId", profile_id),
-                                   body.get("profileId", profile_id)} != {profile_id}:
-        raise ApiError(403, "forbidden", "This device is not linked to that profile.")
+    if profile_id is not None:
+        selectors = [query.get("profileId", profile_id), body.get("profileId", profile_id)]
+        if any(not isinstance(value, str) for value in selectors):
+            raise ApiError(400, "invalid_request", "Field profileId must be a string.")
+        if set(selectors) != {profile_id}:
+            raise ApiError(403, "forbidden", "This device is not linked to that profile.")
     return action(profile_id, query, body)
 
 
@@ -113,9 +116,12 @@ def _number(value):
 
 
 def _respond(status, payload):
+    body = json.dumps(payload, default=_number)
+    if len(body.encode()) > 65536:
+        raise ApiError(503, "unavailable", "The response exceeds the 64 KiB contract.")
     return {"statusCode": status,
             "headers": {"content-type": "application/json", "cache-control": "no-store"},
-            "body": json.dumps(payload, default=_number)}
+            "body": body}
 
 
 def _error(status, code, message):
@@ -155,7 +161,8 @@ def _link_page(profile_id, query, body):
     return {"statusCode": 200,
             "headers": {"content-type": "text/html; charset=utf-8", "cache-control": "no-store",
                         "x-frame-options": "DENY", "referrer-policy": "no-referrer",
-                        "content-security-policy": "default-src 'none'; script-src 'unsafe-inline'; "
+                        "content-security-policy": "default-src 'none'; script-src "
+                        "'sha256-r5vvOH35j5Xp1ecjHhZ7oNRmS7/Xlp/C7RNPviHqeT8='; "
                         "style-src 'unsafe-inline'; connect-src 'self'; form-action 'self'; "
                         "frame-ancestors 'none'"},
             "body": Path(__file__).with_name("link.html").read_text()}
@@ -180,7 +187,12 @@ def _profile_put(profile_id, query, body):
             or not set(settings) <= fields
             or settings.get("scoringPreset", "ppr") not in ("ppr", "halfPpr")):
         raise ApiError(400, "invalid_request", "Profile needs revision and valid Settings data.")
-    item = store.put_profile(profile_id, settings, revision, _now())
+    now = _now()
+    envelope = json.dumps(_profile(profile_id, {"revision": revision + 1, "updatedAt": now,
+                                                "settings": settings}), default=_number)
+    if len(envelope.encode()) > 65536:
+        raise ApiError(400, "payload_too_large", "Profile response would exceed 64 KiB.")
+    item = store.put_profile(profile_id, settings, revision, now)
     if item is None:
         raise ApiError(409, "revision_conflict", "The profile changed; read it and merge first.")
     return _respond(200, _profile(profile_id, item))
