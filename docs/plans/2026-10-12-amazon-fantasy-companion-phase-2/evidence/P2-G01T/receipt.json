@@ -1,0 +1,178 @@
+{
+  "slice": "P2-G01T",
+  "lease_id": "P2-G01T-g1",
+  "outcome": "ENVIRONMENT_FAILURE",
+  "candidate_state": "behavioral red tests frozen and ready for P2-G01; full tool qualification blocked",
+  "branch": "afc/p2-g01",
+  "baseline": "4994aad44ace64f3c9434f73461f3fe2d12f694b",
+  "authority": "AUTH-AFC-2026-10-12-P2-001 + owner M01 execution 2026-10-13",
+  "profile": "opensource-hackathon",
+  "profile_sha256": "7d501eb8c103831a38c50d237b5d1e2e015a564b9ade8aef09a32dfc39b26ab1",
+  "review_capabilities": {
+    "coverage_assist": {
+      "backend": "OCR delegate mode",
+      "enabled": true,
+      "required": true,
+      "status": "not_run; independent review belongs to parent; no author assurance claim"
+    },
+    "reverify": {
+      "enabled": true,
+      "backend": "reverify 0.11.0",
+      "status": "not_applicable",
+      "reason": "tests, source receipts and interpreted Python reporter controls; no compiled binary attribute claim"
+    }
+  },
+  "red": {
+    "command": "python3 -m unittest discover -s tools/ci/tests -v",
+    "exit": 1,
+    "tests": 50,
+    "legacy_passed": 39,
+    "new_tests": 11,
+    "behavioral_assertion_failures": 24,
+    "errors": 0,
+    "hashes": "test-sha256.json",
+    "output": "CMD-RED.txt",
+    "diff": "test-diff.json",
+    "diff_sha256": "4508b1814e6605e608d8cf3040991339cecdd262452c1b4f842f6d246914c97b",
+    "test_ids_unchanged_required_for_green": true
+  },
+  "qualification": {
+    "procedure_exit": 1,
+    "mutation_diagnostic_exit": 1,
+    "native_coverage_status": "QUALIFIED_NATIVE_REPORTER_ONLY",
+    "binding": "python3.12 -m coverage (7.13.5); runtime Python 3.12.3",
+    "controls": {
+      "covered_statements": "PASS; native xml exit 0, all 4 statements hit",
+      "uncovered_statement": "PASS; native xml exit 2, 3/4 hit = 75% < 90%",
+      "absent_native_data": "PASS; nonzero No data to report, no XML emitted"
+    },
+    "changed_line_claim": "NOT_QUALIFIED; aggregate native controls are not diff coverage",
+    "gaps": [
+      {
+        "id": "DIFF_COVER_UNAVAILABLE",
+        "error": "/usr/bin/python3.12: No module named diff_cover",
+        "exit": 1,
+        "blocks": [
+          "changed-line native comparison",
+          "coverage adapter absent/stale/unmapped/empty-denominator controls"
+        ]
+      },
+      {
+        "id": "MUTMUT_UNAVAILABLE",
+        "error": "/usr/bin/python3.12: No module named mutmut",
+        "exit": 1,
+        "blocks": [
+          "known mutant killed",
+          "deliberate survivor",
+          "empty inventory",
+          "wrong target mapping",
+          "timeout/error",
+          "stale cache"
+        ]
+      },
+      {
+        "id": "CFN_LINT_UNAVAILABLE",
+        "error": "bash: line 1: cfn-lint: command not found",
+        "exit": 127,
+        "blocks": [
+          "native SAM lint qualification; command protocol fixtures do not substitute"
+        ]
+      },
+      {
+        "id": "REPO_ADAPTERS_NOT_IMPLEMENTED",
+        "error": "No tools/ci/coverage/ or tools/ci/mutation/ at baseline; G01 owns their implementation",
+        "blocks": [
+          "native plus repo adapter qualification"
+        ]
+      },
+      {
+        "id": "ANDROID_COVERAGE_COMPATIBILITY_GAP",
+        "error": "No tv-app/ build or admitted JaCoCo reporter at baseline",
+        "blocks": [
+          "Kotlin/JDK17/AGP coverage controls; A01T/A01 preparation"
+        ]
+      },
+      {
+        "id": "ANDROID_MUTATION_COMPATIBILITY_GAP",
+        "error": "No tv-app/ build or admitted Android PIT reporter at baseline",
+        "blocks": [
+          "Kotlin known killed/surviving controls; A01T/A01 preparation"
+        ]
+      },
+      {
+        "id": "SHELL_GATE_CAPABILITY_GAP",
+        "error": "No admitted shell coverage/mutation backend in SEIT",
+        "blocks": [
+          "shell coverage/mutation claims"
+        ]
+      }
+    ],
+    "engine_reliability": "not applicable; host subprocess/report tests start no engine/server/browser/driver",
+    "gate_cost": "runs.json exact measurements; CMD-RED 18.803s suite (subprocess elapsed recorded separately)"
+  },
+  "scope_corrections": [
+    {
+      "id": "G01T-SCOPE-01",
+      "change": "Local red commit with --no-verify replaces plan uncommitted-red wording",
+      "authority": "Explicit owner dispatch; no red PR or merge"
+    },
+    {
+      "id": "G01T-SCOPE-02",
+      "change": "Extend legacy exact-set assertions to retain required legacy members and exact gate/job/filter correspondence, with new exact five-area assertions",
+      "reason": "Avoid stale Phase 1 expectations preventing G01 green; all existing 39 cases still pass"
+    }
+  ],
+  "proof_rows": {
+    "supported_not_closed": [
+      "SEIT-AFC-P2-GATE-01 (behavioral red half)",
+      "SEIT-AFC-P2-DX-01 (this return and observation evidence)",
+      "SEIT-AFC-P2-PATH-01 (legacy runtime-generated checks + candidate scan)",
+      "SEIT-RISK-AFC-P2-12 (legacy negative controls + sanitized receipts)",
+      "SEIT-RISK-AFC-P2-10 (frozen route/capabilities preserved)"
+    ],
+    "closure_deferred": {
+      "SEIT-AFC-P2-GATE-01": "P2-G01 green and qualification",
+      "SEIT-AFC-P2-PATH-01": "P2-G01 full tracked candidate scan",
+      "SEIT-AFC-PR-056": "P2-D03 inspection",
+      "SEIT-AFC-P2-LAND-01": "P2-R5 landing receipts",
+      "SEIT-AFC-P2-REL-01": "P2-R5 changelog receipts",
+      "SEIT-AFC-P2-REV-01": "P2-L05 independent review evidence",
+      "SEIT-AFC-P2-DX-01": "P2-SCR1 lifecycle-wide ingestion",
+      "SEIT-RISK-AFC-P2-12": "P2-SCR1 export/capture inventory",
+      "SEIT-RISK-AFC-P2-10": "P2-6 lifecycle inspection"
+    }
+  },
+  "developer_feedback": [
+    {
+      "id": "G01T-DX-01",
+      "observation": "coverage available only under python3.12; native controls qualified, diff_cover/mutmut/cfn-lint absent",
+      "evidence": [
+        "tool-binding.json",
+        "PROC-GATE-TOOL-QUALIFY.txt",
+        "mutation-diagnostic.txt"
+      ]
+    },
+    {
+      "id": "G01T-DX-02",
+      "observation": "Controller lease resolves prior missing-lease wait; checkout journey is not controlling",
+      "evidence": "lease-validation.json"
+    },
+    {
+      "id": "G01T-DX-03",
+      "observation": "Baseline Phase 1 exact-set assertions would conflict with product extensions; bounded test correction preserves aggregate contract",
+      "evidence": [
+        "test-diff.json",
+        "baseline-39.txt",
+        "legacy-gate.txt",
+        "legacy-workflows.txt"
+      ]
+    }
+  ],
+  "bug_route": "BUG_ROUTE: not-a-bug expected TDD behavioral red and explicitly known tool gaps; assigned worker reports to parent without nested triage",
+  "bran": "unavailable; no native policy; repository files used",
+  "create_lean_skill": {
+    "outcome": "BLOCKED",
+    "reason": "No skill target or skill write authority in this slice. Strongest installed peer implementer already owns bounded test execution; duplicating it would violate skill rules and packet. No skill created."
+  },
+  "protected_actions": "No installs, AWS/device calls, credentials, external sends, GitHub, branch changes or product edits."
+}

@@ -31,7 +31,8 @@ class AC_AFC_CI_01(unittest.TestCase):
     def test_list_prints_exactly_spec_docs_hygiene(self):
         rc, out = run_gate(self, REPO, '--list')
         self.assertEqual(rc, 0, out)
-        self.assertEqual(sorted(out.split()), sorted(AREAS))
+        self.assertLessEqual(AREAS, set(out.split()))
+        self.assertEqual(len(out.split()), len(set(out.split())))
 
     def test_unknown_area_exits_2(self):
         rc, out = run_gate(self, REPO, 'android')
@@ -59,7 +60,10 @@ class AC_AFC_CI_01(unittest.TestCase):
         except ImportError:
             self.fail('PyYAML is required to read ci.yml')
         jobs = yaml.safe_load(workflow.read_text(encoding='utf-8')).get('jobs', {})
-        self.assertEqual(set(jobs) - {'changes'}, AREAS)
+        rc, listed = run_gate(self, REPO, '--list')
+        self.assertEqual(rc, 0, listed)
+        self.assertEqual(set(jobs) - {'changes'}, set(listed.split()))
+        self.assertLessEqual(AREAS, set(jobs))
         for area in AREAS:
             with self.subTest(area=area):
                 runs = '\n'.join(str(step.get('run', '')) for step in jobs[area].get('steps', []))
