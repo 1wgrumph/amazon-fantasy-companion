@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add ESPN feed ingest: pinned JSON Schema validation that rejects a bad
+  poll before any store write, per-play GameEvent normalization with
+  monotonic correction revisions, hash-verified fixture replay labeled
+  `replay`, labeled monitoring decisions, and an allowlisted scheduled
+  poller (PR #TBD).
 - Add lineup sources and scoring presets: read-only Yahoo client, manual
   lineup with T_yahoo activation, one active source per profile, PPR and
   Half-PPR tables with Half-PPR as default ([#65](https://github.com/1wgrumph/amazon-fantasy-companion/pull/65)).
