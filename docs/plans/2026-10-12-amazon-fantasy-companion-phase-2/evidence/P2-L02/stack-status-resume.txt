@@ -1,0 +1,12 @@
+$ aws cloudformation describe-stacks --stack-name afc-dev --query 'Stacks[0].{Status:StackStatus,ApiUrl:Outputs[?OutputKey==`ApiUrl`].OutputValue,GitCommit:Tags[?Key==`GitCommit`].Value}' --profile afc-dev --region us-east-2 --output json
+{
+    "Status": "CREATE_COMPLETE",
+    "ApiUrl": [
+        "https://le3r79003f.execute-api.us-east-2.amazonaws.com"
+    ],
+    "GitCommit": [
+        "75afca022f967945a70bf715beb2a7c98e65ed9d"
+    ]
+}
+
+exit=0

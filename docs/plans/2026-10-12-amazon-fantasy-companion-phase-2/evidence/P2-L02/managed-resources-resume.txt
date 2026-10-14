@@ -1,0 +1,17 @@
+$ aws cloudformation list-stack-resources --stack-name aws-sam-cli-managed-default --query 'StackResourceSummaries[].{LogicalId:LogicalResourceId,Type:ResourceType,PhysicalId:PhysicalResourceId,Status:ResourceStatus}' --profile afc-dev --region us-east-2 --output json
+[
+    {
+        "LogicalId": "SamCliSourceBucket",
+        "Type": "AWS::S3::Bucket",
+        "PhysicalId": "aws-sam-cli-managed-default-samclisourcebucket-kpyrjq2yreuk",
+        "Status": "CREATE_COMPLETE"
+    },
+    {
+        "LogicalId": "SamCliSourceBucketBucketPolicy",
+        "Type": "AWS::S3::BucketPolicy",
+        "PhysicalId": "aws-sam-cli-managed-default-samclisourcebucket-kpyrjq2yreuk",
+        "Status": "CREATE_COMPLETE"
+    }
+]
+
+exit=0

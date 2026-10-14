@@ -1,68 +1,93 @@
 # P2-L02 deployment receipt
 
-Outcome: **CONTRACT_FAILURE**. Deployment and deployed smoke are NOT_RUN.
+Outcome: **REPAIRABLE_FAILURE**. Deployment succeeded; deployed smoke acceptance did not. No code/config changes or repair attempted.
 
-Lifecycle AFC-2026-10-11 Phase 2; issue #29; milestone M05; authority AUTH-AFC-2026-10-12-P2-001 and the explicit 2026-10-14 dispatch. Branch `afc/p2-l02`; baseline and intended deploy SHA `75afca022f967945a70bf715beb2a7c98e65ed9d`. Backend tree `7c0a94484ed1ace448fbefdf3dcae0412f13134d`. Dispatch route Codex CLI / GPT-6.1 Sol / medium under DEC-AFC-SD-043/045; no route switch or live profile read. Initial checkout clean and matches dispatched branch/revision. No separate checkout lease artifact was supplied for this slice; the current owner dispatch is the checkout binding. BRAN unavailable (no native policy); repository discovery used. Neither repository-root AGENTS.md nor CLAUDE.md exists at this revision; supplied session and workspace instructions apply.
+Lifecycle AFC-2026-10-11 Phase 2; issue #29; milestone M05; authority AUTH-AFC-2026-10-12-P2-001 plus owner resume amendment on 2026-10-14. Branch `afc/p2-l02`; resumed at `3f6adce68bd8325159241c3f536dc4072c9fec03`. Intended and deployed SHA `75afca022f967945a70bf715beb2a7c98e65ed9d`; backend tree `7c0a94484ed1ace448fbefdf3dcae0412f13134d` matches both revisions. Previous blocked-run logs remain historical evidence; this receipt supersedes their outcome. Route Codex CLI / GPT-6.1 Sol / medium (DEC-AFC-SD-043/045), unchanged; no live profile catalog read.
 
-Next action for the orchestrator: supply an explicitly authorized existing artifact bucket and an amended exact deploy command disabling S3 auto-resolution, or amend authority to cover SAM-managed infrastructure. No config or product repair was attempted. The worker does not choose either alternative.
+Owner amendment authorizes create/update of `afc-dev` and `aws-sam-cli-managed-default` only, in `us-east-2` with profile `afc-dev`, including SAM resolve_s3 artifact provisioning. All other packet limits remain. Checkout matches owner binding; pre-existing untracked Python caches outside the write set were left untouched. BRAN unavailable (no native policy). Root AGENTS.md and CLAUDE.md absent. Next action is orchestrator triage of the deployed fixture failure and authorized non-printing passphrase setup before another smoke run. Do not repeat deployment solely to repair test preparation.
 
-## Blocker
+## Deployment result
 
-`backend/samconfig.toml` sets `resolve_s3 = true` without an `s3_bucket`. Installed SAM help states this creates a managed default S3 bucket. AWS documents the managed deployment infrastructure under the `aws-sam-cli-managed-default` naming. This provisioning is outside the dispatch's afc-dev-only stack boundary. The deploy was stopped before invocation, so there is no changeset to review or execute, no mutation, no deployment exit code, and no assertion that the managed stack exists or is absent. No other stack was queried.
-
-References: [AWS deployment guide](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/using-sam-cli-deploy.html), [SAM deploy reference](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-cli-command-reference-sam-deploy.html). Installed CLI evidence: `deploy-preflight.txt`.
+- `afc-dev`: **CREATE_COMPLETE**; SAM deploy exit **0**.
+- ApiUrl: `https://le3r79003f.execute-api.us-east-2.amazonaws.com`.
+- Stack GitCommit tag: `75afca022f967945a70bf715beb2a7c98e65ed9d`.
+- `aws-sam-cli-managed-default`: **CREATE_COMPLETE**, one S3 artifact bucket plus its bucket policy.
+- Changeset reviewed before answering `y` for afc-dev: additions only, matching the planned template. Confirmation/CloudFormation events are in deploy-resume-foreground.txt. No paid-plan/billing prompt or upgrade accepted.
+- First deploy attempt created managed artifacts and an unexecuted afc-dev changeset, then stopped on terminal access because timeout used a separate process group. Terminated with exit 143. Retry after this new harness evidence used `timeout --foreground 900` with identical SAM arguments. See resume-authority.txt; no route change.
 
 ## Commands and exits
 
-All AWS commands use profile `afc-dev` and region `us-east-2`. PATH includes the authorized backend-tests venv. Logs replace home paths with `<home>` and every twelve-digit numeric sequence with `<acct>`. No credential retrieval, account/config dump, or token output occurred. Command processes were bounded to at most 900 seconds.
+All AWS calls below use `--profile afc-dev --region us-east-2`; all processes bounded to 900 seconds. PATH includes the existing backend-tests venv. Logs redact every twelve-digit sequence as `<acct>` and home paths as `<home>`. No credential values retrieved, printed or committed.
 
 | Command | Exit/result | Evidence |
 | --- | --- | --- |
-| `git branch --show-current`; `git rev-parse HEAD`; `git status --short` | 0 each; expected branch/SHA, clean | dispatch checkout check; build-identity.txt binds SHA |
-| `sam --version`; `aws --version`; `python3.12 --version` | 0 each | build-identity.txt |
-| `(cd backend && sam validate --region us-east-2)` | 0 | validate.txt |
-| `(cd backend && sam build)` | 0 | build.txt; build-identity.txt template/config digests |
-| `sam deploy --help` | 0 | deploy-preflight.txt (relevant excerpt) |
-| `(cd backend && sam deploy --config-env default --profile afc-dev --region us-east-2 --tags GitCommit=75afca022f967945a70bf715beb2a7c98e65ed9d)` | NOT_RUN: contract boundary | deploy-preflight.txt |
-| `aws cloudformation describe-stacks --stack-name afc-dev --profile afc-dev --region us-east-2 --query 'Stacks[0].{Status:StackStatus,ApiUrl:Outputs[?OutputKey==`ApiUrl`].OutputValue,GitCommit:Tags[?Key==`GitCommit`].Value}' --output json` | 254: ValidationError, stack does not exist | stack-status.txt |
-| `python3.12 -m pytest backend/tests/deployed -k link -v --junitxml=<evidence_dir>/deployed-smoke.xml` | NOT_RUN: no deployed stack; 0 executed, no pass/skip claim | this receipt |
-| Deployed profile smoke (`backend/tests/deployed/api/test_profile.py`) | NOT_RUN: no deployed stack; 0 executed | this receipt |
-| CMD-DEPLOYED-COMMIT tag/tree comparison | NOT_RUN: no deployed stack/tag | local backend tree only in build-identity.txt |
-| Stack resource inventory | NOT_RUN: afc-dev does not exist | stack-status.txt |
-| `bash tools/ci/gate.sh` (twice, second run with completed receipt) | 0 each; 61 CI tests and 158 backend tests passed each run | gate.txt, gate-final.txt |
+| `sam validate --region us-east-2` in backend (prior run) | 0 | validate.txt |
+| `sam build` in backend (prior run, reused unchanged artifact) | 0 | build.txt, build-identity.txt |
+| `sam deploy --config-env default --profile afc-dev --region us-east-2 --tags GitCommit=75afca022f967945a70bf715beb2a7c98e65ed9d` in backend, timeout wrapper | 143; interrupted terminal harness, changeset not executed | deploy-resume.txt |
+| Same deploy under `timeout --foreground 900`, reviewed changeset then `y` | 0 | deploy-resume-foreground.txt |
+| `aws cloudformation describe-stacks --stack-name afc-dev --query 'Stacks[0].{Status:StackStatus,ApiUrl:Outputs[?OutputKey==`ApiUrl`].OutputValue,GitCommit:Tags[?Key==`GitCommit`].Value}' --profile afc-dev --region us-east-2 --output json` | 0; COMPLETE, URL and expected tag | stack-status-resume.txt |
+| `aws cloudformation list-stack-resources --stack-name afc-dev --query 'StackResourceSummaries[].{LogicalId:LogicalResourceId,Type:ResourceType,PhysicalId:PhysicalResourceId,Status:ResourceStatus}' --profile afc-dev --region us-east-2 --output json` | 0; 31 resources COMPLETE | stack-resources-resume.txt |
+| Same resource query for `aws-sam-cli-managed-default` | 0; bucket and bucket policy COMPLETE | managed-resources-resume.txt |
+| `aws cloudformation describe-stacks --stack-name aws-sam-cli-managed-default --query 'Stacks[0].{Status:StackStatus}' --profile afc-dev --region us-east-2 --output json` | 0; CREATE_COMPLETE | managed-status-resume.txt |
+| `git rev-parse 75afca0:backend HEAD:backend` | 0; both trees equal | backend-tree-resume.txt |
+| `sha256sum backend/template.yaml backend/.aws-sam/build/template.yaml backend/samconfig.toml` | 0; all match prior build receipt | build-digests-resume.txt |
+| `AFC_DEPLOYED_API_URL=https://le3r79003f.execute-api.us-east-2.amazonaws.com AFC_DEPLOYED_TEST_PROFILE=p2-l02-resume-smoke python3.12 -m pytest backend/tests/deployed/device_auth -v -rs --tb=short --show-capture=no` | **1; 4 collected, 3 failed, 1 skipped, 0 passed** | deployed-link-resume.txt |
+| Same environment, `python3.12 -m pytest backend/tests/deployed/api -v -rs --tb=short --show-capture=no` | **0; 4 collected, 4 skipped, 0 passed; NOT_RUN** | deployed-profile-resume.txt |
+| `bash tools/ci/gate.sh` with venv PATH | 0; 61 CI tests and 158 backend tests passed | gate-resume.txt, gate-resume-staged.txt |
 
-Discovery reads also found absent AGENTS.md/CLAUDE.md (cat exit 1), absent backend/README glob (rg exit 2), and no installed SAM Python source match (rg exit 1). These are discovery gaps, not product failures. Official pinned-source web fetches were unavailable; no upstream software was downloaded or executed for this inspection.
+Discovery/check commands: pwd, branch, HEAD and status checks exit 0; missing root AGENTS.md cat exit 1; reading supplied skills/workspace rules and existing tests/config/logs exit 0; slice/SEIT JSON extraction exit 0; passphrase-presence-only check exit 0 (absent); template rg, process-state checks and fd reads exit 0. Attempted terminal tcsetpgrp recovery exited 1 (ENOTTY), then process termination commands exited 0. No AWS error or authentication expiry occurred in this resume. Exact substantive command lines and exit codes are in each named log.
+
+## Smoke failure and missing prerequisite
+
+Device-auth tests fail at `backend/tests/deployed/conftest.py:38` with `AssertionError: Deployed test may only contact le3r79003f.execute-api.us-east-2.amazonaws.com`. The fixture compares `address[0]` passed to socket.connect with the URL hostname; Python socket.create_connection resolves DNS before socket.connect. This is deployed test-harness evidence, not evidence of an API response failure. The tests did not complete HTTPS requests. Do not weaken the network containment guard; orchestrator owns triage/repair and regression/prevention checks. No nested bug workflow or GitHub action performed by this assigned worker.
+
+`AFC_DEPLOYED_LINK_PASSPHRASE` is absent in this process. The shared linked fixture skips the confirmed-link test and every profile test. No SSM credential retrieval or secret creation attempted. Exit 0 from an all-skipped profile group is **not PASS**. Both requested deployed groups were invoked separately; the frozen `-k link` selection alone was not used.
 
 ## Acceptance to evidence
 
 | Acceptance | Result | Evidence |
 | --- | --- | --- |
-| 1. Validate/build exit 0 | PASS (local preparation only) | validate.txt, build.txt, build-identity.txt |
-| 2. Reviewed changeset, afc-dev deploy exit 0 | NOT_RUN / blocked | deploy-preflight.txt |
-| 3. ApiUrl and COMPLETE stack | NOT_MET: no stack, no ApiUrl, no deployed SHA | stack-status.txt |
-| 4. Deployed link/profile smoke | NOT_RUN, zero executed | no deployed endpoint |
-| 5. Sanitized receipt, resources and cost note | Partial: receipt present; no stack inventory possible | this receipt and text logs |
-| 6. Gate and local evidence commit | Final exit/commit reported in worker return | gate-final.txt; Git commit |
+| 1. Validate/build exit 0 | PASS, prior run reused with identical tree/template/config digests | validate.txt, build.txt, build-identity.txt, build-digests-resume.txt |
+| 2. Reviewed changeset, deploy exit 0 | PASS | deploy-resume-foreground.txt |
+| 3. ApiUrl and COMPLETE stack | PASS | stack-status-resume.txt |
+| 4. Link and profile smoke pass | **NOT_MET: link 3 failed/1 skipped; profile 4 skipped** | deployed-link-resume.txt, deployed-profile-resume.txt |
+| 5. Sanitized receipt, resources, cost note | Receipt/inventories supplied; eligibility caveat below | this receipt, stack-resources-resume.txt, managed-resources-resume.txt |
+| 6. Gate and local evidence commit | 0; 61 CI tests and 158 backend tests passed | gate-resume-staged.txt and local Git commit |
 
-## Cost boundary
+## Resources and cost boundary
 
-Not established that all resources are free tier eligible. Inspected the source template only: HTTP API, three Python Lambda functions, six DynamoDB PAY_PER_REQUEST tables with an index/stream, EventBridge Scheduler with schedule DISABLED, IAM service roles, and seven-day CloudWatch log groups. SSM SecureString entries are references to owner-created parameters. SAM additionally needs an S3 artifact bucket. The template's Free-plan wording is a claim, not account eligibility proof. No billing/account query was authorized or made; no payment/plan change or paid prompt was accepted. No resources were created by this slice. Service quotas, free-tier credit balance, usage and account eligibility remain unverified. SEIT-AFC-PR-054 and SEIT-RISK-AFC-P2-07 are not closed by this receipt.
+Observed afc-dev inventory: six DynamoDB tables, three Lambda functions, four service roles, eleven Lambda permissions, three CloudWatch log groups, HTTP API and stage, disabled-by-default ingestion scheduler, one stream event source mapping (31 total). Managed artifact stack contains one S3 bucket and its bucket policy. No other stacks queried, modified or deleted. Source template declares DynamoDB PAY_PER_REQUEST, seven-day logs and scheduler default DISABLED. No IAM users/keys or account/billing changes.
+
+Owner explicitly confirmed the SAM artifact bucket is within free tier. This run checked template types/defaults, actual resource inventory and deploy output for paid-only/upgrade prompts; none appeared. It did **not** query billing/account eligibility, credits, service usage, quotas or free-tier balances. Therefore it does not establish that all deployed usage is free or close AFC-PR-054/RISK-AFC-P2-07. These remain P2-L03 obligations. The source template Free-plan wording alone is not eligibility proof.
 
 ## Proof rows and later obligations
 
-- SEIT-AFC-P2-DX-01: supporting developer feedback below supplied; aggregate closure stays with P2-SCR1.
-- SEIT-AFC-P2-PATH-01: local hygiene gate is supporting evidence only; aggregate closure remains P2-G01.
-- SEIT-AFC-P2-LAND-01 and SEIT-AFC-P2-REL-01: not satisfied; orchestrator owns independent review, landing and changelog under P2-R5 aggregate closure. Worker does not push or access GitHub.
-- SEIT-AFC-P2-REV-01: OCR delegate mode remains required at independent review; NOT_RUN here. Reverify: not applicable — no compiled-binary attribute claim. Aggregate closure remains P2-L05.
-- SEIT-AFC-PR-038: NOT_RUN. Full registered demonstration needs real stick plus owner phone/browser action; no stick is available. HTTP smoke cannot close it.
-- SEIT-AFC-PR-054 and SEIT-RISK-AFC-P2-07: NOT_RUN for deployed eligibility/inventory; P2-L03 closure remains. The boundary was preserved locally by stopping before provisioning.
-- SEIT-RISK-AFC-P2-10: no route change or fallback occurred; no independent aggregate assurance claim.
+No full SEIT row is closed by this worker receipt. Deployment and tree/tag identity are supporting evidence only.
 
-No full SEIT proof row is claimed closed by this blocked run. A deploy retry still needs the corrected infrastructure contract, authorized owner linking setup, deployed smoke and account eligibility evidence. Frozen `-k link` selects the link-flow module but excludes the separate profile module; mapped expiry/replay and owner phone confirmation also require their registered demonstration evidence.
+| Proof row | Supplied now / remaining closure |
+| --- | --- |
+| SEIT-AFC-P2-DX-01 | Feedback supplied; aggregate P2-SCR1 closure later |
+| SEIT-AFC-P2-PATH-01 | Local hygiene/gate support; aggregate P2-G01 closure later |
+| SEIT-AFC-P2-LAND-01, SEIT-AFC-P2-REL-01 | Not satisfied; independent review, landing/changelog remain orchestrator/P2-R5 |
+| SEIT-AFC-P2-REV-01 | OCR delegation required at independent review, NOT_RUN here; aggregate P2-L05 later. Reverify not applicable: no compiled-binary attribute claim |
+| SEIT-AFC-PR-038 | Not satisfied; smoke failure plus missing passphrase; full expiry/replay, real stick and owner phone/browser demonstration still required |
+| SEIT-AFC-PR-054, SEIT-RISK-AFC-P2-07 | Deployment inventory and boundary record supplied; account eligibility and registered P2-L03 proof remain |
+| SEIT-RISK-AFC-P2-10 | No route switch, capabilities retained; no independent aggregate assurance claim |
+
+No Fire TV stick is available. No APK/ApiUrl equivalence or end-to-end owner confirmation claimed. Runtime remains deployed; no rollback/deletion authorized or attempted.
 
 ## developer_feedback
 
-- AFC-L02-OBS-001: SAM artifact provisioning conflicts with the one-stack execution contract. Evidence: backend/samconfig.toml, installed SAM 1.169.0 help excerpt in deploy-preflight.txt, official AWS guide. This is a dispatch prerequisite gap, not a reproduced product bug.
-- AFC-L02-OBS-002: Frozen CMD-DEPLOYED-SMOKE uses `-k link`; separate deployed profile tests require an additional explicit invocation. Existing deployed link module has four cases; full expiry/replay and owner phone demonstration remain outside those four HTTP cases. Evidence: seit.json command entry and backend/tests/deployed/{device_auth/test_link_flow.py,api/test_profile.py,conftest.py}. No code/test changes made.
+- AFC-L02-OBS-001: prior stack-authority prerequisite resolved by explicit owner amendment; see resume-authority.txt. No product change.
+- AFC-L02-OBS-002: both groups now invoked separately; profile acceptance remains NOT_RUN, not silently excluded. Evidence: deployed-link-resume.txt and deployed-profile-resume.txt.
+- AFC-L02-OBS-003: deployed network fixture rejects resolved socket addresses before HTTPS reaches API. Three device-auth failures at conftest.py:38; evidence deployed-link-resume.txt. Assigned worker reports to orchestrator for bounded triage, does not repair.
+- AFC-L02-OBS-004: authenticated deployed tests require an environment passphrase not supplied at dispatch; five skipped tests total. Evidence both smoke logs and shared conftest. No credential access attempted.
+- AFC-L02-OBS-005: interactive SAM under timeout requires foreground process-group handling; first attempt stopped at confirmation, foreground retry succeeded. Evidence deploy-resume.txt, deploy-resume-foreground.txt, resume-authority.txt. Local invocation issue, no reproduced SAM product defect claimed.
 
-Tools exercised: Git, Python, SAM 1.169.0, AWS CLI 2.38.0, repository gate, official AWS documentation lookup. Output hashes are in log-digests.txt. All changes stay under this evidence directory; build artifacts remain ignored and uncommitted.
+Tools exercised: Git, Python 3.12/pytest, existing SAM 1.169.0 and AWS CLI 2.38.0, process/terminal diagnostics, repository gate/hooks. No tool installation. All committed changes stay in P2/evidence/P2-L02; .aws-sam and pre-existing caches excluded. Evidence output hashes recorded in resume-log-digests.txt.
+
+Final pre-commit verification: full gate exit 0 (61 CI tests, 158 backend tests); fixture negative-control GAP/fatal lines in gate output are expected test cases, not failing gate results. Receipt twelve-digit scan empty; git diff --check exit 0. No product changes. Commit hook and committed-head verification reported in worker return.
+
+Evidence formatting correction: first git commit attempt exited 1 because the enabled hygiene hook rejected SAM table trailing spaces (WS-CHECK in both deploy logs). Removed only trailing whitespace and normalized terminal line endings in those logs; no substantive output removed. The earlier full gate ran before new logs were staged and therefore did not cover them; staged full gate rerun follows. Hooks remain enabled.
+
+Staged full-gate rerun after evidence formatting correction: exit 0; 61 CI tests and 158 backend tests passed (gate-resume-staged.txt). First commit attempt exit 1; final commit exit and SHA reported in return. No skipped deployed case is counted as PASS.
