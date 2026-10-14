@@ -1,0 +1,315 @@
+{
+ "outcome": "PASS",
+ "scope": "Behavioral red suite for P2-B03 frozen and committed on the pair branch; backend gate red is the expected TDD signal",
+ "lifecycle": "AFC-2026-10-11",
+ "phase": 2,
+ "wave": "Wave 2",
+ "milestone": "M05",
+ "issue": 28,
+ "slice_id": "P2-B03T",
+ "authority_id": "AUTH-AFC-2026-10-12-P2-001",
+ "branch": "afc/p2-b03",
+ "baseline": "75afca022f967945a70bf715beb2a7c98e65ed9d",
+ "candidate_binding": "Red working delta on afc/p2-b03; committed receipt is bound to its containing local commit",
+ "route": "Muse Code / Muse Spark 1.3 / max",
+ "profile": {
+  "name": "opensource-hackathon as amended by DEC-AFC-SD-043/044",
+  "live_catalog_read": false
+ },
+ "review_capabilities": {
+  "coverage_assist": {
+   "enabled": true,
+   "required": true,
+   "backend": "OCR OpenCodeReview delegate mode",
+   "status": "not_run; allocated to independent review at IE-P2-14, never claimed PASS"
+  },
+  "reverify": {
+   "enabled": true,
+   "status": "not_applicable",
+   "reason": "red tests and receipts, no compiled-binary claim"
+  }
+ },
+ "method": "SEIT supporting TDD method=test; registered proof methods/environments unchanged",
+ "frozen_test_sha256": {
+  "backend/tests/unit/lineup/lineup_support.py": "978bc5c7bb5401a191022f7c361c44c48a57e893c821a305dfb8e38346a412db",
+  "backend/tests/unit/lineup/test_active_lineup.py": "993e37c3c58b5f517f3470cdd32e8416477736c589dd8d445c2bc866f9c6d332",
+  "backend/tests/unit/lineup/test_manual_source.py": "66b1915633222229e35af96e0f6cda74c083991149b9d306d02f071d6671aa8f",
+  "backend/tests/unit/lineup/test_presets.py": "5fb192bd1d2b575e8af1ecccc2ae2cb5297afca6044742a3a06f179d3874cda7",
+  "backend/tests/unit/lineup/test_yahoo_client.py": "e48d5dec291fe2c62ea2333ccfa330af8a4fd2110e3fc145f5795e2bcdef1127",
+  "backend/tests/deployed/lineup/test_source_labels.py": "d0fe6ac4fff754d15b07604c58278b219833540d927c0ff72dc0ffc31da32ecc"
+ },
+ "frozen_fixture_sha256": {
+  "backend/tests/unit/lineup/recorded/leagues.json": "4b2154dd5689ea8ba7dbabbdc252ec33c1eb17f45df192b250eda7c250473e32",
+  "backend/tests/unit/lineup/recorded/roster_week5.json": "74a3e009714626ed7afe09b30c5f52a62ad17d3aaad7c543eb4a1bb024ec79b8",
+  "backend/tests/unit/lineup/recorded/roster_week6.json": "161586a8d5c84ea69b5406712a6af1102520c0e2fc35133ff23f5654a25486b2",
+  "backend/tests/unit/lineup/recorded/settings.json": "c1a948b2558bf8420240e6d044b714115a71ba7f97ec9af3bcb129156ef47af2",
+  "backend/tests/unit/lineup/recorded/teams.json": "6e24325bb82bbb478427343f7a7d43bc5aafa6c6314e7a472fce4b1b3678e5e0"
+ },
+ "red": {
+  "command_id": "CMD-RED",
+  "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 $HOME/.local/share/afc-tools/backend-tests/bin/python3.12 -m pytest backend/tests/unit/lineup backend/tests/deployed/lineup -v -p no:cacheprovider --tb=short --junitxml=docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B03T/CMD-RED.xml",
+  "exit_code": 1,
+  "output": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B03T/CMD-RED.txt",
+  "junit": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B03T/CMD-RED.xml",
+  "failed": 77,
+  "passed": 0,
+  "errors": 0,
+  "skipped": 3,
+  "elapsed_seconds": 2.15,
+  "failure_class": "77 JUnit failures, every message begins AssertionError (pytest 8.4.2 omits the failure type attribute); 3 deployed skips carry NOT_RUN (no AFC_DEPLOYED_API_URL), the plan's pre-deploy signal, never a pass claim",
+  "test_ids": [
+   "tests/unit/lineup/test_active_lineup.py::test_no_stored_lineup_returns_none",
+   "tests/unit/lineup/test_active_lineup.py::test_profile_without_a_lineup_is_not_a_source",
+   "tests/unit/lineup/test_active_lineup.py::test_manual_lineup_defaults_to_half_ppr",
+   "tests/unit/lineup/test_active_lineup.py::test_manual_lineup_uses_the_profile_preset[ppr-PPR]",
+   "tests/unit/lineup/test_active_lineup.py::test_manual_lineup_uses_the_profile_preset[halfPpr-Half-PPR]",
+   "tests/unit/lineup/test_active_lineup.py::test_manual_lineup_rejects_an_unknown_stored_preset",
+   "tests/unit/lineup/test_active_lineup.py::test_yahoo_lineup_uses_yahoo_league_scoring",
+   "tests/unit/lineup/test_active_lineup.py::test_yahoo_lineup_ignores_the_profile_preset",
+   "tests/unit/lineup/test_active_lineup.py::test_an_unknown_stored_source_is_rejected",
+   "tests/unit/lineup/test_active_lineup.py::test_source_switch_keeps_exactly_one_active",
+   "tests/unit/lineup/test_active_lineup.py::test_last_writer_wins_without_duplication",
+   "tests/unit/lineup/test_manual_source.py::test_t_yahoo_constant_matches_the_plan",
+   "tests/unit/lineup/test_manual_source.py::test_activation_before_t_yahoo_is_pending[2026-10-16T18:59:59Z]",
+   "tests/unit/lineup/test_manual_source.py::test_activation_before_t_yahoo_is_pending[2026-10-01T00:00:00Z]",
+   "tests/unit/lineup/test_manual_source.py::test_activation_at_t_yahoo_without_approval_is_manual",
+   "tests/unit/lineup/test_manual_source.py::test_activation_after_t_yahoo_without_approval_is_manual[2026-10-16T19:00:01Z]",
+   "tests/unit/lineup/test_manual_source.py::test_activation_after_t_yahoo_without_approval_is_manual[2026-10-20T00:00:00Z]",
+   "tests/unit/lineup/test_manual_source.py::test_approved_yahoo_stays_yahoo_across_t_yahoo[2026-10-16T19:00:00Z]",
+   "tests/unit/lineup/test_manual_source.py::test_approved_yahoo_stays_yahoo_across_t_yahoo[2026-10-16T18:59:59Z]",
+   "tests/unit/lineup/test_manual_source.py::test_approved_yahoo_stays_yahoo_across_t_yahoo[2026-10-16T19:00:01Z]",
+   "tests/unit/lineup/test_manual_source.py::test_malformed_timestamp_is_rejected[not-a-time]",
+   "tests/unit/lineup/test_manual_source.py::test_malformed_timestamp_is_rejected[]",
+   "tests/unit/lineup/test_manual_source.py::test_malformed_timestamp_is_rejected[2026-13-45T99:99:99Z]",
+   "tests/unit/lineup/test_manual_source.py::test_build_labels_the_entry_manual_with_its_preset",
+   "tests/unit/lineup/test_manual_source.py::test_build_applies_the_selected_preset",
+   "tests/unit/lineup/test_manual_source.py::test_build_rejects_an_unknown_preset",
+   "tests/unit/lineup/test_manual_source.py::test_build_rejects_players_outside_the_espn_roster",
+   "tests/unit/lineup/test_manual_source.py::test_build_rejects_a_malformed_espn_roster",
+   "tests/unit/lineup/test_manual_source.py::test_manual_values_are_never_presented_as_yahoo",
+   "tests/unit/lineup/test_presets.py::test_exactly_two_preset_tables",
+   "tests/unit/lineup/test_presets.py::test_preset_tables_match_the_contract",
+   "tests/unit/lineup/test_presets.py::test_tables_cover_only_contract_stats",
+   "tests/unit/lineup/test_presets.py::test_default_preset_is_half_ppr",
+   "tests/unit/lineup/test_presets.py::test_each_table_row_scores_in_isolation[PPR-stats0-3.0]",
+   "tests/unit/lineup/test_presets.py::test_each_table_row_scores_in_isolation[Half-PPR-stats1-1.5]",
+   "tests/unit/lineup/test_presets.py::test_each_table_row_scores_in_isolation[PPR-stats2-1.0]",
+   "tests/unit/lineup/test_presets.py::test_each_table_row_scores_in_isolation[Half-PPR-stats3-1.0]",
+   "tests/unit/lineup/test_presets.py::test_each_table_row_scores_in_isolation[PPR-stats4-1.0]",
+   "tests/unit/lineup/test_presets.py::test_each_table_row_scores_in_isolation[Half-PPR-stats5-1.0]",
+   "tests/unit/lineup/test_presets.py::test_each_table_row_scores_in_isolation[PPR-stats6-12]",
+   "tests/unit/lineup/test_presets.py::test_each_table_row_scores_in_isolation[Half-PPR-stats7-12]",
+   "tests/unit/lineup/test_presets.py::test_each_table_row_scores_in_isolation[PPR-stats8-6]",
+   "tests/unit/lineup/test_presets.py::test_each_table_row_scores_in_isolation[Half-PPR-stats9-6]",
+   "tests/unit/lineup/test_presets.py::test_each_table_row_scores_in_isolation[PPR-stats10-1.0]",
+   "tests/unit/lineup/test_presets.py::test_each_table_row_scores_in_isolation[Half-PPR-stats11-1.0]",
+   "tests/unit/lineup/test_presets.py::test_each_table_row_scores_in_isolation[PPR-stats12-8]",
+   "tests/unit/lineup/test_presets.py::test_each_table_row_scores_in_isolation[Half-PPR-stats13-8]",
+   "tests/unit/lineup/test_presets.py::test_each_table_row_scores_in_isolation[PPR-stats14--2]",
+   "tests/unit/lineup/test_presets.py::test_each_table_row_scores_in_isolation[Half-PPR-stats15--2]",
+   "tests/unit/lineup/test_presets.py::test_each_table_row_scores_in_isolation[PPR-stats16--2]",
+   "tests/unit/lineup/test_presets.py::test_each_table_row_scores_in_isolation[Half-PPR-stats17--2]",
+   "tests/unit/lineup/test_presets.py::test_combined_stats_sum_every_row",
+   "tests/unit/lineup/test_presets.py::test_missing_stats_count_as_zero",
+   "tests/unit/lineup/test_presets.py::test_a_third_preset_is_rejected[Standard]",
+   "tests/unit/lineup/test_presets.py::test_a_third_preset_is_rejected[ppr]",
+   "tests/unit/lineup/test_presets.py::test_a_third_preset_is_rejected[half-ppr]",
+   "tests/unit/lineup/test_presets.py::test_a_third_preset_is_rejected[Half_PPR]",
+   "tests/unit/lineup/test_presets.py::test_a_third_preset_is_rejected[]",
+   "tests/unit/lineup/test_presets.py::test_a_stat_without_a_table_row_is_rejected",
+   "tests/unit/lineup/test_yahoo_client.py::test_leagues_lists_the_recorded_leagues",
+   "tests/unit/lineup/test_yahoo_client.py::test_teams_lists_the_recorded_teams",
+   "tests/unit/lineup/test_yahoo_client.py::test_roster_distinguishes_starting_slots_from_bench[5]",
+   "tests/unit/lineup/test_yahoo_client.py::test_roster_distinguishes_starting_slots_from_bench[6]",
+   "tests/unit/lineup/test_yahoo_client.py::test_roster_weeks_are_independent",
+   "tests/unit/lineup/test_yahoo_client.py::test_settings_returns_the_league_scoring",
+   "tests/unit/lineup/test_yahoo_client.py::test_client_issues_only_authenticated_reads",
+   "tests/unit/lineup/test_yahoo_client.py::test_client_completes_when_writes_are_refused",
+   "tests/unit/lineup/test_yahoo_client.py::test_eligibility_is_never_used_as_a_starting_slot",
+   "tests/unit/lineup/test_yahoo_client.py::test_empty_token_is_rejected_before_any_request[]",
+   "tests/unit/lineup/test_yahoo_client.py::test_empty_token_is_rejected_before_any_request[None]",
+   "tests/unit/lineup/test_yahoo_client.py::test_non_integer_week_is_rejected_before_any_request",
+   "tests/unit/lineup/test_yahoo_client.py::test_roster_with_a_non_mapping_payload_is_rejected",
+   "tests/unit/lineup/test_yahoo_client.py::test_roster_missing_its_players_is_rejected",
+   "tests/unit/lineup/test_yahoo_client.py::test_roster_with_a_non_mapping_player_is_rejected",
+   "tests/unit/lineup/test_yahoo_client.py::test_roster_with_unexpected_player_types_is_rejected",
+   "tests/unit/lineup/test_yahoo_client.py::test_settings_missing_its_modifiers_is_rejected",
+   "tests/unit/lineup/test_yahoo_client.py::test_absurdly_oversize_roster_is_rejected",
+   "tests/deployed/lineup/test_source_labels.py::test_panel_reports_exactly_one_lineup_source",
+   "tests/deployed/lineup/test_source_labels.py::test_panel_source_is_stable_across_reads",
+   "tests/deployed/lineup/test_source_labels.py::test_preset_selection_roundtrip"
+  ],
+  "output_sha256": "d6641319754d3d0852345c2445c01f582288692ebd64d74856ad66f425ec0c94",
+  "sanitization": "Home prefix replaced with $HOME in CMD-RED.txt, CMD-RED.xml, collect.txt, gate.txt"
+ },
+ "gate": {
+  "command": "bash tools/ci/gate.sh",
+  "exit_code": 1,
+  "output": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B03T/gate.txt",
+  "areas": {
+   "spec": "PASS",
+   "docs": "PASS",
+   "hygiene": "PASS",
+   "tvapp": "PASS no tv-app/ tree",
+   "backend": "FAIL (expected red)"
+  },
+  "backend_scope": "77 failed are exactly the new lineup red tests; 158 pre-existing tests passed; 0 errors"
+ },
+ "hygiene": {
+  "path_scan": "PYTHONDONTWRITEBYTECODE=1 python3.12 tools/ci/check_paths.py",
+  "path_scan_exit_code": 0,
+  "path_scan_output": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B03T/path-check.txt",
+  "whitespace_exit_code": 0,
+  "credential_shapes": "No CRED-* hits: OAuth tokens are runtime-generated short values; fixtures carry no tokens or personal data"
+ },
+ "proof_rows": [
+  {
+   "id": "SEIT-AFC-PR-001",
+   "registered_method": "test",
+   "red_support": "Yahoo read-only client assertions against recorded responses (two weeks, active/bench, settings, read-only audit, malformed/oversize rejection)",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-L03"
+  },
+  {
+   "id": "SEIT-AFC-PR-006",
+   "registered_method": "test",
+   "red_support": "Manual-entry activation at T_yahoo boundaries and ESPN-roster validation/labeling assertions",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-L03"
+  },
+  {
+   "id": "SEIT-AFC-PR-007",
+   "registered_method": "test",
+   "red_support": "Exactly-one-active-source assertions via active_lineup and deployed panel-envelope source labels",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-L03"
+  },
+  {
+   "id": "SEIT-AFC-PR-065",
+   "registered_method": "test",
+   "red_support": "Preset tables exactly per CONTRACT-AFC-P2-PRESETS, default Half-PPR, manual scoring and Yahoo-league scoring assertions",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-L03"
+  },
+  {
+   "id": "SEIT-AFC-P2-DX-01",
+   "registered_method": "inspection",
+   "red_support": "Packet/evidence obligation preserved",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-SCR1"
+  },
+  {
+   "id": "SEIT-AFC-P2-LAND-01",
+   "registered_method": "inspection",
+   "red_support": "Packet/evidence obligation preserved",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-R5"
+  },
+  {
+   "id": "SEIT-AFC-P2-PATH-01",
+   "registered_method": "test",
+   "red_support": "check_paths PASS on the candidate; no absolute paths or credential shapes committed",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-G01"
+  },
+  {
+   "id": "SEIT-AFC-P2-REL-01",
+   "registered_method": "inspection",
+   "red_support": "Packet/evidence obligation preserved",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-R5"
+  },
+  {
+   "id": "SEIT-AFC-P2-REV-01",
+   "registered_method": "inspection",
+   "red_support": "Packet/evidence obligation preserved",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-L05"
+  },
+  {
+   "id": "SEIT-RISK-AFC-P2-10",
+   "registered_method": "inspection",
+   "red_support": "Run on the dispatched Muse fallback route per the packet; no further route change",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-6"
+  }
+ ],
+ "handoff_contract_choices": [
+  "lineup.presets: TABLES dict with exactly PPR and Half-PPR; DEFAULT_PRESET Half-PPR; score(preset, stats) with stat keys receptions/rushing_yards/receiving_yards/rushing_touchdowns/receiving_touchdowns/passing_yards/passing_touchdowns/interceptions_thrown/fumbles_lost; unknown preset or stat key raises ValueError.",
+  "lineup.yahoo: get_leagues/get_teams/get_roster/get_settings over an injected transport request(method, url, headers) returning parsed JSON; all requests GET to https://fantasysports.yahooapis.com/ with Bearer token; empty token, non-integer week and malformed/oversize payloads raise ValueError.",
+  "Test recorders route fixtures by URL markers (leagues/teams/settings/roster, week=N); real Yahoo URLs contain these markers.",
+  "lineup.manual: T_YAHOO 2026-10-16T19:00:00Z; activation(now_iso, yahoo_approved) returns yahoo/manual/pending with the T_yahoo boundary inclusive; build(espn_roster, entries, preset) labels source manual with scoring preset; unknown preset/player or malformed roster raises ValueError.",
+  "lineup.active_lineup(profile_id): None without a stored Lineups row; manual rows resolve the preset from Profile settings scoringPreset (ppr/halfPpr per frozen openapi enum, default halfPpr) to PPR/Half-PPR labels; Yahoo rows return stored league scoring verbatim with no preset; unknown source or preset raises ValueError.",
+  "Stored-seed note: DynamoDB numeric values must be Decimal; float seeds fail at write time (fixed in test_active_lineup.py)."
+ ],
+ "scope_reconciliation": [
+  "Packet STATE said backend/src/lineup/ does not exist; P2-B01 landed it as an AFC-STUB exposing active_lineup(profile_id) only, so presets/yahoo/manual assertions fail on missing modules (AssertionError) and active_lineup assertions on the stub (AssertionError).",
+  "Deployed lineup tests use the frozen shared deployed/lineup fixtures and skip NOT_RUN without a stack; they assert only envelope-level and profile-API facts owned by this slice, never B07 panel-data shapes.",
+  "Packet orders a local red commit; the pre-commit hook's backend FAIL is the expected TDD red. Committed locally with --no-verify per the B01T red-commit convention; nothing pushed, no gate weakened."
+ ],
+ "deferred": [
+  "P2-B03 green on unchanged frozen tests (same IDs/hashes) via CMD-GATE-BACKEND",
+  "Independent OCR review at IE-P2-14",
+  "Deployed proof closeout P2-L03 (CMD-DEPLOYED-TESTS) and Yahoo/manual verdict P2-X06",
+  "Orchestrator landing/changelog and allocated lifecycle proof closure"
+ ],
+ "developer_feedback": {
+  "observations": [
+   {
+    "id": "P2B03T-DX-001",
+    "tool": "pytest/Moto",
+    "observation": "77 all-assertion red cases plus 3 NOT_RUN deployed skips run offline in ~2 s; the shared api/offline fixtures needed no changes for the lineup dirs.",
+    "evidence": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B03T/CMD-RED.xml"
+   },
+   {
+    "id": "P2B03T-DX-002",
+    "tool": "pytest JUnit",
+    "observation": "pytest 8.4.2 JUnit failures still omit the type attribute; the B01T classifier rule (AssertionError-prefixed messages, explicit error/skipped nodes) holds, extended here for NOT_RUN deployed skips.",
+    "evidence": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B03T/verify_receipt.py"
+   },
+   {
+    "id": "P2B03T-DX-003",
+    "tool": "DynamoDB/Moto",
+    "observation": "boto3 rejects float seeds (use Decimal); a red-seed TypeError is a harness defect, not a behavioral signal, and was fixed before freezing.",
+    "evidence": "backend/tests/unit/lineup/test_active_lineup.py"
+   },
+   {
+    "id": "P2B03T-DX-004",
+    "tool": "gate.sh",
+    "observation": "Full gate matches the red-commit convention exactly: spec/docs/hygiene/tvapp PASS, backend FAIL scoped to the 77 new red tests with 158 pre-existing passing.",
+    "evidence": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B03T/gate.txt"
+   }
+  ],
+  "tools_exercised": [
+   "git",
+   "python3.12",
+   "pytest",
+   "boto3/botocore",
+   "Moto",
+   "tools/ci/gate.sh",
+   "tools/ci/check_paths.py"
+  ]
+ },
+ "resource_group": "host-pytest; fresh per-test Moto state; sockets blocked; no engine/server/AWS/device",
+ "changed_paths": [
+  "backend/tests/deployed/lineup/test_source_labels.py",
+  "backend/tests/unit/lineup/lineup_support.py",
+  "backend/tests/unit/lineup/recorded/leagues.json",
+  "backend/tests/unit/lineup/recorded/roster_week5.json",
+  "backend/tests/unit/lineup/recorded/roster_week6.json",
+  "backend/tests/unit/lineup/recorded/settings.json",
+  "backend/tests/unit/lineup/recorded/teams.json",
+  "backend/tests/unit/lineup/test_active_lineup.py",
+  "backend/tests/unit/lineup/test_manual_source.py",
+  "backend/tests/unit/lineup/test_presets.py",
+  "backend/tests/unit/lineup/test_yahoo_client.py",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B03T/CMD-RED.txt",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B03T/CMD-RED.xml",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B03T/collect.txt",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B03T/commands.json",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B03T/gate.txt",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B03T/path-check.txt",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B03T/receipt.json",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B03T/verify_receipt.py"
+ ]
+}
