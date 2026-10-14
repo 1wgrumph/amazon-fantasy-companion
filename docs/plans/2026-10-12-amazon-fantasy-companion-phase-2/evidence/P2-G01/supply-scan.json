@@ -1,0 +1,60 @@
+{
+  "procedure": "scan-software-supply-chain SKILL (CMD-SUPPLY-SCAN), static only; trees cloned to session scratch, nothing executed",
+  "scanners": {
+    "clamscan": "/usr/bin/clamscan",
+    "gitleaks": "--redact",
+    "trivy": "0.71.0 --offline-scan --skip-db-update, DB UpdatedAt 2026-10-10T01:03Z (3 days; NextUpdate passed)"
+  },
+  "credential_findings": "No named-prefix secrets. All gitleaks hits are entropy-only generic-api-key matches inside ncc-bundled dist JS (base64 wasm blob, Azure SDK 'AccountKey=REDACTED' redaction regex, JSDoc example 'apiToken = \"abc123xyz456\"'): false positives, discard.",
+  "actions": [
+    {
+      "action": "actions/setup-java",
+      "tag": "v6.0.1",
+      "sha": "de7274f081f381c8f8158605e0321c36c376e2e6",
+      "commit_date": "2026-09-09",
+      "age_ok": true,
+      "runtime": "node24 dist/setup/index.js + dist/cleanup/index.js",
+      "sha256": {
+        "action.yml": "0fea4e9d329b3503a7bc1a64c2221d47252e7c520403e674a7d8c5a13a88d3b9",
+        "dist/setup/index.js": "4f0bc66190614f4100b61354fe93b1415bbb746f6892594cf4a8c43d1eee586d",
+        "dist/cleanup/index.js": "ad280f6a75e3d8467290d51fb10c1e2d03f00180c31ce047c2ff9a00c6893457",
+        "tracked_file_manifest": "ed362f360f18b7b6b89fece5b785d6a10327995d4d1b7082ac2ff1dca9958eef"
+      },
+      "clamscan_exit": 0,
+      "gitleaks_exit": 1,
+      "gitleaks_findings": 17,
+      "trivy_high_critical": [
+        "brace-expansion 5.0.9 CVE-2026-102276 HIGH",
+        "brace-expansion 5.0.9 CVE-2026-102278 HIGH",
+        "undici 6.28.0 CVE-2026-19534 HIGH"
+      ],
+      "verdict": "PASS",
+      "reachability": "All three are DoS-class. brace-expansion is reached only through @actions/glob in cache.ts (cache input, not set; workflow comment forbids enabling it); undici CVE needs a WebSocket peer, setup-java makes plain HTTPS downloads. Latest release; no fixed alternative."
+    },
+    {
+      "action": "actions/setup-python",
+      "tag": "v7.0.0",
+      "sha": "5fda3b95a4ea91299a34e894583c3862153e4b97",
+      "commit_date": "2026-07-19",
+      "age_ok": true,
+      "runtime": "node24 dist/setup/index.js + dist/cache-save/index.js",
+      "sha256": {
+        "action.yml": "e6dc8046c02bd3c9f7bf2fea6ba2e59b4e83c7de2b26ec2149a1627f5d66f96c",
+        "dist/setup/index.js": "230ec985a243c1bb7dc48f6f47212d82a7f4995343dad2dea63437733e56a81d",
+        "dist/cache-save/index.js": "97f64401ac2a1b66b2bdccc9b3525e8d4bed878df49d6f9fd8b4b015ecb5e434",
+        "tracked_file_manifest": "319285ac69d48494519faea7baba7f8b36dfc2f9c34fc9d34b32e732babb2532"
+      },
+      "clamscan_exit": 0,
+      "gitleaks_exit": 1,
+      "gitleaks_findings": 8,
+      "trivy_high_critical": [
+        "brace-expansion 1.1.15/5.0.6 CVE-2026-102276, -102278, -13149, -14257, -69152 HIGH",
+        "fast-xml-parser 5.9.3 CVE-2026-73569 HIGH",
+        "undici 6.27.0 CVE-2026-19534 HIGH"
+      ],
+      "verdict": "PASS",
+      "reachability": "DoS-class. brace-expansion reached only via glob.hashFiles/create in cache-distributions (cache input not set); fast-xml-parser not used by setup-python source (bundled via @azure cache client); undici WebSocket path unused. Latest release; no fixed alternative."
+    }
+  ],
+  "residual_risk": "Reachability is static source reasoning, not proof. A future edit enabling `cache:` makes the brace-expansion DoS reachable from repo-controlled glob patterns (self-DoS of the job only)."
+}
