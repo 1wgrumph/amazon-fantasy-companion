@@ -95,3 +95,76 @@ Live smoke remains outside this packet. DNS is snapshotted per fixture: if a
 later resolution changes to an IP absent from that snapshot, the guard rejects
 it; this preserves containment. A passing local harness fix does not claim
 live-stack API acceptance or resolve the separate linking-passphrase prerequisite.
+
+
+## Single repair round after independent REPAIR_REQUIRED — 2026-10-14
+
+Outcome: **PASS** for this assigned repair packet, ready for the parent to
+consume deterministic verification. Review candidate/baseline:
+`17398092553e2ec963b2e8c521a3dbcd9a072a00`; same branch, worktree and
+bug-triager Implementer route (Codex CLI / GPT-6.1 Sol / high). This is the
+single authorized repair round, not a second independent review. The commit
+containing this receipt identifies the candidate. Earlier snapshot-only DNS
+behavior and its stated rotation limitation above are superseded by this repair.
+
+| Finding | Fix | Regression | Evidence |
+| --- | --- | --- | --- |
+| F1: urllib/create_connection re-resolves a rotating API host, but new IPs were absent from the setup snapshot | Wrap getaddrinfo for the session; add returned AF_INET/AF_INET6 pairs only when queried_host equals the configured API host | Real create_connection with a stub resolver returning a new IPv4 or IPv6 address on call two succeeds; resolving a different host still cannot authorize its IP | repair-red.txt: four rotation failures; repair-green.txt: all six rotation/foreign-host cases pass |
+| F2: session linked setup ran before the function guard | Session autouse offline fixture uses pytest.MonkeyPatch.context(); deployed explicitly depends on offline; direct unit harness starts/closes the generator | Isolated real pytest scheduler runs actual offline/deployed/linked fixtures; the stub HTTP helper probes allowed and forbidden connections during all three link calls | repair-red.txt: test_guard_precedes_session_link_flow fails because the forbidden connect does not raise; repair-green.txt: it passes |
+| Hardening: destination sends bypassed the guard | Apply the same family/address check to sendto and addressed sendmsg; no URL blocks all four socket methods | Configured API IPv4/IPv6 sends succeed, foreign IPv4/IPv6 and Unix destinations fail, and no URL rejects every destination for both methods | repair-red.txt: 32 send failures; repair-green.txt: all 40 addressed-send cases pass |
+
+The installed standard library calls `getaddrinfo(host, port, 0, SOCK_STREAM)`
+inside create_connection on every invocation, and only catches socket errors
+when connecting. That explains the AssertionError escape. Its real source and
+sendto/sendmsg destination signatures are captured in
+[repair-dependency.txt](repair-dependency.txt). Stub inputs are the owner-required
+DNS rotation and destinations using reserved documentation IPs and .invalid
+hosts. No live DNS, network, AWS or credential calls were made. The isolated
+pytest child disables plugin autoload and cache writes; its DNS, connection
+methods and link helper are stubbed before fixture setup.
+
+The initial deployed harness introduced the pinning problem; this review
+identified two escapes in the first repair's tests: they exercised only a
+stable DNS snapshot and invoked the guard directly, bypassing pytest ordering.
+The new regressions exercise those real standard-library and pytest boundaries.
+The original 26 tests and their assertions remain; the only post-red test-harness
+adaptation starts the new fixture generator and registers close for teardown.
+No backend behavior, requirements, plan scope, models or frozen routes changed.
+Normal gate discovery automatically includes every regression, preventing
+recurrence without new configuration or dependencies.
+
+| Command | Exit | Result/evidence |
+| --- | --- | --- |
+| `PATH="$HOME/.local/share/afc-tools/backend-tests/bin:$PATH" timeout 600 python3.12 -m pytest backend/tests/unit/test_deployed_guard.py -v --tb=short --show-capture=no` before repair | 1, expected | [repair-red.txt](repair-red.txt): 37 failed, 36 passed on unchanged 1739809 fixture |
+| Same focused command after repair | 0 | [repair-green.txt](repair-green.txt): 73 passed, including all 26 original guard cases |
+| `UV_OFFLINE=1 PATH="$HOME/.local/share/afc-tools/backend-tests/bin:$PATH" timeout 600 bash tools/ci/gate.sh` | 0 | [repair-gate.txt](repair-gate.txt): all five gate areas PASS; 231 backend tests passed |
+| Ordered test-ID and baseline/source/log hash assertions | 0 | [repair-binding.json](repair-binding.json): identical 73 red/green IDs, all original 26 IDs retained, unchanged baseline fixture hash and candidate source/log hashes |
+
+UV_OFFLINE prevents dependency fetching; gate diagnostics from intentional
+negative CI tests and pre-existing botocore deprecations remain in the log.
+Focused green took 0.29 seconds (including isolated pytest scheduling); backend
+suite took 18.25 seconds in the final full gate. Resource group remains host-pytest: no bound port,
+server, engine, display or external shared resource. Temporary child files use
+pytest's per-test tmp_path; sockets are context-managed. Session monkeypatches
+are restored at fixture teardown, including direct unit-harness teardown.
+
+Authority remains exactly the two allowed test files and this evidence directory.
+No push, PR, branch switch, source/tools/workflow/changelog edits or issue action.
+Commit uses Codex author/committer environment, active repository hooks and no
+Co-Authored-By. BRAN remains unavailable. OCR is the parent's independent review
+capability; no additional review was run or claimed here. Reverify: not applicable
+— Python fixture changes make no compiled-binary claim. Live smoke and deployed
+acceptance remain outside this no-network repair packet.
+
+Red output has trailing whitespace stripped for repository hygiene; the raw
+and stored log hashes are both retained in repair-binding.json. Test output,
+IDs and failure details are otherwise unchanged.
+
+The first commit attempt exited 1: the active pre-commit path-hygiene check
+found private home paths in newly staged raw test logs. No commit was created.
+Logs now use <home>, <repo> and <pytest-tmp> placeholders, matching prior evidence;
+raw hashes remain recorded. This evidence-only correction changes no test or
+guard code. Full gate and commit hook are rerun after normalization.
+
+Final full gate after evidence normalization: exit 0, all five areas PASS,
+61 CI tests and 231 backend tests passed. The next commit retry retains hooks.

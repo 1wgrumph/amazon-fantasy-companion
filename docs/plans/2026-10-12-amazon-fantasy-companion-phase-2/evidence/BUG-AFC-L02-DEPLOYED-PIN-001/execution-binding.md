@@ -37,3 +37,24 @@ selection is not supplied in this packet and is not inferred as disabled.
 Reverify (deterministic_verification.reverify): not applicable to this Python
 fixture-only change; no compiled-binary claim. Parent retains any frozen
 review settings and review budget; no live profiles read or changed.
+
+## Single repair round — 2026-10-14
+
+Owner packet pins candidate 17398092553e2ec963b2e8c521a3dbcd9a072a00, same
+checkout/branch and bug-triager route. Initial HEAD and clean status match.
+Parent accepted REPAIR_REQUIRED: F1 rotating DNS, F2 guard fixture ordering,
+and destination-address sendto/sendmsg hardening. No nested orchestration.
+Router skill read: assigned packets are explicitly outside its orchestration
+role; Implementer skill applies. No additional lease/control state invented.
+
+Next action: extend unit regressions, capture red on the unchanged candidate
+fixture, repair only the allowed fixture, adapt direct fixture invocation for
+session teardown, capture green on the same test IDs, run gate, append repair
+evidence and commit with hooks enabled. Method=test; same no-network resource
+group. Real installed socket.create_connection source calls getaddrinfo for
+each request; socket sendto/sendmsg docstrings specify destination signatures.
+Owner explicitly requires resolver/connect stubs, DNS rotation and send guards.
+Guard ordering is tested through real pytest fixture scheduling in an isolated
+temporary test suite with stubbed DNS, socket methods and link HTTP helper.
+Existing review capability settings and one-repair budget remain unchanged;
+this author session supplies deterministic evidence, not independent assurance.
