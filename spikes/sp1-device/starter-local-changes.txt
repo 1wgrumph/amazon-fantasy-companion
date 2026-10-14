@@ -1,0 +1,52 @@
+P2-X01 part A - local changes to the vendored starter
+Upstream: AmazonAppDev/hello-world-fire-tv @ 50108f4fc4a9dc054be86d851286355df027524a (git archive of that commit).
+Every file under starter/ is byte-identical to the pinned commit except the files below.
+Reasons: distributionSha256Sum pins the Gradle distribution; the other edits are whitespace and one
+relative GitHub link that the repository gate (git diff --check, check_docs DOC-LINK) rejects.
+gradlew.bat: CRLF line endings converted to LF (content otherwise unchanged; diff below shown with --strip-trailing-cr).
+(Trailing whitespace stripped from this record so it passes git diff --check; blank context lines lost their leading space.)
+
+diff -ru --strip-trailing-cr -x build -x .gradle -x .kotlin -x local.properties a/gradle/wrapper/gradle-wrapper.properties starter/gradle/wrapper/gradle-wrapper.properties
+--- a/gradle/wrapper/gradle-wrapper.properties	2024-10-10 06:27:24.000000000 -0500
++++ b/gradle/wrapper/gradle-wrapper.properties	2026-10-14 01:30:18.486990088 -0500
+@@ -4,3 +4,4 @@
+ distributionUrl=https\://services.gradle.org/distributions/gradle-8.2-bin.zip
+ zipStoreBase=GRADLE_USER_HOME
+ zipStorePath=wrapper/dists
++distributionSha256Sum=38f66cd6eef217b4c35855bb11ea4e9fbc53594ccccb5fb82dfd317ef8c2c5a3
+diff -ru --strip-trailing-cr -x build -x .gradle -x .kotlin -x local.properties a/LICENSE starter/LICENSE
+--- a/LICENSE	2024-10-10 06:27:24.000000000 -0500
++++ b/LICENSE	2026-10-14 01:45:52.530488915 -0500
+@@ -14,4 +14,3 @@
+ COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-
+diff -ru --strip-trailing-cr -x build -x .gradle -x .kotlin -x local.properties a/README.md starter/README.md
+--- a/README.md	2024-10-10 06:27:24.000000000 -0500
++++ b/README.md	2026-10-14 01:45:40.144201246 -0500
+@@ -36,7 +36,7 @@
+
+ ## Get support
+
+-If you found a bug or want to suggest a new [feature/use case/sample], please [file an issue](../../issues).
++If you found a bug or want to suggest a new [feature/use case/sample], please [file an issue](https://github.com/AmazonAppDev/hello-world-fire-tv/issues).
+
+ If you have questions, comments, or need help with code, we're here to help:
+ - on Twitter at [@AmazonAppDev](https://twitter.com/AmazonAppDev)
+diff -ru --strip-trailing-cr -x build -x .gradle -x .kotlin -x local.properties a/settings.gradle.kts starter/settings.gradle.kts
+--- a/settings.gradle.kts	2024-10-10 06:27:24.000000000 -0500
++++ b/settings.gradle.kts	2026-10-14 01:45:40.142176541 -0500
+@@ -15,4 +15,3 @@
+
+ rootProject.name = "Hello World TV"
+ include(":app")
+-
+\ No newline at end of file
+
+Files differing (diff -rq, CR-sensitive):
+Files gradle/wrapper/gradle-wrapper.properties  differ
+Files gradlew.bat  differ
+Files LICENSE  differ
+Files README.md  differ
+Files settings.gradle.kts  differ
