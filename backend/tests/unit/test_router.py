@@ -166,6 +166,20 @@ def test_profile_envelope_exactly_at_64kib_is_stored(api, owner):
     assert len(response["body"].encode()) == 65536
 
 
+def test_profile_envelope_one_byte_over_64kib_is_rejected(api, owner):
+    import api.handler as router
+    probe = {"revision": 1, "updatedAt": "2020-01-01T00:00:00Z",
+             "settings": {"fantasySelections": ""}}
+    room = 65537 - len(json.dumps(router._profile("owner", probe)).encode())
+    body = json.dumps({"revision": 0, "data": {"fantasySelections": "x" * room}})
+    assert len(body.encode()) < 65536
+    status, response = call("PUT", "/v1/profile", body, owner)
+    assert status == 400
+    assert error_of(response) == {"code": "payload_too_large",
+                                  "message": "Profile response would exceed 64 KiB."}
+    assert api.table("Profiles").scan()["Items"] == []
+
+
 def test_response_cap_counts_serialized_bytes_not_characters(api, owner):
     overhead = len(json.dumps({"revision": 0, "data": {"fantasySelections": ""}}).encode())
     value = "é" * ((65536 - overhead - 10) // 2) + '"\\\n'
@@ -187,6 +201,8 @@ def test_oversize_json_responses_fail_closed(api):
         503, "unavailable", "The response exceeds the 64 KiB contract.")
     exact = api.handler._respond(200, {"pad": "x" * (65536 - len('{"pad": ""}'))})
     assert len(exact["body"].encode()) == 65536
+    with pytest.raises(api.handler.ApiError):
+        api.handler._respond(200, {"pad": "x" * (65537 - len('{"pad": ""}'))})
 
 
 @pytest.mark.parametrize("field", sorted([

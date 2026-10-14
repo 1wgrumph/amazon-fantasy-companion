@@ -1,0 +1,55 @@
+# P2-B01 repair1: red-then-green per finding
+
+Base f71f72ba975d3c5218fe0ad0f2cbe9932bc5a537; repair HEADs 7eaa700 + boundary-test follow-up.
+Red = new/changed test on f71f72b product code; green = same test on repair HEAD.
+Boundary/guard tests that pass on both are marked LOCK (they pin behavior).
+
+R02 backend/tests/unit/test_device_auth_units.py (replaces one-shot test):
+- red: test_dropped_linked_poll_response_is_recoverable_by_retry FAIL,
+  test_linked_poll_retry_keeps_confirm_one_time_and_hashes_only FAIL,
+  test_failed_session_write_leaves_the_link_recoverable FAIL (3 failed)
+- green: backend unit auth suites 47 passed (incl. frozen test_device_auth.py)
+
+R03 backend/tests/unit/test_router.py:
+- red: test_oversize_profile_envelope_is_rejected_without_mutation FAIL
+  (200 instead of 400), test_response_cap_counts_serialized_bytes FAIL
+  (200 instead of 400), test_oversize_json_responses_fail_closed FAIL
+  (no raise); test_profile_envelope_exactly_at_64kib_is_stored LOCK
+- green: test_router.py + frozen test_api_contract.py 76 passed
+- follow-up: test_profile_envelope_one_byte_over_64kib_is_rejected (red on
+  f71f72b: 200 instead of 400) and the 65537 _respond assertion (red on
+  f71f72b: no raise) kill mutation survivors x__profile_put__95/_109 and
+  x__respond__7 (65536->65537, probe-id None), confirmed by single-mutant
+  reruns. Remaining repair-introduced survivors are provable equivalents:
+  x__profile_put__102 (revision+2 is byte-length-identical to revision+1 for
+  every revision) and device_auth.x_poll__29 (token_urlsafe(None) == 32 bytes
+  in Python 3.12, as in the review's survivor analysis).
+
+R04 backend/tests/unit/test_router.py:
+- red: test_non_string_profile_selectors_are_rejected_without_mutation
+  5/5 params FAIL (503/403 instead of 400)
+- green: test_router.py + frozen test_device_auth.py 87 passed
+
+R05 backend/tests/contract/test_template_iam.py (new):
+- red: test_each_function_grants_only_its_store_operations FAIL,
+  test_api_never_writes_alerts_and_nothing_deletes_or_batch_writes FAIL;
+  test_links_index_query_and_events_stream_are_preserved LOCK
+- green: backend/tests/contract 38 passed (incl. frozen template test);
+  sam validate --lint exit 0; cfn-lint exit 0
+
+R06 backend/tests/deployed/ (new):
+- red: pytest --collect-only backend/tests/deployed -> exit 4
+  (file or directory not found)
+- green: 8 collected, exit 0; default run 8 skipped, no AWS contact
+
+R07 backend/tests/unit/test_router.py::test_link_page_is_framed_by_strict_headers:
+- red: FAIL on script-src 'unsafe-inline'
+- green: PASS; sha256 matches served script; frozen link-page test passes
+
+R01 tools/ci/tests/test_bug2_mutenv.py, test_bug3_covempty.py:
+- red: native tests under bare PATH (review ci-hygiene-repro.log, re-run
+  locally): 3 failed (missing mutmut / missing diff-cover x2); new
+  HygieneCIDeps binding FAIL before the ci.yml edit
+- green: fresh venv from tools/ci/requirements-hygiene.txt only:
+  4 native passed; full unittest discover 61 OK; missing-tool negatives
+  (2 new) fail closed with exit 3; pytest tools 86 passed
