@@ -4099,7 +4099,21 @@
       "scope": "A01 host-side code, gate, coverage, mutation, APK inspection; no device",
       "branch": "afc/p2-a01",
       "base_head": "463a73f",
-      "state": "active"
+      "state": "released",
+      "outcome": "PASS (part A)",
+      "commit": "90e7654",
+      "orchestrator_verified": [
+        "unit suite 79/79 green (60 frozen + 19 new)",
+        "frozen A01T 7/7",
+        "gate.sh exit 0 all five areas",
+        "write set within A01",
+        "no home paths"
+      ],
+      "open_items": [
+        "CMD-COVERAGE-TVAPP / CMD-MUTATION-TVAPP wrappers absent: planned deferral in P2-G01 receipt (tools/ci/ write set, not A01) -> needs a tools/ci tvapp coverage/mutation packet before A01 lands",
+        "UTP (instrumented test runner) netty closure not admitted: HIGH/CRITICAL incl. CVE-2026-75595 -> owner decision needed before A03-A05 connectedDebugAndroidTest",
+        "device steps: PENDING-DEVICE.txt (install, PROC-VISUAL-REVIEW)"
+      ]
     }
   ],
   "planning_review": {
