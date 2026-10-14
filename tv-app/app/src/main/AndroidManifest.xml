@@ -1,7 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- DES-AFC-P2-TV and DES-AFC-P2-ALERTPATH: every component and permission; later edits take the tv-app-manifest lease. -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- AlertService: foreground long poll while monitoring is enabled (AFC-PR-009). -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+    <!-- AlertNotifier: heads-up notification on a high-importance channel (AFC-PR-015). -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
     <uses-feature android:name="android.software.leanback" android:required="true" />
     <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
-    <application android:label="Amazon Fantasy Companion" />
+
+    <!-- AppDetector and WatchLauncher see launchable TV apps only, never every installed package. -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+        </intent>
+    </queries>
+
+    <application
+        android:allowBackup="false"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:banner="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:usesCleartextTraffic="false"
+        android:theme="@android:style/Theme.Material.NoActionBar">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <!-- Watch action target: a notification PendingIntent into WatchLauncher (no trampoline receiver). -->
+        <activity
+            android:name=".watch.WatchActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <service
+            android:name=".alerts.AlertService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
+    </application>
 </manifest>
