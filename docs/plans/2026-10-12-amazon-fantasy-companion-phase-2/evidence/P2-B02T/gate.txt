@@ -1,0 +1,4084 @@
+Installed 1 package in 1ms
+Installed 1 package in 1ms
+Installed 1 package in 2ms
+gate: spec: PASS checks completed
+gate: docs: PASS checks completed
+.github/workflows/ci.yml: PASS
+...............fatal: not a git repository (or any parent up to mount point /)
+Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+........fatal: not a git repository (or any parent up to mount point /)
+Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+......................................
+----------------------------------------------------------------------
+Ran 61 tests in 36.577s
+
+OK
+mutation adapter exit=3: ['GAP REPORT_INCOMPLETE: mutmut stats absent']
+mutation adapter exit=0: ['PASS mutation score 100.00% (threshold 70%)']
+coverage adapter exit=0: ['PASS changed-line coverage 100% (threshold 90%)']
+coverage adapter exit=3: ['GAP REPORT_INCOMPLETE: unmapped changed files: backend/src/control.py']
+gate: hygiene: PASS checks completed
+gate: tvapp: PASS no tv-app/ tree
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.2, pluggy-1.6.0
+rootdir: $HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b02/backend
+configfile: pyproject.toml
+plugins: cov-7.1.0, anyio-4.13.0, asyncio-1.3.0, mock-3.15.1, typeguard-4.4.4
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 432 items
+
+backend/tests/unit/feed_ingest/test_monitoring.py FFFFFFFFFFFF           [  2%]
+backend/tests/unit/feed_ingest/test_normalization.py FFFFFFFFFFFFFFF     [  6%]
+backend/tests/unit/feed_ingest/test_replay_labels.py FFFFFFFF            [  8%]
+backend/tests/unit/feed_ingest/test_revisions.py FFFFFFF                 [  9%]
+backend/tests/unit/feed_ingest/test_validation.py FFFFFFFFFFFFFF         [ 12%]
+backend/tests/unit/lineup/test_active_lineup.py ...........              [ 15%]
+backend/tests/unit/lineup/test_lineup_rejections.py .................... [ 20%]
+........................                                                 [ 25%]
+backend/tests/unit/lineup/test_manual_source.py ..................       [ 29%]
+backend/tests/unit/lineup/test_presets.py .............................. [ 36%]
+                                                                         [ 36%]
+backend/tests/unit/lineup/test_review_regressions.py ................... [ 41%]
+.                                                                        [ 41%]
+backend/tests/unit/lineup/test_yahoo_client.py ..................        [ 45%]
+backend/tests/unit/test_bug_auth002.py ..                                [ 46%]
+backend/tests/unit/test_deployed_guard.py .............................. [ 53%]
+...........................................                              [ 62%]
+backend/tests/unit/test_device_auth.py ..............................    [ 69%]
+backend/tests/unit/test_device_auth_units.py ..........                  [ 72%]
+backend/tests/unit/test_pipeline_and_stubs.py ............               [ 75%]
+backend/tests/unit/test_router.py ...................................... [ 83%]
+....................                                                     [ 88%]
+backend/tests/unit/test_store.py .......                                 [ 90%]
+backend/tests/contract/feed_ingest/test_feed_contracts.py FFFFFF         [ 91%]
+backend/tests/contract/test_api_contract.py ........................     [ 96%]
+backend/tests/contract/test_backend_template.py ..........               [ 99%]
+backend/tests/contract/test_template_iam.py ...                          [100%]
+
+=================================== FAILURES ===================================
+_______________ test_a_game_with_a_selected_player_is_monitored ________________
+
+name = 'feed_ingest.monitoring'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.monitoring', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.monitoring'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+    def test_a_game_with_a_selected_player_is_monitored():
+        games = captured_games()
+        selected = [games[0]["playerIds"][0]]
+>       assert monitored_ids(decide(games, selected, [])) == {GAME}
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/test_monitoring.py:39: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/unit/feed_ingest/test_monitoring.py:18: in decide
+    func = require_attr(require_module("feed_ingest.monitoring"), "monitored_decisions")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.monitoring'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.monitoring: No module named 'feed_ingest.monitoring'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+________________ test_a_game_with_a_favorite_team_is_monitored _________________
+
+name = 'feed_ingest.monitoring'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.monitoring', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.monitoring'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+    def test_a_game_with_a_favorite_team_is_monitored():
+        games = captured_games()
+        favorite = [games[1]["teamIds"][0]]
+>       assert monitored_ids(decide(games, [], favorite)) == {OTHER_GAME}
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/test_monitoring.py:45: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/unit/feed_ingest/test_monitoring.py:18: in decide
+    func = require_attr(require_module("feed_ingest.monitoring"), "monitored_decisions")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.monitoring'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.monitoring: No module named 'feed_ingest.monitoring'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+___________________ test_an_irrelevant_game_is_not_monitored ___________________
+
+name = 'feed_ingest.monitoring'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.monitoring', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.monitoring'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+    def test_an_irrelevant_game_is_not_monitored():
+        games = captured_games()
+>       decisions = decide(games, ["no-such-athlete"], ["no-such-team"])
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/test_monitoring.py:50: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/unit/feed_ingest/test_monitoring.py:18: in decide
+    func = require_attr(require_module("feed_ingest.monitoring"), "monitored_decisions")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.monitoring'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.monitoring: No module named 'feed_ingest.monitoring'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+_____________ test_no_game_is_monitored_outside_an_enabled_period ______________
+
+name = 'feed_ingest.monitoring'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.monitoring', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.monitoring'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+    def test_no_game_is_monitored_outside_an_enabled_period():
+        games = captured_games()
+        everyone = [player for game in games for player in game["playerIds"]]
+>       decisions = decide(games, everyone, [], enabled=False)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/test_monitoring.py:58: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/unit/feed_ingest/test_monitoring.py:18: in decide
+    func = require_attr(require_module("feed_ingest.monitoring"), "monitored_decisions")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.monitoring'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.monitoring: No module named 'feed_ingest.monitoring'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+__________________ test_every_game_gets_exactly_one_decision ___________________
+
+name = 'feed_ingest.monitoring'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.monitoring', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.monitoring'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+    def test_every_game_gets_exactly_one_decision():
+        games = captured_games()
+>       decisions = decide(games, [], [])
+                    ^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/test_monitoring.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/unit/feed_ingest/test_monitoring.py:18: in decide
+    func = require_attr(require_module("feed_ingest.monitoring"), "monitored_decisions")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.monitoring'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.monitoring: No module named 'feed_ingest.monitoring'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+________ test_every_decision_carries_its_basis_label[observed-playback] ________
+
+name = 'feed_ingest.monitoring'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.monitoring', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.monitoring'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+basis = 'observed-playback'
+
+    @pytest.mark.parametrize("basis", BASES)
+    def test_every_decision_carries_its_basis_label(basis):
+        games = captured_games()
+>       decisions = decide(games, [games[0]["playerIds"][0]], [], basis=basis)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/test_monitoring.py:74: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/unit/feed_ingest/test_monitoring.py:18: in decide
+    func = require_attr(require_module("feed_ingest.monitoring"), "monitored_decisions")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.monitoring'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.monitoring: No module named 'feed_ingest.monitoring'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+_______ test_every_decision_carries_its_basis_label[profile-assumption] ________
+
+name = 'feed_ingest.monitoring'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.monitoring', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.monitoring'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+basis = 'profile-assumption'
+
+    @pytest.mark.parametrize("basis", BASES)
+    def test_every_decision_carries_its_basis_label(basis):
+        games = captured_games()
+>       decisions = decide(games, [games[0]["playerIds"][0]], [], basis=basis)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/test_monitoring.py:74: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/unit/feed_ingest/test_monitoring.py:18: in decide
+    func = require_attr(require_module("feed_ingest.monitoring"), "monitored_decisions")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.monitoring'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.monitoring: No module named 'feed_ingest.monitoring'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+_____________ test_an_unlabeled_or_unknown_basis_is_rejected[None] _____________
+
+name = 'feed_ingest.monitoring'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.monitoring', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.monitoring'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+basis = None
+
+    @pytest.mark.parametrize("basis", [None, "", "live", "guessed"])
+    def test_an_unlabeled_or_unknown_basis_is_rejected(basis):
+        with pytest.raises(ValueError):
+>           decide(captured_games(), [], [], basis=basis)
+
+backend/tests/unit/feed_ingest/test_monitoring.py:81: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/unit/feed_ingest/test_monitoring.py:18: in decide
+    func = require_attr(require_module("feed_ingest.monitoring"), "monitored_decisions")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.monitoring'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.monitoring: No module named 'feed_ingest.monitoring'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+_______________ test_an_unlabeled_or_unknown_basis_is_rejected[] _______________
+
+name = 'feed_ingest.monitoring'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.monitoring', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.monitoring'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+basis = ''
+
+    @pytest.mark.parametrize("basis", [None, "", "live", "guessed"])
+    def test_an_unlabeled_or_unknown_basis_is_rejected(basis):
+        with pytest.raises(ValueError):
+>           decide(captured_games(), [], [], basis=basis)
+
+backend/tests/unit/feed_ingest/test_monitoring.py:81: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/unit/feed_ingest/test_monitoring.py:18: in decide
+    func = require_attr(require_module("feed_ingest.monitoring"), "monitored_decisions")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.monitoring'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.monitoring: No module named 'feed_ingest.monitoring'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+_____________ test_an_unlabeled_or_unknown_basis_is_rejected[live] _____________
+
+name = 'feed_ingest.monitoring'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.monitoring', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.monitoring'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+basis = 'live'
+
+    @pytest.mark.parametrize("basis", [None, "", "live", "guessed"])
+    def test_an_unlabeled_or_unknown_basis_is_rejected(basis):
+        with pytest.raises(ValueError):
+>           decide(captured_games(), [], [], basis=basis)
+
+backend/tests/unit/feed_ingest/test_monitoring.py:81: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/unit/feed_ingest/test_monitoring.py:18: in decide
+    func = require_attr(require_module("feed_ingest.monitoring"), "monitored_decisions")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.monitoring'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.monitoring: No module named 'feed_ingest.monitoring'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+___________ test_an_unlabeled_or_unknown_basis_is_rejected[guessed] ____________
+
+name = 'feed_ingest.monitoring'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.monitoring', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.monitoring'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+basis = 'guessed'
+
+    @pytest.mark.parametrize("basis", [None, "", "live", "guessed"])
+    def test_an_unlabeled_or_unknown_basis_is_rejected(basis):
+        with pytest.raises(ValueError):
+>           decide(captured_games(), [], [], basis=basis)
+
+backend/tests/unit/feed_ingest/test_monitoring.py:81: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/unit/feed_ingest/test_monitoring.py:18: in decide
+    func = require_attr(require_module("feed_ingest.monitoring"), "monitored_decisions")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.monitoring'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.monitoring: No module named 'feed_ingest.monitoring'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+__________ test_monitoring_does_not_widen_to_the_other_captured_game ___________
+
+name = 'feed_ingest.monitoring'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.monitoring', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.monitoring'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+    def test_monitoring_does_not_widen_to_the_other_captured_game():
+        games = captured_games()
+        only_first = [games[0]["playerIds"][0]]
+>       decisions = decide(games, only_first, [])
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/test_monitoring.py:87: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/unit/feed_ingest/test_monitoring.py:18: in decide
+    func = require_attr(require_module("feed_ingest.monitoring"), "monitored_decisions")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.monitoring'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.monitoring: No module named 'feed_ingest.monitoring'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+__________________ test_every_captured_play_becomes_one_event __________________
+
+name = 'feed_ingest.normalize'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.normalize', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.normalize'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+    def test_every_captured_play_becomes_one_event():
+        summary = fresh_summary()
+>       events = normalize(summary)
+                 ^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/test_normalization.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/unit/feed_ingest/test_normalization.py:24: in normalize
+    func = require_attr(normalize_module(), "normalize_summary")
+                        ^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_normalization.py:20: in normalize_module
+    return require_module("feed_ingest.normalize")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.normalize'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+_____________ test_events_carry_only_the_stored_game_event_fields ______________
+
+name = 'feed_ingest.normalize'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.normalize', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.normalize'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+    def test_events_carry_only_the_stored_game_event_fields():
+>       for event in normalize(fresh_summary()):
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/test_normalization.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/unit/feed_ingest/test_normalization.py:24: in normalize
+    func = require_attr(normalize_module(), "normalize_summary")
+                        ^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_normalization.py:20: in normalize_module
+    return require_module("feed_ingest.normalize")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.normalize'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+_______________________ test_score_comes_from_each_play ________________________
+
+name = 'feed_ingest.normalize'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.normalize', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.normalize'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+    def test_score_comes_from_each_play():
+        summary = fresh_summary()
+>       by_id = {event["eventId"]: event for event in normalize(summary)}
+                                                      ^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/test_normalization.py:42: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/unit/feed_ingest/test_normalization.py:24: in normalize
+    func = require_attr(normalize_module(), "normalize_summary")
+                        ^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_normalization.py:20: in normalize_module
+    return require_module("feed_ingest.normalize")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.normalize'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+________________ test_field_position_comes_from_each_play_start ________________
+
+name = 'feed_ingest.normalize'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.normalize', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.normalize'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+    def test_field_position_comes_from_each_play_start():
+        summary = fresh_summary()
+>       by_id = {event["eventId"]: event for event in normalize(summary)}
+                                                      ^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/test_normalization.py:50: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/unit/feed_ingest/test_normalization.py:24: in normalize
+    func = require_attr(normalize_module(), "normalize_summary")
+                        ^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_normalization.py:20: in normalize_module
+    return require_module("feed_ingest.normalize")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.normalize'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+_____________________ test_possession_is_the_offense_team ______________________
+
+name = 'feed_ingest.normalize'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.normalize', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.normalize'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+    def test_possession_is_the_offense_team():
+        summary = fresh_summary()
+>       by_id = {event["eventId"]: event for event in normalize(summary)}
+                                                      ^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/test_normalization.py:57: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/unit/feed_ingest/test_normalization.py:24: in normalize
+    func = require_attr(normalize_module(), "normalize_summary")
+                        ^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_normalization.py:20: in normalize_module
+    return require_module("feed_ingest.normalize")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.normalize'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+________________ test_event_time_comes_from_each_play_wallclock ________________
+
+name = 'feed_ingest.normalize'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.normalize', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.normalize'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+    def test_event_time_comes_from_each_play_wallclock():
+        summary = fresh_summary()
+>       by_id = {event["eventId"]: event for event in normalize(summary)}
+                                                      ^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/test_normalization.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/unit/feed_ingest/test_normalization.py:24: in normalize
+    func = require_attr(normalize_module(), "normalize_summary")
+                        ^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_normalization.py:20: in normalize_module
+    return require_module("feed_ingest.normalize")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.normalize'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+___________________ test_player_ids_never_invent_an_athlete ____________________
+
+name = 'feed_ingest.normalize'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.normalize', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.normalize'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+    def test_player_ids_never_invent_an_athlete():
+        # Play participants are $ref links, not inline ids (VERDICT.md), so a
+        # play may list none; any id listed must be a captured boxscore athlete.
+        summary = fresh_summary()
+        known = boxscore_athlete_ids(summary)
+        assert known, "the captured boxscore must name athletes"
+>       for event in normalize(summary):
+                     ^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/test_normalization.py:76: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/unit/feed_ingest/test_normalization.py:24: in normalize
+    func = require_attr(normalize_module(), "normalize_summary")
+                        ^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_normalization.py:20: in normalize_module
+    return require_module("feed_ingest.normalize")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.normalize'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+_______ test_first_seen_events_start_at_revision_one_without_correction ________
+
+name = 'feed_ingest.normalize'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.normalize', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.normalize'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+    def test_first_seen_events_start_at_revision_one_without_correction():
+>       for event in normalize(fresh_summary()):
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/test_normalization.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/unit/feed_ingest/test_normalization.py:24: in normalize
+    func = require_attr(normalize_module(), "normalize_summary")
+                        ^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_normalization.py:20: in normalize_module
+    return require_module("feed_ingest.normalize")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.normalize'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+_______________ test_scoring_plays_carry_the_score_they_produced _______________
+
+name = 'feed_ingest.normalize'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.normalize', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.normalize'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+    def test_scoring_plays_carry_the_score_they_produced():
+        summary = fresh_summary()
+>       by_id = {event["eventId"]: event for event in normalize(summary)}
+                                                      ^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/test_normalization.py:90: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/unit/feed_ingest/test_normalization.py:24: in normalize
+    func = require_attr(normalize_module(), "normalize_summary")
+                        ^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_normalization.py:20: in normalize_module
+    return require_module("feed_ingest.normalize")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.normalize'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+__________________ test_ingest_stores_every_normalized_event ___________________
+
+name = 'feed_ingest.ingest'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.ingest', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.ingest'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+api = namespace(request=<function api.<locals>.request at 0x720f1d385120>, table=<function api.<locals>.table at 0x720f1d385...inksTable': 'expiresAt'}, passphrase='7Y2phdd3uWiZE8n2f_-Mbg', ssm_reads=[], secret_names=['/afc/dev/link-passphrase'])
+
+    def test_ingest_stores_every_normalized_event(api):
+>       ingest_summary = require_attr(require_module("feed_ingest.ingest"), "ingest_summary")
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/test_normalization.py:99: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.ingest'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.ingest: No module named 'feed_ingest.ingest'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+___________ test_broadcast_networks_come_from_the_header_competition ___________
+
+name = 'feed_ingest.normalize'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.normalize', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.normalize'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+    def test_broadcast_networks_come_from_the_header_competition():
+        # X05-OBS-001: the top-level broadcasts list is empty in the capture;
+        # the networks live in header.competitions[0].broadcasts.
+        summary = fresh_summary()
+        assert summary["broadcasts"] == []
+        expected = [entry["media"]["shortName"]
+                    for entry in summary["header"]["competitions"][0]["broadcasts"]]
+        assert expected, "the captured competition must name a network"
+>       func = require_attr(normalize_module(), "broadcast_networks")
+                            ^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/test_normalization.py:114: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/unit/feed_ingest/test_normalization.py:20: in normalize_module
+    return require_module("feed_ingest.normalize")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.normalize'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+______________ test_broadcast_networks_ignore_the_top_level_field ______________
+
+name = 'feed_ingest.normalize'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.normalize', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.normalize'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+    def test_broadcast_networks_ignore_the_top_level_field():
+        summary = fresh_summary()
+        summary["header"]["competitions"][0]["broadcasts"] = []
+        summary["broadcasts"] = [{"media": {"shortName": "Invented TV"}}]
+>       func = require_attr(normalize_module(), "broadcast_networks")
+                            ^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/test_normalization.py:122: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/unit/feed_ingest/test_normalization.py:20: in normalize_module
+    return require_module("feed_ingest.normalize")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.normalize'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+__________________ test_a_non_feed_source_is_rejected[yahoo] ___________________
+
+name = 'feed_ingest.normalize'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.normalize', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.normalize'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+source = 'yahoo'
+
+    @pytest.mark.parametrize("source", ["yahoo", "manual", ""])
+    def test_a_non_feed_source_is_rejected(source):
+        with pytest.raises(ValueError):
+>           normalize(fresh_summary(), source=source)
+
+backend/tests/unit/feed_ingest/test_normalization.py:129: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/unit/feed_ingest/test_normalization.py:24: in normalize
+    func = require_attr(normalize_module(), "normalize_summary")
+                        ^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_normalization.py:20: in normalize_module
+    return require_module("feed_ingest.normalize")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.normalize'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+__________________ test_a_non_feed_source_is_rejected[manual] __________________
+
+name = 'feed_ingest.normalize'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.normalize', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.normalize'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+source = 'manual'
+
+    @pytest.mark.parametrize("source", ["yahoo", "manual", ""])
+    def test_a_non_feed_source_is_rejected(source):
+        with pytest.raises(ValueError):
+>           normalize(fresh_summary(), source=source)
+
+backend/tests/unit/feed_ingest/test_normalization.py:129: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/unit/feed_ingest/test_normalization.py:24: in normalize
+    func = require_attr(normalize_module(), "normalize_summary")
+                        ^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_normalization.py:20: in normalize_module
+    return require_module("feed_ingest.normalize")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.normalize'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+_____________________ test_a_non_feed_source_is_rejected[] _____________________
+
+name = 'feed_ingest.normalize'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.normalize', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.normalize'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+source = ''
+
+    @pytest.mark.parametrize("source", ["yahoo", "manual", ""])
+    def test_a_non_feed_source_is_rejected(source):
+        with pytest.raises(ValueError):
+>           normalize(fresh_summary(), source=source)
+
+backend/tests/unit/feed_ingest/test_normalization.py:129: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/unit/feed_ingest/test_normalization.py:24: in normalize
+    func = require_attr(normalize_module(), "normalize_summary")
+                        ^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_normalization.py:20: in normalize_module
+    return require_module("feed_ingest.normalize")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.normalize'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+____________________ test_replay_loads_every_captured_play _____________________
+
+name = 'feed_ingest.replay'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.replay', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.replay'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+    def test_replay_loads_every_captured_play():
+>       events = load_events()
+                 ^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/test_replay_labels.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/unit/feed_ingest/test_replay_labels.py:18: in load_events
+    func = require_attr(require_module("feed_ingest.replay"), "load_events")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.replay'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.replay: No module named 'feed_ingest.replay'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+__________________ test_every_replay_value_is_labeled_replay ___________________
+
+name = 'feed_ingest.replay'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.replay', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.replay'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+    def test_every_replay_value_is_labeled_replay():
+>       events = load_events()
+                 ^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/test_replay_labels.py:29: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/unit/feed_ingest/test_replay_labels.py:18: in load_events
+    func = require_attr(require_module("feed_ingest.replay"), "load_events")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.replay'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.replay: No module named 'feed_ingest.replay'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+____________________ test_no_replay_value_claims_to_be_live ____________________
+
+name = 'feed_ingest.replay'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.replay', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.replay'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+    def test_no_replay_value_claims_to_be_live():
+>       for event in load_events():
+                     ^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/test_replay_labels.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/unit/feed_ingest/test_replay_labels.py:18: in load_events
+    func = require_attr(require_module("feed_ingest.replay"), "load_events")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.replay'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.replay: No module named 'feed_ingest.replay'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+_____________________ test_replay_values_match_the_capture _____________________
+
+name = 'feed_ingest.replay'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.replay', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.replay'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+    def test_replay_values_match_the_capture():
+        summary = fresh_summary()
+>       by_id = {event["eventId"]: event for event in load_events()}
+                                                      ^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/test_replay_labels.py:41: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/unit/feed_ingest/test_replay_labels.py:18: in load_events
+    func = require_attr(require_module("feed_ingest.replay"), "load_events")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.replay'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.replay: No module named 'feed_ingest.replay'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+________________ test_normalizing_as_replay_labels_every_event _________________
+
+name = 'feed_ingest.normalize'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.normalize', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.normalize'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+    def test_normalizing_as_replay_labels_every_event():
+>       func = require_attr(require_module("feed_ingest.normalize"), "normalize_summary")
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/test_replay_labels.py:50: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.normalize'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+________________ test_ingesting_replay_stores_the_replay_label _________________
+
+name = 'feed_ingest.ingest'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.ingest', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.ingest'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+api = namespace(request=<function api.<locals>.request at 0x720f22a18040>, table=<function api.<locals>.table at 0x720f22a18...inksTable': 'expiresAt'}, passphrase='jJxxIie716x9_LoLbsgpqg', ssm_reads=[], secret_names=['/afc/dev/link-passphrase'])
+
+    def test_ingesting_replay_stores_the_replay_label(api):
+>       ingest_summary = require_attr(require_module("feed_ingest.ingest"), "ingest_summary")
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/test_replay_labels.py:56: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.ingest'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.ingest: No module named 'feed_ingest.ingest'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+________________ test_replay_of_an_uncaptured_game_is_rejected _________________
+
+name = 'feed_ingest.replay'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.replay', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.replay'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+    def test_replay_of_an_uncaptured_game_is_rejected():
+        with pytest.raises(ValueError):
+>           load_events(game_id="401872999")
+
+backend/tests/unit/feed_ingest/test_replay_labels.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/unit/feed_ingest/test_replay_labels.py:18: in load_events
+    func = require_attr(require_module("feed_ingest.replay"), "load_events")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.replay'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.replay: No module named 'feed_ingest.replay'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+___________ test_replay_rejects_a_fixture_that_fails_its_index_hash ____________
+
+name = 'feed_ingest.replay'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.replay', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.replay'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = PosixPath('/tmp/pytest-of-spectre/pytest-423/test_replay_rejects_a_fixture_0')
+
+    def test_replay_rejects_a_fixture_that_fails_its_index_hash(tmp_path):
+        game_dir = tmp_path / GAME
+        shutil.copytree(FIXTURES / GAME, game_dir)
+        payload = json.loads((game_dir / "001-summary.json").read_text())
+        plays_in(payload)[0]["homeScore"] = 99
+        (game_dir / "001-summary.json").write_text(json.dumps(payload))
+        with pytest.raises(ValueError):
+>           load_events(fixtures_dir=tmp_path)
+
+backend/tests/unit/feed_ingest/test_replay_labels.py:74: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/unit/feed_ingest/test_replay_labels.py:18: in load_events
+    func = require_attr(require_module("feed_ingest.replay"), "load_events")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.replay'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.replay: No module named 'feed_ingest.replay'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+____________________ test_an_unchanged_repoll_emits_nothing ____________________
+
+name = 'feed_ingest.normalize'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.normalize', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.normalize'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+    def test_an_unchanged_repoll_emits_nothing():
+>       assert normalize(fresh_summary(), prior=first_poll()) == []
+                                                ^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/test_revisions.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/unit/feed_ingest/test_revisions.py:19: in first_poll
+    events = normalize(fresh_summary())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_revisions.py:14: in normalize
+    func = require_attr(require_module("feed_ingest.normalize"), "normalize_summary")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.normalize'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+__________ test_a_correction_emits_one_new_revision_of_the_same_event __________
+
+name = 'feed_ingest.normalize'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.normalize', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.normalize'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+    def test_a_correction_emits_one_new_revision_of_the_same_event():
+        summary, play = corrected_summary()
+>       emitted = normalize(summary, prior=first_poll())
+                                           ^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/test_revisions.py:39: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/unit/feed_ingest/test_revisions.py:19: in first_poll
+    events = normalize(fresh_summary())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_revisions.py:14: in normalize
+    func = require_attr(require_module("feed_ingest.normalize"), "normalize_summary")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.normalize'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+________________ test_a_correction_carries_the_corrected_score _________________
+
+name = 'feed_ingest.normalize'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.normalize', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.normalize'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+    def test_a_correction_carries_the_corrected_score():
+        summary, play = corrected_summary()
+>       emitted = normalize(summary, prior=first_poll())
+                                           ^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/test_revisions.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/unit/feed_ingest/test_revisions.py:19: in first_poll
+    events = normalize(fresh_summary())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_revisions.py:14: in normalize
+    func = require_attr(require_module("feed_ingest.normalize"), "normalize_summary")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.normalize'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+_____________ test_revisions_stay_monotonic_across_two_corrections _____________
+
+name = 'feed_ingest.normalize'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.normalize', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.normalize'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+    def test_revisions_stay_monotonic_across_two_corrections():
+>       prior = first_poll()
+                ^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/test_revisions.py:53: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/unit/feed_ingest/test_revisions.py:19: in first_poll
+    events = normalize(fresh_summary())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_revisions.py:14: in normalize
+    func = require_attr(require_module("feed_ingest.normalize"), "normalize_summary")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.normalize'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+_________ test_a_new_play_after_the_first_poll_starts_at_revision_one __________
+
+name = 'feed_ingest.normalize'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.normalize', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.normalize'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+    def test_a_new_play_after_the_first_poll_starts_at_revision_one():
+>       prior = first_poll()
+                ^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/test_revisions.py:66: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/unit/feed_ingest/test_revisions.py:19: in first_poll
+    events = normalize(fresh_summary())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_revisions.py:14: in normalize
+    func = require_attr(require_module("feed_ingest.normalize"), "normalize_summary")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.normalize'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+________ test_ingesting_a_correction_revises_the_stored_event_in_place _________
+
+name = 'feed_ingest.ingest'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.ingest', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.ingest'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+api = namespace(request=<function api.<locals>.request at 0x720f1f156660>, table=<function api.<locals>.table at 0x720f1f156...inksTable': 'expiresAt'}, passphrase='AfoVZQvWqfiku0g2j2ApQA', ssm_reads=[], secret_names=['/afc/dev/link-passphrase'])
+
+    def test_ingesting_a_correction_revises_the_stored_event_in_place(api):
+>       ingest_summary = require_attr(require_module("feed_ingest.ingest"), "ingest_summary")
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/test_revisions.py:79: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.ingest'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.ingest: No module named 'feed_ingest.ingest'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+____________ test_ingesting_the_same_poll_twice_changes_no_revision ____________
+
+name = 'feed_ingest.ingest'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.ingest', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.ingest'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+api = namespace(request=<function api.<locals>.request at 0x720f1e9feca0>, table=<function api.<locals>.table at 0x720f1e9fe...inksTable': 'expiresAt'}, passphrase='ofrcdT0bg8QqS3EtBAR71A', ssm_reads=[], secret_names=['/afc/dev/link-passphrase'])
+
+    def test_ingesting_the_same_poll_twice_changes_no_revision(api):
+>       ingest_summary = require_attr(require_module("feed_ingest.ingest"), "ingest_summary")
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/test_revisions.py:91: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.ingest'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.ingest: No module named 'feed_ingest.ingest'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+___________________ test_captured_summary_passes_validation ____________________
+
+name = 'feed_ingest.validation'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.validation', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.validation'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+    def test_captured_summary_passes_validation():
+>       assert validate_summary(fresh_summary()) is None
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/test_validation.py:31: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/unit/feed_ingest/test_validation.py:23: in validate_summary
+    return attempt(require_attr(validation(), "validate_summary"), payload, game_id)
+                                ^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_validation.py:15: in validation
+    return require_module("feed_ingest.validation")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.validation'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.validation: No module named 'feed_ingest.validation'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+__________________ test_captured_scoreboard_passes_validation __________________
+
+name = 'feed_ingest.validation'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.validation', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.validation'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+    def test_captured_scoreboard_passes_validation():
+>       assert validate_scoreboard(fresh_scoreboard()) is None
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/test_validation.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/unit/feed_ingest/test_validation.py:27: in validate_scoreboard
+    return attempt(require_attr(validation(), "validate_scoreboard"), payload)
+                                ^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_validation.py:15: in validation
+    return require_module("feed_ingest.validation")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.validation'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.validation: No module named 'feed_ingest.validation'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+__________________ test_summary_for_another_game_is_rejected ___________________
+
+name = 'feed_ingest.validation'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.validation', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.validation'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+    def test_summary_for_another_game_is_rejected():
+        with pytest.raises(ValueError):
+>           validate_summary(fresh_summary(), game_id="401872999")
+
+backend/tests/unit/feed_ingest/test_validation.py:40: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/unit/feed_ingest/test_validation.py:23: in validate_summary
+    return attempt(require_attr(validation(), "validate_summary"), payload, game_id)
+                                ^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_validation.py:15: in validation
+    return require_module("feed_ingest.validation")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.validation'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.validation: No module named 'feed_ingest.validation'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+_____________________ test_non_object_summary_is_rejected ______________________
+
+name = 'feed_ingest.validation'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.validation', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.validation'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+    def test_non_object_summary_is_rejected():
+        with pytest.raises(ValueError):
+>           validate_summary(["not", "a", "summary"])
+
+backend/tests/unit/feed_ingest/test_validation.py:45: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/unit/feed_ingest/test_validation.py:23: in validate_summary
+    return attempt(require_attr(validation(), "validate_summary"), payload, game_id)
+                                ^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_validation.py:15: in validation
+    return require_module("feed_ingest.validation")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.validation'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.validation: No module named 'feed_ingest.validation'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+___________________ test_summary_without_header_is_rejected ____________________
+
+name = 'feed_ingest.validation'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.validation', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.validation'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+    def test_summary_without_header_is_rejected():
+        payload = fresh_summary()
+        del payload["header"]
+        with pytest.raises(ValueError):
+>           validate_summary(payload)
+
+backend/tests/unit/feed_ingest/test_validation.py:52: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/unit/feed_ingest/test_validation.py:23: in validate_summary
+    return attempt(require_attr(validation(), "validate_summary"), payload, game_id)
+                                ^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_validation.py:15: in validation
+    return require_module("feed_ingest.validation")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.validation'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.validation: No module named 'feed_ingest.validation'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+________________ test_summary_without_competitions_is_rejected _________________
+
+name = 'feed_ingest.validation'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.validation', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.validation'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+    def test_summary_without_competitions_is_rejected():
+        payload = fresh_summary()
+        payload["header"]["competitions"] = []
+        with pytest.raises(ValueError):
+>           validate_summary(payload)
+
+backend/tests/unit/feed_ingest/test_validation.py:59: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/unit/feed_ingest/test_validation.py:23: in validate_summary
+    return attempt(require_attr(validation(), "validate_summary"), payload, game_id)
+                                ^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_validation.py:15: in validation
+    return require_module("feed_ingest.validation")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.validation'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.validation: No module named 'feed_ingest.validation'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+___________________ test_summary_without_drives_is_rejected ____________________
+
+name = 'feed_ingest.validation'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.validation', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.validation'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+    def test_summary_without_drives_is_rejected():
+        payload = fresh_summary()
+        del payload["drives"]
+        with pytest.raises(ValueError):
+>           validate_summary(payload)
+
+backend/tests/unit/feed_ingest/test_validation.py:66: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/unit/feed_ingest/test_validation.py:23: in validate_summary
+    return attempt(require_attr(validation(), "validate_summary"), payload, game_id)
+                                ^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_validation.py:15: in validation
+    return require_module("feed_ingest.validation")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.validation'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.validation: No module named 'feed_ingest.validation'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+_______________________ test_play_without_id_is_rejected _______________________
+
+name = 'feed_ingest.validation'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.validation', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.validation'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+    def test_play_without_id_is_rejected():
+        payload = fresh_summary()
+        del plays_in(payload)[0]["id"]
+        with pytest.raises(ValueError):
+>           validate_summary(payload)
+
+backend/tests/unit/feed_ingest/test_validation.py:73: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/unit/feed_ingest/test_validation.py:23: in validate_summary
+    return attempt(require_attr(validation(), "validate_summary"), payload, game_id)
+                                ^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_validation.py:15: in validation
+    return require_module("feed_ingest.validation")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.validation'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.validation: No module named 'feed_ingest.validation'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+_________________ test_play_with_non_numeric_score_is_rejected _________________
+
+name = 'feed_ingest.validation'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.validation', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.validation'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+    def test_play_with_non_numeric_score_is_rejected():
+        payload = fresh_summary()
+        plays_in(payload)[0]["awayScore"] = "seven"
+        with pytest.raises(ValueError):
+>           validate_summary(payload)
+
+backend/tests/unit/feed_ingest/test_validation.py:80: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/unit/feed_ingest/test_validation.py:23: in validate_summary
+    return attempt(require_attr(validation(), "validate_summary"), payload, game_id)
+                                ^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_validation.py:15: in validation
+    return require_module("feed_ingest.validation")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.validation'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.validation: No module named 'feed_ingest.validation'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+___________________ test_play_without_wallclock_is_rejected ____________________
+
+name = 'feed_ingest.validation'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.validation', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.validation'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+    def test_play_without_wallclock_is_rejected():
+        payload = fresh_summary()
+        del plays_in(payload)[0]["wallclock"]
+        with pytest.raises(ValueError):
+>           validate_summary(payload)
+
+backend/tests/unit/feed_ingest/test_validation.py:87: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/unit/feed_ingest/test_validation.py:23: in validate_summary
+    return attempt(require_attr(validation(), "validate_summary"), payload, game_id)
+                                ^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_validation.py:15: in validation
+    return require_module("feed_ingest.validation")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.validation'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.validation: No module named 'feed_ingest.validation'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+__________________ test_scoreboard_without_events_is_rejected __________________
+
+name = 'feed_ingest.validation'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.validation', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.validation'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+    def test_scoreboard_without_events_is_rejected():
+        payload = fresh_scoreboard()
+        del payload["events"]
+        with pytest.raises(ValueError):
+>           validate_scoreboard(payload)
+
+backend/tests/unit/feed_ingest/test_validation.py:94: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/unit/feed_ingest/test_validation.py:27: in validate_scoreboard
+    return attempt(require_attr(validation(), "validate_scoreboard"), payload)
+                                ^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_validation.py:15: in validation
+    return require_module("feed_ingest.validation")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.validation'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.validation: No module named 'feed_ingest.validation'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+_________________ test_scoreboard_event_without_id_is_rejected _________________
+
+name = 'feed_ingest.validation'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.validation', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.validation'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+    def test_scoreboard_event_without_id_is_rejected():
+        payload = fresh_scoreboard()
+        del payload["events"][0]["id"]
+        with pytest.raises(ValueError):
+>           validate_scoreboard(payload)
+
+backend/tests/unit/feed_ingest/test_validation.py:101: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/unit/feed_ingest/test_validation.py:27: in validate_scoreboard
+    return attempt(require_attr(validation(), "validate_scoreboard"), payload)
+                                ^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_validation.py:15: in validation
+    return require_module("feed_ingest.validation")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.validation'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.validation: No module named 'feed_ingest.validation'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+_______________ test_invalid_poll_leaves_stored_events_unchanged _______________
+
+name = 'feed_ingest.ingest'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.ingest', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.ingest'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+api = namespace(request=<function api.<locals>.request at 0x720f246f7ec0>, table=<function api.<locals>.table at 0x720f246f7...inksTable': 'expiresAt'}, passphrase='_IHEeTFyIfHKQ4KY5HvNHQ', ssm_reads=[], secret_names=['/afc/dev/link-passphrase'])
+
+    def test_invalid_poll_leaves_stored_events_unchanged(api):
+>       ingest_summary = require_attr(ingest(), "ingest_summary")
+                                      ^^^^^^^^
+
+backend/tests/unit/feed_ingest/test_validation.py:111: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/unit/feed_ingest/test_validation.py:19: in ingest
+    return require_module("feed_ingest.ingest")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.ingest'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.ingest: No module named 'feed_ingest.ingest'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+____________________ test_invalid_first_poll_stores_nothing ____________________
+
+name = 'feed_ingest.ingest'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/feed_support.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.ingest', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'feed_ingest.ingest'
+
+/usr/lib/python3.12/importlib/__init__.py:90: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+api = namespace(request=<function api.<locals>.request at 0x720f255dae80>, table=<function api.<locals>.table at 0x720f255d9...inksTable': 'expiresAt'}, passphrase='4kZ88RM6-XAhGx_EB5DEgA', ssm_reads=[], secret_names=['/afc/dev/link-passphrase'])
+
+    def test_invalid_first_poll_stores_nothing(api):
+>       ingest_summary = require_attr(ingest(), "ingest_summary")
+                                      ^^^^^^^^
+
+backend/tests/unit/feed_ingest/test_validation.py:123: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/unit/feed_ingest/test_validation.py:19: in ingest
+    return require_module("feed_ingest.ingest")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.ingest'
+
+    def require_module(name):
+        """Import a module under test; a missing module is an assertion failure."""
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.ingest: No module named 'feed_ingest.ingest'
+
+backend/tests/unit/feed_ingest/feed_support.py:46: AssertionError
+_____________________ test_pinned_schemas_exist_and_parse ______________________
+
+name = 'feed_ingest.validation'
+
+    def require_module(name):
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/contract/feed_ingest/test_feed_contracts.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.validation'
+import_ = <function _gcd_import at 0x720f281a40e0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'feed_ingest.validation'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+    @pytest.mark.contract
+    def test_pinned_schemas_exist_and_parse():
+>       validate = require_module("feed_ingest.validation")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/contract/feed_ingest/test_feed_contracts.py:53: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.validation'
+
+    def require_module(name):
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.validation: No module named 'feed_ingest.validation'
+
+backend/tests/contract/feed_ingest/test_feed_contracts.py:28: AssertionError
+_______________ test_every_normalized_value_carries_the_envelope _______________
+
+name = 'feed_ingest.normalize'
+
+    def require_module(name):
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/contract/feed_ingest/test_feed_contracts.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.normalize'
+import_ = <function _gcd_import at 0x720f281a40e0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'feed_ingest.normalize'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+    @pytest.mark.contract
+    def test_every_normalized_value_carries_the_envelope():
+>       events = normalized()
+                 ^^^^^^^^^^^^
+
+backend/tests/contract/feed_ingest/test_feed_contracts.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/contract/feed_ingest/test_feed_contracts.py:43: in normalized
+    module = require_module("feed_ingest.normalize")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.normalize'
+
+    def require_module(name):
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'
+
+backend/tests/contract/feed_ingest/test_feed_contracts.py:28: AssertionError
+____________________ test_event_identity_is_game_plus_play _____________________
+
+name = 'feed_ingest.normalize'
+
+    def require_module(name):
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/contract/feed_ingest/test_feed_contracts.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.normalize'
+import_ = <function _gcd_import at 0x720f281a40e0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'feed_ingest.normalize'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+    @pytest.mark.contract
+    def test_event_identity_is_game_plus_play():
+        plays = [play for drive in summary()["drives"]["previous"]
+                 for play in drive.get("plays") or []]
+>       events = normalized()
+                 ^^^^^^^^^^^^
+
+backend/tests/contract/feed_ingest/test_feed_contracts.py:78: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/contract/feed_ingest/test_feed_contracts.py:43: in normalized
+    module = require_module("feed_ingest.normalize")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.normalize'
+
+    def require_module(name):
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'
+
+backend/tests/contract/feed_ingest/test_feed_contracts.py:28: AssertionError
+______________ test_replay_fixture_index_verifies_through_replay _______________
+
+name = 'feed_ingest.replay'
+
+    def require_module(name):
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/contract/feed_ingest/test_feed_contracts.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.replay', import_ = <function _gcd_import at 0x720f281a40e0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'feed_ingest.replay'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+    @pytest.mark.contract
+    def test_replay_fixture_index_verifies_through_replay():
+>       replay = require_module("feed_ingest.replay")
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/contract/feed_ingest/test_feed_contracts.py:86: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.replay'
+
+    def require_module(name):
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.replay: No module named 'feed_ingest.replay'
+
+backend/tests/contract/feed_ingest/test_feed_contracts.py:28: AssertionError
+________________ test_all_captured_games_replay_with_the_label _________________
+
+name = 'feed_ingest.replay'
+
+    def require_module(name):
+        try:
+>           return importlib.import_module(name)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/contract/feed_ingest/test_feed_contracts.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.replay', import_ = <function _gcd_import at 0x720f281a40e0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'feed_ingest.replay'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+    @pytest.mark.contract
+    def test_all_captured_games_replay_with_the_label():
+>       replay = require_module("feed_ingest.replay")
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/contract/feed_ingest/test_feed_contracts.py:100: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'feed_ingest.replay'
+
+    def require_module(name):
+        try:
+            return importlib.import_module(name)
+        except ImportError as exc:
+>           raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E           AssertionError: feed behavior is not implemented: cannot import feed_ingest.replay: No module named 'feed_ingest.replay'
+
+backend/tests/contract/feed_ingest/test_feed_contracts.py:28: AssertionError
+______________ test_lambda_handler_remains_the_ingest_entry_point ______________
+
+func = <function lambda_handler at 0x720f25487380>
+args = ({'source': 'not-a-schedule'}, None), kwargs = {}
+
+    def attempt(func, *args, **kwargs):
+        try:
+>           return func(*args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/contract/feed_ingest/test_feed_contracts.py:33: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+event = {'source': 'not-a-schedule'}, context = None
+
+    def lambda_handler(event, context):
+        """AFC-STUB (P2-B02): IngestFunction entry: poll each profile-relevant in-progress game every feed_poll_interval, validate, normalize and store GameEvents."""
+>       raise NotImplementedError(_pending())
+E       NotImplementedError: AFC-STUB: feed_ingest is implemented by P2-B02
+
+backend/src/feed_ingest/__init__.py:13: NotImplementedError
+
+During handling of the above exception, another exception occurred:
+
+    @pytest.mark.contract
+    def test_lambda_handler_remains_the_ingest_entry_point():
+        module = require_module("feed_ingest")
+        handler = getattr(module, "lambda_handler", None)
+        assert callable(handler), "template IngestFunction handler is feed_ingest.lambda_handler"
+        with pytest.raises(ValueError):
+>           attempt(handler, {"source": "not-a-schedule"}, None)
+
+backend/tests/contract/feed_ingest/test_feed_contracts.py:116: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+func = <function lambda_handler at 0x720f25487380>
+args = ({'source': 'not-a-schedule'}, None), kwargs = {}
+
+    def attempt(func, *args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except NotImplementedError as exc:
+>           raise AssertionError(f"feed behavior is not implemented (AFC-STUB): {exc}")
+E           AssertionError: feed behavior is not implemented (AFC-STUB): AFC-STUB: feed_ingest is implemented by P2-B02
+
+backend/tests/contract/feed_ingest/test_feed_contracts.py:35: AssertionError
+=============================== warnings summary ===============================
+tests/unit/feed_ingest/test_normalization.py: 7 warnings
+tests/unit/feed_ingest/test_replay_labels.py: 7 warnings
+tests/unit/feed_ingest/test_revisions.py: 14 warnings
+tests/unit/feed_ingest/test_validation.py: 14 warnings
+tests/unit/lineup/test_active_lineup.py: 117 warnings
+tests/unit/lineup/test_lineup_rejections.py: 20 warnings
+tests/unit/lineup/test_review_regressions.py: 18 warnings
+tests/unit/test_bug_auth002.py: 42 warnings
+tests/unit/test_device_auth.py: 324 warnings
+tests/unit/test_device_auth_units.py: 133 warnings
+tests/unit/test_pipeline_and_stubs.py: 80 warnings
+tests/unit/test_router.py: 870 warnings
+tests/unit/test_store.py: 92 warnings
+tests/contract/test_api_contract.py: 109 warnings
+  $HOME/.local/lib/python3.12/site-packages/botocore/auth.py:424: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    datetime_now = datetime.datetime.utcnow()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+============================= slowest 10 durations =============================
+0.49s setup    tests/unit/feed_ingest/test_normalization.py::test_ingest_stores_every_normalized_event
+0.30s setup    tests/unit/test_router.py::test_bearer_scheme_is_case_insensitive_and_other_schemes_refused
+0.27s setup    tests/unit/test_router.py::test_response_cap_counts_serialized_bytes_not_characters
+0.26s setup    tests/unit/test_pipeline_and_stubs.py::test_stubs_name_their_owning_slice[provider_resolver-resolve-2-P2-B06]
+0.26s setup    tests/unit/test_router.py::test_invalid_profile_updates_change_nothing[body0]
+0.26s setup    tests/unit/test_router.py::test_unknown_route_is_a_structured_404
+0.26s setup    tests/unit/test_router.py::test_valid_routing_outcomes_reach_the_resolver_stub[appHomeOpened]
+0.26s setup    tests/unit/test_router.py::test_api_errors_carry_their_message
+0.26s setup    tests/unit/test_router.py::test_unexpected_failures_return_a_safe_503
+0.26s setup    tests/unit/test_device_auth.py::test_every_protected_route_rejects_an_unknown_session[GET-/v1/panel]
+=========================== short test summary info ============================
+FAILED backend/tests/unit/feed_ingest/test_monitoring.py::test_a_game_with_a_selected_player_is_monitored
+FAILED backend/tests/unit/feed_ingest/test_monitoring.py::test_a_game_with_a_favorite_team_is_monitored
+FAILED backend/tests/unit/feed_ingest/test_monitoring.py::test_an_irrelevant_game_is_not_monitored
+FAILED backend/tests/unit/feed_ingest/test_monitoring.py::test_no_game_is_monitored_outside_an_enabled_period
+FAILED backend/tests/unit/feed_ingest/test_monitoring.py::test_every_game_gets_exactly_one_decision
+FAILED backend/tests/unit/feed_ingest/test_monitoring.py::test_every_decision_carries_its_basis_label[observed-playback]
+FAILED backend/tests/unit/feed_ingest/test_monitoring.py::test_every_decision_carries_its_basis_label[profile-assumption]
+FAILED backend/tests/unit/feed_ingest/test_monitoring.py::test_an_unlabeled_or_unknown_basis_is_rejected[None]
+FAILED backend/tests/unit/feed_ingest/test_monitoring.py::test_an_unlabeled_or_unknown_basis_is_rejected[]
+FAILED backend/tests/unit/feed_ingest/test_monitoring.py::test_an_unlabeled_or_unknown_basis_is_rejected[live]
+FAILED backend/tests/unit/feed_ingest/test_monitoring.py::test_an_unlabeled_or_unknown_basis_is_rejected[guessed]
+FAILED backend/tests/unit/feed_ingest/test_monitoring.py::test_monitoring_does_not_widen_to_the_other_captured_game
+FAILED backend/tests/unit/feed_ingest/test_normalization.py::test_every_captured_play_becomes_one_event
+FAILED backend/tests/unit/feed_ingest/test_normalization.py::test_events_carry_only_the_stored_game_event_fields
+FAILED backend/tests/unit/feed_ingest/test_normalization.py::test_score_comes_from_each_play
+FAILED backend/tests/unit/feed_ingest/test_normalization.py::test_field_position_comes_from_each_play_start
+FAILED backend/tests/unit/feed_ingest/test_normalization.py::test_possession_is_the_offense_team
+FAILED backend/tests/unit/feed_ingest/test_normalization.py::test_event_time_comes_from_each_play_wallclock
+FAILED backend/tests/unit/feed_ingest/test_normalization.py::test_player_ids_never_invent_an_athlete
+FAILED backend/tests/unit/feed_ingest/test_normalization.py::test_first_seen_events_start_at_revision_one_without_correction
+FAILED backend/tests/unit/feed_ingest/test_normalization.py::test_scoring_plays_carry_the_score_they_produced
+FAILED backend/tests/unit/feed_ingest/test_normalization.py::test_ingest_stores_every_normalized_event
+FAILED backend/tests/unit/feed_ingest/test_normalization.py::test_broadcast_networks_come_from_the_header_competition
+FAILED backend/tests/unit/feed_ingest/test_normalization.py::test_broadcast_networks_ignore_the_top_level_field
+FAILED backend/tests/unit/feed_ingest/test_normalization.py::test_a_non_feed_source_is_rejected[yahoo]
+FAILED backend/tests/unit/feed_ingest/test_normalization.py::test_a_non_feed_source_is_rejected[manual]
+FAILED backend/tests/unit/feed_ingest/test_normalization.py::test_a_non_feed_source_is_rejected[]
+FAILED backend/tests/unit/feed_ingest/test_replay_labels.py::test_replay_loads_every_captured_play
+FAILED backend/tests/unit/feed_ingest/test_replay_labels.py::test_every_replay_value_is_labeled_replay
+FAILED backend/tests/unit/feed_ingest/test_replay_labels.py::test_no_replay_value_claims_to_be_live
+FAILED backend/tests/unit/feed_ingest/test_replay_labels.py::test_replay_values_match_the_capture
+FAILED backend/tests/unit/feed_ingest/test_replay_labels.py::test_normalizing_as_replay_labels_every_event
+FAILED backend/tests/unit/feed_ingest/test_replay_labels.py::test_ingesting_replay_stores_the_replay_label
+FAILED backend/tests/unit/feed_ingest/test_replay_labels.py::test_replay_of_an_uncaptured_game_is_rejected
+FAILED backend/tests/unit/feed_ingest/test_replay_labels.py::test_replay_rejects_a_fixture_that_fails_its_index_hash
+FAILED backend/tests/unit/feed_ingest/test_revisions.py::test_an_unchanged_repoll_emits_nothing
+FAILED backend/tests/unit/feed_ingest/test_revisions.py::test_a_correction_emits_one_new_revision_of_the_same_event
+FAILED backend/tests/unit/feed_ingest/test_revisions.py::test_a_correction_carries_the_corrected_score
+FAILED backend/tests/unit/feed_ingest/test_revisions.py::test_revisions_stay_monotonic_across_two_corrections
+FAILED backend/tests/unit/feed_ingest/test_revisions.py::test_a_new_play_after_the_first_poll_starts_at_revision_one
+FAILED backend/tests/unit/feed_ingest/test_revisions.py::test_ingesting_a_correction_revises_the_stored_event_in_place
+FAILED backend/tests/unit/feed_ingest/test_revisions.py::test_ingesting_the_same_poll_twice_changes_no_revision
+FAILED backend/tests/unit/feed_ingest/test_validation.py::test_captured_summary_passes_validation
+FAILED backend/tests/unit/feed_ingest/test_validation.py::test_captured_scoreboard_passes_validation
+FAILED backend/tests/unit/feed_ingest/test_validation.py::test_summary_for_another_game_is_rejected
+FAILED backend/tests/unit/feed_ingest/test_validation.py::test_non_object_summary_is_rejected
+FAILED backend/tests/unit/feed_ingest/test_validation.py::test_summary_without_header_is_rejected
+FAILED backend/tests/unit/feed_ingest/test_validation.py::test_summary_without_competitions_is_rejected
+FAILED backend/tests/unit/feed_ingest/test_validation.py::test_summary_without_drives_is_rejected
+FAILED backend/tests/unit/feed_ingest/test_validation.py::test_play_without_id_is_rejected
+FAILED backend/tests/unit/feed_ingest/test_validation.py::test_play_with_non_numeric_score_is_rejected
+FAILED backend/tests/unit/feed_ingest/test_validation.py::test_play_without_wallclock_is_rejected
+FAILED backend/tests/unit/feed_ingest/test_validation.py::test_scoreboard_without_events_is_rejected
+FAILED backend/tests/unit/feed_ingest/test_validation.py::test_scoreboard_event_without_id_is_rejected
+FAILED backend/tests/unit/feed_ingest/test_validation.py::test_invalid_poll_leaves_stored_events_unchanged
+FAILED backend/tests/unit/feed_ingest/test_validation.py::test_invalid_first_poll_stores_nothing
+FAILED backend/tests/contract/feed_ingest/test_feed_contracts.py::test_pinned_schemas_exist_and_parse
+FAILED backend/tests/contract/feed_ingest/test_feed_contracts.py::test_every_normalized_value_carries_the_envelope
+FAILED backend/tests/contract/feed_ingest/test_feed_contracts.py::test_event_identity_is_game_plus_play
+FAILED backend/tests/contract/feed_ingest/test_feed_contracts.py::test_replay_fixture_index_verifies_through_replay
+FAILED backend/tests/contract/feed_ingest/test_feed_contracts.py::test_all_captured_games_replay_with_the_label
+FAILED backend/tests/contract/feed_ingest/test_feed_contracts.py::test_lambda_handler_remains_the_ingest_entry_point
+================ 62 failed, 370 passed, 1847 warnings in 22.23s ================
+gate: backend: FAIL check exit 1
