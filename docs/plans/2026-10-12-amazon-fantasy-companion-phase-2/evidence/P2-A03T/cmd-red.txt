@@ -1,0 +1,256 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.7.0/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preDebugBuild UP-TO-DATE
+> Task :app:generateDebugBuildConfig UP-TO-DATE
+> Task :app:generateDebugResources UP-TO-DATE
+> Task :app:packageDebugResources UP-TO-DATE
+> Task :app:processDebugNavigationResources UP-TO-DATE
+> Task :app:parseDebugLocalResources UP-TO-DATE
+> Task :app:generateDebugRFile UP-TO-DATE
+> Task :app:compileDebugKotlin UP-TO-DATE
+> Task :app:javaPreCompileDebug UP-TO-DATE
+> Task :app:compileDebugJavaWithJavac UP-TO-DATE
+> Task :app:checkDebugAarMetadata UP-TO-DATE
+> Task :app:mapDebugSourceSetPaths UP-TO-DATE
+> Task :app:compileDebugNavigationResources UP-TO-DATE
+> Task :app:mergeDebugResources UP-TO-DATE
+> Task :app:createDebugCompatibleScreenManifests UP-TO-DATE
+> Task :app:extractDeepLinksDebug UP-TO-DATE
+> Task :app:processDebugMainManifest UP-TO-DATE
+> Task :app:processDebugManifest UP-TO-DATE
+> Task :app:processDebugManifestForPackage UP-TO-DATE
+> Task :app:processDebugResources UP-TO-DATE
+> Task :app:bundleDebugClassesToRuntimeJar UP-TO-DATE
+> Task :app:bundleDebugClassesToCompileJar UP-TO-DATE
+> Task :app:preDebugUnitTestBuild UP-TO-DATE
+> Task :app:javaPreCompileDebugUnitTest UP-TO-DATE
+> Task :app:processDebugJavaRes UP-TO-DATE
+> Task :app:compileDebugUnitTestKotlin
+> Task :app:compileDebugUnitTestJavaWithJavac NO-SOURCE
+> Task :app:processDebugUnitTestJavaRes UP-TO-DATE
+
+> Task :app:testDebugUnitTest FAILED
+
+AlertFeedTest > queueKeepsAtMostTwentyNewestAlerts FAILED
+    java.lang.AssertionError: expected:<15> but was:<0>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at org.junit.Assert.assertEquals(Assert.java:146)
+        at com.afc.companion.alerts.AlertFeedTest$queueKeepsAtMostTwentyNewestAlerts$1.invokeSuspend(AlertFeedTest.kt:77)
+        at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+        at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+        at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+        at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+        at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+        at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+        at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+        at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source)
+        at com.afc.companion.alerts.AlertFeedTest.queueKeepsAtMostTwentyNewestAlerts(AlertFeedTest.kt:72)
+
+AlertFeedTest > cursorLongerThanTheContractIsNotAdopted FAILED
+    java.lang.AssertionError: expected:<c1> but was:<null>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at org.junit.Assert.assertEquals(Assert.java:146)
+        at com.afc.companion.alerts.AlertFeedTest$cursorLongerThanTheContractIsNotAdopted$1.invokeSuspend(AlertFeedTest.kt:64)
+        at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+        at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+        at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+        at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+        at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+        at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+        at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+        at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source)
+        at com.afc.companion.alerts.AlertFeedTest.cursorLongerThanTheContractIsNotAdopted(AlertFeedTest.kt:60)
+
+AlertFeedTest > invalidPageDeliversNothingAndKeepsTheCursor FAILED
+    java.lang.AssertionError: expected:<[a1]> but was:<[]>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at org.junit.Assert.assertEquals(Assert.java:146)
+        at com.afc.companion.alerts.AlertFeedTest$invalidPageDeliversNothingAndKeepsTheCursor$1.invokeSuspend(AlertFeedTest.kt:39)
+        at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+        at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+        at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+        at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+        at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+        at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+        at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+        at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source)
+        at com.afc.companion.alerts.AlertFeedTest.invalidPageDeliversNothingAndKeepsTheCursor(AlertFeedTest.kt:35)
+
+AlertFeedTest > burstUpdatesCoalesceToOneLatestRevisionPerAlert FAILED
+    java.lang.AssertionError: burst coalesced expected:<{a1=2, a2=1}> but was:<{}>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at com.afc.companion.alerts.AlertFeedTest$burstUpdatesCoalesceToOneLatestRevisionPerAlert$1.invokeSuspend(AlertFeedTest.kt:91)
+        at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+        at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+        at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+        at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+        at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+        at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+        at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+        at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source)
+        at com.afc.companion.alerts.AlertFeedTest.burstUpdatesCoalesceToOneLatestRevisionPerAlert(AlertFeedTest.kt:84)
+
+AlertFeedTest > errorStatusDeliversNothingAndKeepsTheCursor FAILED
+    java.lang.AssertionError: expected:<[a1]> but was:<[]>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at org.junit.Assert.assertEquals(Assert.java:146)
+        at com.afc.companion.alerts.AlertFeedTest$errorStatusDeliversNothingAndKeepsTheCursor$1.invokeSuspend(AlertFeedTest.kt:52)
+        at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+        at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+        at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+        at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+        at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+        at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+        at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+        at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source)
+        at com.afc.companion.alerts.AlertFeedTest.errorStatusDeliversNothingAndKeepsTheCursor(AlertFeedTest.kt:48)
+
+AlertFeedTest > dismissAcknowledgesLocallyWithoutABackendCall FAILED
+    java.lang.AssertionError: held alert acknowledged
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at com.afc.companion.alerts.AlertFeedTest$dismissAcknowledgesLocallyWithoutABackendCall$1.invokeSuspend(AlertFeedTest.kt:104)
+        at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+        at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+        at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+        at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+        at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+        at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+        at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+        at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source)
+        at com.afc.companion.alerts.AlertFeedTest.dismissAcknowledgesLocallyWithoutABackendCall(AlertFeedTest.kt:100)
+
+AlertFeedTest > firstPollSendsNoCursorAndEachNextPollSendsTheReturnedCursor FAILED
+    java.lang.AssertionError: expected:<[a1]> but was:<[]>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at org.junit.Assert.assertEquals(Assert.java:146)
+        at com.afc.companion.alerts.AlertFeedTest$firstPollSendsNoCursorAndEachNextPollSendsTheReturnedCursor$1.invokeSuspend(AlertFeedTest.kt:26)
+        at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+        at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+        at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+        at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+        at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+        at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+        at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+        at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source)
+        at com.afc.companion.alerts.AlertFeedTest.firstPollSendsNoCursorAndEachNextPollSendsTheReturnedCursor(AlertFeedTest.kt:23)
+
+AlertPresenterTest > unknownAccessReadsUnknownAndPromisesNothing FAILED
+    java.lang.AssertionError: Missing behavior: alert text rendered
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at org.junit.Assert.assertNotNull(Assert.java:713)
+        at com.afc.companion.alerts.AlertPresenterTest.text(AlertPresenterTest.kt:26)
+        at com.afc.companion.alerts.AlertPresenterTest.unknownAccessReadsUnknownAndPromisesNothing(AlertPresenterTest.kt:69)
+
+AlertPresenterTest > textCarriesTheTriggeringPlayerAndMatchup FAILED
+    java.lang.AssertionError: Missing behavior: alert text rendered
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at org.junit.Assert.assertNotNull(Assert.java:713)
+        at com.afc.companion.alerts.AlertPresenterTest.text(AlertPresenterTest.kt:26)
+        at com.afc.companion.alerts.AlertPresenterTest.text$default(AlertPresenterTest.kt:24)
+        at com.afc.companion.alerts.AlertPresenterTest.textCarriesTheTriggeringPlayerAndMatchup(AlertPresenterTest.kt:45)
+
+AlertPresenterTest > redZoneCommentaryClaimingAPlayerWillScoreIsNotShown FAILED
+    java.lang.AssertionError: Missing behavior: alert text rendered
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at org.junit.Assert.assertNotNull(Assert.java:713)
+        at com.afc.companion.alerts.AlertPresenterTest.text(AlertPresenterTest.kt:26)
+        at com.afc.companion.alerts.AlertPresenterTest.redZoneCommentaryClaimingAPlayerWillScoreIsNotShown(AlertPresenterTest.kt:62)
+
+AlertPresenterTest > verifiedAccessIsNotShownAsUnknown FAILED
+    java.lang.AssertionError: Missing behavior: alert text rendered
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at org.junit.Assert.assertNotNull(Assert.java:713)
+        at com.afc.companion.alerts.AlertPresenterTest.text(AlertPresenterTest.kt:26)
+        at com.afc.companion.alerts.AlertPresenterTest.verifiedAccessIsNotShownAsUnknown(AlertPresenterTest.kt:82)
+
+AlertPresenterTest > voiceStaysOffWithoutAVerifiedRoute FAILED
+    java.lang.AssertionError: Missing behavior: alert view rendered
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at org.junit.Assert.assertNotNull(Assert.java:713)
+        at com.afc.companion.alerts.AlertPresenterTest.voiceStaysOffWithoutAVerifiedRoute(AlertPresenterTest.kt:98)
+
+AlertPresenterTest > headsUpSelectionShowsWatchAndDismiss FAILED
+    java.lang.AssertionError: Missing behavior: alert view rendered
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at org.junit.Assert.assertNotNull(Assert.java:713)
+        at com.afc.companion.alerts.AlertPresenterTest.headsUpSelectionShowsWatchAndDismiss(AlertPresenterTest.kt:32)
+
+AlertPresenterTest > redZoneTextMakesNoOnFieldOrWillScoreClaim FAILED
+    java.lang.AssertionError: Missing behavior: alert text rendered
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at org.junit.Assert.assertNotNull(Assert.java:713)
+        at com.afc.companion.alerts.AlertPresenterTest.text(AlertPresenterTest.kt:26)
+        at com.afc.companion.alerts.AlertPresenterTest.redZoneTextMakesNoOnFieldOrWillScoreClaim(AlertPresenterTest.kt:57)
+
+AlertPresenterTest > alertWithoutTriggeringContextIsNotRendered PASSED
+
+AlertPresenterTest > panelOnlySelectionShowsNoHeadsUp FAILED
+    java.lang.AssertionError: Missing behavior: alert view rendered
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at org.junit.Assert.assertNotNull(Assert.java:713)
+        at com.afc.companion.alerts.AlertPresenterTest.panelOnlySelectionShowsNoHeadsUp(AlertPresenterTest.kt:39)
+
+AlertPresenterTest > customerConfirmedAccessIsNotShownAsVerified FAILED
+    java.lang.AssertionError: Missing behavior: alert text rendered
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at org.junit.Assert.assertNotNull(Assert.java:713)
+        at com.afc.companion.alerts.AlertPresenterTest.text(AlertPresenterTest.kt:26)
+        at com.afc.companion.alerts.AlertPresenterTest.customerConfirmedAccessIsNotShownAsVerified(AlertPresenterTest.kt:76)
+
+AlertPresenterTest > voiceSpeaksOnlyWhenEnabledOverAVerifiedRoute FAILED
+    java.lang.AssertionError: Missing behavior: alert view rendered
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at org.junit.Assert.assertNotNull(Assert.java:713)
+        at com.afc.companion.alerts.AlertPresenterTest.voiceSpeaksOnlyWhenEnabledOverAVerifiedRoute(AlertPresenterTest.kt:89)
+
+18 tests completed, 17 failed
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:testDebugUnitTest'.
+> There were failing tests. See the report at: file://<worktree>/tv-app/app/build/reports/tests/testDebugUnitTest/index.html
+
+* Try:
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+
+BUILD FAILED in 17s
+26 actionable tasks: 2 executed, 24 up-to-date

@@ -1,0 +1,18 @@
+...                                                                      [100%]
+=============================== warnings summary ===============================
+tests/unit/matcher/test_matcher_corrections.py: 28 warnings
+tests/unit/matcher/test_matcher_dedup.py: 19 warnings
+  $HOME/.local/lib/python3.12/site-packages/botocore/auth.py:424: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    datetime_now = datetime.datetime.utcnow()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+============================= slowest 10 durations =============================
+0.20s setup    tests/unit/matcher/test_matcher_corrections.py::test_stale_revision_after_correction_yields_nothing
+0.15s setup    tests/unit/matcher/test_matcher_dedup.py::test_redelivery_after_alert_yields_nothing
+0.11s setup    tests/unit/matcher/test_matcher_corrections.py::test_correction_redelivery_yields_nothing
+0.03s call     tests/unit/matcher/test_matcher_dedup.py::test_redelivery_after_alert_yields_nothing
+0.03s call     tests/unit/matcher/test_matcher_corrections.py::test_stale_revision_after_correction_yields_nothing
+0.03s call     tests/unit/matcher/test_matcher_corrections.py::test_correction_redelivery_yields_nothing
+
+(3 durations < 0.005s hidden.  Use -vv to show these durations.)
+3 passed, 21 deselected, 47 warnings in 0.57s

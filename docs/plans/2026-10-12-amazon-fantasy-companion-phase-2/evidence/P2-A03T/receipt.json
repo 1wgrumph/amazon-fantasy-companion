@@ -1,0 +1,227 @@
+{
+ "slice": "P2-A03T",
+ "role": "Test Implementer",
+ "route": "Claude Code / Claude Opus 5.5 / high (packet-assigned)",
+ "base_commit": "71d3e649fec8406cc593519e9d8cab5eb7c65575",
+ "command_id": "CMD-RED",
+ "command": "./tv-app/gradlew -p tv-app --no-daemon --max-workers=2 testDebugUnitTest --tests 'com.afc.companion.alerts.*'",
+ "exit_code": 1,
+ "log": "cmd-red.txt",
+ "log_sha256": "44483d4ff5014a0c53f1ca0b62a30f30f50969187f7d1d6d70fdcc4bf13a4daf",
+ "log_note": "one absolute report path rewritten to file://<worktree>/ (no private paths in evidence)",
+ "counts": {
+  "tests": 18,
+  "failed": 17,
+  "passed": 1,
+  "errors": 0,
+  "compile_errors": 0
+ },
+ "failure_types": [
+  "java.lang.AssertionError"
+ ],
+ "classification": "behavioral red: every failure is a java.lang.AssertionError against AFC-STUB neutral returns; 0 compile, collection or tool errors (a first-run collection error, a non-void @Test, was fixed before freeze)",
+ "passing_at_red": {
+  "note": "negative case that holds against the stub by construction (stub text() returns null); it guards the green implementation",
+  "ids": [
+   "com.afc.companion.alerts.AlertPresenterTest#alertWithoutTriggeringContextIsNotRendered"
+  ]
+ },
+ "cases": [
+  {
+   "id": "com.afc.companion.alerts.AlertFeedTest#queueKeepsAtMostTwentyNewestAlerts",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: expected:<15> but was:<0>"
+  },
+  {
+   "id": "com.afc.companion.alerts.AlertFeedTest#cursorLongerThanTheContractIsNotAdopted",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: expected:<c1> but was:<null>"
+  },
+  {
+   "id": "com.afc.companion.alerts.AlertFeedTest#invalidPageDeliversNothingAndKeepsTheCursor",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: expected:<[a1]> but was:<[]>"
+  },
+  {
+   "id": "com.afc.companion.alerts.AlertFeedTest#burstUpdatesCoalesceToOneLatestRevisionPerAlert",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: burst coalesced expected:<{a1=2, a2=1}> but was:<{}>"
+  },
+  {
+   "id": "com.afc.companion.alerts.AlertFeedTest#errorStatusDeliversNothingAndKeepsTheCursor",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: expected:<[a1]> but was:<[]>"
+  },
+  {
+   "id": "com.afc.companion.alerts.AlertFeedTest#dismissAcknowledgesLocallyWithoutABackendCall",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: held alert acknowledged"
+  },
+  {
+   "id": "com.afc.companion.alerts.AlertFeedTest#firstPollSendsNoCursorAndEachNextPollSendsTheReturnedCursor",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: expected:<[a1]> but was:<[]>"
+  },
+  {
+   "id": "com.afc.companion.alerts.AlertPresenterTest#unknownAccessReadsUnknownAndPromisesNothing",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: Missing behavior: alert text rendered"
+  },
+  {
+   "id": "com.afc.companion.alerts.AlertPresenterTest#textCarriesTheTriggeringPlayerAndMatchup",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: Missing behavior: alert text rendered"
+  },
+  {
+   "id": "com.afc.companion.alerts.AlertPresenterTest#redZoneCommentaryClaimingAPlayerWillScoreIsNotShown",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: Missing behavior: alert text rendered"
+  },
+  {
+   "id": "com.afc.companion.alerts.AlertPresenterTest#verifiedAccessIsNotShownAsUnknown",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: Missing behavior: alert text rendered"
+  },
+  {
+   "id": "com.afc.companion.alerts.AlertPresenterTest#voiceStaysOffWithoutAVerifiedRoute",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: Missing behavior: alert view rendered"
+  },
+  {
+   "id": "com.afc.companion.alerts.AlertPresenterTest#headsUpSelectionShowsWatchAndDismiss",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: Missing behavior: alert view rendered"
+  },
+  {
+   "id": "com.afc.companion.alerts.AlertPresenterTest#redZoneTextMakesNoOnFieldOrWillScoreClaim",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: Missing behavior: alert text rendered"
+  },
+  {
+   "id": "com.afc.companion.alerts.AlertPresenterTest#alertWithoutTriggeringContextIsNotRendered",
+   "result": "PASSED",
+   "failure_type": null,
+   "message": null
+  },
+  {
+   "id": "com.afc.companion.alerts.AlertPresenterTest#panelOnlySelectionShowsNoHeadsUp",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: Missing behavior: alert view rendered"
+  },
+  {
+   "id": "com.afc.companion.alerts.AlertPresenterTest#customerConfirmedAccessIsNotShownAsVerified",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: Missing behavior: alert text rendered"
+  },
+  {
+   "id": "com.afc.companion.alerts.AlertPresenterTest#voiceSpeaksOnlyWhenEnabledOverAVerifiedRoute",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: Missing behavior: alert view rendered"
+  }
+ ],
+ "frozen_tests": {
+  "tv-app/app/src/test/java/com/afc/companion/alerts/AlertFeedTest.kt": "5ed136e211afab0cfebb78fb659968d592dfcd63aaca51d9ea4f63d1ef5b76e4",
+  "tv-app/app/src/test/java/com/afc/companion/alerts/AlertFixtures.kt": "f6c42298e22376d25cdc3584c6f425243390e6b89e209ccbd4cd865bc9128c38",
+  "tv-app/app/src/test/java/com/afc/companion/alerts/AlertPresenterTest.kt": "d5e9fe1243e36a0ddee2b37008d7354343c64cb783d0317cff324026c13fe622",
+  "tv-app/app/src/androidTest/java/com/afc/companion/alerts/AlertNotifierDeviceTest.kt": "807f80366cea3489d002952e06b8843c85cbedf720cb54a2e2a536d038342fc1"
+ },
+ "bootstrap_scaffolding": {
+  "note": "AFC-STUB signatures only; AlertFeed returns null cursor, empty queue, empty poll, dismiss false; AlertPresenter returns null text/view; no tested green behavior. Existing AlertService.kt and AlertNotifier.kt unchanged.",
+  "files": {
+   "tv-app/app/src/main/java/com/afc/companion/alerts/AlertFeed.kt": "96b4b0559947bc01e98161ea55f7c9e2e84147373f9e766429ad841974da758f",
+   "tv-app/app/src/main/java/com/afc/companion/alerts/AlertPresenter.kt": "cc9c778c7ba77a2dc08f6630ddd8585993e7d7911b7002f90a974ecce655b7b8"
+  }
+ },
+ "baseline": {
+  "command": "./tv-app/gradlew -p tv-app --no-daemon --max-workers=2 testDebugUnitTest compileDebugAndroidTestKotlin",
+  "at": "base_commit before any A03T file",
+  "exit_code": 0,
+  "result": "115 passed, 0 failed (A01/A02 host tests green)"
+ },
+ "android_test_compile": {
+  "command": "./tv-app/gradlew -p tv-app --no-daemon --max-workers=2 compileDebugAndroidTestKotlin",
+  "exit_code": 0,
+  "note": "compile only; not run"
+ },
+ "gate": {
+  "command": "bash tools/ci/gate.sh",
+  "exit_code": 1,
+  "areas": {
+   "spec": "PASS",
+   "docs": "PASS",
+   "hygiene": "PASS",
+   "backend": "PASS",
+   "tvapp": "FAIL check exit 1: 133 tests, 17 failed, all 17 are the intended red cases above; 116 passed"
+  },
+  "lint_assemble": "./tv-app/gradlew -p tv-app --no-daemon --max-workers=2 lintDebug assembleDebug -> exit 0 BUILD SUCCESSFUL (gate stops at testDebugUnitTest)",
+  "note": "backend-area tool self-tests print adapter GAP lines and 'fatal: not a git repository' from their own fixtures; the backend area still reports PASS"
+ },
+ "typed_gaps": [
+  {
+   "id": "DEVICE_INSTALL_PENDING",
+   "scope": "AlertNotifierDeviceTest#headsUpAlertPostsWatchAndDismissOnAHighImportanceChannel (CMD-TVAPP-INSTRUMENTED); heads-up over provider playback without foregrounding (PROC-VISUAL-REVIEW)",
+   "reason": "no Fire TV stick; fire-tv-stick lease not taken; compiled, never run, never a pass"
+  },
+  {
+   "id": "X02_VERDICT_PENDING",
+   "scope": "AFC-PR-015 heads-up route",
+   "reason": "P2-X02 verdict absent; tests bind presentation selection and Watch/Dismiss actions, not an on-stick heads-up route"
+  },
+  {
+   "id": "X11_VERDICT_PENDING",
+   "scope": "AFC-PR-022 voice route",
+   "reason": "no verified voice route; tests require voice off by default and speak only with enabled+verified"
+  },
+  {
+   "id": "ALERT_DATA_SHAPE_ASSUMED",
+   "scope": "alert envelope data fields alertType, triggerContext{player,matchup}, commentary, route",
+   "reason": "openapi.yaml leaves alert data open; field names follow backend store Alert attributes and Dto data.route; triggerContext's inner shape is not frozen. P2-B05 must emit it or the shape needs a contract amendment"
+  },
+  {
+   "id": "PR063_INSPECTION",
+   "scope": "AFC-PR-063 off-render-thread work",
+   "reason": "inspection method; ApiClient's IO dispatch is covered by A01 tests; no new host test"
+  }
+ ],
+ "acceptance": {
+  "long-poll cursor (ALERTSVC)": "AlertFeedTest#firstPollSendsNoCursorAndEachNextPollSendsTheReturnedCursor, #invalidPageDeliversNothingAndKeepsTheCursor, #errorStatusDeliversNothingAndKeepsTheCursor, #cursorLongerThanTheContractIsNotAdopted",
+  "AFC-PR-062 bounded queue": "AlertFeedTest#queueKeepsAtMostTwentyNewestAlerts (alert_queue_max = 20)",
+  "AFC-PR-061 coalesced updates": "AlertFeedTest#burstUpdatesCoalesceToOneLatestRevisionPerAlert",
+  "AFC-PR-021 presentation": "AlertPresenterTest#headsUpSelectionShowsWatchAndDismiss, #panelOnlySelectionShowsNoHeadsUp",
+  "AFC-PR-015 heads-up actions": "AlertPresenterTest#headsUpSelectionShowsWatchAndDismiss; AlertFeedTest#dismissAcknowledgesLocallyWithoutABackendCall; AlertNotifierDeviceTest (DEVICE_INSTALL_PENDING)",
+  "AFC-PR-027 context": "AlertPresenterTest#textCarriesTheTriggeringPlayerAndMatchup, #alertWithoutTriggeringContextIsNotRendered",
+  "AFC-PR-028 no on-field claim": "AlertPresenterTest#redZoneTextMakesNoOnFieldOrWillScoreClaim, #redZoneCommentaryClaimingAPlayerWillScoreIsNotShown",
+  "AFC-PR-032/-033 unknown access": "AlertPresenterTest#unknownAccessReadsUnknownAndPromisesNothing, #customerConfirmedAccessIsNotShownAsVerified, #verifiedAccessIsNotShownAsUnknown",
+  "AFC-PR-022 voice gate": "AlertPresenterTest#voiceSpeaksOnlyWhenEnabledOverAVerifiedRoute, #voiceStaysOffWithoutAVerifiedRoute",
+  "AFC-PR-063": "PR063_INSPECTION gap"
+ },
+ "developer_feedback": [
+  {
+   "id": "DX-P2-A03T-01",
+   "observation": "A Kotlin @Test written as '= runBlocking { use { ... } }' takes the type of its last expression; a non-Unit last expression makes JUnit 4 reject the class (initializationError 'should be void'), a collection error not a red.",
+   "evidence": "first CMD-RED run: AlertFeedTest > initializationError, fixed before freeze"
+  },
+  {
+   "id": "DX-P2-A03T-02",
+   "observation": "Gradle's failing-test report line prints the absolute worktree path; red logs need it rewritten before commit to keep private paths out.",
+   "evidence": "cmd-red.txt line 250 rewritten to file://<worktree>/"
+  }
+ ]
+}

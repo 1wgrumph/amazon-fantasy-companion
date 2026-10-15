@@ -1,0 +1,13 @@
+{"commands": [
+ {"id": "B04-C01", "command": "read implementer SKILL.md, orch-b04t-verified.txt, P2-B04T receipt.json (handoff_contract_choices), verify_receipt.py, frozen matcher tests, store, template.yaml, DES-AFC-P2-MATCH", "exit_code": 0, "purpose": "Contract reading; IAM/storage analysis"},
+ {"id": "B04-C02", "command": "PYTHONDONTWRITEBYTECODE=1 $HOME/.local/share/afc-tools/backend-tests/bin/python3.12 -m pytest backend/tests/unit/matcher -q", "exit_code": 1, "purpose": "Confirm red baseline in this worktree: 24 failed"},
+ {"id": "B04-C03", "command": "write backend/src/matcher/__init__.py + player_map.json; remove matcher row from test_pipeline_and_stubs.py STUBS", "exit_code": 0, "purpose": "Product implementation + authorized stub-row retirement"},
+ {"id": "B04-C04", "command": "pytest backend/tests/unit/matcher backend/tests/unit/test_pipeline_and_stubs.py -q", "exit_code": 0, "purpose": "First green: 31 passed"},
+ {"id": "B04-C05", "command": "bash tools/ci/gate.sh", "exit_code": 1, "purpose": "1 failure: B01 future-modules pin still asserts matcher is AFC-STUB (626 passed)"},
+ {"id": "B04-C06", "command": "remove matcher from test_backend_template.py future-modules parametrize (B02/B03/B06 precedent)", "exit_code": 0, "purpose": "Stub-pin retirement; flagged as authority deviation in receipt.json"},
+ {"id": "CMD-GREEN", "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 $HOME/.local/share/afc-tools/backend-tests/bin/python3.12 -m pytest backend/tests/unit/matcher backend/tests/deployed/matcher -v -p no:cacheprovider --tb=short --junitxml=evidence/P2-B04/CMD-GREEN.xml", "exit_code": 0, "purpose": "24 passed, 2 skipped NOT_RUN deployed (no AFC_DEPLOYED_API_URL)"},
+ {"id": "verify_receipt", "command": "python3.12 evidence/P2-B04T/verify_receipt.py evidence/P2-B04T/receipt.json", "exit_code": 0, "purpose": "PASS, 5 frozen files byte-identical"},
+ {"id": "negative-check", "command": "pytest backend/tests/unit/matcher -k 'stale or redelivery'", "exit_code": 0, "purpose": "3 passed: stored revision >= event revision yields no match"},
+ {"id": "CMD-GATE", "command": "bash tools/ci/gate.sh", "exit_code": 0, "purpose": "spec, docs, hygiene, tvapp, backend PASS"},
+ {"id": "path-check", "command": "PYTHONDONTWRITEBYTECODE=1 python3.12 tools/ci/check_paths.py", "exit_code": 0, "purpose": "No /home/<user> paths; evidence sanitized to $HOME"}
+], "scope": "Command/exit ledger for the P2-B04 product slice. Installed paths normalized to $HOME; no command publishes, deploys, or calls AWS."}
