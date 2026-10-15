@@ -96,6 +96,20 @@ PYBASE
             python3 -m unittest discover -s tools/ci/tests ;;
         docs) python3 tools/ci/check_docs.py ;;
         tvapp)
+            if [[ "${CI:-false}" != true && "${GITHUB_ACTIONS:-false}" != true ]]; then
+                if [[ -z "${JAVA_HOME:-}" ]]; then
+                    local jdk jdks=()
+                    for jdk in "$HOME"/.local/share/afc-tools/jdk-17*; do
+                        [[ -d "$jdk" && -x "$jdk/bin/java" ]] && jdks+=("$jdk")
+                    done
+                    if ((${#jdks[@]} == 1)); then
+                        export JAVA_HOME="${jdks[0]}"
+                    fi
+                fi
+                if [[ -z "${ANDROID_HOME:-${ANDROID_SDK_ROOT:-}}" ]]; then
+                    export ANDROID_HOME="$HOME/.local/share/afc-tools/android-sdk"
+                fi
+            fi
             if [[ -n "${JAVA_HOME:-}" ]]; then
                 [[ -x "$JAVA_HOME/bin/java" ]] || { printf 'required tool missing: java (JAVA_HOME)\n'; return 3; }
             else
