@@ -24,6 +24,17 @@ def test_override_on_counts_without_detector_report(resolver):
     assert result["accessBasis"] == "unknown", result
 
 
+def test_production_channel_seam_stays_unknown(api):
+    # No stored broadcast field exists yet (P2B06T-DX-001): the real seam
+    # reads None and resolve fails closed to channel/provider/route null.
+    from resolver_support import require_module
+    module = require_module("provider_resolver")
+    assert attempt(module.event_channel, EVENT) is None
+    result = attempt(module.resolve, PROFILE, EVENT)
+    assert result["channel"] is None and result["provider"] is None, result
+    assert result["accessBasis"] == "unknown", result
+
+
 def test_records_are_stored_facts_not_profile_settings(resolver):
     seed_pref(order=["alpha_stream"])
     resolver.install("test.alpha.firetv")
