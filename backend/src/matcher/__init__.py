@@ -42,7 +42,8 @@ def _scan(variable):
 
 def _alert_for(profile_id, event_id):
     """The profile's stored alert row for this event, or None (Query, paged)."""
-    request = {"KeyConditionExpression": Key("profileId").eq(profile_id)}
+    request = {"KeyConditionExpression": Key("profileId").eq(profile_id),
+               "ConsistentRead": True}
     while True:
         page = _table("ALERTS_TABLE").query(**request)
         for item in page["Items"]:
