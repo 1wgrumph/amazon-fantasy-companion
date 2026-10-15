@@ -317,5 +317,133 @@
       }
     ],
     "wiring": "Not wired into gate.sh or .github/workflows: neither the SEIT commands table nor the G01 receipt places coverage/mutation in a gate area, and the backend wrappers are likewise invoked only by slice and assurance gate-chains."
+  },
+  "tvapp_gates_pit_admission": {
+    "date": "2026-10-14",
+    "route": "Claude Code / Claude Opus 5.5 / medium",
+    "role": "product_implementer",
+    "outcome": "OWNER_DECISION_REQUIRED (coverage PASS at 70%; PIT admitted and runs offline; CMD-MUTATION-TVAPP GAP, and its 70% bar is unreachable host-side under the current scope)",
+    "owner_decisions": [
+      "DEC-AFC-SD-052 tv-app changed-line coverage threshold 70%, backend 90%",
+      "DEC-AFC-SD-053 admit pl.droidsonroids.pitest under rule #23",
+      "tv-app mutation threshold 70%"
+    ],
+    "candidate": "f50dd5a",
+    "base": "75afca0",
+    "changes": {
+      "coverage_threshold": "tools/ci/coverage/evaluate.py: TVAPP profile threshold 70.0; backend THRESHOLD 90.0 unchanged; verdict JSON records the threshold applied",
+      "pit_plugin": "tv-app/build.gradle.kts buildscript classpath libs.pitest.gradle.plugin, Plugin Portal via exclusiveContent for group pl.droidsonroids.gradle only; libs.versions.toml pitestPlugin 0.2.27, pitest 1.19.5",
+      "pit_apply": "tv-app/app/build.gradle.kts applies pl.droidsonroids.pitest only when -Pandroid.newDsl=false: plugin 0.2.27 reads android.applicationVariants (legacy variant API). Default AGP 9.3.1 build error: \"Could not get unknown property 'applicationVariants' for object of type com.android.build.gradle.internal.dsl.ApplicationExtensionImpl$AgpDecorated.\" With newDsl=false alone: \"Configuration with name 'releaseUnitTestRuntimeClasspath' not found.\", so the wrapper also passes -Pandroid.onlyEnableUnitTestForTheTestedBuildType=false. Normal builds and the gate keep the AGP 9 DSL and never apply the plugin. sourceDirs set to src/main/{java,kotlin} (plugin reads empty java.srcDirs); jvmArgs -Dafc.repoRoot; excludeMockableAndroidJar=true; addJUnitPlatformLauncher=false; StubContractTest excluded from PIT (needs android.jar)",
+      "mutation_wrapper": "tools/ci/mutation/tvapp.sh passes the two AGP flags and archives backend/src/api/openapi.yaml (host fixtures read it) when HEAD has it",
+      "tests": "tv-app DefaultArgumentsTest (ApiClient.kt:61 getPanel() defaults, Dto.kt:114 Profile.from() defaults), StubContractTest (WatchLauncher stub reports AccessUnknown); tools/ci/tests/coverage/test_tvapp_threshold.py (75% PASS at 70, 66.7% FAIL, backend 90 unchanged; red with tvapp threshold 90: 3 failed)"
+    },
+    "commands": [
+      {
+        "id": "CMD-COVERAGE-TVAPP",
+        "command": "JAVA_HOME=$HOME/.local/share/afc-tools/jdk-17.0.20.1+1 ANDROID_HOME=$HOME/.local/share/afc-tools/android-sdk GRADLE_USER_HOME=$HOME/.gradle/afc-p2-a01t AFC_GRADLE_ARGS=\"--offline --no-daemon --max-workers=2\" bash tools/ci/coverage/tvapp.sh 75afca0 <dir>",
+        "exit": 0,
+        "result": "PASS changed-line coverage 70% (threshold 70%); 234/333 changed lines (was 230, 69%)",
+        "evidence": [
+          "coverage-tvapp-70-wrapper.txt",
+          "coverage-tvapp-70-result.json",
+          "coverage-tvapp-70-diffcover.json"
+        ]
+      },
+      {
+        "id": "CMD-MUTATION-TVAPP",
+        "command": "JAVA_HOME=$HOME/.local/share/afc-tools/jdk-17.0.20.1+1 ANDROID_HOME=$HOME/.local/share/afc-tools/android-sdk GRADLE_USER_HOME=$HOME/.gradle/afc-p2-a01t AFC_GRADLE_ARGS=\"--offline --no-daemon --max-workers=2\" bash tools/ci/mutation/tvapp.sh 75afca0 <dir>",
+        "exit": 3,
+        "result": "GAP REPORT_INCOMPLETE: not a complete PIT mutations report. :app:pitestDebug itself ran offline and green (953 mutants, 276 killed overall).",
+        "evidence": [
+          "mutation-tvapp-pit-wrapper.txt",
+          "mutation-tvapp-pit-result.json",
+          "mutation-tvapp-pit-run.txt",
+          "mutation-tvapp-pit-mutations.xml.gz",
+          "mutation-tvapp-pit-analysis.json"
+        ]
+      },
+      {
+        "id": "TOOLS-PYTEST",
+        "command": "PATH=$HOME/.local/share/afc-tools/backend-tests/bin:$PATH python3.12 -m pytest -q -p no:cacheprovider tools",
+        "exit": 0,
+        "result": "110 passed",
+        "evidence": "pytest-tools-pit.txt"
+      },
+      {
+        "id": "REPOSITORY-GATE",
+        "command": "PATH=$HOME/.local/share/afc-tools/backend-tests/bin:$PATH JAVA_HOME=$HOME/.local/share/afc-tools/jdk-17.0.20.1+1 ANDROID_HOME=$HOME/.local/share/afc-tools/android-sdk GRADLE_USER_HOME=$HOME/.gradle/afc-p2-a01t bash tools/ci/gate.sh",
+        "exit": 0,
+        "areas": {
+          "spec": "PASS",
+          "docs": "PASS",
+          "hygiene": "PASS",
+          "tvapp": "PASS",
+          "backend": "PASS"
+        },
+        "evidence": "gate-full-pit.txt"
+      },
+      {
+        "id": "FROZEN-HASHES",
+        "result": "A01T 7/7 MATCH; the 10 G01T test files are byte-identical to caa93d0 (3 of them, test_native_coverage.py, gate_support.py, test_native_mutation.py, already differed from the G01T receipt at caa93d0; not touched here)"
+      }
+    ],
+    "mutation_gap_analysis": {
+      "why_gap": [
+        "PIT 1.19.5 writes <mutations partial=\"true\"> whenever reportCoverage is on (XMLReportFactory passes ReportOptions.shouldReportCoverage(), default true, not settable from the CLI). tvapp_evaluate.py reads partial=true as an incomplete report, and tools/ci/tests/mutation/test_mutation_tvapp_adapter.py::test_partial_or_unparseable_report_is_gap pins that reading. That test file is outside this write set, so the evaluator was not changed.",
+        "AlertNotifier.kt, AppDetector.kt and WatchLauncher.kt (AFC-STUB) yield zero mutants, which the evaluator reports as REPORT_INCOMPLETE.",
+        "Changed lines carry 5 TIMED_OUT mutants (ApiClient retry/backoff paths), which the evaluator reports as UNRESOLVED."
+      ],
+      "score_if_report_were_read": {
+        "all_changed_files": "244 killed / 597 scored = 40.9%; upper bound with every covered mutant killed 49.7% (300 NO_COVERAGE in Compose UI, MainActivity, Android components)",
+        "net_and_shell_only": "227 / 276 = 82.3%"
+      },
+      "decision_needed": "Choose one: (a) score CMD-MUTATION-TVAPP over host-reachable classes (net/ except SessionStore, Shell) and leave the remainder to device evidence; (b) lower the all-changed-lines bar below the ~50% host bound; (c) admit a JVM Android runtime (e.g. Robolectric) for Compose/Android classes. Any of them also needs the evaluator to accept PIT 1.19.5 partial=\"true\" (with its test updated), a disposition for zero-mutant stub files, and a TIMED_OUT policy or a larger timeoutConst."
+    },
+    "scan_table": [
+      {
+        "set": "PIT Android plugin and PIT engine closure (inert resolve, nothing applied)",
+        "count": 18,
+        "artifacts": "gradle-pitest-plugin 0.2.27, semver4j 3.1.0, pitest/pitest-entry/pitest-command-line/pitest-html-report 1.19.5, asm* 9.7.1, commons-lang3 3.14.0, commons-text 1.12.0, jopt-simple 4.9, stringtemplate 3.2.1, antlr 2.7.7; plus mockable-jar deps org.json 20080701 and opengl-api gl1.1-android-2.1_r1 (scanned, NOT admitted)",
+        "integrity": "18/18 published checksum MATCH (plugin jar sha256 6cee215b12cf17ca5aa923bdce51ba458003001bf1deadea0d8efa567d6cb478 also matches its Gradle module metadata)",
+        "static": "bounded strings on the plugin jar: no network, process or credential APIs; default PIT 1.19.5; only declared deps",
+        "trivy": "3 findings: org.json 20080701 CVE-2022-45688 HIGH and CVE-2023-5072 HIGH (not admitted: excludeMockableAndroidJar=true, not in verification-metadata.xml, so strict verification refuses them); commons-lang3 3.14.0 CVE-2025-48924 MEDIUM (admitted; PIT build-host classpath only, not packaged). 0 admitted HIGH/CRITICAL.",
+        "clamav": "ClamAV 1.5.4, 18 files, 0 infected",
+        "verdict": "PASS (no admitted HIGH/CRITICAL)",
+        "evidence": [
+          "inert-resolver-pit-plugin.gradle",
+          "pit-plugin-resolved.tsv",
+          "pit-plugin-integrity.json",
+          "pit-plugin-trivy.json",
+          "pit-plugin-clam.txt"
+        ]
+      },
+      {
+        "set": "verification-metadata.xml delta",
+        "count": 36,
+        "components": 19,
+        "integrity": "36/36 jar/pom/module files (incl. parents apache 30, commons-parent 64, pitest-parent 1.19.5, junit-bom 5.10.0) published sha1 MATCH before entry",
+        "evidence": "pit-metadata-delta.tsv"
+      }
+    ],
+    "installs": [
+      {
+        "tool": "pl.droidsonroids.gradle:gradle-pitest-plugin",
+        "version": "0.2.27",
+        "sha256": "6cee215b12cf17ca5aa923bdce51ba458003001bf1deadea0d8efa567d6cb478",
+        "location": "Gradle module cache $HOME/.gradle/afc-p2-a01t (scratch inert cache for the scan)",
+        "scan": "PASS"
+      },
+      {
+        "tool": "org.pitest:pitest-command-line (+pitest, pitest-entry, pitest-html-report)",
+        "version": "1.19.5",
+        "sha256": "see pit-metadata-delta.tsv",
+        "location": "Gradle module cache $HOME/.gradle/afc-p2-a01t",
+        "scan": "PASS"
+      }
+    ],
+    "findings": [
+      "F-PIT-PARTIAL: tvapp_evaluate.py treats PIT 1.19.5 partial=\"true\" (coverage-reporting flag) as an incomplete report; candidate tool bug for bug-triager, blocked here by the write set (existing test pins it).",
+      "pitestDebug exits 0 when PIT prints usage and writes no report (seen with empty sourceDirs); the wrapper still fails closed because it requires exactly one mutations.xml from a fresh workspace."
+    ]
   }
 }
