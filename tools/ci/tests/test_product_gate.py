@@ -47,7 +47,8 @@ class ProductGate(unittest.TestCase):
         sdk.mkdir()
         env = dict(os.environ, PATH=str(bin_dir) + os.pathsep + os.environ['PATH'],
                    ANDROID_HOME=str(sdk), ANDROID_SDK_ROOT=str(sdk),
-                   AFC_COMMAND_LOG=str(repo / 'commands.log'), PYTEST_DISABLE_PLUGIN_AUTOLOAD='1')
+                   AFC_COMMAND_LOG=str(repo / 'commands.log'), PYTEST_DISABLE_PLUGIN_AUTOLOAD='1',
+                   CI='true')
         return env
 
     def test_list_includes_exact_product_and_legacy_areas(self):

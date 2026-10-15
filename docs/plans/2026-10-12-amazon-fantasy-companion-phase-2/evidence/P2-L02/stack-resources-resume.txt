@@ -1,0 +1,191 @@
+$ aws cloudformation list-stack-resources --stack-name afc-dev --query 'StackResourceSummaries[].{LogicalId:LogicalResourceId,Type:ResourceType,PhysicalId:PhysicalResourceId,Status:ResourceStatus}' --profile afc-dev --region us-east-2 --output json
+[
+    {
+        "LogicalId": "AlertsTable",
+        "Type": "AWS::DynamoDB::Table",
+        "PhysicalId": "afc-dev-AlertsTable-6N1HPFI0OCXJ",
+        "Status": "CREATE_COMPLETE"
+    },
+    {
+        "LogicalId": "ApiFunction",
+        "Type": "AWS::Lambda::Function",
+        "PhysicalId": "afc-dev-ApiFunction-SQ4LGLtWYxNh",
+        "Status": "CREATE_COMPLETE"
+    },
+    {
+        "LogicalId": "ApiFunctionAlertsPermission",
+        "Type": "AWS::Lambda::Permission",
+        "PhysicalId": "afc-dev-ApiFunctionAlertsPermission-648O6dBN4Fyo",
+        "Status": "CREATE_COMPLETE"
+    },
+    {
+        "LogicalId": "ApiFunctionInstalledAppsPermission",
+        "Type": "AWS::Lambda::Permission",
+        "PhysicalId": "afc-dev-ApiFunctionInstalledAppsPermission-hpIP8AVdC08G",
+        "Status": "CREATE_COMPLETE"
+    },
+    {
+        "LogicalId": "ApiFunctionLinkConfirmPermission",
+        "Type": "AWS::Lambda::Permission",
+        "PhysicalId": "afc-dev-ApiFunctionLinkConfirmPermission-ZlbOAHKxkfqY",
+        "Status": "CREATE_COMPLETE"
+    },
+    {
+        "LogicalId": "ApiFunctionLinkIssuePermission",
+        "Type": "AWS::Lambda::Permission",
+        "PhysicalId": "afc-dev-ApiFunctionLinkIssuePermission-aofoA9CLP4fR",
+        "Status": "CREATE_COMPLETE"
+    },
+    {
+        "LogicalId": "ApiFunctionLinkPagePermission",
+        "Type": "AWS::Lambda::Permission",
+        "PhysicalId": "afc-dev-ApiFunctionLinkPagePermission-JyM9KshYvt15",
+        "Status": "CREATE_COMPLETE"
+    },
+    {
+        "LogicalId": "ApiFunctionLinkPollPermission",
+        "Type": "AWS::Lambda::Permission",
+        "PhysicalId": "afc-dev-ApiFunctionLinkPollPermission-CP6MKxu7ALdG",
+        "Status": "CREATE_COMPLETE"
+    },
+    {
+        "LogicalId": "ApiFunctionPanelPermission",
+        "Type": "AWS::Lambda::Permission",
+        "PhysicalId": "afc-dev-ApiFunctionPanelPermission-TfqypQjH8Pnp",
+        "Status": "CREATE_COMPLETE"
+    },
+    {
+        "LogicalId": "ApiFunctionProfileGetPermission",
+        "Type": "AWS::Lambda::Permission",
+        "PhysicalId": "afc-dev-ApiFunctionProfileGetPermission-NCmmCv3g1GwK",
+        "Status": "CREATE_COMPLETE"
+    },
+    {
+        "LogicalId": "ApiFunctionProfilePutPermission",
+        "Type": "AWS::Lambda::Permission",
+        "PhysicalId": "afc-dev-ApiFunctionProfilePutPermission-Xr3xE5GrTS9q",
+        "Status": "CREATE_COMPLETE"
+    },
+    {
+        "LogicalId": "ApiFunctionProvidersPermission",
+        "Type": "AWS::Lambda::Permission",
+        "PhysicalId": "afc-dev-ApiFunctionProvidersPermission-6jmg1qzuIniI",
+        "Status": "CREATE_COMPLETE"
+    },
+    {
+        "LogicalId": "ApiFunctionRole",
+        "Type": "AWS::IAM::Role",
+        "PhysicalId": "afc-dev-ApiFunctionRole-VYFrCM4EZALP",
+        "Status": "CREATE_COMPLETE"
+    },
+    {
+        "LogicalId": "ApiFunctionRoutingOutcomePermission",
+        "Type": "AWS::Lambda::Permission",
+        "PhysicalId": "afc-dev-ApiFunctionRoutingOutcomePermission-J43772pqjdyU",
+        "Status": "CREATE_COMPLETE"
+    },
+    {
+        "LogicalId": "ApiLogGroup",
+        "Type": "AWS::Logs::LogGroup",
+        "PhysicalId": "/aws/lambda/afc-dev-ApiFunction-SQ4LGLtWYxNh",
+        "Status": "CREATE_COMPLETE"
+    },
+    {
+        "LogicalId": "EventsTable",
+        "Type": "AWS::DynamoDB::Table",
+        "PhysicalId": "afc-dev-EventsTable-14XU2IPT4CQOQ",
+        "Status": "CREATE_COMPLETE"
+    },
+    {
+        "LogicalId": "HttpApi",
+        "Type": "AWS::ApiGatewayV2::Api",
+        "PhysicalId": "le3r79003f",
+        "Status": "CREATE_COMPLETE"
+    },
+    {
+        "LogicalId": "HttpApiApiGatewayDefaultStage",
+        "Type": "AWS::ApiGatewayV2::Stage",
+        "PhysicalId": "$default",
+        "Status": "CREATE_COMPLETE"
+    },
+    {
+        "LogicalId": "IngestFunction",
+        "Type": "AWS::Lambda::Function",
+        "PhysicalId": "afc-dev-IngestFunction-rRxYOuWakl88",
+        "Status": "CREATE_COMPLETE"
+    },
+    {
+        "LogicalId": "IngestFunctionRole",
+        "Type": "AWS::IAM::Role",
+        "PhysicalId": "afc-dev-IngestFunctionRole-87MdyYpdhMtj",
+        "Status": "CREATE_COMPLETE"
+    },
+    {
+        "LogicalId": "IngestLogGroup",
+        "Type": "AWS::Logs::LogGroup",
+        "PhysicalId": "/aws/lambda/afc-dev-IngestFunction-rRxYOuWakl88",
+        "Status": "CREATE_COMPLETE"
+    },
+    {
+        "LogicalId": "IngestSchedule",
+        "Type": "AWS::Scheduler::Schedule",
+        "PhysicalId": "afc-dev-IngestSchedule-1QZJFHBOVMJCW",
+        "Status": "CREATE_COMPLETE"
+    },
+    {
+        "LogicalId": "IngestScheduleRole",
+        "Type": "AWS::IAM::Role",
+        "PhysicalId": "afc-dev-IngestScheduleRole-t6HTvxAcafeL",
+        "Status": "CREATE_COMPLETE"
+    },
+    {
+        "LogicalId": "LineupsTable",
+        "Type": "AWS::DynamoDB::Table",
+        "PhysicalId": "afc-dev-LineupsTable-1F4C3N1F9JTEP",
+        "Status": "CREATE_COMPLETE"
+    },
+    {
+        "LogicalId": "LinksTable",
+        "Type": "AWS::DynamoDB::Table",
+        "PhysicalId": "afc-dev-LinksTable-SWRCL1ZSX3AQ",
+        "Status": "CREATE_COMPLETE"
+    },
+    {
+        "LogicalId": "PanelsTable",
+        "Type": "AWS::DynamoDB::Table",
+        "PhysicalId": "afc-dev-PanelsTable-1OMYPL571ZPS6",
+        "Status": "CREATE_COMPLETE"
+    },
+    {
+        "LogicalId": "PolicyFunction",
+        "Type": "AWS::Lambda::Function",
+        "PhysicalId": "afc-dev-PolicyFunction-LEaQlcs3Eq0A",
+        "Status": "CREATE_COMPLETE"
+    },
+    {
+        "LogicalId": "PolicyFunctionEventStream",
+        "Type": "AWS::Lambda::EventSourceMapping",
+        "PhysicalId": "9f29f6fe-32a9-4f28-9b1e-fb6954371f62",
+        "Status": "CREATE_COMPLETE"
+    },
+    {
+        "LogicalId": "PolicyFunctionRole",
+        "Type": "AWS::IAM::Role",
+        "PhysicalId": "afc-dev-PolicyFunctionRole-repRa8YzZJjT",
+        "Status": "CREATE_COMPLETE"
+    },
+    {
+        "LogicalId": "PolicyLogGroup",
+        "Type": "AWS::Logs::LogGroup",
+        "PhysicalId": "/aws/lambda/afc-dev-PolicyFunction-LEaQlcs3Eq0A",
+        "Status": "CREATE_COMPLETE"
+    },
+    {
+        "LogicalId": "ProfilesTable",
+        "Type": "AWS::DynamoDB::Table",
+        "PhysicalId": "afc-dev-ProfilesTable-5T8T9R257997",
+        "Status": "CREATE_COMPLETE"
+    }
+]
+
+exit=0

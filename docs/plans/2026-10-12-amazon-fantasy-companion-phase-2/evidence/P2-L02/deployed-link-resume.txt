@@ -1,0 +1,147 @@
+$ python3.12 -m pytest backend/tests/deployed/device_auth -v -rs --tb=short --show-capture=no
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.2, pluggy-1.6.0 -- <home>/.local/share/afc-tools/backend-tests/bin/python3.12
+cachedir: .pytest_cache
+rootdir: <home>/alphazede/worktrees/amazon-fantasy-companion-p2-l02/backend
+configfile: pyproject.toml
+plugins: cov-7.1.0, anyio-4.13.0, asyncio-1.3.0, mock-3.15.1, typeguard-4.4.4
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 4 items
+
+backend/tests/deployed/device_auth/test_link_flow.py::test_issue_returns_a_pending_code FAILED [ 25%]
+backend/tests/deployed/device_auth/test_link_flow.py::test_pending_poll_cannot_authorize_the_device FAILED [ 50%]
+backend/tests/deployed/device_auth/test_link_flow.py::test_confirmed_device_polls_a_usable_session SKIPPED [ 75%]
+backend/tests/deployed/device_auth/test_link_flow.py::test_unknown_session_is_rejected_on_protected_routes FAILED [100%]
+
+=================================== FAILURES ===================================
+______________________ test_issue_returns_a_pending_code _______________________
+backend/tests/deployed/device_auth/test_link_flow.py:7: in test_issue_returns_a_pending_code
+    status, device = call(deployed.base, "POST", "/v1/link")
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/deployed/deployed_helpers.py:16: in call
+    with urllib.request.urlopen(request, timeout=30) as response:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/urllib/request.py:215: in urlopen
+    return opener.open(url, data, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/urllib/request.py:515: in open
+    response = self._open(req, data)
+               ^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/urllib/request.py:532: in _open
+    result = self._call_chain(self.handle_open, protocol, protocol +
+/usr/lib/python3.12/urllib/request.py:492: in _call_chain
+    result = func(*args)
+             ^^^^^^^^^^^
+/usr/lib/python3.12/urllib/request.py:1392: in https_open
+    return self.do_open(http.client.HTTPSConnection, req,
+/usr/lib/python3.12/urllib/request.py:1344: in do_open
+    h.request(req.get_method(), req.selector, req.data, headers,
+/usr/lib/python3.12/http/client.py:1365: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+/usr/lib/python3.12/http/client.py:1411: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+/usr/lib/python3.12/http/client.py:1360: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+/usr/lib/python3.12/http/client.py:1120: in _send_output
+    self.send(msg)
+/usr/lib/python3.12/http/client.py:1064: in send
+    self.connect()
+/usr/lib/python3.12/http/client.py:1499: in connect
+    super().connect()
+/usr/lib/python3.12/http/client.py:1030: in connect
+    self.sock = self._create_connection(
+/usr/lib/python3.12/socket.py:837: in create_connection
+    sock.connect(sa)
+backend/tests/deployed/conftest.py:38: in pinned_connect
+    raise AssertionError(f"Deployed test may only contact {host}")
+E   AssertionError: Deployed test may only contact le3r79003f.execute-api.us-east-2.amazonaws.com
+________________ test_pending_poll_cannot_authorize_the_device _________________
+backend/tests/deployed/device_auth/test_link_flow.py:16: in test_pending_poll_cannot_authorize_the_device
+    _, device = call(deployed.base, "POST", "/v1/link")
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/deployed/deployed_helpers.py:16: in call
+    with urllib.request.urlopen(request, timeout=30) as response:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/urllib/request.py:215: in urlopen
+    return opener.open(url, data, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/urllib/request.py:515: in open
+    response = self._open(req, data)
+               ^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/urllib/request.py:532: in _open
+    result = self._call_chain(self.handle_open, protocol, protocol +
+/usr/lib/python3.12/urllib/request.py:492: in _call_chain
+    result = func(*args)
+             ^^^^^^^^^^^
+/usr/lib/python3.12/urllib/request.py:1392: in https_open
+    return self.do_open(http.client.HTTPSConnection, req,
+/usr/lib/python3.12/urllib/request.py:1344: in do_open
+    h.request(req.get_method(), req.selector, req.data, headers,
+/usr/lib/python3.12/http/client.py:1365: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+/usr/lib/python3.12/http/client.py:1411: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+/usr/lib/python3.12/http/client.py:1360: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+/usr/lib/python3.12/http/client.py:1120: in _send_output
+    self.send(msg)
+/usr/lib/python3.12/http/client.py:1064: in send
+    self.connect()
+/usr/lib/python3.12/http/client.py:1499: in connect
+    super().connect()
+/usr/lib/python3.12/http/client.py:1030: in connect
+    self.sock = self._create_connection(
+/usr/lib/python3.12/socket.py:837: in create_connection
+    sock.connect(sa)
+backend/tests/deployed/conftest.py:38: in pinned_connect
+    raise AssertionError(f"Deployed test may only contact {host}")
+E   AssertionError: Deployed test may only contact le3r79003f.execute-api.us-east-2.amazonaws.com
+_____________ test_unknown_session_is_rejected_on_protected_routes _____________
+backend/tests/deployed/device_auth/test_link_flow.py:29: in test_unknown_session_is_rejected_on_protected_routes
+    status, body = call(deployed.base, method, path, token="unknown-test-session",
+backend/tests/deployed/deployed_helpers.py:16: in call
+    with urllib.request.urlopen(request, timeout=30) as response:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/urllib/request.py:215: in urlopen
+    return opener.open(url, data, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/urllib/request.py:515: in open
+    response = self._open(req, data)
+               ^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/urllib/request.py:532: in _open
+    result = self._call_chain(self.handle_open, protocol, protocol +
+/usr/lib/python3.12/urllib/request.py:492: in _call_chain
+    result = func(*args)
+             ^^^^^^^^^^^
+/usr/lib/python3.12/urllib/request.py:1392: in https_open
+    return self.do_open(http.client.HTTPSConnection, req,
+/usr/lib/python3.12/urllib/request.py:1344: in do_open
+    h.request(req.get_method(), req.selector, req.data, headers,
+/usr/lib/python3.12/http/client.py:1365: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+/usr/lib/python3.12/http/client.py:1411: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+/usr/lib/python3.12/http/client.py:1360: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+/usr/lib/python3.12/http/client.py:1120: in _send_output
+    self.send(msg)
+/usr/lib/python3.12/http/client.py:1064: in send
+    self.connect()
+/usr/lib/python3.12/http/client.py:1499: in connect
+    super().connect()
+/usr/lib/python3.12/http/client.py:1030: in connect
+    self.sock = self._create_connection(
+/usr/lib/python3.12/socket.py:837: in create_connection
+    sock.connect(sa)
+backend/tests/deployed/conftest.py:38: in pinned_connect
+    raise AssertionError(f"Deployed test may only contact {host}")
+E   AssertionError: Deployed test may only contact le3r79003f.execute-api.us-east-2.amazonaws.com
+============================= slowest 10 durations =============================
+0.02s call     tests/deployed/device_auth/test_link_flow.py::test_issue_returns_a_pending_code
+
+(9 durations < 0.005s hidden.  Use -vv to show these durations.)
+=========================== short test summary info ============================
+SKIPPED [1] backend/tests/deployed/device_auth/test_link_flow.py:21: NOT_RUN: linking needs AFC_DEPLOYED_LINK_PASSPHRASE at L02/L03 time
+========================= 3 failed, 1 skipped in 0.30s =========================
+
+exit=1
