@@ -251,6 +251,14 @@ SEIT and Integration Engineer delta. No review/repair budget is reset.
 
 ## Vega-primary conditional projection (2026-10-14)
 
+Selected 2026-10-14 by DEC-AFC-SD-049: Vega OS primary, Fire OS secondary.
+The projection below is the active plan. A01–A05/T are not inactive: they
+keep their original rows and edges as the Fire OS secondary target, and no
+primary slice, integration step or release checkpoint depends on them.
+Critical path: X01 → V01T → X04 → X02 → X03 → X07 → L03 → V01 → X09 → X10 →
+R4 → D04 → R5 → L05 → X12. F1 is closed by DEC-AFC-SD-050: D04 closes
+RISK-AFC-P2-14 with V01 supporting.
+
 Existing rows/edges remain the Fire OS/side-lane baseline. The owner-requested
 primary alternative is specified in each affected implementation slice's
 `vega_primary_contingency`, with the same house fields and inherited routes.

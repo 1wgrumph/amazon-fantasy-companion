@@ -186,7 +186,10 @@ Not mirrored: AFC-PR-052 (Fire OS on the 2018 stick) and AFC-PR-053 (minSdk 25) 
 The Vega packaging rule is AC-AFC-P2-VEGA-02.
 
 
-## Vega-primary conditional allocation (2026-10-14, not activated)
+## Vega-primary conditional allocation (2026-10-14, selected by DEC-AFC-SD-049)
+
+Selected 2026-10-14: Vega OS primary, Fire OS secondary; both targets are
+built and no UID allocation to the Fire OS slices is removed.
 
 The register statements above are preserved. The five-feature Vega mapping
 above remains the source inventory, with all listed UIDs retained. The
@@ -199,7 +202,7 @@ AC-AFC-P2-VPRIMARY-01..04 and RISK-AFC-P2-16/17 belong to the technical plan.
 | Every UID mirrored by the five rows in Vega OS port mapping | Same V01T/V01 IDs; requirement/VCASE source replaces nonexistent A02T–A05T test source. Available A01 tests remain reference evidence. Physical X02/X03/X04/X07/X09 prove provider-dependent claims. | Proposed; every application observation not_run |
 | AFC-PR-015, 030, 048 | Physical alert/action/playback and real provider game/channel handoff | Blocking physical evidence, no simulator substitute |
 | AFC-PR-041, 047 | Physical geometry proof for modeB, or existing timed fullScreen fallback | No new video route or silent waiver |
-| AFC-PR-052, 053 | P2-D02 must record an owner-approved Vega target/model/OS and manifest compatibility allocation instead of Fire OS 2018/minSdk 25 | NEEDS_OWNER_DECISION VP-OD-01; unchanged here |
+| AFC-PR-052, 053 | P2-D02 must record an owner-approved Vega target/model/OS and manifest compatibility allocation instead of Fire OS 2018/minSdk 25 | Decided DEC-AFC-SD-049: P2-D02 records the Vega primary target; Fire OS 2018 stick and minSdk 25 stay for the Fire OS secondary build |
 | AFC-PR-038, 054, 055, 058, 059, 063 | Shared API/session/security/compute controls; SD-048 code-only confirmation reconciled in backend before integrated proof | SD-048 settled; implementation verification pending |
 | All other backend, submission, feedback and lifecycle UIDs | Original allocations retained; downstream slices target the selected artifact and truthful evidence | Not removed by TV contingency |
-| RISK-AFC-P2-14 | Proposed P2-D04 closure, V01 verdict evidence supplier; no “in progress” substitute when Vega is primary | NEEDS_OWNER_DECISION VP-OD-05 / F1 remains open |
+| RISK-AFC-P2-14 | P2-D04 closes it, P2-V01 supplies the verdict evidence. The Vega build is in the submission only if P2-V01 verification passed before the documents are finalized; otherwise it is reported as in progress with its limits | Decided DEC-AFC-SD-050; F1 closed |

@@ -1276,11 +1276,11 @@
    "exit": "Gate areas `tvapp` and `backend` on `main`; Vnv areas added; `tv-app/` scaffold builds and installs on the stick; backend skeleton with device-code link passes tests; P2-X01 verdict landed with first-install time; ESPN capture tool and first fixtures landed; milestones created and read back; release prepared (P2-R1).",
    "dispatch_order": "At approval: P2-X01 (needs OA-1; holds `fire-tv-stick`; its first install starts the spike_panel_max clock), P2-X05 (ESPN capture; first live capture TNF 10-15; earlier captures are labeled historical), P2-B01T, P2-D01, P2-G01T. P2-A01T becomes ready after P2-X01 qualifies the host build tools. As slots free: P2-L01, then P2-A01 after A01T, P2-B01 after B01T, P2-G01T at once (Phase 1 S09 merged on 2026-10-12, origin/main 17b40b4), P2-G01 after G01T. P2-A01 and P2-B01 land after P2-G01; P2-X05 PR 1 lands after P2-B01. P2-R1 after every other Wave 1 slice has merged.",
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "schedule_ref": "amazon-fantasy-companion-phase-2-technical-plan.md#conditional-critical-path-all-timestamps-utc",
-    "rule": "Use same slice membership except inactive A0x/T; M14/V01 moves into primary TV critical path; release R1/R2 waits for V01. Original due dates are preserved baseline only.",
+    "rule": "DEC-AFC-SD-049: Vega primary. Same slice membership; A0x/T stay as the Fire OS secondary target off the Vega critical path; M14/V01 is the primary TV critical path; release R1/R2 waits for V01, not A0x/T. Original due dates are preserved baseline only.",
     "entry": "Selected/materialized alternative only: start dependency-ready slices under their explicit depends_on and milestone receipts; no blanket prior-wave release gate may delay backend or V01 prerequisites. Physical/account requirements still gate physical steps.",
-    "exit": "Close only when selected active slice completion dependencies and original acceptance obligations pass; inactive A0x work is not marked PASS. Release checkpoint dependencies remain explicit in the projected graph.",
+    "exit": "Close only when selected active slice completion dependencies and original acceptance obligations pass; Fire OS secondary A0x/T work is never marked PASS by Vega evidence and does not gate the Vega exit. Release checkpoint dependencies remain explicit in the projected graph.",
     "slice_ids": [
      "P2-L01",
      "P2-X01",
@@ -1313,16 +1313,16 @@
     "P2-R2"
    ],
    "due_on": "2026-10-17T01:00:00Z",
-   "entry": "P2-X01 merged for P2-X04 and the device chain; P2-B01 merged for backend Wave 2 slices; P2-A01 merged for P2-A02; no blanket P2-R1 prerequisite for P2-X04; OA-3 (AWS account and `afc-dev` profile) and OA-10 (link passphrase) for P2-L02; OA-4 (ESPN, DirecTV Stream, YouTube TV signed in) for P2-X03.",
+   "entry": "P2-X01 merged for P2-X04 and the device chain; P2-B01 merged for backend Wave 2 slices; P2-A01 merged for P2-A02; no blanket P2-R1 prerequisite for P2-X04; OA-3 (AWS account and `afc-dev` profile) and OA-10 (owner confirms the TV link code; no passphrase, DEC-AFC-SD-048) for P2-L02; OA-4 (ESPN, DirecTV Stream, YouTube TV signed in) for P2-X03.",
    "exit": "Verdicts landed for panel (within spike_panel_max), notification, provider links (TNF check included), detection, ESPN live timing, Yahoo or manual; ingest and lineup slices merged; profile/settings UI merged with visual review; backend deployed to aws-afc-dev with link and profile smoke; release prepared (P2-R2).",
    "dispatch_order": "P2-X04 holds fire-tv-stick from P2-X01's release until its verdict or first_install_at + spike_panel_max, without interruption; P2-A01's on-device review queues behind it and runs between P2-X04 and P2-X02. P2-X04 immediately after P2-X01 (stick), then P2-X02, P2-X03 PR 1 (desk evidence, then the stick is released) and P2-X07, all serialized on `fire-tv-stick`; P2-X03 PR 2 (Prime Video TNF check) holds the stick and `live-game-window` for the 2026-10-15 game only, while P2-X05 PR 2 captures the same game host-only; the stick chain counts as one agent. P2-B02T/B02 after P2-X05 PR 1 lands fixtures (completed games with historical provenance; no prior live-capture claim). P2-B03T/B03 after P2-B01. P2-A02T/A02 after P2-A01. P2-L02 after P2-B01 and OA-3. P2-X06: Yahoo path after P2-B03 is deployed (OA-2), manual path at T_yahoo; its verdict configures P2-L03. P2-R2 last (after P2-R1).",
    "due_explanation": "T_yahoo + 6 h for the P2-X06 verdict pull request and P2-R2 (T_yahoo is 2026-10-16T19:00:00Z); machine due_on is ISO only, no date change.",
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "schedule_ref": "amazon-fantasy-companion-phase-2-technical-plan.md#conditional-critical-path-all-timestamps-utc",
-    "rule": "Use same slice membership except inactive A0x/T; M14/V01 moves into primary TV critical path; release R1/R2 waits for V01. Original due dates are preserved baseline only.",
+    "rule": "DEC-AFC-SD-049: Vega primary. Same slice membership; A0x/T stay as the Fire OS secondary target off the Vega critical path; M14/V01 is the primary TV critical path; release R1/R2 waits for V01, not A0x/T. Original due dates are preserved baseline only.",
     "entry": "Selected/materialized alternative only: start dependency-ready slices under their explicit depends_on and milestone receipts; no blanket prior-wave release gate may delay backend or V01 prerequisites. Physical/account requirements still gate physical steps.",
-    "exit": "Close only when selected active slice completion dependencies and original acceptance obligations pass; inactive A0x work is not marked PASS. Release checkpoint dependencies remain explicit in the projected graph.",
+    "exit": "Close only when selected active slice completion dependencies and original acceptance obligations pass; Fire OS secondary A0x/T work is never marked PASS by Vega evidence and does not gate the Vega exit. Release checkpoint dependencies remain explicit in the projected graph.",
     "slice_ids": [
      "P2-X04",
      "P2-X02",
@@ -1365,11 +1365,11 @@
    "exit": "On Sun 2026-10-18 with simultaneous live games: alert over provider playback \u2192 Watch \u2192 recorded routing outcome on the stick; panel in the verdict's mode with live points and freshness; matcher, policy, resolver, panel service, alert, Watch and panel UI merged; release prepared (P2-R3).",
    "dispatch_order": "Dispatch ready red slices under cap 5: P2-B04T first; P2-B05T after its verified red/shared-fixture handoff; P2-B06T, P2-A03T and P2-A05T when their own prerequisites hold. Greens follow their verified red receipts; P2-B07T/B07 and P2-A04T/A04 proceed as dependencies/leases permit. P2-A03 needs P2-X02; P2-A04 needs P2-X03 and P2-B06; P2-A05 needs P2-X04 and P2-B07. P2-L03 after B04..B07 merge. P2-X09 on Sun 2026-10-18 holds `fire-tv-stick`, `aws-afc-dev` and `live-game-window`. P2-R3 last.",
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "schedule_ref": "amazon-fantasy-companion-phase-2-technical-plan.md#conditional-critical-path-all-timestamps-utc",
-    "rule": "Use same slice membership except inactive A0x/T; M14/V01 moves into primary TV critical path; release R1/R2 waits for V01. Original due dates are preserved baseline only.",
+    "rule": "DEC-AFC-SD-049: Vega primary. Same slice membership; A0x/T stay as the Fire OS secondary target off the Vega critical path; M14/V01 is the primary TV critical path; release R1/R2 waits for V01, not A0x/T. Original due dates are preserved baseline only.",
     "entry": "Selected/materialized alternative only: start dependency-ready slices under their explicit depends_on and milestone receipts; no blanket prior-wave release gate may delay backend or V01 prerequisites. Physical/account requirements still gate physical steps.",
-    "exit": "Close only when selected active slice completion dependencies and original acceptance obligations pass; inactive A0x work is not marked PASS. Release checkpoint dependencies remain explicit in the projected graph.",
+    "exit": "Close only when selected active slice completion dependencies and original acceptance obligations pass; Fire OS secondary A0x/T work is never marked PASS by Vega evidence and does not gate the Vega exit. Release checkpoint dependencies remain explicit in the projected graph.",
     "slice_ids": [
      "P2-B04T",
      "P2-B04",
@@ -1399,11 +1399,11 @@
    "exit": "Corrections and starter changes verified live or by labeled replay plus live check on Mon 2026-10-19; every active register case has passing evidence or an owner-accepted typed gap; no unresolved actionable review defect at any priority without explicit owner acceptance of residual risk; D1 revision landed (AC-AFC-P2-SPEC-01); Alexa stretch verdict if OD-AFC-03 = yes; release prepared (P2-R4).",
    "dispatch_order": "P2-X10 on Mon 2026-10-19 MNF (corrections, starter change, Sunday defects re-checked). P2-D02 after all required P2-X01..X07 verdicts and PR #10 merged, plus P2-X11 terminal disposition when selected; include every landed verdict through the specification freeze. P2-X11 only if OD-AFC-03 = yes and W3 exited on time; dropped at 2026-10-21T12:00:00Z if unverified. Defect slices dispatch per defect on bug-triager when their write set does not overlap a running slice. P2-R4 last.",
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "schedule_ref": "amazon-fantasy-companion-phase-2-technical-plan.md#conditional-critical-path-all-timestamps-utc",
-    "rule": "Use same slice membership except inactive A0x/T; M14/V01 moves into primary TV critical path; release R1/R2 waits for V01. Original due dates are preserved baseline only.",
+    "rule": "DEC-AFC-SD-049: Vega primary. Same slice membership; A0x/T stay as the Fire OS secondary target off the Vega critical path; M14/V01 is the primary TV critical path; release R1/R2 waits for V01, not A0x/T. Original due dates are preserved baseline only.",
     "entry": "Selected/materialized alternative only: start dependency-ready slices under their explicit depends_on and milestone receipts; no blanket prior-wave release gate may delay backend or V01 prerequisites. Physical/account requirements still gate physical steps.",
-    "exit": "Close only when selected active slice completion dependencies and original acceptance obligations pass; inactive A0x work is not marked PASS. Release checkpoint dependencies remain explicit in the projected graph.",
+    "exit": "Close only when selected active slice completion dependencies and original acceptance obligations pass; Fire OS secondary A0x/T work is never marked PASS by Vega evidence and does not gate the Vega exit. Release checkpoint dependencies remain explicit in the projected graph.",
     "slice_ids": [
      "P2-X10",
      "P2-D02",
@@ -1429,11 +1429,11 @@
    "exit": "README and setup verified from a clean checkout; write-up, demo plan and clips ready; developer feedback assembled and sanitized; final APK tagged, hashed and Reverify run; Assurance Test Engineer and Integration Engineer execution verdicts on the W5 candidate; release prepared (P2-R5); owner checklist for submission handed over.",
    "dispatch_order": "P2-D03, P2-D04, P2-D05 in parallel; P2-SCR1 after W4 (Scribe, not counted); P2-R5 after those four merge; P2-L05 at the P2-R5 merge commit; P2-X12 on the final APK in the Thu 2026-10-22 TNF window, landing a docs-only manifest PR after the candidate.",
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "schedule_ref": "amazon-fantasy-companion-phase-2-technical-plan.md#conditional-critical-path-all-timestamps-utc",
-    "rule": "Use same slice membership except inactive A0x/T; M14/V01 moves into primary TV critical path; release R1/R2 waits for V01. Original due dates are preserved baseline only.",
+    "rule": "DEC-AFC-SD-049: Vega primary. Same slice membership; A0x/T stay as the Fire OS secondary target off the Vega critical path; M14/V01 is the primary TV critical path; release R1/R2 waits for V01, not A0x/T. Original due dates are preserved baseline only.",
     "entry": "Selected/materialized alternative only: start dependency-ready slices under their explicit depends_on and milestone receipts; no blanket prior-wave release gate may delay backend or V01 prerequisites. Physical/account requirements still gate physical steps.",
-    "exit": "Close only when selected active slice completion dependencies and original acceptance obligations pass; inactive A0x work is not marked PASS. Release checkpoint dependencies remain explicit in the projected graph.",
+    "exit": "Close only when selected active slice completion dependencies and original acceptance obligations pass; Fire OS secondary A0x/T work is never marked PASS by Vega evidence and does not gate the Vega exit. Release checkpoint dependencies remain explicit in the projected graph.",
     "slice_ids": [
      "P2-D03",
      "P2-D04",
@@ -1457,11 +1457,11 @@
    "exit": "P2-V01 merged with gate green including area vegaapp, VVD visual review under evidence/visual/P2-V01/ and the per-feature verdict table; or the slice reported in progress with its limits (RISK-AFC-P2-14).",
    "dispatch_order": "P2-V01T as soon as P2-A05 merges; P2-V01 after its red receipt. Shares no lease with the Fire OS chain except aws-afc-dev (read-only API use during VVD runs) and counts against impl_agent_cap. Inclusion in the submission only under RISK-AFC-P2-14.",
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "schedule_ref": "amazon-fantasy-companion-phase-2-technical-plan.md#conditional-critical-path-all-timestamps-utc",
-    "rule": "Use same slice membership except inactive A0x/T; M14/V01 moves into primary TV critical path; release R1/R2 waits for V01. Original due dates are preserved baseline only.",
+    "rule": "DEC-AFC-SD-049: Vega primary. Same slice membership; A0x/T stay as the Fire OS secondary target off the Vega critical path; M14/V01 is the primary TV critical path; release R1/R2 waits for V01, not A0x/T. Original due dates are preserved baseline only.",
     "entry": "V01T after X01 host/VVD ready and B01/G01; V01 start after frozen V01T red; closure after physical probes and L03. No A01..A05 or R1/R2 prerequisite.",
-    "exit": "Close only when selected active slice completion dependencies and original acceptance obligations pass; inactive A0x work is not marked PASS. Release checkpoint dependencies remain explicit in the projected graph.",
+    "exit": "Close only when selected active slice completion dependencies and original acceptance obligations pass; Fire OS secondary A0x/T work is never marked PASS by Vega evidence and does not gate the Vega exit. Release checkpoint dependencies remain explicit in the projected graph.",
     "slice_ids": [
      "P2-V01T",
      "P2-V01"
@@ -2415,9 +2415,9 @@
    },
    "development_strategy": "evidence-only (OD-AFC-04, open_for_integrated_review)",
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "dispatchable": false,
-    "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+    "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
     "disposition": "replace_platform_keep_evidence",
     "overrides": {
      "goal": "Qualify pinned, scanned Vega SDK/VVD and user-scope Watchman; record host compatibility, VVD boot/input/capture and first_install_at. Record physical Vega identity after owner login; no Android qualification prerequisite.",
@@ -2443,10 +2443,11 @@
        "OA-12",
        "OA-13"
       ],
-      "open_decisions": [
-       "VP-OD-01",
-       "VP-OD-03"
-      ]
+      "open_decisions": [],
+      "decided": {
+       "VP-OD-01": "DEC-AFC-SD-049",
+       "VP-OD-03": "DEC-AFC-SD-051"
+      }
      },
      "requirement_ids": [
       "AFC-PR-052",
@@ -3246,14 +3247,14 @@
    },
    "development_strategy": "tdd",
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "dispatchable": false,
-    "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
-    "disposition": "preserved_reference_not_dispatched",
+    "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
+    "disposition": "fire_os_secondary_target",
     "overrides": {},
     "completion_dependencies": [],
     "preserved_fields": "All unmentioned fields, including role/model_route/reasoning_level/review_path/authority_id, inherit unchanged. No new execution authority.",
-    "note": "Keep existing work and tests; V01T/V01 replace the primary realization. No deletion, completion or cancellation claimed."
+    "note": "Fire OS secondary target (DEC-AFC-SD-049): original fields, tests and dependencies stay and the slice is dispatched off the Vega critical path; V01T/V01 are the primary realization. No primary slice waits on it. No deletion, completion or cancellation claimed."
    }
   },
   {
@@ -3437,14 +3438,14 @@
    },
    "development_strategy": "tdd",
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "dispatchable": false,
-    "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
-    "disposition": "preserved_reference_not_dispatched",
+    "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
+    "disposition": "fire_os_secondary_target",
     "overrides": {},
     "completion_dependencies": [],
     "preserved_fields": "All unmentioned fields, including role/model_route/reasoning_level/review_path/authority_id, inherit unchanged. No new execution authority.",
-    "note": "Keep existing work and tests; V01T/V01 replace the primary realization. No deletion, completion or cancellation claimed."
+    "note": "Fire OS secondary target (DEC-AFC-SD-049): original fields, tests and dependencies stay and the slice is dispatched off the Vega critical path; V01T/V01 are the primary realization. No primary slice waits on it. No deletion, completion or cancellation claimed."
    }
   },
   {
@@ -3785,9 +3786,9 @@
    "development_strategy": "tdd",
    "write_set_note": "(not , IE-P2-F01)",
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "dispatchable": false,
-    "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+    "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
     "disposition": "keep_shared_backend",
     "overrides": {},
     "completion_dependencies": [],
@@ -3955,9 +3956,9 @@
    },
    "development_strategy": "light",
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "dispatchable": false,
-    "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+    "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
     "disposition": "keep_release_checkpoint_replace_target",
     "overrides": {
      "depends_on": [
@@ -4156,9 +4157,9 @@
    },
    "development_strategy": "evidence-only (OD-AFC-04, open_for_integrated_review)",
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "dispatchable": false,
-    "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+    "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
     "disposition": "replace_platform_keep_evidence",
     "overrides": {
      "goal": "Probe panel beside real provider video on Vega with no overlap/crop and preserved aspect. Close at verdict or primary Vega first_install_at + 24h; FAILS/TIMEBOX selects the existing fullScreen fallback.",
@@ -4176,9 +4177,10 @@
        "OA-12",
        "OA-4"
       ],
-      "open_decisions": [
-       "VP-OD-01"
-      ]
+      "open_decisions": [],
+      "decided": {
+       "VP-OD-01": "DEC-AFC-SD-049"
+      }
      }
     },
     "completion_dependencies": [],
@@ -4344,9 +4346,9 @@
    },
    "development_strategy": "evidence-only (OD-AFC-04, open_for_integrated_review)",
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "dispatchable": false,
-    "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+    "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
     "disposition": "replace_platform_keep_evidence",
     "overrides": {
      "goal": "Probe physical Vega background alerts during provider playback, including Watch/Dismiss and disabled/panel-only controls. Verify exact SDK/RN notification compatibility; VVD cannot close this probe.",
@@ -4365,9 +4367,10 @@
        "OA-12",
        "OA-4"
       ],
-      "open_decisions": [
-       "VP-OD-01"
-      ]
+      "open_decisions": [],
+      "decided": {
+       "VP-OD-01": "DEC-AFC-SD-049"
+      }
      },
      "requirement_ids": [
       "AFC-PR-015",
@@ -4576,9 +4579,9 @@
    },
    "development_strategy": "evidence-only (OD-AFC-04, open_for_integrated_review)",
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "dispatchable": false,
-    "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+    "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
     "disposition": "replace_platform_keep_evidence",
     "overrides": {
      "goal": "Probe Vega provider game/channel URIs in the existing provider order; record exact component, access basis and honest outcomes in the existing registry schema. Separate desk and live receipts; no Android intent assumption.",
@@ -4599,9 +4602,10 @@
        "OA-12",
        "OA-4"
       ],
-      "open_decisions": [
-       "VP-OD-01"
-      ]
+      "open_decisions": [],
+      "decided": {
+       "VP-OD-01": "DEC-AFC-SD-049"
+      }
      }
     },
     "completion_dependencies": [],
@@ -4756,9 +4760,9 @@
    },
    "development_strategy": "evidence-only (OD-AFC-04, open_for_integrated_review)",
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "dispatchable": false,
-    "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+    "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
     "disposition": "replace_platform_keep_evidence",
     "overrides": {
      "goal": "Probe permitted installed-provider and current-context detection on physical Vega; verify positive/absent/disabled cases and labels. URI resolution is not entitlement; unverified identifiers cannot prove app absence.",
@@ -4776,9 +4780,10 @@
        "OA-12",
        "OA-4"
       ],
-      "open_decisions": [
-       "VP-OD-01"
-      ]
+      "open_decisions": [],
+      "decided": {
+       "VP-OD-01": "DEC-AFC-SD-049"
+      }
      }
     },
     "completion_dependencies": [],
@@ -5720,14 +5725,14 @@
    },
    "development_strategy": "tdd",
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "dispatchable": false,
-    "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
-    "disposition": "preserved_reference_not_dispatched",
+    "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
+    "disposition": "fire_os_secondary_target",
     "overrides": {},
     "completion_dependencies": [],
     "preserved_fields": "All unmentioned fields, including role/model_route/reasoning_level/review_path/authority_id, inherit unchanged. No new execution authority.",
-    "note": "Keep existing work and tests; V01T/V01 replace the primary realization. No deletion, completion or cancellation claimed."
+    "note": "Fire OS secondary target (DEC-AFC-SD-049): original fields, tests and dependencies stay and the slice is dispatched off the Vega critical path; V01T/V01 are the primary realization. No primary slice waits on it. No deletion, completion or cancellation claimed."
    }
   },
   {
@@ -5926,14 +5931,14 @@
    "development_strategy": "tdd",
    "write_set_note": "(own entries only, under tv-app-manifest / tv-app-gradle)",
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "dispatchable": false,
-    "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
-    "disposition": "preserved_reference_not_dispatched",
+    "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
+    "disposition": "fire_os_secondary_target",
     "overrides": {},
     "completion_dependencies": [],
     "preserved_fields": "All unmentioned fields, including role/model_route/reasoning_level/review_path/authority_id, inherit unchanged. No new execution authority.",
-    "note": "Keep existing work and tests; V01T/V01 replace the primary realization. No deletion, completion or cancellation claimed."
+    "note": "Fire OS secondary target (DEC-AFC-SD-049): original fields, tests and dependencies stay and the slice is dispatched off the Vega critical path; V01T/V01 are the primary realization. No primary slice waits on it. No deletion, completion or cancellation claimed."
    }
   },
   {
@@ -6095,9 +6100,9 @@
    },
    "development_strategy": "light",
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "dispatchable": false,
-    "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+    "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
     "disposition": "keep_shared_backend",
     "overrides": {},
     "completion_dependencies": [],
@@ -6262,9 +6267,9 @@
    },
    "development_strategy": "light",
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "dispatchable": false,
-    "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+    "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
     "disposition": "keep_release_checkpoint_replace_target",
     "overrides": {
      "depends_on": [
@@ -7065,9 +7070,9 @@
    },
    "development_strategy": "tdd",
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "dispatchable": false,
-    "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+    "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
     "disposition": "keep_shared_backend",
     "overrides": {},
     "completion_dependencies": [],
@@ -7224,9 +7229,9 @@
    "development_strategy": "tdd",
    "write_set_note": "(registry.json read-only)",
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "dispatchable": false,
-    "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+    "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
     "disposition": "keep_shared_backend",
     "overrides": {},
     "completion_dependencies": [],
@@ -7693,14 +7698,14 @@
    },
    "development_strategy": "tdd",
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "dispatchable": false,
-    "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
-    "disposition": "preserved_reference_not_dispatched",
+    "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
+    "disposition": "fire_os_secondary_target",
     "overrides": {},
     "completion_dependencies": [],
     "preserved_fields": "All unmentioned fields, including role/model_route/reasoning_level/review_path/authority_id, inherit unchanged. No new execution authority.",
-    "note": "Keep existing work and tests; V01T/V01 replace the primary realization. No deletion, completion or cancellation claimed."
+    "note": "Fire OS secondary target (DEC-AFC-SD-049): original fields, tests and dependencies stay and the slice is dispatched off the Vega critical path; V01T/V01 are the primary realization. No primary slice waits on it. No deletion, completion or cancellation claimed."
    }
   },
   {
@@ -7879,14 +7884,14 @@
    "development_strategy": "tdd",
    "write_set_note": "(own entries only, under tv-app-manifest / tv-app-gradle)",
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "dispatchable": false,
-    "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
-    "disposition": "preserved_reference_not_dispatched",
+    "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
+    "disposition": "fire_os_secondary_target",
     "overrides": {},
     "completion_dependencies": [],
     "preserved_fields": "All unmentioned fields, including role/model_route/reasoning_level/review_path/authority_id, inherit unchanged. No new execution authority.",
-    "note": "Keep existing work and tests; V01T/V01 replace the primary realization. No deletion, completion or cancellation claimed."
+    "note": "Fire OS secondary target (DEC-AFC-SD-049): original fields, tests and dependencies stay and the slice is dispatched off the Vega critical path; V01T/V01 are the primary realization. No primary slice waits on it. No deletion, completion or cancellation claimed."
    }
   },
   {
@@ -8043,14 +8048,14 @@
    },
    "development_strategy": "tdd",
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "dispatchable": false,
-    "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
-    "disposition": "preserved_reference_not_dispatched",
+    "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
+    "disposition": "fire_os_secondary_target",
     "overrides": {},
     "completion_dependencies": [],
     "preserved_fields": "All unmentioned fields, including role/model_route/reasoning_level/review_path/authority_id, inherit unchanged. No new execution authority.",
-    "note": "Keep existing work and tests; V01T/V01 replace the primary realization. No deletion, completion or cancellation claimed."
+    "note": "Fire OS secondary target (DEC-AFC-SD-049): original fields, tests and dependencies stay and the slice is dispatched off the Vega critical path; V01T/V01 are the primary realization. No primary slice waits on it. No deletion, completion or cancellation claimed."
    }
   },
   {
@@ -8223,14 +8228,14 @@
    "development_strategy": "tdd",
    "write_set_note": "(own entries only, under tv-app-manifest / tv-app-gradle)",
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "dispatchable": false,
-    "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
-    "disposition": "preserved_reference_not_dispatched",
+    "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
+    "disposition": "fire_os_secondary_target",
     "overrides": {},
     "completion_dependencies": [],
     "preserved_fields": "All unmentioned fields, including role/model_route/reasoning_level/review_path/authority_id, inherit unchanged. No new execution authority.",
-    "note": "Keep existing work and tests; V01T/V01 replace the primary realization. No deletion, completion or cancellation claimed."
+    "note": "Fire OS secondary target (DEC-AFC-SD-049): original fields, tests and dependencies stay and the slice is dispatched off the Vega critical path; V01T/V01 are the primary realization. No primary slice waits on it. No deletion, completion or cancellation claimed."
    }
   },
   {
@@ -8399,14 +8404,14 @@
    },
    "development_strategy": "tdd",
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "dispatchable": false,
-    "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
-    "disposition": "preserved_reference_not_dispatched",
+    "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
+    "disposition": "fire_os_secondary_target",
     "overrides": {},
     "completion_dependencies": [],
     "preserved_fields": "All unmentioned fields, including role/model_route/reasoning_level/review_path/authority_id, inherit unchanged. No new execution authority.",
-    "note": "Keep existing work and tests; V01T/V01 replace the primary realization. No deletion, completion or cancellation claimed."
+    "note": "Fire OS secondary target (DEC-AFC-SD-049): original fields, tests and dependencies stay and the slice is dispatched off the Vega critical path; V01T/V01 are the primary realization. No primary slice waits on it. No deletion, completion or cancellation claimed."
    }
   },
   {
@@ -8596,14 +8601,14 @@
    "development_strategy": "tdd",
    "write_set_note": "(own entries only, under tv-app-manifest / tv-app-gradle)",
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "dispatchable": false,
-    "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
-    "disposition": "preserved_reference_not_dispatched",
+    "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
+    "disposition": "fire_os_secondary_target",
     "overrides": {},
     "completion_dependencies": [],
     "preserved_fields": "All unmentioned fields, including role/model_route/reasoning_level/review_path/authority_id, inherit unchanged. No new execution authority.",
-    "note": "Keep existing work and tests; V01T/V01 replace the primary realization. No deletion, completion or cancellation claimed."
+    "note": "Fire OS secondary target (DEC-AFC-SD-049): original fields, tests and dependencies stay and the slice is dispatched off the Vega critical path; V01T/V01 are the primary realization. No primary slice waits on it. No deletion, completion or cancellation claimed."
    }
   },
   {
@@ -8799,9 +8804,9 @@
    },
    "development_strategy": "light",
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "dispatchable": false,
-    "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+    "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
     "disposition": "keep_shared_backend",
     "overrides": {},
     "completion_dependencies": [],
@@ -9013,9 +9018,9 @@
    },
    "development_strategy": "evidence-only (OD-AFC-04, open_for_integrated_review)",
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "dispatchable": false,
-    "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+    "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
     "disposition": "keep_replace_target",
     "overrides": {
      "depends_on": [
@@ -9278,9 +9283,9 @@
    },
    "development_strategy": "light",
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "dispatchable": false,
-    "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+    "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
     "disposition": "keep_release_checkpoint_replace_target",
     "overrides": {
      "depends_on": [
@@ -9475,9 +9480,9 @@
    },
    "development_strategy": "evidence-only (OD-AFC-04, open_for_integrated_review)",
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "dispatchable": false,
-    "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+    "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
     "disposition": "keep_replace_target",
     "overrides": {
      "depends_on": [
@@ -9650,14 +9655,14 @@
    },
    "development_strategy": "documentation-only inspection (declared verification method; tdd for behavior changes)",
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "dispatchable": false,
-    "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+    "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
     "disposition": "keep_documentation_replace_target",
     "overrides": {},
     "completion_dependencies": [],
     "preserved_fields": "All unmentioned fields, including role/model_route/reasoning_level/review_path/authority_id, inherit unchanged. No new execution authority.",
-    "note": "Use actual Vega device/package evidence and truthful limits; original write_set and dependencies retained. SD-048 is settled. D02 changes AFC-PR-052/053 platform allocation only after VP-OD-01; no unapproved behavior reduction."
+    "note": "Use actual Vega device/package evidence and truthful limits; Fire OS secondary evidence is reported only where it exists. Original write_set and dependencies retained. SD-048 is settled. D02 records the Vega primary target (DEC-AFC-SD-049) in AFC-PR-052/053 allocation; no unapproved behavior reduction."
    }
   },
   {
@@ -9810,9 +9815,9 @@
    "dispatchable": false,
    "slice_status": "conditional (OD-AFC-03 = yes and W3 on time; drop at 2026-10-21T12:00:00Z if unverified)",
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "dispatchable": false,
-    "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+    "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
     "disposition": "keep_conditional",
     "overrides": {
      "leases": [
@@ -9973,9 +9978,9 @@
    },
    "development_strategy": "light",
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "dispatchable": false,
-    "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+    "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
     "disposition": "keep_release_checkpoint_replace_target",
     "overrides": {
      "depends_on": [
@@ -10151,20 +10156,20 @@
    },
    "development_strategy": "documentation-only inspection (declared verification method; tdd for behavior changes)",
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "dispatchable": false,
-    "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+    "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
     "disposition": "keep_documentation_replace_target",
     "overrides": {},
     "completion_dependencies": [],
     "preserved_fields": "All unmentioned fields, including role/model_route/reasoning_level/review_path/authority_id, inherit unchanged. No new execution authority.",
-    "note": "Use actual Vega device/package evidence and truthful limits; original write_set and dependencies retained. SD-048 is settled. D02 changes AFC-PR-052/053 platform allocation only after VP-OD-01; no unapproved behavior reduction."
+    "note": "Use actual Vega device/package evidence and truthful limits; Fire OS secondary evidence is reported only where it exists. Original write_set and dependencies retained. SD-048 is settled. D02 records the Vega primary target (DEC-AFC-SD-049) in AFC-PR-052/053 allocation; no unapproved behavior reduction."
    }
   },
   {
    "id": "P2-D04",
    "role": "Product Implementer",
-   "goal": "Write-up from evidence: Fire TV and AWS Builder integrations, YouTube TV Fantasy View differentiation, SD-036 future direction with public citations marked external context; stop at PROC-SUBMISSION-CHECK pass.",
+   "goal": "Write-up from evidence: Fire TV and AWS Builder integrations, YouTube TV Fantasy View differentiation, SD-036 future direction with public citations marked external context; stop at PROC-SUBMISSION-CHECK pass. Include the Vega OS build in the submission only if P2-V01 verification passed before these documents are finalized; otherwise report it as in progress with its limits.",
    "goal_source_notes": "Write-up from evidence: Fire TV and AWS Builder integrations, YouTube TV Fantasy View differentiation, SD-036 future direction with public citations marked external context; stop at PROC-SUBMISSION-CHECK pass.",
    "type": "docs",
    "requirement_ids": [
@@ -10175,7 +10180,8 @@
     "AC-AFC-P2-REV-01",
     "AC-AFC-P2-SUB-03",
     "RISK-AFC-P2-10",
-    "RISK-AFC-P2-12"
+    "RISK-AFC-P2-12",
+    "RISK-AFC-P2-14"
    ],
    "design_ids": [
     "DES-AFC-P2-SUB"
@@ -10188,7 +10194,8 @@
     "SEIT-AFC-P2-REV-01",
     "SEIT-AFC-P2-SUB-03",
     "SEIT-RISK-AFC-P2-10",
-    "SEIT-RISK-AFC-P2-12"
+    "SEIT-RISK-AFC-P2-12",
+    "SEIT-RISK-AFC-P2-14"
    ],
    "design_lenses": [
     "Developer feedback",
@@ -10300,9 +10307,9 @@
    },
    "development_strategy": "documentation-only inspection (declared verification method; tdd for behavior changes)",
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "dispatchable": false,
-    "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+    "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
     "disposition": "keep_documentation_replace_target",
     "overrides": {
      "requirement_ids": [
@@ -10341,17 +10348,17 @@
     },
     "completion_dependencies": [],
     "preserved_fields": "All unmentioned fields, including role/model_route/reasoning_level/review_path/authority_id, inherit unchanged. No new execution authority.",
-    "note": "Use actual Vega device/package evidence and truthful limits; original write_set and dependencies retained. SD-048 is settled. D02 changes AFC-PR-052/053 platform allocation only after VP-OD-01; no unapproved behavior reduction.",
-    "proposed_risk_ownership": {
+    "note": "Use actual Vega device/package evidence and truthful limits; Fire OS secondary evidence is reported only where it exists. Original write_set and dependencies retained. SD-048 is settled. D02 records the Vega primary target (DEC-AFC-SD-049) in AFC-PR-052/053 allocation; no unapproved behavior reduction.",
+    "risk_ownership": {
      "risk_id": "RISK-AFC-P2-14",
      "closing_slice": "P2-D04",
      "supporting_slices": [
       "P2-V01"
      ],
-     "status": "NEEDS_OWNER_DECISION",
-     "decision_ref": "VP-OD-05",
-     "open_finding": "F1",
-     "primary_failure_rule": "Primary Vega failure blocks submission readiness; side-lane in-progress wording cannot satisfy the primary target."
+     "status": "decided",
+     "decision_ref": "DEC-AFC-SD-050",
+     "open_finding": "F1 closed",
+     "primary_failure_rule": "Include the Vega OS build in the submission only if P2-V01 verification passed before these documents are finalized; otherwise report it as in progress with its limits."
     }
    }
   },
@@ -10498,14 +10505,14 @@
    },
    "development_strategy": "documentation-only inspection (declared verification method; tdd for behavior changes)",
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "dispatchable": false,
-    "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+    "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
     "disposition": "keep_documentation_replace_target",
     "overrides": {},
     "completion_dependencies": [],
     "preserved_fields": "All unmentioned fields, including role/model_route/reasoning_level/review_path/authority_id, inherit unchanged. No new execution authority.",
-    "note": "Use actual Vega device/package evidence and truthful limits; original write_set and dependencies retained. SD-048 is settled. D02 changes AFC-PR-052/053 platform allocation only after VP-OD-01; no unapproved behavior reduction."
+    "note": "Use actual Vega device/package evidence and truthful limits; Fire OS secondary evidence is reported only where it exists. Original write_set and dependencies retained. SD-048 is settled. D02 records the Vega primary target (DEC-AFC-SD-049) in AFC-PR-052/053 allocation; no unapproved behavior reduction."
    }
   },
   {
@@ -10668,9 +10675,9 @@
    },
    "development_strategy": "evidence-only (OD-AFC-04, open_for_integrated_review)",
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "dispatchable": false,
-    "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+    "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
     "disposition": "keep_replace_capture",
     "overrides": {
      "depends_on": [
@@ -10877,14 +10884,14 @@
    },
    "development_strategy": "scribe assembly (PROC-SCRIBE-ASSEMBLY; documentation-only inspection)",
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "dispatchable": false,
-    "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+    "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
     "disposition": "keep_documentation_replace_target",
     "overrides": {},
     "completion_dependencies": [],
     "preserved_fields": "All unmentioned fields, including role/model_route/reasoning_level/review_path/authority_id, inherit unchanged. No new execution authority.",
-    "note": "Use actual Vega device/package evidence and truthful limits; original write_set and dependencies retained. SD-048 is settled. D02 changes AFC-PR-052/053 platform allocation only after VP-OD-01; no unapproved behavior reduction."
+    "note": "Use actual Vega device/package evidence and truthful limits; Fire OS secondary evidence is reported only where it exists. Original write_set and dependencies retained. SD-048 is settled. D02 records the Vega primary target (DEC-AFC-SD-049) in AFC-PR-052/053 allocation; no unapproved behavior reduction."
    }
   },
   {
@@ -11042,9 +11049,9 @@
    },
    "development_strategy": "light",
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "dispatchable": false,
-    "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+    "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
     "disposition": "replace_apk_with_vpkg",
     "overrides": {
      "goal": "Build the final Vega candidate using V01 qualified configuration; record physical and VVD .vpkg architecture, commit and hashes; run Reverify on exact packages. No publication.",
@@ -11057,9 +11064,10 @@
      ],
      "human_decision": {
       "owner_actions": [],
-      "open_decisions": [
-       "VP-OD-01"
-      ]
+      "open_decisions": [],
+      "decided": {
+       "VP-OD-01": "DEC-AFC-SD-049"
+      }
      },
      "leases": [
       "vega-app-config"
@@ -11256,9 +11264,9 @@
    },
    "development_strategy": "light",
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "dispatchable": false,
-    "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+    "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
     "disposition": "keep_release_checkpoint_replace_target",
     "overrides": {
      "depends_on": [
@@ -11535,9 +11543,9 @@
    },
    "development_strategy": "tdd",
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "dispatchable": false,
-    "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+    "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
     "disposition": "promote_existing_pair",
     "overrides": {
      "depends_on": [
@@ -11559,10 +11567,11 @@
       "owner_actions": [
        "OA-13"
       ],
-      "open_decisions": [
-       "VP-OD-01",
-       "VP-OD-03"
-      ]
+      "open_decisions": [],
+      "decided": {
+       "VP-OD-01": "DEC-AFC-SD-049",
+       "VP-OD-03": "DEC-AFC-SD-051"
+      }
      },
      "leases": [
       "vega-app-config",
@@ -11948,7 +11957,7 @@
     "P2-A05",
     "P2-L03"
    ],
-   "depends_on_text": "P2-V01T red receipt; P2-A01..P2-A05 merged; P2-L03 (aws-afc-dev at the Wave 3 backend head) for VVD runs against the deployed API; linked-state capture needs the owner's OA-10 passphrase entry; physical-device path only after OA-12",
+   "depends_on_text": "P2-V01T red receipt; P2-A01..P2-A05 merged; P2-L03 (aws-afc-dev at the Wave 3 backend head) for VVD runs against the deployed API; linked-state capture needs the owner to confirm the TV code on a phone or browser (DEC-AFC-SD-048; no passphrase); physical-device path only after OA-12",
    "leases": [
     "vega-virtual-device",
     "vega-app-config",
@@ -11976,9 +11985,9 @@
    },
    "development_strategy": "tdd",
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "dispatchable": false,
-    "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+    "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
     "disposition": "promote_existing_pair",
     "overrides": {
      "depends_on": [
@@ -12014,10 +12023,11 @@
        "OA-12",
        "OA-13"
       ],
-      "open_decisions": [
-       "VP-OD-01",
-       "VP-OD-03"
-      ]
+      "open_decisions": [],
+      "decided": {
+       "VP-OD-01": "DEC-AFC-SD-049",
+       "VP-OD-03": "DEC-AFC-SD-051"
+      }
      },
      "leases": [
       "vega-app-config",
@@ -12258,7 +12268,7 @@
     "rollback": "revert PR (no force-push); Phase 2 dispatch waits",
     "exit": "p2.base recorded; every Phase 2 branch cuts from it or later",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "after": [],
      "merges": [],
      "note": "After is integration closure order, not a blanket start gate. Same shared-resource/review/owner boundaries. Original platform-specific post-step commands use primary SEIT bindings; no waived positive/negative criteria."
@@ -12289,7 +12299,7 @@
     "rollback": "revert PR; milestones edited by gh api to the approved table (no deletion without owner)",
     "exit": "AC-AFC-P2-MS-01, AC-AFC-P2-VNV-01 evidence recorded",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "after": [
       "IE-P2-1"
      ],
@@ -12327,7 +12337,7 @@
     "rollback": "revert PR; A01/B01 landings wait (RISK-AFC-P2-11)",
     "exit": "gate areas tvapp and backend on main (W1 exit item 1)",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "after": [
       "IE-P2-1"
      ],
@@ -12364,7 +12374,7 @@
     "rollback": "verdict is evidence; a wrong verdict is superseded by a new verdict PR, never edited silently",
     "exit": "device identity and clock start recorded; stick released to P2-X04 immediately",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "after": [
       "IE-P2-1"
      ],
@@ -12403,7 +12413,7 @@
     "rollback": "revert PR; dependents keep developing against the branch",
     "exit": "frozen contracts recorded; backend skeleton with device-code link green (W1 exit item 4)",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "after": [
       "IE-P2-3"
      ],
@@ -12439,7 +12449,7 @@
     "rollback": "revert PR; fixtures are never edited, a bad capture is superseded by later sequence files",
     "exit": "first fixtures on main (W1 exit item 6); B02T may start",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "after": [
       "IE-P2-5"
      ],
@@ -12480,10 +12490,17 @@
     "rollback": "revert PR; CMD-ADB-ROLLBACK on the stick (first app install: adb uninstall com.afc.companion)",
     "exit": "tv-app scaffold builds and installs on the stick (W1 exit item 3); apk.last_green set",
     "vega_primary_contingency": {
-     "status": "inactive_if_selected",
-     "after": [],
-     "merges": [],
-     "note": "Baseline Android realization retained as reference; primary counterpart is IE-P2-V01. No acceptance inferred."
+     "status": "fire_os_secondary",
+     "after": [
+      "IE-P2-3",
+      "IE-P2-4",
+      "IE-P2-5"
+     ],
+     "merges": [
+      "P2-A01T",
+      "P2-A01"
+     ],
+     "note": "Fire OS secondary target (DEC-AFC-SD-049): merges in its original order, off the Vega critical path; no Vega integration step waits on it. Primary counterpart is IE-P2-V01. No acceptance inferred."
     }
    },
    {
@@ -12515,7 +12532,7 @@
     "rollback": "revert PR; draft release deleted (unpublished draft only)",
     "exit": "W1 exit; release.m1 recorded",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "after": [
       "IE-P2-2",
       "IE-P2-3",
@@ -12553,7 +12570,7 @@
     "rollback": "verdict superseded only by a new verdict PR inside the clock; after the clock, TIMEBOX \u2192 fullScreen stands",
     "exit": "panel_mode fixed for A05T/A05, X09, D02",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "after": [
       "IE-P2-4"
      ],
@@ -12587,7 +12604,7 @@
     "rollback": "verdict superseded by new verdict PR",
     "exit": "notify_route fixed for A03T/A03",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "after": [
       "IE-P2-9"
      ],
@@ -12622,7 +12639,7 @@
     "rollback": "revert PR; registry returns to the empty contract shape",
     "exit": "B06T and A04T may start",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "after": [
       "IE-P2-10",
       "IE-P2-5"
@@ -12655,7 +12672,7 @@
     "rollback": "verdict superseded by new verdict PR",
     "exit": "A02 detector behavior fixed",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "after": [
       "IE-P2-11"
      ],
@@ -12691,7 +12708,7 @@
     "rollback": "revert PR",
     "exit": "ingest merged",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "after": [
       "IE-P2-5",
       "IE-P2-6"
@@ -12728,7 +12745,7 @@
     "rollback": "revert PR",
     "exit": "lineup merged; X06 Yahoo path becomes testable once deployed",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "after": [
       "IE-P2-5"
      ],
@@ -12751,7 +12768,7 @@
      "IE-P2-5"
     ],
     "entry_criteria": [
-     "OA-3 done (afc-dev profile); OA-10 passphrase stored for the link-confirm smoke (IE-P2-F15)",
+     "OA-3 done (afc-dev profile); OA-10 owner available to confirm the TV link code for the link-confirm smoke (IE-P2-F15; DEC-AFC-SD-048, no passphrase)",
      "aws-afc-dev lease free; no in-progress game window held",
      "deploy commit = main HEAD (includes B02/B03 when merged); CMD-SAM-BUILD, CMD-SAM-DEPLOY with --tags GitCommit=<sha>",
      "any Paid-plan prompt \u2192 stop, class F (RISK-AFC-P2-07)"
@@ -12759,14 +12776,14 @@
     "post_step_vv": [
      "CMD-STACK-OUTPUTS \u2192 ApiUrl",
      "CMD-DEPLOYED-COMMIT",
-     "CMD-DEPLOYED-SMOKE (link issue 200, profile 401 without token, confirm with OA-10 passphrase entered by the owner)",
+     "CMD-DEPLOYED-SMOKE (link issue 200, profile 401 without token, confirm with the TV code entered by the owner; no passphrase, DEC-AFC-SD-048)",
      "CMD-APK-BUILD-DEBUG with -PafcApiBaseUrl=ApiUrl; CMD-ADB-INSTALL; PROC-VISUAL-REVIEW of A01 code-shown, expired, linked states (IE-P2-F26)",
      "evidence PR lands under main-landing"
     ],
     "rollback": "first deploy failure: stack in ROLLBACK_COMPLETE \u2192 `sam delete --stack-name afc-dev --profile afc-dev --no-prompts` (dev data only) and retry; later failures: redeploy deploy.last_green",
     "exit": "deploy.1 recorded; deploy.last_green = deploy.1",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "after": [
       "IE-P2-5"
      ],
@@ -12799,7 +12816,7 @@
     "rollback": "revert PR (registry.v1 stands); live window missed \u2192 RISK-AFC-P2-08: desk outcome stands and the TNF check moves to X09",
     "exit": "provider-link verdict final (W2 exit)",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "after": [
       "IE-P2-11"
      ],
@@ -12831,7 +12848,7 @@
     "rollback": "revert PR; fixtures.v1 stands; live captures retried at X09 (RISK-AFC-P2-08)",
     "exit": "ESPN live timing verdict (W2 exit)",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "after": [
       "IE-P2-6"
      ],
@@ -12870,10 +12887,17 @@
     "rollback": "revert PR; CMD-ADB-ROLLBACK to apk.last_green",
     "exit": "profile and settings UI merged with visual review (W2 exit)",
     "vega_primary_contingency": {
-     "status": "inactive_if_selected",
-     "after": [],
-     "merges": [],
-     "note": "Baseline Android realization retained as reference; primary counterpart is IE-P2-V01. No acceptance inferred."
+     "status": "fire_os_secondary",
+     "after": [
+      "IE-P2-7",
+      "IE-P2-12",
+      "IE-P2-15"
+     ],
+     "merges": [
+      "P2-A02T",
+      "P2-A02"
+     ],
+     "note": "Fire OS secondary target (DEC-AFC-SD-049): merges in its original order, off the Vega critical path; no Vega integration step waits on it. Primary counterpart is IE-P2-V01. No acceptance inferred."
     }
    },
    {
@@ -12899,7 +12923,7 @@
     "rollback": "verdict superseded by new verdict PR; Yahoo failure after approval \u2192 manual (C6)",
     "exit": "T_yahoo outcome recorded (Wave 3 entry)",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "after": [
       "IE-P2-1"
      ],
@@ -12944,7 +12968,7 @@
     "rollback": "revert PR; delete unpublished draft",
     "exit": "W2 exit",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "after": [
       "IE-P2-8",
       "IE-P2-9",
@@ -12988,7 +13012,7 @@
     "rollback": "revert PR",
     "exit": "matcher merged",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "after": [
       "IE-P2-13",
       "IE-P2-14"
@@ -13023,7 +13047,7 @@
     "rollback": "revert PR",
     "exit": "policy merged; A03 may land",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "after": [
       "IE-P2-21"
      ],
@@ -13057,7 +13081,7 @@
     "rollback": "revert PR",
     "exit": "resolver merged; A04 may land",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "after": [
       "IE-P2-11"
      ],
@@ -13091,7 +13115,7 @@
     "rollback": "revert PR",
     "exit": "panel service merged; A05 may land",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "after": [
       "IE-P2-21"
      ],
@@ -13132,7 +13156,7 @@
     "rollback": "redeploy deploy.last_green (CMD-SAM-DEPLOY at that commit)",
     "exit": "deploy.2; deploy.last_green = deploy.2",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "after": [
       "IE-P2-15",
       "IE-P2-19",
@@ -13174,10 +13198,17 @@
     "rollback": "revert PR; CMD-ADB-ROLLBACK",
     "exit": "alert UI merged",
     "vega_primary_contingency": {
-     "status": "inactive_if_selected",
-     "after": [],
-     "merges": [],
-     "note": "Baseline Android realization retained as reference; primary counterpart is IE-P2-V01. No acceptance inferred."
+     "status": "fire_os_secondary",
+     "after": [
+      "IE-P2-18",
+      "IE-P2-10",
+      "IE-P2-22"
+     ],
+     "merges": [
+      "P2-A03T",
+      "P2-A03"
+     ],
+     "note": "Fire OS secondary target (DEC-AFC-SD-049): merges in its original order, off the Vega critical path; no Vega integration step waits on it. Primary counterpart is IE-P2-V01. No acceptance inferred."
     }
    },
    {
@@ -13205,10 +13236,17 @@
     "rollback": "revert PR; CMD-ADB-ROLLBACK",
     "exit": "Watch merged",
     "vega_primary_contingency": {
-     "status": "inactive_if_selected",
-     "after": [],
-     "merges": [],
-     "note": "Baseline Android realization retained as reference; primary counterpart is IE-P2-V01. No acceptance inferred."
+     "status": "fire_os_secondary",
+     "after": [
+      "IE-P2-18",
+      "IE-P2-11",
+      "IE-P2-23"
+     ],
+     "merges": [
+      "P2-A04T",
+      "P2-A04"
+     ],
+     "note": "Fire OS secondary target (DEC-AFC-SD-049): merges in its original order, off the Vega critical path; no Vega integration step waits on it. Primary counterpart is IE-P2-V01. No acceptance inferred."
     }
    },
    {
@@ -13238,10 +13276,17 @@
     "rollback": "revert PR; CMD-ADB-ROLLBACK",
     "exit": "panel UI merged",
     "vega_primary_contingency": {
-     "status": "inactive_if_selected",
-     "after": [],
-     "merges": [],
-     "note": "Baseline Android realization retained as reference; primary counterpart is IE-P2-V01. No acceptance inferred."
+     "status": "fire_os_secondary",
+     "after": [
+      "IE-P2-9",
+      "IE-P2-18",
+      "IE-P2-24"
+     ],
+     "merges": [
+      "P2-A05T",
+      "P2-A05"
+     ],
+     "note": "Fire OS secondary target (DEC-AFC-SD-049): merges in its original order, off the Vega critical path; no Vega integration step waits on it. Primary counterpart is IE-P2-V01. No acceptance inferred."
     }
    },
    {
@@ -13269,7 +13314,7 @@
     "rollback": "CMD-ADB-ROLLBACK; failing behavior \u2192 bug-triager; owner scope decision (RISK-AFC-P2-13) if not fixable by 2026-10-18T15:00Z",
     "exit": "rehearsal receipt; candidate APK installed for X09",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "after": [
       "IE-P2-25",
       "IE-P2-V01"
@@ -13301,7 +13346,7 @@
     "rollback": "missed window or no qualifying event \u2192 labeled replay + next window (RISK-AFC-P2-08)",
     "exit": "W3 live evidence (W3 exit item 1)",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "after": [
       "IE-P2-29"
      ],
@@ -13344,7 +13389,7 @@
     "rollback": "revert PR; delete unpublished draft",
     "exit": "W3 exit",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "after": [
       "IE-P2-20",
       "IE-P2-21",
@@ -13384,7 +13429,7 @@
     "rollback": "revert fix PR; redeploy deploy.last_green; CMD-ADB-ROLLBACK",
     "exit": "deploy.last_green and apk.last_green current for X10",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "after": [
       "IE-P2-30"
      ],
@@ -13413,7 +13458,7 @@
     "rollback": "missed window \u2192 labeled replay; the gap is owner-accepted at class C or carried as a typed gap",
     "exit": "corrections/starter changes verified (W4 exit item 1)",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "after": [
       "IE-P2-32"
      ],
@@ -13444,7 +13489,7 @@
     "rollback": "Unselected or timeboxed X11 records exact terminal/no-offer disposition under OD-AFC-03; only applicable no-offer criteria can close; enabled voice proof remains not_run/typed gap, never inferred PASS",
     "exit": "X11 terminal disposition recorded; verdict landed when run; D02 may freeze only after this prerequisite",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "after": [
       "IE-P2-31"
      ],
@@ -13486,7 +13531,7 @@
     "rollback": "revert PR",
     "exit": "AC-AFC-P2-SPEC-01 evidence; all landed verdicts through freeze incorporated; same D02 slice owns any necessary later delta",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "after": [
       "IE-P2-1",
       "IE-P2-4",
@@ -13531,7 +13576,7 @@
     "rollback": "revert PR; delete unpublished draft",
     "exit": "W4 exit; tv-app/ and backend/ frozen except bug-triager fixes",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "after": [
       "IE-P2-31",
       "IE-P2-32",
@@ -13572,7 +13617,7 @@
     "rollback": "revert PR",
     "exit": "submission docs on main",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "after": [
       "IE-P2-33"
      ],
@@ -13604,7 +13649,7 @@
     "rollback": "revert PR",
     "exit": "AC-AFC-P2-DX-02",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "after": [
       "IE-P2-36"
      ],
@@ -13635,7 +13680,7 @@
     "rollback": "exposure found after flip \u2192 RISK-AFC-P2-12: owner flips back to private and rotates; revert the leaking commit by PR",
     "exit": "judge access verified",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "after": [
       "IE-P2-37",
       "IE-P2-38"
@@ -13664,7 +13709,7 @@
     "rollback": "redeploy deploy.last_green",
     "exit": "deploy.final with backend/ tree equal to the candidate's",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "after": [
       "IE-P2-36"
      ],
@@ -13700,7 +13745,7 @@
     "rollback": "revert PR; candidate falls back to the IE-P2-36 state with v0.4.0",
     "exit": "W5 candidate commit fixed",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "after": [
       "IE-P2-36",
       "IE-P2-37",
@@ -13739,7 +13784,7 @@
     "rollback": "build failure \u2192 bug-triager; stick: CMD-ADB-ROLLBACK to apk.m4",
     "exit": "Exact final APK identity/inspection and truthful Reverify disposition; tagged-main/publication remains OWNER_EVIDENCE_PENDING until OA-8 tag readback",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "after": [
       "IE-P2-41"
      ],
@@ -13774,7 +13819,7 @@
     "rollback": "Revert evidence PR if needed; retain final-APK capture obligation; earlier X09/X10 clips are historical evidence of those APKs only, never demonstration of apk.final; any material restriction requires exact owner scope decision",
     "exit": "demo clips manifest complete",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "after": [
       "IE-P2-42",
       "IE-P2-37"
@@ -13807,7 +13852,7 @@
     "rollback": "a failing assessment finding \u2192 bug-triager in the current round; candidate re-forms at the fix merge (R5 version stays) with IE-P2-42 rebuilt; owner told of any W5 slip (RISK-AFC-P2-13)",
     "exit": "W5 technical closeout only when final capture/evidence and required independent assessments complete; owner checklist handed over; pending tag/publication subcriteria remain explicitly pending until OA-8, never complete by planning PASS",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "after": [
       "IE-P2-42"
      ],
@@ -13862,7 +13907,7 @@
      ],
      "exit": "V01 accepted on VVD plus physical provider-dependent proof before X09; typed gaps remain blocking.",
      "rollback": "Preserve backend and Kotlin trees; reinstall only known qualified own .vpkg with account/session cleanup authority checked; no platform fallback without owner choice.",
-     "status": "proposed",
+     "status": "selected",
      "after": [
       "IE-P2-3",
       "IE-P2-4",
@@ -14461,7 +14506,7 @@
    },
    {
     "id": "OA-10",
-    "action": "Store the manual-mode link passphrase as SSM SecureString under the B01 template's parameter name; perform /link confirmation for the stick when smoke, X09, X10 or a data-clearing rollback need it",
+    "action": "Superseded by DEC-AFC-SD-048 (TV code only): no passphrase is stored. Confirm the TV code on the /link page on a phone or browser for the stick when P2-L02 smoke, P2-X09, P2-X10 or a data-clearing rollback needs a linked device.",
     "blocks": [
      "IE-P2-15 smoke confirm",
      "P2-X09",
@@ -14673,7 +14718,8 @@
     ],
     "compared": "DES-AFC-P2-AUTH puts the manual-mode link on an 'owner-set link passphrase held in SSM SecureString', but OA-1..OA-9 have no action for it. The L02 deployed link smoke and every linked-device live run need it, and reading it is credential access (owner only). OA-2 does not cover registering the deployed callback as the Yahoo redirect URI, which is only known after P2-L02",
     "target": "technical plan \u00a7Owner-action entry criteria (new row; OA-2 row)",
-    "corrected_text": "Add row: `| OA-10 | Store the manual-mode link passphrase as an SSM SecureString parameter in aws-afc-dev under the name P2-B01's template declares, and perform the /link confirmation for the stick when P2-L02 smoke, P2-X09, P2-X10 or a data-clearing APK rollback needs a linked device. | P2-L02 link smoke (M2) | Deployed link confirmation; linked-device live runs |`. OA-2 append: ` After P2-L02 reports the stack's ApiUrl, register the deployed /link callback as the Yahoo app redirect URI.`"
+    "corrected_text": "Add row: `| OA-10 | Store the manual-mode link passphrase as an SSM SecureString parameter in aws-afc-dev under the name P2-B01's template declares, and perform the /link confirmation for the stick when P2-L02 smoke, P2-X09, P2-X10 or a data-clearing APK rollback needs a linked device. | P2-L02 link smoke (M2) | Deployed link confirmation; linked-device live runs |`. OA-2 append: ` After P2-L02 reports the stack's ApiUrl, register the deployed /link callback as the Yahoo app redirect URI.`",
+    "superseded_by": "DEC-AFC-SD-048 (2026-10-14): TV code only; the passphrase text above is historical."
    },
    {
     "id": "IE-P2-F16",
@@ -17808,7 +17854,8 @@
     "SEIT-RISK-AFC-P2-14"
    ],
    "slices": [
-    "P2-V01"
+    "P2-V01",
+    "P2-D04"
    ],
    "lifecycle_level_bindings": [],
    "ownership": "Lifecycle-local"
@@ -18041,7 +18088,7 @@
    },
    {
     "id": "OA-10",
-    "owner_action": "Store the manual-mode link passphrase as an SSM SecureString parameter in aws-afc-dev under the name P2-B01's template declares, and perform the /link confirmation for the stick when P2-L02 smoke, P2-X09, P2-X10 or a data-clearing APK rollback needs a linked device.",
+    "owner_action": "Superseded by DEC-AFC-SD-048 (TV code only): no passphrase is stored. Confirm the TV code on the /link page on a phone or browser for the stick when P2-L02 smoke, P2-X09, P2-X10 or a data-clearing rollback needs a linked device.",
     "needed_by": "P2-L02 link smoke (W2)",
     "blocks_if_absent": "Deployed link confirmation; linked-device live runs"
    },
@@ -18177,9 +18224,9 @@
     "P2-G01"
    ],
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "schedule_ref": "amazon-fantasy-companion-phase-2-technical-plan.md#conditional-critical-path-all-timestamps-utc",
-    "rule": "Use same slice membership except inactive A0x/T; M14/V01 moves into primary TV critical path; release R1/R2 waits for V01. Original due dates are preserved baseline only."
+    "rule": "DEC-AFC-SD-049: Vega primary. Same slice membership; A0x/T stay as the Fire OS secondary target off the Vega critical path; M14/V01 is the primary TV critical path; release R1/R2 waits for V01, not A0x/T. Original due dates are preserved baseline only."
    }
   },
   {
@@ -18193,9 +18240,9 @@
     "P2-B01"
    ],
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "schedule_ref": "amazon-fantasy-companion-phase-2-technical-plan.md#conditional-critical-path-all-timestamps-utc",
-    "rule": "Use same slice membership except inactive A0x/T; M14/V01 moves into primary TV critical path; release R1/R2 waits for V01. Original due dates are preserved baseline only."
+    "rule": "DEC-AFC-SD-049: Vega primary. Same slice membership; A0x/T stay as the Fire OS secondary target off the Vega critical path; M14/V01 is the primary TV critical path; release R1/R2 waits for V01, not A0x/T. Original due dates are preserved baseline only."
    }
   },
   {
@@ -18210,9 +18257,9 @@
     "P2-R1"
    ],
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "schedule_ref": "amazon-fantasy-companion-phase-2-technical-plan.md#conditional-critical-path-all-timestamps-utc",
-    "rule": "Use same slice membership except inactive A0x/T; M14/V01 moves into primary TV critical path; release R1/R2 waits for V01. Original due dates are preserved baseline only."
+    "rule": "DEC-AFC-SD-049: Vega primary. Same slice membership; A0x/T stay as the Fire OS secondary target off the Vega critical path; M14/V01 is the primary TV critical path; release R1/R2 waits for V01, not A0x/T. Original due dates are preserved baseline only."
    }
   },
   {
@@ -18228,9 +18275,9 @@
     "P2-X05"
    ],
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "schedule_ref": "amazon-fantasy-companion-phase-2-technical-plan.md#conditional-critical-path-all-timestamps-utc",
-    "rule": "Use same slice membership except inactive A0x/T; M14/V01 moves into primary TV critical path; release R1/R2 waits for V01. Original due dates are preserved baseline only."
+    "rule": "DEC-AFC-SD-049: Vega primary. Same slice membership; A0x/T stay as the Fire OS secondary target off the Vega critical path; M14/V01 is the primary TV critical path; release R1/R2 waits for V01, not A0x/T. Original due dates are preserved baseline only."
    }
   },
   {
@@ -18245,9 +18292,9 @@
     "P2-B02"
    ],
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "schedule_ref": "amazon-fantasy-companion-phase-2-technical-plan.md#conditional-critical-path-all-timestamps-utc",
-    "rule": "Use same slice membership except inactive A0x/T; M14/V01 moves into primary TV critical path; release R1/R2 waits for V01. Original due dates are preserved baseline only."
+    "rule": "DEC-AFC-SD-049: Vega primary. Same slice membership; A0x/T stay as the Fire OS secondary target off the Vega critical path; M14/V01 is the primary TV critical path; release R1/R2 waits for V01, not A0x/T. Original due dates are preserved baseline only."
    }
   },
   {
@@ -18262,9 +18309,9 @@
     "P2-R2"
    ],
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "schedule_ref": "amazon-fantasy-companion-phase-2-technical-plan.md#conditional-critical-path-all-timestamps-utc",
-    "rule": "Use same slice membership except inactive A0x/T; M14/V01 moves into primary TV critical path; release R1/R2 waits for V01. Original due dates are preserved baseline only."
+    "rule": "DEC-AFC-SD-049: Vega primary. Same slice membership; A0x/T stay as the Fire OS secondary target off the Vega critical path; M14/V01 is the primary TV critical path; release R1/R2 waits for V01, not A0x/T. Original due dates are preserved baseline only."
    }
   },
   {
@@ -18279,9 +18326,9 @@
     "P2-B07"
    ],
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "schedule_ref": "amazon-fantasy-companion-phase-2-technical-plan.md#conditional-critical-path-all-timestamps-utc",
-    "rule": "Use same slice membership except inactive A0x/T; M14/V01 moves into primary TV critical path; release R1/R2 waits for V01. Original due dates are preserved baseline only."
+    "rule": "DEC-AFC-SD-049: Vega primary. Same slice membership; A0x/T stay as the Fire OS secondary target off the Vega critical path; M14/V01 is the primary TV critical path; release R1/R2 waits for V01, not A0x/T. Original due dates are preserved baseline only."
    }
   },
   {
@@ -18296,9 +18343,9 @@
     "P2-A04"
    ],
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "schedule_ref": "amazon-fantasy-companion-phase-2-technical-plan.md#conditional-critical-path-all-timestamps-utc",
-    "rule": "Use same slice membership except inactive A0x/T; M14/V01 moves into primary TV critical path; release R1/R2 waits for V01. Original due dates are preserved baseline only."
+    "rule": "DEC-AFC-SD-049: Vega primary. Same slice membership; A0x/T stay as the Fire OS secondary target off the Vega critical path; M14/V01 is the primary TV critical path; release R1/R2 waits for V01, not A0x/T. Original due dates are preserved baseline only."
    }
   },
   {
@@ -18312,9 +18359,9 @@
     "P2-L03"
    ],
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "schedule_ref": "amazon-fantasy-companion-phase-2-technical-plan.md#conditional-critical-path-all-timestamps-utc",
-    "rule": "Use same slice membership except inactive A0x/T; M14/V01 moves into primary TV critical path; release R1/R2 waits for V01. Original due dates are preserved baseline only."
+    "rule": "DEC-AFC-SD-049: Vega primary. Same slice membership; A0x/T stay as the Fire OS secondary target off the Vega critical path; M14/V01 is the primary TV critical path; release R1/R2 waits for V01, not A0x/T. Original due dates are preserved baseline only."
    }
   },
   {
@@ -18328,9 +18375,9 @@
     "P2-R3"
    ],
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "schedule_ref": "amazon-fantasy-companion-phase-2-technical-plan.md#conditional-critical-path-all-timestamps-utc",
-    "rule": "Use same slice membership except inactive A0x/T; M14/V01 moves into primary TV critical path; release R1/R2 waits for V01. Original due dates are preserved baseline only."
+    "rule": "DEC-AFC-SD-049: Vega primary. Same slice membership; A0x/T stay as the Fire OS secondary target off the Vega critical path; M14/V01 is the primary TV critical path; release R1/R2 waits for V01, not A0x/T. Original due dates are preserved baseline only."
    }
   },
   {
@@ -18346,9 +18393,9 @@
     "P2-R4"
    ],
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "schedule_ref": "amazon-fantasy-companion-phase-2-technical-plan.md#conditional-critical-path-all-timestamps-utc",
-    "rule": "Use same slice membership except inactive A0x/T; M14/V01 moves into primary TV critical path; release R1/R2 waits for V01. Original due dates are preserved baseline only."
+    "rule": "DEC-AFC-SD-049: Vega primary. Same slice membership; A0x/T stay as the Fire OS secondary target off the Vega critical path; M14/V01 is the primary TV critical path; release R1/R2 waits for V01, not A0x/T. Original due dates are preserved baseline only."
    }
   },
   {
@@ -18364,9 +18411,9 @@
     "P2-SCR1"
    ],
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "schedule_ref": "amazon-fantasy-companion-phase-2-technical-plan.md#conditional-critical-path-all-timestamps-utc",
-    "rule": "Use same slice membership except inactive A0x/T; M14/V01 moves into primary TV critical path; release R1/R2 waits for V01. Original due dates are preserved baseline only."
+    "rule": "DEC-AFC-SD-049: Vega primary. Same slice membership; A0x/T stay as the Fire OS secondary target off the Vega critical path; M14/V01 is the primary TV critical path; release R1/R2 waits for V01, not A0x/T. Original due dates are preserved baseline only."
    }
   },
   {
@@ -18381,9 +18428,9 @@
     "P2-X12"
    ],
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "schedule_ref": "amazon-fantasy-companion-phase-2-technical-plan.md#conditional-critical-path-all-timestamps-utc",
-    "rule": "Use same slice membership except inactive A0x/T; M14/V01 moves into primary TV critical path; release R1/R2 waits for V01. Original due dates are preserved baseline only."
+    "rule": "DEC-AFC-SD-049: Vega primary. Same slice membership; A0x/T stay as the Fire OS secondary target off the Vega critical path; M14/V01 is the primary TV critical path; release R1/R2 waits for V01, not A0x/T. Original due dates are preserved baseline only."
    }
   },
   {
@@ -18396,9 +18443,11 @@
     "P2-V01"
    ],
    "vega_primary_contingency": {
-    "status": "proposed",
+    "status": "selected",
     "schedule_ref": "amazon-fantasy-companion-phase-2-technical-plan.md#conditional-critical-path-all-timestamps-utc",
-    "rule": "Use same slice membership except inactive A0x/T; M14/V01 moves into primary TV critical path; release R1/R2 waits for V01. Original due dates are preserved baseline only."
+    "rule": "DEC-AFC-SD-049: Vega primary. Same slice membership; A0x/T stay as the Fire OS secondary target off the Vega critical path; M14/V01 is the primary TV critical path; release R1/R2 waits for V01, not A0x/T. Original due dates are preserved baseline only.",
+    "entry": "DEC-AFC-SD-049 Vega primary: X01 host-ready receipt and the V01T red receipt; this selected candidate passed planning review. No P2-A01..P2-A05 merge prerequisite.",
+    "exit": "Primary TV milestone: V01 accepted on the VVD plus physical provider-dependent proof (X02/X03/X04/X07) against L03, before X09. On the critical path; typed gaps stay blocking."
    }
   }
  ],
@@ -18882,7 +18931,7 @@
   "state": "planning",
   "title": "Amazon Fantasy Companion \u2014 Definition of Done Manifest (AFC-2026-10-11, Phase 2)",
   "lede": "Planning-only conditional delta; historical baseline and proposed overrides are both visible. Unknown/not_run is never PASS.",
-  "bluf": "Vega-primary contingency proposed on 2026-10-14; Fire OS remains active under SD-040 until owner selection. Existing V01T/V01 move ahead of A01-A05 in the alternative. Physical alerts/Watch acceptance is a hard convergence point; handover target 2026-10-23T12:00Z, deadline 19:00Z. SD-048 is code-only. No execution authorization or review budget reset.",
+  "bluf": "Vega OS primary, Fire OS secondary (DEC-AFC-SD-049, 2026-10-14): both targets are built; V01T/V01 lead the TV critical path and A01-A05 stay as the Fire OS secondary target. Physical alerts/Watch acceptance is the hard convergence point; handover target 2026-10-23T12:00Z.",
   "identity": [
    {
     "label": "Lifecycle",
@@ -18946,7 +18995,7 @@
    },
    {
     "label": "Contingency authority",
-    "value": "Planning-only owner packet 2026-10-14; proposed/not activated; prior candidate bindings retained in evidence/P2-VEGA-PRIMARY-plan/prior-bindings.json"
+    "value": "Planning-only owner packet 2026-10-14; selected by DEC-AFC-SD-049 (Vega primary, Fire OS secondary); prior candidate bindings retained in evidence/P2-VEGA-PRIMARY-plan/prior-bindings.json"
    }
   ],
   "outcome": "Conditional primary proposal: the same five-feature companion runs as a Vega .vpkg on a confirmed physical Vega stick, with VVD development evidence and the unchanged shared backend. SD-048 means TV-code-only confirmation. Physical alerts and Watch remain required. The following original Fire OS outcome is preserved as the unselected baseline until VP-OD-01: Phase 2 builds and submits the product the approved specification describes (`spec/amazon-fantasy-companion/amazon-fantasy-companion.md`, owner approval DEC-AFC-APPROVAL-ST5). When it is done: - **A Fire TV app** (Kotlin/Gradle, from the starter `AmazonAppDev/hello-world-fire-tv`, minSdk 25) runs on the owner's 2018 stick on Fire OS (SD-001, SD-003). It links to the backend by device code, holds the customer's profile and every customer control, shows a heads-up alert with Watch and Dismiss over a provider app's playback, opens the resolved provider game or channel and reports the routing outcome, and shows the right-side lineup panel beside provider video, or the full-screen panel when the spike shows that route does not exist (AFC-PR-047, DEC-AFC-SD-035). - **An AWS serverless backend** on the owner's new Free-plan account (SD-005, C4) ingests ESPN's unofficial public JSON (SD-004) with labeled replay (C2), reads the lineup from Yahoo or labeled manual entry after T_yahoo (C6) with the PPR / Half-PPR presets (AFC-PR-065), matches identities, applies the alert policy (close game within 8 points in the 4th quarter or overtime, stale after 60 s, excitement Off / Mild / Hype), resolves the provider and channel and serves the panel. - **Spikes run first and are time-boxed.** Each writes a verdict that records exactly which routes work on the real stick (issue #1 \u00a7Development integration obligation). Their verdicts select the panel mode, the provider link contracts and the notification route before product code depends on them. - **The submission is ready before T_deadline:** README and setup instructions, judge access through T_judge_access, a demo video plan under three minutes, a write-up (with the YouTube TV Fantasy View differentiation and the DEC-AFC-SD-036 future direction, cited, discussion only), and the developer feedback assembled from the Scribe log (DEC-AFC-SD-025). The owner submits. - **Every landed slice is visible in the revision record** (DEC-AFC-SD-038): a `CHANGELOG.md` `[Unreleased]` entry linking its pull request, and one release per technical wave prepared through the `release-process` skill. The owner authorizes each publication. - **GitHub milestones M01..M13** (D3) are defined here and created only after this package is approved (P2-7). Every slice traces register UIDs (`requirements-register.md`) and spec sections. Phase 2 adds no product requirement; Lifecycle-local criteria below cover write sets, seams, gates, schedule, submission and the revision record only.",
@@ -18976,7 +19025,7 @@
    "Vega-primary critical path (UTC): Oct 22 rehearsal; Oct 23 00:00\u201305:00 live capture window \u2014 L05 exact .vpkg build after R5, X12 capture on that hash; reserve time for TNF from original plan \u2014 Sanitized clip/hash manifest, platform/device labels and capture provenance. Documented demo plan may precede final clips; no unpublished artifact claimed public.",
    "Vega-primary critical path (UTC): Oct 23 by 12:00 \u2014 Final ATE/IE evidence and owner handover \u2014 Seven-hour buffer to 19:00Z. No unsupported, unknown, not_run or capability gap counted as PASS.",
    "Vega-primary critical path (UTC): Oct 23 19:00 \u2014 Submission deadline \u2014 Owner publication/upload/judge-access/submission authority remains separate.",
-   "Manifest task table projects the proposed Vega completion graph. Baseline field values remain in implementation.json and each task baseline_projection; nothing is active until owner selection. V01 can start after V01T, but its displayed completion prerequisites must all close before acceptance."
+   "Manifest task table projects the proposed Vega completion graph. Baseline field values remain in implementation.json and each task baseline_projection; selected by DEC-AFC-SD-049; Fire OS A0x/T are the secondary target. V01 can start after V01T, but its displayed completion prerequisites must all close before acceptance."
   ],
   "exclusions": [
    "Messenger, message boards, community rooms, shared chat and watch-party social features (issue #1, AFC-PR-057).",
@@ -21202,7 +21251,7 @@
    },
    {
     "id": "DES-AFC-P2-BACKEND",
-    "decision": "Serverless backend: `POST /v1/link` issues an 8-character code from an unambiguous base-32 alphabet (\u2265 40 bits), TTL device_code_ttl, plus a polling handle. `POST /v1/link/confirm` is called from the `/link` page on a phone or browser: the customer signs in with Yahoo OAuth (when Yahoo is approved) or with the owner-set link passphrase held in SSM SecureString (manual mode; single-owner demo), then enters the code. C",
+    "decision": "Serverless backend: `POST /v1/link` issues an 8-character code from an unambiguous base-32 alphabet (\u2265 40 bits), TTL device_code_ttl, plus a polling handle. `POST /v1/link/confirm` is called from the `/link` page on a phone or browser: the customer enters the TV code, and the code alone confirms the link (DEC-AFC-SD-048: no passphrase or sign-in step; Yahoo OAuth, when approved, is only for lineup import). C",
     "interfaces": "\u2014",
     "lenses": [
      "Free-tier boundary",
@@ -21218,7 +21267,7 @@
    },
    {
     "id": "DES-AFC-P2-AUTH",
-    "decision": "Device-code linking and sessions: `POST /v1/link` issues an 8-character code from an unambiguous base-32 alphabet (\u2265 40 bits), TTL device_code_ttl, plus a polling handle. `POST /v1/link/confirm` is called from the `/link` page on a phone or browser: the customer signs in with Yahoo OAuth (when Yahoo is approved) or with the owner-set link passphrase held in SSM SecureString (manual mode; single-owner demo), then enters the code. C",
+    "decision": "Device-code linking and sessions: `POST /v1/link` issues an 8-character code from an unambiguous base-32 alphabet (\u2265 40 bits), TTL device_code_ttl, plus a polling handle. `POST /v1/link/confirm` is called from the `/link` page on a phone or browser: the customer enters the TV code, and the code alone confirms the link (DEC-AFC-SD-048: no passphrase or sign-in step; Yahoo OAuth, when approved, is only for lineup import). C",
     "interfaces": "\u2014",
     "lenses": [
      "Security controls"
@@ -21987,9 +22036,9 @@
     "issue": "P2-X01 (M02)",
     "status": "proposed Vega binding; not approved",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "dispatchable": false,
-     "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+     "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
      "disposition": "replace_platform_keep_evidence",
      "overrides": {
       "goal": "Qualify pinned, scanned Vega SDK/VVD and user-scope Watchman; record host compatibility, VVD boot/input/capture and first_install_at. Record physical Vega identity after owner login; no Android qualification prerequisite.",
@@ -22015,10 +22064,11 @@
         "OA-12",
         "OA-13"
        ],
-       "open_decisions": [
-        "VP-OD-01",
-        "VP-OD-03"
-       ]
+       "open_decisions": [],
+       "decided": {
+        "VP-OD-01": "DEC-AFC-SD-049",
+        "VP-OD-03": "DEC-AFC-SD-051"
+       }
       },
       "requirement_ids": [
        "AFC-PR-052",
@@ -22162,14 +22212,14 @@
     "issue": "P2-A01 (M03)",
     "status": "inactive if Vega selected; preserved reference",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "dispatchable": false,
-     "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
-     "disposition": "preserved_reference_not_dispatched",
+     "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
+     "disposition": "fire_os_secondary_target",
      "overrides": {},
      "completion_dependencies": [],
      "preserved_fields": "All unmentioned fields, including role/model_route/reasoning_level/review_path/authority_id, inherit unchanged. No new execution authority.",
-     "note": "Keep existing work and tests; V01T/V01 replace the primary realization. No deletion, completion or cancellation claimed."
+     "note": "Fire OS secondary target (DEC-AFC-SD-049): original fields, tests and dependencies stay and the slice is dispatched off the Vega critical path; V01T/V01 are the primary realization. No primary slice waits on it. No deletion, completion or cancellation claimed."
     },
     "baseline_projection": {
      "depends_on": [
@@ -22211,14 +22261,14 @@
     "issue": "P2-A01 (M03)",
     "status": "inactive if Vega selected; preserved reference",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "dispatchable": false,
-     "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
-     "disposition": "preserved_reference_not_dispatched",
+     "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
+     "disposition": "fire_os_secondary_target",
      "overrides": {},
      "completion_dependencies": [],
      "preserved_fields": "All unmentioned fields, including role/model_route/reasoning_level/review_path/authority_id, inherit unchanged. No new execution authority.",
-     "note": "Keep existing work and tests; V01T/V01 replace the primary realization. No deletion, completion or cancellation claimed."
+     "note": "Fire OS secondary target (DEC-AFC-SD-049): original fields, tests and dependencies stay and the slice is dispatched off the Vega critical path; V01T/V01 are the primary realization. No primary slice waits on it. No deletion, completion or cancellation claimed."
     },
     "baseline_projection": {
      "depends_on": [
@@ -22280,9 +22330,9 @@
     "issue": "P2-B01 (M02)",
     "status": "proposed Vega binding; not approved",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "dispatchable": false,
-     "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+     "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
      "disposition": "keep_shared_backend",
      "overrides": {},
      "completion_dependencies": [],
@@ -22333,9 +22383,9 @@
     "issue": "P2-R1 (M03)",
     "status": "proposed Vega binding; not approved",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "dispatchable": false,
-     "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+     "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
      "disposition": "keep_release_checkpoint_replace_target",
      "overrides": {
       "depends_on": [
@@ -22406,9 +22456,9 @@
     "issue": "P2-X04 (M03)",
     "status": "proposed Vega binding; not approved",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "dispatchable": false,
-     "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+     "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
      "disposition": "replace_platform_keep_evidence",
      "overrides": {
       "goal": "Probe panel beside real provider video on Vega with no overlap/crop and preserved aspect. Close at verdict or primary Vega first_install_at + 24h; FAILS/TIMEBOX selects the existing fullScreen fallback.",
@@ -22426,9 +22476,10 @@
         "OA-12",
         "OA-4"
        ],
-       "open_decisions": [
-        "VP-OD-01"
-       ]
+       "open_decisions": [],
+       "decided": {
+        "VP-OD-01": "DEC-AFC-SD-049"
+       }
       }
      },
      "completion_dependencies": [],
@@ -22463,9 +22514,9 @@
     "issue": "P2-X02 (M04)",
     "status": "proposed Vega binding; not approved",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "dispatchable": false,
-     "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+     "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
      "disposition": "replace_platform_keep_evidence",
      "overrides": {
       "goal": "Probe physical Vega background alerts during provider playback, including Watch/Dismiss and disabled/panel-only controls. Verify exact SDK/RN notification compatibility; VVD cannot close this probe.",
@@ -22484,9 +22535,10 @@
         "OA-12",
         "OA-4"
        ],
-       "open_decisions": [
-        "VP-OD-01"
-       ]
+       "open_decisions": [],
+       "decided": {
+        "VP-OD-01": "DEC-AFC-SD-049"
+       }
       },
       "requirement_ids": [
        "AFC-PR-015",
@@ -22554,9 +22606,9 @@
     "issue": "P2-X03 (M04)",
     "status": "proposed Vega binding; not approved",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "dispatchable": false,
-     "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+     "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
      "disposition": "replace_platform_keep_evidence",
      "overrides": {
       "goal": "Probe Vega provider game/channel URIs in the existing provider order; record exact component, access basis and honest outcomes in the existing registry schema. Separate desk and live receipts; no Android intent assumption.",
@@ -22577,9 +22629,10 @@
         "OA-12",
         "OA-4"
        ],
-       "open_decisions": [
-        "VP-OD-01"
-       ]
+       "open_decisions": [],
+       "decided": {
+        "VP-OD-01": "DEC-AFC-SD-049"
+       }
       }
      },
      "completion_dependencies": [],
@@ -22616,9 +22669,9 @@
     "issue": "P2-X07 (M04)",
     "status": "proposed Vega binding; not approved",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "dispatchable": false,
-     "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+     "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
      "disposition": "replace_platform_keep_evidence",
      "overrides": {
       "goal": "Probe permitted installed-provider and current-context detection on physical Vega; verify positive/absent/disabled cases and labels. URI resolution is not entitlement; unverified identifiers cannot prove app absence.",
@@ -22636,9 +22689,10 @@
         "OA-12",
         "OA-4"
        ],
-       "open_decisions": [
-        "VP-OD-01"
-       ]
+       "open_decisions": [],
+       "decided": {
+        "VP-OD-01": "DEC-AFC-SD-049"
+       }
       }
      },
      "completion_dependencies": [],
@@ -22760,14 +22814,14 @@
     "issue": "P2-A02 (M06)",
     "status": "inactive if Vega selected; preserved reference",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "dispatchable": false,
-     "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
-     "disposition": "preserved_reference_not_dispatched",
+     "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
+     "disposition": "fire_os_secondary_target",
      "overrides": {},
      "completion_dependencies": [],
      "preserved_fields": "All unmentioned fields, including role/model_route/reasoning_level/review_path/authority_id, inherit unchanged. No new execution authority.",
-     "note": "Keep existing work and tests; V01T/V01 replace the primary realization. No deletion, completion or cancellation claimed."
+     "note": "Fire OS secondary target (DEC-AFC-SD-049): original fields, tests and dependencies stay and the slice is dispatched off the Vega critical path; V01T/V01 are the primary realization. No primary slice waits on it. No deletion, completion or cancellation claimed."
     },
     "baseline_projection": {
      "depends_on": [
@@ -22804,14 +22858,14 @@
     "issue": "P2-A02 (M06)",
     "status": "inactive if Vega selected; preserved reference",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "dispatchable": false,
-     "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
-     "disposition": "preserved_reference_not_dispatched",
+     "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
+     "disposition": "fire_os_secondary_target",
      "overrides": {},
      "completion_dependencies": [],
      "preserved_fields": "All unmentioned fields, including role/model_route/reasoning_level/review_path/authority_id, inherit unchanged. No new execution authority.",
-     "note": "Keep existing work and tests; V01T/V01 replace the primary realization. No deletion, completion or cancellation claimed."
+     "note": "Fire OS secondary target (DEC-AFC-SD-049): original fields, tests and dependencies stay and the slice is dispatched off the Vega critical path; V01T/V01 are the primary realization. No primary slice waits on it. No deletion, completion or cancellation claimed."
     },
     "baseline_projection": {
      "depends_on": [
@@ -22845,9 +22899,9 @@
     "issue": "P2-L02 (M05)",
     "status": "proposed Vega binding; not approved",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "dispatchable": false,
-     "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+     "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
      "disposition": "keep_shared_backend",
      "overrides": {},
      "completion_dependencies": [],
@@ -22893,9 +22947,9 @@
     "issue": "P2-R2 (M06)",
     "status": "proposed Vega binding; not approved",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "dispatchable": false,
-     "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+     "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
      "disposition": "keep_release_checkpoint_replace_target",
      "overrides": {
       "depends_on": [
@@ -23040,9 +23094,9 @@
     "issue": "P2-B06 (M08)",
     "status": "proposed Vega binding; not approved",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "dispatchable": false,
-     "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+     "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
      "disposition": "keep_shared_backend",
      "overrides": {},
      "completion_dependencies": [],
@@ -23076,9 +23130,9 @@
     "issue": "P2-B06 (M08)",
     "status": "proposed Vega binding; not approved",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "dispatchable": false,
-     "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+     "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
      "disposition": "keep_shared_backend",
      "overrides": {},
      "completion_dependencies": [],
@@ -23146,14 +23200,14 @@
     "issue": "P2-A03 (M08)",
     "status": "inactive if Vega selected; preserved reference",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "dispatchable": false,
-     "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
-     "disposition": "preserved_reference_not_dispatched",
+     "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
+     "disposition": "fire_os_secondary_target",
      "overrides": {},
      "completion_dependencies": [],
      "preserved_fields": "All unmentioned fields, including role/model_route/reasoning_level/review_path/authority_id, inherit unchanged. No new execution authority.",
-     "note": "Keep existing work and tests; V01T/V01 replace the primary realization. No deletion, completion or cancellation claimed."
+     "note": "Fire OS secondary target (DEC-AFC-SD-049): original fields, tests and dependencies stay and the slice is dispatched off the Vega critical path; V01T/V01 are the primary realization. No primary slice waits on it. No deletion, completion or cancellation claimed."
     },
     "baseline_projection": {
      "depends_on": [
@@ -23188,14 +23242,14 @@
     "issue": "P2-A03 (M08)",
     "status": "inactive if Vega selected; preserved reference",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "dispatchable": false,
-     "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
-     "disposition": "preserved_reference_not_dispatched",
+     "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
+     "disposition": "fire_os_secondary_target",
      "overrides": {},
      "completion_dependencies": [],
      "preserved_fields": "All unmentioned fields, including role/model_route/reasoning_level/review_path/authority_id, inherit unchanged. No new execution authority.",
-     "note": "Keep existing work and tests; V01T/V01 replace the primary realization. No deletion, completion or cancellation claimed."
+     "note": "Fire OS secondary target (DEC-AFC-SD-049): original fields, tests and dependencies stay and the slice is dispatched off the Vega critical path; V01T/V01 are the primary realization. No primary slice waits on it. No deletion, completion or cancellation claimed."
     },
     "baseline_projection": {
      "depends_on": [
@@ -23230,14 +23284,14 @@
     "issue": "P2-A04 (M08)",
     "status": "inactive if Vega selected; preserved reference",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "dispatchable": false,
-     "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
-     "disposition": "preserved_reference_not_dispatched",
+     "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
+     "disposition": "fire_os_secondary_target",
      "overrides": {},
      "completion_dependencies": [],
      "preserved_fields": "All unmentioned fields, including role/model_route/reasoning_level/review_path/authority_id, inherit unchanged. No new execution authority.",
-     "note": "Keep existing work and tests; V01T/V01 replace the primary realization. No deletion, completion or cancellation claimed."
+     "note": "Fire OS secondary target (DEC-AFC-SD-049): original fields, tests and dependencies stay and the slice is dispatched off the Vega critical path; V01T/V01 are the primary realization. No primary slice waits on it. No deletion, completion or cancellation claimed."
     },
     "baseline_projection": {
      "depends_on": [
@@ -23272,14 +23326,14 @@
     "issue": "P2-A04 (M08)",
     "status": "inactive if Vega selected; preserved reference",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "dispatchable": false,
-     "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
-     "disposition": "preserved_reference_not_dispatched",
+     "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
+     "disposition": "fire_os_secondary_target",
      "overrides": {},
      "completion_dependencies": [],
      "preserved_fields": "All unmentioned fields, including role/model_route/reasoning_level/review_path/authority_id, inherit unchanged. No new execution authority.",
-     "note": "Keep existing work and tests; V01T/V01 replace the primary realization. No deletion, completion or cancellation claimed."
+     "note": "Fire OS secondary target (DEC-AFC-SD-049): original fields, tests and dependencies stay and the slice is dispatched off the Vega critical path; V01T/V01 are the primary realization. No primary slice waits on it. No deletion, completion or cancellation claimed."
     },
     "baseline_projection": {
      "depends_on": [
@@ -23314,14 +23368,14 @@
     "issue": "P2-A05 (M09)",
     "status": "inactive if Vega selected; preserved reference",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "dispatchable": false,
-     "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
-     "disposition": "preserved_reference_not_dispatched",
+     "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
+     "disposition": "fire_os_secondary_target",
      "overrides": {},
      "completion_dependencies": [],
      "preserved_fields": "All unmentioned fields, including role/model_route/reasoning_level/review_path/authority_id, inherit unchanged. No new execution authority.",
-     "note": "Keep existing work and tests; V01T/V01 replace the primary realization. No deletion, completion or cancellation claimed."
+     "note": "Fire OS secondary target (DEC-AFC-SD-049): original fields, tests and dependencies stay and the slice is dispatched off the Vega critical path; V01T/V01 are the primary realization. No primary slice waits on it. No deletion, completion or cancellation claimed."
     },
     "baseline_projection": {
      "depends_on": [
@@ -23357,14 +23411,14 @@
     "issue": "P2-A05 (M09)",
     "status": "inactive if Vega selected; preserved reference",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "dispatchable": false,
-     "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
-     "disposition": "preserved_reference_not_dispatched",
+     "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
+     "disposition": "fire_os_secondary_target",
      "overrides": {},
      "completion_dependencies": [],
      "preserved_fields": "All unmentioned fields, including role/model_route/reasoning_level/review_path/authority_id, inherit unchanged. No new execution authority.",
-     "note": "Keep existing work and tests; V01T/V01 replace the primary realization. No deletion, completion or cancellation claimed."
+     "note": "Fire OS secondary target (DEC-AFC-SD-049): original fields, tests and dependencies stay and the slice is dispatched off the Vega critical path; V01T/V01 are the primary realization. No primary slice waits on it. No deletion, completion or cancellation claimed."
     },
     "baseline_projection": {
      "depends_on": [
@@ -23401,9 +23455,9 @@
     "issue": "P2-L03 (M09)",
     "status": "proposed Vega binding; not approved",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "dispatchable": false,
-     "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+     "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
      "disposition": "keep_shared_backend",
      "overrides": {},
      "completion_dependencies": [],
@@ -23441,9 +23495,9 @@
     "issue": "P2-X09 (M10)",
     "status": "proposed Vega binding; not approved",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "dispatchable": false,
-     "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+     "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
      "disposition": "keep_replace_target",
      "overrides": {
       "depends_on": [
@@ -23587,9 +23641,9 @@
     "issue": "P2-R3 (M10)",
     "status": "proposed Vega binding; not approved",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "dispatchable": false,
-     "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+     "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
      "disposition": "keep_release_checkpoint_replace_target",
      "overrides": {
       "depends_on": [
@@ -23670,9 +23724,9 @@
     "issue": "P2-X10 (M11)",
     "status": "proposed Vega binding; not approved",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "dispatchable": false,
-     "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+     "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
      "disposition": "keep_replace_target",
      "overrides": {
       "depends_on": [
@@ -23728,14 +23782,14 @@
     "issue": "P2-D02 (M11)",
     "status": "proposed Vega binding; not approved",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "dispatchable": false,
-     "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+     "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
      "disposition": "keep_documentation_replace_target",
      "overrides": {},
      "completion_dependencies": [],
      "preserved_fields": "All unmentioned fields, including role/model_route/reasoning_level/review_path/authority_id, inherit unchanged. No new execution authority.",
-     "note": "Use actual Vega device/package evidence and truthful limits; original write_set and dependencies retained. SD-048 is settled. D02 changes AFC-PR-052/053 platform allocation only after VP-OD-01; no unapproved behavior reduction."
+     "note": "Use actual Vega device/package evidence and truthful limits; Fire OS secondary evidence is reported only where it exists. Original write_set and dependencies retained. SD-048 is settled. D02 records the Vega primary target (DEC-AFC-SD-049) in AFC-PR-052/053 allocation; no unapproved behavior reduction."
     },
     "baseline_projection": {
      "depends_on": [
@@ -23768,9 +23822,9 @@
     "issue": "P2-X11 (M11)",
     "status": "proposed Vega binding; not approved",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "dispatchable": false,
-     "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+     "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
      "disposition": "keep_conditional",
      "overrides": {
       "leases": [
@@ -23811,9 +23865,9 @@
     "issue": "P2-R4 (M11)",
     "status": "proposed Vega binding; not approved",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "dispatchable": false,
-     "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+     "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
      "disposition": "keep_release_checkpoint_replace_target",
      "overrides": {
       "depends_on": [
@@ -23873,14 +23927,14 @@
     "issue": "P2-D03 (M12)",
     "status": "proposed Vega binding; not approved",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "dispatchable": false,
-     "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+     "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
      "disposition": "keep_documentation_replace_target",
      "overrides": {},
      "completion_dependencies": [],
      "preserved_fields": "All unmentioned fields, including role/model_route/reasoning_level/review_path/authority_id, inherit unchanged. No new execution authority.",
-     "note": "Use actual Vega device/package evidence and truthful limits; original write_set and dependencies retained. SD-048 is settled. D02 changes AFC-PR-052/053 platform allocation only after VP-OD-01; no unapproved behavior reduction."
+     "note": "Use actual Vega device/package evidence and truthful limits; Fire OS secondary evidence is reported only where it exists. Original write_set and dependencies retained. SD-048 is settled. D02 records the Vega primary target (DEC-AFC-SD-049) in AFC-PR-052/053 allocation; no unapproved behavior reduction."
     },
     "baseline_projection": {
      "depends_on": [
@@ -23909,9 +23963,9 @@
     "issue": "P2-D04 (M12)",
     "status": "proposed Vega binding; not approved",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "dispatchable": false,
-     "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+     "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
      "disposition": "keep_documentation_replace_target",
      "overrides": {
       "requirement_ids": [
@@ -23950,7 +24004,7 @@
      },
      "completion_dependencies": [],
      "preserved_fields": "All unmentioned fields, including role/model_route/reasoning_level/review_path/authority_id, inherit unchanged. No new execution authority.",
-     "note": "Use actual Vega device/package evidence and truthful limits; original write_set and dependencies retained. SD-048 is settled. D02 changes AFC-PR-052/053 platform allocation only after VP-OD-01; no unapproved behavior reduction.",
+     "note": "Use actual Vega device/package evidence and truthful limits; Fire OS secondary evidence is reported only where it exists. Original write_set and dependencies retained. SD-048 is settled. D02 records the Vega primary target (DEC-AFC-SD-049) in AFC-PR-052/053 allocation; no unapproved behavior reduction.",
      "proposed_risk_ownership": {
       "risk_id": "RISK-AFC-P2-14",
       "closing_slice": "P2-D04",
@@ -23990,14 +24044,14 @@
     "issue": "P2-D05 (M12)",
     "status": "proposed Vega binding; not approved",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "dispatchable": false,
-     "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+     "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
      "disposition": "keep_documentation_replace_target",
      "overrides": {},
      "completion_dependencies": [],
      "preserved_fields": "All unmentioned fields, including role/model_route/reasoning_level/review_path/authority_id, inherit unchanged. No new execution authority.",
-     "note": "Use actual Vega device/package evidence and truthful limits; original write_set and dependencies retained. SD-048 is settled. D02 changes AFC-PR-052/053 platform allocation only after VP-OD-01; no unapproved behavior reduction."
+     "note": "Use actual Vega device/package evidence and truthful limits; Fire OS secondary evidence is reported only where it exists. Original write_set and dependencies retained. SD-048 is settled. D02 records the Vega primary target (DEC-AFC-SD-049) in AFC-PR-052/053 allocation; no unapproved behavior reduction."
     },
     "baseline_projection": {
      "depends_on": [
@@ -24026,9 +24080,9 @@
     "issue": "P2-X12 (M13)",
     "status": "proposed Vega binding; not approved",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "dispatchable": false,
-     "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+     "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
      "disposition": "keep_replace_capture",
      "overrides": {
       "depends_on": [
@@ -24113,14 +24167,14 @@
     "issue": "P2-SCR1 (M12)",
     "status": "proposed Vega binding; not approved",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "dispatchable": false,
-     "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+     "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
      "disposition": "keep_documentation_replace_target",
      "overrides": {},
      "completion_dependencies": [],
      "preserved_fields": "All unmentioned fields, including role/model_route/reasoning_level/review_path/authority_id, inherit unchanged. No new execution authority.",
-     "note": "Use actual Vega device/package evidence and truthful limits; original write_set and dependencies retained. SD-048 is settled. D02 changes AFC-PR-052/053 platform allocation only after VP-OD-01; no unapproved behavior reduction."
+     "note": "Use actual Vega device/package evidence and truthful limits; Fire OS secondary evidence is reported only where it exists. Original write_set and dependencies retained. SD-048 is settled. D02 records the Vega primary target (DEC-AFC-SD-049) in AFC-PR-052/053 allocation; no unapproved behavior reduction."
     },
     "baseline_projection": {
      "depends_on": [
@@ -24148,9 +24202,9 @@
     "issue": "P2-L05 (M13)",
     "status": "proposed Vega binding; not approved",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "dispatchable": false,
-     "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+     "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
      "disposition": "replace_apk_with_vpkg",
      "overrides": {
       "goal": "Build the final Vega candidate using V01 qualified configuration; record physical and VVD .vpkg architecture, commit and hashes; run Reverify on exact packages. No publication.",
@@ -24163,9 +24217,10 @@
       ],
       "human_decision": {
        "owner_actions": [],
-       "open_decisions": [
-        "VP-OD-01"
-       ]
+       "open_decisions": [],
+       "decided": {
+        "VP-OD-01": "DEC-AFC-SD-049"
+       }
       },
       "leases": [
        "vega-app-config"
@@ -24238,9 +24293,9 @@
     "issue": "P2-R5 (M13)",
     "status": "proposed Vega binding; not approved",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "dispatchable": false,
-     "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+     "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
      "disposition": "keep_release_checkpoint_replace_target",
      "overrides": {
       "depends_on": [
@@ -24313,9 +24368,9 @@
     "issue": "P2-V01 (M14, #59)",
     "status": "proposed Vega binding; not approved",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "dispatchable": false,
-     "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+     "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
      "disposition": "promote_existing_pair",
      "overrides": {
       "depends_on": [
@@ -24337,10 +24392,11 @@
        "owner_actions": [
         "OA-13"
        ],
-       "open_decisions": [
-        "VP-OD-01",
-        "VP-OD-03"
-       ]
+       "open_decisions": [],
+       "decided": {
+        "VP-OD-01": "DEC-AFC-SD-049",
+        "VP-OD-03": "DEC-AFC-SD-051"
+       }
       },
       "leases": [
        "vega-app-config",
@@ -24519,9 +24575,9 @@
     "issue": "P2-V01 (M14, #59)",
     "status": "proposed Vega binding; not approved",
     "vega_primary_contingency": {
-     "status": "proposed",
+     "status": "selected",
      "dispatchable": false,
-     "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+     "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
      "disposition": "promote_existing_pair",
      "overrides": {
       "depends_on": [
@@ -24557,10 +24613,11 @@
         "OA-12",
         "OA-13"
        ],
-       "open_decisions": [
-        "VP-OD-01",
-        "VP-OD-03"
-       ]
+       "open_decisions": [],
+       "decided": {
+        "VP-OD-01": "DEC-AFC-SD-049",
+        "VP-OD-03": "DEC-AFC-SD-051"
+       }
       },
       "leases": [
        "vega-app-config",
@@ -25224,7 +25281,7 @@
     "status": "open_for_integrated_review"
    },
    {
-    "event": "VP-OD-01: Choose target and AFC-PR-052/053 amendment; no automatic switch.",
+    "event": "VP-OD-01: Choose target and AFC-PR-052/053 amendment; no automatic switch. Decided 2026-10-14 by DEC-AFC-SD-049: Build both targets: Vega OS primary, Fire OS secondary. The Vega-primary contingency is the selected plan.",
     "owner": "William Rumph",
     "evidence": "P2-VEGA-PRIMARY-plan proposal; queued, not answered",
     "status": "NEEDS_OWNER_DECISION"
@@ -25236,7 +25293,7 @@
     "status": "NEEDS_OWNER_DECISION"
    },
    {
-    "event": "VP-OD-03: Ubuntu 26.04 user-scope qualification/Watchman versus supported host; no sudo.",
+    "event": "VP-OD-03: Ubuntu 26.04 user-scope qualification/Watchman versus supported host; no sudo. Decided 2026-10-14 by DEC-AFC-SD-051: The Vega host gets a user-scope, scanned and pinned Watchman; libpython3.8-dev is skipped.",
     "owner": "William Rumph",
     "evidence": "P2-VEGA-PRIMARY-plan proposal; queued, not answered",
     "status": "NEEDS_OWNER_DECISION"
@@ -25248,7 +25305,7 @@
     "status": "NEEDS_OWNER_DECISION"
    },
    {
-    "event": "VP-OD-05: F1: P2-D04 closes RISK-AFC-P2-14, V01 supplies evidence; primary failure is a stop.",
+    "event": "VP-OD-05: F1: P2-D04 closes RISK-AFC-P2-14, V01 supplies evidence; primary failure is a stop. Decided 2026-10-14 by DEC-AFC-SD-050: F1 option (a): P2-D04 closes RISK-AFC-P2-14; P2-V01 supplies the evidence.",
     "owner": "William Rumph",
     "evidence": "P2-VEGA-PRIMARY-plan proposal; queued, not answered",
     "status": "NEEDS_OWNER_DECISION"
@@ -25324,27 +25381,40 @@
    "F1": "open; proposed D04 ownership requires VP-OD-05",
    "prior_review_bounds": "unchanged; no new automatic review grant",
    "delta_candidate_digest": "3ea492c5821d3a47649cbb59428d95ba0f6409506d5901c07aaf259374ebf867"
+  },
+  {
+   "id": "P2-VEGA-PRIMARY-select",
+   "date": "2026-10-14",
+   "base_commit": "df259ed",
+   "candidate_ref": "afc/p2-vega-primary-plan",
+   "authority": "Owner journey decisions DEC-AFC-SD-048..054; plan-only correction packet vega-f1.",
+   "receipt": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-VEGA-PRIMARY-plan/receipt.md",
+   "status": "selected_ready_for_planning_review",
+   "rule": "Vega OS primary, Fire OS secondary; no slice deleted; F1 applied per DEC-AFC-SD-050.",
+   "owner_decisions": [
+    "DEC-AFC-SD-048",
+    "DEC-AFC-SD-049",
+    "DEC-AFC-SD-050",
+    "DEC-AFC-SD-051",
+    "DEC-AFC-SD-052",
+    "DEC-AFC-SD-053",
+    "DEC-AFC-SD-054"
+   ],
+   "open_owner_decisions": [
+    "VP-OD-02",
+    "VP-OD-04"
+   ],
+   "F1": "closed by DEC-AFC-SD-050 option (a)",
+   "prior_review_bounds": "unchanged; one planning review of this candidate is next"
   }
  ],
  "vega_primary_contingency": {
   "id": "P2-VEGA-PRIMARY-plan",
-  "status": "proposed_for_planning_review",
-  "active": false,
-  "owner_decision_ref": "VP-OD-01",
+  "status": "selected",
+  "active": true,
+  "owner_decision_ref": "DEC-AFC-SD-049",
   "authority": "Current owner authoring packet only; no execution/push/PR/merge/install authority.",
-  "precedence": "After controller materialization only, explicit overrides replace fields for the same slice ID. Original active arrays stay untouched until selection. SD-048 code-only linking is already settled and supersedes every historical passphrase instruction.",
-  "inactive_primary_slices": [
-   "P2-A01T",
-   "P2-A01",
-   "P2-A02T",
-   "P2-A02",
-   "P2-A03T",
-   "P2-A03",
-   "P2-A04T",
-   "P2-A04",
-   "P2-A05T",
-   "P2-A05"
-  ],
+  "precedence": "Selected by DEC-AFC-SD-049. Explicit overrides are the primary Vega scope for the same slice ID; original fields stay as the Fire OS secondary scope. SD-048 code-only linking is settled and supersedes every historical passphrase instruction.",
   "completion_dependency_rule": "Union depends_on and completion_dependencies for closure; X01 host-ready receipt permits V01T start while physical qualification remains pending.",
   "review_capabilities": {
    "coverage_assist": {
@@ -25381,11 +25451,12 @@
      "P2-L05",
      "P2-R5"
     ],
-    "availability": "not_run; .vpkg semantic support unproven, VEGA_REVERIFY_CAPABILITY_GAP on unsupported semantics"
+    "availability": "not_run; .vpkg semantic support unproven, VEGA_REVERIFY_CAPABILITY_GAP on unsupported semantics",
+    "target_order": "CMD-REVERIFY-VPKG is primary (Vega: V01, L05, R5); CMD-REVERIFY-APK is secondary (Fire OS: A01-A05 and the secondary APK in L05/R5)."
    }
   },
-  "review_budget": "No reset of spent planning review/repair bounds; F1 remains open. No new automatic dispatch authority.",
-  "next_action": "Planning controller reviews this committed candidate, resolves queued VP-OD-01..05 in the integrated batch, then materializes/rebinds only the chosen alternative before execution.",
+  "review_budget": "No reset of spent planning review/repair bounds. F1 closed by DEC-AFC-SD-050. One planning review of this selected candidate is next; no new automatic dispatch authority.",
+  "next_action": "One planning review of this selected candidate; then the controller materializes the overrides and rebinds before dispatch. VP-OD-02 (SDK terms) and VP-OD-04 (device arrival, owner login) stay open owner actions.",
   "slice_proof_map": {
    "P2-X01": [
     "SEIT-AFC-P2-DX-01",
@@ -25856,6 +25927,62 @@
    "note": "Reuses V01 estimate, not 180 additional seconds on top of V01; device procedures outside repository gate.",
    "device_procedure_estimate_seconds": 1800,
    "estimate_status": "unmeasured planning budget per bounded physical feature session; live event waits excluded."
+  },
+  "selected_on": "2026-10-14",
+  "secondary_target_slices": [
+   "P2-A01T",
+   "P2-A01",
+   "P2-A02T",
+   "P2-A02",
+   "P2-A03T",
+   "P2-A03",
+   "P2-A04T",
+   "P2-A04",
+   "P2-A05T",
+   "P2-A05"
+  ],
+  "secondary_scope_rule": "On a shared slice that carries overrides (X01-X04, X07, X09, X10, X11, X12, L05, R1-R5, V01T/V01, D04), the overrides are the primary Vega scope and close the primary obligation. The original baseline fields stay as the Fire OS secondary scope: run after the Vega exit evidence, only on a real Fire OS device, and never gating Vega closure or the Vega critical path. A01-A05/T are Fire OS-only secondary slices with their original fields and dependencies.",
+  "milestone_order": [
+   "M01",
+   "M02",
+   "M14",
+   "M04",
+   "M05",
+   "M07",
+   "M09",
+   "M10",
+   "M11",
+   "M12",
+   "M13",
+   "M03",
+   "M06",
+   "M08"
+  ],
+  "critical_path": [
+   "P2-X01",
+   "P2-V01T",
+   "P2-X04",
+   "P2-X02",
+   "P2-X03",
+   "P2-X07",
+   "P2-L03",
+   "P2-V01",
+   "P2-X09",
+   "P2-X10",
+   "P2-R4",
+   "P2-D04",
+   "P2-R5",
+   "P2-L05",
+   "P2-X12"
+  ],
+  "owner_decisions": {
+   "DEC-AFC-SD-048": "Device linking uses the TV code only; no passphrase.",
+   "DEC-AFC-SD-049": "Build both targets: Vega OS primary, Fire OS secondary. The Vega-primary contingency is the selected plan.",
+   "DEC-AFC-SD-050": "F1 option (a): P2-D04 closes RISK-AFC-P2-14; P2-V01 supplies the evidence.",
+   "DEC-AFC-SD-051": "The Vega host gets a user-scope, scanned and pinned Watchman; libpython3.8-dev is skipped.",
+   "DEC-AFC-SD-052": "tv-app changed-line coverage threshold is 70% (CMD-COVERAGE-TVAPP).",
+   "DEC-AFC-SD-053": "Tool installs the plan needs are agent work.",
+   "DEC-AFC-SD-054": "UTP netty CVEs are accepted until submission; a post-submission cleanup task removes them."
   }
  }
 }

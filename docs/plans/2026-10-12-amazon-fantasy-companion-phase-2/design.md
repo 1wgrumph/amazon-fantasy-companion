@@ -223,9 +223,10 @@ panel_refresh while visible, immediately on show; apply changed rows only.
 `POST /v1/link` issues an 8-character code from an unambiguous base-32
 alphabet (≥ 40 bits), TTL device_code_ttl, plus a polling handle.
 `POST /v1/link/confirm` is called from the `/link` page on a phone or
-browser: the customer signs in with Yahoo OAuth (when Yahoo is approved) or
-with the owner-set link passphrase held in SSM SecureString (manual mode;
-single-owner demo), then enters the code. Confirmation is one-time; an
+browser: the customer enters the TV code, and the code alone confirms the
+link (DEC-AFC-SD-048, 2026-10-14: no passphrase or sign-in step is
+requested, stored or supplied; Yahoo OAuth, when approved, is only for
+lineup import). Confirmation is one-time; an
 expired or reused code returns 410. Linking returns a 256-bit opaque device
 session token, stored only as a hash, sent as a bearer token, checked on
 every request against the profile it is bound to (403 on any foreign
@@ -582,9 +583,10 @@ stateDiagram-v2
 
 ### DES-AFC-P2-VPRIMARY — Same contracts, conditional primary target
 
-This is an additive alternative to DES-AFC-P2-VEGA, activated only by the
-owner's platform choice and integrated candidate approval. The Kotlin
-implementation is reference material, not executable input to Vega. The
+Selected 2026-10-14 by DEC-AFC-SD-049: Vega OS is the primary target and
+Fire OS the secondary target; both are built. The Kotlin app (A01..A05)
+stays as the Fire OS secondary build, off the Vega critical path, and is
+reference material, not executable input to Vega. The
 V01T/V01 pair implements the existing register behavior directly in the
 previously planned TypeScript module layout. A01 test identities are used
 where present; A02–A05 behavior is traced directly to register/VCASE IDs
@@ -645,10 +647,13 @@ AWS identities stay separate from customer sessions.
 | X03 → B06 | Populate existing registry fields with verified Vega URI/component data and outcomes | `launch.type=uri` already exists. Keep field schema; do not claim Android package names or intent strings work on Vega. If Vega cannot fit the existing contract, stop for a named contract decision. |
 | L03 / final deploy step | Deploy and qualify the same shared backend against exact TV candidate | `aws-afc-dev` lease and existing credential/DB boundaries; B01 being live does not establish all later endpoints work. |
 
-The primary contingency selects one TV target per deployment; it does not
-add a multi-platform registry discriminator. If both clients must be served
-simultaneously and URI values differ, that is unresolved contract work,
-not authorized by this delta. V01 has no backend write permission. X03's
+Under DEC-AFC-SD-049 one shared backend serves both clients. The registry
+holds one `launch` per provider, so X03 writes the verified Vega (primary)
+value. Design item DF-VP-01 for the planning review: if a provider's Vega
+and Fire OS launch values differ, the Fire OS secondary client reports the
+existing labeled limitation for that provider (no guessed intent), unless
+the review accepts a per-platform launch field as a named contract change
+to CONTRACT-AFC-P2-PROVIDER-REGISTRY owned by X03/B06. V01 has no backend write permission. X03's
 existing data-only registry permission remains with X03.
 
 ### Conditional integration and proof binding

@@ -2043,8 +2043,8 @@
       ],
       "execution_status": "not_run (prospective procedure; help/preparation inspection is not execution)",
       "vega_primary_contingency": {
-        "status": "proposed",
-        "activation": "VP-OD-01 plus approved materialized candidate; SD-048 already settled",
+        "status": "selected",
+        "activation": "DEC-AFC-SD-049 selected Vega primary; dispatch after planning review approval and controller materialization; SD-048 settled",
         "overrides": {
           "pass": "Use the existing non-secret output/readback procedure and deployed endpoint; SD-048 removes every OA-10/passphrase prerequisite. No new credential retrieval; code-only linked smoke must pass the shared reconciled contract."
         },
@@ -2254,8 +2254,8 @@
         "Verify thirteen milestones row by row against the approved payload and tracking_workflow.milestone_table (title, due date, exact UTC due time in description, issues in order), then inspect PROC-TRACKING-SETUP saved mapping/readbacks for 39 issues and all 52 slices. This readback phase must not rerun filing/submission."
       ],
       "vega_primary_contingency": {
-        "status": "proposed",
-        "activation": "VP-OD-01 plus approved materialized candidate; SD-048 already settled",
+        "status": "selected",
+        "activation": "DEC-AFC-SD-049 selected Vega primary; dispatch after planning review approval and controller materialization; SD-048 settled",
         "overrides": {
           "pass": "Retain saved-state readback controls; compare with owner-approved selected primary schedule/M14 promotion when materialized. This planning packet performs no GitHub mutation."
         },
@@ -2305,8 +2305,8 @@
       ],
       "execution_status": "not_run (prospective procedure; help/preparation inspection is not execution)",
       "vega_primary_contingency": {
-        "status": "proposed",
-        "activation": "VP-OD-01 plus approved materialized candidate; SD-048 already settled",
+        "status": "selected",
+        "activation": "DEC-AFC-SD-049 selected Vega primary; dispatch after planning review approval and controller materialization; SD-048 settled",
         "overrides": {
           "command": "Load the installed release-process skill; use the selected R1..R5 version table and exact candidate. Acquire vega-app-config and main-landing for the existing release-preparation PR; update vega-app/package.json and manifest.toml consistently, changelog and draft notes. Add the L05 .vpkg digests to draft notes. No tag or publication without OA-8.",
           "pass": "Same release evidence and gates as baseline; selected .vpkg replaces APK, and no tv-app-gradle mutation/lease for Vega-only release preparation."
@@ -2483,8 +2483,8 @@
       "execution_status": "not_run (prospective procedure; help/preparation inspection is not execution)",
       "vega_binding": "P2-V01 (M14): same pass criteria on the Vega Virtual Device; drive with CMD-VVD-INPUT and capture with CMD-VVD-SCREENCAP (CMD-VEGA-DEVICE-INSTALL target when OA-12 confirms a Vega OS stick); vega-virtual-device lease replaces fire-tv-stick; screenshots under evidence/visual/P2-V01/.",
       "vega_primary_contingency": {
-        "status": "proposed",
-        "activation": "VP-OD-01 plus approved materialized candidate; SD-048 already settled",
+        "status": "selected",
+        "activation": "DEC-AFC-SD-049 selected Vega primary; dispatch after planning review approval and controller materialization; SD-048 settled",
         "overrides": {
           "command": "Use CMD-VVD-INPUT/CMD-VVD-SCREENCAP on VVD and qualified physical Vega remote/capture route on the stick. Drive every changed loading/empty/error/focused state at recorded 1080p output; inspect D-pad/select/back, text floor and behavior.",
           "pass": "Same visual criteria; bind .vpkg hash, environment and safe captures. Physical provider cases require real playback and admissible arrival/geometry proof. Host-window capture is labeled and cannot prove protected video or substitute for physical acceptance."
@@ -2843,7 +2843,7 @@
       "id": "CMD-COVERAGE-TVAPP",
       "command": "bash tools/ci/coverage/tvapp.sh <base_sha> <evidence_dir>",
       "description": "Prospective G01-owned comparator wrapper; A01T/A01 own AGP/JaCoCo enablement and afcCoverageReport task in existing app module.",
-      "pass": "JaCoCo XML represents exact candidate handwritten Kotlin/Java and required selected suite data; changed-line result >=90%. Missing tool/report, stale candidate, zero-test or zero-mutation denominator, unmapped changed executable source, unsupported runtime, qualification failure or not_run is a typed gap/nonzero, never unit-test substitute or PASS.",
+      "pass": "JaCoCo XML represents exact candidate handwritten Kotlin/Java and required selected suite data; changed-line result >=70% (DEC-AFC-SD-052). Missing tool/report, stale candidate, zero-test or zero-mutation denominator, unmapped changed executable source, unsupported runtime, qualification failure or not_run is a typed gap/nonzero, never unit-test substitute or PASS.",
       "used_by": [
         "IE-P2-7",
         "P2-A01",
@@ -2856,7 +2856,7 @@
         "G01 implements the repo wrapper and report completeness/threshold evaluator; G01T qualifies positive and failing controls. Never count unchanged aggregate coverage as changed-line evidence.",
         "Run at exact candidate from repository root; create bounded diff from recorded base to candidate restricted to the target handwritten source. XML paths must resolve to that exact tree.",
         "Inventory every changed executable file/line before score. Missing file/line mapping is REPORT_INCOMPLETE, not a 100% empty diff. Document genuinely non-executable/generated exclusions with evidence.",
-        "Require >=90% covered changed executable lines; threshold is a TE proposal pending integrated approval. Preserve all mandatory VCASEs independent of percentage.",
+        "Require >=70% covered changed executable lines (owner DEC-AFC-SD-052, 2026-10-14). Preserve all mandatory VCASEs independent of percentage.",
         "A01 binds a repo-owned JacocoReport task named :app:afcCoverageReport to actual pinned debug variant class/source/execution data with XML enabled; it is prospective custom task, not an assumed standard Android task.",
         "Qualified same-candidate instrumentation data may be included under stick lock if needed; local unit report never stands in for an unexercised on-device VCASE. Missing Android/Compose/Kotlin mapping stays capability gap.",
         "Do not create another application module or enable weakened Android behavior solely to make coverage pass."
@@ -2865,7 +2865,7 @@
       "native_commands": [
         "./tv-app/gradlew -p tv-app testDebugUnitTest :app:afcCoverageReport",
         "git diff <base_sha> HEAD -- tv-app/app/src/main > <evidence_dir>/changed.diff",
-        "diff-cover <qualified_jacoco_xml> --diff-file=<evidence_dir>/changed.diff --src-roots tv-app/app/src/main/java tv-app/app/src/main/kotlin --fail-under=90"
+        "diff-cover <qualified_jacoco_xml> --diff-file=<evidence_dir>/changed.diff --src-roots tv-app/app/src/main/java tv-app/app/src/main/kotlin --fail-under=70"
       ],
       "report_formats": [
         "JaCoCo XML",
@@ -3007,8 +3007,8 @@
       "filing_scope_ref": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/specialists/filing-scope-resolution.md",
       "scope_checked_at_action_time": true,
       "vega_primary_contingency": {
-        "status": "proposed",
-        "activation": "VP-OD-01 plus approved materialized candidate; SD-048 already settled",
+        "status": "selected",
+        "activation": "DEC-AFC-SD-049 selected Vega primary; dispatch after planning review approval and controller materialization; SD-048 settled",
         "overrides": {
           "pass": "Retain repository reporting authority and saved-state checks; if authorized later, update existing work items to selected target and explicit limits. Do not duplicate V01 issues or close incomplete Fire OS/Vega acceptance."
         },
@@ -3017,8 +3017,8 @@
     },
     {
       "id": "PROC-VEGA-PREPARE",
-      "command": "Step 1: curl -fsSL -o <scan_dir>/get_vvm.sh https://sdk-installer.vega.labcollab.net/get_vvm.sh && sha256sum <scan_dir>/get_vvm.sh ; Step 2: CMD-SUPPLY-SCAN on <scan_dir>/get_vvm.sh; must return ALLOW ; Step 3: NONINTERACTIVE=true VEGA_SDK_VERSION=<pinned_sdk_version> bash <scan_dir>/get_vvm.sh < /dev/null && ~/vega/bin/vega --version",
-      "pass": "Installer digest and pinned VEGA_SDK_VERSION recorded; CMD-SUPPLY-SCAN ALLOW/PASS for the installer and each downloaded SDK/VVD artifact before first execution; `~/vega/bin/vega --version` prints the pinned Active SDK Version and CLI version. User scope only (~/vega); no sudo or system package. A license or terms prompt, a required system package, BLOCK/INDETERMINATE scan, or an unsupported-host error stops with OWNER_DECISION_REQUIRED (OA-13, RISK-AFC-P2-15). Missing tool, missing article, unsupported capability, zero collected cases, skipped required case or not_run is a typed gap, never PASS. Record safe error, phase and exit status.",
+      "command": "Step 1: curl -fsSL -o <scan_dir>/get_vvm.sh https://sdk-installer.vega.labcollab.net/get_vvm.sh && sha256sum <scan_dir>/get_vvm.sh ; Step 2: CMD-SUPPLY-SCAN on <scan_dir>/get_vvm.sh; must return ALLOW ; Step 3: curl -fsSL -o <scan_dir>/watchman.zip https://github.com/facebook/watchman/releases/download/<pinned_watchman_tag>/watchman-<pinned_watchman_tag>-linux.zip && sha256sum <scan_dir>/watchman.zip ; Step 4: CMD-SUPPLY-SCAN on <scan_dir>/watchman.zip; must return ALLOW ; Step 5: unzip -q <scan_dir>/watchman.zip -d ~/.local/opt/ && ln -sf ~/.local/opt/watchman-<pinned_watchman_tag>-linux/bin/watchman ~/.local/bin/watchman && watchman --version ; Step 6: NONINTERACTIVE=true VEGA_SDK_VERSION=<pinned_sdk_version> bash <scan_dir>/get_vvm.sh < /dev/null && ~/vega/bin/vega --version",
+      "pass": "Installer digest and pinned VEGA_SDK_VERSION recorded; CMD-SUPPLY-SCAN ALLOW/PASS for the installer and each downloaded SDK/VVD artifact before first execution; `~/vega/bin/vega --version` prints the pinned Active SDK Version and CLI version. Watchman (DEC-AFC-SD-051): pinned official release, sha256 recorded, CMD-SUPPLY-SCAN ALLOW/PASS before first use, installed under ~/.local, and `watchman --version` prints the pinned version. libpython3.8-dev is skipped (DEC-AFC-SD-051); its absence is recorded as a native-debugging limitation, not a failure. User scope only (~/vega, ~/.local); no sudo or system package. These installs are agent work (DEC-AFC-SD-053). A license or terms prompt, a required system package, BLOCK/INDETERMINATE scan, or an unsupported-host error stops with OWNER_DECISION_REQUIRED (OA-13, RISK-AFC-P2-15). Missing tool, missing article, unsupported capability, zero collected cases, skipped required case or not_run is a typed gap, never PASS. Record safe error, phase and exit status.",
       "description": "Prepare the Vega SDK, CLI and Vega Virtual Device on the Ubuntu x86_64 KVM host (workspace rule 23). The installer is downloaded and scanned before it runs; it is never piped from the network into bash.",
       "used_by": [
         "IE-P2-V01",
@@ -3032,22 +3032,25 @@
         "Record host: uname -a, lsb_release -a, /dev/kvm access, free disk >= 20 GB (docs), node --version >= 18, native (non-snap) curl, lz4, watchman.",
         "Pin VEGA_SDK_VERSION to the 0.24.x build named in the docs at dispatch (S3 example 0.24.9311); use `vega sdk list-remote` only if `vega --help` lists it.",
         "Run scan-software-supply-chain on the installer and on each archive it fetches; NONINTERACTIVE=true must not accept license terms on the owner's behalf: if terms appear, stop (OA-13). During the scan, inspect get_vvm.sh for license, EULA, terms or accept handling. If the NONINTERACTIVE path accepts or skips any terms, stop with OWNER_DECISION_REQUIRED (OA-13) before running it.",
-        "Missing system packages (libpython3.8-dev has no candidate on Ubuntu 26.04; watchman absent) are installed only in user scope after scan, or the owner decides; native debugging (libpython3.8) is not needed for build, Jest or VVD run and its absence is recorded, not worked around."
+        "Watchman (DEC-AFC-SD-051, DEC-AFC-SD-053): download the pinned official release zip to <scan_dir>, record sha256, run CMD-SUPPLY-SCAN (ALLOW/PASS required; BLOCK or INDETERMINATE stops for the owner), then unpack it under ~/.local/opt and link bin/watchman into ~/.local/bin with a user-owned state directory; no sudo, PPA or system package. libpython3.8-dev is skipped: native debugging is not needed for build, Jest or VVD run, and its absence is recorded, not worked around. Record tool, version, hash, location and scan verdict in the slice evidence."
       ],
       "command_steps": [
         "curl -fsSL -o <scan_dir>/get_vvm.sh https://sdk-installer.vega.labcollab.net/get_vvm.sh && sha256sum <scan_dir>/get_vvm.sh",
         "CMD-SUPPLY-SCAN on <scan_dir>/get_vvm.sh; must return ALLOW",
+        "curl -fsSL -o <scan_dir>/watchman.zip https://github.com/facebook/watchman/releases/download/<pinned_watchman_tag>/watchman-<pinned_watchman_tag>-linux.zip && sha256sum <scan_dir>/watchman.zip",
+        "CMD-SUPPLY-SCAN on <scan_dir>/watchman.zip; must return ALLOW",
+        "unzip -q <scan_dir>/watchman.zip -d ~/.local/opt/ && ln -sf ~/.local/opt/watchman-<pinned_watchman_tag>-linux/bin/watchman ~/.local/bin/watchman && watchman --version",
         "NONINTERACTIVE=true VEGA_SDK_VERSION=<pinned_sdk_version> bash <scan_dir>/get_vvm.sh < /dev/null && ~/vega/bin/vega --version"
       ],
       "vega_primary_contingency": {
-        "status": "proposed",
+        "status": "selected",
         "additional_preconditions": [
           "Inspect installer download/execution sequence before running: stage and scan every transitive SDK/VVD artifact before its first execution; if download-only staging cannot be established, return SUPPLY_CHAIN_STAGING_GAP rather than execute bootstrap and scan afterward.",
           "Pin exact RN 0.72/SDK/OS/package pairing only after reconciling notification documentation conflict. Do not assume RN 0.83 parity or silently downgrade.",
-          "Watchman in user scope only after exact official provenance and scan receipt. No new scanner install, sudo, PPA or system package. Owner-approved host attempt does not make unsupported Ubuntu 26.04 supported.",
+          "Watchman in user scope per DEC-AFC-SD-051: exact official provenance and scan receipt first. No new scanner install, sudo, PPA or system package. The Ubuntu 26.04 attempt is selected; it does not make the host supported, and a failed user-scope attempt returns the exact gap.",
           "Inspect proposed user shell-profile/VS Code changes; isolate to task user-scope environment where possible and preserve existing tools. Unknown license/terms behavior blocks NONINTERACTIVE execution."
         ],
-        "command_note": "Original F2-F8 corrected command_steps preserved; these additional preconditions are gates before the install step, not permission to run it."
+        "command_note": "F2-F8 corrected steps preserved; DEC-AFC-SD-051 inserts the Watchman steps 3-5 before the SDK install step. Additional preconditions gate the install; installs are agent work under DEC-AFC-SD-053."
       }
     },
     {
@@ -3173,8 +3176,8 @@
       ],
       "execution_status": "not_run (prospective procedure; help/preparation inspection is not execution)",
       "vega_primary_contingency": {
-        "status": "proposed",
-        "activation": "VP-OD-01 plus approved materialized candidate; SD-048 already settled",
+        "status": "selected",
+        "activation": "DEC-AFC-SD-049 selected Vega primary; dispatch after planning review approval and controller materialization; SD-048 settled",
         "overrides": {
           "pass": "Keep the five-feature vocabulary and evidence fields; separate VVD and physical verdict columns. A simulator-limited row may pass documentation completeness but cannot close the corresponding physical product requirement. Primary missing/unsupported behavior remains a named gap until requirement-specific owner disposition."
         },
@@ -3193,8 +3196,8 @@
       ],
       "execution_status": "not_run (prospective procedure; help/preparation inspection is not execution)",
       "vega_primary_contingency": {
-        "status": "proposed",
-        "activation": "VP-OD-01 plus approved materialized candidate; SD-048 already settled",
+        "status": "selected",
+        "activation": "DEC-AFC-SD-049 selected Vega primary; dispatch after planning review approval and controller materialization; SD-048 settled",
         "overrides": {
           "pass": "Mandatory physical qualification for the selected primary Vega target after OA-12. Verify actual model/OS/architecture and exact qualified package. If actual architecture differs from armv7, use the documented pinned build variant after qualification, not a renamed package. Missing hardware remains pending, never not-applicable/PASS for primary acceptance."
         },
@@ -3336,6 +3339,16 @@
         "SEIT-RISK-AFC-P2-17"
       ],
       "execution_status": "not_run (proposed; platform selection and execution authority pending)"
+    },
+    {
+      "id": "PROC-POST-SUBMISSION-UTP-NETTY",
+      "command": "./tv-app/gradlew -p tv-app :app:dependencies --configuration debugAndroidTestRuntimeClasspath ; CMD-SUPPLY-SCAN on the resolved tv-app dependency set",
+      "description": "Post-submission cleanup task (DEC-AFC-SD-054): remove the netty artifacts with known CVEs that the Android Unified Test Platform (UTP) pulls into the tv-app test toolchain. Accepted residual risk until T_deadline 2026-10-23T19:00:00Z; the task runs after submission.",
+      "pass": "After the upgrade, exclusion or removal, the resolved tv-app dependency set has no netty version with the accepted CVEs, CMD-SUPPLY-SCAN returns ALLOW/PASS, and the tv-app gate still passes. Missing tool, unresolved configuration or not_run is a typed gap, never PASS. Until it passes, the CVEs stay listed as accepted residual risk in submission and release notes.",
+      "used_by": [
+        "post-submission cleanup task (created after T_deadline; not a P2 slice)"
+      ],
+      "execution_status": "not_run (post-submission; DEC-AFC-SD-054)"
     }
   ],
   "required_commands": [
@@ -10756,8 +10769,8 @@
       ],
       "execution_status": "not_run",
       "vega_primary_contingency": {
-        "status": "proposed",
-        "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+        "status": "selected",
+        "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
         "preconditions": [
           "Approved/materialized primary candidate; SD-048 common contract qualified; no A01..A05 merge prerequisite.",
           "Use V01 start/closure dependencies in implementation.json; physical evidence required for provider-dependent claims."
@@ -10795,8 +10808,8 @@
       "supporting_slices": [],
       "execution_status": "not_run",
       "vega_primary_contingency": {
-        "status": "proposed",
-        "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+        "status": "selected",
+        "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
         "preconditions": [
           "Approved/materialized primary candidate; SD-048 common contract qualified; no A01..A05 merge prerequisite.",
           "Use V01 start/closure dependencies in implementation.json; physical evidence required for provider-dependent claims."
@@ -10817,7 +10830,7 @@
         "Execution requires planning review of the P2-V01 delta, P2-A01..P2-A05 merged, PROC-VEGA-PREPARE receipt and the exact candidate.",
         "Off the M13 critical path; inclusion in the submission only under RISK-AFC-P2-14."
       ],
-      "stimulus_or_procedure": "Start the VVD, install the candidate, link against aws-afc-dev (owner OA-10 passphrase), drive each changed screen and state by D-pad/select/back and capture it; fill the per-feature verdict table.",
+      "stimulus_or_procedure": "Start the VVD, install the candidate, link against aws-afc-dev (owner confirms the TV code on a phone or browser; no passphrase, DEC-AFC-SD-048), drive each changed screen and state by D-pad/select/back and capture it; fill the per-feature verdict table.",
       "expected_result": "Each feature has a verdict, test evidence and screenshots; limited-by-simulator rows name the limit (provider apps, DRM playback, notifications over playback); unknown stays unknown.",
       "observable_evidence": "evidence/visual/P2-V01/ and docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-V01/feature-verdicts.md",
       "pass_fail_rule": "PASS iff all duties in AC-AFC-P2-VEGA-03 and expected observations hold. `works` without VVD observation, a missing state capture, account data in a capture, or a simulator limit reported as works => FAIL. Missing tool, missing article, unsupported capability, zero collected cases, skipped required case or not_run is a typed gap, never PASS. Record safe error, phase and exit status.",
@@ -10834,8 +10847,8 @@
       "supporting_slices": [],
       "execution_status": "not_run",
       "vega_primary_contingency": {
-        "status": "proposed",
-        "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+        "status": "selected",
+        "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
         "preconditions": [
           "Approved/materialized primary candidate; SD-048 common contract qualified; no A01..A05 merge prerequisite.",
           "Use V01 start/closure dependencies in implementation.json; physical evidence required for provider-dependent claims."
@@ -10875,8 +10888,8 @@
       ],
       "execution_status": "not_run",
       "vega_primary_contingency": {
-        "status": "proposed",
-        "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+        "status": "selected",
+        "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
         "preconditions": [
           "Approved/materialized primary candidate; SD-048 common contract qualified; no A01..A05 merge prerequisite.",
           "Use V01 start/closure dependencies in implementation.json; physical evidence required for provider-dependent claims."
@@ -10914,8 +10927,8 @@
       "supporting_slices": [],
       "execution_status": "not_run",
       "vega_primary_contingency": {
-        "status": "proposed",
-        "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+        "status": "selected",
+        "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
         "preconditions": [
           "Approved/materialized primary candidate; SD-048 common contract qualified; no A01..A05 merge prerequisite.",
           "Use V01 start/closure dependencies in implementation.json; physical evidence required for provider-dependent claims."
@@ -10953,8 +10966,8 @@
       "supporting_slices": [],
       "execution_status": "not_run",
       "vega_primary_contingency": {
-        "status": "proposed",
-        "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+        "status": "selected",
+        "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
         "preconditions": [
           "Approved/materialized primary candidate; SD-048 common contract qualified; no A01..A05 merge prerequisite.",
           "Use V01 start/closure dependencies in implementation.json; physical evidence required for provider-dependent claims."
@@ -10980,7 +10993,7 @@
       "observable_evidence": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-V01/ (inclusion decision record)",
       "pass_fail_rule": "PASS iff all duties in RISK-AFC-P2-14 and expected observations hold. Vega claimed in submission without merged verified evidence, or an M12/M13 slice delayed by V01 => FAIL. Missing tool, missing article, unsupported capability, zero collected cases, skipped required case or not_run is a typed gap, never PASS. Record safe error, phase and exit status.",
       "method_fields": {
-        "slice": "P2-V01",
+        "slice": "P2-D04",
         "requirement_ref": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/amazon-fantasy-companion-phase-2-technical-plan.md#RISK-AFC-P2-14",
         "register_independence": "Lifecycle-local criterion; mirrors register UIDs by reference and does not replace their Fire OS VCASE allocations.",
         "reverify": "Reverify: not applicable — this row checks source, tests or observed behavior, not a compiled binary attribute",
@@ -10988,12 +11001,14 @@
       },
       "negative_or_failure_case": "Vega claimed in submission without merged verified evidence, or an M12/M13 slice delayed by V01",
       "boundary_test_layer": "Lifecycle control",
-      "closing_slice": "P2-V01",
-      "supporting_slices": [],
+      "closing_slice": "P2-D04",
+      "supporting_slices": [
+        "P2-V01"
+      ],
       "execution_status": "not_run",
       "vega_primary_contingency": {
-        "status": "proposed",
-        "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+        "status": "selected",
+        "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
         "preconditions": [
           "Approved/materialized primary candidate; SD-048 common contract qualified; no A01..A05 merge prerequisite.",
           "Use V01 start/closure dependencies in implementation.json; physical evidence required for provider-dependent claims."
@@ -11004,7 +11019,7 @@
         "supporting_slices": [
           "P2-V01"
         ],
-        "decision_ref": "VP-OD-05"
+        "decision_ref": "DEC-AFC-SD-050"
       }
     },
     {
@@ -11038,8 +11053,8 @@
       ],
       "execution_status": "not_run",
       "vega_primary_contingency": {
-        "status": "proposed",
-        "condition": "Only after explicit VP-OD-01 platform selection, candidate approval and controller materialization; proposed, dispatchable=false now.",
+        "status": "selected",
+        "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
         "preconditions": [
           "Approved/materialized primary candidate; SD-048 common contract qualified; no A01..A05 merge prerequisite.",
           "Use V01 start/closure dependencies in implementation.json; physical evidence required for provider-dependent claims."
@@ -11638,7 +11653,7 @@
       "milestone_note": "entry",
       "release_checkpoint": "W1",
       "vega_primary_contingency": {
-        "status": "proposed",
+        "status": "selected",
         "after": [],
         "merges": [],
         "note": "After is integration closure order, not a blanket start gate. Same shared-resource/review/owner boundaries. Original platform-specific post-step commands use primary SEIT bindings; no waived positive/negative criteria."
@@ -11690,7 +11705,7 @@
       "filing_scope_projection_ref": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-6/codex-lead/filing-scope-binding.json#assembly_glue",
       "release_checkpoint": "W1",
       "vega_primary_contingency": {
-        "status": "proposed",
+        "status": "selected",
         "after": [
           "IE-P2-1"
         ],
@@ -11753,7 +11768,7 @@
       ],
       "release_checkpoint": "W1",
       "vega_primary_contingency": {
-        "status": "proposed",
+        "status": "selected",
         "after": [
           "IE-P2-1"
         ],
@@ -11814,7 +11829,7 @@
       "note": "Exact correction2 assembly projection; current task hold overrides prospective execution entry. Additional TE commands assigned through supplemental_command_ids and PI refresh; no IE edit.",
       "release_checkpoint": "W1",
       "vega_primary_contingency": {
-        "status": "proposed",
+        "status": "selected",
         "after": [
           "IE-P2-1"
         ],
@@ -11885,7 +11900,7 @@
       ],
       "release_checkpoint": "W1",
       "vega_primary_contingency": {
-        "status": "proposed",
+        "status": "selected",
         "after": [
           "IE-P2-3"
         ],
@@ -11943,7 +11958,7 @@
       "milestone_note": "CP-X05-HIST, executes during M02/M03",
       "release_checkpoint": "W1",
       "vega_primary_contingency": {
-        "status": "proposed",
+        "status": "selected",
         "after": [
           "IE-P2-5"
         ],
@@ -12020,10 +12035,17 @@
       ],
       "release_checkpoint": "W1",
       "vega_primary_contingency": {
-        "status": "inactive_if_selected",
-        "after": [],
-        "merges": [],
-        "note": "Baseline Android realization retained as reference; primary counterpart is IE-P2-V01. No acceptance inferred."
+        "status": "fire_os_secondary",
+        "after": [
+          "IE-P2-3",
+          "IE-P2-4",
+          "IE-P2-5"
+        ],
+        "merges": [
+          "P2-A01T",
+          "P2-A01"
+        ],
+        "note": "Fire OS secondary target (DEC-AFC-SD-049): merges in its original order, off the Vega critical path; no Vega integration step waits on it. Primary counterpart is IE-P2-V01. No acceptance inferred."
       }
     },
     {
@@ -12074,7 +12096,7 @@
       "X05_checkpoint_binding": "P2-X05 -> P2-R1 is PR 1 historical-fixture checkpoint CP-X05-HIST merged at IE-P2-6 (W1), not final M04 issue closure. PR 2 final live timing remains IE-P2-17 (M04, W2). Existing assembly strategy/order unchanged.",
       "release_checkpoint": "W1",
       "vega_primary_contingency": {
-        "status": "proposed",
+        "status": "selected",
         "after": [
           "IE-P2-2",
           "IE-P2-3",
@@ -12133,7 +12155,7 @@
       "note": "Exact correction2 assembly projection; current task hold overrides prospective execution entry. Additional TE commands assigned through supplemental_command_ids and PI refresh; no IE edit.",
       "release_checkpoint": "W2",
       "vega_primary_contingency": {
-        "status": "proposed",
+        "status": "selected",
         "after": [
           "IE-P2-4"
         ],
@@ -12187,7 +12209,7 @@
       "note": "Exact correction2 assembly projection; current task hold overrides prospective execution entry. Additional TE commands assigned through supplemental_command_ids and PI refresh; no IE edit.",
       "release_checkpoint": "W2",
       "vega_primary_contingency": {
-        "status": "proposed",
+        "status": "selected",
         "after": [
           "IE-P2-9"
         ],
@@ -12246,7 +12268,7 @@
       "milestone_note": "CP-X03-REG",
       "release_checkpoint": "W2",
       "vega_primary_contingency": {
-        "status": "proposed",
+        "status": "selected",
         "after": [
           "IE-P2-10",
           "IE-P2-5"
@@ -12297,7 +12319,7 @@
       "note": "Exact correction2 assembly projection; current task hold overrides prospective execution entry. Additional TE commands assigned through supplemental_command_ids and PI refresh; no IE edit.",
       "release_checkpoint": "W2",
       "vega_primary_contingency": {
-        "status": "proposed",
+        "status": "selected",
         "after": [
           "IE-P2-11"
         ],
@@ -12354,7 +12376,7 @@
       "note": "Exact correction2 assembly projection; current task hold overrides prospective execution entry. Additional TE commands assigned through supplemental_command_ids and PI refresh; no IE edit.",
       "release_checkpoint": "W2",
       "vega_primary_contingency": {
-        "status": "proposed",
+        "status": "selected",
         "after": [
           "IE-P2-5",
           "IE-P2-6"
@@ -12412,7 +12434,7 @@
       "note": "Exact correction2 assembly projection; current task hold overrides prospective execution entry. Additional TE commands assigned through supplemental_command_ids and PI refresh; no IE edit.",
       "release_checkpoint": "W2",
       "vega_primary_contingency": {
-        "status": "proposed",
+        "status": "selected",
         "after": [
           "IE-P2-5"
         ],
@@ -12435,7 +12457,7 @@
         "P2-L02"
       ],
       "entry_criteria": [
-        "OA-3 done (afc-dev profile); OA-10 passphrase stored for the link-confirm smoke (IE-P2-F15)",
+        "OA-3 done (afc-dev profile); OA-10 owner available to confirm the TV link code for the link-confirm smoke (IE-P2-F15; DEC-AFC-SD-048, no passphrase)",
         "aws-afc-dev lease free; no in-progress game window held",
         "deploy commit = main HEAD (includes B02/B03 when merged); CMD-SAM-BUILD, CMD-SAM-DEPLOY with --tags GitCommit=<sha>",
         "any Paid-plan prompt → stop, class F (RISK-AFC-P2-07)"
@@ -12443,7 +12465,7 @@
       "post_step_vv": [
         "CMD-STACK-OUTPUTS → ApiUrl",
         "CMD-DEPLOYED-COMMIT",
-        "CMD-DEPLOYED-SMOKE (link issue 200, profile 401 without token, confirm with OA-10 passphrase entered by the owner)",
+        "CMD-DEPLOYED-SMOKE (link issue 200, profile 401 without token, confirm with the TV code entered by the owner; no passphrase, DEC-AFC-SD-048)",
         "CMD-APK-BUILD-DEBUG with -PafcApiBaseUrl=ApiUrl; CMD-ADB-INSTALL; PROC-VISUAL-REVIEW of A01 code-shown, expired, linked states (IE-P2-F26)",
         "evidence PR lands under main-landing"
       ],
@@ -12472,7 +12494,7 @@
       "note": "Exact correction2 assembly projection; current task hold overrides prospective execution entry. Additional TE commands assigned through supplemental_command_ids and PI refresh; no IE edit.",
       "release_checkpoint": "W2",
       "vega_primary_contingency": {
-        "status": "proposed",
+        "status": "selected",
         "after": [
           "IE-P2-5"
         ],
@@ -12529,7 +12551,7 @@
       "note": "Exact correction2 assembly projection; current task hold overrides prospective execution entry. Additional TE commands assigned through supplemental_command_ids and PI refresh; no IE edit.",
       "release_checkpoint": "W2",
       "vega_primary_contingency": {
-        "status": "proposed",
+        "status": "selected",
         "after": [
           "IE-P2-11"
         ],
@@ -12582,7 +12604,7 @@
       "note": "Exact correction2 assembly projection; current task hold overrides prospective execution entry. Additional TE commands assigned through supplemental_command_ids and PI refresh; no IE edit.",
       "release_checkpoint": "W2",
       "vega_primary_contingency": {
-        "status": "proposed",
+        "status": "selected",
         "after": [
           "IE-P2-6"
         ],
@@ -12659,10 +12681,17 @@
       "note": "Exact correction2 assembly projection; current task hold overrides prospective execution entry. Additional TE commands assigned through supplemental_command_ids and PI refresh; no IE edit.",
       "release_checkpoint": "W2",
       "vega_primary_contingency": {
-        "status": "inactive_if_selected",
-        "after": [],
-        "merges": [],
-        "note": "Baseline Android realization retained as reference; primary counterpart is IE-P2-V01. No acceptance inferred."
+        "status": "fire_os_secondary",
+        "after": [
+          "IE-P2-7",
+          "IE-P2-12",
+          "IE-P2-15"
+        ],
+        "merges": [
+          "P2-A02T",
+          "P2-A02"
+        ],
+        "note": "Fire OS secondary target (DEC-AFC-SD-049): merges in its original order, off the Vega critical path; no Vega integration step waits on it. Primary counterpart is IE-P2-V01. No acceptance inferred."
       }
     },
     {
@@ -12707,7 +12736,7 @@
       "note": "Exact correction2 assembly projection; current task hold overrides prospective execution entry. Additional TE commands assigned through supplemental_command_ids and PI refresh; no IE edit.",
       "release_checkpoint": "W2",
       "vega_primary_contingency": {
-        "status": "proposed",
+        "status": "selected",
         "after": [
           "IE-P2-1"
         ],
@@ -12766,7 +12795,7 @@
       "note": "Exact correction2 assembly projection; current task hold overrides prospective execution entry. Additional TE commands assigned through supplemental_command_ids and PI refresh; no IE edit.",
       "release_checkpoint": "W2",
       "vega_primary_contingency": {
-        "status": "proposed",
+        "status": "selected",
         "after": [
           "IE-P2-8",
           "IE-P2-9",
@@ -12827,7 +12856,7 @@
       "note": "Exact correction2 assembly projection; current task hold overrides prospective execution entry. Additional TE commands assigned through supplemental_command_ids and PI refresh; no IE edit.",
       "release_checkpoint": "W3",
       "vega_primary_contingency": {
-        "status": "proposed",
+        "status": "selected",
         "after": [
           "IE-P2-13",
           "IE-P2-14"
@@ -12889,7 +12918,7 @@
       "note": "Exact correction2 assembly projection; current task hold overrides prospective execution entry. Additional TE commands assigned through supplemental_command_ids and PI refresh; no IE edit.",
       "release_checkpoint": "W3",
       "vega_primary_contingency": {
-        "status": "proposed",
+        "status": "selected",
         "after": [
           "IE-P2-21"
         ],
@@ -12944,7 +12973,7 @@
       "note": "Exact correction2 assembly projection; current task hold overrides prospective execution entry. Additional TE commands assigned through supplemental_command_ids and PI refresh; no IE edit.",
       "release_checkpoint": "W3",
       "vega_primary_contingency": {
-        "status": "proposed",
+        "status": "selected",
         "after": [
           "IE-P2-11"
         ],
@@ -12998,7 +13027,7 @@
       "note": "Exact correction2 assembly projection; current task hold overrides prospective execution entry. Additional TE commands assigned through supplemental_command_ids and PI refresh; no IE edit.",
       "release_checkpoint": "W3",
       "vega_primary_contingency": {
-        "status": "proposed",
+        "status": "selected",
         "after": [
           "IE-P2-21"
         ],
@@ -13077,7 +13106,7 @@
       "note": "Exact correction2 assembly projection; current task hold overrides prospective execution entry. Additional TE commands assigned through supplemental_command_ids and PI refresh; no IE edit.",
       "release_checkpoint": "W3",
       "vega_primary_contingency": {
-        "status": "proposed",
+        "status": "selected",
         "after": [
           "IE-P2-15",
           "IE-P2-19",
@@ -13148,10 +13177,17 @@
       "note": "Exact correction2 assembly projection; current task hold overrides prospective execution entry. Additional TE commands assigned through supplemental_command_ids and PI refresh; no IE edit.",
       "release_checkpoint": "W3",
       "vega_primary_contingency": {
-        "status": "inactive_if_selected",
-        "after": [],
-        "merges": [],
-        "note": "Baseline Android realization retained as reference; primary counterpart is IE-P2-V01. No acceptance inferred."
+        "status": "fire_os_secondary",
+        "after": [
+          "IE-P2-18",
+          "IE-P2-10",
+          "IE-P2-22"
+        ],
+        "merges": [
+          "P2-A03T",
+          "P2-A03"
+        ],
+        "note": "Fire OS secondary target (DEC-AFC-SD-049): merges in its original order, off the Vega critical path; no Vega integration step waits on it. Primary counterpart is IE-P2-V01. No acceptance inferred."
       }
     },
     {
@@ -13202,10 +13238,17 @@
       "note": "Exact correction2 assembly projection; current task hold overrides prospective execution entry. Additional TE commands assigned through supplemental_command_ids and PI refresh; no IE edit.",
       "release_checkpoint": "W3",
       "vega_primary_contingency": {
-        "status": "inactive_if_selected",
-        "after": [],
-        "merges": [],
-        "note": "Baseline Android realization retained as reference; primary counterpart is IE-P2-V01. No acceptance inferred."
+        "status": "fire_os_secondary",
+        "after": [
+          "IE-P2-18",
+          "IE-P2-11",
+          "IE-P2-23"
+        ],
+        "merges": [
+          "P2-A04T",
+          "P2-A04"
+        ],
+        "note": "Fire OS secondary target (DEC-AFC-SD-049): merges in its original order, off the Vega critical path; no Vega integration step waits on it. Primary counterpart is IE-P2-V01. No acceptance inferred."
       }
     },
     {
@@ -13268,10 +13311,17 @@
       "note": "Exact correction2 assembly projection; current task hold overrides prospective execution entry. Additional TE commands assigned through supplemental_command_ids and PI refresh; no IE edit.",
       "release_checkpoint": "W3",
       "vega_primary_contingency": {
-        "status": "inactive_if_selected",
-        "after": [],
-        "merges": [],
-        "note": "Baseline Android realization retained as reference; primary counterpart is IE-P2-V01. No acceptance inferred."
+        "status": "fire_os_secondary",
+        "after": [
+          "IE-P2-9",
+          "IE-P2-18",
+          "IE-P2-24"
+        ],
+        "merges": [
+          "P2-A05T",
+          "P2-A05"
+        ],
+        "note": "Fire OS secondary target (DEC-AFC-SD-049): merges in its original order, off the Vega critical path; no Vega integration step waits on it. Primary counterpart is IE-P2-V01. No acceptance inferred."
       }
     },
     {
@@ -13311,7 +13361,7 @@
       "note": "Exact correction2 assembly projection; current task hold overrides prospective execution entry. Additional TE commands assigned through supplemental_command_ids and PI refresh; no IE edit.",
       "release_checkpoint": "W3",
       "vega_primary_contingency": {
-        "status": "proposed",
+        "status": "selected",
         "after": [
           "IE-P2-25",
           "IE-P2-V01"
@@ -13384,7 +13434,7 @@
       "note": "Exact correction2 assembly projection; current task hold overrides prospective execution entry. Additional TE commands assigned through supplemental_command_ids and PI refresh; no IE edit.",
       "release_checkpoint": "W3",
       "vega_primary_contingency": {
-        "status": "proposed",
+        "status": "selected",
         "after": [
           "IE-P2-29"
         ],
@@ -13441,7 +13491,7 @@
       "note": "Exact correction2 assembly projection; current task hold overrides prospective execution entry. Additional TE commands assigned through supplemental_command_ids and PI refresh; no IE edit.",
       "release_checkpoint": "W3",
       "vega_primary_contingency": {
-        "status": "proposed",
+        "status": "selected",
         "after": [
           "IE-P2-20",
           "IE-P2-21",
@@ -13494,7 +13544,7 @@
       "note": "Exact correction2 assembly projection; current task hold overrides prospective execution entry. Additional TE commands assigned through supplemental_command_ids and PI refresh; no IE edit.",
       "release_checkpoint": "W4",
       "vega_primary_contingency": {
-        "status": "proposed",
+        "status": "selected",
         "after": [
           "IE-P2-30"
         ],
@@ -13542,7 +13592,7 @@
       "note": "Exact correction2 assembly projection; current task hold overrides prospective execution entry. Additional TE commands assigned through supplemental_command_ids and PI refresh; no IE edit.",
       "release_checkpoint": "W4",
       "vega_primary_contingency": {
-        "status": "proposed",
+        "status": "selected",
         "after": [
           "IE-P2-32"
         ],
@@ -13590,7 +13640,7 @@
       "note": "Exact correction2 assembly projection; current task hold overrides prospective execution entry. Additional TE commands assigned through supplemental_command_ids and PI refresh; no IE edit.",
       "release_checkpoint": "W4",
       "vega_primary_contingency": {
-        "status": "proposed",
+        "status": "selected",
         "after": [
           "IE-P2-31"
         ],
@@ -13647,7 +13697,7 @@
       "note": "Exact correction2 assembly projection; current task hold overrides prospective execution entry. Additional TE commands assigned through supplemental_command_ids and PI refresh; no IE edit.",
       "release_checkpoint": "W4",
       "vega_primary_contingency": {
-        "status": "proposed",
+        "status": "selected",
         "after": [
           "IE-P2-1",
           "IE-P2-4",
@@ -13706,7 +13756,7 @@
       "note": "Exact correction2 assembly projection; current task hold overrides prospective execution entry. Additional TE commands assigned through supplemental_command_ids and PI refresh; no IE edit.",
       "release_checkpoint": "W4",
       "vega_primary_contingency": {
-        "status": "proposed",
+        "status": "selected",
         "after": [
           "IE-P2-31",
           "IE-P2-32",
@@ -13772,7 +13822,7 @@
       "note": "Exact correction2 assembly projection; current task hold overrides prospective execution entry. Additional TE commands assigned through supplemental_command_ids and PI refresh; no IE edit.",
       "release_checkpoint": "W5",
       "vega_primary_contingency": {
-        "status": "proposed",
+        "status": "selected",
         "after": [
           "IE-P2-33"
         ],
@@ -13821,7 +13871,7 @@
       "note": "Exact correction2 assembly projection; current task hold overrides prospective execution entry. Additional TE commands assigned through supplemental_command_ids and PI refresh; no IE edit.",
       "release_checkpoint": "W5",
       "vega_primary_contingency": {
-        "status": "proposed",
+        "status": "selected",
         "after": [
           "IE-P2-36"
         ],
@@ -13858,7 +13908,7 @@
       "note": "Exact correction2 assembly projection; current task hold overrides prospective execution entry. Additional TE commands assigned through supplemental_command_ids and PI refresh; no IE edit.",
       "release_checkpoint": "W5",
       "vega_primary_contingency": {
-        "status": "proposed",
+        "status": "selected",
         "after": [
           "IE-P2-37",
           "IE-P2-38"
@@ -13894,7 +13944,7 @@
       "note": "Exact correction2 assembly projection; current task hold overrides prospective execution entry. Additional TE commands assigned through supplemental_command_ids and PI refresh; no IE edit.",
       "release_checkpoint": "W5",
       "vega_primary_contingency": {
-        "status": "proposed",
+        "status": "selected",
         "after": [
           "IE-P2-36"
         ],
@@ -13944,7 +13994,7 @@
       "note": "Exact correction2 assembly projection; current task hold overrides prospective execution entry. Additional TE commands assigned through supplemental_command_ids and PI refresh; no IE edit.",
       "release_checkpoint": "W5",
       "vega_primary_contingency": {
-        "status": "proposed",
+        "status": "selected",
         "after": [
           "IE-P2-36",
           "IE-P2-37",
@@ -14003,7 +14053,7 @@
       "note": "Exact correction2 assembly projection; current task hold overrides prospective execution entry. Additional TE commands assigned through supplemental_command_ids and PI refresh; no IE edit.",
       "release_checkpoint": "W5",
       "vega_primary_contingency": {
-        "status": "proposed",
+        "status": "selected",
         "after": [
           "IE-P2-41"
         ],
@@ -14058,7 +14108,7 @@
       "note": "Exact correction2 assembly projection; current task hold overrides prospective execution entry. Additional TE commands assigned through supplemental_command_ids and PI refresh; no IE edit.",
       "release_checkpoint": "W5",
       "vega_primary_contingency": {
-        "status": "proposed",
+        "status": "selected",
         "after": [
           "IE-P2-42",
           "IE-P2-37"
@@ -14097,7 +14147,7 @@
       "note": "Exact correction2 assembly projection; current task hold overrides prospective execution entry. Additional TE commands assigned through supplemental_command_ids and PI refresh; no IE edit.",
       "release_checkpoint": "W5",
       "vega_primary_contingency": {
-        "status": "proposed",
+        "status": "selected",
         "after": [
           "IE-P2-42"
         ],
@@ -14233,7 +14283,7 @@
         ],
         "exit": "V01 accepted on VVD plus physical provider-dependent proof before X09; typed gaps remain blocking.",
         "rollback": "Preserve backend and Kotlin trees; reinstall only known qualified own .vpkg with account/session cleanup authority checked; no platform fallback without owner choice.",
-        "status": "proposed",
+        "status": "selected",
         "after": [
           "IE-P2-3",
           "IE-P2-4",
@@ -17951,27 +18001,40 @@
       ],
       "F1": "open; proposed D04 ownership requires VP-OD-05",
       "prior_review_bounds": "unchanged; no new automatic review grant"
+    },
+    {
+      "id": "P2-VEGA-PRIMARY-select",
+      "date": "2026-10-14",
+      "base_commit": "df259ed",
+      "candidate_ref": "afc/p2-vega-primary-plan",
+      "authority": "Owner journey decisions DEC-AFC-SD-048..054; plan-only correction packet vega-f1.",
+      "receipt": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-VEGA-PRIMARY-plan/receipt.md",
+      "status": "selected_ready_for_planning_review",
+      "rule": "Vega OS primary, Fire OS secondary; no slice deleted; F1 applied per DEC-AFC-SD-050.",
+      "owner_decisions": [
+        "DEC-AFC-SD-048",
+        "DEC-AFC-SD-049",
+        "DEC-AFC-SD-050",
+        "DEC-AFC-SD-051",
+        "DEC-AFC-SD-052",
+        "DEC-AFC-SD-053",
+        "DEC-AFC-SD-054"
+      ],
+      "open_owner_decisions": [
+        "VP-OD-02",
+        "VP-OD-04"
+      ],
+      "F1": "closed by DEC-AFC-SD-050 option (a)",
+      "prior_review_bounds": "unchanged; one planning review of this candidate is next"
     }
   ],
   "vega_primary_contingency": {
     "id": "P2-VEGA-PRIMARY-plan",
-    "status": "proposed_for_planning_review",
-    "active": false,
-    "owner_decision_ref": "VP-OD-01",
+    "status": "selected",
+    "active": true,
+    "owner_decision_ref": "DEC-AFC-SD-049",
     "authority": "Current owner authoring packet only; no execution/push/PR/merge/install authority.",
-    "precedence": "After controller materialization only, explicit overrides replace fields for the same slice ID. Original active arrays stay untouched until selection. SD-048 code-only linking is already settled and supersedes every historical passphrase instruction.",
-    "inactive_primary_slices": [
-      "P2-A01T",
-      "P2-A01",
-      "P2-A02T",
-      "P2-A02",
-      "P2-A03T",
-      "P2-A03",
-      "P2-A04T",
-      "P2-A04",
-      "P2-A05T",
-      "P2-A05"
-    ],
+    "precedence": "Selected by DEC-AFC-SD-049. Explicit overrides are the primary Vega scope for the same slice ID; original fields stay as the Fire OS secondary scope. SD-048 code-only linking is settled and supersedes every historical passphrase instruction.",
     "completion_dependency_rule": "Union depends_on and completion_dependencies for closure; X01 host-ready receipt permits V01T start while physical qualification remains pending.",
     "review_capabilities": {
       "coverage_assist": {
@@ -18008,11 +18071,12 @@
           "P2-L05",
           "P2-R5"
         ],
-        "availability": "not_run; .vpkg semantic support unproven, VEGA_REVERIFY_CAPABILITY_GAP on unsupported semantics"
+        "availability": "not_run; .vpkg semantic support unproven, VEGA_REVERIFY_CAPABILITY_GAP on unsupported semantics",
+        "target_order": "CMD-REVERIFY-VPKG is primary (Vega: V01, L05, R5); CMD-REVERIFY-APK is secondary (Fire OS: A01-A05 and the secondary APK in L05/R5)."
       }
     },
-    "review_budget": "No reset of spent planning review/repair bounds; F1 remains open. No new automatic dispatch authority.",
-    "next_action": "Planning controller reviews this committed candidate, resolves queued VP-OD-01..05 in the integrated batch, then materializes/rebinds only the chosen alternative before execution.",
+    "review_budget": "No reset of spent planning review/repair bounds. F1 closed by DEC-AFC-SD-050. One planning review of this selected candidate is next; no new automatic dispatch authority.",
+    "next_action": "One planning review of this selected candidate; then the controller materializes the overrides and rebinds before dispatch. VP-OD-02 (SDK terms) and VP-OD-04 (device arrival, owner login) stay open owner actions.",
     "slice_proof_map": {
       "P2-X01": [
         "SEIT-AFC-P2-DX-01",
@@ -18483,6 +18547,62 @@
       "note": "Reuses V01 estimate, not 180 additional seconds on top of V01; device procedures outside repository gate.",
       "device_procedure_estimate_seconds": 1800,
       "estimate_status": "unmeasured planning budget per bounded physical feature session; live event waits excluded."
+    },
+    "selected_on": "2026-10-14",
+    "secondary_target_slices": [
+      "P2-A01T",
+      "P2-A01",
+      "P2-A02T",
+      "P2-A02",
+      "P2-A03T",
+      "P2-A03",
+      "P2-A04T",
+      "P2-A04",
+      "P2-A05T",
+      "P2-A05"
+    ],
+    "secondary_scope_rule": "On a shared slice that carries overrides (X01-X04, X07, X09, X10, X11, X12, L05, R1-R5, V01T/V01, D04), the overrides are the primary Vega scope and close the primary obligation. The original baseline fields stay as the Fire OS secondary scope: run after the Vega exit evidence, only on a real Fire OS device, and never gating Vega closure or the Vega critical path. A01-A05/T are Fire OS-only secondary slices with their original fields and dependencies.",
+    "milestone_order": [
+      "M01",
+      "M02",
+      "M14",
+      "M04",
+      "M05",
+      "M07",
+      "M09",
+      "M10",
+      "M11",
+      "M12",
+      "M13",
+      "M03",
+      "M06",
+      "M08"
+    ],
+    "critical_path": [
+      "P2-X01",
+      "P2-V01T",
+      "P2-X04",
+      "P2-X02",
+      "P2-X03",
+      "P2-X07",
+      "P2-L03",
+      "P2-V01",
+      "P2-X09",
+      "P2-X10",
+      "P2-R4",
+      "P2-D04",
+      "P2-R5",
+      "P2-L05",
+      "P2-X12"
+    ],
+    "owner_decisions": {
+      "DEC-AFC-SD-048": "Device linking uses the TV code only; no passphrase.",
+      "DEC-AFC-SD-049": "Build both targets: Vega OS primary, Fire OS secondary. The Vega-primary contingency is the selected plan.",
+      "DEC-AFC-SD-050": "F1 option (a): P2-D04 closes RISK-AFC-P2-14; P2-V01 supplies the evidence.",
+      "DEC-AFC-SD-051": "The Vega host gets a user-scope, scanned and pinned Watchman; libpython3.8-dev is skipped.",
+      "DEC-AFC-SD-052": "tv-app changed-line coverage threshold is 70% (CMD-COVERAGE-TVAPP).",
+      "DEC-AFC-SD-053": "Tool installs the plan needs are agent work.",
+      "DEC-AFC-SD-054": "UTP netty CVEs are accepted until submission; a post-submission cleanup task removes them."
     }
   }
 }

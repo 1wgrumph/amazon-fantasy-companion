@@ -1,13 +1,13 @@
 {
-  "status": "proposed, not execution authority",
-  "base_commit": "5097585",
+  "status": "selected by DEC-AFC-SD-049; execution authority pending planning review",
+  "base_commit": "df259ed",
   "notes": [
     "X01 host/VVD milestone releases V01T while physical qualification remains pending.",
     "X05 PR1 fixtures release B02T; original late live receipt still required.",
     "Integration graph names closure order; slice start graph allows independent preparation.",
     "No blanket wave/release barrier is added to backend or V01 prerequisites."
   ],
-  "inactive_primary_slices": [
+  "secondary_target_slices": [
     "P2-A01",
     "P2-A01T",
     "P2-A02",
@@ -18,6 +18,39 @@
     "P2-A04T",
     "P2-A05",
     "P2-A05T"
+  ],
+  "critical_path": [
+    "P2-X01",
+    "P2-V01T",
+    "P2-X04",
+    "P2-X02",
+    "P2-X03",
+    "P2-X07",
+    "P2-L03",
+    "P2-V01",
+    "P2-X09",
+    "P2-X10",
+    "P2-R4",
+    "P2-D04",
+    "P2-R5",
+    "P2-L05",
+    "P2-X12"
+  ],
+  "milestone_order": [
+    "M01",
+    "M02",
+    "M14",
+    "M04",
+    "M05",
+    "M07",
+    "M09",
+    "M10",
+    "M11",
+    "M12",
+    "M13",
+    "M03",
+    "M06",
+    "M08"
   ],
   "slices": {
     "P2-L01": {
@@ -119,6 +152,61 @@
         "CMD-COVERAGE-BACKEND",
         "CMD-COVERAGE-TVAPP",
         "CMD-MUTATION-BACKEND",
+        "CMD-MUTATION-TVAPP"
+      ]
+    },
+    "P2-A01T": {
+      "depends_on": [
+        "P2-X01"
+      ],
+      "completion_dependencies": [
+        "P2-X01"
+      ],
+      "role": "Test Implementer",
+      "write_set": [
+        "tv-app/app/src/test/",
+        "tv-app/settings.gradle.kts",
+        "tv-app/build.gradle.kts",
+        "tv-app/gradle/",
+        "tv-app/gradlew",
+        "tv-app/gradlew.bat",
+        "tv-app/app/build.gradle.kts",
+        "tv-app/app/src/main/AndroidManifest.xml",
+        "tv-app/app/src/main/java/com/afc/companion/"
+      ],
+      "command_ids": [
+        "CMD-RED",
+        "PROC-GATE-TOOL-QUALIFY"
+      ]
+    },
+    "P2-A01": {
+      "depends_on": [
+        "P2-X01",
+        "P2-G01",
+        "P2-A01T",
+        "P2-B01",
+        "P2-X04"
+      ],
+      "completion_dependencies": [
+        "P2-X01",
+        "P2-G01",
+        "P2-A01T",
+        "P2-B01",
+        "P2-X04"
+      ],
+      "role": "Product Implementer",
+      "write_set": [
+        "tv-app/",
+        "THIRD_PARTY_NOTICES.md",
+        "evidence/visual/P2-A01/"
+      ],
+      "command_ids": [
+        "CMD-GATE-TVAPP",
+        "CMD-ADB-INSTALL",
+        "PROC-VISUAL-REVIEW",
+        "CMD-SUPPLY-SCAN",
+        "PROC-GATE-TOOL-QUALIFY",
+        "CMD-COVERAGE-TVAPP",
         "CMD-MUTATION-TVAPP"
       ]
     },
@@ -358,6 +446,48 @@
         "CMD-GATE-BACKEND"
       ]
     },
+    "P2-A02T": {
+      "depends_on": [
+        "P2-A01"
+      ],
+      "completion_dependencies": [
+        "P2-A01"
+      ],
+      "role": "Test Implementer",
+      "write_set": [
+        "tv-app/app/src/test/java/com/afc/companion/profile/",
+        "tv-app/app/src/test/java/com/afc/companion/detect/",
+        "tv-app/app/src/androidTest/java/com/afc/companion/profile/",
+        "tv-app/app/src/androidTest/java/com/afc/companion/detect/"
+      ],
+      "command_ids": [
+        "CMD-RED"
+      ]
+    },
+    "P2-A02": {
+      "depends_on": [
+        "P2-X07",
+        "P2-A02T"
+      ],
+      "completion_dependencies": [
+        "P2-X07",
+        "P2-A02T"
+      ],
+      "role": "Product Implementer",
+      "write_set": [
+        "tv-app/app/src/main/java/com/afc/companion/profile/",
+        "tv-app/app/src/main/java/com/afc/companion/detect/",
+        "evidence/visual/P2-A02/",
+        "tv-app/app/src/main/AndroidManifest.xml",
+        "tv-app/app/build.gradle.kts",
+        "tv-app/gradle/libs.versions.toml"
+      ],
+      "command_ids": [
+        "CMD-GATE-TVAPP",
+        "CMD-ADB-INSTALL",
+        "PROC-VISUAL-REVIEW"
+      ]
+    },
     "P2-L02": {
       "depends_on": [
         "P2-B01"
@@ -543,6 +673,131 @@
       ],
       "command_ids": [
         "CMD-GATE-BACKEND"
+      ]
+    },
+    "P2-A03T": {
+      "depends_on": [
+        "P2-X02",
+        "P2-A02"
+      ],
+      "completion_dependencies": [
+        "P2-X02",
+        "P2-A02"
+      ],
+      "role": "Test Implementer",
+      "write_set": [
+        "tv-app/app/src/test/java/com/afc/companion/alerts/",
+        "tv-app/app/src/androidTest/java/com/afc/companion/alerts/"
+      ],
+      "command_ids": [
+        "CMD-RED"
+      ]
+    },
+    "P2-A03": {
+      "depends_on": [
+        "P2-B05",
+        "P2-A03T"
+      ],
+      "completion_dependencies": [
+        "P2-B05",
+        "P2-A03T"
+      ],
+      "role": "Product Implementer",
+      "write_set": [
+        "tv-app/app/src/main/java/com/afc/companion/alerts/",
+        "evidence/visual/P2-A03/",
+        "tv-app/app/src/main/AndroidManifest.xml",
+        "tv-app/app/build.gradle.kts",
+        "tv-app/gradle/libs.versions.toml"
+      ],
+      "command_ids": [
+        "CMD-GATE-TVAPP",
+        "CMD-TVAPP-INSTRUMENTED",
+        "PROC-VISUAL-REVIEW"
+      ]
+    },
+    "P2-A04T": {
+      "depends_on": [
+        "P2-X03",
+        "P2-A03T"
+      ],
+      "completion_dependencies": [
+        "P2-X03",
+        "P2-A03T"
+      ],
+      "role": "Test Implementer",
+      "write_set": [
+        "tv-app/app/src/test/java/com/afc/companion/watch/",
+        "tv-app/app/src/androidTest/java/com/afc/companion/watch/"
+      ],
+      "command_ids": [
+        "CMD-RED"
+      ]
+    },
+    "P2-A04": {
+      "depends_on": [
+        "P2-B06",
+        "P2-A04T"
+      ],
+      "completion_dependencies": [
+        "P2-B06",
+        "P2-A04T"
+      ],
+      "role": "Product Implementer",
+      "write_set": [
+        "tv-app/app/src/main/java/com/afc/companion/watch/",
+        "evidence/visual/P2-A04/",
+        "tv-app/app/src/main/AndroidManifest.xml",
+        "tv-app/app/build.gradle.kts",
+        "tv-app/gradle/libs.versions.toml"
+      ],
+      "command_ids": [
+        "CMD-GATE-TVAPP",
+        "CMD-TVAPP-INSTRUMENTED",
+        "PROC-VISUAL-REVIEW"
+      ]
+    },
+    "P2-A05T": {
+      "depends_on": [
+        "P2-X04",
+        "P2-A02"
+      ],
+      "completion_dependencies": [
+        "P2-X04",
+        "P2-A02"
+      ],
+      "role": "Test Implementer",
+      "write_set": [
+        "tv-app/app/src/test/java/com/afc/companion/panel/",
+        "tv-app/app/src/androidTest/java/com/afc/companion/panel/"
+      ],
+      "command_ids": [
+        "CMD-RED"
+      ]
+    },
+    "P2-A05": {
+      "depends_on": [
+        "P2-B07",
+        "P2-A05T"
+      ],
+      "completion_dependencies": [
+        "P2-B07",
+        "P2-A05T"
+      ],
+      "role": "Product Implementer",
+      "write_set": [
+        "tv-app/app/src/main/java/com/afc/companion/panel/",
+        "tv-app/app/src/main/java/com/afc/companion/MainActivity.kt",
+        "evidence/visual/P2-A05/",
+        "tv-app/app/src/main/AndroidManifest.xml",
+        "tv-app/app/build.gradle.kts",
+        "tv-app/gradle/libs.versions.toml"
+      ],
+      "command_ids": [
+        "CMD-GATE-TVAPP",
+        "CMD-TVAPP-INSTRUMENTED",
+        "PROC-VISUAL-REVIEW",
+        "CMD-TEXT-SIZE-MEASURE"
       ]
     },
     "P2-L03": {
@@ -940,6 +1195,11 @@
     "IE-P2-6": [
       "IE-P2-5"
     ],
+    "IE-P2-7": [
+      "IE-P2-3",
+      "IE-P2-4",
+      "IE-P2-5"
+    ],
     "IE-P2-8": [
       "IE-P2-2",
       "IE-P2-3",
@@ -977,6 +1237,11 @@
     "IE-P2-17": [
       "IE-P2-6"
     ],
+    "IE-P2-18": [
+      "IE-P2-7",
+      "IE-P2-12",
+      "IE-P2-15"
+    ],
     "IE-P2-19": [
       "IE-P2-1"
     ],
@@ -1013,6 +1278,21 @@
       "IE-P2-21",
       "IE-P2-22",
       "IE-P2-23",
+      "IE-P2-24"
+    ],
+    "IE-P2-26": [
+      "IE-P2-18",
+      "IE-P2-10",
+      "IE-P2-22"
+    ],
+    "IE-P2-27": [
+      "IE-P2-18",
+      "IE-P2-11",
+      "IE-P2-23"
+    ],
+    "IE-P2-28": [
+      "IE-P2-9",
+      "IE-P2-18",
       "IE-P2-24"
     ],
     "IE-P2-29": [

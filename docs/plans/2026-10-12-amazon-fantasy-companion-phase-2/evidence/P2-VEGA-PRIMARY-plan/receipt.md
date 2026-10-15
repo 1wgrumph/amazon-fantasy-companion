@@ -128,3 +128,73 @@ conducts only the authorized review, records the integrated owner choices,
 then materializes/rebinds the selected conditional graph and target proof
 allocations before dispatch. Final acceptance, publication and submission
 remain distinct from this author receipt.
+
+## Owner decisions 049-054
+
+Correction packet vega-f1, 2026-10-14. Author route Claude Code / Claude
+Opus 5.5 / high, `BEARING_ROLE=planning_and_design`, plan-only. Base
+`df259ed`. The contingency above is now the **selected plan**: Vega OS
+primary, Fire OS secondary. No slice is deleted (54 slice IDs, 0 new).
+DEC-AFC-SD-048 (code-only linking) is applied with them. VP-OD-01, VP-OD-03
+and VP-OD-05 are decided. VP-OD-02 (SDK terms) and VP-OD-04 (device
+arrival, owner logins) stay open owner actions. The outcome and owner batch
+in the sections above are historical; this section supersedes them.
+
+Every changed JSON field, with its decision id, is listed in
+[owner-decisions-049-054-changes.json](owner-decisions-049-054-changes.json)
+(468 rows). Summary by decision:
+
+| Decision | File | Changed fields |
+|---|---|---|
+| DEC-AFC-SD-048 | implementation.json | `slices/P2-V01/depends_on_text`; `waves/Wave 2/entry`; `integration_plan/steps/IE-P2-15/entry_criteria`, `post_step_vv`; `integration_plan/owner_dependencies/OA-10/action`; `approval_boundaries/owner_action_entry_criteria/OA-10/owner_action`; `integration_plan/concurrency_findings/IE-P2-F15/superseded_by` (added; historical text kept); `dod_manifest/architecture/DES-AFC-P2-AUTH/decision`, `DES-AFC-P2-BACKEND/decision` |
+| DEC-AFC-SD-048 | seit.json | `integration_vv_sequence/IE-P2-15/entry_criteria`, `post_step_vv`; `proof_cases/SEIT-AFC-P2-VEGA-03/stimulus_or_procedure` |
+| DEC-AFC-SD-048 | technical plan | OA-10 row; W2 entry (OA-10); M14 owner-action note on OA-10 |
+| DEC-AFC-SD-048 | design.md | DES-AFC-P2-AUTH confirmation paragraph |
+| DEC-AFC-SD-049 | implementation.json, seit.json | top-level `vega_primary_contingency`: `status`=selected, `active`=true, `owner_decision_ref`, `selected_on`, `precedence`, `inactive_primary_slices` renamed `secondary_target_slices`, new `secondary_scope_rule`, `milestone_order`, `critical_path`, `owner_decisions`, `next_action`, `review_capabilities/reverify/target_order` |
+| DEC-AFC-SD-049 | implementation.json | every nested `vega_primary_contingency` `status` (proposed→selected; inactive_if_selected→fire_os_secondary) and `condition`; A0x/T `disposition`→fire_os_secondary_target and `note`; D02–D05/SCR1 `note`; milestone and wave `rule`, wave `exit`; M14 contingency `entry`/`exit` (added); secondary IE-P2-7/18/26/27/28 contingency `after`/`merges` = original order; overrides `human_decision/open_decisions` drop VP-OD-01/03 and add `decided`; `dod_manifest/bluf`, `identity` value, `scope` line, `authority` VP-OD-01 event; mirrored `dod_manifest/tasks/*` contingency fields |
+| DEC-AFC-SD-049 | seit.json | nested contingency `status`, `condition`, `activation`; secondary `integration_vv_sequence` rows `after`/`merges`/`note` |
+| DEC-AFC-SD-049 | technical plan | new section "Selected plan: Vega OS primary, Fire OS secondary" (milestone order Vega first: M01, M02, M14, M04, M05, M07, M09–M13, then Fire OS M03, M06, M08; critical path X01→V01T→X04→X02→X03→X07→L03→V01→X09→X10→R4→D04→R5→L05→X12); contingency header marked selected; Fire OS recovery and Recovery paragraphs; owner-batch VP-OD-01 row |
+| DEC-AFC-SD-049 | design.md | DES-AFC-P2-VPRIMARY opening paragraph; shared-registry paragraph now names design item DF-VP-01 |
+| DEC-AFC-SD-049 | requirements-register.md | appendix heading and lead; AFC-PR-052/053 status row |
+| DEC-AFC-SD-049 | specialists/slice-graph.md | selected-plan paragraph with critical path; A0x/T secondary |
+| DEC-AFC-SD-050 | implementation.json | `slices/P2-D04/requirement_ids` (+RISK-AFC-P2-14), `seit_proof_rows` (+SEIT-RISK-AFC-P2-14), `goal` (+inclusion sentence, 378 chars); `slices/P2-D04/vega_primary_contingency/proposed_risk_ownership` renamed `risk_ownership`, decided; `traceability/RISK-AFC-P2-14/slices` (+P2-D04); `dod_manifest/authority` VP-OD-05 event; `vega_primary_contingency/review_budget` |
+| DEC-AFC-SD-050 | seit.json | `proof_cases/SEIT-RISK-AFC-P2-14/closing_slice`=P2-D04, `supporting_slices`=[P2-V01], `method_fields/slice`=P2-D04, contingency `decision_ref`; top-level `review_budget` |
+| DEC-AFC-SD-050 | technical plan, register, slice graph | Oct 22 critical-path row; VP-OD-05 row; RISK-AFC-P2-14 register row; slice-graph F1 note |
+| DEC-AFC-SD-051 | seit.json | `PROC-VEGA-PREPARE`: `command`, `command_steps` (Watchman steps 3–5 inserted), `pass`, `procedure_steps[3]` (libpython3.8-dev skipped), contingency `additional_preconditions[2]`, `command_note` |
+| DEC-AFC-SD-051 | implementation.json, technical plan | `dod_manifest/authority` VP-OD-03 event; overrides `human_decision` VP-OD-03; owner-batch VP-OD-03 row |
+| DEC-AFC-SD-052 | seit.json | `CMD-COVERAGE-TVAPP`: `pass`, `procedure_steps[3]`, `native_commands[2]` (`--fail-under=70`) |
+| DEC-AFC-SD-053 | seit.json | `PROC-VEGA-PREPARE` `pass`, `procedure_steps[3]`, `command_note` (installs are agent work, rule-23 limits) |
+| DEC-AFC-SD-054 | seit.json | new `procedures_and_commands/PROC-POST-SUBMISSION-UTP-NETTY` (post-submission cleanup; accepted residual risk until T_deadline) |
+| DEC-AFC-SD-049..054 | implementation.json, seit.json | new `planning_deltas/P2-VEGA-PRIMARY-select` entry (F1 closed; open VP-OD-02, VP-OD-04) |
+
+Evidence refreshed: `verify_delta.py` now checks the selected state against
+`df259ed` (allowed changed fields only; A0x/T secondary and never a primary
+predecessor; start, completion and integration graphs acyclic) and wrote
+[mechanical-verification.json](mechanical-verification.json) and
+[effective-graph.json](effective-graph.json). Schema (bearing-lite
+marketplace schemas): implementation.json 2 findings at base and 2 now,
+0 new (the two inherited V01 goal lengths); seit.json 0.
+
+Limits and review-facing items:
+
+- `amazon-fantasy-companion-phase-2-dod-manifest.html` is **not
+  regenerated**; it is outside this packet's allowed writes. Its rendered
+  text still shows the proposed state. `package-freeze.json` still holds the
+  `df259ed` digest. The controller re-renders and refreezes before review.
+- DF-VP-01 (design.md): one shared registry serves both clients; if Vega
+  and Fire OS launch values differ for a provider, the Fire OS client shows
+  the existing labeled limitation unless the review accepts a per-platform
+  launch field as a named contract change.
+- CMD-COVERAGE-VEGAAPP stays at 90%; DEC-AFC-SD-052 names only
+  CMD-COVERAGE-TVAPP.
+- Historical passphrase text kept only inside recorded findings and history
+  (IE-P2-F15 `compared`/`corrected_text`, DoD authority `historical_event`),
+  each marked superseded by SD-048.
+- Independent planning review: not_run. OCR stays required in its packet.
+  Reverify: not applicable — plan-only authoring, no binary claim.
+
+Repository gate for this correction: `export
+PATH=$HOME/.local/share/afc-tools/backend-tests/bin:$PATH; bash
+tools/ci/gate.sh` **exit 0** (spec, docs, hygiene with 61 gate tests,
+tvapp "no tv-app/ tree", backend 158 passed). [gate.txt](gate.txt) now holds
+this run; the earlier run is superseded.
