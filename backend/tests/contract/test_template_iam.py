@@ -33,7 +33,7 @@ EXPECTED = {
                     "EventsTable": {"GetItem"},
                     "PanelsTable": {"GetItem"}},
     "IngestFunction": {"EventsTable": {"GetItem", "PutItem"},
-                       "ProfilesTable": {"GetItem"},
+                       "ProfilesTable": {"GetItem", "Scan"},
                        "LineupsTable": {"GetItem"}},
     "PolicyFunction": {"ProfilesTable": {"GetItem"},
                        "EventsTable": {"GetItem"},
@@ -78,7 +78,7 @@ def test_each_function_grants_only_its_store_operations():
         actions, _ = grants(policies)
         assert actions == expected, f"{function} DynamoDB grants changed: {actions}"
         assert set().union(*actions.values()) <= {"GetItem", "PutItem", "UpdateItem", "Query",
-                                                 "DeleteItem"}
+                                                 "DeleteItem", "Scan"}
 
 
 def test_api_never_writes_alerts_and_only_supersedes_link_sessions():

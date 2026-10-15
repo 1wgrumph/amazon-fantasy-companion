@@ -1,0 +1,25 @@
+{
+  "outcome": "REPAIRABLE_FAILURE",
+  "finding": "F5",
+  "baseline": "1aca2da",
+  "classification": "Authorized implementation requires one existing unfrozen test expectation correction outside the packet write set",
+  "team_contract": "Selected manual player team must be a string matching [A-Z0-9]{2,4}; no real-team membership check",
+  "frozen_B03T_conflict": false,
+  "required_path": "backend/tests/unit/lineup/test_lineup_rejections.py",
+  "test_id": "backend/tests/unit/lineup/test_lineup_rejections.py::test_manual_build_keeps_entry_order_and_roster_names",
+  "code_evidence": "The test compares starters to exact dictionaries with athlete_id, name, slot and no team. Returning each roster team as required necessarily changes dictionary equality.",
+  "exact_correction": "Add \"team\": \"SYN\" to both expected starter dictionaries; preserve all current assertions.",
+  "baseline_command": "PATH=$HOME/.local/share/afc-tools/backend-tests/bin:$PATH python3.12 -m pytest backend/tests/unit/lineup/test_lineup_rejections.py::test_manual_build_keeps_entry_order_and_roster_names -q",
+  "exit_code": 0,
+  "baseline_result": "1 passed in 0.02s",
+  "requested_amendment": "Asked owner for authority for this exact expectation correction; no reply received before stop receipt",
+  "stop_rule": "STOP when a path outside authority is needed",
+  "product_changed": false,
+  "not_run": [
+    "new red/green regression",
+    "gate on repaired candidate",
+    "B02/B03 coverage",
+    "B02/B03 mutation"
+  ],
+  "scope": "This is a packet write-set gap, not a frozen-test contract conflict or a new review round."
+}

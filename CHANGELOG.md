@@ -15,6 +15,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add ESPN-feed ingest outage handling: packaged replay corpus, scoreboard-error fallback to labeled replay, warm-container failure counts, and a 60s poll deadline ([#76](https://github.com/1wgrumph/amazon-fantasy-companion/pull/76)).
+- Add ESPN feed ingest: pinned JSON Schema validation that rejects a bad
+  poll before any store write, per-play GameEvent normalization with
+  monotonic correction revisions, hash-verified fixture replay labeled
+  `replay`, labeled monitoring decisions, and an allowlisted scheduled
+  poller ([#76](https://github.com/1wgrumph/amazon-fantasy-companion/pull/76)).
 - Add the TV profile and installed-app detection host code: settings codec with schema validation and documented defaults, revision-checked profile persistence, customer overrides over detection, opt-in detector reporting, and the Profile/Settings screen with stated limits for unsupported routes ([#74](https://github.com/1wgrumph/amazon-fantasy-companion/pull/74)).
 - Record the P2-L02 afc-dev deploy of origin/main `2d973bd`: eleven known routes answered, nine deployed smoke tests passed; two panel tests remain deferred until P2-B07/L03 ([#70](https://github.com/1wgrumph/amazon-fantasy-companion/pull/70)).
 - Add the TV app host foundation: shell, API client, Link screen, Gradle and manifest, 70% host coverage gate, and bounded PIT mutation scoring ([#73](https://github.com/1wgrumph/amazon-fantasy-companion/pull/73)).
