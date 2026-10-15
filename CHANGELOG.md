@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Remove unused Yahoo SSM read access from the public API function and warn
   users to confirm only a code on their own TV; preserve code-only linking,
-  short code expiry and one-time confirmation (PR #TBD).
+  short code expiry and one-time confirmation ([#68](https://github.com/1wgrumph/amazon-fantasy-companion/pull/68)).
 
 ### Added
 
