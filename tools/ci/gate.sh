@@ -102,8 +102,9 @@ PYBASE
                     for jdk in "$HOME"/.local/share/afc-tools/jdk-17*; do
                         [[ -d "$jdk" && -x "$jdk/bin/java" ]] && jdks+=("$jdk")
                     done
-                    ((${#jdks[@]} == 1)) || { printf 'required tool missing: java (JAVA_HOME)\n'; return 3; }
-                    export JAVA_HOME="${jdks[0]}"
+                    if ((${#jdks[@]} == 1)); then
+                        export JAVA_HOME="${jdks[0]}"
+                    fi
                 fi
                 if [[ -z "${ANDROID_HOME:-${ANDROID_SDK_ROOT:-}}" ]]; then
                     export ANDROID_HOME="$HOME/.local/share/afc-tools/android-sdk"

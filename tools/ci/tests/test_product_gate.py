@@ -75,6 +75,20 @@ class ProductGate(unittest.TestCase):
         self.assertEqual((repo / 'commands.log').read_text().splitlines(),
                          [str(tools / 'jdk-17.fixture'), str(tools / 'android-sdk'), ''])
 
+    def test_local_tvapp_uses_path_java_without_user_jdk(self):
+        repo = self.repo('local-path-java')
+        env, tools = self.local_toolchain(repo)
+        java = tools / 'jdk-17.fixture/bin/java'
+        java.rename(repo / 'fixture-bin/java')
+        shutil.rmtree(java.parents[1])
+        env['PATH'] = str(repo / 'fixture-bin') + os.pathsep + path_without(
+            'java', self.tmp / 'no-host-java')
+        rc, out = run_gate(self, repo, 'tvapp', env=env)
+        self.assertEqual(rc, 0, out)
+        self.assertIn('gate: tvapp: PASS', out)
+        self.assertEqual((repo / 'commands.log').read_text().splitlines(),
+                         ['', str(tools / 'android-sdk'), ''])
+
     def test_local_tvapp_explicit_toolchain_wins(self):
         for sdk_var in ('ANDROID_HOME', 'ANDROID_SDK_ROOT'):
             with self.subTest(sdk_var=sdk_var):
@@ -96,6 +110,7 @@ class ProductGate(unittest.TestCase):
             with self.subTest(case=case):
                 repo = self.repo(case)
                 env, tools = self.local_toolchain(repo)
+                env['PATH'] = path_without('java', self.tmp / ('no-java-' + case))
                 java = tools / 'jdk-17.fixture/bin/java'
                 if case == 'absent':
                     shutil.rmtree(java.parents[1])
