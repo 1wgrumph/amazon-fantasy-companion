@@ -1,0 +1,1463 @@
+{
+  "status": "selected by DEC-AFC-SD-049; execution authority pending planning review",
+  "base_commit": "df259ed",
+  "notes": [
+    "X01 host/VVD milestone releases V01T while physical qualification remains pending.",
+    "X05 PR1 fixtures release B02T; original late live receipt still required.",
+    "Integration graph names closure order; slice start graph allows independent preparation.",
+    "No blanket wave/release barrier is added to backend or V01 prerequisites."
+  ],
+  "secondary_target_slices": [
+    "P2-A01",
+    "P2-A01T",
+    "P2-A02",
+    "P2-A02T",
+    "P2-A03",
+    "P2-A03T",
+    "P2-A04",
+    "P2-A04T",
+    "P2-A05",
+    "P2-A05T"
+  ],
+  "critical_path": [
+    "P2-X01",
+    "P2-V01T",
+    "P2-X04",
+    "P2-X02",
+    "P2-X03",
+    "P2-X07",
+    "P2-L03",
+    "P2-V01",
+    "P2-X09",
+    "P2-X10",
+    "P2-R4",
+    "P2-D04",
+    "P2-R5",
+    "P2-L05",
+    "P2-X12"
+  ],
+  "milestone_stages": [
+    {
+      "stage": 1,
+      "name": "Readiness",
+      "milestones": [
+        "M01",
+        "M02"
+      ],
+      "start": "Planning PR merged.",
+      "closure": "M01 and M02 exit criteria; X01 host-ready receipt; B01 and G01 landed."
+    },
+    {
+      "stage": 2,
+      "name": "Start M14",
+      "milestones": [
+        "M14"
+      ],
+      "start": "P2-V01T after its depends_on (X01, G01, B01); P2-V01 after the V01T red receipt.",
+      "closure": "None at this stage; M14 stays open."
+    },
+    {
+      "stage": 3,
+      "name": "Primary prerequisites within M03-M09",
+      "milestones": [
+        "M03",
+        "M04",
+        "M05",
+        "M06",
+        "M07",
+        "M08",
+        "M09"
+      ],
+      "primary_slices": [
+        "P2-X04",
+        "P2-X02",
+        "P2-X03",
+        "P2-X07",
+        "P2-X05",
+        "P2-B02T",
+        "P2-B02",
+        "P2-B03T",
+        "P2-B03",
+        "P2-L02",
+        "P2-X06",
+        "P2-B04T",
+        "P2-B04",
+        "P2-B05T",
+        "P2-B05",
+        "P2-B07T",
+        "P2-B07",
+        "P2-B06T",
+        "P2-B06",
+        "P2-L03"
+      ],
+      "secondary_slices": [
+        "P2-A01T",
+        "P2-A01",
+        "P2-A02T",
+        "P2-A02",
+        "P2-A03T",
+        "P2-A03",
+        "P2-A04T",
+        "P2-A04",
+        "P2-A05T",
+        "P2-A05"
+      ],
+      "start": "Each slice under its own depends_on and leases; runs in parallel with M14.",
+      "closure": "Primary slices land. R1 (M03) and R2 (M06) depend on V01, so M03 and M06 close in stage 4. Secondary A0x/T work never gates this stage."
+    },
+    {
+      "stage": 4,
+      "name": "Close M14",
+      "milestones": [
+        "M14",
+        "M03",
+        "M06"
+      ],
+      "start": "V01 completion dependencies X02, X03, X04, X07 and L03 landed.",
+      "closure": "V01 accepted (M14 closes); then R1 and R2 close, closing the primary obligations of M03 and M06."
+    },
+    {
+      "stage": 5,
+      "name": "M10-M13",
+      "milestones": [
+        "M10",
+        "M11",
+        "M12",
+        "M13"
+      ],
+      "start": "M14 closed; each slice under its own depends_on.",
+      "closure": "Original M10-M13 exit criteria on the Vega primary target; Fire OS secondary evidence is reported where it exists."
+    }
+  ],
+  "slices": {
+    "P2-L01": {
+      "depends_on": [],
+      "completion_dependencies": [],
+      "role": "Light Implementer",
+      "write_set": [
+        "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-L01/"
+      ],
+      "command_ids": [
+        "CMD-MILESTONES-CREATE",
+        "CMD-MILESTONES-READBACK",
+        "PROC-TRACKING-SETUP"
+      ]
+    },
+    "P2-X01": {
+      "depends_on": [],
+      "completion_dependencies": [],
+      "role": "Product Implementer",
+      "write_set": [
+        "spikes/sp1-device/",
+        "evidence/visual/sp1-device/"
+      ],
+      "command_ids": [
+        "PROC-VEGA-PREPARE",
+        "CMD-SUPPLY-SCAN",
+        "CMD-VVD-START",
+        "CMD-VVD-INSTALL",
+        "CMD-VVD-INPUT",
+        "CMD-VVD-SCREENCAP",
+        "PROC-VEGA-PRIMARY-PHYSICAL",
+        "CMD-VERDICT-CHECK",
+        "PROC-VEGA-PRIMARY-RISK"
+      ]
+    },
+    "P2-X05": {
+      "depends_on": [
+        "P2-B01"
+      ],
+      "completion_dependencies": [
+        "P2-B01"
+      ],
+      "role": "Product Implementer",
+      "write_set": [
+        "spikes/sp5-espn-feed/",
+        "backend/fixtures/replay/"
+      ],
+      "command_ids": [
+        "CMD-ESPN-CAPTURE",
+        "CMD-FIXTURE-INDEX-CHECK",
+        "CMD-VERDICT-CHECK"
+      ]
+    },
+    "P2-D01": {
+      "depends_on": [],
+      "completion_dependencies": [],
+      "role": "Product Implementer",
+      "write_set": [
+        "docs/vnv/"
+      ],
+      "command_ids": [
+        "CMD-GATE-DOCS"
+      ]
+    },
+    "P2-G01T": {
+      "depends_on": [],
+      "completion_dependencies": [],
+      "role": "Test Implementer",
+      "write_set": [
+        "tools/ci/tests/",
+        "tools/ci/tests/coverage/",
+        "tools/ci/tests/mutation/"
+      ],
+      "command_ids": [
+        "CMD-RED",
+        "PROC-GATE-TOOL-QUALIFY"
+      ]
+    },
+    "P2-G01": {
+      "depends_on": [
+        "P2-G01T"
+      ],
+      "completion_dependencies": [
+        "P2-G01T"
+      ],
+      "role": "Product Implementer",
+      "write_set": [
+        "tools/ci/",
+        ".github/workflows/",
+        ".githooks/",
+        "tools/ci/coverage/",
+        "tools/ci/mutation/"
+      ],
+      "command_ids": [
+        "CMD-GATE-ALL",
+        "CMD-WORKFLOW-CHECK",
+        "CMD-SUPPLY-SCAN",
+        "PROC-GATE-TOOL-QUALIFY",
+        "CMD-COVERAGE-BACKEND",
+        "CMD-COVERAGE-TVAPP",
+        "CMD-MUTATION-BACKEND",
+        "CMD-MUTATION-TVAPP"
+      ]
+    },
+    "P2-A01T": {
+      "depends_on": [
+        "P2-X01"
+      ],
+      "completion_dependencies": [
+        "P2-X01"
+      ],
+      "role": "Test Implementer",
+      "write_set": [
+        "tv-app/app/src/test/",
+        "tv-app/settings.gradle.kts",
+        "tv-app/build.gradle.kts",
+        "tv-app/gradle/",
+        "tv-app/gradlew",
+        "tv-app/gradlew.bat",
+        "tv-app/app/build.gradle.kts",
+        "tv-app/app/src/main/AndroidManifest.xml",
+        "tv-app/app/src/main/java/com/afc/companion/"
+      ],
+      "command_ids": [
+        "CMD-RED",
+        "PROC-GATE-TOOL-QUALIFY"
+      ]
+    },
+    "P2-A01": {
+      "depends_on": [
+        "P2-X01",
+        "P2-G01",
+        "P2-A01T",
+        "P2-B01",
+        "P2-X04"
+      ],
+      "completion_dependencies": [
+        "P2-X01",
+        "P2-G01",
+        "P2-A01T",
+        "P2-B01",
+        "P2-X04"
+      ],
+      "role": "Product Implementer",
+      "write_set": [
+        "tv-app/",
+        "THIRD_PARTY_NOTICES.md",
+        "evidence/visual/P2-A01/"
+      ],
+      "command_ids": [
+        "CMD-GATE-TVAPP",
+        "CMD-ADB-INSTALL",
+        "PROC-VISUAL-REVIEW",
+        "CMD-SUPPLY-SCAN",
+        "PROC-GATE-TOOL-QUALIFY",
+        "CMD-COVERAGE-TVAPP",
+        "CMD-MUTATION-TVAPP"
+      ]
+    },
+    "P2-B01T": {
+      "depends_on": [],
+      "completion_dependencies": [],
+      "role": "Test Implementer",
+      "write_set": [
+        "backend/tests/",
+        "backend/tests/deployed/conftest.py",
+        "backend/tests/deployed/device_auth/",
+        "backend/tests/deployed/api/",
+        "backend/requirements-dev.txt",
+        "backend/pyproject.toml",
+        "backend/src/api/"
+      ],
+      "command_ids": [
+        "CMD-RED",
+        "PROC-GATE-TOOL-QUALIFY"
+      ]
+    },
+    "P2-B01": {
+      "depends_on": [
+        "P2-G01",
+        "P2-B01T"
+      ],
+      "completion_dependencies": [
+        "P2-G01",
+        "P2-B01T"
+      ],
+      "role": "Product Implementer",
+      "write_set": [
+        "backend/template.yaml",
+        "backend/samconfig.toml",
+        "backend/requirements.txt",
+        "backend/requirements-dev.txt",
+        "backend/.gitignore",
+        "backend/src/",
+        "backend/tests/",
+        "backend/fixtures/"
+      ],
+      "command_ids": [
+        "CMD-GATE-BACKEND",
+        "CMD-SAM-VALIDATE",
+        "CMD-SUPPLY-SCAN",
+        "PROC-GATE-TOOL-QUALIFY",
+        "CMD-COVERAGE-BACKEND",
+        "CMD-MUTATION-BACKEND"
+      ]
+    },
+    "P2-R1": {
+      "depends_on": [
+        "P2-L01",
+        "P2-X01",
+        "P2-X05",
+        "P2-D01",
+        "P2-G01T",
+        "P2-G01",
+        "P2-V01",
+        "P2-B01T",
+        "P2-B01"
+      ],
+      "completion_dependencies": [
+        "P2-L01",
+        "P2-X01",
+        "P2-X05",
+        "P2-D01",
+        "P2-G01T",
+        "P2-G01",
+        "P2-V01",
+        "P2-B01T",
+        "P2-B01"
+      ],
+      "role": "Light Implementer",
+      "write_set": [
+        "CHANGELOG.md",
+        "vega-app/package.json",
+        "vega-app/manifest.toml"
+      ],
+      "command_ids": [
+        "CMD-RELEASE-PREP",
+        "CMD-CHANGELOG-CHECK"
+      ]
+    },
+    "P2-X04": {
+      "depends_on": [
+        "P2-X01"
+      ],
+      "completion_dependencies": [
+        "P2-X01"
+      ],
+      "role": "Product Implementer",
+      "write_set": [
+        "spikes/sp4-panel-video/",
+        "evidence/visual/sp4-panel-video/"
+      ],
+      "command_ids": [
+        "PROC-VEGA-PRIMARY-PHYSICAL",
+        "CMD-VERDICT-CHECK"
+      ]
+    },
+    "P2-X02": {
+      "depends_on": [
+        "P2-X04"
+      ],
+      "completion_dependencies": [
+        "P2-X04"
+      ],
+      "role": "Product Implementer",
+      "write_set": [
+        "spikes/sp2-notify/",
+        "evidence/visual/sp2-notify/"
+      ],
+      "command_ids": [
+        "PROC-VEGA-PRIMARY-PHYSICAL",
+        "CMD-VERDICT-CHECK",
+        "PROC-VEGA-PRIMARY-RISK"
+      ]
+    },
+    "P2-X03": {
+      "depends_on": [
+        "P2-B01",
+        "P2-X02"
+      ],
+      "completion_dependencies": [
+        "P2-B01",
+        "P2-X02"
+      ],
+      "role": "Product Implementer",
+      "write_set": [
+        "spikes/sp3-provider-links/",
+        "evidence/visual/sp3-provider-links/",
+        "backend/src/provider_resolver/registry.json"
+      ],
+      "command_ids": [
+        "PROC-VEGA-PRIMARY-PHYSICAL",
+        "CMD-VERDICT-CHECK",
+        "CMD-REGISTRY-CHECK"
+      ]
+    },
+    "P2-X07": {
+      "depends_on": [
+        "P2-X03"
+      ],
+      "completion_dependencies": [
+        "P2-X03"
+      ],
+      "role": "Product Implementer",
+      "write_set": [
+        "spikes/sp7-detection/",
+        "evidence/visual/sp7-detection/"
+      ],
+      "command_ids": [
+        "PROC-VEGA-PRIMARY-PHYSICAL",
+        "CMD-VERDICT-CHECK"
+      ]
+    },
+    "P2-X06": {
+      "depends_on": [
+        "P2-B03",
+        "P2-L02"
+      ],
+      "completion_dependencies": [
+        "P2-B03",
+        "P2-L02"
+      ],
+      "role": "Product Implementer",
+      "write_set": [
+        "spikes/sp6-yahoo/"
+      ],
+      "command_ids": [
+        "CMD-VERDICT-CHECK"
+      ]
+    },
+    "P2-B02T": {
+      "depends_on": [
+        "P2-X05",
+        "P2-B01"
+      ],
+      "completion_dependencies": [
+        "P2-X05",
+        "P2-B01"
+      ],
+      "role": "Test Implementer",
+      "write_set": [
+        "backend/tests/unit/feed_ingest/",
+        "backend/tests/contract/feed_ingest/",
+        "backend/tests/deployed/feed_ingest/"
+      ],
+      "command_ids": [
+        "CMD-RED"
+      ]
+    },
+    "P2-B02": {
+      "depends_on": [
+        "P2-B02T"
+      ],
+      "completion_dependencies": [
+        "P2-B02T"
+      ],
+      "role": "Product Implementer",
+      "write_set": [
+        "backend/src/feed_ingest/"
+      ],
+      "command_ids": [
+        "CMD-GATE-BACKEND"
+      ]
+    },
+    "P2-B03T": {
+      "depends_on": [
+        "P2-B01"
+      ],
+      "completion_dependencies": [
+        "P2-B01"
+      ],
+      "role": "Test Implementer",
+      "write_set": [
+        "backend/tests/unit/lineup/",
+        "backend/tests/deployed/lineup/"
+      ],
+      "command_ids": [
+        "CMD-RED"
+      ]
+    },
+    "P2-B03": {
+      "depends_on": [
+        "P2-B03T"
+      ],
+      "completion_dependencies": [
+        "P2-B03T"
+      ],
+      "role": "Product Implementer",
+      "write_set": [
+        "backend/src/lineup/"
+      ],
+      "command_ids": [
+        "CMD-GATE-BACKEND"
+      ]
+    },
+    "P2-A02T": {
+      "depends_on": [
+        "P2-A01"
+      ],
+      "completion_dependencies": [
+        "P2-A01"
+      ],
+      "role": "Test Implementer",
+      "write_set": [
+        "tv-app/app/src/test/java/com/afc/companion/profile/",
+        "tv-app/app/src/test/java/com/afc/companion/detect/",
+        "tv-app/app/src/androidTest/java/com/afc/companion/profile/",
+        "tv-app/app/src/androidTest/java/com/afc/companion/detect/"
+      ],
+      "command_ids": [
+        "CMD-RED"
+      ]
+    },
+    "P2-A02": {
+      "depends_on": [
+        "P2-X07",
+        "P2-A02T"
+      ],
+      "completion_dependencies": [
+        "P2-X07",
+        "P2-A02T"
+      ],
+      "role": "Product Implementer",
+      "write_set": [
+        "tv-app/app/src/main/java/com/afc/companion/profile/",
+        "tv-app/app/src/main/java/com/afc/companion/detect/",
+        "evidence/visual/P2-A02/",
+        "tv-app/app/src/main/AndroidManifest.xml",
+        "tv-app/app/build.gradle.kts",
+        "tv-app/gradle/libs.versions.toml"
+      ],
+      "command_ids": [
+        "CMD-GATE-TVAPP",
+        "CMD-ADB-INSTALL",
+        "PROC-VISUAL-REVIEW"
+      ]
+    },
+    "P2-L02": {
+      "depends_on": [
+        "P2-B01"
+      ],
+      "completion_dependencies": [
+        "P2-B01"
+      ],
+      "role": "Light Implementer",
+      "write_set": [
+        "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-L02/"
+      ],
+      "command_ids": [
+        "CMD-SAM-BUILD",
+        "CMD-SAM-DEPLOY",
+        "CMD-DEPLOYED-SMOKE",
+        "CMD-STACK-OUTPUTS",
+        "CMD-DEPLOYED-COMMIT"
+      ]
+    },
+    "P2-R2": {
+      "depends_on": [
+        "P2-R1",
+        "P2-X04",
+        "P2-X02",
+        "P2-X03",
+        "P2-X07",
+        "P2-X06",
+        "P2-B02T",
+        "P2-B02",
+        "P2-B03T",
+        "P2-B03",
+        "P2-V01",
+        "P2-L02"
+      ],
+      "completion_dependencies": [
+        "P2-R1",
+        "P2-X04",
+        "P2-X02",
+        "P2-X03",
+        "P2-X07",
+        "P2-X06",
+        "P2-B02T",
+        "P2-B02",
+        "P2-B03T",
+        "P2-B03",
+        "P2-V01",
+        "P2-L02"
+      ],
+      "role": "Light Implementer",
+      "write_set": [
+        "CHANGELOG.md",
+        "vega-app/package.json",
+        "vega-app/manifest.toml"
+      ],
+      "command_ids": [
+        "CMD-RELEASE-PREP",
+        "CMD-CHANGELOG-CHECK"
+      ]
+    },
+    "P2-B04T": {
+      "depends_on": [
+        "P2-B02",
+        "P2-B03"
+      ],
+      "completion_dependencies": [
+        "P2-B02",
+        "P2-B03"
+      ],
+      "role": "Test Implementer",
+      "write_set": [
+        "backend/tests/unit/matcher/",
+        "backend/tests/deployed/matcher/"
+      ],
+      "command_ids": [
+        "CMD-RED"
+      ]
+    },
+    "P2-B04": {
+      "depends_on": [
+        "P2-B04T"
+      ],
+      "completion_dependencies": [
+        "P2-B04T"
+      ],
+      "role": "Product Implementer",
+      "write_set": [
+        "backend/src/matcher/"
+      ],
+      "command_ids": [
+        "CMD-GATE-BACKEND"
+      ]
+    },
+    "P2-B05T": {
+      "depends_on": [
+        "P2-B04T"
+      ],
+      "completion_dependencies": [
+        "P2-B04T"
+      ],
+      "role": "Test Implementer",
+      "write_set": [
+        "backend/tests/unit/alert_policy/",
+        "backend/tests/deployed/alert_policy/"
+      ],
+      "command_ids": [
+        "CMD-RED"
+      ]
+    },
+    "P2-B05": {
+      "depends_on": [
+        "P2-B04",
+        "P2-B05T"
+      ],
+      "completion_dependencies": [
+        "P2-B04",
+        "P2-B05T"
+      ],
+      "role": "Product Implementer",
+      "write_set": [
+        "backend/src/alert_policy/"
+      ],
+      "command_ids": [
+        "CMD-GATE-BACKEND"
+      ]
+    },
+    "P2-B06T": {
+      "depends_on": [
+        "P2-X03"
+      ],
+      "completion_dependencies": [
+        "P2-X03"
+      ],
+      "role": "Test Implementer",
+      "write_set": [
+        "backend/tests/unit/provider_resolver/",
+        "backend/tests/deployed/provider_resolver/"
+      ],
+      "command_ids": [
+        "CMD-RED"
+      ]
+    },
+    "P2-B06": {
+      "depends_on": [
+        "P2-B06T"
+      ],
+      "completion_dependencies": [
+        "P2-B06T"
+      ],
+      "role": "Product Implementer",
+      "write_set": [
+        "backend/src/provider_resolver/",
+        "backend/src/api/openapi.yaml"
+      ],
+      "command_ids": [
+        "CMD-GATE-BACKEND"
+      ]
+    },
+    "P2-B07T": {
+      "depends_on": [
+        "P2-B04"
+      ],
+      "completion_dependencies": [
+        "P2-B04"
+      ],
+      "role": "Test Implementer",
+      "write_set": [
+        "backend/tests/unit/panel/",
+        "backend/tests/deployed/panel/"
+      ],
+      "command_ids": [
+        "CMD-RED"
+      ]
+    },
+    "P2-B07": {
+      "depends_on": [
+        "P2-B07T"
+      ],
+      "completion_dependencies": [
+        "P2-B07T"
+      ],
+      "role": "Product Implementer",
+      "write_set": [
+        "backend/src/panel/"
+      ],
+      "command_ids": [
+        "CMD-GATE-BACKEND"
+      ]
+    },
+    "P2-A03T": {
+      "depends_on": [
+        "P2-X02",
+        "P2-A02"
+      ],
+      "completion_dependencies": [
+        "P2-X02",
+        "P2-A02"
+      ],
+      "role": "Test Implementer",
+      "write_set": [
+        "tv-app/app/src/test/java/com/afc/companion/alerts/",
+        "tv-app/app/src/androidTest/java/com/afc/companion/alerts/"
+      ],
+      "command_ids": [
+        "CMD-RED"
+      ]
+    },
+    "P2-A03": {
+      "depends_on": [
+        "P2-B05",
+        "P2-A03T"
+      ],
+      "completion_dependencies": [
+        "P2-B05",
+        "P2-A03T"
+      ],
+      "role": "Product Implementer",
+      "write_set": [
+        "tv-app/app/src/main/java/com/afc/companion/alerts/",
+        "evidence/visual/P2-A03/",
+        "tv-app/app/src/main/AndroidManifest.xml",
+        "tv-app/app/build.gradle.kts",
+        "tv-app/gradle/libs.versions.toml"
+      ],
+      "command_ids": [
+        "CMD-GATE-TVAPP",
+        "CMD-TVAPP-INSTRUMENTED",
+        "PROC-VISUAL-REVIEW"
+      ]
+    },
+    "P2-A04T": {
+      "depends_on": [
+        "P2-X03",
+        "P2-A03T"
+      ],
+      "completion_dependencies": [
+        "P2-X03",
+        "P2-A03T"
+      ],
+      "role": "Test Implementer",
+      "write_set": [
+        "tv-app/app/src/test/java/com/afc/companion/watch/",
+        "tv-app/app/src/androidTest/java/com/afc/companion/watch/"
+      ],
+      "command_ids": [
+        "CMD-RED"
+      ]
+    },
+    "P2-A04": {
+      "depends_on": [
+        "P2-B06",
+        "P2-A04T"
+      ],
+      "completion_dependencies": [
+        "P2-B06",
+        "P2-A04T"
+      ],
+      "role": "Product Implementer",
+      "write_set": [
+        "tv-app/app/src/main/java/com/afc/companion/watch/",
+        "evidence/visual/P2-A04/",
+        "tv-app/app/src/main/AndroidManifest.xml",
+        "tv-app/app/build.gradle.kts",
+        "tv-app/gradle/libs.versions.toml"
+      ],
+      "command_ids": [
+        "CMD-GATE-TVAPP",
+        "CMD-TVAPP-INSTRUMENTED",
+        "PROC-VISUAL-REVIEW"
+      ]
+    },
+    "P2-A05T": {
+      "depends_on": [
+        "P2-X04",
+        "P2-A02"
+      ],
+      "completion_dependencies": [
+        "P2-X04",
+        "P2-A02"
+      ],
+      "role": "Test Implementer",
+      "write_set": [
+        "tv-app/app/src/test/java/com/afc/companion/panel/",
+        "tv-app/app/src/androidTest/java/com/afc/companion/panel/"
+      ],
+      "command_ids": [
+        "CMD-RED"
+      ]
+    },
+    "P2-A05": {
+      "depends_on": [
+        "P2-B07",
+        "P2-A05T"
+      ],
+      "completion_dependencies": [
+        "P2-B07",
+        "P2-A05T"
+      ],
+      "role": "Product Implementer",
+      "write_set": [
+        "tv-app/app/src/main/java/com/afc/companion/panel/",
+        "tv-app/app/src/main/java/com/afc/companion/MainActivity.kt",
+        "evidence/visual/P2-A05/",
+        "tv-app/app/src/main/AndroidManifest.xml",
+        "tv-app/app/build.gradle.kts",
+        "tv-app/gradle/libs.versions.toml"
+      ],
+      "command_ids": [
+        "CMD-GATE-TVAPP",
+        "CMD-TVAPP-INSTRUMENTED",
+        "PROC-VISUAL-REVIEW",
+        "CMD-TEXT-SIZE-MEASURE"
+      ]
+    },
+    "P2-L03": {
+      "depends_on": [
+        "P2-X06",
+        "P2-B05",
+        "P2-B06",
+        "P2-B07"
+      ],
+      "completion_dependencies": [
+        "P2-X06",
+        "P2-B05",
+        "P2-B06",
+        "P2-B07"
+      ],
+      "role": "Light Implementer",
+      "write_set": [
+        "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-L03/"
+      ],
+      "command_ids": [
+        "CMD-SAM-BUILD",
+        "CMD-SAM-DEPLOY",
+        "CMD-DEPLOYED-SMOKE",
+        "CMD-DEPLOYED-TESTS",
+        "CMD-STACK-OUTPUTS",
+        "CMD-DEPLOYED-COMMIT"
+      ]
+    },
+    "P2-X09": {
+      "depends_on": [
+        "P2-V01",
+        "P2-L03"
+      ],
+      "completion_dependencies": [
+        "P2-V01",
+        "P2-L03"
+      ],
+      "role": "Product Implementer",
+      "write_set": [
+        "evidence/e2e/2026-10-18/",
+        "evidence/visual/e2e-2026-10-18/"
+      ],
+      "command_ids": [
+        "PROC-VEGA-PRIMARY-PHYSICAL",
+        "PROC-VEGA-PRIMARY-PARITY",
+        "PROC-VEGA-PRIMARY-RISK"
+      ]
+    },
+    "P2-R3": {
+      "depends_on": [
+        "P2-R2",
+        "P2-B04T",
+        "P2-B04",
+        "P2-B05T",
+        "P2-B05",
+        "P2-B06T",
+        "P2-B06",
+        "P2-B07T",
+        "P2-B07",
+        "P2-V01",
+        "P2-L03",
+        "P2-X09"
+      ],
+      "completion_dependencies": [
+        "P2-R2",
+        "P2-B04T",
+        "P2-B04",
+        "P2-B05T",
+        "P2-B05",
+        "P2-B06T",
+        "P2-B06",
+        "P2-B07T",
+        "P2-B07",
+        "P2-V01",
+        "P2-L03",
+        "P2-X09"
+      ],
+      "role": "Light Implementer",
+      "write_set": [
+        "CHANGELOG.md",
+        "vega-app/package.json",
+        "vega-app/manifest.toml"
+      ],
+      "command_ids": [
+        "CMD-RELEASE-PREP",
+        "CMD-CHANGELOG-CHECK"
+      ]
+    },
+    "P2-X10": {
+      "depends_on": [
+        "P2-X09"
+      ],
+      "completion_dependencies": [
+        "P2-X09"
+      ],
+      "role": "Product Implementer",
+      "write_set": [
+        "evidence/e2e/2026-10-19/",
+        "evidence/visual/e2e-2026-10-19/"
+      ],
+      "command_ids": [
+        "PROC-VEGA-PRIMARY-PHYSICAL",
+        "PROC-VEGA-PRIMARY-PARITY"
+      ]
+    },
+    "P2-D02": {
+      "depends_on": [
+        "P2-X01",
+        "P2-X05",
+        "P2-X04",
+        "P2-X02",
+        "P2-X03",
+        "P2-X07",
+        "P2-X06",
+        "P2-X11"
+      ],
+      "completion_dependencies": [
+        "P2-X01",
+        "P2-X05",
+        "P2-X04",
+        "P2-X02",
+        "P2-X03",
+        "P2-X07",
+        "P2-X06",
+        "P2-X11"
+      ],
+      "role": "Product Implementer",
+      "write_set": [
+        "spec/amazon-fantasy-companion/"
+      ],
+      "command_ids": [
+        "CMD-GATE-SPEC"
+      ]
+    },
+    "P2-X11": {
+      "depends_on": [],
+      "completion_dependencies": [],
+      "role": "Product Implementer",
+      "write_set": [
+        "spikes/sp8-alexa/"
+      ],
+      "command_ids": [
+        "CMD-VERDICT-CHECK"
+      ]
+    },
+    "P2-R4": {
+      "depends_on": [
+        "P2-R3",
+        "P2-X10",
+        "P2-D02",
+        "P2-X11"
+      ],
+      "completion_dependencies": [
+        "P2-R3",
+        "P2-X10",
+        "P2-D02",
+        "P2-X11"
+      ],
+      "role": "Light Implementer",
+      "write_set": [
+        "CHANGELOG.md",
+        "vega-app/package.json",
+        "vega-app/manifest.toml"
+      ],
+      "command_ids": [
+        "CMD-RELEASE-PREP",
+        "CMD-CHANGELOG-CHECK"
+      ]
+    },
+    "P2-D03": {
+      "depends_on": [
+        "P2-X10"
+      ],
+      "completion_dependencies": [
+        "P2-X10"
+      ],
+      "role": "Product Implementer",
+      "write_set": [
+        "README.md",
+        "LICENSE"
+      ],
+      "command_ids": [
+        "PROC-README-FRESH-SETUP",
+        "CMD-GATE-DOCS",
+        "CMD-GATE-HYGIENE"
+      ]
+    },
+    "P2-D04": {
+      "depends_on": [
+        "P2-X10"
+      ],
+      "completion_dependencies": [
+        "P2-X10"
+      ],
+      "role": "Product Implementer",
+      "write_set": [
+        "docs/submission/writeup.md"
+      ],
+      "command_ids": [
+        "PROC-SUBMISSION-CHECK",
+        "CMD-GATE-HYGIENE",
+        "PROC-VEGA-PRIMARY-RISK"
+      ]
+    },
+    "P2-D05": {
+      "depends_on": [
+        "P2-X10"
+      ],
+      "completion_dependencies": [
+        "P2-X10"
+      ],
+      "role": "Product Implementer",
+      "write_set": [
+        "docs/submission/demo-plan.md",
+        "docs/submission/owner-checklist.md"
+      ],
+      "command_ids": [
+        "PROC-SUBMISSION-CHECK"
+      ]
+    },
+    "P2-X12": {
+      "depends_on": [
+        "P2-L05"
+      ],
+      "completion_dependencies": [
+        "P2-L05"
+      ],
+      "role": "Product Implementer",
+      "write_set": [
+        "evidence/demo/"
+      ],
+      "command_ids": [
+        "PROC-VEGA-PRIMARY-ARTIFACT"
+      ]
+    },
+    "P2-SCR1": {
+      "depends_on": [
+        "P2-X10"
+      ],
+      "completion_dependencies": [
+        "P2-X10"
+      ],
+      "role": "Scribe",
+      "write_set": [
+        "docs/developer-feedback/"
+      ],
+      "command_ids": [
+        "PROC-SCRIBE-ASSEMBLY",
+        "CMD-GATE-HYGIENE"
+      ]
+    },
+    "P2-L05": {
+      "depends_on": [
+        "P2-R5"
+      ],
+      "completion_dependencies": [
+        "P2-R5"
+      ],
+      "role": "Light Implementer",
+      "write_set": [
+        "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-L05/"
+      ],
+      "command_ids": [
+        "CMD-VEGA-BUILD",
+        "CMD-REVERIFY-VPKG",
+        "PROC-VEGA-PRIMARY-ARTIFACT",
+        "PROC-VEGA-PRIMARY-RISK"
+      ]
+    },
+    "P2-R5": {
+      "depends_on": [
+        "P2-R4",
+        "P2-D03",
+        "P2-D04",
+        "P2-D05",
+        "P2-SCR1"
+      ],
+      "completion_dependencies": [
+        "P2-R4",
+        "P2-D03",
+        "P2-D04",
+        "P2-D05",
+        "P2-SCR1"
+      ],
+      "role": "Light Implementer",
+      "write_set": [
+        "CHANGELOG.md",
+        "vega-app/package.json",
+        "vega-app/manifest.toml"
+      ],
+      "command_ids": [
+        "CMD-RELEASE-PREP",
+        "CMD-CHANGELOG-CHECK"
+      ]
+    },
+    "P2-V01T": {
+      "depends_on": [
+        "P2-X01",
+        "P2-G01",
+        "P2-B01"
+      ],
+      "completion_dependencies": [
+        "P2-X01",
+        "P2-G01",
+        "P2-B01"
+      ],
+      "role": "Test Implementer",
+      "write_set": [
+        "vega-app/__tests__/",
+        "vega-app/package.json",
+        "vega-app/package-lock.json",
+        "vega-app/jest.config.js",
+        "vega-app/babel.config.js",
+        "vega-app/tsconfig.json",
+        "vega-app/manifest.toml",
+        "vega-app/.gitignore",
+        "vega-app/src/",
+        "tools/ci/tests/test_gate_vegaapp.py",
+        "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-V01T/"
+      ],
+      "command_ids": [
+        "CMD-RED-VEGA",
+        "PROC-VEGA-PREPARE",
+        "PROC-GATE-TOOL-QUALIFY",
+        "PROC-VEGA-PRIMARY-PARITY",
+        "PROC-VEGA-PRIMARY-PLAN",
+        "PROC-VEGA-PRIMARY-CONTRACT",
+        "PROC-VEGA-PRIMARY-RISK"
+      ]
+    },
+    "P2-V01": {
+      "depends_on": [
+        "P2-V01T"
+      ],
+      "completion_dependencies": [
+        "P2-V01T",
+        "P2-X02",
+        "P2-X03",
+        "P2-X04",
+        "P2-X07",
+        "P2-L03"
+      ],
+      "role": "Product Implementer",
+      "write_set": [
+        "vega-app/",
+        "tools/ci/gate.sh",
+        "tools/ci/tests/test_gate_vegaapp.py",
+        ".github/workflows/ci.yml",
+        "docs/vnv/vega-app/AGENTS.md",
+        "docs/vnv/AGENTS.md",
+        "THIRD_PARTY_NOTICES.md",
+        "evidence/visual/P2-V01/",
+        "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-V01/"
+      ],
+      "command_ids": [
+        "CMD-GATE-VEGAAPP",
+        "CMD-VEGA-UNIT",
+        "CMD-VEGA-BUILD",
+        "CMD-VVD-START",
+        "CMD-VVD-INSTALL",
+        "CMD-VVD-INPUT",
+        "CMD-VVD-SCREENCAP",
+        "PROC-VISUAL-REVIEW",
+        "PROC-VEGA-FEATURE-VERDICT",
+        "CMD-VEGA-DEVICE-INSTALL",
+        "CMD-REVERIFY-VPKG",
+        "CMD-SUPPLY-SCAN",
+        "PROC-VEGA-PREPARE",
+        "PROC-GATE-TOOL-QUALIFY",
+        "CMD-COVERAGE-VEGAAPP",
+        "CMD-MUTATION-VEGAAPP",
+        "CMD-TREE-EQUAL",
+        "CMD-CONTRACT-FROZEN",
+        "PROC-VEGA-PRIMARY-PARITY",
+        "PROC-VEGA-PRIMARY-PLAN",
+        "PROC-VEGA-PRIMARY-CONTRACT",
+        "PROC-VEGA-PRIMARY-RISK"
+      ]
+    }
+  },
+  "integration_dependencies": {
+    "IE-P2-1": [],
+    "IE-P2-2": [
+      "IE-P2-1"
+    ],
+    "IE-P2-3": [
+      "IE-P2-1"
+    ],
+    "IE-P2-4": [
+      "IE-P2-1"
+    ],
+    "IE-P2-5": [
+      "IE-P2-3"
+    ],
+    "IE-P2-6": [
+      "IE-P2-5"
+    ],
+    "IE-P2-7": [
+      "IE-P2-3",
+      "IE-P2-4",
+      "IE-P2-5"
+    ],
+    "IE-P2-8": [
+      "IE-P2-2",
+      "IE-P2-3",
+      "IE-P2-4",
+      "IE-P2-5",
+      "IE-P2-6",
+      "IE-P2-V01"
+    ],
+    "IE-P2-9": [
+      "IE-P2-4"
+    ],
+    "IE-P2-10": [
+      "IE-P2-9"
+    ],
+    "IE-P2-11": [
+      "IE-P2-10",
+      "IE-P2-5"
+    ],
+    "IE-P2-12": [
+      "IE-P2-11"
+    ],
+    "IE-P2-13": [
+      "IE-P2-5",
+      "IE-P2-6"
+    ],
+    "IE-P2-14": [
+      "IE-P2-5"
+    ],
+    "IE-P2-15": [
+      "IE-P2-5"
+    ],
+    "IE-P2-16": [
+      "IE-P2-11"
+    ],
+    "IE-P2-17": [
+      "IE-P2-6"
+    ],
+    "IE-P2-18": [
+      "IE-P2-7",
+      "IE-P2-12",
+      "IE-P2-15"
+    ],
+    "IE-P2-19": [
+      "IE-P2-1"
+    ],
+    "IE-P2-20": [
+      "IE-P2-8",
+      "IE-P2-9",
+      "IE-P2-10",
+      "IE-P2-11",
+      "IE-P2-12",
+      "IE-P2-13",
+      "IE-P2-14",
+      "IE-P2-15",
+      "IE-P2-16",
+      "IE-P2-17",
+      "IE-P2-V01",
+      "IE-P2-19"
+    ],
+    "IE-P2-21": [
+      "IE-P2-13",
+      "IE-P2-14"
+    ],
+    "IE-P2-22": [
+      "IE-P2-21"
+    ],
+    "IE-P2-23": [
+      "IE-P2-11"
+    ],
+    "IE-P2-24": [
+      "IE-P2-21"
+    ],
+    "IE-P2-25": [
+      "IE-P2-15",
+      "IE-P2-19",
+      "IE-P2-21",
+      "IE-P2-22",
+      "IE-P2-23",
+      "IE-P2-24"
+    ],
+    "IE-P2-26": [
+      "IE-P2-18",
+      "IE-P2-10",
+      "IE-P2-22"
+    ],
+    "IE-P2-27": [
+      "IE-P2-18",
+      "IE-P2-11",
+      "IE-P2-23"
+    ],
+    "IE-P2-28": [
+      "IE-P2-9",
+      "IE-P2-18",
+      "IE-P2-24"
+    ],
+    "IE-P2-29": [
+      "IE-P2-25",
+      "IE-P2-V01"
+    ],
+    "IE-P2-30": [
+      "IE-P2-29"
+    ],
+    "IE-P2-31": [
+      "IE-P2-20",
+      "IE-P2-21",
+      "IE-P2-22",
+      "IE-P2-23",
+      "IE-P2-24",
+      "IE-P2-25",
+      "IE-P2-V01",
+      "IE-P2-29",
+      "IE-P2-30"
+    ],
+    "IE-P2-32": [
+      "IE-P2-30"
+    ],
+    "IE-P2-33": [
+      "IE-P2-32"
+    ],
+    "IE-P2-35": [
+      "IE-P2-31"
+    ],
+    "IE-P2-34": [
+      "IE-P2-1",
+      "IE-P2-4",
+      "IE-P2-9",
+      "IE-P2-10",
+      "IE-P2-12",
+      "IE-P2-16",
+      "IE-P2-17",
+      "IE-P2-19",
+      "IE-P2-35"
+    ],
+    "IE-P2-36": [
+      "IE-P2-31",
+      "IE-P2-32",
+      "IE-P2-33",
+      "IE-P2-34",
+      "IE-P2-35"
+    ],
+    "IE-P2-37": [
+      "IE-P2-33"
+    ],
+    "IE-P2-38": [
+      "IE-P2-36"
+    ],
+    "IE-P2-39": [
+      "IE-P2-37",
+      "IE-P2-38"
+    ],
+    "IE-P2-40": [
+      "IE-P2-36"
+    ],
+    "IE-P2-41": [
+      "IE-P2-36",
+      "IE-P2-37",
+      "IE-P2-38",
+      "IE-P2-39",
+      "IE-P2-40"
+    ],
+    "IE-P2-42": [
+      "IE-P2-41"
+    ],
+    "IE-P2-43": [
+      "IE-P2-42",
+      "IE-P2-37"
+    ],
+    "IE-P2-44": [
+      "IE-P2-42"
+    ],
+    "IE-P2-V01": [
+      "IE-P2-3",
+      "IE-P2-4",
+      "IE-P2-5",
+      "IE-P2-9",
+      "IE-P2-10",
+      "IE-P2-11",
+      "IE-P2-12",
+      "IE-P2-16",
+      "IE-P2-25"
+    ]
+  }
+}

@@ -1,0 +1,164 @@
+{
+  "base_commit": "0e5ba5965f97704e6e3fb042198b49547e0b68b0",
+  "finding": "F-VP-01-MANIFEST",
+  "scope": "current dod_manifest projection only; historical baseline projections and non-Manifest content unchanged",
+  "changes": [
+    {
+      "path": "/dod_manifest/architecture/22/decision",
+      "before": "Provider registry: `backend/src/provider_resolver/registry.json`, written from the P2-X03 verdict: per provider `id`, `name`, `package`, `launch` (`type`: `intent` | `uri`; `value` template with `{channel}` / `{event}` placeholders only where documented), `doc_source`, `verified_outcome` (one RoutingOutcome value observed on the stick), `channels_carried` (for local broadcast), `verified_at`. `verified_outcome` desc",
+      "after": "`backend/src/provider_resolver/registry.json`, written from the P2-X03 verdict: per provider `id`, `name`, `channels_carried` (for local broadcast) and `platform_routes` with two entries, `fire_os` and `vega` (amended 2026-10-14 for DEC-AFC-SD-049, both targets built). Each entry carries its own `package` (Android package or Vega component id), `launch` (`type`: `intent` | `uri`; `value` template with `{channel}` / `{event}` placeholders only where documented), `doc_source`, `verified_outcome` (one RoutingOutcome value observed on that platform's device), `verified_at` and the documented current-attempt observation mechanism or explicitly none. `verified_outcome` describes the spike observation only, not a current launch result. X03's primary scope writes `vega`; its Fire OS secondary scope writes `fire_os`. A missing or unverified entry is REGISTRY_ROUTE_GAP for that platform: it blocks that platform's Watch acceptance, is never filled from the other platform, and is never turned into a client limitation without an owner amendment. Order of entries is the spike order; selection order is the customer's preference."
+    },
+    {
+      "path": "/dod_manifest/definition_of_done/4/criterion",
+      "before": "Conditional primary readiness requires physical alerts/Watch proof, five-feature parity, shared SD-048 contract readiness, exact final .vpkg/demo hash and resolved owner decisions; no side-lane in-progress fallback. F1 remains open.",
+      "after": "Conditional primary readiness requires physical alerts/Watch proof, five-feature parity, shared SD-048 contract readiness, exact final .vpkg/demo hash and resolved owner decisions; no side-lane in-progress fallback. F1 closed by DEC-AFC-SD-050 option (a)."
+    },
+    {
+      "path": "/dod_manifest/tasks/6/status",
+      "before": "inactive if Vega selected; preserved reference",
+      "after": "planned"
+    },
+    {
+      "path": "/dod_manifest/tasks/7/status",
+      "before": "inactive if Vega selected; preserved reference",
+      "after": "planned"
+    },
+    {
+      "path": "/dod_manifest/tasks/20/status",
+      "before": "inactive if Vega selected; preserved reference",
+      "after": "planned"
+    },
+    {
+      "path": "/dod_manifest/tasks/21/status",
+      "before": "inactive if Vega selected; preserved reference",
+      "after": "planned"
+    },
+    {
+      "path": "/dod_manifest/tasks/29/write_set",
+      "before": [
+        "backend/src/provider_resolver/"
+      ],
+      "after": [
+        "backend/src/provider_resolver/",
+        "backend/src/api/openapi.yaml"
+      ]
+    },
+    {
+      "path": "/dod_manifest/tasks/29/vega_primary_contingency/overrides/write_set",
+      "before": null,
+      "after": [
+        "backend/src/provider_resolver/",
+        "backend/src/api/openapi.yaml"
+      ]
+    },
+    {
+      "path": "/dod_manifest/tasks/29/vega_primary_contingency/overrides/goal",
+      "before": null,
+      "after": "Implement `src/provider_resolver/` with registry read-only; return each route with the whole `platform_routes` map (fire_os and vega, each verified or REGISTRY_ROUTE_GAP); keep the existing caller; amend only the route schema in openapi.yaml; stop when green."
+    },
+    {
+      "path": "/dod_manifest/tasks/29/vega_primary_contingency/overrides/design_ids",
+      "before": null,
+      "after": [
+        "DES-AFC-P2-RESOLVE",
+        "CONTRACT-AFC-P2-PROVIDER-REGISTRY",
+        "CONTRACT-AFC-P2-API"
+      ]
+    },
+    {
+      "path": "/dod_manifest/tasks/29/vega_primary_contingency/platform_route_binding",
+      "before": null,
+      "after": "Owns the backend side: the resolver returns the `platform_routes` map with both entries and per-entry REGISTRY_ROUTE_GAP status. It does not select by client platform; the preserved caller backend/src/api/handler.py passes only profile_id and eventId. Amends only the route schema in backend/src/api/openapi.yaml under CMD-CONTRACT-FROZEN review."
+    },
+    {
+      "path": "/dod_manifest/tasks/29/vega_primary_contingency/disposition",
+      "before": "keep_shared_backend",
+      "after": "shared_backend_platform_routes"
+    },
+    {
+      "path": "/dod_manifest/tasks/32/status",
+      "before": "inactive if Vega selected; preserved reference",
+      "after": "planned"
+    },
+    {
+      "path": "/dod_manifest/tasks/33/status",
+      "before": "inactive if Vega selected; preserved reference",
+      "after": "planned"
+    },
+    {
+      "path": "/dod_manifest/tasks/34/status",
+      "before": "inactive if Vega selected; preserved reference",
+      "after": "planned"
+    },
+    {
+      "path": "/dod_manifest/tasks/35/status",
+      "before": "inactive if Vega selected; preserved reference",
+      "after": "planned"
+    },
+    {
+      "path": "/dod_manifest/tasks/36/status",
+      "before": "inactive if Vega selected; preserved reference",
+      "after": "planned"
+    },
+    {
+      "path": "/dod_manifest/tasks/37/status",
+      "before": "inactive if Vega selected; preserved reference",
+      "after": "planned"
+    },
+    {
+      "path": "/dod_manifest/tasks/46/vega_primary_contingency/risk_ownership",
+      "before": null,
+      "after": {
+        "risk_id": "RISK-AFC-P2-14",
+        "closing_slice": "P2-D04",
+        "supporting_slices": [
+          "P2-V01"
+        ],
+        "status": "decided",
+        "decision_ref": "DEC-AFC-SD-050",
+        "open_finding": "F1 closed",
+        "primary_failure_rule": "Include the Vega OS build in the submission only if P2-V01 verification passed before these documents are finalized; otherwise report it as in progress with its limits."
+      }
+    },
+    {
+      "path": "/dod_manifest/tasks/46/vega_primary_contingency/proposed_risk_ownership",
+      "before": {
+        "risk_id": "RISK-AFC-P2-14",
+        "closing_slice": "P2-D04",
+        "supporting_slices": [
+          "P2-V01"
+        ],
+        "status": "NEEDS_OWNER_DECISION",
+        "decision_ref": "VP-OD-05",
+        "open_finding": "F1",
+        "primary_failure_rule": "Primary Vega failure blocks submission readiness; side-lane in-progress wording cannot satisfy the primary target."
+      },
+      "after": null
+    },
+    {
+      "path": "/dod_manifest/risks/13/control",
+      "before": "If P2-V01 is not merged with its verdict table before the M12 submission documents are finalized (due 2026-10-22T16:00:00Z), then the submission shall describe the Vega build as in progress with its stated limits, and no M12 or M13 slice shall wait for it. Conditional primary override: failed Vega blocks submission readiness; D04 closure ownership remains VP-OD-05/F1, not approved.",
+      "after": "If P2-V01 is not merged with its verdict table before the M12 submission documents are finalized (due 2026-10-22T16:00:00Z), then the submission shall describe the Vega build as in progress with its stated limits, and no M12 or M13 slice shall wait for it. Conditional primary override: failed Vega blocks submission readiness; P2-D04 closes RISK-AFC-P2-14; P2-V01 supplies the evidence (DEC-AFC-SD-050); F1 closed."
+    },
+    {
+      "path": "/dod_manifest/risks/17/status",
+      "before": "baseline gap; schema-validation.json",
+      "after": "closed; schema-validation.json"
+    },
+    {
+      "path": "/dod_manifest/risks/17/recovery",
+      "before": "Materialize the approved concise primary goals; if Fire OS selected, losslessly normalize summaries retaining original goal_source_notes. No new owner intent required.",
+      "after": "No schema correction remains; preserve goal_source_notes."
+    },
+    {
+      "path": "/dod_manifest/risks/17/control",
+      "before": "Additive-only delta preserves them; proposed primary override goals meet schema; no new schema findings. Full unmaterialized document is not claimed schema PASS.",
+      "after": "Each goal now equals its vega_primary_contingency.overrides.goal; goal_source_notes keep the long text. Raw implementation.json and seit.json have zero schema violations under 1.1.8."
+    },
+    {
+      "path": "/dod_manifest/risks/17/risk",
+      "before": "Original V01T and V01 goal strings exceed the house-schema 512-character cap at base 5097585.",
+      "after": "The two earlier V01T/V01 goal maxLength findings are closed (F-VP-03)."
+    }
+  ]
+}

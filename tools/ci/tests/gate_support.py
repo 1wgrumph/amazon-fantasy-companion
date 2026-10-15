@@ -7,6 +7,7 @@ error, so the S09T red run is a valid red (SEIT tdd red_expectation).
 import contextlib
 import importlib.util
 import io
+import json
 import os
 import runpy
 import shutil
@@ -107,6 +108,15 @@ def run_gate(case, cwd, *args, env=None):
     gate = Path(cwd) / 'tools' / 'ci' / 'gate.sh'
     case.assertTrue(gate.is_file(), 'tools/ci/gate.sh is missing')
     case.assertTrue(os.access(gate, os.X_OK), 'tools/ci/gate.sh is not executable')
+    env = dict(os.environ if env is None else env)
+    # Fixture repositories have their own history and must not use the host CI event.
+    if (Path(cwd) != REPO and os.environ.get('GITHUB_EVENT_PATH')
+            and env.get('GITHUB_EVENT_PATH') == os.environ['GITHUB_EVENT_PATH']):
+        fixture_base = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=cwd,
+                                               text=True).strip()
+        fixture_event = Path(cwd) / '.git' / 'gate-event.json'
+        fixture_event.write_text(json.dumps({'before': fixture_base}), encoding='utf-8')
+        env['GITHUB_EVENT_PATH'] = str(fixture_event)
     result = subprocess.run(['tools/ci/gate.sh', *args], cwd=cwd, env=env,
                             capture_output=True, text=True, timeout=900)
     return result.returncode, result.stdout + result.stderr

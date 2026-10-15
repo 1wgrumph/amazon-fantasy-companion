@@ -1,0 +1,246 @@
+{
+  "verdict": "INDETERMINATE",
+  "credential_findings": "No secret rule fired; no credentials accessed. Candidate archives scanned for vulnerabilities/malware, not broad entropy scanning of packed JARs.",
+  "candidate_versions": {
+    "AGP": "9.3.1",
+    "Kotlin": "2.4.21",
+    "Gradle": "9.7.0",
+    "Android_build_tools": "36.0.0",
+    "compileSdk": "34"
+  },
+  "compatibility_sources": [
+    "https://kotlinlang.org/docs/gradle-configure-project.html",
+    "https://developer.android.com/build/releases/about-agp",
+    "https://developer.android.com/build/releases/agp-9-3-0-release-notes",
+    "https://developer.android.com/build/migrate-to-built-in-kotlin"
+  ],
+  "artifact_roots": [
+    "$HOME/.local/share/afc-tools/downloads/p2-a01t/resolve/build/closure",
+    "$HOME/.gradle/afc-p2-a01t"
+  ],
+  "candidate_artifact_count": 124,
+  "resolved_inventory": "resolved-artifacts.tsv",
+  "artifact_hashes": "artifact-sha256s.txt",
+  "archive_scan_package_count": 98,
+  "candidate_high_critical": 10,
+  "newest_stable_compiler": {
+    "version": "32.4.1",
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/external/com-intellij/kotlin-compiler/32.4.1/kotlin-compiler-32.4.1.jar",
+    "official_sha1": "7c2776229f721222785eb82d6347521495a78505",
+    "sha256": "f7605ecd8e5157f1df689951e0f200ff7ccb0b1443e8c4ab35a595cb1ccdc886",
+    "latest_stable_versions": [
+      "32.3.1",
+      "32.3.2",
+      "32.3.3",
+      "32.4.0",
+      "32.4.1"
+    ]
+  },
+  "newest_stable_compiler_high_critical": 5,
+  "newest_compiler_embedded_classes": {
+    "org/jetbrains/kotlin/protobuf/": 276,
+    "org/jline/builtins/": 98,
+    "org/jline/builtins/telnet/": 18
+  },
+  "embedded_override_limit": "protobuf and jline classes are bundled inside Android lint kotlin-compiler JAR, not independent resolved dependencies. Ordinary Gradle version constraints do not replace those embedded bytes. No patching/removal/republishing of vendor JARs attempted.",
+  "findings": [
+    {
+      "scan": "candidate-closure",
+      "package": "com.google.protobuf:protobuf-java",
+      "version": "2.6.1",
+      "id": "CVE-2021-22569",
+      "severity": "HIGH",
+      "artifact": "kotlin-compiler-32.3.1.jar",
+      "fixed_versions": "3.16.1, 3.18.2, 3.19.2",
+      "status": "unreviewed; no reachability or false-positive determination"
+    },
+    {
+      "scan": "candidate-closure",
+      "package": "com.google.protobuf:protobuf-java",
+      "version": "2.6.1",
+      "id": "CVE-2024-7254",
+      "severity": "HIGH",
+      "artifact": "kotlin-compiler-32.3.1.jar",
+      "fixed_versions": "3.25.5, 4.27.5, 4.28.2",
+      "status": "unreviewed; no reachability or false-positive determination"
+    },
+    {
+      "scan": "candidate-closure",
+      "package": "org.bitbucket.b_c:jose4j",
+      "version": "0.9.5",
+      "id": "CVE-2024-29371",
+      "severity": "HIGH",
+      "artifact": "jose4j-0.9.5.jar",
+      "fixed_versions": "0.9.6",
+      "status": "unreviewed; no reachability or false-positive determination"
+    },
+    {
+      "scan": "candidate-closure",
+      "package": "org.bouncycastle:bcprov-jdk18on",
+      "version": "1.79",
+      "id": "CVE-2025-14813",
+      "severity": "CRITICAL",
+      "artifact": "bcprov-jdk18on-1.79.jar",
+      "fixed_versions": "1.80.2, 1.81.1, 1.84",
+      "status": "unreviewed; no reachability or false-positive determination"
+    },
+    {
+      "scan": "candidate-closure",
+      "package": "org.bouncycastle:bcprov-jdk18on",
+      "version": "1.79",
+      "id": "CVE-2026-8763",
+      "severity": "CRITICAL",
+      "artifact": "bcprov-jdk18on-1.79.jar",
+      "fixed_versions": "1.85",
+      "status": "unreviewed; no reachability or false-positive determination"
+    },
+    {
+      "scan": "candidate-closure",
+      "package": "org.bouncycastle:bcprov-jdk18on",
+      "version": "1.79",
+      "id": "CVE-2026-13506",
+      "severity": "HIGH",
+      "artifact": "bcprov-jdk18on-1.79.jar",
+      "fixed_versions": "1.85",
+      "status": "unreviewed; no reachability or false-positive determination"
+    },
+    {
+      "scan": "candidate-closure",
+      "package": "org.jdom:jdom2",
+      "version": "2.0.6",
+      "id": "CVE-2021-33813",
+      "severity": "HIGH",
+      "artifact": "jdom2-2.0.6.jar",
+      "fixed_versions": "2.0.6.1",
+      "status": "unreviewed; no reachability or false-positive determination"
+    },
+    {
+      "scan": "candidate-closure",
+      "package": "org.jline:jline-builtins",
+      "version": "3.24.1",
+      "id": "CVE-2026-77422",
+      "severity": "HIGH",
+      "artifact": "kotlin-compiler-32.3.1.jar",
+      "fixed_versions": "4.3.1, 3.30.15",
+      "status": "unreviewed; no reachability or false-positive determination"
+    },
+    {
+      "scan": "candidate-closure",
+      "package": "org.jline:jline-remote-telnet",
+      "version": "3.24.1",
+      "id": "CVE-2026-56740",
+      "severity": "HIGH",
+      "artifact": "kotlin-compiler-32.3.1.jar",
+      "fixed_versions": "4.2.1, 4.0.16, 3.30.14",
+      "status": "unreviewed; no reachability or false-positive determination"
+    },
+    {
+      "scan": "candidate-closure",
+      "package": "org.jline:jline-remote-telnet",
+      "version": "3.24.1",
+      "id": "CVE-2026-56741",
+      "severity": "HIGH",
+      "artifact": "kotlin-compiler-32.3.1.jar",
+      "fixed_versions": "4.2.1, 4.0.16, 3.30.14",
+      "status": "unreviewed; no reachability or false-positive determination"
+    },
+    {
+      "scan": "newest-stable-compiler",
+      "package": "com.google.protobuf:protobuf-java",
+      "version": "2.6.1",
+      "id": "CVE-2021-22569",
+      "severity": "HIGH",
+      "artifact": "kotlin-compiler-32.4.1.jar",
+      "fixed_versions": "3.16.1, 3.18.2, 3.19.2",
+      "status": "unreviewed; no reachability or false-positive determination"
+    },
+    {
+      "scan": "newest-stable-compiler",
+      "package": "com.google.protobuf:protobuf-java",
+      "version": "2.6.1",
+      "id": "CVE-2024-7254",
+      "severity": "HIGH",
+      "artifact": "kotlin-compiler-32.4.1.jar",
+      "fixed_versions": "3.25.5, 4.27.5, 4.28.2",
+      "status": "unreviewed; no reachability or false-positive determination"
+    },
+    {
+      "scan": "newest-stable-compiler",
+      "package": "org.jline:jline-builtins",
+      "version": "3.24.1",
+      "id": "CVE-2026-77422",
+      "severity": "HIGH",
+      "artifact": "kotlin-compiler-32.4.1.jar",
+      "fixed_versions": "4.3.1, 3.30.15",
+      "status": "unreviewed; no reachability or false-positive determination"
+    },
+    {
+      "scan": "newest-stable-compiler",
+      "package": "org.jline:jline-remote-telnet",
+      "version": "3.24.1",
+      "id": "CVE-2026-56740",
+      "severity": "HIGH",
+      "artifact": "kotlin-compiler-32.4.1.jar",
+      "fixed_versions": "4.2.1, 4.0.16, 3.30.14",
+      "status": "unreviewed; no reachability or false-positive determination"
+    },
+    {
+      "scan": "newest-stable-compiler",
+      "package": "org.jline:jline-remote-telnet",
+      "version": "3.24.1",
+      "id": "CVE-2026-56741",
+      "severity": "HIGH",
+      "artifact": "kotlin-compiler-32.4.1.jar",
+      "fixed_versions": "4.2.1, 4.0.16, 3.30.14",
+      "status": "unreviewed; no reachability or false-positive determination"
+    }
+  ],
+  "tools": {
+    "trivy": "0.71.0",
+    "clamav": "1.5.4",
+    "clamav_signatures": "3628164; signature set 28150 (qualified X01 baseline)",
+    "vulnerability_db": {
+      "Version": 2,
+      "NextUpdate": "2026-10-14T19:11:46.909501616Z",
+      "UpdatedAt": "2026-10-13T19:11:46.909502157Z",
+      "DownloadedAt": "2026-10-14T00:49:07.106426695Z"
+    },
+    "java_index_db": {
+      "Version": 1,
+      "NextUpdate": "2026-09-06T01:07:40.242587282Z",
+      "UpdatedAt": "2026-09-03T01:07:40.242587533Z",
+      "DownloadedAt": "2026-09-04T01:01:41.119315863Z"
+    }
+  },
+  "scan_gap": "Offline Java identity index is stale; 98 package identities reported from 124 artifact files. Gradle native inventory preserves all resolved artifact coordinates. No complete clean-closure claim.",
+  "scan_commands": [
+    {
+      "command": "trivy fs --scanners vuln --skip-db-update --skip-java-db-update --offline-scan --format json <closure>",
+      "exit": 0,
+      "status": "INVALID_EVIDENCE: zero language-specific files; superseded by rootfs scan"
+    },
+    {
+      "command": "trivy rootfs --disable-telemetry --scanners vuln --skip-db-update --skip-java-db-update --offline-scan --list-all-pkgs --format json <closure>",
+      "exit": 0,
+      "status": "10 unreviewed HIGH/CRITICAL; exit zero is scanner completion, not acceptance"
+    },
+    {
+      "command": "trivy rootfs --disable-telemetry --scanners vuln --skip-db-update --skip-java-db-update --offline-scan --list-all-pkgs --format json <newer-compiler>",
+      "exit": 0,
+      "status": "5 unreviewed HIGH remain in latest stable artifact"
+    }
+  ],
+  "sources": {
+    "backend/src/api/openapi.yaml": "835e0757658fe46a826dc7da1bdb021d0883d85e257c7982f8cc41c439466ebe",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/implementation.json": "ae2b224ceb242d6a45e8d0564feee1c93e79e555e0d4e2ca045b8ed4b3c64c9a",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/seit.json": "8db198397d019aa44310a7132b5b1dd98ef53f33b622fbb3ac34b7732c00c848",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/design.md": "07bcfb0d7ac4b08a386ea242b23a6afec76c89a0eb5ddcd14c3f1976da776c6f",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/amazon-fantasy-companion-phase-2-technical-plan.md": "1c33c214324bbb6f7c6a31ee460eff3e5697516b27792a694000cf1669d2bc0f",
+    "docs/vnv/tv-app/AGENTS.md": "08ffa7c8ecfb912ac39cbf8db4907bf04836950ad228fc3239c4143b81b17f84"
+  },
+  "admission": "No external Gradle plugin/dependency executed or admitted. Resolve-only copying with the qualified Gradle core plugin never applied AGP or KGP.",
+  "superseded_download": {
+    "version": "Gradle 9.8.1",
+    "status": "Not admitted; initial download hash verified, own ClamAV scan cancelled when Kotlin documented maximum selected 9.7.0."
+  }
+}

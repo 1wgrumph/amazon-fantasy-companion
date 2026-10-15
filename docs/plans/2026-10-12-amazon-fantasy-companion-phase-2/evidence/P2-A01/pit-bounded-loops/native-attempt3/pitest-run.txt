@@ -1,0 +1,168 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.7.0/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build
+
+> Configure project :app
+WARNING: The option setting 'android.newDsl=false' is deprecated.
+The current default is 'true'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+Add android.sync.suppressAgpWarnings=UNSUPPORTED_PROJECT_OPTION_USE to the gradle.properties file to suppress this warning.
+WARNING: API 'applicationVariants' is obsolete and has been replaced with 'AndroidComponentsExtension'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+The legacy variant API is disabled by default in AGP 9.0, but can be re-enabled by adding
+    android.newDsl=false
+to this project's gradle.properties file.
+For more information, see http://developer.android.com/build/r/new-dsl.
+
+To determine what is calling applicationVariants, use -Pandroid.debug.obsoleteApi=true on the command line to display more information.
+Add android.sync.suppressAgpWarnings=DEPRECATED_DSL to the gradle.properties file to suppress this warning.
+
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preDebugBuild UP-TO-DATE
+> Task :app:generateDebugBuildConfig
+> Task :app:generateDebugResources
+> Task :app:packageDebugResources
+> Task :app:processDebugNavigationResources
+> Task :app:javaPreCompileDebug
+> Task :app:parseDebugLocalResources
+> Task :app:checkDebugAarMetadata
+> Task :app:mapDebugSourceSetPaths
+> Task :app:compileDebugNavigationResources
+> Task :app:generateDebugRFile
+> Task :app:mergeDebugResources
+> Task :app:createDebugCompatibleScreenManifests
+> Task :app:extractDeepLinksDebug
+> Task :app:processDebugMainManifest
+> Task :app:processDebugManifest
+> Task :app:processDebugManifestForPackage
+> Task :app:processDebugResources
+> Task :app:preDebugUnitTestBuild UP-TO-DATE
+> Task :app:javaPreCompileDebugUnitTest
+> Task :app:compileDebugKotlin
+> Task :app:compileDebugJavaWithJavac
+> Task :app:bundleDebugClassesToCompileJar
+> Task :app:processDebugJavaRes
+
+> Task :app:compileDebugUnitTestKotlin
+w: file:///tmp/tmp.HYNOW8cQYO/tv-app/app/src/test/java/com/afc/companion/ApiLoopBoundTest.kt:38:37 The corresponding parameter in the supertype 'Continuation' is named 'result'. This may cause problems when calling this function with named arguments.
+w: file:///tmp/tmp.HYNOW8cQYO/tv-app/app/src/test/java/com/afc/companion/TypedOperationsTest.kt:34:94 Unnecessary non-null assertion (!!) on a non-null receiver of type 'LinkState'.
+w: file:///tmp/tmp.HYNOW8cQYO/tv-app/app/src/test/java/com/afc/companion/TypedOperationsTest.kt:51:106 Unnecessary non-null assertion (!!) on a non-null receiver of type 'Profile'.
+w: file:///tmp/tmp.HYNOW8cQYO/tv-app/app/src/test/java/com/afc/companion/TypedOperationsTest.kt:72:54 Unnecessary non-null assertion (!!) on a non-null receiver of type 'AlertsPage'.
+w: file:///tmp/tmp.HYNOW8cQYO/tv-app/app/src/test/java/com/afc/companion/TypedOperationsTest.kt:72:115 Unnecessary non-null assertion (!!) on a non-null receiver of type 'AlertsPage'.
+w: file:///tmp/tmp.HYNOW8cQYO/tv-app/app/src/test/java/com/afc/companion/TypedOperationsTest.kt:73:53 Unnecessary non-null assertion (!!) on a non-null receiver of type 'AlertsPage'.
+w: file:///tmp/tmp.HYNOW8cQYO/tv-app/app/src/test/java/com/afc/companion/TypedOperationsTest.kt:73:101 Unnecessary non-null assertion (!!) on a non-null receiver of type 'AlertsPage'.
+w: file:///tmp/tmp.HYNOW8cQYO/tv-app/app/src/test/java/com/afc/companion/TypedOperationsTest.kt:88:103 Unnecessary non-null assertion (!!) on a non-null receiver of type 'ProviderRoute'.
+w: file:///tmp/tmp.HYNOW8cQYO/tv-app/app/src/test/java/com/afc/companion/TypedOperationsTest.kt:105:86 Unnecessary non-null assertion (!!) on a non-null receiver of type 'ApiError'.
+w: file:///tmp/tmp.HYNOW8cQYO/tv-app/app/src/test/java/com/afc/companion/TypedOperationsTest.kt:110:89 Cast is redundant.
+
+> Task :app:compileDebugUnitTestJavaWithJavac NO-SOURCE
+> Task :app:processDebugUnitTestJavaRes
+> Task :app:compileDebugUnitTestSources
+
+> Task :app:pitestDebug
+7:58:27 PM PIT >> INFO : Verbose logging is disabled. If you encounter a problem, please enable it before reporting an issue.
+7:58:28 PM PIT >> INFO : Created 67 mutation test units in pre scan
+7:58:28 PM PIT >> INFO : Sending 156 test classes to minion
+7:58:28 PM PIT >> INFO : Sent tests to minion
+7:58:31 PM PIT >> INFO : Calculated coverage in 3 seconds.
+7:58:31 PM PIT >> INFO : Created 59 mutation test units
+7:58:40 PM PIT >> WARNING : Minion exited abnormally due to TIMED_OUT
+7:58:55 PM PIT >> WARNING : Minion exited abnormally due to TIMED_OUT
+7:59:04 PM PIT >> INFO : Completed in 36 seconds
+================================================================================
+- Mutators
+================================================================================
+> org.pitest.mutationtest.engine.gregor.mutators.returns.PrimitiveReturnsMutator
+>> Generated 7 Killed 4 (57%)
+> KILLED 4 SURVIVED 1 TIMED_OUT 0 NON_VIABLE 0
+> MEMORY_ERROR 0 NOT_STARTED 0 STARTED 0 RUN_ERROR 0
+> NO_COVERAGE 2
+--------------------------------------------------------------------------------
+> org.pitest.mutationtest.engine.gregor.mutators.ConditionalsBoundaryMutator
+>> Generated 16 Killed 8 (50%)
+> KILLED 7 SURVIVED 8 TIMED_OUT 1 NON_VIABLE 0
+> MEMORY_ERROR 0 NOT_STARTED 0 STARTED 0 RUN_ERROR 0
+> NO_COVERAGE 0
+--------------------------------------------------------------------------------
+> org.pitest.mutationtest.engine.gregor.mutators.IncrementsMutator
+>> Generated 1 Killed 1 (100%)
+> KILLED 1 SURVIVED 0 TIMED_OUT 0 NON_VIABLE 0
+> MEMORY_ERROR 0 NOT_STARTED 0 STARTED 0 RUN_ERROR 0
+> NO_COVERAGE 0
+--------------------------------------------------------------------------------
+> org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator
+>> Generated 341 Killed 7 (2%)
+> KILLED 7 SURVIVED 32 TIMED_OUT 0 NON_VIABLE 0
+> MEMORY_ERROR 0 NOT_STARTED 0 STARTED 0 RUN_ERROR 0
+> NO_COVERAGE 302
+--------------------------------------------------------------------------------
+> org.pitest.mutationtest.engine.gregor.mutators.returns.BooleanTrueReturnValsMutator
+>> Generated 1 Killed 1 (100%)
+> KILLED 1 SURVIVED 0 TIMED_OUT 0 NON_VIABLE 0
+> MEMORY_ERROR 0 NOT_STARTED 0 STARTED 0 RUN_ERROR 0
+> NO_COVERAGE 0
+--------------------------------------------------------------------------------
+> org.pitest.mutationtest.engine.gregor.mutators.returns.NullReturnValsMutator
+>> Generated 73 Killed 51 (70%)
+> KILLED 51 SURVIVED 6 TIMED_OUT 0 NON_VIABLE 0
+> MEMORY_ERROR 0 NOT_STARTED 0 STARTED 0 RUN_ERROR 0
+> NO_COVERAGE 16
+--------------------------------------------------------------------------------
+> org.pitest.mutationtest.engine.gregor.mutators.MathMutator
+>> Generated 172 Killed 1 (1%)
+> KILLED 1 SURVIVED 1 TIMED_OUT 0 NON_VIABLE 0
+> MEMORY_ERROR 0 NOT_STARTED 0 STARTED 0 RUN_ERROR 0
+> NO_COVERAGE 170
+--------------------------------------------------------------------------------
+> org.pitest.mutationtest.engine.gregor.mutators.returns.EmptyObjectReturnValsMutator
+>> Generated 43 Killed 29 (67%)
+> KILLED 29 SURVIVED 3 TIMED_OUT 0 NON_VIABLE 0
+> MEMORY_ERROR 0 NOT_STARTED 0 STARTED 0 RUN_ERROR 0
+> NO_COVERAGE 11
+--------------------------------------------------------------------------------
+> org.pitest.mutationtest.engine.gregor.mutators.returns.BooleanFalseReturnValsMutator
+>> Generated 1 Killed 1 (100%)
+> KILLED 1 SURVIVED 0 TIMED_OUT 0 NON_VIABLE 0
+> MEMORY_ERROR 0 NOT_STARTED 0 STARTED 0 RUN_ERROR 0
+> NO_COVERAGE 0
+--------------------------------------------------------------------------------
+> org.pitest.mutationtest.engine.gregor.mutators.NegateConditionalsMutator
+>> Generated 298 Killed 173 (58%)
+> KILLED 172 SURVIVED 4 TIMED_OUT 1 NON_VIABLE 0
+> MEMORY_ERROR 0 NOT_STARTED 0 STARTED 0 RUN_ERROR 0
+> NO_COVERAGE 121
+--------------------------------------------------------------------------------
+================================================================================
+- Timings
+================================================================================
+> pre-scan for mutations : < 1 second
+> scan classpath : < 1 second
+> coverage and dependency analysis : 2 seconds
+> build mutation tests : < 1 second
+> run mutation analysis : 33 seconds
+--------------------------------------------------------------------------------
+> Total  : 36 seconds
+--------------------------------------------------------------------------------
+================================================================================
+- Statistics
+================================================================================
+>> Line Coverage (for mutated classes only): 291/738 (39%)
+>> 156 tests examined
+>> Generated 953 mutations Killed 276 (29%)
+>> Mutations with no coverage 622. Test strength 83%
+>> Ran 1139 tests (1.2 tests per mutation)
+Enhanced functionality available at https://www.arcmutate.com/
+
+Build messages:-
+* Project uses kotlin, but the Arcmutate kotlin plugin is not present. (https://docs.arcmutate.com/docs/kotlin.html)
+
+[Incubating] Problems report is available at: file:///tmp/tmp.HYNOW8cQYO/tv-app/build/reports/problems/problems-report.html
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/9.7.0/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 1m
+25 actionable tasks: 25 executed
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.7.0/userguide/configuration_cache_enabling.html

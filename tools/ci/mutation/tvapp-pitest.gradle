@@ -1,0 +1,9 @@
+// Keep TIMED_OUT unresolved: allow more time instead of counting timeouts as kills.
+gradle.projectsEvaluated {
+    rootProject.subprojects { project ->
+        def pitest = project.extensions.findByName('pitest')
+        if (pitest != null) {
+            pitest.timeoutFactor.set(new BigDecimal('10'))
+        }
+    }
+}

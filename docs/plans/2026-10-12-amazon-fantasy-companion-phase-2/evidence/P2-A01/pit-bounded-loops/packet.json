@@ -1,0 +1,87 @@
+{
+  "key": "tvapp_mutation_bounded_loops",
+  "state": "author_complete",
+  "role": "Bug-triager Implementer",
+  "profile": "bug-triager",
+  "route": "Codex CLI / GPT-6.1 Sol / high",
+  "baseline": "c46cbf483a0ffb73c17db04f40f1e5d007e8289f",
+  "branch": "afc/p2-a01",
+  "generation": 2,
+  "authority": "Current owner packet widens test write set; no frozen tests, tools edits, push, PR or branch changes. No product changes needed.",
+  "identity_validation": "Owner packet binds current checkout/branch/HEAD. Parent historical A01 leases are released; no new lifecycle lease/control state invented.",
+  "next_action": "Return committed author candidate and receipt to parent for configured independent review/assurance. No push or PR by this worker.",
+  "scope": [
+    "new tv-app/app/src/test/java/com/afc/companion/net/ApiClientLoopMutationTest.kt",
+    "P2/evidence/P2-A01/pit-bounded-loops/",
+    "tv-app/app/src/main/java/com/afc/companion/net/ApiClient.kt: default IO dispatcher injection and internal visibility for existing readBounded helper only"
+  ],
+  "verification_method": "test",
+  "named_behaviors": [
+    "three retries maximum with 1/2/4 second backoff",
+    "suspended backoff completes before retry",
+    "bounded response reader stops at 64 KiB plus one detection byte"
+  ],
+  "real_dependency": "Existing LocalApi JDK HTTP server on OS-assigned port; 503 and oversized body are exercised in frozen ApiPolicyTest and FixtureCalibrationTest, bound to backend/src/api/openapi.yaml. No fake HTTP replies or fabricated engine.",
+  "origin": "Host tests recorded delays but did not assert attempt limits while executing; synchronous backoff tests missed the coroutine suspension branch; bounded reader tests used streams that accept repeated zero-byte reads.",
+  "escape": "No bounded test asserted these progress rules; native PIT first exposed the four timeout outcomes.",
+  "prevention": "Assertions fail at extra attempts and zero-length reads; handshake exercises actual coroutine suspension. Native PIT remains fail-closed for timeouts; no scoring or policy changes.",
+  "review": {
+    "coverage_assist": {
+      "enabled": true,
+      "required": true,
+      "backend": "OpenCodeReview delegation",
+      "availability": "ocr executable installed",
+      "status": "not_run: independent parent reviewer responsibility; no author substitution"
+    }
+  },
+  "deterministic_verification": {
+    "reverify": {
+      "enabled": true,
+      "backend": "installed reverify auto, pure-python parser",
+      "availability": "executable available; JVM class parsing unsupported by this result",
+      "exit": 0,
+      "status": "GAP",
+      "error": "JVM cafebabe class was classified as Mach-O; parse_error: Mach-O needs lief: pip install lief",
+      "evidence": "reverify-class.json",
+      "interpretation": "Not passing binary assurance; native parser result is not applicable JVM behavior proof. No substitution with ordinary host test reruns."
+    }
+  },
+  "resource_group": "none shared; connection fixtures use in-memory byte streams",
+  "expected_test_time": "under 1 second per suite after JVM startup; no sleep/backoff wall time",
+  "corrections": [
+    {
+      "attempt": 1,
+      "native_verdict": "GAP UNRESOLVED: 3 mutants",
+      "killed": "ApiClient request line 44 increment mutant",
+      "evidence": "native-attempt1/mutations.xml.gz",
+      "hypothesis": "PIT test prioritization can execute an older unbounded case first; use lower-cost bounded probes with HTTP inputs already exercised by the first focused run.",
+      "change": "Replace network-backed probes with minimal HttpURLConnection fixtures; use real coroutine suspension and attempt caps. No runtime code or tool changes."
+    },
+    {
+      "attempt": 2,
+      "native_verdict": "GAP UNRESOLVED: 3 mutants",
+      "killed": "Original line 43 coroutine suspension check now killed; original line 42 and 122 remain; newly reached request line 35 null-return mutation timed out.",
+      "evidence": "native-attempt2/mutations.xml.gz",
+      "change": "Default-preserving ioDispatcher constructor seam enables an inline continuation driver; reject request completion before resuming its backoff. No timers, worker threads or channel handshake races."
+    },
+    {
+      "attempt": 3,
+      "native_verdict": "GAP UNRESOLVED: 1 mutant",
+      "killed": "All three original retry/backoff mutants plus the newly covered null-return mutation are now KILLED by the inline continuation test.",
+      "evidence": "native-attempt3/mutations.xml.gz",
+      "change": "Make existing readBounded helper internal (implementation unchanged); byte-cap test invokes it directly to avoid coroutine startup and ensure it precedes unbounded HTTP cases."
+    }
+  ],
+  "real_dependency_proof": "focused.txt: 3/3 real LocalApi probes passed before fixture introduction, exercising 503 {} and a 65537-byte x body. Frozen FixtureCalibrationTest also proves real HTTP status/body behavior. The second version reuses these observed inputs.",
+  "hygiene_correction": "Full gate attempt2 exit 1 solely because a rewritten Gradle evidence log had trailing whitespace; normalize evidence before final gate. Product and backend checks passed.",
+  "priority_binding": {
+    "native_attempt4": "GAP UNRESOLVED: 2 mutants; original retry condition regressed from KILLED to TIMED_OUT with unchanged assertion behavior.",
+    "contract": "Pinned PIT 1.19.5 TestToClassMapper strips suffix Test; DefaultTestPrioritiser gives an exact tested-class match 1000 ms weighting. Inner Kotlin classes require exact binary names.",
+    "evidence": "pit-priority-contract.txt",
+    "change": "Mechanical package/class binding of the same two bounded test bodies to ApiClient$request$2Test and ApiClient$CompanionTest; bodies byte-for-byte unchanged. No tools/scoring changes.",
+    "unchanged_test_body_sha256": {
+      "transientRetriesStopAtTheAttemptCapAfterSuspendedBackoffs": "94ec76535ef8fe6fc66c19c83d2e9f2f3d256cedf5e6f33e916317a094da36c3",
+      "oversizedResponseStopsReadingAtTheByteCap": "b3cc5644cf0928c3e688bad6655d90198573fc257ce25b9d11cca0455247c5d1"
+    }
+  }
+}

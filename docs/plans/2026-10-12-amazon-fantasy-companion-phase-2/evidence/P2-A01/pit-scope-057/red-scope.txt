@@ -1,0 +1,68 @@
+F.FFF                                                                    [100%]
+=================================== FAILURES ===================================
+___ TvappMutationAdapter.test_device_file_is_listed_and_excluded_from_score ____
+
+self = <test_mutation_tvapp_adapter.TvappMutationAdapter testMethod=test_device_file_is_listed_and_excluded_from_score>
+
+    def test_device_file_is_listed_and_excluded_from_score(self):
+        self.candidate({SRC: CONTROL, DEVICE: CONTROL})
+        xml = pit([(4, 'KILLED')]).replace('</mutations>',
+            pit([(4, 'SURVIVED')]).split('<mutations partial="false">')[1])
+        # The second mutation belongs to the explicitly excluded Android component.
+        before, _, second = xml.partition('</mutation>')
+        xml = before + '</mutation>' + second.replace('Shell', 'MainActivity')
+        rc, out = self.run_adapter(xml)
+>       self.assertEqual(rc, 0, out)
+E       AssertionError: 1 != 0 : FAIL mutation score 50.00% (threshold 70%)
+
+tools/ci/tests/mutation/test_mutation_tvapp_adapter.py:136: AssertionError
+----------------------------- Captured stdout call -----------------------------
+tvapp mutation adapter exit=1: ['FAIL mutation score 50.00% (threshold 70%)']
+____________ TvappMutationAdapter.test_stub_with_mutants_is_scored _____________
+
+self = <test_mutation_tvapp_adapter.TvappMutationAdapter testMethod=test_stub_with_mutants_is_scored>
+
+    def test_stub_with_mutants_is_scored(self):
+        self.candidate({SRC: '// AFC-STUB: test implementation\n' + CONTROL})
+        rc, out = self.run_adapter(pit([(5, 'SURVIVED')]))
+        self.assertEqual(rc, 1, out)
+>       self.assertEqual(self.result()['excluded'], [])
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'excluded'
+
+tools/ci/tests/mutation/test_mutation_tvapp_adapter.py:154: KeyError
+----------------------------- Captured stdout call -----------------------------
+tvapp mutation adapter exit=1: ['FAIL mutation score 0.00% (threshold 70%)']
+_______ TvappMutationAdapter.test_unclassified_changed_file_is_scope_gap _______
+
+self = <test_mutation_tvapp_adapter.TvappMutationAdapter testMethod=test_unclassified_changed_file_is_scope_gap>
+
+    def test_unclassified_changed_file_is_scope_gap(self):
+        unknown = SRC.replace('Shell.kt', 'NewLogic.kt')
+        self.candidate({unknown: CONTROL})
+        rc, out = self.run_adapter(pit([(4, 'KILLED')]).replace('Shell', 'NewLogic'))
+>       self.assertEqual(rc, 3, out)
+E       AssertionError: 0 != 3 : PASS mutation score 100.00% (threshold 70%)
+
+tools/ci/tests/mutation/test_mutation_tvapp_adapter.py:161: AssertionError
+----------------------------- Captured stdout call -----------------------------
+tvapp mutation adapter exit=0: ['PASS mutation score 100.00% (threshold 70%)']
+______ TvappMutationAdapter.test_zero_mutant_stub_is_listed_and_excluded _______
+
+self = <test_mutation_tvapp_adapter.TvappMutationAdapter testMethod=test_zero_mutant_stub_is_listed_and_excluded>
+
+    def test_zero_mutant_stub_is_listed_and_excluded(self):
+        self.candidate({SRC: CONTROL, STUB: (REPO / STUB).read_text()})
+        rc, out = self.run_adapter(pit([(4, 'KILLED')]))
+>       self.assertEqual(rc, 0, out)
+E       AssertionError: 3 != 0 : GAP REPORT_INCOMPLETE: no mutants for changed files: tv-app/app/src/main/java/com/afc/companion/detect/AppDetector.kt
+
+tools/ci/tests/mutation/test_mutation_tvapp_adapter.py:145: AssertionError
+----------------------------- Captured stdout call -----------------------------
+tvapp mutation adapter exit=3: ['GAP REPORT_INCOMPLETE: no mutants for changed files: tv-app/app/src/main/java/com/afc/companion/detect/AppDetector.kt']
+=========================== short test summary info ============================
+FAILED tools/ci/tests/mutation/test_mutation_tvapp_adapter.py::TvappMutationAdapter::test_device_file_is_listed_and_excluded_from_score
+FAILED tools/ci/tests/mutation/test_mutation_tvapp_adapter.py::TvappMutationAdapter::test_stub_with_mutants_is_scored
+FAILED tools/ci/tests/mutation/test_mutation_tvapp_adapter.py::TvappMutationAdapter::test_unclassified_changed_file_is_scope_gap
+FAILED tools/ci/tests/mutation/test_mutation_tvapp_adapter.py::TvappMutationAdapter::test_zero_mutant_stub_is_listed_and_excluded
+4 failed, 1 passed, 13 deselected in 1.41s

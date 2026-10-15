@@ -1,0 +1,295 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.7.0/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preDebugBuild UP-TO-DATE
+> Task :app:generateDebugBuildConfig UP-TO-DATE
+> Task :app:generateDebugResources UP-TO-DATE
+> Task :app:packageDebugResources UP-TO-DATE
+> Task :app:processDebugNavigationResources UP-TO-DATE
+> Task :app:parseDebugLocalResources UP-TO-DATE
+> Task :app:generateDebugRFile UP-TO-DATE
+> Task :app:compileDebugKotlin UP-TO-DATE
+> Task :app:javaPreCompileDebug UP-TO-DATE
+> Task :app:compileDebugJavaWithJavac UP-TO-DATE
+> Task :app:checkDebugAarMetadata UP-TO-DATE
+> Task :app:mapDebugSourceSetPaths UP-TO-DATE
+> Task :app:compileDebugNavigationResources UP-TO-DATE
+> Task :app:mergeDebugResources UP-TO-DATE
+> Task :app:createDebugCompatibleScreenManifests UP-TO-DATE
+> Task :app:extractDeepLinksDebug UP-TO-DATE
+> Task :app:processDebugMainManifest UP-TO-DATE
+> Task :app:processDebugManifest UP-TO-DATE
+> Task :app:processDebugManifestForPackage UP-TO-DATE
+> Task :app:processDebugResources UP-TO-DATE
+> Task :app:bundleDebugClassesToRuntimeJar UP-TO-DATE
+> Task :app:bundleDebugClassesToCompileJar UP-TO-DATE
+> Task :app:preDebugUnitTestBuild UP-TO-DATE
+> Task :app:javaPreCompileDebugUnitTest UP-TO-DATE
+> Task :app:processDebugJavaRes UP-TO-DATE
+
+> Task :app:compileDebugUnitTestKotlin
+w: file://$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-a02t/tv-app/app/src/test/java/com/afc/companion/TypedOperationsTest.kt:34:94 Unnecessary non-null assertion (!!) on a non-null receiver of type 'LinkState'.
+w: file://$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-a02t/tv-app/app/src/test/java/com/afc/companion/TypedOperationsTest.kt:51:106 Unnecessary non-null assertion (!!) on a non-null receiver of type 'Profile'.
+w: file://$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-a02t/tv-app/app/src/test/java/com/afc/companion/TypedOperationsTest.kt:72:54 Unnecessary non-null assertion (!!) on a non-null receiver of type 'AlertsPage'.
+w: file://$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-a02t/tv-app/app/src/test/java/com/afc/companion/TypedOperationsTest.kt:72:115 Unnecessary non-null assertion (!!) on a non-null receiver of type 'AlertsPage'.
+w: file://$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-a02t/tv-app/app/src/test/java/com/afc/companion/TypedOperationsTest.kt:73:53 Unnecessary non-null assertion (!!) on a non-null receiver of type 'AlertsPage'.
+w: file://$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-a02t/tv-app/app/src/test/java/com/afc/companion/TypedOperationsTest.kt:73:101 Unnecessary non-null assertion (!!) on a non-null receiver of type 'AlertsPage'.
+w: file://$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-a02t/tv-app/app/src/test/java/com/afc/companion/TypedOperationsTest.kt:88:103 Unnecessary non-null assertion (!!) on a non-null receiver of type 'ProviderRoute'.
+w: file://$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-a02t/tv-app/app/src/test/java/com/afc/companion/TypedOperationsTest.kt:105:86 Unnecessary non-null assertion (!!) on a non-null receiver of type 'ApiError'.
+w: file://$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-a02t/tv-app/app/src/test/java/com/afc/companion/TypedOperationsTest.kt:110:89 Cast is redundant.
+
+> Task :app:compileDebugUnitTestJavaWithJavac NO-SOURCE
+> Task :app:processDebugUnitTestJavaRes
+
+> Task :app:testDebugUnitTest
+
+AppDetectorTest > malformedCandidatesAreSkipped FAILED
+    java.lang.AssertionError: expected:<[com.example.provider.a]> but was:<[]>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at org.junit.Assert.assertEquals(Assert.java:146)
+        at com.afc.companion.detect.AppDetectorTest.malformedCandidatesAreSkipped(AppDetectorTest.kt:37)
+
+AppDetectorTest > optedOutSendsNoReport PASSED
+
+AppDetectorTest > optedOutPerformsNoReads PASSED
+
+AppDetectorTest > reportIsBoundedByTheContractCap FAILED
+    java.lang.AssertionError: expected:<500> but was:<0>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at org.junit.Assert.assertEquals(Assert.java:146)
+        at com.afc.companion.detect.AppDetectorTest.reportIsBoundedByTheContractCap(AppDetectorTest.kt:44)
+
+AppDetectorTest > reportsEachInstalledCandidateAndNoAbsentOne FAILED
+    java.lang.AssertionError: each supported installed app reported expected:<[com.example.provider.a, com.example.provider.c]> but was:<[]>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at com.afc.companion.detect.AppDetectorTest.reportsEachInstalledCandidateAndNoAbsentOne(AppDetectorTest.kt:23)
+
+AppDetectorTest > detectorReportPostsInstalledApps FAILED
+    java.lang.AssertionError: Missing behavior: detector report sent
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at org.junit.Assert.assertNotNull(Assert.java:713)
+        at com.afc.companion.detect.AppDetectorTest$detectorReportPostsInstalledApps$1.invokeSuspend(AppDetectorTest.kt:50)
+        at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+        at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+        at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+        at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+        at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+        at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+        at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+        at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source)
+        at com.afc.companion.detect.AppDetectorTest.detectorReportPostsInstalledApps(AppDetectorTest.kt:47)
+
+ProfileCodecTest > wrongTypedControlIsRejected PASSED
+
+ProfileCodecTest > emptySettingsDecodeToDocumentedDefaults FAILED
+    java.lang.AssertionError: Missing behavior: empty persisted settings decode to defaults
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at org.junit.Assert.assertNotNull(Assert.java:713)
+        at com.afc.companion.profile.ProfileCodecTest.emptySettingsDecodeToDocumentedDefaults(ProfileCodecTest.kt:20)
+
+ProfileCodecTest > eachExcitementLevelRoundTrips FAILED
+    java.lang.AssertionError: expected:<Off> but was:<null>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at org.junit.Assert.assertEquals(Assert.java:146)
+        at com.afc.companion.profile.ProfileCodecTest.eachExcitementLevelRoundTrips(ProfileCodecTest.kt:38)
+
+ProfileCodecTest > eachScoringPresetRoundTripsWithFrozenWire FAILED
+    org.junit.ComparisonFailure: expected:<[p]pr> but was:<[halfP]pr>
+        at app//org.junit.Assert.assertEquals(Assert.java:117)
+        at app//org.junit.Assert.assertEquals(Assert.java:146)
+        at app//com.afc.companion.profile.ProfileCodecTest.eachScoringPresetRoundTripsWithFrozenWire(ProfileCodecTest.kt:45)
+
+ProfileCodecTest > eachPresentationRoundTrips FAILED
+    java.lang.AssertionError: expected:<HeadsUp> but was:<null>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at org.junit.Assert.assertEquals(Assert.java:146)
+        at com.afc.companion.profile.ProfileCodecTest.eachPresentationRoundTrips(ProfileCodecTest.kt:51)
+
+ProfileCodecTest > outOfRangeValuesCannotBeEncoded FAILED
+    java.lang.AssertionError: alert_min_gap above 600 s: expected java.lang.IllegalArgumentException to be thrown, but nothing was thrown
+        at org.junit.Assert.assertThrows(Assert.java:1028)
+        at com.afc.companion.profile.ProfileCodecTest.outOfRangeValuesCannotBeEncoded(ProfileCodecTest.kt:103)
+
+ProfileCodecTest > eachControlWritesOnlyItsOwnSettingsField FAILED
+    java.lang.AssertionError: changing fantasySelections rewrites only fantasySelections expected:<[fantasySelections]> but was:<[]>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at com.afc.companion.profile.ProfileCodecTest.eachControlWritesOnlyItsOwnSettingsField(ProfileCodecTest.kt:79)
+
+ProfileCodecTest > overridesAndLocalMarketRoundTrip FAILED
+    java.lang.AssertionError: expected:<{com.example.provider.a=false, com.example.provider.c=true}> but was:<null>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at org.junit.Assert.assertEquals(Assert.java:146)
+        at com.afc.companion.profile.ProfileCodecTest.overridesAndLocalMarketRoundTrip(ProfileCodecTest.kt:86)
+
+ProfileCodecTest > everyControlRoundTrips FAILED
+    java.lang.AssertionError: Missing behavior: encoded settings decode
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at org.junit.Assert.assertNotNull(Assert.java:713)
+        at com.afc.companion.profile.ProfileCodecTest.everyControlRoundTrips(ProfileCodecTest.kt:32)
+
+ProfileControlsTest > customerOverrideWinsOverDetection FAILED
+    java.lang.AssertionError: expected:<[com.example.provider.b, com.example.provider.c]> but was:<[]>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at org.junit.Assert.assertEquals(Assert.java:146)
+        at com.afc.companion.profile.ProfileControlsTest.customerOverrideWinsOverDetection(ProfileControlsTest.kt:42)
+
+ProfileControlsTest > unsupportedDetectionHidesItsControlWithStatedLimit FAILED
+    java.lang.AssertionError: stated limit for hidden detection
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at com.afc.companion.profile.ProfileControlsTest.unsupportedDetectionHidesItsControlWithStatedLimit(ProfileControlsTest.kt:20)
+
+ProfileControlsTest > unverifiedVoiceRouteHidesVoiceWithStatedLimit FAILED
+    java.lang.AssertionError: stated limit for hidden voice
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at com.afc.companion.profile.ProfileControlsTest.unverifiedVoiceRouteHidesVoiceWithStatedLimit(ProfileControlsTest.kt:27)
+
+ProfileControlsTest > voiceGateNeedsBothEnablementAndVerifiedRoute FAILED
+    java.lang.AssertionError: enabled over a verified route speaks
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at com.afc.companion.profile.ProfileControlsTest.voiceGateNeedsBothEnablementAndVerifiedRoute(ProfileControlsTest.kt:33)
+
+ProfileControlsTest > everyControlIsOfferedWhenRoutesAreSupported FAILED
+    java.lang.AssertionError: expected:<[Selections, TeamLeague, AlertTypes, Frequency, QuietHours, GameDay, SpoilerDelay, Presentation, Voice, Excitement, ProviderPreference, SwitchingConfirmation, DetectionOptIn, PanelVisibility, ScoringPreset]> but was:<[]>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at org.junit.Assert.assertEquals(Assert.java:146)
+        at com.afc.companion.profile.ProfileControlsTest.everyControlIsOfferedWhenRoutesAreSupported(ProfileControlsTest.kt:12)
+
+ProfilePersistenceTest > pprSelectionPersistsAndHalfPprReturnsAfterSwitchBack FAILED
+    java.lang.AssertionError
+        at org.junit.Assert.fail(Assert.java:87)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at org.junit.Assert.assertNotNull(Assert.java:713)
+        at org.junit.Assert.assertNotNull(Assert.java:723)
+        at com.afc.companion.profile.ProfilePersistenceTest$pprSelectionPersistsAndHalfPprReturnsAfterSwitchBack$1.invokeSuspend(ProfilePersistenceTest.kt:59)
+        at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+        at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+        at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+        at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+        at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+        at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+        at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+        at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source)
+        at com.afc.companion.profile.ProfilePersistenceTest.pprSelectionPersistsAndHalfPprReturnsAfterSwitchBack(ProfilePersistenceTest.kt:56)
+
+ProfilePersistenceTest > staleSaveDoesNotOverwriteNewerProfile FAILED
+    java.lang.AssertionError
+        at org.junit.Assert.fail(Assert.java:87)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at org.junit.Assert.assertNotNull(Assert.java:713)
+        at org.junit.Assert.assertNotNull(Assert.java:723)
+        at com.afc.companion.profile.ProfilePersistenceTest$staleSaveDoesNotOverwriteNewerProfile$1.invokeSuspend(ProfilePersistenceTest.kt:90)
+        at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+        at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+        at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+        at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+        at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+        at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+        at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+        at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source)
+        at com.afc.companion.profile.ProfilePersistenceTest.staleSaveDoesNotOverwriteNewerProfile(ProfilePersistenceTest.kt:86)
+
+ProfilePersistenceTest > everySelectionAndControlPersistsAcrossRestart FAILED
+    java.lang.AssertionError
+        at org.junit.Assert.fail(Assert.java:87)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at org.junit.Assert.assertNotNull(Assert.java:713)
+        at org.junit.Assert.assertNotNull(Assert.java:723)
+        at com.afc.companion.profile.ProfilePersistenceTest$everySelectionAndControlPersistsAcrossRestart$1.invokeSuspend(ProfilePersistenceTest.kt:30)
+        at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+        at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+        at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+        at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+        at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+        at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+        at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+        at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source)
+        at com.afc.companion.profile.ProfilePersistenceTest.everySelectionAndControlPersistsAcrossRestart(ProfilePersistenceTest.kt:27)
+
+ProfilePersistenceTest > firstLoadOfEmptyProfileIsHalfPpr FAILED
+    java.lang.AssertionError: Missing behavior: load decodes GET /v1/profile
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at org.junit.Assert.assertNotNull(Assert.java:713)
+        at com.afc.companion.profile.ProfilePersistenceTest$firstLoadOfEmptyProfileIsHalfPpr$1.invokeSuspend(ProfilePersistenceTest.kt:22)
+        at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+        at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+        at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+        at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+        at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+        at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+        at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+        at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source)
+        at com.afc.companion.profile.ProfilePersistenceTest.firstLoadOfEmptyProfileIsHalfPpr(ProfilePersistenceTest.kt:19)
+
+ProfilePersistenceTest > invalidStoredProfileIsNotApplied PASSED
+
+ProfilePersistenceTest > overrideSurvivesRestartAndDetectionRefresh FAILED
+    java.lang.AssertionError
+        at org.junit.Assert.fail(Assert.java:87)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at org.junit.Assert.assertNotNull(Assert.java:713)
+        at org.junit.Assert.assertNotNull(Assert.java:723)
+        at com.afc.companion.profile.ProfilePersistenceTest$overrideSurvivesRestartAndDetectionRefresh$1.invokeSuspend(ProfilePersistenceTest.kt:74)
+        at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+        at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+        at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+        at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+        at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+        at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+        at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+        at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source)
+        at com.afc.companion.profile.ProfilePersistenceTest.overrideSurvivesRestartAndDetectionRefresh(ProfilePersistenceTest.kt:71)
+
+26 tests completed, 22 failed
+
+> Task :app:testDebugUnitTest FAILED
+
+[Incubating] Problems report is available at: file://$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-a02t/tv-app/build/reports/problems/problems-report.html
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:testDebugUnitTest'.
+> There were failing tests. See the report at: file://$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-a02t/tv-app/app/build/reports/tests/testDebugUnitTest/index.html
+
+* Try:
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+
+BUILD FAILED in 14s
+26 actionable tasks: 3 executed, 23 up-to-date

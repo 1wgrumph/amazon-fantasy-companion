@@ -47,7 +47,39 @@ run_area() {
     case "$1" in
         hygiene)
             python3 -c 'import yaml' || return 3
-            ws_out=$(git diff --check HEAD -- 2>&1)
+            local ws_base=$base
+            if [[ -z "$ws_base" && "${GITHUB_ACTIONS:-false}" == true ]]; then
+                # Checkout is clean in CI: check the event's whole change.
+                ws_base=$(python3 - <<'PYBASE'
+import json
+import os
+import re
+import sys
+try:
+    with open(os.environ['GITHUB_EVENT_PATH'], encoding='utf-8') as source:
+        event = json.load(source)
+    base = event.get('pull_request', {}).get('base', {}).get('sha') or event.get('before')
+    if not isinstance(base, str) or not re.fullmatch(r'[0-9a-f]{40}', base):
+        raise ValueError
+    print(base)
+except (KeyError, OSError, ValueError, TypeError, AttributeError):
+    sys.exit('WS-CHECK: missing or invalid CI base')
+PYBASE
+                ) || return 1
+                if [[ "$ws_base" == 0000000000000000000000000000000000000000 ]]; then
+                    ws_base=$(git hash-object -t tree --stdin < /dev/null) || return 1
+                elif ! git cat-file -e "$ws_base^{commit}" 2>/dev/null; then
+                    git fetch --no-tags --depth=1 origin "$ws_base" >/dev/null 2>&1 \
+                        || { printf 'WS-CHECK: CI base unavailable\n'; return 1; }
+                fi
+            fi
+            if [[ -z "$ws_base" ]]; then
+                ws_base=$(git merge-base HEAD origin/main 2>/dev/null) || {
+                    printf 'WS-CHECK: no origin/main; checking uncommitted changes only\n'
+                    ws_base=HEAD
+                }
+            fi
+            ws_out=$(git diff --check "$ws_base" -- 2>&1)
             ws_rc=$?
             if (( ws_rc != 0 )); then
                 # Report file:line:rule-id only; never echo matched line text.

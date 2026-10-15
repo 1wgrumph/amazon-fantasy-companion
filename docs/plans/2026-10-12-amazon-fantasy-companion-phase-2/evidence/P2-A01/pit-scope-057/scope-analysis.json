@@ -1,0 +1,83 @@
+{
+  "official_verdict": "GAP",
+  "official_detail": "UNRESOLVED: 4 mutants",
+  "report_partial_attribute": "true",
+  "report_mutants": 953,
+  "scored_changed_line_statuses": {
+    "KILLED": 227,
+    "SURVIVED": 39,
+    "TIMED_OUT": 4,
+    "NO_COVERAGE": 10
+  },
+  "per_file": {
+    "tv-app/app/src/main/java/com/afc/companion/Shell.kt": {
+      "KILLED": 7
+    },
+    "tv-app/app/src/main/java/com/afc/companion/net/ApiClient.kt": {
+      "KILLED": 92,
+      "SURVIVED": 22,
+      "TIMED_OUT": 4
+    },
+    "tv-app/app/src/main/java/com/afc/companion/net/Dto.kt": {
+      "KILLED": 128,
+      "SURVIVED": 17,
+      "NO_COVERAGE": 10
+    }
+  },
+  "resolved_only_ratio": 0.822463768115942,
+  "resolved_only_ratio_is_gate_score": false,
+  "explanation": "Four unresolved mutants prevent an official score under the preserved evaluator rule. Increasing timeoutFactor to 10 reproduced the same four ApiClient timeouts as the baseline. No timeout was counted as killed.",
+  "unresolved": [
+    "com.afc.companion.net.ApiClient$Companion:122:org.pitest.mutationtest.engine.gregor.mutators.ConditionalsBoundaryMutator",
+    "com.afc.companion.net.ApiClient$request$2:42:org.pitest.mutationtest.engine.gregor.mutators.NegateConditionalsMutator",
+    "com.afc.companion.net.ApiClient$request$2:43:org.pitest.mutationtest.engine.gregor.mutators.NegateConditionalsMutator",
+    "com.afc.companion.net.ApiClient$request$2:44:org.pitest.mutationtest.engine.gregor.mutators.IncrementsMutator"
+  ],
+  "excluded": [
+    {
+      "path": "tv-app/app/src/main/java/com/afc/companion/MainActivity.kt",
+      "reason": "device-only (DEC-AFC-SD-057)"
+    },
+    {
+      "path": "tv-app/app/src/main/java/com/afc/companion/alerts/AlertNotifier.kt",
+      "reason": "stub (AFC-STUB; zero mutants)"
+    },
+    {
+      "path": "tv-app/app/src/main/java/com/afc/companion/alerts/AlertService.kt",
+      "reason": "device-only (DEC-AFC-SD-057)"
+    },
+    {
+      "path": "tv-app/app/src/main/java/com/afc/companion/detect/AppDetector.kt",
+      "reason": "stub (AFC-STUB; zero mutants)"
+    },
+    {
+      "path": "tv-app/app/src/main/java/com/afc/companion/link/LinkScreen.kt",
+      "reason": "device-only (DEC-AFC-SD-057)"
+    },
+    {
+      "path": "tv-app/app/src/main/java/com/afc/companion/net/SessionStore.kt",
+      "reason": "device-only (DEC-AFC-SD-057)"
+    },
+    {
+      "path": "tv-app/app/src/main/java/com/afc/companion/panel/LineupPanel.kt",
+      "reason": "device-only (DEC-AFC-SD-057)"
+    },
+    {
+      "path": "tv-app/app/src/main/java/com/afc/companion/profile/ProfileSettingsScreen.kt",
+      "reason": "device-only (DEC-AFC-SD-057)"
+    },
+    {
+      "path": "tv-app/app/src/main/java/com/afc/companion/ui/theme/Theme.kt",
+      "reason": "device-only (DEC-AFC-SD-057)"
+    },
+    {
+      "path": "tv-app/app/src/main/java/com/afc/companion/watch/WatchActivity.kt",
+      "reason": "device-only (DEC-AFC-SD-057)"
+    },
+    {
+      "path": "tv-app/app/src/main/java/com/afc/companion/watch/WatchLauncher.kt",
+      "reason": "stub (AFC-STUB; zero mutants)"
+    }
+  ],
+  "required_follow_up": "A bounded test repair in tv-app/app/src/test/ must make the looping mutants terminate with an assertion, or an explicit owner decision must amend timeout semantics. Neither action is authorized by this packet."
+}

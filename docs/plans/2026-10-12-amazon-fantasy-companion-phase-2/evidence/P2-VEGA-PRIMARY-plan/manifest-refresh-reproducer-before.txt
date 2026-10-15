@@ -1,0 +1,39 @@
+{
+  "outcome": "FAIL",
+  "failures": [
+    {
+      "check": "B06 selected write set matches Manifest",
+      "expected": [
+        "backend/src/provider_resolver/",
+        "backend/src/api/openapi.yaml"
+      ],
+      "actual": [
+        "backend/src/provider_resolver/"
+      ]
+    },
+    {
+      "check": "Required Fire OS secondary work is not inactive",
+      "actual": {
+        "P2-A01T": "inactive if Vega selected; preserved reference",
+        "P2-A01": "inactive if Vega selected; preserved reference",
+        "P2-A02T": "inactive if Vega selected; preserved reference",
+        "P2-A02": "inactive if Vega selected; preserved reference",
+        "P2-A03T": "inactive if Vega selected; preserved reference",
+        "P2-A03": "inactive if Vega selected; preserved reference",
+        "P2-A04T": "inactive if Vega selected; preserved reference",
+        "P2-A04": "inactive if Vega selected; preserved reference",
+        "P2-A05T": "inactive if Vega selected; preserved reference",
+        "P2-A05": "inactive if Vega selected; preserved reference"
+      }
+    },
+    {
+      "check": "Manifest describes amended registry",
+      "actual": "Provider registry: `backend/src/provider_resolver/registry.json`, written from the P2-X03 verdict: per provider `id`, `name`, `package`, `launch` (`type`: `intent` | `uri`; `value` template with `{channel}` / `{event}` placeholders only where documented), `doc_source`, `verified_outcome` (one RoutingOutcome value observed on the stick), `channels_carried` (for local broadcast), `verified_at`. `verified_outcome` desc"
+    }
+  ]
+}
+Traceback (most recent call last):
+  File "/tmp/claude-1000/-home-spectre-alphazede-Hackathons-amazon-fantasy-companion/7352b056-1244-48ce-b8df-ea7ac4503e84/scratchpad/reviews/P2-VEGA-PRIMARY-plan/manifest-consistency-reproducer.py", line 21, in <module>
+    assert not failures, "Corrected plan and current Manifest projection disagree"
+           ^^^^^^^^^^^^
+AssertionError: Corrected plan and current Manifest projection disagree

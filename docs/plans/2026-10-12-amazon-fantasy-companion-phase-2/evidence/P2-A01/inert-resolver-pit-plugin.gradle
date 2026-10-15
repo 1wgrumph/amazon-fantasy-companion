@@ -1,0 +1,35 @@
+plugins { id 'java-gradle-plugin' } // Core Gradle plugin only; nothing acquired is applied.
+repositories { google(); mavenCentral(); gradlePluginPortal() }
+configurations {
+    pit
+    mockable { transitive = false }
+    closure {
+        transitive = false
+        attributes {
+            attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage, Usage.JAVA_RUNTIME))
+            attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category, Category.LIBRARY))
+            attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling, Bundling.EXTERNAL))
+            attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, 17)
+            attribute(org.gradle.api.attributes.plugin.GradlePluginApiVersion.GRADLE_PLUGIN_API_VERSION_ATTRIBUTE,
+                objects.named(org.gradle.api.attributes.plugin.GradlePluginApiVersion, '9.7.0'))
+        }
+    }
+}
+dependencies {
+    // AGP is already admitted at 9.3.1 and wins conflict resolution; only the new modules are resolved here.
+    closure 'pl.droidsonroids.gradle:gradle-pitest-plugin:0.2.27'
+    closure 'com.vdurmont:semver4j:3.1.0'
+    pit 'org.pitest:pitest-command-line:1.19.5'
+    mockable 'org.json:json:20080701'
+    mockable 'org.khronos:opengl-api:gl1.1-android-2.1_r1'
+}
+tasks.register('resolveClosure', Copy) {
+    from configurations.closure
+    from configurations.pit
+    from configurations.mockable
+    into layout.buildDirectory.dir('closure')
+    doLast {
+        file('build/artifacts.tsv').text = (configurations.closure.resolvedConfiguration.resolvedArtifacts + configurations.pit.resolvedConfiguration.resolvedArtifacts + configurations.mockable.resolvedConfiguration.resolvedArtifacts).collect {
+            "${it.moduleVersion.id}\t${it.file.name}" }.sort().join('\n') + '\n'
+    }
+}

@@ -1,0 +1,36 @@
+plugins { id 'java-gradle-plugin' } // Core Gradle plugin only: registers JVM compatibility rules.
+repositories { google(); mavenCentral(); gradlePluginPortal() }
+configurations {
+    closure {
+        attributes {
+            attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage, Usage.JAVA_RUNTIME))
+            attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category, Category.LIBRARY))
+            attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling, Bundling.EXTERNAL))
+            attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, 17)
+            attribute(org.gradle.api.attributes.plugin.GradlePluginApiVersion.GRADLE_PLUGIN_API_VERSION_ATTRIBUTE,
+                objects.named(org.gradle.api.attributes.plugin.GradlePluginApiVersion, '9.7.0'))
+        }
+    }
+}
+dependencies {
+    closure 'com.android.application:com.android.application.gradle.plugin:9.3.1'
+    closure 'org.jetbrains.kotlin:kotlin-gradle-plugin:2.4.21'
+    closure 'org.jetbrains.kotlin:kotlin-compiler-embeddable:2.4.21'
+    closure 'org.jetbrains.kotlin:kotlin-stdlib:2.4.21'
+    closure 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0'
+    closure 'org.json:json:20260814'
+    closure 'junit:junit:4.13.2'
+    closure 'org.yaml:snakeyaml:2.7'
+    closure 'com.android.tools.lint:lint-gradle:32.3.1'
+    closure 'com.android.tools.build:aapt2:9.3.1-15703166:linux'
+}
+tasks.register('resolveClosure', Copy) {
+    from configurations.closure
+    into layout.buildDirectory.dir('closure')
+    doLast {
+        def artifacts = configurations.closure.resolvedConfiguration.resolvedArtifacts
+        file('build/artifacts.tsv').text = artifacts.collect {
+            "${it.moduleVersion.id}\t${it.file.name}"
+        }.sort().join('\n') + '\n'
+    }
+}

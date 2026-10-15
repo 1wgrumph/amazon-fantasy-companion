@@ -1,0 +1,6 @@
+gradle.projectsEvaluated {
+    def app = rootProject.project(':app')
+    app.tasks.register('afcLoopTestClasspath') {
+        doLast { println app.tasks.getByName('testDebugUnitTest').classpath.asPath }
+    }
+}

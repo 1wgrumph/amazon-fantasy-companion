@@ -1,0 +1,94 @@
+{
+ "slice": "P2-A02",
+ "role": "Product Implementer",
+ "route": "Muse Code / muse-wonder-full-1.0 / high (packet-assigned)",
+ "issue": 31,
+ "milestone": "M06",
+ "base": "afc/p2-a02t at 179666a (origin/main 0c273e5 plus A02T 20500d5, c401d87)",
+ "red_receipt": "../P2-A02T/receipt.json",
+ "commands": [
+  {
+   "id": "CMD-RED (green rerun, same test ids as the A02T red receipt)",
+   "command": "./tv-app/gradlew -p tv-app --no-daemon --max-workers=2 testDebugUnitTest --tests 'com.afc.companion.profile.*' --tests 'com.afc.companion.detect.*'",
+   "exit_code": 0,
+   "log": "cmd-green.txt",
+   "log_sha256": "2807abc07033b91d292a0f6b2768abf1b45ad6af2d599308f91b36911a9dbb36",
+   "counts": {"tests": 26, "passed": 26, "failed": 0, "errors": 0}
+  },
+  {
+   "id": "CMD-GATE-TVAPP (full gate)",
+   "command": "bash tools/ci/gate.sh",
+   "exit_code": 0,
+   "log": "gate-full.txt",
+   "log_sha256": "ca9013ad1d100d8a9aca6562310b18e1713dc37fd7a4d83a7b2fd3ef47add874",
+   "areas": {"spec": "PASS", "docs": "PASS", "hygiene": "PASS", "tvapp": "PASS (110 unit tests: 84 A01 + 26 A02; lintDebug; assembleDebug)", "backend": "PASS (380 passed)"}
+  },
+  {
+   "id": "assembleDebug",
+   "command": "./tv-app/gradlew -p tv-app --no-daemon --max-workers=2 assembleDebug",
+   "exit_code": 0,
+   "apk": "tv-app/app/build/outputs/apk/debug/app-debug.apk (7587448 bytes)",
+   "apk_sha256": "87d37bf22022be69d61653c0908f954ba4c13518b69110a93d5e19d395e0c1cb"
+  },
+  {
+   "id": "CMD-REVERIFY-APK",
+   "command": "reverify auto tv-app/app/build/outputs/apk/debug/app-debug.apk",
+   "exit_code": 0,
+   "log": "reverify-apk.txt",
+   "result": "typed gap REVERIFY_CAPABILITY_GAP: reverify triaged the APK only as a ZIP archive with a strings preview; no APK semantic claim (signature, version, contents) is grounded by this run, so none is made"
+  }
+ ],
+ "frozen_tests_unchanged": {
+  "tv-app/app/src/test/java/com/afc/companion/detect/AppDetectorTest.kt": "26d5f81eab35fb790db8e08cdf89ebef83a444f667bd354f5fb22bed0e1cb863",
+  "tv-app/app/src/test/java/com/afc/companion/profile/ProfileCodecTest.kt": "711966a5993e2a9fc3b551d7cb3b10983f35252e72c9ee78f3504ea17c994310",
+  "tv-app/app/src/test/java/com/afc/companion/profile/ProfileControlsTest.kt": "92c3d36c6e5faaffd0f75fe91e93a4189e4cf39ee5bd148c5b0a272bf5ba712d",
+  "tv-app/app/src/test/java/com/afc/companion/profile/ProfileFixtures.kt": "dced25d6665a4e7ca69b63de7bf4e3b102b17b1fbc87b66bdb9f5e4627d58b26",
+  "tv-app/app/src/test/java/com/afc/companion/profile/ProfilePersistenceTest.kt": "415de83facebf2022b33e396f4172f0d6846720abe6e1e52f8109f28df0bfad9"
+ },
+ "changed_paths": [
+  "tv-app/app/src/main/java/com/afc/companion/profile/ProfileModel.kt",
+  "tv-app/app/src/main/java/com/afc/companion/profile/ProfileSettingsScreen.kt",
+  "tv-app/app/src/main/java/com/afc/companion/detect/AppDetector.kt",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A02/",
+  "CHANGELOG.md"
+ ],
+ "acceptance": {
+  "AFC-PR-002": "ProfilePersistenceTest#everySelectionAndControlPersistsAcrossRestart PASSED",
+  "AFC-PR-003": "AppDetectorTest#reportsEachInstalledCandidateAndNoAbsentOne, #detectorReportPostsInstalledApps PASSED (host seam; real PackageManager pending device)",
+  "AFC-PR-005": "ProfilePersistenceTest#overrideSurvivesRestartAndDetectionRefresh, ProfileControlsTest#customerOverrideWinsOverDetection, ProfileCodecTest#overridesAndLocalMarketRoundTrip PASSED",
+  "AFC-PR-009/-018/-019": "gameDayPeriods and quietHours in codec, field-isolation and persistence tests PASSED",
+  "AFC-PR-010/-037": "AppDetectorTest#optedOutPerformsNoReads, #optedOutSendsNoReport PASSED; ProfileControlsTest#unsupportedDetectionHidesItsControlWithStatedLimit PASSED; default detectionOptIn false",
+  "AFC-PR-016/-017/-020/-021/-034/-035/-042/-044": "ProfileCodecTest#eachControlWritesOnlyItsOwnSettingsField, #everyControlRoundTrips, persistence tests PASSED",
+  "AFC-PR-022": "ProfileControlsTest#voiceGateNeedsBothEnablementAndVerifiedRoute, #unverifiedVoiceRouteHidesVoiceWithStatedLimit PASSED",
+  "AFC-PR-023": "ProfileCodecTest#eachExcitementLevelRoundTrips PASSED (Off/Mild/Hype exactly)",
+  "AFC-PR-066": "ProfileCodecTest#emptySettingsDecodeToDocumentedDefaults, #eachScoringPresetRoundTripsWithFrozenWire; ProfilePersistenceTest#firstLoadOfEmptyProfileIsHalfPpr, #pprSelectionPersistsAndHalfPprReturnsAfterSwitchBack, #invalidStoredProfileIsNotApplied PASSED (no third preset)"
+ },
+ "negative_check": "ProfilePersistenceTest#invalidStoredProfileIsNotApplied PASSED: wrong-typed stored controls and a third scoring preset both load as null, never partially applied; ProfileCodecTest#wrongTypedControlIsRejected PASSED for every Settings control field",
+ "typed_gaps": [
+  {
+   "id": "DEVICE_INSTALL_PENDING",
+   "scope": "CMD-ADB-INSTALL for the A02 APK on the Fire TV stick",
+   "reason": "no Fire TV stick; fire-tv-stick lease not taken; never a pass. Steps in PENDING-DEVICE.txt"
+  },
+  {
+   "id": "VISUAL_EMULATOR_UNAVAILABLE",
+   "scope": "PROC-VISUAL-REVIEW of Profile/Settings states (D-pad reachability, 1080p captures, window geometry)",
+   "reason": "no stick and no emulator run in this slice; never a pass. Steps in PENDING-DEVICE.txt"
+  },
+  {
+   "id": "X07_VERDICT_PENDING",
+   "scope": "which installed-app and viewing-context facts the platform permits",
+   "reason": "P2-X07 verdict absent; the PackageManager constructor queries named packages only (no <queries> manifest entries added) and defaults opt-in false; unsupported detection hides the control with a stated limit per the slice goal"
+  },
+  {
+   "id": "REVERIFY_CAPABILITY_GAP",
+   "scope": "APK semantic claims from reverify",
+   "reason": "reverify auto exit 0 triaged the APK as a ZIP archive only; no signature/version/contents claim is grounded"
+  }
+ ],
+ "notes": [
+  "No AndroidManifest.xml, build.gradle.kts or libs.versions.toml change was needed; no new dependency.",
+  "List-valued controls (selections, quiet hours, provider order) render as summaries on the settings screen; full D-pad list editors ride the pending device visual pass.",
+  "Session token is never logged: profile/detect code adds no logging and ApiClient keeps the token in the Authorization header only."
+ ]
+}
