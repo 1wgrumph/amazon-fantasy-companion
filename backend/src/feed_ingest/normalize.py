@@ -27,7 +27,8 @@ def _facts(play, known, source):
                if entry.get("athlete", {}).get("id") in known]
     return {"source": source, "score": {"away": play["awayScore"], "home": play["homeScore"]},
             "fieldPosition": play["start"]["yardsToEndzone"], "possession": _offense(play),
-            "playerIds": players, "eventTime": play.get("wallclock")}
+            "playerIds": players, "eventTime": play.get("wallclock"),
+            "period": play["period"]["number"], "scoringPlay": play["scoringPlay"]}
 
 
 def normalize_summary(payload, game_id, source="live", prior=None):

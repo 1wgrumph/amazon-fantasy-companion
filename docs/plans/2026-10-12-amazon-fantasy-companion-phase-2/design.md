@@ -241,7 +241,7 @@ and tokens live only in SSM SecureString (AFC-PR-055). Realizes AFC-PR-038,
 ESPN scoreboard and summary JSON (endpoints recorded by P2-X05) are fetched
 by `IngestFunction`, validated against a pinned JSON Schema in
 `src/feed_ingest/schema/` before any store write (AFC-PR-064), normalized to
-GameEvent (score, field position, possession, player ids, event time,
+GameEvent (period >= 1, scoringPlay boolean per DEC-AFC-SD-067, score, field position, possession, player ids, event time,
 correctionOf) with a monotonic revision, and stored (AFC-PR-012). When the
 endpoint fails feed_fail_limit times or the schema check fails on a
 contract change, `replay.py` serves captured fixtures with `source: replay`
