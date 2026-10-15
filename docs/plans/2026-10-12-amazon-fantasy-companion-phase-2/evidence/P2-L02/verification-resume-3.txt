@@ -1,0 +1,23 @@
+Outcome CONTRACT_FAILURE / NEEDS_MORE_EVIDENCE, reclassify judgement; target revision not deployed.
+Required full gate: bash tools/ci/gate.sh, exit 0.
+Spec PASS, docs PASS, hygiene PASS (61 tests), tvapp PASS no tree, backend PASS (376 tests; cfn-lint success).
+Gate fixture output includes intentional negative-test diagnostics; gate overall exit is 0. These are not deployed smoke or review receipts.
+Changeset rejected with n before execution. SAM exit 0 denotes declined changeset, not successful deployment.
+Post-cancellation stack describe exit 0: UPDATE_COMPLETE, actual GitCommit 220c8193be354ba65cc7da00e5261092cd5d8095.
+Post-cancellation changeset describe exit 0: CREATE_COMPLETE / AVAILABLE, unexecuted.
+Smoke NOT_RUN: 0 executed, 0 passed, 0 failed, 0 pytest skips; no smoke acceptance claimed.
+Target source/backend parity: git diff --exit-code origin/main -- backend, exit 0.
+Tracked pre-commit diff: evidence only; inherited merge changes are not new worker edits.
+No source/config/CHANGELOG edits outside authorized main merge; pre-existing untracked caches preserved.
+Commit uses Codex author environment, hooks on (.githooks/pre-commit -> gate.sh --changed), no Co-Authored-By.
+No push/PR/issue changes or publication authorized or attempted.
+Redaction: grep -E twelve-digit pattern on all resume-3 evidence produced no matches; grep exit 1 (expected), redaction check exit 0.
+Initial staged git diff --check found trailing padding in SAM table output; normalized log line endings and trailing whitespace only, then reran staged whitespace check. No product repair.
+First git commit exited 1: hygiene blocked three home-path occurrences in build/gate logs (PATH-HOME-POSIX). Replaced home prefixes with literal $HOME in new evidence, then reran gate and commit with hooks. No code/config change or hook bypass.
+Final full gate after sanitization: exit 0; gate-final-resume-3.txt.
+Output SHA256 digests:
+e231b1cc6ad26463cfcb402ca1a39b851ffd9280a1b8edf0f092520862c50e25  build-resume-3.txt
+defa70ee10b7eec5bc7dfed75e0b5dc4d68c3a3654c8cbc78d29285f08209dbf  deploy-resume-3.txt
+f799b810ef80d78832910c4e0caa96748921a109b507a1981b3404424f7e465d  changeset-resume-3.txt
+57a9978907854f2d97eab752414819adbc7b1d556118c5db70ee24cbd639971e  stack-status-resume-3.txt
+62bd329498c579ebf0cde95b5bcdce4b2cf95fce15c027c888dcfc3192e96069  gate-final-resume-3.txt
