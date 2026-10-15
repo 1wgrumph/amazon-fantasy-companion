@@ -520,6 +520,55 @@
       "decision": "Remove the link passphrase. Linking = TV shows device code, phone /link page confirms with the code only. Keep existing code expiry, attempt limits and one-live-session rules. Remove the SSM passphrase parameter, its IAM grant and AFC_DEPLOYED_LINK_PASSPHRASE from deployed tests. Supersedes DEC-AFC-SD-047 (passphrase from SSM).",
       "delivery": "Small change slice: tests first (update B01 linking tests), then code, then one review, redeploy afc-dev, rerun L02 smoke.",
       "residual_risk_accepted": "A person who guesses a live device code within its expiry window could link to the demo profile; demo profile holds no money or personal data."
+    },
+    {
+      "id": "DEC-AFC-SD-049",
+      "status": "confirmed",
+      "at": "2026-10-15T00:05:05Z",
+      "owner_statement": "why not both? but maybe vega primary to be safe",
+      "decision": "Build both TV targets; Vega OS is primary, Fire OS secondary. Supersedes SD-040 ordering. Vega-primary contingency delta (df259ed) proceeds to planning review and tracking update."
+    },
+    {
+      "id": "DEC-AFC-SD-050",
+      "status": "confirmed",
+      "at": "2026-10-15T00:05:05Z",
+      "owner_statement": "Just do it right now (F1)",
+      "decision": "RISK-AFC-P2-14 inclusion control added to P2-D04 (option a); re-review of that change only."
+    },
+    {
+      "id": "DEC-AFC-SD-051",
+      "status": "confirmed",
+      "at": "2026-10-15T00:05:05Z",
+      "owner_statement": "User-scope Watchman (Rec.)",
+      "decision": "Agent installs scanned, pinned Watchman in user scope; skip libpython3.8-dev."
+    },
+    {
+      "id": "DEC-AFC-SD-052",
+      "status": "confirmed",
+      "at": "2026-10-15T00:05:05Z",
+      "owner_statement": "Accept 70% for tv-app",
+      "decision": "tv-app changed-line coverage threshold is 70% (host-reachable); backend stays 90%."
+    },
+    {
+      "id": "DEC-AFC-SD-053",
+      "status": "confirmed",
+      "at": "2026-10-15T00:05:05Z",
+      "owner_statement": "install all sw that you need and stop asking",
+      "decision": "Admit pl.droidsonroids.pitest under rule #23 (scan, pin, verify); tv-app mutation threshold 70%. Standing: tool installs needed by the plan are agent work, no owner question."
+    },
+    {
+      "id": "DEC-AFC-SD-054",
+      "status": "confirmed",
+      "at": "2026-10-15T00:05:05Z",
+      "owner_statement": "We can accept but eventually we will need to remove this from our computer to protect our device after submission",
+      "decision": "Accept UTP netty CVEs (incl. CVE-2026-75595) as build-host residual risk until submission; post-submission task: remove the UTP/netty closure and Android test tooling from the host and from CI."
+    },
+    {
+      "id": "DEC-AFC-SD-055",
+      "status": "confirmed",
+      "at": "2026-10-15T00:05:05Z",
+      "owner_statement": "Keep, fine public too",
+      "decision": "OA-6 closed: raw ESPN fixtures stay, including if the repo goes public."
     }
   ],
   "open_decisions": [],
