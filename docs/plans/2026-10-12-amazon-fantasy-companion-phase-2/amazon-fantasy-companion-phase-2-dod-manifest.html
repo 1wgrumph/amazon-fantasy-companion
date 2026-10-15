@@ -673,7 +673,7 @@
         <section class="block" id="s1" aria-labelledby="h-s1">
           <h2 id="h-s1"><span class="secno">1</span>BLUF and Lifecycle state</h2>
           <div class="bluf">
-            <p><strong>Vega-primary contingency proposed on 2026-10-14; Fire OS remains active under SD-040 until owner selection. Existing V01T/V01 move ahead of A01-A05 in the alternative. Physical alerts/Watch acceptance is a hard convergence point; handover target 2026-10-23T12:00Z, deadline 19:00Z. SD-048 is code-only. No execution authorization or review budget reset.</strong></p>
+            <p><strong>Vega OS primary, Fire OS secondary (DEC-AFC-SD-049, 2026-10-14): both targets are built; V01T/V01 lead the TV critical path and A01-A05 stay as the Fire OS secondary target. Physical alerts/Watch acceptance is the hard convergence point; handover target 2026-10-23T12:00Z.</strong></p>
             <p><strong>Lifecycle state.</strong> <span class="status status-plan"><span class="mark" aria-hidden="true"></span>planning</span></p>
             <p>This manifest compares authorized intent with planned work, evidence, and gaps. It does not grant execution, acceptance, release, or deployment.</p>
           <ul class="legend status-key" aria-label="Status key">
@@ -702,7 +702,7 @@
             <dt>Authoring baseline revision</dt>
             <dd><code>5097585749dec6bfa8a1972137dc1eda0d230717</code></dd>
             <dt>Candidate digest</dt>
-            <dd><code>3ea492c5821d3a47649cbb59428d95ba0f6409506d5901c07aaf259374ebf867</code></dd>
+            <dd><code>fd66f4110c70da8a7bd284e8b8ff680cc0d0b9d99ca1fb0d8e0346adc59deda4</code></dd>
             <dt>Authority</dt>
             <dd><code>AUTH-AFC-2026-10-12-P2-001 (proposed, effective=false)</code></dd>
             <dt>Requirement register</dt>
@@ -718,9 +718,9 @@
             <dt>Profile opensource-hackathon full sha256</dt>
             <dd><code>7d501eb8c103831a38c50d237b5d1e2e015a564b9ade8aef09a32dfc39b26ab1</code></dd>
             <dt>seit.json</dt>
-            <dd><code>f52973c2a2ba9f225ec12040f87ac00731415019d650f20bd37fb82f9ed25226</code></dd>
+            <dd><code>dfc088383365aca2984d14d7e4e33a5bf05b49101c4725458ef84c6685fb3dae</code></dd>
             <dt>Contingency authority</dt>
-            <dd><code>Planning-only owner packet 2026-10-14; proposed/not activated; prior candidate bindings retained in evidence/P2-VEGA-PRIMARY-plan/prior-bindings.json</code></dd>
+            <dd><code>Planning-only owner packet 2026-10-14; selected by DEC-AFC-SD-049 (Vega primary, Fire OS secondary); prior candidate bindings retained in evidence/P2-VEGA-PRIMARY-plan/prior-bindings.json</code></dd>
             <dt>Manifest file</dt>
             <dd><code>amazon-fantasy-companion-phase-2-dod-manifest.html</code></dd>
             <dt>Template</dt>
@@ -763,7 +763,7 @@
             <li>Vega-primary critical path (UTC): Oct 22 rehearsal; Oct 23 00:00–05:00 live capture window — L05 exact .vpkg build after R5, X12 capture on that hash; reserve time for TNF from original plan — Sanitized clip/hash manifest, platform/device labels and capture provenance. Documented demo plan may precede final clips; no unpublished artifact claimed public.</li>
             <li>Vega-primary critical path (UTC): Oct 23 by 12:00 — Final ATE/IE evidence and owner handover — Seven-hour buffer to 19:00Z. No unsupported, unknown, not_run or capability gap counted as PASS.</li>
             <li>Vega-primary critical path (UTC): Oct 23 19:00 — Submission deadline — Owner publication/upload/judge-access/submission authority remains separate.</li>
-            <li>Manifest task table projects the proposed Vega completion graph. Baseline field values remain in implementation.json and each task baseline_projection; nothing is active until owner selection. V01 can start after V01T, but its displayed completion prerequisites must all close before acceptance.</li>
+            <li>Manifest task table projects the proposed Vega completion graph. Baseline field values remain in implementation.json and each task baseline_projection; selected by DEC-AFC-SD-049; Fire OS A0x/T are the secondary target. V01 can start after V01T, but its displayed completion prerequisites must all close before acceptance.</li>
           </ul>
           <h3>Exclusions</h3>
           <ul class="plain">
@@ -1579,13 +1579,13 @@
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">DES-AFC-P2-BACKEND</th>
-                  <td>Serverless backend: `POST /v1/link` issues an 8-character code from an unambiguous base-32 alphabet (≥ 40 bits), TTL device_code_ttl, plus a polling handle. `POST /v1/link/confirm` is called from the `/link` page on a phone or browser: the customer signs in with Yahoo OAuth (when Yahoo is approved) or with the owner-set link passphrase held in SSM SecureString (manual mode; single-owner demo), then enters the code. C</td>
+                  <td>Serverless backend: `POST /v1/link` issues an 8-character code from an unambiguous base-32 alphabet (≥ 40 bits), TTL device_code_ttl, plus a polling handle. `POST /v1/link/confirm` is called from the `/link` page on a phone or browser: the customer enters the TV code, and the code alone confirms the link (DEC-AFC-SD-048: no passphrase or sign-in step; Yahoo OAuth, when approved, is only for lineup import). C</td>
                   <td>—</td>
                   <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">DES-AFC-P2-AUTH</th>
-                  <td>Device-code linking and sessions: `POST /v1/link` issues an 8-character code from an unambiguous base-32 alphabet (≥ 40 bits), TTL device_code_ttl, plus a polling handle. `POST /v1/link/confirm` is called from the `/link` page on a phone or browser: the customer signs in with Yahoo OAuth (when Yahoo is approved) or with the owner-set link passphrase held in SSM SecureString (manual mode; single-owner demo), then enters the code. C</td>
+                  <td>Device-code linking and sessions: `POST /v1/link` issues an 8-character code from an unambiguous base-32 alphabet (≥ 40 bits), TTL device_code_ttl, plus a polling handle. `POST /v1/link/confirm` is called from the `/link` page on a phone or browser: the customer enters the TV code, and the code alone confirms the link (DEC-AFC-SD-048: no passphrase or sign-in step; Yahoo OAuth, when approved, is only for lineup import). C</td>
                   <td>—</td>
                   <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
                 </tr>
@@ -3599,7 +3599,7 @@
                   <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>open_for_integrated_review</span></td>
                 </tr>
                 <tr class="row-plan">
-                  <th scope="row" class="id">VP-OD-01: Choose target and AFC-PR-052/053 amendment; no automatic switch.</th>
+                  <th scope="row" class="id">VP-OD-01: Choose target and AFC-PR-052/053 amendment; no automatic switch. Decided 2026-10-14 by DEC-AFC-SD-049: Build both targets: Vega OS primary, Fire OS secondary. The Vega-primary contingency is the selected plan.</th>
                   <td>William Rumph</td>
                   <td>P2-VEGA-PRIMARY-plan proposal; queued, not answered</td>
                   <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>NEEDS_OWNER_DECISION</span></td>
@@ -3611,7 +3611,7 @@
                   <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>NEEDS_OWNER_DECISION</span></td>
                 </tr>
                 <tr class="row-plan">
-                  <th scope="row" class="id">VP-OD-03: Ubuntu 26.04 user-scope qualification/Watchman versus supported host; no sudo.</th>
+                  <th scope="row" class="id">VP-OD-03: Ubuntu 26.04 user-scope qualification/Watchman versus supported host; no sudo. Decided 2026-10-14 by DEC-AFC-SD-051: The Vega host gets a user-scope, scanned and pinned Watchman; libpython3.8-dev is skipped.</th>
                   <td>William Rumph</td>
                   <td>P2-VEGA-PRIMARY-plan proposal; queued, not answered</td>
                   <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>NEEDS_OWNER_DECISION</span></td>
@@ -3623,7 +3623,7 @@
                   <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>NEEDS_OWNER_DECISION</span></td>
                 </tr>
                 <tr class="row-plan">
-                  <th scope="row" class="id">VP-OD-05: F1: P2-D04 closes RISK-AFC-P2-14, V01 supplies evidence; primary failure is a stop.</th>
+                  <th scope="row" class="id">VP-OD-05: F1: P2-D04 closes RISK-AFC-P2-14, V01 supplies evidence; primary failure is a stop. Decided 2026-10-14 by DEC-AFC-SD-050: F1 option (a): P2-D04 closes RISK-AFC-P2-14; P2-V01 supplies the evidence.</th>
                   <td>William Rumph</td>
                   <td>P2-VEGA-PRIMARY-plan proposal; queued, not answered</td>
                   <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>NEEDS_OWNER_DECISION</span></td>
