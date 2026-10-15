@@ -29,11 +29,16 @@ if [[ -z "$changed" ]]; then
 fi
 work=$(mktemp -d) || exit 3
 trap 'rm -rf "$work"' EXIT
-git archive HEAD tv-app | tar -x -C "$work" || exit 3
+# Host tests read the OpenAPI contract from the repository root (afc.repoRoot); without it PIT's green run fails (GAP).
+paths=(tv-app)
+git cat-file -e HEAD:backend/src/api/openapi.yaml 2>/dev/null && paths+=(backend/src/api/openapi.yaml)
+git archive HEAD "${paths[@]}" | tar -x -C "$work" || exit 3
 [[ -x "$work/tv-app/gradlew" ]] || { echo 'GAP required tool missing: tv-app/gradlew'; exit 3; }
 # shortcut: one fixed 1500 s bound for the whole PIT run; size it per changed scope if real runs approach it.
 # shellcheck disable=SC2086 # AFC_GRADLE_ARGS is a word list by design.
-(cd "$work" && timeout 1500 ./tv-app/gradlew -p tv-app ${AFC_GRADLE_ARGS:-} :app:pitestDebug) \
+# The PIT Android plugin needs AGP's legacy variant API; build.gradle.kts applies it only under these flags.
+(cd "$work" && timeout 1500 ./tv-app/gradlew -p tv-app ${AFC_GRADLE_ARGS:-} -Pandroid.newDsl=false \
+    -Pandroid.onlyEnableUnitTestForTheTestedBuildType=false :app:pitestDebug) \
     > "$out/pitest-run.txt" 2>&1
 rc=$?
 ((rc == 0)) || tail -n 20 "$out/pitest-run.txt"

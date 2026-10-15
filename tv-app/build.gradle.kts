@@ -1,5 +1,9 @@
 buildscript {
-    repositories { google(); mavenCentral() }
+    repositories {
+        google(); mavenCentral()
+        // DEC-AFC-SD-053: the PIT Android plugin is published only to the Plugin Portal; nothing else resolves there.
+        exclusiveContent { forRepository { gradlePluginPortal() }; filter { includeGroup("pl.droidsonroids.gradle") } }
+    }
     configurations.all {
         resolutionStrategy.eachDependency {
             // SD-042: patch the AGP build-host closure; keep the BC family aligned.
@@ -13,6 +17,7 @@ buildscript {
         classpath(libs.agp)
         classpath(libs.kotlin.gradle.plugin)
         classpath(libs.compose.compiler.gradle.plugin)
+        classpath(libs.pitest.gradle.plugin)
     }
 }
 allprojects {

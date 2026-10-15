@@ -17,18 +17,19 @@ import subprocess
 import sys
 from pathlib import Path
 
-THRESHOLD = 90.0
+THRESHOLD = 90.0  # backend
 SOURCE = 'backend/src/'
 # tvapp: src roots map JaCoCo package paths to files; no Kotlin parser here, so no
 # "nothing to cover" exemption (an unmapped changed file stays a GAP).
-TVAPP = {'source': 'tv-app/app/src/main/', 'suffixes': ('.kt', '.java'),
+# DEC-AFC-SD-052: tv-app changed-line threshold is 70% (host-reachable share); backend stays 90%.
+TVAPP = {'source': 'tv-app/app/src/main/', 'suffixes': ('.kt', '.java'), 'threshold': 70.0,
          'src_roots': ['tv-app/app/src/main/java', 'tv-app/app/src/main/kotlin']}
 BINDING = re.compile(r'<!-- afc-coverage-binding (\{.*\}) -->')
 
 
-def verdict(out, status, detail, **extra):
+def verdict(out, status, detail, threshold=THRESHOLD, **extra):
     (out / 'coverage-result.json').write_text(
-        json.dumps({'status': status, 'detail': detail, 'threshold': THRESHOLD, **extra}, indent=2) + '\n')
+        json.dumps({'status': status, 'detail': detail, 'threshold': threshold, **extra}, indent=2) + '\n')
     print(f'{status} {detail}')
     return {'PASS': 0, 'FAIL': 1}.get(status, 3)
 
@@ -120,8 +121,9 @@ def main(argv):
     if not data.get('total_num_lines'):
         return verdict(out, 'GAP', 'EMPTY_DENOMINATOR: no executable changed lines', **common)
     percent = float(data['total_percent_covered'])
-    status = 'PASS' if percent >= THRESHOLD else 'FAIL'
-    return verdict(out, status, f'changed-line coverage {percent:g}% (threshold {THRESHOLD:g}%)', **common)
+    threshold = profile['threshold'] if profile else THRESHOLD
+    status = 'PASS' if percent >= threshold else 'FAIL'
+    return verdict(out, status, f'changed-line coverage {percent:g}% (threshold {threshold:g}%)', threshold, **common)
 
 
 if __name__ == '__main__':
