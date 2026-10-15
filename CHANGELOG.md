@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Security
+
+- Remove unused Yahoo SSM read access from the public API function and warn
+  users to confirm only a code on their own TV; preserve code-only linking,
+  short code expiry and one-time confirmation (PR #TBD).
+
 ### Added
 
 - Add lineup sources and scoring presets: read-only Yahoo client, manual
