@@ -1,0 +1,120 @@
+{
+ "slice": "P2-A05",
+ "role": "Product Implementer",
+ "route": "Muse Code / muse-wonder-full-1.0 / high (packet-assigned)",
+ "issue": 40,
+ "milestone": "M09",
+ "branch": "afc/p2-a05t",
+ "base_red_commit": "9ccb94a7d051366bf16df4b75a7db94d10deba3f",
+ "merge": "origin/main 1518e573b0acb5b24db24164b26057e250974e66 merged into afc/p2-a05t (ort, no conflicts) before implementation",
+ "commands": [
+  {
+   "id": "CMD-RED(now green)",
+   "command": "./tv-app/gradlew -p tv-app --no-daemon --max-workers=2 testDebugUnitTest --tests 'com.afc.companion.panel.*' lintDebug assembleDebug",
+   "exit_code": 0,
+   "log": "cmd-green.txt",
+   "log_sha256": "934826ad5a89bb62ac33c36abe8dc40278b1a66d70f4b4a45c0b11cbd36bf457",
+   "counts": {
+    "tests": 34,
+    "passed": 34,
+    "failed": 0
+   }
+  },
+  {
+   "id": "CMD-GATE-ALL",
+   "command": "bash tools/ci/gate.sh",
+   "exit_code": 0,
+   "log": "gate.txt",
+   "log_sha256": "906cde4af21f8c0c4f47b14ff30f5f9da208bf20784e9b3f9773d36f86a7b6ee",
+   "areas": {
+    "spec": "PASS",
+    "docs": "PASS",
+    "hygiene": "PASS",
+    "tvapp": "PASS",
+    "backend": "PASS"
+   }
+  },
+  {
+   "id": "CMD-REVERIFY-APK",
+   "command": "reverify auto tv-app/app/build/outputs/apk/debug/app-debug.apk",
+   "exit_code": 0,
+   "log": "reverify.txt",
+   "log_sha256": "7c0781b8a71408b03ca9b7b4e7626a840d5a3e9c5328469c797401188d23dd6b",
+   "result": "ZIP Archive / Package triage only; no APK semantic grounding (TE-P2-F03 REVERIFY_CAPABILITY_GAP retained), never a contents proof"
+  }
+ ],
+ "apk": {
+  "path": "tv-app/app/build/outputs/apk/debug/app-debug.apk",
+  "sha256": "055e4fb0810136a3c0bb34ffbc27e419313100b3fb38ca384afd134634c889fa",
+  "note": "built in the same gradle invocation as cmd-green.txt after the final source state; APK bytes are not reproducible across builds"
+ },
+ "frozen_tests": {
+  "tv-app/app/src/test/java/com/afc/companion/panel/PanelControllerTest.kt": "31db0fec01ce897e3796a46c10cd4533ecba09b519e32f6999afdbb4eb0f40ac",
+  "tv-app/app/src/test/java/com/afc/companion/panel/PanelDecodeTest.kt": "5a8027913784ba430d5da082f1e10344cae0d9d577011a8a4dea2962c7d619c5",
+  "tv-app/app/src/test/java/com/afc/companion/panel/PanelFixtures.kt": "1d9f1628fa86295144a0dcab7d1ed4b7059f05ef1df01f0747a15483e24160c0",
+  "tv-app/app/src/test/java/com/afc/companion/panel/PanelModeTest.kt": "e1f4d8bb89ef1b4b1c8cded770f82416d2139e6afe4a2283eeb284da83b66734",
+  "tv-app/app/src/test/java/com/afc/companion/panel/PanelTextTest.kt": "6933af6f90dfe357422e4f20311e94f548ad5d3d35133428d871f6f4272e7355",
+  "check": "frozen-hash-check.txt; all five byte-identical to the P2-A05T receipt after merge and after implementation"
+ },
+ "negative_check": "PanelTextTest#unknownValueIsLabeledUnavailableAndNeverZero and PanelDecodeTest#malformedValueBecomesUnavailableNotZero pass: unavailable renders 'Unavailable', never 0; PanelTextTest#realZeroIsShownAsZero keeps a real 0.0 visible",
+ "acceptance": {
+  "AFC-PR-039": "PanelDecodeTest rows/total/progress/basis cases; PanelTextTest#eachScoringBasisHasItsLabel, #freshValueShowsTheNumberWithoutLabels",
+  "AFC-PR-040": "PanelTextTest stale-at-60000ms/undated/unavailable/real-zero cases; PanelDecodeTest#nullPointsKeepTheirReasonAndAreNotZero, #malformedValueBecomesUnavailableNotZero",
+  "AFC-PR-041": "PanelModeTest modeB geometry (panel right, video left at 16:9) on host JVM; on-stick geometry DEVICE_INSTALL_PENDING, mode selection X04_VERDICT_PENDING",
+  "AFC-PR-042": "PanelControllerTest#remoteTogglesVisibility, #remoteSwitchesTeamLeagueAndCyclesBack, #lateResponseForTheOldTeamIsDiscarded",
+  "AFC-PR-043": "PanelControllerTest remote-key binding and D-pad focus cases; Compose focus indicator on device DEVICE_INSTALL_PENDING",
+  "AFC-PR-044": "PanelControllerTest#initialStateReflectsTheProfileSettings; PanelDecodeTest#panelFeedDecodesOverTheApiClientForTheSelectedTeamLeague",
+  "AFC-PR-045": "PanelTextTest#textSizesMeetTheCouchFloor (24sp body / 32sp score); on-stick px measurement CMD-TEXT-SIZE-MEASURE in PENDING-DEVICE.txt",
+  "AFC-PR-046": "PanelControllerTest#starterChangeReportsAddedAndRemovedRowsOnly, #identicalOrOlderRevisionChangesNothing",
+  "AFC-PR-047": "PanelModeTest#fullScreenHostsThePanelAloneWithNoStandInVideo; MainActivity hosts panelModeFor(null)=FullScreen while X04_VERDICT_PENDING",
+  "AFC-PR-061": "PanelControllerTest changed-rows-only, refresh-on-show/30s, hidden-suspend cases; LineupPanel LazyColumn keyed by playerId",
+  "AFC-PR-062": "PANEL_ROWS_MAX=32, oversize rejected whole (PanelDecodeTest#rowCountIsBoundedByTheDeclaredLimit); one held snapshot in PanelController",
+  "AFC-PR-063": "inspection: ApiClient network/JSON runs on Dispatchers.IO; LineupPanel fetches and decodePanel runs under withContext(Dispatchers.Default); only bounded state application and rendering run on the UI thread",
+  "RISK-AFC-P2-04/09/10": "typed gaps retained below; packet route recorded, no fallback taken"
+ },
+ "typed_gaps": [
+  {
+   "id": "DEVICE_INSTALL_PENDING",
+   "scope": "instrumented panel tests, stick D-pad/focus, screencap text measurement, dumpsys geometry",
+   "reason": "no Fire TV stick; fire-tv-stick lease not taken; steps in PENDING-DEVICE.txt"
+  },
+  {
+   "id": "VISUAL_EMULATOR_UNAVAILABLE",
+   "scope": "PROC-VISUAL-REVIEW screencaps for panel states",
+   "reason": "no stick or emulator visual run in this slice"
+  },
+  {
+   "id": "X04_VERDICT_PENDING",
+   "scope": "which PanelMode ships; overlay/modeB visual",
+   "reason": "P2-X04 verdict absent; MainActivity passes panelModeFor(null)=FullScreen; modeB geometry proven only on host JVM"
+  },
+  {
+   "id": "PANEL_WIRE_UNFROZEN",
+   "scope": "GET /v1/panel data object keys",
+   "reason": "P2-B07 not landed; implemented against the shape frozen in PanelFixtures.kt per DEC-AFC-SD-065 coordinator packet"
+  },
+  {
+   "id": "REVERIFY_CAPABILITY_GAP",
+   "scope": "APK semantic claims from reverify",
+   "reason": "reverify auto reports ZIP/package triage only (reverify.txt); TE-P2-F03 retained, never PASS for contents"
+  }
+ ],
+ "write_set_note": "One disclosed exception outside the listed write set, kept in a separate commit: whitespace-only removal of one trailing space in evidence/P2-A05T/cmd-red.txt line 2 plus its receipt log_sha256 update (06908904 -> f6a4ff61). The merged origin/main WS-CHECK hygiene gate fails the whole branch on that byte, so gate exit 0 was otherwise unreachable; the five frozen test files are untouched.",
+ "developer_feedback": [
+  {
+   "id": "DX-P2-A05-01",
+   "observation": "The merged WS-CHECK hygiene gate checks the whole branch diff vs origin/main, so one trailing space in the A05T captured gradle log (line 'Daemon will be stopped at the end of the build ') fails hygiene on any branch carrying raw gradle logs as evidence; evidence logs need trailing-whitespace stripping at capture time.",
+   "evidence": "gate run 1: hygiene FAIL cmd-red.txt:2:WS-CHECK; this slice strips trailing whitespace in its own evidence logs"
+  },
+  {
+   "id": "DX-P2-A05-02",
+   "observation": "Same as DX-P2-A05T-01: openapi.yaml types /v1/panel data as a free object; PANEL_WIRE_UNFROZEN remains until P2-B07 emits the PanelFixtures shape.",
+   "evidence": "decodePanel implements the PanelFixtures.kt shape only"
+  },
+  {
+   "id": "DX-P2-A05-03",
+   "observation": "tools/ci/gate.sh still leaves tools/*/__pycache__ untracked (DX-P2-A05T-02 recurrence).",
+   "evidence": "git status --short after gate runs in this session"
+  }
+ ]
+}

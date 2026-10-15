@@ -24,7 +24,7 @@ import com.afc.companion.link.LinkView
 import com.afc.companion.net.ApiClient
 import com.afc.companion.net.SessionStore
 import com.afc.companion.panel.LineupPanel
-import com.afc.companion.panel.PanelMode
+import com.afc.companion.panel.panelModeFor
 import com.afc.companion.profile.ProfileSettingsScreen
 import com.afc.companion.ui.theme.AfcTheme
 
@@ -69,7 +69,9 @@ private fun AppShell(shell: Shell, client: ApiClient, sessions: SessionStore) {
                     destination = Destination.ProfileSettings
                 })
                 Destination.ProfileSettings -> ProfileSettingsScreen(client)
-                Destination.Panel -> LineupPanel(client, PanelMode.FullScreen)
+                // X04_VERDICT_PENDING: no P2-X04 verdict exists in this build, so
+                // panelModeFor(null) hosts the panel fullScreen with no stand-in video.
+                Destination.Panel -> LineupPanel(client, panelModeFor(null))
             }
         }
     }
