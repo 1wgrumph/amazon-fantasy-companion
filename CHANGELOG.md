@@ -15,11 +15,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add ESPN-feed ingest outage handling: packaged replay corpus, scoreboard-error fallback to labeled replay, warm-container failure counts, and a 60s poll deadline (PR #TBD).
 - Add ESPN feed ingest: pinned JSON Schema validation that rejects a bad
   poll before any store write, per-play GameEvent normalization with
   monotonic correction revisions, hash-verified fixture replay labeled
   `replay`, labeled monitoring decisions, and an allowlisted scheduled
   poller (PR #TBD).
+- Record the P2-L02 afc-dev deploy of origin/main `2d973bd`: eleven known routes answered, nine deployed smoke tests passed; two panel tests remain deferred until P2-B07/L03 ([#70](https://github.com/1wgrumph/amazon-fantasy-companion/pull/70)).
 - Add lineup sources and scoring presets: read-only Yahoo client, manual
   lineup with T_yahoo activation, one active source per profile, PPR and
   Half-PPR tables with Half-PPR as default ([#65](https://github.com/1wgrumph/amazon-fantasy-companion/pull/65)).
@@ -71,6 +73,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Locate the documented backend test environment in local gates and Git hooks,
+  and report a provisioning GAP when it is missing; preserve CI tool selection
+  ([#71](https://github.com/1wgrumph/amazon-fantasy-companion/pull/71)).
 - Restore client-side profile ID validation on `/link` by escaping the
   pattern's hyphen for Unicode Sets (`v`) mode ([#69](https://github.com/1wgrumph/amazon-fantasy-companion/pull/69)).
 - Return the standard 404 error envelope for unknown API routes by routing
