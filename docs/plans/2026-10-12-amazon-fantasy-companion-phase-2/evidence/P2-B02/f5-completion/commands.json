@@ -1,0 +1,35 @@
+{
+  "commands": [
+    {
+      "id": "red",
+      "command": "PYTHONDONTWRITEBYTECODE=1 PATH=$HOME/.local/share/afc-tools/backend-tests/bin:$PATH python3.12 -m pytest -q backend/tests/unit/lineup/test_manual_team.py backend/tests/unit/feed_ingest/test_review_repairs.py::test_f5_manual_nonleader_team_game_is_fetched_and_irrelevant_game_is_skipped backend/tests/unit/feed_ingest/test_review_repairs.py::test_f5_irrelevant_in_progress_game_is_never_fetched",
+      "exit_code": 1,
+      "output": "red.txt"
+    },
+    {
+      "id": "green",
+      "command": "PYTHONDONTWRITEBYTECODE=1 PATH=$HOME/.local/share/afc-tools/backend-tests/bin:$PATH python3.12 -m pytest -q backend/tests/unit/lineup/test_manual_team.py backend/tests/unit/feed_ingest/test_review_repairs.py::test_f5_manual_nonleader_team_game_is_fetched_and_irrelevant_game_is_skipped backend/tests/unit/feed_ingest/test_review_repairs.py::test_f5_irrelevant_in_progress_game_is_never_fetched",
+      "exit_code": 0,
+      "output": "green.txt"
+    },
+    {
+      "id": "B02T-verifier",
+      "command": "python3 <P2>/evidence/P2-B02T/verify_receipt.py <P2>/evidence/P2-B02T/receipt.json",
+      "exit_code": 0,
+      "output": "P2-B02T-verify.txt"
+    },
+    {
+      "id": "B03T-verifier",
+      "command": "python3 <P2>/evidence/P2-B03T/verify_receipt.py <P2>/evidence/P2-B03T/receipt.json",
+      "exit_code": 0,
+      "output": "P2-B03T-verify.txt"
+    },
+    {
+      "id": "gate",
+      "command": "PATH=$HOME/.local/share/afc-tools/backend-tests/bin:$PATH PYTHONDONTWRITEBYTECODE=1 timeout 1500 bash tools/ci/gate.sh",
+      "exit_code": 0,
+      "result": "520 passed; all five areas PASS",
+      "output": "gate.txt"
+    }
+  ]
+}

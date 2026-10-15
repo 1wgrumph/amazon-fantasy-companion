@@ -9,8 +9,8 @@ from lineup import manual, yahoo
 
 TEAM_KEY = "nfl.l.1001.t.1"
 LEAGUE_KEY = "nfl.l.1001"
-ROSTER = [{"athlete_id": "espn.1", "name": "Sample Quarterback"},
-          {"athlete_id": "espn.2", "name": "Sample Runner"}]
+ROSTER = [{"athlete_id": "espn.1", "name": "Sample Quarterback", "team": "SYN"},
+          {"athlete_id": "espn.2", "name": "Sample Runner", "team": "SYN"}]
 
 
 class Fixed:
@@ -109,8 +109,8 @@ def test_manual_build_rejects_malformed_input(roster, entries):
 def test_manual_build_keeps_entry_order_and_roster_names():
     entries = [{"athlete_id": "espn.2", "slot": "RB"}, {"athlete_id": "espn.1", "slot": "QB"}]
     built = manual.build(ROSTER, entries, "PPR")
-    assert built["starters"] == [{"athlete_id": "espn.2", "name": "Sample Runner", "slot": "RB"},
-                                 {"athlete_id": "espn.1", "name": "Sample Quarterback", "slot": "QB"}]
+    assert built["starters"] == [{"athlete_id": "espn.2", "name": "Sample Runner", "team": "SYN", "slot": "RB"},
+                                 {"athlete_id": "espn.1", "name": "Sample Quarterback", "team": "SYN", "slot": "QB"}]
 
 
 @pytest.mark.parametrize("profile_id", ["", None, 7])

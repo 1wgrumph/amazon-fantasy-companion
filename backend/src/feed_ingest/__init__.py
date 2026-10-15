@@ -67,7 +67,7 @@ def _monitored(game, profiles):
         starters = profile["starters"]
         selected = [player.get("athlete_id", player.get("player_key")) for player in starters]
         favorites = selections.get("favoriteTeamIds", [])
-        # Yahoo starters carry their NFL team; ESPN scoreboards do not carry full rosters.
+        # Lineup starters carry their NFL team; ESPN scoreboards do not carry full rosters.
         starter_teams = [player["team"] for player in starters if "team" in player]
         decision = monitored_decisions([descriptor], selected, favorites + starter_teams,
                                        enabled, basis="profile-assumption")[0]

@@ -321,3 +321,30 @@ def test_f3_tampered_replay_is_stale_and_mutates_nothing(api, feed, monkeypatch,
     result, _ = run_loop(feed, monkeypatch)
     assert result == {"stored": 0, "failed": [GAME], "stale": [GAME]}
     assert api.table("Events").scan()["Items"] == before
+
+
+def test_f5_manual_nonleader_team_game_is_fetched_and_irrelevant_game_is_skipped(api, feed):
+    from lineup import manual
+
+    module, bodies, calls = feed
+    board = board_for(GAME, OTHER_GAME)
+    game = board["events"][0]
+    leaders = {leader["athlete"]["id"] for competition in game["competitions"]
+               for category in competition.get("leaders", []) for leader in category["leaders"]}
+    team = next(t for t in fresh_summary()["boxscore"]["players"]
+                if t["team"]["abbreviation"] == "PHI")
+    athlete = next(entry["athlete"] for stat in team["statistics"]
+                   for entry in stat.get("athletes", []) if entry["athlete"]["id"] == "4715355")
+    assert athlete["displayName"] == "Darius Cooper" and athlete["id"] not in leaders
+    roster = [{"athlete_id": athlete["id"], "name": athlete["displayName"],
+               "team": team["team"]["abbreviation"]}]
+    built = manual.build(roster, [{"athlete_id": athlete["id"], "slot": "FLEX"}], "PPR")
+    api.table("Profiles").put_item(Item={"profileId": "owner", "settings": {}})
+    api.table("Lineups").put_item(Item={"profileId": "owner", **built})
+    bodies[BASE + "scoreboard"] = board
+    bodies[BASE + "summary?event=" + GAME] = fresh_summary()
+    bodies[BASE + "summary?event=" + OTHER_GAME] = fresh_summary(OTHER_GAME)
+    result = module.lambda_handler({}, None)
+    assert calls == [(BASE + "scoreboard", 10), (BASE + "summary?event=" + GAME, 10)]
+    assert result == {"stored": len(plays_in(fresh_summary())), "failed": []}
+    assert {row["gameId"] for row in api.table("Events").scan()["Items"]} == {GAME}
