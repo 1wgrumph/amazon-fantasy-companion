@@ -7,7 +7,7 @@ Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
 Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
 ......................................
 ----------------------------------------------------------------------
-Ran 61 tests in 51.839s
+Ran 61 tests in 39.586s
 
 OK
 mutation adapter exit=3: ['GAP REPORT_INCOMPLETE: mutmut stats absent']
@@ -73,20 +73,20 @@ tests/unit/test_pipeline_and_stubs.py: 73 warnings
 tests/unit/test_router.py: 870 warnings
 tests/unit/test_store.py: 92 warnings
 tests/contract/test_api_contract.py: 109 warnings
-  <user-local>/lib/python3.12/site-packages/botocore/auth.py:424: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  <home>/.local/lib/python3.12/site-packages/botocore/auth.py:424: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
     datetime_now = datetime.datetime.utcnow()
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
 ============================= slowest 10 durations =============================
-2.23s call     tests/unit/feed_ingest/test_review_repairs.py::test_f3_repeated_fallback_keeps_revisions_stable
-2.07s call     tests/unit/feed_ingest/test_review_repairs.py::test_f3_three_failures_replace_live_with_labeled_replay[failure0]
-1.84s call     tests/unit/feed_ingest/test_review_repairs.py::test_f3_three_failures_replace_live_with_labeled_replay[failure1]
-1.63s call     tests/unit/feed_ingest/test_review_repairs.py::test_f3_tampered_replay_is_stale_and_mutates_nothing
-1.53s call     tests/unit/feed_ingest/test_revisions.py::test_ingesting_a_correction_revises_the_stored_event_in_place
-1.46s call     tests/unit/feed_ingest/test_review_repairs.py::test_f3_success_resets_consecutive_failures
-1.39s call     tests/unit/feed_ingest/test_revisions.py::test_ingesting_the_same_poll_twice_changes_no_revision
-1.24s call     tests/unit/feed_ingest/test_validation.py::test_invalid_poll_leaves_stored_events_unchanged
-1.00s call     tests/unit/feed_ingest/test_review_repairs.py::test_f3_no_fixture_reports_stale_without_changing_values
-0.95s call     tests/unit/feed_ingest/test_review_repairs.py::test_f5_irrelevant_in_progress_game_is_never_fetched
-===================== 500 passed, 11591 warnings in 57.12s =====================
+1.58s call     tests/unit/feed_ingest/test_review_repairs.py::test_f3_repeated_fallback_keeps_revisions_stable
+1.53s call     tests/unit/feed_ingest/test_review_repairs.py::test_f3_three_failures_replace_live_with_labeled_replay[failure0]
+1.45s call     tests/unit/feed_ingest/test_review_repairs.py::test_f3_three_failures_replace_live_with_labeled_replay[failure1]
+1.03s call     tests/unit/feed_ingest/test_revisions.py::test_ingesting_the_same_poll_twice_changes_no_revision
+0.96s call     tests/unit/feed_ingest/test_revisions.py::test_ingesting_a_correction_revises_the_stored_event_in_place
+0.94s call     tests/unit/feed_ingest/test_review_repairs.py::test_f3_success_resets_consecutive_failures
+0.90s call     tests/unit/feed_ingest/test_review_repairs.py::test_f3_tampered_replay_is_stale_and_mutates_nothing
+0.76s call     tests/unit/feed_ingest/test_review_repairs.py::test_f2_bad_game_does_not_abort_later_valid_game[failure1]
+0.74s call     tests/unit/feed_ingest/test_validation.py::test_invalid_poll_leaves_stored_events_unchanged
+0.71s call     tests/unit/feed_ingest/test_validation.py::test_captured_missing_wallclock_validates_ingests_and_replays_all_183_plays
+===================== 500 passed, 11591 warnings in 44.73s =====================
 gate: backend: PASS checks completed

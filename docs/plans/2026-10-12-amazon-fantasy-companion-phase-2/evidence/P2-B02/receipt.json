@@ -1,5 +1,5 @@
 {
- "outcome": "PASS",
+ "outcome": "CONTRACT_FAILURE",
  "slice_id": "P2-B02",
  "issue": 30,
  "milestone": "M05",
@@ -111,12 +111,12 @@
   ]
  },
  "repair": {
-  "outcome": "IN_PROGRESS",
+  "outcome": "CONTRACT_FAILURE",
   "profile": "bug-triager",
   "route": "Codex CLI / GPT-6.1 Sol / high",
   "baseline": "0d65797a82d3d899be2055706fac555f7642a77a",
   "round": "single authorized independent-review repair round",
-  "next_action": "Commit verified source candidate; run formal coverage and mutation; commit evidence only",
+  "next_action": "Return CONTRACT_FAILURE with the containing evidence-only commit; an amended packet must cover the manual-lineup team-identity seam before F5 / AFC-PR-008 can close.",
   "authority": "Owner P2-B02 F1\u2013F6 repair packet, including backend-template lease for read-only relevance access",
   "requirements": [
    "AFC-PR-008",
@@ -162,7 +162,8 @@
     "test": "test_validation.py::test_captured_missing_wallclock_validates_ingests_and_replays_all_183_plays; test_play_with_non_string_wallclock_is_rejected; test_review_repairs.py::test_f1_every_captured_summary_validates_for_live_ingest",
     "red_evidence": "repair-red-final.txt (pinned baseline; failure for finding)",
     "green_evidence": "repair-green-final.txt and repair-green.txt",
-    "prevention_evidence": "repair-gate.txt and formal coverage/mutation reports"
+    "prevention_evidence": "repair-gate.txt and formal coverage/mutation reports",
+    "status": "PASS"
    },
    {
     "finding": "F2",
@@ -170,7 +171,8 @@
     "test": "test_review_repairs.py::test_f2_bad_game_does_not_abort_later_valid_game",
     "red_evidence": "repair-red-final.txt (pinned baseline; failure for finding)",
     "green_evidence": "repair-green-final.txt and repair-green.txt",
-    "prevention_evidence": "repair-gate.txt and formal coverage/mutation reports"
+    "prevention_evidence": "repair-gate.txt and formal coverage/mutation reports",
+    "status": "PASS"
    },
    {
     "finding": "F3",
@@ -178,7 +180,8 @@
     "test": "test_review_repairs.py::test_f3_three_failures_replace_live_with_labeled_replay; test_f3_no_fixture_reports_stale_without_changing_values; test_f3_success_resets_consecutive_failures; test_f3_repeated_fallback_keeps_revisions_stable; test_f3_tampered_replay_is_stale_and_mutates_nothing",
     "red_evidence": "repair-red-final.txt (pinned baseline; failure for finding)",
     "green_evidence": "repair-green-final.txt and repair-green.txt",
-    "prevention_evidence": "repair-gate.txt and formal coverage/mutation reports"
+    "prevention_evidence": "repair-gate.txt and formal coverage/mutation reports",
+    "status": "PASS"
    },
    {
     "finding": "F4",
@@ -186,7 +189,8 @@
     "test": "test_review_repairs.py::test_f4_configured_interval_and_lambda_deadline; test_f4_invalid_interval_is_rejected_without_a_poll",
     "red_evidence": "repair-red-final.txt (pinned baseline; failure for finding)",
     "green_evidence": "repair-green-final.txt and repair-green.txt",
-    "prevention_evidence": "repair-gate.txt and formal coverage/mutation reports"
+    "prevention_evidence": "repair-gate.txt and formal coverage/mutation reports",
+    "status": "PASS"
    },
    {
     "finding": "F5",
@@ -194,7 +198,10 @@
     "test": "test_review_repairs.py::test_f5_irrelevant_in_progress_game_is_never_fetched; test_f5_no_profiles_fetches_no_summary; test_f5_selected_starter_game_is_monitored_without_favorites; test_f5_profile_accessor_follows_scan_pages_and_reads_starters; test_f5_monitoring_decisions_carry_profile_assumption_basis; test_f5_malformed_relevance_fields_are_rejected_before_store_access; contract/test_template_iam.py::test_each_function_grants_only_its_store_operations",
     "red_evidence": "repair-red-final.txt (pinned baseline; failure for finding)",
     "green_evidence": "repair-green-final.txt and repair-green.txt",
-    "prevention_evidence": "repair-gate.txt and formal coverage/mutation reports"
+    "prevention_evidence": "repair-gate.txt and formal coverage/mutation reports",
+    "status": "PARTIAL",
+    "unresolved": "Selected manual nonleader is not monitored; see relevance-contract-gap.json. No claim of complete PR-008.",
+    "blocking_evidence": "relevance-contract-gap.json"
    },
    {
     "finding": "F6",
@@ -202,7 +209,8 @@
     "test": "test_review_repairs.py::test_f6_redirect_is_refused_before_any_second_request (301/302/307/308); test_feed_edges.py allowlist/size checks",
     "red_evidence": "repair-red-final.txt (pinned baseline; failure for finding)",
     "green_evidence": "repair-green-final.txt and repair-green.txt",
-    "prevention_evidence": "repair-gate.txt and formal coverage/mutation reports"
+    "prevention_evidence": "repair-gate.txt and formal coverage/mutation reports",
+    "status": "PASS"
    }
   ],
   "commands": [
@@ -240,7 +248,129 @@
     "exit_code": 0,
     "result": "PASS local lint; credential/config files disabled; telemetry disabled",
     "evidence": "repair-sam.txt"
+   },
+   {
+    "id": "coverage",
+    "command": "tools/ci/coverage/backend.sh d13f8b1 <P2-B02>/repair-coverage (outer timeout 1500 s)",
+    "exit_code": 0,
+    "result": "changed-line coverage 99% (threshold 90%)",
+    "evidence": "repair-coverage.txt",
+    "report": "repair-coverage/coverage-result.json"
+   },
+   {
+    "id": "coverage-portable",
+    "command": "python3 tools/ci/coverage/evaluate.py d13f8b1 <portable coverage.xml> <repair-coverage>",
+    "exit_code": 0,
+    "result": "PASS 99%; XML source path sanitized, native measurement and source binding preserved",
+    "evidence": "repair-coverage-portable.txt"
+   },
+   {
+    "id": "mutation",
+    "command": "PATH=$HOME/.local/share/afc-tools/mutmut-backend/bin:$PATH tools/ci/mutation/backend.sh d13f8b1 <P2-B02>/repair-mutation (outer timeout 1500 s)",
+    "exit_code": 0,
+    "result": "mutation score 93.70% (threshold 70%)",
+    "evidence": "repair-mutation.txt",
+    "report": "repair-mutation/mutation-result.json"
+   },
+   {
+    "id": "F5-contract-gap",
+    "command": "PYTHONDONTWRITEBYTECODE=1 python3 <P2-B02>/relevance-contract-gap.py",
+    "exit_code": 0,
+    "result": "CONTRACT_FAILURE reproduced: captured manual starter 4715355 (PHI), expected monitored=true, actual=false",
+    "evidence": "relevance-contract-gap.json"
+   },
+   {
+    "id": "final-full-gate",
+    "command": "PATH=$HOME/.local/share/afc-tools/backend-tests/bin:$PATH bash tools/ci/gate.sh",
+    "exit_code": 0,
+    "result": "PASS all areas; 500 backend tests in 44.73 s",
+    "evidence": "repair-gate.txt"
    }
-  ]
+  ],
+  "candidate_ref": "13c5892d588230a7df9df9ddf0fcb3d173300ee6",
+  "candidate_binding": "Formal coverage and mutation measured committed candidate 13c5892d588230a7df9df9ddf0fcb3d173300ee6; closeout commit changes evidence only. repair-candidate-binding.json freezes all 12 changed backend paths.",
+  "stop_rule": "A fix needs a path outside authority: backend/src/lineup/manual.py and associated lineup test / input-output-contract authority.",
+  "completed_findings": [
+   "F1",
+   "F2",
+   "F3",
+   "F4",
+   "F6"
+  ],
+  "partial_findings": [
+   "F5"
+  ],
+  "outstanding_obligations": [
+   "Complete selected-manual-player relevance for players absent from scoreboard leaders; the existing manual builder discards NFL team even when the roster input carries it.",
+   "Obtain authority for backend/src/lineup/manual.py and affected lineup tests / any frozen-contract correction, or an explicitly approved alternative data source. No additional IAM grant is required.",
+   "Add the positive nonleader production-path regression, repair it, and rerun required checks on the resulting candidate."
+  ],
+  "blocker_evidence": "relevance-contract-gap.json and relevance-contract-gap.py",
+  "blocker_origin": "B03 manual lineup output drops NFL team; B02 relevance adapter only has scoreboard leaders and team-bearing starters. The production positive case is not representable with the current manual-starter shape.",
+  "blocker_escape": "Frozen monitoring tests supply full boxscore athlete sets directly to the helper, while the production scoreboard carries only leaders. New positive integration tests covered a leader and a team-bearing Yahoo starter, leaving a selected manual nonleader untested.",
+  "formal_gate_status": "All assigned deterministic gates PASS; this does not close the reproduced F5 semantic gap or full AFC-PR-008.",
+  "unperformed": [
+   "AWS/network/deployment/device/live-feed checks prohibited by packet",
+   "No new independent review or OCR run in this Implementer repair session",
+   "No compiled-binary claim; Reverify not applicable",
+   "No push, PR, branch change, activation, or publication"
+  ],
+  "tooling_corrections": [
+   "Commit attempt 1: backend 500 PASS, hygiene rejected trailing whitespace in captured failure logs; normalized evidence.",
+   "Commit attempt 2: backend 500 PASS, hygiene rejected local paths in the captured hook log; sanitized all evidence and checked paths before staging.",
+   "Candidate commit attempt 3: hooks PASS; Codex author/committer; no Co-Authored-By."
+  ],
+  "formal_results": {
+   "coverage": {
+    "status": "PASS",
+    "percent": 99,
+    "changed_lines": 217,
+    "threshold": 90,
+    "report": "repair-coverage/coverage-result.json"
+   },
+   "mutation": {
+    "status": "PASS",
+    "score": 0.937007874015748,
+    "scored_mutants": 762,
+    "killed_scored": 714,
+    "threshold": 0.7,
+    "native_total": 1223,
+    "timeouts": 0,
+    "report": "repair-mutation/mutation-result.json"
+   }
+  },
+  "acceptance": [
+   {
+    "objective": 1,
+    "status": "PARTIAL",
+    "detail": "Requested red/green regressions: 17 baseline failures, 18 candidate passes. F1\u2013F4/F6 complete; F5 negative case repaired but selected manual nonleader remains a reproduced contract gap."
+   },
+   {
+    "objective": 2,
+    "status": "PASS",
+    "detail": "Frozen verifier exit 0; exact F1 hash/note-only exception checked."
+   },
+   {
+    "objective": 3,
+    "status": "PASS",
+    "detail": "Final full gate exit 0; 500 backend tests passed (44.73 s); spec/docs/hygiene/tvapp/backend pass."
+   },
+   {
+    "objective": 4,
+    "status": "PASS",
+    "detail": "Formal coverage 99% of 217 changed lines; formal mutation 93.70% (714/762 scoped), 0 unresolved/timeouts; both exit 0 against d13f8b1."
+   },
+   {
+    "objective": 5,
+    "status": "PASS",
+    "detail": "Local SAM lint exit 0; no credential files, AWS or deployed operations."
+   },
+   {
+    "objective": 6,
+    "status": "PASS",
+    "detail": "This receipt includes finding/fix/test/evidence/status table and explicit unresolved F5 scope."
+   }
+  ],
+  "closeout": "Containing commit is evidence only; all backend hashes match measured source candidate 13c5892d588230a7df9df9ddf0fcb3d173300ee6. No source work after contract stop."
  }
 }
