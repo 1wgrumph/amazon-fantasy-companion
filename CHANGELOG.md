@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add the backend provider resolver: preference-ordered selection among installed providers carrying the event's channel from the read-only registry, per-platform routes with REGISTRY_ROUTE_GAP for missing or unverified entries, an honest access basis that is never inferred from installation, and recording of detector reports and routing outcomes (PR #TBD).
 - Add the TV profile and installed-app detection host code: settings codec with schema validation and documented defaults, revision-checked profile persistence, customer overrides over detection, opt-in detector reporting, and the Profile/Settings screen with stated limits for unsupported routes ([#74](https://github.com/1wgrumph/amazon-fantasy-companion/pull/74)).
 - Record the P2-L02 afc-dev deploy of origin/main `2d973bd`: eleven known routes answered, nine deployed smoke tests passed; two panel tests remain deferred until P2-B07/L03 ([#70](https://github.com/1wgrumph/amazon-fantasy-companion/pull/70)).
 - Add the TV app host foundation: shell, API client, Link screen, Gradle and manifest, 70% host coverage gate, and bounded PIT mutation scoring ([#73](https://github.com/1wgrumph/amazon-fantasy-companion/pull/73)).

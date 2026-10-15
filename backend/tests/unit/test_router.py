@@ -216,12 +216,11 @@ def test_every_settings_attribute_is_accepted(api, owner, field):
 
 @pytest.mark.parametrize("outcome", ["gameOpened", "searchOpened", "appHomeOpened", "appAbsent",
                                      "accessUnknown", "playbackDenied"])
-def test_valid_routing_outcomes_reach_the_resolver_stub(api, owner, outcome):
+def test_valid_routing_outcomes_reach_the_resolver(api, owner, outcome):
     status, response = call("POST", "/v1/routing-outcome",
                             json.dumps({"eventId": "e1", "outcome": outcome}), owner)
-    assert status == 503
-    assert error_of(response) == {"code": "not_implemented",
-                                  "message": "This feature is not available yet."}
+    assert status == 200
+    assert json.loads(response["body"])["outcome"] == outcome
 
 
 def test_routing_outcomes_are_validated(api, owner):
@@ -240,7 +239,7 @@ def test_installed_apps_are_validated(api, owner):
             "code": "invalid_request", "message": "Field packages must list package names."}
     for packages in [[], ["com.amazon.Prime_video.1"] * 500, ["x" * 255]]:
         status, _ = call("POST", "/v1/installed-apps", json.dumps({"packages": packages}), owner)
-        assert status == 503
+        assert status == 200
 
 
 def test_stub_routes_receive_the_session_profile_and_query(api, owner, monkeypatch):

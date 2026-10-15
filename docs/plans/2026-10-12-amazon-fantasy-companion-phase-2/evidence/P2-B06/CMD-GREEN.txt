@@ -1,0 +1,80 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.2, pluggy-1.6.0 -- $HOME/.local/share/afc-tools/backend-tests/bin/python3.12
+rootdir: $HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b06t/backend
+configfile: pyproject.toml
+collecting ... collected 49 items
+
+backend/tests/unit/provider_resolver/test_resolver_access_basis.py::test_installed_only_reads_unknown PASSED [  2%]
+backend/tests/unit/provider_resolver/test_resolver_access_basis.py::test_installed_only_never_reads_verified_or_confirmed PASSED [  4%]
+backend/tests/unit/provider_resolver/test_resolver_access_basis.py::test_customer_confirmation_reads_customer_confirmed PASSED [  6%]
+backend/tests/unit/provider_resolver/test_resolver_access_basis.py::test_confirmation_is_never_promoted_to_verified PASSED [  8%]
+backend/tests/unit/provider_resolver/test_resolver_access_basis.py::test_confirmation_of_another_provider_does_not_carry_over PASSED [ 10%]
+backend/tests/unit/provider_resolver/test_resolver_access_basis.py::test_unknown_broadcast_stays_unknown PASSED [ 12%]
+backend/tests/unit/provider_resolver/test_resolver_access_basis.py::test_no_profile_and_no_report_reads_unknown PASSED [ 14%]
+backend/tests/unit/provider_resolver/test_resolver_access_basis.py::test_installed_fact_is_recorded_separately_from_access PASSED [ 16%]
+backend/tests/unit/provider_resolver/test_resolver_access_basis.py::test_providers_api_reads_unknown_after_installed_report PASSED [ 18%]
+backend/tests/unit/provider_resolver/test_resolver_local_broadcast.py::test_local_channel_with_installed_carrier_offers_its_route PASSED [ 20%]
+backend/tests/unit/provider_resolver/test_resolver_local_broadcast.py::test_local_channel_without_installed_carrier_has_no_deep_link PASSED [ 22%]
+backend/tests/unit/provider_resolver/test_resolver_local_broadcast.py::test_local_channel_with_no_installed_carrier_shows_channel_only[CBS] PASSED [ 24%]
+backend/tests/unit/provider_resolver/test_resolver_local_broadcast.py::test_local_channel_with_no_installed_carrier_shows_channel_only[FOX] PASSED [ 26%]
+backend/tests/unit/provider_resolver/test_resolver_local_broadcast.py::test_local_channel_with_no_installed_carrier_shows_channel_only[NBC] PASSED [ 28%]
+backend/tests/unit/provider_resolver/test_resolver_local_broadcast.py::test_local_carrier_installed_only_still_reads_unknown PASSED [ 30%]
+backend/tests/unit/provider_resolver/test_resolver_overrides.py::test_override_off_defeats_detector_report PASSED [ 32%]
+backend/tests/unit/provider_resolver/test_resolver_overrides.py::test_override_on_counts_without_detector_report PASSED [ 34%]
+backend/tests/unit/provider_resolver/test_resolver_overrides.py::test_records_are_stored_facts_not_profile_settings PASSED [ 36%]
+backend/tests/unit/provider_resolver/test_resolver_platform_routes.py::test_route_carries_both_platform_entries PASSED [ 38%]
+backend/tests/unit/provider_resolver/test_resolver_platform_routes.py::test_verified_entries_carry_their_own_launch_data PASSED [ 40%]
+backend/tests/unit/provider_resolver/test_resolver_platform_routes.py::test_missing_vega_entry_is_a_gap_not_filled_from_fire_os PASSED [ 42%]
+backend/tests/unit/provider_resolver/test_resolver_platform_routes.py::test_unverified_fire_os_entry_is_a_gap_not_filled_from_vega PASSED [ 44%]
+backend/tests/unit/provider_resolver/test_resolver_platform_routes.py::test_registry_verified_outcome_is_not_access PASSED [ 46%]
+backend/tests/unit/provider_resolver/test_resolver_records.py::test_installed_report_is_stored_and_returned PASSED [ 48%]
+backend/tests/unit/provider_resolver/test_resolver_records.py::test_latest_installed_report_replaces_the_previous_one PASSED [ 51%]
+backend/tests/unit/provider_resolver/test_resolver_records.py::test_installed_report_does_not_create_access_confirmation PASSED [ 53%]
+backend/tests/unit/provider_resolver/test_resolver_records.py::test_each_modeled_outcome_is_recorded[gameOpened] PASSED [ 55%]
+backend/tests/unit/provider_resolver/test_resolver_records.py::test_each_modeled_outcome_is_recorded[searchOpened] PASSED [ 57%]
+backend/tests/unit/provider_resolver/test_resolver_records.py::test_each_modeled_outcome_is_recorded[appHomeOpened] PASSED [ 59%]
+backend/tests/unit/provider_resolver/test_resolver_records.py::test_each_modeled_outcome_is_recorded[appAbsent] PASSED [ 61%]
+backend/tests/unit/provider_resolver/test_resolver_records.py::test_each_modeled_outcome_is_recorded[accessUnknown] PASSED [ 63%]
+backend/tests/unit/provider_resolver/test_resolver_records.py::test_each_modeled_outcome_is_recorded[playbackDenied] PASSED [ 65%]
+backend/tests/unit/provider_resolver/test_resolver_records.py::test_invented_outcome_is_rejected[launched] PASSED [ 67%]
+backend/tests/unit/provider_resolver/test_resolver_records.py::test_invented_outcome_is_rejected[success] PASSED [ 69%]
+backend/tests/unit/provider_resolver/test_resolver_records.py::test_invented_outcome_is_rejected[] PASSED [ 71%]
+backend/tests/unit/provider_resolver/test_resolver_records.py::test_invented_outcome_is_rejected[None] PASSED [ 73%]
+backend/tests/unit/provider_resolver/test_resolver_records.py::test_game_opened_outcome_does_not_verify_access PASSED [ 75%]
+backend/tests/unit/provider_resolver/test_resolver_selection.py::test_resolution_names_provider_channel_and_route PASSED [ 77%]
+backend/tests/unit/provider_resolver/test_resolver_selection.py::test_preference_selects_among_installed_carriers PASSED [ 79%]
+backend/tests/unit/provider_resolver/test_resolver_selection.py::test_preference_change_reroutes_contested_game PASSED [ 81%]
+backend/tests/unit/provider_resolver/test_resolver_selection.py::test_spike_order_does_not_override_preference PASSED [ 83%]
+backend/tests/unit/provider_resolver/test_resolver_selection.py::test_uninstalled_preferred_provider_falls_to_next_installed_preference PASSED [ 85%]
+backend/tests/unit/provider_resolver/test_resolver_selection.py::test_no_carrier_for_channel_gives_no_route PASSED [ 87%]
+backend/tests/unit/provider_resolver/test_resolver_selection.py::test_registry_is_read_only PASSED [ 89%]
+backend/tests/unit/provider_resolver/test_resolver_selection.py::test_default_registry_is_the_landed_document PASSED [ 91%]
+backend/tests/unit/provider_resolver/test_resolver_selection.py::test_landed_empty_registry_resolves_no_route PASSED [ 93%]
+backend/tests/deployed/provider_resolver/test_providers_deployed.py::test_installed_report_is_accepted SKIPPED [ 95%]
+backend/tests/deployed/provider_resolver/test_providers_deployed.py::test_providers_reads_an_access_basis_never_verified_from_install SKIPPED [ 97%]
+backend/tests/deployed/provider_resolver/test_providers_deployed.py::test_invented_routing_outcome_is_rejected SKIPPED [100%]
+
+=============================== warnings summary ===============================
+tests/unit/provider_resolver/test_resolver_access_basis.py: 93 warnings
+tests/unit/provider_resolver/test_resolver_local_broadcast.py: 60 warnings
+tests/unit/provider_resolver/test_resolver_overrides.py: 30 warnings
+tests/unit/provider_resolver/test_resolver_platform_routes.py: 50 warnings
+tests/unit/provider_resolver/test_resolver_records.py: 104 warnings
+tests/unit/provider_resolver/test_resolver_selection.py: 89 warnings
+  $HOME/.local/lib/python3.12/site-packages/botocore/auth.py:424: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    datetime_now = datetime.datetime.utcnow()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: $HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b06t/docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B06/CMD-GREEN.xml -
+============================= slowest 10 durations =============================
+0.20s setup    tests/unit/provider_resolver/test_resolver_selection.py::test_spike_order_does_not_override_preference
+0.18s setup    tests/unit/provider_resolver/test_resolver_selection.py::test_default_registry_is_the_landed_document
+0.18s setup    tests/unit/provider_resolver/test_resolver_records.py::test_invented_outcome_is_rejected[None]
+0.17s setup    tests/unit/provider_resolver/test_resolver_platform_routes.py::test_missing_vega_entry_is_a_gap_not_filled_from_fire_os
+0.16s setup    tests/unit/provider_resolver/test_resolver_access_basis.py::test_installed_fact_is_recorded_separately_from_access
+0.15s setup    tests/unit/provider_resolver/test_resolver_local_broadcast.py::test_local_channel_with_no_installed_carrier_shows_channel_only[CBS]
+0.14s setup    tests/unit/provider_resolver/test_resolver_access_basis.py::test_installed_only_reads_unknown
+0.11s call     tests/unit/provider_resolver/test_resolver_overrides.py::test_override_off_defeats_detector_report
+0.11s call     tests/unit/provider_resolver/test_resolver_records.py::test_each_modeled_outcome_is_recorded[appAbsent]
+0.10s call     tests/unit/provider_resolver/test_resolver_records.py::test_latest_installed_report_replaces_the_previous_one
+================= 46 passed, 3 skipped, 426 warnings in 4.80s ==================
