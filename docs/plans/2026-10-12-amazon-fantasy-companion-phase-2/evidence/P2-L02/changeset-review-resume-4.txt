@@ -1,0 +1,60 @@
+Pre-execution review: samcli-deploy1792026572
+Full Changes array identical to resume-3; eleven removals explicitly authorized by resume-4 owner packet.
+{'Modify': 20, 'Remove': 11, 'Add': 1}
+Modify AlertsTable scope=['Tags'] replacement=False
+  /Tags/0/Value
+Remove ApiFunctionAlertsPermission scope=[] replacement=N/A
+Add ApiFunctionDefaultRoutePermission scope=[] replacement=N/A
+New permission: {"Action": "lambda:InvokeFunction", "FunctionName": "afc-dev-ApiFunction-SQ4LGLtWYxNh", "Principal": "apigateway.amazonaws.com", "SourceArn": "arn:aws:execute-api:us-east-2:<acct>:le3r79003f/*/*"}
+Remove ApiFunctionInstalledAppsPermission scope=[] replacement=N/A
+Remove ApiFunctionLinkConfirmPermission scope=[] replacement=N/A
+Remove ApiFunctionLinkIssuePermission scope=[] replacement=N/A
+Remove ApiFunctionLinkPagePermission scope=[] replacement=N/A
+Remove ApiFunctionLinkPollPermission scope=[] replacement=N/A
+Remove ApiFunctionPanelPermission scope=[] replacement=N/A
+Remove ApiFunctionProfileGetPermission scope=[] replacement=N/A
+Remove ApiFunctionProfilePutPermission scope=[] replacement=N/A
+Remove ApiFunctionProvidersPermission scope=[] replacement=N/A
+Modify ApiFunctionRole scope=['Tags'] replacement=False
+  /Tags/0/Value
+Remove ApiFunctionRoutingOutcomePermission scope=[] replacement=N/A
+Modify ApiFunction scope=['Tags'] replacement=False
+  /Tags/0/Value
+Modify ApiLogGroup scope=['Tags'] replacement=False
+  /Tags/0/Value
+Modify EventsTable scope=['Tags'] replacement=False
+  /Tags/0/Value
+Modify HttpApiApiGatewayDefaultStage scope=['Tags'] replacement=False
+  /Tags/0/Value
+Modify HttpApi scope=['Properties', 'Tags'] replacement=False
+  /Properties/Body
+  /Tags/0/Value
+Modify IngestFunctionRole scope=['Tags'] replacement=False
+  /Tags/0/Value
+Modify IngestFunction scope=['Tags'] replacement=False
+  /Tags/0/Value
+Modify IngestLogGroup scope=['Tags'] replacement=False
+  /Tags/0/Value
+Modify IngestScheduleRole scope=['Tags'] replacement=False
+  /Tags/0/Value
+Modify IngestSchedule scope=['Tags'] replacement=False
+  /Tags/0/Value
+Modify LineupsTable scope=['Tags'] replacement=False
+  /Tags/0/Value
+Modify LinksTable scope=['Tags'] replacement=False
+  /Tags/0/Value
+Modify PanelsTable scope=['Tags'] replacement=False
+  /Tags/0/Value
+Modify PolicyFunctionEventStream scope=['Tags'] replacement=False
+  /Tags/0/Value
+Modify PolicyFunctionRole scope=['Tags'] replacement=False
+  /Tags/0/Value
+Modify PolicyFunction scope=['Tags'] replacement=False
+  /Tags/0/Value
+Modify PolicyLogGroup scope=['Tags'] replacement=False
+  /Tags/0/Value
+Modify ProfilesTable scope=['Tags'] replacement=False
+  /Tags/0/Value
+Existing API paths/integrations unchanged; only $default added. All other modifications tag-only. No code artifact, IAM policy or schedule-state change.
+Initial diagnostic parser exit 1: KeyError Tags (context omits stack tags); parser corrected to inspect Scope/Details and compare contexts. This was a local inspection error; no AWS mutation occurred.
+Verdict: authorized exact expected changeset; confirm execution. Review assertions EXIT_CODE=0.

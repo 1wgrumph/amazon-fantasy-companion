@@ -1,0 +1,280 @@
+$ timeout --foreground 900 sam deploy --config-env default --profile afc-dev --region us-east-2 --tags GitCommit=75afca022f967945a70bf715beb2a7c98e65ed9d
+
+	Managed S3 bucket: aws-sam-cli-managed-default-samclisourcebucket-kpyrjq2yreuk
+	Auto resolution of buckets can be turned off by setting resolve_s3=False
+	To use a specific S3 bucket, set --s3-bucket=<bucket_name>
+	Above settings can be stored in samconfig.toml
+
+	File with same data already exists at 1239e7cb365a2ad3e441c4dba4ff63fd, skipping upload
+
+	File with same data already exists at 1239e7cb365a2ad3e441c4dba4ff63fd, skipping upload
+
+	File with same data already exists at 1239e7cb365a2ad3e441c4dba4ff63fd, skipping upload
+
+	Deploying with following values
+	===============================
+	Stack name                   : afc-dev
+	Region                       : us-east-2
+	Confirm changeset            : True
+	Disable rollback             : False
+	Deployment s3 bucket         : aws-sam-cli-managed-default-samclisourcebucket-kpyrjq2yreuk
+	Capabilities                 : ["CAPABILITY_IAM"]
+	Parameter overrides          : {}
+	Signing Profiles             : {}
+
+Initiating deployment
+=====================
+
+
+	File with same data already exists at 3ac0650f8600f1c1c8693118e0f16028.template, skipping upload
+
+
+Waiting for changeset to be created..
+
+CloudFormation stack changeset
+-------------------------------------------------------------------------------------------------
+Operation                LogicalResourceId        ResourceType             Replacement
+-------------------------------------------------------------------------------------------------
++ Add                    AlertsTable              AWS::DynamoDB::Table     N/A
++ Add                    ApiFunctionAlertsPermi   AWS::Lambda::Permissio   N/A
+                         ssion                    n
++ Add                    ApiFunctionInstalledAp   AWS::Lambda::Permissio   N/A
+                         psPermission             n
++ Add                    ApiFunctionLinkConfirm   AWS::Lambda::Permissio   N/A
+                         Permission               n
++ Add                    ApiFunctionLinkIssuePe   AWS::Lambda::Permissio   N/A
+                         rmission                 n
++ Add                    ApiFunctionLinkPagePer   AWS::Lambda::Permissio   N/A
+                         mission                  n
++ Add                    ApiFunctionLinkPollPer   AWS::Lambda::Permissio   N/A
+                         mission                  n
++ Add                    ApiFunctionPanelPermis   AWS::Lambda::Permissio   N/A
+                         sion                     n
++ Add                    ApiFunctionProfileGetP   AWS::Lambda::Permissio   N/A
+                         ermission                n
++ Add                    ApiFunctionProfilePutP   AWS::Lambda::Permissio   N/A
+                         ermission                n
++ Add                    ApiFunctionProvidersPe   AWS::Lambda::Permissio   N/A
+                         rmission                 n
++ Add                    ApiFunctionRole          AWS::IAM::Role           N/A
++ Add                    ApiFunctionRoutingOutc   AWS::Lambda::Permissio   N/A
+                         omePermission            n
++ Add                    ApiFunction              AWS::Lambda::Function    N/A
++ Add                    ApiLogGroup              AWS::Logs::LogGroup      N/A
++ Add                    EventsTable              AWS::DynamoDB::Table     N/A
++ Add                    HttpApiApiGatewayDefau   AWS::ApiGatewayV2::Sta   N/A
+                         ltStage                  ge
++ Add                    HttpApi                  AWS::ApiGatewayV2::Api   N/A
++ Add                    IngestFunctionRole       AWS::IAM::Role           N/A
++ Add                    IngestFunction           AWS::Lambda::Function    N/A
++ Add                    IngestLogGroup           AWS::Logs::LogGroup      N/A
++ Add                    IngestScheduleRole       AWS::IAM::Role           N/A
++ Add                    IngestSchedule           AWS::Scheduler::Schedu   N/A
+                                                  le
++ Add                    LineupsTable             AWS::DynamoDB::Table     N/A
++ Add                    LinksTable               AWS::DynamoDB::Table     N/A
++ Add                    PanelsTable              AWS::DynamoDB::Table     N/A
++ Add                    PolicyFunctionEventStr   AWS::Lambda::EventSour   N/A
+                         eam                      ceMapping
++ Add                    PolicyFunctionRole       AWS::IAM::Role           N/A
++ Add                    PolicyFunction           AWS::Lambda::Function    N/A
++ Add                    PolicyLogGroup           AWS::Logs::LogGroup      N/A
++ Add                    ProfilesTable            AWS::DynamoDB::Table     N/A
+-------------------------------------------------------------------------------------------------
+
+
+Changeset created successfully. arn:aws:cloudformation:us-east-2:<acct>:changeSet/samcli-deploy1791990245/6d8ce3ea-859e-4169-82d3-7652109682c1
+
+
+Previewing CloudFormation changeset before deployment
+======================================================
+Deploy this changeset? [y/N]:
+2026-10-14 10:04:27 - Waiting for stack create/update to complete
+
+CloudFormation events from stack operations (refresh every 5.0 seconds)
+-------------------------------------------------------------------------------------------------
+ResourceStatus           ResourceType             LogicalResourceId        ResourceStatusReason
+-------------------------------------------------------------------------------------------------
+CREATE_IN_PROGRESS       AWS::CloudFormation::S   afc-dev                  User Initiated
+                         tack
+CREATE_IN_PROGRESS       AWS::DynamoDB::Table     LineupsTable             -
+CREATE_IN_PROGRESS       AWS::DynamoDB::Table     ProfilesTable            -
+CREATE_IN_PROGRESS       AWS::DynamoDB::Table     AlertsTable              -
+CREATE_IN_PROGRESS       AWS::DynamoDB::Table     EventsTable              -
+CREATE_IN_PROGRESS       AWS::DynamoDB::Table     LinksTable               -
+CREATE_IN_PROGRESS       AWS::DynamoDB::Table     PanelsTable              -
+CREATE_IN_PROGRESS       AWS::DynamoDB::Table     LineupsTable             Resource creation
+                                                                           Initiated
+CREATE_IN_PROGRESS       AWS::DynamoDB::Table     AlertsTable              Resource creation
+                                                                           Initiated
+CREATE_IN_PROGRESS       AWS::DynamoDB::Table     ProfilesTable            Resource creation
+                                                                           Initiated
+CREATE_IN_PROGRESS       AWS::DynamoDB::Table     PanelsTable              Resource creation
+                                                                           Initiated
+CREATE_IN_PROGRESS       AWS::DynamoDB::Table     LinksTable               Resource creation
+                                                                           Initiated
+CREATE_IN_PROGRESS       AWS::DynamoDB::Table     EventsTable              Resource creation
+                                                                           Initiated
+CREATE_COMPLETE          AWS::DynamoDB::Table     LineupsTable             -
+CREATE_COMPLETE          AWS::DynamoDB::Table     AlertsTable              -
+CREATE_COMPLETE          AWS::DynamoDB::Table     PanelsTable              -
+CREATE_COMPLETE          AWS::DynamoDB::Table     ProfilesTable            -
+CREATE_COMPLETE          AWS::DynamoDB::Table     EventsTable              -
+CREATE_COMPLETE          AWS::DynamoDB::Table     LinksTable               -
+CREATE_IN_PROGRESS       AWS::IAM::Role           IngestFunctionRole       -
+CREATE_IN_PROGRESS       AWS::IAM::Role           ApiFunctionRole          -
+CREATE_IN_PROGRESS       AWS::IAM::Role           PolicyFunctionRole       -
+CREATE_IN_PROGRESS       AWS::IAM::Role           IngestFunctionRole       Resource creation
+                                                                           Initiated
+CREATE_IN_PROGRESS       AWS::IAM::Role           ApiFunctionRole          Resource creation
+                                                                           Initiated
+CREATE_IN_PROGRESS       AWS::IAM::Role           PolicyFunctionRole       Resource creation
+                                                                           Initiated
+CREATE_COMPLETE          AWS::IAM::Role           IngestFunctionRole       -
+CREATE_COMPLETE          AWS::IAM::Role           ApiFunctionRole          -
+CREATE_COMPLETE          AWS::IAM::Role           PolicyFunctionRole       -
+CREATE_IN_PROGRESS       AWS::Lambda::Function    IngestFunction           -
+CREATE_IN_PROGRESS       AWS::Lambda::Function    ApiFunction              -
+CREATE_IN_PROGRESS       AWS::Lambda::Function    PolicyFunction           -
+CREATE_IN_PROGRESS       AWS::Lambda::Function    IngestFunction           Resource creation
+                                                                           Initiated
+CREATE_IN_PROGRESS       AWS::Lambda::Function    ApiFunction              Resource creation
+                                                                           Initiated
+CREATE_IN_PROGRESS       AWS::Lambda::Function    PolicyFunction           Resource creation
+                                                                           Initiated
+CREATE_IN_PROGRESS -     AWS::Lambda::Function    IngestFunction           Eventual consistency
+CONFIGURATION_COMPLETE                                                     check initiated
+CREATE_IN_PROGRESS       AWS::Logs::LogGroup      IngestLogGroup           -
+CREATE_IN_PROGRESS -     AWS::Lambda::Function    PolicyFunction           Eventual consistency
+CONFIGURATION_COMPLETE                                                     check initiated
+CREATE_IN_PROGRESS -     AWS::Lambda::Function    ApiFunction              Eventual consistency
+CONFIGURATION_COMPLETE                                                     check initiated
+CREATE_IN_PROGRESS       AWS::Logs::LogGroup      PolicyLogGroup           -
+CREATE_IN_PROGRESS       AWS::Logs::LogGroup      ApiLogGroup              -
+CREATE_IN_PROGRESS       AWS::ApiGatewayV2::Api   HttpApi                  -
+CREATE_IN_PROGRESS       AWS::Logs::LogGroup      IngestLogGroup           Resource creation
+                                                                           Initiated
+CREATE_IN_PROGRESS       AWS::Lambda::EventSour   PolicyFunctionEventStr   -
+                         ceMapping                eam
+CREATE_IN_PROGRESS       AWS::Logs::LogGroup      ApiLogGroup              Resource creation
+                                                                           Initiated
+CREATE_IN_PROGRESS       AWS::Logs::LogGroup      PolicyLogGroup           Resource creation
+                                                                           Initiated
+CREATE_IN_PROGRESS       AWS::Lambda::EventSour   PolicyFunctionEventStr   Resource creation
+                         ceMapping                eam                      Initiated
+CREATE_COMPLETE          AWS::Lambda::EventSour   PolicyFunctionEventStr   -
+                         ceMapping                eam
+CREATE_IN_PROGRESS       AWS::ApiGatewayV2::Api   HttpApi                  Resource creation
+                                                                           Initiated
+CREATE_COMPLETE          AWS::ApiGatewayV2::Api   HttpApi                  -
+CREATE_IN_PROGRESS       AWS::Lambda::Permissio   ApiFunctionLinkPollPer   -
+                         n                        mission
+CREATE_IN_PROGRESS       AWS::Lambda::Permissio   ApiFunctionLinkConfirm   -
+                         n                        Permission
+CREATE_IN_PROGRESS       AWS::Lambda::Permissio   ApiFunctionRoutingOutc   -
+                         n                        omePermission
+CREATE_IN_PROGRESS       AWS::Lambda::Permissio   ApiFunctionProfileGetP   -
+                         n                        ermission
+CREATE_IN_PROGRESS       AWS::Lambda::Permissio   ApiFunctionLinkPagePer   -
+                         n                        mission
+CREATE_IN_PROGRESS       AWS::Lambda::Permissio   ApiFunctionInstalledAp   -
+                         n                        psPermission
+CREATE_IN_PROGRESS       AWS::Lambda::Permissio   ApiFunctionProvidersPe   -
+                         n                        rmission
+CREATE_IN_PROGRESS       AWS::Lambda::Permissio   ApiFunctionPanelPermis   -
+                         n                        sion
+CREATE_IN_PROGRESS       AWS::Lambda::Permissio   ApiFunctionAlertsPermi   -
+                         n                        ssion
+CREATE_IN_PROGRESS       AWS::Lambda::Permissio   ApiFunctionProfilePutP   -
+                         n                        ermission
+CREATE_IN_PROGRESS       AWS::Lambda::Permissio   ApiFunctionLinkIssuePe   -
+                         n                        rmission
+CREATE_IN_PROGRESS       AWS::ApiGatewayV2::Sta   HttpApiApiGatewayDefau   -
+                         ge                       ltStage
+CREATE_IN_PROGRESS       AWS::Lambda::Permissio   ApiFunctionLinkConfirm   Resource creation
+                         n                        Permission               Initiated
+CREATE_IN_PROGRESS       AWS::Lambda::Permissio   ApiFunctionProvidersPe   Resource creation
+                         n                        rmission                 Initiated
+CREATE_IN_PROGRESS       AWS::Lambda::Permissio   ApiFunctionPanelPermis   Resource creation
+                         n                        sion                     Initiated
+CREATE_IN_PROGRESS       AWS::Lambda::Permissio   ApiFunctionInstalledAp   Resource creation
+                         n                        psPermission             Initiated
+CREATE_IN_PROGRESS       AWS::Lambda::Permissio   ApiFunctionLinkIssuePe   Resource creation
+                         n                        rmission                 Initiated
+CREATE_IN_PROGRESS       AWS::Lambda::Permissio   ApiFunctionAlertsPermi   Resource creation
+                         n                        ssion                    Initiated
+CREATE_IN_PROGRESS       AWS::ApiGatewayV2::Sta   HttpApiApiGatewayDefau   Resource creation
+                         ge                       ltStage                  Initiated
+CREATE_COMPLETE          AWS::Lambda::Permissio   ApiFunctionLinkConfirm   -
+                         n                        Permission
+CREATE_COMPLETE          AWS::Lambda::Function    IngestFunction           -
+CREATE_COMPLETE          AWS::Lambda::Permissio   ApiFunctionProvidersPe   -
+                         n                        rmission
+CREATE_COMPLETE          AWS::Lambda::Permissio   ApiFunctionPanelPermis   -
+                         n                        sion
+CREATE_COMPLETE          AWS::Lambda::Permissio   ApiFunctionInstalledAp   -
+                         n                        psPermission
+CREATE_COMPLETE          AWS::Lambda::Permissio   ApiFunctionLinkIssuePe   -
+                         n                        rmission
+CREATE_COMPLETE          AWS::Lambda::Permissio   ApiFunctionAlertsPermi   -
+                         n                        ssion
+CREATE_IN_PROGRESS       AWS::IAM::Role           IngestScheduleRole       -
+CREATE_COMPLETE          AWS::Lambda::Function    PolicyFunction           -
+CREATE_COMPLETE          AWS::Lambda::Function    ApiFunction              -
+CREATE_COMPLETE          AWS::ApiGatewayV2::Sta   HttpApiApiGatewayDefau   -
+                         ge                       ltStage
+CREATE_IN_PROGRESS       AWS::IAM::Role           IngestScheduleRole       Resource creation
+                                                                           Initiated
+CREATE_IN_PROGRESS       AWS::Lambda::Permissio   ApiFunctionLinkPagePer   Resource creation
+                         n                        mission                  Initiated
+CREATE_IN_PROGRESS       AWS::Lambda::Permissio   ApiFunctionProfilePutP   Resource creation
+                         n                        ermission                Initiated
+CREATE_IN_PROGRESS       AWS::Lambda::Permissio   ApiFunctionProfileGetP   Resource creation
+                         n                        ermission                Initiated
+CREATE_IN_PROGRESS -     AWS::Logs::LogGroup      IngestLogGroup           Eventual consistency
+CONFIGURATION_COMPLETE                                                     check initiated
+CREATE_IN_PROGRESS       AWS::Lambda::Permissio   ApiFunctionLinkPollPer   Resource creation
+                         n                        mission                  Initiated
+CREATE_IN_PROGRESS       AWS::Lambda::Permissio   ApiFunctionRoutingOutc   Resource creation
+                         n                        omePermission            Initiated
+CREATE_COMPLETE          AWS::Lambda::Permissio   ApiFunctionLinkPagePer   -
+                         n                        mission
+CREATE_COMPLETE          AWS::Lambda::Permissio   ApiFunctionProfilePutP   -
+                         n                        ermission
+CREATE_COMPLETE          AWS::Logs::LogGroup      IngestLogGroup           -
+CREATE_IN_PROGRESS -     AWS::Logs::LogGroup      ApiLogGroup              Eventual consistency
+CONFIGURATION_COMPLETE                                                     check initiated
+CREATE_COMPLETE          AWS::Lambda::Permissio   ApiFunctionProfileGetP   -
+                         n                        ermission
+CREATE_COMPLETE          AWS::Lambda::Permissio   ApiFunctionLinkPollPer   -
+                         n                        mission
+CREATE_COMPLETE          AWS::Lambda::Permissio   ApiFunctionRoutingOutc   -
+                         n                        omePermission
+CREATE_IN_PROGRESS -     AWS::Logs::LogGroup      PolicyLogGroup           Eventual consistency
+CONFIGURATION_COMPLETE                                                     check initiated
+CREATE_COMPLETE          AWS::Logs::LogGroup      ApiLogGroup              -
+CREATE_COMPLETE          AWS::Logs::LogGroup      PolicyLogGroup           -
+CREATE_COMPLETE          AWS::IAM::Role           IngestScheduleRole       -
+CREATE_IN_PROGRESS       AWS::Scheduler::Schedu   IngestSchedule           -
+                         le
+CREATE_IN_PROGRESS       AWS::Scheduler::Schedu   IngestSchedule           Resource creation
+                         le                                                Initiated
+CREATE_COMPLETE          AWS::Scheduler::Schedu   IngestSchedule           -
+                         le
+CREATE_COMPLETE          AWS::CloudFormation::S   afc-dev                  -
+                         tack
+-------------------------------------------------------------------------------------------------
+
+CloudFormation outputs from deployed stack
+-------------------------------------------------------------------------------------------------
+Outputs
+-------------------------------------------------------------------------------------------------
+Key                 ApiUrl
+Description         HTTP API base URL for the TV app and the /link page.
+Value               https://le3r79003f.execute-api.us-east-2.amazonaws.com
+-------------------------------------------------------------------------------------------------
+
+
+Successfully created/updated stack - afc-dev in us-east-2
+
+exit=0
