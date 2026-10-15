@@ -113,6 +113,10 @@ def main():
     for key in ('P2-X03', 'P2-B06T', 'P2-B06', 'P2-A04T', 'P2-A04', 'P2-V01T', 'P2-V01', 'P2-X09'):
         assert 'platform_routes' in current[key]['vega_primary_contingency']['platform_route_binding'], key + ': F-VP-01'
     assert 'backend/' not in ' '.join(effective['P2-V01']['write_set']), 'V01 backend edit'
+    assert 'does not select by client platform' in current['P2-B06']['vega_primary_contingency']['platform_route_binding'], 'F-VP-01 r2: B06 returns the map'
+    for key in ('P2-A04T', 'P2-A04', 'P2-V01T', 'P2-V01'):
+        assert 'never' in current[key]['vega_primary_contingency']['platform_route_binding'] and 'execut' in current[key]['vega_primary_contingency']['platform_route_binding'], key + ': F-VP-01 r2'
+    assert not any('never receive' in json.dumps(current[k]) for k in current), 'F-VP-01 r2: receive wording'
     stages = impl['vega_primary_contingency']['milestone_stages']
     assert [s['stage'] for s in stages] == [1, 2, 3, 4, 5] and 'milestone_order' not in impl['vega_primary_contingency'], 'F-VP-02'
     assert set(stages[2]['secondary_slices']) == secondary and not set(stages[2]['primary_slices']) & secondary

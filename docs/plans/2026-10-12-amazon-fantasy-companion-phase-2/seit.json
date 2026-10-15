@@ -6254,7 +6254,7 @@
         "P2-B06"
       ],
       "execution_status": "not_run (planning only)",
-      "platform_route_binding": "Resolver output per client platform from `platform_routes` (B06); local-broadcast rule holds on both."
+      "platform_route_binding": "Resolver output carries both `platform_routes` entries (B06); local-broadcast rule holds on both."
     },
     {
       "id": "SEIT-AFC-PR-030",
@@ -6314,7 +6314,7 @@
         "P2-X12"
       ],
       "execution_status": "not_run (planning only)",
-      "platform_route_binding": "Vega primary via V01/X09 on `platform_routes.vega`; Fire OS secondary via A04/X09 on `platform_routes.fire_os`."
+      "platform_route_binding": "Vega primary via V01/X09 executes only `platform_routes.vega`; Fire OS secondary via A04/X09 executes only `platform_routes.fire_os`; neither client executes the other entry."
     },
     {
       "id": "SEIT-AFC-PR-031",
@@ -6372,7 +6372,7 @@
         "P2-X09"
       ],
       "execution_status": "not_run (planning only)",
-      "platform_route_binding": "One RoutingOutcome per attempt on each client, each from its own `platform_routes` entry."
+      "platform_route_binding": "One RoutingOutcome per attempt on each client, each attempt executing only its own `platform_routes` entry."
     },
     {
       "id": "SEIT-AFC-PR-032",
@@ -10245,7 +10245,7 @@
         "P2-A04"
       ],
       "execution_status": "not_run (planning only)",
-      "platform_route_binding": "Route verification gap is per platform entry (REGISTRY_ROUTE_GAP); no automatic fallback."
+      "platform_route_binding": "Route verification gap is per platform entry (REGISTRY_ROUTE_GAP): the client with the gap does not launch and reports it; the other entry is never executed instead."
     },
     {
       "id": "SEIT-RISK-AFC-P2-04",
@@ -11166,7 +11166,7 @@
       "resource_group": "vega-virtual-device; vega-tv-stick; aws-afc-dev (lease serialized, isolated profiles)",
       "expected_gate_seconds": 600,
       "gate_cost_note": "Estimated 600 seconds per system procedure invocation, run outside repository CI gate; V01 local gate forecast remains 180 seconds. Qualification five sequential and two concurrent invocations under cross-process device locks; live-window waits excluded.",
-      "platform_route_binding": "Common API contract: the route schema carries `platform_routes`; the Vega client reads only `vega`, the Fire OS client only `fire_os`. Backend side owned by B06, not V01."
+      "platform_route_binding": "Common API contract: route responses carry the whole `platform_routes` map; the existing caller is unchanged. Tests check the Vega client executes only `vega` and the Fire OS client only `fire_os`, never the other platform's launch data. Backend side owned by B06, not V01."
     },
     {
       "id": "SEIT-AFC-P2-VPRIMARY-04",
@@ -18035,7 +18035,8 @@
       ],
       "F1": "closed by DEC-AFC-SD-050 option (a)",
       "prior_review_bounds": "unchanged; one planning review of this candidate is next",
-      "correction_round_1": "Planning review CHANGE_REQUESTED (Codex GPT-6.1 Sol high) F-VP-01..03 applied: platform_routes registry contract and bindings; milestone start/closure stages; V01T/V01 goals set to override goals."
+      "correction_round_1": "Planning review CHANGE_REQUESTED (Codex GPT-6.1 Sol high) F-VP-01..03 applied: platform_routes registry contract and bindings; milestone start/closure stages; V01T/V01 goals set to override goals.",
+      "correction_round_2": "Planning regate CHANGE_REQUESTED (Codex GPT-6.1 Sol high) F-VP-01 residual: B06 returns the whole platform_routes map; clients execute only their own entry; existing caller and write sets kept."
     }
   ],
   "vega_primary_contingency": {

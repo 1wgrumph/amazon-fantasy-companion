@@ -472,10 +472,16 @@ Status codes 400/401/403/409/410/429/503 and the structured `error`
 api_retry_max, device_code_ttl. Request and response bodies ≤ 64 KiB.
 OpenAPI document `backend/src/api/openapi.yaml` is the frozen artifact
 (written in P2-B01, changed only under its own review). Amendment for
-DEC-AFC-SD-049: every route the API returns carries the provider's
-`platform_routes` entries; the Vega client reads only `vega` and the Fire OS
-client only `fire_os`. P2-B06 owns this route-schema change in
-`openapi.yaml` under CMD-CONTRACT-FROZEN review; V01 makes no backend edit.
+DEC-AFC-SD-049: every route the API returns carries the provider's whole
+`platform_routes` map with both entries, each marked verified or
+REGISTRY_ROUTE_GAP. The backend does not select by client platform: the
+existing `GET /v1/providers` caller passes only the profile and `eventId`,
+and it stays unchanged. Each client executes only its own entry: the Vega
+client `vega`, the Fire OS client `fire_os`. A client never executes the
+other platform's launch data, and a gap in its own entry means no launch
+for that provider plus the reported gap. P2-B06 owns this route-schema
+change in `openapi.yaml` under CMD-CONTRACT-FROZEN review; V01 makes no
+backend edit.
 
 ### CONTRACT-AFC-P2-ENVELOPE — Entity envelope
 
@@ -658,7 +664,7 @@ AWS identities stay separate from customer sessions.
 | B02 / X05 | Finish ingest/replay with live/replay provenance | X05 PR1 landed per local origin/main; no recapture or claim of completed live timing from fixtures alone. |
 | B03 / X06 | Finish reviewed lineup/settings source and Yahoo/manual disposition | Manual fallback and OAuth authority unchanged. |
 | B04/B05/B07 | Complete matcher, policy and panel service, preserve freshness and control semantics | Same API and test obligations for either TV platform. |
-| X03 → B06 | X03 writes and verifies `platform_routes.vega` (primary) and `platform_routes.fire_os` (secondary); B06 selects the entry for the requesting client and amends the route schema in openapi.yaml | Amended CONTRACT-AFC-P2-PROVIDER-REGISTRY. Never reuse Android package names or intents on Vega, or Vega URIs on Fire OS. A missing entry is REGISTRY_ROUTE_GAP for that platform. |
+| X03 → B06 | X03 writes and verifies `platform_routes.vega` (primary) and `platform_routes.fire_os` (secondary); B06 returns the whole `platform_routes` map in each route and amends the route schema in openapi.yaml; the client executes only its own entry (A04 `fire_os`, V01 `vega`) | Amended CONTRACT-AFC-P2-PROVIDER-REGISTRY. Never reuse Android package names or intents on Vega, or Vega URIs on Fire OS. A missing entry is REGISTRY_ROUTE_GAP for that platform. |
 | L03 / final deploy step | Deploy and qualify the same shared backend against exact TV candidate | `aws-afc-dev` lease and existing credential/DB boundaries; B01 being live does not establish all later endpoints work. |
 
 Under DEC-AFC-SD-049 one shared backend serves both clients. The registry
@@ -666,7 +672,9 @@ carries `platform_routes.fire_os` and `platform_routes.vega` per provider
 (F-VP-01 correction; replaces DF-VP-01). Neither client loses a provider
 by default: each platform's entry is verified on its own device, and a gap
 blocks that platform's acceptance until X03 closes it or the owner amends
-scope. B06 owns the backend side. V01 has no backend write permission. X03's
+scope. B06 returns both entries; each client executes only its own. B06
+owns the backend side and keeps the existing caller. V01 has no backend
+write permission. X03's
 existing data-only registry permission remains with X03.
 
 ### Conditional integration and proof binding

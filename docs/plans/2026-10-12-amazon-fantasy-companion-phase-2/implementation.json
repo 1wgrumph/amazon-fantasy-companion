@@ -7076,12 +7076,12 @@
     "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
     "disposition": "shared_backend_platform_routes",
     "overrides": {
-     "goal": "Red tests against the landed registry: resolution from installed + verified/confirmed access + market + preference, local-broadcast no-link, unknown access stays unknown, no inference from installation; per-platform selection from `platform_routes`, no cross-platform fallback; stop at CMD-RED."
+     "goal": "Red tests against the landed registry: resolution from installed + verified/confirmed access + market + preference, local-broadcast no-link, unknown access stays unknown, no inference from installation; route output carries both `platform_routes` entries with per-entry gap status, never filled across platforms; stop at CMD-RED."
     },
     "completion_dependencies": [],
     "preserved_fields": "All unmentioned fields, including role/model_route/reasoning_level/review_path/authority_id, inherit unchanged. No new execution authority.",
     "note": "No Vega-specific API/schema/service change. Existing SD-048 code-only reconciliation must land and deploy before linked proof; X03 supplies Vega URI registry data using the same schema. B01 live is not proof B02..B07 are complete.",
-    "platform_route_binding": "Red tests select `platform_routes.<platform>` for the requesting client: a vega client never receives fire_os launch data and the reverse; a missing or unverified entry is REGISTRY_ROUTE_GAP, never a silent fallback to the other platform or a degraded route."
+    "platform_route_binding": "Red tests: resolver output carries the `platform_routes` map with both entries; a missing or unverified entry is REGISTRY_ROUTE_GAP for that platform and is never filled from the other entry. Client execution checks are in A04T (fire_os) and V01T (vega)."
    }
   },
   {
@@ -7238,7 +7238,7 @@
     "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
     "disposition": "shared_backend_platform_routes",
     "overrides": {
-     "goal": "Implement `src/provider_resolver/` with registry read-only; select `platform_routes.<platform>` for the requesting client and amend only the route schema in openapi.yaml; stop when green.",
+     "goal": "Implement `src/provider_resolver/` with registry read-only; return each route with the whole `platform_routes` map (fire_os and vega, each verified or REGISTRY_ROUTE_GAP); keep the existing caller; amend only the route schema in openapi.yaml; stop when green.",
      "design_ids": [
       "DES-AFC-P2-RESOLVE",
       "CONTRACT-AFC-P2-PROVIDER-REGISTRY",
@@ -7252,7 +7252,7 @@
     "completion_dependencies": [],
     "preserved_fields": "All unmentioned fields, including role/model_route/reasoning_level/review_path/authority_id, inherit unchanged. No new execution authority.",
     "note": "No Vega-specific API/schema/service change. Existing SD-048 code-only reconciliation must land and deploy before linked proof; X03 supplies Vega URI registry data using the same schema. B01 live is not proof B02..B07 are complete.",
-    "platform_route_binding": "Owns the backend side: resolver reads `platform_routes`, returns the entry for the client platform, and amends only the route schema in backend/src/api/openapi.yaml under CMD-CONTRACT-FROZEN review."
+    "platform_route_binding": "Owns the backend side: the resolver returns the `platform_routes` map with both entries and per-entry REGISTRY_ROUTE_GAP status. It does not select by client platform; the preserved caller backend/src/api/handler.py passes only profile_id and eventId. Amends only the route schema in backend/src/api/openapi.yaml under CMD-CONTRACT-FROZEN review."
    }
   },
   {
@@ -8072,7 +8072,7 @@
     "completion_dependencies": [],
     "preserved_fields": "All unmentioned fields, including role/model_route/reasoning_level/review_path/authority_id, inherit unchanged. No new execution authority.",
     "note": "Fire OS secondary target (DEC-AFC-SD-049): original fields, tests and dependencies stay and the slice is dispatched off the Vega critical path; V01T/V01 are the primary realization. No primary slice waits on it. No deletion, completion or cancellation claimed.",
-    "platform_route_binding": "Fire OS secondary client: Watch tests consume only `platform_routes.fire_os`."
+    "platform_route_binding": "Fire OS secondary client: Watch tests prove the client executes only `platform_routes.fire_os` and never executes the `vega` entry; a fire_os REGISTRY_ROUTE_GAP gives no launch for that provider and reports the gap."
    }
   },
   {
@@ -8253,7 +8253,7 @@
     "completion_dependencies": [],
     "preserved_fields": "All unmentioned fields, including role/model_route/reasoning_level/review_path/authority_id, inherit unchanged. No new execution authority.",
     "note": "Fire OS secondary target (DEC-AFC-SD-049): original fields, tests and dependencies stay and the slice is dispatched off the Vega critical path; V01T/V01 are the primary realization. No primary slice waits on it. No deletion, completion or cancellation claimed.",
-    "platform_route_binding": "Fire OS secondary client: launches only `platform_routes.fire_os`; no Vega URI reuse."
+    "platform_route_binding": "Fire OS secondary client: executes only `platform_routes.fire_os` launch data, never the `vega` entry; a fire_os gap gives no launch and a reported gap."
    }
   },
   {
@@ -9138,7 +9138,7 @@
     "completion_dependencies": [],
     "preserved_fields": "All unmentioned fields, including role/model_route/reasoning_level/review_path/authority_id, inherit unchanged. No new execution authority.",
     "note": "",
-    "platform_route_binding": "Live end-to-end Watch on each platform uses its own `platform_routes` entry; Vega primary first."
+    "platform_route_binding": "Live end-to-end Watch: each client executes only its own `platform_routes` entry from the shared response; Vega primary first."
    }
   },
   {
@@ -11716,7 +11716,7 @@
     "completion_dependencies": [],
     "preserved_fields": "All unmentioned fields, including role/model_route/reasoning_level/review_path/authority_id, inherit unchanged. No new execution authority.",
     "note": "M14 becomes the TV critical path within W1..W3; same pair and review unit. Module checkpoints do not create new slices or reset reviews.",
-    "platform_route_binding": "Vega primary client: Watch tests consume only `platform_routes.vega`. No backend edits (AC-AFC-P2-VEGA-06)."
+    "platform_route_binding": "Vega primary client: Watch tests prove the client executes only `platform_routes.vega` and never executes the `fire_os` entry; a vega REGISTRY_ROUTE_GAP gives no launch for that provider and reports the gap. No backend edits (AC-AFC-P2-VEGA-06)."
    }
   },
   {
@@ -12202,7 +12202,7 @@
     ],
     "preserved_fields": "All unmentioned fields, including role/model_route/reasoning_level/review_path/authority_id, inherit unchanged. No new execution authority.",
     "note": "M14 becomes the TV critical path within W1..W3; same pair and review unit. Module checkpoints do not create new slices or reset reviews.",
-    "platform_route_binding": "Vega primary client: launches only `platform_routes.vega`; reports `platform=vega`. No backend edits (AC-AFC-P2-VEGA-06); B06 owns the backend side."
+    "platform_route_binding": "Vega primary client: executes only `platform_routes.vega` launch data, never the `fire_os` entry; a vega gap gives no launch and a reported gap. No backend edits (AC-AFC-P2-VEGA-06); B06 owns the backend side."
    }
   }
  ],
@@ -25467,7 +25467,8 @@
    ],
    "F1": "closed by DEC-AFC-SD-050 option (a)",
    "prior_review_bounds": "unchanged; one planning review of this candidate is next",
-   "correction_round_1": "Planning review CHANGE_REQUESTED (Codex GPT-6.1 Sol high) F-VP-01..03 applied: platform_routes registry contract and bindings; milestone start/closure stages; V01T/V01 goals set to override goals."
+   "correction_round_1": "Planning review CHANGE_REQUESTED (Codex GPT-6.1 Sol high) F-VP-01..03 applied: platform_routes registry contract and bindings; milestone start/closure stages; V01T/V01 goals set to override goals.",
+   "correction_round_2": "Planning regate CHANGE_REQUESTED (Codex GPT-6.1 Sol high) F-VP-01 residual: B06 returns the whole platform_routes map; clients execute only their own entry; existing caller and write sets kept."
   }
  ],
  "vega_primary_contingency": {
