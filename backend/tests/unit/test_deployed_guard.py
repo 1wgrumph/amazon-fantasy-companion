@@ -205,8 +205,7 @@ def test_link(linked):
     assert connections == [("192.0.2.10", 443)] * 3
 ''')
     env = dict(os.environ, PYTEST_DISABLE_PLUGIN_AUTOLOAD="1",
-               AFC_DEPLOYED_API_URL="https://api.example.invalid",
-               AFC_DEPLOYED_LINK_PASSPHRASE="test-passphrase")
+               AFC_DEPLOYED_API_URL="https://api.example.invalid")
     result = subprocess.run([sys.executable, "-m", "pytest", "-q", "-c", "/dev/null",
                              "-p", "no:cacheprovider",
                              "--confcutdir", str(tmp_path), str(tmp_path)],

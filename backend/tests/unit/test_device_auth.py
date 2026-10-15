@@ -43,38 +43,36 @@ def test_pending_poll_cannot_authorize_the_device(api):
     assert_error(status, body, 401)
 
 
-def test_correct_ssm_passphrase_confirms_once_and_returns_256_bit_session(api):
+def test_tv_code_alone_confirms_once_and_returns_256_bit_session(api):
     _, token = link_device(api)
     try:
         raw = bytes.fromhex(token)
     except ValueError:
         raw = base64.urlsafe_b64decode(token + "=" * (-len(token) % 4))
     assert len(raw) >= 32, "Opaque session must contain at least 256 bits"
-    assert api.ssm_reads, "Customer authentication must retrieve the SSM SecureString"
-    assert all(x["WithDecryption"] is True and x["Name"] in api.secret_names
-               for x in api.ssm_reads)
+    assert not api.ssm_reads, "Code-only linking (DEC-AFC-SD-048) reads no SSM secret"
     stored = [item for table in api.tables.values() for item in table.scan()["Items"]]
     values = scalar_values(stored)
     assert hashlib.sha256(token.encode()).hexdigest() in values, "Persist only a session hash"
-    assert token not in values and api.passphrase not in values, "No raw session/passphrase in DynamoDB"
+    assert token not in values, "No raw session in DynamoDB"
 
 
-def test_wrong_passphrase_rejects_confirmation_and_leaves_code_pending(api):
+def test_wrong_code_rejects_confirmation_and_leaves_code_pending(api):
     device = issue(api)
-    status, body = confirm(api, device["code"], passphrase="incorrect-test-value")
-    assert_error(status, body, 401)
+    wrong = "ZZZZ2222" if device["code"] != "ZZZZ2222" else "YYYY2222"
+    status, body = confirm(api, wrong)
+    assert_error(status, body, 410)
     status, body = api.request("GET", "/v1/link", query={"handle": device["handle"]})
     assert status == 200 and body["state"] == "codePending"
     assert "sessionToken" not in body
     status, _ = confirm(api, device["code"])
-    assert status in (200, 201), "Failed authentication must not consume the valid code"
+    assert status in (200, 201), "A wrong code must not consume the valid code"
 
 
-def test_missing_passphrase_cannot_confirm(api):
+def test_missing_code_cannot_confirm(api):
     device = issue(api)
-    status, body = api.request("POST", "/v1/link/confirm", {"code": device["code"], "profileId": "owner"})
-    assert status in (400, 401)
-    assert_error(status, body, status)
+    status, body = api.request("POST", "/v1/link/confirm", {"profileId": "owner"})
+    assert_error(status, body, 400)
     status, body = api.request("GET", "/v1/link", query={"handle": device["handle"]})
     assert status == 200 and body["state"] == "codePending"
 

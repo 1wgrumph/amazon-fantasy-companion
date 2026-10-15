@@ -47,6 +47,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Link a TV with its device code alone (DEC-AFC-SD-048): drop the link
+  passphrase from the `/link` page, the confirm API and its OpenAPI
+  contract, and remove the SSM passphrase parameter, its env var and IAM
+  grant; code expiry, throttling and one-session-per-link stay ([#66](https://github.com/1wgrumph/amazon-fantasy-companion/pull/66)).
 - Record the Phase 2 execution lease and the M01 dispatch, review and
   closeout receipts in the Lifecycle control journey
   ([PR #58](https://github.com/1wgrumph/amazon-fantasy-companion/pull/58)).
@@ -61,6 +65,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Return the standard 404 error envelope for unknown API routes by routing
+  unmatched requests to the existing Lambda router ([#67](https://github.com/1wgrumph/amazon-fantasy-companion/pull/67)).
 - Fix the deployed-test network guard so smoke tests reach the configured
   API host (resolved and rotating addresses) while every other destination
   stays blocked ([#64](https://github.com/1wgrumph/amazon-fantasy-companion/pull/64)).

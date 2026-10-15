@@ -63,7 +63,7 @@ def test_dropped_linked_poll_response_is_recoverable_by_retry(api):
     assert status == 200 and foreign == {"state": "unlinked"}
     values = scalar_values(api.table("Links").scan()["Items"])
     assert hashlib.sha256(retry["sessionToken"].encode()).hexdigest() in values
-    assert retry["sessionToken"] not in values and api.passphrase not in values
+    assert retry["sessionToken"] not in values
 
 
 def test_linked_poll_retry_keeps_confirm_one_time_and_hashes_only(api, auth):
@@ -74,7 +74,7 @@ def test_linked_poll_retry_keeps_confirm_one_time_and_hashes_only(api, auth):
     assert auth.authenticate(token) is None, "a retry supersedes the previous token"
     assert auth.authenticate(retry["sessionToken"]) == "owner"
     assert auth.poll("unknown-handle") == {"state": "unlinked"}
-    assert auth.confirm(device["code"], api.passphrase, "owner") == "gone"
+    assert auth.confirm(device["code"], "owner") == "gone"
     sessions = [x for x in api.table("Links").scan()["Items"] if "sessionHash" in x]
     assert len(sessions) == 1 and all(s["profileId"] == "owner" for s in sessions)
     assert all(s["linkedAt"].endswith("Z") and len(s["linkedAt"]) == 20 for s in sessions)
@@ -83,7 +83,7 @@ def test_linked_poll_retry_keeps_confirm_one_time_and_hashes_only(api, auth):
 def test_failed_session_write_leaves_the_link_recoverable(api, auth, monkeypatch):
     import store
     device = issue_http(api)
-    assert auth.confirm(device["code"], api.passphrase, "owner") == "linked"
+    assert auth.confirm(device["code"], "owner") == "linked"
     real, calls = store.put_session, []
     def flaky(*args):
         calls.append(args)
@@ -100,9 +100,8 @@ def test_failed_session_write_leaves_the_link_recoverable(api, auth, monkeypatch
 
 def test_confirm_normalizes_the_typed_code(api, auth):
     device = auth.issue()
-    assert auth.confirm(" " + device["code"].lower() + " ", api.passphrase, "owner") == "linked"
-    assert auth.confirm(device["code"], api.passphrase, "owner") == "gone"
-    assert auth.confirm(device["code"], api.passphrase + "x", "owner") == "unauthorized"
+    assert auth.confirm(" " + device["code"].lower() + " ", "owner") == "linked"
+    assert auth.confirm(device["code"], "owner") == "gone"
 
 
 def test_empty_token_never_reaches_the_store(auth, monkeypatch):
