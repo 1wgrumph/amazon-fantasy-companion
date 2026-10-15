@@ -116,7 +116,7 @@
   "route": "Codex CLI / GPT-6.1 Sol / high",
   "baseline": "0d65797a82d3d899be2055706fac555f7642a77a",
   "round": "single authorized independent-review repair round",
-  "next_action": "Return CONTRACT_FAILURE with the containing evidence-only commit; an amended packet must cover the manual-lineup team-identity seam before F5 / AFC-PR-008 can close.",
+  "next_action": "Orchestrator must reconcile the frozen synthetic fixtures with strict NFL-team validation before redispatch; no owner decision or scope narrowing inferred",
   "authority": "Owner P2-B02 F1\u2013F6 repair packet, including backend-template lease for read-only relevance access",
   "requirements": [
    "AFC-PR-008",
@@ -211,6 +211,101 @@
     "green_evidence": "repair-green-final.txt and repair-green.txt",
     "prevention_evidence": "repair-gate.txt and formal coverage/mutation reports",
     "status": "PASS"
+   },
+   {
+    "finding": "F5",
+    "status": "CONTRACT_FAILURE",
+    "baseline": "3a43e8fdcc5037fbb6cb38a219328e7d7eaeef3f",
+    "round": "Continuation of the same P2-B02 repair round; no new review",
+    "authority": "Current owner packet adds manual team-identity repair and new tests; frozen B02T/B03T remain prohibited",
+    "method": "test",
+    "skills": [
+     "bearing-lite:implementer",
+     "ponytail:ponytail",
+     "test-engineering",
+     "write-tests"
+    ],
+    "BUG_ROUTE": "not-a-bug diagnostic negative-test failures establish incompatible requirements; existing F5 remains an assigned repair",
+    "contract_conflict": "Untrusted team values must be NFL team abbreviations or ESPN NFL team ids. SYN is neither. Frozen B03 positive tests require accepting SYN. An arbitrary three-letter-string format check or synthetic-team bypass would weaken the required validation.",
+    "frozen_test_ids": [
+     "backend/tests/unit/lineup/test_manual_source.py::test_build_labels_the_entry_manual_with_its_preset",
+     "backend/tests/unit/lineup/test_manual_source.py::test_build_applies_the_selected_preset",
+     "backend/tests/unit/lineup/test_manual_source.py::test_manual_values_are_never_presented_as_yahoo"
+    ],
+    "origin": "P2-B03 manual builder discards team; positive frozen fixtures use a non-NFL synthetic team",
+    "escape": "Frozen manual tests assert name/slot/scoring but neither retained team nor nonleader production monitoring",
+    "commands": [
+     {
+      "command": "probe.py nonleader-red",
+      "exit_code": 1,
+      "output": "nonleader-red.txt",
+      "result": "Expected behavioral red: Darius Cooper (4715355), PHI, game 401872981; absent from leaders, team dropped, actual_monitored=false"
+     },
+     {
+      "command": "probe.py frozen-baseline",
+      "exit_code": 0,
+      "output": "frozen-baseline.txt",
+      "result": "3 frozen tests pass with SYN accepted"
+     },
+     {
+      "command": "probe.py reject-synthetic-team",
+      "exit_code": 1,
+      "output": "reject-synthetic-team.txt",
+      "result": "3 frozen tests fail with ValueError when SYN is rejected; diagnostic in-memory guard, not product implementation"
+     },
+     {
+      "command": "python3 -m pytest -q backend/tests/unit/feed_ingest/test_review_repairs.py::test_f5_irrelevant_in_progress_game_is_never_fetched",
+      "exit_code": 0,
+      "output": "irrelevant-game.txt",
+      "result": "1 passed"
+     },
+     {
+      "command": "python3 docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B02T/verify_receipt.py docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B02T/receipt.json",
+      "exit_code": 0,
+      "output": "P2-B02T-verify.txt",
+      "result": {
+       "outcome": "PASS",
+       "failed_cases": 62,
+       "errors": 0,
+       "skipped": 3,
+       "frozen_files": 8
+      }
+     },
+     {
+      "command": "python3 docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B03T/verify_receipt.py docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B03T/receipt.json",
+      "exit_code": 0,
+      "output": "P2-B03T-verify.txt",
+      "result": {
+       "outcome": "PASS",
+       "failed_cases": 77,
+       "errors": 0,
+       "skipped": 3,
+       "frozen_files": 11
+      }
+     }
+    ],
+    "evidence_scope": "Author diagnostic evidence on unchanged 3a43e8f source; no product green or independent assurance claimed",
+    "product_changed": false,
+    "frozen_files_changed": false,
+    "unmet": [
+     "Team retention and validation implementation",
+     "Nonleader green",
+     "New product regression tests",
+     "Full gate rerun",
+     "B02 formal coverage >=90% and mutation >=70% against d13f8b1",
+     "B03 formal coverage >=90% and mutation >=70% against 1ac5846"
+    ],
+    "stop_rule": "Frozen-test conflict; no further product work or expensive formal runs",
+    "next_action": "Orchestrator must reconcile the frozen synthetic fixtures with strict NFL-team validation before redispatch; no owner decision or scope narrowing inferred",
+    "iam": "No new grants needed; template unchanged",
+    "bran": "unavailable: no native policy; ordinary repository discovery used",
+    "reverify": "not_applicable: no compiled-binary claim",
+    "log_sanitization": "Captured machine paths replaced with relative or user-home placeholders; test results and exit codes preserved",
+    "commit_attempt_1": {
+     "exit_code": 1,
+     "reason": "Hooks rejected local paths in two newly captured logs; sanitized and check_paths.py then exited 0",
+     "backend": "500 passed; backend hook PASS; not a full gate PASS"
+    }
    }
   ],
   "commands": [
@@ -371,6 +466,7 @@
     "detail": "This receipt includes finding/fix/test/evidence/status table and explicit unresolved F5 scope."
    }
   ],
-  "closeout": "Containing commit is evidence only; all backend hashes match measured source candidate 13c5892d588230a7df9df9ddf0fcb3d173300ee6. No source work after contract stop."
+  "closeout": "Containing commit is evidence only; all backend hashes match measured source candidate 13c5892d588230a7df9df9ddf0fcb3d173300ee6. No source work after contract stop.",
+  "f5_team_contract_attempt": "f5-team-contract/result.json"
  }
 }
