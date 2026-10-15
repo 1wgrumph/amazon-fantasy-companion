@@ -1,0 +1,18 @@
+.....................                                                    [100%]
+=============================== warnings summary ===============================
+tests/unit/feed_ingest/test_review_repairs.py: 819 warnings
+  $HOME/.local/lib/python3.12/site-packages/botocore/auth.py:424: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    datetime_now = datetime.datetime.utcnow()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+============================= slowest 10 durations =============================
+1.05s call     tests/unit/feed_ingest/test_review_repairs.py::test_f5_manual_nonleader_team_game_is_fetched_and_irrelevant_game_is_skipped
+1.01s call     tests/unit/feed_ingest/test_review_repairs.py::test_f5_irrelevant_in_progress_game_is_never_fetched
+0.63s setup    tests/unit/feed_ingest/test_review_repairs.py::test_f5_manual_nonleader_team_game_is_fetched_and_irrelevant_game_is_skipped
+0.24s setup    tests/unit/feed_ingest/test_review_repairs.py::test_f5_irrelevant_in_progress_game_is_never_fetched
+0.01s call     tests/unit/lineup/test_manual_team.py::test_manual_accepts_team_shape_without_nfl_membership_check[PHI]
+0.01s call     tests/unit/lineup/test_manual_team.py::test_manual_retains_team_from_roster_instead_of_untrusted_selection
+0.01s call     tests/unit/lineup/test_manual_team.py::test_manual_accepts_team_shape_without_nfl_membership_check[SYN]
+
+(3 durations < 0.005s hidden.  Use -vv to show these durations.)
+21 passed, 819 warnings in 3.10s

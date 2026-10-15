@@ -1,0 +1,285 @@
+{
+ "outcome": "PASS",
+ "scope": "Behavioral red suite for P2-B02 frozen and committed on the pair branch; backend gate red is the expected TDD signal",
+ "lifecycle": "AFC-2026-10-11",
+ "phase": 2,
+ "wave": "Wave 2",
+ "milestone": "M05",
+ "issue": 30,
+ "slice_id": "P2-B02T",
+ "authority_id": "AUTH-AFC-2026-10-12-P2-001",
+ "branch": "afc/p2-b02",
+ "baseline": "f2d3c5e97d26da703c89a3daadd01a828361841d",
+ "candidate_binding": "Red working delta on afc/p2-b02; committed receipt is bound to its containing local commit",
+ "route": "Muse Code / Muse WonderFull (muse-wonder-full-1.0) / high",
+ "profile": {
+  "name": "opensource-hackathon (frozen snapshot test_implementer fallback route)",
+  "live_catalog_read": false
+ },
+ "review_capabilities": {
+  "coverage_assist": {
+   "enabled": true,
+   "required": true,
+   "backend": "OCR OpenCodeReview delegate mode",
+   "status": "not_run; allocated to independent review at IE-P2-13, never claimed PASS"
+  },
+  "reverify": {
+   "enabled": true,
+   "status": "not_applicable",
+   "reason": "red tests and receipts, no compiled-binary claim"
+  }
+ },
+ "method": "SEIT supporting TDD method=test; registered proof methods/environments unchanged",
+ "frozen_test_sha256": {
+  "backend/tests/unit/feed_ingest/feed_support.py": "6689e9638b4803cf5a29245b910af0d2792cee73812c4fddbc9c39adb1aed897",
+  "backend/tests/unit/feed_ingest/test_validation.py": "bee9d0490b64231674f42d1a765bd99593695e61d5d7edebb1c247bd816a679f",
+  "backend/tests/unit/feed_ingest/test_normalization.py": "e24f003b5ecad2a36fa4d755157f547e4de9ab461af06527d03e87500d757289",
+  "backend/tests/unit/feed_ingest/test_revisions.py": "4f27e9ff8cdb18bc202eaecf98ec938634c2d274afdbb57a7a9e127e0e436b1d",
+  "backend/tests/unit/feed_ingest/test_replay_labels.py": "91f4b18626e300aba255cf18d36899e4a9c726b562f58c7ef85975f85cf343ee",
+  "backend/tests/unit/feed_ingest/test_monitoring.py": "7fc8c5b5f7dc84e72af4a599c9a0236552f552cd622bd0929ab790233d2fd15a",
+  "backend/tests/contract/feed_ingest/test_feed_contracts.py": "af1b31c67b07a564aa43f804b7c3ef9efafddb029354fc52d73dec01d93b0a3b",
+  "backend/tests/deployed/feed_ingest/test_feed_labels.py": "e225a93750e5a0a26f60a155e1a4e630fe1a955ec06e91ece941dcd1bbfeea21"
+ },
+ "red": {
+  "command_id": "CMD-RED",
+  "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 $HOME/.local/share/afc-tools/backend-tests/bin/python3.12 -m pytest backend/tests/unit/feed_ingest backend/tests/contract/feed_ingest backend/tests/deployed/feed_ingest -v -p no:cacheprovider --tb=short --junitxml=docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B02T/CMD-RED.xml",
+  "exit_code": 1,
+  "output": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B02T/CMD-RED.txt",
+  "junit": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B02T/CMD-RED.xml",
+  "failed": 62,
+  "passed": 0,
+  "errors": 0,
+  "skipped": 3,
+  "elapsed_seconds": 1.22,
+  "failure_class": "62 JUnit failures, every message begins AssertionError (pytest 8.4.2 omits the failure type attribute); 3 deployed skips carry NOT_RUN (no AFC_DEPLOYED_API_URL), the plan's pre-deploy signal, never a pass claim",
+  "test_ids": [
+   "tests/contract/feed_ingest/test_feed_contracts.py::test_all_captured_games_replay_with_the_label",
+   "tests/contract/feed_ingest/test_feed_contracts.py::test_event_identity_is_game_plus_play",
+   "tests/contract/feed_ingest/test_feed_contracts.py::test_every_normalized_value_carries_the_envelope",
+   "tests/contract/feed_ingest/test_feed_contracts.py::test_lambda_handler_remains_the_ingest_entry_point",
+   "tests/contract/feed_ingest/test_feed_contracts.py::test_pinned_schemas_exist_and_parse",
+   "tests/contract/feed_ingest/test_feed_contracts.py::test_replay_fixture_index_verifies_through_replay",
+   "tests/deployed/feed_ingest/test_feed_labels.py::test_alerts_carry_the_envelope",
+   "tests/deployed/feed_ingest/test_feed_labels.py::test_panel_revision_never_moves_backwards",
+   "tests/deployed/feed_ingest/test_feed_labels.py::test_panel_values_carry_a_source_label",
+   "tests/unit/feed_ingest/test_monitoring.py::test_a_game_with_a_favorite_team_is_monitored",
+   "tests/unit/feed_ingest/test_monitoring.py::test_a_game_with_a_selected_player_is_monitored",
+   "tests/unit/feed_ingest/test_monitoring.py::test_an_irrelevant_game_is_not_monitored",
+   "tests/unit/feed_ingest/test_monitoring.py::test_an_unlabeled_or_unknown_basis_is_rejected[None]",
+   "tests/unit/feed_ingest/test_monitoring.py::test_an_unlabeled_or_unknown_basis_is_rejected[]",
+   "tests/unit/feed_ingest/test_monitoring.py::test_an_unlabeled_or_unknown_basis_is_rejected[guessed]",
+   "tests/unit/feed_ingest/test_monitoring.py::test_an_unlabeled_or_unknown_basis_is_rejected[live]",
+   "tests/unit/feed_ingest/test_monitoring.py::test_every_decision_carries_its_basis_label[observed-playback]",
+   "tests/unit/feed_ingest/test_monitoring.py::test_every_decision_carries_its_basis_label[profile-assumption]",
+   "tests/unit/feed_ingest/test_monitoring.py::test_every_game_gets_exactly_one_decision",
+   "tests/unit/feed_ingest/test_monitoring.py::test_monitoring_does_not_widen_to_the_other_captured_game",
+   "tests/unit/feed_ingest/test_monitoring.py::test_no_game_is_monitored_outside_an_enabled_period",
+   "tests/unit/feed_ingest/test_normalization.py::test_a_non_feed_source_is_rejected[]",
+   "tests/unit/feed_ingest/test_normalization.py::test_a_non_feed_source_is_rejected[manual]",
+   "tests/unit/feed_ingest/test_normalization.py::test_a_non_feed_source_is_rejected[yahoo]",
+   "tests/unit/feed_ingest/test_normalization.py::test_broadcast_networks_come_from_the_header_competition",
+   "tests/unit/feed_ingest/test_normalization.py::test_broadcast_networks_ignore_the_top_level_field",
+   "tests/unit/feed_ingest/test_normalization.py::test_event_time_comes_from_each_play_wallclock",
+   "tests/unit/feed_ingest/test_normalization.py::test_events_carry_only_the_stored_game_event_fields",
+   "tests/unit/feed_ingest/test_normalization.py::test_every_captured_play_becomes_one_event",
+   "tests/unit/feed_ingest/test_normalization.py::test_field_position_comes_from_each_play_start",
+   "tests/unit/feed_ingest/test_normalization.py::test_first_seen_events_start_at_revision_one_without_correction",
+   "tests/unit/feed_ingest/test_normalization.py::test_ingest_stores_every_normalized_event",
+   "tests/unit/feed_ingest/test_normalization.py::test_player_ids_never_invent_an_athlete",
+   "tests/unit/feed_ingest/test_normalization.py::test_possession_is_the_offense_team",
+   "tests/unit/feed_ingest/test_normalization.py::test_score_comes_from_each_play",
+   "tests/unit/feed_ingest/test_normalization.py::test_scoring_plays_carry_the_score_they_produced",
+   "tests/unit/feed_ingest/test_replay_labels.py::test_every_replay_value_is_labeled_replay",
+   "tests/unit/feed_ingest/test_replay_labels.py::test_ingesting_replay_stores_the_replay_label",
+   "tests/unit/feed_ingest/test_replay_labels.py::test_no_replay_value_claims_to_be_live",
+   "tests/unit/feed_ingest/test_replay_labels.py::test_normalizing_as_replay_labels_every_event",
+   "tests/unit/feed_ingest/test_replay_labels.py::test_replay_loads_every_captured_play",
+   "tests/unit/feed_ingest/test_replay_labels.py::test_replay_of_an_uncaptured_game_is_rejected",
+   "tests/unit/feed_ingest/test_replay_labels.py::test_replay_rejects_a_fixture_that_fails_its_index_hash",
+   "tests/unit/feed_ingest/test_replay_labels.py::test_replay_values_match_the_capture",
+   "tests/unit/feed_ingest/test_revisions.py::test_a_correction_carries_the_corrected_score",
+   "tests/unit/feed_ingest/test_revisions.py::test_a_correction_emits_one_new_revision_of_the_same_event",
+   "tests/unit/feed_ingest/test_revisions.py::test_a_new_play_after_the_first_poll_starts_at_revision_one",
+   "tests/unit/feed_ingest/test_revisions.py::test_an_unchanged_repoll_emits_nothing",
+   "tests/unit/feed_ingest/test_revisions.py::test_ingesting_a_correction_revises_the_stored_event_in_place",
+   "tests/unit/feed_ingest/test_revisions.py::test_ingesting_the_same_poll_twice_changes_no_revision",
+   "tests/unit/feed_ingest/test_revisions.py::test_revisions_stay_monotonic_across_two_corrections",
+   "tests/unit/feed_ingest/test_validation.py::test_captured_scoreboard_passes_validation",
+   "tests/unit/feed_ingest/test_validation.py::test_captured_summary_passes_validation",
+   "tests/unit/feed_ingest/test_validation.py::test_invalid_first_poll_stores_nothing",
+   "tests/unit/feed_ingest/test_validation.py::test_invalid_poll_leaves_stored_events_unchanged",
+   "tests/unit/feed_ingest/test_validation.py::test_non_object_summary_is_rejected",
+   "tests/unit/feed_ingest/test_validation.py::test_play_with_non_numeric_score_is_rejected",
+   "tests/unit/feed_ingest/test_validation.py::test_play_without_id_is_rejected",
+   "tests/unit/feed_ingest/test_validation.py::test_play_without_wallclock_is_rejected",
+   "tests/unit/feed_ingest/test_validation.py::test_scoreboard_event_without_id_is_rejected",
+   "tests/unit/feed_ingest/test_validation.py::test_scoreboard_without_events_is_rejected",
+   "tests/unit/feed_ingest/test_validation.py::test_summary_for_another_game_is_rejected",
+   "tests/unit/feed_ingest/test_validation.py::test_summary_without_competitions_is_rejected",
+   "tests/unit/feed_ingest/test_validation.py::test_summary_without_drives_is_rejected",
+   "tests/unit/feed_ingest/test_validation.py::test_summary_without_header_is_rejected"
+  ]
+ },
+ "gate": {
+  "command": "bash tools/ci/gate.sh",
+  "exit_code": 1,
+  "output": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B02T/gate.txt",
+  "areas": {
+   "spec": "PASS",
+   "docs": "PASS",
+   "hygiene": "PASS",
+   "tvapp": "PASS no tv-app/ tree",
+   "backend": "FAIL (expected red)"
+  },
+  "backend_scope": "62 failed are exactly the new feed_ingest red tests (unit+contract; deployed excluded from the gate); 370 pre-existing tests passed; 0 errors"
+ },
+ "hygiene": {
+  "path_scan": "PYTHONDONTWRITEBYTECODE=1 python3.12 tools/ci/check_paths.py",
+  "path_scan_exit_code": 0,
+  "path_scan_output": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B02T/path-check.txt",
+  "credential_shapes": "No CRED-* hits and no token values: the suite consumes captured ESPN fixtures only; the shared conftest generates its own short synthetic secrets at run time"
+ },
+ "proof_rows": [
+  {
+   "id": "SEIT-AFC-PR-008",
+   "registered_method": "test",
+   "red_support": "Monitoring decisions over two captured games: selected-player and favorite-team games monitored, irrelevant and disabled-period games not (test_monitoring.py)",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-L03"
+  },
+  {
+   "id": "SEIT-AFC-PR-011",
+   "registered_method": "test",
+   "red_support": "Every decision carries exactly one observed-playback or profile-assumption basis; missing/unknown basis rejected (test_monitoring.py)",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-L03"
+  },
+  {
+   "id": "SEIT-AFC-PR-012",
+   "registered_method": "test",
+   "red_support": "Per-play normalization of score, field position, possession, player ids and event time from the captured summary, plus correction revisions (test_normalization.py, test_revisions.py)",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-L03"
+  },
+  {
+   "id": "SEIT-AFC-PR-013",
+   "registered_method": "test",
+   "red_support": "Replay label on every replayed/normalized/stored value, no replay value labeled live, index-hash tamper rejected, all 14 captured games replay (test_replay_labels.py, contract tests, deployed skips)",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-L03"
+  },
+  {
+   "id": "SEIT-AFC-PR-064",
+   "registered_method": "test",
+   "red_support": "Malformed variants derived from the capture rejected with ValueError; invalid polls leave the Moto Events table byte-identical (test_validation.py)",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-L03"
+  },
+  {
+   "id": "SEIT-AFC-P2-DX-01",
+   "registered_method": "test",
+   "red_support": "developer_feedback observations in this receipt with evidence paths",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-L03"
+  },
+  {
+   "id": "SEIT-AFC-P2-LAND-01",
+   "registered_method": "test",
+   "red_support": "Local red commit only; no push, PR or landing in this slice",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-L03"
+  },
+  {
+   "id": "SEIT-AFC-P2-PATH-01",
+   "registered_method": "test",
+   "red_support": "check_paths.py exit 0 (path-check.txt); writes confined to the slice write set plus this evidence dir",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-L03"
+  },
+  {
+   "id": "SEIT-AFC-P2-REL-01",
+   "registered_method": "test",
+   "red_support": "Suite is offline and deterministic over committed captures; no network, AWS or device",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-L03"
+  },
+  {
+   "id": "SEIT-AFC-P2-REV-01",
+   "registered_method": "test",
+   "red_support": "Frozen sha256 of every test file in this receipt, verified by verify_receipt.py including a tampered-hash rejection",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-L03"
+  },
+  {
+   "id": "SEIT-RISK-AFC-P2-10",
+   "registered_method": "test",
+   "red_support": "Untrusted-feed boundary: schema rejection without mutation and replay-never-live assertions",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-L03"
+  }
+ ],
+ "handoff_contract_choices": [
+  "feed_ingest.validation: validate_summary(payload, game_id) and validate_scoreboard(payload) return None when valid and raise ValueError otherwise (sibling lineup convention); game_id must equal header.id.",
+  "feed_ingest.normalize.normalize_summary(payload, game_id, source='live', prior=None): one GameEvent per play in drives.previous[].plays[] with the exact store.put_event keys; score={'away','home'} from awayScore/homeScore; fieldPosition=start.yardsToEndzone; possession=offense teamParticipant id; playerIds=list drawn only from boxscore athlete ids (may be empty: play participants are $ref links); eventTime=wallclock; first revision 1 with correctionOf None; prior maps eventId->event, unchanged plays emit nothing, a changed play emits revision+1 with correctionOf=the superseded revision; source outside live/replay raises ValueError.",
+  "feed_ingest.normalize.broadcast_networks(payload): media.shortName list from header.competitions[0].broadcasts only (X05-OBS-001); the top-level broadcasts field is ignored.",
+  "feed_ingest.ingest.ingest_summary(payload, game_id, source='live'): validate before any write, store normalized events via the Events table, return them; a correction revises the stored row in place; re-ingesting an identical poll changes no revision.",
+  "feed_ingest.replay.load_events(game_id, fixtures_dir): verify index.json sha256 per CONTRACT-AFC-P2-FIXTURE (tamper or uncaptured game raises ValueError), then normalized events with source 'replay' on every value.",
+  "feed_ingest.monitoring.monitored_decisions(games, selected_player_ids, favorite_team_ids, enabled, basis): games are {'gameId','teamIds','playerIds'}; returns one {'gameId','monitored','basis'} per game in input order; monitored only when enabled and (a selected player or favorite team is in the game); basis must be 'observed-playback' or 'profile-assumption', anything else raises ValueError.",
+  "feed_ingest.lambda_handler(event, context) remains the template entry point; a non-schedule event raises ValueError (its polling behavior is exercised through ingest_summary offline).",
+  "Pinned JSON Schemas (at least scoreboard and summary) live as parseable JSON objects under src/feed_ingest/schema/ per DES-AFC-P2-FEED."
+ ],
+ "scope_reconciliation": [
+  "backend/src/feed_ingest exists only as the AFC-STUB lambda_handler (owner P2-B02); per DEC-AFC-SD-046 retiring its stub pins stays with P2-B02, so no stub-pin test was edited.",
+  "Per-play athlete ids are $ref links in the capture, not inline data, so playerIds assertions require subset-of-boxscore membership rather than non-empty per-play ids; player-level involvement beyond that needs the PR 2 live sequence or a further fetch the design does not name.",
+  "Correction evidence is a derived variant (score/text/modified edited in test code) because the PR 1 capture holds only final state (X05-OBS-002); live-sequence correction proof remains with P2-X05 PR 2 and P2-L03.",
+  "Packet orders a local red commit with --no-verify because the backend gate is red by design, matching the P2-B03T precedent; the gate was still run and recorded (gate.txt)."
+ ],
+ "deferred": [
+  "P2-B02 green on unchanged frozen tests (same IDs/hashes) via CMD-GATE-BACKEND",
+  "Independent OCR review at IE-P2-13",
+  "Deployed proof closeout P2-L03 (CMD-DEPLOYED-TESTS) and live-timing/correction sequence P2-X05 PR 2",
+  "Orchestrator landing/changelog and allocated lifecycle proof closure"
+ ],
+ "developer_feedback": {
+  "observations": [
+   {
+    "id": "P2B02T-DX-001",
+    "tool": "pytest/Moto",
+    "observation": "62 all-assertion red cases plus 3 NOT_RUN deployed skips run offline in about 2 s over the 600 KB captures; the shared api/offline fixtures needed no changes for the feed dirs.",
+    "evidence": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B02T/CMD-RED.xml"
+   },
+   {
+    "id": "P2B02T-DX-002",
+    "tool": "ESPN capture (P2-X05)",
+    "observation": "All 199 plays of game 401872981 carry id, start.yardsToEndzone, wallclock and an offense teamParticipant, so field-position and possession expectations need no fallbacks; play athlete ids remain $ref-only.",
+    "evidence": "backend/fixtures/replay/401872981/001-summary.json"
+   },
+   {
+    "id": "P2B02T-DX-003",
+    "tool": "pytest JUnit",
+    "observation": "pytest 8.4.2 JUnit failures still omit the type attribute; the AssertionError-prefixed message classifier from B03T holds unchanged for unit, contract and deployed scopes.",
+    "evidence": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B02T/CMD-RED.xml"
+   }
+  ]
+ },
+ "resource_group": "host-pytest; fresh per-test Moto state; sockets blocked; no engine/server/AWS/device",
+ "changed_paths": [
+  "backend/tests/unit/feed_ingest/feed_support.py",
+  "backend/tests/unit/feed_ingest/test_validation.py",
+  "backend/tests/unit/feed_ingest/test_normalization.py",
+  "backend/tests/unit/feed_ingest/test_revisions.py",
+  "backend/tests/unit/feed_ingest/test_replay_labels.py",
+  "backend/tests/unit/feed_ingest/test_monitoring.py",
+  "backend/tests/contract/feed_ingest/test_feed_contracts.py",
+  "backend/tests/deployed/feed_ingest/test_feed_labels.py",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B02T/CMD-RED.txt",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B02T/CMD-RED.xml",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B02T/collect.txt",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B02T/commands.json",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B02T/gate.txt",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B02T/path-check.txt",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B02T/receipt.json",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B02T/verify_receipt.py"
+ ],
+ "frozen_test_correction": "frozen test corrected in B02 repair round: encoded a rule contradicted by real ESPN data (review F1)"
+}

@@ -1,0 +1,36 @@
+{
+  "baseline": "8a4808e016dbf1538fcbba2419bd65d980300251",
+  "method": "Same test files and selectors run before any product edit on the pinned checkout, then after the repair; no branch change",
+  "test_selectors": [
+    "backend/tests/unit/lineup/test_manual_team.py",
+    "backend/tests/unit/feed_ingest/test_review_repairs.py::test_f5_manual_nonleader_team_game_is_fetched_and_irrelevant_game_is_skipped",
+    "backend/tests/unit/feed_ingest/test_review_repairs.py::test_f5_irrelevant_in_progress_game_is_never_fetched"
+  ],
+  "command": "PYTHONDONTWRITEBYTECODE=1 PATH=$HOME/.local/share/afc-tools/backend-tests/bin:$PATH python3.12 -m pytest -q backend/tests/unit/lineup/test_manual_team.py backend/tests/unit/feed_ingest/test_review_repairs.py::test_f5_manual_nonleader_team_game_is_fetched_and_irrelevant_game_is_skipped backend/tests/unit/feed_ingest/test_review_repairs.py::test_f5_irrelevant_in_progress_game_is_never_fetched",
+  "test_file_sha256": {
+    "backend/tests/unit/lineup/test_manual_team.py": "4c3779a8b74b31ce8e2b51cf57c51142c35513e3a7acd0c991fd9b47d7bb6306",
+    "backend/tests/unit/feed_ingest/test_review_repairs.py": "b30069cbecfbeb5ea0da64cf5f3659c19ba1727ac5c286019825f8d9d7c3d31e"
+  },
+  "red": {
+    "exit_code": 1,
+    "output": "red.txt",
+    "result": "20 failed, 1 passed; nonleader polling assertion fails; irrelevant-game case passes"
+  },
+  "green": {
+    "exit_code": 0,
+    "output": "green.txt",
+    "result": "21 passed"
+  },
+  "captured_player": {
+    "athlete_id": "4715355",
+    "name": "Darius Cooper",
+    "team": "PHI",
+    "game_id": "401872981",
+    "scoreboard_leader": false
+  },
+  "origin": "Manual builder omitted roster team; scoreboard athletes are only leaders",
+  "missed_detection": "Frozen manual tests check source/name/slot/scoring but not team retention; previous positive ingest cases used a leader or a team-bearing Yahoo starter",
+  "prevention": "Production poll through stored manual lineup and captured two-game board checks both selected nonleader fetch and irrelevant-game omission; shape-only validation tests protect untrusted roster input",
+  "BUG_ROUTE": "frozen-lifecycle-profile assigned same-round F5 repair; no nested triage or new review",
+  "reverify": "not_applicable: Python source, no compiled-binary claim"
+}
