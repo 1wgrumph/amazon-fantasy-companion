@@ -1,10 +1,12 @@
 package com.afc.companion
 
 import com.afc.companion.net.ApiClient
-import java.io.FilterInputStream
-import java.io.InputStream
+import java.io.ByteArrayInputStream
 import java.net.HttpURLConnection
-import java.util.concurrent.atomic.AtomicBoolean
+import java.net.URL
+import java.util.concurrent.atomic.AtomicInteger
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.runBlocking
@@ -12,72 +14,63 @@ import kotlinx.coroutines.selects.select
 import org.junit.Assert.*
 import org.junit.Test
 
-// Resource group: none shared. LocalApi owns an OS-assigned port and its executor.
+// Inputs were exercised against LocalApi in pit-bounded-loops/focused.txt; no shared resources.
 class ApiLoopBoundTest {
-    @Test fun transientRetriesStopAtTheAttemptCap() = runBlocking {
-        LocalApi(listOf(503 to "{}")).use { server ->
-            val waits = mutableListOf<Long>()
-            val client = ApiClient(server.baseUrl, openConnection = { url ->
-                assertTrue("At most one request plus three retries", server.requests.size < 4)
-                connect(url)
-            }, backoff = {
-                assertTrue("At most three backoffs", waits.size < 3)
-                waits.add(it)
-            })
-            assertEquals(503, client.request("GET", "/v1/profile").status)
-            assertEquals(listOf(1_000L, 2_000L, 4_000L), waits)
-            assertEquals(4, server.requests.size)
+    @Test fun transientRetriesStopAtTheAttemptCapAfterSuspendedBackoffs() = runBlocking(Dispatchers.IO) {
+        val attempts = AtomicInteger()
+        val backoffs = AtomicInteger()
+        val resumed = AtomicInteger()
+        val waiting = Channel<Long>(Channel.UNLIMITED)
+        val resume = Channel<Unit>()
+        // Start inline on the request dispatcher so the first backoff has suspended before resumption.
+        val response = async(start = CoroutineStart.UNDISPATCHED) {
+            ApiClient("https://api.example.test", openConnection = { url ->
+                assertEquals("No request before its backoff resumes", backoffs.get(), resumed.get())
+                assertTrue("At most one request plus three retries", attempts.getAndIncrement() < 4)
+                responseConnection(url, 503, "{}".toByteArray())
+            }, backoff = { millis ->
+                assertTrue("At most three backoffs", backoffs.getAndIncrement() < 3)
+                waiting.send(millis)
+                resume.receive()
+                resumed.incrementAndGet()
+            }).request("GET", "/v1/profile")
         }
-    }
-
-    @Test fun suspendedBackoffMustResumeBeforeTheNextAttempt() = runBlocking {
-        LocalApi(listOf(503 to "{}", 200 to "{}")).use { server ->
-            val waiting = Channel<Long>(Channel.UNLIMITED)
-            val resume = Channel<Unit>()
-            val resumed = AtomicBoolean(false)
-            val response = async {
-                ApiClient(server.baseUrl, openConnection = { url ->
-                    assertTrue("No retry until the suspended backoff resumes", server.requests.isEmpty() || resumed.get())
-                    connect(url)
-                }, backoff = { millis ->
-                    waiting.send(millis)
-                    resume.receive()
-                    resumed.set(true)
-                }).request("GET", "/v1/profile")
-            }
+        for ((index, expected) in listOf(1_000L, 2_000L, 4_000L).withIndex()) {
             val millis = select<Long> {
                 waiting.onReceive { it }
                 response.onAwait { throw AssertionError("Request returned before its backoff") }
             }
-            assertEquals(1_000L, millis)
-            assertEquals(1, server.requests.size)
+            assertEquals(expected, millis)
+            assertEquals(index + 1, attempts.get())
             resume.send(Unit)
-            assertEquals(200, response.await().status)
-            assertEquals(2, server.requests.size)
         }
+        assertEquals(503, response.await().status)
+        assertEquals(4, attempts.get())
+        assertEquals(3, backoffs.get())
     }
 
     @Test fun oversizedResponseStopsReadingAtTheByteCap() {
-        LocalApi(listOf(200 to "x".repeat(65_537))).use { server ->
-            val client = ApiClient(server.baseUrl, openConnection = { url ->
-                val real = connect(url)
-                object : HttpURLConnection(url) {
-                    override fun connect() = real.connect()
-                    override fun disconnect() = real.disconnect()
-                    override fun usingProxy(): Boolean = real.usingProxy()
-                    override fun getResponseCode(): Int = real.responseCode
-                    override fun getInputStream(): InputStream = object : FilterInputStream(real.inputStream) {
-                        override fun read(bytes: ByteArray, offset: Int, length: Int): Int {
-                            assertTrue("Bounded reader must stop before requesting zero bytes", length > 0)
-                            return super.read(bytes, offset, length)
-                        }
-                    }
-                }
-            })
-            assertThrows(IllegalArgumentException::class.java) {
-                runBlocking { client.request("GET", "/v1/profile") }
-            }
-            assertEquals(1, server.requests.size)
+        val client = ApiClient("https://api.example.test", openConnection = { url ->
+            responseConnection(url, 200, ByteArray(65_537) { 'x'.code.toByte() })
+        })
+        val failure = assertThrows(IllegalArgumentException::class.java) {
+            runBlocking { client.request("GET", "/v1/profile") }
         }
+        assertEquals("Response body exceeds 64 KiB", failure.message)
     }
+
+    private fun responseConnection(url: URL, status: Int, body: ByteArray): HttpURLConnection =
+        object : HttpURLConnection(url) {
+            override fun connect() {}
+            override fun disconnect() {}
+            override fun usingProxy(): Boolean = false
+            override fun getResponseCode(): Int = status
+            override fun getInputStream(): ByteArrayInputStream = object : ByteArrayInputStream(body) {
+                override fun read(bytes: ByteArray, offset: Int, length: Int): Int {
+                    assertTrue("Bounded reader must stop before requesting zero bytes", length > 0)
+                    return super.read(bytes, offset, length)
+                }
+            }
+            override fun getErrorStream(): ByteArrayInputStream = inputStream
+        }
 }

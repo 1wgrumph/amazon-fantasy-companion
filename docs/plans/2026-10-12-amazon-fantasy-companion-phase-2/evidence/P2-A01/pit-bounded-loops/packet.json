@@ -38,6 +38,17 @@
       "status": "pending applicability evaluation"
     }
   },
-  "resource_group": "none shared; each LocalApi owns OS-assigned port and executor",
-  "expected_test_time": "under 1 second per suite after JVM startup; no sleep/backoff wall time"
+  "resource_group": "none shared; connection fixtures use in-memory byte streams",
+  "expected_test_time": "under 1 second per suite after JVM startup; no sleep/backoff wall time",
+  "corrections": [
+    {
+      "attempt": 1,
+      "native_verdict": "GAP UNRESOLVED: 3 mutants",
+      "killed": "ApiClient request line 44 increment mutant",
+      "evidence": "native-attempt1/mutations.xml.gz",
+      "hypothesis": "PIT test prioritization can execute an older unbounded case first; use lower-cost bounded probes with HTTP inputs already exercised by the first focused run.",
+      "change": "Replace network-backed probes with minimal HttpURLConnection fixtures; use real coroutine suspension and attempt caps. No runtime code or tool changes."
+    }
+  ],
+  "real_dependency_proof": "focused.txt: 3/3 real LocalApi probes passed before fixture introduction, exercising 503 {} and a 65537-byte x body. Frozen FixtureCalibrationTest also proves real HTTP status/body behavior. The second version reuses these observed inputs."
 }

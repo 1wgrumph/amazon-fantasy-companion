@@ -1,0 +1,954 @@
+diff --git a/tv-app/app/src/main/AndroidManifest.xml b/tv-app/app/src/main/AndroidManifest.xml
+new file mode 100644
+index 0000000..ee1881d
+--- /dev/null
++++ b/tv-app/app/src/main/AndroidManifest.xml
+@@ -0,0 +1,52 @@
++<?xml version="1.0" encoding="utf-8"?>
++<!-- DES-AFC-P2-TV and DES-AFC-P2-ALERTPATH: every component and permission; later edits take the tv-app-manifest lease. -->
++<manifest xmlns:android="http://schemas.android.com/apk/res/android">
++    <uses-permission android:name="android.permission.INTERNET" />
++    <!-- AlertService: foreground long poll while monitoring is enabled (AFC-PR-009). -->
++    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
++    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
++    <!-- AlertNotifier: heads-up notification on a high-importance channel (AFC-PR-015). -->
++    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
++
++    <uses-feature android:name="android.software.leanback" android:required="true" />
++    <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
++
++    <!-- AppDetector and WatchLauncher see launchable TV apps only, never every installed package. -->
++    <queries>
++        <intent>
++            <action android:name="android.intent.action.MAIN" />
++            <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
++        </intent>
++    </queries>
++
++    <application
++        android:allowBackup="false"
++        android:dataExtractionRules="@xml/data_extraction_rules"
++        android:banner="@mipmap/ic_launcher"
++        android:icon="@mipmap/ic_launcher"
++        android:label="@string/app_name"
++        android:supportsRtl="true"
++        android:usesCleartextTraffic="false"
++        android:theme="@android:style/Theme.Material.NoActionBar">
++        <activity
++            android:name=".MainActivity"
++            android:exported="true">
++            <intent-filter>
++                <action android:name="android.intent.action.MAIN" />
++                <category android:name="android.intent.category.LAUNCHER" />
++                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
++            </intent-filter>
++        </activity>
++        <!-- Watch action target: a notification PendingIntent into WatchLauncher (no trampoline receiver). -->
++        <activity
++            android:name=".watch.WatchActivity"
++            android:exported="false"
++            android:excludeFromRecents="true"
++            android:noHistory="true"
++            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
++        <service
++            android:name=".alerts.AlertService"
++            android:exported="false"
++            android:foregroundServiceType="dataSync" />
++    </application>
++</manifest>
+diff --git a/tv-app/app/src/main/java/com/afc/companion/MainActivity.kt b/tv-app/app/src/main/java/com/afc/companion/MainActivity.kt
+new file mode 100644
+index 0000000..0358af5
+--- /dev/null
++++ b/tv-app/app/src/main/java/com/afc/companion/MainActivity.kt
+@@ -0,0 +1,76 @@
++package com.afc.companion
++
++import android.os.Bundle
++import androidx.activity.ComponentActivity
++import androidx.activity.compose.setContent
++import androidx.compose.foundation.background
++import androidx.compose.foundation.layout.Arrangement
++import androidx.compose.foundation.layout.Box
++import androidx.compose.foundation.layout.Column
++import androidx.compose.foundation.layout.Row
++import androidx.compose.foundation.layout.fillMaxSize
++import androidx.compose.foundation.layout.padding
++import androidx.compose.runtime.Composable
++import androidx.compose.runtime.getValue
++import androidx.compose.runtime.mutableStateOf
++import androidx.compose.runtime.remember
++import androidx.compose.runtime.setValue
++import androidx.compose.ui.Modifier
++import androidx.compose.ui.unit.dp
++import androidx.tv.material3.Button
++import androidx.tv.material3.MaterialTheme
++import androidx.tv.material3.Text
++import com.afc.companion.link.LinkView
++import com.afc.companion.net.ApiClient
++import com.afc.companion.net.SessionStore
++import com.afc.companion.panel.LineupPanel
++import com.afc.companion.panel.PanelMode
++import com.afc.companion.profile.ProfileSettingsScreen
++import com.afc.companion.ui.theme.AfcTheme
++
++/** SHELL: single activity hosting Link, Profile/Settings and Panel. Only P2-A05 edits this file after P2-A01. */
++class MainActivity : ComponentActivity() {
++    override fun onCreate(savedInstanceState: Bundle?) {
++        super.onCreate(savedInstanceState)
++        val sessions = SessionStore(this)
++        val shell = Shell()
++        val client = shell.client(BuildConfig.AFC_API_BASE_URL, sessions::token)
++        setContent {
++            AfcTheme {
++                Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
++                    if (client == null) NotConfigured() else AppShell(shell, client, sessions)
++                }
++            }
++        }
++    }
++}
++
++@Composable
++private fun NotConfigured() {
++    Column(Modifier.padding(48.dp), verticalArrangement = Arrangement.spacedBy(24.dp)) {
++        Text("Backend not configured", style = MaterialTheme.typography.headlineMedium)
++        Text("Build with -PafcApiBaseUrl=<API URL> to connect this TV.", style = MaterialTheme.typography.bodyLarge)
++    }
++}
++
++@Composable
++private fun AppShell(shell: Shell, client: ApiClient, sessions: SessionStore) {
++    var destination by remember { mutableStateOf(shell.start(sessions.token() != null)) }
++    Row(Modifier.fillMaxSize()) {
++        Column(Modifier.padding(32.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
++            Destination.entries.forEach { target ->
++                Button(onClick = { destination = target }) { Text(target.label) }
++            }
++        }
++        Box(Modifier.weight(1f).fillMaxSize()) {
++            when (destination) {
++                Destination.Link -> LinkView(client, onLinked = { token ->
++                    sessions.save(token)
++                    destination = Destination.ProfileSettings
++                })
++                Destination.ProfileSettings -> ProfileSettingsScreen(client)
++                Destination.Panel -> LineupPanel(client, PanelMode.FullScreen)
++            }
++        }
++    }
++}
+diff --git a/tv-app/app/src/main/java/com/afc/companion/Shell.kt b/tv-app/app/src/main/java/com/afc/companion/Shell.kt
+new file mode 100644
+index 0000000..14a993c
+--- /dev/null
++++ b/tv-app/app/src/main/java/com/afc/companion/Shell.kt
+@@ -0,0 +1,16 @@
++package com.afc.companion
++
++import com.afc.companion.net.ApiClient
++
++/** SHELL: Link, Profile/Settings and Panel only; no social or messaging surfaces (AFC-PR-057). */
++enum class Destination(val label: String) { Link("Link"), ProfileSettings("Profile/Settings"), Panel("Panel") }
++
++class Shell {
++    fun destinations(): Set<String> = Destination.entries.mapTo(LinkedHashSet()) { it.label }
++
++    fun start(hasSession: Boolean): Destination = if (hasSession) Destination.ProfileSettings else Destination.Link
++
++    /** Null means "Backend not configured": an empty or unusable AFC_API_BASE_URL. */
++    fun client(baseUrl: String, sessionToken: () -> String?): ApiClient? =
++        baseUrl.takeIf { it.isNotBlank() }?.let { runCatching { ApiClient(it, sessionToken) }.getOrNull() }
++}
+diff --git a/tv-app/app/src/main/java/com/afc/companion/alerts/AlertNotifier.kt b/tv-app/app/src/main/java/com/afc/companion/alerts/AlertNotifier.kt
+new file mode 100644
+index 0000000..357a7c6
+--- /dev/null
++++ b/tv-app/app/src/main/java/com/afc/companion/alerts/AlertNotifier.kt
+@@ -0,0 +1,9 @@
++package com.afc.companion.alerts
++
++import android.content.Context
++import com.afc.companion.net.Alert
++
++// AFC-STUB: P2-A03 implements NOTIFIER (heads-up with Watch / Dismiss, or panel-only) behind this signature.
++class AlertNotifier(private val context: Context) {
++    fun show(alert: Alert) = Unit
++}
+diff --git a/tv-app/app/src/main/java/com/afc/companion/alerts/AlertService.kt b/tv-app/app/src/main/java/com/afc/companion/alerts/AlertService.kt
+new file mode 100644
+index 0000000..7a29b01
+--- /dev/null
++++ b/tv-app/app/src/main/java/com/afc/companion/alerts/AlertService.kt
+@@ -0,0 +1,19 @@
++package com.afc.companion.alerts
++
++import android.app.Service
++import android.content.Intent
++import android.os.IBinder
++
++// AFC-STUB: P2-A03 implements ALERTSVC (foreground long poll, bounded queue) behind this component.
++class AlertService : Service() {
++    override fun onBind(intent: Intent?): IBinder? = null
++
++    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
++        stopSelf(startId)
++        return START_NOT_STICKY
++    }
++
++    companion object {
++        const val ACTION_DISMISS = "com.afc.companion.alerts.DISMISS"
++    }
++}
+diff --git a/tv-app/app/src/main/java/com/afc/companion/detect/AppDetector.kt b/tv-app/app/src/main/java/com/afc/companion/detect/AppDetector.kt
+new file mode 100644
+index 0000000..53c053b
+--- /dev/null
++++ b/tv-app/app/src/main/java/com/afc/companion/detect/AppDetector.kt
+@@ -0,0 +1,9 @@
++package com.afc.companion.detect
++
++import android.content.pm.PackageManager
++import com.afc.companion.net.InstalledApps
++
++// AFC-STUB: P2-A02 implements DETECTOR per the P2-X07 verdict; reports nothing until then.
++class AppDetector(private val packageManager: PackageManager) {
++    fun detect(candidates: Collection<String>): InstalledApps = InstalledApps(emptyList())
++}
+diff --git a/tv-app/app/src/main/java/com/afc/companion/link/LinkScreen.kt b/tv-app/app/src/main/java/com/afc/companion/link/LinkScreen.kt
+new file mode 100644
+index 0000000..51b0027
+--- /dev/null
++++ b/tv-app/app/src/main/java/com/afc/companion/link/LinkScreen.kt
+@@ -0,0 +1,106 @@
++package com.afc.companion.link
++
++import androidx.compose.foundation.layout.Arrangement
++import androidx.compose.foundation.layout.Column
++import androidx.compose.foundation.layout.padding
++import androidx.compose.runtime.Composable
++import androidx.compose.runtime.LaunchedEffect
++import androidx.compose.runtime.getValue
++import androidx.compose.runtime.mutableIntStateOf
++import androidx.compose.runtime.mutableStateOf
++import androidx.compose.runtime.remember
++import androidx.compose.runtime.setValue
++import androidx.compose.ui.Modifier
++import androidx.compose.ui.unit.dp
++import androidx.tv.material3.Button
++import androidx.tv.material3.MaterialTheme
++import androidx.tv.material3.Text
++import com.afc.companion.net.ApiClient
++import com.afc.companion.net.DeviceCode
++import com.afc.companion.net.LinkState
++import com.afc.companion.net.LinkStatus
++import java.io.IOException
++import kotlinx.coroutines.delay
++import org.json.JSONObject
++
++/** AFC-PR-038 TV side: presentation of device-code and link-poll responses. Never carries the session token. */
++class LinkScreen(private val linkPage: String = "the link page") {
++    fun present(response: JSONObject): LinkPresentation? {
++        if (response.has("code")) {
++            val code = DeviceCode.from(response) ?: return null
++            return LinkPresentation(LinkStatus.CodePending.wire, code.code,
++                "On your phone, open $linkPage and enter this code before ${code.expires}", false)
++        }
++        val state = LinkState.from(response) ?: return null
++        return when (state.state) {
++            LinkStatus.Unlinked -> LinkPresentation(state.state.wire, null, "This TV is not linked. Select Get code to link it.", false)
++            LinkStatus.CodePending -> LinkPresentation(state.state.wire, null, "Waiting for the code to be confirmed", false)
++            LinkStatus.Linked -> LinkPresentation(state.state.wire, null, "Linked", true)
++            LinkStatus.Expired -> LinkPresentation(state.state.wire, null, "The code expired. Select Get code for a new one.", false)
++        }
++    }
++}
++
++data class LinkPresentation(val state: String, val code: String?, val message: String, val showProfile: Boolean)
++
++/** Issues a code, then polls its handle until linked or expired. IOException and contract errors reach the caller. */
++class LinkFlow(
++    private val client: ApiClient,
++    private val screen: LinkScreen,
++    private val pollIntervalMs: Long = POLL_INTERVAL_MS,
++    private val sleep: suspend (Long) -> Unit = { delay(it) },
++) {
++    suspend fun run(show: (LinkPresentation) -> Unit, onLinked: (String) -> Unit) {
++        val issued = client.issueLinkCode()
++        val code = issued.value ?: return show(failure(issued.status))
++        show(screen.present(JSONObject().put("code", code.code).put("expires", code.expires).put("handle", code.handle))!!)
++        while (true) {
++            sleep(pollIntervalMs)
++            val polled = client.pollLink(code.handle)
++            val state = polled.value ?: return show(failure(polled.status))
++            when (state.state) {
++                LinkStatus.CodePending -> continue
++                LinkStatus.Linked -> {
++                    val token = state.sessionToken ?: return show(failure(polled.status))
++                    onLinked(token)
++                    return show(screen.present(JSONObject().put("state", state.state.wire))!!)
++                }
++                else -> return show(screen.present(JSONObject().put("state", state.state.wire))!!)
++            }
++        }
++    }
++
++    companion object {
++        const val POLL_INTERVAL_MS = 5_000L
++        fun failure(status: Int) = LinkPresentation("error", null, "Linking failed (HTTP $status). Select Get code to try again.", false)
++    }
++}
++
++@Composable
++fun LinkView(client: ApiClient, onLinked: (String) -> Unit, modifier: Modifier = Modifier) {
++    var attempt by remember { mutableIntStateOf(0) }
++    var shown by remember { mutableStateOf<LinkPresentation?>(null) }
++    LaunchedEffect(attempt) {
++        shown = null
++        try {
++            LinkFlow(client, LinkScreen("${client.baseUrl.trimEnd('/')}/link")).run({ shown = it }, onLinked)
++        } catch (e: IOException) {
++            shown = LinkPresentation("networkError", null, "Network error. Check the connection, then select Get code.", false)
++        } catch (e: IllegalArgumentException) {
++            shown = LinkPresentation("error", null, "The backend sent an unexpected response.", false)
++        }
++    }
++    Column(modifier.padding(48.dp), verticalArrangement = Arrangement.spacedBy(24.dp)) {
++        Text("Link this TV", style = MaterialTheme.typography.headlineMedium)
++        val current = shown
++        if (current == null) {
++            Text("Requesting a code…", style = MaterialTheme.typography.bodyLarge)
++        } else {
++            current.code?.let { Text(it, style = MaterialTheme.typography.displayMedium) }
++            Text(current.message, style = MaterialTheme.typography.bodyLarge)
++            if (current.state != LinkStatus.CodePending.wire && !current.showProfile) {
++                Button(onClick = { attempt++ }) { Text("Get code") }
++            }
++        }
++    }
++}
+diff --git a/tv-app/app/src/main/java/com/afc/companion/net/ApiClient.kt b/tv-app/app/src/main/java/com/afc/companion/net/ApiClient.kt
+new file mode 100644
+index 0000000..9bc9403
+--- /dev/null
++++ b/tv-app/app/src/main/java/com/afc/companion/net/ApiClient.kt
+@@ -0,0 +1,139 @@
++package com.afc.companion.net
++
++import java.io.InputStream
++import java.net.HttpURLConnection
++import java.net.URL
++import java.net.URLEncoder
++import kotlinx.coroutines.Dispatchers
++import kotlinx.coroutines.delay
++import kotlinx.coroutines.withContext
++import org.json.JSONException
++import org.json.JSONObject
++
++/**
++ * CONTRACT-AFC-P2-API client (backend/src/api/openapi.yaml). Bodies are at most 64 KiB both ways;
++ * api_timeout is 10 s, the alerts long poll reads for alert_poll_wait + 5 s = 25 s; idempotent calls
++ * (GET, PUT /v1/profile) retry 429/503 up to api_retry_max = 3 times with 1, 2, 4 s backoff. Link
++ * confirmation and Watch reports are never retried. All network and parsing run on Dispatchers.IO.
++ */
++class ApiClient(
++    val baseUrl: String,
++    val sessionToken: () -> String? = { null },
++    val openConnection: (URL) -> HttpURLConnection = { it.openConnection() as HttpURLConnection },
++    val backoff: suspend (Long) -> Unit = { delay(it) },
++) {
++    private val base: String = baseUrl.trimEnd('/')
++
++    init {
++        val url = runCatching { URL(base) }.getOrNull()
++        require(url != null && url.userInfo == null && url.query == null && url.ref == null &&
++            (url.protocol == "https" || (url.protocol == "http" && url.host in LOOPBACK_HOSTS))) {
++            "API base URL must be https (http only for loopback)"
++        }
++    }
++
++    suspend fun request(method: String, path: String, body: JSONObject? = null): ApiResponse = withContext(Dispatchers.IO) {
++        require(method in METHODS && path.startsWith("/v1/")) { "Unsupported operation" }
++        val payload = body?.toString()?.toByteArray(Charsets.UTF_8)
++        require(payload == null || payload.size <= MAX_BODY_BYTES) { "Request body exceeds 64 KiB" }
++        val idempotent = method == "GET" || method == "PUT"
++        var attempt = 0
++        var response = send(method, path, payload)
++        while (idempotent && response.status in TRANSIENT && attempt < RETRY_MAX) {
++            backoff(BACKOFF_BASE_MS shl attempt)
++            attempt++
++            response = send(method, path, payload)
++        }
++        response
++    }
++
++    suspend fun envelope(body: JSONObject, heldRevision: Long? = null): Envelope? = Envelope.from(body, heldRevision)
++
++    suspend fun issueLinkCode(): ApiResult<DeviceCode> = call("POST", "/v1/link", JSONObject(), DeviceCode::from)
++    suspend fun pollLink(handle: String): ApiResult<LinkState> = call("GET", "/v1/link?handle=${encode(handle)}", null, LinkState::from)
++    suspend fun confirmLink(confirm: LinkConfirm): ApiResult<LinkStatus> =
++        call("POST", "/v1/link/confirm", confirm.toJson()) { json -> LinkStatus.Linked.takeIf { json.opt("state") == it.wire } }
++    suspend fun getProfile(heldRevision: Long? = null): ApiResult<Profile> = call("GET", "/v1/profile", null) { Profile.from(it, heldRevision) }
++    suspend fun putProfile(update: ProfileUpdate): ApiResult<Profile> =
++        call("PUT", "/v1/profile", update.toJson()) { Profile.from(it, update.revision) }
++    suspend fun getAlerts(cursor: String? = null): ApiResult<AlertsPage> =
++        call("GET", "/v1/alerts" + (cursor?.let { "?cursor=${encode(it)}" } ?: ""), null, AlertsPage::from)
++    suspend fun getPanel(teamLeague: String? = null, heldRevision: Long? = null): ApiResult<PanelState> =
++        call("GET", "/v1/panel" + (teamLeague?.let { "?teamLeague=${encode(it)}" } ?: ""), null) { PanelState.from(it, heldRevision) }
++    suspend fun getProvider(eventId: String? = null): ApiResult<ProviderRoute> =
++        call("GET", "/v1/providers" + (eventId?.let { "?eventId=${encode(it)}" } ?: ""), null, ProviderRoute::from)
++    suspend fun reportRoutingOutcome(report: RoutingOutcomeReport): ApiResult<Unit> = call("POST", "/v1/routing-outcome", report.toJson()) { }
++    suspend fun reportInstalledApps(apps: InstalledApps): ApiResult<Unit> = call("POST", "/v1/installed-apps", apps.toJson()) { }
++
++    private suspend fun <T : Any> call(method: String, path: String, body: JSONObject?, decode: (JSONObject) -> T?): ApiResult<T> {
++        val response = request(method, path, body)
++        if (response.status !in 200..299) return ApiResult(response.status, null, ApiError.from(response.body))
++        val value = response.body?.let(decode) ?: throw IllegalArgumentException("Response does not match the API contract")
++        return ApiResult(response.status, value, null)
++    }
++
++    private fun send(method: String, path: String, payload: ByteArray?): ApiResponse {
++        val connection = openConnection(URL(base + path))
++        try {
++            connection.connectTimeout = TIMEOUT_MS
++            connection.readTimeout = if (path.substringBefore('?') == "/v1/alerts") LONG_POLL_READ_MS else TIMEOUT_MS
++            connection.instanceFollowRedirects = false
++            connection.requestMethod = method
++            connection.setRequestProperty("Accept", "application/json")
++            if (path.substringBefore('?') !in PUBLIC_PATHS) {
++                sessionToken()?.let { connection.setRequestProperty("Authorization", "Bearer $it") }
++            }
++            if (payload != null) {
++                connection.doOutput = true
++                connection.setRequestProperty("Content-Type", "application/json")
++                connection.outputStream.use { it.write(payload) }
++            }
++            val status = connection.responseCode
++            val stream = if (status >= 400) connection.errorStream else connection.inputStream
++            return ApiResponse(status, stream?.use { parse(readBounded(it)) })
++        } finally {
++            connection.disconnect()
++        }
++    }
++
++    companion object {
++        const val MAX_BODY_BYTES = 65_536
++        const val TIMEOUT_MS = 10_000
++        const val LONG_POLL_READ_MS = 25_000
++        const val RETRY_MAX = 3
++        const val BACKOFF_BASE_MS = 1_000L
++        private val METHODS = setOf("GET", "POST", "PUT")
++        private val TRANSIENT = setOf(429, 503)
++        private val PUBLIC_PATHS = setOf("/v1/link", "/v1/link/confirm")
++        private val LOOPBACK_HOSTS = setOf("127.0.0.1", "localhost")
++
++        private fun encode(value: String): String = URLEncoder.encode(value, "UTF-8")
++
++        private fun readBounded(input: InputStream): String {
++            val bytes = input.readNBytesCompat(MAX_BODY_BYTES + 1)
++            require(bytes.size <= MAX_BODY_BYTES) { "Response body exceeds 64 KiB" }
++            return bytes.toString(Charsets.UTF_8)
++        }
++
++        // InputStream.readNBytes is API 33; read at most [limit] bytes by hand for minSdk 25.
++        private fun InputStream.readNBytesCompat(limit: Int): ByteArray {
++            val out = java.io.ByteArrayOutputStream()
++            val buffer = ByteArray(8_192)
++            while (out.size() < limit) {
++                val read = read(buffer, 0, minOf(buffer.size, limit - out.size()))
++                if (read < 0) break
++                out.write(buffer, 0, read)
++            }
++            return out.toByteArray()
++        }
++
++        private fun parse(text: String): JSONObject? {
++            if (text.isBlank()) return null
++            return try {
++                JSONObject(text)
++            } catch (e: JSONException) {
++                throw IllegalArgumentException("Response is not a JSON object", e)
++            }
++        }
++    }
++}
+diff --git a/tv-app/app/src/main/java/com/afc/companion/net/Dto.kt b/tv-app/app/src/main/java/com/afc/companion/net/Dto.kt
+new file mode 100644
+index 0000000..415c9dc
+--- /dev/null
++++ b/tv-app/app/src/main/java/com/afc/companion/net/Dto.kt
+@@ -0,0 +1,220 @@
++package com.afc.companion.net
++
++import org.json.JSONArray
++import org.json.JSONObject
++
++/** Request and response types for every CONTRACT-AFC-P2-API operation. Decoders return null on contract violations. */
++data class ApiResponse(val status: Int, val body: JSONObject?)
++
++data class ApiResult<out T : Any>(val status: Int, val value: T?, val error: ApiError?)
++
++data class ApiError(val code: String, val message: String) {
++    companion object {
++        fun from(body: JSONObject?): ApiError? {
++            val error = body?.opt("error") as? JSONObject ?: return null
++            val code = error.opt("code") as? String ?: return null
++            val message = error.opt("message") as? String ?: return null
++            return ApiError(code, message)
++        }
++    }
++}
++
++/** CONTRACT-AFC-P2-ENVELOPE. A revision older than the one held is rejected. */
++data class Envelope(
++    val schemaVersion: Int,
++    val id: String,
++    val revision: Long,
++    val source: String,
++    val updatedAt: String,
++    val eventTime: String?,
++    val data: JSONObject,
++) {
++    companion object {
++        const val SCHEMA_VERSION = 1
++        val SOURCES = setOf("live", "replay", "yahoo", "manual")
++
++        fun from(json: JSONObject, heldRevision: Long? = null): Envelope? {
++            val schemaVersion = integral(json.opt("schemaVersion"))?.takeIf { it == SCHEMA_VERSION.toLong() } ?: return null
++            val id = (json.opt("id") as? String)?.takeIf { it.isNotEmpty() } ?: return null
++            val revision = integral(json.opt("revision"))?.takeIf { it >= 0 } ?: return null
++            if (heldRevision != null && revision < heldRevision) return null
++            val source = (json.opt("source") as? String)?.takeIf { it in SOURCES } ?: return null
++            val updatedAt = timestamp(json.opt("updatedAt")) ?: return null
++            val eventTime = if (json.has("eventTime")) timestamp(json.opt("eventTime")) ?: return null else null
++            val data = json.opt("data") as? JSONObject ?: return null
++            return Envelope(schemaVersion.toInt(), id, revision, source, updatedAt, eventTime, data)
++        }
++    }
++}
++
++data class DeviceCode(val code: String, val expires: String, val handle: String) {
++    companion object {
++        private val CODE = Regex("^[ABCDEFGHJKLMNPQRSTUVWXYZ23456789]{8}$")
++        fun from(json: JSONObject): DeviceCode? {
++            val code = (json.opt("code") as? String)?.takeIf { CODE.matches(it) } ?: return null
++            val expires = timestamp(json.opt("expires")) ?: return null
++            val handle = (json.opt("handle") as? String)?.takeIf { it.isNotEmpty() } ?: return null
++            return DeviceCode(code, expires, handle)
++        }
++    }
++}
++
++enum class LinkStatus(val wire: String) {
++    Unlinked("unlinked"), CodePending("codePending"), Linked("linked"), Expired("expired");
++    companion object { fun of(wire: Any?): LinkStatus? = entries.firstOrNull { it.wire == wire } }
++}
++
++/** The session token never appears in toString, logs or presentation. */
++class LinkState(val state: LinkStatus, val sessionToken: String?) {
++    override fun toString(): String = "LinkState(state=$state, sessionToken=${if (sessionToken == null) "absent" else "redacted"})"
++    companion object {
++        fun from(json: JSONObject): LinkState? {
++            val state = LinkStatus.of(json.opt("state")) ?: return null
++            val token = json.opt("sessionToken")?.let { it as? String ?: return null }
++            return LinkState(state, token)
++        }
++    }
++}
++
++class LinkConfirm(val code: String, val passphrase: String, val profileId: String) {
++    override fun toString(): String = "LinkConfirm(code=$code, profileId=$profileId)"
++    fun toJson(): JSONObject = JSONObject().put("code", code).put("passphrase", passphrase).put("profileId", profileId)
++}
++
++enum class ScoringPreset(val wire: String) {
++    Ppr("ppr"), HalfPpr("halfPpr");
++    companion object { fun of(wire: Any?): ScoringPreset? = entries.firstOrNull { it.wire == wire } }
++}
++
++/** Settings: additionalProperties false; scoringPreset defaults to Half-PPR. Other controls stay opaque until P2-A02. */
++class Settings(val scoringPreset: ScoringPreset = ScoringPreset.HalfPpr, controls: JSONObject = JSONObject()) {
++    val controls: JSONObject = JSONObject(controls.toString())
++
++    init { require(this.controls.keys().asSequence().all { it in CONTROLS }) { "Unknown settings field" } }
++
++    fun toJson(): JSONObject = JSONObject(controls.toString()).put("scoringPreset", scoringPreset.wire)
++
++    companion object {
++        val CONTROLS = setOf(
++            "fantasySelections", "teamLeague", "alertTypes", "frequency", "quietHours", "gameDayPeriods", "spoilerDelay",
++            "presentation", "voice", "excitement", "providerPref", "switchingConfirm", "panelPrefs", "detectionOptIn",
++        )
++
++        fun from(json: JSONObject): Settings? {
++            val preset = if (json.has("scoringPreset")) ScoringPreset.of(json.opt("scoringPreset")) ?: return null else ScoringPreset.HalfPpr
++            val controls = JSONObject(json.toString()).apply { remove("scoringPreset") }
++            if (!controls.keys().asSequence().all { it in CONTROLS }) return null
++            return Settings(preset, controls)
++        }
++    }
++}
++
++class Profile(val envelope: Envelope, val settings: Settings) {
++    companion object {
++        fun from(json: JSONObject, heldRevision: Long? = null): Profile? {
++            val envelope = Envelope.from(json, heldRevision) ?: return null
++            return Settings.from(envelope.data)?.let { Profile(envelope, it) }
++        }
++    }
++}
++
++class ProfileUpdate(val revision: Long, val settings: Settings, val profileId: String? = null) {
++    init { require(revision >= 0) { "revision must be non-negative" } }
++    fun toJson(): JSONObject = JSONObject().put("revision", revision).put("data", settings.toJson())
++        .apply { profileId?.let { put("profileId", it) } }
++}
++
++enum class AccessBasis(val wire: String) {
++    Verified("verified"), CustomerConfirmed("customerConfirmed"), Unknown("unknown");
++    companion object { fun of(wire: Any?): AccessBasis? = entries.firstOrNull { it.wire == wire } }
++}
++
++/** GET /v1/providers: resolved route and access basis; never inferred from installed apps. */
++class ProviderRoute(val provider: String?, val channel: String?, val route: JSONObject?, val accessBasis: AccessBasis) {
++    companion object {
++        fun from(json: JSONObject): ProviderRoute? {
++            val basis = AccessBasis.of(json.opt("accessBasis")) ?: return null
++            val provider = optional<String>(json, "provider") ?: return null
++            val channel = optional<String>(json, "channel") ?: return null
++            val route = optional<JSONObject>(json, "route") ?: return null
++            return ProviderRoute(provider.value, channel.value, route.value, basis)
++        }
++    }
++}
++
++/** An alert envelope; data.route (a ProviderRoute) is optional and absent access shows as unknown (AFC-PR-032). */
++class Alert(val envelope: Envelope, val route: ProviderRoute?) {
++    val accessBasis: AccessBasis get() = route?.accessBasis ?: AccessBasis.Unknown
++    companion object {
++        fun from(envelope: Envelope): Alert? {
++            val route = optional<JSONObject>(envelope.data, "route") ?: return null
++            return Alert(envelope, route.value?.let { ProviderRoute.from(it) ?: return null })
++        }
++    }
++}
++
++/** GET /v1/alerts: one invalid entry rejects the page, so nothing is partially applied. */
++class AlertsPage(val alerts: List<Alert>, val cursor: String) {
++    companion object {
++        fun from(json: JSONObject): AlertsPage? {
++            val items = json.opt("alerts") as? JSONArray ?: return null
++            val cursor = json.opt("cursor") as? String ?: return null
++            val alerts = (0 until items.length()).map { i ->
++                (items.opt(i) as? JSONObject)?.let(Envelope::from)?.let(Alert::from) ?: return null
++            }
++            return AlertsPage(alerts, cursor)
++        }
++    }
++}
++
++/** GET /v1/panel: PanelState envelope; P2-A05 reads rows, totals and scoring basis from data. */
++class PanelState(val envelope: Envelope) {
++    companion object {
++        fun from(json: JSONObject, heldRevision: Long? = null): PanelState? = Envelope.from(json, heldRevision)?.let(::PanelState)
++    }
++}
++
++enum class RoutingOutcome(val wire: String) {
++    GameOpened("gameOpened"), SearchOpened("searchOpened"), AppHomeOpened("appHomeOpened"),
++    AppAbsent("appAbsent"), AccessUnknown("accessUnknown"), PlaybackDenied("playbackDenied"),
++}
++
++class RoutingOutcomeReport(val eventId: String, val outcome: RoutingOutcome, val profileId: String? = null) {
++    init { require(eventId.length in 1..256) { "eventId length" } }
++    fun toJson(): JSONObject = JSONObject().put("eventId", eventId).put("outcome", outcome.wire)
++        .apply { profileId?.let { put("profileId", it) } }
++}
++
++class InstalledApps(val packages: List<String>, val profileId: String? = null) {
++    init {
++        require(packages.size <= MAX_PACKAGES) { "At most $MAX_PACKAGES packages" }
++        require(packages.all { PACKAGE.matches(it) }) { "Invalid package name" }
++    }
++    fun toJson(): JSONObject = JSONObject().put("packages", JSONArray(packages))
++        .apply { profileId?.let { put("profileId", it) } }
++    companion object {
++        const val MAX_PACKAGES = 500
++        private val PACKAGE = Regex("^[A-Za-z0-9._]{1,255}$")
++    }
++}
++
++private class Present<out T>(val value: T?)
++
++/** Absent or JSON null yields Present(null); a value of the wrong type yields null. */
++private inline fun <reified T> optional(json: JSONObject, key: String): Present<T>? {
++    val value = json.opt(key)
++    if (value == null || value == JSONObject.NULL) return Present(null)
++    return (value as? T)?.let { Present(it) }
++}
++
++private fun integral(value: Any?): Long? = when (value) {
++    is Int -> value.toLong()
++    is Long -> value
++    else -> null
++}
++
++private val RFC3339 = Regex(
++    "^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])T([01]\\d|2[0-3]):[0-5]\\d:([0-5]\\d|60)(\\.\\d{1,9})?(Z|[+-]([01]\\d|2[0-3]):[0-5]\\d)$",
++)
++
++private fun timestamp(value: Any?): String? = (value as? String)?.takeIf { RFC3339.matches(it) }
+diff --git a/tv-app/app/src/main/java/com/afc/companion/net/SessionStore.kt b/tv-app/app/src/main/java/com/afc/companion/net/SessionStore.kt
+new file mode 100644
+index 0000000..e54a343
+--- /dev/null
++++ b/tv-app/app/src/main/java/com/afc/companion/net/SessionStore.kt
+@@ -0,0 +1,17 @@
++package com.afc.companion.net
++
++import android.content.Context
++import androidx.core.content.edit
++
++/** The only credential the TV holds: its device session token, in app-private storage (AFC-PR-055). Never logged. */
++class SessionStore(context: Context) {
++    private val prefs = context.getSharedPreferences("afc_session", Context.MODE_PRIVATE)
++
++    fun token(): String? = prefs.getString(KEY, null)
++
++    fun save(token: String) = prefs.edit { putString(KEY, token) }
++
++    fun clear() = prefs.edit { remove(KEY) }
++
++    private companion object { const val KEY = "sessionToken" }
++}
+diff --git a/tv-app/app/src/main/java/com/afc/companion/panel/LineupPanel.kt b/tv-app/app/src/main/java/com/afc/companion/panel/LineupPanel.kt
+new file mode 100644
+index 0000000..c21cf70
+--- /dev/null
++++ b/tv-app/app/src/main/java/com/afc/companion/panel/LineupPanel.kt
+@@ -0,0 +1,23 @@
++package com.afc.companion.panel
++
++import androidx.compose.foundation.layout.Arrangement
++import androidx.compose.foundation.layout.Column
++import androidx.compose.foundation.layout.padding
++import androidx.compose.runtime.Composable
++import androidx.compose.ui.Modifier
++import androidx.compose.ui.unit.dp
++import androidx.tv.material3.MaterialTheme
++import androidx.tv.material3.Text
++import com.afc.companion.net.ApiClient
++
++/** PanelMode fixed by the P2-X04 verdict: modeB side-by-side route or fullScreen in this app. */
++enum class PanelMode { ModeB, FullScreen }
++
++// AFC-STUB: P2-A05 implements PANEL (rows, totals, basis, freshness) behind this final signature.
++@Composable
++fun LineupPanel(client: ApiClient, mode: PanelMode, modifier: Modifier = Modifier) {
++    Column(modifier.padding(48.dp), verticalArrangement = Arrangement.spacedBy(24.dp)) {
++        Text("Panel", style = MaterialTheme.typography.headlineMedium)
++        Text("The lineup panel is not available in this build.", style = MaterialTheme.typography.bodyLarge)
++    }
++}
+diff --git a/tv-app/app/src/main/java/com/afc/companion/profile/ProfileSettingsScreen.kt b/tv-app/app/src/main/java/com/afc/companion/profile/ProfileSettingsScreen.kt
+new file mode 100644
+index 0000000..74c59b6
+--- /dev/null
++++ b/tv-app/app/src/main/java/com/afc/companion/profile/ProfileSettingsScreen.kt
+@@ -0,0 +1,20 @@
++package com.afc.companion.profile
++
++import androidx.compose.foundation.layout.Arrangement
++import androidx.compose.foundation.layout.Column
++import androidx.compose.foundation.layout.padding
++import androidx.compose.runtime.Composable
++import androidx.compose.ui.Modifier
++import androidx.compose.ui.unit.dp
++import androidx.tv.material3.MaterialTheme
++import androidx.tv.material3.Text
++import com.afc.companion.net.ApiClient
++
++// AFC-STUB: P2-A02 implements PROFILE (selections and every control) behind this final signature.
++@Composable
++fun ProfileSettingsScreen(client: ApiClient, modifier: Modifier = Modifier) {
++    Column(modifier.padding(48.dp), verticalArrangement = Arrangement.spacedBy(24.dp)) {
++        Text("Profile/Settings", style = MaterialTheme.typography.headlineMedium)
++        Text("Profile and settings are not available in this build.", style = MaterialTheme.typography.bodyLarge)
++    }
++}
+diff --git a/tv-app/app/src/main/java/com/afc/companion/ui/theme/Theme.kt b/tv-app/app/src/main/java/com/afc/companion/ui/theme/Theme.kt
+new file mode 100644
+index 0000000..13e1af8
+--- /dev/null
++++ b/tv-app/app/src/main/java/com/afc/companion/ui/theme/Theme.kt
+@@ -0,0 +1,34 @@
++// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
++// SPDX-License-Identifier: MIT-0
++// Adapted from AmazonAppDev/hello-world-fire-tv (see THIRD_PARTY_NOTICES.md): package renamed, TV dark scheme only.
++
++package com.afc.companion.ui.theme
++
++import androidx.compose.runtime.Composable
++import androidx.compose.ui.graphics.Color
++import androidx.compose.ui.text.TextStyle
++import androidx.compose.ui.text.font.FontFamily
++import androidx.compose.ui.text.font.FontWeight
++import androidx.compose.ui.unit.sp
++import androidx.tv.material3.MaterialTheme
++import androidx.tv.material3.Typography
++import androidx.tv.material3.darkColorScheme
++
++private val Purple80 = Color(0xFFD0BCFF)
++private val PurpleGrey80 = Color(0xFFCCC2DC)
++private val Pink80 = Color(0xFFEFB8C8)
++private val Black = Color(0xFF030303)
++
++// Couch UI: body text stays at or above 24 px at 1080p (AFC-PR-045).
++private val AfcTypography = Typography(
++    bodyLarge = TextStyle(fontFamily = FontFamily.Default, fontWeight = FontWeight.Normal, fontSize = 16.sp, lineHeight = 24.sp, letterSpacing = 0.5.sp),
++)
++
++@Composable
++fun AfcTheme(content: @Composable () -> Unit) {
++    MaterialTheme(
++        colorScheme = darkColorScheme(primary = Purple80, secondary = PurpleGrey80, tertiary = Pink80, background = Black, surfaceVariant = Color.LightGray),
++        typography = AfcTypography,
++        content = content,
++    )
++}
+diff --git a/tv-app/app/src/main/java/com/afc/companion/watch/WatchActivity.kt b/tv-app/app/src/main/java/com/afc/companion/watch/WatchActivity.kt
+new file mode 100644
+index 0000000..ce7eae3
+--- /dev/null
++++ b/tv-app/app/src/main/java/com/afc/companion/watch/WatchActivity.kt
+@@ -0,0 +1,12 @@
++package com.afc.companion.watch
++
++import android.app.Activity
++import android.os.Bundle
++
++// AFC-STUB: P2-A04 runs WatchLauncher for the alert's route here (the notification Watch PendingIntent target).
++class WatchActivity : Activity() {
++    override fun onCreate(savedInstanceState: Bundle?) {
++        super.onCreate(savedInstanceState)
++        finish()
++    }
++}
+diff --git a/tv-app/app/src/main/java/com/afc/companion/watch/WatchLauncher.kt b/tv-app/app/src/main/java/com/afc/companion/watch/WatchLauncher.kt
+new file mode 100644
+index 0000000..6f23157
+--- /dev/null
++++ b/tv-app/app/src/main/java/com/afc/companion/watch/WatchLauncher.kt
+@@ -0,0 +1,10 @@
++package com.afc.companion.watch
++
++import android.content.Context
++import com.afc.companion.net.ProviderRoute
++import com.afc.companion.net.RoutingOutcome
++
++// AFC-STUB: P2-A04 implements LAUNCHER (registry route to intent/URI); nothing launches, so nothing is verified.
++class WatchLauncher(private val context: Context) {
++    fun launch(route: ProviderRoute): RoutingOutcome = RoutingOutcome.AccessUnknown
++}
+diff --git a/tv-app/app/src/main/res/drawable/ic_launcher_foreground.xml b/tv-app/app/src/main/res/drawable/ic_launcher_foreground.xml
+new file mode 100644
+index 0000000..5e7d5ec
+--- /dev/null
++++ b/tv-app/app/src/main/res/drawable/ic_launcher_foreground.xml
+@@ -0,0 +1,23 @@
++<vector xmlns:android="http://schemas.android.com/apk/res/android"
++    android:width="108dp"
++    android:height="108dp"
++    android:viewportWidth="1200"
++    android:viewportHeight="680">
++  <group android:scaleX="1.65"
++      android:scaleY="0.935"
++      android:translateX="-353.33334"
++      android:translateY="32.488888">
++    <path
++        android:pathData="M579.2,333.1m-262.5,0a262.5,262.5 0,1 1,525 0a262.5,262.5 0,1 1,-525 0"
++        android:fillColor="#232F3E"/>
++    <path
++        android:pathData="M652.3,342c5.5,-3.9 5.6,-12 0.1,-16l-98.5,-70.2c-5,-3 -11.5,0.6 -11.5,6.5v141.6c0,5.8 6.3,9.5 11.3,6.6L652.3,342z"
++        android:fillColor="#FF9900"/>
++    <path
++        android:pathData="M499.2,423.3c-1.5,0 -2.6,-0.3 -5,-1.5l-97.4,-67.5c-2.4,-1.3 -4,-2.7 -4.8,-4.3c-0.8,-1.6 -1.3,-3.8 -1.3,-6.8V323c0,-2.9 0.4,-5.2 1.3,-6.8c0.8,-1.6 2.4,-3 4.8,-4.3l97.4,-67.5c2.4,-1.3 3.3,-1.5 4.9,-1.5c2.9,0 5.2,1.6 5.2,5.6v23c0,2.9 -0.5,5.2 -1.4,6.8c-0.9,1.6 -2.5,2.2 -4.7,3.9l-70,50.4l70,50.1c2.3,2 3.8,3 4.7,4.6c0.9,1.6 1.4,3.2 1.4,6.2v24C504.3,421.6 502.1,423.3 499.2,423.3z"
++        android:fillColor="#FF9900"/>
++    <path
++        android:pathData="M654.2,417.6v-24c0,-2.9 0.4,-4.6 1.4,-6.2c0.9,-1.6 2.4,-2.6 4.7,-4.6l70,-50.1l-70,-50.4c-2.2,-1.7 -3.7,-2.4 -4.7,-3.9c-0.9,-1.6 -1.4,-3.8 -1.4,-6.8v-23c0,-4 2.4,-5.6 5.2,-5.6c1.5,0 2.5,0.3 4.9,1.5l97.4,67.5c2.4,1.3 4,2.7 4.8,4.3c0.8,1.6 1.3,3.8 1.3,6.8v20.2c0,2.9 -0.4,5.2 -1.3,6.8c-0.8,1.6 -2.4,3 -4.8,4.3l-97.4,67.5c-2.4,1.3 -3.5,1.5 -5,1.5C656.4,423.3 654.2,421.6 654.2,417.6z"
++        android:fillColor="#FF9900"/>
++  </group>
++</vector>
+diff --git a/tv-app/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml b/tv-app/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
+new file mode 100644
+index 0000000..7353dbd
+--- /dev/null
++++ b/tv-app/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
+@@ -0,0 +1,5 @@
++<?xml version="1.0" encoding="utf-8"?>
++<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
++    <background android:drawable="@color/ic_launcher_background"/>
++    <foreground android:drawable="@drawable/ic_launcher_foreground"/>
++</adaptive-icon>
+\ No newline at end of file
+diff --git a/tv-app/app/src/main/res/mipmap-hdpi/ic_launcher.webp b/tv-app/app/src/main/res/mipmap-hdpi/ic_launcher.webp
+new file mode 100644
+index 0000000..78a4b6d
+Binary files /dev/null and b/tv-app/app/src/main/res/mipmap-hdpi/ic_launcher.webp differ
+diff --git a/tv-app/app/src/main/res/mipmap-mdpi/ic_launcher.webp b/tv-app/app/src/main/res/mipmap-mdpi/ic_launcher.webp
+new file mode 100644
+index 0000000..6117b34
+Binary files /dev/null and b/tv-app/app/src/main/res/mipmap-mdpi/ic_launcher.webp differ
+diff --git a/tv-app/app/src/main/res/mipmap-xhdpi/ic_launcher.webp b/tv-app/app/src/main/res/mipmap-xhdpi/ic_launcher.webp
+new file mode 100644
+index 0000000..01e6cc6
+Binary files /dev/null and b/tv-app/app/src/main/res/mipmap-xhdpi/ic_launcher.webp differ
+diff --git a/tv-app/app/src/main/res/mipmap-xxhdpi/ic_launcher.webp b/tv-app/app/src/main/res/mipmap-xxhdpi/ic_launcher.webp
+new file mode 100644
+index 0000000..f228b57
+Binary files /dev/null and b/tv-app/app/src/main/res/mipmap-xxhdpi/ic_launcher.webp differ
+diff --git a/tv-app/app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp b/tv-app/app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp
+new file mode 100644
+index 0000000..d87239f
+Binary files /dev/null and b/tv-app/app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp differ
+diff --git a/tv-app/app/src/main/res/values/ic_launcher_background.xml b/tv-app/app/src/main/res/values/ic_launcher_background.xml
+new file mode 100644
+index 0000000..6d83c14
+--- /dev/null
++++ b/tv-app/app/src/main/res/values/ic_launcher_background.xml
+@@ -0,0 +1,7 @@
++<?xml version="1.0" encoding="utf-8"?><!--
++  ~  Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
++  ~ SPDX-License-Identifier: MIT-0
++  -->
++<resources>
++    <color name="ic_launcher_background">#222F3D</color>
++</resources>
+\ No newline at end of file
+diff --git a/tv-app/app/src/main/res/values/strings.xml b/tv-app/app/src/main/res/values/strings.xml
+new file mode 100644
+index 0000000..db76d8e
+--- /dev/null
++++ b/tv-app/app/src/main/res/values/strings.xml
+@@ -0,0 +1,3 @@
++<resources>
++    <string name="app_name">Amazon Fantasy Companion</string>
++</resources>
+diff --git a/tv-app/app/src/main/res/xml/data_extraction_rules.xml b/tv-app/app/src/main/res/xml/data_extraction_rules.xml
+new file mode 100644
+index 0000000..35dfd32
+--- /dev/null
++++ b/tv-app/app/src/main/res/xml/data_extraction_rules.xml
+@@ -0,0 +1,12 @@
++<?xml version="1.0" encoding="utf-8"?>
++<!-- The device session token never leaves the TV through backup or device transfer (AFC-PR-055). -->
++<data-extraction-rules>
++    <cloud-backup>
++        <exclude domain="root" path="." />
++        <exclude domain="sharedpref" path="." />
++    </cloud-backup>
++    <device-transfer>
++        <exclude domain="root" path="." />
++        <exclude domain="sharedpref" path="." />
++    </device-transfer>
++</data-extraction-rules>
