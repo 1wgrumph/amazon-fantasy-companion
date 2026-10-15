@@ -1,0 +1,78 @@
+{
+ "outcome": "PASS",
+ "outcome_note": "Product PASS ready for independent review. Author gate-chain receipts are diagnostic, not assurance. Deployed alert_policy tests stay NOT_RUN without a stack.",
+ "slice_id": "P2-B05",
+ "issue": 35,
+ "milestone": "M07",
+ "wave": "Wave 3",
+ "phase": 2,
+ "lifecycle": "AFC-2026-10-11",
+ "authority_id": "AUTH-AFC-2026-10-12-P2-001",
+ "branch": "afc/p2-b05t",
+ "baseline": "fac1b62 (P2-B05T red) merged with origin/main fc206b4af01120cf378fa7063ce7e29b9707c3b0 as merge commit 09d9027; no conflicts, frozen B05T tests kept",
+ "candidate_binding": "Committed receipt is bound to its containing commit on afc/p2-b05t (product + evidence in one commit; see git log).",
+ "route": "Muse Code / muse-wonder-full-1.0 / high",
+ "bug_route": "BUG_ROUTE: not-a-bug planned TDD product slice P2-B05",
+ "review_capabilities": {
+  "coverage_assist": {"enabled": true, "required": true, "backend": "OCR OpenCodeReview delegate mode", "status": "not_run; allocated to independent review, never claimed PASS"},
+  "reverify": {"enabled": true, "status": "not_applicable", "reason": "no compiled-binary claim"}
+ },
+ "method": "SEIT supporting TDD method=test; registered proof methods/environments unchanged",
+ "red_then_green": {
+  "red": "P2-B05T receipt: 70 failed AssertionError, 0 errors, 3 deployed skipped (CMD-RED); verify_receipt.py PASS before and after product",
+  "green": "CMD-GREEN: 70 passed unit alert_policy; deployed 3 skipped NOT_RUN; same frozen test ids and hashes"
+ },
+ "commands": "evidence/P2-B05/commands.json",
+ "acceptance_to_evidence": [
+  {"acceptance": "Merge origin/main into afc/p2-b05t", "evidence": "git log merge commit 09d9027; commands.json B05-C01"},
+  {"acceptance": "All unit alert_policy tests pass; frozen files byte-identical", "evidence": "CMD-GREEN.txt/xml (70 passed); frozen-hash-check.txt (verify_receipt PASS, 6 hashes)"},
+  {"acceptance": "bash tools/ci/gate.sh exit 0", "evidence": "gate.txt (backend 734 passed, all areas PASS)"},
+  {"acceptance": "Negative: 20 yards is not inside-20; Q3 close margin does not fire", "evidence": "negative-check.txt (3 passed)"},
+  {"acceptance": "GET /v1/alerts serves only the linked profile", "evidence": "test_afc_pr_060_alerts_api_serves_only_the_linked_profile in CMD-GREEN; route already wired in backend/src/api/handler.py _alerts to alert_policy.pending"},
+  {"acceptance": "CHANGELOG [Unreleased] Added entry ending (PR #TBD)", "evidence": "CHANGELOG.md diff"},
+  {"acceptance": "No home-directory user in committed evidence", "evidence": "path-check.txt exit 0; evidence sanitized to $HOME"}
+ ],
+ "changed_paths": [
+  "backend/src/alert_policy/__init__.py",
+  "backend/tests/unit/test_pipeline_and_stubs.py",
+  "backend/tests/contract/test_backend_template.py",
+  "backend/tests/contract/test_api_contract.py",
+  "CHANGELOG.md",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B05/CMD-GREEN.txt",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B05/CMD-GREEN.xml",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B05/commands.json",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B05/frozen-hash-check.txt",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B05/gate.txt",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B05/negative-check.txt",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B05/path-check.txt",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B05/receipt.json"
+ ],
+ "authority_deviation": "backend/tests/contract/test_api_contract.py is outside the literal allowed list: its future-stub parametrize still asserted GET /v1/alerts returns 503 not_implemented, which the landed policy correctly breaks (gate exit 1, 1 failed / 734 passed). Removed only \"/v1/alerts\" from that parametrize, keeping \"/v1/panel\"; same stub-pin retirement class the packet authorized for test_backend_template.py under the B04/B06 precedent. No router.py/control.py exists; GET /v1/alerts was already wired to alert_policy.pending in backend/src/api/handler.py, so no API change was made.",
+ "design_notes": [
+  "Gate order per DES-AFC-P2-POLICY: matched types intersect enabled types, then game-day periods, quiet hours (UTC minutes, wrap-aware, start inclusive / end exclusive), close-game once-per-game suppression, per-game alert_min_gap on release times, spoiler delay sets emittedAt = eventTime + spoilerDelay.",
+  "Red zone: fieldPosition < 20 and possession equals a matched starter's team (20 excluded). Player score: scoringPlay and a matched starter athlete_id in playerIds. Close game: period >= 4 and margin <= 8.",
+  "Commentary templates name no player or team and insert only score, margin, field position, period and 20, so no on-field or will-score claim is possible; Off attaches None.",
+  "pending stops at the first unreleased alert so the cursor never passes a held alert; envelope route is the stored providerRoute.",
+  "shortcut: prior-alert scans page store.list_alerts at 100 per page per matched profile; upgrade to a query/index if alert volume per profile grows."
+ ],
+ "proof_rows": [
+  {"id": "SEIT-AFC-PR-014", "status": "green_support", "evidence": "test_policy_alert_types.py via CMD-GREEN", "formal_row_status": "not_closed_by_product_slice", "closing_slice": "P2-L03"},
+  {"id": "SEIT-AFC-PR-016/017/018/019/020", "status": "green_support", "evidence": "test_policy_gates.py via CMD-GREEN", "formal_row_status": "not_closed_by_product_slice", "closing_slice": "P2-L03"},
+  {"id": "SEIT-AFC-PR-023", "status": "green_support", "evidence": "test_policy_commentary.py via CMD-GREEN", "formal_row_status": "not_closed_by_product_slice", "closing_slice": "P2-L03"},
+  {"id": "SEIT-AFC-PR-027/028", "status": "green_support", "evidence": "test_policy_alert_types.py, test_policy_delivery.py via CMD-GREEN", "formal_row_status": "not_closed_by_product_slice", "closing_slice": "P2-L03"},
+  {"id": "SEIT-AFC-PR-008/011/026/037/060", "status": "green_support (policy half where applicable)", "evidence": "test_policy_delivery.py via CMD-GREEN", "formal_row_status": "not_closed_by_product_slice", "closing_slice": "P2-L03"}
+ ],
+ "deferred": [
+  "Independent OCR review (coverage_assist not_run)",
+  "Deployed proof closeout P2-L03 (deployed tests NOT_RUN without a stack)",
+  "Close-game re-entry after leaving the close state is not distinguished from still-close (prior CloseGame alert for the game suppresses); frozen tests do not cover re-entry"
+ ],
+ "resource_group": "host-pytest; fresh per-test Moto state; no AWS/device; gate about 95 s backend",
+ "developer_feedback": {
+  "observations": [
+   {"id": "P2B05-DX-001", "tool": "packet vs repo layout", "observation": "Packet allowed backend/src/control.py and router.py for GET /v1/alerts, but the landed router is backend/src/api/handler.py and already calls alert_policy.pending; no wiring change was needed.", "evidence": "backend/src/api/handler.py _alerts"},
+   {"id": "P2B05-DX-002", "tool": "stub pins", "observation": "Three stub pins assert alert_policy is unimplemented (STUBS, template future-modules, API 503 parametrize); the packet named only the first two, so the third surfaced as a gate failure and an authority deviation.", "evidence": "gate first run: 1 failed test_future_module_stubs_surface_503_not_implemented[/v1/alerts]"},
+   {"id": "P2B05-DX-003", "tool": "pytest conftest", "observation": "Mixing backend/tests/deployed with unit/contract dirs in one pytest call still breaks collection via conftest shadowing (P2B05T-DX-002); run deployed separately.", "evidence": "commands.json deployed row run separately: 3 skipped"}
+  ]
+ }
+}
