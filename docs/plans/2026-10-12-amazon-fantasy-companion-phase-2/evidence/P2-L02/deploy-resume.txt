@@ -1,0 +1,93 @@
+$ sam deploy --config-env default --profile afc-dev --region us-east-2 --tags GitCommit=75afca022f967945a70bf715beb2a7c98e65ed9d
+	Creating the required resources...
+	Successfully created!
+
+	Managed S3 bucket: aws-sam-cli-managed-default-samclisourcebucket-kpyrjq2yreuk
+	Auto resolution of buckets can be turned off by setting resolve_s3=False
+	To use a specific S3 bucket, set --s3-bucket=<bucket_name>
+	Above settings can be stored in samconfig.toml
+
+	Uploading to 1239e7cb365a2ad3e441c4dba4ff63fd  649115 / 649115  (100.00%)
+
+	File with same data already exists at 1239e7cb365a2ad3e441c4dba4ff63fd, skipping upload
+
+	File with same data already exists at 1239e7cb365a2ad3e441c4dba4ff63fd, skipping upload
+
+	Deploying with following values
+	===============================
+	Stack name                   : afc-dev
+	Region                       : us-east-2
+	Confirm changeset            : True
+	Disable rollback             : False
+	Deployment s3 bucket         : aws-sam-cli-managed-default-samclisourcebucket-kpyrjq2yreuk
+	Capabilities                 : ["CAPABILITY_IAM"]
+	Parameter overrides          : {}
+	Signing Profiles             : {}
+
+Initiating deployment
+=====================
+
+
+	Uploading to 3ac0650f8600f1c1c8693118e0f16028.template  13748 / 13748  (100.00%)
+
+
+Waiting for changeset to be created..
+
+CloudFormation stack changeset
+-------------------------------------------------------------------------------------------------
+Operation                LogicalResourceId        ResourceType             Replacement
+-------------------------------------------------------------------------------------------------
++ Add                    AlertsTable              AWS::DynamoDB::Table     N/A
++ Add                    ApiFunctionAlertsPermi   AWS::Lambda::Permissio   N/A
+                         ssion                    n
++ Add                    ApiFunctionInstalledAp   AWS::Lambda::Permissio   N/A
+                         psPermission             n
++ Add                    ApiFunctionLinkConfirm   AWS::Lambda::Permissio   N/A
+                         Permission               n
++ Add                    ApiFunctionLinkIssuePe   AWS::Lambda::Permissio   N/A
+                         rmission                 n
++ Add                    ApiFunctionLinkPagePer   AWS::Lambda::Permissio   N/A
+                         mission                  n
++ Add                    ApiFunctionLinkPollPer   AWS::Lambda::Permissio   N/A
+                         mission                  n
++ Add                    ApiFunctionPanelPermis   AWS::Lambda::Permissio   N/A
+                         sion                     n
++ Add                    ApiFunctionProfileGetP   AWS::Lambda::Permissio   N/A
+                         ermission                n
++ Add                    ApiFunctionProfilePutP   AWS::Lambda::Permissio   N/A
+                         ermission                n
++ Add                    ApiFunctionProvidersPe   AWS::Lambda::Permissio   N/A
+                         rmission                 n
++ Add                    ApiFunctionRole          AWS::IAM::Role           N/A
++ Add                    ApiFunctionRoutingOutc   AWS::Lambda::Permissio   N/A
+                         omePermission            n
++ Add                    ApiFunction              AWS::Lambda::Function    N/A
++ Add                    ApiLogGroup              AWS::Logs::LogGroup      N/A
++ Add                    EventsTable              AWS::DynamoDB::Table     N/A
++ Add                    HttpApiApiGatewayDefau   AWS::ApiGatewayV2::Sta   N/A
+                         ltStage                  ge
++ Add                    HttpApi                  AWS::ApiGatewayV2::Api   N/A
++ Add                    IngestFunctionRole       AWS::IAM::Role           N/A
++ Add                    IngestFunction           AWS::Lambda::Function    N/A
++ Add                    IngestLogGroup           AWS::Logs::LogGroup      N/A
++ Add                    IngestScheduleRole       AWS::IAM::Role           N/A
++ Add                    IngestSchedule           AWS::Scheduler::Schedu   N/A
+                                                  le
++ Add                    LineupsTable             AWS::DynamoDB::Table     N/A
++ Add                    LinksTable               AWS::DynamoDB::Table     N/A
++ Add                    PanelsTable              AWS::DynamoDB::Table     N/A
++ Add                    PolicyFunctionEventStr   AWS::Lambda::EventSour   N/A
+                         eam                      ceMapping
++ Add                    PolicyFunctionRole       AWS::IAM::Role           N/A
++ Add                    PolicyFunction           AWS::Lambda::Function    N/A
++ Add                    PolicyLogGroup           AWS::Logs::LogGroup      N/A
++ Add                    ProfilesTable            AWS::DynamoDB::Table     N/A
+-------------------------------------------------------------------------------------------------
+
+
+Changeset created successfully. arn:aws:cloudformation:us-east-2:<acct>:changeSet/samcli-deploy1791990156/8c3d4c40-d695-4385-8ec8-d049dfc04588
+
+
+Previewing CloudFormation changeset before deployment
+======================================================
+Deploy this changeset? [y/N]: exit=143

@@ -1,0 +1,13 @@
+POST /v1/link: HTTP 201; expected 201; PASS
+GET /v1/link: HTTP 400; expected 400; PASS
+POST /v1/link/confirm: HTTP 400; expected 400; PASS
+GET /link: HTTP 200; expected 200; PASS
+GET /v1/profile: HTTP 401; expected 401; PASS
+PUT /v1/profile: HTTP 401; expected 401; PASS
+GET /v1/alerts: HTTP 401; expected 401; PASS
+GET /v1/panel: HTTP 401; expected 401; PASS
+GET /v1/providers: HTTP 401; expected 401; PASS
+POST /v1/routing-outcome: HTTP 401; expected 401; PASS
+POST /v1/installed-apps: HTTP 401; expected 401; PASS
+11/11 known routes answered via existing router; no API Gateway 500/403. Protected feature implementations were not evaluated.
+EXIT_CODE=0

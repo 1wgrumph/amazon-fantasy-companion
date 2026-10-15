@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Record the P2-L02 afc-dev deploy of origin/main `2d973bd`: eleven known routes answered, nine deployed smoke tests passed; two panel tests remain deferred until P2-B07/L03 ([#70](https://github.com/1wgrumph/amazon-fantasy-companion/pull/70)).
 - Add lineup sources and scoring presets: read-only Yahoo client, manual
   lineup with T_yahoo activation, one active source per profile, PPR and
   Half-PPR tables with Half-PPR as default ([#65](https://github.com/1wgrumph/amazon-fantasy-companion/pull/65)).
