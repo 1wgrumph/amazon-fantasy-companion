@@ -58,8 +58,7 @@ def test_template_routes_tv_and_link_page_and_bounds_link_attempts():
                v["Properties"].get("Path", "$default"))
               for v in events.values() if v["Type"] == "HttpApi"]
     assert routes
-    assert any(method == "ANY" and path in {"$default", "/{proxy+}"}
-               for method, path in routes) or {("POST", "/v1/link"),
+    assert {("POST", "/v1/link"),
                ("GET", "/v1/link"), ("POST", "/v1/link/confirm"),
                ("GET", "/link"), ("GET", "/v1/profile"), ("PUT", "/v1/profile"),
                ("GET", "/v1/alerts"), ("GET", "/v1/panel"), ("GET", "/v1/providers"),
@@ -67,6 +66,17 @@ def test_template_routes_tv_and_link_page_and_bounds_link_attempts():
     apis = [r["Properties"] for r in resources.values() if r["Type"] == "AWS::Serverless::HttpApi"]
     assert any(a.get("DefaultRouteSettings", {}).get("ThrottlingBurstLimit") and
                a.get("DefaultRouteSettings", {}).get("ThrottlingRateLimit") for a in apis)
+
+
+def test_unknown_routes_reach_the_api_router_for_the_error_envelope():
+    router = document("template.yaml")["Resources"]["ApiFunction"]["Properties"]
+    assert router["Handler"] == "api.handler.lambda_handler"
+    defaults = [event["Properties"] for event in router["Events"].values()
+                if event["Type"] == "HttpApi"
+                and "Path" not in event["Properties"]
+                and "Method" not in event["Properties"]]
+    assert len(defaults) == 1, "Unknown paths need a SAM $default route to ApiFunction"
+    assert defaults[0]["ApiId"] == {"Ref": "HttpApi"}
 
 
 def test_template_uses_ssm_parameter_names_instead_of_embedded_secret_values():
