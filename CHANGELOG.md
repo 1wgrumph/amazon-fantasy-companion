@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add the TV Watch launcher: executes only a verified Fire OS registry route (intent or URI with event/channel placeholders filled), reports exactly one routing outcome per attempt (appAbsent, playbackDenied, or accessUnknown while no current-attempt observation is supported, never a reused gameOpened), honors switching confirmation, gates Alexa-assisted tuning on a verified route, and leaves the app after a started full-screen launch (PR #TBD).
 - Add the backend provider resolver: preference-ordered selection among installed providers carrying the event's channel from the read-only registry, per-platform routes with REGISTRY_ROUTE_GAP for missing or unverified entries, an honest access basis that is never inferred from installation, and recording of detector reports and routing outcomes ([#77](https://github.com/1wgrumph/amazon-fantasy-companion/pull/77)).
 - Add ESPN-feed ingest outage handling: packaged replay corpus, scoreboard-error fallback to labeled replay, warm-container failure counts, and a 60s poll deadline ([#76](https://github.com/1wgrumph/amazon-fantasy-companion/pull/76)).
 - Add ESPN feed ingest: pinned JSON Schema validation that rejects a bad
