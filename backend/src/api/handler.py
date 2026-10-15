@@ -223,4 +223,5 @@ def _installed_apps(profile_id, query, body):
             or not all(isinstance(p, str) and re.fullmatch(r"[A-Za-z0-9._]{1,255}", p)
                        for p in packages)):
         raise ApiError(400, "invalid_request", "Field packages must list package names.")
-    return _respond(200, provider_resolver.record_installed_apps(profile_id, packages))
+    provider_resolver.record_installed_apps(profile_id, packages)
+    return _respond(200, {"profileId": profile_id})

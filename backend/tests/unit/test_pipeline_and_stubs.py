@@ -53,9 +53,6 @@ STUBS = [
     ("matcher", "resolve", 1, "P2-B04"),
     ("alert_policy", "evaluate", 2, "P2-B05"),
     ("alert_policy", "pending", 2, "P2-B05"),
-    ("provider_resolver", "resolve", 2, "P2-B06"),
-    ("provider_resolver", "record_outcome", 3, "P2-B06"),
-    ("provider_resolver", "record_installed_apps", 2, "P2-B06"),
     ("panel", "project", 2, "P2-B07"),
     ("panel", "snapshot", 2, "P2-B07"),
 ]

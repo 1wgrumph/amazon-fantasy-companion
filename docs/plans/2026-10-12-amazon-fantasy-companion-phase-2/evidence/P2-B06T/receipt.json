@@ -1,0 +1,229 @@
+{
+ "outcome": "PASS",
+ "scope": "Behavioral red suite for P2-B06 (provider resolver) frozen and committed on the pair branch; backend gate red is the expected TDD signal",
+ "lifecycle": "AFC-2026-10-11",
+ "phase": 2,
+ "wave": "Wave 3",
+ "milestone": "M08",
+ "issue": 37,
+ "slice_id": "P2-B06T",
+ "authority_id": "AUTH-AFC-2026-10-12-P2-001",
+ "branch": "afc/p2-b06t",
+ "baseline": "71d3e649fec8406cc593519e9d8cab5eb7c65575",
+ "candidate_binding": "Red delta on afc/p2-b06t; committed receipt is bound to its containing local commit",
+ "route": "Claude Code / claude-opus-5-5 / high (as dispatched; see developer_feedback P2B06T-DX-004)",
+ "profile": {
+  "name": "opensource-hackathon",
+  "live_catalog_read": false
+ },
+ "review_capabilities": {
+  "coverage_assist": {
+   "enabled": true,
+   "required": true,
+   "backend": "OCR OpenCodeReview delegate mode",
+   "status": "not_run; allocated to independent review at IE-P2-23, never claimed PASS"
+  },
+  "reverify": {
+   "enabled": true,
+   "status": "not_applicable",
+   "reason": "red tests and receipts, no compiled-binary claim"
+  }
+ },
+ "method": "SEIT supporting TDD method=test; registered proof methods/environments unchanged",
+ "frozen_test_sha256": {
+  "backend/tests/unit/provider_resolver/resolver_support.py": "401d689a7306f7411e1d2eef094c36fa7865b5e8bad716b809a3774312f36601",
+  "backend/tests/unit/provider_resolver/test_resolver_access_basis.py": "632bd33525fec883b449eccbeb252d24d3bafe45f5729a86e27f9524e73167a9",
+  "backend/tests/unit/provider_resolver/test_resolver_local_broadcast.py": "115715747c57c9b7c0bbbf520e34810340f714460e9334b2b6df769fa2e381ba",
+  "backend/tests/unit/provider_resolver/test_resolver_platform_routes.py": "dc8e7f3a89f8e017645b78062afa89f464573df79a48648dee9c740e3b9c71cd",
+  "backend/tests/unit/provider_resolver/test_resolver_records.py": "d46a194ab06a348d40e719a4a6756e6b60393fa5274b4909f5f2c58de984d3ce",
+  "backend/tests/unit/provider_resolver/test_resolver_selection.py": "f36b48fcc53afd8b94f83a83caf8f14657b294fb1fbf0570fb50b1bd53ba0ecc",
+  "backend/tests/deployed/provider_resolver/test_providers_deployed.py": "feaf78823a0c19435f8fb501b6ffc55179d0690885d4fd3597c09931baff6f0d"
+ },
+ "frozen_fixture_sha256": {
+  "backend/tests/unit/provider_resolver/registry/example.json": "6c1f87eb759acd28f7a0908957201281c6e750a50112a0ad98de3bdf3238e3b5"
+ },
+ "red": {
+  "command_id": "CMD-RED",
+  "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 $HOME/.local/share/afc-tools/backend-tests/bin/python3.12 -m pytest backend/tests/unit/provider_resolver backend/tests/deployed/provider_resolver -v -p no:cacheprovider --tb=short --junitxml=docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B06T/CMD-RED.xml",
+  "exit_code": 1,
+  "output": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B06T/CMD-RED.txt",
+  "junit": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B06T/CMD-RED.xml",
+  "failed": 43,
+  "passed": 0,
+  "errors": 0,
+  "skipped": 3,
+  "classification": "41 failures are AFC-STUB NotImplementedError converted to AssertionError by resolver_support.attempt; 1 is the API's 503 not_implemented on POST /v1/installed-apps; 1 is the missing provider_resolver.REGISTRY_PATH seam. Skips are the 3 deployed cases, NOT_RUN without AFC_DEPLOYED_API_URL.",
+  "test_ids": [
+   "tests/unit/provider_resolver/test_resolver_access_basis.py::test_installed_only_reads_unknown",
+   "tests/unit/provider_resolver/test_resolver_access_basis.py::test_installed_only_never_reads_verified_or_confirmed",
+   "tests/unit/provider_resolver/test_resolver_access_basis.py::test_customer_confirmation_reads_customer_confirmed",
+   "tests/unit/provider_resolver/test_resolver_access_basis.py::test_confirmation_is_never_promoted_to_verified",
+   "tests/unit/provider_resolver/test_resolver_access_basis.py::test_confirmation_of_another_provider_does_not_carry_over",
+   "tests/unit/provider_resolver/test_resolver_access_basis.py::test_unknown_broadcast_stays_unknown",
+   "tests/unit/provider_resolver/test_resolver_access_basis.py::test_no_profile_and_no_report_reads_unknown",
+   "tests/unit/provider_resolver/test_resolver_access_basis.py::test_installed_fact_is_recorded_separately_from_access",
+   "tests/unit/provider_resolver/test_resolver_access_basis.py::test_providers_api_reads_unknown_after_installed_report",
+   "tests/unit/provider_resolver/test_resolver_local_broadcast.py::test_local_channel_with_installed_carrier_offers_its_route",
+   "tests/unit/provider_resolver/test_resolver_local_broadcast.py::test_local_channel_without_installed_carrier_has_no_deep_link",
+   "tests/unit/provider_resolver/test_resolver_local_broadcast.py::test_local_channel_with_no_installed_carrier_shows_channel_only[CBS]",
+   "tests/unit/provider_resolver/test_resolver_local_broadcast.py::test_local_channel_with_no_installed_carrier_shows_channel_only[FOX]",
+   "tests/unit/provider_resolver/test_resolver_local_broadcast.py::test_local_channel_with_no_installed_carrier_shows_channel_only[NBC]",
+   "tests/unit/provider_resolver/test_resolver_local_broadcast.py::test_local_carrier_installed_only_still_reads_unknown",
+   "tests/unit/provider_resolver/test_resolver_platform_routes.py::test_route_carries_both_platform_entries",
+   "tests/unit/provider_resolver/test_resolver_platform_routes.py::test_verified_entries_carry_their_own_launch_data",
+   "tests/unit/provider_resolver/test_resolver_platform_routes.py::test_missing_vega_entry_is_a_gap_not_filled_from_fire_os",
+   "tests/unit/provider_resolver/test_resolver_platform_routes.py::test_unverified_fire_os_entry_is_a_gap_not_filled_from_vega",
+   "tests/unit/provider_resolver/test_resolver_platform_routes.py::test_registry_verified_outcome_is_not_access",
+   "tests/unit/provider_resolver/test_resolver_records.py::test_installed_report_is_stored_and_returned",
+   "tests/unit/provider_resolver/test_resolver_records.py::test_latest_installed_report_replaces_the_previous_one",
+   "tests/unit/provider_resolver/test_resolver_records.py::test_installed_report_does_not_create_access_confirmation",
+   "tests/unit/provider_resolver/test_resolver_records.py::test_each_modeled_outcome_is_recorded[gameOpened]",
+   "tests/unit/provider_resolver/test_resolver_records.py::test_each_modeled_outcome_is_recorded[searchOpened]",
+   "tests/unit/provider_resolver/test_resolver_records.py::test_each_modeled_outcome_is_recorded[appHomeOpened]",
+   "tests/unit/provider_resolver/test_resolver_records.py::test_each_modeled_outcome_is_recorded[appAbsent]",
+   "tests/unit/provider_resolver/test_resolver_records.py::test_each_modeled_outcome_is_recorded[accessUnknown]",
+   "tests/unit/provider_resolver/test_resolver_records.py::test_each_modeled_outcome_is_recorded[playbackDenied]",
+   "tests/unit/provider_resolver/test_resolver_records.py::test_invented_outcome_is_rejected[launched]",
+   "tests/unit/provider_resolver/test_resolver_records.py::test_invented_outcome_is_rejected[success]",
+   "tests/unit/provider_resolver/test_resolver_records.py::test_invented_outcome_is_rejected[]",
+   "tests/unit/provider_resolver/test_resolver_records.py::test_invented_outcome_is_rejected[None]",
+   "tests/unit/provider_resolver/test_resolver_records.py::test_game_opened_outcome_does_not_verify_access",
+   "tests/unit/provider_resolver/test_resolver_selection.py::test_resolution_names_provider_channel_and_route",
+   "tests/unit/provider_resolver/test_resolver_selection.py::test_preference_selects_among_installed_carriers",
+   "tests/unit/provider_resolver/test_resolver_selection.py::test_preference_change_reroutes_contested_game",
+   "tests/unit/provider_resolver/test_resolver_selection.py::test_spike_order_does_not_override_preference",
+   "tests/unit/provider_resolver/test_resolver_selection.py::test_uninstalled_preferred_provider_falls_to_next_installed_preference",
+   "tests/unit/provider_resolver/test_resolver_selection.py::test_no_carrier_for_channel_gives_no_route",
+   "tests/unit/provider_resolver/test_resolver_selection.py::test_registry_is_read_only",
+   "tests/unit/provider_resolver/test_resolver_selection.py::test_default_registry_is_the_landed_document",
+   "tests/unit/provider_resolver/test_resolver_selection.py::test_landed_empty_registry_resolves_no_route",
+   "tests/deployed/provider_resolver/test_providers_deployed.py::test_installed_report_is_accepted",
+   "tests/deployed/provider_resolver/test_providers_deployed.py::test_providers_reads_an_access_basis_never_verified_from_install",
+   "tests/deployed/provider_resolver/test_providers_deployed.py::test_invented_routing_outcome_is_rejected"
+  ]
+ },
+ "gate": {
+  "command": "bash tools/ci/gate.sh",
+  "exit_code": 1,
+  "output": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B06T/gate.txt",
+  "areas": {
+   "spec": "PASS",
+   "docs": "PASS",
+   "hygiene": "PASS",
+   "tvapp": "PASS checks completed",
+   "backend": "FAIL (expected red): 43 failed are exactly the new provider_resolver red tests; 380 pre-existing tests passed; 0 errors"
+  }
+ },
+ "hygiene": {
+  "path_scan": "PYTHONDONTWRITEBYTECODE=1 python3.12 tools/ci/check_paths.py",
+  "path_scan_exit_code": 0,
+  "path_scan_output": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B06T/path-check.txt",
+  "credential_shapes": "No credentials; example registry uses synthetic test.* packages and test-* URI schemes, never real provider launch data"
+ },
+ "proof_rows": [
+  {
+   "id": "SEIT-AFC-PR-004",
+   "registered_method": "test",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-L03"
+  },
+  {
+   "id": "SEIT-AFC-PR-029",
+   "registered_method": "test",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-L03"
+  },
+  {
+   "id": "SEIT-AFC-PR-032",
+   "registered_method": "test",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-L03"
+  },
+  {
+   "id": "SEIT-AFC-PR-033",
+   "registered_method": "test",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-L03"
+  },
+  {
+   "id": "SEIT-AFC-PR-034",
+   "registered_method": "test",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-L03"
+  }
+ ],
+ "handoff_contract_choices": [
+  "provider_resolver.REGISTRY_PATH: module-level path to the registry document, default the landed backend/src/provider_resolver/registry.json, read at call time and never written.",
+  "provider_resolver.event_channel(event_id): module-level function returning the event's ESPN broadcast channel short name (summary broadcasts media.shortName) or None; resolve() calls it at call time. Tests replace it; its production source is an open contract gap (P2B06T-DX-001).",
+  "Profile inputs: Settings.providerPref as landed by the TV app (A02): order (provider ids), confirmedAccess (provider ids), appOverrides, localMarket.",
+  "Selection: among registry providers whose channels_carried contains the channel and whose fire_os or vega package is in the latest detector report, pick the first in providerPref.order; registry (spike) order never overrides it. Local CBS/FOX/NBC without an installed carrier: channel only, provider and route null.",
+  "resolve() output: provider, channel, route (registry route with platform_routes.fire_os and .vega, each status verified or REGISTRY_ROUTE_GAP; verified entries carry their own package and launch), accessBasis, and inputs {installed, localMarket}. accessBasis is customerConfirmed only when the chosen provider is in confirmedAccess, otherwise unknown; nothing yields verified (no entitlement integration).",
+  "A registry platform entry without verified_outcome and verified_at is unverified and reads REGISTRY_ROUTE_GAP.",
+  "record_installed_apps(profile, packages) returns a mapping with packages; the latest report replaces the previous one and never edits providerPref. record_outcome(profile, event, outcome) returns a mapping with eventId and outcome; a value outside the six RoutingOutcome values raises ValueError; outcomes never change accessBasis."
+ ],
+ "scope_reconciliation": [
+  "Packet assumption checked: resolve/record_outcome/record_installed_apps still raise NotImplementedError at 71d3e64.",
+  "platform_routes assertions are isolated in test_resolver_platform_routes.py (DEC-AFC-SD-049 amendment in design.md; the Vega override for B06 is marked dispatchable=false in implementation.json). If the controller does not materialize that override for B06, drop that file's IDs by an owner/controller amendment rather than editing frozen hashes.",
+  "Example registry lives under backend/tests, not src; the landed registry.json is asserted only for its default path, schemaVersion 1 and empty-registry behavior.",
+  "Red commit uses --no-verify per packet; the pre-commit gate's backend FAIL is the expected TDD red."
+ ],
+ "deferred": [
+  "P2-B06 green on unchanged frozen tests via CMD-GATE-BACKEND",
+  "Independent OCR review at IE-P2-23",
+  "Deployed proof closeout P2-L03 (CMD-DEPLOYED-TESTS)",
+  "Orchestrator landing/changelog"
+ ],
+ "resource_group": "host-pytest; fresh per-test Moto state and tmp registry copy; sockets blocked; no engine/server/AWS/device",
+ "changed_paths": [
+  "backend/tests/deployed/provider_resolver/test_providers_deployed.py",
+  "backend/tests/unit/provider_resolver/registry/example.json",
+  "backend/tests/unit/provider_resolver/resolver_support.py",
+  "backend/tests/unit/provider_resolver/test_resolver_access_basis.py",
+  "backend/tests/unit/provider_resolver/test_resolver_local_broadcast.py",
+  "backend/tests/unit/provider_resolver/test_resolver_platform_routes.py",
+  "backend/tests/unit/provider_resolver/test_resolver_records.py",
+  "backend/tests/unit/provider_resolver/test_resolver_selection.py",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B06T/CMD-RED.txt",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B06T/CMD-RED.xml",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B06T/collect.txt",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B06T/commands.json",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B06T/gate.txt",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B06T/path-check.txt",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B06T/receipt.json",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B06T/verify_receipt.py"
+ ],
+ "developer_feedback": {
+  "observations": [
+   {
+    "id": "P2B06T-DX-001",
+    "tool": "contract reading (design.md, openapi.yaml, store, pipeline)",
+    "observation": "CONTRACT GAP for P2-B06: DES-AFC-P2-RESOLVE lists the game broadcaster (ESPN summary broadcast field) as an input, but resolve(profile_id, event_id) is the frozen signature, the stored GameEvent shape (store.put_event allow-list, models/AFC-Data.sysml) has no broadcast/channel attribute, and B06's write set (backend/src/provider_resolver/, plus openapi.yaml under the Vega override) excludes store/ and feed_ingest/. The suite pins a module seam provider_resolver.event_channel(event_id); its production source needs a controller/owner decision (for example B02 storing the broadcast, or an amended B06 write set) before B06 can be green in deployment.",
+    "evidence": "backend/src/store/__init__.py put_event allow-list; backend/src/pipeline/handler.py:27; backend/src/api/handler.py:208; docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/design.md DES-AFC-P2-RESOLVE"
+   },
+   {
+    "id": "P2B06T-DX-002",
+    "tool": "pytest 8.4.2 prepend import mode",
+    "observation": "`from conftest import link_device` inside backend/tests/unit/provider_resolver resolves to backend/tests/deployed/conftest.py when unit and deployed dirs are collected together (ImportError). Inlined the three link requests instead; a nested conftest.py in the unit subdir was avoided for the same reason (it would shadow `from conftest import` in later unit modules).",
+    "evidence": "first CMD-RED run (superseded); docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B06T/commands.json B06T-C07"
+   },
+   {
+    "id": "P2B06T-DX-003",
+    "tool": "implementation.json",
+    "observation": "P2-B06T has two entries; the full one carries a Vega contingency marked dispatchable=false whose override adds platform_routes, while design.md CONTRACT-AFC-P2-PROVIDER-REGISTRY and CONTRACT-AFC-P2-API are already amended. Platform-route assertions are isolated in one file so the controller can keep or amend them explicitly.",
+    "evidence": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/implementation.json P2-B06T vega_primary_contingency"
+   },
+   {
+    "id": "P2B06T-DX-004",
+    "tool": "dispatch route",
+    "observation": "Slice model_route is Codex CLI / GPT-6.1 Sol / high with Claude Code / Claude Opus 5.5 at medium as fallback 2; this session ran as dispatched on Claude Code / claude-opus-5-5 / high. No fallback receipts were seen by this worker; the controller owns the route binding record.",
+    "evidence": "implementation.json P2-B06T model_route; dispatch packet ROLE line"
+   },
+   {
+    "id": "P2B06T-DX-005",
+    "tool": "landed registry / spec",
+    "observation": "No verified-entitlement integration exists (spec 4.1.1: confirmation is not automated verification), so the accessBasis value verified is unreachable today; tests assert it is never produced from installation, confirmation or outcomes rather than inventing a verification source.",
+    "evidence": "spec/amazon-fantasy-companion/04.1.1-feature.md; backend/tests/unit/provider_resolver/test_resolver_access_basis.py"
+   }
+  ]
+ }
+}

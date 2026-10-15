@@ -1,0 +1,17 @@
+{"commands": [
+ {"id": "B06-C01", "command": "read implementer SKILL.md, P2-B06T receipt/commands, design DES-AFC-P2-RESOLVE + CONTRACT-AFC-P2-PROVIDER-REGISTRY, frozen tests, stub, store, api handler, template, implementation.json P2-B06 (command_ids=[CMD-GATE-BACKEND])", "exit_code": 0, "purpose": "Contract reading; storage and stub-pin analysis"},
+ {"id": "B06-C02", "command": "write backend/src/provider_resolver/__init__.py (resolve/record_outcome/record_installed_apps, REGISTRY_PATH, event_channel seam)", "exit_code": 0, "purpose": "Product implementation"},
+ {"id": "B06-C03", "command": "CMD-RED command rerun (unit+deployed provider_resolver)", "exit_code": 0, "purpose": "First green: 43 passed, 3 skipped"},
+ {"id": "B06-C04", "command": "retire B01 stub pins in test_pipeline_and_stubs.py + test_backend_template.py; add test_resolver_overrides.py", "exit_code": 0, "purpose": "Pin retirement per B02/B03 precedent; added coverage tests"},
+ {"id": "B06-C05", "command": "CMD-GREEN with junit to evidence/P2-B06 + frozen-hash-check + negative-check (-k installed_only or never_promoted or does_not_verify)", "exit_code": 0, "purpose": "46 passed; 8/8 frozen hashes MATCH; negative check 5 passed"},
+ {"id": "B06-C06", "command": "bash tools/ci/gate.sh (first full run)", "exit_code": 1, "purpose": "8 failures: remaining B01 stub pins in test_router.py and test_api_contract.py asserting 503 from the now-implemented resolver"},
+ {"id": "B06-C07", "command": "retire remaining pins: router outcome/installed-apps tests assert implemented 200; /v1/providers removed from 503-stub parametrize", "exit_code": 0, "purpose": "127 passed over router+contract+resolver subset"},
+ {"id": "B06-C08", "command": "bash tools/ci/gate.sh", "exit_code": 0, "purpose": "All five areas PASS; backend 421 passed"},
+ {"id": "B06-C09", "command": "git commit attempt 1 (pre-commit gate --changed)", "exit_code": 1, "purpose": "Hygiene PATH-HOME-POSIX failed on unsanitized CMD-GREEN.xml absolute paths; nothing committed"},
+ {"id": "B06-C10", "command": "sed $HOME redaction of CMD-GREEN.xml; git commit 787be9d (hooks on)", "exit_code": 0, "purpose": "Product candidate committed; all gate areas PASS in hook"},
+ {"id": "B06-C11", "command": "add production event_channel fail-closed test; git commit 14fb867 (hooks on, repo-config committer restored)", "exit_code": 0, "purpose": "Covers the one uncovered changed line; 4/4 added tests pass"},
+ {"id": "B06-C12", "command": "bash tools/ci/coverage/backend.sh 71d3e649fec8406cc593519e9d8cab5eb7c65575 <scratch>/cov", "exit_code": 0, "purpose": "PASS changed-line coverage 100% (threshold 90%) on candidate 14fb867"},
+ {"id": "B06-C13", "command": "PATH=<mutmut-backend>:<backend-tests>:$PATH bash tools/ci/mutation/backend.sh 71d3e649fec8406cc593519e9d8cab5eb7c65575 <scratch>/mut", "exit_code": 3, "purpose": "Typed GAP PYTHON_NONFUNCTION_MUTATION_GAP (module-level REGISTRY_PATH seam unbindable); raw 214 killed / 17 survived / 231 total"},
+ {"id": "B06-C14", "command": "Final CMD-GREEN (47 passed, 3 skipped) + bash tools/ci/gate.sh exit 0 + check_paths.py exit 0; evidence sanitized to $HOME", "exit_code": 0, "purpose": "Final candidate evidence"},
+ {"id": "B06-C15", "command": "git commit evidence closeout (hooks on)", "exit_code": 0, "purpose": "Evidence-only closeout commit; see git log"}
+], "scope": "Command/exit ledger for the P2-B06 product slice. Installed paths normalized to $HOME; no command publishes, calls AWS, or touches a device."}
