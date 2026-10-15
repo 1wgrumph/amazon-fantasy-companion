@@ -1,7 +1,5 @@
-package com.afc.companion
+package com.afc.companion.net
 
-import com.afc.companion.net.ApiClient
-import com.afc.companion.net.ApiResponse
 import java.io.ByteArrayInputStream
 import java.net.HttpURLConnection
 import java.net.URL
@@ -14,8 +12,10 @@ import kotlinx.coroutines.Dispatchers
 import org.junit.Assert.*
 import org.junit.Test
 
+// PIT prioritizes <mutated class>Test ahead of frozen HTTP cases that can hang on these mutants.
+// shortcut: generated class names depend on Kotlin; refresh these names if request's state machine changes.
 // Inputs were exercised against LocalApi in pit-bounded-loops/focused.txt; no shared resources.
-class ApiLoopBoundTest {
+class `ApiClient$request$2Test` {
     @Test fun transientRetriesStopAtTheAttemptCapAfterSuspendedBackoffs() {
         var attempts = 0
         val waits = mutableListOf<Long>()
@@ -50,6 +50,18 @@ class ApiLoopBoundTest {
         assertNull(pending)
     }
 
+    private fun responseConnection(url: URL, status: Int, body: ByteArray): HttpURLConnection =
+        object : HttpURLConnection(url) {
+            override fun connect() {}
+            override fun disconnect() {}
+            override fun usingProxy(): Boolean = false
+            override fun getResponseCode(): Int = status
+            override fun getInputStream(): ByteArrayInputStream = ByteArrayInputStream(body)
+            override fun getErrorStream(): ByteArrayInputStream = inputStream
+        }
+}
+
+class `ApiClient$CompanionTest` {
     @Test fun oversizedResponseStopsReadingAtTheByteCap() {
         val input = object : ByteArrayInputStream(ByteArray(65_537) { 'x'.code.toByte() }) {
             override fun read(bytes: ByteArray, offset: Int, length: Int): Int {
@@ -60,14 +72,4 @@ class ApiLoopBoundTest {
         val failure = assertThrows(IllegalArgumentException::class.java) { ApiClient.readBounded(input) }
         assertEquals("Response body exceeds 64 KiB", failure.message)
     }
-
-    private fun responseConnection(url: URL, status: Int, body: ByteArray): HttpURLConnection =
-        object : HttpURLConnection(url) {
-            override fun connect() {}
-            override fun disconnect() {}
-            override fun usingProxy(): Boolean = false
-            override fun getResponseCode(): Int = status
-            override fun getInputStream(): ByteArrayInputStream = ByteArrayInputStream(body)
-            override fun getErrorStream(): ByteArrayInputStream = inputStream
-        }
 }

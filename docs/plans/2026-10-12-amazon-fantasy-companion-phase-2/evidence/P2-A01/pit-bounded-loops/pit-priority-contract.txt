@@ -1,0 +1,243 @@
+Compiled from "DefaultTestPrioritiser.java"
+public class org.pitest.mutationtest.build.DefaultTestPrioritiser implements org.pitest.mutationtest.build.TestPrioritiser {
+  private static final int TIME_WEIGHTING_FOR_DIRECT_UNIT_TESTS;
+
+  private final org.pitest.coverage.CoverageDatabase coverage;
+
+  public org.pitest.mutationtest.build.DefaultTestPrioritiser(org.pitest.coverage.CoverageDatabase);
+    Code:
+       0: aload_0
+       1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+       4: aload_0
+       5: aload_1
+       6: putfield      #2                  // Field coverage:Lorg/pitest/coverage/CoverageDatabase;
+       9: return
+
+  public java.util.List<org.pitest.coverage.TestInfo> assignTests(org.pitest.mutationtest.engine.MutationDetails);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: invokevirtual #3                  // Method org/pitest/mutationtest/engine/MutationDetails.getClassName:()Lorg/pitest/classinfo/ClassName;
+       5: aload_0
+       6: aload_1
+       7: invokevirtual #4                  // Method pickTests:(Lorg/pitest/mutationtest/engine/MutationDetails;)Ljava/util/Collection;
+      10: invokevirtual #5                  // Method prioritizeTests:(Lorg/pitest/classinfo/ClassName;Ljava/util/Collection;)Ljava/util/List;
+      13: areturn
+
+  private java.util.Collection<org.pitest.coverage.TestInfo> pickTests(org.pitest.mutationtest.engine.MutationDetails);
+    Code:
+       0: aload_1
+       1: invokevirtual #6                  // Method org/pitest/mutationtest/engine/MutationDetails.getBlocks:()Ljava/util/List;
+       4: invokeinterface #7,  1            // InterfaceMethod java/util/List.stream:()Ljava/util/stream/Stream;
+       9: aload_1
+      10: invokedynamic #8,  0              // InvokeDynamic #0:apply:(Lorg/pitest/mutationtest/engine/MutationDetails;)Ljava/util/function/Function;
+      15: invokeinterface #9,  2            // InterfaceMethod java/util/stream/Stream.map:(Ljava/util/function/Function;)Ljava/util/stream/Stream;
+      20: aload_0
+      21: invokedynamic #10,  0             // InvokeDynamic #1:apply:(Lorg/pitest/mutationtest/build/DefaultTestPrioritiser;)Ljava/util/function/Function;
+      26: invokeinterface #11,  2           // InterfaceMethod java/util/stream/Stream.flatMap:(Ljava/util/function/Function;)Ljava/util/stream/Stream;
+      31: invokedynamic #12,  0             // InvokeDynamic #2:get:()Ljava/util/function/Supplier;
+      36: invokestatic  #13                 // Method java/util/stream/Collectors.toCollection:(Ljava/util/function/Supplier;)Ljava/util/stream/Collector;
+      39: invokeinterface #14,  2           // InterfaceMethod java/util/stream/Stream.collect:(Ljava/util/stream/Collector;)Ljava/lang/Object;
+      44: checkcast     #15                 // class java/util/Collection
+      47: areturn
+
+  private java.util.List<org.pitest.coverage.TestInfo> prioritizeTests(org.pitest.classinfo.ClassName, java.util.Collection<org.pitest.coverage.TestInfo>);
+    Code:
+       0: new           #16                 // class java/util/ArrayList
+       3: dup
+       4: aload_2
+       5: invokespecial #17                 // Method java/util/ArrayList."<init>":(Ljava/util/Collection;)V
+       8: astore_3
+       9: aload_3
+      10: new           #18                 // class org/pitest/mutationtest/build/TestInfoPriorisationComparator
+      13: dup
+      14: aload_1
+      15: sipush        1000
+      18: invokespecial #20                 // Method org/pitest/mutationtest/build/TestInfoPriorisationComparator."<init>":(Lorg/pitest/classinfo/ClassName;I)V
+      21: invokeinterface #21,  2           // InterfaceMethod java/util/List.sort:(Ljava/util/Comparator;)V
+      26: aload_3
+      27: areturn
+
+  private static java.util.HashSet lambda$pickTests$2();
+    Code:
+       0: new           #22                 // class java/util/HashSet
+       3: dup
+       4: invokespecial #23                 // Method java/util/HashSet."<init>":()V
+       7: areturn
+
+  private java.util.stream.Stream lambda$pickTests$1(org.pitest.coverage.BlockLocation);
+    Code:
+       0: aload_0
+       1: getfield      #2                  // Field coverage:Lorg/pitest/coverage/CoverageDatabase;
+       4: aload_1
+       5: invokeinterface #24,  2           // InterfaceMethod org/pitest/coverage/CoverageDatabase.getTestsForBlockLocation:(Lorg/pitest/coverage/BlockLocation;)Ljava/util/Collection;
+      10: invokeinterface #25,  1           // InterfaceMethod java/util/Collection.stream:()Ljava/util/stream/Stream;
+      15: areturn
+
+  private static org.pitest.coverage.BlockLocation lambda$pickTests$0(org.pitest.mutationtest.engine.MutationDetails, java.lang.Integer);
+    Code:
+       0: new           #26                 // class org/pitest/coverage/BlockLocation
+       3: dup
+       4: aload_0
+       5: invokevirtual #27                 // Method org/pitest/mutationtest/engine/MutationDetails.getId:()Lorg/pitest/mutationtest/engine/MutationIdentifier;
+       8: invokevirtual #28                 // Method org/pitest/mutationtest/engine/MutationIdentifier.getLocation:()Lorg/pitest/mutationtest/engine/Location;
+      11: aload_1
+      12: invokevirtual #29                 // Method java/lang/Integer.intValue:()I
+      15: invokespecial #30                 // Method org/pitest/coverage/BlockLocation."<init>":(Lorg/pitest/mutationtest/engine/Location;I)V
+      18: areturn
+}
+Compiled from "TestInfoPriorisationComparator.java"
+public class org.pitest.mutationtest.build.TestInfoPriorisationComparator implements java.util.Comparator<org.pitest.coverage.TestInfo>, java.io.Serializable {
+  private static final long serialVersionUID;
+
+  private final int distanceTimeWeighting;
+
+  private final org.pitest.classinfo.ClassName targetClass;
+
+  public org.pitest.mutationtest.build.TestInfoPriorisationComparator(org.pitest.classinfo.ClassName, int);
+    Code:
+       0: aload_0
+       1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+       4: aload_0
+       5: aload_1
+       6: putfield      #2                  // Field targetClass:Lorg/pitest/classinfo/ClassName;
+       9: aload_0
+      10: iload_2
+      11: putfield      #3                  // Field distanceTimeWeighting:I
+      14: return
+
+  public int compare(org.pitest.coverage.TestInfo, org.pitest.coverage.TestInfo);
+    Code:
+       0: aload_1
+       1: invokevirtual #4                  // Method org/pitest/coverage/TestInfo.getTime:()I
+       4: istore_3
+       5: aload_2
+       6: invokevirtual #4                  // Method org/pitest/coverage/TestInfo.getTime:()I
+       9: istore        4
+      11: iload_3
+      12: iload         4
+      14: isub
+      15: aload_0
+      16: aload_1
+      17: aload_2
+      18: invokevirtual #5                  // Method distanceWeighting:(Lorg/pitest/coverage/TestInfo;Lorg/pitest/coverage/TestInfo;)I
+      21: isub
+      22: ireturn
+
+  private int distanceWeighting(org.pitest.coverage.TestInfo, org.pitest.coverage.TestInfo);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: invokevirtual #6                  // Method weightFor:(Lorg/pitest/coverage/TestInfo;)I
+       5: aload_0
+       6: aload_2
+       7: invokevirtual #6                  // Method weightFor:(Lorg/pitest/coverage/TestInfo;)I
+      10: isub
+      11: ireturn
+
+  private int weightFor(org.pitest.coverage.TestInfo);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: invokevirtual #7                  // Method weightForDirectHit:(Lorg/pitest/coverage/TestInfo;)I
+       5: aload_1
+       6: invokevirtual #8                  // Method org/pitest/coverage/TestInfo.getNumberOfBlocksCovered:()I
+       9: bipush        10
+      11: idiv
+      12: isub
+      13: ireturn
+
+  private int weightForDirectHit(org.pitest.coverage.TestInfo);
+    Code:
+       0: aload_1
+       1: aload_0
+       2: getfield      #2                  // Field targetClass:Lorg/pitest/classinfo/ClassName;
+       5: invokevirtual #9                  // Method org/pitest/coverage/TestInfo.directlyHits:(Lorg/pitest/classinfo/ClassName;)Z
+       8: ifeq          18
+      11: aload_0
+      12: getfield      #3                  // Field distanceTimeWeighting:I
+      15: goto          19
+      18: iconst_0
+      19: ireturn
+
+  public int compare(java.lang.Object, java.lang.Object);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: checkcast     #10                 // class org/pitest/coverage/TestInfo
+       5: aload_2
+       6: checkcast     #10                 // class org/pitest/coverage/TestInfo
+       9: invokevirtual #11                 // Method compare:(Lorg/pitest/coverage/TestInfo;Lorg/pitest/coverage/TestInfo;)I
+      12: ireturn
+}
+Compiled from "TestToClassMapper.java"
+public class org.pitest.classinfo.TestToClassMapper {
+  private static final int TEST_LENGTH;
+
+  private final org.pitest.classinfo.Repository repository;
+
+  public org.pitest.classinfo.TestToClassMapper(org.pitest.classinfo.Repository);
+    Code:
+       0: aload_0
+       1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+       4: aload_0
+       5: aload_1
+       6: putfield      #2                  // Field repository:Lorg/pitest/classinfo/Repository;
+       9: return
+
+  public java.util.Optional<org.pitest.classinfo.ClassName> findTestee(java.lang.String);
+    Code:
+       0: aload_1
+       1: invokestatic  #3                  // Method org/pitest/classinfo/ClassName.fromString:(Ljava/lang/String;)Lorg/pitest/classinfo/ClassName;
+       4: astore_2
+       5: aload_2
+       6: invokevirtual #4                  // Method org/pitest/classinfo/ClassName.asJavaName:()Ljava/lang/String;
+       9: ldc           #5                  // String Test
+      11: invokevirtual #6                  // Method java/lang/String.endsWith:(Ljava/lang/String;)Z
+      14: ifeq          42
+      17: aload_0
+      18: aload_2
+      19: getstatic     #7                  // Field TEST_LENGTH:I
+      22: invokevirtual #8                  // Method org/pitest/classinfo/ClassName.withoutSuffixChars:(I)Lorg/pitest/classinfo/ClassName;
+      25: invokevirtual #9                  // Method tryName:(Lorg/pitest/classinfo/ClassName;)Z
+      28: ifeq          42
+      31: aload_2
+      32: getstatic     #7                  // Field TEST_LENGTH:I
+      35: invokevirtual #8                  // Method org/pitest/classinfo/ClassName.withoutSuffixChars:(I)Lorg/pitest/classinfo/ClassName;
+      38: invokestatic  #10                 // Method java/util/Optional.ofNullable:(Ljava/lang/Object;)Ljava/util/Optional;
+      41: areturn
+      42: aload_2
+      43: invokevirtual #11                 // Method org/pitest/classinfo/ClassName.getNameWithoutPackage:()Lorg/pitest/classinfo/ClassName;
+      46: invokevirtual #4                  // Method org/pitest/classinfo/ClassName.asJavaName:()Ljava/lang/String;
+      49: ldc           #5                  // String Test
+      51: invokevirtual #12                 // Method java/lang/String.startsWith:(Ljava/lang/String;)Z
+      54: ifeq          82
+      57: aload_0
+      58: aload_2
+      59: getstatic     #7                  // Field TEST_LENGTH:I
+      62: invokevirtual #13                 // Method org/pitest/classinfo/ClassName.withoutPrefixChars:(I)Lorg/pitest/classinfo/ClassName;
+      65: invokevirtual #9                  // Method tryName:(Lorg/pitest/classinfo/ClassName;)Z
+      68: ifeq          82
+      71: aload_2
+      72: getstatic     #7                  // Field TEST_LENGTH:I
+      75: invokevirtual #13                 // Method org/pitest/classinfo/ClassName.withoutPrefixChars:(I)Lorg/pitest/classinfo/ClassName;
+      78: invokestatic  #10                 // Method java/util/Optional.ofNullable:(Ljava/lang/Object;)Ljava/util/Optional;
+      81: areturn
+      82: invokestatic  #14                 // Method java/util/Optional.empty:()Ljava/util/Optional;
+      85: areturn
+
+  private boolean tryName(org.pitest.classinfo.ClassName);
+    Code:
+       0: aload_0
+       1: getfield      #2                  // Field repository:Lorg/pitest/classinfo/Repository;
+       4: aload_1
+       5: invokevirtual #15                 // Method org/pitest/classinfo/Repository.hasClass:(Lorg/pitest/classinfo/ClassName;)Z
+       8: ireturn
+
+  static {};
+    Code:
+       0: ldc           #5                  // String Test
+       2: invokevirtual #16                 // Method java/lang/String.length:()I
+       5: putstatic     #7                  // Field TEST_LENGTH:I
+       8: return
+}
