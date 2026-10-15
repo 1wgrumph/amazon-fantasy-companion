@@ -66,6 +66,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Locate the documented backend test environment in local gates and Git hooks,
+  and report a provisioning GAP when it is missing; preserve CI tool selection
+  (PR #TBD).
+
 - Return the standard 404 error envelope for unknown API routes by routing
   unmatched requests to the existing Lambda router ([#67](https://github.com/1wgrumph/amazon-fantasy-companion/pull/67)).
 - Fix the deployed-test network guard so smoke tests reach the configured
