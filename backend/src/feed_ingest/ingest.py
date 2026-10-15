@@ -13,7 +13,7 @@ def store_events(events):
         if before is not None:
             facts = {key: value for key, value in event.items()
                      if key not in ("revision", "correctionOf")}
-            if all(before.get(key) == value for key, value in facts.items()):
+            if all(key not in before or before[key] == value for key, value in facts.items()):
                 continue
             event = dict(event, revision=int(before["revision"]) + 1,
                          correctionOf=int(before["revision"]))
