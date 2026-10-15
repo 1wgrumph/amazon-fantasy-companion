@@ -47,7 +47,7 @@ def normalize_summary(payload, game_id, source="live", prior=None):
         before = prior.get(play["id"])
         if before is None:
             revision, correction_of = 1, None
-        elif any(before.get(key) != value for key, value in facts.items()):
+        elif any(key in before and before[key] != value for key, value in facts.items()):
             correction_of = int(before["revision"])
             revision = correction_of + 1
         else:

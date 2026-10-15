@@ -42,6 +42,9 @@ def test_captured_period_and_scoring_are_stored(api, game, kind):
     ("period", None), ("scoringPlay", None),
     ("period", {}), ("period", {"number": 0}),
     ("period", {"number": "4"}), ("period", {"number": True}),
+    pytest.param("period", {"number": 4.0}, id="period-whole-float"),
+    pytest.param("awayScore", 7.0, id="away-score-whole-float"),
+    pytest.param("homeScore", 7.0, id="home-score-whole-float"),
     ("scoringPlay", "false"), ("scoringPlay", 1),
 ])
 @pytest.mark.parametrize("existing", [False, True], ids=["first-poll", "repoll"])
@@ -93,3 +96,39 @@ def test_changed_play_fact_revises_once_in_normalizer_and_store(api, field):
         assert event["revision"] == 2 and event["correctionOf"] == 1
     assert ingest_summary(summary, GAME) == []
     assert len(api.table("Events").scan()["Items"]) == len(first)
+
+
+@pytest.mark.parametrize("missing", [("period",), ("scoringPlay",), ("period", "scoringPlay")])
+@pytest.mark.parametrize("changed", [False, True], ids=["unchanged", "score-correction"])
+@pytest.mark.parametrize("path", ["normalizer", "ingest"])
+def test_legacy_missing_facts_only_revise_on_known_fact_changes(api, missing, changed, path):
+    import store
+    from feed_ingest.ingest import ingest_summary
+    from feed_ingest.normalize import normalize_summary
+
+    summary = fresh_summary()
+    prior = {event["eventId"]: {key: value for key, value in event.items() if key not in missing}
+             for event in normalize_summary(summary, GAME)}
+    if path == "ingest":
+        for event in prior.values():
+            store.put_event(event)
+    play = plays_in(summary)[-1]
+    if changed:
+        play["awayScore"] += 1
+    emitted = (normalize_summary(summary, GAME, prior=prior) if path == "normalizer"
+               else ingest_summary(summary, GAME))
+    assert len(emitted) == (1 if changed else 0)
+    if changed:
+        event = emitted[0]
+        assert event["eventId"] == play["id"]
+        assert event["score"]["away"] == play["awayScore"]
+        assert event["period"] == play["period"]["number"]
+        assert event["scoringPlay"] is play["scoringPlay"]
+        assert event["revision"] == 2 and event["correctionOf"] == 1
+        prior[event["eventId"]] = event
+    if path == "normalizer":
+        assert normalize_summary(summary, GAME, prior=prior) == []
+    else:
+        assert ingest_summary(summary, GAME) == []
+        stored = {event["eventId"]: event for event in api.table("Events").scan()["Items"]}
+        assert stored == prior
