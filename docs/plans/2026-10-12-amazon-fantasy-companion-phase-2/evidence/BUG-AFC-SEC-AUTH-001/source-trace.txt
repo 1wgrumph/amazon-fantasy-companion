@@ -1,0 +1,66 @@
+$ rg -n get_parameter|GetParameter|YAHOO_CLIENT_SECRET_PARAMETER|YAHOO_TOKEN_PARAMETER backend/src
+(no matches)
+exit=1
+
+$ rg -n ^import |^from |def _routes|device_auth\.|store\.|panel\.|alert_policy\.|provider_resolver\. backend/src/api/handler.py
+8:import base64
+9:import binascii
+10:import json
+11:import logging
+12:import re
+13:import time
+14:from decimal import Decimal
+15:from pathlib import Path
+17:import alert_policy
+18:import device_auth
+19:import panel
+20:import provider_resolver
+21:import store
+53:        profile_id = device_auth.authenticate(_bearer(event.get("headers") or {}))
+66:def _routes():
+143:    return _respond(201, device_auth.issue())
+147:    return _respond(200, device_auth.poll(_text(query, "handle")))
+152:    result = device_auth.confirm(code, _text(body, "profileId", r"[A-Za-z0-9_-]{1,64}"))
+176:    return _respond(200, _profile(profile_id, store.get_profile(profile_id)))
+193:    item = store.put_profile(profile_id, settings, revision, now)
+200:    return _respond(200, alert_policy.pending(profile_id, query.get("cursor")))
+204:    return _respond(200, panel.snapshot(profile_id, query.get("teamLeague")))
+208:    return _respond(200, provider_resolver.resolve(profile_id, query.get("eventId")))
+216:    return _respond(200, provider_resolver.record_outcome(
+226:    return _respond(200, provider_resolver.record_installed_apps(profile_id, packages))
+exit=0
+
+$ rg -n ^import |^from |def _get|def get_|Authorization|transport.request backend/src/lineup/yahoo.py
+6:ValueError. The bearer token is only placed in the Authorization header,
+10:import re
+39:def _get(transport, token, path):
+42:    payload = transport.request("GET", _api() + path, {"Authorization": "Bearer " + token})
+70:def get_leagues(transport, token):
+76:def get_teams(transport, token, league_key):
+82:def get_roster(transport, token, team_key, week):
+102:def get_settings(transport, token, league_key):
+exit=0
+
+$ rg -n def confirm|ConditionExpression|expiresAt|codePending backend/src/device_auth/__init__.py backend/src/store/__init__.py
+backend/src/store/__init__.py:55:    if _written(_table("PROFILES_TABLE").put_item, Item=item, ConditionExpression=condition):
+backend/src/store/__init__.py:63:            "state": "codePending", "expiresAt": expires_at}
+backend/src/store/__init__.py:65:                    ConditionExpression=Attr("pk").not_exists())
+backend/src/store/__init__.py:70:        IndexName="handle", KeyConditionExpression=Key("handleHash").eq(handle_hash))["Items"]
+backend/src/store/__init__.py:74:def confirm_link(code, profile_id, now):
+backend/src/store/__init__.py:79:        ConditionExpression="#state = :pending AND expiresAt > :now",
+backend/src/store/__init__.py:81:        ExpressionAttributeValues={":confirmed": "confirmed", ":pending": "codePending",
+backend/src/store/__init__.py:90:        ConditionExpression="#state = :confirmed",
+backend/src/store/__init__.py:143:    return _table("ALERTS_TABLE").query(KeyConditionExpression=condition, Limit=limit)["Items"]
+backend/src/device_auth/__init__.py:45:    if link["expiresAt"] <= now:
+backend/src/device_auth/__init__.py:47:    if link["state"] == "codePending":
+backend/src/device_auth/__init__.py:48:        return {"state": "codePending"}
+backend/src/device_auth/__init__.py:61:def confirm(code, profile_id):
+exit=0
+
+$ git log --format=%h %s -S YahooClientSecretParameter -- backend/template.yaml
+9cd216c P2-B01: backend foundation, device linking and module stubs
+exit=0
+
+$ git log --format=%h %s -S ssm:GetParameter -- backend/tests/contract/test_template_iam.py
+7eaa700 P2-B01-repair1: address independent review findings R01-R07
+exit=0
