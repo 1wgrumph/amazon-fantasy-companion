@@ -1,0 +1,20 @@
+PENDING DEVICE WORK - P2-A05 (no Fire TV stick in this slice; lease not taken)
+
+Typed gaps, never a pass:
+- DEVICE_INSTALL_PENDING: install the P2-A05 debug APK on the Fire TV stick
+  (fire-tv-stick lease) and run CMD-TVAPP-INSTRUMENTED for any panel
+  instrumented cases (none authored in P2-A05T).
+- VISUAL_EMULATOR_UNAVAILABLE / PROC-VISUAL-REVIEW: drive the panel on the
+  stick by D-pad (up/down focus, Menu show/hide, fast-forward team switch),
+  capture screencaps of each state (fresh, stale labeled, unavailable label,
+  hidden hint) into evidence/visual/P2-A05/, and record dumpsys window
+  geometry for the panel box.
+- CMD-TEXT-SIZE-MEASURE: measure rendered body/score text heights in pixels
+  on 1080p screencaps (floors 24 px body, 32 px scores; host proof is the
+  PanelTextSizes sp >= px-at-mdpi JVM assertion only).
+- X04_VERDICT_PENDING: when the P2-X04 verdict lands, feed its exact string
+  to panelModeFor in MainActivity (currently null -> FullScreen); if modeB,
+  verify side-by-side panel-right / video-left geometry on the stick against
+  panelLayout (host-panelLayout JVM proof only in this slice).
+- Focus indicator behavior is controller-driven on host; Compose focus
+  traversal on the stick still needs on-device confirmation.
