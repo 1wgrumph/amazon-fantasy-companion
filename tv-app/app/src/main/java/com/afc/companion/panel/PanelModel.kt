@@ -105,6 +105,9 @@ private fun parseInstantMs(text: String?): Long? {
         val offsetMs = if (g[8] == "Z") 0L else {
             val sign = if (g[8].startsWith("-")) -1L else 1L
             val parts = g[8].substring(1).split(":")
+            // RFC3339 time-numoffset is time-hour ":" time-minute (00-23:00-59); an
+            // out-of-range offset is invalid, so the value stays undated, never fresh.
+            if (parts[0].toInt() !in 0..23 || parts[1].toInt() !in 0..59) return@runCatching null
             sign * (parts[0].toLong() * 3_600_000L + parts[1].toLong() * 60_000L)
         }
         calendar.timeInMillis - offsetMs
@@ -217,7 +220,10 @@ class PanelController(teamLeagues: List<String>, selected: String?, visible: Boo
             PanelAction.NextTeamLeague -> {
                 if (teamLeagues.isEmpty()) return
                 val index = teamLeagues.indexOf(currentTeamLeague)
-                currentTeamLeague = teamLeagues[(index + 1).mod(teamLeagues.size)]
+                val next = teamLeagues[(index + 1).mod(teamLeagues.size)]
+                // One choice (the profile's single pair): keep the held rows, no refetch.
+                if (next == currentTeamLeague) return
+                currentTeamLeague = next
                 held = null
                 focus = FocusTarget.TeamLeagueSwitch
                 needsFetch = true

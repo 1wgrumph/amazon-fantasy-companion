@@ -72,6 +72,9 @@ fun LineupPanel(client: ApiClient, mode: PanelMode, modifier: Modifier = Modifie
         return
     }
     val controller = remember(client, teamLeague) {
+        // The profile stores exactly one team/league pair (ProfileState.teamLeague);
+        // its leagues/teams selection sets are unpaired, so the switch cycles this
+        // one actual selection and a one-choice switch is a no-op in the controller.
         PanelController(listOf(teamLeague), teamLeague, current.panel.visible)
     }
     var tick by remember(controller) { mutableIntStateOf(0) }
@@ -97,6 +100,9 @@ fun LineupPanel(client: ApiClient, mode: PanelMode, modifier: Modifier = Modifie
                 tick++
             }
             delay(1_000)
+            // Invalidate every second while composed so a value crossing the 60 s
+            // stale boundary re-renders stale without waiting for the 30 s fetch.
+            tick++
         }
     }
 
@@ -138,20 +144,32 @@ fun LineupPanel(client: ApiClient, mode: PanelMode, modifier: Modifier = Modifie
                     style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = Color.White),
                 )
             } else {
-                PanelContent(controller, fetchAttempted)
+                // Pass changed immutable state, not the controller: equal parameters
+                // would let Compose skip the child and freeze later scores/focus.
+                PanelContent(
+                    snapshot = controller.snapshot,
+                    teamLeague = controller.teamLeague,
+                    focused = controller.focused,
+                    fetchAttempted = fetchAttempted,
+                    nowMs = System.currentTimeMillis(),
+                )
             }
         }
     }
 }
 
 @Composable
-private fun PanelContent(controller: PanelController, fetchAttempted: Boolean) {
-    val snapshot = controller.snapshot
-    val nowMs = System.currentTimeMillis()
+private fun PanelContent(
+    snapshot: PanelSnapshot?,
+    teamLeague: String?,
+    focused: FocusTarget?,
+    fetchAttempted: Boolean,
+    nowMs: Long,
+) {
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        FocusableRow(controller.focused == FocusTarget.TeamLeagueSwitch) {
+        FocusableRow(focused == FocusTarget.TeamLeagueSwitch) {
             Text(
-                "Team/league: ${controller.teamLeague ?: "Unavailable"}",
+                "Team/league: ${teamLeague ?: "Unavailable"}",
                 style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = Color.White),
             )
         }
@@ -171,7 +189,7 @@ private fun PanelContent(controller: PanelController, fetchAttempted: Boolean) {
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             items(snapshot.rows, key = { it.playerId }) { row ->
-                FocusableRow(controller.focused == FocusTarget.Row(row.playerId)) {
+                FocusableRow(focused == FocusTarget.Row(row.playerId)) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(24.dp),
@@ -193,7 +211,7 @@ private fun PanelContent(controller: PanelController, fetchAttempted: Boolean) {
                 }
             }
         }
-        FocusableRow(controller.focused == FocusTarget.Total) {
+        FocusableRow(focused == FocusTarget.Total) {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(
                     "Team total: ${PanelText.value(snapshot.teamTotal, nowMs)}",
