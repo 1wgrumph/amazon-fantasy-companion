@@ -1,0 +1,43 @@
+P2-A02 device steps pending (no Fire TV stick in this slice, 2026-10-15)
+
+Typed gaps: DEVICE_INSTALL_PENDING (CMD-ADB-INSTALL) and
+VISUAL_EMULATOR_UNAVAILABLE (PROC-VISUAL-REVIEW). Neither is a pass. The host
+slice is green: 26/26 profile/detect unit tests, full gate exit 0 (110 TV
+unit tests), assembleDebug. Nothing below has run; each step needs the
+fire-tv-stick lease.
+
+1. CMD-ADB-INSTALL
+   Build from the P2-A02 commit (or its reviewed successor):
+     ./tv-app/gradlew -p tv-app assembleDebug -PafcApiBaseUrl=<afc-dev ApiUrl>
+   Record the APK sha256, then: adb -s <stick_serial> install -r <apk>;
+   record exit status, sanitized device model, Fire OS and API level.
+
+2. PROC-VISUAL-REVIEW (DES-AFC-P2-VISUAL, rule 16), 1080p is the only viewport.
+   Drive with adb shell input keyevent (DPAD_UP/DOWN/LEFT/RIGHT, DPAD_CENTER,
+   BACK) and capture adb exec-out screencap -p >
+   evidence/visual/P2-A02/<state>.png plus adb shell dumpsys window >
+   evidence/visual/P2-A02/<state>-window.txt for each state, using a
+   sanitized fixture profile (no account names or tokens):
+     - profile-loaded: Profile/Settings after linking shows every supported
+       control with its persisted value; D-pad focus reaches each control
+       and the Save profile button.
+     - voice-hidden: the Voice row shows its stated limit (no verified
+       voice route in this build) and is not focusable as a control.
+     - preset-switch: switch the scoring preset ppr <-> halfPpr, save, kill
+       and relaunch the app; the saved preset and every other control value
+       are shown unchanged (AFC-PR-002/-066 on device).
+     - detection-optin: enable installed-app detection, save, relaunch;
+       confirm the setting persisted and that disabling it stops reports
+       (AFC-PR-010/-037 on device).
+     - profile-unavailable: with an unreachable base URL, Profile/Settings
+       shows the unavailable message and no stale values presented as live.
+   Measure body text height in pixels on each capture (AFC-PR-045 floor
+   24 px) and judge layout, focus visibility, overscan margins and couch
+   legibility. Protected provider video captures show black; geometry
+   evidence backs layout claims.
+
+3. Real PackageManager detection (P2-X07 verdict still absent): with a known
+   provider app installed and one absent, confirm the detector reports the
+   installed package only, and that a customer override survives the refresh
+   (AFC-PR-003/-005 on device). If the platform denies the query, record the
+   denial; the control must stay hidden with its stated limit.
