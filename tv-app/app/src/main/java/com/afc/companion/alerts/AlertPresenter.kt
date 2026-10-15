@@ -17,22 +17,26 @@ data class AlertView(val presentation: Presentation, val actions: List<AlertActi
 
 /**
  * NOTIFIER's presentation, alert text and voice gate. Alert payloads are untrusted: the headline is
- * ours, player/matchup/commentary are sanitized and bounded, and commentary carrying an on-field,
- * will-score or access claim is dropped whole rather than edited (AFC-PR-027, -028, -032).
+ * ours, player/matchup/commentary are sanitized and bounded, and any displayed field carrying an
+ * on-field, will-score or access claim is dropped whole rather than edited (AFC-PR-027, -028, -032).
+ * Claims are matched on a normalized form (non-alphanumerics collapsed to one space) so whitespace
+ * or punctuation variants such as "will  score" or "on-the-field" cannot slip through.
  */
 object AlertPresenter {
+    // Matched by isUnsafe against normalized text, where words are separated by single spaces.
     private val unsafeClaim = Regex(
-        "(?i)on the field|on-field|will score|going to score|about to score|is scoring|set to score|sure to score|guaranteed" +
-            "|\\binclud(ed|es)\\b|\\bsubscribed\\b|(?<!not )\\bverified\\b",
+        "(?i)\\b(on the field|on field|will score|going to score|about to score|is scoring|set to score|sure to score|guaranteed" +
+            "|includ(ed|es)|subscribed)\\b|(?<!not )\\bverified\\b",
     )
 
-    /** Null when the alert lacks its triggering player and matchup context. */
+    /** Null when the alert lacks safe triggering player and matchup context. */
     fun text(alert: Alert): AlertText? {
         val data = alert.envelope.data
         val trigger = data.opt("triggerContext") as? JSONObject ?: return null
-        val player = clean(trigger.opt("player")) ?: return null
-        val matchup = clean(trigger.opt("matchup")) ?: return null
-        val commentary = clean(data.opt("commentary"), MAX_COMMENTARY_LENGTH)?.takeUnless { unsafeClaim.containsMatchIn(it) }
+        val player = clean(trigger.opt("player"))?.takeUnless(::isUnsafe) ?: return null
+        val matchup = clean(trigger.opt("matchup"))?.takeUnless(::isUnsafe) ?: return null
+        if (isUnsafe("$player $matchup")) return null // a claim may span the player/matchup boundary
+        val commentary = clean(data.opt("commentary"), MAX_COMMENTARY_LENGTH)?.takeUnless(::isUnsafe)
         return AlertText(
             headline = when (data.opt("alertType")) {
                 "redZone" -> "Red-zone alert"
@@ -67,6 +71,10 @@ object AlertPresenter {
     private const val MAX_CONTEXT_LENGTH = 80
     private const val MAX_COMMENTARY_LENGTH = 240
 
+    private fun isUnsafe(value: String): Boolean = unsafeClaim.containsMatchIn(
+        value.replace(Regex("[^\\p{L}\\p{N}]+"), " ").trim(),
+    )
+
     private fun clean(value: Any?, maxLength: Int = MAX_CONTEXT_LENGTH): String? =
-        (value as? String)?.replace(Regex("[\\p{Cntrl}]"), " ")?.trim()?.take(maxLength)?.takeIf { it.isNotBlank() }
+        (value as? String)?.replace(Regex("[\\p{Cntrl}\\s]+"), " ")?.trim()?.take(maxLength)?.takeIf { it.isNotBlank() }
 }

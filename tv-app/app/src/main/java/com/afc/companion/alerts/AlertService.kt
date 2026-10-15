@@ -10,9 +10,11 @@ import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.core.app.ServiceCompat
 import com.afc.companion.BuildConfig
+import com.afc.companion.net.Alert
 import com.afc.companion.net.ApiClient
 import com.afc.companion.net.SessionStore
 import com.afc.companion.profile.Presentation
+import com.afc.companion.profile.ProfileState
 import com.afc.companion.profile.ProfileStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -56,14 +58,15 @@ class AlertService : Service() {
         val activeFeed = AlertFeed(client).also { feed = it }
         val activeProfiles = ProfileStore(client).also { profiles = it }
         val notifier = AlertNotifier(this)
+        val gate = PresentationGate()
         polling = scope.launch {
             while (isActive) {
                 val startedAt = System.currentTimeMillis()
                 val delivered = activeFeed.poll()
-                if (delivered.isNotEmpty()) {
-                    val profile = activeProfiles.load()
-                    if (profile?.presentation != Presentation.PanelOnly) delivered.forEach(notifier::show)
-                } else if (System.currentTimeMillis() - startedAt < FAST_FAILURE_MS) {
+                if (delivered.isNotEmpty() || gate.hasPending()) {
+                    gate.drain(delivered, activeProfiles.load()).forEach(notifier::show)
+                }
+                if (delivered.isEmpty() && System.currentTimeMillis() - startedAt < FAST_FAILURE_MS) {
                     delay(ERROR_BACKOFF_MS) // a fast return is an error, not a long poll expiring
                 }
             }
@@ -108,5 +111,48 @@ class AlertService : Service() {
         private const val STATUS_NOTIFICATION_ID = 1
         private const val FAST_FAILURE_MS = 1_000L
         private const val ERROR_BACKOFF_MS = 5_000L
+    }
+}
+
+/**
+ * Fail-closed presentation gate: a null profile (timeout, 500, bad body) never means heads-up.
+ * The last validated presentation decides; with none validated yet, alerts are deferred (bounded,
+ * newest revision per id) until a profile loads, then flushed only if it is heads-up. Panel-only
+ * drops the notifier backlog because [AlertFeed] already retains those alerts for the panel.
+ */
+internal class PresentationGate {
+    private var lastValidated: Presentation? = null
+    private val pending = LinkedHashMap<String, Alert>()
+
+    @Synchronized fun hasPending(): Boolean = pending.isNotEmpty()
+
+    @Synchronized fun drain(delivered: List<Alert>, profile: ProfileState?): List<Alert> {
+        if (profile != null) lastValidated = profile.presentation
+        return when (profile?.presentation ?: lastValidated) {
+            Presentation.HeadsUp -> {
+                val ready = LinkedHashMap<String, Alert>()
+                for (alert in pending.values + delivered) {
+                    val held = ready[alert.envelope.id]
+                    if (held == null || alert.envelope.revision >= held.envelope.revision) ready[alert.envelope.id] = alert
+                }
+                pending.clear()
+                ready.values.toList()
+            }
+            Presentation.PanelOnly -> {
+                pending.clear()
+                emptyList()
+            }
+            null -> {
+                for (alert in delivered) {
+                    val held = pending[alert.envelope.id]
+                    if (held == null || alert.envelope.revision >= held.envelope.revision) {
+                        pending.remove(alert.envelope.id)
+                        pending[alert.envelope.id] = alert
+                    }
+                }
+                while (pending.size > AlertFeed.QUEUE_MAX) pending.remove(pending.keys.first())
+                emptyList()
+            }
+        }
     }
 }
