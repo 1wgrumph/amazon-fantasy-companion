@@ -70,6 +70,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Check committed PR and push changes for whitespace in CI and local hooks,
+  and remove trailing whitespace from the P2-A02T evidence log (PR #TBD).
+
 - Locate the documented backend test environment in local gates and Git hooks,
   and report a provisioning GAP when it is missing; preserve CI tool selection
   ([#71](https://github.com/1wgrumph/amazon-fantasy-companion/pull/71)).

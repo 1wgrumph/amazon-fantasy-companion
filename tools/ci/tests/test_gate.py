@@ -1,6 +1,7 @@
 """Gate entrypoint tests: AC-AFC-CI-01 (SEIT-AFC-CI-01.U) and the spec area of
 AC-AFC-CI-04 (SEIT-AFC-CI-04.U), per CONTRACT-AFC-GATE and DES-AFC-GATE."""
 
+import json
 import os
 import re
 import secrets
@@ -116,6 +117,39 @@ class AC_AFC_CI_01(unittest.TestCase):
         self.assertFalse(token in out, 'hygiene output echoed staged line text:\n' + shown)
         self.assertTrue('+plus.txt:1:WS-CHECK' in out.splitlines(),
                         'hygiene finding lost its +plus.txt location:\n' + shown)
+
+    def test_committed_evidence_whitespace_fails_locally_and_in_ci(self):
+        evidence = ('docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/'
+                    'evidence/P2-A02T/cmd-red.txt')
+        for mode in ('local', 'pull_request', 'push'):
+            with self.subTest(mode=mode):
+                repo = copy_repo(self.tmp / mode)
+                base = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=repo,
+                                               text=True).strip()
+                write(repo, {evidence: 'first line\nDaemon will be stopped at the end of the build \n'})
+                commit_all(repo)
+                env = dict(os.environ, CI='', GITHUB_ACTIONS='')
+                args = ('--changed=' + base, 'hygiene')
+                if mode != 'local':
+                    # Reproduce checkout's depth-1 clean tree; fetch the event base from a real remote.
+                    clone = self.tmp / (mode + '-shallow')
+                    git(self.tmp, 'clone', '-q', '--depth=1', repo.as_uri(), str(clone))
+                    repo = clone
+                    event = self.tmp / (mode + '.json')
+                    payload = ({'pull_request': {'base': {'sha': base}}}
+                               if mode == 'pull_request' else {'before': base})
+                    event.write_text(json.dumps(payload), encoding='utf-8')
+                    env.update(CI='true', GITHUB_ACTIONS='true', GITHUB_EVENT_PATH=str(event))
+                    args = ('hygiene',)
+                rc, out = run_gate(self, repo, *args, env=env)
+                self.assertEqual(rc, 1, out)
+                self.assertIn(evidence + ':2:WS-CHECK', out.splitlines())
+                self.assertNotIn('Daemon will be stopped', out)
+                write(repo, {evidence: 'first line\nDaemon will be stopped at the end of the build\n'})
+                commit_all(repo)
+                rc, out = run_gate(self, repo, *args, env=env)
+                self.assertEqual(rc, 0, out)
+                self.assertIn('gate: hygiene: PASS', out)
 
     def test_docs_area_exits_1_on_seeded_broken_link(self):
         repo = copy_repo(self.tmp / 'repo')
