@@ -1,0 +1,41 @@
+{"probe_mode": "reject-synthetic-team", "tests": ["test_build_labels_the_entry_manual_with_its_preset", "test_build_applies_the_selected_preset", "test_manual_values_are_never_presented_as_yahoo"]}
+FFF                                                                      [100%]
+=================================== FAILURES ===================================
+______________ test_build_labels_the_entry_manual_with_its_preset ______________
+backend/tests/unit/lineup/test_manual_source.py:59: in test_build_labels_the_entry_manual_with_its_preset
+    lineup = attempt(manual().build, ROSTER, ENTRIES, "Half-PPR")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/lineup/lineup_support.py:21: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B02/f5-team-contract/probe.py:26: in reject_synthetic
+    raise ValueError('SYN is not an NFL team abbreviation or ESPN NFL team id')
+E   ValueError: SYN is not an NFL team abbreviation or ESPN NFL team id
+____________________ test_build_applies_the_selected_preset ____________________
+backend/tests/unit/lineup/test_manual_source.py:68: in test_build_applies_the_selected_preset
+    lineup = attempt(manual().build, ROSTER, ENTRIES, "PPR")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/lineup/lineup_support.py:21: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B02/f5-team-contract/probe.py:26: in reject_synthetic
+    raise ValueError('SYN is not an NFL team abbreviation or ESPN NFL team id')
+E   ValueError: SYN is not an NFL team abbreviation or ESPN NFL team id
+_______________ test_manual_values_are_never_presented_as_yahoo ________________
+backend/tests/unit/lineup/test_manual_source.py:90: in test_manual_values_are_never_presented_as_yahoo
+    lineup = attempt(manual().build, ROSTER, ENTRIES, "Half-PPR")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/lineup/lineup_support.py:21: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B02/f5-team-contract/probe.py:26: in reject_synthetic
+    raise ValueError('SYN is not an NFL team abbreviation or ESPN NFL team id')
+E   ValueError: SYN is not an NFL team abbreviation or ESPN NFL team id
+============================= slowest 10 durations =============================
+
+(9 durations < 0.005s hidden.  Use -vv to show these durations.)
+=========================== short test summary info ============================
+FAILED backend/tests/unit/lineup/test_manual_source.py::test_build_labels_the_entry_manual_with_its_preset
+FAILED backend/tests/unit/lineup/test_manual_source.py::test_build_applies_the_selected_preset
+FAILED backend/tests/unit/lineup/test_manual_source.py::test_manual_values_are_never_presented_as_yahoo
+3 failed in 0.03s

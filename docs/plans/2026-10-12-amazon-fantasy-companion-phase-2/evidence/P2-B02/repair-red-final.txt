@@ -1,0 +1,219 @@
+FFFFFFFFFFFFFF.FFF                                                       [100%]
+=================================== FAILURES ===================================
+__________ test_f2_bad_game_does_not_abort_later_valid_game[failure0] __________
+backend/tests/unit/feed_ingest/test_review_repairs.py:90: in test_f2_bad_game_does_not_abort_later_valid_game
+    result = module.lambda_handler({}, None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/feed_ingest/__init__.py:51: in lambda_handler
+    return {"stored": len(poll())}
+                          ^^^^^^
+backend/src/feed_ingest/__init__.py:43: in poll
+    stored += ingest_summary(summary, game["id"])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/feed_ingest/ingest.py:13: in ingest_summary
+    validate_summary(payload, game_id)
+backend/src/feed_ingest/validation.py:24: in validate_summary
+    _check("summary", payload)
+backend/src/feed_ingest/validation.py:19: in _check
+    raise ValueError(f"ESPN {name} fails the pinned schema: {error.message}")
+E   ValueError: ESPN summary fails the pinned schema: 'header' is a required property
+__________ test_f2_bad_game_does_not_abort_later_valid_game[failure1] __________
+backend/tests/unit/feed_ingest/test_review_repairs.py:90: in test_f2_bad_game_does_not_abort_later_valid_game
+    result = module.lambda_handler({}, None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/feed_ingest/__init__.py:51: in lambda_handler
+    return {"stored": len(poll())}
+                          ^^^^^^
+backend/src/feed_ingest/__init__.py:42: in poll
+    summary = _get_json(_feed() + "summary?event=" + game["id"])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/feed_ingest/__init__.py:28: in _get_json
+    with request.urlopen(url, timeout=10) as response:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_review_repairs.py:49: in open_url
+    raise value
+E   OSError: feed down
+______ test_f3_three_failures_replace_live_with_labeled_replay[failure0] _______
+backend/tests/unit/feed_ingest/test_review_repairs.py:111: in test_f3_three_failures_replace_live_with_labeled_replay
+    result, clock = run_loop(feed, monkeypatch)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_review_repairs.py:80: in run_loop
+    return module.lambda_handler({}, clock), clock
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/feed_ingest/__init__.py:51: in lambda_handler
+    return {"stored": len(poll())}
+                          ^^^^^^
+backend/src/feed_ingest/__init__.py:42: in poll
+    summary = _get_json(_feed() + "summary?event=" + game["id"])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/feed_ingest/__init__.py:28: in _get_json
+    with request.urlopen(url, timeout=10) as response:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_review_repairs.py:49: in open_url
+    raise value
+E   OSError: feed down
+______ test_f3_three_failures_replace_live_with_labeled_replay[failure1] _______
+backend/tests/unit/feed_ingest/test_review_repairs.py:111: in test_f3_three_failures_replace_live_with_labeled_replay
+    result, clock = run_loop(feed, monkeypatch)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_review_repairs.py:80: in run_loop
+    return module.lambda_handler({}, clock), clock
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/feed_ingest/__init__.py:51: in lambda_handler
+    return {"stored": len(poll())}
+                          ^^^^^^
+backend/src/feed_ingest/__init__.py:43: in poll
+    stored += ingest_summary(summary, game["id"])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/feed_ingest/ingest.py:13: in ingest_summary
+    validate_summary(payload, game_id)
+backend/src/feed_ingest/validation.py:24: in validate_summary
+    _check("summary", payload)
+backend/src/feed_ingest/validation.py:19: in _check
+    raise ValueError(f"ESPN {name} fails the pinned schema: {error.message}")
+E   ValueError: ESPN summary fails the pinned schema: 'header' is a required property
+___________ test_f3_no_fixture_reports_stale_without_changing_values ___________
+backend/tests/unit/feed_ingest/test_review_repairs.py:131: in test_f3_no_fixture_reports_stale_without_changing_values
+    result, _ = run_loop(feed, monkeypatch)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_review_repairs.py:80: in run_loop
+    return module.lambda_handler({}, clock), clock
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/feed_ingest/__init__.py:51: in lambda_handler
+    return {"stored": len(poll())}
+                          ^^^^^^
+backend/src/feed_ingest/__init__.py:42: in poll
+    summary = _get_json(_feed() + "summary?event=" + game["id"])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/feed_ingest/__init__.py:28: in _get_json
+    with request.urlopen(url, timeout=10) as response:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_review_repairs.py:49: in open_url
+    raise value
+E   OSError: feed down
+_______ test_f4_configured_interval_and_lambda_deadline[5-26-expected0] ________
+backend/tests/unit/feed_ingest/test_review_repairs.py:143: in test_f4_configured_interval_and_lambda_deadline
+    assert result == {"stored": 0, "failed": []}
+E   AssertionError: assert {'stored': 0} == {'failed': [], 'stored': 0}
+E
+E     Omitting 1 identical items, use -vv to show
+E     Right contains 1 more item:
+E     {'failed': []}
+E     Use -v to get more diff
+_______ test_f4_configured_interval_and_lambda_deadline[15-51-expected1] _______
+backend/tests/unit/feed_ingest/test_review_repairs.py:143: in test_f4_configured_interval_and_lambda_deadline
+    assert result == {"stored": 0, "failed": []}
+E   AssertionError: assert {'stored': 0} == {'failed': [], 'stored': 0}
+E
+E     Omitting 1 identical items, use -vv to show
+E     Right contains 1 more item:
+E     {'failed': []}
+E     Use -v to get more diff
+_______ test_f4_configured_interval_and_lambda_deadline[60-60-expected2] _______
+backend/tests/unit/feed_ingest/test_review_repairs.py:143: in test_f4_configured_interval_and_lambda_deadline
+    assert result == {"stored": 0, "failed": []}
+E   AssertionError: assert {'stored': 0} == {'failed': [], 'stored': 0}
+E
+E     Omitting 1 identical items, use -vv to show
+E     Right contains 1 more item:
+E     {'failed': []}
+E     Use -v to get more diff
+_____________ test_f5_irrelevant_in_progress_game_is_never_fetched _____________
+backend/tests/unit/feed_ingest/test_review_repairs.py:156: in test_f5_irrelevant_in_progress_game_is_never_fetched
+    assert calls == [(BASE + "scoreboard", 10), (BASE + "summary?event=" + GAME, 10)]
+E   AssertionError: assert [('https://si...1872982', 10)] == [('https://si...1872981', 10)]
+E
+E     Left contains one more item: ('https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401872982', 10)
+E     Use -v to get more diff
+____________________ test_f5_no_profiles_fetches_no_summary ____________________
+backend/tests/unit/feed_ingest/test_review_repairs.py:165: in test_f5_no_profiles_fetches_no_summary
+    assert calls == [(BASE + "scoreboard", 10)]
+E   AssertionError: assert [('https://si...1872981', 10)] == [('https://si...reboard', 10)]
+E
+E     Left contains one more item: ('https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401872981', 10)
+E     Use -v to get more diff
+__________ test_f6_redirect_is_refused_before_any_second_request[301] __________
+backend/tests/unit/feed_ingest/test_review_repairs.py:192: in test_f6_redirect_is_refused_before_any_second_request
+    with pytest.raises(ValueError, match="^ESPN redirects are refused$"):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+__________ test_f6_redirect_is_refused_before_any_second_request[302] __________
+backend/tests/unit/feed_ingest/test_review_repairs.py:192: in test_f6_redirect_is_refused_before_any_second_request
+    with pytest.raises(ValueError, match="^ESPN redirects are refused$"):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+__________ test_f6_redirect_is_refused_before_any_second_request[307] __________
+backend/tests/unit/feed_ingest/test_review_repairs.py:192: in test_f6_redirect_is_refused_before_any_second_request
+    with pytest.raises(ValueError, match="^ESPN redirects are refused$"):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+__________ test_f6_redirect_is_refused_before_any_second_request[308] __________
+backend/tests/unit/feed_ingest/test_review_repairs.py:192: in test_f6_redirect_is_refused_before_any_second_request
+    with pytest.raises(ValueError, match="^ESPN redirects are refused$"):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+_ test_captured_missing_wallclock_validates_ingests_and_replays_all_183_plays __
+backend/tests/unit/feed_ingest/test_validation.py:94: in test_captured_missing_wallclock_validates_ingests_and_replays_all_183_plays
+    validate_summary(payload, game_id)
+backend/tests/unit/feed_ingest/test_validation.py:23: in validate_summary
+    return attempt(require_attr(validation(), "validate_summary"), payload, game_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:61: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/feed_ingest/validation.py:24: in validate_summary
+    _check("summary", payload)
+backend/src/feed_ingest/validation.py:19: in _check
+    raise ValueError(f"ESPN {name} fails the pinned schema: {error.message}")
+E   ValueError: ESPN summary fails the pinned schema: 'wallclock' is a required property
+_________________ test_replay_keeps_the_play_without_wallclock _________________
+backend/tests/unit/feed_ingest/test_feed_edges.py:170: in test_replay_keeps_the_play_without_wallclock
+    assert [event["eventId"] for event in events] == expected
+E   AssertionError: assert ['40187298653...2986177', ...] == ['40187298640...2986155', ...]
+E
+E     At index 0 diff: '40187298653' != '40187298640'
+E     Right contains one more item: '4018729864612'
+E     Use -v to get more diff
+_____________ test_each_function_grants_only_its_store_operations ______________
+backend/tests/contract/test_template_iam.py:79: in test_each_function_grants_only_its_store_operations
+    assert actions == expected, f"{function} DynamoDB grants changed: {actions}"
+E   AssertionError: IngestFunction DynamoDB grants changed: {'EventsTable': {'GetItem', 'PutItem'}, 'ProfilesTable': {'GetItem'}, 'LineupsTable': {'GetItem'}}
+E   assert {'EventsTable...: {'GetItem'}} == {'EventsTable...tem', 'Scan'}}
+E
+E     Omitting 2 identical items, use -vv to show
+E     Differing items:
+E     {'ProfilesTable': {'GetItem'}} != {'ProfilesTable': {'GetItem', 'Scan'}}
+E     Use -v to get more diff
+=============================== warnings summary ===============================
+tests/unit/feed_ingest/test_review_repairs.py: 2455 warnings
+tests/unit/feed_ingest/test_validation.py: 7 warnings
+  <home>/.local/lib/python3.12/site-packages/botocore/auth.py:424: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    datetime_now = datetime.datetime.utcnow()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+============================= slowest 10 durations =============================
+0.95s call     tests/unit/feed_ingest/test_review_repairs.py::test_f5_irrelevant_in_progress_game_is_never_fetched
+0.63s call     tests/unit/feed_ingest/test_review_repairs.py::test_f3_no_fixture_reports_stale_without_changing_values
+0.62s call     tests/unit/feed_ingest/test_review_repairs.py::test_f3_three_failures_replace_live_with_labeled_replay[failure0]
+0.62s call     tests/unit/feed_ingest/test_review_repairs.py::test_f3_three_failures_replace_live_with_labeled_replay[failure1]
+0.53s call     tests/unit/feed_ingest/test_review_repairs.py::test_f5_no_profiles_fetches_no_summary
+0.48s setup    tests/unit/feed_ingest/test_review_repairs.py::test_f2_bad_game_does_not_abort_later_valid_game[failure0]
+0.18s setup    tests/unit/feed_ingest/test_review_repairs.py::test_f4_configured_interval_and_lambda_deadline[60-60-expected2]
+0.17s setup    tests/unit/feed_ingest/test_review_repairs.py::test_f6_redirect_is_refused_before_any_second_request[302]
+0.14s setup    tests/unit/feed_ingest/test_review_repairs.py::test_f2_bad_game_does_not_abort_later_valid_game[failure1]
+0.09s setup    tests/unit/feed_ingest/test_review_repairs.py::test_f3_three_failures_replace_live_with_labeled_replay[failure0]
+=========================== short test summary info ============================
+FAILED backend/tests/unit/feed_ingest/test_review_repairs.py::test_f2_bad_game_does_not_abort_later_valid_game[failure0]
+FAILED backend/tests/unit/feed_ingest/test_review_repairs.py::test_f2_bad_game_does_not_abort_later_valid_game[failure1]
+FAILED backend/tests/unit/feed_ingest/test_review_repairs.py::test_f3_three_failures_replace_live_with_labeled_replay[failure0]
+FAILED backend/tests/unit/feed_ingest/test_review_repairs.py::test_f3_three_failures_replace_live_with_labeled_replay[failure1]
+FAILED backend/tests/unit/feed_ingest/test_review_repairs.py::test_f3_no_fixture_reports_stale_without_changing_values
+FAILED backend/tests/unit/feed_ingest/test_review_repairs.py::test_f4_configured_interval_and_lambda_deadline[5-26-expected0]
+FAILED backend/tests/unit/feed_ingest/test_review_repairs.py::test_f4_configured_interval_and_lambda_deadline[15-51-expected1]
+FAILED backend/tests/unit/feed_ingest/test_review_repairs.py::test_f4_configured_interval_and_lambda_deadline[60-60-expected2]
+FAILED backend/tests/unit/feed_ingest/test_review_repairs.py::test_f5_irrelevant_in_progress_game_is_never_fetched
+FAILED backend/tests/unit/feed_ingest/test_review_repairs.py::test_f5_no_profiles_fetches_no_summary
+FAILED backend/tests/unit/feed_ingest/test_review_repairs.py::test_f6_redirect_is_refused_before_any_second_request[301]
+FAILED backend/tests/unit/feed_ingest/test_review_repairs.py::test_f6_redirect_is_refused_before_any_second_request[302]
+FAILED backend/tests/unit/feed_ingest/test_review_repairs.py::test_f6_redirect_is_refused_before_any_second_request[307]
+FAILED backend/tests/unit/feed_ingest/test_review_repairs.py::test_f6_redirect_is_refused_before_any_second_request[308]
+FAILED backend/tests/unit/feed_ingest/test_validation.py::test_captured_missing_wallclock_validates_ingests_and_replays_all_183_plays
+FAILED backend/tests/unit/feed_ingest/test_feed_edges.py::test_replay_keeps_the_play_without_wallclock
+FAILED backend/tests/contract/test_template_iam.py::test_each_function_grants_only_its_store_operations
+17 failed, 1 passed, 2462 warnings in 5.59s
