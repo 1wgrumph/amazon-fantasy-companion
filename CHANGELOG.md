@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add the TV Watch launcher: executes only a verified Fire OS registry route (intent or URI with event/channel placeholders filled), reports exactly one routing outcome per attempt (appAbsent, playbackDenied, or accessUnknown while no current-attempt observation is supported, never a reused gameOpened), honors switching confirmation, gates Alexa-assisted tuning on a verified route, and leaves the app after a started full-screen launch (PR #TBD).
+- Add the TV lineup panel: rows, team total, progress and scoring-basis label for the followed team/league; stale values labeled at 60 s and unknown values shown as unavailable, never zero; remote show/hide and team/league switch, changed-row updates on a 30 s refresh, and fullScreen hosting pending the P2-X04 mode verdict ([#81](https://github.com/1wgrumph/amazon-fantasy-companion/pull/81)).
+- Add the TV alert path: the foreground long-poll feed with cursor handling, a bounded coalescing queue, local dismiss, alert text carrying the triggering player and matchup with unknown access shown as unknown, heads-up Watch/Dismiss notifications, and voice kept off without a verified route ([#80](https://github.com/1wgrumph/amazon-fantasy-companion/pull/80)).
 - Add the backend provider resolver: preference-ordered selection among installed providers carrying the event's channel from the read-only registry, per-platform routes with REGISTRY_ROUTE_GAP for missing or unverified entries, an honest access basis that is never inferred from installation, and recording of detector reports and routing outcomes ([#77](https://github.com/1wgrumph/amazon-fantasy-companion/pull/77)).
 - Add ESPN-feed ingest outage handling: packaged replay corpus, scoreboard-error fallback to labeled replay, warm-container failure counts, and a 60s poll deadline ([#76](https://github.com/1wgrumph/amazon-fantasy-companion/pull/76)).
 - Add ESPN feed ingest: pinned JSON Schema validation that rejects a bad
@@ -77,6 +79,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add architecture specification revision 0.3 with clickable references, per-revision changed sections and PR/diff links; update the vendored authoring tools ([PR #10](https://github.com/1wgrumph/amazon-fantasy-companion/pull/10), [diff](https://github.com/1wgrumph/amazon-fantasy-companion/pull/10/files)).
 
 ### Fixed
+
+- Preserve ESPN play period and scoringPlay in stored GameEvents, validate both before writes, and revise events when either fact changes ([#79](https://github.com/1wgrumph/amazon-fantasy-companion/pull/79)).
 
 - Discover the user-scope JDK 17 and Android SDK for local gate and hook runs
   without exported toolchain variables; preserve explicit settings and CI behavior ([#78](https://github.com/1wgrumph/amazon-fantasy-companion/pull/78)).

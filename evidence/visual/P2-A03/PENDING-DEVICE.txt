@@ -1,0 +1,29 @@
+P2-A03 visual and device verification: PENDING (typed gaps, never a pass)
+
+No Fire TV stick was leased or used by this slice (packet prohibition), and no
+emulator was available. The following steps remain for the device owner:
+
+DEVICE_INSTALL_PENDING (CMD-TVAPP-INSTRUMENTED)
+1. Build with -PafcApiBaseUrl=<afc-dev ApiUrl> and install app-debug.apk plus
+   the androidTest APK on the Fire TV stick.
+2. Run: ./tv-app/gradlew -p tv-app connectedDebugAndroidTest with
+   com.afc.companion.alerts.AlertNotifierDeviceTest (frozen by P2-A03T).
+   Expected: one notification on a high-importance channel with Watch and
+   Dismiss actions.
+
+VISUAL_EMULATOR_UNAVAILABLE (PROC-VISUAL-REVIEW)
+3. Start provider playback, then trigger a red-zone alert for a followed
+   player. Capture at 1080p: heads-up notification over playback, player and
+   matchup context legible, no overlap claim about protected video (geometry
+   evidence accompanies the capture; protected video shows black).
+4. D-pad to Watch and confirm the Watch PendingIntent opens WatchActivity
+   (P2-A04 runs the launcher there); D-pad to Dismiss and confirm the
+   notification clears and the alert is not re-delivered at the same revision.
+5. Switch presentation to panel-only and confirm no heads-up notification is
+   posted for the next alert.
+6. Enable voice in settings and confirm nothing is spoken (no verified voice
+   route, P2-X11 absent); the notification still appears.
+
+Host evidence standing in for the above: none. Host JVM tests and
+assembleDebug results are in the P2-A03 evidence receipt; they do not close
+the device or visual requirements.
