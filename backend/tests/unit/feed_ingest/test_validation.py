@@ -80,11 +80,29 @@ def test_play_with_non_numeric_score_is_rejected():
         validate_summary(payload)
 
 
-def test_play_without_wallclock_is_rejected():
+def test_play_with_non_string_wallclock_is_rejected():
     payload = fresh_summary()
-    del plays_in(payload)[0]["wallclock"]
+    plays_in(payload)[0]["wallclock"] = 123
     with pytest.raises(ValueError):
         validate_summary(payload)
+
+
+def test_captured_missing_wallclock_validates_ingests_and_replays_all_183_plays(api):
+    from feed_support import FIXTURES
+    game_id = "401872986"
+    payload = fresh_summary(game_id)
+    validate_summary(payload, game_id)
+    live = ingest().ingest_summary(payload, game_id)
+    replay = require_module("feed_ingest.replay").load_events(game_id, FIXTURES)
+    expected = [play["id"] for play in plays_in(payload)]
+    assert len(expected) == len(live) == len(replay) == 183
+    assert [event["eventId"] for event in live] == expected
+    assert [event["eventId"] for event in replay] == expected
+    for events, source in ((live, "live"), (replay, "replay")):
+        kickoff = next(event for event in events if event["eventId"] == "40187298640")
+        assert kickoff["eventTime"] is None
+        assert {event["source"] for event in events} == {source}
+    assert len(api.table("Events").scan()["Items"]) == 183
 
 
 def test_scoreboard_without_events_is_rejected():

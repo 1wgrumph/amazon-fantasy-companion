@@ -37,9 +37,5 @@ def load_events(game_id, fixtures_dir):
         raise ValueError(f"No captured summary for game {game_id}")
     latest = max(summaries, key=lambda entry: entry["seq"])
     payload = json.loads((game_dir / Path(latest["file"]).name).read_bytes())
-    # The envelope needs an event time; a captured play without wallclock (one in
-    # 401872986) is left out of replay rather than given an invented time.
-    for drive in payload.get("drives", {}).get("previous", []):
-        drive["plays"] = [play for play in drive.get("plays", []) if "wallclock" in play]
     validate_summary(payload, game_id)
     return normalize_summary(payload, game_id, source="replay")

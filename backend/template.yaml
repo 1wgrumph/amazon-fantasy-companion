@@ -122,7 +122,7 @@ Resources:
               Action: [dynamodb:GetItem, dynamodb:PutItem]
               Resource: [!GetAtt EventsTable.Arn]
             - Effect: Allow
-              Action: [dynamodb:GetItem]
+              Action: [dynamodb:GetItem, dynamodb:Scan]
               Resource: [!GetAtt ProfilesTable.Arn]
             - Effect: Allow
               Action: [dynamodb:GetItem]

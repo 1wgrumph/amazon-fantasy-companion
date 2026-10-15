@@ -35,7 +35,7 @@ def espn(monkeypatch):
         calls.append((url, timeout))
         return Response(bodies[url])
 
-    monkeypatch.setattr(feed_ingest.request, "urlopen", urlopen)
+    monkeypatch.setattr(feed_ingest._opener(), "open", urlopen)
     return calls, bodies
 
 
@@ -51,10 +51,12 @@ def in_progress_scoreboard():
 
 def test_handler_polls_only_in_progress_games_from_the_allowlisted_host(api, espn):
     calls, bodies = espn
+    api.table("Profiles").put_item(Item={"profileId": "owner", "settings": {
+        "fantasySelections": {"favoriteTeamIds": ["30"]}}})
     bodies[BASE + "scoreboard"] = json.dumps(in_progress_scoreboard()).encode()
     bodies[BASE + "summary?event=" + GAME] = json.dumps(fresh_summary()).encode()
     result = feed_ingest.lambda_handler({}, None)
-    assert result == {"stored": len(plays_in(fresh_summary()))}
+    assert result == {"stored": len(plays_in(fresh_summary())), "failed": []}
     assert calls == [(BASE + "scoreboard", 10), (BASE + "summary?event=" + GAME, 10)]
     items = api.table("Events").scan()["Items"]
     assert len(items) == result["stored"]
@@ -67,7 +69,7 @@ def test_handler_accepts_the_scheduler_source(api, espn):
     for event in board["events"]:
         event["status"]["type"]["state"] = "pre"
     bodies[BASE + "scoreboard"] = json.dumps(board).encode()
-    assert feed_ingest.lambda_handler({"source": "aws.scheduler"}, None) == {"stored": 0}
+    assert feed_ingest.lambda_handler({"source": "aws.scheduler"}, None) == {"stored": 0, "failed": []}
     assert len(calls) == 1
 
 
@@ -161,13 +163,13 @@ def test_source_rejection_names_the_allowed_labels():
         normalize.normalize_summary(fresh_summary(), GAME, source="x")
 
 
-def test_replay_leaves_out_only_a_play_without_wallclock():
+def test_replay_keeps_the_play_without_wallclock():
     summary = json.loads((FIXTURES / "401872986" / "001-summary.json").read_text())
-    expected = [play["id"] for play in plays_in(summary) if "wallclock" in play]
-    assert len(expected) == len(plays_in(summary)) - 1
+    expected = [play["id"] for play in plays_in(summary)]
     events = replay.load_events("401872986", FIXTURES)
     assert [event["eventId"] for event in events] == expected
-    assert all(isinstance(event["eventTime"], str) for event in events)
+    assert [event["eventTime"] for event in events] == [
+        play.get("wallclock") for play in plays_in(summary)]
 
 
 @pytest.mark.parametrize("game_id", [None, "", "../401872981", "40187298a", "1" * 21])

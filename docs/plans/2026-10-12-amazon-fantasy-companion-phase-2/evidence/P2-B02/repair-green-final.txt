@@ -1,0 +1,20 @@
+..................                                                       [100%]
+=============================== warnings summary ===============================
+tests/unit/feed_ingest/test_review_repairs.py: 3255 warnings
+tests/unit/feed_ingest/test_validation.py: 374 warnings
+  <home>/.local/lib/python3.12/site-packages/botocore/auth.py:424: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    datetime_now = datetime.datetime.utcnow()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+============================= slowest 10 durations =============================
+1.50s call     tests/unit/feed_ingest/test_review_repairs.py::test_f3_three_failures_replace_live_with_labeled_replay[failure0]
+1.41s call     tests/unit/feed_ingest/test_review_repairs.py::test_f3_three_failures_replace_live_with_labeled_replay[failure1]
+0.68s call     tests/unit/feed_ingest/test_review_repairs.py::test_f5_irrelevant_in_progress_game_is_never_fetched
+0.67s call     tests/unit/feed_ingest/test_validation.py::test_captured_missing_wallclock_validates_ingests_and_replays_all_183_plays
+0.66s call     tests/unit/feed_ingest/test_review_repairs.py::test_f3_no_fixture_reports_stale_without_changing_values
+0.57s call     tests/unit/feed_ingest/test_review_repairs.py::test_f2_bad_game_does_not_abort_later_valid_game[failure1]
+0.57s call     tests/unit/feed_ingest/test_review_repairs.py::test_f2_bad_game_does_not_abort_later_valid_game[failure0]
+0.46s setup    tests/unit/feed_ingest/test_review_repairs.py::test_f2_bad_game_does_not_abort_later_valid_game[failure0]
+0.18s setup    tests/unit/feed_ingest/test_review_repairs.py::test_f6_redirect_is_refused_before_any_second_request[301]
+0.17s setup    tests/unit/feed_ingest/test_review_repairs.py::test_f3_no_fixture_reports_stale_without_changing_values
+18 passed, 3629 warnings in 8.26s

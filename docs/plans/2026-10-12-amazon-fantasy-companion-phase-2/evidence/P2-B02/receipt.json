@@ -12,17 +12,70 @@
  "route": "Claude Code / Claude Opus 5.5 / medium",
  "bug_route": "not-a-bug: the 62 failures were the intended P2-B02T red suite",
  "review_capabilities": {
-  "coverage_assist": {"enabled": true, "required": true, "status": "not_run; allocated to independent review at IE-P2-13, never claimed PASS"},
-  "reverify": {"enabled": true, "status": "not_applicable", "reason": "no compiled-binary claim"}
+  "coverage_assist": {
+   "enabled": true,
+   "required": true,
+   "status": "not_run; allocated to independent review at IE-P2-13, never claimed PASS"
+  },
+  "reverify": {
+   "enabled": true,
+   "status": "not_applicable",
+   "reason": "no compiled-binary claim"
+  }
  },
  "commands": [
-  {"id": "verify_receipt", "command": "python3 docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B02T/verify_receipt.py <P2-B02T>/receipt.json", "exit_code": 0, "result": "PASS, 8 frozen files byte-identical, 62 red ids unchanged", "output": "verify_receipt.txt"},
-  {"id": "CMD-GREEN", "command": "python3.12 -m pytest <5 frozen unit files> tests/contract/feed_ingest tests/deployed/feed_ingest -q -rs (cwd backend)", "exit_code": 0, "result": "62 passed, 3 skipped NOT_RUN (no AFC_DEPLOYED_API_URL; closes at P2-L03)", "output": "CMD-GREEN.txt", "junit": "CMD-GREEN.xml"},
-  {"id": "CMD-GATE-BACKEND", "command": "PATH=$HOME/.local/share/afc-tools/backend-tests/bin:$PATH bash tools/ci/gate.sh", "exit_code": 0, "result": "spec, docs, hygiene PASS; tvapp PASS no tree; backend PASS 462 passed (370 prior - 2 retired feed_ingest stub pins + 62 frozen + 32 new edge tests)", "output": "CMD-GATE-ALL.txt"},
-  {"id": "CMD-COVERAGE-BACKEND", "command": "bash tools/ci/coverage/backend.sh d13f8b1 <scratch>/cov", "exit_code": 0, "result": "PASS changed-line coverage 100% (threshold 90%), 131 lines in 6 files", "output": "CMD-COVERAGE-BACKEND.txt", "report": "coverage-result.json"},
-  {"id": "CMD-MUTATION-BACKEND", "command": "PATH=$HOME/.local/share/afc-tools/mutmut-backend/bin:$PATH bash tools/ci/mutation/backend.sh d13f8b1 <scratch>/mut", "exit_code": 0, "result": "PASS mutation score 94.81% (457 killed / 482, 0 timeouts; threshold 70%)", "output": "CMD-MUTATION-BACKEND.txt", "report": "mutation-result.json", "stats": "mutmut-cicd-stats.json"},
-  {"id": "negative-check", "command": "pytest test_validation.py -k 'invalid_poll_leaves or invalid_first_poll' + test_feed_edges.py::test_invalid_scoreboard_stores_nothing", "exit_code": 0, "result": "malformed summary/scoreboard rejected with ValueError; Events table unchanged", "output": "negative-check.txt"},
-  {"id": "path-check", "command": "python3 tools/ci/check_paths.py", "exit_code": 0, "output": "path-check.txt"}
+  {
+   "id": "verify_receipt",
+   "command": "python3 docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B02T/verify_receipt.py <P2-B02T>/receipt.json",
+   "exit_code": 0,
+   "result": "PASS, 8 frozen files byte-identical, 62 red ids unchanged",
+   "output": "verify_receipt.txt"
+  },
+  {
+   "id": "CMD-GREEN",
+   "command": "python3.12 -m pytest <5 frozen unit files> tests/contract/feed_ingest tests/deployed/feed_ingest -q -rs (cwd backend)",
+   "exit_code": 0,
+   "result": "62 passed, 3 skipped NOT_RUN (no AFC_DEPLOYED_API_URL; closes at P2-L03)",
+   "output": "CMD-GREEN.txt",
+   "junit": "CMD-GREEN.xml"
+  },
+  {
+   "id": "CMD-GATE-BACKEND",
+   "command": "PATH=$HOME/.local/share/afc-tools/backend-tests/bin:$PATH bash tools/ci/gate.sh",
+   "exit_code": 0,
+   "result": "spec, docs, hygiene PASS; tvapp PASS no tree; backend PASS 462 passed (370 prior - 2 retired feed_ingest stub pins + 62 frozen + 32 new edge tests)",
+   "output": "CMD-GATE-ALL.txt"
+  },
+  {
+   "id": "CMD-COVERAGE-BACKEND",
+   "command": "bash tools/ci/coverage/backend.sh d13f8b1 <scratch>/cov",
+   "exit_code": 0,
+   "result": "PASS changed-line coverage 100% (threshold 90%), 131 lines in 6 files",
+   "output": "CMD-COVERAGE-BACKEND.txt",
+   "report": "coverage-result.json"
+  },
+  {
+   "id": "CMD-MUTATION-BACKEND",
+   "command": "PATH=$HOME/.local/share/afc-tools/mutmut-backend/bin:$PATH bash tools/ci/mutation/backend.sh d13f8b1 <scratch>/mut",
+   "exit_code": 0,
+   "result": "PASS mutation score 94.81% (457 killed / 482, 0 timeouts; threshold 70%)",
+   "output": "CMD-MUTATION-BACKEND.txt",
+   "report": "mutation-result.json",
+   "stats": "mutmut-cicd-stats.json"
+  },
+  {
+   "id": "negative-check",
+   "command": "pytest test_validation.py -k 'invalid_poll_leaves or invalid_first_poll' + test_feed_edges.py::test_invalid_scoreboard_stores_nothing",
+   "exit_code": 0,
+   "result": "malformed summary/scoreboard rejected with ValueError; Events table unchanged",
+   "output": "negative-check.txt"
+  },
+  {
+   "id": "path-check",
+   "command": "python3 tools/ci/check_paths.py",
+   "exit_code": 0,
+   "output": "path-check.txt"
+  }
  ],
  "stub_retirement": "Per DEC-AFC-SD-046: removed only the feed_ingest row of STUBS in backend/tests/unit/test_pipeline_and_stubs.py and the 'feed_ingest' parametrize entry in backend/tests/contract/test_backend_template.py",
  "implementation": {
@@ -43,8 +96,151 @@
  ],
  "developer_feedback": {
   "observations": [
-   {"id": "P2B02-DX-001", "tool": "ESPN capture", "observation": "Game 401872986 play 40187298640 has no wallclock key, which conflicts with a strict wallclock-required schema and all-14-games replay; replay drops that play.", "evidence": "backend/fixtures/replay/401872986/001-summary.json"},
-   {"id": "P2B02-DX-002", "tool": "mutmut 3.8.0 / coverage", "observation": "Keeping the feed schema in JSON (not Python) left 482 mutants; formal mutation finished in one run at 94.81%, coverage 100% of 131 changed lines.", "evidence": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B02/mutation-result.json"}
+   {
+    "id": "P2B02-DX-001",
+    "tool": "ESPN capture",
+    "observation": "Game 401872986 play 40187298640 has no wallclock key, which conflicts with a strict wallclock-required schema and all-14-games replay; replay drops that play.",
+    "evidence": "backend/fixtures/replay/401872986/001-summary.json"
+   },
+   {
+    "id": "P2B02-DX-002",
+    "tool": "mutmut 3.8.0 / coverage",
+    "observation": "Keeping the feed schema in JSON (not Python) left 482 mutants; formal mutation finished in one run at 94.81%, coverage 100% of 131 changed lines.",
+    "evidence": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B02/mutation-result.json"
+   }
+  ]
+ },
+ "repair": {
+  "outcome": "IN_PROGRESS",
+  "profile": "bug-triager",
+  "route": "Codex CLI / GPT-6.1 Sol / high",
+  "baseline": "0d65797a82d3d899be2055706fac555f7642a77a",
+  "round": "single authorized independent-review repair round",
+  "next_action": "Commit verified source candidate; run formal coverage and mutation; commit evidence only",
+  "authority": "Owner P2-B02 F1\u2013F6 repair packet, including backend-template lease for read-only relevance access",
+  "requirements": [
+   "AFC-PR-008",
+   "AFC-PR-011",
+   "AFC-PR-012",
+   "AFC-PR-013",
+   "AFC-PR-064",
+   "RISK-AFC-P2-05"
+  ],
+  "origin": "P2-B02 plus wrong frozen B02T wallclock rule",
+  "escape": "Absent fixture-wide live validation and production multi-game, outage, interval, relevance, redirect tests",
+  "method": "test",
+  "resource_group": "host-pytest / Moto / committed ESPN captures / injected clock; no engine/server",
+  "evidence_scope": "Author deterministic repair evidence, not independent review or formal deployed acceptance",
+  "review_capabilities": {
+   "coverage_assist": {
+    "enabled": true,
+    "required": true,
+    "status": "Parent independent review returned REPAIR_REQUIRED; no new review in this round"
+   },
+   "reverify": {
+    "enabled": true,
+    "status": "not_applicable",
+    "reason": "No compiled-binary claim"
+   }
+  },
+  "scope_corrections": [
+   "Only F1 changes a frozen test file; corrected its sha256 and added the exact owner note, leaving historical red inventory and other frozen hashes unchanged.",
+   "Corrected the unfrozen implementer edge test that asserted the same dropped-play bug.",
+   "Cached opener factory replaces requested module-level _OPENER assignment because formal mutation rejects all new module-level executable assignments (PYTHON_NONFUNCTION_MUTATION_GAP). Redirect behavior and transport bounds are preserved.",
+   "Profiles Scan plus existing Lineups GetItem is narrower than scanning both tables; no write grants or index grants added."
+  ],
+  "profile_shape": "fantasySelections.favoriteTeamIds for favorite ESPN team ids; lineup starters use athlete_id for ESPN ids or team for Yahoo team abbreviation. Historical string placeholders are treated as no favorite selections. Scoreboard leaders supply inline athlete ids; team-bearing starters match their NFL team.",
+  "supersedes_historical_remaining_risks": [
+   0,
+   1,
+   2
+  ],
+  "repair_table": [
+   {
+    "finding": "F1",
+    "fix": "Optional/null wallclock; eventTime uses get(); replay preserves every captured play; one frozen rule corrected",
+    "test": "test_validation.py::test_captured_missing_wallclock_validates_ingests_and_replays_all_183_plays; test_play_with_non_string_wallclock_is_rejected; test_review_repairs.py::test_f1_every_captured_summary_validates_for_live_ingest",
+    "red_evidence": "repair-red-final.txt (pinned baseline; failure for finding)",
+    "green_evidence": "repair-green-final.txt and repair-green.txt",
+    "prevention_evidence": "repair-gate.txt and formal coverage/mutation reports"
+   },
+   {
+    "finding": "F2",
+    "fix": "Catch ValueError/OSError separately for each relevant game; report failed ids and continue",
+    "test": "test_review_repairs.py::test_f2_bad_game_does_not_abort_later_valid_game",
+    "red_evidence": "repair-red-final.txt (pinned baseline; failure for finding)",
+    "green_evidence": "repair-green-final.txt and repair-green.txt",
+    "prevention_evidence": "repair-gate.txt and formal coverage/mutation reports"
+   },
+   {
+    "finding": "F3",
+    "fix": "Count consecutive per-game failures in invocation; after 3 load verified replay and store through shared revision path; unavailable or invalid replay reports stale without mutation",
+    "test": "test_review_repairs.py::test_f3_three_failures_replace_live_with_labeled_replay; test_f3_no_fixture_reports_stale_without_changing_values; test_f3_success_resets_consecutive_failures; test_f3_repeated_fallback_keeps_revisions_stable; test_f3_tampered_replay_is_stale_and_mutates_nothing",
+    "red_evidence": "repair-red-final.txt (pinned baseline; failure for finding)",
+    "green_evidence": "repair-green-final.txt and repair-green.txt",
+    "prevention_evidence": "repair-gate.txt and formal coverage/mutation reports"
+   },
+   {
+    "finding": "F4",
+    "fix": "Honor FEED_POLL_INTERVAL_SECONDS and remaining Lambda budget with ten-second margin; injected sleep/clock tests",
+    "test": "test_review_repairs.py::test_f4_configured_interval_and_lambda_deadline; test_f4_invalid_interval_is_rejected_without_a_poll",
+    "red_evidence": "repair-red-final.txt (pinned baseline; failure for finding)",
+    "green_evidence": "repair-green-final.txt and repair-green.txt",
+    "prevention_evidence": "repair-gate.txt and formal coverage/mutation reports"
+   },
+   {
+    "finding": "F5",
+    "fix": "Paginate profile scan; read each lineup using existing GetItem; monitored_decisions(profile-assumption) filters every scoreboard game; type newly consumed feed fields before store reads; only add Profiles Scan grant",
+    "test": "test_review_repairs.py::test_f5_irrelevant_in_progress_game_is_never_fetched; test_f5_no_profiles_fetches_no_summary; test_f5_selected_starter_game_is_monitored_without_favorites; test_f5_profile_accessor_follows_scan_pages_and_reads_starters; test_f5_monitoring_decisions_carry_profile_assumption_basis; test_f5_malformed_relevance_fields_are_rejected_before_store_access; contract/test_template_iam.py::test_each_function_grants_only_its_store_operations",
+    "red_evidence": "repair-red-final.txt (pinned baseline; failure for finding)",
+    "green_evidence": "repair-green-final.txt and repair-green.txt",
+    "prevention_evidence": "repair-gate.txt and formal coverage/mutation reports"
+   },
+   {
+    "finding": "F6",
+    "fix": "Reject HTTP redirects in HTTPRedirectHandler.redirect_request; use one cached guarded opener with existing allowlist, size and timeout bounds",
+    "test": "test_review_repairs.py::test_f6_redirect_is_refused_before_any_second_request (301/302/307/308); test_feed_edges.py allowlist/size checks",
+    "red_evidence": "repair-red-final.txt (pinned baseline; failure for finding)",
+    "green_evidence": "repair-green-final.txt and repair-green.txt",
+    "prevention_evidence": "repair-gate.txt and formal coverage/mutation reports"
+   }
+  ],
+  "commands": [
+   {
+    "id": "red-green",
+    "command": "python3 <P2-B02>/repair-red-green.py",
+    "exit_code": 0,
+    "result": "17 failed / 1 passed on pinned baseline; identical 18 cases pass after fix",
+    "evidence": "repair-red-green.json"
+   },
+   {
+    "id": "focused",
+    "command": "PYTHONDONTWRITEBYTECODE=1 python3.12 -m pytest backend/tests/unit/feed_ingest backend/tests/contract/test_template_iam.py -q",
+    "exit_code": 0,
+    "result": "129 passed",
+    "evidence": "repair-green.txt"
+   },
+   {
+    "id": "verify_receipt",
+    "command": "python3 <P2-B02T>/verify_receipt.py <P2-B02T>/receipt.json",
+    "exit_code": 0,
+    "result": "PASS; 8 frozen files; only authorized F1 hash changed",
+    "evidence": "repair-verify-receipt.txt"
+   },
+   {
+    "id": "gate",
+    "command": "PATH=$HOME/.local/share/afc-tools/backend-tests/bin:$PATH bash tools/ci/gate.sh",
+    "exit_code": 0,
+    "result": "500 backend tests passed; full gate PASS",
+    "evidence": "repair-gate.txt"
+   },
+   {
+    "id": "sam",
+    "command": "sam validate --lint --template backend/template.yaml --region us-east-2",
+    "exit_code": 0,
+    "result": "PASS local lint; credential/config files disabled; telemetry disabled",
+    "evidence": "repair-sam.txt"
+   }
   ]
  }
 }
