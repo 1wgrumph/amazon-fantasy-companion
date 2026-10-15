@@ -1,0 +1,14 @@
+F1 scalar PUT: 200
+F1 scalar GET: (503, {'error': {'code': 'unavailable', 'message': 'The service is temporarily unavailable.'}})
+F1 claim PUT: 200
+F1 claim result: {'alpha_stream': False} 200 customerConfirmed
+F1 claim PUT: 200
+F1 claim result: 'not_alpha_stream' 200 customerConfirmed
+F1 claim PUT: 200
+F1 claim result: [] 200 unknown
+F1 claim PUT: 200
+F1 claim result: ['alpha_stream'] 200 customerConfirmed
+F2 request bytes: 65536
+F2 echoed response bytes: 65558
+F2 response: (503, {'error': {'code': 'unavailable', 'message': 'The response exceeds the 64 KiB contract.'}})
+F2 stored despite 503: True

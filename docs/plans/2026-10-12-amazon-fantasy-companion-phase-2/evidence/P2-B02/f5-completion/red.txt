@@ -1,0 +1,305 @@
+FFFFFFFFFFFFFFFFFFFF.                                                    [100%]
+=================================== FAILURES ===================================
+_____ test_manual_retains_team_from_roster_instead_of_untrusted_selection ______
+
+    def test_manual_retains_team_from_roster_instead_of_untrusted_selection():
+        roster = captured_roster()
+        built = manual.build(roster, [{"athlete_id": roster[0]["athlete_id"],
+                                       "slot": "FLEX", "team": "DAL"}], "PPR")
+>       assert built["starters"] == [{**roster[0], "slot": "FLEX"}]
+E       AssertionError: assert [{'athlete_id...lot': 'FLEX'}] == [{'athlete_id...team': 'PHI'}]
+E
+E         At index 0 diff: {'athlete_id': '4715355', 'name': 'Darius Cooper', 'slot': 'FLEX'} != {'athlete_id': '4715355', 'name': 'Darius Cooper', 'team': 'PHI', 'slot': 'FLEX'}
+E         Use -v to get more diff
+
+backend/tests/unit/lineup/test_manual_team.py:29: AssertionError
+_______ test_manual_accepts_team_shape_without_nfl_membership_check[PHI] _______
+
+team = 'PHI'
+
+    @pytest.mark.parametrize("team", ["PHI", "SYN", "12", "A1B2"])
+    def test_manual_accepts_team_shape_without_nfl_membership_check(team):
+        roster = captured_roster()
+        roster[0]["team"] = team
+        built = manual.build(roster, [{"athlete_id": roster[0]["athlete_id"], "slot": "FLEX"}], "PPR")
+>       assert built["starters"][0]["team"] == team
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'team'
+
+backend/tests/unit/lineup/test_manual_team.py:37: KeyError
+_______ test_manual_accepts_team_shape_without_nfl_membership_check[SYN] _______
+
+team = 'SYN'
+
+    @pytest.mark.parametrize("team", ["PHI", "SYN", "12", "A1B2"])
+    def test_manual_accepts_team_shape_without_nfl_membership_check(team):
+        roster = captured_roster()
+        roster[0]["team"] = team
+        built = manual.build(roster, [{"athlete_id": roster[0]["athlete_id"], "slot": "FLEX"}], "PPR")
+>       assert built["starters"][0]["team"] == team
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'team'
+
+backend/tests/unit/lineup/test_manual_team.py:37: KeyError
+_______ test_manual_accepts_team_shape_without_nfl_membership_check[12] ________
+
+team = '12'
+
+    @pytest.mark.parametrize("team", ["PHI", "SYN", "12", "A1B2"])
+    def test_manual_accepts_team_shape_without_nfl_membership_check(team):
+        roster = captured_roster()
+        roster[0]["team"] = team
+        built = manual.build(roster, [{"athlete_id": roster[0]["athlete_id"], "slot": "FLEX"}], "PPR")
+>       assert built["starters"][0]["team"] == team
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'team'
+
+backend/tests/unit/lineup/test_manual_team.py:37: KeyError
+______ test_manual_accepts_team_shape_without_nfl_membership_check[A1B2] _______
+
+team = 'A1B2'
+
+    @pytest.mark.parametrize("team", ["PHI", "SYN", "12", "A1B2"])
+    def test_manual_accepts_team_shape_without_nfl_membership_check(team):
+        roster = captured_roster()
+        roster[0]["team"] = team
+        built = manual.build(roster, [{"athlete_id": roster[0]["athlete_id"], "slot": "FLEX"}], "PPR")
+>       assert built["starters"][0]["team"] == team
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'team'
+
+backend/tests/unit/lineup/test_manual_team.py:37: KeyError
+________________ test_manual_rejects_invalid_roster_team[None] _________________
+
+team = None
+
+    @pytest.mark.parametrize("team", [None, 1, True, [], {}, "", "P", "ABCDE", "phi", "PH-", " PHI", "PHI\n", "ÄBC"])
+    def test_manual_rejects_invalid_roster_team(team):
+        roster = captured_roster()
+        roster[0]["team"] = team
+>       with pytest.raises(ValueError, match="team"):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+backend/tests/unit/lineup/test_manual_team.py:44: Failed
+__________________ test_manual_rejects_invalid_roster_team[1] __________________
+
+team = 1
+
+    @pytest.mark.parametrize("team", [None, 1, True, [], {}, "", "P", "ABCDE", "phi", "PH-", " PHI", "PHI\n", "ÄBC"])
+    def test_manual_rejects_invalid_roster_team(team):
+        roster = captured_roster()
+        roster[0]["team"] = team
+>       with pytest.raises(ValueError, match="team"):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+backend/tests/unit/lineup/test_manual_team.py:44: Failed
+________________ test_manual_rejects_invalid_roster_team[True] _________________
+
+team = True
+
+    @pytest.mark.parametrize("team", [None, 1, True, [], {}, "", "P", "ABCDE", "phi", "PH-", " PHI", "PHI\n", "ÄBC"])
+    def test_manual_rejects_invalid_roster_team(team):
+        roster = captured_roster()
+        roster[0]["team"] = team
+>       with pytest.raises(ValueError, match="team"):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+backend/tests/unit/lineup/test_manual_team.py:44: Failed
+________________ test_manual_rejects_invalid_roster_team[team3] ________________
+
+team = []
+
+    @pytest.mark.parametrize("team", [None, 1, True, [], {}, "", "P", "ABCDE", "phi", "PH-", " PHI", "PHI\n", "ÄBC"])
+    def test_manual_rejects_invalid_roster_team(team):
+        roster = captured_roster()
+        roster[0]["team"] = team
+>       with pytest.raises(ValueError, match="team"):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+backend/tests/unit/lineup/test_manual_team.py:44: Failed
+________________ test_manual_rejects_invalid_roster_team[team4] ________________
+
+team = {}
+
+    @pytest.mark.parametrize("team", [None, 1, True, [], {}, "", "P", "ABCDE", "phi", "PH-", " PHI", "PHI\n", "ÄBC"])
+    def test_manual_rejects_invalid_roster_team(team):
+        roster = captured_roster()
+        roster[0]["team"] = team
+>       with pytest.raises(ValueError, match="team"):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+backend/tests/unit/lineup/test_manual_team.py:44: Failed
+__________________ test_manual_rejects_invalid_roster_team[] ___________________
+
+team = ''
+
+    @pytest.mark.parametrize("team", [None, 1, True, [], {}, "", "P", "ABCDE", "phi", "PH-", " PHI", "PHI\n", "ÄBC"])
+    def test_manual_rejects_invalid_roster_team(team):
+        roster = captured_roster()
+        roster[0]["team"] = team
+>       with pytest.raises(ValueError, match="team"):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+backend/tests/unit/lineup/test_manual_team.py:44: Failed
+__________________ test_manual_rejects_invalid_roster_team[P] __________________
+
+team = 'P'
+
+    @pytest.mark.parametrize("team", [None, 1, True, [], {}, "", "P", "ABCDE", "phi", "PH-", " PHI", "PHI\n", "ÄBC"])
+    def test_manual_rejects_invalid_roster_team(team):
+        roster = captured_roster()
+        roster[0]["team"] = team
+>       with pytest.raises(ValueError, match="team"):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+backend/tests/unit/lineup/test_manual_team.py:44: Failed
+________________ test_manual_rejects_invalid_roster_team[ABCDE] ________________
+
+team = 'ABCDE'
+
+    @pytest.mark.parametrize("team", [None, 1, True, [], {}, "", "P", "ABCDE", "phi", "PH-", " PHI", "PHI\n", "ÄBC"])
+    def test_manual_rejects_invalid_roster_team(team):
+        roster = captured_roster()
+        roster[0]["team"] = team
+>       with pytest.raises(ValueError, match="team"):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+backend/tests/unit/lineup/test_manual_team.py:44: Failed
+_________________ test_manual_rejects_invalid_roster_team[phi] _________________
+
+team = 'phi'
+
+    @pytest.mark.parametrize("team", [None, 1, True, [], {}, "", "P", "ABCDE", "phi", "PH-", " PHI", "PHI\n", "ÄBC"])
+    def test_manual_rejects_invalid_roster_team(team):
+        roster = captured_roster()
+        roster[0]["team"] = team
+>       with pytest.raises(ValueError, match="team"):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+backend/tests/unit/lineup/test_manual_team.py:44: Failed
+_________________ test_manual_rejects_invalid_roster_team[PH-] _________________
+
+team = 'PH-'
+
+    @pytest.mark.parametrize("team", [None, 1, True, [], {}, "", "P", "ABCDE", "phi", "PH-", " PHI", "PHI\n", "ÄBC"])
+    def test_manual_rejects_invalid_roster_team(team):
+        roster = captured_roster()
+        roster[0]["team"] = team
+>       with pytest.raises(ValueError, match="team"):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+backend/tests/unit/lineup/test_manual_team.py:44: Failed
+________________ test_manual_rejects_invalid_roster_team[ PHI] _________________
+
+team = ' PHI'
+
+    @pytest.mark.parametrize("team", [None, 1, True, [], {}, "", "P", "ABCDE", "phi", "PH-", " PHI", "PHI\n", "ÄBC"])
+    def test_manual_rejects_invalid_roster_team(team):
+        roster = captured_roster()
+        roster[0]["team"] = team
+>       with pytest.raises(ValueError, match="team"):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+backend/tests/unit/lineup/test_manual_team.py:44: Failed
+________________ test_manual_rejects_invalid_roster_team[PHI\n] ________________
+
+team = 'PHI\n'
+
+    @pytest.mark.parametrize("team", [None, 1, True, [], {}, "", "P", "ABCDE", "phi", "PH-", " PHI", "PHI\n", "ÄBC"])
+    def test_manual_rejects_invalid_roster_team(team):
+        roster = captured_roster()
+        roster[0]["team"] = team
+>       with pytest.raises(ValueError, match="team"):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+backend/tests/unit/lineup/test_manual_team.py:44: Failed
+_______________ test_manual_rejects_invalid_roster_team[\xc4BC] ________________
+
+team = 'ÄBC'
+
+    @pytest.mark.parametrize("team", [None, 1, True, [], {}, "", "P", "ABCDE", "phi", "PH-", " PHI", "PHI\n", "ÄBC"])
+    def test_manual_rejects_invalid_roster_team(team):
+        roster = captured_roster()
+        roster[0]["team"] = team
+>       with pytest.raises(ValueError, match="team"):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+backend/tests/unit/lineup/test_manual_team.py:44: Failed
+___________________ test_manual_rejects_missing_roster_team ____________________
+
+    def test_manual_rejects_missing_roster_team():
+        roster = captured_roster()
+        del roster[0]["team"]
+>       with pytest.raises(ValueError, match="team"):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+backend/tests/unit/lineup/test_manual_team.py:51: Failed
+_ test_f5_manual_nonleader_team_game_is_fetched_and_irrelevant_game_is_skipped _
+
+api = namespace(request=<function api.<locals>.request at 0x70b2d8866a20>, table=<function api.<locals>.table at 0x70b2d8866...inksTable': 'expiresAt'}, passphrase='tBXTrh1wuBTFC9tfT7Cdyg', ssm_reads=[], secret_names=['/afc/dev/link-passphrase'])
+feed = (<module 'feed_ingest' from 'backend/src/feed_ingest...m': {...}}]}, 'broadcasts': [], ...}}, [('https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard', 10)])
+
+    def test_f5_manual_nonleader_team_game_is_fetched_and_irrelevant_game_is_skipped(api, feed):
+        from lineup import manual
+
+        module, bodies, calls = feed
+        board = board_for(GAME, OTHER_GAME)
+        game = board["events"][0]
+        leaders = {leader["athlete"]["id"] for competition in game["competitions"]
+                   for category in competition.get("leaders", []) for leader in category["leaders"]}
+        team = next(t for t in fresh_summary()["boxscore"]["players"]
+                    if t["team"]["abbreviation"] == "PHI")
+        athlete = next(entry["athlete"] for stat in team["statistics"]
+                       for entry in stat.get("athletes", []) if entry["athlete"]["id"] == "4715355")
+        assert athlete["displayName"] == "Darius Cooper" and athlete["id"] not in leaders
+        roster = [{"athlete_id": athlete["id"], "name": athlete["displayName"],
+                   "team": team["team"]["abbreviation"]}]
+        built = manual.build(roster, [{"athlete_id": athlete["id"], "slot": "FLEX"}], "PPR")
+        api.table("Profiles").put_item(Item={"profileId": "owner", "settings": {}})
+        api.table("Lineups").put_item(Item={"profileId": "owner", **built})
+        bodies[BASE + "scoreboard"] = board
+        bodies[BASE + "summary?event=" + GAME] = fresh_summary()
+        bodies[BASE + "summary?event=" + OTHER_GAME] = fresh_summary(OTHER_GAME)
+        result = module.lambda_handler({}, None)
+>       assert calls == [(BASE + "scoreboard", 10), (BASE + "summary?event=" + GAME, 10)]
+E       AssertionError: assert [('https://si...reboard', 10)] == [('https://si...1872981', 10)]
+E
+E         Right contains one more item: ('https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401872981', 10)
+E         Use -v to get more diff
+
+backend/tests/unit/feed_ingest/test_review_repairs.py:348: AssertionError
+=============================== warnings summary ===============================
+tests/unit/feed_ingest/test_review_repairs.py: 420 warnings
+  $HOME/.local/lib/python3.12/site-packages/botocore/auth.py:424: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    datetime_now = datetime.datetime.utcnow()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+============================= slowest 10 durations =============================
+0.62s call     tests/unit/feed_ingest/test_review_repairs.py::test_f5_irrelevant_in_progress_game_is_never_fetched
+0.52s setup    tests/unit/feed_ingest/test_review_repairs.py::test_f5_manual_nonleader_team_game_is_fetched_and_irrelevant_game_is_skipped
+0.16s setup    tests/unit/feed_ingest/test_review_repairs.py::test_f5_irrelevant_in_progress_game_is_never_fetched
+0.04s call     tests/unit/feed_ingest/test_review_repairs.py::test_f5_manual_nonleader_team_game_is_fetched_and_irrelevant_game_is_skipped
+
+(6 durations < 0.005s hidden.  Use -vv to show these durations.)
+=========================== short test summary info ============================
+FAILED backend/tests/unit/lineup/test_manual_team.py::test_manual_retains_team_from_roster_instead_of_untrusted_selection
+FAILED backend/tests/unit/lineup/test_manual_team.py::test_manual_accepts_team_shape_without_nfl_membership_check[PHI]
+FAILED backend/tests/unit/lineup/test_manual_team.py::test_manual_accepts_team_shape_without_nfl_membership_check[SYN]
+FAILED backend/tests/unit/lineup/test_manual_team.py::test_manual_accepts_team_shape_without_nfl_membership_check[12]
+FAILED backend/tests/unit/lineup/test_manual_team.py::test_manual_accepts_team_shape_without_nfl_membership_check[A1B2]
+FAILED backend/tests/unit/lineup/test_manual_team.py::test_manual_rejects_invalid_roster_team[None]
+FAILED backend/tests/unit/lineup/test_manual_team.py::test_manual_rejects_invalid_roster_team[1]
+FAILED backend/tests/unit/lineup/test_manual_team.py::test_manual_rejects_invalid_roster_team[True]
+FAILED backend/tests/unit/lineup/test_manual_team.py::test_manual_rejects_invalid_roster_team[team3]
+FAILED backend/tests/unit/lineup/test_manual_team.py::test_manual_rejects_invalid_roster_team[team4]
+FAILED backend/tests/unit/lineup/test_manual_team.py::test_manual_rejects_invalid_roster_team[]
+FAILED backend/tests/unit/lineup/test_manual_team.py::test_manual_rejects_invalid_roster_team[P]
+FAILED backend/tests/unit/lineup/test_manual_team.py::test_manual_rejects_invalid_roster_team[ABCDE]
+FAILED backend/tests/unit/lineup/test_manual_team.py::test_manual_rejects_invalid_roster_team[phi]
+FAILED backend/tests/unit/lineup/test_manual_team.py::test_manual_rejects_invalid_roster_team[PH-]
+FAILED backend/tests/unit/lineup/test_manual_team.py::test_manual_rejects_invalid_roster_team[ PHI]
+FAILED backend/tests/unit/lineup/test_manual_team.py::test_manual_rejects_invalid_roster_team[PHI\n]
+FAILED backend/tests/unit/lineup/test_manual_team.py::test_manual_rejects_invalid_roster_team[\xc4BC]
+FAILED backend/tests/unit/lineup/test_manual_team.py::test_manual_rejects_missing_roster_team
+FAILED backend/tests/unit/feed_ingest/test_review_repairs.py::test_f5_manual_nonleader_team_game_is_fetched_and_irrelevant_game_is_skipped
+20 failed, 1 passed, 420 warnings in 1.49s

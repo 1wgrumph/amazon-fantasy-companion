@@ -1,0 +1,1124 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="62" skipped="3" tests="65" time="1.633" timestamp="2026-10-14T11:45:56.910784-05:00" hostname="spectre-dev"><testcase classname="tests.unit.feed_ingest.test_monitoring" name="test_a_game_with_a_selected_player_is_monitored" time="0.017"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.monitoring: No module named 'feed_ingest.monitoring'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.monitoring'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_monitoring.py:39: in test_a_game_with_a_selected_player_is_monitored
+    assert monitored_ids(decide(games, selected, [])) == {GAME}
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_monitoring.py:18: in decide
+    func = require_attr(require_module("feed_ingest.monitoring"), "monitored_decisions")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.monitoring: No module named 'feed_ingest.monitoring'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_monitoring" name="test_a_game_with_a_favorite_team_is_monitored" time="0.009"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.monitoring: No module named 'feed_ingest.monitoring'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.monitoring'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_monitoring.py:45: in test_a_game_with_a_favorite_team_is_monitored
+    assert monitored_ids(decide(games, [], favorite)) == {OTHER_GAME}
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_monitoring.py:18: in decide
+    func = require_attr(require_module("feed_ingest.monitoring"), "monitored_decisions")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.monitoring: No module named 'feed_ingest.monitoring'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_monitoring" name="test_an_irrelevant_game_is_not_monitored" time="0.009"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.monitoring: No module named 'feed_ingest.monitoring'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.monitoring'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_monitoring.py:50: in test_an_irrelevant_game_is_not_monitored
+    decisions = decide(games, ["no-such-athlete"], ["no-such-team"])
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_monitoring.py:18: in decide
+    func = require_attr(require_module("feed_ingest.monitoring"), "monitored_decisions")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.monitoring: No module named 'feed_ingest.monitoring'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_monitoring" name="test_no_game_is_monitored_outside_an_enabled_period" time="0.009"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.monitoring: No module named 'feed_ingest.monitoring'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.monitoring'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_monitoring.py:58: in test_no_game_is_monitored_outside_an_enabled_period
+    decisions = decide(games, everyone, [], enabled=False)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_monitoring.py:18: in decide
+    func = require_attr(require_module("feed_ingest.monitoring"), "monitored_decisions")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.monitoring: No module named 'feed_ingest.monitoring'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_monitoring" name="test_every_game_gets_exactly_one_decision" time="0.009"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.monitoring: No module named 'feed_ingest.monitoring'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.monitoring'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_monitoring.py:65: in test_every_game_gets_exactly_one_decision
+    decisions = decide(games, [], [])
+                ^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_monitoring.py:18: in decide
+    func = require_attr(require_module("feed_ingest.monitoring"), "monitored_decisions")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.monitoring: No module named 'feed_ingest.monitoring'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_monitoring" name="test_every_decision_carries_its_basis_label[observed-playback]" time="0.009"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.monitoring: No module named 'feed_ingest.monitoring'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.monitoring'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_monitoring.py:74: in test_every_decision_carries_its_basis_label
+    decisions = decide(games, [games[0]["playerIds"][0]], [], basis=basis)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_monitoring.py:18: in decide
+    func = require_attr(require_module("feed_ingest.monitoring"), "monitored_decisions")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.monitoring: No module named 'feed_ingest.monitoring'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_monitoring" name="test_every_decision_carries_its_basis_label[profile-assumption]" time="0.009"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.monitoring: No module named 'feed_ingest.monitoring'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.monitoring'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_monitoring.py:74: in test_every_decision_carries_its_basis_label
+    decisions = decide(games, [games[0]["playerIds"][0]], [], basis=basis)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_monitoring.py:18: in decide
+    func = require_attr(require_module("feed_ingest.monitoring"), "monitored_decisions")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.monitoring: No module named 'feed_ingest.monitoring'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_monitoring" name="test_an_unlabeled_or_unknown_basis_is_rejected[None]" time="0.009"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.monitoring: No module named 'feed_ingest.monitoring'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.monitoring'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_monitoring.py:81: in test_an_unlabeled_or_unknown_basis_is_rejected
+    decide(captured_games(), [], [], basis=basis)
+backend/tests/unit/feed_ingest/test_monitoring.py:18: in decide
+    func = require_attr(require_module("feed_ingest.monitoring"), "monitored_decisions")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.monitoring: No module named 'feed_ingest.monitoring'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_monitoring" name="test_an_unlabeled_or_unknown_basis_is_rejected[]" time="0.009"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.monitoring: No module named 'feed_ingest.monitoring'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.monitoring'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_monitoring.py:81: in test_an_unlabeled_or_unknown_basis_is_rejected
+    decide(captured_games(), [], [], basis=basis)
+backend/tests/unit/feed_ingest/test_monitoring.py:18: in decide
+    func = require_attr(require_module("feed_ingest.monitoring"), "monitored_decisions")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.monitoring: No module named 'feed_ingest.monitoring'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_monitoring" name="test_an_unlabeled_or_unknown_basis_is_rejected[live]" time="0.009"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.monitoring: No module named 'feed_ingest.monitoring'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.monitoring'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_monitoring.py:81: in test_an_unlabeled_or_unknown_basis_is_rejected
+    decide(captured_games(), [], [], basis=basis)
+backend/tests/unit/feed_ingest/test_monitoring.py:18: in decide
+    func = require_attr(require_module("feed_ingest.monitoring"), "monitored_decisions")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.monitoring: No module named 'feed_ingest.monitoring'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_monitoring" name="test_an_unlabeled_or_unknown_basis_is_rejected[guessed]" time="0.009"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.monitoring: No module named 'feed_ingest.monitoring'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.monitoring'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_monitoring.py:81: in test_an_unlabeled_or_unknown_basis_is_rejected
+    decide(captured_games(), [], [], basis=basis)
+backend/tests/unit/feed_ingest/test_monitoring.py:18: in decide
+    func = require_attr(require_module("feed_ingest.monitoring"), "monitored_decisions")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.monitoring: No module named 'feed_ingest.monitoring'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_monitoring" name="test_monitoring_does_not_widen_to_the_other_captured_game" time="0.009"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.monitoring: No module named 'feed_ingest.monitoring'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.monitoring'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_monitoring.py:87: in test_monitoring_does_not_widen_to_the_other_captured_game
+    decisions = decide(games, only_first, [])
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_monitoring.py:18: in decide
+    func = require_attr(require_module("feed_ingest.monitoring"), "monitored_decisions")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.monitoring: No module named 'feed_ingest.monitoring'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_normalization" name="test_every_captured_play_becomes_one_event" time="0.004"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.normalize'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_normalization.py:30: in test_every_captured_play_becomes_one_event
+    events = normalize(summary)
+             ^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_normalization.py:24: in normalize
+    func = require_attr(normalize_module(), "normalize_summary")
+                        ^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_normalization.py:20: in normalize_module
+    return require_module("feed_ingest.normalize")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_normalization" name="test_events_carry_only_the_stored_game_event_fields" time="0.004"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.normalize'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_normalization.py:35: in test_events_carry_only_the_stored_game_event_fields
+    for event in normalize(fresh_summary()):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_normalization.py:24: in normalize
+    func = require_attr(normalize_module(), "normalize_summary")
+                        ^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_normalization.py:20: in normalize_module
+    return require_module("feed_ingest.normalize")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_normalization" name="test_score_comes_from_each_play" time="0.006"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.normalize'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_normalization.py:42: in test_score_comes_from_each_play
+    by_id = {event["eventId"]: event for event in normalize(summary)}
+                                                  ^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_normalization.py:24: in normalize
+    func = require_attr(normalize_module(), "normalize_summary")
+                        ^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_normalization.py:20: in normalize_module
+    return require_module("feed_ingest.normalize")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_normalization" name="test_field_position_comes_from_each_play_start" time="0.005"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.normalize'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_normalization.py:50: in test_field_position_comes_from_each_play_start
+    by_id = {event["eventId"]: event for event in normalize(summary)}
+                                                  ^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_normalization.py:24: in normalize
+    func = require_attr(normalize_module(), "normalize_summary")
+                        ^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_normalization.py:20: in normalize_module
+    return require_module("feed_ingest.normalize")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_normalization" name="test_possession_is_the_offense_team" time="0.005"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.normalize'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_normalization.py:57: in test_possession_is_the_offense_team
+    by_id = {event["eventId"]: event for event in normalize(summary)}
+                                                  ^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_normalization.py:24: in normalize
+    func = require_attr(normalize_module(), "normalize_summary")
+                        ^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_normalization.py:20: in normalize_module
+    return require_module("feed_ingest.normalize")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_normalization" name="test_event_time_comes_from_each_play_wallclock" time="0.007"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.normalize'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_normalization.py:65: in test_event_time_comes_from_each_play_wallclock
+    by_id = {event["eventId"]: event for event in normalize(summary)}
+                                                  ^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_normalization.py:24: in normalize
+    func = require_attr(normalize_module(), "normalize_summary")
+                        ^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_normalization.py:20: in normalize_module
+    return require_module("feed_ingest.normalize")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_normalization" name="test_player_ids_never_invent_an_athlete" time="0.005"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.normalize'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_normalization.py:76: in test_player_ids_never_invent_an_athlete
+    for event in normalize(summary):
+                 ^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_normalization.py:24: in normalize
+    func = require_attr(normalize_module(), "normalize_summary")
+                        ^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_normalization.py:20: in normalize_module
+    return require_module("feed_ingest.normalize")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_normalization" name="test_first_seen_events_start_at_revision_one_without_correction" time="0.005"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.normalize'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_normalization.py:82: in test_first_seen_events_start_at_revision_one_without_correction
+    for event in normalize(fresh_summary()):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_normalization.py:24: in normalize
+    func = require_attr(normalize_module(), "normalize_summary")
+                        ^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_normalization.py:20: in normalize_module
+    return require_module("feed_ingest.normalize")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_normalization" name="test_scoring_plays_carry_the_score_they_produced" time="0.005"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.normalize'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_normalization.py:90: in test_scoring_plays_carry_the_score_they_produced
+    by_id = {event["eventId"]: event for event in normalize(summary)}
+                                                  ^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_normalization.py:24: in normalize
+    func = require_attr(normalize_module(), "normalize_summary")
+                        ^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_normalization.py:20: in normalize_module
+    return require_module("feed_ingest.normalize")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_normalization" name="test_ingest_stores_every_normalized_event" time="0.463"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.ingest: No module named 'feed_ingest.ingest'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.ingest'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_normalization.py:99: in test_ingest_stores_every_normalized_event
+    ingest_summary = require_attr(require_module("feed_ingest.ingest"), "ingest_summary")
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.ingest: No module named 'feed_ingest.ingest'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_normalization" name="test_broadcast_networks_come_from_the_header_competition" time="0.005"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.normalize'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_normalization.py:114: in test_broadcast_networks_come_from_the_header_competition
+    func = require_attr(normalize_module(), "broadcast_networks")
+                        ^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_normalization.py:20: in normalize_module
+    return require_module("feed_ingest.normalize")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_normalization" name="test_broadcast_networks_ignore_the_top_level_field" time="0.005"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.normalize'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_normalization.py:122: in test_broadcast_networks_ignore_the_top_level_field
+    func = require_attr(normalize_module(), "broadcast_networks")
+                        ^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_normalization.py:20: in normalize_module
+    return require_module("feed_ingest.normalize")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_normalization" name="test_a_non_feed_source_is_rejected[yahoo]" time="0.005"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.normalize'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_normalization.py:129: in test_a_non_feed_source_is_rejected
+    normalize(fresh_summary(), source=source)
+backend/tests/unit/feed_ingest/test_normalization.py:24: in normalize
+    func = require_attr(normalize_module(), "normalize_summary")
+                        ^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_normalization.py:20: in normalize_module
+    return require_module("feed_ingest.normalize")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_normalization" name="test_a_non_feed_source_is_rejected[manual]" time="0.005"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.normalize'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_normalization.py:129: in test_a_non_feed_source_is_rejected
+    normalize(fresh_summary(), source=source)
+backend/tests/unit/feed_ingest/test_normalization.py:24: in normalize
+    func = require_attr(normalize_module(), "normalize_summary")
+                        ^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_normalization.py:20: in normalize_module
+    return require_module("feed_ingest.normalize")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_normalization" name="test_a_non_feed_source_is_rejected[]" time="0.005"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.normalize'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_normalization.py:129: in test_a_non_feed_source_is_rejected
+    normalize(fresh_summary(), source=source)
+backend/tests/unit/feed_ingest/test_normalization.py:24: in normalize
+    func = require_attr(normalize_module(), "normalize_summary")
+                        ^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_normalization.py:20: in normalize_module
+    return require_module("feed_ingest.normalize")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_replay_labels" name="test_replay_loads_every_captured_play" time="0.000"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.replay: No module named 'feed_ingest.replay'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.replay'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_replay_labels.py:23: in test_replay_loads_every_captured_play
+    events = load_events()
+             ^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_replay_labels.py:18: in load_events
+    func = require_attr(require_module("feed_ingest.replay"), "load_events")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.replay: No module named 'feed_ingest.replay'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_replay_labels" name="test_every_replay_value_is_labeled_replay" time="0.000"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.replay: No module named 'feed_ingest.replay'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.replay'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_replay_labels.py:29: in test_every_replay_value_is_labeled_replay
+    events = load_events()
+             ^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_replay_labels.py:18: in load_events
+    func = require_attr(require_module("feed_ingest.replay"), "load_events")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.replay: No module named 'feed_ingest.replay'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_replay_labels" name="test_no_replay_value_claims_to_be_live" time="0.000"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.replay: No module named 'feed_ingest.replay'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.replay'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_replay_labels.py:35: in test_no_replay_value_claims_to_be_live
+    for event in load_events():
+                 ^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_replay_labels.py:18: in load_events
+    func = require_attr(require_module("feed_ingest.replay"), "load_events")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.replay: No module named 'feed_ingest.replay'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_replay_labels" name="test_replay_values_match_the_capture" time="0.004"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.replay: No module named 'feed_ingest.replay'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.replay'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_replay_labels.py:41: in test_replay_values_match_the_capture
+    by_id = {event["eventId"]: event for event in load_events()}
+                                                  ^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_replay_labels.py:18: in load_events
+    func = require_attr(require_module("feed_ingest.replay"), "load_events")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.replay: No module named 'feed_ingest.replay'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_replay_labels" name="test_normalizing_as_replay_labels_every_event" time="0.000"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.normalize'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_replay_labels.py:50: in test_normalizing_as_replay_labels_every_event
+    func = require_attr(require_module("feed_ingest.normalize"), "normalize_summary")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_replay_labels" name="test_ingesting_replay_stores_the_replay_label" time="0.081"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.ingest: No module named 'feed_ingest.ingest'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.ingest'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_replay_labels.py:56: in test_ingesting_replay_stores_the_replay_label
+    ingest_summary = require_attr(require_module("feed_ingest.ingest"), "ingest_summary")
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.ingest: No module named 'feed_ingest.ingest'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_replay_labels" name="test_replay_of_an_uncaptured_game_is_rejected" time="0.000"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.replay: No module named 'feed_ingest.replay'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.replay'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_replay_labels.py:64: in test_replay_of_an_uncaptured_game_is_rejected
+    load_events(game_id="401872999")
+backend/tests/unit/feed_ingest/test_replay_labels.py:18: in load_events
+    func = require_attr(require_module("feed_ingest.replay"), "load_events")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.replay: No module named 'feed_ingest.replay'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_replay_labels" name="test_replay_rejects_a_fixture_that_fails_its_index_hash" time="0.006"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.replay: No module named 'feed_ingest.replay'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.replay'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_replay_labels.py:74: in test_replay_rejects_a_fixture_that_fails_its_index_hash
+    load_events(fixtures_dir=tmp_path)
+backend/tests/unit/feed_ingest/test_replay_labels.py:18: in load_events
+    func = require_attr(require_module("feed_ingest.replay"), "load_events")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.replay: No module named 'feed_ingest.replay'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_revisions" name="test_an_unchanged_repoll_emits_nothing" time="0.009"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.normalize'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_revisions.py:34: in test_an_unchanged_repoll_emits_nothing
+    assert normalize(fresh_summary(), prior=first_poll()) == []
+                                            ^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_revisions.py:19: in first_poll
+    events = normalize(fresh_summary())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_revisions.py:14: in normalize
+    func = require_attr(require_module("feed_ingest.normalize"), "normalize_summary")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_revisions" name="test_a_correction_emits_one_new_revision_of_the_same_event" time="0.009"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.normalize'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_revisions.py:39: in test_a_correction_emits_one_new_revision_of_the_same_event
+    emitted = normalize(summary, prior=first_poll())
+                                       ^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_revisions.py:19: in first_poll
+    events = normalize(fresh_summary())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_revisions.py:14: in normalize
+    func = require_attr(require_module("feed_ingest.normalize"), "normalize_summary")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_revisions" name="test_a_correction_carries_the_corrected_score" time="0.009"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.normalize'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_revisions.py:48: in test_a_correction_carries_the_corrected_score
+    emitted = normalize(summary, prior=first_poll())
+                                       ^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_revisions.py:19: in first_poll
+    events = normalize(fresh_summary())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_revisions.py:14: in normalize
+    func = require_attr(require_module("feed_ingest.normalize"), "normalize_summary")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_revisions" name="test_revisions_stay_monotonic_across_two_corrections" time="0.005"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.normalize'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_revisions.py:53: in test_revisions_stay_monotonic_across_two_corrections
+    prior = first_poll()
+            ^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_revisions.py:19: in first_poll
+    events = normalize(fresh_summary())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_revisions.py:14: in normalize
+    func = require_attr(require_module("feed_ingest.normalize"), "normalize_summary")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_revisions" name="test_a_new_play_after_the_first_poll_starts_at_revision_one" time="0.005"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.normalize'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_revisions.py:66: in test_a_new_play_after_the_first_poll_starts_at_revision_one
+    prior = first_poll()
+            ^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_revisions.py:19: in first_poll
+    events = normalize(fresh_summary())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_revisions.py:14: in normalize
+    func = require_attr(require_module("feed_ingest.normalize"), "normalize_summary")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_revisions" name="test_ingesting_a_correction_revises_the_stored_event_in_place" time="0.081"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.ingest: No module named 'feed_ingest.ingest'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.ingest'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_revisions.py:79: in test_ingesting_a_correction_revises_the_stored_event_in_place
+    ingest_summary = require_attr(require_module("feed_ingest.ingest"), "ingest_summary")
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.ingest: No module named 'feed_ingest.ingest'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_revisions" name="test_ingesting_the_same_poll_twice_changes_no_revision" time="0.080"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.ingest: No module named 'feed_ingest.ingest'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.ingest'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_revisions.py:91: in test_ingesting_the_same_poll_twice_changes_no_revision
+    ingest_summary = require_attr(require_module("feed_ingest.ingest"), "ingest_summary")
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.ingest: No module named 'feed_ingest.ingest'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_validation" name="test_captured_summary_passes_validation" time="0.005"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.validation: No module named 'feed_ingest.validation'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.validation'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_validation.py:31: in test_captured_summary_passes_validation
+    assert validate_summary(fresh_summary()) is None
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_validation.py:23: in validate_summary
+    return attempt(require_attr(validation(), "validate_summary"), payload, game_id)
+                                ^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_validation.py:15: in validation
+    return require_module("feed_ingest.validation")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.validation: No module named 'feed_ingest.validation'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_validation" name="test_captured_scoreboard_passes_validation" time="0.002"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.validation: No module named 'feed_ingest.validation'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.validation'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_validation.py:35: in test_captured_scoreboard_passes_validation
+    assert validate_scoreboard(fresh_scoreboard()) is None
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_validation.py:27: in validate_scoreboard
+    return attempt(require_attr(validation(), "validate_scoreboard"), payload)
+                                ^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_validation.py:15: in validation
+    return require_module("feed_ingest.validation")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.validation: No module named 'feed_ingest.validation'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_validation" name="test_summary_for_another_game_is_rejected" time="0.004"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.validation: No module named 'feed_ingest.validation'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.validation'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_validation.py:40: in test_summary_for_another_game_is_rejected
+    validate_summary(fresh_summary(), game_id="401872999")
+backend/tests/unit/feed_ingest/test_validation.py:23: in validate_summary
+    return attempt(require_attr(validation(), "validate_summary"), payload, game_id)
+                                ^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_validation.py:15: in validation
+    return require_module("feed_ingest.validation")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.validation: No module named 'feed_ingest.validation'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_validation" name="test_non_object_summary_is_rejected" time="0.000"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.validation: No module named 'feed_ingest.validation'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.validation'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_validation.py:45: in test_non_object_summary_is_rejected
+    validate_summary(["not", "a", "summary"])
+backend/tests/unit/feed_ingest/test_validation.py:23: in validate_summary
+    return attempt(require_attr(validation(), "validate_summary"), payload, game_id)
+                                ^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_validation.py:15: in validation
+    return require_module("feed_ingest.validation")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.validation: No module named 'feed_ingest.validation'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_validation" name="test_summary_without_header_is_rejected" time="0.004"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.validation: No module named 'feed_ingest.validation'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.validation'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_validation.py:52: in test_summary_without_header_is_rejected
+    validate_summary(payload)
+backend/tests/unit/feed_ingest/test_validation.py:23: in validate_summary
+    return attempt(require_attr(validation(), "validate_summary"), payload, game_id)
+                                ^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_validation.py:15: in validation
+    return require_module("feed_ingest.validation")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.validation: No module named 'feed_ingest.validation'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_validation" name="test_summary_without_competitions_is_rejected" time="0.006"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.validation: No module named 'feed_ingest.validation'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.validation'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_validation.py:59: in test_summary_without_competitions_is_rejected
+    validate_summary(payload)
+backend/tests/unit/feed_ingest/test_validation.py:23: in validate_summary
+    return attempt(require_attr(validation(), "validate_summary"), payload, game_id)
+                                ^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_validation.py:15: in validation
+    return require_module("feed_ingest.validation")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.validation: No module named 'feed_ingest.validation'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_validation" name="test_summary_without_drives_is_rejected" time="0.005"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.validation: No module named 'feed_ingest.validation'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.validation'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_validation.py:66: in test_summary_without_drives_is_rejected
+    validate_summary(payload)
+backend/tests/unit/feed_ingest/test_validation.py:23: in validate_summary
+    return attempt(require_attr(validation(), "validate_summary"), payload, game_id)
+                                ^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_validation.py:15: in validation
+    return require_module("feed_ingest.validation")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.validation: No module named 'feed_ingest.validation'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_validation" name="test_play_without_id_is_rejected" time="0.005"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.validation: No module named 'feed_ingest.validation'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.validation'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_validation.py:73: in test_play_without_id_is_rejected
+    validate_summary(payload)
+backend/tests/unit/feed_ingest/test_validation.py:23: in validate_summary
+    return attempt(require_attr(validation(), "validate_summary"), payload, game_id)
+                                ^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_validation.py:15: in validation
+    return require_module("feed_ingest.validation")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.validation: No module named 'feed_ingest.validation'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_validation" name="test_play_with_non_numeric_score_is_rejected" time="0.006"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.validation: No module named 'feed_ingest.validation'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.validation'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_validation.py:80: in test_play_with_non_numeric_score_is_rejected
+    validate_summary(payload)
+backend/tests/unit/feed_ingest/test_validation.py:23: in validate_summary
+    return attempt(require_attr(validation(), "validate_summary"), payload, game_id)
+                                ^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_validation.py:15: in validation
+    return require_module("feed_ingest.validation")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.validation: No module named 'feed_ingest.validation'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_validation" name="test_play_without_wallclock_is_rejected" time="0.004"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.validation: No module named 'feed_ingest.validation'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.validation'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_validation.py:87: in test_play_without_wallclock_is_rejected
+    validate_summary(payload)
+backend/tests/unit/feed_ingest/test_validation.py:23: in validate_summary
+    return attempt(require_attr(validation(), "validate_summary"), payload, game_id)
+                                ^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_validation.py:15: in validation
+    return require_module("feed_ingest.validation")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.validation: No module named 'feed_ingest.validation'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_validation" name="test_scoreboard_without_events_is_rejected" time="0.001"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.validation: No module named 'feed_ingest.validation'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.validation'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_validation.py:94: in test_scoreboard_without_events_is_rejected
+    validate_scoreboard(payload)
+backend/tests/unit/feed_ingest/test_validation.py:27: in validate_scoreboard
+    return attempt(require_attr(validation(), "validate_scoreboard"), payload)
+                                ^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_validation.py:15: in validation
+    return require_module("feed_ingest.validation")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.validation: No module named 'feed_ingest.validation'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_validation" name="test_scoreboard_event_without_id_is_rejected" time="0.003"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.validation: No module named 'feed_ingest.validation'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.validation'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_validation.py:101: in test_scoreboard_event_without_id_is_rejected
+    validate_scoreboard(payload)
+backend/tests/unit/feed_ingest/test_validation.py:27: in validate_scoreboard
+    return attempt(require_attr(validation(), "validate_scoreboard"), payload)
+                                ^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/test_validation.py:15: in validation
+    return require_module("feed_ingest.validation")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.validation: No module named 'feed_ingest.validation'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_validation" name="test_invalid_poll_leaves_stored_events_unchanged" time="0.147"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.ingest: No module named 'feed_ingest.ingest'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.ingest'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_validation.py:111: in test_invalid_poll_leaves_stored_events_unchanged
+    ingest_summary = require_attr(ingest(), "ingest_summary")
+                                  ^^^^^^^^
+backend/tests/unit/feed_ingest/test_validation.py:19: in ingest
+    return require_module("feed_ingest.ingest")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.ingest: No module named 'feed_ingest.ingest'</failure></testcase><testcase classname="tests.unit.feed_ingest.test_validation" name="test_invalid_first_poll_stores_nothing" time="0.081"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.ingest: No module named 'feed_ingest.ingest'">backend/tests/unit/feed_ingest/feed_support.py:44: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'feed_ingest.ingest'
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/feed_ingest/test_validation.py:123: in test_invalid_first_poll_stores_nothing
+    ingest_summary = require_attr(ingest(), "ingest_summary")
+                                  ^^^^^^^^
+backend/tests/unit/feed_ingest/test_validation.py:19: in ingest
+    return require_module("feed_ingest.ingest")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:46: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.ingest: No module named 'feed_ingest.ingest'</failure></testcase><testcase classname="tests.contract.feed_ingest.test_feed_contracts" name="test_pinned_schemas_exist_and_parse" time="0.000"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.validation: No module named 'feed_ingest.validation'">backend/tests/contract/feed_ingest/test_feed_contracts.py:26: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+&lt;frozen importlib._bootstrap&gt;:1387: in _gcd_import
+    ???
+&lt;frozen importlib._bootstrap&gt;:1360: in _find_and_load
+    ???
+&lt;frozen importlib._bootstrap&gt;:1324: in _find_and_load_unlocked
+    ???
+E   ModuleNotFoundError: No module named 'feed_ingest.validation'
+
+During handling of the above exception, another exception occurred:
+backend/tests/contract/feed_ingest/test_feed_contracts.py:53: in test_pinned_schemas_exist_and_parse
+    validate = require_module("feed_ingest.validation")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/contract/feed_ingest/test_feed_contracts.py:28: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.validation: No module named 'feed_ingest.validation'</failure></testcase><testcase classname="tests.contract.feed_ingest.test_feed_contracts" name="test_every_normalized_value_carries_the_envelope" time="0.000"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'">backend/tests/contract/feed_ingest/test_feed_contracts.py:26: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+&lt;frozen importlib._bootstrap&gt;:1387: in _gcd_import
+    ???
+&lt;frozen importlib._bootstrap&gt;:1360: in _find_and_load
+    ???
+&lt;frozen importlib._bootstrap&gt;:1324: in _find_and_load_unlocked
+    ???
+E   ModuleNotFoundError: No module named 'feed_ingest.normalize'
+
+During handling of the above exception, another exception occurred:
+backend/tests/contract/feed_ingest/test_feed_contracts.py:65: in test_every_normalized_value_carries_the_envelope
+    events = normalized()
+             ^^^^^^^^^^^^
+backend/tests/contract/feed_ingest/test_feed_contracts.py:43: in normalized
+    module = require_module("feed_ingest.normalize")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/contract/feed_ingest/test_feed_contracts.py:28: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'</failure></testcase><testcase classname="tests.contract.feed_ingest.test_feed_contracts" name="test_event_identity_is_game_plus_play" time="0.003"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'">backend/tests/contract/feed_ingest/test_feed_contracts.py:26: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+&lt;frozen importlib._bootstrap&gt;:1387: in _gcd_import
+    ???
+&lt;frozen importlib._bootstrap&gt;:1360: in _find_and_load
+    ???
+&lt;frozen importlib._bootstrap&gt;:1324: in _find_and_load_unlocked
+    ???
+E   ModuleNotFoundError: No module named 'feed_ingest.normalize'
+
+During handling of the above exception, another exception occurred:
+backend/tests/contract/feed_ingest/test_feed_contracts.py:78: in test_event_identity_is_game_plus_play
+    events = normalized()
+             ^^^^^^^^^^^^
+backend/tests/contract/feed_ingest/test_feed_contracts.py:43: in normalized
+    module = require_module("feed_ingest.normalize")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/contract/feed_ingest/test_feed_contracts.py:28: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.normalize: No module named 'feed_ingest.normalize'</failure></testcase><testcase classname="tests.contract.feed_ingest.test_feed_contracts" name="test_replay_fixture_index_verifies_through_replay" time="0.000"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.replay: No module named 'feed_ingest.replay'">backend/tests/contract/feed_ingest/test_feed_contracts.py:26: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+&lt;frozen importlib._bootstrap&gt;:1387: in _gcd_import
+    ???
+&lt;frozen importlib._bootstrap&gt;:1360: in _find_and_load
+    ???
+&lt;frozen importlib._bootstrap&gt;:1324: in _find_and_load_unlocked
+    ???
+E   ModuleNotFoundError: No module named 'feed_ingest.replay'
+
+During handling of the above exception, another exception occurred:
+backend/tests/contract/feed_ingest/test_feed_contracts.py:86: in test_replay_fixture_index_verifies_through_replay
+    replay = require_module("feed_ingest.replay")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/contract/feed_ingest/test_feed_contracts.py:28: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.replay: No module named 'feed_ingest.replay'</failure></testcase><testcase classname="tests.contract.feed_ingest.test_feed_contracts" name="test_all_captured_games_replay_with_the_label" time="0.000"><failure message="AssertionError: feed behavior is not implemented: cannot import feed_ingest.replay: No module named 'feed_ingest.replay'">backend/tests/contract/feed_ingest/test_feed_contracts.py:26: in require_module
+    return importlib.import_module(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+&lt;frozen importlib._bootstrap&gt;:1387: in _gcd_import
+    ???
+&lt;frozen importlib._bootstrap&gt;:1360: in _find_and_load
+    ???
+&lt;frozen importlib._bootstrap&gt;:1324: in _find_and_load_unlocked
+    ???
+E   ModuleNotFoundError: No module named 'feed_ingest.replay'
+
+During handling of the above exception, another exception occurred:
+backend/tests/contract/feed_ingest/test_feed_contracts.py:100: in test_all_captured_games_replay_with_the_label
+    replay = require_module("feed_ingest.replay")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/contract/feed_ingest/test_feed_contracts.py:28: in require_module
+    raise AssertionError(f"feed behavior is not implemented: cannot import {name}: {exc}")
+E   AssertionError: feed behavior is not implemented: cannot import feed_ingest.replay: No module named 'feed_ingest.replay'</failure></testcase><testcase classname="tests.contract.feed_ingest.test_feed_contracts" name="test_lambda_handler_remains_the_ingest_entry_point" time="0.001"><failure message="AssertionError: feed behavior is not implemented (AFC-STUB): AFC-STUB: feed_ingest is implemented by P2-B02">backend/tests/contract/feed_ingest/test_feed_contracts.py:33: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/feed_ingest/__init__.py:13: in lambda_handler
+    raise NotImplementedError(_pending())
+E   NotImplementedError: AFC-STUB: feed_ingest is implemented by P2-B02
+
+During handling of the above exception, another exception occurred:
+backend/tests/contract/feed_ingest/test_feed_contracts.py:116: in test_lambda_handler_remains_the_ingest_entry_point
+    attempt(handler, {"source": "not-a-schedule"}, None)
+backend/tests/contract/feed_ingest/test_feed_contracts.py:35: in attempt
+    raise AssertionError(f"feed behavior is not implemented (AFC-STUB): {exc}")
+E   AssertionError: feed behavior is not implemented (AFC-STUB): AFC-STUB: feed_ingest is implemented by P2-B02</failure></testcase><testcase classname="tests.deployed.feed_ingest.test_feed_labels" name="test_panel_values_carry_a_source_label" time="0.000"><skipped type="pytest.skip" message="NOT_RUN: set AFC_DEPLOYED_API_URL to execute against a deployed stack">$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b02/backend/tests/deployed/feed_ingest/test_feed_labels.py:11: NOT_RUN: set AFC_DEPLOYED_API_URL to execute against a deployed stack</skipped></testcase><testcase classname="tests.deployed.feed_ingest.test_feed_labels" name="test_panel_revision_never_moves_backwards" time="0.000"><skipped type="pytest.skip" message="NOT_RUN: set AFC_DEPLOYED_API_URL to execute against a deployed stack">$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b02/backend/tests/deployed/feed_ingest/test_feed_labels.py:17: NOT_RUN: set AFC_DEPLOYED_API_URL to execute against a deployed stack</skipped></testcase><testcase classname="tests.deployed.feed_ingest.test_feed_labels" name="test_alerts_carry_the_envelope" time="0.000"><skipped type="pytest.skip" message="NOT_RUN: set AFC_DEPLOYED_API_URL to execute against a deployed stack">$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b02/backend/tests/deployed/feed_ingest/test_feed_labels.py:24: NOT_RUN: set AFC_DEPLOYED_API_URL to execute against a deployed stack</skipped></testcase></testsuite></testsuites>

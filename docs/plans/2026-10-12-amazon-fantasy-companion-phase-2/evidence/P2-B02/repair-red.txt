@@ -1,0 +1,566 @@
+FFFFFFFFFFFFFF..........F....FF                                          [100%]
+=================================== FAILURES ===================================
+__________ test_f2_bad_game_does_not_abort_later_valid_game[failure0] __________
+
+api = namespace(request=<function api.<locals>.request at 0x76c7082b8a40>, table=<function api.<locals>.table at 0x76c7082b8...inksTable': 'expiresAt'}, passphrase='<synthetic-test-value>', ssm_reads=[], secret_names=['/afc/dev/link-passphrase'])
+feed = (<module 'feed_ingest' from '<repo>/backend/src/feed_ingest...ball/nfl/scoreboard', 10), ('https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401872981', 10)])
+failure = ValueError('schema drift')
+
+    @pytest.mark.parametrize("failure", [ValueError("schema drift"), OSError("feed down")])
+    def test_f2_bad_game_does_not_abort_later_valid_game(api, feed, failure):
+        module, bodies, calls = feed
+        select_teams(api, GAME, OTHER_GAME)
+        bodies[BASE + "scoreboard"] = board_for(GAME, OTHER_GAME)
+        bodies[BASE + "summary?event=" + GAME] = failure
+        bodies[BASE + "summary?event=" + OTHER_GAME] = fresh_summary(OTHER_GAME)
+>       result = module.lambda_handler({}, None)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/test_review_repairs.py:88:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend/src/feed_ingest/__init__.py:51: in lambda_handler
+    return {"stored": len(poll())}
+                          ^^^^^^
+backend/src/feed_ingest/__init__.py:42: in poll
+    summary = _get_json(_feed() + "summary?event=" + game["id"])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/feed_ingest/__init__.py:28: in _get_json
+    with request.urlopen(url, timeout=10) as response:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+url = 'https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401872981'
+timeout = 10
+
+    def open_url(url, timeout):
+        calls.append((url, timeout))
+        value = bodies[url]
+        if callable(value):
+            value = value()
+        if isinstance(value, Exception):
+>           raise value
+E           ValueError: schema drift
+
+backend/tests/unit/feed_ingest/test_review_repairs.py:49: ValueError
+__________ test_f2_bad_game_does_not_abort_later_valid_game[failure1] __________
+
+api = namespace(request=<function api.<locals>.request at 0x76c705e26840>, table=<function api.<locals>.table at 0x76c705e26...inksTable': 'expiresAt'}, passphrase='<synthetic-test-value>', ssm_reads=[], secret_names=['/afc/dev/link-passphrase'])
+feed = (<module 'feed_ingest' from '<repo>/backend/src/feed_ingest...ball/nfl/scoreboard', 10), ('https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401872981', 10)])
+failure = OSError('feed down')
+
+    @pytest.mark.parametrize("failure", [ValueError("schema drift"), OSError("feed down")])
+    def test_f2_bad_game_does_not_abort_later_valid_game(api, feed, failure):
+        module, bodies, calls = feed
+        select_teams(api, GAME, OTHER_GAME)
+        bodies[BASE + "scoreboard"] = board_for(GAME, OTHER_GAME)
+        bodies[BASE + "summary?event=" + GAME] = failure
+        bodies[BASE + "summary?event=" + OTHER_GAME] = fresh_summary(OTHER_GAME)
+>       result = module.lambda_handler({}, None)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/test_review_repairs.py:88:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend/src/feed_ingest/__init__.py:51: in lambda_handler
+    return {"stored": len(poll())}
+                          ^^^^^^
+backend/src/feed_ingest/__init__.py:42: in poll
+    summary = _get_json(_feed() + "summary?event=" + game["id"])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/feed_ingest/__init__.py:28: in _get_json
+    with request.urlopen(url, timeout=10) as response:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+url = 'https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401872981'
+timeout = 10
+
+    def open_url(url, timeout):
+        calls.append((url, timeout))
+        value = bodies[url]
+        if callable(value):
+            value = value()
+        if isinstance(value, Exception):
+>           raise value
+E           OSError: feed down
+
+backend/tests/unit/feed_ingest/test_review_repairs.py:49: OSError
+______ test_f3_three_failures_replace_live_with_labeled_replay[failure0] _______
+
+api = namespace(request=<function api.<locals>.request at 0x76c70857d6c0>, table=<function api.<locals>.table at 0x76c70857d...inksTable': 'expiresAt'}, passphrase='<synthetic-test-value>', ssm_reads=[], secret_names=['/afc/dev/link-passphrase'])
+feed = (<module 'feed_ingest' from '<repo>/backend/src/feed_ingest...ball/nfl/scoreboard', 10), ('https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401872981', 10)])
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x76c705ddd6d0>
+failure = OSError('feed down')
+
+    @pytest.mark.parametrize("failure", [OSError("feed down"), {"drives": {}}])
+    def test_f3_three_failures_replace_live_with_labeled_replay(api, feed, monkeypatch, failure):
+        module, bodies, calls = feed
+        select_teams(api, GAME)
+        importlib.import_module("feed_ingest.ingest").ingest_summary(fresh_summary(), GAME)
+        bodies[BASE + "scoreboard"] = board_for(GAME)
+        attempts = []
+
+        def fail():
+            rows = api.table("Events").scan()["Items"]
+            assert {row["source"] for row in rows} == {"live"}
+            attempts.append(1)
+            return failure
+
+        bodies[BASE + "summary?event=" + GAME] = fail
+>       result, clock = run_loop(feed, monkeypatch)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/test_review_repairs.py:109:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend/tests/unit/feed_ingest/test_review_repairs.py:78: in run_loop
+    return module.lambda_handler({}, clock), clock
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/feed_ingest/__init__.py:51: in lambda_handler
+    return {"stored": len(poll())}
+                          ^^^^^^
+backend/src/feed_ingest/__init__.py:42: in poll
+    summary = _get_json(_feed() + "summary?event=" + game["id"])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/feed_ingest/__init__.py:28: in _get_json
+    with request.urlopen(url, timeout=10) as response:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+url = 'https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401872981'
+timeout = 10
+
+    def open_url(url, timeout):
+        calls.append((url, timeout))
+        value = bodies[url]
+        if callable(value):
+            value = value()
+        if isinstance(value, Exception):
+>           raise value
+E           OSError: feed down
+
+backend/tests/unit/feed_ingest/test_review_repairs.py:49: OSError
+______ test_f3_three_failures_replace_live_with_labeled_replay[failure1] _______
+
+api = namespace(request=<function api.<locals>.request at 0x76c70520e200>, table=<function api.<locals>.table at 0x76c70520e...inksTable': 'expiresAt'}, passphrase='<synthetic-test-value>', ssm_reads=[], secret_names=['/afc/dev/link-passphrase'])
+feed = (<module 'feed_ingest' from '<repo>/backend/src/feed_ingest...ball/nfl/scoreboard', 10), ('https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401872981', 10)])
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x76c707426360>
+failure = {'drives': {}}
+
+    @pytest.mark.parametrize("failure", [OSError("feed down"), {"drives": {}}])
+    def test_f3_three_failures_replace_live_with_labeled_replay(api, feed, monkeypatch, failure):
+        module, bodies, calls = feed
+        select_teams(api, GAME)
+        importlib.import_module("feed_ingest.ingest").ingest_summary(fresh_summary(), GAME)
+        bodies[BASE + "scoreboard"] = board_for(GAME)
+        attempts = []
+
+        def fail():
+            rows = api.table("Events").scan()["Items"]
+            assert {row["source"] for row in rows} == {"live"}
+            attempts.append(1)
+            return failure
+
+        bodies[BASE + "summary?event=" + GAME] = fail
+>       result, clock = run_loop(feed, monkeypatch)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/test_review_repairs.py:109:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend/tests/unit/feed_ingest/test_review_repairs.py:78: in run_loop
+    return module.lambda_handler({}, clock), clock
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/feed_ingest/__init__.py:51: in lambda_handler
+    return {"stored": len(poll())}
+                          ^^^^^^
+backend/src/feed_ingest/__init__.py:43: in poll
+    stored += ingest_summary(summary, game["id"])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/feed_ingest/ingest.py:13: in ingest_summary
+    validate_summary(payload, game_id)
+backend/src/feed_ingest/validation.py:24: in validate_summary
+    _check("summary", payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+name = 'summary', payload = {'drives': {}}
+
+    def _check(name, payload):
+        error = jsonschema.exceptions.best_match(_validator(name).iter_errors(payload))
+        if error is not None:
+>           raise ValueError(f"ESPN {name} fails the pinned schema: {error.message}")
+E           ValueError: ESPN summary fails the pinned schema: 'header' is a required property
+
+backend/src/feed_ingest/validation.py:19: ValueError
+___________ test_f3_no_fixture_reports_stale_without_changing_values ___________
+
+api = namespace(request=<function api.<locals>.request at 0x76c704624720>, table=<function api.<locals>.table at 0x76c704624...inksTable': 'expiresAt'}, passphrase='<synthetic-test-value>', ssm_reads=[], secret_names=['/afc/dev/link-passphrase'])
+feed = (<module 'feed_ingest' from '<repo>/backend/src/feed_ingest...ball/nfl/scoreboard', 10), ('https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401872981', 10)])
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x76c707468dd0>
+tmp_path = PosixPath('/tmp/pytest-of-spectre/pytest-543/test_f3_no_fixture_reports_sta0')
+
+    def test_f3_no_fixture_reports_stale_without_changing_values(api, feed, monkeypatch, tmp_path):
+        module, bodies, _ = feed
+        select_teams(api, GAME)
+        importlib.import_module("feed_ingest.ingest").ingest_summary(fresh_summary(), GAME)
+        before = api.table("Events").scan()["Items"]
+        bodies[BASE + "scoreboard"] = board_for(GAME)
+        bodies[BASE + "summary?event=" + GAME] = OSError("feed down")
+        monkeypatch.setattr(module, "_fixtures", lambda: tmp_path, raising=False)
+>       result, _ = run_loop(feed, monkeypatch)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/feed_ingest/test_review_repairs.py:129:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend/tests/unit/feed_ingest/test_review_repairs.py:78: in run_loop
+    return module.lambda_handler({}, clock), clock
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/feed_ingest/__init__.py:51: in lambda_handler
+    return {"stored": len(poll())}
+                          ^^^^^^
+backend/src/feed_ingest/__init__.py:42: in poll
+    summary = _get_json(_feed() + "summary?event=" + game["id"])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/feed_ingest/__init__.py:28: in _get_json
+    with request.urlopen(url, timeout=10) as response:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+url = 'https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401872981'
+timeout = 10
+
+    def open_url(url, timeout):
+        calls.append((url, timeout))
+        value = bodies[url]
+        if callable(value):
+            value = value()
+        if isinstance(value, Exception):
+>           raise value
+E           OSError: feed down
+
+backend/tests/unit/feed_ingest/test_review_repairs.py:49: OSError
+_______ test_f4_configured_interval_and_lambda_deadline[5-26-expected0] ________
+
+api = namespace(request=<function api.<locals>.request at 0x76c70508b1a0>, table=<function api.<locals>.table at 0x76c70520f...inksTable': 'expiresAt'}, passphrase='<synthetic-test-value>', ssm_reads=[], secret_names=['/afc/dev/link-passphrase'])
+feed = (<module 'feed_ingest' from '<repo>/backend/src/feed_ingest...riority': 1}, 'week': {'number': 5}}}, [('https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard', 10)])
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x76c7070e9cd0>
+interval = 5, seconds = 26, expected = [5, 5, 5]
+
+    @pytest.mark.parametrize("interval,seconds,expected", [(5, 26, [5, 5, 5]),
+                                                          (15, 51, [15, 15]),
+                                                          (60, 60, [])])
+    def test_f4_configured_interval_and_lambda_deadline(api, feed, monkeypatch, interval, seconds, expected):
+        _, bodies, calls = feed
+        bodies[BASE + "scoreboard"] = board_for()
+        result, clock = run_loop(feed, monkeypatch, seconds, interval)
+>       assert result == {"stored": 0, "failed": []}
+E       AssertionError: assert {'stored': 0} == {'failed': [], 'stored': 0}
+E
+E         Omitting 1 identical items, use -vv to show
+E         Right contains 1 more item:
+E         {'failed': []}
+E         Use -v to get more diff
+
+backend/tests/unit/feed_ingest/test_review_repairs.py:141: AssertionError
+_______ test_f4_configured_interval_and_lambda_deadline[15-51-expected1] _______
+
+api = namespace(request=<function api.<locals>.request at 0x76c705a75760>, table=<function api.<locals>.table at 0x76c705a75...inksTable': 'expiresAt'}, passphrase='<synthetic-test-value>', ssm_reads=[], secret_names=['/afc/dev/link-passphrase'])
+feed = (<module 'feed_ingest' from '<repo>/backend/src/feed_ingest...riority': 1}, 'week': {'number': 5}}}, [('https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard', 10)])
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x76c703a58410>
+interval = 15, seconds = 51, expected = [15, 15]
+
+    @pytest.mark.parametrize("interval,seconds,expected", [(5, 26, [5, 5, 5]),
+                                                          (15, 51, [15, 15]),
+                                                          (60, 60, [])])
+    def test_f4_configured_interval_and_lambda_deadline(api, feed, monkeypatch, interval, seconds, expected):
+        _, bodies, calls = feed
+        bodies[BASE + "scoreboard"] = board_for()
+        result, clock = run_loop(feed, monkeypatch, seconds, interval)
+>       assert result == {"stored": 0, "failed": []}
+E       AssertionError: assert {'stored': 0} == {'failed': [], 'stored': 0}
+E
+E         Omitting 1 identical items, use -vv to show
+E         Right contains 1 more item:
+E         {'failed': []}
+E         Use -v to get more diff
+
+backend/tests/unit/feed_ingest/test_review_repairs.py:141: AssertionError
+_______ test_f4_configured_interval_and_lambda_deadline[60-60-expected2] _______
+
+api = namespace(request=<function api.<locals>.request at 0x76c702f571a0>, table=<function api.<locals>.table at 0x76c702f57...inksTable': 'expiresAt'}, passphrase='<synthetic-test-value>', ssm_reads=[], secret_names=['/afc/dev/link-passphrase'])
+feed = (<module 'feed_ingest' from '<repo>/backend/src/feed_ingest...riority': 1}, 'week': {'number': 5}}}, [('https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard', 10)])
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x76c707481580>
+interval = 60, seconds = 60, expected = []
+
+    @pytest.mark.parametrize("interval,seconds,expected", [(5, 26, [5, 5, 5]),
+                                                          (15, 51, [15, 15]),
+                                                          (60, 60, [])])
+    def test_f4_configured_interval_and_lambda_deadline(api, feed, monkeypatch, interval, seconds, expected):
+        _, bodies, calls = feed
+        bodies[BASE + "scoreboard"] = board_for()
+        result, clock = run_loop(feed, monkeypatch, seconds, interval)
+>       assert result == {"stored": 0, "failed": []}
+E       AssertionError: assert {'stored': 0} == {'failed': [], 'stored': 0}
+E
+E         Omitting 1 identical items, use -vv to show
+E         Right contains 1 more item:
+E         {'failed': []}
+E         Use -v to get more diff
+
+backend/tests/unit/feed_ingest/test_review_repairs.py:141: AssertionError
+_____________ test_f5_irrelevant_in_progress_game_is_never_fetched _____________
+
+api = namespace(request=<function api.<locals>.request at 0x76c7022c1080>, table=<function api.<locals>.table at 0x76c7022c0...inksTable': 'expiresAt'}, passphrase='<synthetic-test-value>', ssm_reads=[], secret_names=['/afc/dev/link-passphrase'])
+feed = (<module 'feed_ingest' from '<repo>/backend/src/feed_ingest...ary?event=401872981', 10), ('https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401872982', 10)])
+
+    def test_f5_irrelevant_in_progress_game_is_never_fetched(api, feed):
+        module, bodies, calls = feed
+        select_teams(api, GAME)
+        bodies[BASE + "scoreboard"] = board_for(GAME, OTHER_GAME)
+        bodies[BASE + "summary?event=" + GAME] = fresh_summary()
+        # Supplying this body proves a baseline failure on relevance, not a fake KeyError.
+        bodies[BASE + "summary?event=" + OTHER_GAME] = fresh_summary(OTHER_GAME)
+        module.lambda_handler({}, None)
+>       assert calls == [(BASE + "scoreboard", 10), (BASE + "summary?event=" + GAME, 10)]
+E       AssertionError: assert [('https://si...1872982', 10)] == [('https://si...1872981', 10)]
+E
+E         Left contains one more item: ('https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401872982', 10)
+E         Use -v to get more diff
+
+backend/tests/unit/feed_ingest/test_review_repairs.py:154: AssertionError
+____________________ test_f5_no_profiles_fetches_no_summary ____________________
+
+api = namespace(request=<function api.<locals>.request at 0x76c70da3a5c0>, table=<function api.<locals>.table at 0x76c70da3a...inksTable': 'expiresAt'}, passphrase='<synthetic-test-value>', ssm_reads=[], secret_names=['/afc/dev/link-passphrase'])
+feed = (<module 'feed_ingest' from '<repo>/backend/src/feed_ingest...ball/nfl/scoreboard', 10), ('https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401872981', 10)])
+
+    def test_f5_no_profiles_fetches_no_summary(api, feed):
+        module, bodies, calls = feed
+        bodies[BASE + "scoreboard"] = board_for(GAME)
+        bodies[BASE + "summary?event=" + GAME] = fresh_summary()
+        module.lambda_handler({}, None)
+>       assert calls == [(BASE + "scoreboard", 10)]
+E       AssertionError: assert [('https://si...1872981', 10)] == [('https://si...reboard', 10)]
+E
+E         Left contains one more item: ('https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401872981', 10)
+E         Use -v to get more diff
+
+backend/tests/unit/feed_ingest/test_review_repairs.py:163: AssertionError
+__________ test_f6_redirect_is_refused_before_any_second_request[301] __________
+
+api = namespace(request=<function api.<locals>.request at 0x76c7054e1580>, table=<function api.<locals>.table at 0x76c7054e1...inksTable': 'expiresAt'}, passphrase='<synthetic-test-value>', ssm_reads=[], secret_names=['/afc/dev/link-passphrase'])
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x76c703a59280>
+code = 301
+
+    @pytest.mark.parametrize("code", [301, 302, 307, 308])
+    def test_f6_redirect_is_refused_before_any_second_request(api, monkeypatch, code):
+        module = importlib.import_module("feed_ingest")
+        calls = []
+
+        class Redirect(request.HTTPSHandler):
+            def https_open(self, req):
+                calls.append(req.full_url)
+                headers = Message()
+                headers["Location"] = "https://elsewhere.example/summary"
+                reply = response.addinfourl(io.BytesIO(b"{}"), headers, req.full_url,
+                                           code=code if len(calls) == 1 else 200)
+                reply.msg = "redirect" if len(calls) == 1 else "OK"
+                return reply
+
+        opener = getattr(module, "_OPENER", None)
+        if opener is None:
+            monkeypatch.setattr(request, "_opener", request.build_opener(Redirect()))
+        else:
+            opener.add_handler(Redirect())
+>       with pytest.raises(ValueError, match="^ESPN redirects are refused$"):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+backend/tests/unit/feed_ingest/test_review_repairs.py:187: Failed
+__________ test_f6_redirect_is_refused_before_any_second_request[302] __________
+
+api = namespace(request=<function api.<locals>.request at 0x76c7025df1a0>, table=<function api.<locals>.table at 0x76c7025df...inksTable': 'expiresAt'}, passphrase='<synthetic-test-value>', ssm_reads=[], secret_names=['/afc/dev/link-passphrase'])
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x76c70538cf50>
+code = 302
+
+    @pytest.mark.parametrize("code", [301, 302, 307, 308])
+    def test_f6_redirect_is_refused_before_any_second_request(api, monkeypatch, code):
+        module = importlib.import_module("feed_ingest")
+        calls = []
+
+        class Redirect(request.HTTPSHandler):
+            def https_open(self, req):
+                calls.append(req.full_url)
+                headers = Message()
+                headers["Location"] = "https://elsewhere.example/summary"
+                reply = response.addinfourl(io.BytesIO(b"{}"), headers, req.full_url,
+                                           code=code if len(calls) == 1 else 200)
+                reply.msg = "redirect" if len(calls) == 1 else "OK"
+                return reply
+
+        opener = getattr(module, "_OPENER", None)
+        if opener is None:
+            monkeypatch.setattr(request, "_opener", request.build_opener(Redirect()))
+        else:
+            opener.add_handler(Redirect())
+>       with pytest.raises(ValueError, match="^ESPN redirects are refused$"):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+backend/tests/unit/feed_ingest/test_review_repairs.py:187: Failed
+__________ test_f6_redirect_is_refused_before_any_second_request[307] __________
+
+api = namespace(request=<function api.<locals>.request at 0x76c704bdbe20>, table=<function api.<locals>.table at 0x76c704bdb...inksTable': 'expiresAt'}, passphrase='<synthetic-test-value>', ssm_reads=[], secret_names=['/afc/dev/link-passphrase'])
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x76c703097380>
+code = 307
+
+    @pytest.mark.parametrize("code", [301, 302, 307, 308])
+    def test_f6_redirect_is_refused_before_any_second_request(api, monkeypatch, code):
+        module = importlib.import_module("feed_ingest")
+        calls = []
+
+        class Redirect(request.HTTPSHandler):
+            def https_open(self, req):
+                calls.append(req.full_url)
+                headers = Message()
+                headers["Location"] = "https://elsewhere.example/summary"
+                reply = response.addinfourl(io.BytesIO(b"{}"), headers, req.full_url,
+                                           code=code if len(calls) == 1 else 200)
+                reply.msg = "redirect" if len(calls) == 1 else "OK"
+                return reply
+
+        opener = getattr(module, "_OPENER", None)
+        if opener is None:
+            monkeypatch.setattr(request, "_opener", request.build_opener(Redirect()))
+        else:
+            opener.add_handler(Redirect())
+>       with pytest.raises(ValueError, match="^ESPN redirects are refused$"):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+backend/tests/unit/feed_ingest/test_review_repairs.py:187: Failed
+__________ test_f6_redirect_is_refused_before_any_second_request[308] __________
+
+api = namespace(request=<function api.<locals>.request at 0x76c70446b7e0>, table=<function api.<locals>.table at 0x76c70446b...inksTable': 'expiresAt'}, passphrase='<synthetic-test-value>', ssm_reads=[], secret_names=['/afc/dev/link-passphrase'])
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x76c70468a630>
+code = 308
+
+    @pytest.mark.parametrize("code", [301, 302, 307, 308])
+    def test_f6_redirect_is_refused_before_any_second_request(api, monkeypatch, code):
+        module = importlib.import_module("feed_ingest")
+        calls = []
+
+        class Redirect(request.HTTPSHandler):
+            def https_open(self, req):
+                calls.append(req.full_url)
+                headers = Message()
+                headers["Location"] = "https://elsewhere.example/summary"
+                reply = response.addinfourl(io.BytesIO(b"{}"), headers, req.full_url,
+                                           code=code if len(calls) == 1 else 200)
+                reply.msg = "redirect" if len(calls) == 1 else "OK"
+                return reply
+
+        opener = getattr(module, "_OPENER", None)
+        if opener is None:
+            monkeypatch.setattr(request, "_opener", request.build_opener(Redirect()))
+        else:
+            opener.add_handler(Redirect())
+>       with pytest.raises(ValueError, match="^ESPN redirects are refused$"):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+backend/tests/unit/feed_ingest/test_review_repairs.py:187: Failed
+_ test_captured_missing_wallclock_validates_ingests_and_replays_all_183_plays __
+
+api = namespace(request=<function api.<locals>.request at 0x76c702f568e0>, table=<function api.<locals>.table at 0x76c702f56...inksTable': 'expiresAt'}, passphrase='<synthetic-test-value>', ssm_reads=[], secret_names=['/afc/dev/link-passphrase'])
+
+    def test_captured_missing_wallclock_validates_ingests_and_replays_all_183_plays(api):
+        from feed_support import FIXTURES
+        game_id = "401872986"
+        payload = fresh_summary(game_id)
+>       validate_summary(payload, game_id)
+
+backend/tests/unit/feed_ingest/test_validation.py:94:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend/tests/unit/feed_ingest/test_validation.py:23: in validate_summary
+    return attempt(require_attr(validation(), "validate_summary"), payload, game_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/feed_ingest/feed_support.py:61: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/feed_ingest/validation.py:24: in validate_summary
+    _check("summary", payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+name = 'summary'
+payload = {'againstTheSpread': [{'records': [], 'team': {'abbreviation': 'LV', 'displayName': 'Las Vegas Raiders', 'id': '13', '..., 'alternateColor': 'c60c30', 'color': '002a5c', 'displayName': 'New England Patriots', ...}}]}, 'broadcasts': [], ...}
+
+    def _check(name, payload):
+        error = jsonschema.exceptions.best_match(_validator(name).iter_errors(payload))
+        if error is not None:
+>           raise ValueError(f"ESPN {name} fails the pinned schema: {error.message}")
+E           ValueError: ESPN summary fails the pinned schema: 'wallclock' is a required property
+
+backend/src/feed_ingest/validation.py:19: ValueError
+_________________ test_replay_keeps_the_play_without_wallclock _________________
+
+    def test_replay_keeps_the_play_without_wallclock():
+        summary = json.loads((FIXTURES / "401872986" / "001-summary.json").read_text())
+        expected = [play["id"] for play in plays_in(summary)]
+        events = replay.load_events("401872986", FIXTURES)
+>       assert [event["eventId"] for event in events] == expected
+E       AssertionError: assert ['40187298653...2986177', ...] == ['40187298640...2986155', ...]
+E
+E         At index 0 diff: '40187298653' != '40187298640'
+E         Right contains one more item: '4018729864612'
+E         Use -v to get more diff
+
+backend/tests/unit/feed_ingest/test_feed_edges.py:168: AssertionError
+_____________ test_each_function_grants_only_its_store_operations ______________
+
+    def test_each_function_grants_only_its_store_operations():
+        template = document("template.yaml")
+        for function, expected in EXPECTED.items():
+            policies = template["Resources"][function]["Properties"]["Policies"]
+            assert not any(set(e) & set(EXPANDED) for e in policies), \
+                f"{function} still uses a broad DynamoDB policy template"
+            actions, _ = grants(policies)
+>           assert actions == expected, f"{function} DynamoDB grants changed: {actions}"
+E           AssertionError: IngestFunction DynamoDB grants changed: {'EventsTable': {'GetItem', 'PutItem'}, 'ProfilesTable': {'GetItem'}, 'LineupsTable': {'GetItem'}}
+E           assert {'EventsTable...: {'GetItem'}} == {'EventsTable...tem', 'Scan'}}
+E
+E             Omitting 2 identical items, use -vv to show
+E             Differing items:
+E             {'ProfilesTable': {'GetItem'}} != {'ProfilesTable': {'GetItem', 'Scan'}}
+E             Use -v to get more diff
+
+backend/tests/contract/test_template_iam.py:79: AssertionError
+=============================== warnings summary ===============================
+tests/unit/feed_ingest/test_review_repairs.py: 2455 warnings
+tests/unit/feed_ingest/test_validation.py: 422 warnings
+  <user-local>/lib/python3.12/site-packages/botocore/auth.py:424: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    datetime_now = datetime.datetime.utcnow()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+============================= slowest 10 durations =============================
+1.11s call     tests/unit/feed_ingest/test_review_repairs.py::test_f5_irrelevant_in_progress_game_is_never_fetched
+0.80s call     tests/unit/feed_ingest/test_validation.py::test_invalid_poll_leaves_stored_events_unchanged
+0.64s call     tests/unit/feed_ingest/test_review_repairs.py::test_f3_three_failures_replace_live_with_labeled_replay[failure0]
+0.63s call     tests/unit/feed_ingest/test_review_repairs.py::test_f3_three_failures_replace_live_with_labeled_replay[failure1]
+0.58s call     tests/unit/feed_ingest/test_review_repairs.py::test_f5_no_profiles_fetches_no_summary
+0.56s call     tests/unit/feed_ingest/test_review_repairs.py::test_f3_no_fixture_reports_stale_without_changing_values
+0.44s setup    tests/unit/feed_ingest/test_review_repairs.py::test_f2_bad_game_does_not_abort_later_valid_game[failure0]
+0.22s setup    tests/unit/feed_ingest/test_review_repairs.py::test_f6_redirect_is_refused_before_any_second_request[308]
+0.18s setup    tests/unit/feed_ingest/test_review_repairs.py::test_f4_configured_interval_and_lambda_deadline[5-26-expected0]
+0.18s setup    tests/unit/feed_ingest/test_review_repairs.py::test_f3_three_failures_replace_live_with_labeled_replay[failure0]
+=========================== short test summary info ============================
+FAILED backend/tests/unit/feed_ingest/test_review_repairs.py::test_f2_bad_game_does_not_abort_later_valid_game[failure0]
+FAILED backend/tests/unit/feed_ingest/test_review_repairs.py::test_f2_bad_game_does_not_abort_later_valid_game[failure1]
+FAILED backend/tests/unit/feed_ingest/test_review_repairs.py::test_f3_three_failures_replace_live_with_labeled_replay[failure0]
+FAILED backend/tests/unit/feed_ingest/test_review_repairs.py::test_f3_three_failures_replace_live_with_labeled_replay[failure1]
+FAILED backend/tests/unit/feed_ingest/test_review_repairs.py::test_f3_no_fixture_reports_stale_without_changing_values
+FAILED backend/tests/unit/feed_ingest/test_review_repairs.py::test_f4_configured_interval_and_lambda_deadline[5-26-expected0]
+FAILED backend/tests/unit/feed_ingest/test_review_repairs.py::test_f4_configured_interval_and_lambda_deadline[15-51-expected1]
+FAILED backend/tests/unit/feed_ingest/test_review_repairs.py::test_f4_configured_interval_and_lambda_deadline[60-60-expected2]
+FAILED backend/tests/unit/feed_ingest/test_review_repairs.py::test_f5_irrelevant_in_progress_game_is_never_fetched
+FAILED backend/tests/unit/feed_ingest/test_review_repairs.py::test_f5_no_profiles_fetches_no_summary
+FAILED backend/tests/unit/feed_ingest/test_review_repairs.py::test_f6_redirect_is_refused_before_any_second_request[301]
+FAILED backend/tests/unit/feed_ingest/test_review_repairs.py::test_f6_redirect_is_refused_before_any_second_request[302]
+FAILED backend/tests/unit/feed_ingest/test_review_repairs.py::test_f6_redirect_is_refused_before_any_second_request[307]
+FAILED backend/tests/unit/feed_ingest/test_review_repairs.py::test_f6_redirect_is_refused_before_any_second_request[308]
+FAILED backend/tests/unit/feed_ingest/test_validation.py::test_captured_missing_wallclock_validates_ingests_and_replays_all_183_plays
+FAILED backend/tests/unit/feed_ingest/test_feed_edges.py::test_replay_keeps_the_play_without_wallclock
+FAILED backend/tests/contract/test_template_iam.py::test_each_function_grants_only_its_store_operations
+17 failed, 14 passed, 2877 warnings in 6.91s

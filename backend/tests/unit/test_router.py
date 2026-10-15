@@ -216,12 +216,11 @@ def test_every_settings_attribute_is_accepted(api, owner, field):
 
 @pytest.mark.parametrize("outcome", ["gameOpened", "searchOpened", "appHomeOpened", "appAbsent",
                                      "accessUnknown", "playbackDenied"])
-def test_valid_routing_outcomes_reach_the_resolver_stub(api, owner, outcome):
+def test_valid_routing_outcomes_reach_the_resolver(api, owner, outcome):
     status, response = call("POST", "/v1/routing-outcome",
                             json.dumps({"eventId": "e1", "outcome": outcome}), owner)
-    assert status == 503
-    assert error_of(response) == {"code": "not_implemented",
-                                  "message": "This feature is not available yet."}
+    assert status == 200
+    assert json.loads(response["body"])["outcome"] == outcome
 
 
 def test_routing_outcomes_are_validated(api, owner):
@@ -240,7 +239,7 @@ def test_installed_apps_are_validated(api, owner):
             "code": "invalid_request", "message": "Field packages must list package names."}
     for packages in [[], ["com.amazon.Prime_video.1"] * 500, ["x" * 255]]:
         status, _ = call("POST", "/v1/installed-apps", json.dumps({"packages": packages}), owner)
-        assert status == 503
+        assert status == 200
 
 
 def test_stub_routes_receive_the_session_profile_and_query(api, owner, monkeypatch):
@@ -258,9 +257,30 @@ def test_stub_routes_receive_the_session_profile_and_query(api, owner, monkeypat
     assert call("GET", "/v1/providers", token=owner, query={"eventId": "e9"})[0] == 200
     assert call("POST", "/v1/routing-outcome", '{"eventId": "e9", "outcome": "appAbsent"}', owner)[0] == 200
     status, response = call("POST", "/v1/installed-apps", '{"packages": ["com.a"]}', owner)
-    assert status == 200 and json.loads(response["body"]) == {"ok": 2}
+    assert status == 200 and json.loads(response["body"]) == {"profileId": "owner"}
     assert seen == [("owner", "c1"), ("owner", "T/L"), ("owner", "e9"),
                     ("owner", "e9", "appAbsent"), ("owner", ["com.a"])]
+
+
+def test_opaque_provider_preferences_keep_unknown_broadcast_available(api, owner):
+    status, _ = api.request("PUT", "/v1/profile",
+                            {"revision": 0, "data": {"providerPref": "x"}}, token=owner)
+    assert status == 200
+    status, result = api.request("GET", "/v1/providers", token=owner)
+    assert status == 200, result
+    assert result["provider"] is None and result["route"] is None
+    assert result["accessBasis"] == "unknown"
+
+
+def test_maximum_size_installed_report_gets_bounded_success_acknowledgement(api, owner):
+    packages = ["x" * 255] * 252 + ["y" * 250]
+    body = {"packages": packages}
+    assert len(json.dumps(body).encode()) == 65536
+    status, result = api.request("POST", "/v1/installed-apps", body, token=owner)
+    assert status == 200, result
+    assert result == {"profileId": "owner"}
+    stored = api.table("Profiles").get_item(Key={"profileId": "providerState#owner"})["Item"]
+    assert stored["installedPackages"] == packages
 
 
 def test_unexpected_failures_return_a_safe_503(api, owner, monkeypatch):

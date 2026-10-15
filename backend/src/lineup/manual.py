@@ -5,6 +5,7 @@ stay readable as module attributes.
 """
 
 from datetime import datetime, timezone
+import re
 
 from lineup import presets
 
@@ -48,12 +49,15 @@ def build(espn_roster, entries, preset):
         raise ValueError(f"Unknown scoring preset: {preset!r}")
     if not isinstance(espn_roster, list) or len(espn_roster) > _max_entries():
         raise ValueError("ESPN roster must be a bounded list")
-    names = {}
+    players = {}
     for player in espn_roster:
         if not (isinstance(player, dict) and isinstance(player.get("athlete_id"), str)
                 and player["athlete_id"] and isinstance(player.get("name"), str)):
             raise ValueError("ESPN roster entry needs an athlete_id and name")
-        names[player["athlete_id"]] = player["name"]
+        team = player.get("team")
+        if not isinstance(team, str) or not re.fullmatch(r"[A-Z0-9]{2,4}", team):
+            raise ValueError("ESPN roster entry needs a team of 2-4 uppercase letters/digits")
+        players[player["athlete_id"]] = player
     if not isinstance(entries, list) or len(entries) > _max_entries():
         raise ValueError("Lineup entries must be a bounded list")
     starters = []
@@ -62,9 +66,11 @@ def build(espn_roster, entries, preset):
                 or not isinstance(entry.get("slot"), str) or not entry["slot"]):
             raise ValueError("Lineup entry needs an athlete_id and slot")
         athlete = entry.get("athlete_id")
-        if athlete not in names:
+        if athlete not in players:
             raise ValueError(f"Player {athlete!r} is not on the ESPN roster")
         if any(s["athlete_id"] == athlete for s in starters):
             raise ValueError(f"Player {athlete!r} is entered twice")
-        starters.append({"athlete_id": athlete, "name": names[athlete], "slot": entry["slot"]})
+        player = players[athlete]
+        starters.append({"athlete_id": athlete, "name": player["name"],
+                         "team": player["team"], "slot": entry["slot"]})
     return {"source": "manual", "scoring": {"preset": preset}, "starters": starters}

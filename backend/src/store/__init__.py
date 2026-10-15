@@ -46,6 +46,22 @@ def get_profile(profile_id):
         Key={"profileId": profile_id}).get("Item")
 
 
+def monitoring_profiles():
+    """Enumerate profile monitoring settings and starters, including every scan page."""
+    profiles = []
+    scan = {"ProjectionExpression": "profileId, #settings",
+            "ExpressionAttributeNames": {"#settings": "settings"}}
+    while True:
+        page = _table("PROFILES_TABLE").scan(**scan)
+        for profile in page["Items"]:
+            lineup = get_lineup(profile["profileId"]) or {}
+            profiles.append({"settings": profile.get("settings", {}),
+                             "starters": lineup.get("starters", [])})
+        if "LastEvaluatedKey" not in page:
+            return profiles
+        scan["ExclusiveStartKey"] = page["LastEvaluatedKey"]
+
+
 def put_profile(profile_id, settings, revision, updated_at):
     """Store revision + 1 only while the stored revision equals `revision` (0 = none yet)."""
     item = {"profileId": profile_id, "settings": settings, "revision": revision + 1,
