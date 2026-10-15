@@ -49,6 +49,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Select Vega OS as the primary TV target with Fire OS remaining the secondary target, and rebind the Phase 2 plan package (DEC-AFC-SD-048 through DEC-AFC-SD-054) ([#72](https://github.com/1wgrumph/amazon-fantasy-companion/pull/72)).
 - Link a TV with its device code alone (DEC-AFC-SD-048): drop the link
   passphrase from the `/link` page, the confirm API and its OpenAPI
   contract, and remove the SSM passphrase parameter, its env var and IAM

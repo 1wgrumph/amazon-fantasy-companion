@@ -1,0 +1,44 @@
+[
+  {
+    "command": [
+      "node",
+      "$HOME/.claude/plugins/cache/bearing-lite/bearing-lite/1.1.7/tools/render-dod-manifest.mjs",
+      "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/implementation.json"
+    ],
+    "exit_code": 0,
+    "log": "rebind-render.txt"
+  },
+  {
+    "command": [
+      "node",
+      "$HOME/.claude/plugins/cache/bearing-lite/bearing-lite/1.1.7/hooks/plan-package.cjs",
+      "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2"
+    ],
+    "exit_code": 0,
+    "log": "rebind-freeze.txt"
+  },
+  {
+    "command": [
+      "node",
+      "$HOME/.claude/plugins/cache/bearing-lite/bearing-lite/1.1.7/tools/render-dod-manifest.mjs",
+      "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/implementation.json",
+      "--check"
+    ],
+    "exit_code": 0,
+    "log": "rebind-render-check.txt"
+  },
+  {
+    "command": [
+      "python3",
+      "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-VEGA-PRIMARY-plan/verify_delta.py"
+    ],
+    "exit_code": 0,
+    "log": "rebind-verify-delta.txt"
+  },
+  {
+    "command": "export PATH=$HOME/.local/share/afc-tools/backend-tests/bin:$PATH; bash tools/ci/gate.sh",
+    "exit_code": 0,
+    "elapsed_seconds": 75.29,
+    "log": "rebind-gate.txt"
+  }
+]
