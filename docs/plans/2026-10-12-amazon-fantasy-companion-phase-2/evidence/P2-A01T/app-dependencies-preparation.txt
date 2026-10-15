@@ -1,0 +1,759 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.7.0/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build
+
+> Task :app:dependencies
+
+------------------------------------------------------------
+Project ':app'
+------------------------------------------------------------
+
+androidJdkImage - Configuration providing JDK image for compiling Java 9+ sources
+No dependencies
+
+androidLintTool - Configuration for the lint tool dependencies.
+\--- com.android.tools.lint:lint-gradle:32.3.1
+     +--- com.android.tools.external.com-intellij:intellij-core:32.3.1
+     +--- com.android.tools.external.com-intellij:kotlin-compiler:32.3.1
+     +--- com.android.tools.external.org-jetbrains:uast:32.3.1
+     +--- com.android.tools:common:32.3.1
+     |    +--- com.android.tools:annotations:32.3.1
+     |    +--- com.google.guava:guava:33.4.0-jre
+     |    |    +--- com.google.guava:failureaccess:1.0.2
+     |    |    +--- com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava
+     |    |    +--- com.google.code.findbugs:jsr305:3.0.2
+     |    |    +--- org.checkerframework:checker-qual:3.43.0
+     |    |    +--- com.google.errorprone:error_prone_annotations:2.36.0
+     |    |    \--- com.google.j2objc:j2objc-annotations:3.0.0
+     |    +--- net.java.dev.jna:jna-platform:5.6.0
+     |    |    \--- net.java.dev.jna:jna:5.6.0
+     |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.10
+     |         +--- org.jetbrains.kotlin:kotlin-stdlib:2.2.10 FAILED
+     |         \--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.2.10
+     |              \--- org.jetbrains.kotlin:kotlin-stdlib:2.2.10 FAILED
+     +--- com.android.tools.lint:lint:32.3.1
+     |    +--- com.android.tools.lint:lint-api:32.3.1
+     |    |    +--- com.android.tools.lint:lint-model:32.3.1
+     |    |    |    +--- com.android.tools.build:builder-model:9.3.1
+     |    |    |    |    +--- com.android.tools:annotations:32.3.1
+     |    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:2.2.10 FAILED
+     |    |    |    +--- com.android.tools:common:32.3.1 (*)
+     |    |    |    +--- com.android.tools:repository:32.3.1
+     |    |    |    |    +--- com.android.tools.analytics-library:shared:32.3.1
+     |    |    |    |    |    +--- com.android.tools.analytics-library:protos:32.3.1
+     |    |    |    |    |    |    \--- com.google.protobuf:protobuf-java:3.25.5
+     |    |    |    |    |    +--- com.android.tools:annotations:32.3.1
+     |    |    |    |    |    +--- com.android.tools:common:32.3.1 (*)
+     |    |    |    |    |    +--- com.google.code.gson:gson:2.11.0
+     |    |    |    |    |    |    \--- com.google.errorprone:error_prone_annotations:2.27.0 -> 2.36.0
+     |    |    |    |    |    +--- com.google.guava:guava:33.4.0-jre (*)
+     |    |    |    |    |    +--- net.java.dev.jna:jna-platform:5.6.0 (*)
+     |    |    |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.10 (*)
+     |    |    |    |    |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0
+     |    |    |    |    |         \--- org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.9.0
+     |    |    |    |    |              +--- org.jetbrains:annotations:23.0.0
+     |    |    |    |    |              +--- org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.9.0
+     |    |    |    |    |              |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.9.0 (c)
+     |    |    |    |    |              |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0 (c)
+     |    |    |    |    |              \--- org.jetbrains.kotlin:kotlin-stdlib:2.0.0 -> 2.2.10 FAILED
+     |    |    |    |    +--- com.android.tools:common:32.3.1 (*)
+     |    |    |    |    +--- com.google.jimfs:jimfs:1.1
+     |    |    |    |    |    \--- com.google.guava:guava:18.0 -> 33.4.0-jre (*)
+     |    |    |    |    +--- org.apache.commons:commons-compress:1.27.1
+     |    |    |    |    |    +--- commons-codec:commons-codec:1.17.1
+     |    |    |    |    |    +--- commons-io:commons-io:2.16.1
+     |    |    |    |    |    \--- org.apache.commons:commons-lang3:3.16.0
+     |    |    |    |    +--- org.glassfish.jaxb:jaxb-runtime:2.3.2
+     |    |    |    |    |    +--- jakarta.xml.bind:jakarta.xml.bind-api:2.3.2
+     |    |    |    |    |    |    \--- jakarta.activation:jakarta.activation-api:1.2.1
+     |    |    |    |    |    +--- org.glassfish.jaxb:txw2:2.3.2
+     |    |    |    |    |    +--- com.sun.istack:istack-commons-runtime:3.0.8
+     |    |    |    |    |    |    \--- jakarta.activation:jakarta.activation-api:1.2.1
+     |    |    |    |    |    +--- org.jvnet.staxex:stax-ex:1.8.1
+     |    |    |    |    |    |    +--- jakarta.activation:jakarta.activation-api:1.2.1
+     |    |    |    |    |    |    \--- jakarta.xml.bind:jakarta.xml.bind-api:2.3.2 (*)
+     |    |    |    |    |    +--- com.sun.xml.fastinfoset:FastInfoset:1.2.16
+     |    |    |    |    |    \--- jakarta.activation:jakarta.activation-api:1.2.1
+     |    |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.10 (*)
+     |    |    |    |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0 (*)
+     |    |    |    +--- com.android.tools:sdk-common:32.3.1
+     |    |    |    |    +--- com.android.tools.analytics-library:shared:32.3.1 (*)
+     |    |    |    |    +--- com.android.tools.build:aapt2-proto:9.3.1-15703166
+     |    |    |    |    |    \--- com.google.protobuf:protobuf-java:3.25.5
+     |    |    |    |    +--- com.android.tools:common:32.3.1 (*)
+     |    |    |    |    +--- com.android.tools.ddms:ddmlib:32.3.1
+     |    |    |    |    |    +--- com.android.tools:common:32.3.1 (*)
+     |    |    |    |    |    +--- com.google.protobuf:protobuf-java:3.25.5
+     |    |    |    |    |    +--- net.sf.kxml:kxml2:2.3.0
+     |    |    |    |    |    \--- org.jetbrains:annotations:23.0.0
+     |    |    |    |    +--- com.android.tools.layoutlib:layoutlib-api:32.3.1
+     |    |    |    |    |    +--- com.android.tools:annotations:32.3.1
+     |    |    |    |    |    +--- com.android.tools:common:32.3.1 (*)
+     |    |    |    |    |    +--- net.sf.kxml:kxml2:2.3.0
+     |    |    |    |    |    \--- org.jetbrains:annotations:23.0.0
+     |    |    |    |    +--- com.android.tools:sdklib:32.3.1
+     |    |    |    |    |    +--- com.android.tools:repository:32.3.1 (*)
+     |    |    |    |    |    +--- com.android.tools:common:32.3.1 (*)
+     |    |    |    |    |    +--- com.android.tools:dvlib:32.3.1
+     |    |    |    |    |    |    \--- com.android.tools:common:32.3.1 (*)
+     |    |    |    |    |    +--- com.android.tools.layoutlib:layoutlib-api:32.3.1 (*)
+     |    |    |    |    |    +--- com.google.code.gson:gson:2.11.0 (*)
+     |    |    |    |    |    +--- org.apache.commons:commons-compress:1.27.1 (*)
+     |    |    |    |    |    +--- org.apache.httpcomponents:httpcore:4.4.16
+     |    |    |    |    |    +--- org.apache.httpcomponents:httpmime:4.5.6
+     |    |    |    |    |    |    \--- org.apache.httpcomponents:httpclient:4.5.6 FAILED
+     |    |    |    |    |    \--- org.glassfish.jaxb:jaxb-runtime:2.3.2 (*)
+     |    |    |    |    +--- com.google.code.gson:gson:2.11.0 (*)
+     |    |    |    |    +--- com.google.guava:guava:33.4.0-jre (*)
+     |    |    |    |    +--- com.google.protobuf:protobuf-java:3.25.5
+     |    |    |    |    +--- javax.inject:javax.inject:1
+     |    |    |    |    +--- net.sf.kxml:kxml2:2.3.0
+     |    |    |    |    +--- org.apache.commons:commons-compress:1.27.1 (*)
+     |    |    |    |    +--- org.bouncycastle:bcpkix-jdk18on:1.79 -> 1.85
+     |    |    |    |    |    \--- org.bouncycastle:bcutil-jdk18on:1.85
+     |    |    |    |    |         \--- org.bouncycastle:bcprov-jdk18on:1.85
+     |    |    |    |    +--- org.bouncycastle:bcprov-jdk18on:1.79 -> 1.85
+     |    |    |    |    +--- org.glassfish.jaxb:jaxb-runtime:2.3.2 (*)
+     |    |    |    |    +--- org.jetbrains.kotlin:kotlin-reflect:2.2.10
+     |    |    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:2.2.10 FAILED
+     |    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.10 (*)
+     |    |    |    +--- com.android.tools:sdklib:32.3.1 (*)
+     |    |    |    +--- net.sf.kxml:kxml2:2.3.0
+     |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.10 (*)
+     |    |    +--- com.android.tools.external.com-intellij:intellij-core:32.3.1
+     |    |    +--- com.android.tools.external.com-intellij:kotlin-compiler:32.3.1
+     |    |    +--- com.android.tools.external.org-jetbrains:uast:32.3.1
+     |    |    +--- com.android.tools.build:manifest-merger:32.3.1
+     |    |    |    +--- com.android.tools:common:32.3.1 (*)
+     |    |    |    +--- com.android.tools:sdklib:32.3.1 (*)
+     |    |    |    +--- com.android.tools:sdk-common:32.3.1 (*)
+     |    |    |    +--- com.google.code.gson:gson:2.11.0 (*)
+     |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:2.2.10 FAILED
+     |    |    +--- com.android.tools:common:32.3.1 (*)
+     |    |    +--- com.android.tools.layoutlib:layoutlib-api:32.3.1 (*)
+     |    |    +--- com.android.tools:sdk-common:32.3.1 (*)
+     |    |    +--- com.android.tools:sdklib:32.3.1 (*)
+     |    |    +--- commons-io:commons-io:2.16.1
+     |    |    +--- net.sf.kxml:kxml2:2.3.0
+     |    |    +--- org.jetbrains.kotlin:kotlin-reflect:2.2.10 (*)
+     |    |    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.10 (*)
+     |    |    +--- org.ow2.asm:asm:9.9
+     |    |    +--- org.ow2.asm:asm-commons:9.9
+     |    |    |    +--- org.ow2.asm:asm:9.9
+     |    |    |    \--- org.ow2.asm:asm-tree:9.9
+     |    |    |         \--- org.ow2.asm:asm:9.9
+     |    |    +--- org.ow2.asm:asm-tree:9.9 (*)
+     |    |    +--- com.android.tools.build:builder-model:9.3.1 (*)
+     |    |    \--- com.google.guava:guava:33.4.0-jre (*)
+     |    +--- com.android.tools.lint:lint-checks:32.3.1
+     |    |    +--- com.android.tools.lint:lint-api:32.3.1 (*)
+     |    |    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.10 (*)
+     |    |    +--- com.android.tools.external.com-intellij:intellij-core:32.3.1
+     |    |    +--- com.android.tools.external.com-intellij:kotlin-compiler:32.3.1
+     |    |    +--- com.android.tools.external.org-jetbrains:uast:32.3.1
+     |    |    +--- com.android.tools:common:32.3.1 (*)
+     |    |    +--- com.android.tools.layoutlib:layoutlib-api:32.3.1 (*)
+     |    |    +--- com.android.tools:play-sdk-proto:32.3.1
+     |    |    |    \--- com.google.protobuf:protobuf-java:3.25.5
+     |    |    +--- com.android.tools:sdk-common:32.3.1 (*)
+     |    |    +--- com.android.tools:sdklib:32.3.1 (*)
+     |    |    +--- com.google.code.gson:gson:2.11.0 (*)
+     |    |    +--- com.google.guava:guava:33.4.0-jre (*)
+     |    |    +--- com.google.protobuf:protobuf-java:3.25.5
+     |    |    +--- net.sf.kxml:kxml2:2.3.0
+     |    |    \--- org.ow2.asm:asm-analysis:9.9
+     |    |         \--- org.ow2.asm:asm-tree:9.9 (*)
+     |    +--- com.android.tools.external.com-intellij:intellij-core:32.3.1
+     |    +--- com.android.tools.external.com-intellij:kotlin-compiler:32.3.1
+     |    +--- com.android.tools.external.org-jetbrains:uast:32.3.1
+     |    +--- com.android.tools.analytics-library:protos:32.3.1 (*)
+     |    +--- com.android.tools.analytics-library:shared:32.3.1 (*)
+     |    +--- com.android.tools.analytics-library:tracker:32.3.1
+     |    |    +--- com.android.tools.analytics-library:protos:32.3.1 (*)
+     |    |    +--- com.android.tools.analytics-library:shared:32.3.1 (*)
+     |    |    +--- com.android.tools:annotations:32.3.1
+     |    |    +--- com.android.tools:common:32.3.1 (*)
+     |    |    +--- com.google.guava:guava:33.4.0-jre (*)
+     |    |    +--- com.google.protobuf:protobuf-java:3.25.5
+     |    |    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.10 (*)
+     |    |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0 (*)
+     |    +--- com.android.tools.build:manifest-merger:32.3.1 (*)
+     |    +--- com.android.tools:common:32.3.1 (*)
+     |    +--- com.android.tools.layoutlib:layoutlib-api:32.3.1 (*)
+     |    +--- com.android.tools:sdk-common:32.3.1 (*)
+     |    +--- com.android.tools:sdklib:32.3.1 (*)
+     |    +--- com.google.code.gson:gson:2.11.0 (*)
+     |    +--- com.google.guava:guava:33.4.0-jre (*)
+     |    +--- org.jetbrains.kotlin:kotlin-reflect:2.2.10 (*)
+     |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.10 (*)
+     +--- com.android.tools.lint:lint-typedef-remover:32.3.1
+     |    +--- com.android.tools:annotations:32.3.1
+     |    +--- com.google.guava:guava:33.4.0-jre (*)
+     |    \--- org.ow2.asm:asm:9.9
+     \--- org.codehaus.groovy:groovy:3.0.22
+
+androidTestAnnotationProcessor - Classpath for the annotation processor for 'androidTest'. (n)
+No dependencies
+
+androidTestCompileOnly - Compile only dependencies for 'androidTest' sources. (n)
+No dependencies
+
+androidTestDebugAnnotationProcessor - Classpath for the annotation processor for 'androidTestDebug'. (n)
+No dependencies
+
+androidTestDebugCompileOnly - Compile only dependencies for 'androidTestDebug' sources. (n)
+No dependencies
+
+androidTestDebugImplementation - Implementation only dependencies for 'androidTestDebug' sources. (n)
+No dependencies
+
+androidTestDebugRuntimeOnly - Runtime only dependencies for 'androidTestDebug' sources. (n)
+No dependencies
+
+androidTestImplementation - Implementation only dependencies for 'androidTest' sources. (n)
+No dependencies
+
+androidTestReleaseAnnotationProcessor - Classpath for the annotation processor for 'androidTestRelease'. (n)
+No dependencies
+
+androidTestReleaseCompileOnly - Compile only dependencies for 'androidTestRelease' sources. (n)
+No dependencies
+
+androidTestReleaseImplementation - Implementation only dependencies for 'androidTestRelease' sources. (n)
+No dependencies
+
+androidTestReleaseRuntimeOnly - Runtime only dependencies for 'androidTestRelease' sources. (n)
+No dependencies
+
+androidTestRuntimeOnly - Runtime only dependencies for 'androidTest' sources. (n)
+No dependencies
+
+androidTestUtil - Additional APKs used during instrumentation testing.
+No dependencies
+
+annotationProcessor - Classpath for the annotation processor for 'main'. (n)
+No dependencies
+
+api - API dependencies for 'main' sources. (n)
+\--- org.jetbrains.kotlin:kotlin-stdlib:2.4.21 (n)
+
+compileOnly - Compile only dependencies for 'main' sources. (n)
+No dependencies
+
+compileOnlyApi - Compile only API dependencies for 'main' sources. (n)
+No dependencies
+
+coreLibraryDesugaring - Configuration to desugar libraries
+No dependencies
+
+debugAndroidTestAnnotationProcessorClasspath - Resolved configuration for annotation-processor for variant: debugAndroidTest
+No dependencies
+
+debugAndroidTestApi (n)
+No dependencies
+
+debugAndroidTestCompilationApi - API dependencies for '/debugAndroidTest'. (n)
+No dependencies
+
+debugAndroidTestCompilationCompileOnly - Compile only dependencies for '/debugAndroidTest'. (n)
+No dependencies
+
+debugAndroidTestCompilationImplementation - Implementation only dependencies for '/debugAndroidTest'. (n)
+No dependencies
+
+debugAndroidTestCompilationRuntimeOnly - Runtime only dependencies for '/debugAndroidTest'. (n)
+No dependencies
+
+debugAndroidTestCompileClasspath - Compile classpath for '/debugAndroidTest'.
++--- org.jetbrains.kotlin:kotlin-stdlib:2.4.21
+|    \--- org.jetbrains:annotations:13.0 -> 23.0.0
++--- project ':app' (*)
+\--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0
+     \--- org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.11.0
+          +--- org.jetbrains:annotations:23.0.0
+          +--- org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.11.0
+          |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.11.0 (c)
+          |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0 (c)
+          \--- org.jetbrains.kotlin:kotlin-stdlib:2.2.20 -> 2.4.21 (*)
+
+debugAndroidTestCompileOnly (n)
+No dependencies
+
+debugAndroidTestImplementation (n)
+No dependencies
+
+debugAndroidTestImplementationDependenciesMetadata
+No dependencies
+
+debugAndroidTestLintChecksClasspath - Resolved configuration for lint check compilation for variant: debugAndroidTest
++--- org.jetbrains.kotlin:kotlin-stdlib:2.4.21
+|    \--- org.jetbrains:annotations:13.0 -> 23.0.0
++--- project ':app' (*)
+\--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0
+     \--- org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.11.0
+          +--- org.jetbrains:annotations:23.0.0
+          +--- org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.11.0
+          |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.11.0 (c)
+          |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0 (c)
+          \--- org.jetbrains.kotlin:kotlin-stdlib:2.2.20 -> 2.4.21 (*)
+
+debugAndroidTestRuntimeClasspath - Runtime classpath of '/debugAndroidTest'.
+No dependencies
+
+debugAndroidTestRuntimeOnly (n)
+No dependencies
+
+debugAnnotationProcessor - Classpath for the annotation processor for 'debug'. (n)
+No dependencies
+
+debugAnnotationProcessorClasspath - Resolved configuration for annotation-processor for variant: debug
+No dependencies
+
+debugApi - API dependencies for 'debug' sources. (n)
+No dependencies
+
+debugApiElements - API elements for debug (n)
+No dependencies
+
+debugCompilationApi - API dependencies for '/debug'. (n)
+No dependencies
+
+debugCompilationCompileOnly - Compile only dependencies for '/debug'. (n)
+No dependencies
+
+debugCompilationImplementation - Implementation only dependencies for '/debug'. (n)
+No dependencies
+
+debugCompilationRuntimeOnly - Runtime only dependencies for '/debug'. (n)
+No dependencies
+
+debugCompileClasspath - Compile classpath for '/debug'.
++--- org.jetbrains.kotlin:kotlin-stdlib:2.4.21
+|    \--- org.jetbrains:annotations:13.0 -> 23.0.0
+\--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0
+     \--- org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.11.0
+          +--- org.jetbrains:annotations:23.0.0
+          +--- org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.11.0
+          |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.11.0 (c)
+          |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0 (c)
+          \--- org.jetbrains.kotlin:kotlin-stdlib:2.2.20 -> 2.4.21 (*)
+
+debugCompileOnly - Compile only dependencies for 'debug' sources. (n)
+No dependencies
+
+debugCompileOnlyApi - Compile only API dependencies for 'debug' sources. (n)
+No dependencies
+
+debugImplementation - Implementation only dependencies for 'debug' sources. (n)
+No dependencies
+
+debugImplementationDependenciesMetadata
+No dependencies
+
+debugLintChecksClasspath - Resolved configuration for lint check compilation for variant: debug
++--- org.jetbrains.kotlin:kotlin-stdlib:2.4.21
+|    \--- org.jetbrains:annotations:13.0 -> 23.0.0
+\--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0
+     \--- org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.11.0
+          +--- org.jetbrains:annotations:23.0.0
+          +--- org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.11.0
+          |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.11.0 (c)
+          |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0 (c)
+          \--- org.jetbrains.kotlin:kotlin-stdlib:2.2.20 -> 2.4.21 (*)
+
+debugReverseMetadataValues - Metadata Values dependencies for the base Split
+No dependencies
+
+debugRuntimeClasspath - Runtime classpath of '/debug'.
++--- org.jetbrains.kotlin:kotlin-stdlib:2.4.21
+|    \--- org.jetbrains:annotations:13.0 -> 23.0.0
+\--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0
+     \--- org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.11.0
+          +--- org.jetbrains:annotations:23.0.0
+          +--- org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.11.0
+          |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.11.0 (c)
+          |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0 (c)
+          \--- org.jetbrains.kotlin:kotlin-stdlib:2.2.20 -> 2.4.21 (*)
+
+debugRuntimeElements - Runtime elements for debug (n)
+No dependencies
+
+debugRuntimeOnly - Runtime only dependencies for 'debug' sources. (n)
+No dependencies
+
+debugUnitTestAnnotationProcessorClasspath - Resolved configuration for annotation-processor for variant: debugUnitTest
+No dependencies
+
+debugUnitTestApi (n)
+No dependencies
+
+debugUnitTestCompilationApi - API dependencies for '/debugUnitTest'. (n)
+No dependencies
+
+debugUnitTestCompilationCompileOnly - Compile only dependencies for '/debugUnitTest'. (n)
+No dependencies
+
+debugUnitTestCompilationImplementation - Implementation only dependencies for '/debugUnitTest'. (n)
+No dependencies
+
+debugUnitTestCompilationRuntimeOnly - Runtime only dependencies for '/debugUnitTest'. (n)
+No dependencies
+
+debugUnitTestCompileClasspath - Compile classpath for '/debugUnitTest'.
++--- org.jetbrains.kotlin:kotlin-stdlib:2.4.21
+|    \--- org.jetbrains:annotations:13.0 -> 23.0.0
++--- project ':app' (*)
++--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0
+|    \--- org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.11.0
+|         +--- org.jetbrains:annotations:23.0.0
+|         +--- org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.11.0
+|         |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.11.0 (c)
+|         |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0 (c)
+|         \--- org.jetbrains.kotlin:kotlin-stdlib:2.2.20 -> 2.4.21 (*)
++--- junit:junit:4.13.2
+|    \--- org.hamcrest:hamcrest-core:1.3
++--- org.json:json:20260814
+\--- org.yaml:snakeyaml:2.7
+
+debugUnitTestCompileOnly (n)
+No dependencies
+
+debugUnitTestImplementation (n)
+No dependencies
+
+debugUnitTestImplementationDependenciesMetadata
+No dependencies
+
+debugUnitTestLintChecksClasspath - Resolved configuration for lint check compilation for variant: debugUnitTest
++--- org.jetbrains.kotlin:kotlin-stdlib:2.4.21
+|    \--- org.jetbrains:annotations:13.0 -> 23.0.0
++--- project ':app' (*)
++--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0
+|    \--- org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.11.0
+|         +--- org.jetbrains:annotations:23.0.0
+|         +--- org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.11.0
+|         |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.11.0 (c)
+|         |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0 (c)
+|         \--- org.jetbrains.kotlin:kotlin-stdlib:2.2.20 -> 2.4.21 (*)
++--- junit:junit:4.13.2
+|    \--- org.hamcrest:hamcrest-core:1.3
++--- org.json:json:20260814
+\--- org.yaml:snakeyaml:2.7
+
+debugUnitTestRuntimeClasspath - Runtime classpath of '/debugUnitTest'.
++--- project ':app' (*)
++--- junit:junit:4.13.2
+|    \--- org.hamcrest:hamcrest-core:1.3
++--- org.json:json:20260814
++--- org.yaml:snakeyaml:2.7
++--- org.jetbrains.kotlin:kotlin-stdlib:2.4.21
+|    \--- org.jetbrains:annotations:13.0 -> 23.0.0
+\--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0
+     \--- org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.11.0
+          +--- org.jetbrains:annotations:23.0.0
+          +--- org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.11.0
+          |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.11.0 (c)
+          |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0 (c)
+          \--- org.jetbrains.kotlin:kotlin-stdlib:2.2.20 -> 2.4.21 (*)
+
+debugUnitTestRuntimeOnly (n)
+No dependencies
+
+implementation - Implementation only dependencies for 'main' sources. (n)
+\--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0 (n)
+
+kotlinAbiValidationCompatClasspath
++--- org.jetbrains.kotlin:kotlin-build-tools-compat:2.4.21
+|    \--- org.jetbrains.kotlin:kotlin-tooling-core:2.4.21
+\--- org.jetbrains.kotlin:kotlin-build-tools-impl:{strictly 2.4.0} -> 2.4.0 FAILED
+
+kotlinBuildToolsApiClasspath
++--- org.jetbrains.kotlin:kotlin-build-tools-compat:2.4.21
+|    \--- org.jetbrains.kotlin:kotlin-tooling-core:2.4.21
+\--- org.jetbrains.kotlin:kotlin-build-tools-impl:{strictly 2.4.21} -> 2.4.21
+     +--- org.jetbrains.kotlin:kotlin-build-tools-api:2.4.21
+     +--- org.jetbrains.kotlin:kotlin-stdlib:2.4.21
+     |    \--- org.jetbrains:annotations:13.0
+     +--- org.jetbrains.kotlin:kotlin-build-tools-cri-impl:2.4.21
+     |    +--- org.jetbrains.kotlin:kotlin-build-tools-api:2.4.21
+     |    \--- org.jetbrains.kotlin:kotlin-stdlib:2.4.21 (*)
+     +--- org.jetbrains.kotlin:kotlin-tooling-core:2.4.21
+     +--- org.jetbrains.kotlin:kotlin-compiler-embeddable:2.4.21
+     |    +--- org.jetbrains.kotlin:kotlin-build-tools-api:2.4.21
+     |    +--- org.jetbrains.kotlin:kotlin-stdlib:2.4.21 (*)
+     |    +--- org.jetbrains.kotlin:kotlin-script-runtime:2.4.21
+     |    +--- org.jetbrains.kotlin:kotlin-reflect:1.6.10
+     |    +--- org.jetbrains.kotlin:kotlin-daemon-embeddable:2.4.21
+     |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.8.0
+     \--- org.jetbrains.kotlin:kotlin-compiler-runner:2.4.21
+          +--- org.jetbrains.kotlin:kotlin-daemon-client:2.4.21
+          |    \--- org.jetbrains.kotlin:kotlin-stdlib:2.2.21 -> 2.4.21 (*)
+          +--- org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.8.0
+          \--- org.jetbrains.kotlin:kotlin-compiler-embeddable:2.4.21 (*)
+
+kotlinCompilerClasspath
++--- org.jetbrains.kotlin:kotlin-build-tools-compat:2.4.21
+|    \--- org.jetbrains.kotlin:kotlin-tooling-core:2.4.21
+\--- org.jetbrains.kotlin:kotlin-build-tools-impl:2.4.21
+     +--- org.jetbrains.kotlin:kotlin-build-tools-api:2.4.21
+     +--- org.jetbrains.kotlin:kotlin-stdlib:2.4.21
+     |    \--- org.jetbrains:annotations:13.0
+     +--- org.jetbrains.kotlin:kotlin-build-tools-cri-impl:2.4.21
+     |    +--- org.jetbrains.kotlin:kotlin-build-tools-api:2.4.21
+     |    \--- org.jetbrains.kotlin:kotlin-stdlib:2.4.21 (*)
+     +--- org.jetbrains.kotlin:kotlin-tooling-core:2.4.21
+     +--- org.jetbrains.kotlin:kotlin-compiler-embeddable:2.4.21
+     |    +--- org.jetbrains.kotlin:kotlin-build-tools-api:2.4.21
+     |    +--- org.jetbrains.kotlin:kotlin-stdlib:2.4.21 (*)
+     |    +--- org.jetbrains.kotlin:kotlin-script-runtime:2.4.21
+     |    +--- org.jetbrains.kotlin:kotlin-reflect:1.6.10
+     |    +--- org.jetbrains.kotlin:kotlin-daemon-embeddable:2.4.21
+     |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.8.0
+     \--- org.jetbrains.kotlin:kotlin-compiler-runner:2.4.21
+          +--- org.jetbrains.kotlin:kotlin-daemon-client:2.4.21
+          |    \--- org.jetbrains.kotlin:kotlin-stdlib:2.2.21 -> 2.4.21 (*)
+          +--- org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.8.0
+          \--- org.jetbrains.kotlin:kotlin-compiler-embeddable:2.4.21 (*)
+
+kotlinCompilerPluginClasspath
+No dependencies
+
+kotlinCompilerPluginClasspathDebug - Kotlin compiler plugins for compilation
+No dependencies
+
+kotlinCompilerPluginClasspathDebugAndroidTest - Kotlin compiler plugins for compilation
+No dependencies
+
+kotlinCompilerPluginClasspathDebugUnitTest - Kotlin compiler plugins for compilation
+No dependencies
+
+kotlinCompilerPluginClasspathRelease - Kotlin compiler plugins for compilation
+No dependencies
+
+lintChecks - Configuration to apply external lint check jar
+No dependencies
+
+lintPublish - Configuration to publish external lint check jar
+No dependencies
+
+releaseAnnotationProcessor - Classpath for the annotation processor for 'release'. (n)
+No dependencies
+
+releaseAnnotationProcessorClasspath - Resolved configuration for annotation-processor for variant: release
+No dependencies
+
+releaseApi - API dependencies for 'release' sources. (n)
+No dependencies
+
+releaseApiElements - API elements for release (n)
+No dependencies
+
+releaseCompilationApi - API dependencies for '/release'. (n)
+No dependencies
+
+releaseCompilationCompileOnly - Compile only dependencies for '/release'. (n)
+No dependencies
+
+releaseCompilationImplementation - Implementation only dependencies for '/release'. (n)
+No dependencies
+
+releaseCompilationRuntimeOnly - Runtime only dependencies for '/release'. (n)
+No dependencies
+
+releaseCompileClasspath - Compile classpath for '/release'.
++--- org.jetbrains.kotlin:kotlin-stdlib:2.4.21
+|    \--- org.jetbrains:annotations:13.0 -> 23.0.0
+\--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0
+     \--- org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.11.0
+          +--- org.jetbrains:annotations:23.0.0
+          +--- org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.11.0
+          |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.11.0 (c)
+          |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0 (c)
+          \--- org.jetbrains.kotlin:kotlin-stdlib:2.2.20 -> 2.4.21 (*)
+
+releaseCompileOnly - Compile only dependencies for 'release' sources. (n)
+No dependencies
+
+releaseCompileOnlyApi - Compile only API dependencies for 'release' sources. (n)
+No dependencies
+
+releaseImplementation - Implementation only dependencies for 'release' sources. (n)
+No dependencies
+
+releaseImplementationDependenciesMetadata
+No dependencies
+
+releaseLintChecksClasspath - Resolved configuration for lint check compilation for variant: release
++--- org.jetbrains.kotlin:kotlin-stdlib:2.4.21
+|    \--- org.jetbrains:annotations:13.0 -> 23.0.0
+\--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0
+     \--- org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.11.0
+          +--- org.jetbrains:annotations:23.0.0
+          +--- org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.11.0
+          |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.11.0 (c)
+          |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0 (c)
+          \--- org.jetbrains.kotlin:kotlin-stdlib:2.2.20 -> 2.4.21 (*)
+
+releaseReverseMetadataValues - Metadata Values dependencies for the base Split
+No dependencies
+
+releaseRuntimeClasspath - Runtime classpath of '/release'.
++--- org.jetbrains.kotlin:kotlin-stdlib:2.4.21
+|    \--- org.jetbrains:annotations:13.0 -> 23.0.0
+\--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0
+     \--- org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.11.0
+          +--- org.jetbrains:annotations:23.0.0
+          +--- org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.11.0
+          |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.11.0 (c)
+          |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0 (c)
+          \--- org.jetbrains.kotlin:kotlin-stdlib:2.2.20 -> 2.4.21 (*)
+
+releaseRuntimeElements - Runtime elements for release (n)
+No dependencies
+
+releaseRuntimeOnly - Runtime only dependencies for 'release' sources. (n)
+No dependencies
+
+runtimeOnly - Runtime only dependencies for 'main' sources. (n)
+No dependencies
+
+testAnnotationProcessor - Classpath for the annotation processor for 'test'. (n)
+No dependencies
+
+testCompileOnly - Compile only dependencies for 'test' sources. (n)
+No dependencies
+
+testDebugAnnotationProcessor - Classpath for the annotation processor for 'testDebug'. (n)
+No dependencies
+
+testDebugCompileOnly - Compile only dependencies for 'testDebug' sources. (n)
+No dependencies
+
+testDebugImplementation - Implementation only dependencies for 'testDebug' sources. (n)
+No dependencies
+
+testDebugRuntimeOnly - Runtime only dependencies for 'testDebug' sources. (n)
+No dependencies
+
+testFixturesAnnotationProcessor - Classpath for the annotation processor for 'testFixtures'. (n)
+No dependencies
+
+testFixturesApi - API dependencies for 'testFixtures' sources. (n)
+No dependencies
+
+testFixturesCompileOnly - Compile only dependencies for 'testFixtures' sources. (n)
+No dependencies
+
+testFixturesCompileOnlyApi - Compile only API dependencies for 'testFixtures' sources. (n)
+No dependencies
+
+testFixturesDebugAnnotationProcessor - Classpath for the annotation processor for 'testFixturesDebug'. (n)
+No dependencies
+
+testFixturesDebugApi - API dependencies for 'testFixturesDebug' sources. (n)
+No dependencies
+
+testFixturesDebugCompileOnly - Compile only dependencies for 'testFixturesDebug' sources. (n)
+No dependencies
+
+testFixturesDebugCompileOnlyApi - Compile only API dependencies for 'testFixturesDebug' sources. (n)
+No dependencies
+
+testFixturesDebugImplementation - Implementation only dependencies for 'testFixturesDebug' sources. (n)
+No dependencies
+
+testFixturesDebugRuntimeOnly - Runtime only dependencies for 'testFixturesDebug' sources. (n)
+No dependencies
+
+testFixturesImplementation - Implementation only dependencies for 'testFixtures' sources. (n)
+No dependencies
+
+testFixturesReleaseAnnotationProcessor - Classpath for the annotation processor for 'testFixturesRelease'. (n)
+No dependencies
+
+testFixturesReleaseApi - API dependencies for 'testFixturesRelease' sources. (n)
+No dependencies
+
+testFixturesReleaseCompileOnly - Compile only dependencies for 'testFixturesRelease' sources. (n)
+No dependencies
+
+testFixturesReleaseCompileOnlyApi - Compile only API dependencies for 'testFixturesRelease' sources. (n)
+No dependencies
+
+testFixturesReleaseImplementation - Implementation only dependencies for 'testFixturesRelease' sources. (n)
+No dependencies
+
+testFixturesReleaseRuntimeOnly - Runtime only dependencies for 'testFixturesRelease' sources. (n)
+No dependencies
+
+testFixturesRuntimeOnly - Runtime only dependencies for 'testFixtures' sources. (n)
+No dependencies
+
+testImplementation - Implementation only dependencies for 'test' sources. (n)
++--- junit:junit:4.13.2 (n)
++--- org.json:json:20260814 (n)
+\--- org.yaml:snakeyaml:2.7 (n)
+
+testReleaseAnnotationProcessor - Classpath for the annotation processor for 'testRelease'. (n)
+No dependencies
+
+testReleaseCompileOnly - Compile only dependencies for 'testRelease' sources. (n)
+No dependencies
+
+testReleaseImplementation - Implementation only dependencies for 'testRelease' sources. (n)
+No dependencies
+
+testReleaseRuntimeOnly - Runtime only dependencies for 'testRelease' sources. (n)
+No dependencies
+
+testRuntimeOnly - Runtime only dependencies for 'test' sources. (n)
+No dependencies
+
+unified-test-platform-android-device-provider-ddmlib - A configuration to resolve the Unified Test Platform dependencies.
+\--- com.android.tools.utp:android-device-provider-ddmlib:32.3.1 FAILED
+
+unified-test-platform-android-driver-instrumentation - A configuration to resolve the Unified Test Platform dependencies.
+\--- com.google.testing.platform:android-driver-instrumentation:0.0.9-alpha04 FAILED
+
+unified-test-platform-android-test-plugin - A configuration to resolve the Unified Test Platform dependencies.
+\--- com.google.testing.platform:android-test-plugin:0.0.9-alpha04 FAILED
+
+unified-test-platform-android-test-plugin-host-additional-test-output - A configuration to resolve the Unified Test Platform dependencies.
+\--- com.android.tools.utp:android-test-plugin-host-additional-test-output:32.3.1 FAILED
+
+unified-test-platform-android-test-plugin-host-apk-installer - A configuration to resolve the Unified Test Platform dependencies.
+\--- com.android.tools.utp:android-test-plugin-host-apk-installer:32.3.1 FAILED
+
+unified-test-platform-android-test-plugin-host-coverage - A configuration to resolve the Unified Test Platform dependencies.
+\--- com.android.tools.utp:android-test-plugin-host-coverage:32.3.1 FAILED
+
+unified-test-platform-android-test-plugin-host-device-info - A configuration to resolve the Unified Test Platform dependencies.
+\--- com.android.tools.utp:android-test-plugin-host-device-info:32.3.1 FAILED
+
+unified-test-platform-android-test-plugin-host-emulator-control - A configuration to resolve the Unified Test Platform dependencies.
+\--- com.android.tools.utp:android-test-plugin-host-emulator-control:32.3.1 FAILED
+
+unified-test-platform-android-test-plugin-host-logcat - A configuration to resolve the Unified Test Platform dependencies.
+\--- com.android.tools.utp:android-test-plugin-host-logcat:32.3.1 FAILED
+
+unified-test-platform-android-test-plugin-result-listener-gradle - A configuration to resolve the Unified Test Platform dependencies.
+\--- com.android.tools.utp:android-test-plugin-result-listener-gradle:32.3.1 FAILED
+
+unified-test-platform-core - A configuration to resolve the Unified Test Platform dependencies.
+\--- com.google.testing.platform:core:0.0.9-alpha04 FAILED
+
+unified-test-platform-gradle-work-action - A configuration to resolve the Unified Test Platform dependencies.
+\--- com.android.tools.utp:gradle-work-action:32.3.1 FAILED
+
+unified-test-platform-launcher - A configuration to resolve the Unified Test Platform dependencies.
+\--- com.google.testing.platform:launcher:0.0.9-alpha04 FAILED
+
+(c) - A dependency constraint, not a dependency. The dependency affected by the constraint occurs elsewhere in the tree.
+(*) - Indicates repeated occurrences of a transitive dependency subtree. Gradle expands transitive dependency subtrees only once per project; repeat occurrences only display the root of the subtree, followed by this annotation.
+
+(n) - A dependency or dependency configuration that cannot be resolved.
+
+A web-based, searchable dependency report is available by adding the --scan option.
+
+BUILD SUCCESSFUL in 5s
+1 actionable task: 1 executed
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.7.0/userguide/configuration_cache_enabling.html

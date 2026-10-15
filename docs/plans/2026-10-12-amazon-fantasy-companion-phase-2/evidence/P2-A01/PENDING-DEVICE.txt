@@ -1,0 +1,33 @@
+P2-A01 part B - device steps pending (no Fire TV stick available to part A, 2026-10-14)
+
+Part A delivered the host-side slice: build, unit tests, lint, APK inspection and the
+dependency admission recorded in receipt.json. Nothing below has run. Each step needs the
+fire-tv-stick lease and runs only after P2-X04 releases the stick (IE-P2-F07).
+
+1. CMD-ADB-INSTALL
+   Build the candidate APK twice from the part A commit (or its reviewed successor):
+     a. ./tv-app/gradlew -p tv-app assembleDebug                           (no base URL)
+     b. ./tv-app/gradlew -p tv-app assembleDebug -PafcApiBaseUrl=https://127.0.0.2.invalid
+        (a syntactically valid https URL that cannot connect, for the network-error state)
+   Record each APK sha256, then: adb -s <stick_serial> install -r <apk>; record exit status,
+   the sanitized device model, Fire OS and API level (CMD-ADB-BASELINE values from P2-X01).
+
+2. PROC-VISUAL-REVIEW (DES-AFC-P2-VISUAL, rule 16), 1080p output is the only viewport.
+   Drive with adb shell input keyevent (DPAD_UP/DOWN/LEFT/RIGHT, DPAD_CENTER, BACK) and capture
+   adb exec-out screencap -p > evidence/visual/P2-A01/<state>.png plus
+   adb shell dumpsys window > evidence/visual/P2-A01/<state>-window.txt for each state:
+     - backend-not-configured: APK 1a at launch shows "Backend not configured" and the
+       -PafcApiBaseUrl hint; no navigation is offered.
+     - shell: APK 1b at launch shows the three destinations Link, Profile/Settings and Panel
+       with D-pad focus moving between them; Profile/Settings and Panel show their placeholders.
+     - network-error: APK 1b on Link shows "Network error. Check the connection, then select
+       Get code." with a focusable Get code button; selecting it retries.
+   Measure body text height in pixels on each capture (AFC-PR-045 floor 24 px) and judge
+   layout, focus visibility, overscan margins and legibility from the couch.
+   Captures carry no account names or tokens.
+
+3. Deferred to P2-L02 post-step V&V (IE-P2-15, against aws-afc-dev; not part B of P2-A01):
+   code-shown, expired and linked captures with -PafcApiBaseUrl=<afc-dev ApiUrl>.
+
+4. Owner action OA-11: no release keystore supplied, so the release variant signs with the
+   host debug key (configured in tv-app/app/build.gradle.kts); L05 executes it.

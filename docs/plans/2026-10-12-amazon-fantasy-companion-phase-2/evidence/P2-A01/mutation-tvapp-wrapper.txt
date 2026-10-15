@@ -1,0 +1,10 @@
+bash: tools/ci/mutation/tvapp.sh: No such file or directory
+exit=127
+
+--- G01-deferred wrapper landed (candidate a1d31ef6535e039c535badb061b5f1d0c1f58660, 2026-10-14) ---
+command: (same env) bash tools/ci/mutation/tvapp.sh 75afca0 <evidence_dir>
+GAP ANDROID_MUTATION_COMPATIBILITY_GAP: PIT run exit 1
+exit=3
+cause: "Cannot locate tasks that match ':app:pitestDebug' as task 'pitestDebug' not found in project ':app'." No PIT plugin is applied in tv-app/app/build.gradle.kts; no Android PIT fork pin is admitted.
+classification: tool (ANDROID_MUTATION_COMPATIBILITY_GAP), not threshold. Never PASS.
+results: mutation-tvapp-result.json, mutation-tvapp-pitest-run.txt

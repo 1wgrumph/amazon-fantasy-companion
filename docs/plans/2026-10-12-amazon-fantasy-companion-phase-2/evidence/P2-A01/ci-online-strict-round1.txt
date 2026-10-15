@@ -1,0 +1,99 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.7.0/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preDebugBuild UP-TO-DATE
+> Task :app:generateDebugBuildConfig
+> Task :app:generateDebugResources
+> Task :app:packageDebugResources
+> Task :app:processDebugNavigationResources
+> Task :app:javaPreCompileDebug
+> Task :app:parseDebugLocalResources
+> Task :app:checkDebugAarMetadata
+> Task :app:mapDebugSourceSetPaths
+> Task :app:generateDebugRFile
+> Task :app:compileDebugNavigationResources
+> Task :app:mergeDebugResources
+> Task :app:createDebugCompatibleScreenManifests
+> Task :app:extractDeepLinksDebug
+> Task :app:processDebugMainManifest
+> Task :app:processDebugManifest
+> Task :app:processDebugManifestForPackage
+> Task :app:processDebugResources
+> Task :app:preDebugUnitTestBuild UP-TO-DATE
+> Task :app:javaPreCompileDebugUnitTest
+> Task :app:preDebugAndroidTestBuild SKIPPED
+> Task :app:extractProguardFiles
+> Task :app:mergeDebugNativeDebugMetadata NO-SOURCE
+> Task :app:generateDebugAssets UP-TO-DATE
+> Task :app:mergeDebugAssets
+> Task :app:compressDebugAssets
+> Task :app:generateDebugGlobalSynthetics
+> Task :app:checkDebugDuplicateClasses
+> Task :app:desugarDebugFileDependencies
+> Task :app:mergeExtDexDebug
+> Task :app:mergeLibDexDebug
+> Task :app:mergeDebugJniLibFolders
+> Task :app:mergeDebugNativeLibs
+
+> Task :app:stripDebugDebugSymbols
+Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so. Run with --info option to learn more.
+
+> Task :app:validateSigningDebug
+> Task :app:writeDebugAppMetadata
+> Task :app:writeDebugSigningConfigVersions
+> Task :app:preReleaseBuild UP-TO-DATE
+> Task :app:mergeReleaseJniLibFolders
+> Task :app:mergeReleaseNativeLibs
+
+> Task :app:stripReleaseDebugSymbols
+Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so. Run with --info option to learn more.
+
+> Task :app:extractReleaseNativeSymbolTables
+> Task :app:mergeReleaseNativeDebugMetadata NO-SOURCE
+> Task :app:checkReleaseDuplicateClasses
+> Task :app:generateReleaseBuildConfig
+> Task :app:generateReleaseResources
+> Task :app:packageReleaseResources
+> Task :app:processReleaseNavigationResources
+> Task :app:parseReleaseLocalResources
+> Task :app:generateReleaseRFile
+> Task :app:compileDebugKotlin
+> Task :app:compileReleaseKotlin
+> Task :app:compileDebugJavaWithJavac
+> Task :app:bundleDebugClassesToRuntimeJar
+> Task :app:bundleDebugClassesToCompileJar
+> Task :app:processDebugJavaRes
+
+> Task :app:compileDebugUnitTestKotlin
+w: file://$HOME/.local/share/afc-tools/downloads/p2-a01/ci-emul/tv-app/app/src/test/java/com/afc/companion/TypedOperationsTest.kt:34:94 Unnecessary non-null assertion (!!) on a non-null receiver of type 'LinkState'.
+w: file://$HOME/.local/share/afc-tools/downloads/p2-a01/ci-emul/tv-app/app/src/test/java/com/afc/companion/TypedOperationsTest.kt:51:106 Unnecessary non-null assertion (!!) on a non-null receiver of type 'Profile'.
+w: file://$HOME/.local/share/afc-tools/downloads/p2-a01/ci-emul/tv-app/app/src/test/java/com/afc/companion/TypedOperationsTest.kt:72:54 Unnecessary non-null assertion (!!) on a non-null receiver of type 'AlertsPage'.
+w: file://$HOME/.local/share/afc-tools/downloads/p2-a01/ci-emul/tv-app/app/src/test/java/com/afc/companion/TypedOperationsTest.kt:72:115 Unnecessary non-null assertion (!!) on a non-null receiver of type 'AlertsPage'.
+w: file://$HOME/.local/share/afc-tools/downloads/p2-a01/ci-emul/tv-app/app/src/test/java/com/afc/companion/TypedOperationsTest.kt:73:53 Unnecessary non-null assertion (!!) on a non-null receiver of type 'AlertsPage'.
+w: file://$HOME/.local/share/afc-tools/downloads/p2-a01/ci-emul/tv-app/app/src/test/java/com/afc/companion/TypedOperationsTest.kt:73:101 Unnecessary non-null assertion (!!) on a non-null receiver of type 'AlertsPage'.
+w: file://$HOME/.local/share/afc-tools/downloads/p2-a01/ci-emul/tv-app/app/src/test/java/com/afc/companion/TypedOperationsTest.kt:88:103 Unnecessary non-null assertion (!!) on a non-null receiver of type 'ProviderRoute'.
+w: file://$HOME/.local/share/afc-tools/downloads/p2-a01/ci-emul/tv-app/app/src/test/java/com/afc/companion/TypedOperationsTest.kt:105:86 Unnecessary non-null assertion (!!) on a non-null receiver of type 'ApiError'.
+w: file://$HOME/.local/share/afc-tools/downloads/p2-a01/ci-emul/tv-app/app/src/test/java/com/afc/companion/TypedOperationsTest.kt:110:89 Cast is redundant.
+
+> Task :app:generateDebugAndroidTestLintModel FAILED
+
+[Incubating] Problems report is available at: file://$HOME/.local/share/afc-tools/downloads/p2-a01/ci-emul/tv-app/build/reports/problems/problems-report.html
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:generateDebugAndroidTestLintModel' (registered by plugin 'com.android.internal.application').
+> Dependency verification failed for configuration ':app:debugAndroidTestCompileClasspath'
+  One artifact failed verification: kotlinx-coroutines-bom-1.7.1.pom (org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.7.1) from repository MavenRepo
+  If the artifacts are trustworthy, you will need to update the gradle/verification-metadata.xml file. For more on how to do this, please refer to https://docs.gradle.org/9.7.0/userguide/dependency_verification.html#sec:troubleshooting-verification in the Gradle documentation.
+
+  Open this report for more details: file://$HOME/.local/share/afc-tools/downloads/p2-a01/ci-emul/tv-app/build/reports/dependency-verification/at-1791978494579/dependency-verification-report.html
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 32s
+51 actionable tasks: 51 executed

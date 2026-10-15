@@ -1,0 +1,27 @@
+plugins { id 'java-gradle-plugin' } // Core Gradle plugin only; nothing acquired is applied.
+repositories { google(); mavenCentral(); gradlePluginPortal() }
+configurations {
+    closure {
+        attributes {
+            attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage, Usage.JAVA_RUNTIME))
+            attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category, Category.LIBRARY))
+            attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling, Bundling.EXTERNAL))
+            attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, 17)
+            attribute(org.gradle.api.attributes.plugin.GradlePluginApiVersion.GRADLE_PLUGIN_API_VERSION_ATTRIBUTE,
+                objects.named(org.gradle.api.attributes.plugin.GradlePluginApiVersion, '9.7.0'))
+        }
+    }
+}
+dependencies {
+    closure 'org.jetbrains.kotlin:compose-compiler-gradle-plugin:2.4.21'
+    closure 'org.jetbrains.kotlin:kotlin-compose-compiler-plugin-embeddable:2.4.21'
+    closure 'org.jetbrains.kotlin:kotlin-compose-compiler-plugin:2.4.21'
+}
+tasks.register('resolveClosure', Copy) {
+    from configurations.closure
+    into layout.buildDirectory.dir('closure')
+    doLast {
+        file('build/artifacts.tsv').text = configurations.closure.resolvedConfiguration.resolvedArtifacts.collect {
+            "${it.moduleVersion.id}\t${it.file.name}" }.sort().join('\n') + '\n'
+    }
+}

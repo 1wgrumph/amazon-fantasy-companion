@@ -1,0 +1,6 @@
+tv-app/app/src/test/java/com/afc/companion/ApiLoopBoundTest.kt:33:        }, ioDispatcher = Dispatchers.Unconfined)
+tv-app/app/src/test/java/com/afc/companion/ApiLoopBoundTest.kt:60:        val failure = assertThrows(IllegalArgumentException::class.java) { ApiClient.readBounded(input) }
+tv-app/app/src/main/java/com/afc/companion/net/ApiClient.kt:25:    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
+tv-app/app/src/main/java/com/afc/companion/net/ApiClient.kt:37:    suspend fun request(method: String, path: String, body: JSONObject? = null): ApiResponse = withContext(ioDispatcher) {
+tv-app/app/src/main/java/com/afc/companion/net/ApiClient.kt:95:            return ApiResponse(status, stream?.use { parse(readBounded(it)) })
+tv-app/app/src/main/java/com/afc/companion/net/ApiClient.kt:114:        internal fun readBounded(input: InputStream): String {

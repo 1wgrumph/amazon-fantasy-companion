@@ -1,0 +1,175 @@
+{
+  "key": "tvapp_mutation_sd057_bugfix",
+  "outcome": "CONTRACT_FAILURE",
+  "candidate_status": "PARTIAL: report and scope repair verified; real mutation gate remains GAP",
+  "role": "Bug-triager Implementer",
+  "profile": "bug-triager",
+  "route": "Codex CLI / GPT-6.1 Sol / high",
+  "packet_baseline": "8b712ef",
+  "mutation_base": "75afca0",
+  "branch": "afc/p2-a01",
+  "authority": "Current owner packet: tools/ci/mutation/, tools/ci/tests/mutation/, P2/evidence/P2-A01/; no push/PR/branch changes, tv-app writes, or timeout-policy change.",
+  "bug": {
+    "id": "BUG-AFC-TVAPP-PIT-PARTIAL-001",
+    "classification": "test tool",
+    "origin": "Evaluator and fixture expected partial=true to mean an incomplete report; implemented before a real PIT report existed.",
+    "escape": "Synthetic schema-derived tests encoded the same assumption; no real report was available until PIT admission.",
+    "repair": "Do not infer completeness from partial. Require parseable mutations XML, known statuses, required mutation fields, and successful PIT exit; truncated XML and missing fields remain GAP.",
+    "prevention": "Regression accepts complete partial=true; committed real PIT corpus derived from the baseline report. Scope tests cover scored file, excluded device file, zero-mutant stub, stub with mutants, and unclassified file GAP."
+  },
+  "scope": {
+    "decision": "DEC-AFC-SD-057",
+    "host_runnable": [
+      "tv-app/app/src/main/java/com/afc/companion/Shell.kt",
+      "tv-app/app/src/main/java/com/afc/companion/net/ApiClient.kt",
+      "tv-app/app/src/main/java/com/afc/companion/net/Dto.kt"
+    ],
+    "device_only": [
+      "tv-app/app/src/main/java/com/afc/companion/MainActivity.kt",
+      "tv-app/app/src/main/java/com/afc/companion/alerts/AlertNotifier.kt",
+      "tv-app/app/src/main/java/com/afc/companion/alerts/AlertService.kt",
+      "tv-app/app/src/main/java/com/afc/companion/detect/AppDetector.kt",
+      "tv-app/app/src/main/java/com/afc/companion/link/LinkScreen.kt",
+      "tv-app/app/src/main/java/com/afc/companion/net/SessionStore.kt",
+      "tv-app/app/src/main/java/com/afc/companion/panel/LineupPanel.kt",
+      "tv-app/app/src/main/java/com/afc/companion/profile/ProfileSettingsScreen.kt",
+      "tv-app/app/src/main/java/com/afc/companion/ui/theme/Theme.kt",
+      "tv-app/app/src/main/java/com/afc/companion/watch/WatchActivity.kt",
+      "tv-app/app/src/main/java/com/afc/companion/watch/WatchLauncher.kt"
+    ],
+    "device_only_reason": "device-only (DEC-AFC-SD-057)",
+    "stub_marker": "AFC-STUB:",
+    "stub_reason": "stub (AFC-STUB; zero mutants)",
+    "stub_rule": "AFC-STUB files with zero mutants in the complete report are excluded; files with mutants follow the explicit scope lists."
+  },
+  "timeout": {
+    "preserved_rule": "TIMED_OUT is unresolved (GAP), never counted as killed",
+    "factor": 10,
+    "binding": "tools/ci/mutation/tvapp-pitest.gradle loaded by wrapper --init-script",
+    "result": "Same four ApiClient timeouts persisted; increased time allowance does not resolve the looping mutants.",
+    "unresolved_source_lines": [
+      42,
+      43,
+      44,
+      122
+    ],
+    "boundary": "Resolving mutants via bounded assertions requires test writes under tv-app/app/src/test/, prohibited by the current packet. Do not exclude ApiClient or count timeouts as kills."
+  },
+  "commands": [
+    {
+      "command": "python3.12 -m pytest -q -p no:cacheprovider tools/ci/tests/mutation/test_mutation_tvapp_adapter.py -k 'partial_true or truncated_or_unparseable or mutation_missing_required'",
+      "phase": "red on baseline evaluator",
+      "exit": 1,
+      "summary": "2 failed, 1 passed; complete partial=true rejected",
+      "evidence": "pit-scope-057/red-report.txt"
+    },
+    {
+      "command": "python3.12 -m pytest -q -p no:cacheprovider tools/ci/tests/mutation/test_mutation_tvapp_adapter.py -k 'partial_true or truncated_or_unparseable or mutation_missing_required'",
+      "phase": "green report fix, same test IDs and fixtures as red",
+      "exit": 0,
+      "summary": "3 passed",
+      "evidence": "pit-scope-057/green-report.txt"
+    },
+    {
+      "command": "python3.12 -m pytest -q -p no:cacheprovider tools/ci/tests/mutation/test_mutation_tvapp_adapter.py -k 'device_file or zero_mutant_stub or stub_with_mutants or unclassified or real_pit'",
+      "phase": "red scope tests before scope rule",
+      "exit": 1,
+      "summary": "4 failed, 1 passed",
+      "evidence": "pit-scope-057/red-scope.txt"
+    },
+    {
+      "command": "python3.12 -m pytest -q -p no:cacheprovider tools/ci/tests/mutation/test_mutation_tvapp_adapter.py",
+      "exit": 0,
+      "summary": "18 passed",
+      "evidence": "pit-scope-057/green-adapter.txt"
+    },
+    {
+      "command": "bash tools/ci/mutation/tvapp.sh 75afca0 <evidence>/pit-scope-057/native",
+      "exit": 3,
+      "summary": "GAP UNRESOLVED: 4 mutants",
+      "evidence": "pit-scope-057/wrapper.txt"
+    },
+    {
+      "command": "python3.12 -m pytest -q -p no:cacheprovider tools",
+      "exit": 0,
+      "summary": "117 passed in 106.04s",
+      "evidence": "pit-scope-057/pytest-tools.txt"
+    },
+    {
+      "command": "PATH=$HOME/.local/share/afc-tools/backend-tests/bin:$PATH bash tools/ci/gate.sh",
+      "exit": 0,
+      "summary": "All five areas PASS; backend 158 passed",
+      "evidence": "pit-scope-057/gate.txt"
+    }
+  ],
+  "toolchain": {
+    "JAVA_HOME": "$HOME/.local/share/afc-tools/jdk-17.0.20.1+1",
+    "ANDROID_HOME": "$HOME/.local/share/afc-tools/android-sdk",
+    "GRADLE_USER_HOME": "$HOME/.gradle/afc-p2-a01t",
+    "AFC_GRADLE_ARGS": "--offline --no-daemon --max-workers=2",
+    "PIT": "1.19.5",
+    "android_plugin": "0.2.27",
+    "new_installs": []
+  },
+  "real_report": {
+    "sha256_uncompressed": "12a2f57b6410c38788e06ee6d8e0ff9013ffe04e066bb315d296dbed3ad9f5c7",
+    "file": "pit-scope-057/native/mutations.xml.gz",
+    "root_partial": "true",
+    "mutants": 953,
+    "host_changed_line_counts": {
+      "KILLED": 227,
+      "SURVIVED": 39,
+      "NO_COVERAGE": 10,
+      "TIMED_OUT": 4
+    },
+    "official_score": null,
+    "verdict": "GAP",
+    "analysis": "pit-scope-057/scope-analysis.json"
+  },
+  "real_corpus_origin": {
+    "file": "mutation-tvapp-pit-mutations.xml.gz",
+    "sha256": "d619379fab05451d50c17f1a609985eaa4fb331dcd49d295bb267246aa9c4b2a",
+    "selection": "First Shell.kt mutation, preserving mutation fields and mutations partial=true root"
+  },
+  "candidate_input_sha256": {
+    "tools/ci/mutation/tvapp_evaluate.py": "b992f9744e7cdbee5f7f2f178f2b96bb82adbb8972a6b4497fd0771ee6aedfb5",
+    "tools/ci/mutation/tvapp.sh": "58397ff68eeb5ab3d51412be7f7bd2daaeb47f9eeb11d4456721b4a5ef8d614e",
+    "tools/ci/mutation/tvapp_scope.json": "4bbc399f1d72032dcfd66af686d69c141ffd4ccca65c2babeaed5db36814a7b6",
+    "tools/ci/mutation/tvapp-pitest.gradle": "eccd093503d9034e9b8bb2a48134f16ceb4112f5bf9797f04d5ccfc53e51e284",
+    "tools/ci/tests/mutation/test_mutation_tvapp_adapter.py": "7a7b9eb626f1d3816493e0ef5bf026ff408e129a8029e31a8d4b34570e758b5c",
+    "tools/ci/tests/mutation/fixtures/real-pit-shell.xml": "12d6c32b722c3d51084fbee34554078a0bd4ae769993dac18be938c6cd4ed16f"
+  },
+  "acceptance": {
+    "1_red_green_report": "PASS",
+    "2_explicit_tested_fail_closed_scope": "PASS",
+    "3_real_wrapper_PASS_or_FAIL": "NOT_MET: GAP due four unresolved timeouts",
+    "4_tools_and_full_gate": "PASS",
+    "5_receipt_new_key": "PASS"
+  },
+  "independent_review": {
+    "status": "not_run",
+    "coverage_assist": "OCR delegation belongs to parent independent reviewer; no author review substituted",
+    "reverify": "not applicable: Python/shell scoring and report parsing; no compiled-binary behavior claim"
+  },
+  "next_action": "Parent orchestrator receives partial candidate and dispatches an authorized tv-app test repair; rerun CMD-MUTATION-TVAPP and independent review. No push or PR by this worker.",
+  "precommit_identity_check": {
+    "branch": "afc/p2-a01",
+    "HEAD": "8b712ef7bec717c50dde44729d9fef556241cffe",
+    "expected_baseline": "8b712ef",
+    "route": "unchanged from owner packet"
+  },
+  "preserved_unrelated_work": "Pre-existing untracked __pycache__ directories were not staged or removed.",
+  "evidence_normalization": "Captured text logs have trailing spaces and blank EOF lines removed and private home prefixes replaced with $HOME/ for repository hygiene. Compressed native XML retains its original bytes and SHA-256.",
+  "precommit_hygiene_repairs": [
+    {
+      "attempt": 1,
+      "exit": 1,
+      "reason": "PIT log trailing whitespace; normalized text evidence"
+    },
+    {
+      "attempt": 2,
+      "exit": 1,
+      "reason": "Gate log contained private home paths in pytest output; normalized to $HOME/"
+    }
+  ]
+}
