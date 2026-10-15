@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add the TV alert path: the foreground long-poll feed with cursor handling, a bounded coalescing queue, local dismiss, alert text carrying the triggering player and matchup with unknown access shown as unknown, heads-up Watch/Dismiss notifications, and voice kept off without a verified route (PR #TBD).
 - Add the backend provider resolver: preference-ordered selection among installed providers carrying the event's channel from the read-only registry, per-platform routes with REGISTRY_ROUTE_GAP for missing or unverified entries, an honest access basis that is never inferred from installation, and recording of detector reports and routing outcomes ([#77](https://github.com/1wgrumph/amazon-fantasy-companion/pull/77)).
 - Add ESPN-feed ingest outage handling: packaged replay corpus, scoreboard-error fallback to labeled replay, warm-container failure counts, and a 60s poll deadline ([#76](https://github.com/1wgrumph/amazon-fantasy-companion/pull/76)).
 - Add ESPN feed ingest: pinned JSON Schema validation that rejects a bad

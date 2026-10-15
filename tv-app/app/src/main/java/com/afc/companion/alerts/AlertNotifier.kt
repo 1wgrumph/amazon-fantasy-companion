@@ -1,9 +1,73 @@
 package com.afc.companion.alerts
 
+import android.Manifest
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import com.afc.companion.net.Alert
+import com.afc.companion.watch.WatchActivity
 
-// AFC-STUB: P2-A03 implements NOTIFIER (heads-up with Watch / Dismiss, or panel-only) behind this signature.
+/**
+ * NOTIFIER: one alert as a heads-up notification on a high-importance channel, with Watch (a
+ * [PendingIntent] into [WatchActivity], P2-A04's launcher target) and Dismiss (acknowledged
+ * locally by [AlertService]) actions. The text comes from [AlertPresenter]; an alert without
+ * triggering context posts nothing.
+ */
 class AlertNotifier(private val context: Context) {
-    fun show(alert: Alert) = Unit
+    private val manager: NotificationManager = context.getSystemService(NotificationManager::class.java)
+
+    fun show(alert: Alert) {
+        val text = AlertPresenter.text(alert) ?: return
+        if (Build.VERSION.SDK_INT >= 33 &&
+            ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
+        ) return
+        ensureChannel()
+        val flags = PendingIntent.FLAG_UPDATE_CURRENT or if (Build.VERSION.SDK_INT >= 23) PendingIntent.FLAG_IMMUTABLE else 0
+        val watch = Intent(context, WatchActivity::class.java)
+            .putExtra(EXTRA_ALERT_ID, alert.envelope.id)
+            .putExtra(EXTRA_EVENT_ID, alert.envelope.data.opt("eventId") as? String)
+        val dismiss = Intent(context, AlertService::class.java)
+            .setAction(AlertService.ACTION_DISMISS)
+            .putExtra(EXTRA_ALERT_ID, alert.envelope.id)
+        val body = listOfNotNull(text.context, text.access, text.commentary).joinToString("\n")
+        val notification = NotificationCompat.Builder(context, CHANNEL_ID)
+            .setSmallIcon(android.R.drawable.ic_dialog_info)
+            .setContentTitle(text.headline)
+            .setContentText(text.context)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(body))
+            .setCategory(NotificationCompat.CATEGORY_EVENT)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setAutoCancel(true)
+            .addAction(android.R.drawable.ic_media_play, "Watch", PendingIntent.getActivity(context, requestCode(alert, 1), watch, flags))
+            .addAction(android.R.drawable.ic_menu_close_clear_cancel, "Dismiss", PendingIntent.getService(context, requestCode(alert, 2), dismiss, flags))
+            .build()
+        manager.notify(notificationId(alert.envelope.id), notification)
+    }
+
+    fun cancel(alertId: String) = manager.cancel(notificationId(alertId))
+
+    private fun ensureChannel() {
+        if (Build.VERSION.SDK_INT < 26) return
+        if (manager.getNotificationChannel(CHANNEL_ID) != null) return
+        manager.createNotificationChannel(
+            NotificationChannel(CHANNEL_ID, "Game alerts", NotificationManager.IMPORTANCE_HIGH)
+                .apply { description = "Fantasy game alerts with Watch and Dismiss actions" },
+        )
+    }
+
+    companion object {
+        const val CHANNEL_ID = "afc-alerts"
+        const val EXTRA_ALERT_ID = "com.afc.companion.alerts.ALERT_ID"
+        const val EXTRA_EVENT_ID = "com.afc.companion.alerts.EVENT_ID"
+
+        internal fun notificationId(alertId: String): Int = alertId.hashCode()
+
+        private fun requestCode(alert: Alert, action: Int): Int = alert.envelope.id.hashCode() * 31 + action
+    }
 }
