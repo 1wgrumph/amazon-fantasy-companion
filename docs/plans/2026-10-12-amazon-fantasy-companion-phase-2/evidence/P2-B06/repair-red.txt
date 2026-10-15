@@ -1,0 +1,265 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.2, pluggy-1.6.0 -- $HOME/.local/share/afc-tools/backend-tests/bin/python3.12
+rootdir: $REPO/backend
+configfile: pyproject.toml
+collecting ... collected 83 items / 57 deselected / 26 selected
+
+backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py::test_opaque_preferences_preserve_unknown_resolution[x] FAILED [  3%]
+backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py::test_opaque_preferences_preserve_unknown_resolution[pref1] FAILED [  7%]
+backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py::test_opaque_preferences_preserve_unknown_resolution[True] FAILED [ 11%]
+backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py::test_opaque_preferences_preserve_unknown_resolution[1] FAILED [ 15%]
+backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py::test_opaque_preferences_preserve_unknown_resolution[None] PASSED [ 19%]
+backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py::test_only_explicit_provider_id_list_confirms_selected_provider[claim0-unknown] FAILED [ 23%]
+backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py::test_only_explicit_provider_id_list_confirms_selected_provider[not_alpha_stream-unknown] FAILED [ 26%]
+backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py::test_only_explicit_provider_id_list_confirms_selected_provider[True-unknown] FAILED [ 30%]
+backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py::test_only_explicit_provider_id_list_confirms_selected_provider[claim3-unknown] FAILED [ 34%]
+backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py::test_only_explicit_provider_id_list_confirms_selected_provider[claim4-unknown] FAILED [ 38%]
+backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py::test_only_explicit_provider_id_list_confirms_selected_provider[claim5-unknown] PASSED [ 42%]
+backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py::test_only_explicit_provider_id_list_confirms_selected_provider[claim6-unknown] PASSED [ 46%]
+backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py::test_only_explicit_provider_id_list_confirms_selected_provider[claim7-customerConfirmed] PASSED [ 50%]
+backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py::test_malformed_nested_preferences_keep_detector_facts_safe[pref0] FAILED [ 53%]
+backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py::test_malformed_nested_preferences_keep_detector_facts_safe[pref1] PASSED [ 57%]
+backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py::test_malformed_nested_preferences_keep_detector_facts_safe[pref2] FAILED [ 61%]
+backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py::test_malformed_nested_preferences_keep_detector_facts_safe[pref3] FAILED [ 65%]
+backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py::test_malformed_nested_preferences_keep_detector_facts_safe[pref4] FAILED [ 69%]
+backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py::test_malformed_nested_preferences_keep_detector_facts_safe[pref5] FAILED [ 73%]
+backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py::test_non_boolean_override_cannot_invent_installation[false] FAILED [ 76%]
+backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py::test_non_boolean_override_cannot_invent_installation[1] FAILED [ 80%]
+backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py::test_non_boolean_override_cannot_invent_installation[value2] FAILED [ 84%]
+backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py::test_non_boolean_override_cannot_invent_installation[value3] FAILED [ 88%]
+backend/tests/unit/test_router.py::test_stub_routes_receive_the_session_profile_and_query FAILED [ 92%]
+backend/tests/unit/test_router.py::test_opaque_provider_preferences_keep_unknown_broadcast_available FAILED [ 96%]
+backend/tests/unit/test_router.py::test_maximum_size_installed_report_gets_bounded_success_acknowledgement FAILED [100%]
+
+=================================== FAILURES ===================================
+____________ test_opaque_preferences_preserve_unknown_resolution[x] ____________
+backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py:19: in test_opaque_preferences_preserve_unknown_resolution
+    result = resolver.resolve(EVENT)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:67: in resolve
+    result = attempt(module.resolve, PROFILE, event_id)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:41: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/provider_resolver/__init__.py:80: in resolve
+    "localMarket": pref.get("localMarket")}}
+                   ^^^^^^^^
+E   AttributeError: 'str' object has no attribute 'get'
+__________ test_opaque_preferences_preserve_unknown_resolution[pref1] __________
+backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py:19: in test_opaque_preferences_preserve_unknown_resolution
+    result = resolver.resolve(EVENT)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:67: in resolve
+    result = attempt(module.resolve, PROFILE, event_id)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:41: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/provider_resolver/__init__.py:80: in resolve
+    "localMarket": pref.get("localMarket")}}
+                   ^^^^^^^^
+E   AttributeError: 'list' object has no attribute 'get'
+__________ test_opaque_preferences_preserve_unknown_resolution[True] ___________
+backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py:19: in test_opaque_preferences_preserve_unknown_resolution
+    result = resolver.resolve(EVENT)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:67: in resolve
+    result = attempt(module.resolve, PROFILE, event_id)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:41: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/provider_resolver/__init__.py:80: in resolve
+    "localMarket": pref.get("localMarket")}}
+                   ^^^^^^^^
+E   AttributeError: 'bool' object has no attribute 'get'
+____________ test_opaque_preferences_preserve_unknown_resolution[1] ____________
+backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py:19: in test_opaque_preferences_preserve_unknown_resolution
+    result = resolver.resolve(EVENT)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:67: in resolve
+    result = attempt(module.resolve, PROFILE, event_id)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:41: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/provider_resolver/__init__.py:80: in resolve
+    "localMarket": pref.get("localMarket")}}
+                   ^^^^^^^^
+E   AttributeError: 'decimal.Decimal' object has no attribute 'get'
+_ test_only_explicit_provider_id_list_confirms_selected_provider[claim0-unknown] _
+backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py:40: in test_only_explicit_provider_id_list_confirms_selected_provider
+    assert result["accessBasis"] == expected
+E   AssertionError: assert 'customerConfirmed' == 'unknown'
+E
+E     - unknown
+E     + customerConfirmed
+_ test_only_explicit_provider_id_list_confirms_selected_provider[not_alpha_stream-unknown] _
+backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py:40: in test_only_explicit_provider_id_list_confirms_selected_provider
+    assert result["accessBasis"] == expected
+E   AssertionError: assert 'customerConfirmed' == 'unknown'
+E
+E     - unknown
+E     + customerConfirmed
+_ test_only_explicit_provider_id_list_confirms_selected_provider[True-unknown] _
+backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py:38: in test_only_explicit_provider_id_list_confirms_selected_provider
+    result = resolver.resolve(EVENT)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:67: in resolve
+    result = attempt(module.resolve, PROFILE, event_id)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:41: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/provider_resolver/__init__.py:104: in resolve
+    if chosen["id"] in (pref.get("confirmedAccess") or []):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: argument of type 'bool' is not iterable
+_ test_only_explicit_provider_id_list_confirms_selected_provider[claim3-unknown] _
+backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py:40: in test_only_explicit_provider_id_list_confirms_selected_provider
+    assert result["accessBasis"] == expected
+E   AssertionError: assert 'customerConfirmed' == 'unknown'
+E
+E     - unknown
+E     + customerConfirmed
+_ test_only_explicit_provider_id_list_confirms_selected_provider[claim4-unknown] _
+backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py:40: in test_only_explicit_provider_id_list_confirms_selected_provider
+    assert result["accessBasis"] == expected
+E   AssertionError: assert 'customerConfirmed' == 'unknown'
+E
+E     - unknown
+E     + customerConfirmed
+______ test_malformed_nested_preferences_keep_detector_facts_safe[pref0] _______
+backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py:55: in test_malformed_nested_preferences_keep_detector_facts_safe
+    result = resolver.resolve(EVENT)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:67: in resolve
+    result = attempt(module.resolve, PROFILE, event_id)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:41: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/provider_resolver/__init__.py:87: in resolve
+    order = list(pref.get("order") or [])
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: 'decimal.Decimal' object is not iterable
+______ test_malformed_nested_preferences_keep_detector_facts_safe[pref2] _______
+backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py:56: in test_malformed_nested_preferences_keep_detector_facts_safe
+    assert result["provider"] == "alpha_stream"
+E   AssertionError: assert 'beta_tv' == 'alpha_stream'
+E
+E     - alpha_stream
+E     + beta_tv
+______ test_malformed_nested_preferences_keep_detector_facts_safe[pref3] _______
+backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py:55: in test_malformed_nested_preferences_keep_detector_facts_safe
+    result = resolver.resolve(EVENT)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:67: in resolve
+    result = attempt(module.resolve, PROFILE, event_id)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:41: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/provider_resolver/__init__.py:85: in resolve
+    if overrides.get(p) is not False}
+       ^^^^^^^^^^^^^
+E   AttributeError: 'str' object has no attribute 'get'
+______ test_malformed_nested_preferences_keep_detector_facts_safe[pref4] _______
+backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py:55: in test_malformed_nested_preferences_keep_detector_facts_safe
+    result = resolver.resolve(EVENT)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:67: in resolve
+    result = attempt(module.resolve, PROFILE, event_id)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:41: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/provider_resolver/__init__.py:85: in resolve
+    if overrides.get(p) is not False}
+       ^^^^^^^^^^^^^
+E   AttributeError: 'list' object has no attribute 'get'
+______ test_malformed_nested_preferences_keep_detector_facts_safe[pref5] _______
+backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py:58: in test_malformed_nested_preferences_keep_detector_facts_safe
+    assert result["inputs"]["localMarket"] is None
+E   AssertionError: assert {'market': 'Test Market 1'} is None
+_________ test_non_boolean_override_cannot_invent_installation[false] __________
+backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py:67: in test_non_boolean_override_cannot_invent_installation
+    assert result["provider"] is None and result["route"] is None
+E   AssertionError: assert ('alpha_stream' is None)
+___________ test_non_boolean_override_cannot_invent_installation[1] ____________
+backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py:67: in test_non_boolean_override_cannot_invent_installation
+    assert result["provider"] is None and result["route"] is None
+E   AssertionError: assert ('alpha_stream' is None)
+_________ test_non_boolean_override_cannot_invent_installation[value2] _________
+backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py:67: in test_non_boolean_override_cannot_invent_installation
+    assert result["provider"] is None and result["route"] is None
+E   AssertionError: assert ('alpha_stream' is None)
+_________ test_non_boolean_override_cannot_invent_installation[value3] _________
+backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py:67: in test_non_boolean_override_cannot_invent_installation
+    assert result["provider"] is None and result["route"] is None
+E   AssertionError: assert ('alpha_stream' is None)
+____________ test_stub_routes_receive_the_session_profile_and_query ____________
+backend/tests/unit/test_router.py:260: in test_stub_routes_receive_the_session_profile_and_query
+    assert status == 200 and json.loads(response["body"]) == {"profileId": "owner"}
+E   AssertionError: assert (200 == 200 and {'ok': 2} == {'profileId': 'owner'}
+E
+E     Left contains 1 more item:
+E     {'ok': 2}
+E     Right contains 1 more item:
+E     {'profileId': 'owner'}
+E
+E     Full diff:...
+E
+E     ...Full output truncated (4 lines hidden), use '-vv' to show)
+______ test_opaque_provider_preferences_keep_unknown_broadcast_available _______
+backend/tests/unit/test_router.py:270: in test_opaque_provider_preferences_keep_unknown_broadcast_available
+    assert status == 200, result
+E   AssertionError: {'error': {'code': 'unavailable', 'message': 'The service is temporarily unavailable.'}}
+E   assert 503 == 200
+___ test_maximum_size_installed_report_gets_bounded_success_acknowledgement ____
+backend/tests/unit/test_router.py:280: in test_maximum_size_installed_report_gets_bounded_success_acknowledgement
+    assert status == 200, result
+E   AssertionError: {'error': {'code': 'unavailable', 'message': 'The response exceeds the 64 KiB contract.'}}
+E   assert 503 == 200
+=============================== warnings summary ===============================
+tests/unit/provider_resolver/test_resolver_preference_shapes.py: 216 warnings
+tests/unit/test_router.py: 47 warnings
+  $HOME/.local/lib/python3.12/site-packages/botocore/auth.py:424: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    datetime_now = datetime.datetime.utcnow()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+============================= slowest 10 durations =============================
+0.19s setup    tests/unit/test_router.py::test_stub_routes_receive_the_session_profile_and_query
+0.15s setup    tests/unit/provider_resolver/test_resolver_preference_shapes.py::test_only_explicit_provider_id_list_confirms_selected_provider[not_alpha_stream-unknown]
+0.15s setup    tests/unit/provider_resolver/test_resolver_preference_shapes.py::test_only_explicit_provider_id_list_confirms_selected_provider[claim5-unknown]
+0.15s setup    tests/unit/provider_resolver/test_resolver_preference_shapes.py::test_non_boolean_override_cannot_invent_installation[false]
+0.15s setup    tests/unit/provider_resolver/test_resolver_preference_shapes.py::test_opaque_preferences_preserve_unknown_resolution[x]
+0.10s call     tests/unit/provider_resolver/test_resolver_preference_shapes.py::test_malformed_nested_preferences_keep_detector_facts_safe[pref1]
+0.10s setup    tests/unit/provider_resolver/test_resolver_preference_shapes.py::test_opaque_preferences_preserve_unknown_resolution[pref1]
+0.09s setup    tests/unit/test_router.py::test_opaque_provider_preferences_keep_unknown_broadcast_available
+0.09s setup    tests/unit/test_router.py::test_maximum_size_installed_report_gets_bounded_success_acknowledgement
+0.07s setup    tests/unit/provider_resolver/test_resolver_preference_shapes.py::test_non_boolean_override_cannot_invent_installation[value2]
+=========================== short test summary info ============================
+FAILED backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py::test_opaque_preferences_preserve_unknown_resolution[x]
+FAILED backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py::test_opaque_preferences_preserve_unknown_resolution[pref1]
+FAILED backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py::test_opaque_preferences_preserve_unknown_resolution[True]
+FAILED backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py::test_opaque_preferences_preserve_unknown_resolution[1]
+FAILED backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py::test_only_explicit_provider_id_list_confirms_selected_provider[claim0-unknown]
+FAILED backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py::test_only_explicit_provider_id_list_confirms_selected_provider[not_alpha_stream-unknown]
+FAILED backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py::test_only_explicit_provider_id_list_confirms_selected_provider[True-unknown]
+FAILED backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py::test_only_explicit_provider_id_list_confirms_selected_provider[claim3-unknown]
+FAILED backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py::test_only_explicit_provider_id_list_confirms_selected_provider[claim4-unknown]
+FAILED backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py::test_malformed_nested_preferences_keep_detector_facts_safe[pref0]
+FAILED backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py::test_malformed_nested_preferences_keep_detector_facts_safe[pref2]
+FAILED backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py::test_malformed_nested_preferences_keep_detector_facts_safe[pref3]
+FAILED backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py::test_malformed_nested_preferences_keep_detector_facts_safe[pref4]
+FAILED backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py::test_malformed_nested_preferences_keep_detector_facts_safe[pref5]
+FAILED backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py::test_non_boolean_override_cannot_invent_installation[false]
+FAILED backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py::test_non_boolean_override_cannot_invent_installation[1]
+FAILED backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py::test_non_boolean_override_cannot_invent_installation[value2]
+FAILED backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py::test_non_boolean_override_cannot_invent_installation[value3]
+FAILED backend/tests/unit/test_router.py::test_stub_routes_receive_the_session_profile_and_query
+FAILED backend/tests/unit/test_router.py::test_opaque_provider_preferences_keep_unknown_broadcast_available
+FAILED backend/tests/unit/test_router.py::test_maximum_size_installed_report_gets_bounded_success_acknowledgement
+========== 21 failed, 5 passed, 57 deselected, 263 warnings in 2.79s ===========

@@ -1,0 +1,92 @@
+gate: spec: PASS checks completed
+gate: docs: PASS checks completed
+.github/workflows/ci.yml: PASS
+...............fatal: not a git repository (or any parent up to mount point /)
+Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+........fatal: not a git repository (or any parent up to mount point /)
+Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+......................................
+----------------------------------------------------------------------
+Ran 61 tests in 39.586s
+
+OK
+mutation adapter exit=3: ['GAP REPORT_INCOMPLETE: mutmut stats absent']
+mutation adapter exit=0: ['PASS mutation score 100.00% (threshold 70%)']
+coverage adapter exit=0: ['PASS changed-line coverage 100% (threshold 90%)']
+coverage adapter exit=3: ['GAP REPORT_INCOMPLETE: unmapped changed files: backend/src/control.py']
+gate: hygiene: PASS checks completed
+gate: tvapp: PASS no tv-app/ tree
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.2, pluggy-1.6.0
+rootdir: <repo>/backend
+configfile: pyproject.toml
+plugins: cov-7.1.0, anyio-4.13.0, asyncio-1.3.0, mock-3.15.1, typeguard-4.4.4
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 500 items
+
+backend/tests/unit/feed_ingest/test_feed_edges.py ...................... [  4%]
+..........                                                               [  6%]
+backend/tests/unit/feed_ingest/test_monitoring.py ............           [  8%]
+backend/tests/unit/feed_ingest/test_normalization.py ...............     [ 11%]
+backend/tests/unit/feed_ingest/test_replay_labels.py ........            [ 13%]
+backend/tests/unit/feed_ingest/test_review_repairs.py .................. [ 17%]
+...................                                                      [ 20%]
+backend/tests/unit/feed_ingest/test_revisions.py .......                 [ 22%]
+backend/tests/unit/feed_ingest/test_validation.py ...............        [ 25%]
+backend/tests/unit/lineup/test_active_lineup.py ...........              [ 27%]
+backend/tests/unit/lineup/test_lineup_rejections.py .................... [ 31%]
+........................                                                 [ 36%]
+backend/tests/unit/lineup/test_manual_source.py ..................       [ 39%]
+backend/tests/unit/lineup/test_presets.py .............................. [ 45%]
+                                                                         [ 45%]
+backend/tests/unit/lineup/test_review_regressions.py ................... [ 49%]
+.                                                                        [ 49%]
+backend/tests/unit/lineup/test_yahoo_client.py ..................        [ 53%]
+backend/tests/unit/test_bug_auth002.py ..                                [ 53%]
+backend/tests/unit/test_deployed_guard.py .............................. [ 59%]
+...........................................                              [ 68%]
+backend/tests/unit/test_device_auth.py ..............................    [ 74%]
+backend/tests/unit/test_device_auth_units.py ..........                  [ 76%]
+backend/tests/unit/test_pipeline_and_stubs.py ...........                [ 78%]
+backend/tests/unit/test_router.py ...................................... [ 86%]
+....................                                                     [ 90%]
+backend/tests/unit/test_store.py .......                                 [ 91%]
+backend/tests/contract/feed_ingest/test_feed_contracts.py ......         [ 92%]
+backend/tests/contract/test_api_contract.py ........................     [ 97%]
+backend/tests/contract/test_backend_template.py .........                [ 99%]
+backend/tests/contract/test_template_iam.py ...                          [100%]
+
+=============================== warnings summary ===============================
+tests/unit/feed_ingest/test_feed_edges.py: 425 warnings
+tests/unit/feed_ingest/test_normalization.py: 406 warnings
+tests/unit/feed_ingest/test_replay_labels.py: 406 warnings
+tests/unit/feed_ingest/test_review_repairs.py: 6556 warnings
+tests/unit/feed_ingest/test_revisions.py: 1211 warnings
+tests/unit/feed_ingest/test_validation.py: 789 warnings
+tests/unit/lineup/test_active_lineup.py: 117 warnings
+tests/unit/lineup/test_lineup_rejections.py: 20 warnings
+tests/unit/lineup/test_review_regressions.py: 18 warnings
+tests/unit/test_bug_auth002.py: 42 warnings
+tests/unit/test_device_auth.py: 324 warnings
+tests/unit/test_device_auth_units.py: 133 warnings
+tests/unit/test_pipeline_and_stubs.py: 73 warnings
+tests/unit/test_router.py: 870 warnings
+tests/unit/test_store.py: 92 warnings
+tests/contract/test_api_contract.py: 109 warnings
+  <home>/.local/lib/python3.12/site-packages/botocore/auth.py:424: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    datetime_now = datetime.datetime.utcnow()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+============================= slowest 10 durations =============================
+1.58s call     tests/unit/feed_ingest/test_review_repairs.py::test_f3_repeated_fallback_keeps_revisions_stable
+1.53s call     tests/unit/feed_ingest/test_review_repairs.py::test_f3_three_failures_replace_live_with_labeled_replay[failure0]
+1.45s call     tests/unit/feed_ingest/test_review_repairs.py::test_f3_three_failures_replace_live_with_labeled_replay[failure1]
+1.03s call     tests/unit/feed_ingest/test_revisions.py::test_ingesting_the_same_poll_twice_changes_no_revision
+0.96s call     tests/unit/feed_ingest/test_revisions.py::test_ingesting_a_correction_revises_the_stored_event_in_place
+0.94s call     tests/unit/feed_ingest/test_review_repairs.py::test_f3_success_resets_consecutive_failures
+0.90s call     tests/unit/feed_ingest/test_review_repairs.py::test_f3_tampered_replay_is_stale_and_mutates_nothing
+0.76s call     tests/unit/feed_ingest/test_review_repairs.py::test_f2_bad_game_does_not_abort_later_valid_game[failure1]
+0.74s call     tests/unit/feed_ingest/test_validation.py::test_invalid_poll_leaves_stored_events_unchanged
+0.71s call     tests/unit/feed_ingest/test_validation.py::test_captured_missing_wallclock_validates_ingests_and_replays_all_183_plays
+===================== 500 passed, 11591 warnings in 44.73s =====================
+gate: backend: PASS checks completed

@@ -1,0 +1,28 @@
+..............................................................sss        [100%]
+=============================== warnings summary ===============================
+tests/unit/feed_ingest/test_validation.py: 415 warnings
+tests/unit/feed_ingest/test_normalization.py: 406 warnings
+tests/unit/feed_ingest/test_revisions.py: 1211 warnings
+tests/unit/feed_ingest/test_replay_labels.py: 406 warnings
+  $HOME/.local/lib/python3.12/site-packages/botocore/auth.py:424: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    datetime_now = datetime.datetime.utcnow()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: $HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b02/docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B02/CMD-GREEN.xml -
+============================= slowest 10 durations =============================
+0.85s call     tests/unit/feed_ingest/test_revisions.py::test_ingesting_a_correction_revises_the_stored_event_in_place
+0.85s call     tests/unit/feed_ingest/test_revisions.py::test_ingesting_the_same_poll_twice_changes_no_revision
+0.71s call     tests/unit/feed_ingest/test_validation.py::test_invalid_poll_leaves_stored_events_unchanged
+0.60s call     tests/unit/feed_ingest/test_normalization.py::test_ingest_stores_every_normalized_event
+0.54s call     tests/unit/feed_ingest/test_replay_labels.py::test_ingesting_replay_stores_the_replay_label
+0.46s setup    tests/unit/feed_ingest/test_validation.py::test_invalid_poll_leaves_stored_events_unchanged
+0.18s call     tests/contract/feed_ingest/test_feed_contracts.py::test_all_captured_games_replay_with_the_label
+0.13s setup    tests/unit/feed_ingest/test_revisions.py::test_ingesting_the_same_poll_twice_changes_no_revision
+0.13s setup    tests/unit/feed_ingest/test_replay_labels.py::test_ingesting_replay_stores_the_replay_label
+0.13s setup    tests/unit/feed_ingest/test_revisions.py::test_ingesting_a_correction_revises_the_stored_event_in_place
+=========================== short test summary info ============================
+SKIPPED [1] tests/deployed/feed_ingest/test_feed_labels.py:11: NOT_RUN: set AFC_DEPLOYED_API_URL to execute against a deployed stack
+SKIPPED [1] tests/deployed/feed_ingest/test_feed_labels.py:17: NOT_RUN: set AFC_DEPLOYED_API_URL to execute against a deployed stack
+SKIPPED [1] tests/deployed/feed_ingest/test_feed_labels.py:24: NOT_RUN: set AFC_DEPLOYED_API_URL to execute against a deployed stack
+62 passed, 3 skipped, 2438 warnings in 5.34s
+exit=0

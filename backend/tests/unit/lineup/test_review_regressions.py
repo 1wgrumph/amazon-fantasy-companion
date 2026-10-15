@@ -12,18 +12,18 @@ from test_yahoo_client import Recorder, recorded, LEAGUE_KEY, TEAM_KEY
 
 @pytest.mark.parametrize("athlete_id", [[], {}])
 def test_manual_unhashable_athlete_id_is_value_error(athlete_id):
-    roster = [{"athlete_id": "espn.1", "name": "A"}]
+    roster = [{"athlete_id": "espn.1", "name": "A", "team": "SYN"}]
     with pytest.raises(ValueError):
         manual.build(roster, [{"athlete_id": athlete_id, "slot": "QB"}], "PPR")
 
 
 def test_manual_espn_roster_at_size_limit_is_accepted():
-    roster = [{"athlete_id": f"espn.{i}", "name": "A"} for i in range(200)]
+    roster = [{"athlete_id": f"espn.{i}", "name": "A", "team": "SYN"} for i in range(200)]
     assert manual.build(roster, [], "PPR")["starters"] == []
 
 
 def test_manual_oversize_espn_roster_is_rejected_without_duplicates():
-    roster = [{"athlete_id": f"espn.{i}", "name": "A"} for i in range(201)]
+    roster = [{"athlete_id": f"espn.{i}", "name": "A", "team": "SYN"} for i in range(201)]
     with pytest.raises(ValueError):
         manual.build(roster, [], "PPR")
 

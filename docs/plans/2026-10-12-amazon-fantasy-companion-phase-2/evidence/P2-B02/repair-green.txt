@@ -1,0 +1,25 @@
+........................................................................ [ 55%]
+.........................................................                [100%]
+=============================== warnings summary ===============================
+tests/unit/feed_ingest/test_feed_edges.py: 425 warnings
+tests/unit/feed_ingest/test_normalization.py: 406 warnings
+tests/unit/feed_ingest/test_replay_labels.py: 406 warnings
+tests/unit/feed_ingest/test_review_repairs.py: 6556 warnings
+tests/unit/feed_ingest/test_revisions.py: 1211 warnings
+tests/unit/feed_ingest/test_validation.py: 789 warnings
+  <user-local>/lib/python3.12/site-packages/botocore/auth.py:424: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    datetime_now = datetime.datetime.utcnow()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+============================= slowest 10 durations =============================
+1.58s call     tests/unit/feed_ingest/test_review_repairs.py::test_f3_repeated_fallback_keeps_revisions_stable
+1.58s call     tests/unit/feed_ingest/test_review_repairs.py::test_f3_three_failures_replace_live_with_labeled_replay[failure0]
+1.49s call     tests/unit/feed_ingest/test_review_repairs.py::test_f3_three_failures_replace_live_with_labeled_replay[failure1]
+0.91s call     tests/unit/feed_ingest/test_revisions.py::test_ingesting_a_correction_revises_the_stored_event_in_place
+0.91s call     tests/unit/feed_ingest/test_review_repairs.py::test_f3_success_resets_consecutive_failures
+0.89s call     tests/unit/feed_ingest/test_revisions.py::test_ingesting_the_same_poll_twice_changes_no_revision
+0.79s call     tests/unit/feed_ingest/test_review_repairs.py::test_f3_tampered_replay_is_stale_and_mutates_nothing
+0.70s call     tests/unit/feed_ingest/test_review_repairs.py::test_f5_irrelevant_in_progress_game_is_never_fetched
+0.67s call     tests/unit/feed_ingest/test_validation.py::test_invalid_poll_leaves_stored_events_unchanged
+0.67s call     tests/unit/feed_ingest/test_review_repairs.py::test_f3_no_fixture_reports_stale_without_changing_values
+129 passed, 9793 warnings in 21.05s

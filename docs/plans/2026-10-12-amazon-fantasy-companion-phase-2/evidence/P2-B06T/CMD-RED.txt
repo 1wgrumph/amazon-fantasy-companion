@@ -1,0 +1,816 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.2, pluggy-1.6.0 -- $HOME/.local/share/afc-tools/backend-tests/bin/python3.12
+rootdir: $HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b06t/backend
+configfile: pyproject.toml
+collecting ... collected 46 items
+
+backend/tests/unit/provider_resolver/test_resolver_access_basis.py::test_installed_only_reads_unknown FAILED [  2%]
+backend/tests/unit/provider_resolver/test_resolver_access_basis.py::test_installed_only_never_reads_verified_or_confirmed FAILED [  4%]
+backend/tests/unit/provider_resolver/test_resolver_access_basis.py::test_customer_confirmation_reads_customer_confirmed FAILED [  6%]
+backend/tests/unit/provider_resolver/test_resolver_access_basis.py::test_confirmation_is_never_promoted_to_verified FAILED [  8%]
+backend/tests/unit/provider_resolver/test_resolver_access_basis.py::test_confirmation_of_another_provider_does_not_carry_over FAILED [ 10%]
+backend/tests/unit/provider_resolver/test_resolver_access_basis.py::test_unknown_broadcast_stays_unknown FAILED [ 13%]
+backend/tests/unit/provider_resolver/test_resolver_access_basis.py::test_no_profile_and_no_report_reads_unknown FAILED [ 15%]
+backend/tests/unit/provider_resolver/test_resolver_access_basis.py::test_installed_fact_is_recorded_separately_from_access FAILED [ 17%]
+backend/tests/unit/provider_resolver/test_resolver_access_basis.py::test_providers_api_reads_unknown_after_installed_report FAILED [ 19%]
+backend/tests/unit/provider_resolver/test_resolver_local_broadcast.py::test_local_channel_with_installed_carrier_offers_its_route FAILED [ 21%]
+backend/tests/unit/provider_resolver/test_resolver_local_broadcast.py::test_local_channel_without_installed_carrier_has_no_deep_link FAILED [ 23%]
+backend/tests/unit/provider_resolver/test_resolver_local_broadcast.py::test_local_channel_with_no_installed_carrier_shows_channel_only[CBS] FAILED [ 26%]
+backend/tests/unit/provider_resolver/test_resolver_local_broadcast.py::test_local_channel_with_no_installed_carrier_shows_channel_only[FOX] FAILED [ 28%]
+backend/tests/unit/provider_resolver/test_resolver_local_broadcast.py::test_local_channel_with_no_installed_carrier_shows_channel_only[NBC] FAILED [ 30%]
+backend/tests/unit/provider_resolver/test_resolver_local_broadcast.py::test_local_carrier_installed_only_still_reads_unknown FAILED [ 32%]
+backend/tests/unit/provider_resolver/test_resolver_platform_routes.py::test_route_carries_both_platform_entries FAILED [ 34%]
+backend/tests/unit/provider_resolver/test_resolver_platform_routes.py::test_verified_entries_carry_their_own_launch_data FAILED [ 36%]
+backend/tests/unit/provider_resolver/test_resolver_platform_routes.py::test_missing_vega_entry_is_a_gap_not_filled_from_fire_os FAILED [ 39%]
+backend/tests/unit/provider_resolver/test_resolver_platform_routes.py::test_unverified_fire_os_entry_is_a_gap_not_filled_from_vega FAILED [ 41%]
+backend/tests/unit/provider_resolver/test_resolver_platform_routes.py::test_registry_verified_outcome_is_not_access FAILED [ 43%]
+backend/tests/unit/provider_resolver/test_resolver_records.py::test_installed_report_is_stored_and_returned FAILED [ 45%]
+backend/tests/unit/provider_resolver/test_resolver_records.py::test_latest_installed_report_replaces_the_previous_one FAILED [ 47%]
+backend/tests/unit/provider_resolver/test_resolver_records.py::test_installed_report_does_not_create_access_confirmation FAILED [ 50%]
+backend/tests/unit/provider_resolver/test_resolver_records.py::test_each_modeled_outcome_is_recorded[gameOpened] FAILED [ 52%]
+backend/tests/unit/provider_resolver/test_resolver_records.py::test_each_modeled_outcome_is_recorded[searchOpened] FAILED [ 54%]
+backend/tests/unit/provider_resolver/test_resolver_records.py::test_each_modeled_outcome_is_recorded[appHomeOpened] FAILED [ 56%]
+backend/tests/unit/provider_resolver/test_resolver_records.py::test_each_modeled_outcome_is_recorded[appAbsent] FAILED [ 58%]
+backend/tests/unit/provider_resolver/test_resolver_records.py::test_each_modeled_outcome_is_recorded[accessUnknown] FAILED [ 60%]
+backend/tests/unit/provider_resolver/test_resolver_records.py::test_each_modeled_outcome_is_recorded[playbackDenied] FAILED [ 63%]
+backend/tests/unit/provider_resolver/test_resolver_records.py::test_invented_outcome_is_rejected[launched] FAILED [ 65%]
+backend/tests/unit/provider_resolver/test_resolver_records.py::test_invented_outcome_is_rejected[success] FAILED [ 67%]
+backend/tests/unit/provider_resolver/test_resolver_records.py::test_invented_outcome_is_rejected[] FAILED [ 69%]
+backend/tests/unit/provider_resolver/test_resolver_records.py::test_invented_outcome_is_rejected[None] FAILED [ 71%]
+backend/tests/unit/provider_resolver/test_resolver_records.py::test_game_opened_outcome_does_not_verify_access FAILED [ 73%]
+backend/tests/unit/provider_resolver/test_resolver_selection.py::test_resolution_names_provider_channel_and_route FAILED [ 76%]
+backend/tests/unit/provider_resolver/test_resolver_selection.py::test_preference_selects_among_installed_carriers FAILED [ 78%]
+backend/tests/unit/provider_resolver/test_resolver_selection.py::test_preference_change_reroutes_contested_game FAILED [ 80%]
+backend/tests/unit/provider_resolver/test_resolver_selection.py::test_spike_order_does_not_override_preference FAILED [ 82%]
+backend/tests/unit/provider_resolver/test_resolver_selection.py::test_uninstalled_preferred_provider_falls_to_next_installed_preference FAILED [ 84%]
+backend/tests/unit/provider_resolver/test_resolver_selection.py::test_no_carrier_for_channel_gives_no_route FAILED [ 86%]
+backend/tests/unit/provider_resolver/test_resolver_selection.py::test_registry_is_read_only FAILED [ 89%]
+backend/tests/unit/provider_resolver/test_resolver_selection.py::test_default_registry_is_the_landed_document FAILED [ 91%]
+backend/tests/unit/provider_resolver/test_resolver_selection.py::test_landed_empty_registry_resolves_no_route FAILED [ 93%]
+backend/tests/deployed/provider_resolver/test_providers_deployed.py::test_installed_report_is_accepted SKIPPED [ 95%]
+backend/tests/deployed/provider_resolver/test_providers_deployed.py::test_providers_reads_an_access_basis_never_verified_from_install SKIPPED [ 97%]
+backend/tests/deployed/provider_resolver/test_providers_deployed.py::test_invented_routing_outcome_is_rejected SKIPPED [100%]
+
+=================================== FAILURES ===================================
+______________________ test_installed_only_reads_unknown _______________________
+backend/tests/unit/provider_resolver/resolver_support.py:41: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/provider_resolver/__init__.py:23: in record_installed_apps
+    raise NotImplementedError(_pending())
+E   NotImplementedError: AFC-STUB: provider_resolver is implemented by P2-B06
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/provider_resolver/test_resolver_access_basis.py:16: in test_installed_only_reads_unknown
+    resolver.install("test.alpha.firetv")
+backend/tests/unit/provider_resolver/resolver_support.py:64: in install
+    return attempt(module.record_installed_apps, PROFILE, list(packages))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:43: in attempt
+    raise AssertionError(f"provider resolver is not implemented (AFC-STUB): {exc}")
+E   AssertionError: provider resolver is not implemented (AFC-STUB): AFC-STUB: provider_resolver is implemented by P2-B06
+____________ test_installed_only_never_reads_verified_or_confirmed _____________
+backend/tests/unit/provider_resolver/resolver_support.py:41: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/provider_resolver/__init__.py:23: in record_installed_apps
+    raise NotImplementedError(_pending())
+E   NotImplementedError: AFC-STUB: provider_resolver is implemented by P2-B06
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/provider_resolver/test_resolver_access_basis.py:24: in test_installed_only_never_reads_verified_or_confirmed
+    resolver.install("test.alpha.firetv", "test.beta.firetv", "test.gamma.firetv", "test.gamma.vega")
+backend/tests/unit/provider_resolver/resolver_support.py:64: in install
+    return attempt(module.record_installed_apps, PROFILE, list(packages))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:43: in attempt
+    raise AssertionError(f"provider resolver is not implemented (AFC-STUB): {exc}")
+E   AssertionError: provider resolver is not implemented (AFC-STUB): AFC-STUB: provider_resolver is implemented by P2-B06
+_____________ test_customer_confirmation_reads_customer_confirmed ______________
+backend/tests/unit/provider_resolver/resolver_support.py:41: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/provider_resolver/__init__.py:23: in record_installed_apps
+    raise NotImplementedError(_pending())
+E   NotImplementedError: AFC-STUB: provider_resolver is implemented by P2-B06
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/provider_resolver/test_resolver_access_basis.py:32: in test_customer_confirmation_reads_customer_confirmed
+    resolver.install("test.alpha.firetv")
+backend/tests/unit/provider_resolver/resolver_support.py:64: in install
+    return attempt(module.record_installed_apps, PROFILE, list(packages))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:43: in attempt
+    raise AssertionError(f"provider resolver is not implemented (AFC-STUB): {exc}")
+E   AssertionError: provider resolver is not implemented (AFC-STUB): AFC-STUB: provider_resolver is implemented by P2-B06
+_______________ test_confirmation_is_never_promoted_to_verified ________________
+backend/tests/unit/provider_resolver/resolver_support.py:41: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/provider_resolver/__init__.py:23: in record_installed_apps
+    raise NotImplementedError(_pending())
+E   NotImplementedError: AFC-STUB: provider_resolver is implemented by P2-B06
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/provider_resolver/test_resolver_access_basis.py:41: in test_confirmation_is_never_promoted_to_verified
+    resolver.install("test.beta.firetv")
+backend/tests/unit/provider_resolver/resolver_support.py:64: in install
+    return attempt(module.record_installed_apps, PROFILE, list(packages))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:43: in attempt
+    raise AssertionError(f"provider resolver is not implemented (AFC-STUB): {exc}")
+E   AssertionError: provider resolver is not implemented (AFC-STUB): AFC-STUB: provider_resolver is implemented by P2-B06
+__________ test_confirmation_of_another_provider_does_not_carry_over ___________
+backend/tests/unit/provider_resolver/resolver_support.py:41: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/provider_resolver/__init__.py:23: in record_installed_apps
+    raise NotImplementedError(_pending())
+E   NotImplementedError: AFC-STUB: provider_resolver is implemented by P2-B06
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/provider_resolver/test_resolver_access_basis.py:48: in test_confirmation_of_another_provider_does_not_carry_over
+    resolver.install("test.alpha.firetv")
+backend/tests/unit/provider_resolver/resolver_support.py:64: in install
+    return attempt(module.record_installed_apps, PROFILE, list(packages))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:43: in attempt
+    raise AssertionError(f"provider resolver is not implemented (AFC-STUB): {exc}")
+E   AssertionError: provider resolver is not implemented (AFC-STUB): AFC-STUB: provider_resolver is implemented by P2-B06
+_____________________ test_unknown_broadcast_stays_unknown _____________________
+backend/tests/unit/provider_resolver/resolver_support.py:41: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/provider_resolver/__init__.py:23: in record_installed_apps
+    raise NotImplementedError(_pending())
+E   NotImplementedError: AFC-STUB: provider_resolver is implemented by P2-B06
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/provider_resolver/test_resolver_access_basis.py:56: in test_unknown_broadcast_stays_unknown
+    resolver.install("test.alpha.firetv")
+backend/tests/unit/provider_resolver/resolver_support.py:64: in install
+    return attempt(module.record_installed_apps, PROFILE, list(packages))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:43: in attempt
+    raise AssertionError(f"provider resolver is not implemented (AFC-STUB): {exc}")
+E   AssertionError: provider resolver is not implemented (AFC-STUB): AFC-STUB: provider_resolver is implemented by P2-B06
+_________________ test_no_profile_and_no_report_reads_unknown __________________
+backend/tests/unit/provider_resolver/resolver_support.py:41: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/provider_resolver/__init__.py:13: in resolve
+    raise NotImplementedError(_pending())
+E   NotImplementedError: AFC-STUB: provider_resolver is implemented by P2-B06
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/provider_resolver/test_resolver_access_basis.py:65: in test_no_profile_and_no_report_reads_unknown
+    result = resolver.resolve(EVENT)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:67: in resolve
+    result = attempt(module.resolve, PROFILE, event_id)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:43: in attempt
+    raise AssertionError(f"provider resolver is not implemented (AFC-STUB): {exc}")
+E   AssertionError: provider resolver is not implemented (AFC-STUB): AFC-STUB: provider_resolver is implemented by P2-B06
+____________ test_installed_fact_is_recorded_separately_from_access ____________
+backend/tests/unit/provider_resolver/resolver_support.py:41: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/provider_resolver/__init__.py:23: in record_installed_apps
+    raise NotImplementedError(_pending())
+E   NotImplementedError: AFC-STUB: provider_resolver is implemented by P2-B06
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/provider_resolver/test_resolver_access_basis.py:73: in test_installed_fact_is_recorded_separately_from_access
+    resolver.install("test.alpha.firetv")
+backend/tests/unit/provider_resolver/resolver_support.py:64: in install
+    return attempt(module.record_installed_apps, PROFILE, list(packages))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:43: in attempt
+    raise AssertionError(f"provider resolver is not implemented (AFC-STUB): {exc}")
+E   AssertionError: provider resolver is not implemented (AFC-STUB): AFC-STUB: provider_resolver is implemented by P2-B06
+___________ test_providers_api_reads_unknown_after_installed_report ____________
+backend/tests/unit/provider_resolver/test_resolver_access_basis.py:92: in test_providers_api_reads_unknown_after_installed_report
+    assert status == 200, body
+E   AssertionError: {'error': {'code': 'not_implemented', 'message': 'This feature is not available yet.'}}
+E   assert 503 == 200
+__________ test_local_channel_with_installed_carrier_offers_its_route __________
+backend/tests/unit/provider_resolver/resolver_support.py:41: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/provider_resolver/__init__.py:23: in record_installed_apps
+    raise NotImplementedError(_pending())
+E   NotImplementedError: AFC-STUB: provider_resolver is implemented by P2-B06
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/provider_resolver/test_resolver_local_broadcast.py:17: in test_local_channel_with_installed_carrier_offers_its_route
+    resolver.install("test.beta.firetv")
+backend/tests/unit/provider_resolver/resolver_support.py:64: in install
+    return attempt(module.record_installed_apps, PROFILE, list(packages))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:43: in attempt
+    raise AssertionError(f"provider resolver is not implemented (AFC-STUB): {exc}")
+E   AssertionError: provider resolver is not implemented (AFC-STUB): AFC-STUB: provider_resolver is implemented by P2-B06
+________ test_local_channel_without_installed_carrier_has_no_deep_link _________
+backend/tests/unit/provider_resolver/resolver_support.py:41: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/provider_resolver/__init__.py:23: in record_installed_apps
+    raise NotImplementedError(_pending())
+E   NotImplementedError: AFC-STUB: provider_resolver is implemented by P2-B06
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/provider_resolver/test_resolver_local_broadcast.py:26: in test_local_channel_without_installed_carrier_has_no_deep_link
+    resolver.install("test.alpha.firetv")
+backend/tests/unit/provider_resolver/resolver_support.py:64: in install
+    return attempt(module.record_installed_apps, PROFILE, list(packages))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:43: in attempt
+    raise AssertionError(f"provider resolver is not implemented (AFC-STUB): {exc}")
+E   AssertionError: provider resolver is not implemented (AFC-STUB): AFC-STUB: provider_resolver is implemented by P2-B06
+_____ test_local_channel_with_no_installed_carrier_shows_channel_only[CBS] _____
+backend/tests/unit/provider_resolver/resolver_support.py:41: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/provider_resolver/__init__.py:23: in record_installed_apps
+    raise NotImplementedError(_pending())
+E   NotImplementedError: AFC-STUB: provider_resolver is implemented by P2-B06
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/provider_resolver/test_resolver_local_broadcast.py:36: in test_local_channel_with_no_installed_carrier_shows_channel_only
+    resolver.install("test.alpha.firetv", "test.gamma.firetv", "test.gamma.vega")
+backend/tests/unit/provider_resolver/resolver_support.py:64: in install
+    return attempt(module.record_installed_apps, PROFILE, list(packages))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:43: in attempt
+    raise AssertionError(f"provider resolver is not implemented (AFC-STUB): {exc}")
+E   AssertionError: provider resolver is not implemented (AFC-STUB): AFC-STUB: provider_resolver is implemented by P2-B06
+_____ test_local_channel_with_no_installed_carrier_shows_channel_only[FOX] _____
+backend/tests/unit/provider_resolver/resolver_support.py:41: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/provider_resolver/__init__.py:23: in record_installed_apps
+    raise NotImplementedError(_pending())
+E   NotImplementedError: AFC-STUB: provider_resolver is implemented by P2-B06
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/provider_resolver/test_resolver_local_broadcast.py:36: in test_local_channel_with_no_installed_carrier_shows_channel_only
+    resolver.install("test.alpha.firetv", "test.gamma.firetv", "test.gamma.vega")
+backend/tests/unit/provider_resolver/resolver_support.py:64: in install
+    return attempt(module.record_installed_apps, PROFILE, list(packages))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:43: in attempt
+    raise AssertionError(f"provider resolver is not implemented (AFC-STUB): {exc}")
+E   AssertionError: provider resolver is not implemented (AFC-STUB): AFC-STUB: provider_resolver is implemented by P2-B06
+_____ test_local_channel_with_no_installed_carrier_shows_channel_only[NBC] _____
+backend/tests/unit/provider_resolver/resolver_support.py:41: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/provider_resolver/__init__.py:23: in record_installed_apps
+    raise NotImplementedError(_pending())
+E   NotImplementedError: AFC-STUB: provider_resolver is implemented by P2-B06
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/provider_resolver/test_resolver_local_broadcast.py:36: in test_local_channel_with_no_installed_carrier_shows_channel_only
+    resolver.install("test.alpha.firetv", "test.gamma.firetv", "test.gamma.vega")
+backend/tests/unit/provider_resolver/resolver_support.py:64: in install
+    return attempt(module.record_installed_apps, PROFILE, list(packages))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:43: in attempt
+    raise AssertionError(f"provider resolver is not implemented (AFC-STUB): {exc}")
+E   AssertionError: provider resolver is not implemented (AFC-STUB): AFC-STUB: provider_resolver is implemented by P2-B06
+____________ test_local_carrier_installed_only_still_reads_unknown _____________
+backend/tests/unit/provider_resolver/resolver_support.py:41: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/provider_resolver/__init__.py:23: in record_installed_apps
+    raise NotImplementedError(_pending())
+E   NotImplementedError: AFC-STUB: provider_resolver is implemented by P2-B06
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/provider_resolver/test_resolver_local_broadcast.py:46: in test_local_carrier_installed_only_still_reads_unknown
+    resolver.install("test.beta.firetv")
+backend/tests/unit/provider_resolver/resolver_support.py:64: in install
+    return attempt(module.record_installed_apps, PROFILE, list(packages))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:43: in attempt
+    raise AssertionError(f"provider resolver is not implemented (AFC-STUB): {exc}")
+E   AssertionError: provider resolver is not implemented (AFC-STUB): AFC-STUB: provider_resolver is implemented by P2-B06
+___________________ test_route_carries_both_platform_entries ___________________
+backend/tests/unit/provider_resolver/resolver_support.py:41: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/provider_resolver/__init__.py:23: in record_installed_apps
+    raise NotImplementedError(_pending())
+E   NotImplementedError: AFC-STUB: provider_resolver is implemented by P2-B06
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/provider_resolver/test_resolver_platform_routes.py:36: in test_route_carries_both_platform_entries
+    routes = routes_for(resolver, "alpha_stream", "test.alpha.firetv")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/test_resolver_platform_routes.py:27: in routes_for
+    resolver.install(*packages)
+backend/tests/unit/provider_resolver/resolver_support.py:64: in install
+    return attempt(module.record_installed_apps, PROFILE, list(packages))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:43: in attempt
+    raise AssertionError(f"provider resolver is not implemented (AFC-STUB): {exc}")
+E   AssertionError: provider resolver is not implemented (AFC-STUB): AFC-STUB: provider_resolver is implemented by P2-B06
+______________ test_verified_entries_carry_their_own_launch_data _______________
+backend/tests/unit/provider_resolver/resolver_support.py:41: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/provider_resolver/__init__.py:23: in record_installed_apps
+    raise NotImplementedError(_pending())
+E   NotImplementedError: AFC-STUB: provider_resolver is implemented by P2-B06
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/provider_resolver/test_resolver_platform_routes.py:42: in test_verified_entries_carry_their_own_launch_data
+    routes = routes_for(resolver, "alpha_stream", "test.alpha.firetv")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/test_resolver_platform_routes.py:27: in routes_for
+    resolver.install(*packages)
+backend/tests/unit/provider_resolver/resolver_support.py:64: in install
+    return attempt(module.record_installed_apps, PROFILE, list(packages))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:43: in attempt
+    raise AssertionError(f"provider resolver is not implemented (AFC-STUB): {exc}")
+E   AssertionError: provider resolver is not implemented (AFC-STUB): AFC-STUB: provider_resolver is implemented by P2-B06
+___________ test_missing_vega_entry_is_a_gap_not_filled_from_fire_os ___________
+backend/tests/unit/provider_resolver/resolver_support.py:41: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/provider_resolver/__init__.py:23: in record_installed_apps
+    raise NotImplementedError(_pending())
+E   NotImplementedError: AFC-STUB: provider_resolver is implemented by P2-B06
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/provider_resolver/test_resolver_platform_routes.py:51: in test_missing_vega_entry_is_a_gap_not_filled_from_fire_os
+    routes = routes_for(resolver, "beta_tv", "test.beta.firetv")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/test_resolver_platform_routes.py:27: in routes_for
+    resolver.install(*packages)
+backend/tests/unit/provider_resolver/resolver_support.py:64: in install
+    return attempt(module.record_installed_apps, PROFILE, list(packages))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:43: in attempt
+    raise AssertionError(f"provider resolver is not implemented (AFC-STUB): {exc}")
+E   AssertionError: provider resolver is not implemented (AFC-STUB): AFC-STUB: provider_resolver is implemented by P2-B06
+_________ test_unverified_fire_os_entry_is_a_gap_not_filled_from_vega __________
+backend/tests/unit/provider_resolver/resolver_support.py:41: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/provider_resolver/__init__.py:23: in record_installed_apps
+    raise NotImplementedError(_pending())
+E   NotImplementedError: AFC-STUB: provider_resolver is implemented by P2-B06
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/provider_resolver/test_resolver_platform_routes.py:60: in test_unverified_fire_os_entry_is_a_gap_not_filled_from_vega
+    routes = routes_for(resolver, "gamma_live", "test.gamma.vega")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/test_resolver_platform_routes.py:27: in routes_for
+    resolver.install(*packages)
+backend/tests/unit/provider_resolver/resolver_support.py:64: in install
+    return attempt(module.record_installed_apps, PROFILE, list(packages))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:43: in attempt
+    raise AssertionError(f"provider resolver is not implemented (AFC-STUB): {exc}")
+E   AssertionError: provider resolver is not implemented (AFC-STUB): AFC-STUB: provider_resolver is implemented by P2-B06
+_________________ test_registry_verified_outcome_is_not_access _________________
+backend/tests/unit/provider_resolver/resolver_support.py:41: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/provider_resolver/__init__.py:23: in record_installed_apps
+    raise NotImplementedError(_pending())
+E   NotImplementedError: AFC-STUB: provider_resolver is implemented by P2-B06
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/provider_resolver/test_resolver_platform_routes.py:71: in test_registry_verified_outcome_is_not_access
+    resolver.install("test.beta.firetv")
+backend/tests/unit/provider_resolver/resolver_support.py:64: in install
+    return attempt(module.record_installed_apps, PROFILE, list(packages))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:43: in attempt
+    raise AssertionError(f"provider resolver is not implemented (AFC-STUB): {exc}")
+E   AssertionError: provider resolver is not implemented (AFC-STUB): AFC-STUB: provider_resolver is implemented by P2-B06
+_________________ test_installed_report_is_stored_and_returned _________________
+backend/tests/unit/provider_resolver/resolver_support.py:41: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/provider_resolver/__init__.py:23: in record_installed_apps
+    raise NotImplementedError(_pending())
+E   NotImplementedError: AFC-STUB: provider_resolver is implemented by P2-B06
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/provider_resolver/test_resolver_records.py:17: in test_installed_report_is_stored_and_returned
+    record = resolver.install("test.alpha.firetv", "test.beta.firetv")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:64: in install
+    return attempt(module.record_installed_apps, PROFILE, list(packages))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:43: in attempt
+    raise AssertionError(f"provider resolver is not implemented (AFC-STUB): {exc}")
+E   AssertionError: provider resolver is not implemented (AFC-STUB): AFC-STUB: provider_resolver is implemented by P2-B06
+____________ test_latest_installed_report_replaces_the_previous_one ____________
+backend/tests/unit/provider_resolver/resolver_support.py:41: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/provider_resolver/__init__.py:23: in record_installed_apps
+    raise NotImplementedError(_pending())
+E   NotImplementedError: AFC-STUB: provider_resolver is implemented by P2-B06
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/provider_resolver/test_resolver_records.py:23: in test_latest_installed_report_replaces_the_previous_one
+    resolver.install("test.alpha.firetv")
+backend/tests/unit/provider_resolver/resolver_support.py:64: in install
+    return attempt(module.record_installed_apps, PROFILE, list(packages))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:43: in attempt
+    raise AssertionError(f"provider resolver is not implemented (AFC-STUB): {exc}")
+E   AssertionError: provider resolver is not implemented (AFC-STUB): AFC-STUB: provider_resolver is implemented by P2-B06
+__________ test_installed_report_does_not_create_access_confirmation ___________
+backend/tests/unit/provider_resolver/resolver_support.py:41: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/provider_resolver/__init__.py:23: in record_installed_apps
+    raise NotImplementedError(_pending())
+E   NotImplementedError: AFC-STUB: provider_resolver is implemented by P2-B06
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/provider_resolver/test_resolver_records.py:33: in test_installed_report_does_not_create_access_confirmation
+    resolver.install("test.alpha.firetv")
+backend/tests/unit/provider_resolver/resolver_support.py:64: in install
+    return attempt(module.record_installed_apps, PROFILE, list(packages))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:43: in attempt
+    raise AssertionError(f"provider resolver is not implemented (AFC-STUB): {exc}")
+E   AssertionError: provider resolver is not implemented (AFC-STUB): AFC-STUB: provider_resolver is implemented by P2-B06
+______________ test_each_modeled_outcome_is_recorded[gameOpened] _______________
+backend/tests/unit/provider_resolver/resolver_support.py:41: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/provider_resolver/__init__.py:18: in record_outcome
+    raise NotImplementedError(_pending())
+E   NotImplementedError: AFC-STUB: provider_resolver is implemented by P2-B06
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/provider_resolver/test_resolver_records.py:41: in test_each_modeled_outcome_is_recorded
+    record = attempt(resolver.module.record_outcome, PROFILE, "evt-o1", outcome)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:43: in attempt
+    raise AssertionError(f"provider resolver is not implemented (AFC-STUB): {exc}")
+E   AssertionError: provider resolver is not implemented (AFC-STUB): AFC-STUB: provider_resolver is implemented by P2-B06
+_____________ test_each_modeled_outcome_is_recorded[searchOpened] ______________
+backend/tests/unit/provider_resolver/resolver_support.py:41: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/provider_resolver/__init__.py:18: in record_outcome
+    raise NotImplementedError(_pending())
+E   NotImplementedError: AFC-STUB: provider_resolver is implemented by P2-B06
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/provider_resolver/test_resolver_records.py:41: in test_each_modeled_outcome_is_recorded
+    record = attempt(resolver.module.record_outcome, PROFILE, "evt-o1", outcome)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:43: in attempt
+    raise AssertionError(f"provider resolver is not implemented (AFC-STUB): {exc}")
+E   AssertionError: provider resolver is not implemented (AFC-STUB): AFC-STUB: provider_resolver is implemented by P2-B06
+_____________ test_each_modeled_outcome_is_recorded[appHomeOpened] _____________
+backend/tests/unit/provider_resolver/resolver_support.py:41: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/provider_resolver/__init__.py:18: in record_outcome
+    raise NotImplementedError(_pending())
+E   NotImplementedError: AFC-STUB: provider_resolver is implemented by P2-B06
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/provider_resolver/test_resolver_records.py:41: in test_each_modeled_outcome_is_recorded
+    record = attempt(resolver.module.record_outcome, PROFILE, "evt-o1", outcome)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:43: in attempt
+    raise AssertionError(f"provider resolver is not implemented (AFC-STUB): {exc}")
+E   AssertionError: provider resolver is not implemented (AFC-STUB): AFC-STUB: provider_resolver is implemented by P2-B06
+_______________ test_each_modeled_outcome_is_recorded[appAbsent] _______________
+backend/tests/unit/provider_resolver/resolver_support.py:41: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/provider_resolver/__init__.py:18: in record_outcome
+    raise NotImplementedError(_pending())
+E   NotImplementedError: AFC-STUB: provider_resolver is implemented by P2-B06
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/provider_resolver/test_resolver_records.py:41: in test_each_modeled_outcome_is_recorded
+    record = attempt(resolver.module.record_outcome, PROFILE, "evt-o1", outcome)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:43: in attempt
+    raise AssertionError(f"provider resolver is not implemented (AFC-STUB): {exc}")
+E   AssertionError: provider resolver is not implemented (AFC-STUB): AFC-STUB: provider_resolver is implemented by P2-B06
+_____________ test_each_modeled_outcome_is_recorded[accessUnknown] _____________
+backend/tests/unit/provider_resolver/resolver_support.py:41: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/provider_resolver/__init__.py:18: in record_outcome
+    raise NotImplementedError(_pending())
+E   NotImplementedError: AFC-STUB: provider_resolver is implemented by P2-B06
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/provider_resolver/test_resolver_records.py:41: in test_each_modeled_outcome_is_recorded
+    record = attempt(resolver.module.record_outcome, PROFILE, "evt-o1", outcome)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:43: in attempt
+    raise AssertionError(f"provider resolver is not implemented (AFC-STUB): {exc}")
+E   AssertionError: provider resolver is not implemented (AFC-STUB): AFC-STUB: provider_resolver is implemented by P2-B06
+____________ test_each_modeled_outcome_is_recorded[playbackDenied] _____________
+backend/tests/unit/provider_resolver/resolver_support.py:41: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/provider_resolver/__init__.py:18: in record_outcome
+    raise NotImplementedError(_pending())
+E   NotImplementedError: AFC-STUB: provider_resolver is implemented by P2-B06
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/provider_resolver/test_resolver_records.py:41: in test_each_modeled_outcome_is_recorded
+    record = attempt(resolver.module.record_outcome, PROFILE, "evt-o1", outcome)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:43: in attempt
+    raise AssertionError(f"provider resolver is not implemented (AFC-STUB): {exc}")
+E   AssertionError: provider resolver is not implemented (AFC-STUB): AFC-STUB: provider_resolver is implemented by P2-B06
+_________________ test_invented_outcome_is_rejected[launched] __________________
+backend/tests/unit/provider_resolver/resolver_support.py:41: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/provider_resolver/__init__.py:18: in record_outcome
+    raise NotImplementedError(_pending())
+E   NotImplementedError: AFC-STUB: provider_resolver is implemented by P2-B06
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/provider_resolver/test_resolver_records.py:49: in test_invented_outcome_is_rejected
+    attempt(resolver.module.record_outcome, PROFILE, "evt-o2", outcome)
+backend/tests/unit/provider_resolver/resolver_support.py:43: in attempt
+    raise AssertionError(f"provider resolver is not implemented (AFC-STUB): {exc}")
+E   AssertionError: provider resolver is not implemented (AFC-STUB): AFC-STUB: provider_resolver is implemented by P2-B06
+__________________ test_invented_outcome_is_rejected[success] __________________
+backend/tests/unit/provider_resolver/resolver_support.py:41: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/provider_resolver/__init__.py:18: in record_outcome
+    raise NotImplementedError(_pending())
+E   NotImplementedError: AFC-STUB: provider_resolver is implemented by P2-B06
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/provider_resolver/test_resolver_records.py:49: in test_invented_outcome_is_rejected
+    attempt(resolver.module.record_outcome, PROFILE, "evt-o2", outcome)
+backend/tests/unit/provider_resolver/resolver_support.py:43: in attempt
+    raise AssertionError(f"provider resolver is not implemented (AFC-STUB): {exc}")
+E   AssertionError: provider resolver is not implemented (AFC-STUB): AFC-STUB: provider_resolver is implemented by P2-B06
+_____________________ test_invented_outcome_is_rejected[] ______________________
+backend/tests/unit/provider_resolver/resolver_support.py:41: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/provider_resolver/__init__.py:18: in record_outcome
+    raise NotImplementedError(_pending())
+E   NotImplementedError: AFC-STUB: provider_resolver is implemented by P2-B06
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/provider_resolver/test_resolver_records.py:49: in test_invented_outcome_is_rejected
+    attempt(resolver.module.record_outcome, PROFILE, "evt-o2", outcome)
+backend/tests/unit/provider_resolver/resolver_support.py:43: in attempt
+    raise AssertionError(f"provider resolver is not implemented (AFC-STUB): {exc}")
+E   AssertionError: provider resolver is not implemented (AFC-STUB): AFC-STUB: provider_resolver is implemented by P2-B06
+___________________ test_invented_outcome_is_rejected[None] ____________________
+backend/tests/unit/provider_resolver/resolver_support.py:41: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/provider_resolver/__init__.py:18: in record_outcome
+    raise NotImplementedError(_pending())
+E   NotImplementedError: AFC-STUB: provider_resolver is implemented by P2-B06
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/provider_resolver/test_resolver_records.py:49: in test_invented_outcome_is_rejected
+    attempt(resolver.module.record_outcome, PROFILE, "evt-o2", outcome)
+backend/tests/unit/provider_resolver/resolver_support.py:43: in attempt
+    raise AssertionError(f"provider resolver is not implemented (AFC-STUB): {exc}")
+E   AssertionError: provider resolver is not implemented (AFC-STUB): AFC-STUB: provider_resolver is implemented by P2-B06
+_______________ test_game_opened_outcome_does_not_verify_access ________________
+backend/tests/unit/provider_resolver/resolver_support.py:41: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/provider_resolver/__init__.py:23: in record_installed_apps
+    raise NotImplementedError(_pending())
+E   NotImplementedError: AFC-STUB: provider_resolver is implemented by P2-B06
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/provider_resolver/test_resolver_records.py:58: in test_game_opened_outcome_does_not_verify_access
+    resolver.install("test.alpha.firetv")
+backend/tests/unit/provider_resolver/resolver_support.py:64: in install
+    return attempt(module.record_installed_apps, PROFILE, list(packages))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:43: in attempt
+    raise AssertionError(f"provider resolver is not implemented (AFC-STUB): {exc}")
+E   AssertionError: provider resolver is not implemented (AFC-STUB): AFC-STUB: provider_resolver is implemented by P2-B06
+_______________ test_resolution_names_provider_channel_and_route _______________
+backend/tests/unit/provider_resolver/resolver_support.py:41: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/provider_resolver/__init__.py:23: in record_installed_apps
+    raise NotImplementedError(_pending())
+E   NotImplementedError: AFC-STUB: provider_resolver is implemented by P2-B06
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/provider_resolver/test_resolver_selection.py:19: in test_resolution_names_provider_channel_and_route
+    resolver.install("test.alpha.firetv")
+backend/tests/unit/provider_resolver/resolver_support.py:64: in install
+    return attempt(module.record_installed_apps, PROFILE, list(packages))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:43: in attempt
+    raise AssertionError(f"provider resolver is not implemented (AFC-STUB): {exc}")
+E   AssertionError: provider resolver is not implemented (AFC-STUB): AFC-STUB: provider_resolver is implemented by P2-B06
+_______________ test_preference_selects_among_installed_carriers _______________
+backend/tests/unit/provider_resolver/resolver_support.py:41: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/provider_resolver/__init__.py:23: in record_installed_apps
+    raise NotImplementedError(_pending())
+E   NotImplementedError: AFC-STUB: provider_resolver is implemented by P2-B06
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/provider_resolver/test_resolver_selection.py:28: in test_preference_selects_among_installed_carriers
+    resolver.install(*CONTESTED)
+backend/tests/unit/provider_resolver/resolver_support.py:64: in install
+    return attempt(module.record_installed_apps, PROFILE, list(packages))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:43: in attempt
+    raise AssertionError(f"provider resolver is not implemented (AFC-STUB): {exc}")
+E   AssertionError: provider resolver is not implemented (AFC-STUB): AFC-STUB: provider_resolver is implemented by P2-B06
+________________ test_preference_change_reroutes_contested_game ________________
+backend/tests/unit/provider_resolver/resolver_support.py:41: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/provider_resolver/__init__.py:23: in record_installed_apps
+    raise NotImplementedError(_pending())
+E   NotImplementedError: AFC-STUB: provider_resolver is implemented by P2-B06
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/provider_resolver/test_resolver_selection.py:34: in test_preference_change_reroutes_contested_game
+    resolver.install(*CONTESTED)
+backend/tests/unit/provider_resolver/resolver_support.py:64: in install
+    return attempt(module.record_installed_apps, PROFILE, list(packages))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:43: in attempt
+    raise AssertionError(f"provider resolver is not implemented (AFC-STUB): {exc}")
+E   AssertionError: provider resolver is not implemented (AFC-STUB): AFC-STUB: provider_resolver is implemented by P2-B06
+________________ test_spike_order_does_not_override_preference _________________
+backend/tests/unit/provider_resolver/resolver_support.py:41: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/provider_resolver/__init__.py:23: in record_installed_apps
+    raise NotImplementedError(_pending())
+E   NotImplementedError: AFC-STUB: provider_resolver is implemented by P2-B06
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/provider_resolver/test_resolver_selection.py:49: in test_spike_order_does_not_override_preference
+    resolver.install("test.alpha.firetv", "test.beta.firetv")
+backend/tests/unit/provider_resolver/resolver_support.py:64: in install
+    return attempt(module.record_installed_apps, PROFILE, list(packages))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:43: in attempt
+    raise AssertionError(f"provider resolver is not implemented (AFC-STUB): {exc}")
+E   AssertionError: provider resolver is not implemented (AFC-STUB): AFC-STUB: provider_resolver is implemented by P2-B06
+____ test_uninstalled_preferred_provider_falls_to_next_installed_preference ____
+backend/tests/unit/provider_resolver/resolver_support.py:41: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/provider_resolver/__init__.py:23: in record_installed_apps
+    raise NotImplementedError(_pending())
+E   NotImplementedError: AFC-STUB: provider_resolver is implemented by P2-B06
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/provider_resolver/test_resolver_selection.py:56: in test_uninstalled_preferred_provider_falls_to_next_installed_preference
+    resolver.install("test.alpha.firetv")
+backend/tests/unit/provider_resolver/resolver_support.py:64: in install
+    return attempt(module.record_installed_apps, PROFILE, list(packages))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:43: in attempt
+    raise AssertionError(f"provider resolver is not implemented (AFC-STUB): {exc}")
+E   AssertionError: provider resolver is not implemented (AFC-STUB): AFC-STUB: provider_resolver is implemented by P2-B06
+__________________ test_no_carrier_for_channel_gives_no_route __________________
+backend/tests/unit/provider_resolver/resolver_support.py:41: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/provider_resolver/__init__.py:23: in record_installed_apps
+    raise NotImplementedError(_pending())
+E   NotImplementedError: AFC-STUB: provider_resolver is implemented by P2-B06
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/provider_resolver/test_resolver_selection.py:63: in test_no_carrier_for_channel_gives_no_route
+    resolver.install("test.alpha.firetv")
+backend/tests/unit/provider_resolver/resolver_support.py:64: in install
+    return attempt(module.record_installed_apps, PROFILE, list(packages))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:43: in attempt
+    raise AssertionError(f"provider resolver is not implemented (AFC-STUB): {exc}")
+E   AssertionError: provider resolver is not implemented (AFC-STUB): AFC-STUB: provider_resolver is implemented by P2-B06
+__________________________ test_registry_is_read_only __________________________
+backend/tests/unit/provider_resolver/resolver_support.py:41: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/provider_resolver/__init__.py:23: in record_installed_apps
+    raise NotImplementedError(_pending())
+E   NotImplementedError: AFC-STUB: provider_resolver is implemented by P2-B06
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/provider_resolver/test_resolver_selection.py:74: in test_registry_is_read_only
+    resolver.install("test.alpha.firetv")
+backend/tests/unit/provider_resolver/resolver_support.py:64: in install
+    return attempt(module.record_installed_apps, PROFILE, list(packages))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:43: in attempt
+    raise AssertionError(f"provider resolver is not implemented (AFC-STUB): {exc}")
+E   AssertionError: provider resolver is not implemented (AFC-STUB): AFC-STUB: provider_resolver is implemented by P2-B06
+_________________ test_default_registry_is_the_landed_document _________________
+backend/tests/unit/provider_resolver/test_resolver_selection.py:83: in test_default_registry_is_the_landed_document
+    assert path is not None, "provider_resolver.REGISTRY_PATH is not defined"
+E   AssertionError: provider_resolver.REGISTRY_PATH is not defined
+E   assert None is not None
+_________________ test_landed_empty_registry_resolves_no_route _________________
+backend/tests/unit/provider_resolver/resolver_support.py:41: in attempt
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend/src/provider_resolver/__init__.py:13: in resolve
+    raise NotImplementedError(_pending())
+E   NotImplementedError: AFC-STUB: provider_resolver is implemented by P2-B06
+
+During handling of the above exception, another exception occurred:
+backend/tests/unit/provider_resolver/test_resolver_selection.py:93: in test_landed_empty_registry_resolves_no_route
+    result = attempt(module.resolve, PROFILE, EVENT)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/provider_resolver/resolver_support.py:43: in attempt
+    raise AssertionError(f"provider resolver is not implemented (AFC-STUB): {exc}")
+E   AssertionError: provider resolver is not implemented (AFC-STUB): AFC-STUB: provider_resolver is implemented by P2-B06
+=============================== warnings summary ===============================
+tests/unit/provider_resolver/test_resolver_access_basis.py: 67 warnings
+tests/unit/provider_resolver/test_resolver_local_broadcast.py: 42 warnings
+tests/unit/provider_resolver/test_resolver_platform_routes.py: 35 warnings
+tests/unit/provider_resolver/test_resolver_records.py: 86 warnings
+tests/unit/provider_resolver/test_resolver_selection.py: 61 warnings
+  $HOME/.local/lib/python3.12/site-packages/botocore/auth.py:424: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    datetime_now = datetime.datetime.utcnow()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: $HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b06t/docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B06T/CMD-RED.xml -
+============================= slowest 10 durations =============================
+0.39s setup    tests/unit/provider_resolver/test_resolver_selection.py::test_spike_order_does_not_override_preference
+0.32s setup    tests/unit/provider_resolver/test_resolver_selection.py::test_landed_empty_registry_resolves_no_route
+0.28s setup    tests/unit/provider_resolver/test_resolver_access_basis.py::test_installed_only_reads_unknown
+0.26s setup    tests/unit/provider_resolver/test_resolver_records.py::test_each_modeled_outcome_is_recorded[accessUnknown]
+0.26s setup    tests/unit/provider_resolver/test_resolver_records.py::test_invented_outcome_is_rejected[None]
+0.25s setup    tests/unit/provider_resolver/test_resolver_access_basis.py::test_installed_fact_is_recorded_separately_from_access
+0.24s setup    tests/unit/provider_resolver/test_resolver_records.py::test_latest_installed_report_replaces_the_previous_one
+0.24s setup    tests/unit/provider_resolver/test_resolver_platform_routes.py::test_verified_entries_carry_their_own_launch_data
+0.22s setup    tests/unit/provider_resolver/test_resolver_selection.py::test_preference_change_reroutes_contested_game
+0.19s setup    tests/unit/provider_resolver/test_resolver_selection.py::test_uninstalled_preferred_provider_falls_to_next_installed_preference
+=========================== short test summary info ============================
+FAILED backend/tests/unit/provider_resolver/test_resolver_access_basis.py::test_installed_only_reads_unknown
+FAILED backend/tests/unit/provider_resolver/test_resolver_access_basis.py::test_installed_only_never_reads_verified_or_confirmed
+FAILED backend/tests/unit/provider_resolver/test_resolver_access_basis.py::test_customer_confirmation_reads_customer_confirmed
+FAILED backend/tests/unit/provider_resolver/test_resolver_access_basis.py::test_confirmation_is_never_promoted_to_verified
+FAILED backend/tests/unit/provider_resolver/test_resolver_access_basis.py::test_confirmation_of_another_provider_does_not_carry_over
+FAILED backend/tests/unit/provider_resolver/test_resolver_access_basis.py::test_unknown_broadcast_stays_unknown
+FAILED backend/tests/unit/provider_resolver/test_resolver_access_basis.py::test_no_profile_and_no_report_reads_unknown
+FAILED backend/tests/unit/provider_resolver/test_resolver_access_basis.py::test_installed_fact_is_recorded_separately_from_access
+FAILED backend/tests/unit/provider_resolver/test_resolver_access_basis.py::test_providers_api_reads_unknown_after_installed_report
+FAILED backend/tests/unit/provider_resolver/test_resolver_local_broadcast.py::test_local_channel_with_installed_carrier_offers_its_route
+FAILED backend/tests/unit/provider_resolver/test_resolver_local_broadcast.py::test_local_channel_without_installed_carrier_has_no_deep_link
+FAILED backend/tests/unit/provider_resolver/test_resolver_local_broadcast.py::test_local_channel_with_no_installed_carrier_shows_channel_only[CBS]
+FAILED backend/tests/unit/provider_resolver/test_resolver_local_broadcast.py::test_local_channel_with_no_installed_carrier_shows_channel_only[FOX]
+FAILED backend/tests/unit/provider_resolver/test_resolver_local_broadcast.py::test_local_channel_with_no_installed_carrier_shows_channel_only[NBC]
+FAILED backend/tests/unit/provider_resolver/test_resolver_local_broadcast.py::test_local_carrier_installed_only_still_reads_unknown
+FAILED backend/tests/unit/provider_resolver/test_resolver_platform_routes.py::test_route_carries_both_platform_entries
+FAILED backend/tests/unit/provider_resolver/test_resolver_platform_routes.py::test_verified_entries_carry_their_own_launch_data
+FAILED backend/tests/unit/provider_resolver/test_resolver_platform_routes.py::test_missing_vega_entry_is_a_gap_not_filled_from_fire_os
+FAILED backend/tests/unit/provider_resolver/test_resolver_platform_routes.py::test_unverified_fire_os_entry_is_a_gap_not_filled_from_vega
+FAILED backend/tests/unit/provider_resolver/test_resolver_platform_routes.py::test_registry_verified_outcome_is_not_access
+FAILED backend/tests/unit/provider_resolver/test_resolver_records.py::test_installed_report_is_stored_and_returned
+FAILED backend/tests/unit/provider_resolver/test_resolver_records.py::test_latest_installed_report_replaces_the_previous_one
+FAILED backend/tests/unit/provider_resolver/test_resolver_records.py::test_installed_report_does_not_create_access_confirmation
+FAILED backend/tests/unit/provider_resolver/test_resolver_records.py::test_each_modeled_outcome_is_recorded[gameOpened]
+FAILED backend/tests/unit/provider_resolver/test_resolver_records.py::test_each_modeled_outcome_is_recorded[searchOpened]
+FAILED backend/tests/unit/provider_resolver/test_resolver_records.py::test_each_modeled_outcome_is_recorded[appHomeOpened]
+FAILED backend/tests/unit/provider_resolver/test_resolver_records.py::test_each_modeled_outcome_is_recorded[appAbsent]
+FAILED backend/tests/unit/provider_resolver/test_resolver_records.py::test_each_modeled_outcome_is_recorded[accessUnknown]
+FAILED backend/tests/unit/provider_resolver/test_resolver_records.py::test_each_modeled_outcome_is_recorded[playbackDenied]
+FAILED backend/tests/unit/provider_resolver/test_resolver_records.py::test_invented_outcome_is_rejected[launched]
+FAILED backend/tests/unit/provider_resolver/test_resolver_records.py::test_invented_outcome_is_rejected[success]
+FAILED backend/tests/unit/provider_resolver/test_resolver_records.py::test_invented_outcome_is_rejected[]
+FAILED backend/tests/unit/provider_resolver/test_resolver_records.py::test_invented_outcome_is_rejected[None]
+FAILED backend/tests/unit/provider_resolver/test_resolver_records.py::test_game_opened_outcome_does_not_verify_access
+FAILED backend/tests/unit/provider_resolver/test_resolver_selection.py::test_resolution_names_provider_channel_and_route
+FAILED backend/tests/unit/provider_resolver/test_resolver_selection.py::test_preference_selects_among_installed_carriers
+FAILED backend/tests/unit/provider_resolver/test_resolver_selection.py::test_preference_change_reroutes_contested_game
+FAILED backend/tests/unit/provider_resolver/test_resolver_selection.py::test_spike_order_does_not_override_preference
+FAILED backend/tests/unit/provider_resolver/test_resolver_selection.py::test_uninstalled_preferred_provider_falls_to_next_installed_preference
+FAILED backend/tests/unit/provider_resolver/test_resolver_selection.py::test_no_carrier_for_channel_gives_no_route
+FAILED backend/tests/unit/provider_resolver/test_resolver_selection.py::test_registry_is_read_only
+FAILED backend/tests/unit/provider_resolver/test_resolver_selection.py::test_default_registry_is_the_landed_document
+FAILED backend/tests/unit/provider_resolver/test_resolver_selection.py::test_landed_empty_registry_resolves_no_route
+================= 43 failed, 3 skipped, 291 warnings in 7.47s ==================
