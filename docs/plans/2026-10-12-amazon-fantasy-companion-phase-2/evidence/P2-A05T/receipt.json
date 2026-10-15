@@ -1,0 +1,311 @@
+{
+ "slice": "P2-A05T",
+ "role": "Test Implementer",
+ "route": "Claude Code / claude-opus-5-5 / high (packet-assigned)",
+ "base_commit": "71d3e649fec8406cc593519e9d8cab5eb7c65575",
+ "command_id": "CMD-RED",
+ "command": "./tv-app/gradlew -p tv-app --no-daemon --max-workers=2 testDebugUnitTest --tests 'com.afc.companion.panel.*'",
+ "exit_code": 1,
+ "log": "cmd-red.txt",
+ "log_sha256": "069089044b65700d2f263ae350f0bb9a4b689a1bfa689b556fc2fb6ea69ef10a",
+ "counts": {
+  "tests": 34,
+  "failed": 34,
+  "passed": 0,
+  "errors": 0,
+  "compile_errors": 0
+ },
+ "failure_types": [
+  "java.lang.AssertionError",
+  "org.junit.ComparisonFailure"
+ ],
+ "classification": "behavioral red: every failure is an AssertionError (ComparisonFailure is its subclass) against AFC-STUB neutral returns in panel/PanelModel.kt; 0 compile, collection or tool errors",
+ "passing_at_red": {
+  "note": "none; guard assertions are paired with a positive assertion that fails on the stub",
+  "ids": []
+ },
+ "cases": [
+  {
+   "id": "com.afc.companion.panel.PanelControllerTest#burstOfUpdatesHoldsOneSnapshotAndReportsOnlyTheChangedRow",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: Missing behavior: a visible panel fetches"
+  },
+  {
+   "id": "com.afc.companion.panel.PanelControllerTest#everyElementIsFocusableAndReachableByDpad",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: Missing behavior: a visible panel fetches"
+  },
+  {
+   "id": "com.afc.companion.panel.PanelControllerTest#everyPanelOperationIsBoundToAFireTvRemoteKey",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: Missing behavior: ToggleVisibility is bound to a remote key"
+  },
+  {
+   "id": "com.afc.companion.panel.PanelControllerTest#firstSnapshotReportsEveryRow",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: Missing behavior: a new panel fetches immediately"
+  },
+  {
+   "id": "com.afc.companion.panel.PanelControllerTest#focusMovesOffARemovedRow",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: Missing behavior: a visible panel fetches"
+  },
+  {
+   "id": "com.afc.companion.panel.PanelControllerTest#hiddenPanelLeavesNavigationKeysToTheShell",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: Missing behavior: a visible panel fetches"
+  },
+  {
+   "id": "com.afc.companion.panel.PanelControllerTest#hiddenPanelSuspendsUpdatesAndRefreshesOnShow",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: Missing behavior: a visible panel fetches"
+  },
+  {
+   "id": "com.afc.companion.panel.PanelControllerTest#identicalOrOlderRevisionChangesNothing",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: Missing behavior: a visible panel fetches"
+  },
+  {
+   "id": "com.afc.companion.panel.PanelControllerTest#initialStateReflectsTheProfileSettings",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: visible per panel prefs"
+  },
+  {
+   "id": "com.afc.companion.panel.PanelControllerTest#lateResponseForTheOldTeamIsDiscarded",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: Missing behavior: a visible panel fetches"
+  },
+  {
+   "id": "com.afc.companion.panel.PanelControllerTest#onlyChangedRowsAreReported",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: Missing behavior: a visible panel fetches"
+  },
+  {
+   "id": "com.afc.companion.panel.PanelControllerTest#refreshesOnShowAndEveryThirtySecondsWhileVisible",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: Missing behavior: a visible panel fetches"
+  },
+  {
+   "id": "com.afc.companion.panel.PanelControllerTest#remoteSwitchesTeamLeagueAndCyclesBack",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: Missing behavior: a visible panel fetches"
+  },
+  {
+   "id": "com.afc.companion.panel.PanelControllerTest#remoteTogglesVisibility",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: Missing behavior: ToggleVisibility is bound to a remote key"
+  },
+  {
+   "id": "com.afc.companion.panel.PanelControllerTest#starterChangeReportsAddedAndRemovedRowsOnly",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: Missing behavior: a visible panel fetches"
+  },
+  {
+   "id": "com.afc.companion.panel.PanelDecodeTest#eachScoringBasisDecodes",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: yahooLeague expected:<YahooLeague> but was:<null>"
+  },
+  {
+   "id": "com.afc.companion.panel.PanelDecodeTest#malformedRowsRejectTheState",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: Missing behavior: a well-formed state decodes"
+  },
+  {
+   "id": "com.afc.companion.panel.PanelDecodeTest#malformedValueBecomesUnavailableNotZero",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: Missing behavior: PanelState data decodes"
+  },
+  {
+   "id": "com.afc.companion.panel.PanelDecodeTest#missingOrUnknownBasisRejectsTheWholeState",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: Missing behavior: a known basis decodes"
+  },
+  {
+   "id": "com.afc.companion.panel.PanelDecodeTest#nullPointsKeepTheirReasonAndAreNotZero",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: Missing behavior: PanelState data decodes"
+  },
+  {
+   "id": "com.afc.companion.panel.PanelDecodeTest#panelFeedDecodesOverTheApiClientForTheSelectedTeamLeague",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: Missing behavior: the fetched PanelState decodes"
+  },
+  {
+   "id": "com.afc.companion.panel.PanelDecodeTest#rowCountIsBoundedByTheDeclaredLimit",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: PANEL_ROWS_MAX declares room for a full lineup and stays small: 0"
+  },
+  {
+   "id": "com.afc.companion.panel.PanelDecodeTest#rowsTotalProgressAndBasisDecode",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: Missing behavior: PanelState data decodes"
+  },
+  {
+   "id": "com.afc.companion.panel.PanelModeTest#fullScreenHostsThePanelAloneWithNoStandInVideo",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: expected:<Box(left=0, top=0, width=1920, height=1080)> but was:<Box(left=0, top=0, width=0, height=0)>"
+  },
+  {
+   "id": "com.afc.companion.panel.PanelModeTest#modeBPutsThePanelRightAndFitsTheVideoLeftAtItsAspect",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: Missing behavior: modeB reserves a video area"
+  },
+  {
+   "id": "com.afc.companion.panel.PanelModeTest#onlyAModeBVerdictSelectsModeB",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: expected:<ModeB> but was:<FullScreen>"
+  },
+  {
+   "id": "com.afc.companion.panel.PanelTextTest#eachScoringBasisHasItsLabel",
+   "result": "FAILED",
+   "failure_type": "org.junit.ComparisonFailure",
+   "message": "org.junit.ComparisonFailure: expected:<[Yahoo league scoring]> but was:<[]>"
+  },
+  {
+   "id": "com.afc.companion.panel.PanelTextTest#freshValueShowsTheNumberWithoutLabels",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: fresh value shows its points: ''"
+  },
+  {
+   "id": "com.afc.companion.panel.PanelTextTest#realZeroIsShownAsZero",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: a real zero is a value: ''"
+  },
+  {
+   "id": "com.afc.companion.panel.PanelTextTest#textSizesMeetTheCouchFloor",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: body text >= 24 px at 1080p: 0.0 sp"
+  },
+  {
+   "id": "com.afc.companion.panel.PanelTextTest#unknownGameStatusIsLabeledUnavailable",
+   "result": "FAILED",
+   "failure_type": "org.junit.ComparisonFailure",
+   "message": "org.junit.ComparisonFailure: expected:<[Q2 08:14]> but was:<[]>"
+  },
+  {
+   "id": "com.afc.companion.panel.PanelTextTest#unknownValueIsLabeledUnavailableAndNeverZero",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: null with reason is labeled: ''"
+  },
+  {
+   "id": "com.afc.companion.panel.PanelTextTest#valueAtSixtySecondsIsLabeledStaleWithItsAge",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: stale_after is 60 s: ''"
+  },
+  {
+   "id": "com.afc.companion.panel.PanelTextTest#valueWithoutTimestampIsNeverShownAsFresh",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: an undated value is labeled: ''"
+  }
+ ],
+ "frozen_tests": {
+  "tv-app/app/src/test/java/com/afc/companion/panel/PanelControllerTest.kt": "31db0fec01ce897e3796a46c10cd4533ecba09b519e32f6999afdbb4eb0f40ac",
+  "tv-app/app/src/test/java/com/afc/companion/panel/PanelDecodeTest.kt": "5a8027913784ba430d5da082f1e10344cae0d9d577011a8a4dea2962c7d619c5",
+  "tv-app/app/src/test/java/com/afc/companion/panel/PanelFixtures.kt": "1d9f1628fa86295144a0dcab7d1ed4b7059f05ef1df01f0747a15483e24160c0",
+  "tv-app/app/src/test/java/com/afc/companion/panel/PanelModeTest.kt": "e1f4d8bb89ef1b4b1c8cded770f82416d2139e6afe4a2283eeb284da83b66734",
+  "tv-app/app/src/test/java/com/afc/companion/panel/PanelTextTest.kt": "6933af6f90dfe357422e4f20311e94f548ad5d3d35133428d871f6f4272e7355"
+ },
+ "bootstrap_scaffolding": {
+  "note": "AFC-STUB final signatures only: types, PANEL_ROWS_MAX = 0, empty text, 0 sp sizes, FullScreen mode, zero-size layout, PanelController returning neutral state; no tested green behavior. LineupPanel.kt and MainActivity.kt untouched.",
+  "files": {
+   "tv-app/app/src/main/java/com/afc/companion/panel/PanelModel.kt": "cf6c680402967feda2457329183d0024036bb172211704b30ea63d45fc8237ff"
+  }
+ },
+ "gate": {
+  "command": "bash tools/ci/gate.sh",
+  "exit_code": 1,
+  "log": "gate.txt",
+  "log_sha256": "8b499e7cb18730c07b435ee8aaa3c45b023b1f275b85e0995ddfa3c7d8ef2c6f",
+  "areas": {
+   "spec": "PASS",
+   "docs": "PASS",
+   "hygiene": "PASS",
+   "backend": "PASS (380 passed)",
+   "tvapp": "FAIL check exit 1: 149 tests, 34 failed, all 34 are the intended red panel cases above; 115 passed (A01/A02 host tests unchanged and green)"
+  },
+  "lint_assemble": "./tv-app/gradlew -p tv-app --no-daemon --max-workers=2 lintDebug assembleDebug -> BUILD SUCCESSFUL (gate stops at testDebugUnitTest)"
+ },
+ "typed_gaps": [
+  {
+   "id": "DEVICE_INSTALL_PENDING",
+   "scope": "androidTest panel cases: Compose focus indicator on every element, D-pad on the stick, LazyColumn keyed recomposition of changed rows, screencap text-height measurement (CMD-TEXT-SIZE-MEASURE), modeB geometry via dumpsys window",
+   "reason": "no Fire TV stick; fire-tv-stick lease not taken; no instrumented test authored or run, never a pass"
+  },
+  {
+   "id": "X04_VERDICT_PENDING",
+   "scope": "which PanelMode ships and the modeB route",
+   "reason": "P2-X04 verdict absent; tests bind panelModeFor (only an exact 'modeB' verdict selects ModeB) and modeB geometry, not a verified route; no overlay-mode visual pass is claimed"
+  },
+  {
+   "id": "PANEL_WIRE_UNFROZEN",
+   "scope": "GET /v1/panel data object keys (teamLeague, scoringBasis, rows[playerId,name,points,gameStatus], teamTotal, progress; value objects {value, reason, source, asOf})",
+   "reason": "P2-B07T/B07 not landed and openapi.yaml types data as a free object; the TV-side shape follows spec 04.3 and is frozen in PanelFixtures.kt; P2-B07 must emit it or the pair reconciles at P2-A05"
+  }
+ ],
+ "test_design_decisions": [
+  "stale_after boundary: age >= 60 000 ms is stale (register: 'age at which it is labeled stale: 60 s'); 59 999 ms is fresh",
+  "a value without a source timestamp is never shown as fresh",
+  "text floor checked as sp >= px floor (1 sp >= 1 px at any 1080p density >= mdpi); on-stick px measurement stays with P2-A05",
+  "PANEL_ROWS_MAX must be declared in 20..64; a state above it is rejected whole, not truncated",
+  "remote: each PanelAction must be bound to a key the Fire TV remote delivers; the specific key is the product's choice",
+  "a hidden panel suspends update application, never fetches, does not consume D-pad focus keys, and fetches immediately on show"
+ ],
+ "acceptance": {
+  "AFC-PR-039": "PanelDecodeTest#rowsTotalProgressAndBasisDecode, #eachScoringBasisDecodes, #missingOrUnknownBasisRejectsTheWholeState; PanelTextTest#eachScoringBasisHasItsLabel, #freshValueShowsTheNumberWithoutLabels",
+  "AFC-PR-040": "PanelTextTest#valueAtSixtySecondsIsLabeledStaleWithItsAge, #unknownValueIsLabeledUnavailableAndNeverZero, #valueWithoutTimestampIsNeverShownAsFresh, #unknownGameStatusIsLabeledUnavailable, #realZeroIsShownAsZero; PanelDecodeTest#nullPointsKeepTheirReasonAndAreNotZero, #malformedValueBecomesUnavailableNotZero",
+  "AFC-PR-041": "PanelModeTest#onlyAModeBVerdictSelectsModeB, #modeBPutsThePanelRightAndFitsTheVideoLeftAtItsAspect (on-stick geometry: DEVICE_INSTALL_PENDING, X04_VERDICT_PENDING)",
+  "AFC-PR-042": "PanelControllerTest#remoteTogglesVisibility, #remoteSwitchesTeamLeagueAndCyclesBack, #lateResponseForTheOldTeamIsDiscarded",
+  "AFC-PR-043": "PanelControllerTest#everyPanelOperationIsBoundToAFireTvRemoteKey, #everyElementIsFocusableAndReachableByDpad, #focusMovesOffARemovedRow, #hiddenPanelLeavesNavigationKeysToTheShell (Compose focus indicator: DEVICE_INSTALL_PENDING)",
+  "AFC-PR-044": "PanelControllerTest#initialStateReflectsTheProfileSettings; PanelDecodeTest#panelFeedDecodesOverTheApiClientForTheSelectedTeamLeague",
+  "AFC-PR-045": "PanelTextTest#textSizesMeetTheCouchFloor (screencap measurement: DEVICE_INSTALL_PENDING)",
+  "AFC-PR-046": "PanelControllerTest#starterChangeReportsAddedAndRemovedRowsOnly, #identicalOrOlderRevisionChangesNothing (cross-surface agreement is P2-B07/system scope)",
+  "AFC-PR-047": "PanelModeTest#fullScreenHostsThePanelAloneWithNoStandInVideo, #onlyAModeBVerdictSelectsModeB",
+  "AFC-PR-061": "PanelControllerTest#onlyChangedRowsAreReported, #firstSnapshotReportsEveryRow, #burstOfUpdatesHoldsOneSnapshotAndReportsOnlyTheChangedRow, #hiddenPanelSuspendsUpdatesAndRefreshesOnShow, #refreshesOnShowAndEveryThirtySecondsWhileVisible",
+  "AFC-PR-062": "PanelDecodeTest#rowCountIsBoundedByTheDeclaredLimit; PanelControllerTest#burstOfUpdatesHoldsOneSnapshotAndReportsOnlyTheChangedRow",
+  "RISK-AFC-P2-10": "packet route recorded; no fallback taken"
+ },
+ "developer_feedback": [
+  {
+   "id": "DX-P2-A05T-01",
+   "observation": "openapi.yaml types the /v1/panel envelope data as a free object, so the TV red suite and P2-B07T must each assume a PanelState shape; a shared schema (or fixture) would remove a pair-reconciliation risk.",
+   "evidence": "backend/src/api/openapi.yaml Envelope.data {type: object}; typed gap PANEL_WIRE_UNFROZEN"
+  },
+  {
+   "id": "DX-P2-A05T-02",
+   "observation": "tools/ci/gate.sh leaves tools/ci/__pycache__/, tools/ci/tests/__pycache__/, tools/spec/__pycache__/ and tools/spec/azdiagram/__pycache__/ untracked (not gitignored) in the worktree.",
+   "evidence": "git status --short after gate run"
+  }
+ ]
+}
