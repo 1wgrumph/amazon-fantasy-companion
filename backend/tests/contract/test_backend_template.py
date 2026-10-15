@@ -88,7 +88,7 @@ def test_template_uses_ssm_parameter_names_instead_of_embedded_secret_values():
     for name in names:
         assert "Value" not in params[name]
         assert str(params[name].get("Default", "/owner-supplied/path")).startswith("/")
-    function = template["Resources"]["ApiFunction"]["Properties"]
+    function = template["Resources"]["PolicyFunction"]["Properties"]
     policy = json.dumps(function.get("Policies", {}))
     assert "ssm:GetParameter" in policy or "SSMParameterReadPolicy" in policy
     assert "secretsmanager" not in json.dumps(template).lower()
