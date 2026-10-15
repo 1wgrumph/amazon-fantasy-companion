@@ -1,0 +1,90 @@
+{
+  "status": "PASS",
+  "mutants": [
+    {
+      "case": "F2-roster-size",
+      "baseline": "20a570a",
+      "baseline_source_sha256": "bd88c4867602d74821b67a6eb3a99decc57a9a689de1ec8a1c012d0225485190",
+      "test_sha256": "f1bdcd1c98aaddbf564c6a783b8ad8adaac82c9cac1b8680b64446fe5fe66547",
+      "replacement": [
+        " or len(espn_roster) > _max_entries()",
+        ""
+      ],
+      "exit_code": 1,
+      "failures": [
+        {
+          "test": "tests/unit/lineup/test_review_regressions.py::test_manual_oversize_espn_roster_is_rejected_without_duplicates",
+          "phase": "call"
+        }
+      ]
+    },
+    {
+      "case": "F3-week-one",
+      "baseline": "20a570a",
+      "baseline_source_sha256": "2e5e7b89696a31e0253ea0d9a89f1dc3683fc7248a585aab1697eea75d2c4832",
+      "test_sha256": "f1bdcd1c98aaddbf564c6a783b8ad8adaac82c9cac1b8680b64446fe5fe66547",
+      "replacement": [
+        "week < 1",
+        "week <= 1"
+      ],
+      "exit_code": 1,
+      "failures": [
+        {
+          "test": "tests/unit/lineup/test_review_regressions.py::test_yahoo_week_one_is_accepted",
+          "phase": "call"
+        }
+      ]
+    },
+    {
+      "case": "F3-leagues-url",
+      "baseline": "20a570a",
+      "baseline_source_sha256": "2e5e7b89696a31e0253ea0d9a89f1dc3683fc7248a585aab1697eea75d2c4832",
+      "test_sha256": "f1bdcd1c98aaddbf564c6a783b8ad8adaac82c9cac1b8680b64446fe5fe66547",
+      "replacement": [
+        "game_keys=nfl/leagues",
+        "game_keys=nf/leagues"
+      ],
+      "exit_code": 1,
+      "failures": [
+        {
+          "test": "tests/unit/lineup/test_review_regressions.py::test_yahoo_leagues_url_is_exact",
+          "phase": "call"
+        }
+      ]
+    },
+    {
+      "case": "F3-modifiers-bound",
+      "baseline": "20a570a",
+      "baseline_source_sha256": "2e5e7b89696a31e0253ea0d9a89f1dc3683fc7248a585aab1697eea75d2c4832",
+      "test_sha256": "f1bdcd1c98aaddbf564c6a783b8ad8adaac82c9cac1b8680b64446fe5fe66547",
+      "replacement": [
+        "len(modifiers) > _max_items()",
+        "len(modifiers) >= _max_items()"
+      ],
+      "exit_code": 1,
+      "failures": [
+        {
+          "test": "tests/unit/lineup/test_review_regressions.py::test_yahoo_settings_at_size_limit_is_accepted[stat_modifiers]",
+          "phase": "call"
+        }
+      ]
+    },
+    {
+      "case": "F3-slots-bound",
+      "baseline": "20a570a",
+      "baseline_source_sha256": "2e5e7b89696a31e0253ea0d9a89f1dc3683fc7248a585aab1697eea75d2c4832",
+      "test_sha256": "f1bdcd1c98aaddbf564c6a783b8ad8adaac82c9cac1b8680b64446fe5fe66547",
+      "replacement": [
+        "len(slots) > _max_items()",
+        "len(slots) >= _max_items()"
+      ],
+      "exit_code": 1,
+      "failures": [
+        {
+          "test": "tests/unit/lineup/test_review_regressions.py::test_yahoo_settings_at_size_limit_is_accepted[roster_slots]",
+          "phase": "call"
+        }
+      ]
+    }
+  ]
+}

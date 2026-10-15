@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add lineup sources and scoring presets: read-only Yahoo client, manual
+  lineup with T_yahoo activation, one active source per profile, PPR and
+  Half-PPR tables with Half-PPR as default ([#65](https://github.com/1wgrumph/amazon-fantasy-companion/pull/65)).
+- Add the ESPN feed capture tool and historical replay fixtures for 14
+  completed games, with an interim SP-5 verdict ([#63](https://github.com/1wgrumph/amazon-fantasy-companion/pull/63)).
+- Add the 2026-10-14 developer friction-log catch-up (ten observations in
+  the house format) ([#62](https://github.com/1wgrumph/amazon-fantasy-companion/pull/62)).
 - Add the backend foundation: SAM HTTP API with throttling, Lambda router
   and response envelope, DynamoDB store, device-code linking with a
   passphrase-confirmed phone page, bounded session retry, least-privilege
@@ -35,6 +42,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Link a TV with its device code alone (DEC-AFC-SD-048): drop the link
+  passphrase from the `/link` page, the confirm API and its OpenAPI
+  contract, and remove the SSM passphrase parameter, its env var and IAM
+  grant; code expiry, throttling and one-session-per-link stay ([#66](https://github.com/1wgrumph/amazon-fantasy-companion/pull/66)).
 - Record the Phase 2 execution lease and the M01 dispatch, review and
   closeout receipts in the Lifecycle control journey
   ([PR #58](https://github.com/1wgrumph/amazon-fantasy-companion/pull/58)).
@@ -49,6 +60,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Fix the deployed-test network guard so smoke tests reach the configured
+  API host (resolved and rotating addresses) while every other destination
+  stays blocked ([#64](https://github.com/1wgrumph/amazon-fantasy-companion/pull/64)).
 - Spec gate compares the rebuilt output against the staged index instead of
   HEAD, so a correctly regenerated staged output passes before commit
   ([PR](https://github.com/1wgrumph/amazon-fantasy-companion/pull/14)).

@@ -1,0 +1,26 @@
+Baseline: 3ff9a3560cc3c00bf471a1429e35352faf78768f
+Classification: test-only harness defect, not a product API failure.
+Origin: P2-B01T/B01 deployed harness, conftest introduced by 7eaa700.
+Escape: normal gate explicitly excludes deployed tests; deployed runs without
+AFC_DEPLOYED_API_URL skip. No ordinary unit exercised the hostname/IP guard.
+
+Installed Python standard-library socket.create_connection source (read only;
+no DNS, socket connect or AWS call executed):
+    for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+        af, socktype, proto, canonname, sa = res
+            sock.connect(sa)
+        raise error("getaddrinfo returns an empty list")
+
+At baseline the deployed fixture compares address[0] with urlsplit(base).hostname.
+The getaddrinfo sockaddr sa contains a numeric IP, so valid API connections fail
+before the HTTPS request. Unit reproduction uses the real deployed fixture and
+explicitly owner-authorized resolver/connection stubs, with reserved IPs and
+api.example.invalid; red.txt shows this AssertionError on all three allowed IPs.
+It also exposes unguarded configured connect_ex; both methods are covered now.
+
+Prior owner-supplied live evidence was inspected read-only from local branch
+afc/p2-l02: docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-L02/
+receipt.md and deployed-link-resume.txt. Device-auth group: 3 failed, 1 skipped;
+stack deployment completed, but all three failures stopped at conftest.py:38.
+No prior AWS endpoint, credentials, session or raw deployment inventory copied.
+No network or AWS replay was performed by this implementer.

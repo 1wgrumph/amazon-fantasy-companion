@@ -1,0 +1,87 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_______ test_manual_oversize_espn_roster_is_rejected_without_duplicates ________
+backend/tests/unit/lineup/test_review_regressions.py:27: in test_manual_oversize_espn_roster_is_rejected_without_duplicates
+    with pytest.raises(ValueError):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+============================= slowest 10 durations =============================
+
+(3 durations < 0.005s hidden.  Use -vv to show these durations.)
+=========================== short test summary info ============================
+FAILED backend/tests/unit/lineup/test_review_regressions.py::test_manual_oversize_espn_roster_is_rejected_without_duplicates
+1 failed in 0.04s
+MUTANT_PROOF {"case": "F2-roster-size", "baseline": "20a570a", "baseline_source_sha256": "bd88c4867602d74821b67a6eb3a99decc57a9a689de1ec8a1c012d0225485190", "test_sha256": "f1bdcd1c98aaddbf564c6a783b8ad8adaac82c9cac1b8680b64446fe5fe66547", "replacement": [" or len(espn_roster) > _max_entries()", ""], "exit_code": 1, "failures": [{"test": "tests/unit/lineup/test_review_regressions.py::test_manual_oversize_espn_roster_is_rejected_without_duplicates", "phase": "call"}]}
+
+
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_______________________ test_yahoo_week_one_is_accepted ________________________
+backend/tests/unit/lineup/test_review_regressions.py:34: in test_yahoo_week_one_is_accepted
+    roster = yahoo.get_roster(transport, "synthetic-token", TEAM_KEY, 1)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/lineup/yahoo.py:85: in get_roster
+    raise ValueError("Week must be a positive integer")
+E   ValueError: Week must be a positive integer
+============================= slowest 10 durations =============================
+
+(3 durations < 0.005s hidden.  Use -vv to show these durations.)
+=========================== short test summary info ============================
+FAILED backend/tests/unit/lineup/test_review_regressions.py::test_yahoo_week_one_is_accepted
+1 failed in 0.04s
+MUTANT_PROOF {"case": "F3-week-one", "baseline": "20a570a", "baseline_source_sha256": "2e5e7b89696a31e0253ea0d9a89f1dc3683fc7248a585aab1697eea75d2c4832", "test_sha256": "f1bdcd1c98aaddbf564c6a783b8ad8adaac82c9cac1b8680b64446fe5fe66547", "replacement": ["week < 1", "week <= 1"], "exit_code": 1, "failures": [{"test": "tests/unit/lineup/test_review_regressions.py::test_yahoo_week_one_is_accepted", "phase": "call"}]}
+
+
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_______________________ test_yahoo_leagues_url_is_exact ________________________
+backend/tests/unit/lineup/test_review_regressions.py:46: in test_yahoo_leagues_url_is_exact
+    assert transport.calls[0]["url"] == (
+E   AssertionError: assert 'https://fant...ys=nf/leagues' == 'https://fant...s=nfl/leagues'
+E
+E     Skipping 73 identical leading characters in diff, use -v to show
+E     - me_keys=nfl/leagues
+E     ?           -
+E     + me_keys=nf/leagues
+============================= slowest 10 durations =============================
+
+(3 durations < 0.005s hidden.  Use -vv to show these durations.)
+=========================== short test summary info ============================
+FAILED backend/tests/unit/lineup/test_review_regressions.py::test_yahoo_leagues_url_is_exact
+1 failed in 0.04s
+MUTANT_PROOF {"case": "F3-leagues-url", "baseline": "20a570a", "baseline_source_sha256": "2e5e7b89696a31e0253ea0d9a89f1dc3683fc7248a585aab1697eea75d2c4832", "test_sha256": "f1bdcd1c98aaddbf564c6a783b8ad8adaac82c9cac1b8680b64446fe5fe66547", "replacement": ["game_keys=nfl/leagues", "game_keys=nf/leagues"], "exit_code": 1, "failures": [{"test": "tests/unit/lineup/test_review_regressions.py::test_yahoo_leagues_url_is_exact", "phase": "call"}]}
+
+
+F                                                                        [100%]
+=================================== FAILURES ===================================
+________ test_yahoo_settings_at_size_limit_is_accepted[stat_modifiers] _________
+backend/tests/unit/lineup/test_review_regressions.py:57: in test_yahoo_settings_at_size_limit_is_accepted
+    assert yahoo.get_settings(Recorder({"settings": payload}), "synthetic-token", LEAGUE_KEY)[
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/lineup/yahoo.py:109: in get_settings
+    raise ValueError("Yahoo settings have no valid stat_modifiers")
+E   ValueError: Yahoo settings have no valid stat_modifiers
+============================= slowest 10 durations =============================
+
+(3 durations < 0.005s hidden.  Use -vv to show these durations.)
+=========================== short test summary info ============================
+FAILED backend/tests/unit/lineup/test_review_regressions.py::test_yahoo_settings_at_size_limit_is_accepted[stat_modifiers]
+1 failed in 0.04s
+MUTANT_PROOF {"case": "F3-modifiers-bound", "baseline": "20a570a", "baseline_source_sha256": "2e5e7b89696a31e0253ea0d9a89f1dc3683fc7248a585aab1697eea75d2c4832", "test_sha256": "f1bdcd1c98aaddbf564c6a783b8ad8adaac82c9cac1b8680b64446fe5fe66547", "replacement": ["len(modifiers) > _max_items()", "len(modifiers) >= _max_items()"], "exit_code": 1, "failures": [{"test": "tests/unit/lineup/test_review_regressions.py::test_yahoo_settings_at_size_limit_is_accepted[stat_modifiers]", "phase": "call"}]}
+
+
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_________ test_yahoo_settings_at_size_limit_is_accepted[roster_slots] __________
+backend/tests/unit/lineup/test_review_regressions.py:57: in test_yahoo_settings_at_size_limit_is_accepted
+    assert yahoo.get_settings(Recorder({"settings": payload}), "synthetic-token", LEAGUE_KEY)[
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/src/lineup/yahoo.py:113: in get_settings
+    raise ValueError("Yahoo settings have no valid roster_slots")
+E   ValueError: Yahoo settings have no valid roster_slots
+============================= slowest 10 durations =============================
+
+(3 durations < 0.005s hidden.  Use -vv to show these durations.)
+=========================== short test summary info ============================
+FAILED backend/tests/unit/lineup/test_review_regressions.py::test_yahoo_settings_at_size_limit_is_accepted[roster_slots]
+1 failed in 0.04s
+MUTANT_PROOF {"case": "F3-slots-bound", "baseline": "20a570a", "baseline_source_sha256": "2e5e7b89696a31e0253ea0d9a89f1dc3683fc7248a585aab1697eea75d2c4832", "test_sha256": "f1bdcd1c98aaddbf564c6a783b8ad8adaac82c9cac1b8680b64446fe5fe66547", "replacement": ["len(slots) > _max_items()", "len(slots) >= _max_items()"], "exit_code": 1, "failures": [{"test": "tests/unit/lineup/test_review_regressions.py::test_yahoo_settings_at_size_limit_is_accepted[roster_slots]", "phase": "call"}]}

@@ -72,8 +72,7 @@ def test_template_routes_tv_and_link_page_and_bounds_link_attempts():
 def test_template_uses_ssm_parameter_names_instead_of_embedded_secret_values():
     template = document("template.yaml")
     params = template.get("Parameters", {})
-    names = {name for name in params if any(w in name.lower() for w in ["passphrase", "secret", "token"])}
-    assert any("passphrase" in n.lower() for n in names)
+    names = {name for name in params if any(w in name.lower() for w in ["secret", "token"])}
     assert any("yahoo" in n.lower() and "secret" in n.lower() for n in names)
     assert any("yahoo" in n.lower() and "token" in n.lower() for n in names)
     for name in names:
@@ -85,7 +84,7 @@ def test_template_uses_ssm_parameter_names_instead_of_embedded_secret_values():
     assert "secretsmanager" not in json.dumps(template).lower()
 
 
-@pytest.mark.parametrize("module", ["feed_ingest", "lineup", "matcher", "alert_policy",
+@pytest.mark.parametrize("module", ["feed_ingest", "matcher", "alert_policy",
                                      "provider_resolver", "panel"])
 def test_future_backend_modules_have_explicit_unimplemented_public_interfaces(module):
     files = list((BACKEND / "src" / module).rglob("*.py"))

@@ -43,7 +43,7 @@ paths:
         "503": {$ref: "#/components/responses/Unavailable"}
   /v1/link/confirm:
     post:
-      summary: Confirm a code from a phone or browser with the owner link passphrase (one time).
+      summary: Confirm a code from a phone or browser with the TV code alone (one time).
       security: []
       requestBody:
         required: true
@@ -51,10 +51,9 @@ paths:
           application/json:
             schema:
               type: object
-              required: [code, passphrase, profileId]
+              required: [code, profileId]
               properties:
                 code: {type: string, maxLength: 16}
-                passphrase: {type: string, maxLength: 256}
                 profileId: {$ref: "#/components/schemas/ProfileId"}
       responses:
         "200":
@@ -67,7 +66,6 @@ paths:
                 properties:
                   state: {type: string, enum: [linked]}
         "400": {$ref: "#/components/responses/BadRequest"}
-        "401": {$ref: "#/components/responses/Unauthenticated"}
         "410": {$ref: "#/components/responses/Gone"}
         "429": {$ref: "#/components/responses/TooManyRequests"}
         "503": {$ref: "#/components/responses/Unavailable"}
@@ -321,7 +319,7 @@ components:
         application/json:
           schema: {$ref: "#/components/schemas/Error"}
     Unauthenticated:
-      description: Missing or unknown session, or wrong link passphrase.
+      description: Missing or unknown session.
       content:
         application/json:
           schema: {$ref: "#/components/schemas/Error"}
