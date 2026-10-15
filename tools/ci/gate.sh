@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 set -u
 
+# Local tools are installed in the user bin; CI supplies its own toolchain.
+if [[ "${CI:-false}" != true && "${GITHUB_ACTIONS:-false}" != true ]]; then
+    export PATH="$PATH:$HOME/.local/bin"
+fi
+
 # Hooks export repository locations that must not redirect this gate or its fixtures.
 unset GIT_DIR GIT_WORK_TREE GIT_INDEX_FILE GIT_PREFIX GIT_COMMON_DIR \
     GIT_OBJECT_DIRECTORY GIT_ALTERNATE_OBJECT_DIRECTORIES GIT_IMPLICIT_WORK_TREE \
@@ -71,6 +76,18 @@ run_area() {
             # Subcheck exits are normalized so a tool's own exit 3 never reads as GAP.
             ./tv-app/gradlew -p tv-app testDebugUnitTest lintDebug assembleDebug || return 1 ;;
         backend)
+            if [[ "${CI:-false}" != true && "${GITHUB_ACTIONS:-false}" != true ]]; then
+                # Location documented in evidence/BUG-AFC-L02-DEPLOYED-PIN-001/receipt.md.
+                local backend_venv="$HOME/.local/share/afc-tools/backend-tests"
+                if [[ ! -x "$backend_venv/bin/python3.12" ]] \
+                    || ! "$backend_venv/bin/python3.12" -c 'import pytest, moto, boto3, yaml' >/dev/null 2>&1; then
+                    printf 'required backend test environment missing or incomplete: %s\n' "$backend_venv"
+                    printf 'Provision: python3.12 -m venv %q && %q -m pip install --require-hashes -r backend/requirements-dev.txt\n' \
+                        "$backend_venv" "$backend_venv/bin/python3.12"
+                    return 3
+                fi
+                export PATH="$backend_venv/bin:$PATH"
+            fi
             need python3.12 || return "$?"
             need cfn-lint || return "$?"
             python3.12 -m pytest --version >/dev/null 2>&1 \
