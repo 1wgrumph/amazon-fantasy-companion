@@ -163,3 +163,46 @@ receives ≥1 UID. Withdrawn UIDs 049..051 carry no live allocation (historical 
 | P2 | excitement_levels (PR-023) | Closed by SD-035: Off / Mild / Hype |
 | P3 | stale_after (PR-040) | Closed by SD-035: 60 seconds |
 | D1 | Manual-lineup default scoring (PR-065) | Closed by SD-035: customer-selectable preset of PPR and Half-PPR; Default preset Half-PPR (PR-065/066) |
+
+## Vega OS port mapping (P2-V01, M14; planning delta 2026-10-14)
+
+The Vega build (issue #59, owner SD-040) mirrors the Fire OS TV app. Each
+Vega feature reuses the register UIDs below by reference, unchanged. Their
+Fire OS VCASE allocations stay as they are; the Vega evidence for them is
+SEIT-AFC-P2-VEGA-01 and -03. Vega-specific items (packaging, VVD limits and
+verdicts, token storage, optional physical device, Fire OS isolation) are
+Lifecycle-local criteria AC-AFC-P2-VEGA-01..06 and RISK-AFC-P2-14/15 in the
+technical plan §M14 Vega OS port. No new register UID is added.
+
+| Vega feature | Fire OS slices mirrored | Register UIDs reused |
+|---|---|---|
+| Device linking and ApiClient | P2-A01T, P2-A01 | AFC-PR-038, -057, -063 |
+| Profile settings and detection | P2-A02T, P2-A02 | AFC-PR-002, -003, -005, -009, -010, -016, -017, -018, -019, -020, -021, -022, -023, -034, -035, -037, -042, -044, -066 |
+| Alerts | P2-A03T, P2-A03 | AFC-PR-015, -021, -022, -027, -028, -032, -033, -061, -062, -063 |
+| Watch | P2-A04T, P2-A04 | AFC-PR-030, -031, -035, -036, -048 |
+| Lineup panel | P2-A05T, P2-A05 | AFC-PR-039, -040, -041, -042, -043, -044, -045, -046, -047, -061, -062 |
+
+Not mirrored: AFC-PR-052 (Fire OS on the 2018 stick) and AFC-PR-053 (minSdk 25) have no Vega equivalent.
+The Vega packaging rule is AC-AFC-P2-VEGA-02.
+
+
+## Vega-primary conditional allocation (2026-10-14, selected by DEC-AFC-SD-049)
+
+Selected 2026-10-14: Vega OS primary, Fire OS secondary; both targets are
+built and no UID allocation to the Fire OS slices is removed.
+
+The register statements above are preserved. The five-feature Vega mapping
+above remains the source inventory, with all listed UIDs retained. The
+primary alternative changes realization and proof environment only after
+VP-OD-01; it does not manufacture passed VCASEs. Lifecycle-local
+AC-AFC-P2-VPRIMARY-01..04 and RISK-AFC-P2-16/17 belong to the technical plan.
+
+| Coverage set | Proposed primary realization / proof | Status |
+|---|---|---|
+| Every UID mirrored by the five rows in Vega OS port mapping | Same V01T/V01 IDs; requirement/VCASE source replaces nonexistent A02T–A05T test source. Available A01 tests remain reference evidence. Physical X02/X03/X04/X07/X09 prove provider-dependent claims. | Proposed; every application observation not_run |
+| AFC-PR-015, 030, 048 | Physical alert/action/playback and real provider game/channel handoff | Blocking physical evidence, no simulator substitute |
+| AFC-PR-041, 047 | Physical geometry proof for modeB, or existing timed fullScreen fallback | No new video route or silent waiver |
+| AFC-PR-052, 053 | P2-D02 must record an owner-approved Vega target/model/OS and manifest compatibility allocation instead of Fire OS 2018/minSdk 25 | Decided DEC-AFC-SD-049: P2-D02 records the Vega primary target; Fire OS 2018 stick and minSdk 25 stay for the Fire OS secondary build |
+| AFC-PR-038, 054, 055, 058, 059, 063 | Shared API/session/security/compute controls; SD-048 code-only confirmation reconciled in backend before integrated proof | SD-048 settled; implementation verification pending |
+| All other backend, submission, feedback and lifecycle UIDs | Original allocations retained; downstream slices target the selected artifact and truthful evidence | Not removed by TV contingency |
+| RISK-AFC-P2-14 | P2-D04 closes it, P2-V01 supplies the verdict evidence. The Vega build is in the submission only if P2-V01 verification passed before the documents are finalized; otherwise it is reported as in progress with its limits | Decided DEC-AFC-SD-050; F1 closed |

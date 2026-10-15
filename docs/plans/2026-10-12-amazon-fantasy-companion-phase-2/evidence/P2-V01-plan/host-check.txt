@@ -1,0 +1,66 @@
+# Host check for P2-V01 planning (read-only), captured 2026-10-14T15:19:27Z
+$ uname -a
+Linux spectre-dev 7.0.0-38-generic #38-Ubuntu SMP PREEMPT_DYNAMIC Fri Sep  4 09:10:14 UTC 2026 x86_64 GNU/Linux
+exit=0
+$ lsb_release -a
+Distributor ID:	Ubuntu
+Description:	Ubuntu 26.04.1 LTS
+Release:	26.04
+Codename:	resolute
+exit=0
+$ ls -l /dev/kvm
+crw-rw----+ 1 root kvm 10, 232 Oct  9 20:49 /dev/kvm
+exit=0
+$ getfacl -p /dev/kvm
+# file: /dev/kvm
+# owner: root
+# group: kvm
+user::rw-
+user:spectre:rw-
+group::rw-
+mask::rw-
+other::---
+
+exit=0
+$ nproc
+20
+exit=0
+$ free -g
+               total        used        free      shared  buff/cache   available
+Mem:              30           8           7           0          15          21
+Swap:             39          15          24
+exit=0
+$ node --version
+v22.23.3
+exit=0
+$ readlink -f $(command -v curl)
+/usr/bin/curl
+exit=0
+$ command -v lz4
+/usr/bin/lz4
+exit=0
+$ command -v watchman
+exit=1
+$ command -v python3.8
+exit=1
+$ apt-cache policy libpython3.8-dev
+libpython3.8-dev:
+  Installed: (none)
+  Candidate: (none)
+  Version table:
+exit=0
+$ command -v vega
+exit=1
+$ command -v reverify
+$HOME/.local/bin/reverify
+exit=0
+$ command -v ocr
+$HOME/.npm-global/bin/ocr
+exit=0
+$ command -v diff-cover
+$HOME/.local/bin/diff-cover
+exit=0
+$ df -h $HOME (filesystem line)
+915G size, 249G available
+$ test -r /dev/kvm -a -w /dev/kvm
+kvm read/write: yes

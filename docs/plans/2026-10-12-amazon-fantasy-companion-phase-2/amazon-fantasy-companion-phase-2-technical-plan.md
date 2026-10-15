@@ -277,7 +277,7 @@ Leases (held by the Orchestrator, granted to one slice at a time):
 | Checkpoint | Title | Due (UTC) | Entry criteria | Exit criteria | Slices |
 |---|---|---|---|---|---|
 | W1 | Foundations and device baseline | 2026-10-14T23:00:00Z | This package approved and landed (entry criterion 2); OA-1 (stick located, ADB enabled, model and Fire OS recorded) and OA-4 (Prime Video signed in) for P2-X01; Phase 1 S09 merged (met: origin/main 17b40b4). | Gate areas `tvapp` and `backend` on `main`; Vnv areas added; `tv-app/` scaffold builds and installs on the stick; backend skeleton with device-code link passes tests; P2-X01 verdict landed with first-install time; ESPN capture tool and first fixtures landed; milestones created and read back; release prepared (P2-R1). | P2-L01, P2-X01, P2-X05, P2-D01, P2-G01T, P2-G01, P2-A01T, P2-A01, P2-B01T, P2-B01, P2-R1 |
-| W2 | Spike verdicts and backend baseline | 2026-10-17T01:00:00Z (T_yahoo + 6 h for the P2-X06 verdict pull request and P2-R2) | P2-X01 merged for P2-X04 and the device chain; P2-B01 merged for backend Wave 2 slices; P2-A01 merged for P2-A02; no blanket P2-R1 prerequisite for P2-X04; OA-3 (AWS account and `afc-dev` profile) and OA-10 (link passphrase) for P2-L02; OA-4 (ESPN, DirecTV Stream, YouTube TV signed in) for P2-X03. | Verdicts landed for panel (within spike_panel_max), notification, provider links (TNF check included), detection, ESPN live timing, Yahoo or manual; ingest and lineup slices merged; profile/settings UI merged with visual review; backend deployed to aws-afc-dev with link and profile smoke; release prepared (P2-R2). | P2-X04, P2-X02, P2-X03, P2-X07, P2-X06, P2-B02T, P2-B02, P2-B03T, P2-B03, P2-A02T, P2-A02, P2-L02, P2-R2 |
+| W2 | Spike verdicts and backend baseline | 2026-10-17T01:00:00Z (T_yahoo + 6 h for the P2-X06 verdict pull request and P2-R2) | P2-X01 merged for P2-X04 and the device chain; P2-B01 merged for backend Wave 2 slices; P2-A01 merged for P2-A02; no blanket P2-R1 prerequisite for P2-X04; OA-3 (AWS account and `afc-dev` profile) and OA-10 (owner confirms the TV link code; no passphrase, DEC-AFC-SD-048) for P2-L02; OA-4 (ESPN, DirecTV Stream, YouTube TV signed in) for P2-X03. | Verdicts landed for panel (within spike_panel_max), notification, provider links (TNF check included), detection, ESPN live timing, Yahoo or manual; ingest and lineup slices merged; profile/settings UI merged with visual review; backend deployed to aws-afc-dev with link and profile smoke; release prepared (P2-R2). | P2-X04, P2-X02, P2-X03, P2-X07, P2-X06, P2-B02T, P2-B02, P2-B03T, P2-B03, P2-A02T, P2-A02, P2-L02, P2-R2 |
 | W3 | End-to-end on the stick | 2026-10-19T12:00:00Z | W2 verdicts; T_yahoo outcome applied. | On Sun 2026-10-18 with simultaneous live games: alert over provider playback → Watch → recorded routing outcome on the stick; panel in the verdict's mode with live points and freshness; matcher, policy, resolver, panel service, alert, Watch and panel UI merged; release prepared (P2-R3). | P2-B04T, P2-B04, P2-B05T, P2-B05, P2-B06T, P2-B06, P2-B07T, P2-B07, P2-A03T, P2-A03, P2-A04T, P2-A04, P2-A05T, P2-A05, P2-L03, P2-X09, P2-R3 |
 | W4 | Feature complete and hardened | 2026-10-21T23:00:00Z | W3 exit. | Corrections and starter changes verified live or by labeled replay plus live check on Mon 2026-10-19; every active register case has passing evidence or an owner-accepted typed gap; no unresolved actionable review defect at any priority without explicit owner acceptance of residual risk; D1 revision landed (AC-AFC-P2-SPEC-01); Alexa stretch verdict if OD-AFC-03 = yes; release prepared (P2-R4). | P2-X10, P2-D02, P2-X11 (conditional), P2-R4 |
 | W5 | Submission ready | 2026-10-23T12:00:00Z | W4 exit; OA-5 (LICENSE file and visibility flip) before judge-access verification; OA-6 (ESPN terms) before the write-up is final. | README and setup verified from a clean checkout; write-up, demo plan and clips ready; developer feedback assembled and sanitized; final APK tagged, hashed and Reverify run; Assurance Test Engineer and Integration Engineer execution verdicts on the W5 candidate; release prepared (P2-R5); owner checklist for submission handed over. | P2-D03, P2-D04, P2-D05, P2-SCR1, P2-R5, P2-L05, P2-X12 |
@@ -459,7 +459,7 @@ SEIT IDs, write set, commands, leases, dependencies, stop rule) is in
 | OA-6 | ESPN unofficial JSON terms reviewed for public submission (C3). | P2-D04 final (W5) | Final write-up wording |
 | OA-7 | Devpost project draft, public demo video upload (YouTube or Vimeo), submission with Fire TV track and AWS Builder fields, before T_deadline; judge access kept through T_judge_access. | W5 handover | Submission |
 | OA-8 | Authorize each release publication (P2-R1..R5) and any external feedback sending. | Each technical-wave release checkpoint | Release stays a prepared draft |
-| OA-10 | Store the manual-mode link passphrase as an SSM SecureString parameter in aws-afc-dev under the name P2-B01's template declares, and perform the /link confirmation for the stick when P2-L02 smoke, P2-X09, P2-X10 or a data-clearing APK rollback needs a linked device. | P2-L02 link smoke (W2) | Deployed link confirmation; linked-device live runs |
+| OA-10 | Superseded by DEC-AFC-SD-048 (TV code only): no passphrase is stored. Confirm the TV code on the /link page on a phone or browser for the stick when P2-L02 smoke, P2-X09, P2-X10 or a data-clearing rollback needs a linked device. | P2-L02 link smoke (W2) | Deployed link confirmation; linked-device live runs |
 | OA-11 (optional) | Supply a release signing keystore for the submitted APK. | P2-L05 (W5) | Debug signing configuration is used |
 | OA-9 | Camera capture of the TV screen for shots where provider video is protected (RISK-AFC-P2-09), if OD-AFC-P2-02 = A. | P2-X12 (W5) | Those demo shots |
 
@@ -552,3 +552,350 @@ TDD, cadence, concurrency, clean-session transition, OCR and Reverify. Every
 Muse primary or fallback requires `--contributor-mode on`. Confirmed usage/rate
 limits alone may activate frozen fallbacks; other errors preserve the route.
 The separate bug-triager binding and all spent review/repair limits remain.
+
+## M14 Vega OS port (P2-V01)
+
+Planning delta P2-V01-plan, 2026-10-14 (issue #59, GitHub milestone M14).
+Authority: owner SD-040 (2026-10-13), "lets just stick with Fire OS and add an
+extra milestone to get this working on Vega OS"; owner 2026-10-14, "Should
+match up with what we have". Fire OS on the owner's stick stays the primary
+target (SD-003). This section is additive: no Fire OS slice, wave W1..W5,
+milestone M01..M13, release or final APK step changes. Receipt:
+`evidence/P2-V01-plan/receipt.md`.
+
+### Outcome and scope
+
+P2-V01 ports the finished TV app (device linking, profile settings with
+detection, alerts, Watch and the lineup panel from P2-A01..P2-A05) to Vega OS
+with React Native for Vega, packaged as a `.vpkg`, against the unchanged
+backend API (CONTRACT-AFC-P2-API, CONTRACT-AFC-P2-ENVELOPE). It is verified
+on the Vega Virtual Device (VVD) on the Ubuntu x86_64 KVM development host,
+and optionally on a physical Vega OS stick (AC-AFC-P2-VEGA-05). Each feature
+gets a verdict: works, limited by simulator, not supported, or unknown.
+
+Out of scope: any change under `tv-app/` or `backend/`, the frozen OpenAPI
+contract, the final APK, and every M12/M13 slice.
+
+### Requirements (Lifecycle-local, Vega)
+
+Behavior shared with the Fire OS app reuses the register UIDs by reference
+(mapping in `requirements-register.md` §Vega OS port mapping). New IDs cover
+only Vega-specific items.
+
+| ID | Statement | Source | Verification | Allocation |
+|---|---|---|---|---|
+| AC-AFC-P2-VEGA-01 | The Vega OS build of the TV app shall implement the device linking, profile settings with detection, alerts, Watch and lineup panel behaviors of P2-A01..P2-A05 against the unchanged CONTRACT-AFC-P2-API and CONTRACT-AFC-P2-ENVELOPE, with each Vega test traced to the Fire OS test of the same behavior. | Issue #59; owner SD-040; owner 2026-10-14 "Should match up with what we have" | test | P2-V01T, P2-V01 |
+| AC-AFC-P2-VEGA-02 | The Vega app shall build as a `.vpkg` from a pinned Vega SDK version that passed a scan-software-supply-chain receipt before first use, with its sha256, SDK version and target architecture recorded and no token or credential in the package. | Issue #59; workspace rule 23; AC-AFC-P2-SUPPLY-01 | inspection | P2-V01 |
+| AC-AFC-P2-VEGA-03 | Each ported feature shall have Vega test evidence, Vega Virtual Device screenshots under `evidence/visual/P2-V01/` and a recorded verdict of works, limited by simulator, not supported or unknown; an unverified feature stays unknown. | Issue #59 acceptance; AC-AFC-P2-VIS-01; rule 16 | demonstration | P2-V01 |
+| AC-AFC-P2-VEGA-04 | The Vega app shall keep its device session token only in app-private storage through a single token-store module, send it only as the bearer credential, and never write it to a log, the package or a capture. | DES-AFC-P2-TV token rule (AFC-PR-055 TV side); RISK-AFC-P2-12 | test, inspection | P2-V01T, P2-V01 |
+| AC-AFC-P2-VEGA-05 | If the owner confirms that the replacement Fire TV stick runs Vega OS (OA-12), the Vega app shall also be installed, driven and captured on that device and its rows added to the verdict table; otherwise this criterion is not applicable. | Owner fact 2026-10-14 (stick lost, replacement may ship Vega OS); conditional, does not change SD-040 | demonstration | P2-V01 |
+| AC-AFC-P2-VEGA-06 | P2-V01 shall change nothing under `tv-app/` or `backend/`, the frozen OpenAPI contract, the final APK path or any M12/M13 slice artifact. | Issue #59 (does not change the Fire OS deliverables, the final APK or the M13 critical path) | inspection | P2-V01 |
+
+### Risks (Vega)
+
+| ID | Statement (control) | Source | Verification | Allocation | Risk (rationale) | Response |
+|---|---|---|---|---|---|---|
+| RISK-AFC-P2-14 | If P2-V01 is not merged with its verdict table before the M12 submission documents are finalized (due 2026-10-22T16:00:00Z), then the submission shall describe the Vega build as in progress with its stated limits, and no M12 or M13 slice shall wait for it. | Issue #59 Expected; T_deadline 2026-10-23T19:00:00Z | inspection | P2-V01, P2-D04 | M14 starts after A01..A05 (W3) with nine days to T_deadline and competes for the five-agent cap. | Report in progress with limits; Fire OS path unaffected. |
+| RISK-AFC-P2-15 | If the Vega SDK or Vega Virtual Device cannot install or run on the Ubuntu 26.04 x86_64 KVM host, then P2-V01 shall stop with the exact unmet requirement and raise an owner decision; no agent shall change the host OS, use sudo or install a system package. | Vega docs list Ubuntu 20.04, 22.04, 24.04 x86_64 (CI page) and 20.04+ (install page); libpython3.8-dev has no candidate on 26.04; workspace rule 23 | inspection | P2-V01T, P2-V01 | The host runs Ubuntu 26.04, newer than the documented test matrix. | Owner decides: host package install, a 24.04 VM with nested KVM, or M14 reported as blocked. |
+
+### Milestone, wave, lane and leases
+
+| Milestone | Title | Due (UTC) | Entry criteria | Exit criteria | Issues in order |
+|---|---|---|---|---|---|
+| M14 | M14 Vega OS port on the Vega Virtual Device | 2026-10-21T00:00:00Z (GitHub due date) | P2-A01..P2-A05 merged; this delta passed planning review. | `.vpkg` builds and runs on the VVD against aws-afc-dev; each feature has test evidence, screenshots and a verdict; review, one repair round, gates and visual review complete; changelog entry linked; Vega developer feedback recorded. | P2-V01 (#59) |
+
+- Wave: `Wave V (M14 side lane)`, outside the W1..W5 release checkpoints. It
+  is never an entry or exit criterion of W4, W5, M12 or M13.
+- Lane: `tv-app-ui` (opensource-hackathon, tdd). Integration step IE-P2-V01
+  follows IE-P2-28 and IE-P2-29.
+- Dispatch: P2-V01T as soon as P2-A05 merges; P2-V01 after its red receipt.
+  Both count against impl_agent_cap (5).
+- Added gate time: area `vegaapp` (npm ci plus Jest) is estimated at 3 min
+  or less, and runs only on changes under `vega-app/`. VVD boot, install and
+  capture are SEIT procedures under a lease, never gate checks.
+
+| Lease | Resource | Holders |
+|---|---|---|
+| `vega-virtual-device` | The single VVD instance on the development host | P2-V01 VVD runs and visual review |
+| `vega-app-config` | `vega-app/package.json`, `vega-app/package-lock.json`, `vega-app/manifest.toml`, `vega-app/jest.config.js` | P2-V01T creates the harness; P2-V01 completes it after verified red |
+| `vega-tv-stick` (conditional) | A physical Vega OS stick, only if OA-12 confirms the replacement runs Vega OS | P2-V01 physical-device path |
+
+P2-V01 also takes `aws-afc-dev` for read-only API use during VVD system runs.
+It never deploys.
+
+### Routes (opensource-hackathon as amended by DEC-AFC-SD-043/044/045)
+
+| Slice | Role | Primary route | Ordered fallbacks |
+|---|---|---|---|
+| P2-V01T | Test Implementer | Muse Code / Muse WonderFull / high (CLI id `muse-wonder-full-1.0`, `--contributor-mode on`) | Codex CLI / GPT-6.1 Sol / high; Claude Code / Claude Opus 5.5 / medium |
+| P2-V01 | Product Implementer | Claude Code / Claude Opus 5.5 / medium | Muse Code / Muse WonderFull / high; Codex CLI / GPT-6.1 Sol / high |
+| P2-V01 review | Reviewer | Claude Code / Claude Opus 5.5 / medium, in a fresh session separate from the implementer | Muse Code / Muse Spark 1.3 / max; Claude Code / Claude Opus 5.5 / high |
+
+Snapshot sha256 `d5aabda1f44e2808c53112794afb5a7978ad02f930c100cf58002277d9423eea`
+(DEC-AFC-SD-045). OCR delegate mode is required in review. Reverify runs on
+the exact `.vpkg` (CMD-REVERIFY-VPKG). An unproven `.vpkg` capability is
+recorded as a typed gap, never as PASS.
+
+### Commands (Vega toolchain; definitions in `seit.json`)
+
+| ID | Purpose |
+|---|---|
+| PROC-VEGA-PREPARE | Download, scan, then install the pinned SDK, CLI and VVD in user scope (`NONINTERACTIVE=true`, `VEGA_SDK_VERSION`) |
+| CMD-RED-VEGA | CMD-RED receipt contract for the Jest suite |
+| PROC-VEGA-PARITY | A01T..A05T test ID to V01T test ID parity table |
+| CMD-GATE-VEGAAPP | `bash tools/ci/gate.sh vegaapp` (area added by P2-V01) |
+| CMD-VEGA-UNIT | `npm --prefix vega-app test -- --ci` |
+| CMD-VEGA-BUILD | `npm run build:app`, producing `build/<arch>-<type>/<app>_<arch>.vpkg`, then sha256 |
+| CMD-VVD-START | `vega virtual-device start --timeout 120` and status |
+| CMD-VVD-INSTALL | `vega device install-app` and `launch-app` on VirtualDevice |
+| CMD-VVD-INPUT | `inputd-cli button_press` D-pad, select and back |
+| CMD-VVD-SCREENCAP | Device-side screenshot, or a labeled host-window capture (documentation conflict recorded) |
+| PROC-VEGA-FEATURE-VERDICT | Per-feature verdict table |
+| CMD-VEGA-DEVICE-INSTALL | Conditional armv7 install on a Vega OS stick (OA-12) |
+| CMD-REVERIFY-VPKG | Reverify on the exact `.vpkg` |
+| CMD-COVERAGE-VEGAAPP | Jest Cobertura output plus diff-cover at 90% or more of changed lines (qualification pending) |
+| CMD-MUTATION-VEGAAPP | StrykerJS candidate. This is a typed gap (`VEGA_MUTATION_TOOL_GAP`) until it is pinned, scanned and qualified |
+
+PROC-VISUAL-REVIEW keeps its pass criteria on the VVD (`vega_binding` in
+`seit.json`). Screenshots go under `evidence/visual/P2-V01/`.
+
+### Per-feature verdict table (prospective)
+
+| Feature | Fire OS slice | Expected on the VVD (from the Vega 0.24 docs) | Observed |
+|---|---|---|---|
+| Device linking | P2-A01 | works | not_run |
+| Profile settings and detection | P2-A02 | Settings: works. Installed-app detection: unknown, because the supported list has no installed-apps library. Provider apps are absent on the VVD. | not_run |
+| Alerts | P2-A03 | In-app presentation: unknown. `expo-notifications` covers RN 0.72 local notifications only. Heads-up over provider playback: limited by simulator. | not_run |
+| Watch | P2-A04 | Outcome reporting and confirmation: works. Provider launch: limited by simulator (`appAbsent`; no DRM playback on the VVD on Ubuntu). | not_run |
+| Lineup panel | P2-A05 | Full-screen panel: works. modeB: not supported on the VVD. Text floor: unknown until the capture resolution is mapped. | not_run |
+
+Only observed VVD or Vega-stick evidence sets a verdict. An unverified row
+stays unknown.
+
+### Owner-action entry criteria (Vega)
+
+| ID | Owner action | Needed by | Blocks if absent |
+|---|---|---|---|
+| OA-12 (conditional) | Confirm whether the replacement stick runs Vega OS. If it does, run `vega devmode login` (Amazon developer account in a browser) and `vega devmode enable-device --code <code>` on it. | P2-V01 physical path | AC-AFC-P2-VEGA-05 is not applicable; the VVD path proceeds |
+| OA-13 (conditional) | Accept the Vega SDK license or terms if the installer shows any. The 0.24 install and CI pages name none. | PROC-VEGA-PREPARE | P2-V01T and P2-V01 cannot start |
+
+OA-10 (owner confirms the TV code on a phone or browser; no passphrase, DEC-AFC-SD-048) is reused for the VVD linked-state capture.
+
+### Schedule
+
+As of 2026-10-14, T_deadline is 2026-10-23T19:00:00Z. M14 starts after
+P2-A05 merges (M09, due 2026-10-18T11:00:00Z). Its GitHub due date is
+2026-10-21. The M12 submission documents are due 2026-10-22T16:00:00Z.
+RISK-AFC-P2-14 controls inclusion: Vega is named in the submission only if
+P2-V01 is verified before the M12 documents are finalized. Otherwise the
+submission reports it as in progress, with its limits stated.
+
+
+## Selected plan: Vega OS primary, Fire OS secondary (DEC-AFC-SD-049, 2026-10-14)
+
+Owner, 2026-10-14: "why not both? but maybe vega primary to be safe". Both
+TV targets are built. Vega OS is the primary target and owns the critical
+path; Fire OS is the secondary target. The Vega-primary contingency below is
+now the selected plan. No Fire OS slice is deleted: P2-A01..P2-A05 and their
+test slices keep their fields, tests and dependencies and run off the Vega
+critical path. No primary slice, integration step or release checkpoint waits
+on them. This supersedes SD-040's "Fire OS primary, Vega side lane" ordering
+and the M14 section's "off the M13 critical path" wording.
+
+On a shared slice that carries `vega_primary_contingency.overrides`, the
+overrides are the primary Vega scope and close the primary obligation. The
+slice's original fields stay as the Fire OS secondary scope. That scope runs
+after the Vega exit evidence, only on a real Fire OS device, and never gates
+Vega closure. L05 builds the primary `.vpkg` and, when A01..A05 have landed,
+the secondary APK with CMD-REVERIFY-APK.
+
+Milestone stages (GitHub IDs unchanged; F-VP-02 correction). Milestones
+run in start and closure stages, not one total order:
+
+| Stage | Milestones | Start | Closure |
+|---|---|---|---|
+| 1 Readiness | M01, M02 | Planning PR merged | X01 host-ready receipt; B01 and G01 landed |
+| 2 Start M14 | M14 | V01T after X01, G01, B01; V01 after the V01T red receipt | M14 stays open |
+| 3 Primary prerequisites | M03–M09 | Each slice under its own dependencies, in parallel with M14 | X04, X02, X03, X07, X05, B02–B07 with tests, X06, L02, L03 land. R1 (M03) and R2 (M06) wait for V01 |
+| 4 Close M14 | M14, then M03 and M06 | X02, X03, X04, X07 and L03 landed | V01 accepted; then R1 and R2 close |
+| 5 Finish | M10–M13 | M14 closed | Original exit criteria on the Vega primary target |
+
+A01T/A01 (M03), A02T/A02 (M06), A03T/A03 and A04T/A04 (M08) and A05T/A05
+(M09) are Fire OS secondary work inside those mixed milestones. They never
+gate a stage or a primary closure. M14's entry no longer waits for
+P2-A01..P2-A05. Slice identities and dependencies are unchanged.
+
+Critical path: P2-X01 → P2-V01T → P2-X04 → P2-X02 → P2-X03 → P2-X07 →
+P2-L03 → P2-V01 → P2-X09 → P2-X10 → P2-R4 → P2-D04 → P2-R5 → P2-L05 →
+P2-X12. Dated targets are in the critical-path table below.
+
+| Decision | Applied here |
+|---|---|
+| DEC-AFC-SD-048 | Device linking uses the TV code only. No passphrase in OA-10, deployed smoke, VVD capture or design text. |
+| DEC-AFC-SD-049 | Vega primary, Fire OS secondary; contingency selected; A0x/T secondary, not inactive. |
+| DEC-AFC-SD-050 | F1 option (a): P2-D04 closes RISK-AFC-P2-14 with P2-V01 supporting; D04 goal adds the inclusion sentence. |
+| DEC-AFC-SD-051 | PROC-VEGA-PREPARE installs a pinned, scanned Watchman in user scope; libpython3.8-dev is skipped. |
+| DEC-AFC-SD-052 | CMD-COVERAGE-TVAPP changed-line threshold is 70%. |
+| DEC-AFC-SD-053 | Tool installs the plan needs are agent work (rule 23 limits apply). |
+| DEC-AFC-SD-054 | UTP netty CVEs are accepted residual risk until submission; PROC-POST-SUBMISSION-UTP-NETTY removes them after submission. |
+
+Still open owner actions: VP-OD-02 (SDK terms, if the installer shows any)
+and VP-OD-04 (replacement device identity and arrival, Amazon developer and
+provider logins).
+
+## Vega-primary contingency — P2-VEGA-PRIMARY-plan (2026-10-14)
+
+**Selected 2026-10-14 by DEC-AFC-SD-049** (see the section above). The text
+below was written as a proposal; where it says "proposed", "if Vega is
+selected" or "VP-OD-01", read it as selected. Where it says a Fire OS slice
+is dropped or inactive, read "Fire OS secondary target, off the Vega critical
+path".
+
+**Proposed, not activated.** This section and the additive
+`vega_primary_contingency` fields in implementation/SEIT describe the
+alternative if William chooses Vega as the primary TV target. SD-040's
+Fire OS path remains the plan of record. No slice is cancelled, accepted,
+dispatched or marked complete by this delta. V01T/V01 retain their IDs,
+roles, frozen routes and review limits; no duplicate Vega implementation
+slices are created. This authoring packet authorizes only P2 plan files,
+its named evidence directory and a local commit; no product code, install,
+push, PR, merge, account access or publication.
+
+Next action: return this committed candidate to the planning controller for
+review and the single integrated owner decision batch below. Existing
+planning/repair budgets remain spent as recorded; this is a new requested
+contingency proposal, not an automatic new review grant or F1 closure.
+
+### Interpretation and activation
+
+The owner phrase “we just need it for VEGA” establishes the focus of this
+planning delta. The explicit STATE and OBJECTIVE still require a platform
+choice before execution; it is not recorded as that choice. SD-048 is
+already decided: the user confirms the TV code on the phone/browser; no
+passphrase is requested, stored, supplied or reintroduced. This dated rule
+supersedes all older OA-10/passphrase wording in P2 for either platform.
+Other session isolation, expiry, retry, authorization and privacy controls
+remain. The observed OpenAPI mismatch is a prerequisite to reconcile under
+the existing backend lane, not a new Vega protocol (see design).
+
+On explicit approval, the controller materializes the proposed overrides
+for the same slice IDs, dependency edges, integration steps, proof maps,
+wave/milestone projections and Manifest as one coherent candidate before
+execution. It records the owner decision and exact digest, applies
+AFC-PR-052/053 target amendments through P2-D02, and keeps unselected Fire
+OS work preserved. Until then, no tool may treat these fields as active
+execution authority. Absence of a choice never selects a default branch.
+The effective graph is projected in this delta's evidence so the proposed
+switch is concrete and reviewable, rather than left for future design.
+
+### Disposition if Vega is selected
+
+“Dropped” means removed only from the Vega submission's execution path;
+existing Kotlin code, tests and evidence stay intact. Test pairs follow
+their product slice. Requirements and negative cases transfer; no feature
+is silently dropped.
+
+| Existing slice | Fire OS disposition | Vega equivalent / retained obligation |
+|---|---|---|
+| P2-A01T/A01 | Keep unlanded green Kotlin work as read-only reference; replace primary build/link UI | P2-V01T/V01 foundation checkpoint: API client, token store, focus shell and TV-code-only linking. A01 landing is not a dependency. |
+| P2-A02T/A02 | Drop unstarted Kotlin implementation from primary path | V01T/V01 profile/detection checkpoint; all customer settings and detection limits preserved. |
+| P2-A03T/A03 | Drop unstarted Kotlin implementation from primary path | V01T/V01 alerts checkpoint after X02 Vega verdict; physical background playback + Watch/Dismiss proof required. In-app toast is not a substitute for AFC-PR-015. |
+| P2-A04T/A04 | Drop unstarted Kotlin implementation from primary path | V01T/V01 Watch checkpoint after X03 Vega registry evidence; exactly one of the existing six routing outcomes per attempt. |
+| P2-A05T/A05 | Drop unstarted Kotlin implementation from primary path | V01T/V01 panel checkpoint after X04 Vega verdict; fullScreen only under existing AFC-PR-047 fallback, no invented video. |
+| P2-X01 | Replace Android/ADB qualification with Vega host/VVD/device qualification | Same X01: scanned user-scope SDK and Watchman, exact pins, first_install_at and separate physical identity receipt; no Android prerequisite for V01T. |
+| P2-X02 | Replace Fire OS notification probe; keep evidence obligation | Same X02 on physical Vega: notification actions, background delivery, provider playback unaffected; VVD cannot close it. |
+| P2-X03 | Replace Fire OS launch probes; keep provider order and registry contract | Same X03: Vega provider components/URIs and observed outcomes; retain data-only registry write; no Android intent copied blindly. TNF/live evidence stays dated. |
+| P2-X04 | Replace Android composition probe; keep 24-hour cap | Same X04 on Vega: geometry and real video, or documented FAILS/TIMEBOX selecting fullScreen. First primary Vega app install starts the clock; absent physical device cannot yield modeB PASS. |
+| P2-X07 | Replace Android package/context detection; keep customer control | Same X07: permitted provider URI/component resolution; no entitlement inference, no foreground-app spying. Unknown or unsupported route retains the existing labeled limitation. |
+| P2-X09 | Keep live integrated acceptance, replace target/commands | Same X09 on the physical Vega stick, linked to deployed backend; no simulator substitution for required real-provider proof. |
+| P2-X12 | Keep demo and manifest; replace ADB capture route | Same X12: qualified Vega capture or labeled host-window footage for UI; owner camera for protected provider video; hash and label platform/live/replay per clip. |
+| P2-L05 | Replace final APK build in the selected path | Same L05: final armv7 (or actual documented device architecture) .vpkg plus x86_64 VVD companion artifact, hashes, exact candidate, Reverify; no renaming an APK. |
+| P2-V01T/V01 | Promote existing M14 pair from side lane | Starts from approved requirements/contracts and available A01 tests; unbuilt A02–A05 use register/VCASE source IDs, not imaginary Kotlin tests. |
+
+Downstream closure is also retained: X10 runs hardening on Vega; X11 remains
+conditional and offers no unverified Alexa route; D02 records target and
+verified limits; D03/D04/D05/SCR1 use the actual Vega evidence; R1–R5 prepare
+the selected package version through `vega-app/package.json` and
+`vega-app/manifest.toml`, preserving release publication holds. R1/R2 TV
+checkpoints move behind V01 completion if Vega is primary; no early
+feature-complete release is claimed. Their original dates remain historical
+baseline targets, not achievable promises in this alternative.
+
+### Conditional critical path (all timestamps UTC)
+
+These are planning targets, not observed completion or delivery promises.
+The physical stick arrival date is unknown. The original named game windows
+are retained from the package; confirm actual provider/game availability
+before execution. October 22 evening in Chicago falls on October 23 UTC.
+
+| Target window / latest checkpoint | Work and dependencies | Exit evidence / failure consequence |
+|---|---|---|
+| Oct 14 by 20:00 | Review this delta; platform/host/terms decision; preserve SD-048 | Approved target and candidate, or execution stays held. No assumption that the lost stick will reappear. |
+| Oct 14 20:00–Oct 15 12:00 | X01 / PROC-VEGA-PREPARE: scan installer and transitive SDK/VVD/Watchman artifacts before first use; pin and install user scope | Version/hash/origin/scan/location receipts; license or unscannable installer blocks install. Ubuntu 26.04 failure triggers owner-supported-host choice. |
+| Oct 15 by 16:00 | X01 VVD qualification; V01T after B01/G01 contract and tooling readiness | Boot, architecture-correct hello-world/harness install, D-pad/back, network and capture receipt. No SDK install PASS inferred from docs. |
+| Oct 15–16; physical stick needed by Oct 15 20:00 | OA-12 identity and owner developer login; X04 then X02→X03→X07; V01T red/frozen tests in parallel | Physical model/OS/architecture and provider-account readiness; X04 closes by first_install_at + 24h. Early X04 verdict is needed for the Oct 15 evening live check (Oct 16 UTC). A missed window or exhausted 24h cap is recorded, not backdated; reassess the forecast against the Oct 22 window without waiving the live case. |
+| Oct 16–17 by 23:00 | V01 foundation→settings→alerts/Watch/panel; B02/B03→B04/B05/B06/B07; L03 deploy | V01 may start after V01T, but cannot close before X02/X03/X04/X07 and L03 evidence. Existing backend contracts, red/green receipts, screenshot states; all five parity verdicts. |
+| Oct 18 by 12:00; live window Oct 18–19 | V01 qualified candidate, X09 physical end-to-end, R1/R2/R3 draft checkpoints | Alert over playback→Watch→honest result; panel, simultaneous games and controls. Replay is labeled and cannot close a missing live requirement. |
+| Oct 19–21 by 23:00 | X10 hardening, bounded review/repair, D02 spec target/limits, X11 disposition, R4 | Corrections/reconnect/expiry/quiet-hours checks; retained OCR and Reverify evidence, unresolved gaps visible. |
+| Oct 22 by 16:00 | D03–D05/SCR1 submission documents and feedback, R5 candidate preparation | Evidence-backed copy and demo storyboard. D04 closes RISK-AFC-P2-14 (DEC-AFC-SD-050): the Vega build is included only if P2-V01 verification passed before these documents are finalized; otherwise D04 reports it as in progress with its limits, and the Fire OS secondary build carries the submission if its own evidence passed. |
+| Oct 22 rehearsal; Oct 23 00:00–05:00 live capture window | L05 exact .vpkg build after R5, X12 capture on that hash; reserve time for TNF from original plan | Sanitized clip/hash manifest, platform/device labels and capture provenance. Documented demo plan may precede final clips; no unpublished artifact claimed public. |
+| Oct 23 by 12:00 | Final ATE/IE evidence and owner handover | Seven-hour buffer to 19:00Z. No unsupported, unknown, not_run or capability gap counted as PASS. |
+| Oct 23 19:00 | Submission deadline | Owner publication/upload/judge-access/submission authority remains separate. |
+
+The early forecast assumes the stick and provider sessions are ready by Oct 15 20:00Z and X04 reaches an early verdict before that evening’s live probe. If not, the Oct 22 evening window is the last planned catch-up opportunity, compressing final review/capture into Oct 23; the Oct 18 readiness target is then at risk, not promised. No game fixture/time was independently revalidated in this documentation-only packet.
+
+The convergence bottleneck is physical X02/X03/X07 evidence + backend L03
++ V01 completion, then X09. VVD work can continue during an account/device
+wait but cannot establish primary TV acceptance. A delayed hardware arrival
+or failed background notification route is not solved by quietly submitting
+an in-app-only simulator demo. The Fire OS secondary target is built in
+parallel (DEC-AFC-SD-049) and still needs a real Fire OS device and its
+original acceptance evidence; it is never accepted from Vega evidence. No new features are cut to manufacture schedule slack.
+
+### Added Lifecycle-local criteria
+
+These are proposed planning/verification controls, not changes to registered
+product statements. Existing VEGA-01..06 remain the side-lane baseline;
+under the selected alternative the bindings in SEIT supersede only their
+Fire-OS-test prerequisite and off-critical-path interpretation.
+
+| ID | Statement | Source | Verification | Allocation |
+|---|---|---|---|---|
+| AC-AFC-P2-VPRIMARY-01 | The primary-target contingency shall preserve existing slice identities, roles, routes and review bounds and identify every replaced dependency and retained acceptance obligation before dispatch. | Current owner packet objectives 1 and 6 | inspection | P2-V01T, P2-V01 |
+| AC-AFC-P2-VPRIMARY-02 | Primary Vega acceptance shall bind each of the five feature verdicts to its register/VCASE source, exact candidate and execution environment; only physical evidence shall close third-party playback and provider handoff claims. | Objectives 2 and 3; AFC-PR-015/030/048/052 by reference | demonstration | P2-V01, P2-X09 |
+| AC-AFC-P2-VPRIMARY-03 | The Vega client shall use the common API contract after the settled SD-048 reconciliation, with no Vega-only endpoint, session format, routing outcome or backend service. | Objective 4; SD-048 | test, inspection | P2-V01T, P2-V01 |
+| AC-AFC-P2-VPRIMARY-04 | Final Vega package and demo evidence shall name the same candidate, target architecture and package hash, preserve capture provenance and expose every remaining acceptance gap before owner submission. | Objectives 2 and 6 | inspection | P2-L05, P2-X12 |
+| RISK-AFC-P2-16 | A missing physical Vega device, unverified background alert route, SDK compatibility conflict or missed primary checkpoint shall remain a blocking primary-acceptance gap unless the owner explicitly amends the named requirement or target. | Objective 5 | inspection | P2-X01, P2-X02, P2-X09, P2-D04 |
+| RISK-AFC-P2-17 | An SDK/Watchman install shall proceed only with pinned provenance and an ALLOW/PASS scan before execution, resolved terms, and user scope; unsupported host/tool or .vpkg verification capability remains a typed gap. | Objective 5; rule 23; RISK-AFC-P2-15 | inspection | P2-X01, P2-V01T, P2-V01, P2-L05 |
+
+### Owner decision batch (queued; no question blocks authoring)
+
+| ID | Status | Decision / consequence |
+|---|---|---|
+| VP-OD-01 | DECIDED DEC-AFC-SD-049 (Vega primary, Fire OS secondary) | Choose Fire OS record or Vega-primary alternative, including replacement of AFC-PR-052's 2018 Fire OS target and AFC-PR-053's Android minSdk criterion with recorded Vega model/OS/manifest compatibility. Existing real-device and feature acceptance remains. No choice made here. |
+| VP-OD-02 (OA-13 / OQ-V01-1) | NEEDS_OWNER_DECISION, conditional | Owner handles any SDK license/terms before execution. Installer must be inspected for implicit NONINTERACTIVE acceptance; unknown terms block install, not permission to bypass them. |
+| VP-OD-03 (OQ-V01-3 / RISK-AFC-P2-15) | DECIDED DEC-AFC-SD-051 (Ubuntu 26.04 attempt, user-scope Watchman, libpython3.8-dev skipped) | Accept a bounded user-scope Ubuntu 26.04 qualification attempt with scanned user-scope Watchman and native-debugging limitation, or supply a documented supported host (24.04 x86_64 with usable KVM). No sudo/PPA/host-OS modification by agents; failed user-scope attempt returns the exact gap. |
+| VP-OD-04 (OA-12 / OQ-V01-2) | NEEDS_OWNER_DECISION | Confirm replacement device/model/OS/arrival and perform Amazon developer browser login and provider-account sign-in. Only physical steps wait; VVD continues after its own authorization. Primary acceptance cannot proceed without hardware. |
+| VP-OD-05 (V01 F1) | DECIDED DEC-AFC-SD-050 option (a); F1 closed | Confirm P2-D04 as closing owner of RISK-AFC-P2-14 with P2-V01 supplying verdicts. Proposed additive D04 binding is included but not active; F1 remains open. In Vega-primary mode, failed Vega is a submission-scope stop, not the side-lane “in progress while Fire OS submits” fallback. |
+
+No further question is needed about code-only linking, routine prerequisite
+inventory, agent route, user-scope installation authority after approval,
+or preservation of already completed work. The platform decision does not
+accept weaker alerts/Watch acceptance, spend another planning review round,
+or grant public publication authority.
+
+### Entry, exit and recovery for this delta
+
+Entry: branch `afc/p2-v01-plan` at `5097585`, owner-supplied state, prior
+CHANGE_REQUESTED receipt and F2–F8 corrections consumed. Accountable
+controller: existing Lifecycle Orchestrator; author role is Planning and
+Design only. Exit: additive plan committed, gate exit 0, source coverage,
+parity, effective graph, Manifest and queued owner decisions present.
+That exit is author realization, not independent acceptance.
+
+Recovery: leave authority.json and journey.json untouched; preserve prior
+approval bindings in the delta receipt; restore the active baseline only
+through the controller after a decision, never delete unmerged A01/V01 work.
+No review budget is reset. Under DEC-AFC-SD-049, Fire OS-specific proofs
+stay required for the Fire OS secondary target; they are never PASS by Vega
+evidence.
