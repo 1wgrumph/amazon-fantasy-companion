@@ -1,0 +1,45 @@
+........................................................................ [ 61%]
+............................................F                            [100%]
+=================================== FAILURES ===================================
+____________ test_links_index_query_and_events_stream_are_preserved ____________
+
+    def test_links_index_query_and_events_stream_are_preserved():
+        template = document("template.yaml")
+        _, resources = grants(template["Resources"]["ApiFunction"]["Properties"]["Policies"])
+        assert resources["LinksTable"] == {"table", "index"}
+        events = template["Resources"]["EventsTable"]["Properties"]
+        assert events["StreamSpecification"]["StreamViewType"] in {"NEW_IMAGE", "NEW_AND_OLD_IMAGES"}
+        sources = template["Resources"]["PolicyFunction"]["Properties"]["Events"].values()
+        assert any(e["Type"] == "DynamoDB" and e["Properties"]["Stream"] ==
+                   {"Fn::GetAtt": "EventsTable.StreamArn"} for e in sources)
+>       assert "ssm:GetParameter" in json.dumps(
+            template["Resources"]["ApiFunction"]["Properties"]["Policies"])
+E       assert 'ssm:GetParameter' in '[{"Statement": [{"Effect": "Allow", "Action": ["dynamodb:GetItem", "dynamodb:PutItem"], "Resource": [{"Fn::GetAtt": "...Table.Arn"}]}, {"Effect": "Allow", "Action": ["dynamodb:GetItem"], "Resource": [{"Fn::GetAtt": "PanelsTable.Arn"}]}]}]'
+E        +  where '[{"Statement": [{"Effect": "Allow", "Action": ["dynamodb:GetItem", "dynamodb:PutItem"], "Resource": [{"Fn::GetAtt": "...Table.Arn"}]}, {"Effect": "Allow", "Action": ["dynamodb:GetItem"], "Resource": [{"Fn::GetAtt": "PanelsTable.Arn"}]}]}]' = <function dumps>([{'Statement': [{'Action': ['dynamodb:GetItem', 'dynamodb:PutItem'], 'Effect': 'Allow', 'Resource': [{'Fn::GetAtt': 'P...sTable.Arn'}]}, {'Action': ['dynamodb:GetItem'], 'Effect': 'Allow', 'Resource': [{'Fn::GetAtt': 'PanelsTable.Arn'}]}]}])
+E        +    where <function dumps> = json.dumps
+
+backend/tests/contract/test_template_iam.py:106: AssertionError
+=============================== warnings summary ===============================
+tests/unit/test_security_auth_link.py: 21 warnings
+tests/unit/test_device_auth.py: 281 warnings
+tests/unit/test_device_auth_units.py: 115 warnings
+tests/unit/test_bug_auth002.py: 38 warnings
+tests/unit/test_router.py: 762 warnings
+  $HOME/.local/lib/python3.12/site-packages/botocore/auth.py:424: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    datetime_now = datetime.datetime.utcnow()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+============================= slowest 10 durations =============================
+0.24s setup    tests/unit/test_router.py::test_every_settings_attribute_is_accepted[fantasySelections]
+0.23s setup    tests/unit/test_router.py::test_valid_routing_outcomes_reach_the_resolver_stub[appHomeOpened]
+0.22s setup    tests/unit/test_router.py::test_response_cap_counts_serialized_bytes_not_characters
+0.21s setup    tests/unit/test_router.py::test_every_settings_attribute_is_accepted[switchingConfirm]
+0.20s setup    tests/unit/test_router.py::test_every_settings_attribute_is_accepted[presentation]
+0.20s setup    tests/unit/test_router.py::test_stored_profile_timestamps_are_returned_unchanged
+0.20s setup    tests/unit/test_router.py::test_routing_outcomes_are_validated
+0.19s setup    tests/unit/test_router.py::test_bearer_scheme_is_case_insensitive_and_other_schemes_refused
+0.19s setup    tests/unit/test_router.py::test_unknown_route_is_a_structured_404
+0.19s setup    tests/unit/test_router.py::test_link_poll_requires_a_handle
+=========================== short test summary info ============================
+FAILED backend/tests/contract/test_template_iam.py::test_links_index_query_and_events_stream_are_preserved
+1 failed, 116 passed, 1217 warnings in 12.02s
