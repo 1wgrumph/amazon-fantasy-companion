@@ -12,7 +12,8 @@
   "next_action": "Commit passing new tests with hooks, then run native mutation wrapper against 75afca0, coverage, tools pytest and full gate; record final receipt and commit evidence.",
   "scope": [
     "new tv-app/app/src/test/java/com/afc/companion/ApiLoopBoundTest.kt",
-    "P2/evidence/P2-A01/pit-bounded-loops/"
+    "P2/evidence/P2-A01/pit-bounded-loops/",
+    "tv-app/app/src/main/java/com/afc/companion/net/ApiClient.kt: dispatcher seam only"
   ],
   "verification_method": "test",
   "named_behaviors": [
@@ -48,7 +49,15 @@
       "evidence": "native-attempt1/mutations.xml.gz",
       "hypothesis": "PIT test prioritization can execute an older unbounded case first; use lower-cost bounded probes with HTTP inputs already exercised by the first focused run.",
       "change": "Replace network-backed probes with minimal HttpURLConnection fixtures; use real coroutine suspension and attempt caps. No runtime code or tool changes."
+    },
+    {
+      "attempt": 2,
+      "native_verdict": "GAP UNRESOLVED: 3 mutants",
+      "killed": "Original line 43 coroutine suspension check now killed; original line 42 and 122 remain; newly reached request line 35 null-return mutation timed out.",
+      "evidence": "native-attempt2/mutations.xml.gz",
+      "change": "Default-preserving ioDispatcher constructor seam enables an inline continuation driver; reject request completion before resuming its backoff. No timers, worker threads or channel handshake races."
     }
   ],
-  "real_dependency_proof": "focused.txt: 3/3 real LocalApi probes passed before fixture introduction, exercising 503 {} and a 65537-byte x body. Frozen FixtureCalibrationTest also proves real HTTP status/body behavior. The second version reuses these observed inputs."
+  "real_dependency_proof": "focused.txt: 3/3 real LocalApi probes passed before fixture introduction, exercising 503 {} and a 65537-byte x body. Frozen FixtureCalibrationTest also proves real HTTP status/body behavior. The second version reuses these observed inputs.",
+  "hygiene_correction": "Full gate attempt2 exit 1 solely because a rewritten Gradle evidence log had trailing whitespace; normalize evidence before final gate. Product and backend checks passed."
 }

@@ -4,6 +4,7 @@ import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
@@ -21,6 +22,7 @@ class ApiClient(
     val sessionToken: () -> String? = { null },
     val openConnection: (URL) -> HttpURLConnection = { it.openConnection() as HttpURLConnection },
     val backoff: suspend (Long) -> Unit = { delay(it) },
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) {
     private val base: String = baseUrl.trimEnd('/')
 
@@ -32,7 +34,7 @@ class ApiClient(
         }
     }
 
-    suspend fun request(method: String, path: String, body: JSONObject? = null): ApiResponse = withContext(Dispatchers.IO) {
+    suspend fun request(method: String, path: String, body: JSONObject? = null): ApiResponse = withContext(ioDispatcher) {
         require(method in METHODS && path.startsWith("/v1/")) { "Unsupported operation" }
         val payload = body?.toString()?.toByteArray(Charsets.UTF_8)
         require(payload == null || payload.size <= MAX_BODY_BYTES) { "Request body exceeds 64 KiB" }
