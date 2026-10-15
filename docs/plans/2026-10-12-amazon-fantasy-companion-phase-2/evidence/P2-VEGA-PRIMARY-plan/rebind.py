@@ -1,4 +1,4 @@
-"""Mechanical digest refresh for the corrected 39a145c planning package."""
+"""Mechanical digest refresh for the corrected planning package at BASE."""
 import copy
 import hashlib
 import json
@@ -9,7 +9,7 @@ EVIDENCE = Path(__file__).resolve().parent
 PLAN = EVIDENCE.parent.parent
 ROOT = Path(subprocess.check_output(['git', 'rev-parse', '--show-toplevel'], text=True).strip())
 HOOK = Path.home() / '.claude/plugins/cache/bearing-lite/bearing-lite/1.1.7/hooks/plan-package.cjs'
-BASE = '39a145c72eb93d42701328bf95228e3ad4e64f12'
+BASE = '9833110191147fc9d0c6d0249b9b79fcba097d19'  # correction round 2 (round 1 rebind used 39a145c72eb93d42701328bf95228e3ad4e64f12)
 
 
 def sha(file):

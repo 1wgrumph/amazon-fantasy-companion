@@ -220,3 +220,42 @@ Checks: `verify_delta.py --write-evidence` exit 0. Schema: 0 raw
 violations in implementation.json and seit.json. Repository gate: see
 [gate.txt](gate.txt). The DoD Manifest HTML is still not re-rendered
 (outside allowed writes).
+
+## Correction round 2 (planning regate CHANGE_REQUESTED)
+
+Regate: Codex GPT-6.1 Sol high on `495b9dc`. F-VP-02 and F-VP-03 PASS;
+one residual on F-VP-01 (P1). Same author route and authority. Content
+commit `9833110` on top of `495b9dc`, then a mechanical rebind commit.
+
+| Finding | Change | Location |
+|---|---|---|
+| F-VP-01 residual: B06 selected per client, but the preserved caller `backend/src/api/handler.py` passes only profile_id and eventId | B06 returns the whole `platform_routes` map (both entries, each verified or REGISTRY_ROUTE_GAP) and keeps the existing caller. B06 override goal and `platform_route_binding` rewritten; write set unchanged (resolver plus the openapi route schema). | implementation.json `slices/P2-B06/vega_primary_contingency/overrides/goal`, `platform_route_binding` |
+| F-VP-01 residual | B06T tests check the map carries both entries with per-entry gap status, never filled across platforms. "never receives" removed. | implementation.json `slices/P2-B06T/vega_primary_contingency/overrides/goal`, `platform_route_binding` |
+| F-VP-01 residual | Clients: A04T/A04 execute only `fire_os`, V01T/V01 only `vega`; tests check a client never executes the other platform's launch data; a gap in the client's own entry gives no launch plus the reported gap. X09 binding matches. | implementation.json `slices/P2-A04T`, `P2-A04`, `P2-V01T`, `P2-V01`, `P2-X09` `vega_primary_contingency/platform_route_binding` |
+| F-VP-01 residual | Design: CONTRACT-AFC-P2-API amendment (whole map returned, no server selection, caller unchanged, client executes own entry); X03 → B06 table row; shared-backend paragraph. | design.md CONTRACT-AFC-P2-API, "Backend work required" table and paragraph |
+| F-VP-01 residual | SEIT bindings: SEIT-AFC-PR-029, PR-030, PR-031, SEIT-RISK-AFC-P2-03, SEIT-AFC-P2-VPRIMARY-03 use "executes only its own entry" wording. CMD-REGISTRY-CHECK per-platform REGISTRY_ROUTE_GAP handling kept. | seit.json `proof_cases/*/platform_route_binding` |
+| Record | `planning_deltas[-1].correction_round_2` in both JSON files; verifier asserts B06 returns the map, the four client bindings say "never executes", and no "never receive" text remains. | implementation.json, seit.json, `verify_delta.py` |
+
+Rebind (same tools as `495b9dc`; `rebind.py` BASE moved to `9833110`):
+
+| Command | Exit | Evidence |
+|---|---:|---|
+| `node "$PLUGIN/hooks/plan-package.cjs" "$P2"` before refresh | 1 (expected: design.md and candidate digest stale) | [rebind-r2-before-freeze.json](rebind-r2-before-freeze.json) |
+| `python3 "$P2/evidence/P2-VEGA-PRIMARY-plan/rebind.py"` | 0 | [rebind-r2-digests-run.txt](rebind-r2-digests-run.txt), [rebind-digests.json](rebind-digests.json) |
+| `node "$PLUGIN/tools/render-dod-manifest.mjs" "$P2/implementation.json"` | 0 | [rebind-render.txt](rebind-render.txt) |
+| `node "$PLUGIN/hooks/plan-package.cjs" "$P2"` | 0 | [rebind-freeze.txt](rebind-freeze.txt), [package-freeze.json](package-freeze.json) |
+| `node "$PLUGIN/tools/render-dod-manifest.mjs" "$P2/implementation.json" --check` | 0 | [rebind-render-check.txt](rebind-render-check.txt) |
+| `python3 "$P2/evidence/P2-VEGA-PRIMARY-plan/verify_delta.py"` | 0 | [rebind-verify-delta.txt](rebind-verify-delta.txt) |
+| Schema check (bearing-lite 1.1.7 schemas) | 0 violations in both files | — |
+| `export PATH=$HOME/.local/share/afc-tools/backend-tests/bin:$PATH; bash tools/ci/gate.sh` | 0 | [rebind-gate.txt](rebind-gate.txt) |
+
+`PLUGIN=$HOME/.claude/plugins/cache/bearing-lite/bearing-lite/1.1.7`,
+`P2=docs/plans/2026-10-12-amazon-fantasy-companion-phase-2`. Round-1 rebind
+logs are in `495b9dc`; same-named logs here are round 2.
+
+Candidate digest before: `fd66f4110c70da8a7bd284e8b8ff680cc0d0b9d99ca1fb0d8e0346adc59deda4`.
+Candidate/freeze digest after: `b0579ea01bd696dbb680e3211969bb0788a5c90a6e10726da5851a8ba53947fd`.
+Rebind structural changes: digest fields only (design.md planning-input
+hash, seit hash, candidate digest, two DoD identity values). The Manifest
+HTML is re-rendered and carries the new digest. Reverify: not applicable —
+no compiled-binary claim. Independent review of this round: not_run.
