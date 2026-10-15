@@ -74,17 +74,26 @@ def resolve(profile_id, event_id):
     channel = event_channel(event_id)
     profile = store.get_profile(profile_id) or {}
     pref = (profile.get("settings") or {}).get("providerPref") or {}
+    if not isinstance(pref, dict):
+        pref = {}
+    market = pref.get("localMarket")
     result = {"provider": None, "channel": channel, "route": None,
               "accessBasis": "unknown",
               "inputs": {"installed": False,
-                         "localMarket": pref.get("localMarket")}}
+                         "localMarket": market if isinstance(market, str) else None}}
     if channel is None:
         return result
     overrides = pref.get("appOverrides") or {}
+    if not isinstance(overrides, dict):
+        overrides = {}
+    overrides = {p: on for p, on in overrides.items()
+                 if isinstance(p, str) and type(on) is bool}
     installed = {p for p in _installed_packages(profile_id)
                  if overrides.get(p) is not False}
     installed.update(p for p, on in overrides.items() if on)
-    order = list(pref.get("order") or [])
+    order = pref.get("order")
+    if not isinstance(order, list) or not all(isinstance(p, str) for p in order):
+        order = []
     registry = json.loads(Path(REGISTRY_PATH).read_text())
     candidates = []
     for index, provider in enumerate(registry.get("providers") or []):
@@ -101,7 +110,9 @@ def resolve(profile_id, event_id):
     chosen = min(candidates)[2]
     result.update(provider=chosen["id"], route=_route(chosen))
     result["inputs"]["installed"] = True
-    if chosen["id"] in (pref.get("confirmedAccess") or []):
+    confirmed = pref.get("confirmedAccess")
+    if (isinstance(confirmed, list) and all(isinstance(p, str) for p in confirmed)
+            and chosen["id"] in confirmed):
         result["accessBasis"] = "customerConfirmed"
     return result
 
