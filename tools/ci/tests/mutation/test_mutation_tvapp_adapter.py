@@ -2,9 +2,8 @@
 
 Resource group: host-python-report-fixtures; unique temporary git repo per test.
 tv-app/gradlew is a fixture standing in for :app:pitestDebug: it writes the PIT
-mutations.xml the Android PIT fork would emit (no PIT pin is admitted yet; the
-real run's ANDROID_MUTATION_COMPATIBILITY_GAP is evidenced in P2-A01). No engine,
-network or device.
+mutations.xml; the committed real-pit-shell.xml corpus comes from the admitted
+PIT 1.19.5 / Android plugin 0.2.27 P2-A01 run. No engine, network or device.
 """
 
 import json
@@ -16,8 +15,10 @@ import unittest
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[4]
-SRC = 'tv-app/app/src/main/java/com/afc/control/Control.kt'
-CONTROL = ('package com.afc.control\n\nfun verdict(ok: Boolean): String {\n'
+SRC = 'tv-app/app/src/main/java/com/afc/companion/Shell.kt'
+DEVICE = SRC.replace('Shell.kt', 'MainActivity.kt')
+STUB = SRC.replace('Shell.kt', 'detect/AppDetector.kt')
+CONTROL = ('package com.afc.companion\n\nfun verdict(ok: Boolean): String {\n'
            '    if (ok) return "covered"\n    return "uncovered"\n}\n')
 GRADLEW = '''#!/usr/bin/env bash
 [[ -n "${FIXTURE_GRADLE_FAIL:-}" ]] && { echo "Task 'pitestDebug' not found"; exit 1; }
@@ -28,10 +29,10 @@ cd "$(dirname "$0")/.." && mkdir -p tv-app/app/build/reports/pitest/debug \\
 
 
 def pit(mutants, partial='false'):
-    """PIT mutations XML for Control.kt: [(line, status)]."""
+    """PIT mutations XML for Shell.kt: [(line, status)]."""
     body = ''.join(
         f'<mutation detected="{str(s == "KILLED").lower()}" status="{s}" numberOfTestsRun="1">'
-        f'<sourceFile>Control.kt</sourceFile><mutatedClass>com.afc.control.ControlKt</mutatedClass>'
+        f'<sourceFile>Shell.kt</sourceFile><mutatedClass>com.afc.companion.Shell</mutatedClass>'
         f'<mutatedMethod>verdict</mutatedMethod><lineNumber>{n}</lineNumber>'
         f'<mutator>org.pitest.mutationtest.engine.gregor.mutators.M{i}</mutator></mutation>'
         for i, (n, s) in enumerate(mutants))
@@ -116,6 +117,51 @@ class TvappMutationAdapter(unittest.TestCase):
         self.assertEqual(rc, 0, out)
         self.assertEqual(self.result()['scored_mutants'], 1)
 
+
+    def test_real_pit_partial_report_is_accepted(self):
+        self.candidate({SRC: (REPO / SRC).read_text()})
+        xml = (Path(__file__).parent / 'fixtures/real-pit-shell.xml').read_text()
+        rc, out = self.run_adapter(xml)
+        self.assertEqual(rc, 0, out)
+        self.assertEqual(self.result()['scored_mutants'], 1)
+
+    def test_device_file_is_listed_and_excluded_from_score(self):
+        self.candidate({SRC: CONTROL, DEVICE: CONTROL})
+        xml = pit([(4, 'KILLED')]).replace('</mutations>',
+            pit([(4, 'SURVIVED')]).split('<mutations partial="false">')[1])
+        # The second mutation belongs to the explicitly excluded Android component.
+        before, _, second = xml.partition('</mutation>')
+        xml = before + '</mutation>' + second.replace('Shell', 'MainActivity')
+        rc, out = self.run_adapter(xml)
+        self.assertEqual(rc, 0, out)
+        self.assertEqual(self.result()['scored_mutants'], 1)
+        self.assertEqual(self.result()['excluded'], [
+            {'path': DEVICE, 'reason': 'device-only (DEC-AFC-SD-057)'}])
+        self.assertEqual(self.result()['scored_files'], [SRC])
+
+    def test_zero_mutant_stub_is_listed_and_excluded(self):
+        self.candidate({SRC: CONTROL, STUB: (REPO / STUB).read_text()})
+        rc, out = self.run_adapter(pit([(4, 'KILLED')]))
+        self.assertEqual(rc, 0, out)
+        self.assertEqual(self.result()['excluded'], [
+            {'path': STUB, 'reason': 'stub (AFC-STUB; zero mutants)'}])
+        self.assertIn('zero mutants', self.result()['stub_rule'])
+
+    def test_stub_with_mutants_is_scored(self):
+        self.candidate({SRC: '// AFC-STUB: test implementation\n' + CONTROL})
+        rc, out = self.run_adapter(pit([(5, 'SURVIVED')]))
+        self.assertEqual(rc, 1, out)
+        self.assertEqual(self.result()['excluded'], [])
+        self.assertEqual(self.result()['scored_mutants'], 1)
+
+    def test_unclassified_changed_file_is_scope_gap(self):
+        unknown = SRC.replace('Shell.kt', 'NewLogic.kt')
+        self.candidate({unknown: CONTROL})
+        rc, out = self.run_adapter(pit([(4, 'KILLED')]).replace('Shell', 'NewLogic'))
+        self.assertEqual(rc, 3, out)
+        self.assertIn('MUTATION_SCOPE_GAP: unclassified changed files', out)
+        self.assertEqual(self.result()['unclassified'], [unknown])
+
     def test_missing_report_is_gap(self):
         self.candidate()
         rc, out = self.run_adapter()
@@ -134,14 +180,26 @@ class TvappMutationAdapter(unittest.TestCase):
         self.assertEqual(rc, 3, out)
         self.assertIn('UNRESOLVED', out)
 
-    def test_partial_or_unparseable_report_is_gap(self):
+    def test_partial_true_with_complete_data_is_accepted(self):
         self.candidate()
         rc, out = self.run_adapter(pit([(4, 'KILLED')], partial='true'))
+        self.assertEqual(rc, 0, out)
+        self.assertEqual(self.result()['status'], 'PASS')
+        self.assertEqual(self.result()['scored_mutants'], 1)
+
+    def test_truncated_or_unparseable_report_is_gap(self):
+        self.candidate()
+        for xml in (pit([(4, 'KILLED')], partial='true')[:-12], 'not XML'):
+            with self.subTest(xml=xml):
+                rc, out = self.run_adapter(xml)
+                self.assertEqual(rc, 3, out)
+                self.assertIn('unparseable', out)
+
+    def test_mutation_missing_required_data_is_gap(self):
+        self.candidate()
+        rc, out = self.run_adapter('<mutations partial="true"><mutation status="KILLED"/></mutations>')
         self.assertEqual(rc, 3, out)
-        self.assertIn('not a complete PIT', out)
-        rc, out = self.run_adapter('<mutations><mutation')
-        self.assertEqual(rc, 3, out)
-        self.assertIn('unparseable', out)
+        self.assertIn('lacks file, class or line', out)
 
     def test_unknown_status_is_gap(self):
         self.candidate()
@@ -150,7 +208,7 @@ class TvappMutationAdapter(unittest.TestCase):
         self.assertIn('unknown PIT status', out)
 
     def test_changed_file_without_mutants_is_gap(self):
-        self.candidate({SRC: CONTROL, SRC.replace('Control', 'Other'): 'package com.afc.control\n\nfun o() = 1\n'})
+        self.candidate({SRC: CONTROL, SRC.replace('Shell.kt', 'net/Dto.kt'): 'package com.afc.companion\n\nfun o() = 1\n'})
         rc, out = self.run_adapter(pit([(4, 'KILLED')]))
         self.assertEqual(rc, 3, out)
         self.assertIn('no mutants for changed files', out)

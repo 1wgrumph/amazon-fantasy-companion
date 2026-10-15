@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# CMD-MUTATION-TVAPP: PIT score for changed tv-app/app/src/main Kotlin/Java of the committed candidate.
+# CMD-MUTATION-TVAPP: PIT score for changed host-runnable files in tvapp_scope.json (DEC-AFC-SD-057).
 # Runs :app:pitestDebug on a disposable `git archive` copy; never mutates the checkout.
 # Exit 0 PASS, 1 FAIL, 3 GAP. Extra Gradle flags (e.g. --offline --no-daemon) come from AFC_GRADLE_ARGS.
 set -u
@@ -38,7 +38,8 @@ git archive HEAD "${paths[@]}" | tar -x -C "$work" || exit 3
 # shellcheck disable=SC2086 # AFC_GRADLE_ARGS is a word list by design.
 # The PIT Android plugin needs AGP's legacy variant API; build.gradle.kts applies it only under these flags.
 (cd "$work" && timeout 1500 ./tv-app/gradlew -p tv-app ${AFC_GRADLE_ARGS:-} -Pandroid.newDsl=false \
-    -Pandroid.onlyEnableUnitTestForTheTestedBuildType=false :app:pitestDebug) \
+    -Pandroid.onlyEnableUnitTestForTheTestedBuildType=false \
+    --init-script "$root/tools/ci/mutation/tvapp-pitest.gradle" :app:pitestDebug) \
     > "$out/pitest-run.txt" 2>&1
 rc=$?
 ((rc == 0)) || tail -n 20 "$out/pitest-run.txt"

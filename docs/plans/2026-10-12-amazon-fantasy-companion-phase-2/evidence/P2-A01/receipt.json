@@ -445,5 +445,14 @@
       "F-PIT-PARTIAL: tvapp_evaluate.py treats PIT 1.19.5 partial=\"true\" (coverage-reporting flag) as an incomplete report; candidate tool bug for bug-triager, blocked here by the write set (existing test pins it).",
       "pitestDebug exits 0 when PIT prints usage and writes no report (seen with empty sourceDirs); the wrapper still fails closed because it requires exactly one mutations.xml from a fresh workspace."
     ]
+  },
+  "tvapp_mutation_sd057_bugfix": {
+    "outcome": "CONTRACT_FAILURE",
+    "receipt": "pit-scope-057/receipt.json",
+    "mutation_verdict": "GAP UNRESOLVED: 4 mutants",
+    "scope_decision": "DEC-AFC-SD-057",
+    "tools_exit": 0,
+    "gate_exit": 0,
+    "blocker": "tv-app test writes needed to resolve four persistent ApiClient timeouts; outside packet authority."
   }
 }
