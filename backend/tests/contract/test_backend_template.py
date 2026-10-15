@@ -69,6 +69,17 @@ def test_template_routes_tv_and_link_page_and_bounds_link_attempts():
                a.get("DefaultRouteSettings", {}).get("ThrottlingRateLimit") for a in apis)
 
 
+def test_unknown_routes_reach_the_api_router_for_the_error_envelope():
+    router = document("template.yaml")["Resources"]["ApiFunction"]["Properties"]
+    assert router["Handler"] == "api.handler.lambda_handler"
+    defaults = [event["Properties"] for event in router["Events"].values()
+                if event["Type"] == "HttpApi"
+                and "Path" not in event["Properties"]
+                and "Method" not in event["Properties"]]
+    assert len(defaults) == 1, "Unknown paths need a SAM $default route to ApiFunction"
+    assert defaults[0]["ApiId"] == {"Ref": "HttpApi"}
+
+
 def test_template_uses_ssm_parameter_names_instead_of_embedded_secret_values():
     template = document("template.yaml")
     params = template.get("Parameters", {})
