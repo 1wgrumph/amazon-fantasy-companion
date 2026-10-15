@@ -1,0 +1,71 @@
+gate: spec: PASS checks completed
+gate: docs: PASS checks completed
+.github/workflows/ci.yml: PASS
+...............fatal: not a git repository (or any parent up to mount point /)
+Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+........fatal: not a git repository (or any parent up to mount point /)
+Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+......................................
+----------------------------------------------------------------------
+Ran 61 tests in 35.390s
+
+OK
+mutation adapter exit=3: ['GAP REPORT_INCOMPLETE: mutmut stats absent']
+mutation adapter exit=0: ['PASS mutation score 100.00% (threshold 70%)']
+coverage adapter exit=0: ['PASS changed-line coverage 100% (threshold 90%)']
+coverage adapter exit=3: ['GAP REPORT_INCOMPLETE: unmapped changed files: backend/src/control.py']
+gate: hygiene: PASS checks completed
+gate: tvapp: PASS no tv-app/ tree
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.2, pluggy-1.6.0
+rootdir: $HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b03/backend
+configfile: pyproject.toml
+plugins: cov-7.1.0, anyio-4.13.0, asyncio-1.3.0, mock-3.15.1, typeguard-4.4.4
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 277 items
+
+backend/tests/unit/lineup/test_active_lineup.py ...........              [  3%]
+backend/tests/unit/lineup/test_lineup_rejections.py .................... [ 11%]
+........................                                                 [ 19%]
+backend/tests/unit/lineup/test_manual_source.py ..................       [ 26%]
+backend/tests/unit/lineup/test_presets.py .............................. [ 37%]
+                                                                         [ 37%]
+backend/tests/unit/lineup/test_yahoo_client.py ..................        [ 43%]
+backend/tests/unit/test_bug_auth002.py ..                                [ 44%]
+backend/tests/unit/test_device_auth.py ..............................    [ 55%]
+backend/tests/unit/test_device_auth_units.py ..........                  [ 58%]
+backend/tests/unit/test_pipeline_and_stubs.py ............               [ 63%]
+backend/tests/unit/test_router.py ...................................... [ 76%]
+....................                                                     [ 84%]
+backend/tests/unit/test_store.py .......                                 [ 86%]
+backend/tests/contract/test_api_contract.py ........................     [ 95%]
+backend/tests/contract/test_backend_template.py ..........               [ 98%]
+backend/tests/contract/test_template_iam.py ...                          [100%]
+
+=============================== warnings summary ===============================
+tests/unit/lineup/test_active_lineup.py: 117 warnings
+tests/unit/lineup/test_lineup_rejections.py: 20 warnings
+tests/unit/test_bug_auth002.py: 42 warnings
+tests/unit/test_device_auth.py: 324 warnings
+tests/unit/test_device_auth_units.py: 133 warnings
+tests/unit/test_pipeline_and_stubs.py: 80 warnings
+tests/unit/test_router.py: 870 warnings
+tests/unit/test_store.py: 92 warnings
+tests/contract/test_api_contract.py: 109 warnings
+  $HOME/.local/lib/python3.12/site-packages/botocore/auth.py:424: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    datetime_now = datetime.datetime.utcnow()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+============================= slowest 10 durations =============================
+0.45s setup    tests/unit/lineup/test_active_lineup.py::test_no_stored_lineup_returns_none
+0.30s setup    tests/unit/test_router.py::test_profile_reads_defaults_and_writes_with_revision_checks
+0.27s setup    tests/unit/test_router.py::test_profile_envelope_one_byte_over_64kib_is_rejected
+0.26s setup    tests/unit/test_router.py::test_invalid_profile_updates_change_nothing[body3]
+0.26s setup    tests/unit/test_router.py::test_invalid_profile_updates_change_nothing[body6]
+0.26s setup    tests/unit/test_router.py::test_valid_routing_outcomes_reach_the_resolver_stub[playbackDenied]
+0.26s setup    tests/unit/test_router.py::test_every_settings_attribute_is_accepted[providerPref]
+0.25s setup    tests/unit/test_router.py::test_valid_routing_outcomes_reach_the_resolver_stub[searchOpened]
+0.25s setup    tests/unit/test_device_auth_units.py::test_code_is_pending_until_the_expiry_second
+0.25s setup    tests/unit/test_router.py::test_every_settings_attribute_is_accepted[switchingConfirm]
+===================== 277 passed, 1787 warnings in 19.71s ======================
+gate: backend: PASS checks completed

@@ -14,12 +14,10 @@ button { margin-top: 1.5rem; }
 </head>
 <body>
 <h1>Link your TV</h1>
-<p>Enter the code shown on your TV and the link passphrase.</p>
+<p>Enter the code shown on your TV.</p>
 <form id="link-form" method="post" action="/v1/link/confirm">
 <label for="code">TV code</label>
 <input id="code" name="code" autocomplete="off" autocapitalize="characters" maxlength="16" required>
-<label for="passphrase">Link passphrase</label>
-<input id="passphrase" name="passphrase" type="password" autocomplete="current-password" required>
 <label for="profileId">Profile</label>
 <input id="profileId" name="profileId" value="owner" pattern="[A-Za-z0-9_-]{1,64}" required>
 <button type="submit">Link TV</button>

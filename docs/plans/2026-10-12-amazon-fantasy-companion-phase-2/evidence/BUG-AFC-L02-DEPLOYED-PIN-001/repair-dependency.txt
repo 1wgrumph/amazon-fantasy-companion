@@ -1,0 +1,72 @@
+Installed standard-library input contract (no DNS/network execution)
+
+def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                      source_address=None, *, all_errors=False):
+    """Connect to *address* and return the socket object.
+
+    Convenience function.  Connect to *address* (a 2-tuple ``(host,
+    port)``) and return the socket object.  Passing the optional
+    *timeout* parameter will set the timeout on the socket instance
+    before attempting to connect.  If no *timeout* is supplied, the
+    global default timeout setting returned by :func:`getdefaulttimeout`
+    is used.  If *source_address* is set it must be a tuple of (host, port)
+    for the socket to bind as a source address before making the connection.
+    A host of '' or port 0 tells the OS to use the default. When a connection
+    cannot be created, raises the last error if *all_errors* is False,
+    and an ExceptionGroup of all errors if *all_errors* is True.
+    """
+
+    host, port = address
+    exceptions = []
+    for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+        af, socktype, proto, canonname, sa = res
+        sock = None
+        try:
+            sock = socket(af, socktype, proto)
+            if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                sock.settimeout(timeout)
+            if source_address:
+                sock.bind(source_address)
+            sock.connect(sa)
+            # Break explicitly a reference cycle
+            exceptions.clear()
+            return sock
+
+        except error as exc:
+            if not all_errors:
+                exceptions.clear()  # raise only the last error
+            exceptions.append(exc)
+            if sock is not None:
+                sock.close()
+
+    if len(exceptions):
+        try:
+            if not all_errors:
+                raise exceptions[0]
+            raise ExceptionGroup("create_connection failed", exceptions)
+        finally:
+            # Break explicitly a reference cycle
+            exceptions.clear()
+    else:
+        raise error("getaddrinfo returns an empty list")
+
+sendto(data[, flags], address) -> count
+
+Like send(data, flags) but allows specifying the destination address.
+For IP sockets, the address is a pair (hostaddr, port).
+
+sendmsg(buffers[, ancdata[, flags[, address]]]) -> count
+
+Send normal and ancillary data to the socket, gathering the
+non-ancillary data from a series of buffers and concatenating it into
+a single message.  The buffers argument specifies the non-ancillary
+data as an iterable of bytes-like objects (e.g. bytes objects).
+The ancdata argument specifies the ancillary data (control messages)
+as an iterable of zero or more tuples (cmsg_level, cmsg_type,
+cmsg_data), where cmsg_level and cmsg_type are integers specifying the
+protocol level and protocol-specific type respectively, and cmsg_data
+is a bytes-like object holding the associated data.  The flags
+argument defaults to 0 and has the same meaning as for send().  If
+address is supplied and not None, it sets a destination address for
+the message.  The return value is the number of bytes of non-ancillary
+data sent.

@@ -1,0 +1,60 @@
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+___ test_stubs_name_their_owning_slice[feed_ingest-lambda_handler-2-P2-B02] ____
+
+api = namespace(request=<function api.<locals>.request at 0x7f16767c6840>, table=<function api.<locals>.table at 0x7f16767c6...inksTable': 'expiresAt'}, passphrase='WUcCL3DVbrQUTBfMmmlazA', ssm_reads=[], secret_names=['/afc/dev/link-passphrase'])
+module = 'feed_ingest', function = 'lambda_handler', arity = 2
+slice_id = 'P2-B02'
+
+    @pytest.mark.parametrize("module,function,arity,slice_id", STUBS)
+    def test_stubs_name_their_owning_slice(api, module, function, arity, slice_id):
+        target = getattr(importlib.import_module(module), function)
+>       with pytest.raises(NotImplementedError) as error:
+E       Failed: DID NOT RAISE <class 'NotImplementedError'>
+
+backend/tests/unit/test_pipeline_and_stubs.py:68: Failed
+_ test_future_backend_modules_have_explicit_unimplemented_public_interfaces[feed_ingest] _
+
+module = 'feed_ingest'
+
+    @pytest.mark.parametrize("module", ["feed_ingest", "matcher", "alert_policy",
+                                         "provider_resolver", "panel"])
+    def test_future_backend_modules_have_explicit_unimplemented_public_interfaces(module):
+        files = list((BACKEND / "src" / module).rglob("*.py"))
+        assert files, f"Backend must contain the future {module} interface"
+        public_stubs = []
+        for file in files:
+            source = file.read_text()
+            tree = ast.parse(source)
+            for node in tree.body:
+                if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)) and not node.name.startswith("_"):
+                    raises = [x for x in ast.walk(node) if isinstance(x, ast.Raise)]
+                    if "AFC-STUB" in ast.get_source_segment(source, node) and any(
+                        isinstance(x.exc, ast.Call) and isinstance(x.exc.func, ast.Name) and
+                        x.exc.func.id == "NotImplementedError" for x in raises):
+                        public_stubs.append(node.name)
+>       assert public_stubs, "Future behavior must remain explicit AFC-STUB/NotImplementedError"
+E       AssertionError: Future behavior must remain explicit AFC-STUB/NotImplementedError
+E       assert []
+
+backend/tests/contract/test_backend_template.py:104: AssertionError
+=============================== warnings summary ===============================
+tests/unit/test_pipeline_and_stubs.py::test_stubs_name_their_owning_slice[feed_ingest-lambda_handler-2-P2-B02]
+tests/unit/test_pipeline_and_stubs.py::test_stubs_name_their_owning_slice[feed_ingest-lambda_handler-2-P2-B02]
+tests/unit/test_pipeline_and_stubs.py::test_stubs_name_their_owning_slice[feed_ingest-lambda_handler-2-P2-B02]
+tests/unit/test_pipeline_and_stubs.py::test_stubs_name_their_owning_slice[feed_ingest-lambda_handler-2-P2-B02]
+tests/unit/test_pipeline_and_stubs.py::test_stubs_name_their_owning_slice[feed_ingest-lambda_handler-2-P2-B02]
+tests/unit/test_pipeline_and_stubs.py::test_stubs_name_their_owning_slice[feed_ingest-lambda_handler-2-P2-B02]
+tests/unit/test_pipeline_and_stubs.py::test_stubs_name_their_owning_slice[feed_ingest-lambda_handler-2-P2-B02]
+  $HOME/.local/lib/python3.12/site-packages/botocore/auth.py:424: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    datetime_now = datetime.datetime.utcnow()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+============================= slowest 10 durations =============================
+0.58s setup    tests/unit/test_pipeline_and_stubs.py::test_stubs_name_their_owning_slice[feed_ingest-lambda_handler-2-P2-B02]
+
+(5 durations < 0.005s hidden.  Use -vv to show these durations.)
+=========================== short test summary info ============================
+FAILED backend/tests/unit/test_pipeline_and_stubs.py::test_stubs_name_their_owning_slice[feed_ingest-lambda_handler-2-P2-B02]
+FAILED backend/tests/contract/test_backend_template.py::test_future_backend_modules_have_explicit_unimplemented_public_interfaces[feed_ingest]
+2 failed, 7 warnings in 0.63s
