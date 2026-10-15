@@ -1,5 +1,5 @@
 {
- "outcome": "REPAIRABLE_FAILURE",
+ "outcome": "PASS",
  "slice_id": "P2-B02",
  "issue": 30,
  "milestone": "M05",
@@ -8,7 +8,7 @@
  "authority_id": "AUTH-AFC-2026-10-12-P2-001",
  "branch": "afc/p2-b02",
  "base": "d13f8b1",
- "candidate_binding": "Measured on local commit 0fd830e (same product and test files as the containing commit; this receipt and evidence were added by amend)",
+ "candidate_binding": "f5-completion/measured-candidate.json binds both formal bases to source candidate 8e338392ac1782ff31096dd0a1b83ef711bf1b7c; the closeout commit is evidence only",
  "route": "Claude Code / Claude Opus 5.5 / medium",
  "bug_route": "not-a-bug: the 62 failures were the intended P2-B02T red suite",
  "review_capabilities": {
@@ -85,14 +85,14 @@
   "ingest.py": "validate, read prior rows by GetItem, put only new/changed events (in place by key)",
   "replay.py": "index.json game/schema check, sha256 of every indexed file, latest summary by seq, source=replay",
   "monitoring.py": "one labeled decision per game; basis outside observed-playback/profile-assumption raises ValueError",
-  "__init__.py": "lambda_handler accepts only the scheduler event; poll() reads scoreboard then each in-progress game's summary from https://site.api.espn.com only, 4 MiB bound, 10 s timeout"
+  "__init__.py": "Poll at configured interval within Lambda budget; select games by profile starters/favorites, isolate per-game failures, replay after three consecutive failures, refuse redirects and retain request bounds.",
+  "manual.py": "Retains the validated ESPN roster team on each selected manual starter; [A-Z0-9]{2,4} shape only."
  },
- "new_tests": "backend/tests/unit/feed_ingest/test_feed_edges.py (32 cases: offline polling with urlopen replaced, allowlist, size bound, replay index/hash/seq edges, participants, monitoring labels)",
+ "new_tests": "F5 completion adds 20 cases (19 team-contract cases plus captured nonleader polling); 520 backend tests pass.",
  "remaining_risks": [
-  "One captured play (401872986, id 40187298640) has no wallclock; replay leaves it out instead of inventing an event time. Live validation rejects such a poll whole, per the frozen test.",
-  "The handler polls every in-progress game; profile relevance at poll time relies on IngestScheduleState gating. monitored_decisions is implemented but not yet wired into the handler (no profile listing exists in the store or IAM).",
-  "The feed_fail_limit fallback from live polling to replay is not wired into the handler; replay.load_events is ready for the caller that owns it.",
-  "Live timing and live correction sequences remain with P2-X05 PR 2 and P2-L03; corrections are proven on a derived variant."
+  "No network/AWS/deployment, push/PR, branch change or production DB mutation.",
+  "Existing stored manual rows without team are unchanged; rebuilding through manual.build supplies the retained team.",
+  "Author verification does not create a new independent-review or deployed acceptance verdict."
  ],
  "developer_feedback": {
   "observations": [
@@ -111,13 +111,13 @@
   ]
  },
  "repair": {
-  "outcome": "REPAIRABLE_FAILURE",
+  "outcome": "PASS",
   "profile": "bug-triager",
   "route": "Codex CLI / GPT-6.1 Sol / high",
   "baseline": "0d65797a82d3d899be2055706fac555f7642a77a",
   "round": "single authorized independent-review repair round",
-  "next_action": "Await exact write-set amendment for existing unfrozen test expectation, then run red regression, team retention, green, verifiers, gate, coverage and mutation in the same repair round",
-  "authority": "Owner P2-B02 F1\u2013F6 repair packet, including backend-template lease for read-only relevance access",
+  "next_action": "Return committed F5 evidence to orchestrator for deterministic closeout of the same repair round; no new review",
+  "authority": "Current owner F5 continuation extends the same repair round to manual team identity and existing NON-frozen tests; no new grants or frozen-file edits",
   "requirements": [
    "AFC-PR-008",
    "AFC-PR-011",
@@ -147,7 +147,9 @@
    "Only F1 changes a frozen test file; corrected its sha256 and added the exact owner note, leaving historical red inventory and other frozen hashes unchanged.",
    "Corrected the unfrozen implementer edge test that asserted the same dropped-play bug.",
    "Cached opener factory replaces requested module-level _OPENER assignment because formal mutation rejects all new module-level executable assignments (PYTHON_NONFUNCTION_MUTATION_GAP). Redirect behavior and transport bounds are preserved.",
-   "Profiles Scan plus existing Lineups GetItem is narrower than scanning both tables; no write grants or index grants added."
+   "Profiles Scan plus existing Lineups GetItem is narrower than scanning both tables; no write grants or index grants added.",
+   "Owner replaced NFL membership validation with shape-only validation; SYN and digit-containing shapes remain accepted.",
+   "Owner includes existing non-frozen test updates. Updated valid roster fixtures to carry teams and exact output expectation to retain team without weakening their original assertions."
   ],
   "profile_shape": "fantasySelections.favoriteTeamIds for favorite ESPN team ids; lineup starters use athlete_id for ESPN ids or team for Yahoo team abbreviation. Historical string placeholders are treated as no favorite selections. Scoreboard leaders supply inline athlete ids; team-bearing starters match their NFL team.",
   "supersedes_historical_remaining_risks": [
@@ -320,6 +322,122 @@
     "product_changed": false,
     "baseline_command_exit_code": 0,
     "verification": "No repaired-candidate gate, coverage, mutation or red/green claim; stopped before product edits under explicit packet stop rule"
+   },
+   {
+    "finding": "F5",
+    "status": "PASS",
+    "baseline": "8a4808e016dbf1538fcbba2419bd65d980300251",
+    "candidate_ref": "8e338392ac1782ff31096dd0a1b83ef711bf1b7c",
+    "round": "Continuation of the same P2-B02 review/repair round; no additional review",
+    "authority": "Current owner packet permits lineup/manual.py, feed_ingest, new and existing NON-frozen lineup/feed_ingest tests and P2-B02 evidence; frozen B02T/B03T stay byte-identical",
+    "fix": "Validate every roster team as a string matching [A-Z0-9]{2,4}; retain the roster team on each selected starter. Existing ingest starter-team relevance now monitors manual nonleaders without fetching irrelevant games. No NFL membership allowlist or new IAM grants.",
+    "origin": "P2-B03 manual builder dropped team while production scoreboards expose leaders only",
+    "missed_detection": "Frozen manual tests assert names/slots/scoring without team retention; prior production relevance positives covered a leader and a team-bearing Yahoo starter",
+    "requirements": [
+     "AFC-PR-006",
+     "AFC-PR-008",
+     "AFC-PR-011"
+    ],
+    "regression": "Captured Darius Cooper (4715355), PHI, game 401872981, absent from scoreboard leaders: production poll through persisted manual lineup fetches the relevant game only",
+    "red_then_green": {
+     "evidence": "f5-completion/red-green.json",
+     "same_test_file_hashes": true,
+     "red_exit_code": 1,
+     "red_result": "20 failed / 1 passed on pinned baseline; irrelevant-game case passes",
+     "green_exit_code": 0,
+     "green_result": "21 passed"
+    },
+    "frozen_verifiers": {
+     "P2-B02T": {
+      "exit_code": 0,
+      "frozen_files": 8,
+      "output": "f5-completion/P2-B02T-verify.txt"
+     },
+     "P2-B03T": {
+      "exit_code": 0,
+      "frozen_files": 11,
+      "output": "f5-completion/P2-B03T-verify.txt"
+     }
+    },
+    "gate": {
+     "exit_code": 0,
+     "backend_tests_passed": 520,
+     "output": "f5-completion/gate.txt"
+    },
+    "formal_results": {
+     "b02": {
+      "base": "d13f8b1",
+      "coverage": {
+       "status": "PASS",
+       "percent": 99,
+       "changed_lines": 226,
+       "threshold": 90,
+       "report": "f5-completion/coverage-b02/coverage-result.json"
+      },
+      "mutation": {
+       "status": "PASS",
+       "percent": 91.74418604651163,
+       "scored_mutants": 860,
+       "threshold": 70,
+       "native_total": 1360,
+       "unresolved": 0,
+       "report": "f5-completion/mutation-b02/mutation-result.json"
+      }
+     },
+     "b03": {
+      "base": "1ac5846",
+      "coverage": {
+       "status": "PASS",
+       "percent": 99,
+       "changed_lines": 378,
+       "threshold": 90,
+       "report": "f5-completion/coverage-b03/coverage-result.json"
+      },
+      "mutation": {
+       "status": "PASS",
+       "percent": 89.42235558889723,
+       "scored_mutants": 1333,
+       "threshold": 70,
+       "native_total": 1794,
+       "unresolved": 0,
+       "report": "f5-completion/mutation-b03/mutation-result.json"
+      }
+     }
+    },
+    "lineup_only_projection": {
+     "base": "1ac5846",
+     "candidate": "8e338392ac1782ff31096dd0a1b83ef711bf1b7c",
+     "coverage_per_lineup_file": {
+      "backend/src/lineup/__init__.py": 100.0,
+      "backend/src/lineup/presets.py": 100.0,
+      "backend/src/lineup/yahoo.py": 100.0,
+      "backend/src/lineup/manual.py": 100.0
+     },
+     "mutation_lineup_only": {
+      "percent": 83.71278458844134,
+      "native_status_counts": {
+       "killed": 478,
+       "survived": 93
+      },
+      "threshold": 70,
+      "basis": "Projection of the complete native B03 inventory onto lineup.*; all lineup functions are introduced or changed relative to 1ac5846. The formal full-scope adapter verdict is recorded separately."
+     }
+    },
+    "command_receipt": "f5-completion/commands.json",
+    "measured_candidate_binding": "f5-completion/measured-candidate.json",
+    "scope_corrections": [
+     "Owner replaced NFL membership validation with shape-only validation; SYN and digit-containing shapes remain accepted.",
+     "Owner includes existing non-frozen test updates. Updated valid roster fixtures to carry teams and exact output expectation to retain team without weakening their original assertions."
+    ],
+    "iam": "No new grants; backend/template.yaml unchanged",
+    "bran": "unavailable: no native policy; ordinary repository discovery",
+    "review": "Author diagnostics only; parent independent-review finding repaired in the same round. No new OCR/review run.",
+    "reverify": "not_applicable: Python source and data; no compiled-binary claim",
+    "limitations": [
+     "No network/AWS/deployment, push/PR, branch change or production DB mutation.",
+     "Existing stored manual rows without team are unchanged; rebuilding through manual.build supplies the retained team."
+    ],
+    "unmet": []
    }
   ],
   "commands": [
@@ -396,28 +514,20 @@
     "evidence": "repair-gate.txt"
    }
   ],
-  "candidate_ref": "13c5892d588230a7df9df9ddf0fcb3d173300ee6",
-  "candidate_binding": "Formal coverage and mutation measured committed candidate 13c5892d588230a7df9df9ddf0fcb3d173300ee6; closeout commit changes evidence only. repair-candidate-binding.json freezes all 12 changed backend paths.",
-  "stop_rule": "A fix needs a path outside authority: backend/src/lineup/manual.py and associated lineup test / input-output-contract authority.",
+  "candidate_ref": "8e338392ac1782ff31096dd0a1b83ef711bf1b7c",
+  "candidate_binding": "f5-completion/measured-candidate.json binds both formal bases to source candidate 8e338392ac1782ff31096dd0a1b83ef711bf1b7c; the closeout commit is evidence only",
+  "stop_rule": "All F5 packet objectives 1-5 met",
   "completed_findings": [
    "F1",
    "F2",
    "F3",
    "F4",
+   "F5",
    "F6"
   ],
-  "partial_findings": [
-   "F5"
-  ],
-  "outstanding_obligations": [
-   "Complete selected-manual-player relevance for players absent from scoreboard leaders; the existing manual builder discards NFL team even when the roster input carries it.",
-   "Obtain authority for backend/src/lineup/manual.py and affected lineup tests / any frozen-contract correction, or an explicitly approved alternative data source. No additional IAM grant is required.",
-   "Add the positive nonleader production-path regression, repair it, and rerun required checks on the resulting candidate."
-  ],
-  "blocker_evidence": "relevance-contract-gap.json and relevance-contract-gap.py",
-  "blocker_origin": "B03 manual lineup output drops NFL team; B02 relevance adapter only has scoreboard leaders and team-bearing starters. The production positive case is not representable with the current manual-starter shape.",
-  "blocker_escape": "Frozen monitoring tests supply full boxscore athlete sets directly to the helper, while the production scoreboard carries only leaders. New positive integration tests covered a leader and a team-bearing Yahoo starter, leaving a selected manual nonleader untested.",
-  "formal_gate_status": "All assigned deterministic gates PASS; this does not close the reproduced F5 semantic gap or full AFC-PR-008.",
+  "partial_findings": [],
+  "outstanding_obligations": [],
+  "formal_gate_status": "PASS: current F5 packet deterministic checks on committed candidate; author evidence, not independent assurance",
   "unperformed": [
    "AWS/network/deployment/device/live-feed checks prohibited by packet",
    "No new independent review or OCR run in this Implementer repair session",
@@ -427,28 +537,80 @@
   "tooling_corrections": [
    "Commit attempt 1: backend 500 PASS, hygiene rejected trailing whitespace in captured failure logs; normalized evidence.",
    "Commit attempt 2: backend 500 PASS, hygiene rejected local paths in the captured hook log; sanitized all evidence and checked paths before staging.",
-   "Candidate commit attempt 3: hooks PASS; Codex author/committer; no Co-Authored-By."
+   "Candidate commit attempt 3: hooks PASS; Codex author/committer; no Co-Authored-By.",
+   "F5 closeout attempt 1: 520 backend tests PASS; hygiene caught an absolute XML source path. Replaced it with relative ., preserved native counters/source binding and reran both canonical coverage evaluations before retry."
   ],
   "formal_results": {
-   "coverage": {
-    "status": "PASS",
-    "percent": 99,
-    "changed_lines": 217,
-    "threshold": 90,
-    "report": "repair-coverage/coverage-result.json"
+   "b02": {
+    "base": "d13f8b1",
+    "coverage": {
+     "status": "PASS",
+     "percent": 99,
+     "changed_lines": 226,
+     "threshold": 90,
+     "report": "f5-completion/coverage-b02/coverage-result.json"
+    },
+    "mutation": {
+     "status": "PASS",
+     "percent": 91.74418604651163,
+     "scored_mutants": 860,
+     "threshold": 70,
+     "native_total": 1360,
+     "unresolved": 0,
+     "report": "f5-completion/mutation-b02/mutation-result.json"
+    }
    },
-   "mutation": {
-    "status": "PASS",
-    "score": 0.937007874015748,
-    "scored_mutants": 762,
-    "killed_scored": 714,
-    "threshold": 0.7,
-    "native_total": 1223,
-    "timeouts": 0,
-    "report": "repair-mutation/mutation-result.json"
+   "b03": {
+    "base": "1ac5846",
+    "coverage": {
+     "status": "PASS",
+     "percent": 99,
+     "changed_lines": 378,
+     "threshold": 90,
+     "report": "f5-completion/coverage-b03/coverage-result.json"
+    },
+    "mutation": {
+     "status": "PASS",
+     "percent": 89.42235558889723,
+     "scored_mutants": 1333,
+     "threshold": 70,
+     "native_total": 1794,
+     "unresolved": 0,
+     "report": "f5-completion/mutation-b03/mutation-result.json"
+    }
    }
   },
   "acceptance": [
+   {
+    "objective": 1,
+    "status": "PASS",
+    "detail": "Roster team retained; missing/non-string/malformed teams rejected; shape-only synthetic acceptance and frozen B03 compatibility proven."
+   },
+   {
+    "objective": 2,
+    "status": "PASS",
+    "detail": "Existing ingest team relevance monitors manually selected nonleaders and skips irrelevant games."
+   },
+   {
+    "objective": 3,
+    "status": "PASS",
+    "detail": "Same tests red on 8a4808e (20 fail / 1 pass), green on repair (21 pass); irrelevant-game case remains green."
+   },
+   {
+    "objective": 4,
+    "status": "PASS",
+    "detail": "Both frozen verifiers exit 0, full gate exits 0 (520 backend tests), formal coverage 99% at both bases, mutation 91.74% B02 / 89.42% B03; lineup-only 100% coverage and 83.71% native mutation projection."
+   },
+   {
+    "objective": 5,
+    "status": "PASS",
+    "detail": "This F5 repair row appended; earlier partial/contract-failure rows remain historical."
+   }
+  ],
+  "closeout": "Containing closeout commit changes P2-B02 evidence only; backend tree and all measured source/test digests remain identical.",
+  "f5_team_contract_attempt": "f5-team-contract/result.json",
+  "f5_completion": "f5-completion/measured-candidate.json",
+  "historical_acceptance": [
    {
     "objective": 1,
     "status": "PARTIAL",
@@ -480,7 +642,9 @@
     "detail": "This receipt includes finding/fix/test/evidence/status table and explicit unresolved F5 scope."
    }
   ],
-  "closeout": "Containing commit is evidence only; all backend hashes match measured source candidate 13c5892d588230a7df9df9ddf0fcb3d173300ee6. No source work after contract stop.",
-  "f5_team_contract_attempt": "f5-team-contract/result.json"
- }
+  "historical_blocker_evidence": "relevance-contract-gap.json and relevance-contract-gap.py",
+  "historical_blocker_origin": "B03 manual lineup output drops NFL team; B02 relevance adapter only has scoreboard leaders and team-bearing starters. The production positive case is not representable with the current manual-starter shape.",
+  "historical_blocker_escape": "Frozen monitoring tests supply full boxscore athlete sets directly to the helper, while the production scoreboard carries only leaders. New positive integration tests covered a leader and a team-bearing Yahoo starter, leaving a selected manual nonleader untested."
+ },
+ "latest_repair": "repair.repair_table[-1]: F5 completion; previous rows and initial commands are historical"
 }

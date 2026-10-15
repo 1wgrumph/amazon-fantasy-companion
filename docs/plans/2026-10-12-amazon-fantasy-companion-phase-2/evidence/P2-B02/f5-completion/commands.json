@@ -30,6 +30,82 @@
       "exit_code": 0,
       "result": "520 passed; all five areas PASS",
       "output": "gate.txt"
+    },
+    {
+      "id": "coverage-b02",
+      "command": "PATH=$HOME/.local/share/afc-tools/backend-tests/bin:$PATH PYTHONDONTWRITEBYTECODE=1 timeout 1500 bash tools/ci/coverage/backend.sh d13f8b1 <P2-B02>/f5-completion/coverage-b02",
+      "exit_code": 0,
+      "result": "changed-line coverage 99% (threshold 90%)",
+      "report": "coverage-b02/coverage-result.json",
+      "output": "coverage-b02.txt",
+      "native_measurement": "Same committed 8e33839 source and native coverage run; denominator evaluated separately per formal base"
+    },
+    {
+      "id": "coverage-b03",
+      "command": "PATH=$HOME/.local/share/afc-tools/backend-tests/bin:$PATH python3 tools/ci/coverage/evaluate.py 1ac5846 <P2-B02>/f5-completion/coverage-b02/coverage.xml <P2-B02>/f5-completion/coverage-b03",
+      "exit_code": 0,
+      "result": "changed-line coverage 99% (threshold 90%)",
+      "report": "coverage-b03/coverage-result.json",
+      "output": "coverage-b03-portable.txt",
+      "native_measurement": "Same committed 8e33839 source and native coverage run; denominator evaluated separately per formal base"
+    },
+    {
+      "id": "coverage-b02-portable",
+      "command": "PATH=$HOME/.local/share/afc-tools/backend-tests/bin:$PATH python3 tools/ci/coverage/evaluate.py d13f8b1 <P2-B02>/f5-completion/coverage-b02/coverage.xml <P2-B02>/f5-completion/coverage-b02",
+      "exit_code": 0,
+      "output": "coverage-b02-portable.txt",
+      "result": "PASS 99%; sanitized source prefix, original measurement and source binding preserved"
+    },
+    {
+      "id": "mutation-b02",
+      "command": "PATH=$HOME/.local/share/afc-tools/mutmut-backend/bin:$PATH PYTHONDONTWRITEBYTECODE=1 timeout 1500 bash tools/ci/mutation/backend.sh d13f8b1 <P2-B02>/f5-completion/mutation-b02",
+      "exit_code": 0,
+      "result": "mutation score 91.74% (threshold 70%)",
+      "report": "mutation-b02/mutation-result.json",
+      "output": "mutation-b02.txt"
+    },
+    {
+      "id": "mutation-b03",
+      "command": "PATH=$HOME/.local/share/afc-tools/mutmut-backend/bin:$PATH PYTHONDONTWRITEBYTECODE=1 timeout 1500 bash tools/ci/mutation/backend.sh 1ac5846 <P2-B02>/f5-completion/mutation-b03",
+      "exit_code": 0,
+      "result": "PASS mutation score 89.42% (threshold 70%)",
+      "report": "mutation-b03/mutation-result.json",
+      "output": "mutation-b03.txt"
+    },
+    {
+      "id": "mutation-b02-portable",
+      "command": "python3 tools/ci/mutation/evaluate.py <P2-B02>/f5-completion/mutation-b02 <changed-Python-file-list> d13f8b1 0",
+      "exit_code": 0,
+      "output": "mutation-b02-portable.txt",
+      "result": "PASS; log source prefixes sanitized; native stats and complete mutant inventory preserved"
+    },
+    {
+      "id": "mutation-b03-portable",
+      "command": "python3 tools/ci/mutation/evaluate.py <P2-B02>/f5-completion/mutation-b03 <changed-Python-file-list> 1ac5846 0",
+      "exit_code": 0,
+      "output": "mutation-b03-portable.txt",
+      "result": "PASS; log source prefixes sanitized; native stats and complete mutant inventory preserved"
+    },
+    {
+      "id": "candidate-commit",
+      "command": "GIT_AUTHOR_NAME=Codex GIT_AUTHOR_EMAIL=<Codex author email> GIT_COMMITTER_NAME=Codex GIT_COMMITTER_EMAIL=<Codex author email> PATH=$HOME/.local/share/afc-tools/backend-tests/bin:$PATH PYTHONDONTWRITEBYTECODE=1 timeout 1500 git commit -m \"fix: retain manual starter teams for feed relevance\"",
+      "exit_code": 0,
+      "result": "8e33839; hooks on; no Co-Authored-By",
+      "output": "candidate-commit.txt"
+    },
+    {
+      "id": "path-audit",
+      "command": "Assert git diff --name-only 8a4808e plus untracked paths stays inside current packet write set; verify frozen SHA256 and unchanged measured backend tree",
+      "exit_code": 0,
+      "output": "path-audit.json"
+    },
+    {
+      "id": "closeout-commit-attempt1",
+      "command": "git commit with Codex author env and hooks enabled",
+      "exit_code": 1,
+      "output": "closeout-commit-attempt1.txt",
+      "result": "520 backend tests PASS; hygiene rejected absolute XML source path. Corrected to relative . and reran both canonical coverage evaluations before retry.",
+      "BUG_ROUTE": "not-a-bug: artifact hygiene correction inside authorized repair evidence; no product failure or new triage workflow"
     }
   ]
 }
