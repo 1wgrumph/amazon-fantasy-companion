@@ -85,12 +85,6 @@ Resources:
             - Effect: Allow
               Action: [dynamodb:GetItem]
               Resource: [!GetAtt PanelsTable.Arn]
-        - Statement:
-            - Effect: Allow
-              Action: [ssm:GetParameter]
-              Resource:
-                - !Sub arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:parameter${YahooClientSecretParameter}
-                - !Sub arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:parameter${YahooTokenParameter}
       Events:
         DefaultRoute: {Type: HttpApi, Properties: {ApiId: !Ref HttpApi}}
         LinkIssue: {Type: HttpApi, Properties: {ApiId: !Ref HttpApi, Method: POST, Path: /v1/link}}
