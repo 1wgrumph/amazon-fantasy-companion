@@ -58,8 +58,7 @@ def test_template_routes_tv_and_link_page_and_bounds_link_attempts():
                v["Properties"].get("Path", "$default"))
               for v in events.values() if v["Type"] == "HttpApi"]
     assert routes
-    assert any(method == "ANY" and path in {"$default", "/{proxy+}"}
-               for method, path in routes) or {("POST", "/v1/link"),
+    assert {("POST", "/v1/link"),
                ("GET", "/v1/link"), ("POST", "/v1/link/confirm"),
                ("GET", "/link"), ("GET", "/v1/profile"), ("PUT", "/v1/profile"),
                ("GET", "/v1/alerts"), ("GET", "/v1/panel"), ("GET", "/v1/providers"),
