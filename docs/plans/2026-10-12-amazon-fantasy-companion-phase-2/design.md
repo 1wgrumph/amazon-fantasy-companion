@@ -165,7 +165,9 @@ verifies a route (AFC-PR-022).
 The backend resolver (DES-AFC-P2-RESOLVE) returns a route; `WatchLauncher`
 only executes it. It honors switching confirmation (AFC-PR-035): when
 confirmation is on, a confirm dialog precedes launch. Launch uses only the
-registry's intent or URI for the provider (CONTRACT-AFC-P2-PROVIDER-REGISTRY);
+intent or URI in the registry entry for its own platform,
+`platform_routes.fire_os` or `platform_routes.vega`
+(CONTRACT-AFC-P2-PROVIDER-REGISTRY);
 an absent package yields `appAbsent`; a refused launch or provider denial
 yields `playbackDenied` with the provider's reason; otherwise a supported provider response for this attempt determines the
 outcome. A successful launch call and the registry's historical
@@ -439,8 +441,8 @@ integrated review, with selected backend preserved.
   RN 0.72 through `expo-notifications`, or headless service plus in-app
   toast). An unverified route is recorded as `unknown` or `limited by
   simulator`, never claimed (mirrors AFC-PR-015 and RISK-AFC-P2-02).
-- Watch: `Linking.canOpenURL` and `Linking.openURL` with the registry's
-  documented URI for Vega, or `amzns://apps?...` for the provider app. A
+- Watch: `Linking.canOpenURL` and `Linking.openURL` with the launch in
+  `platform_routes.vega`, or `amzns://apps?...` for the provider app. A
   missing app gives `appAbsent`; an unverifiable arrival gives
   `accessUnknown`. Exactly one RoutingOutcome is reported per attempt.
   Provider apps and DRM playback are not available on the VVD on Ubuntu.
@@ -469,7 +471,11 @@ Status codes 400/401/403/409/410/429/503 and the structured `error`
 {code, message} as spec §4.2.3. Quantities: alert_poll_wait, api_timeout,
 api_retry_max, device_code_ttl. Request and response bodies ≤ 64 KiB.
 OpenAPI document `backend/src/api/openapi.yaml` is the frozen artifact
-(written in P2-B01, changed only under its own review).
+(written in P2-B01, changed only under its own review). Amendment for
+DEC-AFC-SD-049: every route the API returns carries the provider's
+`platform_routes` entries; the Vega client reads only `vega` and the Fire OS
+client only `fire_os`. P2-B06 owns this route-schema change in
+`openapi.yaml` under CMD-CONTRACT-FROZEN review; V01 makes no backend edit.
 
 ### CONTRACT-AFC-P2-ENVELOPE — Entity envelope
 
@@ -491,13 +497,20 @@ limits, developer_feedback IDs. No credential or account data.
 ### CONTRACT-AFC-P2-PROVIDER-REGISTRY — Provider registry
 
 `backend/src/provider_resolver/registry.json`, written from the P2-X03
-verdict: per provider `id`, `name`, `package`, `launch` (`type`:
-`intent` | `uri`; `value` template with `{channel}` / `{event}` placeholders
-only where documented), `doc_source`, `verified_outcome` (one RoutingOutcome
-value observed on the stick), `channels_carried` (for local broadcast),
-`verified_at`. `verified_outcome` describes the spike observation only, not
-a current launch result. The registry also records the documented current-
-attempt observation mechanism or explicitly none. Order of entries is the spike order; selection order is the
+verdict: per provider `id`, `name`, `channels_carried` (for local
+broadcast) and `platform_routes` with two entries, `fire_os` and `vega`
+(amended 2026-10-14 for DEC-AFC-SD-049, both targets built). Each entry
+carries its own `package` (Android package or Vega component id), `launch`
+(`type`: `intent` | `uri`; `value` template with `{channel}` / `{event}`
+placeholders only where documented), `doc_source`, `verified_outcome` (one
+RoutingOutcome value observed on that platform's device), `verified_at` and
+the documented current-attempt observation mechanism or explicitly none.
+`verified_outcome` describes the spike observation only, not a current
+launch result. X03's primary scope writes `vega`; its Fire OS secondary
+scope writes `fire_os`. A missing or unverified entry is REGISTRY_ROUTE_GAP
+for that platform: it blocks that platform's Watch acceptance, is never
+filled from the other platform, and is never turned into a client
+limitation without an owner amendment. Order of entries is the spike order; selection order is the
 customer's preference.
 
 ### CONTRACT-AFC-P2-FIXTURE — Replay fixture
@@ -594,7 +607,8 @@ until tests exist. No test is invented as a historical source.
 
 The API boundary, data ownership, retry bounds, bearer token containment,
 monotonic envelopes, six RoutingOutcome values and backend compute remain
-unchanged by the Vega port. SD-048 supersedes DES-AFC-P2-AUTH's older
+unchanged by the Vega port. The one shared change is the per-platform route
+schema (`platform_routes`), owned by B06 for both clients. SD-048 supersedes DES-AFC-P2-AUTH's older
 passphrase paragraph: TV code only, confirmed on the phone/browser.
 `origin/main` still has a passphrase field on 2026-10-14; the common backend
 must reconcile that settled decision and qualify it before the system
@@ -644,16 +658,15 @@ AWS identities stay separate from customer sessions.
 | B02 / X05 | Finish ingest/replay with live/replay provenance | X05 PR1 landed per local origin/main; no recapture or claim of completed live timing from fixtures alone. |
 | B03 / X06 | Finish reviewed lineup/settings source and Yahoo/manual disposition | Manual fallback and OAuth authority unchanged. |
 | B04/B05/B07 | Complete matcher, policy and panel service, preserve freshness and control semantics | Same API and test obligations for either TV platform. |
-| X03 → B06 | Populate existing registry fields with verified Vega URI/component data and outcomes | `launch.type=uri` already exists. Keep field schema; do not claim Android package names or intent strings work on Vega. If Vega cannot fit the existing contract, stop for a named contract decision. |
+| X03 → B06 | X03 writes and verifies `platform_routes.vega` (primary) and `platform_routes.fire_os` (secondary); B06 selects the entry for the requesting client and amends the route schema in openapi.yaml | Amended CONTRACT-AFC-P2-PROVIDER-REGISTRY. Never reuse Android package names or intents on Vega, or Vega URIs on Fire OS. A missing entry is REGISTRY_ROUTE_GAP for that platform. |
 | L03 / final deploy step | Deploy and qualify the same shared backend against exact TV candidate | `aws-afc-dev` lease and existing credential/DB boundaries; B01 being live does not establish all later endpoints work. |
 
 Under DEC-AFC-SD-049 one shared backend serves both clients. The registry
-holds one `launch` per provider, so X03 writes the verified Vega (primary)
-value. Design item DF-VP-01 for the planning review: if a provider's Vega
-and Fire OS launch values differ, the Fire OS secondary client reports the
-existing labeled limitation for that provider (no guessed intent), unless
-the review accepts a per-platform launch field as a named contract change
-to CONTRACT-AFC-P2-PROVIDER-REGISTRY owned by X03/B06. V01 has no backend write permission. X03's
+carries `platform_routes.fire_os` and `platform_routes.vega` per provider
+(F-VP-01 correction; replaces DF-VP-01). Neither client loses a provider
+by default: each platform's entry is verified on its own device, and a gap
+blocks that platform's acceptance until X03 closes it or the owner amends
+scope. B06 owns the backend side. V01 has no backend write permission. X03's
 existing data-only registry permission remains with X03.
 
 ### Conditional integration and proof binding

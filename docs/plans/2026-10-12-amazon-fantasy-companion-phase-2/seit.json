@@ -2361,7 +2361,7 @@
     {
       "id": "CMD-REGISTRY-CHECK",
       "command": "python3 -m json.tool backend/src/provider_resolver/registry.json",
-      "pass": "Schema shape, source documentation and evidence all agree; empty B01 registry allowed only until X03 is due. Invented URI or inflated outcome fails. Missing tool, missing article, unsupported capability, zero collected cases, skipped required case or not_run is a typed gap, never PASS. Record safe error, phase and exit status.",
+      "pass": "Schema shape (including both `platform_routes` entries), source documentation and evidence all agree per platform; empty B01 registry allowed only until X03 is due. Invented URI or inflated outcome fails. Missing tool, missing article, unsupported capability, zero collected cases, skipped required case or not_run is a typed gap, never PASS. Record safe error, phase and exit status.",
       "description": "Inspection of landed provider contract; JSON parse alone cannot pass.",
       "used_by": [
         "IE-P2-11",
@@ -2375,7 +2375,8 @@
         "Check each registry field against CONTRACT-AFC-P2-PROVIDER-REGISTRY and the landed X03 route evidence.",
         "Check provider order, documented placeholder expansion, six-value outcome and timestamp; gameOpened requires observed arrival.",
         "Exercise absent package, unknown access and local broadcaster with no carrying app; inspect their actual outcome.",
-        "Separate historical verified_outcome from this launch. With old gameOpened and no supported current confirmation, require accessUnknown plus reason; record observation mechanism or explicitly none. Six-value enum unchanged."
+        "Separate historical verified_outcome from this launch. With old gameOpened and no supported current confirmation, require accessUnknown plus reason; record observation mechanism or explicitly none. Six-value enum unchanged.",
+        "Per provider, check `platform_routes.vega` and `platform_routes.fire_os` separately: own package/component, launch, doc_source, verified_outcome, verified_at and observation mechanism. A missing or unverified entry is REGISTRY_ROUTE_GAP for that platform and blocks that platform's Watch acceptance; it is never filled from the other platform and never downgraded to a client limitation without an owner amendment."
       ],
       "execution_status": "not_run (prospective procedure; help/preparation inspection is not execution)"
     },
@@ -6252,7 +6253,8 @@
         "P2-B06T",
         "P2-B06"
       ],
-      "execution_status": "not_run (planning only)"
+      "execution_status": "not_run (planning only)",
+      "platform_route_binding": "Resolver output per client platform from `platform_routes` (B06); local-broadcast rule holds on both."
     },
     {
       "id": "SEIT-AFC-PR-030",
@@ -6311,7 +6313,8 @@
         "P2-X09",
         "P2-X12"
       ],
-      "execution_status": "not_run (planning only)"
+      "execution_status": "not_run (planning only)",
+      "platform_route_binding": "Vega primary via V01/X09 on `platform_routes.vega`; Fire OS secondary via A04/X09 on `platform_routes.fire_os`."
     },
     {
       "id": "SEIT-AFC-PR-031",
@@ -6368,7 +6371,8 @@
         "P2-A04",
         "P2-X09"
       ],
-      "execution_status": "not_run (planning only)"
+      "execution_status": "not_run (planning only)",
+      "platform_route_binding": "One RoutingOutcome per attempt on each client, each from its own `platform_routes` entry."
     },
     {
       "id": "SEIT-AFC-PR-032",
@@ -6435,7 +6439,8 @@
         "P2-A03T",
         "P2-A03"
       ],
-      "execution_status": "not_run (planning only)"
+      "execution_status": "not_run (planning only)",
+      "platform_route_binding": "Access basis evaluated per platform entry; no cross-platform inference."
     },
     {
       "id": "SEIT-AFC-PR-033",
@@ -6502,7 +6507,8 @@
         "P2-A03T",
         "P2-A03"
       ],
-      "execution_status": "not_run (planning only)"
+      "execution_status": "not_run (planning only)",
+      "platform_route_binding": "No access inferred from installation on either platform entry."
     },
     {
       "id": "SEIT-AFC-PR-034",
@@ -8283,7 +8289,8 @@
       "supporting_slices": [
         "P2-X03"
       ],
-      "execution_status": "not_run (planning only)"
+      "execution_status": "not_run (planning only)",
+      "platform_route_binding": "Both entries: X03 primary verifies `platform_routes.vega`; X03 secondary verifies `platform_routes.fire_os`."
     },
     {
       "id": "SEIT-AFC-P2-GATE-01",
@@ -10237,7 +10244,8 @@
         "P2-B06",
         "P2-A04"
       ],
-      "execution_status": "not_run (planning only)"
+      "execution_status": "not_run (planning only)",
+      "platform_route_binding": "Route verification gap is per platform entry (REGISTRY_ROUTE_GAP); no automatic fallback."
     },
     {
       "id": "SEIT-RISK-AFC-P2-04",
@@ -11157,7 +11165,8 @@
       "execution_status": "not_run",
       "resource_group": "vega-virtual-device; vega-tv-stick; aws-afc-dev (lease serialized, isolated profiles)",
       "expected_gate_seconds": 600,
-      "gate_cost_note": "Estimated 600 seconds per system procedure invocation, run outside repository CI gate; V01 local gate forecast remains 180 seconds. Qualification five sequential and two concurrent invocations under cross-process device locks; live-window waits excluded."
+      "gate_cost_note": "Estimated 600 seconds per system procedure invocation, run outside repository CI gate; V01 local gate forecast remains 180 seconds. Qualification five sequential and two concurrent invocations under cross-process device locks; live-window waits excluded.",
+      "platform_route_binding": "Common API contract: the route schema carries `platform_routes`; the Vega client reads only `vega`, the Fire OS client only `fire_os`. Backend side owned by B06, not V01."
     },
     {
       "id": "SEIT-AFC-P2-VPRIMARY-04",
@@ -18025,7 +18034,8 @@
         "VP-OD-04"
       ],
       "F1": "closed by DEC-AFC-SD-050 option (a)",
-      "prior_review_bounds": "unchanged; one planning review of this candidate is next"
+      "prior_review_bounds": "unchanged; one planning review of this candidate is next",
+      "correction_round_1": "Planning review CHANGE_REQUESTED (Codex GPT-6.1 Sol high) F-VP-01..03 applied: platform_routes registry contract and bindings; milestone start/closure stages; V01T/V01 goals set to override goals."
     }
   ],
   "vega_primary_contingency": {
@@ -18562,22 +18572,6 @@
       "P2-A05"
     ],
     "secondary_scope_rule": "On a shared slice that carries overrides (X01-X04, X07, X09, X10, X11, X12, L05, R1-R5, V01T/V01, D04), the overrides are the primary Vega scope and close the primary obligation. The original baseline fields stay as the Fire OS secondary scope: run after the Vega exit evidence, only on a real Fire OS device, and never gating Vega closure or the Vega critical path. A01-A05/T are Fire OS-only secondary slices with their original fields and dependencies.",
-    "milestone_order": [
-      "M01",
-      "M02",
-      "M14",
-      "M04",
-      "M05",
-      "M07",
-      "M09",
-      "M10",
-      "M11",
-      "M12",
-      "M13",
-      "M03",
-      "M06",
-      "M08"
-    ],
     "critical_path": [
       "P2-X01",
       "P2-V01T",
@@ -18603,6 +18597,100 @@
       "DEC-AFC-SD-052": "tv-app changed-line coverage threshold is 70% (CMD-COVERAGE-TVAPP).",
       "DEC-AFC-SD-053": "Tool installs the plan needs are agent work.",
       "DEC-AFC-SD-054": "UTP netty CVEs are accepted until submission; a post-submission cleanup task removes them."
-    }
+    },
+    "milestone_stages": [
+      {
+        "stage": 1,
+        "name": "Readiness",
+        "milestones": [
+          "M01",
+          "M02"
+        ],
+        "start": "Planning PR merged.",
+        "closure": "M01 and M02 exit criteria; X01 host-ready receipt; B01 and G01 landed."
+      },
+      {
+        "stage": 2,
+        "name": "Start M14",
+        "milestones": [
+          "M14"
+        ],
+        "start": "P2-V01T after its depends_on (X01, G01, B01); P2-V01 after the V01T red receipt.",
+        "closure": "None at this stage; M14 stays open."
+      },
+      {
+        "stage": 3,
+        "name": "Primary prerequisites within M03-M09",
+        "milestones": [
+          "M03",
+          "M04",
+          "M05",
+          "M06",
+          "M07",
+          "M08",
+          "M09"
+        ],
+        "primary_slices": [
+          "P2-X04",
+          "P2-X02",
+          "P2-X03",
+          "P2-X07",
+          "P2-X05",
+          "P2-B02T",
+          "P2-B02",
+          "P2-B03T",
+          "P2-B03",
+          "P2-L02",
+          "P2-X06",
+          "P2-B04T",
+          "P2-B04",
+          "P2-B05T",
+          "P2-B05",
+          "P2-B07T",
+          "P2-B07",
+          "P2-B06T",
+          "P2-B06",
+          "P2-L03"
+        ],
+        "secondary_slices": [
+          "P2-A01T",
+          "P2-A01",
+          "P2-A02T",
+          "P2-A02",
+          "P2-A03T",
+          "P2-A03",
+          "P2-A04T",
+          "P2-A04",
+          "P2-A05T",
+          "P2-A05"
+        ],
+        "start": "Each slice under its own depends_on and leases; runs in parallel with M14.",
+        "closure": "Primary slices land. R1 (M03) and R2 (M06) depend on V01, so M03 and M06 close in stage 4. Secondary A0x/T work never gates this stage."
+      },
+      {
+        "stage": 4,
+        "name": "Close M14",
+        "milestones": [
+          "M14",
+          "M03",
+          "M06"
+        ],
+        "start": "V01 completion dependencies X02, X03, X04, X07 and L03 landed.",
+        "closure": "V01 accepted (M14 closes); then R1 and R2 close, closing the primary obligations of M03 and M06."
+      },
+      {
+        "stage": 5,
+        "name": "M10-M13",
+        "milestones": [
+          "M10",
+          "M11",
+          "M12",
+          "M13"
+        ],
+        "start": "M14 closed; each slice under its own depends_on.",
+        "closure": "Original M10-M13 exit criteria on the Vega primary target; Fire OS secondary evidence is reported where it exists."
+      }
+    ],
+    "milestone_stage_rule": "Milestones run in start/closure stages (milestone_stages), not one total order. A0x/T inside mixed milestones (M03, M06, M08, M09) are Fire OS secondary work and never gate a stage or primary closure."
   }
 }

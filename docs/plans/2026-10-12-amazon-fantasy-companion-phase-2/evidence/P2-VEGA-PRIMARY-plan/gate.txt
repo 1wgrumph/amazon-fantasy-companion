@@ -1,5 +1,5 @@
 Command: export PATH=$HOME/.local/share/afc-tools/backend-tests/bin:$PATH; bash tools/ci/gate.sh
-Run: vega-f1 correction (DEC-AFC-SD-048..054), 2026-10-14. Exit: 0. Private home paths normalized to $HOME.
+Run: correction round 1 (F-VP-01..03), 2026-10-14. Exit: 0. Private home paths normalized to $HOME.
 
 gate: spec: PASS checks completed
 gate: docs: PASS checks completed
@@ -10,7 +10,7 @@ Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
 Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
 ......................................
 ----------------------------------------------------------------------
-Ran 61 tests in 37.539s
+Ran 61 tests in 35.951s
 OK
 mutation adapter exit=3: ['GAP REPORT_INCOMPLETE: mutmut stats absent']
 mutation adapter exit=0: ['PASS mutation score 100.00% (threshold 70%)']
@@ -37,14 +37,14 @@ backend/tests/contract/test_backend_template.py ...........              [ 98%]
 backend/tests/contract/test_template_iam.py ...                          [100%]
     datetime_now = datetime.datetime.utcnow()
 ============================= slowest 10 durations =============================
-0.45s setup    tests/unit/test_bug_auth002.py::test_poll_after_expiry_mints_no_session
+0.43s setup    tests/unit/test_bug_auth002.py::test_poll_after_expiry_mints_no_session
+0.26s setup    tests/unit/test_router.py::test_invalid_profile_updates_change_nothing[body7]
+0.26s setup    tests/unit/test_router.py::test_every_settings_attribute_is_accepted[quietHours]
 0.25s setup    tests/unit/test_pipeline_and_stubs.py::test_stubs_name_their_owning_slice[provider_resolver-record_outcome-3-P2-B06]
-0.25s setup    tests/unit/test_router.py::test_unhandled_failures_are_logged_without_detail_in_the_response
-0.25s setup    tests/unit/test_router.py::test_valid_routing_outcomes_reach_the_resolver_stub[appHomeOpened]
-0.25s setup    tests/unit/test_router.py::test_invalid_profile_updates_change_nothing[body4]
-0.25s setup    tests/unit/test_router.py::test_bearer_scheme_is_case_insensitive_and_other_schemes_refused
+0.24s setup    tests/contract/test_api_contract.py::test_phone_link_page_exposes_customer_confirmation_form
 0.24s setup    tests/unit/test_router.py::test_routing_outcomes_are_validated
-0.24s setup    tests/unit/test_router.py::test_every_settings_attribute_is_accepted[quietHours]
-0.24s setup    tests/unit/test_router.py::test_every_settings_attribute_is_accepted[voice]
 0.24s setup    tests/unit/test_router.py::test_response_cap_counts_serialized_bytes_not_characters
+0.24s setup    tests/unit/test_router.py::test_every_settings_attribute_is_accepted[voice]
+0.23s setup    tests/unit/test_router.py::test_every_settings_attribute_is_accepted[excitement]
+0.23s setup    tests/unit/test_router.py::test_invalid_profile_updates_change_nothing[body4]
 gate: backend: PASS checks completed

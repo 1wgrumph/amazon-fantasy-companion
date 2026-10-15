@@ -709,10 +709,21 @@ after the Vega exit evidence, only on a real Fire OS device, and never gates
 Vega closure. L05 builds the primary `.vpkg` and, when A01..A05 have landed,
 the secondary APK with CMD-REVERIFY-APK.
 
-Milestone order (GitHub IDs unchanged; Vega first): M01, M02, **M14**, M04,
-M05, M07, M09, M10, M11, M12, M13, then the Fire OS secondary milestones M03,
-M06 and M08. M14's entry no longer waits for P2-A01..P2-A05; it follows the
-X01 host-ready receipt and the V01T red receipt.
+Milestone stages (GitHub IDs unchanged; F-VP-02 correction). Milestones
+run in start and closure stages, not one total order:
+
+| Stage | Milestones | Start | Closure |
+|---|---|---|---|
+| 1 Readiness | M01, M02 | Planning PR merged | X01 host-ready receipt; B01 and G01 landed |
+| 2 Start M14 | M14 | V01T after X01, G01, B01; V01 after the V01T red receipt | M14 stays open |
+| 3 Primary prerequisites | M03–M09 | Each slice under its own dependencies, in parallel with M14 | X04, X02, X03, X07, X05, B02–B07 with tests, X06, L02, L03 land. R1 (M03) and R2 (M06) wait for V01 |
+| 4 Close M14 | M14, then M03 and M06 | X02, X03, X04, X07 and L03 landed | V01 accepted; then R1 and R2 close |
+| 5 Finish | M10–M13 | M14 closed | Original exit criteria on the Vega primary target |
+
+A01T/A01 (M03), A02T/A02 (M06), A03T/A03 and A04T/A04 (M08) and A05T/A05
+(M09) are Fire OS secondary work inside those mixed milestones. They never
+gate a stage or a primary closure. M14's entry no longer waits for
+P2-A01..P2-A05. Slice identities and dependencies are unchanged.
 
 Critical path: P2-X01 → P2-V01T → P2-X04 → P2-X02 → P2-X03 → P2-X07 →
 P2-L03 → P2-V01 → P2-X09 → P2-X10 → P2-R4 → P2-D04 → P2-R5 → P2-L05 →

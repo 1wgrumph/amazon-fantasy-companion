@@ -256,7 +256,11 @@ The projection below is the active plan. A01–A05/T are not inactive: they
 keep their original rows and edges as the Fire OS secondary target, and no
 primary slice, integration step or release checkpoint depends on them.
 Critical path: X01 → V01T → X04 → X02 → X03 → X07 → L03 → V01 → X09 → X10 →
-R4 → D04 → R5 → L05 → X12. F1 is closed by DEC-AFC-SD-050: D04 closes
+R4 → D04 → R5 → L05 → X12. Milestone stages (F-VP-02): 1 readiness M01/M02;
+2 start M14 (V01T, then V01); 3 primary prerequisites inside M03–M09, with
+A0x/T as Fire OS secondary work in M03, M06, M08 and M09; 4 close M14, then
+R1/R2 close M03/M06; 5 M10–M13. Edges and slice IDs are unchanged. X03 and
+B06 bind to `platform_routes.vega` and `platform_routes.fire_os` (F-VP-01). F1 is closed by DEC-AFC-SD-050: D04 closes
 RISK-AFC-P2-14 with V01 supporting.
 
 Existing rows/edges remain the Fire OS/side-lane baseline. The owner-requested

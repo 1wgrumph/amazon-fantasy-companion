@@ -198,3 +198,25 @@ PATH=$HOME/.local/share/afc-tools/backend-tests/bin:$PATH; bash
 tools/ci/gate.sh` **exit 0** (spec, docs, hygiene with 61 gate tests,
 tvapp "no tv-app/ tree", backend 158 passed). [gate.txt](gate.txt) now holds
 this run; the earlier run is superseded.
+
+## Correction round 1 (planning review CHANGE_REQUESTED)
+
+Reviewer: Codex GPT-6.1 Sol high, range `75afca0..227d101`. Same author
+route and authority. Committed on top of `227d101`.
+
+| Finding | Change | Location |
+|---|---|---|
+| F-VP-01 (P1, requires_regate) | Registry contract amended: per provider `platform_routes.fire_os` and `platform_routes.vega`, each with its own package/component, launch, doc_source, verified_outcome, verified_at and observation mechanism. A missing or unverified entry is REGISTRY_ROUTE_GAP for that platform; the automatic "Fire OS limitation" fallback (DF-VP-01) is removed. | design.md: CONTRACT-AFC-P2-PROVIDER-REGISTRY, CONTRACT-AFC-P2-API amendment, DES-AFC-P2-WATCH, DES-AFC-P2-VEGA Watch line, DES-AFC-P2-VPRIMARY API paragraph, backend table row X03 → B06, shared-backend paragraph |
+| F-VP-01 | Slice bindings: `platform_route_binding` on X03, B06T, B06, A04T, A04, V01T, V01, X09. X03 override goal writes `platform_routes.vega`. B06 overrides: goal, design_ids (+registry, +API contract), write_set (+`backend/src/api/openapi.yaml`, route schema only). B06T override goal. V01T/V01 override design_ids += registry contract. V01 keeps no backend write (verified). Integration steps merging X03/B06 bind CMD-REGISTRY-CHECK to both entries. | implementation.json `slices/*/vega_primary_contingency`, `integration_plan/steps/*/vega_primary_contingency/platform_route_binding` |
+| F-VP-01 | Proof bindings: `platform_route_binding` on SEIT-AFC-P2-SPIKE-03, SEIT-AFC-PR-029..033, SEIT-RISK-AFC-P2-03, SEIT-AFC-P2-VPRIMARY-03. CMD-REGISTRY-CHECK `pass` and a new per-platform `procedure_steps` entry. | seit.json `proof_cases`, `procedures_and_commands/CMD-REGISTRY-CHECK` |
+| F-VP-02 (P2, requires_regate) | `milestone_order` replaced by `milestone_stages` (1 M01/M02 readiness; 2 start M14; 3 primary prerequisites in M03–M09; 4 close M14, then R1/R2 close M03/M06; 5 M10–M13) and `milestone_stage_rule`. Per milestone: `stage`, `closure_stage` (M03, M06, M14), `secondary_work` (A0x/T in M03, M06, M08, M09). No slice ID or dependency changed. | implementation.json and seit.json `vega_primary_contingency`; implementation.json `milestones/*/vega_primary_contingency`; technical plan "Selected plan" stage table; slice-graph.md selected-plan paragraph |
+| F-VP-03 (P2, exact_text) | P2-V01T and P2-V01 `goal` set verbatim to their `vega_primary_contingency.overrides.goal` (208 and 242 chars); `goal_source_notes` kept. | implementation.json `slices/P2-V01T/goal`, `slices/P2-V01/goal` |
+| Record | `planning_deltas[-1].correction_round_1` added. Verifier extended for F-VP-01..03; evidence rewritten; schema evidence updated. | implementation.json, seit.json; `verify_delta.py`, `mechanical-verification.json`, `effective-graph.json`, `schema-validation.json` |
+
+This supersedes the DF-VP-01 item and the single milestone order stated in
+the "Owner decisions 049-054" section above.
+
+Checks: `verify_delta.py --write-evidence` exit 0. Schema: 0 raw
+violations in implementation.json and seit.json. Repository gate: see
+[gate.txt](gate.txt). The DoD Manifest HTML is still not re-rendered
+(outside allowed writes).

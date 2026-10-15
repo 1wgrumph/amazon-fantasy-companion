@@ -4584,7 +4584,7 @@
     "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
     "disposition": "replace_platform_keep_evidence",
     "overrides": {
-     "goal": "Probe Vega provider game/channel URIs in the existing provider order; record exact component, access basis and honest outcomes in the existing registry schema. Separate desk and live receipts; no Android intent assumption.",
+     "goal": "Probe Vega provider game/channel URIs in the existing provider order; record exact component, access basis and honest outcomes in `platform_routes.vega` of the amended registry contract. Separate desk and live receipts; no Android intent assumption.",
      "goal_source_notes": "Probe Vega provider game/channel URIs in the existing provider order; record exact component, access basis and honest outcomes in the existing registry schema. Separate desk and live receipts; no Android intent assumption.",
      "command_ids": [
       "PROC-VEGA-PRIMARY-PHYSICAL",
@@ -4610,7 +4610,8 @@
     },
     "completion_dependencies": [],
     "preserved_fields": "All unmentioned fields, including role/model_route/reasoning_level/review_path/authority_id, inherit unchanged. No new execution authority.",
-    "note": "Existing spike write_set retained; probe harness uses Vega, never Kotlin requirements as Vega proof. X01 host readiness is a milestone receipt, not closure of missing physical proof."
+    "note": "Existing spike write_set retained; probe harness uses Vega, never Kotlin requirements as Vega proof. X01 host readiness is a milestone receipt, not closure of missing physical proof.",
+    "platform_route_binding": "Writes the registry per the amended contract: primary scope writes and verifies `platform_routes.vega`; Fire OS secondary scope writes and verifies `platform_routes.fire_os`. Each entry carries its own package/component, launch, doc_source, verified_outcome, verified_at and observation mechanism."
    }
   },
   {
@@ -7073,11 +7074,14 @@
     "status": "selected",
     "dispatchable": false,
     "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
-    "disposition": "keep_shared_backend",
-    "overrides": {},
+    "disposition": "shared_backend_platform_routes",
+    "overrides": {
+     "goal": "Red tests against the landed registry: resolution from installed + verified/confirmed access + market + preference, local-broadcast no-link, unknown access stays unknown, no inference from installation; per-platform selection from `platform_routes`, no cross-platform fallback; stop at CMD-RED."
+    },
     "completion_dependencies": [],
     "preserved_fields": "All unmentioned fields, including role/model_route/reasoning_level/review_path/authority_id, inherit unchanged. No new execution authority.",
-    "note": "No Vega-specific API/schema/service change. Existing SD-048 code-only reconciliation must land and deploy before linked proof; X03 supplies Vega URI registry data using the same schema. B01 live is not proof B02..B07 are complete."
+    "note": "No Vega-specific API/schema/service change. Existing SD-048 code-only reconciliation must land and deploy before linked proof; X03 supplies Vega URI registry data using the same schema. B01 live is not proof B02..B07 are complete.",
+    "platform_route_binding": "Red tests select `platform_routes.<platform>` for the requesting client: a vega client never receives fire_os launch data and the reverse; a missing or unverified entry is REGISTRY_ROUTE_GAP, never a silent fallback to the other platform or a degraded route."
    }
   },
   {
@@ -7232,11 +7236,23 @@
     "status": "selected",
     "dispatchable": false,
     "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
-    "disposition": "keep_shared_backend",
-    "overrides": {},
+    "disposition": "shared_backend_platform_routes",
+    "overrides": {
+     "goal": "Implement `src/provider_resolver/` with registry read-only; select `platform_routes.<platform>` for the requesting client and amend only the route schema in openapi.yaml; stop when green.",
+     "design_ids": [
+      "DES-AFC-P2-RESOLVE",
+      "CONTRACT-AFC-P2-PROVIDER-REGISTRY",
+      "CONTRACT-AFC-P2-API"
+     ],
+     "write_set": [
+      "backend/src/provider_resolver/",
+      "backend/src/api/openapi.yaml"
+     ]
+    },
     "completion_dependencies": [],
     "preserved_fields": "All unmentioned fields, including role/model_route/reasoning_level/review_path/authority_id, inherit unchanged. No new execution authority.",
-    "note": "No Vega-specific API/schema/service change. Existing SD-048 code-only reconciliation must land and deploy before linked proof; X03 supplies Vega URI registry data using the same schema. B01 live is not proof B02..B07 are complete."
+    "note": "No Vega-specific API/schema/service change. Existing SD-048 code-only reconciliation must land and deploy before linked proof; X03 supplies Vega URI registry data using the same schema. B01 live is not proof B02..B07 are complete.",
+    "platform_route_binding": "Owns the backend side: resolver reads `platform_routes`, returns the entry for the client platform, and amends only the route schema in backend/src/api/openapi.yaml under CMD-CONTRACT-FROZEN review."
    }
   },
   {
@@ -8055,7 +8071,8 @@
     "overrides": {},
     "completion_dependencies": [],
     "preserved_fields": "All unmentioned fields, including role/model_route/reasoning_level/review_path/authority_id, inherit unchanged. No new execution authority.",
-    "note": "Fire OS secondary target (DEC-AFC-SD-049): original fields, tests and dependencies stay and the slice is dispatched off the Vega critical path; V01T/V01 are the primary realization. No primary slice waits on it. No deletion, completion or cancellation claimed."
+    "note": "Fire OS secondary target (DEC-AFC-SD-049): original fields, tests and dependencies stay and the slice is dispatched off the Vega critical path; V01T/V01 are the primary realization. No primary slice waits on it. No deletion, completion or cancellation claimed.",
+    "platform_route_binding": "Fire OS secondary client: Watch tests consume only `platform_routes.fire_os`."
    }
   },
   {
@@ -8235,7 +8252,8 @@
     "overrides": {},
     "completion_dependencies": [],
     "preserved_fields": "All unmentioned fields, including role/model_route/reasoning_level/review_path/authority_id, inherit unchanged. No new execution authority.",
-    "note": "Fire OS secondary target (DEC-AFC-SD-049): original fields, tests and dependencies stay and the slice is dispatched off the Vega critical path; V01T/V01 are the primary realization. No primary slice waits on it. No deletion, completion or cancellation claimed."
+    "note": "Fire OS secondary target (DEC-AFC-SD-049): original fields, tests and dependencies stay and the slice is dispatched off the Vega critical path; V01T/V01 are the primary realization. No primary slice waits on it. No deletion, completion or cancellation claimed.",
+    "platform_route_binding": "Fire OS secondary client: launches only `platform_routes.fire_os`; no Vega URI reuse."
    }
   },
   {
@@ -9119,7 +9137,8 @@
     },
     "completion_dependencies": [],
     "preserved_fields": "All unmentioned fields, including role/model_route/reasoning_level/review_path/authority_id, inherit unchanged. No new execution authority.",
-    "note": ""
+    "note": "",
+    "platform_route_binding": "Live end-to-end Watch on each platform uses its own `platform_routes` entry; Vega primary first."
    }
   },
   {
@@ -11300,7 +11319,7 @@
   {
    "id": "P2-V01T",
    "role": "Test Implementer",
-   "goal": "Red Jest tests (Jest 29.7.0, the version the Vega supported-libraries list names) under `vega-app/`, derived one-to-one from the landed A01T..A05T behaviors so the Vega app matches the Fire OS app feature for feature: ApiClient envelope, revision rejection, api_timeout, api_retry_max with retry only for idempotent calls and no automatic retry of link confirmation or Watch; link screen states (code shown, expired, linked, Backend not configured, network error); profile selections persist across restart and every A02T control (types, frequency, quiet hours, game-day, spoiler, presentation, voice gate, excitement Off/Mild/Hype, provider preference, switching confirmation, detection opt-in, team/league, scoring preset PPR/Half-PPR default Half-PPR) and the detector report through the Vega detection route (unsupported detection hides the control with a stated limit); alert long-poll cursor, bounded queue, presentation selection, Watch/Dismiss actions, alert text (context, no on-field claim, unknown access), voice gated off without a verified route, coalesced updates; Watch: registry route execution, exactly one RoutingOutcome per attempt, appAbsent on a missing app, accessUnknown when current arrival is unverified, no relaunch after an uncertain outcome, switching confirmation honored, Alexa tuning hidden; panel rows/total/progress/basis, stale and unavailable labels, remote show/hide and team/league switch, every element focusable, text floor, mode per the X04 verdict, changed-row updates only, bounded state; session token written and read only through the token-store module and never passed to a logger; network and parsing never synchronous on the render path. Write the parity table mapping every A01T..A05T test ID to its V01T test ID (a missing or extra mapping fails); token values in tests and recorded responses are generated at run time or are shorter than 32 characters (hygiene CRED-* shapes); stop at CMD-RED-VEGA. Added bootstrap paths are limited to a buildable Jest harness and empty interface scaffolding; no tested feature behavior; freeze hashes before green.",
+   "goal": "Create red Vega tests from registered/VCASE behavior for all five features and available A01 test IDs; scaffold only; freeze test hashes. Do not require nonexistent A02..A05 tests or implement green behavior.",
    "goal_source_notes": "Red Jest tests (Jest 29.7.0, the version the Vega supported-libraries list names) under `vega-app/`, derived one-to-one from the landed A01T..A05T behaviors so the Vega app matches the Fire OS app feature for feature: ApiClient envelope, revision rejection, api_timeout, api_retry_max with retry only for idempotent calls and no automatic retry of link confirmation or Watch; link screen states (code shown, expired, linked, Backend not configured, network error); profile selections persist across restart and every A02T control (types, frequency, quiet hours, game-day, spoiler, presentation, voice gate, excitement Off/Mild/Hype, provider preference, switching confirmation, detection opt-in, team/league, scoring preset PPR/Half-PPR default Half-PPR) and the detector report through the Vega detection route (unsupported detection hides the control with a stated limit); alert long-poll cursor, bounded queue, presentation selection, Watch/Dismiss actions, alert text (context, no on-field claim, unknown access), voice gated off without a verified route, coalesced updates; Watch: registry route execution, exactly one RoutingOutcome per attempt, appAbsent on a missing app, accessUnknown when current arrival is unverified, no relaunch after an uncertain outcome, switching confirmation honored, Alexa tuning hidden; panel rows/total/progress/basis, stale and unavailable labels, remote show/hide and team/league switch, every element focusable, text floor, mode per the X04 verdict, changed-row updates only, bounded state; session token written and read only through the token-store module and never passed to a logger; network and parsing never synchronous on the render path. Write the parity table mapping every A01T..A05T test ID to its V01T test ID (a missing or extra mapping fails); token values in tests and recorded responses are generated at run time or are shorter than 32 characters (hygiene CRED-* shapes); stop at CMD-RED-VEGA. Added bootstrap paths are limited to a buildable Jest harness and empty interface scaffolding; no tested feature behavior; freeze hashes before green.",
    "type": "test",
    "requirement_ids": [
@@ -11637,7 +11656,8 @@
       "DES-AFC-P2-VEGA",
       "CONTRACT-AFC-P2-API",
       "CONTRACT-AFC-P2-ENVELOPE",
-      "DES-AFC-P2-VPRIMARY"
+      "DES-AFC-P2-VPRIMARY",
+      "CONTRACT-AFC-P2-PROVIDER-REGISTRY"
      ],
      "seit_proof_rows": [
       "SEIT-AFC-P2-DX-01",
@@ -11695,13 +11715,14 @@
     },
     "completion_dependencies": [],
     "preserved_fields": "All unmentioned fields, including role/model_route/reasoning_level/review_path/authority_id, inherit unchanged. No new execution authority.",
-    "note": "M14 becomes the TV critical path within W1..W3; same pair and review unit. Module checkpoints do not create new slices or reset reviews."
+    "note": "M14 becomes the TV critical path within W1..W3; same pair and review unit. Module checkpoints do not create new slices or reset reviews.",
+    "platform_route_binding": "Vega primary client: Watch tests consume only `platform_routes.vega`. No backend edits (AC-AFC-P2-VEGA-06)."
    }
   },
   {
    "id": "P2-V01",
    "role": "Product Implementer",
-   "goal": "Complete the `vega-app/` harness that P2-V01T created. Take any remaining template files (index.js, metro.config.js, app.json, assets/) from the scanned template of the pinned SDK without changing frozen test files. Record the SDK, CLI, React Native for Vega (0.72 line unless the pinned SDK defaults to 0.83) and VVD versions. Port the finished Fire OS app's Link, Profile/Settings with detection, Alerts, Watch and Lineup Panel against the unchanged CONTRACT-AFC-P2-API and CONTRACT-AFC-P2-ENVELOPE (`backend/src/api/openapi.yaml` read-only); the API base URL comes from build-time configuration and empty shows \"Backend not configured\"; the session token goes through `vega-app/src/auth/tokenStore.ts` (DES-AFC-P2-VEGA) and is never logged; add gate area `vegaapp` to `tools/ci/gate.sh` and its path-filtered CI job; build the x86_64 .vpkg (CMD-VEGA-BUILD), install and run it on the Vega Virtual Device against aws-afc-dev (CMD-VVD-START, CMD-VVD-INSTALL), drive and capture every changed state (PROC-VISUAL-REVIEW with CMD-VVD-INPUT and CMD-VVD-SCREENCAP) under `evidence/visual/P2-V01/`, and record the per-feature verdict table (PROC-VEGA-FEATURE-VERDICT: works / limited by simulator / not supported / unknown). Optional physical path (AC-AFC-P2-VEGA-05): only if OA-12 confirms the replacement stick runs Vega OS, build armv7 and repeat install, drive and capture on it with CMD-VEGA-DEVICE-INSTALL. Stop when green, VVD visual review captured and verdicts recorded.",
+   "goal": "Complete the existing V01T harness and implement linking, all settings, alerts, Watch and panel directly from registered behavior. Qualify VVD states, physical provider-dependent parity and unchanged shared API; no Fire OS merge prerequisite.",
    "goal_source_notes": "Complete the `vega-app/` harness that P2-V01T created. Take any remaining template files (index.js, metro.config.js, app.json, assets/) from the scanned template of the pinned SDK without changing frozen test files. Record the SDK, CLI, React Native for Vega (0.72 line unless the pinned SDK defaults to 0.83) and VVD versions. Port the finished Fire OS app's Link, Profile/Settings with detection, Alerts, Watch and Lineup Panel against the unchanged CONTRACT-AFC-P2-API and CONTRACT-AFC-P2-ENVELOPE (`backend/src/api/openapi.yaml` read-only); the API base URL comes from build-time configuration and empty shows \"Backend not configured\"; the session token goes through `vega-app/src/auth/tokenStore.ts` (DES-AFC-P2-VEGA) and is never logged; add gate area `vegaapp` to `tools/ci/gate.sh` and its path-filtered CI job; build the x86_64 .vpkg (CMD-VEGA-BUILD), install and run it on the Vega Virtual Device against aws-afc-dev (CMD-VVD-START, CMD-VVD-INSTALL), drive and capture every changed state (PROC-VISUAL-REVIEW with CMD-VVD-INPUT and CMD-VVD-SCREENCAP) under `evidence/visual/P2-V01/`, and record the per-feature verdict table (PROC-VEGA-FEATURE-VERDICT: works / limited by simulator / not supported / unknown). Optional physical path (AC-AFC-P2-VEGA-05): only if OA-12 confirms the replacement stick runs Vega OS, build armv7 and repeat install, drive and capture on it with CMD-VEGA-DEVICE-INSTALL. Stop when green, VVD visual review captured and verdicts recorded.",
    "type": "product",
    "requirement_ids": [
@@ -12106,7 +12127,8 @@
       "CONTRACT-AFC-P2-API",
       "CONTRACT-AFC-P2-ENVELOPE",
       "CONTRACT-AFC-P2-GATE-AREAS",
-      "DES-AFC-P2-VPRIMARY"
+      "DES-AFC-P2-VPRIMARY",
+      "CONTRACT-AFC-P2-PROVIDER-REGISTRY"
      ],
      "seit_proof_rows": [
       "SEIT-AFC-P2-DX-01",
@@ -12179,7 +12201,8 @@
      "P2-L03"
     ],
     "preserved_fields": "All unmentioned fields, including role/model_route/reasoning_level/review_path/authority_id, inherit unchanged. No new execution authority.",
-    "note": "M14 becomes the TV critical path within W1..W3; same pair and review unit. Module checkpoints do not create new slices or reset reviews."
+    "note": "M14 becomes the TV critical path within W1..W3; same pair and review unit. Module checkpoints do not create new slices or reset reviews.",
+    "platform_route_binding": "Vega primary client: launches only `platform_routes.vega`; reports `platform=vega`. No backend edits (AC-AFC-P2-VEGA-06); B06 owns the backend side."
    }
   }
  ],
@@ -12647,7 +12670,8 @@
      "merges": [
       "P2-X03"
      ],
-     "note": "After is integration closure order, not a blanket start gate. Same shared-resource/review/owner boundaries. Original platform-specific post-step commands use primary SEIT bindings; no waived positive/negative criteria."
+     "note": "After is integration closure order, not a blanket start gate. Same shared-resource/review/owner boundaries. Original platform-specific post-step commands use primary SEIT bindings; no waived positive/negative criteria.",
+     "platform_route_binding": "CMD-REGISTRY-CHECK runs on both `platform_routes` entries per provider."
     }
    },
    {
@@ -12823,7 +12847,8 @@
      "merges": [
       "P2-X03"
      ],
-     "note": "After is integration closure order, not a blanket start gate. Same shared-resource/review/owner boundaries. Original platform-specific post-step commands use primary SEIT bindings; no waived positive/negative criteria."
+     "note": "After is integration closure order, not a blanket start gate. Same shared-resource/review/owner boundaries. Original platform-specific post-step commands use primary SEIT bindings; no waived positive/negative criteria.",
+     "platform_route_binding": "CMD-REGISTRY-CHECK runs on both `platform_routes` entries per provider."
     }
    },
    {
@@ -13089,7 +13114,8 @@
       "P2-B06T",
       "P2-B06"
      ],
-     "note": "After is integration closure order, not a blanket start gate. Same shared-resource/review/owner boundaries. Original platform-specific post-step commands use primary SEIT bindings; no waived positive/negative criteria."
+     "note": "After is integration closure order, not a blanket start gate. Same shared-resource/review/owner boundaries. Original platform-specific post-step commands use primary SEIT bindings; no waived positive/negative criteria.",
+     "platform_route_binding": "CMD-REGISTRY-CHECK runs on both `platform_routes` entries per provider."
     }
    },
    {
@@ -18226,7 +18252,8 @@
    "vega_primary_contingency": {
     "status": "selected",
     "schedule_ref": "amazon-fantasy-companion-phase-2-technical-plan.md#conditional-critical-path-all-timestamps-utc",
-    "rule": "DEC-AFC-SD-049: Vega primary. Same slice membership; A0x/T stay as the Fire OS secondary target off the Vega critical path; M14/V01 is the primary TV critical path; release R1/R2 waits for V01, not A0x/T. Original due dates are preserved baseline only."
+    "rule": "DEC-AFC-SD-049: Vega primary. Same slice membership; A0x/T stay as the Fire OS secondary target off the Vega critical path; M14/V01 is the primary TV critical path; release R1/R2 waits for V01, not A0x/T. Original due dates are preserved baseline only. Stages: see vega_primary_contingency.milestone_stages.",
+    "stage": 1
    }
   },
   {
@@ -18242,7 +18269,8 @@
    "vega_primary_contingency": {
     "status": "selected",
     "schedule_ref": "amazon-fantasy-companion-phase-2-technical-plan.md#conditional-critical-path-all-timestamps-utc",
-    "rule": "DEC-AFC-SD-049: Vega primary. Same slice membership; A0x/T stay as the Fire OS secondary target off the Vega critical path; M14/V01 is the primary TV critical path; release R1/R2 waits for V01, not A0x/T. Original due dates are preserved baseline only."
+    "rule": "DEC-AFC-SD-049: Vega primary. Same slice membership; A0x/T stay as the Fire OS secondary target off the Vega critical path; M14/V01 is the primary TV critical path; release R1/R2 waits for V01, not A0x/T. Original due dates are preserved baseline only. Stages: see vega_primary_contingency.milestone_stages.",
+    "stage": 1
    }
   },
   {
@@ -18259,7 +18287,13 @@
    "vega_primary_contingency": {
     "status": "selected",
     "schedule_ref": "amazon-fantasy-companion-phase-2-technical-plan.md#conditional-critical-path-all-timestamps-utc",
-    "rule": "DEC-AFC-SD-049: Vega primary. Same slice membership; A0x/T stay as the Fire OS secondary target off the Vega critical path; M14/V01 is the primary TV critical path; release R1/R2 waits for V01, not A0x/T. Original due dates are preserved baseline only."
+    "rule": "DEC-AFC-SD-049: Vega primary. Same slice membership; A0x/T stay as the Fire OS secondary target off the Vega critical path; M14/V01 is the primary TV critical path; release R1/R2 waits for V01, not A0x/T. Original due dates are preserved baseline only. Stages: see vega_primary_contingency.milestone_stages.",
+    "stage": 3,
+    "closure_stage": 4,
+    "secondary_work": [
+     "P2-A01T",
+     "P2-A01"
+    ]
    }
   },
   {
@@ -18277,7 +18311,8 @@
    "vega_primary_contingency": {
     "status": "selected",
     "schedule_ref": "amazon-fantasy-companion-phase-2-technical-plan.md#conditional-critical-path-all-timestamps-utc",
-    "rule": "DEC-AFC-SD-049: Vega primary. Same slice membership; A0x/T stay as the Fire OS secondary target off the Vega critical path; M14/V01 is the primary TV critical path; release R1/R2 waits for V01, not A0x/T. Original due dates are preserved baseline only."
+    "rule": "DEC-AFC-SD-049: Vega primary. Same slice membership; A0x/T stay as the Fire OS secondary target off the Vega critical path; M14/V01 is the primary TV critical path; release R1/R2 waits for V01, not A0x/T. Original due dates are preserved baseline only. Stages: see vega_primary_contingency.milestone_stages.",
+    "stage": 3
    }
   },
   {
@@ -18294,7 +18329,8 @@
    "vega_primary_contingency": {
     "status": "selected",
     "schedule_ref": "amazon-fantasy-companion-phase-2-technical-plan.md#conditional-critical-path-all-timestamps-utc",
-    "rule": "DEC-AFC-SD-049: Vega primary. Same slice membership; A0x/T stay as the Fire OS secondary target off the Vega critical path; M14/V01 is the primary TV critical path; release R1/R2 waits for V01, not A0x/T. Original due dates are preserved baseline only."
+    "rule": "DEC-AFC-SD-049: Vega primary. Same slice membership; A0x/T stay as the Fire OS secondary target off the Vega critical path; M14/V01 is the primary TV critical path; release R1/R2 waits for V01, not A0x/T. Original due dates are preserved baseline only. Stages: see vega_primary_contingency.milestone_stages.",
+    "stage": 3
    }
   },
   {
@@ -18311,7 +18347,13 @@
    "vega_primary_contingency": {
     "status": "selected",
     "schedule_ref": "amazon-fantasy-companion-phase-2-technical-plan.md#conditional-critical-path-all-timestamps-utc",
-    "rule": "DEC-AFC-SD-049: Vega primary. Same slice membership; A0x/T stay as the Fire OS secondary target off the Vega critical path; M14/V01 is the primary TV critical path; release R1/R2 waits for V01, not A0x/T. Original due dates are preserved baseline only."
+    "rule": "DEC-AFC-SD-049: Vega primary. Same slice membership; A0x/T stay as the Fire OS secondary target off the Vega critical path; M14/V01 is the primary TV critical path; release R1/R2 waits for V01, not A0x/T. Original due dates are preserved baseline only. Stages: see vega_primary_contingency.milestone_stages.",
+    "stage": 3,
+    "closure_stage": 4,
+    "secondary_work": [
+     "P2-A02T",
+     "P2-A02"
+    ]
    }
   },
   {
@@ -18328,7 +18370,8 @@
    "vega_primary_contingency": {
     "status": "selected",
     "schedule_ref": "amazon-fantasy-companion-phase-2-technical-plan.md#conditional-critical-path-all-timestamps-utc",
-    "rule": "DEC-AFC-SD-049: Vega primary. Same slice membership; A0x/T stay as the Fire OS secondary target off the Vega critical path; M14/V01 is the primary TV critical path; release R1/R2 waits for V01, not A0x/T. Original due dates are preserved baseline only."
+    "rule": "DEC-AFC-SD-049: Vega primary. Same slice membership; A0x/T stay as the Fire OS secondary target off the Vega critical path; M14/V01 is the primary TV critical path; release R1/R2 waits for V01, not A0x/T. Original due dates are preserved baseline only. Stages: see vega_primary_contingency.milestone_stages.",
+    "stage": 3
    }
   },
   {
@@ -18345,7 +18388,14 @@
    "vega_primary_contingency": {
     "status": "selected",
     "schedule_ref": "amazon-fantasy-companion-phase-2-technical-plan.md#conditional-critical-path-all-timestamps-utc",
-    "rule": "DEC-AFC-SD-049: Vega primary. Same slice membership; A0x/T stay as the Fire OS secondary target off the Vega critical path; M14/V01 is the primary TV critical path; release R1/R2 waits for V01, not A0x/T. Original due dates are preserved baseline only."
+    "rule": "DEC-AFC-SD-049: Vega primary. Same slice membership; A0x/T stay as the Fire OS secondary target off the Vega critical path; M14/V01 is the primary TV critical path; release R1/R2 waits for V01, not A0x/T. Original due dates are preserved baseline only. Stages: see vega_primary_contingency.milestone_stages.",
+    "stage": 3,
+    "secondary_work": [
+     "P2-A03T",
+     "P2-A03",
+     "P2-A04T",
+     "P2-A04"
+    ]
    }
   },
   {
@@ -18361,7 +18411,12 @@
    "vega_primary_contingency": {
     "status": "selected",
     "schedule_ref": "amazon-fantasy-companion-phase-2-technical-plan.md#conditional-critical-path-all-timestamps-utc",
-    "rule": "DEC-AFC-SD-049: Vega primary. Same slice membership; A0x/T stay as the Fire OS secondary target off the Vega critical path; M14/V01 is the primary TV critical path; release R1/R2 waits for V01, not A0x/T. Original due dates are preserved baseline only."
+    "rule": "DEC-AFC-SD-049: Vega primary. Same slice membership; A0x/T stay as the Fire OS secondary target off the Vega critical path; M14/V01 is the primary TV critical path; release R1/R2 waits for V01, not A0x/T. Original due dates are preserved baseline only. Stages: see vega_primary_contingency.milestone_stages.",
+    "stage": 3,
+    "secondary_work": [
+     "P2-A05T",
+     "P2-A05"
+    ]
    }
   },
   {
@@ -18377,7 +18432,8 @@
    "vega_primary_contingency": {
     "status": "selected",
     "schedule_ref": "amazon-fantasy-companion-phase-2-technical-plan.md#conditional-critical-path-all-timestamps-utc",
-    "rule": "DEC-AFC-SD-049: Vega primary. Same slice membership; A0x/T stay as the Fire OS secondary target off the Vega critical path; M14/V01 is the primary TV critical path; release R1/R2 waits for V01, not A0x/T. Original due dates are preserved baseline only."
+    "rule": "DEC-AFC-SD-049: Vega primary. Same slice membership; A0x/T stay as the Fire OS secondary target off the Vega critical path; M14/V01 is the primary TV critical path; release R1/R2 waits for V01, not A0x/T. Original due dates are preserved baseline only. Stages: see vega_primary_contingency.milestone_stages.",
+    "stage": 5
    }
   },
   {
@@ -18395,7 +18451,8 @@
    "vega_primary_contingency": {
     "status": "selected",
     "schedule_ref": "amazon-fantasy-companion-phase-2-technical-plan.md#conditional-critical-path-all-timestamps-utc",
-    "rule": "DEC-AFC-SD-049: Vega primary. Same slice membership; A0x/T stay as the Fire OS secondary target off the Vega critical path; M14/V01 is the primary TV critical path; release R1/R2 waits for V01, not A0x/T. Original due dates are preserved baseline only."
+    "rule": "DEC-AFC-SD-049: Vega primary. Same slice membership; A0x/T stay as the Fire OS secondary target off the Vega critical path; M14/V01 is the primary TV critical path; release R1/R2 waits for V01, not A0x/T. Original due dates are preserved baseline only. Stages: see vega_primary_contingency.milestone_stages.",
+    "stage": 5
    }
   },
   {
@@ -18413,7 +18470,8 @@
    "vega_primary_contingency": {
     "status": "selected",
     "schedule_ref": "amazon-fantasy-companion-phase-2-technical-plan.md#conditional-critical-path-all-timestamps-utc",
-    "rule": "DEC-AFC-SD-049: Vega primary. Same slice membership; A0x/T stay as the Fire OS secondary target off the Vega critical path; M14/V01 is the primary TV critical path; release R1/R2 waits for V01, not A0x/T. Original due dates are preserved baseline only."
+    "rule": "DEC-AFC-SD-049: Vega primary. Same slice membership; A0x/T stay as the Fire OS secondary target off the Vega critical path; M14/V01 is the primary TV critical path; release R1/R2 waits for V01, not A0x/T. Original due dates are preserved baseline only. Stages: see vega_primary_contingency.milestone_stages.",
+    "stage": 5
    }
   },
   {
@@ -18430,7 +18488,8 @@
    "vega_primary_contingency": {
     "status": "selected",
     "schedule_ref": "amazon-fantasy-companion-phase-2-technical-plan.md#conditional-critical-path-all-timestamps-utc",
-    "rule": "DEC-AFC-SD-049: Vega primary. Same slice membership; A0x/T stay as the Fire OS secondary target off the Vega critical path; M14/V01 is the primary TV critical path; release R1/R2 waits for V01, not A0x/T. Original due dates are preserved baseline only."
+    "rule": "DEC-AFC-SD-049: Vega primary. Same slice membership; A0x/T stay as the Fire OS secondary target off the Vega critical path; M14/V01 is the primary TV critical path; release R1/R2 waits for V01, not A0x/T. Original due dates are preserved baseline only. Stages: see vega_primary_contingency.milestone_stages.",
+    "stage": 5
    }
   },
   {
@@ -18445,9 +18504,11 @@
    "vega_primary_contingency": {
     "status": "selected",
     "schedule_ref": "amazon-fantasy-companion-phase-2-technical-plan.md#conditional-critical-path-all-timestamps-utc",
-    "rule": "DEC-AFC-SD-049: Vega primary. Same slice membership; A0x/T stay as the Fire OS secondary target off the Vega critical path; M14/V01 is the primary TV critical path; release R1/R2 waits for V01, not A0x/T. Original due dates are preserved baseline only.",
+    "rule": "DEC-AFC-SD-049: Vega primary. Same slice membership; A0x/T stay as the Fire OS secondary target off the Vega critical path; M14/V01 is the primary TV critical path; release R1/R2 waits for V01, not A0x/T. Original due dates are preserved baseline only. Stages: see vega_primary_contingency.milestone_stages.",
     "entry": "DEC-AFC-SD-049 Vega primary: X01 host-ready receipt and the V01T red receipt; this selected candidate passed planning review. No P2-A01..P2-A05 merge prerequisite.",
-    "exit": "Primary TV milestone: V01 accepted on the VVD plus physical provider-dependent proof (X02/X03/X04/X07) against L03, before X09. On the critical path; typed gaps stay blocking."
+    "exit": "Primary TV milestone: V01 accepted on the VVD plus physical provider-dependent proof (X02/X03/X04/X07) against L03, before X09. On the critical path; typed gaps stay blocking.",
+    "stage": 2,
+    "closure_stage": 4
    }
   }
  ],
@@ -25405,7 +25466,8 @@
     "VP-OD-04"
    ],
    "F1": "closed by DEC-AFC-SD-050 option (a)",
-   "prior_review_bounds": "unchanged; one planning review of this candidate is next"
+   "prior_review_bounds": "unchanged; one planning review of this candidate is next",
+   "correction_round_1": "Planning review CHANGE_REQUESTED (Codex GPT-6.1 Sol high) F-VP-01..03 applied: platform_routes registry contract and bindings; milestone start/closure stages; V01T/V01 goals set to override goals."
   }
  ],
  "vega_primary_contingency": {
@@ -25942,22 +26004,6 @@
    "P2-A05"
   ],
   "secondary_scope_rule": "On a shared slice that carries overrides (X01-X04, X07, X09, X10, X11, X12, L05, R1-R5, V01T/V01, D04), the overrides are the primary Vega scope and close the primary obligation. The original baseline fields stay as the Fire OS secondary scope: run after the Vega exit evidence, only on a real Fire OS device, and never gating Vega closure or the Vega critical path. A01-A05/T are Fire OS-only secondary slices with their original fields and dependencies.",
-  "milestone_order": [
-   "M01",
-   "M02",
-   "M14",
-   "M04",
-   "M05",
-   "M07",
-   "M09",
-   "M10",
-   "M11",
-   "M12",
-   "M13",
-   "M03",
-   "M06",
-   "M08"
-  ],
   "critical_path": [
    "P2-X01",
    "P2-V01T",
@@ -25983,6 +26029,100 @@
    "DEC-AFC-SD-052": "tv-app changed-line coverage threshold is 70% (CMD-COVERAGE-TVAPP).",
    "DEC-AFC-SD-053": "Tool installs the plan needs are agent work.",
    "DEC-AFC-SD-054": "UTP netty CVEs are accepted until submission; a post-submission cleanup task removes them."
-  }
+  },
+  "milestone_stages": [
+   {
+    "stage": 1,
+    "name": "Readiness",
+    "milestones": [
+     "M01",
+     "M02"
+    ],
+    "start": "Planning PR merged.",
+    "closure": "M01 and M02 exit criteria; X01 host-ready receipt; B01 and G01 landed."
+   },
+   {
+    "stage": 2,
+    "name": "Start M14",
+    "milestones": [
+     "M14"
+    ],
+    "start": "P2-V01T after its depends_on (X01, G01, B01); P2-V01 after the V01T red receipt.",
+    "closure": "None at this stage; M14 stays open."
+   },
+   {
+    "stage": 3,
+    "name": "Primary prerequisites within M03-M09",
+    "milestones": [
+     "M03",
+     "M04",
+     "M05",
+     "M06",
+     "M07",
+     "M08",
+     "M09"
+    ],
+    "primary_slices": [
+     "P2-X04",
+     "P2-X02",
+     "P2-X03",
+     "P2-X07",
+     "P2-X05",
+     "P2-B02T",
+     "P2-B02",
+     "P2-B03T",
+     "P2-B03",
+     "P2-L02",
+     "P2-X06",
+     "P2-B04T",
+     "P2-B04",
+     "P2-B05T",
+     "P2-B05",
+     "P2-B07T",
+     "P2-B07",
+     "P2-B06T",
+     "P2-B06",
+     "P2-L03"
+    ],
+    "secondary_slices": [
+     "P2-A01T",
+     "P2-A01",
+     "P2-A02T",
+     "P2-A02",
+     "P2-A03T",
+     "P2-A03",
+     "P2-A04T",
+     "P2-A04",
+     "P2-A05T",
+     "P2-A05"
+    ],
+    "start": "Each slice under its own depends_on and leases; runs in parallel with M14.",
+    "closure": "Primary slices land. R1 (M03) and R2 (M06) depend on V01, so M03 and M06 close in stage 4. Secondary A0x/T work never gates this stage."
+   },
+   {
+    "stage": 4,
+    "name": "Close M14",
+    "milestones": [
+     "M14",
+     "M03",
+     "M06"
+    ],
+    "start": "V01 completion dependencies X02, X03, X04, X07 and L03 landed.",
+    "closure": "V01 accepted (M14 closes); then R1 and R2 close, closing the primary obligations of M03 and M06."
+   },
+   {
+    "stage": 5,
+    "name": "M10-M13",
+    "milestones": [
+     "M10",
+     "M11",
+     "M12",
+     "M13"
+    ],
+    "start": "M14 closed; each slice under its own depends_on.",
+    "closure": "Original M10-M13 exit criteria on the Vega primary target; Fire OS secondary evidence is reported where it exists."
+   }
+  ],
+  "milestone_stage_rule": "Milestones run in start/closure stages (milestone_stages), not one total order. A0x/T inside mixed milestones (M03, M06, M08, M09) are Fire OS secondary work and never gate a stage or primary closure."
  }
 }

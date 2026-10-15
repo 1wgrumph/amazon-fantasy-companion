@@ -10,9 +10,9 @@ ROOT = Path(subprocess.check_output(['git', 'rev-parse', '--show-toplevel'], tex
 PLAN = ROOT / 'docs/plans/2026-10-12-amazon-fantasy-companion-phase-2'
 EVIDENCE = PLAN / 'evidence/P2-VEGA-PRIMARY-plan'
 BASE = 'df259ed'  # selected-plan correction (DEC-AFC-SD-048..054); first delta base was 5097585
-ALLOWED_SLICE_FIELDS = {('P2-D04', 'goal'), ('P2-D04', 'requirement_ids'), ('P2-D04', 'seit_proof_rows'), ('P2-V01', 'depends_on_text')}
-ALLOWED_COMMANDS = {'CMD-COVERAGE-TVAPP', 'PROC-VEGA-PREPARE'}
-ALLOWED_PROOF = {'SEIT-RISK-AFC-P2-14', 'SEIT-AFC-P2-VEGA-03'}
+ALLOWED_SLICE_FIELDS = {('P2-D04', 'goal'), ('P2-D04', 'requirement_ids'), ('P2-D04', 'seit_proof_rows'), ('P2-V01', 'depends_on_text'), ('P2-V01T', 'goal'), ('P2-V01', 'goal')}  # F-VP-03: goals = override goals
+ALLOWED_COMMANDS = {'CMD-COVERAGE-TVAPP', 'PROC-VEGA-PREPARE', 'CMD-REGISTRY-CHECK'}
+ALLOWED_PROOF = {'SEIT-RISK-AFC-P2-14', 'SEIT-AFC-P2-VEGA-03'}  # others only gain platform_route_binding
 
 
 def baseline(name):
@@ -108,6 +108,14 @@ def main():
     assert proof['SEIT-RISK-AFC-P2-14']['closing_slice'] == 'P2-D04' and proof['SEIT-RISK-AFC-P2-14']['supporting_slices'] == ['P2-V01']
     assert '--fail-under=70' in commands['CMD-COVERAGE-TVAPP']['native_commands'][2]
     assert 'PROC-POST-SUBMISSION-UTP-NETTY' in commands
+    for key in ('P2-V01T', 'P2-V01'):
+        assert current[key]['goal'] == current[key]['vega_primary_contingency']['overrides']['goal'] and current[key]['goal_source_notes'], key + ': F-VP-03'
+    for key in ('P2-X03', 'P2-B06T', 'P2-B06', 'P2-A04T', 'P2-A04', 'P2-V01T', 'P2-V01', 'P2-X09'):
+        assert 'platform_routes' in current[key]['vega_primary_contingency']['platform_route_binding'], key + ': F-VP-01'
+    assert 'backend/' not in ' '.join(effective['P2-V01']['write_set']), 'V01 backend edit'
+    stages = impl['vega_primary_contingency']['milestone_stages']
+    assert [s['stage'] for s in stages] == [1, 2, 3, 4, 5] and 'milestone_order' not in impl['vega_primary_contingency'], 'F-VP-02'
+    assert set(stages[2]['secondary_slices']) == secondary and not set(stages[2]['primary_slices']) & secondary
     assert all(not (set(effective[k]['completion_dependencies']) & secondary) for k in effective if k not in secondary), 'primary slice waits on Fire OS secondary'
     for key in secondary:
         assert current[key] is not None, key + ': secondary slice deleted'
@@ -118,7 +126,7 @@ def main():
         assert row['command_id'] in commands
         assert row['closing_slice'] in effective
     report = {'outcome': 'PASS', 'base_commit': BASE, 'existing_slices_preserved': len(original), 'active_proposed_slices': len(effective), 'new_slices': 0, 'baseline_commands_and_F2_F8_preserved_except': sorted(ALLOWED_COMMANDS), 'authority_and_journey_unchanged': True, 'frozen_routes_capabilities_and_spent_bounds_preserved': True, 'start_order': start_order, 'completion_order': close_order, 'integration_order': integration_order, 'F1': 'closed by DEC-AFC-SD-050', 'secondary_target_slices': sorted(secondary), 'execution': 'not_run; no binary claim'}
-    projection = {'status': 'selected by DEC-AFC-SD-049; execution authority pending planning review', 'base_commit': BASE, 'notes': ['X01 host/VVD milestone releases V01T while physical qualification remains pending.', 'X05 PR1 fixtures release B02T; original late live receipt still required.', 'Integration graph names closure order; slice start graph allows independent preparation.', 'No blanket wave/release barrier is added to backend or V01 prerequisites.'], 'secondary_target_slices': sorted(secondary), 'critical_path': impl['vega_primary_contingency']['critical_path'], 'milestone_order': impl['vega_primary_contingency']['milestone_order'], 'slices': effective, 'integration_dependencies': integration}
+    projection = {'status': 'selected by DEC-AFC-SD-049; execution authority pending planning review', 'base_commit': BASE, 'notes': ['X01 host/VVD milestone releases V01T while physical qualification remains pending.', 'X05 PR1 fixtures release B02T; original late live receipt still required.', 'Integration graph names closure order; slice start graph allows independent preparation.', 'No blanket wave/release barrier is added to backend or V01 prerequisites.'], 'secondary_target_slices': sorted(secondary), 'critical_path': impl['vega_primary_contingency']['critical_path'], 'milestone_stages': impl['vega_primary_contingency']['milestone_stages'], 'slices': effective, 'integration_dependencies': integration}
     if '--write-evidence' in sys.argv:
         (EVIDENCE / 'effective-graph.json').write_text(json.dumps(projection, indent=2) + '\n')
         (EVIDENCE / 'mechanical-verification.json').write_text(json.dumps(report, indent=2) + '\n')
