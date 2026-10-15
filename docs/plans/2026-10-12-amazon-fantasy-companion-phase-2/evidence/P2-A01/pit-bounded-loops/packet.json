@@ -1,6 +1,6 @@
 {
   "key": "tvapp_mutation_bounded_loops",
-  "state": "in_progress",
+  "state": "author_complete",
   "role": "Bug-triager Implementer",
   "profile": "bug-triager",
   "route": "Codex CLI / GPT-6.1 Sol / high",
@@ -9,7 +9,7 @@
   "generation": 2,
   "authority": "Current owner packet widens test write set; no frozen tests, tools edits, push, PR or branch changes. No product changes needed.",
   "identity_validation": "Owner packet binds current checkout/branch/HEAD. Parent historical A01 leases are released; no new lifecycle lease/control state invented.",
-  "next_action": "Run native wrapper on class-bound tests; final coverage/tools/gate and receipt; return to parent without push/PR.",
+  "next_action": "Return committed author candidate and receipt to parent for configured independent review/assurance. No push or PR by this worker.",
   "scope": [
     "new tv-app/app/src/test/java/com/afc/companion/net/ApiClientLoopMutationTest.kt",
     "P2/evidence/P2-A01/pit-bounded-loops/",
@@ -29,14 +29,21 @@
     "coverage_assist": {
       "enabled": true,
       "required": true,
-      "backend": "OCR delegation",
-      "status": "not_run: parent independent reviewer responsibility"
+      "backend": "OpenCodeReview delegation",
+      "availability": "ocr executable installed",
+      "status": "not_run: independent parent reviewer responsibility; no author substitution"
     }
   },
   "deterministic_verification": {
     "reverify": {
       "enabled": true,
-      "status": "pending applicability evaluation"
+      "backend": "installed reverify auto, pure-python parser",
+      "availability": "executable available; JVM class parsing unsupported by this result",
+      "exit": 0,
+      "status": "GAP",
+      "error": "JVM cafebabe class was classified as Mach-O; parse_error: Mach-O needs lief: pip install lief",
+      "evidence": "reverify-class.json",
+      "interpretation": "Not passing binary assurance; native parser result is not applicable JVM behavior proof. No substitution with ordinary host test reruns."
     }
   },
   "resource_group": "none shared; connection fixtures use in-memory byte streams",
