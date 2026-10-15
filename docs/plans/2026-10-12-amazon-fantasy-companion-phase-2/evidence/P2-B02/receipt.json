@@ -1,5 +1,5 @@
 {
- "outcome": "CONTRACT_FAILURE",
+ "outcome": "REPAIRABLE_FAILURE",
  "slice_id": "P2-B02",
  "issue": 30,
  "milestone": "M05",
@@ -111,12 +111,12 @@
   ]
  },
  "repair": {
-  "outcome": "CONTRACT_FAILURE",
+  "outcome": "REPAIRABLE_FAILURE",
   "profile": "bug-triager",
   "route": "Codex CLI / GPT-6.1 Sol / high",
   "baseline": "0d65797a82d3d899be2055706fac555f7642a77a",
   "round": "single authorized independent-review repair round",
-  "next_action": "Orchestrator must reconcile the frozen synthetic fixtures with strict NFL-team validation before redispatch; no owner decision or scope narrowing inferred",
+  "next_action": "Await exact write-set amendment for existing unfrozen test expectation, then run red regression, team retention, green, verifiers, gate, coverage and mutation in the same repair round",
   "authority": "Owner P2-B02 F1\u2013F6 repair packet, including backend-template lease for read-only relevance access",
   "requirements": [
    "AFC-PR-008",
@@ -306,6 +306,20 @@
      "reason": "Hooks rejected local paths in two newly captured logs; sanitized and check_paths.py then exited 0",
      "backend": "500 passed; backend hook PASS; not a full gate PASS"
     }
+   },
+   {
+    "finding": "F5",
+    "status": "REPAIRABLE_FAILURE",
+    "baseline": "1aca2da",
+    "round": "Continuation of same P2-B02 repair round; no new review",
+    "authority": "Current packet resolves SYN using shape-only validation; no NFL membership check",
+    "blocking_evidence": "f5-unfrozen-expectation-boundary.json",
+    "unresolved": "One existing unfrozen exact-output test must expect retained team; path outside authorized new-test-only writes",
+    "required_path": "backend/tests/unit/lineup/test_lineup_rejections.py",
+    "test_id": "backend/tests/unit/lineup/test_lineup_rejections.py::test_manual_build_keeps_entry_order_and_roster_names",
+    "product_changed": false,
+    "baseline_command_exit_code": 0,
+    "verification": "No repaired-candidate gate, coverage, mutation or red/green claim; stopped before product edits under explicit packet stop rule"
    }
   ],
   "commands": [
