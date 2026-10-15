@@ -329,16 +329,17 @@ index 0000000..51b0027
 +}
 diff --git a/tv-app/app/src/main/java/com/afc/companion/net/ApiClient.kt b/tv-app/app/src/main/java/com/afc/companion/net/ApiClient.kt
 new file mode 100644
-index 0000000..9bc9403
+index 0000000..5f373d6
 --- /dev/null
 +++ b/tv-app/app/src/main/java/com/afc/companion/net/ApiClient.kt
-@@ -0,0 +1,139 @@
+@@ -0,0 +1,141 @@
 +package com.afc.companion.net
 +
 +import java.io.InputStream
 +import java.net.HttpURLConnection
 +import java.net.URL
 +import java.net.URLEncoder
++import kotlinx.coroutines.CoroutineDispatcher
 +import kotlinx.coroutines.Dispatchers
 +import kotlinx.coroutines.delay
 +import kotlinx.coroutines.withContext
@@ -356,6 +357,7 @@ index 0000000..9bc9403
 +    val sessionToken: () -> String? = { null },
 +    val openConnection: (URL) -> HttpURLConnection = { it.openConnection() as HttpURLConnection },
 +    val backoff: suspend (Long) -> Unit = { delay(it) },
++    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
 +) {
 +    private val base: String = baseUrl.trimEnd('/')
 +
@@ -367,7 +369,7 @@ index 0000000..9bc9403
 +        }
 +    }
 +
-+    suspend fun request(method: String, path: String, body: JSONObject? = null): ApiResponse = withContext(Dispatchers.IO) {
++    suspend fun request(method: String, path: String, body: JSONObject? = null): ApiResponse = withContext(ioDispatcher) {
 +        require(method in METHODS && path.startsWith("/v1/")) { "Unsupported operation" }
 +        val payload = body?.toString()?.toByteArray(Charsets.UTF_8)
 +        require(payload == null || payload.size <= MAX_BODY_BYTES) { "Request body exceeds 64 KiB" }

@@ -9,11 +9,11 @@
   "generation": 2,
   "authority": "Current owner packet widens test write set; no frozen tests, tools edits, push, PR or branch changes. No product changes needed.",
   "identity_validation": "Owner packet binds current checkout/branch/HEAD. Parent historical A01 leases are released; no new lifecycle lease/control state invented.",
-  "next_action": "Commit passing new tests with hooks, then run native mutation wrapper against 75afca0, coverage, tools pytest and full gate; record final receipt and commit evidence.",
+  "next_action": "Run the fourth native PIT attempt on the committed candidate, then final coverage, tools and gate; record original four mutant identities with killing tests and return to parent.",
   "scope": [
     "new tv-app/app/src/test/java/com/afc/companion/ApiLoopBoundTest.kt",
     "P2/evidence/P2-A01/pit-bounded-loops/",
-    "tv-app/app/src/main/java/com/afc/companion/net/ApiClient.kt: dispatcher seam only"
+    "tv-app/app/src/main/java/com/afc/companion/net/ApiClient.kt: default IO dispatcher injection and internal visibility for existing readBounded helper only"
   ],
   "verification_method": "test",
   "named_behaviors": [
@@ -56,6 +56,13 @@
       "killed": "Original line 43 coroutine suspension check now killed; original line 42 and 122 remain; newly reached request line 35 null-return mutation timed out.",
       "evidence": "native-attempt2/mutations.xml.gz",
       "change": "Default-preserving ioDispatcher constructor seam enables an inline continuation driver; reject request completion before resuming its backoff. No timers, worker threads or channel handshake races."
+    },
+    {
+      "attempt": 3,
+      "native_verdict": "GAP UNRESOLVED: 1 mutant",
+      "killed": "All three original retry/backoff mutants plus the newly covered null-return mutation are now KILLED by the inline continuation test.",
+      "evidence": "native-attempt3/mutations.xml.gz",
+      "change": "Make existing readBounded helper internal (implementation unchanged); byte-cap test invokes it directly to avoid coroutine startup and ensure it precedes unbounded HTTP cases."
     }
   ],
   "real_dependency_proof": "focused.txt: 3/3 real LocalApi probes passed before fixture introduction, exercising 503 {} and a 65537-byte x body. Frozen FixtureCalibrationTest also proves real HTTP status/body behavior. The second version reuses these observed inputs.",

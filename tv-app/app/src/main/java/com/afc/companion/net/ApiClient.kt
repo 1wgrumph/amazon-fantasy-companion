@@ -111,7 +111,7 @@ class ApiClient(
 
         private fun encode(value: String): String = URLEncoder.encode(value, "UTF-8")
 
-        private fun readBounded(input: InputStream): String {
+        internal fun readBounded(input: InputStream): String {
             val bytes = input.readNBytesCompat(MAX_BODY_BYTES + 1)
             require(bytes.size <= MAX_BODY_BYTES) { "Response body exceeds 64 KiB" }
             return bytes.toString(Charsets.UTF_8)
