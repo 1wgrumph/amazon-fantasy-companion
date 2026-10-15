@@ -29,8 +29,9 @@ without applying that base to WS-CHECK. No extension exclusion caused this.
 
 Both routes now apply the existing Git whitespace rule to the relevant change:
 the selected local base (or merge-base with origin/main), and the GitHub event's
-PR base or push `before` commit. A shallow CI checkout fetches only its missing
-base commit. An invalid or unavailable CI base fails closed. Existing sanitized
+PR base or push `before` commit. CI hygiene now checks out full history with
+credentials persistence disabled. The missing-base fetch remains a fail-closed
+fallback. An invalid or unavailable CI base fails closed. Existing sanitized
 `file:line:WS-CHECK` reporting is preserved. Historical whitespace outside the
 change is not rewritten.
 
@@ -66,3 +67,60 @@ network service, shared port, device or AWS. Expected focused-test cost: about
 - Final commit and hook results are returned in the coordinator packet.
 
 No issue filing, independent review, push, PR or publication is part of this packet.
+
+## Review repair: F1 and F2
+
+- Repair baseline: `0753adbb05320ca70035043c1bcc158b5c4b97bd`, same worktree,
+  branch and frozen bug-triager Implementer route. The owner-authorized repair
+  write set covers the hygiene checkout, gate, gate tests and this evidence
+  directory. The packet's shortened evidence path resolves to this existing
+  Lifecycle evidence directory; no new top-level evidence directory is needed.
+- Next action: finish deterministic verification, commit with hooks enabled,
+  and return the repair result to the coordinator. This is author verification,
+  not independent assurance. F3's CHANGELOG PR link remains the coordinator's
+  landing obligation, outside this worker's write set.
+- F1 origin: hygiene used checkout's depth-1 default without persisted
+  credentials. Its subsequent private-remote fetch could not authenticate.
+  The original file-remote regression escaped this because fetching was allowed.
+  Repair: hygiene checkout alone sets `fetch-depth: 0`; `persist-credentials:
+  false` and the gate's fail-closed fetch fallback remain intact.
+- F2 origin: failure to find `origin/main` selected HEAD without identifying
+  the resulting uncommitted-only scope. Repair: print exactly one line,
+  `WS-CHECK: no origin/main; checking uncommitted changes only`.
+
+Method: test. Two new named behaviors use real Git repositories, the actual
+workflow checkout depth, and isolated local clones. Disabling Git's file
+transport after cloning models a remote that denies further fetch access,
+without accessing credentials or the network. Both PR and push event shapes
+are covered. Depth-1 copies must report `WS-CHECK: CI base unavailable` and
+fail; workflow-depth copies must reach the existing base, reject committed
+whitespace, and pass after a clean replacement commit. The local fallback must
+print its notice once and still reject staged whitespace. Existing redaction
+assertions remain, excluding only the new fixed notice from location records.
+No engines, services, shared ports or acquired dependencies are involved.
+
+- Red command: `PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=tools/ci/tests python3 -m
+  unittest test_gate.AC_AFC_CI_01.test_ci_base_without_fetch_access_fails_closed_or_uses_checkout_history
+  test_gate.AC_AFC_CI_01.test_local_without_origin_main_announces_uncommitted_only_fallback`.
+  Exit 1 on unchanged product code: PR and push full-history cases instead
+  reported `CI base unavailable`; local notice count was 0 instead of 1.
+  Depth-1 fail-closed cases already passed. These are expected regression
+  failures reproducing F1/F2, not new defects or issue-filing triggers.
+- Green command: `PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=tools/ci/tests python3 -m
+  unittest test_gate`. Exit 0: 21 tests, 28.227 seconds. Both new test IDs pass,
+  including the previously failing cases. The original committed-evidence
+  regression also passes, retaining missing-base fetch coverage
+  through an accessible local remote.
+- `bash -n tools/ci/gate.sh` and `git diff --check`: exit 0.
+- Full gate: `JAVA_HOME="$HOME/.local/share/afc-tools/jdk-17.0.20.1+1"
+  ANDROID_HOME="$HOME/.local/share/afc-tools/android-sdk"
+  GRADLE_USER_HOME="$HOME/.gradle/afc-p2-a01t" PYTHONDONTWRITEBYTECODE=1
+  timeout 600 bash tools/ci/gate.sh`, exit 0. All five areas pass, including
+  69 hygiene tests and 380 backend tests. Output includes expected negative
+  fixture Git diagnostics and existing botocore deprecation warnings; neither
+  is a failed gate. The external repair result records the final commit SHA
+  and commit-hook outcome, avoiding a self-referential receipt commit.
+
+BRAN: unavailable (no native policy). OCR: the existing review produced F1/F2;
+no extra review round is started by this worker. Reverify: not applicable to
+this repair's shell/YAML/Python behavior; no compiled-binary claim is made.

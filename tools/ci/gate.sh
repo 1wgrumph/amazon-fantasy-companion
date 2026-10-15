@@ -49,7 +49,7 @@ run_area() {
             python3 -c 'import yaml' || return 3
             local ws_base=$base
             if [[ -z "$ws_base" && "${GITHUB_ACTIONS:-false}" == true ]]; then
-                # Checkout is clean and shallow in CI: check the event's whole change.
+                # Checkout is clean in CI: check the event's whole change.
                 ws_base=$(python3 - <<'PYBASE'
 import json
 import os
@@ -74,7 +74,10 @@ PYBASE
                 fi
             fi
             if [[ -z "$ws_base" ]]; then
-                ws_base=$(git merge-base HEAD origin/main 2>/dev/null) || ws_base=HEAD
+                ws_base=$(git merge-base HEAD origin/main 2>/dev/null) || {
+                    printf 'WS-CHECK: no origin/main; checking uncommitted changes only\n'
+                    ws_base=HEAD
+                }
             fi
             ws_out=$(git diff --check "$ws_base" -- 2>&1)
             ws_rc=$?

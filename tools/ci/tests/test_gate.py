@@ -90,7 +90,8 @@ class AC_AFC_CI_01(unittest.TestCase):
         rc, out = run_gate(self, repo, 'hygiene')
         self.assertEqual(rc, 1, out)
         self.assertNotIn(fake, out, 'hygiene output echoed the staged line text')
-        findings = [line for line in out.splitlines() if not line.startswith('gate: ')]
+        findings = [line for line in out.splitlines() if not line.startswith('gate: ')
+                    and line != 'WS-CHECK: no origin/main; checking uncommitted changes only']
         self.assertTrue(findings, out)
         for line in findings:
             self.assertRegex(line, r'^[^:]+:[0-9]+:[A-Z0-9-]+$')
@@ -150,6 +151,61 @@ class AC_AFC_CI_01(unittest.TestCase):
                 rc, out = run_gate(self, repo, *args, env=env)
                 self.assertEqual(rc, 0, out)
                 self.assertIn('gate: hygiene: PASS', out)
+
+    def test_ci_base_without_fetch_access_fails_closed_or_uses_checkout_history(self):
+        import yaml
+        workflow = yaml.safe_load((REPO / '.github/workflows/ci.yml').read_text(encoding='utf-8'))
+        checkout = next(step for step in workflow['jobs']['hygiene']['steps']
+                        if step.get('uses', '').startswith('actions/checkout@'))
+        self.assertIs(checkout['with']['persist-credentials'], False)
+        depth = checkout['with'].get('fetch-depth', 1)
+        source = copy_repo(self.tmp / 'source')
+        base = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=source,
+                                       text=True).strip()
+        write(source, {'committed.txt': 'trailing space \n'})
+        commit_all(source)
+        for mode in ('pull_request', 'push'):
+            for full_history in (False, True):
+                with self.subTest(mode=mode, full_history=full_history):
+                    clone = self.tmp / f'{mode}-{full_history}'
+                    clone_depth = depth if full_history else 1
+                    args = [] if clone_depth == 0 else [f'--depth={clone_depth}']
+                    git(self.tmp, 'clone', '-q', *args, source.as_uri(), str(clone))
+                    # Deny the real transport after checkout, like a private remote without auth.
+                    git(clone, 'config', 'protocol.file.allow', 'never')
+                    event = self.tmp / f'{mode}-{full_history}.json'
+                    payload = ({'pull_request': {'base': {'sha': base}}}
+                               if mode == 'pull_request' else {'before': base})
+                    event.write_text(json.dumps(payload), encoding='utf-8')
+                    env = dict(os.environ, CI='true', GITHUB_ACTIONS='true',
+                               GITHUB_EVENT_PATH=str(event))
+                    rc, out = run_gate(self, clone, 'hygiene', env=env)
+                    self.assertEqual(rc, 1, out)
+                    if full_history:
+                        self.assertIn('committed.txt:1:WS-CHECK', out.splitlines())
+                        self.assertNotIn('CI base unavailable', out)
+                        write(clone, {'committed.txt': 'no trailing space\n'})
+                        commit_all(clone)
+                        rc, out = run_gate(self, clone, 'hygiene', env=env)
+                        self.assertEqual(rc, 0, out)
+                    else:
+                        self.assertIn('WS-CHECK: CI base unavailable', out.splitlines())
+                        self.assertNotIn('gate: hygiene: PASS', out)
+
+    def test_local_without_origin_main_announces_uncommitted_only_fallback(self):
+        repo = copy_repo(self.tmp / 'repo')
+        write(repo, {'committed.txt': 'trailing space \n'})
+        commit_all(repo)
+        env = dict(os.environ, CI='', GITHUB_ACTIONS='')
+        rc, out = run_gate(self, repo, 'hygiene', env=env)
+        self.assertEqual(rc, 0, out)
+        note = 'WS-CHECK: no origin/main; checking uncommitted changes only'
+        self.assertEqual(out.splitlines().count(note), 1, out)
+        write(repo, {'uncommitted.txt': 'trailing space \n'})
+        git(repo, 'add', 'uncommitted.txt')
+        rc, out = run_gate(self, repo, 'hygiene', env=env)
+        self.assertEqual(rc, 1, out)
+        self.assertIn('uncommitted.txt:1:WS-CHECK', out.splitlines())
 
     def test_docs_area_exits_1_on_seeded_broken_link(self):
         repo = copy_repo(self.tmp / 'repo')
