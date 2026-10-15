@@ -92,6 +92,7 @@ Resources:
                 - !Sub arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:parameter${YahooClientSecretParameter}
                 - !Sub arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:parameter${YahooTokenParameter}
       Events:
+        DefaultRoute: {Type: HttpApi, Properties: {ApiId: !Ref HttpApi}}
         LinkIssue: {Type: HttpApi, Properties: {ApiId: !Ref HttpApi, Method: POST, Path: /v1/link}}
         LinkPoll: {Type: HttpApi, Properties: {ApiId: !Ref HttpApi, Method: GET, Path: /v1/link}}
         LinkConfirm: {Type: HttpApi, Properties: {ApiId: !Ref HttpApi, Method: POST, Path: /v1/link/confirm}}

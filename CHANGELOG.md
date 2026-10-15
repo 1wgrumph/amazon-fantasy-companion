@@ -60,6 +60,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Return the standard 404 error envelope for unknown API routes by routing
+  unmatched requests to the existing Lambda router ([#67](https://github.com/1wgrumph/amazon-fantasy-companion/pull/67)).
 - Fix the deployed-test network guard so smoke tests reach the configured
   API host (resolved and rotating addresses) while every other destination
   stays blocked ([#64](https://github.com/1wgrumph/amazon-fantasy-companion/pull/64)).
