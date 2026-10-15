@@ -438,6 +438,40 @@
      "Existing stored manual rows without team are unchanged; rebuilding through manual.build supplies the retained team."
     ],
     "unmet": []
+   },
+   {
+    "finding": "B02-R1..R4",
+    "status": "PASS",
+    "baseline": "6df74e4 (reviewed 2753595 plus merge of origin/main #69)",
+    "candidate_ref": "b25fa96cb9033a2f8f409f096c543f9052fbd279",
+    "round": "Single authorized in-wave repair round after slice review REPAIR_REQUIRED (P2-B02/review.md); no new review",
+    "route": "Muse Code / muse-wonder-full-1.0 / high, contributor mode on",
+    "bug_route": "frozen-lifecycle-profile in-wave P2-B02 review repair; not a GitHub bug-triager packet",
+    "fix": "R1: immutable replay corpus copied byte-identical into backend/src/feed_ingest/replay_data/ (inside CodeUri src/); _fixtures() resolves beside __file__ and never walks above the package. R2: scoreboard OSError enters the same consecutive-failure fallback as summary outages, using packaged captures' own scoreboards to find profile-relevant games; validation ValueError still propagates. R3: consecutive-failure counts live in a module-level warm-container dict shared across invocations and reset on success (shortcut recorded in code: durable store needs a state-table grant IngestFunction does not hold; a cold start resets the count). R4: no request starts unless its 10s bound fits the remaining Lambda budget, and the loop sleeps into another poll only when interval plus the last poll's observed cost fits.",
+    "requirements": [
+     "DES-AFC-P2-FEED",
+     "CONTRACT-AFC-P2-FIXTURE",
+     "SEIT-AFC-PR-012",
+     "SEIT-AFC-PR-013",
+     "SEIT-RISK-AFC-P2-05"
+    ],
+    "regression": "backend/tests/unit/feed_ingest/test_outage_repairs.py (R2 scoreboard-outage replay; R3 cross-invocation persistence and success reset with 10s-charged timeouts; R4 next-poll budgeting and per-request stop with 8s-charged requests) and backend/tests/contract/feed_ingest/test_replay_packaging.py (R1 isolated CodeUri copy loads replay; packaged game set equals captured set). Red on baseline: 5 failed / 2 passed across the two new files; green after the fix.",
+    "frozen_verifiers": {
+     "P2-B02T": {
+      "exit_code": 0
+     },
+     "P2-B03T": {
+      "exit_code": 0
+     },
+     "note": "Frozen hashed files byte-identical before and after; no frozen file edited"
+    },
+    "gate": {
+     "command": "PATH=$HOME/.local/share/afc-tools/backend-tests/bin:$PATH bash tools/ci/gate.sh",
+     "exit_code": 0,
+     "backend_tests_passed": 537,
+     "note": "spec/docs/hygiene/backend PASS; tvapp PASS no tree; also re-run green inside the commit hook"
+    },
+    "residual_risk": "R3 counts are warm-container only (see fix); deployed acceptance and live timing remain open as in the review (X05 PARTIAL). No AWS, push, or PR in this round."
    }
   ],
   "commands": [
@@ -646,5 +680,5 @@
   "historical_blocker_origin": "B03 manual lineup output drops NFL team; B02 relevance adapter only has scoreboard leaders and team-bearing starters. The production positive case is not representable with the current manual-starter shape.",
   "historical_blocker_escape": "Frozen monitoring tests supply full boxscore athlete sets directly to the helper, while the production scoreboard carries only leaders. New positive integration tests covered a leader and a team-bearing Yahoo starter, leaving a selected manual nonleader untested."
  },
- "latest_repair": "repair.repair_table[-1]: F5 completion; previous rows and initial commands are historical"
+ "latest_repair": "repair.repair_table[-1]: B02-R1..R4 in-wave repair; previous rows are historical"
 }
