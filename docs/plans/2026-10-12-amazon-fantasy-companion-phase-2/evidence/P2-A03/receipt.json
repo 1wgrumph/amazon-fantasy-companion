@@ -1,0 +1,79 @@
+{
+ "slice": "P2-A03",
+ "role": "Product Implementer",
+ "route": "Muse Code / muse-wonder-full-1.0 / high (packet-assigned)",
+ "issue": "#38 (milestone M08)",
+ "base": "455e87c7df5cd4c9f401022f43fb6f6fad552bea (P2-A03T red) merged with origin/main 1518e573b0acb5b24db24164b26057e250974e66",
+ "red_baseline": "P2-A03T receipt: 18 tests, 17 failed, 1 passed, assertion-only (evidence/P2-A03T/receipt.json)",
+ "commands": [
+  {
+   "id": "MERGE-MAIN",
+   "command": "git fetch origin && git merge origin/main --no-edit",
+   "exit_code": 0,
+   "note": "merge commit, no conflicts; frozen A03T hashes re-verified MATCH after the merge"
+  },
+  {
+   "id": "CMD-GREEN",
+   "command": "./tv-app/gradlew -p tv-app --no-daemon --max-workers=2 testDebugUnitTest --tests 'com.afc.companion.alerts.*'",
+   "exit_code": 0,
+   "log": "CMD-GREEN.txt",
+   "result": "18/18 passed (7 AlertFeedTest, 11 AlertPresenterTest); same test ids as the A03T red receipt"
+  },
+  {
+   "id": "CMD-ASSEMBLE",
+   "command": "./tv-app/gradlew -p tv-app --no-daemon --max-workers=2 assembleDebug assembleDebugAndroidTest lintDebug",
+   "exit_code": 0,
+   "log": "assemble.txt",
+   "result": "BUILD SUCCESSFUL; app-debug.apk sha256 65bcf2bdbca666449712564315606244c9078484b5e2a00fca3fc6fa56d9ea81; the frozen androidTest compiles against the new notifier"
+  },
+  {
+   "id": "CMD-REVERIFY-APK",
+   "command": "reverify auto tv-app/app/build/outputs/apk/debug/app-debug.apk",
+   "exit_code": 0,
+   "log": "reverify.txt",
+   "result": "GAP REVERIFY_CAPABILITY_GAP: reverify auto reports only 'ZIP Archive / Package' triage for the APK; no semantic claim about the APK is made (plan TE-P2-F03). Never a pass."
+  },
+  {
+   "id": "CMD-GATE",
+   "command": "bash tools/ci/gate.sh",
+   "exit_code": 0,
+   "log": "gate.txt",
+   "result": "spec, docs, hygiene, tvapp, backend all PASS (second run; first run exit 1 on hygiene only, see ws_repair)"
+  },
+  {
+   "id": "CMD-TVAPP-INSTRUMENTED",
+   "command": "connectedDebugAndroidTest on the Fire TV stick",
+   "exit_code": null,
+   "result": "GAP DEVICE_INSTALL_PENDING: no stick leased or used (packet prohibition); steps in evidence/visual/P2-A03/PENDING-DEVICE.txt"
+  },
+  {
+   "id": "PROC-VISUAL-REVIEW",
+   "command": "visual review on the stick over provider playback",
+   "exit_code": null,
+   "result": "GAP VISUAL_EMULATOR_UNAVAILABLE: no device or emulator; steps in evidence/visual/P2-A03/PENDING-DEVICE.txt"
+  }
+ ],
+ "frozen_hash_check": "frozen-hash-check.txt: all four P2-A03T files MATCH the packet hashes",
+ "negative_check": "voiceStaysOffWithoutAVerifiedRoute PASSED (default voiceRouteVerified=false and explicit false both stay silent); red-zone over-claim commentary is dropped, context retained",
+ "ws_repair": {
+  "finding": "first gate run failed hygiene only: evidence/P2-A03T/cmd-red.txt:2:WS-CHECK (one trailing space committed by P2-A03T, caught by the post-#75 committed-whitespace check after the origin/main merge)",
+  "repair": "removed exactly that one byte from cmd-red.txt (same repair as PR #75 for P2-A02T) and refreshed log_sha256 in evidence/P2-A03T/receipt.json to 44483d4ff5014a0c53f1ca0b62a30f30f50969187f7d1d6d70fdcc4bf13a4daf so the red receipt stays self-consistent; no test file was touched",
+  "authority_note": "this evidence repair sits outside the packet write set; it is required for objective 'bash tools/ci/gate.sh exit 0' and follows the landed #75 precedent"
+ },
+ "remaining_risks": [
+  "ALERT_DATA_SHAPE_ASSUMED: P2-B05 has not landed; alert data (alertType, triggerContext{player,matchup}, commentary, route) follows the frozen A03T fixture and Dto data.route shape. If B05 changes the shape, AlertPresenter reads must be revisited.",
+  "Nothing starts AlertService yet: MainActivity is P2-A05-owned and outside this write set, so service start wiring lands there.",
+  "Over-playback heads-up behavior, the Dismiss service PendingIntent on Fire OS, and POST_NOTIFICATIONS on the stick are unverified until CMD-TVAPP-INSTRUMENTED and PROC-VISUAL-REVIEW run on device.",
+  "Watch action opens WatchActivity, which is still the P2-A04 stub; no launch or routing outcome is claimed."
+ ],
+ "developer_feedback": [
+  {
+   "id": "DX-A03-01",
+   "observation": "Committed gradle logs carry a trailing space on the 'Daemon will be stopped at the end of the build' line, so every new evidence log committed verbatim fails the post-#75 WS-CHECK; P2-A03T hit the same byte P2-A02T did. Evidence: gate.txt first-run finding cmd-red.txt:2:WS-CHECK; repair above. Candidate fix: strip trailing whitespace when capturing evidence logs, or note it in the evidence runbook."
+  },
+  {
+   "id": "DX-A03-02",
+   "observation": "CMD-RED as written fails with 'SDK location not found' unless ANDROID_HOME/JAVA_HOME point at the afc-tools installs that gate.sh self-discovers; the packet command alone is not runnable. Evidence: first CMD-GREEN attempt failed SDK location, succeeded with the gate's discovered paths exported."
+  }
+ ]
+}

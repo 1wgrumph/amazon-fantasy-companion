@@ -7,10 +7,18 @@ from pathlib import Path
 import jsonschema
 
 
+# DynamoDB rejects floats, including whole-number floats allowed by JSON Schema.
+_FeedValidator = jsonschema.validators.extend(
+    jsonschema.Draft202012Validator,
+    type_checker=jsonschema.Draft202012Validator.TYPE_CHECKER.redefine(
+        "integer", lambda checker, value: isinstance(value, int) and not isinstance(value, bool)),
+)
+
+
 @functools.cache
 def _validator(name):
     schema = json.loads((Path(__file__).parent / "schema" / f"{name}.json").read_text())
-    return jsonschema.Draft202012Validator(schema)
+    return _FeedValidator(schema)
 
 
 def _check(name, payload):

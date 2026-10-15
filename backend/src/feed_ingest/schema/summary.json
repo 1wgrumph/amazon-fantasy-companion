@@ -87,12 +87,18 @@
   "$defs": {
     "play": {
       "type": "object",
-      "required": ["id", "awayScore", "homeScore", "start"],
+      "required": ["id", "awayScore", "homeScore", "start", "period", "scoringPlay"],
       "properties": {
         "id": {"type": "string", "minLength": 1},
         "awayScore": {"type": "integer"},
         "homeScore": {"type": "integer"},
         "wallclock": {"type": ["string", "null"]},
+        "period": {
+          "type": "object",
+          "required": ["number"],
+          "properties": {"number": {"type": "integer", "minimum": 1}}
+        },
+        "scoringPlay": {"type": "boolean"},
         "start": {
           "type": "object",
           "required": ["yardsToEndzone"],
