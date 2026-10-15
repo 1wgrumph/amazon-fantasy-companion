@@ -77,7 +77,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Discover the user-scope JDK 17 and Android SDK for local gate and hook runs
-  without exported toolchain variables; preserve explicit settings and CI behavior (PR TBD).
+  without exported toolchain variables; preserve explicit settings and CI behavior ([#78](https://github.com/1wgrumph/amazon-fantasy-companion/pull/78)).
 
 - Check committed PR and push changes for whitespace in CI and local hooks,
   and remove trailing whitespace from the P2-A02T evidence log ([#75](https://github.com/1wgrumph/amazon-fantasy-companion/pull/75)).
