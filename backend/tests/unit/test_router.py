@@ -51,7 +51,7 @@ def test_body_limit_is_exactly_64_kib(api):
 def test_base64_bodies_are_decoded_and_bad_encodings_rejected(api):
     encoded = base64.b64encode(b'{"code": "x"}').decode()
     status, response = call("POST", "/v1/link/confirm", encoded, b64=True)
-    assert status == 400 and error_of(response)["message"] == "Field passphrase is missing or invalid."
+    assert status == 400 and error_of(response)["message"] == "Field profileId is missing or invalid."
     assert call("POST", "/v1/link", "e30=", b64=True)[0] == 201
     for raw in ["not base64!", "e30=\n!", base64.b64encode(b"\xff\xfe").decode()]:
         status, response = call("POST", "/v1/link", raw, b64=True)
@@ -279,25 +279,20 @@ def test_unexpected_failures_return_a_safe_503(api, owner, monkeypatch):
 def test_link_confirm_validates_fields_and_maps_results(api):
     import device_auth
     device = json.loads(call("POST", "/v1/link")[1]["body"])
-    cases = [({"code": "X" * 17, "passphrase": api.passphrase, "profileId": "owner"}, "code"),
-             ({"code": "ab-c d", "passphrase": "", "profileId": "owner"}, "passphrase"),
-             ({"code": device["code"], "passphrase": "p" * 257, "profileId": "owner"}, "passphrase"),
-             ({"code": device["code"], "passphrase": api.passphrase, "profileId": "a/b"}, "profileId"),
-             ({"code": device["code"], "passphrase": api.passphrase, "profileId": "o" * 65}, "profileId")]
+    cases = [({"code": "X" * 17, "profileId": "owner"}, "code"),
+             ({"code": "", "profileId": "owner"}, "code"),
+             ({"code": device["code"], "profileId": "a/b"}, "profileId"),
+             ({"code": device["code"], "profileId": "o" * 65}, "profileId")]
     for body, field in cases:
         status, response = call("POST", "/v1/link/confirm", json.dumps(body))
         assert status == 400 and error_of(response) == {
             "code": "invalid_request", "message": f"Field {field} is missing or invalid."}
     status, response = call("POST", "/v1/link/confirm", json.dumps(
-        {"code": device["code"], "passphrase": "wrong", "profileId": "owner"}))
-    assert status == 401 and error_of(response) == {
-        "code": "unauthenticated", "message": "The link passphrase is not correct."}
-    status, response = call("POST", "/v1/link/confirm", json.dumps(
-        {"code": "ZZZZ2222", "passphrase": api.passphrase, "profileId": "owner"}))
+        {"code": "ZZZZ2222", "profileId": "owner"}))
     assert status == 410 and error_of(response) == {
         "code": "code_expired", "message": "This code is expired, used or unknown."}
     status, response = call("POST", "/v1/link/confirm", json.dumps(
-        {"code": device["code"].lower(), "passphrase": api.passphrase, "profileId": "O_w-1"}))
+        {"code": device["code"].lower(), "profileId": "O_w-1"}))
     assert status == 200 and json.loads(response["body"]) == {"state": "linked"}
     assert device_auth.poll(device["handle"])["state"] == "linked"
 

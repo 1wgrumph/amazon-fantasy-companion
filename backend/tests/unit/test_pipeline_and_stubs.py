@@ -51,7 +51,6 @@ def test_stream_images_are_deserialized(api):
 
 STUBS = [
     ("feed_ingest", "lambda_handler", 2, "P2-B02"),
-    ("lineup", "active_lineup", 1, "P2-B03"),
     ("matcher", "resolve", 1, "P2-B04"),
     ("alert_policy", "evaluate", 2, "P2-B05"),
     ("alert_policy", "pending", 2, "P2-B05"),

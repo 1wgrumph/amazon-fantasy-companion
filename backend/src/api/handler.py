@@ -148,10 +148,8 @@ def _link_poll(profile_id, query, body):
 
 
 def _link_confirm(profile_id, query, body):
-    code, passphrase = _text(body, "code", r"[A-Za-z0-9 -]{1,16}"), _text(body, "passphrase")
-    result = device_auth.confirm(code, passphrase, _text(body, "profileId", r"[A-Za-z0-9_-]{1,64}"))
-    if result == "unauthorized":
-        raise ApiError(401, "unauthenticated", "The link passphrase is not correct.")
+    code = _text(body, "code", r"[A-Za-z0-9 -]{1,16}")
+    result = device_auth.confirm(code, _text(body, "profileId", r"[A-Za-z0-9_-]{1,64}"))
     if result == "gone":
         raise ApiError(410, "code_expired", "This code is expired, used or unknown.")
     return _respond(200, {"state": "linked"})
