@@ -815,7 +815,7 @@
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">DOD-VPRIMARY</th>
-                  <td>Conditional primary readiness requires physical alerts/Watch proof, five-feature parity, shared SD-048 contract readiness, exact final .vpkg/demo hash and resolved owner decisions; no side-lane in-progress fallback. F1 remains open.</td>
+                  <td>Conditional primary readiness requires physical alerts/Watch proof, five-feature parity, shared SD-048 contract readiness, exact final .vpkg/demo hash and resolved owner decisions; no side-lane in-progress fallback. F1 closed by DEC-AFC-SD-050 option (a).</td>
                   <td>Conditional SEIT physical/contract/artifact receipts; queued owner choices.</td>
                   <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>proposed; not_run</span></td>
                 </tr>
@@ -1681,7 +1681,7 @@
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">CONTRACT-AFC-P2-PROVIDER-REGISTRY</th>
-                  <td>Provider registry: `backend/src/provider_resolver/registry.json`, written from the P2-X03 verdict: per provider `id`, `name`, `package`, `launch` (`type`: `intent` | `uri`; `value` template with `{channel}` / `{event}` placeholders only where documented), `doc_source`, `verified_outcome` (one RoutingOutcome value observed on the stick), `channels_carried` (for local broadcast), `verified_at`. `verified_outcome` desc</td>
+                  <td>`backend/src/provider_resolver/registry.json`, written from the P2-X03 verdict: per provider `id`, `name`, `channels_carried` (for local broadcast) and `platform_routes` with two entries, `fire_os` and `vega` (amended 2026-10-14 for DEC-AFC-SD-049, both targets built). Each entry carries its own `package` (Android package or Vega component id), `launch` (`type`: `intent` | `uri`; `value` template with `{channel}` / `{event}` placeholders only where documented), `doc_source`, `verified_outcome` (one RoutingOutcome value observed on that platform&#39;s device), `verified_at` and the documented current-attempt observation mechanism or explicitly none. `verified_outcome` describes the spike observation only, not a current launch result. X03&#39;s primary scope writes `vega`; its Fire OS secondary scope writes `fire_os`. A missing or unverified entry is REGISTRY_ROUTE_GAP for that platform: it blocks that platform&#39;s Watch acceptance, is never filled from the other platform, and is never turned into a client limitation without an owner amendment. Order of entries is the spike order; selection order is the customer&#39;s preference.</td>
                   <td>—</td>
                   <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
                 </tr>
@@ -2381,14 +2381,14 @@
                   <td>Test Implementer</td>
                   <td>P2-X01</td>
                   <td>tv-app/app/src/test/, tv-app/settings.gradle.kts, tv-app/build.gradle.kts, tv-app/gradle/, tv-app/gradlew, tv-app/gradlew.bat, tv-app/app/build.gradle.kts, tv-app/app/src/main/AndroidManifest.xml, tv-app/app/src/main/java/com/afc/companion/</td>
-                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>inactive if Vega selected; preserved reference</span></td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">P2-A01</th>
                   <td>Product Implementer</td>
                   <td>P2-X01, P2-G01, P2-A01T, P2-B01, P2-X04</td>
                   <td>tv-app/, THIRD_PARTY_NOTICES.md, evidence/visual/P2-A01/</td>
-                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>inactive if Vega selected; preserved reference</span></td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">P2-B01T</th>
@@ -2479,14 +2479,14 @@
                   <td>Test Implementer</td>
                   <td>P2-A01</td>
                   <td>tv-app/app/src/test/java/com/afc/companion/profile/, tv-app/app/src/test/java/com/afc/companion/detect/, tv-app/app/src/androidTest/java/com/afc/companion/profile/, tv-app/app/src/androidTest/java/com/afc/companion/detect/</td>
-                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>inactive if Vega selected; preserved reference</span></td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">P2-A02</th>
                   <td>Product Implementer</td>
                   <td>P2-X07, P2-A02T</td>
                   <td>tv-app/app/src/main/java/com/afc/companion/profile/, tv-app/app/src/main/java/com/afc/companion/detect/, evidence/visual/P2-A02/, tv-app/app/src/main/AndroidManifest.xml, tv-app/app/build.gradle.kts, tv-app/gradle/libs.versions.toml</td>
-                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>inactive if Vega selected; preserved reference</span></td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">P2-L02</th>
@@ -2541,7 +2541,7 @@
                   <th scope="row" class="id">P2-B06</th>
                   <td>Product Implementer</td>
                   <td>P2-B06T</td>
-                  <td>backend/src/provider_resolver/</td>
+                  <td>backend/src/provider_resolver/, backend/src/api/openapi.yaml</td>
                   <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>proposed Vega binding; not approved</span></td>
                 </tr>
                 <tr class="row-plan">
@@ -2563,42 +2563,42 @@
                   <td>Test Implementer</td>
                   <td>P2-X02, P2-A02</td>
                   <td>tv-app/app/src/test/java/com/afc/companion/alerts/, tv-app/app/src/androidTest/java/com/afc/companion/alerts/</td>
-                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>inactive if Vega selected; preserved reference</span></td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">P2-A03</th>
                   <td>Product Implementer</td>
                   <td>P2-B05, P2-A03T</td>
                   <td>tv-app/app/src/main/java/com/afc/companion/alerts/, evidence/visual/P2-A03/, tv-app/app/src/main/AndroidManifest.xml, tv-app/app/build.gradle.kts, tv-app/gradle/libs.versions.toml</td>
-                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>inactive if Vega selected; preserved reference</span></td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">P2-A04T</th>
                   <td>Test Implementer</td>
                   <td>P2-X03, P2-A03T</td>
                   <td>tv-app/app/src/test/java/com/afc/companion/watch/, tv-app/app/src/androidTest/java/com/afc/companion/watch/</td>
-                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>inactive if Vega selected; preserved reference</span></td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">P2-A04</th>
                   <td>Product Implementer</td>
                   <td>P2-B06, P2-A04T</td>
                   <td>tv-app/app/src/main/java/com/afc/companion/watch/, evidence/visual/P2-A04/, tv-app/app/src/main/AndroidManifest.xml, tv-app/app/build.gradle.kts, tv-app/gradle/libs.versions.toml</td>
-                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>inactive if Vega selected; preserved reference</span></td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">P2-A05T</th>
                   <td>Test Implementer</td>
                   <td>P2-X04, P2-A02</td>
                   <td>tv-app/app/src/test/java/com/afc/companion/panel/, tv-app/app/src/androidTest/java/com/afc/companion/panel/</td>
-                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>inactive if Vega selected; preserved reference</span></td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">P2-A05</th>
                   <td>Product Implementer</td>
                   <td>P2-B07, P2-A05T</td>
                   <td>tv-app/app/src/main/java/com/afc/companion/panel/, tv-app/app/src/main/java/com/afc/companion/MainActivity.kt, evidence/visual/P2-A05/, tv-app/app/src/main/AndroidManifest.xml, tv-app/app/build.gradle.kts, tv-app/gradle/libs.versions.toml</td>
-                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>inactive if Vega selected; preserved reference</span></td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">P2-L03</th>
@@ -3391,7 +3391,7 @@
                 <tr class="row-plan">
                   <th scope="row" class="id">RISK-AFC-P2-14</th>
                   <td>M14 starts after A01..A05 (W3) with nine days to T_deadline and competes for the five-agent cap.</td>
-                  <td>If P2-V01 is not merged with its verdict table before the M12 submission documents are finalized (due 2026-10-22T16:00:00Z), then the submission shall describe the Vega build as in progress with its stated limits, and no M12 or M13 slice shall wait for it. Conditional primary override: failed Vega blocks submission readiness; D04 closure ownership remains VP-OD-05/F1, not approved.</td>
+                  <td>If P2-V01 is not merged with its verdict table before the M12 submission documents are finalized (due 2026-10-22T16:00:00Z), then the submission shall describe the Vega build as in progress with its stated limits, and no M12 or M13 slice shall wait for it. Conditional primary override: failed Vega blocks submission readiness; P2-D04 closes RISK-AFC-P2-14; P2-V01 supplies the evidence (DEC-AFC-SD-050); F1 closed.</td>
                   <td>Report in progress with limits; Fire OS path unaffected.</td>
                   <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
                   <td>—</td>
@@ -3424,12 +3424,12 @@
                   <td>—</td>
                   <td>—</td>
                 </tr>
-                <tr class="row-gap">
+                <tr class="row-plan">
                   <th scope="row" class="id">Inherited schema gap</th>
-                  <td>Original V01T and V01 goal strings exceed the house-schema 512-character cap at base 5097585.</td>
-                  <td>Additive-only delta preserves them; proposed primary override goals meet schema; no new schema findings. Full unmaterialized document is not claimed schema PASS.</td>
-                  <td>Materialize the approved concise primary goals; if Fire OS selected, losslessly normalize summaries retaining original goal_source_notes. No new owner intent required.</td>
-                  <td><span class="status status-gap"><span class="mark" aria-hidden="true"></span>baseline gap; schema-validation.json</span></td>
+                  <td>The two earlier V01T/V01 goal maxLength findings are closed (F-VP-03).</td>
+                  <td>Each goal now equals its vega_primary_contingency.overrides.goal; goal_source_notes keep the long text. Raw implementation.json and seit.json have zero schema violations under 1.1.8.</td>
+                  <td>No schema correction remains; preserve goal_source_notes.</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>closed; schema-validation.json</span></td>
                   <td>—</td>
                   <td>—</td>
                 </tr>

@@ -19125,7 +19125,7 @@
    },
    {
     "id": "DOD-VPRIMARY",
-    "criterion": "Conditional primary readiness requires physical alerts/Watch proof, five-feature parity, shared SD-048 contract readiness, exact final .vpkg/demo hash and resolved owner decisions; no side-lane in-progress fallback. F1 remains open.",
+    "criterion": "Conditional primary readiness requires physical alerts/Watch proof, five-feature parity, shared SD-048 contract readiness, exact final .vpkg/demo hash and resolved owner decisions; no side-lane in-progress fallback. F1 closed by DEC-AFC-SD-050 option (a).",
     "evidence": "Conditional SEIT physical/contract/artifact receipts; queued owner choices.",
     "status": "proposed; not_run"
    }
@@ -21557,7 +21557,7 @@
    },
    {
     "id": "CONTRACT-AFC-P2-PROVIDER-REGISTRY",
-    "decision": "Provider registry: `backend/src/provider_resolver/registry.json`, written from the P2-X03 verdict: per provider `id`, `name`, `package`, `launch` (`type`: `intent` | `uri`; `value` template with `{channel}` / `{event}` placeholders only where documented), `doc_source`, `verified_outcome` (one RoutingOutcome value observed on the stick), `channels_carried` (for local broadcast), `verified_at`. `verified_outcome` desc",
+    "decision": "`backend/src/provider_resolver/registry.json`, written from the P2-X03 verdict: per provider `id`, `name`, `channels_carried` (for local broadcast) and `platform_routes` with two entries, `fire_os` and `vega` (amended 2026-10-14 for DEC-AFC-SD-049, both targets built). Each entry carries its own `package` (Android package or Vega component id), `launch` (`type`: `intent` | `uri`; `value` template with `{channel}` / `{event}` placeholders only where documented), `doc_source`, `verified_outcome` (one RoutingOutcome value observed on that platform's device), `verified_at` and the documented current-attempt observation mechanism or explicitly none. `verified_outcome` describes the spike observation only, not a current launch result. X03's primary scope writes `vega`; its Fire OS secondary scope writes `fire_os`. A missing or unverified entry is REGISTRY_ROUTE_GAP for that platform: it blocks that platform's Watch acceptance, is never filled from the other platform, and is never turned into a client limitation without an owner amendment. Order of entries is the spike order; selection order is the customer's preference.",
     "interfaces": "\u2014",
     "lenses": [
      "Contract-first"
@@ -22271,7 +22271,7 @@
     "lane": "tv-app-ui",
     "milestone": "M03",
     "issue": "P2-A01 (M03)",
-    "status": "inactive if Vega selected; preserved reference",
+    "status": "planned",
     "vega_primary_contingency": {
      "status": "selected",
      "dispatchable": false,
@@ -22320,7 +22320,7 @@
     "lane": "tv-app-ui",
     "milestone": "M03",
     "issue": "P2-A01 (M03)",
-    "status": "inactive if Vega selected; preserved reference",
+    "status": "planned",
     "vega_primary_contingency": {
      "status": "selected",
      "dispatchable": false,
@@ -22873,7 +22873,7 @@
     "lane": "tv-app-ui",
     "milestone": "M06",
     "issue": "P2-A02 (M06)",
-    "status": "inactive if Vega selected; preserved reference",
+    "status": "planned",
     "vega_primary_contingency": {
      "status": "selected",
      "dispatchable": false,
@@ -22917,7 +22917,7 @@
     "lane": "tv-app-ui",
     "milestone": "M06",
     "issue": "P2-A02 (M06)",
-    "status": "inactive if Vega selected; preserved reference",
+    "status": "planned",
     "vega_primary_contingency": {
      "status": "selected",
      "dispatchable": false,
@@ -23183,7 +23183,8 @@
      "P2-B06T"
     ],
     "write_set": [
-     "backend/src/provider_resolver/"
+     "backend/src/provider_resolver/",
+     "backend/src/api/openapi.yaml"
     ],
     "wave": "Wave 3",
     "lane": "backend",
@@ -23194,11 +23195,23 @@
      "status": "selected",
      "dispatchable": false,
      "condition": "Selected by DEC-AFC-SD-049 (Vega OS primary, Fire OS secondary). Dispatch only after this candidate passes planning review and the controller materializes the overrides; dispatchable=false until then.",
-     "disposition": "keep_shared_backend",
-     "overrides": {},
+     "disposition": "shared_backend_platform_routes",
+     "overrides": {
+      "goal": "Implement `src/provider_resolver/` with registry read-only; return each route with the whole `platform_routes` map (fire_os and vega, each verified or REGISTRY_ROUTE_GAP); keep the existing caller; amend only the route schema in openapi.yaml; stop when green.",
+      "design_ids": [
+       "DES-AFC-P2-RESOLVE",
+       "CONTRACT-AFC-P2-PROVIDER-REGISTRY",
+       "CONTRACT-AFC-P2-API"
+      ],
+      "write_set": [
+       "backend/src/provider_resolver/",
+       "backend/src/api/openapi.yaml"
+      ]
+     },
      "completion_dependencies": [],
      "preserved_fields": "All unmentioned fields, including role/model_route/reasoning_level/review_path/authority_id, inherit unchanged. No new execution authority.",
-     "note": "No Vega-specific API/schema/service change. Existing SD-048 code-only reconciliation must land and deploy before linked proof; X03 supplies Vega URI registry data using the same schema. B01 live is not proof B02..B07 are complete."
+     "note": "No Vega-specific API/schema/service change. Existing SD-048 code-only reconciliation must land and deploy before linked proof; X03 supplies Vega URI registry data using the same schema. B01 live is not proof B02..B07 are complete.",
+     "platform_route_binding": "Owns the backend side: the resolver returns the `platform_routes` map with both entries and per-entry REGISTRY_ROUTE_GAP status. It does not select by client platform; the preserved caller backend/src/api/handler.py passes only profile_id and eventId. Amends only the route schema in backend/src/api/openapi.yaml under CMD-CONTRACT-FROZEN review."
     },
     "baseline_projection": {
      "depends_on": [
@@ -23259,7 +23272,7 @@
     "lane": "tv-app-ui",
     "milestone": "M08",
     "issue": "P2-A03 (M08)",
-    "status": "inactive if Vega selected; preserved reference",
+    "status": "planned",
     "vega_primary_contingency": {
      "status": "selected",
      "dispatchable": false,
@@ -23301,7 +23314,7 @@
     "lane": "tv-app-ui",
     "milestone": "M08",
     "issue": "P2-A03 (M08)",
-    "status": "inactive if Vega selected; preserved reference",
+    "status": "planned",
     "vega_primary_contingency": {
      "status": "selected",
      "dispatchable": false,
@@ -23343,7 +23356,7 @@
     "lane": "tv-app-ui",
     "milestone": "M08",
     "issue": "P2-A04 (M08)",
-    "status": "inactive if Vega selected; preserved reference",
+    "status": "planned",
     "vega_primary_contingency": {
      "status": "selected",
      "dispatchable": false,
@@ -23385,7 +23398,7 @@
     "lane": "tv-app-ui",
     "milestone": "M08",
     "issue": "P2-A04 (M08)",
-    "status": "inactive if Vega selected; preserved reference",
+    "status": "planned",
     "vega_primary_contingency": {
      "status": "selected",
      "dispatchable": false,
@@ -23427,7 +23440,7 @@
     "lane": "tv-app-ui",
     "milestone": "M09",
     "issue": "P2-A05 (M09)",
-    "status": "inactive if Vega selected; preserved reference",
+    "status": "planned",
     "vega_primary_contingency": {
      "status": "selected",
      "dispatchable": false,
@@ -23470,7 +23483,7 @@
     "lane": "tv-app-ui",
     "milestone": "M09",
     "issue": "P2-A05 (M09)",
-    "status": "inactive if Vega selected; preserved reference",
+    "status": "planned",
     "vega_primary_contingency": {
      "status": "selected",
      "dispatchable": false,
@@ -24066,16 +24079,16 @@
      "completion_dependencies": [],
      "preserved_fields": "All unmentioned fields, including role/model_route/reasoning_level/review_path/authority_id, inherit unchanged. No new execution authority.",
      "note": "Use actual Vega device/package evidence and truthful limits; Fire OS secondary evidence is reported only where it exists. Original write_set and dependencies retained. SD-048 is settled. D02 records the Vega primary target (DEC-AFC-SD-049) in AFC-PR-052/053 allocation; no unapproved behavior reduction.",
-     "proposed_risk_ownership": {
+     "risk_ownership": {
       "risk_id": "RISK-AFC-P2-14",
       "closing_slice": "P2-D04",
       "supporting_slices": [
        "P2-V01"
       ],
-      "status": "NEEDS_OWNER_DECISION",
-      "decision_ref": "VP-OD-05",
-      "open_finding": "F1",
-      "primary_failure_rule": "Primary Vega failure blocks submission readiness; side-lane in-progress wording cannot satisfy the primary target."
+      "status": "decided",
+      "decision_ref": "DEC-AFC-SD-050",
+      "open_finding": "F1 closed",
+      "primary_failure_rule": "Include the Vega OS build in the submission only if P2-V01 verification passed before these documents are finalized; otherwise report it as in progress with its limits."
      }
     },
     "baseline_projection": {
@@ -25158,7 +25171,7 @@
    {
     "id": "RISK-AFC-P2-14",
     "risk": "M14 starts after A01..A05 (W3) with nine days to T_deadline and competes for the five-agent cap.",
-    "control": "If P2-V01 is not merged with its verdict table before the M12 submission documents are finalized (due 2026-10-22T16:00:00Z), then the submission shall describe the Vega build as in progress with its stated limits, and no M12 or M13 slice shall wait for it. Conditional primary override: failed Vega blocks submission readiness; D04 closure ownership remains VP-OD-05/F1, not approved.",
+    "control": "If P2-V01 is not merged with its verdict table before the M12 submission documents are finalized (due 2026-10-22T16:00:00Z), then the submission shall describe the Vega build as in progress with its stated limits, and no M12 or M13 slice shall wait for it. Conditional primary override: failed Vega blocks submission readiness; P2-D04 closes RISK-AFC-P2-14; P2-V01 supplies the evidence (DEC-AFC-SD-050); F1 closed.",
     "recovery": "Report in progress with limits; Fire OS path unaffected.",
     "allocation": "P2-V01, P2-D04",
     "status": "planned"
@@ -25189,10 +25202,10 @@
    },
    {
     "id": "Inherited schema gap",
-    "risk": "Original V01T and V01 goal strings exceed the house-schema 512-character cap at base 5097585.",
-    "control": "Additive-only delta preserves them; proposed primary override goals meet schema; no new schema findings. Full unmaterialized document is not claimed schema PASS.",
-    "recovery": "Materialize the approved concise primary goals; if Fire OS selected, losslessly normalize summaries retaining original goal_source_notes. No new owner intent required.",
-    "status": "baseline gap; schema-validation.json"
+    "risk": "The two earlier V01T/V01 goal maxLength findings are closed (F-VP-03).",
+    "control": "Each goal now equals its vega_primary_contingency.overrides.goal; goal_source_notes keep the long text. Raw implementation.json and seit.json have zero schema violations under 1.1.8.",
+    "recovery": "No schema correction remains; preserve goal_source_notes.",
+    "status": "closed; schema-validation.json"
    }
   ],
   "authority": [
