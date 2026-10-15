@@ -103,7 +103,7 @@ def test_links_index_query_and_events_stream_are_preserved():
     sources = template["Resources"]["PolicyFunction"]["Properties"]["Events"].values()
     assert any(e["Type"] == "DynamoDB" and e["Properties"]["Stream"] ==
                {"Fn::GetAtt": "EventsTable.StreamArn"} for e in sources)
-    assert "ssm:GetParameter" in json.dumps(
+    assert "ssm:GetParameter" not in json.dumps(
         template["Resources"]["ApiFunction"]["Properties"]["Policies"])
     assert "ssm:GetParameter" in json.dumps(
         template["Resources"]["PolicyFunction"]["Properties"]["Policies"])
