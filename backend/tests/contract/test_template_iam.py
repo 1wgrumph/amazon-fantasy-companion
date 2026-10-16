@@ -8,12 +8,12 @@ action. The Links handle-index Query resource and the Events stream consumer
 stay intact.
 """
 
-import ast
 import json
 
 import pytest
 
 from conftest import BACKEND, document
+from iam_source import required_actions
 
 pytestmark = pytest.mark.contract
 # SAM 1.169.0 DynamoDB policy template expansions (offline policy template
@@ -70,6 +70,12 @@ def grants(policies):
     return actions, resources
 
 
+def assert_required_grants(actions, required, function):
+    missing = {table: operations - actions.get(table, set())
+               for table, operations in required.items() if operations - actions.get(table, set())}
+    assert not missing, f"{function} missing table-scoped DynamoDB grants: {missing}"
+
+
 def test_each_function_grants_only_its_store_operations():
     template = document("template.yaml")
     for function, expected in EXPECTED.items():
@@ -77,6 +83,9 @@ def test_each_function_grants_only_its_store_operations():
         assert not any(set(e) & set(EXPANDED) for e in policies), \
             f"{function} still uses a broad DynamoDB policy template"
         actions, _ = grants(policies)
+        environment = template["Globals"]["Function"]["Environment"]["Variables"]
+        handler = template["Resources"][function]["Properties"]["Handler"]
+        assert_required_grants(actions, required_actions(BACKEND / "src", handler, environment), function)
         assert actions == expected, f"{function} DynamoDB grants changed: {actions}"
         assert set().union(*actions.values()) <= {"GetItem", "PutItem", "UpdateItem", "Query",
                                                  "DeleteItem", "Scan"}
@@ -87,34 +96,8 @@ def test_policy_grants_matcher_operations_on_exact_table_arns():
     policy = template["Resources"]["PolicyFunction"]["Properties"]
     assert policy["Handler"] == "pipeline.handler.lambda_handler"
     environment = template["Globals"]["Function"]["Environment"]["Variables"]
-    # Other pipeline stages keep their existing grants; matcher reads are derived
-    # from source because moto does not enforce deployed IAM permissions.
-    expected = {"ProfilesTable": {"GetItem"}, "EventsTable": {"GetItem"},
-                "AlertsTable": {"PutItem"}, "LineupsTable": {"GetItem", "PutItem"},
-                "PanelsTable": {"GetItem", "PutItem"}}
-    module = ast.parse((BACKEND / "src/matcher/__init__.py").read_text())
-    for function in module.body:
-        if not isinstance(function, ast.FunctionDef):
-            continue
-        for node in ast.walk(function):
-            if not (isinstance(node, ast.Attribute) and isinstance(node.value, ast.Call)
-                    and isinstance(node.value.func, ast.Name)
-                    and node.value.func.id == "_table"):
-                continue
-            argument = node.value.args[0]
-            if isinstance(argument, ast.Constant):
-                variables = [argument.value]
-            else:
-                assert isinstance(argument, ast.Name)
-                assert argument.id == function.args.args[0].arg
-                variables = [ast.literal_eval(call.args[0]) for call in ast.walk(module)
-                             if isinstance(call, ast.Call) and isinstance(call.func, ast.Name)
-                             and call.func.id == function.name]
-                assert variables, f"No table binding found for {function.name}"
-            action = "".join(part.title() for part in node.attr.split("_"))
-            for variable in variables:
-                expected.setdefault(environment[variable]["Ref"], set()).add(action)
-    table_arns = [{"Fn::GetAtt": arn} for table in expected
+    expected = required_actions(BACKEND / "src", policy["Handler"], environment)
+    table_arns = [{"Fn::GetAtt": arn} for table in EXPECTED["PolicyFunction"]
                   for arn in (table + ".Arn", [table, "Arn"])]
     for entry in policy["Policies"]:
         for statement in entry["Statement"]:
@@ -122,40 +105,16 @@ def test_policy_grants_matcher_operations_on_exact_table_arns():
             if any(action.startswith("dynamodb:") for action in statement["Action"]):
                 assert all(resource in table_arns for resource in statement["Resource"])
     actions, _ = grants(policy["Policies"])
-    assert actions == expected, f"PolicyFunction must grant matcher calls: {expected}; got {actions}"
+    assert_required_grants(actions, expected, "PolicyFunction")
 
 
 def test_api_grants_provider_resolver_operations_on_profiles_table():
     template = document("template.yaml")
-    api = ast.parse((BACKEND / "src/api/handler.py").read_text())
-    called = {node.func.attr for node in ast.walk(api)
-              if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute)
-              and isinstance(node.func.value, ast.Name)
-              and node.func.value.id == "provider_resolver"}
-    assert {"record_outcome", "record_installed_apps"} <= called
-    resolver = ast.parse((BACKEND / "src/provider_resolver/__init__.py").read_text())
-    required = set()
-    for function in resolver.body:
-        if not isinstance(function, ast.FunctionDef) or function.name not in called:
-            continue
-        for node in ast.walk(function):
-            if (isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute)
-                    and isinstance(node.func.value, ast.Call)
-                    and isinstance(node.func.value.func, ast.Name)
-                    and node.func.value.func.id == "_state_table"):
-                required.add("".join(part.title() for part in node.func.attr.split("_")))
-    assert required, "No provider-resolver state operations found"
-    state_table = next(node for node in resolver.body
-                       if isinstance(node, ast.FunctionDef) and node.name == "_state_table")
-    [table_call] = [node for node in ast.walk(state_table)
-                    if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute)
-                    and node.func.attr == "Table"]
-    variable = ast.literal_eval(table_call.args[0].slice)
+    properties = template["Resources"]["ApiFunction"]["Properties"]
     environment = template["Globals"]["Function"]["Environment"]["Variables"]
-    assert environment[variable] == {"Ref": "ProfilesTable"}
-    policies = template["Resources"]["ApiFunction"]["Properties"]["Policies"]
-    actions, resources = grants(policies)
-    assert actions["ProfilesTable"] == {"GetItem", "PutItem"} | required
+    required = required_actions(BACKEND / "src", properties["Handler"], environment)
+    actions, resources = grants(properties["Policies"])
+    assert_required_grants(actions, required, "ApiFunction")
     assert resources["ProfilesTable"] == {"table"}
 
 
@@ -185,3 +144,71 @@ def test_links_index_query_and_events_stream_are_preserved():
         template["Resources"]["ApiFunction"]["Properties"]["Policies"])
     assert "ssm:GetParameter" in json.dumps(
         template["Resources"]["PolicyFunction"]["Properties"]["Policies"])
+
+
+@pytest.mark.parametrize("case,relative,before,after,check", [
+    ("F1-api-helper", "provider_resolver/__init__.py", ".get_item(Key=_state_key(profile_id))",
+     ".query(KeyConditionExpression='review-drift')",
+     test_api_grants_provider_resolver_operations_on_profiles_table),
+    ("F1-policy-helper", "provider_resolver/__init__.py", ".get_item(Key=_state_key(profile_id))",
+     ".query(KeyConditionExpression='review-drift')",
+     test_policy_grants_matcher_operations_on_exact_table_arns),
+    ("F2-helper-alias", "provider_resolver/__init__.py", "    packages = list(packages)",
+     "    _replace_state(profile_id, packages)\n    packages = list(packages)",
+     test_api_grants_provider_resolver_operations_on_profiles_table),
+    ("F3-matcher-alias", "matcher/__init__.py", '    event_id = game_event["eventId"]',
+     '    profiles = _table("PROFILES_TABLE")\n    profiles.scan()\n'
+     '    event_id = game_event["eventId"]',
+     test_policy_grants_matcher_operations_on_exact_table_arns),
+    ("F4-store-helper", "store/__init__.py", '_table("LINEUPS_TABLE").get_item(',
+     '_table("LINEUPS_TABLE").query(',
+     test_each_function_grants_only_its_store_operations),
+], ids=["F1-api-helper", "F1-policy-helper", "F2-helper-alias", "F3-matcher-alias",
+        "F4-store-helper"])
+def test_source_drift_requires_a_table_scoped_grant(monkeypatch, case, relative, before, after, check):
+    """Review M1/M2/M3 and the store gap must trip the real IAM contract."""
+    path = BACKEND / "src" / relative
+    original = path.read_text()
+    assert original.count(before) == 1
+    changed = original.replace(before, after)
+    if case == "F2-helper-alias":
+        # Replace the whole writer, as in review M3, retaining record_outcome.
+        changed = original[:original.index(before)] + '    return _replace_state(profile_id, packages)\n'
+        changed += ('\n\ndef _replace_state(profile_id, packages):\n'
+                    '    state = _state_table()\n'
+                    '    remove = state.delete_item\n'
+                    '    remove(Key=_state_key(profile_id))\n'
+                    '    state.put_item(Item=_state_key(profile_id))\n')
+    read_text = type(path).read_text
+    monkeypatch.setattr(type(path), "read_text",
+                        lambda self, *a, **kw: changed if self == path else read_text(self, *a, **kw))
+    with pytest.raises(AssertionError, match="(Query|DeleteItem|Scan)"):
+        check()
+
+
+@pytest.mark.parametrize("expression", [
+    '_table("UNBOUND_TABLE").scan()',
+    '_table(variable_from_request).scan()',
+    'unknown_table.scan()',
+    'scan = unknown_table.scan; scan()',
+], ids=["missing-environment", "dynamic-table", "unknown-receiver", "unknown-method-alias"])
+def test_unknown_table_resolution_fails_closed(monkeypatch, expression):
+    path = BACKEND / "src/matcher/__init__.py"
+    changed = path.read_text().replace('    event_id = game_event["eventId"]',
+                                       '    ' + expression + '\n    event_id = game_event["eventId"]')
+    read_text = type(path).read_text
+    monkeypatch.setattr(type(path), "read_text",
+                        lambda self, *a, **kw: changed if self == path else read_text(self, *a, **kw))
+    with pytest.raises(AssertionError, match="Unknown DynamoDB table resolution"):
+        test_policy_grants_matcher_operations_on_exact_table_arns()
+
+
+def test_table_and_operation_aliases_keep_valid_grants(monkeypatch):
+    path = BACKEND / "src/matcher/__init__.py"
+    changed = path.read_text().replace(
+        '        page = _table(variable).scan(**request)',
+        '        table = _table(variable)\n        scan = table.scan\n        page = scan(**request)')
+    read_text = type(path).read_text
+    monkeypatch.setattr(type(path), "read_text",
+                        lambda self, *a, **kw: changed if self == path else read_text(self, *a, **kw))
+    test_policy_grants_matcher_operations_on_exact_table_arns()
