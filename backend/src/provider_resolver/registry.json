@@ -1,5 +1,45 @@
 {
   "schemaVersion": 1,
-  "providers": [],
-  "currentAttemptObservation": "none"
+  "currentAttemptObservation": "none",
+  "providers": [
+    {
+      "id": "prime_video",
+      "name": "Prime Video",
+      "channels_carried": ["Prime Video"],
+      "platform_routes": {
+        "fire_os": {
+          "package": "com.amazon.firebat",
+          "launch": {"type": "uri", "value": "https://watch.amazon.com/search"},
+          "doc_source": "Device intent filters for com.amazon.firebat (dumpsys package, AFTKM Fire OS 8.1.8.5, 2026-10-16): VIEW https watch.amazon.com/app.primevideo.com paths /search /detail /landing; spikes/sp3-provider-links/device-log.txt",
+          "verified_outcome": "searchOpened",
+          "verified_at": "2026-10-16T20:10:00Z",
+          "currentAttemptObservation": "none"
+        }
+      }
+    },
+    {
+      "id": "espn",
+      "name": "ESPN",
+      "channels_carried": ["ESPN"],
+      "platform_routes": {}
+    },
+    {
+      "id": "directv_stream",
+      "name": "DirecTV Stream",
+      "channels_carried": [],
+      "platform_routes": {}
+    },
+    {
+      "id": "youtube_tv",
+      "name": "YouTube TV",
+      "channels_carried": [],
+      "platform_routes": {}
+    },
+    {
+      "id": "local_broadcast",
+      "name": "Local broadcast",
+      "channels_carried": ["CBS", "Fox", "NBC"],
+      "platform_routes": {}
+    }
+  ]
 }
