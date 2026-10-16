@@ -7,7 +7,9 @@ instead of raising, so callers map them to contract statuses.
 """
 
 import functools
+import logging
 import os
+import re
 
 import boto3
 from boto3.dynamodb.conditions import Attr, Key
@@ -288,6 +290,11 @@ def put_player_statistics(record):
     item = {key: value for key, value in _shaped(record, {
         "athleteId", "gameId", "gameState", "gameStatus", "source", "asOf",
         "stats"}).items() if not (key == "asOf" and value is None)}
+    athlete_id = item.get("athleteId")
+    if not isinstance(athlete_id, str) or not re.fullmatch(r"[0-9]{1,20}", athlete_id):
+        logging.getLogger(__name__).warning(
+            "Skipping player statistics write with invalid athleteId: %.40r", athlete_id)
+        return False
     values = {":gameId": item.get("gameId"), ":live": "live",
               ":source": item.get("source"), ":replay": "replay"}
     fresh = "attribute_not_exists(athleteId)"
