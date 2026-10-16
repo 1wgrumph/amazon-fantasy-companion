@@ -223,7 +223,7 @@ def put_player_statistics(record):
     athlete_id = item.get("athleteId")
     if not isinstance(athlete_id, str) or not re.fullmatch(r"[0-9]{1,20}", athlete_id):
         logging.getLogger(__name__).warning(
-            "Skipping player statistics write with invalid athleteId: %r", athlete_id)
+            "Skipping player statistics write with invalid athleteId: %.40r", athlete_id)
         return False
     values = {":gameId": item.get("gameId"), ":live": "live",
               ":source": item.get("source"), ":replay": "replay"}

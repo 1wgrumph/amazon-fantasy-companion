@@ -76,25 +76,22 @@ def normalize_summary(payload, game_id, source="live", prior=None):
     return events
 
 
-def _bounds():
-    return {
-        "MAX_ATHLETE_ID_LENGTH": 20,
-        "MAX_BOXSCORE_ATHLETES": 200,
-        "MAX_ATHLETE_STATS": 64,
-        "MAX_STAT_VALUE_LENGTH": 16,
-    }
-
-
-def __getattr__(name):
-    bounds = _bounds()
-    if name in bounds:
-        return bounds[name]
-    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
+MAX_ATHLETE_ID_LENGTH = 20
+MAX_BOXSCORE_ATHLETES = 200
+MAX_ATHLETE_STATS = 64
+MAX_STAT_VALUE_LENGTH = 16
+MAX_LOGGED_VALUE_LENGTH = 40
 
 
 def _valid_athlete_id(athlete_id):
     return (isinstance(athlete_id, str)
-            and bool(re.fullmatch(rf"[0-9]{{1,{_bounds()['MAX_ATHLETE_ID_LENGTH']}}}", athlete_id)))
+            and bool(re.fullmatch(rf"[0-9]{{1,{MAX_ATHLETE_ID_LENGTH}}}", athlete_id)))
+
+
+def _sample(value):
+    """A log-safe, length-bounded repr of an untrusted value."""
+    text = value[:MAX_LOGGED_VALUE_LENGTH] if isinstance(value, str) else value
+    return repr(text)[:MAX_LOGGED_VALUE_LENGTH]
 
 
 def boxscore_statistics(payload, game_id, source="live"):
@@ -117,14 +114,13 @@ def boxscore_statistics(payload, game_id, source="live"):
     detail = status.get("shortDetail") or status.get("detail")
     clocks = [play.get("wallclock") for play in plays if isinstance(play, dict)]
     clocks = [clock for clock in clocks if isinstance(clock, str) and clock]
-    bounds = _bounds()
-    max_athletes = bounds["MAX_BOXSCORE_ATHLETES"]
-    max_stats = bounds["MAX_ATHLETE_STATS"]
-    max_value_len = bounds["MAX_STAT_VALUE_LENGTH"]
-    logger = logging.getLogger(__name__)
+    max_athletes, max_stats = MAX_BOXSCORE_ATHLETES, MAX_ATHLETE_STATS
+    max_value_len = MAX_STAT_VALUE_LENGTH
     boxscore = payload.get("boxscore")
     players = boxscore.get("players") if isinstance(boxscore, dict) else None
     by_athlete, stat_counts = {}, {}
+    # One aggregated log line per payload: a hostile body must not amplify log volume.
+    invalid_ids, excess_athletes, excess_stats, oversize, first_invalid = 0, 0, 0, 0, None
     for team in players if isinstance(players, list) else []:
         if not isinstance(team, dict):
             continue
@@ -142,12 +138,13 @@ def boxscore_statistics(payload, game_id, source="live"):
                 athlete = entry.get("athlete")
                 athlete_id = athlete.get("id") if isinstance(athlete, dict) else None
                 if not _valid_athlete_id(athlete_id):
-                    logger.warning("Skipping boxscore athlete with invalid athleteId: %r", athlete_id)
+                    if not invalid_ids:
+                        first_invalid = _sample(athlete_id)
+                    invalid_ids += 1
                     continue
                 if athlete_id not in by_athlete:
                     if len(by_athlete) >= max_athletes:
-                        logger.warning("Dropping excess boxscore athlete %s beyond %d",
-                                       athlete_id, max_athletes)
+                        excess_athletes += 1
                         continue
                     by_athlete[athlete_id] = {}
                     stat_counts[athlete_id] = 0
@@ -155,8 +152,7 @@ def boxscore_statistics(payload, game_id, source="live"):
                 raw_stats = entry["stats"]
                 remaining = max_stats - stat_counts[athlete_id]
                 if len(keys) > remaining or len(raw_stats) > remaining:
-                    logger.warning("Dropping excess boxscore stats for athlete %s beyond %d",
-                                   athlete_id, max_stats)
+                    excess_stats += 1
                 pairs = list(zip(keys[:remaining], raw_stats[:remaining]))
                 stat_counts[athlete_id] += len(pairs)
                 for key, value in pairs:
@@ -171,17 +167,25 @@ def boxscore_statistics(payload, game_id, source="live"):
                         continue
                     text = value if isinstance(value, str) else str(value)
                     if len(text) > max_value_len:
-                        logger.warning("Skipping oversize boxscore stat for %s.%s (len=%d)",
-                                       name, key, len(text))
+                        oversize += 1
                         continue
                     try:
                         number = Decimal(text)
                     except (InvalidOperation, ArithmeticError, ValueError):
                         continue
-                    # Untrusted body: DynamoDB rejects non-finite or subnormal Decimals,
-                    # and no real boxscore stat needs more than five integer or four fractional digits.
-                    if number.is_finite() and abs(number) <= 99999 and number.as_tuple().exponent >= -4:
+                    # Untrusted body: DynamoDB rejects non-finite, subnormal or clamped
+                    # (positive-exponent) Decimals, and no real boxscore stat needs more
+                    # than five integer or four fractional digits.
+                    if (number.is_finite() and abs(number) <= 99999
+                            and -4 <= number.as_tuple().exponent <= 0):
                         stats[mapped] = number
+    if invalid_ids or excess_athletes or excess_stats or oversize:
+        logging.getLogger(__name__).warning(
+            "Boxscore %s: skipped %d entries with invalid athleteId (first %s); dropped %d "
+            "excess boxscore athlete entries beyond %d; dropped excess boxscore stats for %d "
+            "entries beyond %d; skipped %d oversize boxscore stat values over %d chars",
+            _sample(game_id), invalid_ids, first_invalid, excess_athletes, max_athletes,
+            excess_stats, max_stats, oversize, max_value_len)
     return [{"athleteId": athlete_id, "gameId": game_id, "gameState": state,
              "gameStatus": detail if isinstance(detail, str) else None,
              "source": source, "asOf": max(clocks) if clocks else None, "stats": stats}

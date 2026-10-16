@@ -2,7 +2,7 @@
 
 import logging
 
-from botocore.exceptions import BotoCoreError, ClientError
+from botocore.exceptions import ClientError
 
 import store
 from feed_ingest.normalize import boxscore_statistics, normalize_summary
@@ -26,13 +26,29 @@ def store_events(events):
     return changed
 
 
+def rejected_item(exc):
+    """True for a write DynamoDB refused for the item's own shape (payload-caused)."""
+    return isinstance(exc, ClientError) and exc.response.get("Error", {}).get("Code") == "ValidationException"
+
+
 def store_player_statistics(records):
-    """Overwrite each athlete's stored boxscore with the latest summary's."""
+    """Overwrite each athlete's stored boxscore with the latest summary's.
+
+    Only an item rejected for its own content is skipped; any other failure
+    (access, missing table, throttling, endpoint) propagates so outages stay visible.
+    """
+    skipped, first = 0, None
     for record in records:
         try:
             store.put_player_statistics(record)
-        except (ClientError, BotoCoreError, ValueError, ArithmeticError, TypeError, KeyError) as exc:
-            logging.getLogger(__name__).warning("Skipping failed player statistics write: %s", exc)
+        except (ClientError, ArithmeticError) as exc:
+            if isinstance(exc, ClientError) and not rejected_item(exc):
+                raise
+            skipped, first = skipped + 1, first or exc
+    if skipped:
+        logging.getLogger(__name__).warning(
+            "Skipped %d player statistics writes rejected as invalid (first: %.200s)",
+            skipped, f"{type(first).__name__}: {first}")
 
 
 def ingest_summary(payload, game_id, source="live"):

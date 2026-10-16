@@ -8,8 +8,10 @@ import time
 from pathlib import Path
 from urllib import parse, request
 
+from botocore.exceptions import ClientError
+
 import store
-from feed_ingest.ingest import ingest_summary, store_events, store_player_statistics
+from feed_ingest.ingest import ingest_summary, rejected_item, store_events, store_player_statistics
 from feed_ingest.monitoring import monitored_decisions
 from feed_ingest.replay import load_events, load_statistics
 from feed_ingest.validation import validate_scoreboard
@@ -151,6 +153,14 @@ def poll(failures=None, remaining=None):
             summary = _get_json(_feed() + "summary?event=" + game_id)
             events = ingest_summary(summary, game_id)
         except (ValueError, OSError):
+            _fallback(game_id, failures, result)
+            continue
+        except ClientError as exc:
+            if not rejected_item(exc):
+                raise
+            # A schema-valid body DynamoDB still rejects fails only its own game.
+            logging.getLogger(__name__).warning(
+                "Feed write rejected for game %s: %.200s", game_id, exc)
             _fallback(game_id, failures, result)
             continue
         failures[game_id] = 0
