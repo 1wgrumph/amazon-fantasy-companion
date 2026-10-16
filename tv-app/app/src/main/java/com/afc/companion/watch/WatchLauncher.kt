@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import com.afc.companion.net.AccessBasis
 import com.afc.companion.net.ApiClient
 import com.afc.companion.net.ProviderRoute
 import com.afc.companion.net.RoutingOutcome
@@ -28,15 +29,35 @@ interface LaunchPlatform {
 /**
  * LAUNCHER (DES-AFC-P2-WATCH; CONTRACT-AFC-P2-PROVIDER-REGISTRY). Registry routes are untrusted:
  * only a `verified` own-platform (`fire_os`) entry with a well-formed package and intent|uri launch
- * is executed. No current-attempt observation mechanism is supported yet (P2-X03 pending), so a
+ * is executed. P2-X03 found no current-attempt observation mechanism (`currentAttemptObservation: none`), so a
  * started launch is `accessUnknown` whatever the registry's historical `verified_outcome` or the
  * platform's current-app report says; neither ever establishes `gameOpened` (RISK-AFC-P2-10).
  */
 class WatchLauncher(private val platform: LaunchPlatform) {
     constructor(context: Context) : this(AndroidLaunchPlatform(context))
 
-    /** No event id or client here, so no attempt can be reported; [watch] is the attempt path. */
-    fun launch(route: ProviderRoute): RoutingOutcome = RoutingOutcome.AccessUnknown
+    /**
+     * Watch on one alert (panel or notification): the alert's own resolved route when it carries one,
+     * otherwise GET /v1/providers for [eventId]. An unresolvable route still runs [watch], which then
+     * launches nothing and reports accessUnknown.
+     */
+    suspend fun watchAlert(
+        eventId: String,
+        alertRoute: ProviderRoute?,
+        client: ApiClient,
+        switchingConfirm: Boolean,
+        mode: PanelMode,
+        confirm: suspend () -> Boolean,
+    ): RoutingOutcome? {
+        val route = alertRoute?.takeIf { it.route != null } ?: try {
+            client.getProvider(eventId).value
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            null
+        } ?: ProviderRoute(null, null, null, AccessBasis.Unknown)
+        return watch(eventId, route, client, switchingConfirm, mode, confirm)
+    }
 
     /**
      * One customer Watch attempt for [eventId]: executes only the route's `fire_os` entry and reports
@@ -84,6 +105,7 @@ class WatchLauncher(private val platform: LaunchPlatform) {
         val template = (launch.opt("value") as? String)?.takeIf { it.isNotEmpty() } ?: return null
         if ("{channel}" in template && channel.isNullOrEmpty()) return null
         val value = template.replace("{event}", eventId).replace("{channel}", channel.orEmpty())
+        launchSpec(packageName, type, value) ?: return null
         return Triple(packageName, type, value)
     }
 
@@ -95,8 +117,24 @@ class WatchLauncher(private val platform: LaunchPlatform) {
 /** Alexa-assisted tuning is offered only over an enabled, P2-X11-verified route (AFC-PR-036). */
 fun alexaTuningOffered(voiceEnabled: Boolean, routeVerified: Boolean): Boolean = voiceEnabled && routeVerified
 
-// shortcut: an intent value's "?query" suffix is dropped and currentApp() reports nothing until the
-// P2-X03 stick verdict names the documented launch/observation forms; on-stick launch is DEVICE_INSTALL_PENDING.
+/** The Intent one registry launch becomes; [data] is the VIEW URI, null for an `intent` action. */
+internal data class LaunchSpec(val action: String, val data: String?, val packageName: String)
+
+/**
+ * Null for anything but a registry `uri` or `intent` launch. A bare MAIN with only a package does not
+ * resolve on the stick (P2-X03), so it is never a launch.
+ */
+internal fun launchSpec(packageName: String, type: String, value: String): LaunchSpec? = when (type) {
+    "uri" -> LaunchSpec(ACTION_VIEW, value, packageName)
+    // shortcut: an intent value's "?query" suffix is dropped; carry it as extras once a registry intent route needs them.
+    "intent" -> value.substringBefore('?').takeIf { it.isNotEmpty() && it != ACTION_MAIN }?.let { LaunchSpec(it, null, packageName) }
+    else -> null
+}
+
+private const val ACTION_VIEW = "android.intent.action.VIEW"
+private const val ACTION_MAIN = "android.intent.action.MAIN"
+
+// currentApp() reports nothing: P2-X03 found no supported current-attempt observation on Fire OS.
 private class AndroidLaunchPlatform(private val context: Context) : LaunchPlatform {
     override fun isInstalled(packageName: String): Boolean = try {
         @Suppress("DEPRECATION") context.packageManager.getPackageInfo(packageName, 0)
@@ -106,10 +144,9 @@ private class AndroidLaunchPlatform(private val context: Context) : LaunchPlatfo
     }
 
     override fun start(packageName: String, type: String, value: String): Boolean {
-        val intent = when (type) {
-            "uri" -> Intent(Intent.ACTION_VIEW, Uri.parse(value))
-            else -> Intent(value.substringBefore('?'))
-        }.setPackage(packageName).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        val spec = launchSpec(packageName, type, value) ?: return false
+        val intent = Intent(spec.action).apply { spec.data?.let { data = Uri.parse(it) } }
+            .setPackage(spec.packageName).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         return try {
             context.startActivity(intent)
             true
