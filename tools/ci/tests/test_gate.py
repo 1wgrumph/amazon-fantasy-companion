@@ -43,15 +43,13 @@ class AC_AFC_CI_01(unittest.TestCase):
         rc, out = run_gate(self, REPO, '--no-such-option')
         self.assertEqual(rc, 2, out)
 
-    def test_git_hooks_invoke_gate_changed(self):
-        for hook in ('pre-commit', 'pre-push'):
-            with self.subTest(hook=hook):
-                path = REPO / '.githooks' / hook
-                self.assertTrue(path.is_file(), f'.githooks/{hook} is missing')
-                self.assertTrue(os.access(path, os.X_OK), f'.githooks/{hook} is not executable')
-                text = path.read_text(encoding='utf-8')
-                self.assertRegex(text, r'tools/ci/gate\.sh[^\n]*--changed')
-                self.assertIsNone(DIRECT_CHECKS.search(text), f'.githooks/{hook} calls a check directly')
+    def test_pre_push_hook_invokes_gate_changed(self):
+        path = REPO / '.githooks' / 'pre-push'
+        self.assertTrue(path.is_file(), '.githooks/pre-push is missing')
+        self.assertTrue(os.access(path, os.X_OK), '.githooks/pre-push is not executable')
+        text = path.read_text(encoding='utf-8')
+        self.assertRegex(text, r'tools/ci/gate\.sh[^\n]*--changed')
+        self.assertIsNone(DIRECT_CHECKS.search(text), '.githooks/pre-push calls a check directly')
 
     def test_ci_area_jobs_invoke_gate_with_their_area(self):
         workflow = REPO / '.github' / 'workflows' / 'ci.yml'

@@ -1,0 +1,31 @@
+changeset: samcli-deploy1792165669
+status: CREATE_COMPLETE
+execution: AVAILABLE
+stack tag in changeset: GitCommit=af0e0ac1520ce5b9e7de186fd83df23bc92d6a5e
+resource actions: Add 1, Modify 21, Remove 0
+decision: execute
+deploy executed: yes, 2026-10-16T15:49:42Z, wait exit 0 at 2026-10-16T15:51:13Z
+
+Checked against describe-change-set --include-property-values. The Changes array is the saved changeset-final.txt after <acct> redaction of 12-digit ARN account ids.
+
+Add (expected):
+- PlayerStatsTable AWS::DynamoDB::Table. PAY_PER_REQUEST. Hash key athleteId (S). No Replacement field on an Add.
+
+IAM permission changes are additions only. No statement, action, or resource was removed.
+- ApiFunctionRole: added Allow dynamodb:GetItem on the new table (resource {{changeSet:KNOWN_AFTER_APPLY}}). Replacement=False. RequiresRecreation Never.
+- IngestFunctionRole: added Allow dynamodb:PutItem on the new table (same known-after-apply resource). Replacement=False. RequiresRecreation Never.
+- PolicyFunctionRole and IngestScheduleRole: Tags only. GitCommit c194dee -> af0e0ac.
+
+Stateful resources:
+- Existing DynamoDB tables Alerts, Events, Lineups, Links, Panels, Profiles: Modify, Replacement=False, scope Tags only.
+- No SSM parameter resource is in the changeset. Parameter names are unchanged; values were not read.
+
+Not a stop:
+- No resource Action Remove.
+- No Replacement=True.
+- No Replacement=Conditional on a stateful resource.
+- PolicyFunctionEventStream: the SAM summary table printed Replacement Conditional. describe-change-set with property values says Replacement=False, scope Tags, RequiresRecreation Never, GitCommit tag value only. It is an event-source mapping, not a DynamoDB table or SSM parameter.
+- ApiFunction, IngestFunction, PolicyFunction: Code S3 key change, Replacement=False, plus env PLAYER_STATS_TABLE Add and the GitCommit tag.
+- Remaining resources: GitCommit tag only.
+
+No IAM permission removal. Execute is allowed by the packet rule.

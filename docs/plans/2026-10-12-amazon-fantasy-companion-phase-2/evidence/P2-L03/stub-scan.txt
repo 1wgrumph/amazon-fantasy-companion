@@ -1,0 +1,9 @@
+CMD-STUB-SCAN
+command: git grep -n -e AFC-STUB -e NotImplementedError -- backend/src tv-app/app/src/main; afc_rc=$?; test "$afc_rc" -eq 1
+grep_rc=0
+command_exit=1
+matches:
+backend/src/api/handler.py:5:envelope; module stubs (AFC-STUB) surface as 503 not_implemented.
+backend/src/api/handler.py:37:    except NotImplementedError:
+tv-app/app/src/main/java/com/afc/companion/watch/WatchActivity.kt:6:// AFC-STUB: P2-A04 runs WatchLauncher for the alert's route here (the notification Watch PendingIntent target).
+finding: scan does not pass. Not fixed in this slice. The backend hits are a docstring and the router except handler. The tv-app hit is the P2-A04 WatchActivity marker. No other AFC-STUB or NotImplementedError match in those trees.
