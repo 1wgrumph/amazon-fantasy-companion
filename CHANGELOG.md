@@ -85,7 +85,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Correct the Yahoo setup notes: one app with redirect `https://localhost:8443/link`, the one-command `setup` token flow, and the errors seen on 2026-10-16 (PR TBD).
+- Correct the Yahoo setup notes: one app with redirect `https://localhost:8443/link`, the one-command `setup` token flow, and the errors seen on 2026-10-16 ([#92](https://github.com/1wgrumph/amazon-fantasy-companion/pull/92)).
 - Grant the policy function table-scoped Lineups Scan access used by the matcher
   and the API function Profiles UpdateItem access for provider routing outcomes
   and installed-app reports, with source-to-template IAM contracts to catch
