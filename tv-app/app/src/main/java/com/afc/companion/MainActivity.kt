@@ -22,7 +22,9 @@ import androidx.compose.ui.unit.dp
 import androidx.tv.material3.Button
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
+import androidx.core.content.edit
 import com.afc.companion.alerts.AlertServiceControl
+import com.afc.companion.alerts.alertFeedMemory
 import com.afc.companion.link.LinkView
 import com.afc.companion.net.ApiClient
 import com.afc.companion.net.SessionStore
@@ -60,7 +62,8 @@ private fun NotConfigured() {
 @Composable
 private fun AppShell(shell: Shell, client: ApiClient, sessions: SessionStore) {
     var destination by remember { mutableStateOf(shell.start(sessions.token() != null)) }
-    val monitor = AlertServiceControl(LocalContext.current)
+    val context = LocalContext.current
+    val monitor = AlertServiceControl(context)
     // Every navigation re-reads the enablement, so leaving Profile/Settings applies a changed alert-type choice.
     LaunchedEffect(destination) {
         val hasSession = sessions.token() != null
@@ -76,6 +79,7 @@ private fun AppShell(shell: Shell, client: ApiClient, sessions: SessionStore) {
             when (destination) {
                 Destination.Link -> LinkView(client, onLinked = { token ->
                     sessions.save(token)
+                    alertFeedMemory(context).edit { clear() }
                     destination = Destination.ProfileSettings
                 })
                 Destination.ProfileSettings -> ProfileSettingsScreen(client)

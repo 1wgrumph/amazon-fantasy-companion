@@ -13,6 +13,8 @@ import com.afc.companion.net.RoutingOutcome
 import com.afc.companion.net.RoutingOutcomeReport
 import com.afc.companion.panel.PanelMode
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.withContext
 import org.json.JSONObject
 
 /** Fire OS side of a Watch launch. Its current-app report is untrusted: it never proves the game opened. */
@@ -74,15 +76,18 @@ class WatchLauncher(private val platform: LaunchPlatform) {
         if (switchingConfirm && !confirm()) return null
         var started = false
         val outcome = launchOnce(eventId, route) { started = true }
-        // The launch already happened: a report failure must not swallow its outcome or the leave below.
-        try {
-            client.reportRoutingOutcome(RoutingOutcomeReport(eventId, outcome))
-        } catch (e: CancellationException) {
-            throw e
-        } catch (e: Exception) {
-            // Best-effort report; the known local outcome still stands.
+        // The launch already happened: neither a report failure nor the caller's cancellation (the provider
+        // backgrounding the panel) may swallow its one report or the leave below.
+        withContext(NonCancellable) {
+            try {
+                client.reportRoutingOutcome(RoutingOutcomeReport(eventId, outcome))
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                // Best-effort report; the known local outcome still stands.
+            }
+            if (started && mode == PanelMode.FullScreen) platform.leaveApp()
         }
-        if (started && mode == PanelMode.FullScreen) platform.leaveApp()
         return outcome
     }
 

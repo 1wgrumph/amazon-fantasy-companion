@@ -1,5 +1,6 @@
 package com.afc.companion.watch
 
+import com.afc.companion.LocalApi
 import com.afc.companion.net.ApiClient
 import com.afc.companion.net.RoutingOutcome
 import com.afc.companion.panel.PanelMode
@@ -7,6 +8,8 @@ import java.net.ConnectException
 import java.net.HttpURLConnection
 import java.net.URL
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertThrows
@@ -46,6 +49,26 @@ class WatchReportFailureTest {
         assertEquals(RoutingOutcome.AppAbsent, outcome)
         assertTrue("failed launch stays to show the outcome", "leave" !in platform.calls)
         assertEquals(1, reports[0])
+    }
+
+    @Test fun callerCancelledAfterTheLaunchStillReportsOnceAndLeaves() = runBlocking {
+        LocalApi(listOf(200 to "{}")).use { api ->
+            lateinit var attempt: Job
+            val recording = RecordingPlatform()
+            // The panel's composition scope dies as the provider takes the foreground.
+            val platform = object : LaunchPlatform by recording {
+                override fun start(packageName: String, type: String, value: String): Boolean =
+                    recording.start(packageName, type, value).also { attempt.cancel() }
+            }
+            attempt = launch {
+                WatchLauncher(platform).watch(
+                    EVENT_ID, routeOf(), ApiClient(api.baseUrl, { "session-fixture" }), false, PanelMode.FullScreen,
+                ) { true }
+            }
+            attempt.join()
+            assertEquals("the launched attempt reports exactly one outcome", 1, api.requests.count { it.path == "/v1/routing-outcome" })
+            assertEquals(listOf("start", "leave"), recording.calls)
+        }
     }
 
     @Test fun reportCancellationStillPropagates() {
