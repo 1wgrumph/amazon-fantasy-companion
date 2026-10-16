@@ -176,10 +176,29 @@ def get_lineup(profile_id):
 
 
 # Panels: profile, team/league, PanelState.
+_PANEL_FIELDS = {"profileId", "teamLeague", "visible", "teamTotal", "progress",
+                 "freshness", "rows", "updatedAt"}
+
+
 def put_panel(panel):
-    _table("PANELS_TABLE").put_item(Item=_shaped(panel, {
-        "profileId", "teamLeague", "visible", "teamTotal", "progress", "freshness", "rows",
-        "updatedAt"}))
+    _table("PANELS_TABLE").put_item(Item=_shaped(panel, _PANEL_FIELDS))
+
+
+def put_panel_conditional(panel, expected_counter):
+    """Put a panel only while freshness.counter still equals `expected_counter`.
+
+    None means no row exists yet. Returns False on a lost race so the caller
+    can re-read and merge instead of erasing another writer's facts.
+    """
+    item = _shaped(panel, _PANEL_FIELDS)
+    if expected_counter is None:
+        return _written(_table("PANELS_TABLE").put_item, Item=item,
+                        ConditionExpression=Attr("profileId").not_exists())
+    return _written(
+        _table("PANELS_TABLE").put_item, Item=item,
+        ConditionExpression="#freshness.#counter = :expected",
+        ExpressionAttributeNames={"#freshness": "freshness", "#counter": "counter"},
+        ExpressionAttributeValues={":expected": expected_counter})
 
 
 def get_panel(profile_id, team_league):

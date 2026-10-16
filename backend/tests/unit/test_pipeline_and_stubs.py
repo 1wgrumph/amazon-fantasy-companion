@@ -49,10 +49,7 @@ def test_stream_images_are_deserialized(api):
     assert images == [{"gameId": "g", "eventId": "e", "revision": 3, "playerIds": "1"}]
 
 
-STUBS = [
-    ("panel", "project", 2, "P2-B07"),
-    ("panel", "snapshot", 2, "P2-B07"),
-]
+STUBS = []
 
 
 @pytest.mark.parametrize("module,function,arity,slice_id", STUBS)
