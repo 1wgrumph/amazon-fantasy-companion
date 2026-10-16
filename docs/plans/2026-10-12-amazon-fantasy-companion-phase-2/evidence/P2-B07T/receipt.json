@@ -1,0 +1,431 @@
+{
+ "outcome": "PASS",
+ "scope": "Behavioral red suite for P2-B07 (panel service) frozen and committed on cloud/p2-b07t; backend gate red is the expected TDD signal",
+ "lifecycle": "AFC-2026-10-11",
+ "phase": 2,
+ "wave": "Wave 3",
+ "milestone": "M07",
+ "issue": 36,
+ "slice_id": "P2-B07T",
+ "authority_id": "AUTH-AFC-2026-10-12-P2-001",
+ "branch": "cloud/p2-b07t",
+ "baseline": "fc206b4af01120cf378fa7063ce7e29b9707c3b0",
+ "candidate_binding": "Red delta on cloud/p2-b07t; committed receipt is bound to its containing commit",
+ "route": "Claude Code harness, high reasoning, as named by the dispatch packet",
+ "route_basis": "implementation.json lists Codex CLI / high as the frozen test_implementer primary and the Claude Code harness as its second ordered fallback (medium); the dispatch packet selected the Claude Code route at high. No fallback-qualifying usage-limit evidence was produced in this session (RISK-AFC-P2-10 inspection stays with P2-6).",
+ "profile": {
+  "name": "opensource-hackathon",
+  "live_catalog_read": false
+ },
+ "review_capabilities": {
+  "coverage_assist": {
+   "enabled": true,
+   "required": true,
+   "backend": "OCR OpenCodeReview delegate mode",
+   "status": "not_run; allocated to independent review at IE-P2-24, never claimed PASS"
+  },
+  "reverify": {
+   "enabled": true,
+   "status": "not_applicable",
+   "reason": "red tests and receipts, no compiled-binary claim"
+  }
+ },
+ "method": "SEIT supporting TDD method=test; registered proof methods/environments unchanged",
+ "frozen_test_sha256": {
+  "backend/tests/deployed/panel/test_panel_deployed.py": "58be238c41dcb336964e84ca42da5db61b12b169b9d91981eabf2bb1d5c8eee8",
+  "backend/tests/unit/panel/panel_support.py": "c7261de56f51cae43757a39d593a406e74e442bfbc7d4bd00e06afa2457e1db6",
+  "backend/tests/unit/panel/test_panel_consistency.py": "c3925a92040b4acaa4f17e1b6760f93e57420f8d5b3fef30ab39554bf5a97387",
+  "backend/tests/unit/panel/test_panel_freshness.py": "7a4b149ed6bd6e0c929573baf57cca346a341432a772f5151c28fab9648e9e5c",
+  "backend/tests/unit/panel/test_panel_rows.py": "57a41c3c9d3c53e66c3b2c739652581ba48b79fa21845ad0c085fe640bd5af20",
+  "backend/tests/unit/panel/test_panel_scoring_basis.py": "cf7b17811d6a70a0a767ebee29352c60be8c5f4db33aae43aa718e123f0fb632",
+  "backend/tests/unit/panel/test_panel_settings.py": "8bf342b53ca8ca2d2bf11373e11eb989f6590765643802e162a099c5a62e4369"
+ },
+ "red": {
+  "command_id": "CMD-RED",
+  "command": "cd backend && PYTHONDONTWRITEBYTECODE=1 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 $VENV/bin/python -m pytest tests/unit/panel tests/deployed/panel -v -p no:cacheprovider --tb=short --junitxml=../docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B07T/CMD-RED.xml",
+  "environment": "$VENV = python3.12 -m venv; pip install --require-hashes -r backend/requirements-dev.txt (Python 3.12.3, pytest 8.4.2, moto 5.2.4)",
+  "exit_code": 1,
+  "output": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B07T/CMD-RED.txt",
+  "junit": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B07T/CMD-RED.xml",
+  "collect": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B07T/collect.txt",
+  "failed": 80,
+  "passed": 0,
+  "errors": 0,
+  "skipped": 4,
+  "classification": "All 80 failures are the panel AFC-STUB NotImplementedError converted to AssertionError by panel_support.attempt (junit message 'AssertionError: panel behavior is not implemented (AFC-STUB)'). Skips are the 4 deployed cases, NOT_RUN without AFC_DEPLOYED_API_URL (skip message only, no traceback). Collection: 84 collected, 0 errors (collect.txt).",
+  "test_ids": [
+   "tests/unit/panel/test_panel_consistency.py::test_first_event_facts_reach_the_panel",
+   "tests/unit/panel/test_panel_consistency.py::test_correction_revises_points_in_place",
+   "tests/unit/panel/test_panel_consistency.py::test_correction_replaces_the_game_facts",
+   "tests/unit/panel/test_panel_consistency.py::test_correction_reassigning_the_play_still_revises_the_panel",
+   "tests/unit/panel/test_panel_consistency.py::test_stale_revision_does_not_regress_the_panel",
+   "tests/unit/panel/test_panel_consistency.py::test_panel_facts_agree_with_the_alert_record",
+   "tests/unit/panel/test_panel_consistency.py::test_replay_event_is_labeled_replay_on_the_panel",
+   "tests/unit/panel/test_panel_consistency.py::test_every_matched_profile_gets_the_same_facts",
+   "tests/unit/panel/test_panel_consistency.py::test_starter_change_replaces_the_benched_row",
+   "tests/unit/panel/test_panel_consistency.py::test_alerted_starters_are_panel_rows",
+   "tests/unit/panel/test_panel_consistency.py::test_hidden_panel_is_current_when_shown",
+   "tests/unit/panel/test_panel_freshness.py::test_missing_statistics_are_null_with_reason_not_zero",
+   "tests/unit/panel/test_panel_freshness.py::test_missing_statistics_leave_game_status_unknown",
+   "tests/unit/panel/test_panel_freshness.py::test_known_zero_is_zero_without_a_reason",
+   "tests/unit/panel/test_panel_freshness.py::test_total_with_an_unknown_row_is_not_a_confirmed_sum",
+   "tests/unit/panel/test_panel_freshness.py::test_as_of_is_the_statistics_source_timestamp",
+   "tests/unit/panel/test_panel_freshness.py::test_team_total_as_of_is_the_oldest_row",
+   "tests/unit/panel/test_panel_freshness.py::test_stale_boundary_is_sixty_seconds[0-False]",
+   "tests/unit/panel/test_panel_freshness.py::test_stale_boundary_is_sixty_seconds[59-False]",
+   "tests/unit/panel/test_panel_freshness.py::test_stale_boundary_is_sixty_seconds[60-True]",
+   "tests/unit/panel/test_panel_freshness.py::test_stale_boundary_is_sixty_seconds[61-True]",
+   "tests/unit/panel/test_panel_freshness.py::test_stale_value_keeps_its_number",
+   "tests/unit/panel/test_panel_freshness.py::test_staleness_is_evaluated_at_read_time",
+   "tests/unit/panel/test_panel_freshness.py::test_total_is_stale_when_any_row_is_stale",
+   "tests/unit/panel/test_panel_freshness.py::test_value_without_a_timestamp_is_never_fresh",
+   "tests/unit/panel/test_panel_freshness.py::test_value_source_follows_the_statistics_source[live]",
+   "tests/unit/panel/test_panel_freshness.py::test_value_source_follows_the_statistics_source[replay]",
+   "tests/unit/panel/test_panel_freshness.py::test_unmatched_yahoo_starter_is_unavailable_not_guessed",
+   "tests/unit/panel/test_panel_rows.py::test_every_starter_has_one_row",
+   "tests/unit/panel/test_panel_rows.py::test_rows_carry_points_under_the_basis",
+   "tests/unit/panel/test_panel_rows.py::test_rows_carry_game_status",
+   "tests/unit/panel/test_panel_rows.py::test_team_total_is_the_sum_of_row_points",
+   "tests/unit/panel/test_panel_rows.py::test_repeated_projection_keeps_one_row_per_starter",
+   "tests/unit/panel/test_panel_rows.py::test_progress_is_zero_before_any_kickoff",
+   "tests/unit/panel/test_panel_rows.py::test_progress_is_one_when_every_game_is_final",
+   "tests/unit/panel/test_panel_rows.py::test_progress_between_kickoff_and_final_is_partial",
+   "tests/unit/panel/test_panel_rows.py::test_envelope_names_the_lineup_source_and_team_league",
+   "tests/unit/panel/test_panel_rows.py::test_rereads_keep_id_and_revision",
+   "tests/unit/panel/test_panel_rows.py::test_profile_without_lineup_has_no_rows_and_no_fabricated_total",
+   "tests/unit/panel/test_panel_rows.py::test_get_panel_serves_the_snapshot",
+   "tests/unit/panel/test_panel_scoring_basis.py::test_default_basis_is_half_ppr",
+   "tests/unit/panel/test_panel_scoring_basis.py::test_ppr_selection_scores_a_full_point_per_reception",
+   "tests/unit/panel/test_panel_scoring_basis.py::test_half_ppr_selection_scores_half_a_point_per_reception",
+   "tests/unit/panel/test_panel_scoring_basis.py::test_each_statistic_scores_its_preset_table_row[halfPpr-receptions]",
+   "tests/unit/panel/test_panel_scoring_basis.py::test_each_statistic_scores_its_preset_table_row[halfPpr-rushing_yards]",
+   "tests/unit/panel/test_panel_scoring_basis.py::test_each_statistic_scores_its_preset_table_row[halfPpr-receiving_yards]",
+   "tests/unit/panel/test_panel_scoring_basis.py::test_each_statistic_scores_its_preset_table_row[halfPpr-rushing_touchdowns]",
+   "tests/unit/panel/test_panel_scoring_basis.py::test_each_statistic_scores_its_preset_table_row[halfPpr-receiving_touchdowns]",
+   "tests/unit/panel/test_panel_scoring_basis.py::test_each_statistic_scores_its_preset_table_row[halfPpr-passing_yards]",
+   "tests/unit/panel/test_panel_scoring_basis.py::test_each_statistic_scores_its_preset_table_row[halfPpr-passing_touchdowns]",
+   "tests/unit/panel/test_panel_scoring_basis.py::test_each_statistic_scores_its_preset_table_row[halfPpr-interceptions_thrown]",
+   "tests/unit/panel/test_panel_scoring_basis.py::test_each_statistic_scores_its_preset_table_row[halfPpr-fumbles_lost]",
+   "tests/unit/panel/test_panel_scoring_basis.py::test_each_statistic_scores_its_preset_table_row[ppr-receptions]",
+   "tests/unit/panel/test_panel_scoring_basis.py::test_each_statistic_scores_its_preset_table_row[ppr-rushing_yards]",
+   "tests/unit/panel/test_panel_scoring_basis.py::test_each_statistic_scores_its_preset_table_row[ppr-receiving_yards]",
+   "tests/unit/panel/test_panel_scoring_basis.py::test_each_statistic_scores_its_preset_table_row[ppr-rushing_touchdowns]",
+   "tests/unit/panel/test_panel_scoring_basis.py::test_each_statistic_scores_its_preset_table_row[ppr-receiving_touchdowns]",
+   "tests/unit/panel/test_panel_scoring_basis.py::test_each_statistic_scores_its_preset_table_row[ppr-passing_yards]",
+   "tests/unit/panel/test_panel_scoring_basis.py::test_each_statistic_scores_its_preset_table_row[ppr-passing_touchdowns]",
+   "tests/unit/panel/test_panel_scoring_basis.py::test_each_statistic_scores_its_preset_table_row[ppr-interceptions_thrown]",
+   "tests/unit/panel/test_panel_scoring_basis.py::test_each_statistic_scores_its_preset_table_row[ppr-fumbles_lost]",
+   "tests/unit/panel/test_panel_scoring_basis.py::test_yahoo_lineup_scores_under_league_stat_modifiers",
+   "tests/unit/panel/test_panel_scoring_basis.py::test_yahoo_lineup_ignores_the_manual_preset",
+   "tests/unit/panel/test_panel_scoring_basis.py::test_yahoo_statistic_without_a_modifier_scores_nothing",
+   "tests/unit/panel/test_panel_scoring_basis.py::test_yahoo_rows_use_espn_identity",
+   "tests/unit/panel/test_panel_scoring_basis.py::test_manual_statistic_without_a_table_row_awards_no_points",
+   "tests/unit/panel/test_panel_scoring_basis.py::test_third_preset_is_never_scored",
+   "tests/unit/panel/test_panel_scoring_basis.py::test_every_point_value_travels_with_its_basis[manual-halfPpr]",
+   "tests/unit/panel/test_panel_scoring_basis.py::test_every_point_value_travels_with_its_basis[yahoo-yahooLeague]",
+   "tests/unit/panel/test_panel_settings.py::test_preset_change_rescores_on_the_next_read",
+   "tests/unit/panel/test_panel_settings.py::test_preset_change_through_the_profile_api_reaches_get_panel",
+   "tests/unit/panel/test_panel_settings.py::test_settings_team_league_selects_the_panel",
+   "tests/unit/panel/test_panel_settings.py::test_without_a_team_league_setting_the_active_lineup_is_followed",
+   "tests/unit/panel/test_panel_settings.py::test_requested_team_league_is_echoed",
+   "tests/unit/panel/test_panel_settings.py::test_another_team_league_shows_no_foreign_rows",
+   "tests/unit/panel/test_panel_settings.py::test_team_league_change_moves_the_panel",
+   "tests/unit/panel/test_panel_settings.py::test_get_panel_passes_the_team_league_query",
+   "tests/unit/panel/test_panel_settings.py::test_visibility_reflects_panel_prefs",
+   "tests/unit/panel/test_panel_settings.py::test_visibility_defaults_to_shown",
+   "tests/unit/panel/test_panel_settings.py::test_unrelated_settings_change_keeps_the_panel_facts",
+   "tests/deployed/panel/test_panel_deployed.py::test_panel_data_carries_basis_rows_and_value_objects",
+   "tests/deployed/panel/test_panel_deployed.py::test_panel_rereads_keep_id_and_never_lower_revision",
+   "tests/deployed/panel/test_panel_deployed.py::test_preset_change_reaches_the_panel",
+   "tests/deployed/panel/test_panel_deployed.py::test_panel_game_facts_agree_with_alerts"
+  ]
+ },
+ "satisfiability_check": {
+  "method": "Scratch reference panel (src/panel/__init__.py) in a scratch copy of backend/, never committed; seven single-change mutants of it",
+  "honest": "80 passed, 4 skipped",
+  "zero_for_missing_mutant": "3 failed (missing statistics shown as 0)",
+  "stale_strict_mutant": "1 failed (age > 60 instead of >= 60)",
+  "preset_ignored_mutant": "13 failed (always Half-PPR)",
+  "no_revision_guard_mutant": "1 failed (stale revision regresses game facts)",
+  "asof_now_mutant": "3 failed (asOf = read time)",
+  "preset_for_yahoo_mutant": "6 failed (preset table applied to a Yahoo league)",
+  "settings_frozen_mutant": "3 failed (settings change does not raise the revision)"
+ },
+ "gate": {
+  "command": "bash tools/ci/gate.sh spec docs hygiene backend",
+  "exit_code": 3,
+  "output": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B07T/gate.txt",
+  "areas": {
+   "spec": "GAP: required tool missing (dot) in this container",
+   "docs": "PASS",
+   "hygiene": "FAIL (environment): 16 tools/ci self-test failures from absent mutmut, diff-cover and dot; check_paths.py and check_workflows.py pass",
+   "tvapp": "not_run: excluded by packet (no Android SDK/JDK)",
+   "backend": "FAIL (expected red): 80 failed are exactly the new panel red tests; 24 failed are backend/tests/unit/test_deployed_guard.py IPv6 cases (container has no AF_INET6: OSError errno 97; file unchanged by this slice; same 24 fail when run alone); 644 passed; 0 errors; cfn-lint not reached after pytest exit"
+  }
+ },
+ "hygiene": {
+  "path_scan": "PYTHONDONTWRITEBYTECODE=1 python3 tools/ci/check_paths.py --files backend/tests/unit/panel/*.py backend/tests/deployed/panel/*.py docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B07T/*",
+  "path_scan_exit_code": 0,
+  "path_scan_output": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B07T/path-check.txt",
+  "whitespace": "git diff --check origin/main...HEAD clean",
+  "credential_shapes": "No credentials; synthetic athlete ids 9000001..9000013, fictional names and league-a/team-7 only",
+  "redaction": "evidence paths redacted to $WORKTREE, $VENV and $SCRATCH"
+ },
+ "acceptance": {
+  "AFC-PR-039 rows, points, status, total, progress, basis": [
+   "test_every_starter_has_one_row",
+   "test_rows_carry_points_under_the_basis",
+   "test_rows_carry_game_status",
+   "test_team_total_is_the_sum_of_row_points",
+   "test_repeated_projection_keeps_one_row_per_starter",
+   "test_progress_is_zero_before_any_kickoff",
+   "test_progress_is_one_when_every_game_is_final",
+   "test_progress_between_kickoff_and_final_is_partial",
+   "test_envelope_names_the_lineup_source_and_team_league",
+   "test_rereads_keep_id_and_revision",
+   "test_profile_without_lineup_has_no_rows_and_no_fabricated_total",
+   "test_get_panel_serves_the_snapshot"
+  ],
+  "AFC-PR-065 presets by reference, default Half-PPR, Yahoo league scoring, no third preset": [
+   "test_default_basis_is_half_ppr",
+   "test_ppr_selection_scores_a_full_point_per_reception",
+   "test_half_ppr_selection_scores_half_a_point_per_reception",
+   "test_each_statistic_scores_its_preset_table_row[halfPpr-receptions]",
+   "test_each_statistic_scores_its_preset_table_row[halfPpr-rushing_yards]",
+   "test_each_statistic_scores_its_preset_table_row[halfPpr-receiving_yards]",
+   "test_each_statistic_scores_its_preset_table_row[halfPpr-rushing_touchdowns]",
+   "test_each_statistic_scores_its_preset_table_row[halfPpr-receiving_touchdowns]",
+   "test_each_statistic_scores_its_preset_table_row[halfPpr-passing_yards]",
+   "test_each_statistic_scores_its_preset_table_row[halfPpr-passing_touchdowns]",
+   "test_each_statistic_scores_its_preset_table_row[halfPpr-interceptions_thrown]",
+   "test_each_statistic_scores_its_preset_table_row[halfPpr-fumbles_lost]",
+   "test_each_statistic_scores_its_preset_table_row[ppr-receptions]",
+   "test_each_statistic_scores_its_preset_table_row[ppr-rushing_yards]",
+   "test_each_statistic_scores_its_preset_table_row[ppr-receiving_yards]",
+   "test_each_statistic_scores_its_preset_table_row[ppr-rushing_touchdowns]",
+   "test_each_statistic_scores_its_preset_table_row[ppr-receiving_touchdowns]",
+   "test_each_statistic_scores_its_preset_table_row[ppr-passing_yards]",
+   "test_each_statistic_scores_its_preset_table_row[ppr-passing_touchdowns]",
+   "test_each_statistic_scores_its_preset_table_row[ppr-interceptions_thrown]",
+   "test_each_statistic_scores_its_preset_table_row[ppr-fumbles_lost]",
+   "test_yahoo_lineup_scores_under_league_stat_modifiers",
+   "test_yahoo_lineup_ignores_the_manual_preset",
+   "test_yahoo_statistic_without_a_modifier_scores_nothing",
+   "test_yahoo_rows_use_espn_identity",
+   "test_manual_statistic_without_a_table_row_awards_no_points",
+   "test_third_preset_is_never_scored",
+   "test_every_point_value_travels_with_its_basis[manual-halfPpr]",
+   "test_every_point_value_travels_with_its_basis[yahoo-yahooLeague]"
+  ],
+  "AFC-PR-040 null-with-reason vs zero, stale at 60 s, source timestamp, replay label": [
+   "test_missing_statistics_are_null_with_reason_not_zero",
+   "test_missing_statistics_leave_game_status_unknown",
+   "test_known_zero_is_zero_without_a_reason",
+   "test_total_with_an_unknown_row_is_not_a_confirmed_sum",
+   "test_as_of_is_the_statistics_source_timestamp",
+   "test_team_total_as_of_is_the_oldest_row",
+   "test_stale_boundary_is_sixty_seconds[0-False]",
+   "test_stale_boundary_is_sixty_seconds[59-False]",
+   "test_stale_boundary_is_sixty_seconds[60-True]",
+   "test_stale_boundary_is_sixty_seconds[61-True]",
+   "test_stale_value_keeps_its_number",
+   "test_staleness_is_evaluated_at_read_time",
+   "test_total_is_stale_when_any_row_is_stale",
+   "test_value_without_a_timestamp_is_never_fresh",
+   "test_value_source_follows_the_statistics_source[live]",
+   "test_value_source_follows_the_statistics_source[replay]",
+   "test_unmatched_yahoo_starter_is_unavailable_not_guessed"
+  ],
+  "AFC-PR-044 settings reflected (preset, team/league, visibility)": [
+   "test_preset_change_rescores_on_the_next_read",
+   "test_preset_change_through_the_profile_api_reaches_get_panel",
+   "test_settings_team_league_selects_the_panel",
+   "test_without_a_team_league_setting_the_active_lineup_is_followed",
+   "test_requested_team_league_is_echoed",
+   "test_another_team_league_shows_no_foreign_rows",
+   "test_team_league_change_moves_the_panel",
+   "test_get_panel_passes_the_team_league_query",
+   "test_visibility_reflects_panel_prefs",
+   "test_visibility_defaults_to_shown",
+   "test_unrelated_settings_change_keeps_the_panel_facts"
+  ],
+  "AFC-PR-046 corrections and starter changes agree with alert facts; hidden panel current on show": [
+   "test_first_event_facts_reach_the_panel",
+   "test_correction_revises_points_in_place",
+   "test_correction_replaces_the_game_facts",
+   "test_correction_reassigning_the_play_still_revises_the_panel",
+   "test_stale_revision_does_not_regress_the_panel",
+   "test_panel_facts_agree_with_the_alert_record",
+   "test_replay_event_is_labeled_replay_on_the_panel",
+   "test_every_matched_profile_gets_the_same_facts",
+   "test_starter_change_replaces_the_benched_row",
+   "test_alerted_starters_are_panel_rows",
+   "test_hidden_panel_is_current_when_shown"
+  ],
+  "deployed (NOT_RUN without a stack)": [
+   "test_panel_data_carries_basis_rows_and_value_objects",
+   "test_panel_rereads_keep_id_and_never_lower_revision",
+   "test_preset_change_reaches_the_panel",
+   "test_panel_game_facts_agree_with_alerts"
+  ]
+ },
+ "proof_rows": [
+  {
+   "id": "SEIT-AFC-PR-039",
+   "registered_method": "demonstration",
+   "red_support": "test_panel_rows.py and test_panel_scoring_basis.py: rows, points under basis, game status, total, progress, envelope; deployed shape case",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-X09"
+  },
+  {
+   "id": "SEIT-AFC-PR-040",
+   "registered_method": "demonstration",
+   "red_support": "test_panel_freshness.py: null with reason never zero, known zero, 59/60/61 s boundary at read time, asOf = source timestamp, undated never fresh, replay label",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-X10"
+  },
+  {
+   "id": "SEIT-AFC-PR-044",
+   "registered_method": "test",
+   "red_support": "test_panel_settings.py: preset (store and PUT /v1/profile), team/league selection and echo, foreign pair shows no rows, visibility, revision rises; deployed preset case",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-X09"
+  },
+  {
+   "id": "SEIT-AFC-PR-046",
+   "registered_method": "test",
+   "red_support": "test_panel_consistency.py: correction revises in place, reassigned play, no regression on stale revision, facts equal the alert record, replay agreement, starter change, hidden then shown; deployed agreement case",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-X10"
+  },
+  {
+   "id": "SEIT-AFC-PR-065",
+   "registered_method": "test",
+   "red_support": "test_panel_scoring_basis.py: each statistic of each preset by reference to lineup.presets.TABLES, default Half-PPR, Yahoo stat_modifiers, preset never used for Yahoo, no point without a table row, third preset never scored",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-L03"
+  },
+  {
+   "id": "SEIT-RISK-AFC-P2-10",
+   "registered_method": "inspection",
+   "red_support": "route recorded in this receipt (route, route_basis)",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-6"
+  },
+  {
+   "id": "SEIT-AFC-P2-DX-01",
+   "registered_method": "inspection",
+   "red_support": "developer_feedback below",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-SCR1"
+  },
+  {
+   "id": "SEIT-AFC-P2-PATH-01",
+   "registered_method": "test",
+   "red_support": "check_paths.py exit 0 over changed files; evidence paths redacted",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-G01"
+  },
+  {
+   "id": "SEIT-AFC-P2-LAND-01",
+   "registered_method": "inspection",
+   "red_support": "branch cloud/p2-b07t pushed; no PR per packet",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-R5"
+  },
+  {
+   "id": "SEIT-AFC-P2-REL-01",
+   "registered_method": "inspection",
+   "red_support": "none in red slice (CHANGELOG prohibited by packet)",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-R5"
+  },
+  {
+   "id": "SEIT-AFC-P2-REV-01",
+   "registered_method": "inspection",
+   "red_support": "none in red slice (review allocated to IE-P2-24)",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-L05"
+  }
+ ],
+ "handoff_contract_choices": [
+  "panel.project(game_event, matches): stored GameEvent (store.put_event shape with period and scoringPlay) and P2-B04T matches {profileId, eventId, revision, starters, cursor}; recomputes PanelState for each matched profile; never writes Alerts.",
+  "panel.snapshot(profile_id, team_league) returns the CONTRACT-AFC-P2-ENVELOPE body: schemaVersion int, opaque id stable per profile and team/league, revision unchanged on re-read and strictly greater when content changes, source = active lineup source (yahoo | manual, as the frozen P2-B03T deployed tests already require), updatedAt RFC 3339 UTC.",
+  "data follows the P2-A05T TV wire shape (PanelFixtures.kt, typed gap PANEL_WIRE_UNFROZEN): teamLeague, scoringBasis (yahooLeague | ppr | halfPpr), rows [{playerId, name, points, gameStatus}], teamTotal, progress, value objects {value, reason, source, asOf}. This suite adds three keys the TV decoder ignores (it reads with opt()): stale (bool per value object), visible (Settings.panelPrefs.visible, default True) and games.",
+  "Statistics gap: the stored GameEvent carries no per-player statistics and store.put_event rejects extra attributes, so P2-B07 has no statistics source inside its write set. Seam panel.player_statistics(athlete_id) -> None or {gameId, gameState pre|in|post, gameStatus, source live|replay, asOf, stats {CONTRACT-AFC-P2-PRESETS stat name: number}}, read at call time through the panel module; tests replace it. Production may return None (every point unknown with a reason) until a slice stores ESPN boxscore statistics (same pattern as the P2-B06 event_channel seam).",
+  "Clock seam panel.now() -> RFC 3339 UTC string; staleness is evaluated at snapshot time from each value's source asOf, never from projection or response time.",
+  "stale_after boundary: age >= 60 s is stale (59 fresh, 60 and 61 stale), matching the P2-A05T TV decision and the register's '60 s'; design.md 'older than stale_after' is read the same way. A value with no asOf is stale.",
+  "team/league key is '<league>/<team>' of the Lineups row (the TV LineupPanel query; Settings.teamLeague is {league, team}). team_league None selects Settings.teamLeague, else the active lineup's pair. A pair other than the active lineup's returns no rows and an unknown total.",
+  "playerId is the ESPN athlete id; Yahoo starters map through matcher.PLAYER_MAP_PATH (exact name + team + position, as P2-B04T); an unmatched Yahoo starter keeps a row with unknown points and a reason.",
+  "teamTotal sums row points under the basis (asOf = oldest row asOf, stale when any row is stale); with any unknown row it is None or carries a non-empty reason. progress is pinned only at 0 (every game pre), 1 (every game post) and strictly between for a mix; the exact formula is the implementer's.",
+  "Manual points apply lineup.presets.TABLES by reference; a statistic without a table row awards no points (row unknown with a reason, or the statistic ignored). Yahoo points apply stat_modifiers; a statistic without a modifier scores nothing. A stored preset outside ppr/halfPpr is refused (exception) or every point is unknown.",
+  "games {gameId: {eventId, revision, score, source}} holds the projected event facts so the panel can be compared with the alert record (revision, triggerContext.score/source, P2-B05T shape). A later revision of the same eventId replaces them in place; an equal or lower revision never does. Replacement between different events of one game is only exercised for a later eventTime.",
+  "Settings changes (preset, team/league, visibility) are reflected on the next snapshot with a higher revision and no new event; a starter change is exercised as the Lineups change followed by the next projected event for that profile.",
+  "Points are compared with abs tolerance 0.005 so the implementer may round to two decimals."
+ ],
+ "scope_reconciliation": [
+  "backend/src/panel/__init__.py is the AFC-STUB raising NotImplementedError; matcher (B04), lineup (B03), feed_ingest (B02) and provider_resolver (B06) are landed product on fc206b4; alert_policy is still a stub, so no test runs the full pipeline into panel.project.",
+  "backend/tests/unit/test_pipeline_and_stubs.py STUBS still lists panel.project/snapshot; P2-B07 retires those rows as B04 did for the matcher (outside this slice's write set).",
+  "Red commit uses --no-verify per packet; the backend gate FAIL is the expected TDD red."
+ ],
+ "deferred": [
+  "P2-B07 green on unchanged frozen tests (same IDs/hashes) via CMD-GATE-BACKEND",
+  "Owner allocation of a production per-player statistics source (feed_ingest/store change under the backend-template lease)",
+  "P2-A05 pairing of the additive data keys (stale, visible, games) with the TV decoder",
+  "Independent OCR review at IE-P2-24",
+  "Deployed proof closeout P2-L03/P2-X09/P2-X10 (CMD-DEPLOYED-TESTS, stick demonstrations)"
+ ],
+ "resource_group": "host-pytest; fresh per-test Moto state; sockets blocked; no engine/server/AWS/device",
+ "changed_paths": [
+  "backend/tests/deployed/panel/test_panel_deployed.py",
+  "backend/tests/unit/panel/panel_support.py",
+  "backend/tests/unit/panel/test_panel_consistency.py",
+  "backend/tests/unit/panel/test_panel_freshness.py",
+  "backend/tests/unit/panel/test_panel_rows.py",
+  "backend/tests/unit/panel/test_panel_scoring_basis.py",
+  "backend/tests/unit/panel/test_panel_settings.py",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B07T/CMD-RED.txt",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B07T/CMD-RED.xml",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B07T/RESULT.md",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B07T/collect.txt",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B07T/commands.json",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B07T/gate.txt",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B07T/path-check.txt",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B07T/receipt.json",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B07T/verify_receipt.py"
+ ],
+ "developer_feedback": {
+  "observations": [
+   {
+    "id": "P2B07T-DX-001",
+    "tool": "pytest/Moto",
+    "observation": "80 all-assertion red cases plus 4 NOT_RUN deployed skips run offline in about 27 s; the shared api/offline fixtures needed no change.",
+    "evidence": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B07T/CMD-RED.xml"
+   },
+   {
+    "id": "P2B07T-DX-002",
+    "tool": "backend/src/store, feed_ingest/normalize.py",
+    "observation": "No per-player statistics reach the store: GameEvent has only playerIds and store.put_event rejects other attributes, so the panel cannot compute points in production without a feed_ingest/store change (backend-template lease). The suite binds a player_statistics seam instead.",
+    "evidence": "backend/src/store/__init__.py put_event; backend/src/feed_ingest/normalize.py _facts"
+   },
+   {
+    "id": "P2B07T-DX-003",
+    "tool": "backend/template.yaml",
+    "observation": "ApiFunction has Panels GetItem only, so GET /v1/panel cannot persist a read-time revision bump after a settings change; the revision must be derived (the scratch reference used projection counter + profile revision). Moto does not enforce IAM, so the unit suite cannot catch a PutItem from the API path.",
+    "evidence": "backend/template.yaml ApiFunction Policies"
+   },
+   {
+    "id": "P2B07T-DX-004",
+    "tool": "tools/ci/gate.sh in the cloud container",
+    "observation": "spec GAP (no dot); hygiene self-tests fail for absent mutmut/diff-cover/dot; 24 test_deployed_guard IPv6 cases fail because the container has no AF_INET6. The backend venv was provided by linking $HOME/.local/share/afc-tools/backend-tests to a session venv.",
+    "evidence": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B07T/gate.txt"
+   },
+   {
+    "id": "P2B07T-DX-005",
+    "tool": "P2-A05T PanelFixtures.kt",
+    "observation": "The GET /v1/panel data shape existed only as Kotlin test fixtures (PANEL_WIRE_UNFROZEN); this suite pins it on the backend side and records three additive keys.",
+    "evidence": "tv-app/app/src/test/java/com/afc/companion/panel/PanelFixtures.kt"
+   }
+  ]
+ }
+}
