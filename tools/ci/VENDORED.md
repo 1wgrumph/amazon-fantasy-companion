@@ -3,8 +3,8 @@
 Source repository: [AlphazedeHQ](https://github.com/alphazede/Alphazedehq).
 
 - D4-A merge commit: `448d40c3dbb6fd9dceb66d575c66ee89fb45f6e4`.
-  Adapt `skills/setup-pre-commit/templates/gate.sh` to the Phase 1 areas;
-  install its unchanged hook bodies with `scripts/install-hooks.sh`.
+  Adapt `skills/setup-pre-commit/templates/gate.sh` to the Phase 1 areas.
+  This repository keeps only the pre-push hook.
 - D4-B merge commit: `120dee00207425201aa77d1f42f3756ee6bc406e`
   (PR #308, including directory input and positional area invocation).
   Copy `skills/setup-a-repo/scripts/check-workflows.py` byte for byte into
