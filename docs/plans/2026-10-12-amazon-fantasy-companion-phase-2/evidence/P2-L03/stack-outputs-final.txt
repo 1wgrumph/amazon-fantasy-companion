@@ -1,0 +1,8 @@
+command: aws cloudformation describe-stacks --stack-name afc-dev --profile afc-dev --region us-east-2 --query 'Stacks[0].Outputs[?OutputKey==`ApiUrl`].[OutputKey,OutputValue]' --output json
+[
+    [
+        "ApiUrl",
+        "https://le3r79003f.execute-api.us-east-2.amazonaws.com"
+    ]
+]
+exit=0

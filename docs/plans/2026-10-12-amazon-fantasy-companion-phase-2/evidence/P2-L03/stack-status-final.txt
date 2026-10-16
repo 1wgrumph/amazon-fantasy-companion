@@ -1,0 +1,9 @@
+command: aws cloudformation describe-stacks --stack-name afc-dev --profile afc-dev --region us-east-2 --query 'Stacks[0].{Status:StackStatus,LastUpdatedTime:LastUpdatedTime,GitCommit:Tags[?Key==`GitCommit`].Value}' --output json
+{
+    "Status": "UPDATE_COMPLETE",
+    "LastUpdatedTime": "2026-10-16T15:49:42.403000+00:00",
+    "GitCommit": [
+        "af0e0ac1520ce5b9e7de186fd83df23bc92d6a5e"
+    ]
+}
+exit=0
