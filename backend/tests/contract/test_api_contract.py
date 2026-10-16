@@ -116,6 +116,81 @@ def test_future_module_stubs_surface_503_not_implemented(api, path):
     assert_error(status, body, 503, "not_implemented")
 
 
+def validate(doc, schema, value, where="panel"):
+    """Minimal OpenAPI 3.0 check: types, required, nullable, enums, bounds."""
+    schema = dereference(doc, schema)
+    for part in schema.get("allOf", []):
+        validate(doc, part, value, where)
+    if value is None:
+        assert schema.get("nullable"), f"{where} must not be null"
+        return
+    kind = schema.get("type")
+    if kind == "object":
+        assert isinstance(value, dict), f"{where} must be an object: {value!r}"
+        props, required = properties(doc, schema)
+        assert required <= set(value), f"{where} lacks {required - set(value)}"
+        for name, item in value.items():
+            if name in props:
+                validate(doc, props[name], item, f"{where}.{name}")
+            elif isinstance(schema.get("additionalProperties"), dict):
+                validate(doc, schema["additionalProperties"], item, f"{where}.{name}")
+    elif kind == "array":
+        assert isinstance(value, list), f"{where} must be an array: {value!r}"
+        assert len(value) <= schema.get("maxItems", len(value)), f"{where} exceeds maxItems"
+        for i, item in enumerate(value):
+            validate(doc, schema["items"], item, f"{where}[{i}]")
+    elif kind == "string":
+        assert isinstance(value, str) and len(value) >= schema.get("minLength", 0), where
+    elif kind == "integer":
+        assert isinstance(value, int) and not isinstance(value, bool), where
+        assert value >= schema.get("minimum", value), where
+    elif kind == "number":
+        assert isinstance(value, (int, float)) and not isinstance(value, bool), where
+    elif kind == "boolean":
+        assert isinstance(value, bool), where
+    if "enum" in schema:
+        assert value in schema["enum"], f"{where}={value!r} not in {schema['enum']}"
+
+
+def test_openapi_panel_response_schema_is_concrete():
+    doc = document("src/api/openapi.yaml")
+    schemas = doc["components"]["schemas"]
+    assert {"PanelEnvelope", "PanelData", "PanelValue", "PanelRow"} <= set(schemas)
+    served = response_schema(doc, "/v1/panel", "get", 200)
+    assert served.get("$ref", "").endswith("/PanelEnvelope")
+    data_props, data_required = properties(doc, schemas["PanelData"])
+    assert {"teamLeague", "scoringBasis", "visible", "rows", "teamTotal",
+            "progress", "games"} <= data_required
+    rows = dereference(doc, data_props["rows"])
+    assert rows["type"] == "array" and rows["maxItems"] == 32
+    assert rows["items"].get("$ref", "").endswith("/PanelRow")
+    row_props, row_required = properties(doc, schemas["PanelRow"])
+    assert {"playerId", "name", "points", "gameStatus"} <= row_required
+    assert dereference(doc, row_props["playerId"]).get("minLength") == 1
+    assert dereference(doc, row_props["gameStatus"]).get("nullable") is True
+    value_props, value_required = properties(doc, schemas["PanelValue"])
+    assert {"value", "reason", "source", "asOf", "stale"} <= value_required
+    assert dereference(doc, value_props["value"]).get("nullable") is True
+    assert set(dereference(doc, value_props["source"])["enum"]) == {"live", "replay"}
+    assert set(dereference(doc, data_props["scoringBasis"])["enum"]) == {
+        "yahooLeague", "ppr", "halfPpr"}
+
+
+def test_served_panel_payload_validates_against_openapi(api):
+    doc = document("src/api/openapi.yaml")
+    _, token = link_device(api)
+    import store
+    store.put_profile("owner", {}, 0, "2026-10-18T20:00:00Z")
+    store.put_lineup({"profileId": "owner", "source": "manual", "team": "team-7",
+                      "league": "league-a",
+                      "starters": [{"athlete_id": "9000001", "name": "Sample Receiver",
+                                    "team": "PHI", "slot": "WR"}],
+                      "updatedAt": "2026-10-18T20:00:00Z"})
+    status, body = api.request("GET", "/v1/panel", token=token)
+    assert status == 200, body
+    validate(doc, response_schema(doc, "/v1/panel", "get", 200), body)
+
+
 def test_phone_link_page_exposes_customer_confirmation_form(api):
     status, page = api.request("GET", "/link")
     assert status == 200 and isinstance(page, str)

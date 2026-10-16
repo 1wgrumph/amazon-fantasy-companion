@@ -165,14 +165,53 @@ def list_alerts(profile_id, after, limit, include_after=False):
 
 
 # Lineups: profile, source, starters, scoring basis.
+# lineupVersion is a store-allocated monotonic content version: it advances
+# on every content change (including a change back and an empty/removal
+# row, which is the retained tombstone) and is preserved on an identical
+# rewrite. get_lineup hides it so the stored Lineup shape is unchanged;
+# panel reads it through get_lineup_version.
+_LINEUP_FIELDS = {"profileId", "source", "team", "league", "starters", "scoring",
+                  "updatedAt"}
+_LINEUP_CONTENT = ("source", "team", "league", "starters", "scoring")
+
+
+def _lineup_row(profile_id):
+    return _table("LINEUPS_TABLE").get_item(
+        Key={"profileId": profile_id}).get("Item")
+
+
 def put_lineup(lineup):
-    _table("LINEUPS_TABLE").put_item(Item=_shaped(lineup, {
-        "profileId", "source", "team", "league", "starters", "scoring", "updatedAt"}))
+    item = _shaped(dict(lineup), _LINEUP_FIELDS | {"lineupVersion"})
+    item.pop("lineupVersion", None)  # allocated here, never caller-supplied
+    table = _table("LINEUPS_TABLE")
+    for _attempt in range(3):
+        current = _lineup_row(item["profileId"])
+        version = int(current.get("lineupVersion", 0)) if current else 0
+        unchanged = (current is not None and "lineupVersion" in current and all(
+            current.get(field) == item.get(field) for field in _LINEUP_CONTENT))
+        item["lineupVersion"] = version if unchanged else version + 1
+        if current is None:
+            condition = Attr("profileId").not_exists()
+        elif "lineupVersion" in current:
+            condition = Attr("lineupVersion").eq(version)
+        else:
+            condition = Attr("lineupVersion").not_exists()
+        if _written(table.put_item, Item=item, ConditionExpression=condition):
+            return
+    raise RuntimeError(f"lineup write for {item['profileId']} kept losing races")
 
 
 def get_lineup(profile_id):
-    return _table("LINEUPS_TABLE").get_item(
-        Key={"profileId": profile_id}).get("Item")
+    row = _lineup_row(profile_id)
+    if row is None:
+        return None
+    return {key: value for key, value in row.items() if key != "lineupVersion"}
+
+
+def get_lineup_version(profile_id):
+    """Monotonic lineup content version; 0 for no row or a legacy row."""
+    row = _lineup_row(profile_id)
+    return int(row.get("lineupVersion", 0)) if row else 0
 
 
 # Panels: profile, team/league, PanelState.

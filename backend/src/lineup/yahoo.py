@@ -94,6 +94,13 @@ def get_roster(transport, token, team_key, week):
         if not all(isinstance(p, str) for p in player["positions"]):
             raise ValueError("Yahoo player positions must be strings")
         players.append(player)
+    keys = [p["player_key"] for p in players]
+    if any(not key.strip() for key in keys):
+        raise ValueError("Yahoo player_key must be non-blank")
+    if len(set(keys)) != len(keys):
+        raise ValueError("Yahoo roster repeats a player_key")
+    if sum(p["slot"] not in _bench_slots() for p in players) > 32:
+        raise ValueError("Yahoo roster exceeds the 32-starter panel limit")
     return {"team_key": team_key, "week": week,
             "starters": [p for p in players if p["slot"] not in _bench_slots()],
             "bench": [p for p in players if p["slot"] in _bench_slots()]}

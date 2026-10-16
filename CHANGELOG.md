@@ -86,6 +86,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Make GET /v1/panel honor the TV panel wire contract: lineups over 32 starters or with blank or duplicate player identity are rejected at the manual/Yahoo write boundary and legacy stored rows fail closed with a structured `panel_invalid` error instead of an unusable 200; a store-allocated monotonic lineup version makes every lineup change, return, removal and re-add serve a strictly higher panel revision; mixed dated/undated aggregates are never served as fresh; and OpenAPI now defines concrete PanelEnvelope/PanelData/PanelValue/PanelRow schemas (PR #TBD).
 - Scope the git-hook gate to the change being committed or pushed: pre-commit checks the staged diff only (during a merge, only what the merge itself introduces), and pre-push checks the pushed commit range, so merged-in already-landed whitespace no longer blocks a merge commit and unrelated unstaged or untracked files no longer select the tvapp/backend areas for a docs-only commit (PR TBD).
 - Store per-player ESPN boxscore statistics at ingest and read them through the panel's statistics seam, so the deployed panel shows real fantasy points instead of "statistics unavailable" for every starter ([PR #95](https://github.com/1wgrumph/amazon-fantasy-companion/pull/95)).
 - Correct the Yahoo setup notes: one app with redirect `https://localhost:8443/link`, the one-command `setup` token flow, and the errors seen on 2026-10-16 ([#92](https://github.com/1wgrumph/amazon-fantasy-companion/pull/92)).

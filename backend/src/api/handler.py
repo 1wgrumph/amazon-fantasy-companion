@@ -201,7 +201,12 @@ def _alerts(profile_id, query, body):
 
 
 def _panel(profile_id, query, body):
-    return _respond(200, panel.snapshot(profile_id, query.get("teamLeague")))
+    try:
+        snapshot = panel.snapshot(profile_id, query.get("teamLeague"))
+    except panel.InvalidLineupError:
+        raise ApiError(503, "panel_invalid",
+                       "The stored lineup cannot be displayed on the panel.")
+    return _respond(200, snapshot)
 
 
 def _providers(profile_id, query, body):
