@@ -11,14 +11,18 @@ while read -r _local_ref local_sha _remote_ref remote_sha; do
     if [[ -z "${remote_sha:-}" || "$remote_sha" == "$zero" ]]; then
         base=$(git merge-base "$local_sha" origin/main 2>/dev/null) \
             || base=$(git hash-object -t tree --stdin < /dev/null)
+    elif ! git cat-file -e "$remote_sha^{commit}" 2>/dev/null; then
+        printf 'pre-push: remote tip %s is not in the local repo; fetch it first (git fetch) so the pushed range can be gated\n' "$remote_sha" >&2
+        status=1
+        continue
     else
         base=$remote_sha
     fi
-    bash tools/ci/gate.sh --changed="$base..$local_sha" || status=$?
+    bash tools/ci/gate.sh --changed="$base..$local_sha" < /dev/null || status=$?
 done
 if ((saw == 0)); then
     base=$(git merge-base HEAD origin/main 2>/dev/null) \
         || base=$(git hash-object -t tree --stdin < /dev/null)
-    bash tools/ci/gate.sh --changed="$base..HEAD" || status=$?
+    bash tools/ci/gate.sh --changed="$base..HEAD" < /dev/null || status=$?
 fi
 exit "$status"

@@ -70,6 +70,7 @@ run_area() {
                     local ws_out2 ws_rc2
                     ws_out2=$(git diff --cached --check MERGE_HEAD -- 2>&1); ws_rc2=$?
                     ((ws_rc2 == 0 || ws_rc2 == 1 || ws_rc2 == 2)) || return 1
+                    if ((ws_rc2 != 0)) && [[ -z "$(ws_findings "$ws_out2")" ]]; then return 1; fi
                     if [[ -z "$ws" ]]; then ws_rc=0; else
                         ws=$(printf '%s\n' "$ws" | grep -xF -f <(ws_findings "$ws_out2") || true)
                         [[ -n "$ws" ]] && ws_rc=1 || ws_rc=0
@@ -260,8 +261,11 @@ open(sys.argv[1], "wb").write(b"\0".join(sorted(a & b)) + (b"\0" if a & b else b
                 "$changes" "$other" || exit 1
         fi
     elif [[ -n "$range_tip" ]]; then
-        base=$(git rev-parse --verify --end-of-options "$base^{tree}") || usage
-        range_tip=$(git rev-parse --verify --end-of-options "$range_tip^{tree}") || usage
+        raw_base=$base; raw_tip=$range_tip
+        base=$(git rev-parse --verify --end-of-options "$raw_base^{tree}" 2>/dev/null) \
+            || { printf 'gate: unknown revision in --changed range: %s\n' "$raw_base" >&2; exit 2; }
+        range_tip=$(git rev-parse --verify --end-of-options "$raw_tip^{tree}" 2>/dev/null) \
+            || { printf 'gate: unknown revision in --changed range: %s\n' "$raw_tip" >&2; exit 2; }
         git diff --no-renames --name-only -z "$base" "$range_tip" -- > "$changes" || exit 1
     else
         if [[ -z "$base" ]]; then base=$(git merge-base HEAD origin/main) || usage; fi
