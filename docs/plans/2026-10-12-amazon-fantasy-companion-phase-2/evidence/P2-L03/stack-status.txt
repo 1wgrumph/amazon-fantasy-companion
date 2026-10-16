@@ -1,0 +1,18 @@
+command: aws cloudformation describe-stacks --stack-name afc-dev --profile afc-dev --region us-east-2 --query 'Stacks[0].{Status:StackStatus,Updated:LastUpdatedTime,GitCommit:Tags[?Key==`GitCommit`].Value|[0]}' --output json
+exit=0
+{
+    "Status": "UPDATE_COMPLETE",
+    "Updated": "2026-10-15T01:10:30.108000+00:00",
+    "GitCommit": "2d973bd66182364a69b5a3088286e88c08f1107d"
+}
+ApiUrl command (same query as CMD-STACK-OUTPUTS, unchanged stack; deploy was not executed):
+[
+    [
+        "ApiUrl",
+        "https://le3r79003f.execute-api.us-east-2.amazonaws.com"
+    ]
+]
+changeset after decline:
+name=samcli-deploy1792162052
+Status=CREATE_COMPLETE
+ExecutionStatus=AVAILABLE

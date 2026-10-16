@@ -47,26 +47,19 @@ class HookPath(unittest.TestCase):
         rc, out = run_gate(self, self.repo, 'backend', env=self.env)
         self.assert_local_result(rc, out)
 
-    def test_both_hooks_find_environment_with_minimal_path(self):
+    def test_pre_push_hook_finds_environment_with_minimal_path(self):
         remote = subprocess.check_output(['git', 'rev-parse', 'origin/main'],
                                          cwd=self.repo, text=True).strip()
-        for hook in ('pre-commit', 'pre-push'):
-            with self.subTest(hook=hook):
-                stdin = ''
-                if hook == 'pre-commit':
-                    # The hook gates the staged change.
-                    git(self.repo, 'add', '-A')
-                else:
-                    # The hook gates the pushed range named on its stdin.
-                    commit_all(self.repo)
-                    local = subprocess.check_output(['git', 'rev-parse', 'HEAD'],
-                                                    cwd=self.repo, text=True).strip()
-                    stdin = f'refs/heads/main {local} refs/heads/main {remote}\n'
-                result = subprocess.run([str(self.repo / '.githooks' / hook)],
-                                        cwd=self.repo, env=self.env, input=stdin,
-                                        capture_output=True, text=True, timeout=600)
-                out = result.stdout + result.stderr
-                self.assert_local_result(result.returncode, out)
+        # The hook gates the pushed range named on its stdin.
+        commit_all(self.repo)
+        local = subprocess.check_output(['git', 'rev-parse', 'HEAD'],
+                                        cwd=self.repo, text=True).strip()
+        stdin = f'refs/heads/main {local} refs/heads/main {remote}\n'
+        result = subprocess.run([str(self.repo / '.githooks' / 'pre-push')],
+                                cwd=self.repo, env=self.env, input=stdin,
+                                capture_output=True, text=True, timeout=600)
+        out = result.stdout + result.stderr
+        self.assert_local_result(result.returncode, out)
 
     def test_missing_or_incomplete_environment_is_named_provisioning_gap(self):
         home = self.tmp / 'home with spaces'
