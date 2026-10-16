@@ -5,6 +5,7 @@ import com.afc.companion.net.Alert
 import com.afc.companion.profile.Presentation
 import com.afc.companion.profile.ProfileState
 import com.afc.companion.profile.voiceActive
+import org.json.JSONArray
 import org.json.JSONObject
 
 enum class AlertAction { Watch, Dismiss }
@@ -29,22 +30,39 @@ object AlertPresenter {
             "|includ(ed|es)|subscribed)\\b|(?<!not )\\bverified\\b",
     )
 
-    /** Null when the alert lacks safe triggering player and matchup context. */
+    /** Null when the alert lacks safe triggering context. Server payloads carry structured starters, no matchup yet. */
     fun text(alert: Alert): AlertText? {
         val data = alert.envelope.data
         val trigger = data.opt("triggerContext") as? JSONObject ?: return null
-        val player = clean(trigger.opt("player"))?.takeUnless(::isUnsafe) ?: return null
-        val matchup = clean(trigger.opt("matchup"))?.takeUnless(::isUnsafe) ?: return null
-        if (isUnsafe("$player $matchup")) return null // a claim may span the player/matchup boundary
+        // A present matchup must be safe; an absent or null one is simply not shown (never fabricated).
+        val matchup = if (trigger.has("matchup") && !trigger.isNull("matchup")) {
+            clean(trigger.opt("matchup"))?.takeUnless(::isUnsafe) ?: return null
+        } else {
+            null
+        }
+        val player = if (trigger.has("starters")) {
+            val starters = trigger.opt("starters") as? JSONArray ?: return null
+            val names = (0 until starters.length()).map { i ->
+                val starter = starters.opt(i) as? JSONObject ?: return null
+                clean(starter.opt("name"))?.takeUnless(::isUnsafe) ?: return null
+            }
+            // Empty starters is a correction: no player line at all (owner, 2026-10-16: no extra wording).
+            if (names.isEmpty()) "" else boundedNames(names)
+        } else {
+            // Legacy fixture shape: both player and matchup remain required, as before.
+            if (matchup == null) return null
+            clean(trigger.opt("player"))?.takeUnless(::isUnsafe) ?: return null
+        }
+        if (isUnsafe(listOfNotNull(player, matchup).joinToString(" "))) return null // a claim may span the boundary
         val commentary = clean(data.opt("commentary"), MAX_COMMENTARY_LENGTH)?.takeUnless(::isUnsafe)
         return AlertText(
             headline = when (data.opt("alertType")) {
-                "redZone" -> "Red-zone alert"
-                "playerScore" -> "Score update"
-                "closeGame" -> "Close game alert"
+                "RedZone", "redZone" -> "Red-zone alert"
+                "PlayerScore", "playerScore" -> "Score update"
+                "CloseGame", "closeGame" -> "Close game alert"
                 else -> "Game alert"
             },
-            context = "$player — $matchup",
+            context = if (matchup == null) player else "$player — $matchup",
             access = when (alert.accessBasis) {
                 AccessBasis.Verified -> "Access: verified"
                 AccessBasis.CustomerConfirmed -> "Access: confirmed by you"
@@ -66,6 +84,18 @@ object AlertPresenter {
             text = text,
             speak = profile.voiceActive(voiceRouteVerified),
         )
+    }
+
+    /** Joined starter names bounded to one context field; the remainder is counted, not spelled out. */
+    private fun boundedNames(names: List<String>): String {
+        val joined = names.joinToString(", ")
+        if (joined.length <= MAX_CONTEXT_LENGTH) return joined
+        for (shown in names.size - 1 downTo 1) {
+            val candidate = names.take(shown).joinToString(", ") + ", +${names.size - shown} more"
+            if (candidate.length <= MAX_CONTEXT_LENGTH) return candidate
+        }
+        val suffix = ", +${names.size - 1} more"
+        return names[0].take(MAX_CONTEXT_LENGTH - suffix.length) + suffix
     }
 
     private const val MAX_CONTEXT_LENGTH = 80

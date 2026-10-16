@@ -15,7 +15,7 @@ class PanelTextTest {
 
     @Test fun freshValueShowsTheNumberWithoutLabels() {
         val text = PanelText.value(v(12.3), AS_OF_MS + 59_999)
-        assertTrue("fresh value shows its points: '$text'", text.contains("12.3"))
+        assertEquals("12.3", text)
         assertFalse("under 60 s is not stale: '$text'", stale.containsMatchIn(text))
         assertFalse(unavailable.containsMatchIn(text))
     }
