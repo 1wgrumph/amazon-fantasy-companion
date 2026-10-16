@@ -83,6 +83,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Scope the git-hook gate to the change being committed or pushed: pre-commit checks the staged diff only (during a merge, only what the merge itself introduces), and pre-push checks the pushed commit range, so merged-in already-landed whitespace no longer blocks a merge commit and unrelated unstaged or untracked files no longer select the tvapp/backend areas for a docs-only commit (PR TBD).
 - Grant the policy function table-scoped Lineups Scan access used by the matcher
   and the API function Profiles UpdateItem access for provider routing outcomes
   and installed-app reports, with source-to-template IAM contracts to catch

@@ -1,4 +1,24 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -uo pipefail
 cd "$(git rev-parse --show-toplevel)"
-exec bash tools/ci/gate.sh --changed
+status=0
+saw=0
+zero=0000000000000000000000000000000000000000
+while read -r _local_ref local_sha _remote_ref remote_sha; do
+    [[ -n "${local_sha:-}" ]] || continue
+    saw=1
+    [[ "$local_sha" == "$zero" ]] && continue
+    if [[ -z "${remote_sha:-}" || "$remote_sha" == "$zero" ]]; then
+        base=$(git merge-base "$local_sha" origin/main 2>/dev/null) \
+            || base=$(git hash-object -t tree --stdin < /dev/null)
+    else
+        base=$remote_sha
+    fi
+    bash tools/ci/gate.sh --changed="$base..$local_sha" || status=$?
+done
+if ((saw == 0)); then
+    base=$(git merge-base HEAD origin/main 2>/dev/null) \
+        || base=$(git hash-object -t tree --stdin < /dev/null)
+    bash tools/ci/gate.sh --changed="$base..HEAD" || status=$?
+fi
+exit "$status"
