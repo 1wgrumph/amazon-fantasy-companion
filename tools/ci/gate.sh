@@ -36,6 +36,17 @@ area_matches() {
 need() {
     command -v "$1" >/dev/null || { printf 'required tool missing: %s\n' "$1"; return 3; }
 }
+staged_parent() {
+    git rev-parse --verify --end-of-options "$1^{commit}" 2>/dev/null \
+        || git hash-object -t tree --stdin < /dev/null
+}
+ws_findings() {
+    # Report file:line:rule-id only; never echo matched line text.
+    # Pair headers with "+" content lines by position: only a
+    # blank-at-EOF header has no following content line, and a
+    # "+"-named file's header starts with "+" like content.
+    printf '%s\n' "$1" | awk '{ if (skip) { skip = 0; if (/^\+/) next } if (match($0, /^[^:][^:]*:[0-9]+:/)) { print substr($0, 1, RLENGTH - 1) ":WS-CHECK"; if ($0 !~ /: new blank line at EOF\.$/) skip = 1 } }' | sort -u
+}
 spec_check() {
     local source=$1 output=$2
     uv run --script tools/spec/spec_lint.py "$source" || return "$?"
@@ -47,8 +58,36 @@ run_area() {
     case "$1" in
         hygiene)
             python3 -c 'import yaml' || return 3
-            local ws_base=$base
-            if [[ -z "$ws_base" && "${GITHUB_ACTIONS:-false}" == true ]]; then
+            local ws_base=$base ws_out= ws_rc=0 ws=
+            if ((staged)); then
+                # This commit's own change is the index vs HEAD; during a merge
+                # only findings against both parents were introduced by the merge.
+                ws_out=$(git diff --cached --check "$(staged_parent HEAD)" -- 2>&1); ws_rc=$?
+                ((ws_rc == 0 || ws_rc == 1 || ws_rc == 2)) || return 1
+                ws=$(ws_findings "$ws_out")
+                if ((ws_rc != 0)) && [[ -z "$ws" ]]; then return 1; fi
+                if git rev-parse --verify -q MERGE_HEAD >/dev/null 2>&1; then
+                    local ws_out2 ws_rc2
+                    ws_out2=$(git diff --cached --check MERGE_HEAD -- 2>&1); ws_rc2=$?
+                    ((ws_rc2 == 0 || ws_rc2 == 1 || ws_rc2 == 2)) || return 1
+                    if ((ws_rc2 != 0)) && [[ -z "$(ws_findings "$ws_out2")" ]]; then return 1; fi
+                    if [[ -z "$ws" ]]; then ws_rc=0; else
+                        ws=$(printf '%s\n' "$ws" | grep -xF -f <(ws_findings "$ws_out2") || true)
+                        [[ -n "$ws" ]] && ws_rc=1 || ws_rc=0
+                    fi
+                fi
+                if ((ws_rc != 0)); then
+                    [[ -n "$ws" ]] && printf '%s\n' "$ws"
+                    return 1
+                fi
+            elif [[ -n "$range_tip" ]]; then
+                ws_out=$(git diff --check "$ws_base" "$range_tip" -- 2>&1); ws_rc=$?
+                if ((ws_rc != 0)); then
+                    ws=$(ws_findings "$ws_out")
+                    [[ -n "$ws" ]] && printf '%s\n' "$ws"
+                    return 1
+                fi
+            elif [[ -z "$ws_base" && "${GITHUB_ACTIONS:-false}" == true ]]; then
                 # Checkout is clean in CI: check the event's whole change.
                 ws_base=$(python3 - <<'PYBASE'
 import json
@@ -73,23 +112,21 @@ PYBASE
                         || { printf 'WS-CHECK: CI base unavailable\n'; return 1; }
                 fi
             fi
-            if [[ -z "$ws_base" ]]; then
-                ws_base=$(git merge-base HEAD origin/main 2>/dev/null) || {
-                    printf 'WS-CHECK: no origin/main; checking uncommitted changes only\n'
-                    ws_base=HEAD
-                }
-            fi
-            ws_out=$(git diff --check "$ws_base" -- 2>&1)
-            ws_rc=$?
-            if (( ws_rc != 0 )); then
-                # Report file:line:rule-id only; never echo matched line text.
-                # Pair headers with "+" content lines by position: only a
-                # blank-at-EOF header has no following content line, and a
-                # "+"-named file's header starts with "+" like content.
-                # Unparseable git errors still fail closed (no false PASS).
-                ws=$(printf '%s\n' "$ws_out" | awk '{ if (skip) { skip = 0; if (/^\+/) next } if (match($0, /^[^:][^:]*:[0-9]+:/)) { print substr($0, 1, RLENGTH - 1) ":WS-CHECK"; if ($0 !~ /: new blank line at EOF\.$/) skip = 1 } }' | sort -u)
-                [[ -n "$ws" ]] && printf '%s\n' "$ws"
-                return 1
+            if (( ! staged )) && [[ -z "$range_tip" ]]; then
+                if [[ -z "$ws_base" ]]; then
+                    ws_base=$(git merge-base HEAD origin/main 2>/dev/null) || {
+                        printf 'WS-CHECK: no origin/main; checking uncommitted changes only\n'
+                        ws_base=HEAD
+                    }
+                fi
+                ws_out=$(git diff --check "$ws_base" -- 2>&1)
+                ws_rc=$?
+                if (( ws_rc != 0 )); then
+                    # Unparseable git errors still fail closed (no false PASS).
+                    ws=$(ws_findings "$ws_out")
+                    [[ -n "$ws" ]] && printf '%s\n' "$ws"
+                    return 1
+                fi
             fi
             python3 tools/ci/check_paths.py || return "$?"
             python3 tools/ci/check_workflows.py .github/workflows/ || return "$?"
@@ -168,17 +205,24 @@ PYBASE
     esac
 }
 usage() {
-    printf '%s\n' 'usage: gate.sh [--changed[=<base>]] [--list] [<area>...]' >&2
+    printf '%s\n' 'usage: gate.sh [--changed[=<base>|<base>..<tip>] [--staged]] [--list] [<area>...]' >&2
     exit 2
 }
 changed=0
 list=0
+staged=0
 base=
+range_tip=
 selected=()
 for arg in "$@"; do
     case "$arg" in
         --changed) changed=1 ;;
-        --changed=*) changed=1; base=${arg#*=}; [[ -n "$base" ]] || usage ;;
+        --staged) changed=1; staged=1 ;;
+        --changed=*) changed=1; base=${arg#*=}; [[ -n "$base" ]] || usage
+            if [[ "$base" == *..* ]]; then
+                range_tip=${base#*..}; base=${base%%..*}
+                [[ -n "$base" && -n "$range_tip" && "$range_tip" != .* && "$range_tip" != *..* ]] || usage
+            fi ;;
         --list) list=1 ;;
         -*) usage ;;
         *)
@@ -188,6 +232,7 @@ for arg in "$@"; do
             selected+=("$arg") ;;
     esac
 done
+if ((staged)) && [[ -n "$range_tip" ]]; then usage; fi
 if ((list)); then printf '%s\n' "${areas[@]}"; exit 0; fi
 for tool in git mktemp; do
     if ! command -v "$tool" >/dev/null; then
@@ -199,12 +244,35 @@ root=$(git rev-parse --show-toplevel) || usage
 cd "$root" || exit 1
 paths=()
 if ((changed)); then
-    if [[ -z "$base" ]]; then base=$(git merge-base HEAD origin/main) || usage; fi
-    base=$(git rev-parse --verify --end-of-options "$base^{commit}") || usage
     changes=$(mktemp) || exit 1
     trap 'rm -f "$changes"' EXIT
-    git diff --no-renames --name-only -z "$base" -- > "$changes" || exit 1
-    git ls-files --others --exclude-standard -z >> "$changes" || exit 1
+    if ((staged)); then
+        base=$(staged_parent HEAD) || exit 1
+        git diff --cached --no-renames --name-only -z "$base" -- > "$changes" || exit 1
+        if git rev-parse --verify -q MERGE_HEAD >/dev/null 2>&1; then
+            # Only paths differing from both parents are this merge's own change.
+            other=$(mktemp) || exit 1
+            trap 'rm -f "$changes" "$other"' EXIT
+            git diff --cached --no-renames --name-only -z MERGE_HEAD -- > "$other" || exit 1
+            python3 -c 'import sys
+a = set(open(sys.argv[1], "rb").read().split(b"\0")) - {b""}
+b = set(open(sys.argv[2], "rb").read().split(b"\0")) - {b""}
+open(sys.argv[1], "wb").write(b"\0".join(sorted(a & b)) + (b"\0" if a & b else b""))' \
+                "$changes" "$other" || exit 1
+        fi
+    elif [[ -n "$range_tip" ]]; then
+        raw_base=$base; raw_tip=$range_tip
+        base=$(git rev-parse --verify --end-of-options "$raw_base^{tree}" 2>/dev/null) \
+            || { printf 'gate: unknown revision in --changed range: %s\n' "$raw_base" >&2; exit 2; }
+        range_tip=$(git rev-parse --verify --end-of-options "$raw_tip^{tree}" 2>/dev/null) \
+            || { printf 'gate: unknown revision in --changed range: %s\n' "$raw_tip" >&2; exit 2; }
+        git diff --no-renames --name-only -z "$base" "$range_tip" -- > "$changes" || exit 1
+    else
+        if [[ -z "$base" ]]; then base=$(git merge-base HEAD origin/main) || usage; fi
+        base=$(git rev-parse --verify --end-of-options "$base^{commit}") || usage
+        git diff --no-renames --name-only -z "$base" -- > "$changes" || exit 1
+        git ls-files --others --exclude-standard -z >> "$changes" || exit 1
+    fi
     mapfile -d '' -t paths < "$changes"
 fi
 ((${#selected[@]})) || selected=("${areas[@]}")
