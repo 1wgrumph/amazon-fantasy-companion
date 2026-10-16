@@ -11,7 +11,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from gate_support import REPO, commit_all, copy_repo, git, path_without, run_gate, write
+from gate_support import REPO, commit_all, copy_repo, git, git_output, path_without, run_gate, write
 
 
 class HookPath(unittest.TestCase):
@@ -48,12 +48,10 @@ class HookPath(unittest.TestCase):
         self.assert_local_result(rc, out)
 
     def test_pre_push_hook_finds_environment_with_minimal_path(self):
-        remote = subprocess.check_output(['git', 'rev-parse', 'origin/main'],
-                                         cwd=self.repo, text=True).strip()
+        remote = git_output(self.repo, 'rev-parse', 'origin/main')
         # The hook gates the pushed range named on its stdin.
         commit_all(self.repo)
-        local = subprocess.check_output(['git', 'rev-parse', 'HEAD'],
-                                        cwd=self.repo, text=True).strip()
+        local = git_output(self.repo, 'rev-parse', 'HEAD')
         stdin = f'refs/heads/main {local} refs/heads/main {remote}\n'
         result = subprocess.run([str(self.repo / '.githooks' / 'pre-push')],
                                 cwd=self.repo, env=self.env, input=stdin,

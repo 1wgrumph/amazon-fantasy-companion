@@ -7,21 +7,18 @@ real coverage.py, pytest and diff-cover; no engine, network or AWS.
 import json
 import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[4]
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from gate_support import git, git_output  # noqa: E402
 CONTROL = 'def verdict(ok):\n    if ok:\n        return "covered"\n    return "uncovered"\n'
 BOTH = ('from control import verdict\n\n\ndef test_verdict():\n'
         '    assert verdict(True) == "covered"\n    assert verdict(False) == "uncovered"\n')
 ONE = 'from control import verdict\n\n\ndef test_verdict():\n    assert verdict(True) == "covered"\n'
-
-
-def git(cwd, *args):
-    return subprocess.run(['git', '-c', 'user.name=Gate Test', '-c', 'user.email=gate-test@example.invalid',
-                           '-c', 'commit.gpgsign=false', *args], cwd=cwd, check=True,
-                          capture_output=True, text=True).stdout.strip()
 
 
 def write(root, files):
@@ -42,7 +39,7 @@ class BackendCoverageAdapter(unittest.TestCase):
                           'backend/tests/contract/test_base.py': 'def test_base():\n    assert True\n'})
         git(self.repo, 'init', '-q', '-b', 'main')
         self.commit()
-        self.base = git(self.repo, 'rev-parse', 'HEAD')
+        self.base = git_output(self.repo, 'rev-parse', 'HEAD')
 
     def commit(self):
         git(self.repo, 'add', '-A')
@@ -111,7 +108,7 @@ class BackendCoverageAdapter(unittest.TestCase):
         self.assertEqual(rc, 0, out)
         stale = self.tmp / 'stale.xml'
         stale.write_bytes((self.out / 'coverage.xml').read_bytes())
-        base = git(self.repo, 'rev-parse', 'HEAD')
+        base = git_output(self.repo, 'rev-parse', 'HEAD')
         self.candidate({'backend/src/control.py': CONTROL.replace('"covered"', '"new"')
                         + '\n\ndef untested():\n    return "new logic"\n',
                         'backend/tests/unit/test_control.py': BOTH.replace('"covered"', '"new"')})

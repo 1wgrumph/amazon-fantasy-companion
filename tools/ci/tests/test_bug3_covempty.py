@@ -14,23 +14,11 @@ import tempfile
 import unittest
 from pathlib import Path
 
-REPO = Path(__file__).resolve().parents[3]
+from gate_support import REPO, git, git_output, write
+
 CONTROL = 'def verdict(ok):\n    if ok:\n        return "covered"\n    return "uncovered"\n'
 BOTH = ('from control import verdict\n\n\ndef test_verdict():\n'
         '    assert verdict(True) == "covered"\n    assert verdict(False) == "uncovered"\n')
-
-
-def git(cwd, *args):
-    return subprocess.run(['git', '-c', 'user.name=Gate Test', '-c', 'user.email=gate-test@example.invalid',
-                           '-c', 'commit.gpgsign=false', *args], cwd=cwd, check=True,
-                          capture_output=True, text=True).stdout.strip()
-
-
-def write(root, files):
-    for rel, text in files.items():
-        path = root / rel
-        path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(text, encoding='utf-8')
 
 
 class CoverageEmptyModule(unittest.TestCase):
@@ -45,7 +33,7 @@ class CoverageEmptyModule(unittest.TestCase):
         git(self.repo, 'init', '-q', '-b', 'main')
         git(self.repo, 'add', '-A')
         git(self.repo, 'commit', '-q', '--no-verify', '-m', 'fixture')
-        self.base = git(self.repo, 'rev-parse', 'HEAD')
+        self.base = git_output(self.repo, 'rev-parse', 'HEAD')
 
     def candidate(self, files):
         write(self.repo, files)
@@ -90,7 +78,7 @@ class CoverageEmptyModule(unittest.TestCase):
         # the file; with statements present that stays REPORT_INCOMPLETE.
         self.candidate({'backend/src/control.py': CONTROL.replace('    if ok:\n', '    dead = 99\n    if ok:\n'),
                         'backend/tests/unit/test_control.py': BOTH})
-        self.base = git(self.repo, 'rev-parse', 'HEAD')
+        self.base = git_output(self.repo, 'rev-parse', 'HEAD')
         self.candidate({'backend/src/control.py': CONTROL})
         rc, out = self.run_adapter()
         self.assertEqual(rc, 3, out)

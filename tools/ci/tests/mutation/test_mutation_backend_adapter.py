@@ -8,21 +8,18 @@ import json
 import os
 import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[4]
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from gate_support import git, git_output  # noqa: E402
 CONTROL = 'def verdict(ok):\n    if ok:\n        return "covered"\n    return "uncovered"\n'
 BOTH = ('from control import verdict\n\n\ndef test_verdict():\n'
         '    assert verdict(True) == "covered"\n    assert verdict(False) == "uncovered"\n')
 ONE = 'from control import verdict\n\n\ndef test_verdict():\n    assert verdict(True) == "covered"\n'
-
-
-def git(cwd, *args):
-    return subprocess.run(['git', '-c', 'user.name=Gate Test', '-c', 'user.email=gate-test@example.invalid',
-                           '-c', 'commit.gpgsign=false', *args], cwd=cwd, check=True,
-                          capture_output=True, text=True).stdout.strip()
 
 
 def write(root, files):
@@ -43,7 +40,7 @@ class BackendMutationAdapter(unittest.TestCase):
                           'backend/tests/contract/test_base.py': 'def test_base():\n    assert True\n'})
         git(self.repo, 'init', '-q', '-b', 'main')
         self.commit()
-        self.base = git(self.repo, 'rev-parse', 'HEAD')
+        self.base = git_output(self.repo, 'rev-parse', 'HEAD')
 
     def commit(self):
         git(self.repo, 'add', '-A')
@@ -110,7 +107,7 @@ class BackendMutationAdapter(unittest.TestCase):
         two_tests = BOTH + BOTH.replace('verdict', 'verdict2').replace('test_verdict', 'test_verdict2')
         write(self.repo, {'backend/src/control.py': two, 'backend/tests/unit/test_control.py': two_tests})
         self.commit()
-        base = git(self.repo, 'rev-parse', 'HEAD')
+        base = git_output(self.repo, 'rev-parse', 'HEAD')
         write(self.repo, {'backend/src/control.py': two + '\n\ndef untested():\n    return "untested"\n'})
         self.commit()
         result = subprocess.run(['bash', 'tools/ci/mutation/backend.sh', base, str(self.out)],
