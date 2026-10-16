@@ -13,7 +13,7 @@ from feed_support import (GAME, attempt, boxscore_athlete_ids,
 
 EVENT_FIELDS = {"gameId", "eventId", "revision", "source", "score",
                 "fieldPosition", "possession", "playerIds", "eventTime",
-                "correctionOf", "period", "scoringPlay"}
+                "correctionOf", "period", "scoringPlay", "matchup"}
 
 
 def normalize_module():
@@ -127,3 +127,45 @@ def test_broadcast_networks_ignore_the_top_level_field():
 def test_a_non_feed_source_is_rejected(source):
     with pytest.raises(ValueError):
         normalize(fresh_summary(), source=source)
+
+
+def expected_matchup(summary):
+    competitors = summary["header"]["competitions"][0]["competitors"]
+    away = next(c["team"]["abbreviation"] for c in competitors
+                if c["homeAway"] == "away")
+    home = next(c["team"]["abbreviation"] for c in competitors
+                if c["homeAway"] == "home")
+    return f"{away} at {home}"
+
+
+def test_matchup_comes_from_header_competitors():
+    summary = fresh_summary()
+    label = expected_matchup(summary)
+    assert 0 < len(label) <= 80
+    for event in normalize(summary):
+        assert event["matchup"] == label, event
+
+
+def test_matchup_absent_without_valid_competitors():
+    summary = fresh_summary()
+    del summary["header"]["competitions"][0]["competitors"]
+    for event in normalize(summary):
+        assert "matchup" not in event, event
+
+
+@pytest.mark.parametrize("abbreviation", ["x" * 9, "PHI PHI", "", None])
+def test_matchup_absent_for_invalid_abbreviation(abbreviation):
+    summary = fresh_summary()
+    summary["header"]["competitions"][0]["competitors"][0]["team"]["abbreviation"] = (
+        abbreviation)
+    for event in normalize(summary):
+        assert "matchup" not in event, event
+
+
+def test_matchup_survives_ingest_storage(api):
+    summary = fresh_summary()
+    ingest_summary = require_attr(require_module("feed_ingest.ingest"),
+                                  "ingest_summary")
+    stored = attempt(ingest_summary, summary, GAME)
+    assert stored and all(item["matchup"] == expected_matchup(summary)
+                          for item in api.table("Events").scan()["Items"])
