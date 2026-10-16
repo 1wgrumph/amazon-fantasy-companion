@@ -15,7 +15,8 @@ never touches the profile's Settings/providerPref.
 import functools
 import json
 import os
-from datetime import datetime, timedelta
+import re
+from datetime import datetime
 from pathlib import Path
 
 import boto3
@@ -27,6 +28,7 @@ OUTCOMES = ("gameOpened", "searchOpened", "appHomeOpened", "appAbsent",
             "accessUnknown", "playbackDenied")
 PLATFORMS = ("fire_os", "vega")
 GAP = "REGISTRY_ROUTE_GAP"
+CANONICAL_UTC = re.compile(r"[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z")
 
 
 def event_channel(event_id):
@@ -58,11 +60,14 @@ def _installed_packages(profile_id):
 
 
 def _utc_timestamp(value):
-    try:
-        parsed = datetime.fromisoformat(value)
-    except (TypeError, ValueError):
+    # Match the canonical form first: fromisoformat leniency differs by version.
+    if not isinstance(value, str) or not CANONICAL_UTC.fullmatch(value):
         return False
-    return parsed.utcoffset() == timedelta(0)
+    try:
+        datetime.strptime(value, "%Y-%m-%dT%H:%M:%SZ")
+    except ValueError:
+        return False
+    return True
 
 
 def _route(provider):

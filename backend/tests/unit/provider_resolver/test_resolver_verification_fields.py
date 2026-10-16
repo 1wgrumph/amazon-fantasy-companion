@@ -1,11 +1,14 @@
 """Verified-route field checks (CONTRACT-AFC-P2-PROVIDER-REGISTRY).
 
 A platform entry is verified only when verified_outcome is a defined
-RoutingOutcome and verified_at is an ISO-8601 UTC timestamp; any other
+RoutingOutcome and verified_at is a real UTC instant in the registry's
+canonical form YYYY-MM-DDTHH:MM:SSZ; any other
 entry is a REGISTRY_ROUTE_GAP and its launch data is never served.
 """
 
 import json
+
+import pytest
 
 from resolver_support import LANDED_REGISTRY, require_module, resolver, seed_pref  # noqa: F401
 
@@ -52,6 +55,27 @@ def test_naive_timestamp_is_a_gap(resolver):
     assert fire_os_route(resolver, verified_at="2026-10-14T18:00:00") == {"status": GAP}
 
 
+@pytest.mark.parametrize("verified_at", [
+    "2026-10-14T18:00:00+00:00:00.000001",
+    "2026-10-14T18:00:00+00:00:00",
+    "2026-10-14T18:00:00+00:00",
+    "2026-10-14T18:00:00-00:00",
+    "2026-10-14T18:00:00+0000",
+    "2026-10-14T18:00:00.123456Z",
+    "2026-10-14",
+    "20261014T180000Z",
+    "2026-W42-3T18:00Z",
+    "2026-10-14 18:00:00Z",
+    "2026-10-14T18Z",
+    "2026-10-14T18:00Z",
+    "2026-02-30T18:00:00Z",
+    "2026-10-14T18:00:00Z\n",
+    "２０２６-10-14T18:00:00Z",
+])
+def test_non_canonical_timestamp_is_a_gap(resolver, verified_at):
+    assert fire_os_route(resolver, verified_at=verified_at) == {"status": GAP}
+
+
 def test_missing_outcome_is_a_gap(resolver):
     assert fire_os_route(resolver, verified_outcome=None) == {"status": GAP}
 
@@ -70,10 +94,17 @@ def test_valid_entry_is_verified(resolver):
 
 def test_landed_registry_routes_resolve_as_before():
     module = require_module("provider_resolver")
-    for provider in json.loads(LANDED_REGISTRY.read_text())["providers"]:
-        routes = module._route(provider)["platform_routes"]
-        for platform in module.PLATFORMS:
-            entry = (provider.get("platform_routes") or {}).get(platform) or {}
-            before = ("verified" if entry.get("verified_outcome") and entry.get("verified_at")
-                      else GAP)
-            assert routes[platform]["status"] == before, (provider["id"], platform, entry)
+    providers = json.loads(LANDED_REGISTRY.read_text())["providers"]
+    resolved = {p["id"]: module._route(p)["platform_routes"] for p in providers}
+    prime_fire_os = providers[0]["platform_routes"]["fire_os"]
+    assert resolved == {
+        "prime_video": {"fire_os": dict(prime_fire_os, status="verified"),
+                        "vega": {"status": GAP}},
+        "espn": {"fire_os": {"status": GAP}, "vega": {"status": GAP}},
+        "directv_stream": {"fire_os": {"status": GAP}, "vega": {"status": GAP}},
+        "youtube_tv": {"fire_os": {"status": GAP}, "vega": {"status": GAP}},
+        "local_broadcast": {"fire_os": {"status": GAP}, "vega": {"status": GAP}},
+    }
+    assert resolved["prime_video"]["fire_os"]["package"] == "com.amazon.firebat"
+    assert resolved["prime_video"]["fire_os"]["verified_outcome"] == "searchOpened"
+    assert resolved["prime_video"]["fire_os"]["verified_at"] == "2026-10-16T20:10:00Z"
