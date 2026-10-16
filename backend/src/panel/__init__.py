@@ -7,6 +7,11 @@ does, so the panel agrees with the alert record. snapshot() derives rows,
 points, total and progress at read time from the stored Lineup, the profile
 Settings and the statistics seam, so a settings or starter change shows on
 the next read with a higher revision and no panel write on the read path.
+project() records a fingerprint of the lineup it projected; snapshot()
+spends the revision's low bit when the current lineup differs from that
+fingerprint, so a starter change outruns the last projected revision.
+Projections write conditionally on the stored counter and re-read and
+merge on a lost race, so overlapping games never erase each other.
 
 Seams, read at call time through this module: player_statistics(athlete_id)
 -> None (unknown) or {gameId, gameState pre|in|post, gameStatus, source
@@ -15,6 +20,7 @@ per-player statistics yet, so production statistics are unknown until a
 stats slice lands (P2-B07T R1).
 """
 
+import hashlib
 import json
 from datetime import datetime, timezone
 from decimal import Decimal
@@ -88,10 +94,23 @@ def _value(record, table):
             "asOf": as_of, "stale": stale}
 
 
+def _fingerprint(lineup):
+    """Digest of the lineup content the rows derive from (starters + basis inputs)."""
+    if not lineup:
+        return ""
+    content = {"source": lineup.get("source"), "starters": lineup.get("starters") or [],
+               "scoring": lineup.get("scoring")}
+    return hashlib.sha256(json.dumps(content, sort_keys=True, default=str).encode()).hexdigest()
+
+
 def _stored(profile_id, team_league):
-    row = store.get_panel(profile_id, team_league) or {}
+    """(games, counter or None when no row exists, projected lineup fingerprint)."""
+    row = store.get_panel(profile_id, team_league)
+    if row is None:
+        return {}, None, ""
     freshness = row.get("freshness") or {}
-    return freshness.get("games") or {}, int(freshness.get("counter", 0))
+    return (freshness.get("games") or {}, int(freshness.get("counter", 0)),
+            freshness.get("lineup") or "")
 
 
 def project(game_event, matches):
@@ -108,19 +127,27 @@ def project(game_event, matches):
         if not lineup:
             continue
         team_league = _pair(lineup)
-        games, counter = _stored(profile_id, team_league)
-        current = games.get(game_event["gameId"])
-        replace = (current is None
-                   or (current["eventId"] == facts["eventId"]
-                       and facts["revision"] > int(current["revision"]))
-                   or (current["eventId"] != facts["eventId"]
-                       and str(facts["eventTime"] or "") > str(current.get("eventTime") or "")))
-        if not replace:
-            continue
-        games = dict(games, **{game_event["gameId"]: facts})
-        store.put_panel({"profileId": profile_id, "teamLeague": team_league,
-                         "freshness": {"games": games, "counter": counter + 1},
-                         "updatedAt": now()})
+        fingerprint = _fingerprint(lineup)
+        # Conditional write on the counter we read: a lost race re-reads and
+        # re-decides against the winner's games instead of erasing them.
+        for _attempt in range(3):
+            games, counter, _projected = _stored(profile_id, team_league)
+            current = games.get(game_event["gameId"])
+            replace = (current is None
+                       or (current["eventId"] == facts["eventId"]
+                           and facts["revision"] > int(current["revision"]))
+                       or (current["eventId"] != facts["eventId"]
+                           and str(facts["eventTime"] or "") > str(current.get("eventTime") or "")))
+            if not replace:
+                break
+            panel = {"profileId": profile_id, "teamLeague": team_league,
+                     "freshness": {"games": dict(games, **{game_event["gameId"]: facts}),
+                                   "counter": (counter or 0) + 1, "lineup": fingerprint},
+                     "updatedAt": now()}
+            if store.put_panel_conditional(panel, counter):
+                break
+        else:
+            raise RuntimeError(f"panel projection for {profile_id} kept losing races")
 
 
 def snapshot(profile_id, team_league):
@@ -133,7 +160,7 @@ def snapshot(profile_id, team_league):
                        if selected.get("league") and selected.get("team")
                        else _pair(lineup) if lineup else "unassigned/unassigned")
     basis, table = _basis(lineup, settings)
-    games, counter = _stored(profile_id, team_league)
+    games, counter, projected = _stored(profile_id, team_league)
     rows, states = [], []
     if lineup and _pair(lineup) == team_league:
         for starter in lineup.get("starters") or []:
@@ -173,8 +200,15 @@ def snapshot(profile_id, team_league):
     else:
         progress = {"value": None, "reason": "game progress unavailable", "source": None,
                     "asOf": None, "stale": True}
+    # shortcut: the low bit only distinguishes "lineup as projected" from
+    # "lineup changed since", so a second change (or a change back) before the
+    # next projection reuses a revision; a stored lineup revision would fix
+    # that, but the read path cannot write one. The x2 keeps every counter
+    # or profile bump strictly above a spent low bit.
+    current = _fingerprint(lineup) if lineup and _pair(lineup) == team_league else ""
+    revision = 2 * ((counter or 0) + int(profile.get("revision", 0))) + (current != projected)
     return {"schemaVersion": 1, "id": f"panel/{profile_id}/{team_league}",
-            "revision": counter + int(profile.get("revision", 0)),
+            "revision": revision,
             "source": lineup.get("source", "manual") if lineup else "manual",
             "updatedAt": now(),
             "data": {"teamLeague": team_league, "scoringBasis": basis,
