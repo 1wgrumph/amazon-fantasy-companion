@@ -60,6 +60,37 @@ def test_stubs_name_their_owning_slice(api, module, function, arity, slice_id):
     assert str(error.value) == f"AFC-STUB: {module} is implemented by {slice_id}"
 
 
-def test_provider_registry_starts_empty_in_contract_shape():
+SPIKE_ORDER = ["prime_video", "espn", "directv_stream", "youtube_tv", "local_broadcast"]
+
+
+def assert_registry_contract(registry):
+    # CONTRACT-AFC-P2-PROVIDER-REGISTRY: spike order, verified routes carry outcome+time,
+    # and the exact provider list leaves no room for a route invented for an absent provider.
+    assert registry["schemaVersion"] == 1
+    assert registry["currentAttemptObservation"] == "none"
+    assert [p["id"] for p in registry["providers"]] == SPIKE_ORDER
+    assert [p["name"] for p in registry["providers"]] == [
+        "Prime Video", "ESPN", "DirecTV Stream", "YouTube TV", "Local broadcast"]
+    for provider in registry["providers"]:
+        assert isinstance(provider["channels_carried"], list)
+        assert set(provider["platform_routes"]) <= {"fire_os", "vega"}
+        for route in provider["platform_routes"].values():
+            assert route["package"] and route["doc_source"]
+            assert route["launch"]["type"] in ("intent", "uri") and route["launch"]["value"]
+            assert route["verified_outcome"] and route["verified_at"]
+            assert "currentAttemptObservation" in route
+
+
+def test_provider_registry_filled_in_contract_shape():
     registry = json.loads((BACKEND / "src/provider_resolver/registry.json").read_text())
-    assert registry == {"schemaVersion": 1, "providers": [], "currentAttemptObservation": "none"}
+    assert_registry_contract(registry)
+
+
+def test_provider_registry_contract_rejects_malformed_registry(tmp_path):
+    registry = json.loads((BACKEND / "src/provider_resolver/registry.json").read_text())
+    del registry["providers"][0]["platform_routes"]["fire_os"]["verified_at"]
+    registry["providers"].reverse()
+    copy = tmp_path / "registry.json"
+    copy.write_text(json.dumps(registry))
+    with pytest.raises((AssertionError, KeyError)):
+        assert_registry_contract(json.loads(copy.read_text()))
