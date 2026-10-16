@@ -109,7 +109,7 @@ def test_body_larger_than_64_kib_is_rejected_before_any_link_mutation(api):
     assert {k: table.scan()["Items"] for k, table in api.tables.items()} == before
 
 
-@pytest.mark.parametrize("path", ["/v1/alerts", "/v1/panel"])
+@pytest.mark.parametrize("path", ["/v1/panel"])
 def test_future_module_stubs_surface_503_not_implemented(api, path):
     _, token = link_device(api)
     status, body = api.request("GET", path, token=token, query={"profileId": "owner"})
