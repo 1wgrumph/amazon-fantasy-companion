@@ -39,7 +39,7 @@ class PanelAlertsTest {
 
     @Test fun panelShowsAtMostTheNewestThreeAlerts() {
         val shown = panelAlerts((1..5).map { alertOf("a$it") })
-        assertEquals("bounded so the lineup stays on screen", listOf("a5", "a4", "a3"), shown.map { it.id })
+        assertEquals("only the newest three are shown; the panel scrolls each focused target into view", listOf("a5", "a4", "a3"), shown.map { it.id })
     }
 
     @Test fun watchAndDismissAreReachableByDpadAboveTheLineup() {
@@ -64,8 +64,11 @@ class PanelAlertsTest {
         assertEquals(FocusTarget.AlertDismiss("a1"), c.focused)
     }
 
-    @Test fun selectKeyIsBoundToTheRemoteCenter() {
-        assertEquals(PanelAction.Select, PanelController(listOf(TL), TL, true).bindings()[KeyEvent.KEYCODE_DPAD_CENTER])
+    @Test fun selectKeyIsBoundToTheRemoteCenterEnterAndGamepadA() {
+        val bindings = PanelController(listOf(TL), TL, true).bindings()
+        for (key in listOf(KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER, KeyEvent.KEYCODE_NUMPAD_ENTER, KeyEvent.KEYCODE_BUTTON_A)) {
+            assertEquals("key $key", PanelAction.Select, bindings[key])
+        }
     }
 
     @Test fun switchingConfirmationNeedsASecondPressAndFocusMoveCancelsIt() {

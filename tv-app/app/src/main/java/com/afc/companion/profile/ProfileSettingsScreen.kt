@@ -16,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.Button
@@ -53,6 +54,7 @@ fun ProfileSettingsScreen(client: ApiClient, modifier: Modifier = Modifier) {
     ) {
         Text("Profile/Settings", style = MaterialTheme.typography.headlineMedium)
         Text(message, style = MaterialTheme.typography.bodyLarge)
+        DeviceSettingsControls()
         val current = state ?: return@Column
         for (control in ProfileControl.entries) {
             val limit = controls.limits[control]
@@ -137,6 +139,18 @@ fun ProfileSettingsScreen(client: ApiClient, modifier: Modifier = Modifier) {
             }
         }) { Text("Save profile") }
     }
+}
+
+/** Stored on this TV and applied at once, so it is offered even when the server profile is unavailable. */
+@Composable
+private fun DeviceSettingsControls() {
+    val context = LocalContext.current
+    val settings = remember { DeviceSettings(context) }
+    var showPanelOnNewAlert by remember { mutableStateOf(settings.showPanelOnNewAlert) }
+    Button(onClick = {
+        showPanelOnNewAlert = !showPanelOnNewAlert
+        settings.showPanelOnNewAlert = showPanelOnNewAlert
+    }) { Text(DeviceSettings.label(showPanelOnNewAlert)) }
 }
 
 private fun onOff(value: Boolean): String = if (value) "on" else "off"

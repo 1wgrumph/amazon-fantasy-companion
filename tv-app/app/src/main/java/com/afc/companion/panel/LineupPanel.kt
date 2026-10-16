@@ -1,5 +1,6 @@
 package com.afc.companion.panel
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.focusable
@@ -13,11 +14,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.relocation.BringIntoViewRequester
+import androidx.compose.foundation.relocation.bringIntoViewRequester
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,6 +44,7 @@ import androidx.tv.material3.Text
 import com.afc.companion.alerts.AlertInbox
 import com.afc.companion.alerts.AlertNotifier
 import com.afc.companion.net.ApiClient
+import com.afc.companion.profile.DeviceSettings
 import com.afc.companion.profile.ProfileState
 import com.afc.companion.profile.ProfileStore
 import com.afc.companion.watch.WatchLauncher
@@ -75,18 +80,19 @@ fun LineupPanel(client: ApiClient, mode: PanelMode, modifier: Modifier = Modifie
     }
     val current = profile
     val teamLeague = current?.teamLeague?.let { "${it.league}/${it.team}" }
+    val context = LocalContext.current
+    val revealOnNewAlert = remember(mode) { revealsOnNewAlert(DeviceSettings(context).showPanelOnNewAlert, mode) }
     val controller = remember(client, teamLeague) {
         // The profile stores exactly one team/league pair (ProfileState.teamLeague);
         // its leagues/teams selection sets are unpaired, so the switch cycles this
         // one actual selection and a one-choice switch is a no-op in the controller.
-        PanelController(listOfNotNull(teamLeague), teamLeague, current?.panel?.visible ?: true)
+        PanelController(listOfNotNull(teamLeague), teamLeague, current?.panel?.visible ?: true, revealOnNewAlert)
     }
     var tick by remember(controller) { mutableIntStateOf(0) }
     var fetchAttempted by remember(controller) { mutableStateOf(false) }
     var watchOutcome by remember { mutableStateOf<String?>(null) }
     var watching by remember { mutableStateOf(false) }
     val focusRequester = remember { FocusRequester() }
-    val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(controller) {
@@ -110,6 +116,7 @@ fun LineupPanel(client: ApiClient, mode: PanelMode, modifier: Modifier = Modifie
                 scope.launch {
                     try {
                         // The second OK press was the switching confirmation (PanelController.select).
+                        // WatchLauncher reports a started attempt even if this scope is cancelled meanwhile.
                         WatchLauncher(context).watchAlert(eventId, alert.route, client, current?.switchingConfirm ?: true, mode) { true }
                             ?.let { watchOutcome = PanelText.watchOutcome(it) }
                     } finally {
@@ -215,7 +222,12 @@ private fun PanelContent(
     fetchAttempted: Boolean,
     nowMs: Long,
 ) {
-    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+    // One scrolling column: up to three alert cards are taller than the panel, so the focused
+    // target is brought into view instead of being laid out below the window.
+    Column(
+        Modifier.fillMaxSize().verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+    ) {
         watchOutcome?.let {
             Text(it, style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = Color.White))
         }
@@ -244,11 +256,8 @@ private fun PanelContent(
             PanelText.header(snapshot),
             style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = Color.White),
         )
-        LazyColumn(
-            modifier = Modifier.weight(1f).fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-        ) {
-            items(snapshot.rows, key = { it.playerId }) { row ->
+        snapshot.rows.forEach { row ->
+            key(row.playerId) {
                 FocusableRow(focused == FocusTarget.Row(row.playerId)) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -288,8 +297,10 @@ private fun PanelContent(
 
 @Composable
 private fun AlertCard(alert: PanelAlert, armed: Boolean, focused: FocusTarget?) {
+    // Focus on Watch or Dismiss reveals the whole card, so the customer sees the alert being acted on.
+    val cardFocused = focused == FocusTarget.AlertWatch(alert.id) || focused == FocusTarget.AlertDismiss(alert.id)
     Column(
-        Modifier.fillMaxWidth().border(1.dp, Color.White).padding(12.dp),
+        Modifier.fillMaxWidth().bringIntoViewWhen(cardFocused).border(1.dp, Color.White).padding(12.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         val body = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = Color.White)
@@ -310,9 +321,19 @@ private fun FocusableRow(focused: Boolean, content: @Composable () -> Unit) {
     Box(
         Modifier
             .fillMaxWidth()
+            .bringIntoViewWhen(focused)
             .border(3.dp, if (focused) Color.White else Color.Transparent)
             .padding(12.dp),
     ) { content() }
+}
+
+/** Scrolls the enclosing column until this element is on screen whenever [focused] becomes true. */
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+private fun Modifier.bringIntoViewWhen(focused: Boolean): Modifier {
+    val requester = remember { BringIntoViewRequester() }
+    LaunchedEffect(focused) { if (focused) requester.bringIntoView() }
+    return bringIntoViewRequester(requester)
 }
 
 @Composable
