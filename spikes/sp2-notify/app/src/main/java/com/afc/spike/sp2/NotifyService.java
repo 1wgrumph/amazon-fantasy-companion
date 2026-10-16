@@ -18,6 +18,7 @@ import android.widget.Toast;
 public class NotifyService extends Service {
     static final String TAG = "SP2SPIKE";
     static final String ACTION_POST = "com.afc.spike.sp2.POST";
+    static final String ACTION_POST_FSI = "com.afc.spike.sp2.POST_FSI";
     static final String ACTION_POST_DELAYED = "com.afc.spike.sp2.POST_DELAYED";
     static final String ACTION_DISMISS = "com.afc.spike.sp2.DISMISS";
     static final String ACTION_TOAST = "com.afc.spike.sp2.TOAST";
@@ -32,6 +33,7 @@ public class NotifyService extends Service {
         ensureChannel();
         startForeground(FGS_ID, new Notification.Builder(this, CHANNEL_ID)
             .setSmallIcon(android.R.drawable.ic_dialog_info)
+            .setPriority(Notification.PRIORITY_LOW)
             .setContentTitle("SP2 spike service running").build());
         String action = intent != null ? intent.getAction() : null;
         Log.i(TAG, "service action=" + action
@@ -50,6 +52,8 @@ public class NotifyService extends Service {
             long delay = intent.getLongExtra("delay_ms", 8000);
             Log.i(TAG, "POST scheduled in " + delay + "ms");
             new Handler(Looper.getMainLooper()).postDelayed(this::postAlert, delay);
+        } else if (ACTION_POST_FSI.equals(action)) {
+            postAlertFsi();
         } else {
             postAlert();
         }
@@ -65,6 +69,8 @@ public class NotifyService extends Service {
             new Intent(this, NotifyService.class).setAction(ACTION_DISMISS), piFlags);
         Notification alert = new Notification.Builder(this, CHANNEL_ID)
             .setSmallIcon(android.R.drawable.ic_dialog_info)
+            // Fire TV heads-up guide requires PRIORITY_HIGH on top of IMPORTANCE_HIGH.
+            .setPriority(Notification.PRIORITY_HIGH)
             // Android peeks a heads-up only for IMPORTANCE_HIGH + sound/vibrate; give it both.
             .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE)
             .setContentTitle("SP2 test alert: player in the red zone")
@@ -77,6 +83,33 @@ public class NotifyService extends Service {
             .build();
         getSystemService(NotificationManager.class).notify(ALERT_ID, alert);
         Log.i(TAG, "ALERT posted id=" + ALERT_ID);
+    }
+
+    private void postAlertFsi() {
+        int piFlags = PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE;
+        PendingIntent watch = PendingIntent.getActivity(this, 1,
+            new Intent(this, MainActivity.class).putExtra("via", "WATCH")
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK), piFlags);
+        PendingIntent dismiss = PendingIntent.getService(this, 2,
+            new Intent(this, NotifyService.class).setAction(ACTION_DISMISS), piFlags);
+        PendingIntent fsi = PendingIntent.getActivity(this, 3,
+            new Intent(this, MainActivity.class).putExtra("via", "FSI")
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK), piFlags);
+        Notification alert = new Notification.Builder(this, CHANNEL_ID)
+            .setSmallIcon(android.R.drawable.ic_dialog_info)
+            .setPriority(Notification.PRIORITY_HIGH)
+            .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE)
+            .setContentTitle("SP2 FSI test alert: player in the red zone")
+            .setContentText("Fixture FSI alert with Watch and Dismiss")
+            .setCategory(Notification.CATEGORY_EVENT)
+            .setAutoCancel(true)
+            .setContentIntent(watch)
+            .setFullScreenIntent(fsi, true)
+            .addAction(new Notification.Action.Builder(android.R.drawable.ic_media_play, "Watch", watch).build())
+            .addAction(new Notification.Action.Builder(android.R.drawable.ic_menu_close_clear_cancel, "Dismiss", dismiss).build())
+            .build();
+        getSystemService(NotificationManager.class).notify(ALERT_ID, alert);
+        Log.i(TAG, "ALERT_FSI posted id=" + ALERT_ID);
     }
 
     private void ensureChannel() {
