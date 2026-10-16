@@ -114,6 +114,115 @@ def test_yahoo_modifiers_score_from_boxscore(api, monkeypatch, tmp_path):
     assert data["rows"][0]["points"]["value"] == 21.2
 
 
+def _project(panel, game, event_id, event_time):
+    event = {"gameId": game, "eventId": event_id, "revision": 1, "source": "live",
+             "score": {"away": 0, "home": 0}, "fieldPosition": 50, "possession": None,
+             "playerIds": [HURTS], "eventTime": event_time, "period": 1,
+             "scoringPlay": False}
+    panel.project(event, [{"profileId": "owner", "eventId": event_id, "revision": 1,
+                           "starters": [], "cursor": None}])
+
+
+def test_prior_game_record_not_served_for_current_game(api):
+    # R1 F1: game A final stats must not show as points once the panel has
+    # projected a later game B for the starter and B has no Hurts boxscore.
+    import panel
+    seed(api)
+    ingest_summary(fresh_summary(), GAME, source="replay")
+    _project(panel, GAME, "a-1", "2026-10-11T17:13:41Z")
+    later = fresh_summary()
+    later["header"]["id"] = "401872999"
+    status = later["header"]["competitions"][0]["status"]["type"]
+    status.update({"state": "in", "shortDetail": "Q1 15:00", "detail": "Q1 15:00"})
+    for team in later["boxscore"]["players"]:
+        for cat in team["statistics"]:
+            cat["athletes"] = [e for e in cat["athletes"] if e["athlete"]["id"] != HURTS]
+    for drive in later["drives"]["previous"]:
+        for play in drive.get("plays", []):
+            play["id"] = "b-" + play["id"]
+            if play.get("wallclock"):
+                play["wallclock"] = "2026-10-18T17:00:00Z"
+    ingest_summary(later, "401872999", source="live")
+    _project(panel, "401872999", "b-1", "2026-10-18T17:00:00Z")
+    data = panel.snapshot("owner", "league-a/team-7")["data"]
+    row = data["rows"][0]
+    assert row["points"]["value"] is None
+    assert row["points"]["reason"] == "no statistics for current game"
+    assert row["gameStatus"] is None
+    assert data["teamTotal"]["value"] is None
+    assert data["progress"]["value"] is None
+
+
+def test_malformed_boxscore_values_are_skipped(api):
+    # R1 F2: NaN/Infinity/overflow values and an unhashable key must not crash.
+    from feed_ingest.normalize import boxscore_statistics
+    payload = fresh_summary()
+    for team in payload["boxscore"]["players"]:
+        for cat in team["statistics"]:
+            if cat["name"] == "passing":
+                cat["keys"] = list(cat["keys"]) + [["unhashable"]]
+                for entry in cat["athletes"]:
+                    entry["stats"] = list(entry["stats"]) + ["7"]
+                    if entry["athlete"]["id"] == HURTS:
+                        entry["stats"][cat["keys"].index("passingYards")] = "NaN"
+                        entry["stats"][cat["keys"].index("passingTouchdowns")] = "1e999999"
+                        entry["stats"][cat["keys"].index("interceptions")] = "Infinity"
+    [record] = [r for r in boxscore_statistics(payload, GAME) if r["athleteId"] == HURTS]
+    assert {k: float(v) for k, v in record["stats"].items()} == {
+        "rushing_yards": 2, "rushing_touchdowns": 0, "fumbles_lost": 0}
+    # The same bad values as plain strings pass the schema; ingest must store
+    # the remaining good stats instead of crashing the poll.
+    clean_keys = fresh_summary()
+    for team in clean_keys["boxscore"]["players"]:
+        for cat in team["statistics"]:
+            if cat["name"] == "passing":
+                for entry in cat["athletes"]:
+                    if entry["athlete"]["id"] == HURTS:
+                        entry["stats"][cat["keys"].index("passingYards")] = "NaN"
+    ingest_summary(clean_keys, GAME, source="replay")
+
+
+def test_live_record_survives_replay_fallback(api):
+    # R1 F3/F4: load_statistics + store must not replace a live record.
+    import panel
+    from feed_ingest.ingest import store_player_statistics
+    from feed_ingest.replay import load_statistics
+    live = fresh_summary()
+    for team in live["boxscore"]["players"]:
+        for cat in team["statistics"]:
+            if cat["name"] == "passing":
+                for entry in cat["athletes"]:
+                    if entry["athlete"]["id"] == HURTS:
+                        entry["stats"][cat["keys"].index("passingYards")] = "400"
+    ingest_summary(live, GAME, source="live")
+    store_player_statistics(load_statistics(GAME, FIXTURES))
+    record = panel.player_statistics(HURTS)
+    assert record["source"] == "live"
+    assert float(record["stats"]["passing_yards"]) == 400
+
+
+def test_older_statistics_do_not_replace_newer(api):
+    # R1 F3: an older asOf must not overwrite a newer record for the game.
+    import panel
+    newer = fresh_summary()
+    for drive in newer["drives"]["previous"]:
+        for play in drive.get("plays", []):
+            if play.get("wallclock"):
+                play["wallclock"] = "2026-10-11T18:00:00Z"
+    ingest_summary(newer, GAME, source="live")
+    stale = fresh_summary()
+    for team in stale["boxscore"]["players"]:
+        for cat in team["statistics"]:
+            if cat["name"] == "passing":
+                for entry in cat["athletes"]:
+                    if entry["athlete"]["id"] == HURTS:
+                        entry["stats"][cat["keys"].index("passingYards")] = "100"
+    ingest_summary(stale, GAME, source="live")
+    record = panel.player_statistics(HURTS)
+    assert record["asOf"] == "2026-10-11T18:00:00Z"
+    assert float(record["stats"]["passing_yards"]) == 220
+
+
 def test_no_floats_stored(api):
     ingest_summary(fresh_summary(), GAME, source="replay")
     def floats(value):

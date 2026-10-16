@@ -111,13 +111,19 @@ def boxscore_statistics(payload, game_id, source="live"):
                     continue
                 stats = by_athlete.setdefault(athlete_id, {})
                 for key, value in zip(keys, entry["stats"]):
+                    if not isinstance(key, str):
+                        continue
                     mapped = _BOX.get((name, key))
                     if mapped is None:
                         continue
                     try:
-                        stats[mapped] = Decimal(str(value))
-                    except InvalidOperation:
+                        number = Decimal(str(value))
+                    except (InvalidOperation, ArithmeticError, ValueError):
                         continue
+                    # Untrusted body: DynamoDB rejects non-finite Decimals, and
+                    # no real boxscore stat needs more than five digits.
+                    if number.is_finite() and abs(number) <= 99999:
+                        stats[mapped] = number
     return [{"athleteId": athlete_id, "gameId": game_id, "gameState": state,
              "gameStatus": detail if isinstance(detail, str) else None,
              "source": source, "asOf": max(clocks) if clocks else None, "stats": stats}

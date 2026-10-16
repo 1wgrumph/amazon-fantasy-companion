@@ -119,7 +119,10 @@ def project(game_event, matches):
     facts = {"eventId": game_event["eventId"], "revision": int(game_event.get("revision", 1)),
              "score": {k: (Decimal(str(v)) if isinstance(v, float) else v)
                        for k, v in (game_event.get("score") or {}).items()},
-             "source": game_event.get("source"), "eventTime": game_event.get("eventTime")}
+             "source": game_event.get("source"), "eventTime": game_event.get("eventTime"),
+             # Internal only (never in the wire games map): which starters this
+             # game concerns, so snapshot can tell a starter's current game.
+             "playerIds": [str(p) for p in game_event.get("playerIds") or []]}
     for match in matches:
         profile_id = match["profileId"]
         _, settings = _settings(profile_id)
@@ -141,6 +144,9 @@ def project(game_event, matches):
                            and str(facts["eventTime"] or "") > str(current.get("eventTime") or "")))
             if not replace:
                 break
+            if current is not None:  # a starter stays linked to the game all game long
+                facts = dict(facts, playerIds=sorted(
+                    set(facts["playerIds"]) | {str(p) for p in current.get("playerIds") or []}))
             panel = {"profileId": profile_id, "teamLeague": team_league,
                      "freshness": {"games": dict(games, **{game_event["gameId"]: facts}),
                                    "counter": (counter or 0) + 1, "lineup": fingerprint},
@@ -167,7 +173,20 @@ def snapshot(profile_id, team_league):
         for starter in lineup.get("starters") or []:
             espn_id = _espn_id(starter)
             record = player_statistics(espn_id) if espn_id else None
-            value = _value(record, table)
+            # The starter's current game is the latest projected game whose
+            # events concern them (Panels games map). A statistics record
+            # from an earlier game is not this game's points: fail closed.
+            # Rows projected before playerIds were stored carry no link, so
+            # they impose no current game and the record stands as before.
+            mine = [gid for gid, f in games.items()
+                    if espn_id and espn_id in {str(p) for p in f.get("playerIds") or []}]
+            current_game = (max(mine, key=lambda gid: (str(games[gid].get("eventTime") or ""), gid))
+                            if mine else None)
+            wrong_game = bool(record and current_game
+                              and record.get("gameId") != current_game)
+            value = _value(None if wrong_game else record, table)
+            if wrong_game:
+                record, value = None, dict(value, reason="no statistics for current game")
             if espn_id is None:
                 value = dict(value, reason="no matching ESPN athlete")
             rows.append({"playerId": espn_id or str(starter.get("player_key") or ""),
