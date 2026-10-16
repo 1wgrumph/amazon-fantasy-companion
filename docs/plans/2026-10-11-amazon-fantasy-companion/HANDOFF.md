@@ -1,3 +1,48 @@
+# Planning delta checkpoint — 2026-10-16 (P1-DELTA-OD-AFC-01-B)
+
+Recorded in `implementation.json`; facts are Orchestrator-verified on 2026-10-16
+and were not re-read in this session.
+
+- **OD-AFC-01 = B** (owner, 2026-10-16: "B: add thin entry skill"). S41 is
+  `dispatchable: true`.
+- **Ordering waiver** OA-AFC-P1-2026-10-16-01 (owner: "Yes to both"): S41 and
+  S11 may land before S06/S06L. The planned dependency edges are not rewritten.
+- **README scrub** OA-AFC-P1-2026-10-16-02: Alphazedehq #363, merge `0d11da5e637d`.
+- **Landed in Alphazedehq:**
+  - S41 `skills/ci-cd/` router: #361, merge `7fc081bdaf21`.
+  - S11T T01-T17: #307, marked merged with #364.
+  - S11 hook and installer, T18-T38: #364, merge `c389102d0a66`. The IE-P1-10
+    review returned REPAIR_REQUIRED F1-F5; one repair round fixed all five
+    (T31-T38). S11 review 1/1 and repair 1/1 are **spent**.
+- **Live install:** claude-code, codex and cursor are wired. muse is a
+  typed_gap; its skills were linked into `$HOME/.agents/skills`, not the plan's
+  `$HOME/.config/muse/skills`. agy is a typed_gap.
+- **Route note:** the slices ran on `opensource-hackathon` (DEC-AFC-SD-041).
+  The per-slice `model_route` blocks still show the pre-migration routes.
+- **SEIT:** `seit.json proposed_command_amendments`
+  (SEIT-AMD-P1-2026-10-16, `proposed_owner_review`) proposes fixes to
+  CMD-SKILL-TRIGGER, CMD-SKILL-SIZE, CMD-COVERAGE-HOOK and CMD-D4-AGNOSTIC. The
+  live command strings are unchanged until the owner accepts.
+
+**Typed gaps:**
+- TOOLING_UNAVAILABLE: the Bearing Lite 1.1.7 schemas, `plan-package.cjs` and
+  `render-dod-manifest.mjs` were not installed in the cloud session. Schema
+  validation and the render check were NOT_RUN. The `dod_manifest` block is
+  byte-identical, so the committed Manifest HTML is unchanged by this delta.
+  However, it still shows S41 as conditional.
+- Not supplied to this delta, so recorded as `not_supplied_to_this_delta`:
+  - the S41 and S11 dispatch lease, base, branch and evidence_dir;
+  - journey.json receipts for these dispatches.
+
+**Next:**
+- Re-run the native schema and renderer checks with Bearing 1.1.7.
+- Owner review of SEIT-AMD-P1-2026-10-16.
+- Land S06/S06L.
+
+Earlier checkpoints below are historical.
+
+---
+
 # Current review checkpoint — 2026-10-13T15:27:30Z
 
 The chronology/profile delta is applied: **13 GitHub milestones,39 logical issues,

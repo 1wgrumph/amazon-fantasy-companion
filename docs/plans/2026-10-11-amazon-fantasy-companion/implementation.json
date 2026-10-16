@@ -2062,8 +2062,9 @@
         },
         "source": "seit.json gate_declarations.spec_and_docs.trigger_requests"
       },
-      "dispatchable": false,
-      "verification_note": "CMD-SKILL-SIZE and CMD-SKILL-TRIGGER follow the Alphazedehq stock skill-test pattern (DEC-AFC-SD-026): author tests/test_<skill_snake>.py (mirroring skills/release-process/tests/test_release_process.py) and tests/trigger-requests.json; never run quick_validate.py on the repository SKILL.md; CMD-D4-AGNOSTIC (D4 slices) scans only the tracked files this slice changed in its own directory since its dispatch-record <base>, generated artifacts excluded (DEC-AFC-SD-029). Every command's own exit status is its verdict; evidence goes to the dispatch record's evidence_dir."
+      "dispatchable": true,
+      "verification_note": "CMD-SKILL-SIZE and CMD-SKILL-TRIGGER follow the Alphazedehq stock skill-test pattern (DEC-AFC-SD-026): author tests/test_<skill_snake>.py (mirroring skills/release-process/tests/test_release_process.py) and tests/trigger-requests.json; never run quick_validate.py on the repository SKILL.md; CMD-D4-AGNOSTIC (D4 slices) scans only the tracked files this slice changed in its own directory since its dispatch-record <base>, generated artifacts excluded (DEC-AFC-SD-029). Every command's own exit status is its verdict; evidence goes to the dispatch record's evidence_dir.",
+      "dispatchable_basis": "OD-AFC-01 decided B by the owner on 2026-10-16 (owner words: \"B: add thin entry skill\"); recorded by P1-DELTA-OD-AFC-01-B"
     },
     {
       "id": "S08",
@@ -3719,7 +3720,13 @@
       "decision": "D4 form: extend the existing shared skills only (SD-018), or extend them and add one thin shared entry-point skill (the owner’s latest words were “Just create the shared skill please”).",
       "recommendation": "**A — extensions only.** `setup-pre-commit` becomes the shared CI/CD gate skill and is already linked into every harness. A second entry-point skill would only route to the three extended skills and duplicate their trigger surface, which C10 forbids. If “the shared skill” meant one new named skill, option B costs one judgement slice (S41, `skills/ci-cd/SKILL.md`, a router under 25 lines) and changes nothing else.",
       "source": "technical plan §Open owner items for the integrated review",
-      "status": "open_for_integrated_review"
+      "status": "decided: B",
+      "decided_on": "2026-10-16",
+      "decided_by": "owner, in the owner's own session",
+      "question_put": "settle OD-AFC-01 (A or B)",
+      "owner_words": "B: add thin entry skill",
+      "resolution": "Option B: extend the shared skills (S01, S02, S03) and add one thin shared entry-point skill, skills/ci-cd/ in Alphazedehq (S41). The recommendation of A above is kept as the historical record; the owner selected B. S41 becomes dispatchable.",
+      "recorded_by_delta": "P1-DELTA-OD-AFC-01-B"
     },
     {
       "id": "OD-AFC-06",
@@ -5459,6 +5466,234 @@
       "packet": "packets/S03-r3.md",
       "route": "<lane profile route>",
       "dispatched_at": "<UTC>"
+    },
+    "records": [
+      {
+        "slice": "S41",
+        "recorded_by_delta": "P1-DELTA-OD-AFC-01-B",
+        "source": "Orchestrator-verified 2026-10-16 (delta packet STATE FACTS); not re-read by this session",
+        "dispatch": {
+          "authorized_by": "OD-AFC-01 = B (owner, 2026-10-16); OA-AFC-P1-2026-10-16-01",
+          "route": "implementer Claude Code / Claude Opus 5.5 / medium (opensource-hackathon, DEC-AFC-SD-041)",
+          "lease_id": "not_supplied_to_this_delta",
+          "generation": "not_supplied_to_this_delta",
+          "branch": "not_supplied_to_this_delta",
+          "base": "not_supplied_to_this_delta",
+          "evidence_dir": "not_supplied_to_this_delta",
+          "dispatched_at": "not_supplied_to_this_delta",
+          "journey_receipt": "not written by this delta (journey.json is outside its authority)"
+        },
+        "landing": {
+          "repository": "alphazede/Alphazedehq",
+          "pr": 361,
+          "merge_commit": "7fc081bdaf21",
+          "merged_at": "2026-10-16T19:58:14Z",
+          "landing_method": "merge commit (rebase or merge, never squash)",
+          "delivered": "skills/ci-cd/ router SKILL.md, 17 lines (planned bound: under 25 lines)"
+        },
+        "commands": [
+          {
+            "id": "CMD-SKILL-SIZE",
+            "exit": 0,
+            "deviation": "tools/bran/runtime/bran is gitignored and absent in a fresh worktree; ran with the Alphazedehq main checkout's binary, whose sha256 matched bran-release-pin.json"
+          },
+          {
+            "id": "CMD-SKILL-TRIGGER",
+            "exit": 0,
+            "result": {
+              "request_1": "MATCH",
+              "request_2": "NO_MATCH"
+            },
+            "harness_version": "Claude Code 2.1.301",
+            "deviation": "the command's `claude -p` has no --model or --effort, so the frozen-route guard refused it; ran with the bound implementer flags added"
+          },
+          {
+            "id": "CMD-D4-AGNOSTIC",
+            "exit": 0
+          }
+        ],
+        "review": "not_supplied_to_this_delta"
+      },
+      {
+        "slice": "S11T",
+        "recorded_by_delta": "P1-DELTA-OD-AFC-01-B",
+        "source": "Orchestrator-verified 2026-10-16 (delta packet STATE FACTS); not re-read by this session",
+        "dispatch": {
+          "existing_record": "journey.json execution_receipts dispatch_record S11T-g1, 2026-10-12T08:17:56Z, branch afc/s11t-ci-gate-hook-tests, base ac47f0eca149eb281e41a6bdd9d490221c7a14cf",
+          "red_receipt": "evidence/S11T/g1/red-receipt.json: CMD-RED exit 1, T01-T17 red by assertion, candidate bf4f15907a2cd2aba6681d628b4b29cde53c984c",
+          "route": "test implementer Codex CLI / GPT-6.1 Sol / high (opensource-hackathon, DEC-AFC-SD-041)",
+          "route_note": "the S11T-g1 dispatch record predates DEC-AFC-SD-041 (2026-10-13T13:43:31Z); the generation whose content PR #307 carried is not_supplied_to_this_delta"
+        },
+        "landing": {
+          "repository": "alphazede/Alphazedehq",
+          "pr": 307,
+          "merged_via": "GitHub marked PR #307 merged with PR #364",
+          "merge_commit": "c389102d0a66",
+          "merged_at": "2026-10-16T20:08:22Z",
+          "delivered": "hooks/test-ci-gate-hook.sh red suite T01-T17"
+        }
+      },
+      {
+        "slice": "S11",
+        "recorded_by_delta": "P1-DELTA-OD-AFC-01-B",
+        "source": "Orchestrator-verified 2026-10-16 (delta packet STATE FACTS); not re-read by this session",
+        "dispatch": {
+          "authorized_by": "OA-AFC-P1-2026-10-16-01 (S11 may start and land before S06/S06L)",
+          "route": "implementer Claude Code / Claude Opus 5.5 / medium (opensource-hackathon, DEC-AFC-SD-041)",
+          "lease_id": "not_supplied_to_this_delta",
+          "generation": "not_supplied_to_this_delta",
+          "branch": "not_supplied_to_this_delta",
+          "base": "not_supplied_to_this_delta",
+          "evidence_dir": "not_supplied_to_this_delta",
+          "dispatched_at": "not_supplied_to_this_delta",
+          "journey_receipt": "not written by this delta (journey.json is outside its authority)"
+        },
+        "landing": {
+          "repository": "alphazede/Alphazedehq",
+          "pr": 364,
+          "merge_commit": "c389102d0a66",
+          "merged_at": "2026-10-16T20:08:20Z",
+          "landing_method": "merge commit (rebase or merge, never squash)",
+          "delivered": "hooks/ci-gate-hook.sh, hooks/install-ci-gate-hook.py, hooks/README.md section; test ids T18-T38 added to hooks/test-ci-gate-hook.sh"
+        },
+        "commands": [
+          {
+            "id": "CMD-HOOK-TEST",
+            "result": "38/38 pass, 5x serial and 2x concurrent"
+          },
+          {
+            "id": "CMD-COVERAGE-HOOK",
+            "result": "99% (floor 90%)",
+            "deviation": "under uv the wrapper wrote a uv cache into the tests' temporary HOME, breaking the write-nothing assertions; ran with UV_CACHE_DIR set to the real cache"
+          },
+          {
+            "id": "CMD-MUTATION-HOOK",
+            "result": "137/158 killed, 86.7% (floor 70%)"
+          },
+          {
+            "id": "CMD-SCAN",
+            "result": "PASS for coverage 7.16.2 and mutmut 2.5.1 with their dependencies"
+          },
+          {
+            "id": "CMD-D4-AGNOSTIC",
+            "exit": 0,
+            "deviation": "passed after the separate README scrub (OA-AFC-P1-2026-10-16-02, PR #363); the command greps whole changed files, not only the slice's changed lines"
+          },
+          {
+            "id": "local-gates",
+            "result": "no failures"
+          }
+        ],
+        "review": {
+          "unit": "IE-P1-10",
+          "reviewer_route": "Cursor Agent / Grok 4.7 / high (opensource-hackathon)",
+          "verdict": "REPAIR_REQUIRED",
+          "findings": [
+            {
+              "id": "F1",
+              "summary": "`cd &&` bypass"
+            },
+            {
+              "id": "F2",
+              "summary": "--git-dir / --work-tree bypass"
+            },
+            {
+              "id": "F3",
+              "summary": "substring hook deferral"
+            },
+            {
+              "id": "F4",
+              "summary": "`echo git commit` false block"
+            },
+            {
+              "id": "F5",
+              "summary": "Cursor snake_case keys"
+            }
+          ],
+          "repair": {
+            "route": "Muse Code / Muse Spark 1.3 / max (frozen bug-triager snapshot)",
+            "rounds": 1,
+            "outcome": "F1-F5 fixed, each with a failing-first test (T31-T38)",
+            "post_repair": "deterministic checks passed; no second review, per policy"
+          },
+          "budget": {
+            "review": "1/1 spent",
+            "repair": "1/1 spent",
+            "reset": false
+          }
+        },
+        "live_install": {
+          "command": "CMD-HOOK-INSTALL (live, from the Alphazedehq main checkout, integration step IE-P1-10)",
+          "harnesses": {
+            "claude-code": "wired, timestamped backup",
+            "codex": "wired, timestamped backup",
+            "cursor": "wired, timestamped backup",
+            "muse": "typed_gap; all 6 skills linked into $HOME/.agents/skills",
+            "agy": "typed_gap"
+          },
+          "plan_text_difference": "IE-P1-10 post_step_vv names $HOME/.config/muse/skills as the Muse skill directory; the live install linked into $HOME/.agents/skills"
+        }
+      }
+    ]
+  },
+  "owner_amendments": [
+    {
+      "id": "OA-AFC-P1-2026-10-16-01",
+      "date": "2026-10-16",
+      "kind": "ordering_waiver",
+      "owner_question": "confirm phase-1 S11 may start before S06 and S06L land",
+      "owner_words": "Yes to both",
+      "amendment": "S41 and S11 may proceed and land before S06/S06L. The planned dependency edges S06 -> S11 and S06L -> S11 (kind merged; dependencies and S11.depends_on) are waived for ordering only; the edges, S11.depends_on and depends_on_text stay as planned and are not rewritten. Nothing about S06 or S06L scope, proofs or review is changed.",
+      "affected_dependencies": [
+        {
+          "from": "S06",
+          "to": "S11",
+          "kind": "merged"
+        },
+        {
+          "from": "S06L",
+          "to": "S11",
+          "kind": "merged"
+        }
+      ],
+      "context_from_existing_records": "journey.json execution_receipts: Alphazedehq PR #305 (S06) reported landed 2026-10-12T08:16:44Z with the requirements-system #532 reciprocal re-run pending; S06L g1 returned PASS with draft PR #8 in this repository (evidence/S06L/g1/return.json). This delta does not establish the current state of either.",
+      "recorded_by_delta": "P1-DELTA-OD-AFC-01-B"
+    },
+    {
+      "id": "OA-AFC-P1-2026-10-16-02",
+      "date": "2026-10-16",
+      "kind": "out_of_slice_change",
+      "owner_words": "option B (scrub in a separate change)",
+      "amendment": "The pre-existing references in Alphazedehq hooks/README.md are scrubbed in a separate change, not in S11, so S11 can pass CMD-D4-AGNOSTIC. Landed as alphazede/Alphazedehq PR #363, merge 0d11da5e637d.",
+      "landing": {
+        "repository": "alphazede/Alphazedehq",
+        "pr": 363,
+        "merge_commit": "0d11da5e637d"
+      },
+      "recorded_by_delta": "P1-DELTA-OD-AFC-01-B"
+    },
+    {
+      "id": "OA-AFC-P1-2026-10-16-03",
+      "date": "2026-10-16",
+      "kind": "planning_delta_route",
+      "owner_words": "Yes get claude cloud to",
+      "amendment": "This planning delta (P1-DELTA-OD-AFC-01-B) runs on an owner-named Claude Code cloud session (Claude Opus 5.5 / high), a scoped owner amendment over the frozen Muse planning route for this one delta only. Frozen profile snapshots in journey.json are unchanged.",
+      "recorded_by_delta": "P1-DELTA-OD-AFC-01-B"
     }
+  ],
+  "execution_route_note": {
+    "date": "2026-10-16",
+    "recorded_by_delta": "P1-DELTA-OD-AFC-01-B",
+    "note": "Every slice in this delta (S41, S11T, S11) ran on the frozen opensource-hackathon snapshot per DEC-AFC-SD-041, with the plan's ci lane run as the backend lane: implementer Claude Code / Claude Opus 5.5 / medium, test implementer Codex CLI / GPT-6.1 Sol / high, reviewer Cursor Agent / Grok 4.7 / high. The S11 review repair ran on the frozen bug-triager snapshot: Muse Code / Muse Spark 1.3 / max. The per-slice model_route and review_path.reviewer_route blocks in slices[] still show the pre-migration (DEC-AFC-PROFILE-001) routes and are kept as the planned record; this note, not those blocks, states the executed routes.",
+    "executed_routes": {
+      "snapshot_profile": "opensource-hackathon",
+      "authority": "DEC-AFC-SD-041 (DEC-AFC-SD-041-AMENDMENT-1)",
+      "lane_mapping": "the plan's ci lane ran as the opensource-hackathon backend lane",
+      "implementer": "Claude Code / Claude Opus 5.5 / medium",
+      "test_implementer": "Codex CLI / GPT-6.1 Sol / high",
+      "reviewer": "Cursor Agent / Grok 4.7 / high",
+      "repair": "Muse Code / Muse Spark 1.3 / max (frozen bug-triager snapshot)"
+    },
+    "source": "Orchestrator-verified 2026-10-16 (delta packet STATE FACTS); not re-read by this session"
   }
 }
