@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Record the afc-dev redeploy of origin/main 37dcb7f (G4 alert contract): stack UPDATE_COMPLETE, deployed smoke 4 passed with 22 deselected by the link filter, suite 26 passed (PR #TBD).
+- Record the afc-dev redeploy of origin/main 37dcb7f (G4 alert contract): stack UPDATE_COMPLETE, deployed smoke 4 passed with 22 deselected by the link filter, suite 26 passed ([PR #107](https://github.com/1wgrumph/amazon-fantasy-companion/pull/107)).
 - Record the afc-dev redeploy of origin/main 66aa531 (G3 panel wire contract and boxscore ingest bounds): stack UPDATE_COMPLETE, deployed smoke 4 passed with 22 deselected by the link filter, suite 26 passed ([PR #104](https://github.com/1wgrumph/amazon-fantasy-companion/pull/104))
 - Record the P2-L03 deploys of the integrated backend to afc-dev: interim c194dee, then final af0e0ac with the new PlayerStatsTable; deployed smoke and suite results, and lineup source manual ([#96](https://github.com/1wgrumph/amazon-fantasy-companion/pull/96)).
 - Record Phase 2 execution state through wave 4 in implementation.json (planning delta P2-W4-EXECUTION-STATE) and regenerate the DoD Manifest ([#98](https://github.com/1wgrumph/amazon-fantasy-companion/pull/98)).
