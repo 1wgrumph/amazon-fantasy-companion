@@ -684,6 +684,23 @@
       "owner_statement": "a",
       "decision": "GameEvent lacks period and scoringPlay, which the P2-B05 close-game (Q4/OT) and player-score rules need. Option A: a separate feed fix adds both fields to the feed_ingest normalizer and the store's allowed event keys, sourced from the ESPN data already fetched, with its own red-then-green tests, on the bug-triager route. P2-B05 keeps its write set (backend/src/alert_policy/) and waits for that fix to land.",
       "evidence": "P2-B05T red suite afc/p2-b05t fac1b62 supplies period/scoringPlay in fixtures; grep of backend/src/feed_ingest and backend/src/store on origin/main 1518e57 finds neither field."
+    },
+    {
+      "id": "DEC-AFC-SD-068",
+      "status": "confirmed",
+      "at": "2026-10-16T12:19:32Z",
+      "time_note": "Clock is the P2-X01 starter first_install_at the acceptance was observed with. The acceptance statement clock was not separately recorded.",
+      "decision": "Owner accepted P2-X01 scan row 9 (Gradle build classpath) as residual risk, option (a).",
+      "source": "Orchestrator-observed 2026-10-16"
+    },
+    {
+      "id": "DEC-AFC-SD-069",
+      "status": "confirmed",
+      "at": null,
+      "date": "2026-10-16",
+      "time_note": "Exact UTC time not recorded. Observed after the Codex hang that started about 2026-10-16T12:42Z. Recorded in local Hackathons/AGENTS.md.",
+      "decision": "Hackathon bug fixes use the opensource-hackathon implementer route (Muse Code / Muse WonderFull / high). Review stays on the bug-triager reviewer route (Claude Opus 5.5 medium, separate session).",
+      "source": "Orchestrator-observed owner routing change, 2026-10-16"
     }
   ],
   "open_decisions": [],
@@ -7366,6 +7383,124 @@
         "new guard test 11 failed on old conftest, 26 passed on fix"
       ],
       "state": "in review"
+    },
+    {
+      "id": "ER-AFC-2026-10-16-01",
+      "kind": "landing",
+      "at": "2026-10-16T12:15:00Z",
+      "at_precision": "approximate",
+      "source": "Orchestrator-observed",
+      "gh_token": "invalid, HTTP 401; owner re-authenticated",
+      "pr": 88,
+      "slice": "P2-B07 panel",
+      "merge_commit": "32b673d"
+    },
+    {
+      "id": "ER-AFC-2026-10-16-02",
+      "kind": "owner_scope_decision",
+      "at": "2026-10-16T12:19:32Z",
+      "decision_id": "DEC-AFC-SD-068",
+      "source": "Orchestrator-observed",
+      "slice": "P2-X01 part B",
+      "device": {
+        "model": "AFTKM",
+        "fire_os": "8.1.8.5",
+        "android": "11",
+        "api": 30
+      },
+      "starter": {
+        "installed": true,
+        "first_install_at": "2026-10-16T12:19:32Z",
+        "verdict": "WORKS"
+      },
+      "pr": 89,
+      "review": "taken by session -77",
+      "acceptance": "Owner accepted X01 scan row 9 (Gradle build classpath) as residual risk, option (a)."
+    },
+    {
+      "id": "ER-AFC-2026-10-16-03",
+      "kind": "landing",
+      "date": "2026-10-16",
+      "time_note": "Exact UTC time not recorded. After the 12:19 device result and before the Codex hang at about 12:42Z.",
+      "source": "Orchestrator-observed",
+      "cleanup": "merged or contained branches removed: p2-v01-plan, spec-track #6, s06l #8, s07-vnv #3",
+      "pr": 90,
+      "what": "Phase 1 planning worktree landed: 163 uncommitted plan files + 1 commit",
+      "gate": "pre-commit WS-CHECK falsely failed mid-merge; merge commit made with --no-verify; recorded in the merge commit message"
+    },
+    {
+      "id": "ER-AFC-2026-10-16-04",
+      "kind": "orchestrator_defect",
+      "at": "2026-10-16T12:42:00Z",
+      "at_precision": "approximate",
+      "source": "Orchestrator-observed",
+      "tool": "Codex CLI",
+      "detail": "Every codex exec hung from about 12:42Z with 0-byte output. Remote MCP servers in ~/.codex/config.toml blocked on the locked keyring. Session -77 disabled them on owner instruction. Two bug runs dispatched on Codex at about 12:44Z produced nothing for about 70 minutes.",
+      "orchestrator_error": "The owner had said Codex was down and the role fallback was not used."
+    },
+    {
+      "id": "ER-AFC-2026-10-16-05",
+      "kind": "owner_route_amendment",
+      "date": "2026-10-16",
+      "time_note": "Exact UTC time not recorded.",
+      "decision_id": "DEC-AFC-SD-069",
+      "source": "Orchestrator-observed",
+      "implementer_route": "opensource-hackathon implementer: Muse Code / Muse WonderFull / high",
+      "reviewer_route": "bug-triager reviewer: Claude Opus 5.5 medium, separate session",
+      "recorded_in": "local Hackathons/AGENTS.md",
+      "relaunched": [
+        {
+          "name": "bug-gate-changed-scope",
+          "outcome": "PASS",
+          "commit": "3d6a250",
+          "note": "pre-commit gates the staged change only; docs-only commit 4m00s to 1m46s"
+        },
+        {
+          "name": "R1 bug-panel-player-stats",
+          "outcome": "PASS",
+          "commit": "69d8f07",
+          "note": "new PlayerStatsTable; ingest stores ESPN boxscore stats; panel reads them"
+        }
+      ],
+      "review_state": "both in independent cloud review"
+    },
+    {
+      "id": "ER-AFC-2026-10-16-06",
+      "kind": "orchestrator_note",
+      "date": "2026-10-16",
+      "time_note": "Exact UTC time not recorded.",
+      "source": "Orchestrator-observed",
+      "tool": "AWS CLI",
+      "profile": "afc-dev",
+      "detail": "CLI session expired. aws login 'Continue with an active session' returned 400 Bad Request (reproduced). 'Sign in to new session' worked. Owner signed in."
+    },
+    {
+      "id": "ER-AFC-2026-10-16-07",
+      "kind": "orchestrator_note",
+      "date": "2026-10-16",
+      "source": "Orchestrator-observed",
+      "task": "G12 Yahoo, T_yahoo 19:00Z",
+      "detail": "Orchestrator-created duplicate app (redirect https://localhost/link, oob rejected) deleted by the owner. Original app (2026-10-13, redirect https://localhost:8443/link) is the one in use. Token flow failures, in order: client secret stored as an 8-character placeholder taken from an example command; copy-paste of the code from the address bar failed; a !-prefixed run had no TTY (EOFError); Client ID pasted twice (INVALID_CLIENT_SECRET). Fix: spikes/sp6-yahoo/yahoo_oauth.py setup and capture (hidden prompts, local HTTPS listener on 8443). Refresh token stored 14:18Z. Then every Fantasy API call returned 403 'This application is not authorized to perform this action': the original app lacked Fantasy Sports Read. Owner is ticking that permission and re-running capture. Not complete."
+    },
+    {
+      "id": "ER-AFC-2026-10-16-08",
+      "kind": "landing",
+      "date": "2026-10-16",
+      "time_note": "Exact UTC time not recorded.",
+      "source": "Orchestrator-observed",
+      "prs": {
+        "91": "docs/operations/aws-and-yahoo-setup.md",
+        "92": "correction: redirect 8443, setup flow, error table"
+      },
+      "local_only": "Hackathons/AGENTS.md gained an AFC environment section (Fire TV address, AWS sign-in, Yahoo app, Codex hang). The address is not copied into this repository."
+    },
+    {
+      "id": "ER-AFC-2026-10-16-09",
+      "kind": "owner_review_feedback",
+      "date": "2026-10-16",
+      "time_note": "Exact UTC time not recorded.",
+      "source": "Orchestrator-observed",
+      "detail": "Owner asked why things were not documented and why the Scribe was not used. Owner said the Orchestrator \"speaks in riddles and wastes a lot of time\"."
     }
   ],
   "planning_review": {
@@ -7572,6 +7707,15 @@
       "evidence": "return_record IE-p2-codex-delta; planning_correction IE exact source closure; dispatch_record PI-p2-codex; Phase2 specialists/ie-p2-codex-delta-receipt.md",
       "impact": "Planning proceeds to integration; typed gaps (source reconciliation, Reverify capability, owner evidence) stay visible",
       "uncertainty": "IE run duration unknown; reconciliation outcome pending"
+    },
+    {
+      "date": "2026-10-16",
+      "kind": "observation",
+      "tool": "Scribe (Cursor Agent)",
+      "task": "Transcribe Orchestrator-observed 2026-10-16 events",
+      "time_note": "Transcription batch. No single event clock. Approximate times stay on the receipts.",
+      "observation": "Appended execution receipts ER-AFC-2026-10-16-01 through ER-AFC-2026-10-16-09 and decisions DEC-AFC-SD-068 (X01 scan row 9 residual risk, option a) and DEC-AFC-SD-069 (hackathon bug-fix implementer route). The spec-track file docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/journey.json has no execution_receipts and was not modified.",
+      "evidence": "docs/developer-feedback/scribe-2026-10-16.md"
     }
   ],
   "planning_review_phase2": {
