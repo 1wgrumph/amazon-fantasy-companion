@@ -5,11 +5,13 @@
 package com.afc.companion.ui.theme
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import androidx.tv.material3.LocalContentColor
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Typography
 import androidx.tv.material3.darkColorScheme
@@ -27,8 +29,11 @@ private val AfcTypography = Typography(
 @Composable
 fun AfcTheme(content: @Composable () -> Unit) {
     MaterialTheme(
-        colorScheme = darkColorScheme(primary = Purple80, secondary = PurpleGrey80, tertiary = Pink80, background = Black, surfaceVariant = Color.LightGray),
+        colorScheme = darkColorScheme(primary = Purple80, secondary = PurpleGrey80, tertiary = Pink80, background = Black),
         typography = AfcTypography,
-        content = content,
+        content = {
+            // MaterialTheme supplies the palette, but root Text also needs its inherited content color.
+            CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onBackground, content = content)
+        },
     )
 }
