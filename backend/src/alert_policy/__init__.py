@@ -222,6 +222,10 @@ def _new_cursor(emitted_at, event_id):
     return f"{emitted_at}#h{digest}"
 
 
+def _digest(cursor):
+    return "~h" + hashlib.sha256(str(cursor).encode()).hexdigest()[:32]
+
+
 def _token(cursor, revision):
     """Progress token for a stored cursor at a consumed revision, <= 256 chars.
 
@@ -233,7 +237,7 @@ def _token(cursor, revision):
     readable = f"{cursor}~r{revision}" if revision > 1 else cursor
     if len(readable) <= MAX_CURSOR_LENGTH:
         return readable
-    digest = "~h" + hashlib.sha256(str(cursor).encode()).hexdigest()[:32]
+    digest = _digest(cursor)
     return f"{digest}~r{revision}" if revision > 1 else digest
 
 
@@ -242,7 +246,7 @@ def _resolve_token(profile_id, base):
     if not re.fullmatch(r"~h[0-9a-f]{32}", base or ""):
         return base
     for alert in _all_alerts(profile_id):
-        if _token(alert["cursor"], 1) == base:
+        if _digest(alert["cursor"]) == base:
             return alert["cursor"]
     return None  # row gone: resume from the start rather than lose later alerts
 

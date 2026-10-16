@@ -18,16 +18,15 @@
             "properties": {
               "competitors": {
                 "type": "array",
-                "maxItems": 2,
+                "maxItems": 4,
                 "items": {
                   "type": "object",
                   "properties": {
-                    "homeAway": {"type": "string", "enum": ["home", "away"]},
+                    "homeAway": {"type": "string", "maxLength": 16},
                     "team": {
                       "type": "object",
                       "properties": {
-                        "abbreviation": {"type": "string", "minLength": 1, "maxLength": 8,
-                                         "pattern": "^[A-Z0-9]{1,8}$"}
+                        "abbreviation": {"type": "string", "maxLength": 16}
                       }
                     }
                   }

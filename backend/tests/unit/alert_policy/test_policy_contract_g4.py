@@ -2,6 +2,7 @@
 
 from datetime import datetime, timedelta, timezone
 
+import pytest
 import store
 
 from policy_support import (attempt, deliver, evaluate, game_event, iso, match,
@@ -98,3 +99,24 @@ def test_legacy_long_key_row_is_served_once_with_bounded_resume(policy):
     seed_alert("fan", "z-0001", past(3), event_id="401999001599")
     rest = pending(policy, "fan", redelivered["cursor"])
     assert [a["id"] for a in rest["alerts"]] == ["z-0001"]
+
+
+@pytest.mark.parametrize("length", [254, 255, 256])
+@pytest.mark.parametrize("revision", [2, 10])
+def test_near_limit_legacy_cursor_revision_resumes_without_replay(policy, length, revision):
+    legacy_cursor = "2026-10-15T00:19:30Z#" + "9" * (length - 21)
+    assert len(legacy_cursor) == length
+    seed_alert("fan", "2026-10-15T00:00:00Z#1", past(6), event_id="1")
+    seed_alert("fan", legacy_cursor, past(5), event_id="9" * 20)
+
+    body = pending(policy, "fan")
+    assert [a["id"] for a in body["alerts"]] == ["2026-10-15T00:00:00Z#1", legacy_cursor], body
+
+    seed_alert("fan", legacy_cursor, past(4), event_id="9" * 20, revision=revision)
+    redelivered = pending(policy, "fan", body["cursor"])
+    assert [a["revision"] for a in redelivered["alerts"]] == [revision], redelivered
+    assert redelivered["cursor"].endswith(f"~r{revision}")
+
+    # A second resume must return nothing, not replay the whole history (F1).
+    again = pending(policy, "fan", redelivered["cursor"])
+    assert again["alerts"] == [] and again["cursor"] == redelivered["cursor"], again

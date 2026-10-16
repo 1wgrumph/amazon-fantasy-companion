@@ -162,6 +162,31 @@ def test_matchup_absent_for_invalid_abbreviation(abbreviation):
         assert "matchup" not in event, event
 
 
+@pytest.mark.parametrize("deviation", ["mixed_case_abbreviation", "long_abbreviation",
+                                        "third_competitor", "unexpected_home_away"])
+def test_display_only_competitor_deviation_stores_events_without_matchup(api, deviation):
+    # F2: a display-only competitor deviation must omit matchup, not reject
+    # the whole summary (plays/alerts for the game would be lost).
+    summary = fresh_summary()
+    competitors = summary["header"]["competitions"][0]["competitors"]
+    if deviation == "mixed_case_abbreviation":
+        competitors[0]["team"]["abbreviation"] = "Wsh"
+    elif deviation == "long_abbreviation":
+        competitors[0]["team"]["abbreviation"] = "WASHINGTON"
+    elif deviation == "unexpected_home_away":
+        competitors[0]["homeAway"] = "neutral"
+    else:
+        competitors.append(dict(competitors[0]))
+    ingest_summary = require_attr(require_module("feed_ingest.ingest"),
+                                  "ingest_summary")
+    stored = attempt(ingest_summary, summary, GAME)
+    assert len(stored) == len(plays_in(fresh_summary()))
+    items = api.table("Events").scan()["Items"]
+    assert len(items) == len(stored)
+    assert all("matchup" not in item for item in items), items
+    assert all("matchup" not in event for event in stored)
+
+
 def test_matchup_survives_ingest_storage(api):
     summary = fresh_summary()
     ingest_summary = require_attr(require_module("feed_ingest.ingest"),
