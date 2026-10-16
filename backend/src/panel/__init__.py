@@ -178,7 +178,7 @@ def project(game_event, matches):
 def snapshot(profile_id, team_league):
     """GET /v1/panel body: enveloped PanelState with scoring basis."""
     profile, settings = _settings(profile_id)
-    lineup = store.get_lineup(profile_id)
+    lineup, lineup_version = store.get_lineup_with_version(profile_id)
     if team_league is None:
         selected = settings.get("teamLeague") or {}
         team_league = (f"{selected['league']}/{selected['team']}"
@@ -186,9 +186,15 @@ def snapshot(profile_id, team_league):
                        else _pair(lineup) if lineup else "unassigned/unassigned")
     basis, table = _basis(lineup, settings)
     games, counter, projected = _stored(profile_id, team_league)
-    rows, states = [], []
+    rows, states, source_ids = [], [], []
     if lineup and _pair(lineup) == team_league:
+        source_key = "player_key" if lineup.get("source") == "yahoo" else "athlete_id"
         for starter in lineup.get("starters") or []:
+            raw_id = starter.get(source_key) if isinstance(starter, dict) else None
+            if not isinstance(raw_id, str) or not raw_id.strip():
+                raise InvalidLineupError(
+                    "stored lineup violates the panel row contract (count, blank or duplicate id)")
+            source_ids.append(raw_id)
             espn_id = _espn_id(starter)
             record = player_statistics(espn_id) if espn_id else None
             # The starter's current game is the latest projected game whose
@@ -212,7 +218,8 @@ def snapshot(profile_id, team_league):
                          "gameStatus": record.get("gameStatus") if record else None})
             states.append(record.get("gameState") if record else None)
     ids = [row["playerId"] for row in rows]
-    if (len(rows) > MAX_ROWS or any(not player_id.strip() for player_id in ids)
+    if (len(rows) > MAX_ROWS or len(set(source_ids)) != len(source_ids)
+            or any(not player_id.strip() for player_id in ids)
             or len(set(ids)) != len(ids)):
         raise InvalidLineupError(
             "stored lineup violates the panel row contract (count, blank or duplicate id)")
@@ -243,7 +250,7 @@ def snapshot(profile_id, team_league):
     # keeps every bump strictly above a spent low bit.
     current = _fingerprint(lineup) if lineup and _pair(lineup) == team_league else ""
     revision = (2 * ((counter or 0) + int(profile.get("revision", 0))
-                     + store.get_lineup_version(profile_id))
+                     + lineup_version)
                 + (current != projected))
     return {"schemaVersion": 1, "id": f"panel/{profile_id}/{team_league}",
             "revision": revision,

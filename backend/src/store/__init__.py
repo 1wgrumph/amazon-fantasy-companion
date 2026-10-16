@@ -201,17 +201,26 @@ def put_lineup(lineup):
     raise RuntimeError(f"lineup write for {item['profileId']} kept losing races")
 
 
-def get_lineup(profile_id):
-    row = _lineup_row(profile_id)
-    if row is None:
+def _without_version(row):
+    if row is None or not (set(row) - {"profileId", "lineupVersion", "updatedAt"}):
         return None
     return {key: value for key, value in row.items() if key != "lineupVersion"}
+
+
+def get_lineup(profile_id):
+    return _without_version(_lineup_row(profile_id))
 
 
 def get_lineup_version(profile_id):
     """Monotonic lineup content version; 0 for no row or a legacy row."""
     row = _lineup_row(profile_id)
     return int(row.get("lineupVersion", 0)) if row else 0
+
+
+def get_lineup_with_version(profile_id):
+    """Single-read (lineup or None, monotonic lineupVersion) so snapshot never tears."""
+    row = _lineup_row(profile_id)
+    return _without_version(row), (int(row.get("lineupVersion", 0)) if row else 0)
 
 
 # Panels: profile, team/league, PanelState.

@@ -160,6 +160,9 @@ def test_manual_32_starters_accepted_33_rejected():
     assert len(manual.build(roster, entries(32), "PPR")["starters"]) == 32
     with pytest.raises(ValueError):
         manual.build(roster, entries(33), "PPR")
+    with pytest.raises(ValueError):
+        manual.build([{"athlete_id": "   ", "name": "Blank", "team": "SYN"}],
+                     [{"athlete_id": "   ", "slot": "WR"}], "PPR")
 
 
 @pytest.mark.parametrize("players", [

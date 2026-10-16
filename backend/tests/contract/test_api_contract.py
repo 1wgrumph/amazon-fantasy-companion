@@ -177,9 +177,13 @@ def test_openapi_panel_response_schema_is_concrete():
 
 
 def test_served_panel_payload_validates_against_openapi(api):
-    doc = document("src/api/openapi.yaml")
-    _, token = link_device(api)
+    from decimal import Decimal
+    import panel
     import store
+    doc = document("src/api/openapi.yaml")
+    schema = response_schema(doc, "/v1/panel", "get", 200)
+    assert schema.get("$ref") == "#/components/schemas/PanelEnvelope"
+    _, token = link_device(api)
     store.put_profile("owner", {}, 0, "2026-10-18T20:00:00Z")
     store.put_lineup({"profileId": "owner", "source": "manual", "team": "team-7",
                       "league": "league-a",
@@ -188,7 +192,19 @@ def test_served_panel_payload_validates_against_openapi(api):
                       "updatedAt": "2026-10-18T20:00:00Z"})
     status, body = api.request("GET", "/v1/panel", token=token)
     assert status == 200, body
-    validate(doc, response_schema(doc, "/v1/panel", "get", 200), body)
+    validate(doc, schema, body)
+    store.put_player_statistics({"athleteId": "9000001", "gameId": "401999001",
+                                 "gameState": "in", "gameStatus": "Q2 08:14",
+                                 "source": "live", "asOf": "2026-10-18T20:00:00Z",
+                                 "stats": {"receptions": Decimal("2")}})
+    panel.project({"gameId": "401999001", "eventId": "401999001101", "revision": 1,
+                   "source": "live", "score": {"away": 7, "home": 3},
+                   "playerIds": ["9000001"], "eventTime": "2026-10-18T20:00:00Z"},
+                  [{"profileId": "owner", "eventId": "401999001101", "revision": 1,
+                    "starters": [], "cursor": None}])
+    status, body = api.request("GET", "/v1/panel", token=token)
+    assert status == 200 and body["data"]["games"] and body["data"]["teamTotal"]["value"] == 1.0
+    validate(doc, schema, body)
 
 
 def test_phone_link_page_exposes_customer_confirmation_form(api):

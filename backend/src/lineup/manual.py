@@ -56,7 +56,7 @@ def build(espn_roster, entries, preset):
     players = {}
     for player in espn_roster:
         if not (isinstance(player, dict) and isinstance(player.get("athlete_id"), str)
-                and player["athlete_id"] and isinstance(player.get("name"), str)):
+                and player["athlete_id"].strip() and isinstance(player.get("name"), str)):
             raise ValueError("ESPN roster entry needs an athlete_id and name")
         team = player.get("team")
         if not isinstance(team, str) or not re.fullmatch(r"[A-Z0-9]{2,4}", team):

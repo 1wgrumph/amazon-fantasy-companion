@@ -41,7 +41,9 @@ def test_legacy_33_starters_are_a_structured_panel_error(panel_env):
 
 @pytest.mark.parametrize("starters,source", [
     ([dict(YAHOO_UNMAPPED, player_key="")], "yahoo"),
+    ([dict(YAHOO_RECEIVER, player_key="")], "yahoo"),
     ([YAHOO_RECEIVER, YAHOO_RECEIVER], "yahoo"),
+    ([YAHOO_RECEIVER, dict(YAHOO_UNMAPPED, player_key=YAHOO_RECEIVER["player_key"])], "yahoo"),
     ([YAHOO_RECEIVER, dict(YAHOO_RECEIVER, player_key="nfl.p.7002")], "yahoo"),
     ([RECEIVER, RECEIVER], "manual"),
     ([dict(RECEIVER, athlete_id=" ")], "manual"),
@@ -61,13 +63,18 @@ def test_32_starters_are_served(panel_env):
 
 
 def test_revision_strictly_increases_across_change_return_empty_readd(panel_env):
+    import store
     seed_profile("fan")
     revisions = []
     for starters in ([RECEIVER], [PASSER], [RECEIVER], [], [RECEIVER]):
         seed_lineup("fan", starters)
-        revisions.append(panel_env.snapshot("fan")["revision"])
+        revisions.append(panel_env.snapshot("fan", f"{LEAGUE}/{TEAM}")["revision"])
+    store.put_lineup({"profileId": "fan"})
+    revisions.append(panel_env.snapshot("fan", f"{LEAGUE}/{TEAM}")["revision"])
+    seed_lineup("fan", [RECEIVER])
+    revisions.append(panel_env.snapshot("fan", f"{LEAGUE}/{TEAM}")["revision"])
     assert revisions == sorted(revisions) and len(set(revisions)) == len(revisions), revisions
-    assert panel_env.snapshot("fan")["revision"] == revisions[-1], "rereads stay stable"
+    assert panel_env.snapshot("fan", f"{LEAGUE}/{TEAM}")["revision"] == revisions[-1], "rereads stay stable"
 
 
 def test_mixed_dated_undated_aggregate_is_never_fresh(panel_env):
