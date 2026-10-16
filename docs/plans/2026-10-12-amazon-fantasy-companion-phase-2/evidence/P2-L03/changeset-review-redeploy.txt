@@ -1,0 +1,31 @@
+changeset: samcli-deploy1792174771
+status: CREATE_COMPLETE
+execution: AVAILABLE
+stack tag in changeset: GitCommit=66aa5314b2a3f3f56b066e338b5f223db7bd0db2
+resource actions: Add 0, Modify 22, Remove 0
+decision: execute
+deploy executed: yes, execute-change-set exit 0 at 2026-10-16T18:21:03Z, wait stack-update-complete exit 0 at 2026-10-16T18:22:34Z
+
+Checked against describe-change-set --include-property-values. The Changes array is changeset-redeploy.txt after <acct> redaction of 12-digit ARN account ids.
+
+Lambda code. Replacement=False. RequiresRecreation Never. The only property change is Code S3Key. GitCommit tag also changes. Environment, role, handler, runtime, memory and timeout are unchanged.
+- ApiFunction
+- IngestFunction
+- PolicyFunction. The three functions share one packaged source tree, so the policy artifact S3 key changes with the api and ingest code.
+
+Tag-only. Replacement=False. Scope Tags. RequiresRecreation Never. GitCommit af0e0ac1520ce5b9e7de186fd83df23bc92d6a5e -> 66aa5314b2a3f3f56b066e338b5f223db7bd0db2. Structural properties identical before and after.
+- DynamoDB tables: AlertsTable, EventsTable, LineupsTable, LinksTable, PanelsTable, PlayerStatsTable, ProfilesTable.
+- IAM roles: ApiFunctionRole, IngestFunctionRole, IngestScheduleRole, PolicyFunctionRole. No statement, action, or resource was added or removed.
+- ApiFunctionDefaultRoutePermission, ApiLogGroup, IngestLogGroup, PolicyLogGroup.
+- HttpApi, HttpApiApiGatewayDefaultStage, IngestSchedule.
+- PolicyFunctionEventStream.
+
+Not a stop:
+- No resource Action Remove.
+- No Replacement=True.
+- No Replacement=Conditional on a stateful resource. PolicyFunctionEventStream: the SAM summary table printed Replacement Conditional. describe-change-set with property values says Replacement=False, scope Tags, RequiresRecreation Never. It is an event-source mapping, not a DynamoDB table or SSM parameter.
+- No IAM permission removal.
+- No Add. No SSM parameter resource. SSM values were not read.
+- backend/template.yaml is unchanged from af0e0ac1520ce5b9e7de186fd83df23bc92d6a5e (git diff empty).
+
+Execute is allowed. Every change is a Lambda code modify or a tag-only configuration modify. No stateful resource is replaced. No IAM permission is removed.
