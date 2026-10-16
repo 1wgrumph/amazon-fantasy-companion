@@ -1,0 +1,170 @@
+P2-X01 part B repair - read-only device evidence log
+Captured during F1 repair of PR #89. No install/uninstall/clear performed.
+Stick address and serial redacted as <stick> per owner privacy rule.
+Package: com.amazonappstore.helloworldtv (applicationId from spikes/sp1-device/starter/app/build.gradle.kts)
+---
+time_utc: 2026-10-16T14:14:34Z
+command: adb connect <stick>
+output:
+already connected to <stick>
+exit_code: 0
+---
+time_utc: 2026-10-16T14:14:34Z
+command: adb devices
+output:
+List of devices attached
+<stick>	device
+exit_code: 0
+---
+time_utc: 2026-10-16T14:14:34Z
+command: adb -s <stick> shell getprop ro.product.model
+output:
+AFTKM
+exit_code: 0
+---
+time_utc: 2026-10-16T14:14:34Z
+command: adb -s <stick> shell getprop ro.build.version.release
+output:
+11
+exit_code: 0
+---
+time_utc: 2026-10-16T14:14:34Z
+command: adb -s <stick> shell getprop ro.build.version.sdk
+output:
+30
+exit_code: 0
+---
+time_utc: 2026-10-16T14:14:34Z
+command: adb -s <stick> shell getprop ro.build.version.name
+output:
+Fire OS 8.1.8.5 (RS8185/3891)
+exit_code: 0
+---
+time_utc: 2026-10-16T14:14:34Z
+command: adb -s <stick> shell getprop ro.build.mktg.fireos
+output:
+Fire OS 8.1.8.5
+exit_code: 0
+---
+time_utc: 2026-10-16T14:14:34Z
+command: adb -s <stick> shell getprop ro.build.description
+output:
+karat-user 11 RS8185.3891N 0033018557184 amz-p,release-keys
+exit_code: 0
+---
+time_utc: 2026-10-16T14:14:34Z
+command: adb -s <stick> shell wm size
+output:
+Physical size: 3840x2160
+Override size: 1920x1080
+exit_code: 0
+---
+time_utc: 2026-10-16T14:14:34Z
+command: adb -s <stick> shell wm density
+output:
+Physical density: 320
+exit_code: 0
+---
+time_utc: 2026-10-16T14:14:34Z
+command: adb -s <stick> shell pm path com.amazonappstore.helloworldtv
+output:
+package:/data/app/~~WLJ8eVukh2nqktcuNOVixA==/com.amazonappstore.helloworldtv-LvHqEjyI0uCz5G-4Y6CzRQ==/base.apk
+exit_code: 0
+---
+time_utc: 2026-10-16T14:14:34Z
+command: adb -s <stick> shell dumpsys package com.amazonappstore.helloworldtv | grep -E 'firstInstallTime|lastUpdateTime|versionCode|versionName'
+output:
+    versionCode=1 minSdk=21 targetSdk=34
+    versionName=1.0
+    firstInstallTime=2026-10-16 12:19:31
+    lastUpdateTime=2026-10-16 12:19:31
+exit_code: 0
+---
+time_utc: 2026-10-16T14:14:34Z
+command: adb -s <stick> shell sha256sum <pm path base.apk>
+output:
+621d097744944f9fa29d51014df1ab1ba0f2922937d70f50b8e74364f6d89329  /data/app/~~WLJ8eVukh2nqktcuNOVixA==/com.amazonappstore.helloworldtv-LvHqEjyI0uCz5G-4Y6CzRQ==/base.apk
+exit_code: 0
+note: built APK sha256 in build-log.txt:126-127,279 is 621d097744944f9fa29d51014df1ab1ba0f2922937d70f50b8e74364f6d89329
+---
+time_utc: 2026-10-16T14:14:34Z
+command: adb -s <stick> shell getprop persist.sys.timezone
+output:
+GMT
+exit_code: 0
+---
+time_utc: 2026-10-16T14:14:34Z
+command: adb -s <stick> shell date
+output:
+Fri Oct 16 14:14:34 GMT 2026
+exit_code: 0
+---
+time_utc: 2026-10-16T14:14:34Z
+command: adb -s <stick> shell monkey -p com.amazonappstore.helloworldtv -c android.intent.category.LEANBACK_LAUNCHER 1
+output:
+  bash arg: -p
+  bash arg: com.amazonappstore.helloworldtv
+  bash arg: -c
+  bash arg: android.intent.category.LEANBACK_LAUNCHER
+  bash arg: 1
+args: [-p, com.amazonappstore.helloworldtv, -c, android.intent.category.LEANBACK_LAUNCHER, 1]
+ arg: "-p"
+ arg: "com.amazonappstore.helloworldtv"
+ arg: "-c"
+ arg: "android.intent.category.LEANBACK_LAUNCHER"
+ arg: "1"
+data="com.amazonappstore.helloworldtv"
+data="android.intent.category.LEANBACK_LAUNCHER"
+** SYS_KEYS has no physical keys but with factor 2.0%.
+exit_code: 251
+---
+time_utc: 2026-10-16T14:14:35Z
+command: adb -s <stick> shell monkey -p com.amazonappstore.helloworldtv -c android.intent.category.LAUNCHER 1
+output:
+  bash arg: -p
+  bash arg: com.amazonappstore.helloworldtv
+  bash arg: -c
+  bash arg: android.intent.category.LAUNCHER
+  bash arg: 1
+args: [-p, com.amazonappstore.helloworldtv, -c, android.intent.category.LAUNCHER, 1]
+ arg: "-p"
+ arg: "com.amazonappstore.helloworldtv"
+ arg: "-c"
+ arg: "android.intent.category.LAUNCHER"
+ arg: "1"
+data="com.amazonappstore.helloworldtv"
+data="android.intent.category.LAUNCHER"
+** SYS_KEYS has no physical keys but with factor 2.0%.
+exit_code: 251
+---
+time_utc: 2026-10-16T14:14:38Z
+command: adb -s <stick> shell dumpsys activity activities | grep -iE 'ResumedActivity|topResumedActivity|com.amazonappstore.helloworldtv'
+output:
+    mLastPausedActivity: ActivityRecord{9d59a4e u0 com.amazonappstore.helloworldtv/.MainActivity t23}
+    * Task{e044b8b #23 visible=true type=standard mode=fullscreen translucent=false A=10266:com.amazonappstore.helloworldtv U=0 StackId=23 sz=1}
+      affinity=10266:com.amazonappstore.helloworldtv
+      intent={act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10200000 cmp=com.amazonappstore.helloworldtv/.MainActivity}
+      mActivityComponent=com.amazonappstore.helloworldtv/.MainActivity
+      Activities=[ActivityRecord{9d59a4e u0 com.amazonappstore.helloworldtv/.MainActivity t23}]
+      mRootProcess=ProcessRecord{9796172 13132:com.amazonappstore.helloworldtv/u0a266}
+      * Hist #0: ActivityRecord{9d59a4e u0 com.amazonappstore.helloworldtv/.MainActivity t23}
+          packageName=com.amazonappstore.helloworldtv processName=com.amazonappstore.helloworldtv
+          app=ProcessRecord{9796172 13132:com.amazonappstore.helloworldtv/u0a266}
+          Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10200000 cmp=com.amazonappstore.helloworldtv/.MainActivity }
+          rootOfTask=true task=Task{e044b8b #23 visible=true type=standard mode=fullscreen translucent=false A=10266:com.amazonappstore.helloworldtv U=0 StackId=23 sz=1}
+exit_code: 0
+---
+time_utc: 2026-10-16T14:14:49Z
+command: adb -s <stick> shell am start -n com.amazonappstore.helloworldtv/.MainActivity
+output:
+Starting: Intent { cmp=com.amazonappstore.helloworldtv/.MainActivity }
+exit_code: 0
+---
+time_utc: 2026-10-16T14:14:53Z
+command: adb -s <stick> shell dumpsys activity activities | grep -iE 'Resumed|mFocusedApp'
+output:
+  Resumed activities in task display areas (from top to bottom):
+    Resumed: ActivityRecord{8ce7e43 u0 com.amazonappstore.helloworldtv/.MainActivity t23}
+  ResumedActivity: ActivityRecord{8ce7e43 u0 com.amazonappstore.helloworldtv/.MainActivity t23}
+  mFocusedApp=ActivityRecord{8ce7e43 u0 com.amazonappstore.helloworldtv/.MainActivity t23}
+exit_code: 0
