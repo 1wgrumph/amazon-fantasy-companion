@@ -119,6 +119,8 @@ def test_future_module_stubs_surface_503_not_implemented(api, path):
 def validate(doc, schema, value, where="panel"):
     """Minimal OpenAPI 3.0 check: types, required, nullable, enums, bounds."""
     schema = dereference(doc, schema)
+    if value is None and schema.get("nullable"):
+        return
     for part in schema.get("allOf", []):
         validate(doc, part, value, where)
     if value is None:
@@ -143,6 +145,7 @@ def validate(doc, schema, value, where="panel"):
             validate(doc, schema["items"], item, f"{where}[{i}]")
     elif kind == "string":
         assert isinstance(value, str) and len(value) >= schema.get("minLength", 0), where
+        assert len(value) <= schema.get("maxLength", len(value)), f"{where} exceeds maxLength"
     elif kind == "integer":
         assert isinstance(value, int) and not isinstance(value, bool), where
         assert value >= schema.get("minimum", value), where
@@ -209,6 +212,127 @@ def test_served_panel_payload_validates_against_openapi(api):
     status, body = api.request("GET", "/v1/panel", token=token)
     assert status == 200 and body["data"]["games"] and body["data"]["teamTotal"]["value"] == 1.0
     validate(doc, schema, body)
+
+
+ALERT_MATCHUP = "PHI at JAX"
+ALERT_STARTER = {"athlete_id": "9000001", "name": "Sample Receiver",
+                 "team": "PHI", "slot": "WR"}
+ALERT_KINDS = {"RedZone": "401999001770", "PlayerScore": "401999001771",
+               "CloseGame": "401999001772"}
+GOLDENS = {"RedZone": "red-zone.json", "PlayerScore": "player-score.json",
+           "CloseGame": "close-game.json"}
+
+
+def alert_event(event_id, revision=1, scoring=True):
+    return {"gameId": "401999001", "eventId": event_id, "revision": revision,
+            "correctionOf": None if revision == 1 else revision - 1,
+            "source": "live", "score": {"away": 24, "home": 27},
+            "fieldPosition": 9, "possession": "PHI",
+            "playerIds": ["9000001"] if scoring else [],
+            "eventTime": "2026-10-15T00:19:30Z", "period": 4,
+            "scoringPlay": scoring, "matchup": ALERT_MATCHUP}
+
+
+def serve_alert_page(api, profile_id, kind, correction=False):
+    """Real evaluate -> store -> provider-resolver -> GET /v1/alerts page."""
+    import alert_policy
+    import provider_resolver
+    import store
+    store.put_profile(profile_id, {
+        "alertTypes": [kind], "frequency": 0, "quietHours": [],
+        "gameDayPeriods": {"enabled": True, "periods": []},
+        "spoilerDelay": 0, "excitement": "Mild", "detectionOptIn": False},
+        0, "2026-10-15T00:00:00Z")
+    _, token = link_device(api, profile_id)
+    event = alert_event(ALERT_KINDS[kind])
+    match = {"profileId": profile_id, "eventId": event["eventId"], "revision": 1,
+             "starters": [dict(ALERT_STARTER)], "cursor": None}
+    item, = alert_policy.evaluate(event, [match])
+    store.put_alert(dict(item, providerRoute=provider_resolver.resolve(
+        profile_id, event["eventId"])))
+    if not correction:
+        status, body = api.request("GET", "/v1/alerts", token=token)
+        assert status == 200, body
+        return body
+    revised = alert_event(ALERT_KINDS[kind], revision=2, scoring=False)
+    fix, = alert_policy.evaluate(revised, [dict(
+        match, revision=2, starters=[], cursor=item["cursor"])])
+    store.put_alert(dict(fix, providerRoute=provider_resolver.resolve(
+        profile_id, event["eventId"])))
+    status, body = api.request("GET", "/v1/alerts", token=token,
+                               query={"cursor": item["cursor"]})
+    assert status == 200, body
+    return body
+
+
+def test_openapi_alert_schemas_are_concrete():
+    doc = document("src/api/openapi.yaml")
+    schemas = doc["components"]["schemas"]
+    assert {"AlertEnvelope", "AlertData", "TriggerContext",
+            "ProviderRoute"} <= set(schemas)
+    served = dereference(doc, response_schema(doc, "/v1/alerts", "get", 200))
+    served_props, served_required = properties(doc, served)
+    assert {"alerts", "cursor"} <= served_required
+    assert dereference(doc, served_props["cursor"])["maxLength"] == 256
+    items = dereference(doc, served_props["alerts"])["items"]
+    assert items.get("$ref", "").endswith("/AlertEnvelope")
+    data_props, data_required = properties(doc, schemas["AlertData"])
+    assert {"alertType", "triggerContext", "commentary", "route"} <= data_required
+    assert set(dereference(doc, data_props["alertType"])["enum"]) == {
+        "RedZone", "PlayerScore", "CloseGame"}
+    assert dereference(doc, data_props["commentary"])["nullable"] is True
+    assert dereference(doc, data_props["route"])["nullable"] is True
+    ctx_props, ctx_required = properties(doc, schemas["TriggerContext"])
+    assert {"gameId", "eventId", "source", "score", "starters",
+            "alertTypes", "basis"} <= ctx_required
+    assert "matchup" in ctx_props and "matchup" not in ctx_required
+    matchup = dereference(doc, ctx_props["matchup"])
+    assert matchup["type"] == "string" and matchup["maxLength"] == 80
+    route_props, route_required = properties(doc, schemas["ProviderRoute"])
+    assert {"provider", "channel", "route", "accessBasis",
+            "inputs"} <= route_required
+    assert set(dereference(doc, route_props["accessBasis"])["enum"]) == {
+        "verified", "customerConfirmed", "unknown"}
+
+
+@pytest.mark.parametrize("kind", list(ALERT_KINDS))
+def test_served_alert_payloads_validate_against_openapi(api, kind):
+    doc = document("src/api/openapi.yaml")
+    schema = response_schema(doc, "/v1/alerts", "get", 200)
+    body = serve_alert_page(api, "g4-" + kind, kind)
+    validate(doc, schema, body, "alerts")
+    alert, = body["alerts"]
+    assert alert["data"]["alertType"] == kind
+    assert alert["data"]["triggerContext"]["matchup"] == ALERT_MATCHUP
+    assert len(body["cursor"]) <= 256
+
+
+@pytest.mark.parametrize("kind", list(ALERT_KINDS))
+def test_golden_alert_payloads_equal_served_output(api, kind):
+    import json
+    from pathlib import Path
+    golden = Path(__file__).resolve().parents[2] / "fixtures" / "alerts" / GOLDENS[kind]
+    assert golden.is_file(), f"missing golden payload {golden}"
+    expected = json.loads(golden.read_text())
+    assert serve_alert_page(api, "g4-" + kind, kind) == expected
+    doc = document("src/api/openapi.yaml")
+    validate(doc, response_schema(doc, "/v1/alerts", "get", 200), expected, "alerts")
+
+
+def test_golden_empty_starters_correction(api):
+    import json
+    from pathlib import Path
+    golden = (Path(__file__).resolve().parents[2] / "fixtures" / "alerts"
+              / "empty-starters-correction.json")
+    assert golden.is_file(), f"missing golden payload {golden}"
+    expected = json.loads(golden.read_text())
+    body = serve_alert_page(api, "g4-correction", "PlayerScore", correction=True)
+    assert body == expected
+    alert, = body["alerts"]
+    assert alert["revision"] == 2
+    assert alert["data"]["triggerContext"]["starters"] == []
+    doc = document("src/api/openapi.yaml")
+    validate(doc, response_schema(doc, "/v1/alerts", "get", 200), expected, "alerts")
 
 
 def test_phone_link_page_exposes_customer_confirmation_form(api):
