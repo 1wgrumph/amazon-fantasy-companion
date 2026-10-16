@@ -47,6 +47,7 @@ Globals:
         ALERTS_TABLE: !Ref AlertsTable
         LINEUPS_TABLE: !Ref LineupsTable
         PANELS_TABLE: !Ref PanelsTable
+        PLAYER_STATS_TABLE: !Ref PlayerStatsTable
         YAHOO_CLIENT_SECRET_PARAMETER: !Ref YahooClientSecretParameter
         YAHOO_TOKEN_PARAMETER: !Ref YahooTokenParameter
         DEVICE_CODE_TTL_SECONDS: !Ref DeviceCodeTtlSeconds
@@ -85,6 +86,9 @@ Resources:
             - Effect: Allow
               Action: [dynamodb:GetItem]
               Resource: [!GetAtt PanelsTable.Arn]
+            - Effect: Allow
+              Action: [dynamodb:GetItem]
+              Resource: [!GetAtt PlayerStatsTable.Arn]
       Events:
         DefaultRoute: {Type: HttpApi, Properties: {ApiId: !Ref HttpApi}}
         LinkIssue: {Type: HttpApi, Properties: {ApiId: !Ref HttpApi, Method: POST, Path: /v1/link}}
@@ -116,6 +120,9 @@ Resources:
             - Effect: Allow
               Action: [dynamodb:GetItem]
               Resource: [!GetAtt LineupsTable.Arn]
+            - Effect: Allow
+              Action: [dynamodb:PutItem]
+              Resource: [!GetAtt PlayerStatsTable.Arn]
 
   PolicyFunction:
     Type: AWS::Serverless::Function
@@ -273,6 +280,15 @@ Resources:
       KeySchema:
         - {AttributeName: profileId, KeyType: HASH}
         - {AttributeName: teamLeague, KeyType: RANGE}
+
+  PlayerStatsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - {AttributeName: athleteId, AttributeType: S}
+      KeySchema:
+        - {AttributeName: athleteId, KeyType: HASH}
 
 Outputs:
   ApiUrl:

@@ -8,7 +8,7 @@ import json
 import re
 from pathlib import Path
 
-from feed_ingest.normalize import normalize_summary
+from feed_ingest.normalize import boxscore_statistics, normalize_summary
 from feed_ingest.validation import validate_summary
 
 
@@ -24,8 +24,7 @@ def _index(game_id, fixtures_dir):
     return index
 
 
-def load_events(game_id, fixtures_dir):
-    """The latest captured summary of `game_id`, verified and normalized as replay."""
+def _latest_payload(game_id, fixtures_dir):
     index = _index(game_id, fixtures_dir)
     game_dir = Path(fixtures_dir) / game_id
     for entry in index["files"]:
@@ -38,4 +37,14 @@ def load_events(game_id, fixtures_dir):
     latest = max(summaries, key=lambda entry: entry["seq"])
     payload = json.loads((game_dir / Path(latest["file"]).name).read_bytes())
     validate_summary(payload, game_id)
-    return normalize_summary(payload, game_id, source="replay")
+    return payload
+
+
+def load_events(game_id, fixtures_dir):
+    """The latest captured summary of `game_id`, verified and normalized as replay."""
+    return normalize_summary(_latest_payload(game_id, fixtures_dir), game_id, source="replay")
+
+
+def load_statistics(game_id, fixtures_dir):
+    """Boxscore records of the latest captured summary, labeled replay."""
+    return boxscore_statistics(_latest_payload(game_id, fixtures_dir), game_id, source="replay")
