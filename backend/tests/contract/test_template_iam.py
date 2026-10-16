@@ -1,18 +1,19 @@
 """DES-AFC-P2-BACKEND least-privilege IAM: expanded DynamoDB actions per function.
 
-Every function grants only the table operations its store accessors use (get,
-put, update, query); the API reads but never writes Alerts; only ApiFunction
+Every function grants only the table operations its callers use (get, put,
+update, query, scan); the API reads but never writes Alerts; only ApiFunction
 holds DeleteItem, solely on LinksTable to supersede a prior session of the
 same link; no function holds BatchWriteItem or any other unneeded DynamoDB
 action. The Links handle-index Query resource and the Events stream consumer
 stay intact.
 """
 
+import ast
 import json
 
 import pytest
 
-from conftest import document
+from conftest import BACKEND, document
 
 pytestmark = pytest.mark.contract
 # SAM 1.169.0 DynamoDB policy template expansions (offline policy template
@@ -38,7 +39,7 @@ EXPECTED = {
     "PolicyFunction": {"ProfilesTable": {"GetItem"},
                        "EventsTable": {"GetItem"},
                        "AlertsTable": {"PutItem", "Query"},
-                       "LineupsTable": {"GetItem", "PutItem"},
+                       "LineupsTable": {"GetItem", "PutItem", "Scan"},
                        "PanelsTable": {"GetItem", "PutItem"}},
 }
 
@@ -79,6 +80,49 @@ def test_each_function_grants_only_its_store_operations():
         assert actions == expected, f"{function} DynamoDB grants changed: {actions}"
         assert set().union(*actions.values()) <= {"GetItem", "PutItem", "UpdateItem", "Query",
                                                  "DeleteItem", "Scan"}
+
+
+def test_policy_grants_matcher_operations_on_exact_table_arns():
+    template = document("template.yaml")
+    policy = template["Resources"]["PolicyFunction"]["Properties"]
+    assert policy["Handler"] == "pipeline.handler.lambda_handler"
+    environment = template["Globals"]["Function"]["Environment"]["Variables"]
+    # Other pipeline stages keep their existing grants; matcher reads are derived
+    # from source because moto does not enforce deployed IAM permissions.
+    expected = {"ProfilesTable": {"GetItem"}, "EventsTable": {"GetItem"},
+                "AlertsTable": {"PutItem"}, "LineupsTable": {"GetItem", "PutItem"},
+                "PanelsTable": {"GetItem", "PutItem"}}
+    module = ast.parse((BACKEND / "src/matcher/__init__.py").read_text())
+    for function in module.body:
+        if not isinstance(function, ast.FunctionDef):
+            continue
+        for node in ast.walk(function):
+            if not (isinstance(node, ast.Attribute) and isinstance(node.value, ast.Call)
+                    and isinstance(node.value.func, ast.Name)
+                    and node.value.func.id == "_table"):
+                continue
+            argument = node.value.args[0]
+            if isinstance(argument, ast.Constant):
+                variables = [argument.value]
+            else:
+                assert isinstance(argument, ast.Name)
+                assert argument.id == function.args.args[0].arg
+                variables = [ast.literal_eval(call.args[0]) for call in ast.walk(module)
+                             if isinstance(call, ast.Call) and isinstance(call.func, ast.Name)
+                             and call.func.id == function.name]
+                assert variables, f"No table binding found for {function.name}"
+            action = "".join(part.title() for part in node.attr.split("_"))
+            for variable in variables:
+                expected.setdefault(environment[variable]["Ref"], set()).add(action)
+    table_arns = [{"Fn::GetAtt": arn} for table in expected
+                  for arn in (table + ".Arn", [table, "Arn"])]
+    for entry in policy["Policies"]:
+        for statement in entry["Statement"]:
+            assert all("*" not in action for action in statement["Action"])
+            if any(action.startswith("dynamodb:") for action in statement["Action"]):
+                assert all(resource in table_arns for resource in statement["Resource"])
+    actions, _ = grants(policy["Policies"])
+    assert actions == expected, f"PolicyFunction must grant matcher calls: {expected}; got {actions}"
 
 
 def test_api_never_writes_alerts_and_only_supersedes_link_sessions():
