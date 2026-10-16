@@ -139,7 +139,7 @@ def get_session(session_hash):
 def put_event(event):
     _table("EVENTS_TABLE").put_item(Item=_shaped(event, {
         "gameId", "eventId", "revision", "source", "score", "fieldPosition", "possession",
-        "playerIds", "eventTime", "correctionOf", "period", "scoringPlay"}))
+        "playerIds", "eventTime", "correctionOf", "period", "scoringPlay", "matchup"}))
 
 
 def get_event(game_id, event_id):

@@ -13,7 +13,7 @@ from feed_support import (GAME, attempt, boxscore_athlete_ids,
 
 EVENT_FIELDS = {"gameId", "eventId", "revision", "source", "score",
                 "fieldPosition", "possession", "playerIds", "eventTime",
-                "correctionOf", "period", "scoringPlay"}
+                "correctionOf", "period", "scoringPlay", "matchup"}
 
 
 def normalize_module():
@@ -127,3 +127,70 @@ def test_broadcast_networks_ignore_the_top_level_field():
 def test_a_non_feed_source_is_rejected(source):
     with pytest.raises(ValueError):
         normalize(fresh_summary(), source=source)
+
+
+def expected_matchup(summary):
+    competitors = summary["header"]["competitions"][0]["competitors"]
+    away = next(c["team"]["abbreviation"] for c in competitors
+                if c["homeAway"] == "away")
+    home = next(c["team"]["abbreviation"] for c in competitors
+                if c["homeAway"] == "home")
+    return f"{away} at {home}"
+
+
+def test_matchup_comes_from_header_competitors():
+    summary = fresh_summary()
+    label = expected_matchup(summary)
+    assert 0 < len(label) <= 80
+    for event in normalize(summary):
+        assert event["matchup"] == label, event
+
+
+def test_matchup_absent_without_valid_competitors():
+    summary = fresh_summary()
+    del summary["header"]["competitions"][0]["competitors"]
+    for event in normalize(summary):
+        assert "matchup" not in event, event
+
+
+@pytest.mark.parametrize("abbreviation", ["x" * 9, "PHI PHI", "", None])
+def test_matchup_absent_for_invalid_abbreviation(abbreviation):
+    summary = fresh_summary()
+    summary["header"]["competitions"][0]["competitors"][0]["team"]["abbreviation"] = (
+        abbreviation)
+    for event in normalize(summary):
+        assert "matchup" not in event, event
+
+
+@pytest.mark.parametrize("deviation", ["mixed_case_abbreviation", "long_abbreviation",
+                                        "third_competitor", "unexpected_home_away"])
+def test_display_only_competitor_deviation_stores_events_without_matchup(api, deviation):
+    # F2: a display-only competitor deviation must omit matchup, not reject
+    # the whole summary (plays/alerts for the game would be lost).
+    summary = fresh_summary()
+    competitors = summary["header"]["competitions"][0]["competitors"]
+    if deviation == "mixed_case_abbreviation":
+        competitors[0]["team"]["abbreviation"] = "Wsh"
+    elif deviation == "long_abbreviation":
+        competitors[0]["team"]["abbreviation"] = "WASHINGTON"
+    elif deviation == "unexpected_home_away":
+        competitors[0]["homeAway"] = "neutral"
+    else:
+        competitors.append(dict(competitors[0]))
+    ingest_summary = require_attr(require_module("feed_ingest.ingest"),
+                                  "ingest_summary")
+    stored = attempt(ingest_summary, summary, GAME)
+    assert len(stored) == len(plays_in(fresh_summary()))
+    items = api.table("Events").scan()["Items"]
+    assert len(items) == len(stored)
+    assert all("matchup" not in item for item in items), items
+    assert all("matchup" not in event for event in stored)
+
+
+def test_matchup_survives_ingest_storage(api):
+    summary = fresh_summary()
+    ingest_summary = require_attr(require_module("feed_ingest.ingest"),
+                                  "ingest_summary")
+    stored = attempt(ingest_summary, summary, GAME)
+    assert stored and all(item["matchup"] == expected_matchup(summary)
+                          for item in api.table("Events").scan()["Items"])
