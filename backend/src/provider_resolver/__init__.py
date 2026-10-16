@@ -15,6 +15,7 @@ never touches the profile's Settings/providerPref.
 import functools
 import json
 import os
+from datetime import datetime, timedelta
 from pathlib import Path
 
 import boto3
@@ -56,11 +57,21 @@ def _installed_packages(profile_id):
     return list(item.get("installedPackages") or [])
 
 
+def _utc_timestamp(value):
+    try:
+        parsed = datetime.fromisoformat(value)
+    except (TypeError, ValueError):
+        return False
+    return parsed.utcoffset() == timedelta(0)
+
+
 def _route(provider):
     routes = {}
     for platform in PLATFORMS:
         entry = (provider.get("platform_routes") or {}).get(platform) or {}
-        if entry.get("verified_outcome") and entry.get("verified_at"):
+        outcome = entry.get("verified_outcome")
+        if (isinstance(outcome, str) and outcome in OUTCOMES
+                and _utc_timestamp(entry.get("verified_at"))):
             routes[platform] = dict(entry, status="verified")
         else:
             # A missing or unverified entry is a gap; never fill it, and
