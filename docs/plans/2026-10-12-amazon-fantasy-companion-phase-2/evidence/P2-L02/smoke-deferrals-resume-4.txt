@@ -1,0 +1,12 @@
+Deployed-suite inventory: 11 cases.
+NOT_RUN, two explicitly deselected cases:
+backend/tests/deployed/lineup/test_source_labels.py::test_panel_reports_exactly_one_lineup_source
+backend/tests/deployed/lineup/test_source_labels.py::test_panel_source_is_stable_across_reads
+Reason: panel.snapshot is AFC-STUB assigned to P2-B07 (backend/src/panel/__init__.py); these cases declare L03 execution. B03 lineup is deployed but does not implement panel snapshots. No PASS claimed for these cases.
+Run all remaining nine cases, including lineup preset roundtrip, with the owner command and explicit PYTEST_ADDOPTS deselections. No source/config changes or test monkeypatches.
+feed_ingest: NOT_RUN; no deployed test group exists in this revision. Later-slice ingest/end-to-end data is outside this smoke acceptance. Zero cases collected for that group.
+Known-route invoke-permission probe covers all eleven explicit routes separately, even protected routes whose feature implementation is deferred, by asserting the router's unauthenticated envelope. It does not establish feature acceptance.
+BUG_ROUTE: not-a-bug expected later-slice panel stubs are deferred under the explicit owner packet; no repair or nested triage.
+
+Execution clarification: initial PYTEST_ADDOPTS used backend/tests/... node ids; pytest rootdir is backend, so the deselections did not match. The preserved full run (smoke-resume-4.txt) executed 11: 9 passed, 2 failed, 0 skipped, exit 1. Both failures are the exact known P2-B07 panel stubs above (503 not_implemented). No other failure occurred.
+Command-only correction: use tests/deployed/... node ids. Final run (smoke-scoped-resume-4.txt): 11 collected, 9 selected/passed, 2 deselected, 0 failed, 0 pytest skipped, exit 0. Deferred panel acceptance remains NOT_RUN; the initial attempts are explicitly recorded as failures, not relabelled as PASS or erased.

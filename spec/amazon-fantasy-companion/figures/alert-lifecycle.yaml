@@ -1,0 +1,75 @@
+# Derived from ST-3d model views; model digest 14fb815b78c2c6817d556c36d351b22dd3996db5f5a7e34a87251ce69bfdcfe5
+{
+  "class": "F7",
+  "title": "AlertLifecycle",
+  "max_width": 2400,
+  "max_height": 1600,
+  "direction": "LR",
+  "nodes": [
+    {
+      "id": "detected",
+      "label": "detected"
+    },
+    {
+      "id": "matched",
+      "label": "matched"
+    },
+    {
+      "id": "gated",
+      "label": "gated"
+    },
+    {
+      "id": "emitted",
+      "label": "emitted"
+    },
+    {
+      "id": "delivered",
+      "label": "delivered"
+    },
+    {
+      "id": "suppressed",
+      "label": "suppressed"
+    },
+    {
+      "id": "corrected",
+      "label": "corrected"
+    }
+  ],
+  "edges": [
+    {
+      "from": "detected",
+      "to": "matched",
+      "label": "identify"
+    },
+    {
+      "from": "matched",
+      "to": "gated",
+      "label": "passFilters"
+    },
+    {
+      "from": "matched",
+      "to": "suppressed",
+      "label": "blockFilters"
+    },
+    {
+      "from": "gated",
+      "to": "emitted",
+      "label": "delayElapsed"
+    },
+    {
+      "from": "emitted",
+      "to": "delivered",
+      "label": "present"
+    },
+    {
+      "from": "emitted",
+      "to": "corrected",
+      "label": "correct"
+    },
+    {
+      "from": "delivered",
+      "to": "corrected",
+      "label": "correct"
+    }
+  ]
+}

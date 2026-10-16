@@ -1,0 +1,79 @@
+<mxfile host="azdiagram">
+  <diagram id="data" name="AFC logical data dependencies">
+    <mxGraphModel pageWidth="832.45" pageHeight="226.02">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="Settings" value="Settings" vertex="1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;">
+          <mxGeometry x="265.919" y="88.825" width="76.8024" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="Lineup" value="Lineup" vertex="1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;">
+          <mxGeometry x="270.045" y="25.82" width="68.5498" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="GameEvent" value="GameEvent" vertex="1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;">
+          <mxGeometry x="255.047" y="160.825" width="98.5464" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="Alert" value="Alert" vertex="1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;">
+          <mxGeometry x="500.22" y="146.825" width="57.2998" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="PanelState" value="PanelState" vertex="1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;">
+          <mxGeometry x="482.596" y="74.82" width="92.5488" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="RoutingOutcome" value="RoutingOutcome" vertex="1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;">
+          <mxGeometry x="683.151" y="146.825" width="129.298" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="DeviceCode" value="DeviceCode" vertex="1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;">
+          <mxGeometry x="19.9994" y="88.825" width="100.051" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-1" value="gates" edge="1" parent="1" style="html=1;" source="Settings" target="Alert">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="325.23" y="125.09" as="sourcePoint" />
+            <mxPoint x="499.73" y="170.234" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-2" value="context" edge="1" parent="1" style="html=1;" source="Lineup" target="Alert">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="339.01" y="51.96" as="sourcePoint" />
+            <mxPoint x="506.35" y="146.528" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-3" value="trigger / correction" edge="1" parent="1" style="html=1;" source="GameEvent" target="Alert">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="353.79" y="195.834" as="sourcePoint" />
+            <mxPoint x="501.42" y="183.235" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-4" value="scoring context" edge="1" parent="1" style="html=1;" source="Lineup" target="PanelState">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="339.02" y="37.24" as="sourcePoint" />
+            <mxPoint x="511.31" y="74.54" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-5" value="points / corrections" edge="1" parent="1" style="html=1;" source="GameEvent" target="PanelState">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="347.94" y="160.334" as="sourcePoint" />
+            <mxPoint x="483.4" y="111.268" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-6" value="display / selection" edge="1" parent="1" style="html=1;" source="Settings" target="PanelState">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="343.08" y="104.45" as="sourcePoint" />
+            <mxPoint x="482.23" y="95.7" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-7" value="Watch attempt" edge="1" parent="1" style="html=1;" source="Alert" target="RoutingOutcome">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="557.79" y="164.825" as="sourcePoint" />
+            <mxPoint x="683.02" y="164.825" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-8" value="account link context" edge="1" parent="1" style="html=1;" source="DeviceCode" target="Settings">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="120.29" y="106.825" as="sourcePoint" />
+            <mxPoint x="265.6" y="106.825" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

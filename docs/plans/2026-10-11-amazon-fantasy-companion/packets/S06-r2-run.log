@@ -4171,7 +4171,7 @@ Test results:
    Location: /tmp/afc-s06-source.Ptg6LL/unpacked/1wgrumph-gridmarket-99eb98e/tools/tests/test_azdiagram.py:60:23
 59	def drawio_cells(path: Path) -> list[ET.Element]:
 60	    return [c for c in ET.parse(path).iter() if local(c.tag) == "mxCell"]
-61	
+61
 
 --------------------------------------------------
 >> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
@@ -4218,7 +4218,7 @@ Test results:
 107	        env=env,
 108	        timeout=60,
 109	    )
-110	
+110
 
 --------------------------------------------------
 >> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
@@ -4226,7 +4226,7 @@ Test results:
    CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
    More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b101_assert_used.html
    Location: /tmp/afc-s06-source.Ptg6LL/unpacked/1wgrumph-gridmarket-99eb98e/tools/tests/test_azdiagram.py:119:4
-118	
+118
 119	    assert result.engine == "graphviz"
 120	    assert result.svg == tmp_path / "out" / f"graph-{figure_class.lower()}.svg"
 
@@ -4258,7 +4258,7 @@ Test results:
    Location: /tmp/afc-s06-source.Ptg6LL/unpacked/1wgrumph-gridmarket-99eb98e/tools/tests/test_azdiagram.py:125:4
 124	    )
 125	    assert len({(x, y) for x, y, _, _ in boxes.values()}) == 4, "nodes share a position"
-126	
+126
 
 --------------------------------------------------
 >> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
@@ -4268,7 +4268,7 @@ Test results:
    Location: /tmp/afc-s06-source.Ptg6LL/unpacked/1wgrumph-gridmarket-99eb98e/tools/tests/test_azdiagram.py:132:4
 131	    }
 132	    assert edges >= {("worker", "market"), ("bots", "market"), ("market", "dashboard")}
-133	
+133
 
 --------------------------------------------------
 >> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
@@ -4276,7 +4276,7 @@ Test results:
    CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
    More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b101_assert_used.html
    Location: /tmp/afc-s06-source.Ptg6LL/unpacked/1wgrumph-gridmarket-99eb98e/tools/tests/test_azdiagram.py:153:4
-152	
+152
 153	    assert result.engine == "grid"
 154	    assert result.svg.name == "sequence.svg" and result.drawio.name == "sequence.drawio"
 
@@ -4308,7 +4308,7 @@ Test results:
    Location: /tmp/afc-s06-source.Ptg6LL/unpacked/1wgrumph-gridmarket-99eb98e/tools/tests/test_azdiagram.py:158:4
 157	    assert xs == sorted(xs) and len(set(xs)) == 3, "participants not left to right"
 158	    assert len({boxes[p][1] for p in boxes if p in ("trader", "api", "market")}) == 1
-159	
+159
 
 --------------------------------------------------
 >> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
@@ -4334,7 +4334,7 @@ Test results:
 176	    assert len(ys) == 3 and ys == sorted(ys) and len(set(ys)) == 3, (
 177	        "messages not top to bottom"
 178	    )
-179	
+179
 
 --------------------------------------------------
 >> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
@@ -4342,7 +4342,7 @@ Test results:
    CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
    More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b101_assert_used.html
    Location: /tmp/afc-s06-source.Ptg6LL/unpacked/1wgrumph-gridmarket-99eb98e/tools/tests/test_azdiagram.py:189:4
-188	
+188
 189	    assert result.engine == "grid"
 190	    boxes = assert_same_boxes(
 
@@ -4354,7 +4354,7 @@ Test results:
    Location: /tmp/afc-s06-source.Ptg6LL/unpacked/1wgrumph-gridmarket-99eb98e/tools/tests/test_azdiagram.py:194:4
 193	    ys = [boxes[lane][1] for lane in ("poller", "market", "dashboard")]
 194	    assert ys == sorted(ys) and len(set(ys)) == 3, "lanes not top to bottom"
-195	
+195
 
 --------------------------------------------------
 >> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
@@ -4362,7 +4362,7 @@ Test results:
    CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
    More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b101_assert_used.html
    Location: /tmp/afc-s06-source.Ptg6LL/unpacked/1wgrumph-gridmarket-99eb98e/tools/tests/test_azdiagram.py:207:4
-206	
+206
 207	    assert mod.lint(inputs) == []
 208	    assert run_cli("lint", *map(str, inputs)).returncode == 0
 
@@ -4374,7 +4374,7 @@ Test results:
    Location: /tmp/afc-s06-source.Ptg6LL/unpacked/1wgrumph-gridmarket-99eb98e/tools/tests/test_azdiagram.py:208:4
 207	    assert mod.lint(inputs) == []
 208	    assert run_cli("lint", *map(str, inputs)).returncode == 0
-209	
+209
 
 --------------------------------------------------
 >> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
@@ -4382,7 +4382,7 @@ Test results:
    CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
    More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b101_assert_used.html
    Location: /tmp/afc-s06-source.Ptg6LL/unpacked/1wgrumph-gridmarket-99eb98e/tools/tests/test_azdiagram.py:217:4
-216	
+216
 217	    assert len(findings) == 1
 218	    assert "overlap" in findings[0].lower()
 
@@ -4424,7 +4424,7 @@ Test results:
    Location: /tmp/afc-s06-source.Ptg6LL/unpacked/1wgrumph-gridmarket-99eb98e/tools/tests/test_azdiagram.py:222:4
 221	    assert cli.returncode != 0
 222	    assert "overlap" in (cli.stdout + cli.stderr).lower()
-223	
+223
 
 --------------------------------------------------
 >> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
@@ -4432,7 +4432,7 @@ Test results:
    CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
    More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b101_assert_used.html
    Location: /tmp/afc-s06-source.Ptg6LL/unpacked/1wgrumph-gridmarket-99eb98e/tools/tests/test_azdiagram.py:234:4
-233	
+233
 234	    assert len(findings) == 1
 235	    assert "size" in findings[0].lower()
 
@@ -4464,7 +4464,7 @@ Test results:
    Location: /tmp/afc-s06-source.Ptg6LL/unpacked/1wgrumph-gridmarket-99eb98e/tools/tests/test_azdiagram.py:238:4
 237	    cli = run_cli("lint", str(src))
 238	    assert cli.returncode != 0
-239	
+239
 
 --------------------------------------------------
 >> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
@@ -4472,7 +4472,7 @@ Test results:
    CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
    More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b101_assert_used.html
    Location: /tmp/afc-s06-source.Ptg6LL/unpacked/1wgrumph-gridmarket-99eb98e/tools/tests/test_azdiagram.py:247:4
-246	
+246
 247	    assert mod.lint([figures]) == []
 248	    assert run_cli("lint", str(figures)).returncode == 0
 
@@ -4484,7 +4484,7 @@ Test results:
    Location: /tmp/afc-s06-source.Ptg6LL/unpacked/1wgrumph-gridmarket-99eb98e/tools/tests/test_azdiagram.py:248:4
 247	    assert mod.lint([figures]) == []
 248	    assert run_cli("lint", str(figures)).returncode == 0
-249	
+249
 
 --------------------------------------------------
 >> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
@@ -4539,7 +4539,7 @@ Test results:
 71	        text=True,
 72	        timeout=60,
 73	    )
-74	
+74
 
 --------------------------------------------------
 >> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
@@ -4549,7 +4549,7 @@ Test results:
    Location: /tmp/afc-s06-source.Ptg6LL/unpacked/1wgrumph-gridmarket-99eb98e/tools/tests/test_spec_tools.py:102:4
 101	def test_seit_gm_spec_02_conforming_section_passes() -> None:
 102	    assert spec_lint().lint_section(CONFORMING) == []
-103	
+103
 
 --------------------------------------------------
 >> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
@@ -4559,7 +4559,7 @@ Test results:
    Location: /tmp/afc-s06-source.Ptg6LL/unpacked/1wgrumph-gridmarket-99eb98e/tools/tests/test_spec_tools.py:106:4
 105	def test_seit_gm_spec_02_five_requirements_pass() -> None:
 106	    assert spec_lint().lint_section(with_requirements(5)) == []
-107	
+107
 
 --------------------------------------------------
 >> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
@@ -4567,7 +4567,7 @@ Test results:
    CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
    More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b101_assert_used.html
    Location: /tmp/afc-s06-source.Ptg6LL/unpacked/1wgrumph-gridmarket-99eb98e/tools/tests/test_spec_tools.py:112:4
-111	
+111
 112	    assert len(findings) == 1
 113	    assert "requirement" in findings[0].lower() and "5" in findings[0]
 
@@ -4579,7 +4579,7 @@ Test results:
    Location: /tmp/afc-s06-source.Ptg6LL/unpacked/1wgrumph-gridmarket-99eb98e/tools/tests/test_spec_tools.py:113:4
 112	    assert len(findings) == 1
 113	    assert "requirement" in findings[0].lower() and "5" in findings[0]
-114	
+114
 
 --------------------------------------------------
 >> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
@@ -4587,7 +4587,7 @@ Test results:
    CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
    More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b101_assert_used.html
    Location: /tmp/afc-s06-source.Ptg6LL/unpacked/1wgrumph-gridmarket-99eb98e/tools/tests/test_spec_tools.py:125:4
-124	
+124
 125	    assert len(findings) == 1
 126	    assert "BLUF" in findings[0]
 
@@ -4599,7 +4599,7 @@ Test results:
    Location: /tmp/afc-s06-source.Ptg6LL/unpacked/1wgrumph-gridmarket-99eb98e/tools/tests/test_spec_tools.py:126:4
 125	    assert len(findings) == 1
 126	    assert "BLUF" in findings[0]
-127	
+127
 
 --------------------------------------------------
 >> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
@@ -4609,7 +4609,7 @@ Test results:
    Location: /tmp/afc-s06-source.Ptg6LL/unpacked/1wgrumph-gridmarket-99eb98e/tools/tests/test_spec_tools.py:134:4
 133	    )
 134	    assert text != CONFORMING
-135	
+135
 
 --------------------------------------------------
 >> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
@@ -4617,7 +4617,7 @@ Test results:
    CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
    More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b101_assert_used.html
    Location: /tmp/afc-s06-source.Ptg6LL/unpacked/1wgrumph-gridmarket-99eb98e/tools/tests/test_spec_tools.py:138:4
-137	
+137
 138	    assert len(findings) == 1
 139	    assert "Frame" in findings[0] and field in findings[0]
 
@@ -4629,7 +4629,7 @@ Test results:
    Location: /tmp/afc-s06-source.Ptg6LL/unpacked/1wgrumph-gridmarket-99eb98e/tools/tests/test_spec_tools.py:139:4
 138	    assert len(findings) == 1
 139	    assert "Frame" in findings[0] and field in findings[0]
-140	
+140
 
 --------------------------------------------------
 >> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
@@ -4637,7 +4637,7 @@ Test results:
    CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
    More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b101_assert_used.html
    Location: /tmp/afc-s06-source.Ptg6LL/unpacked/1wgrumph-gridmarket-99eb98e/tools/tests/test_spec_tools.py:154:4
-153	
+153
 154	    assert len(findings) == 1
 155	    assert bad_class in findings[0]
 
@@ -4649,7 +4649,7 @@ Test results:
    Location: /tmp/afc-s06-source.Ptg6LL/unpacked/1wgrumph-gridmarket-99eb98e/tools/tests/test_spec_tools.py:155:4
 154	    assert len(findings) == 1
 155	    assert bad_class in findings[0]
-156	
+156
 
 --------------------------------------------------
 >> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
@@ -4657,7 +4657,7 @@ Test results:
    CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
    More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b101_assert_used.html
    Location: /tmp/afc-s06-source.Ptg6LL/unpacked/1wgrumph-gridmarket-99eb98e/tools/tests/test_spec_tools.py:163:4
-162	
+162
 163	    assert len(findings) == 1
 164	    assert "table" in findings[0].lower()
 
@@ -4669,7 +4669,7 @@ Test results:
    Location: /tmp/afc-s06-source.Ptg6LL/unpacked/1wgrumph-gridmarket-99eb98e/tools/tests/test_spec_tools.py:164:4
 163	    assert len(findings) == 1
 164	    assert "table" in findings[0].lower()
-165	
+165
 
 --------------------------------------------------
 >> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
@@ -4677,7 +4677,7 @@ Test results:
    CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
    More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b101_assert_used.html
    Location: /tmp/afc-s06-source.Ptg6LL/unpacked/1wgrumph-gridmarket-99eb98e/tools/tests/test_spec_tools.py:176:4
-175	
+175
 176	    assert len(findings) == 1
 177	    assert "figure" in findings[0].lower()
 
@@ -4689,7 +4689,7 @@ Test results:
    Location: /tmp/afc-s06-source.Ptg6LL/unpacked/1wgrumph-gridmarket-99eb98e/tools/tests/test_spec_tools.py:177:4
 176	    assert len(findings) == 1
 177	    assert "figure" in findings[0].lower()
-178	
+178
 
 --------------------------------------------------
 >> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
@@ -4697,7 +4697,7 @@ Test results:
    CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
    More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b101_assert_used.html
    Location: /tmp/afc-s06-source.Ptg6LL/unpacked/1wgrumph-gridmarket-99eb98e/tools/tests/test_spec_tools.py:187:4
-186	
+186
 187	    assert spec_lint().lint_section(CONFORMING) == []
 188	    assert run_tool("spec_lint.py", str(good)).returncode == 0
 
@@ -4729,7 +4729,7 @@ Test results:
    Location: /tmp/afc-s06-source.Ptg6LL/unpacked/1wgrumph-gridmarket-99eb98e/tools/tests/test_spec_tools.py:191:4
 190	    assert failed.returncode != 0
 191	    assert "02-market.md" in failed.stdout + failed.stderr
-192	
+192
 
 --------------------------------------------------
 >> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
@@ -4747,7 +4747,7 @@ Test results:
    CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
    More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b101_assert_used.html
    Location: /tmp/afc-s06-source.Ptg6LL/unpacked/1wgrumph-gridmarket-99eb98e/tools/tests/test_spec_tools.py:215:4
-214	
+214
 215	    assert re.match(r"# GridMarket Fixture Specification\s*$", text.splitlines()[0])
 216	    assert "GM-SPEC-FIXTURE" in text
 
@@ -4769,7 +4769,7 @@ Test results:
    Location: /tmp/afc-s06-source.Ptg6LL/unpacked/1wgrumph-gridmarket-99eb98e/tools/tests/test_spec_tools.py:225:8
 224	        position = re.search(rf"^#+ {heading}", text, flags=re.MULTILINE)
 225	        assert position and position.start() < first_section, heading
-226	
+226
 
 --------------------------------------------------
 >> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
@@ -4789,7 +4789,7 @@ Test results:
    Location: /tmp/afc-s06-source.Ptg6LL/unpacked/1wgrumph-gridmarket-99eb98e/tools/tests/test_spec_tools.py:229:4
 228	    assert "0.1" in history and "Initial draft" in history
 229	    assert "0.2" in history and "Added market section" in history
-230	
+230
 
 --------------------------------------------------
 >> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
@@ -4799,7 +4799,7 @@ Test results:
    Location: /tmp/afc-s06-source.Ptg6LL/unpacked/1wgrumph-gridmarket-99eb98e/tools/tests/test_spec_tools.py:232:4
 231	    toc = block(text, "Table of Contents")
 232	    assert toc.index("Overview") < toc.index("Market") < toc.index("Appendix A")
-233	
+233
 
 --------------------------------------------------
 >> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
@@ -4829,7 +4829,7 @@ Test results:
    Location: /tmp/afc-s06-source.Ptg6LL/unpacked/1wgrumph-gridmarket-99eb98e/tools/tests/test_spec_tools.py:238:4
 237	    figures = block(text, "List of Figures")
 238	    assert re.search(r"Figure 1\b.*Market context", figures)
-239	
+239
 
 --------------------------------------------------
 >> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
@@ -4837,7 +4837,7 @@ Test results:
    CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
    More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b101_assert_used.html
    Location: /tmp/afc-s06-source.Ptg6LL/unpacked/1wgrumph-gridmarket-99eb98e/tools/tests/test_spec_tools.py:240:4
-239	
+239
 240	    assert "requirements:" not in text, "section front matter leaked into the build"
 241	    assert text.index("## Overview") < text.index("## Market")
 
@@ -4849,7 +4849,7 @@ Test results:
    Location: /tmp/afc-s06-source.Ptg6LL/unpacked/1wgrumph-gridmarket-99eb98e/tools/tests/test_spec_tools.py:241:4
 240	    assert "requirements:" not in text, "section front matter leaked into the build"
 241	    assert text.index("## Overview") < text.index("## Market")
-242	
+242
 
 --------------------------------------------------
 >> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
@@ -4869,7 +4869,7 @@ Test results:
    Location: /tmp/afc-s06-source.Ptg6LL/unpacked/1wgrumph-gridmarket-99eb98e/tools/tests/test_spec_tools.py:257:8
 256	    ):
 257	        assert any(requirement in row and section in row for row in rows), requirement
-258	
+258
 
 --------------------------------------------------
 >> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
@@ -4877,7 +4877,7 @@ Test results:
    CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
    More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b101_assert_used.html
    Location: /tmp/afc-s06-source.Ptg6LL/unpacked/1wgrumph-gridmarket-99eb98e/tools/tests/test_spec_tools.py:266:4
-265	
+265
 266	    assert run_tool("spec_build.py", str(src), str(first)).returncode == 0
 267	    assert run_tool("spec_build.py", str(src), str(second)).returncode == 0
 
@@ -6533,7 +6533,7 @@ E           File "/usr/lib/python3.14/subprocess.py", line 578, in run
 E             raise CalledProcessError(retcode, process.args,
 E                                      output=stdout, stderr=stderr)
 E         subprocess.CalledProcessError: Command '['git', '-C', '$HOME/alphazede/worktrees/alphazedehq-afc-s06-spec-authoring/skills/spec-authoring', 'rev-parse', ':skills/spec-authoring']' returned non-zero exit status 128.
-E         
+E
 E       assert 1 == 0
 E        +  where 1 = CompletedProcess(args=('bash', '$HOME/alphazede/worktrees/alphazedehq-afc-s06-spec-authoring/skills/spec-autho...-authoring/skills/spec-authoring\', \'rev-parse\', \':skills/spec-authoring\']\' returned non-zero exit status 128.\n').returncode
 

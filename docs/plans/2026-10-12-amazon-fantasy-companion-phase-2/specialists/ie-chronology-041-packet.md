@@ -1,0 +1,18 @@
+ROLE
+Integration Engineer planning delta only. Frozen opensource-hackathon primary Claude Code / Claude Opus 5.5 / high. No nested agents. Load $HOME/.codex/plugins/cache/bearing-lite/bearing-lite/1.1.7/skills/integration-engineer/SKILL.md and $HOME/.codex/skills/integration-engineering/SKILL.md.
+
+STATE
+PLAN=docs/plans/2026-10-12-amazon-fantasy-companion-phase-2. Owner authorized chronology13milestones and complete opensource-hackathon profile migration under DEC-AFC-SD-040/041. Product execution held. Read specialists/chronology-opus-review.md, evidence/chronology-opus-review/proposal.json, current technical-plan/design, specialists/slice-graph.md and specialists/integration-plan.md. The documented pure register precheck now passes through evidence/chronology-profile-delta/precheck_markdown.py without changing Markdown authority. RE is checking only4control rows concurrently; your mechanical chronology/capability projection is independent of those wording verdicts and parent integrates only after RE passes. Product register/interface allocations are unchanged.
+
+OBJECTIVE
+Apply the completed Opus proposal to the slice graph and integration-plan projections only. Preserve52slices,121dependency conditions,44integration steps,5technical waves/releases, cut-off IDs/dates, leases, shared-resource gate costs, exact write sets, earlyX05 historical checkpoint and conditionalX11. Update graph column M,wave to GitHub milestone,wave and each slice's milestone using proposal issue mapping; old Mn meanings become Wn or Wave n where they mean technical-wave/release prerequisite. R1..R4 must still follow every other slice of their technical wave; do not derive release prerequisites from13tracking groups. X05 issue closesM04 but CP-X05-HIST feedsR1M03 and B02M05. Clarify Wave2entry from X01/B01/A01 prerequisites, without makingX04 waitforR1. Integration step milestones come from proposal integration_step_milestone. Preserve all step IDs and conditions.
+
+Replace old lane profile and capability bindings with frozen Phase1 journey.profile_selection.frozen_snapshots opensource-hackathon; bug-triager remains unchanged. Full profile sha2567d501eb8c103831a38c50d237b5d1e2e015a564b9ade8aef09a32dfc39b26ab1. Entire roles/fallbacks/cadence/TDD/concurrency/clean-session/review.coverage_assist/deterministic_verification.reverify/holds must survive. Muse requires --contributor-mode on even on fallback. Assurance now applies to the selected profile's enabled sessions across lanes; no old tech-writing-disabled exemption. Preserve existing13TDD pairs and evidence/docs-only declared methods. No new profile lookup.
+
+AUTHORITY
+Write only PLAN/specialists/slice-graph.md, PLAN/specialists/integration-plan.md, PLAN/specialists/ie-chronology-041-receipt.md and PLAN/evidence/chronology-profile-delta/ie-*.json or ie-*.py. No canonical technical-plan/design/SEIT/implementation edits, no git mutation or remote writes, no runtime/device/AWS. If outside prose needs correction, return exact proposed text. No automatic independent rereview; original planning review1/1 repair1/1 remain spent; this is authoring role delta.
+
+VERIFY
+Check counts, stable step IDs and wave membership, issue grouping, no changed dependency meaning, release prerequisites, profile route/capability fields and holds. Read git baseline51bc730 for comparison. OCR delegation exists but this is assembly authoring, not independent review. Reverify: not applicable planning sources. No test/product code.
+BUG_ROUTE: not-a-bug owner-requested chronology/profile projection delta.
+RETURN CANDIDATE_READY or typed gap with changed paths, exact checks/results and residuals. Stop after the bounded receipt.

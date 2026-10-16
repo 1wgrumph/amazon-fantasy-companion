@@ -1,0 +1,52 @@
+# Projection of V-ST3b-2 and V-ST3b-3; no timing guarantee
+{
+  "class": "F5",
+  "title": "Alert to Watch: derived operational sequence",
+  "max_width": 2000,
+  "max_height": 1200,
+  "participants": [
+    {
+      "id": "be",
+      "label": "Backend policy / resolver"
+    },
+    {
+      "id": "tv",
+      "label": "TV notifier / launcher"
+    },
+    {
+      "id": "user",
+      "label": "Customer"
+    },
+    {
+      "id": "provider",
+      "label": "Provider app"
+    }
+  ],
+  "messages": [
+    {
+      "from": "be",
+      "to": "tv",
+      "label": "gated, delayed Alert + route"
+    },
+    {
+      "from": "tv",
+      "to": "user",
+      "label": "chosen presentation: Watch / Dismiss"
+    },
+    {
+      "from": "user",
+      "to": "tv",
+      "label": "Watch; confirmation if configured"
+    },
+    {
+      "from": "tv",
+      "to": "provider",
+      "label": "supported game/channel URI or intent"
+    },
+    {
+      "from": "tv",
+      "to": "user",
+      "label": "reported RoutingOutcome; unknown stays unknown"
+    }
+  ]
+}

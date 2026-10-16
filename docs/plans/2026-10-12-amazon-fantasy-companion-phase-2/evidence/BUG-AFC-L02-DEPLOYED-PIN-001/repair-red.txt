@@ -1,0 +1,327 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.2, pluggy-1.6.0 -- <home>/.local/share/afc-tools/backend-tests/bin/python3.12
+cachedir: .pytest_cache
+rootdir: <repo>/backend
+configfile: pyproject.toml
+plugins: cov-7.1.0, anyio-4.13.0, asyncio-1.3.0, mock-3.15.1, typeguard-4.4.4
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 73 items
+
+backend/tests/unit/test_deployed_guard.py::test_resolved_api_addresses_are_allowed[connect-2-address0] PASSED [  1%]
+backend/tests/unit/test_deployed_guard.py::test_resolved_api_addresses_are_allowed[connect-2-address1] PASSED [  2%]
+backend/tests/unit/test_deployed_guard.py::test_resolved_api_addresses_are_allowed[connect-10-address2] PASSED [  4%]
+backend/tests/unit/test_deployed_guard.py::test_resolved_api_addresses_are_allowed[connect_ex-2-address0] PASSED [  5%]
+backend/tests/unit/test_deployed_guard.py::test_resolved_api_addresses_are_allowed[connect_ex-2-address1] PASSED [  6%]
+backend/tests/unit/test_deployed_guard.py::test_resolved_api_addresses_are_allowed[connect_ex-10-address2] PASSED [  8%]
+backend/tests/unit/test_deployed_guard.py::test_other_destinations_are_rejected[connect-2-address0] PASSED [  9%]
+backend/tests/unit/test_deployed_guard.py::test_other_destinations_are_rejected[connect-10-address1] PASSED [ 10%]
+backend/tests/unit/test_deployed_guard.py::test_other_destinations_are_rejected[connect-2-address2] PASSED [ 12%]
+backend/tests/unit/test_deployed_guard.py::test_other_destinations_are_rejected[connect-2-address3] PASSED [ 13%]
+backend/tests/unit/test_deployed_guard.py::test_other_destinations_are_rejected[connect-1-guard-test.sock0] PASSED [ 15%]
+backend/tests/unit/test_deployed_guard.py::test_other_destinations_are_rejected[connect-1-guard-test.sock1] PASSED [ 16%]
+backend/tests/unit/test_deployed_guard.py::test_other_destinations_are_rejected[connect-1-address6] PASSED [ 17%]
+backend/tests/unit/test_deployed_guard.py::test_other_destinations_are_rejected[connect_ex-2-address0] PASSED [ 19%]
+backend/tests/unit/test_deployed_guard.py::test_other_destinations_are_rejected[connect_ex-10-address1] PASSED [ 20%]
+backend/tests/unit/test_deployed_guard.py::test_other_destinations_are_rejected[connect_ex-2-address2] PASSED [ 21%]
+backend/tests/unit/test_deployed_guard.py::test_other_destinations_are_rejected[connect_ex-2-address3] PASSED [ 23%]
+backend/tests/unit/test_deployed_guard.py::test_other_destinations_are_rejected[connect_ex-1-guard-test.sock0] PASSED [ 24%]
+backend/tests/unit/test_deployed_guard.py::test_other_destinations_are_rejected[connect_ex-1-guard-test.sock1] PASSED [ 26%]
+backend/tests/unit/test_deployed_guard.py::test_other_destinations_are_rejected[connect_ex-1-address6] PASSED [ 27%]
+backend/tests/unit/test_deployed_guard.py::test_without_url_all_connections_are_rejected[connect-2-address0] PASSED [ 28%]
+backend/tests/unit/test_deployed_guard.py::test_without_url_all_connections_are_rejected[connect-10-address1] PASSED [ 30%]
+backend/tests/unit/test_deployed_guard.py::test_without_url_all_connections_are_rejected[connect-1-guard-test.sock] PASSED [ 31%]
+backend/tests/unit/test_deployed_guard.py::test_without_url_all_connections_are_rejected[connect_ex-2-address0] PASSED [ 32%]
+backend/tests/unit/test_deployed_guard.py::test_without_url_all_connections_are_rejected[connect_ex-10-address1] PASSED [ 34%]
+backend/tests/unit/test_deployed_guard.py::test_without_url_all_connections_are_rejected[connect_ex-1-guard-test.sock] PASSED [ 35%]
+backend/tests/unit/test_deployed_guard.py::test_create_connection_accepts_rotated_api_dns[connect-2-192.0.2.12] FAILED [ 36%]
+backend/tests/unit/test_deployed_guard.py::test_create_connection_accepts_rotated_api_dns[connect-10-2001:db8::12] FAILED [ 38%]
+backend/tests/unit/test_deployed_guard.py::test_create_connection_accepts_rotated_api_dns[connect_ex-2-192.0.2.12] FAILED [ 39%]
+backend/tests/unit/test_deployed_guard.py::test_create_connection_accepts_rotated_api_dns[connect_ex-10-2001:db8::12] FAILED [ 41%]
+backend/tests/unit/test_deployed_guard.py::test_resolving_other_host_does_not_authorize_it[connect] PASSED [ 42%]
+backend/tests/unit/test_deployed_guard.py::test_resolving_other_host_does_not_authorize_it[connect_ex] PASSED [ 43%]
+backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect-2-address0-True-True-sendto] PASSED [ 45%]
+backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect-2-address0-True-True-sendmsg] PASSED [ 46%]
+backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect-2-address0-True-False-sendto] FAILED [ 47%]
+backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect-2-address0-True-False-sendmsg] FAILED [ 49%]
+backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect-10-address1-True-True-sendto] PASSED [ 50%]
+backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect-10-address1-True-True-sendmsg] PASSED [ 52%]
+backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect-10-address1-True-False-sendto] FAILED [ 53%]
+backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect-10-address1-True-False-sendmsg] FAILED [ 54%]
+backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect-2-address2-False-True-sendto] FAILED [ 56%]
+backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect-2-address2-False-True-sendmsg] FAILED [ 57%]
+backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect-2-address2-False-False-sendto] FAILED [ 58%]
+backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect-2-address2-False-False-sendmsg] FAILED [ 60%]
+backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect-10-address3-False-True-sendto] FAILED [ 61%]
+backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect-10-address3-False-True-sendmsg] FAILED [ 63%]
+backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect-10-address3-False-False-sendto] FAILED [ 64%]
+backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect-10-address3-False-False-sendmsg] FAILED [ 65%]
+backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect-1-guard-test.sock-False-True-sendto] FAILED [ 67%]
+backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect-1-guard-test.sock-False-True-sendmsg] FAILED [ 68%]
+backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect-1-guard-test.sock-False-False-sendto] FAILED [ 69%]
+backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect-1-guard-test.sock-False-False-sendmsg] FAILED [ 71%]
+backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect_ex-2-address0-True-True-sendto] PASSED [ 72%]
+backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect_ex-2-address0-True-True-sendmsg] PASSED [ 73%]
+backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect_ex-2-address0-True-False-sendto] FAILED [ 75%]
+backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect_ex-2-address0-True-False-sendmsg] FAILED [ 76%]
+backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect_ex-10-address1-True-True-sendto] PASSED [ 78%]
+backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect_ex-10-address1-True-True-sendmsg] PASSED [ 79%]
+backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect_ex-10-address1-True-False-sendto] FAILED [ 80%]
+backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect_ex-10-address1-True-False-sendmsg] FAILED [ 82%]
+backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect_ex-2-address2-False-True-sendto] FAILED [ 83%]
+backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect_ex-2-address2-False-True-sendmsg] FAILED [ 84%]
+backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect_ex-2-address2-False-False-sendto] FAILED [ 86%]
+backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect_ex-2-address2-False-False-sendmsg] FAILED [ 87%]
+backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect_ex-10-address3-False-True-sendto] FAILED [ 89%]
+backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect_ex-10-address3-False-True-sendmsg] FAILED [ 90%]
+backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect_ex-10-address3-False-False-sendto] FAILED [ 91%]
+backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect_ex-10-address3-False-False-sendmsg] FAILED [ 93%]
+backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect_ex-1-guard-test.sock-False-True-sendto] FAILED [ 94%]
+backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect_ex-1-guard-test.sock-False-True-sendmsg] FAILED [ 95%]
+backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect_ex-1-guard-test.sock-False-False-sendto] FAILED [ 97%]
+backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect_ex-1-guard-test.sock-False-False-sendmsg] FAILED [ 98%]
+backend/tests/unit/test_deployed_guard.py::test_guard_precedes_session_link_flow FAILED [100%]
+
+=================================== FAILURES ===================================
+_____ test_create_connection_accepts_rotated_api_dns[connect-2-192.0.2.12] _____
+backend/tests/unit/test_deployed_guard.py:111: in test_create_connection_accepts_rotated_api_dns
+    with socket.create_connection(("api.example.invalid", 443)) as sock:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/socket.py:837: in create_connection
+    sock.connect(sa)
+backend/tests/deployed/conftest.py:46: in pinned_connect
+    raise AssertionError(f"Deployed test may only contact {host}")
+E   AssertionError: Deployed test may only contact api.example.invalid
+___ test_create_connection_accepts_rotated_api_dns[connect-10-2001:db8::12] ____
+backend/tests/unit/test_deployed_guard.py:111: in test_create_connection_accepts_rotated_api_dns
+    with socket.create_connection(("api.example.invalid", 443)) as sock:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/socket.py:837: in create_connection
+    sock.connect(sa)
+backend/tests/deployed/conftest.py:46: in pinned_connect
+    raise AssertionError(f"Deployed test may only contact {host}")
+E   AssertionError: Deployed test may only contact api.example.invalid
+___ test_create_connection_accepts_rotated_api_dns[connect_ex-2-192.0.2.12] ____
+backend/tests/unit/test_deployed_guard.py:111: in test_create_connection_accepts_rotated_api_dns
+    with socket.create_connection(("api.example.invalid", 443)) as sock:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/socket.py:837: in create_connection
+    sock.connect(sa)
+backend/tests/deployed/conftest.py:46: in pinned_connect
+    raise AssertionError(f"Deployed test may only contact {host}")
+E   AssertionError: Deployed test may only contact api.example.invalid
+__ test_create_connection_accepts_rotated_api_dns[connect_ex-10-2001:db8::12] __
+backend/tests/unit/test_deployed_guard.py:111: in test_create_connection_accepts_rotated_api_dns
+    with socket.create_connection(("api.example.invalid", 443)) as sock:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/socket.py:837: in create_connection
+    sock.connect(sa)
+backend/tests/deployed/conftest.py:46: in pinned_connect
+    raise AssertionError(f"Deployed test may only contact {host}")
+E   AssertionError: Deployed test may only contact api.example.invalid
+___ test_addressed_sends_follow_guard[connect-2-address0-True-False-sendto] ____
+backend/tests/unit/test_deployed_guard.py:159: in test_addressed_sends_follow_guard
+    with pytest.raises(AssertionError, match=message):
+E   Failed: DID NOT RAISE <class 'AssertionError'>
+___ test_addressed_sends_follow_guard[connect-2-address0-True-False-sendmsg] ___
+backend/tests/unit/test_deployed_guard.py:159: in test_addressed_sends_follow_guard
+    with pytest.raises(AssertionError, match=message):
+E   Failed: DID NOT RAISE <class 'AssertionError'>
+___ test_addressed_sends_follow_guard[connect-10-address1-True-False-sendto] ___
+backend/tests/unit/test_deployed_guard.py:159: in test_addressed_sends_follow_guard
+    with pytest.raises(AssertionError, match=message):
+E   Failed: DID NOT RAISE <class 'AssertionError'>
+__ test_addressed_sends_follow_guard[connect-10-address1-True-False-sendmsg] ___
+backend/tests/unit/test_deployed_guard.py:159: in test_addressed_sends_follow_guard
+    with pytest.raises(AssertionError, match=message):
+E   Failed: DID NOT RAISE <class 'AssertionError'>
+___ test_addressed_sends_follow_guard[connect-2-address2-False-True-sendto] ____
+backend/tests/unit/test_deployed_guard.py:159: in test_addressed_sends_follow_guard
+    with pytest.raises(AssertionError, match=message):
+E   Failed: DID NOT RAISE <class 'AssertionError'>
+___ test_addressed_sends_follow_guard[connect-2-address2-False-True-sendmsg] ___
+backend/tests/unit/test_deployed_guard.py:159: in test_addressed_sends_follow_guard
+    with pytest.raises(AssertionError, match=message):
+E   Failed: DID NOT RAISE <class 'AssertionError'>
+___ test_addressed_sends_follow_guard[connect-2-address2-False-False-sendto] ___
+backend/tests/unit/test_deployed_guard.py:159: in test_addressed_sends_follow_guard
+    with pytest.raises(AssertionError, match=message):
+E   Failed: DID NOT RAISE <class 'AssertionError'>
+__ test_addressed_sends_follow_guard[connect-2-address2-False-False-sendmsg] ___
+backend/tests/unit/test_deployed_guard.py:159: in test_addressed_sends_follow_guard
+    with pytest.raises(AssertionError, match=message):
+E   Failed: DID NOT RAISE <class 'AssertionError'>
+___ test_addressed_sends_follow_guard[connect-10-address3-False-True-sendto] ___
+backend/tests/unit/test_deployed_guard.py:159: in test_addressed_sends_follow_guard
+    with pytest.raises(AssertionError, match=message):
+E   Failed: DID NOT RAISE <class 'AssertionError'>
+__ test_addressed_sends_follow_guard[connect-10-address3-False-True-sendmsg] ___
+backend/tests/unit/test_deployed_guard.py:159: in test_addressed_sends_follow_guard
+    with pytest.raises(AssertionError, match=message):
+E   Failed: DID NOT RAISE <class 'AssertionError'>
+__ test_addressed_sends_follow_guard[connect-10-address3-False-False-sendto] ___
+backend/tests/unit/test_deployed_guard.py:159: in test_addressed_sends_follow_guard
+    with pytest.raises(AssertionError, match=message):
+E   Failed: DID NOT RAISE <class 'AssertionError'>
+__ test_addressed_sends_follow_guard[connect-10-address3-False-False-sendmsg] __
+backend/tests/unit/test_deployed_guard.py:159: in test_addressed_sends_follow_guard
+    with pytest.raises(AssertionError, match=message):
+E   Failed: DID NOT RAISE <class 'AssertionError'>
+_ test_addressed_sends_follow_guard[connect-1-guard-test.sock-False-True-sendto] _
+backend/tests/unit/test_deployed_guard.py:159: in test_addressed_sends_follow_guard
+    with pytest.raises(AssertionError, match=message):
+E   Failed: DID NOT RAISE <class 'AssertionError'>
+_ test_addressed_sends_follow_guard[connect-1-guard-test.sock-False-True-sendmsg] _
+backend/tests/unit/test_deployed_guard.py:159: in test_addressed_sends_follow_guard
+    with pytest.raises(AssertionError, match=message):
+E   Failed: DID NOT RAISE <class 'AssertionError'>
+_ test_addressed_sends_follow_guard[connect-1-guard-test.sock-False-False-sendto] _
+backend/tests/unit/test_deployed_guard.py:159: in test_addressed_sends_follow_guard
+    with pytest.raises(AssertionError, match=message):
+E   Failed: DID NOT RAISE <class 'AssertionError'>
+_ test_addressed_sends_follow_guard[connect-1-guard-test.sock-False-False-sendmsg] _
+backend/tests/unit/test_deployed_guard.py:159: in test_addressed_sends_follow_guard
+    with pytest.raises(AssertionError, match=message):
+E   Failed: DID NOT RAISE <class 'AssertionError'>
+__ test_addressed_sends_follow_guard[connect_ex-2-address0-True-False-sendto] __
+backend/tests/unit/test_deployed_guard.py:159: in test_addressed_sends_follow_guard
+    with pytest.raises(AssertionError, match=message):
+E   Failed: DID NOT RAISE <class 'AssertionError'>
+_ test_addressed_sends_follow_guard[connect_ex-2-address0-True-False-sendmsg] __
+backend/tests/unit/test_deployed_guard.py:159: in test_addressed_sends_follow_guard
+    with pytest.raises(AssertionError, match=message):
+E   Failed: DID NOT RAISE <class 'AssertionError'>
+_ test_addressed_sends_follow_guard[connect_ex-10-address1-True-False-sendto] __
+backend/tests/unit/test_deployed_guard.py:159: in test_addressed_sends_follow_guard
+    with pytest.raises(AssertionError, match=message):
+E   Failed: DID NOT RAISE <class 'AssertionError'>
+_ test_addressed_sends_follow_guard[connect_ex-10-address1-True-False-sendmsg] _
+backend/tests/unit/test_deployed_guard.py:159: in test_addressed_sends_follow_guard
+    with pytest.raises(AssertionError, match=message):
+E   Failed: DID NOT RAISE <class 'AssertionError'>
+__ test_addressed_sends_follow_guard[connect_ex-2-address2-False-True-sendto] __
+backend/tests/unit/test_deployed_guard.py:159: in test_addressed_sends_follow_guard
+    with pytest.raises(AssertionError, match=message):
+E   Failed: DID NOT RAISE <class 'AssertionError'>
+_ test_addressed_sends_follow_guard[connect_ex-2-address2-False-True-sendmsg] __
+backend/tests/unit/test_deployed_guard.py:159: in test_addressed_sends_follow_guard
+    with pytest.raises(AssertionError, match=message):
+E   Failed: DID NOT RAISE <class 'AssertionError'>
+_ test_addressed_sends_follow_guard[connect_ex-2-address2-False-False-sendto] __
+backend/tests/unit/test_deployed_guard.py:159: in test_addressed_sends_follow_guard
+    with pytest.raises(AssertionError, match=message):
+E   Failed: DID NOT RAISE <class 'AssertionError'>
+_ test_addressed_sends_follow_guard[connect_ex-2-address2-False-False-sendmsg] _
+backend/tests/unit/test_deployed_guard.py:159: in test_addressed_sends_follow_guard
+    with pytest.raises(AssertionError, match=message):
+E   Failed: DID NOT RAISE <class 'AssertionError'>
+_ test_addressed_sends_follow_guard[connect_ex-10-address3-False-True-sendto] __
+backend/tests/unit/test_deployed_guard.py:159: in test_addressed_sends_follow_guard
+    with pytest.raises(AssertionError, match=message):
+E   Failed: DID NOT RAISE <class 'AssertionError'>
+_ test_addressed_sends_follow_guard[connect_ex-10-address3-False-True-sendmsg] _
+backend/tests/unit/test_deployed_guard.py:159: in test_addressed_sends_follow_guard
+    with pytest.raises(AssertionError, match=message):
+E   Failed: DID NOT RAISE <class 'AssertionError'>
+_ test_addressed_sends_follow_guard[connect_ex-10-address3-False-False-sendto] _
+backend/tests/unit/test_deployed_guard.py:159: in test_addressed_sends_follow_guard
+    with pytest.raises(AssertionError, match=message):
+E   Failed: DID NOT RAISE <class 'AssertionError'>
+_ test_addressed_sends_follow_guard[connect_ex-10-address3-False-False-sendmsg] _
+backend/tests/unit/test_deployed_guard.py:159: in test_addressed_sends_follow_guard
+    with pytest.raises(AssertionError, match=message):
+E   Failed: DID NOT RAISE <class 'AssertionError'>
+_ test_addressed_sends_follow_guard[connect_ex-1-guard-test.sock-False-True-sendto] _
+backend/tests/unit/test_deployed_guard.py:159: in test_addressed_sends_follow_guard
+    with pytest.raises(AssertionError, match=message):
+E   Failed: DID NOT RAISE <class 'AssertionError'>
+_ test_addressed_sends_follow_guard[connect_ex-1-guard-test.sock-False-True-sendmsg] _
+backend/tests/unit/test_deployed_guard.py:159: in test_addressed_sends_follow_guard
+    with pytest.raises(AssertionError, match=message):
+E   Failed: DID NOT RAISE <class 'AssertionError'>
+_ test_addressed_sends_follow_guard[connect_ex-1-guard-test.sock-False-False-sendto] _
+backend/tests/unit/test_deployed_guard.py:159: in test_addressed_sends_follow_guard
+    with pytest.raises(AssertionError, match=message):
+E   Failed: DID NOT RAISE <class 'AssertionError'>
+_ test_addressed_sends_follow_guard[connect_ex-1-guard-test.sock-False-False-sendmsg] _
+backend/tests/unit/test_deployed_guard.py:159: in test_addressed_sends_follow_guard
+    with pytest.raises(AssertionError, match=message):
+E   Failed: DID NOT RAISE <class 'AssertionError'>
+____________________ test_guard_precedes_session_link_flow _____________________
+backend/tests/unit/test_deployed_guard.py:209: in test_guard_precedes_session_link_flow
+    assert result.returncode == 0, result.stdout + result.stderr
+E   AssertionError: E                                                                        [100%]
+E     ==================================== ERRORS ====================================
+E     _________________________ ERROR at setup of test_link __________________________
+E
+E     deployed = namespace(base='https://api.example.invalid', profile='deployed-smoke')
+E
+E         @pytest.fixture(scope="session")
+E         def linked(deployed):
+E             passphrase = os.environ.get("AFC_DEPLOYED_LINK_PASSPHRASE", "")
+E             if not passphrase:
+E                 pytest.skip("NOT_RUN: linking needs AFC_DEPLOYED_LINK_PASSPHRASE at L02/L03 time")
+E     >       status, device = call(deployed.base, "POST", "/v1/link")
+E                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E
+E     backend/tests/deployed/conftest.py:68:
+E     _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+E
+E     base = 'https://api.example.invalid', method = 'POST', path = '/v1/link'
+E     body = None
+E
+E         def call(base, method, path, body=None):
+E             with socket.socket() as sock:
+E                 sock.connect(("192.0.2.10", 443))
+E     >           with pytest.raises(AssertionError, match="may only contact"):
+E     E           Failed: DID NOT RAISE <class 'AssertionError'>
+E
+E     <pytest-tmp>/test_guard_precedes_session_li0/conftest.py:22: Failed
+E     =========================== short test summary info ============================
+E     ERROR ../../../../../dev/test_link.py::test_link - Failed: DID NOT RAISE <cla...
+E     1 error in 0.01s
+E
+E   assert 1 == 0
+E    +  where 1 = CompletedProcess(args=['<home>/.local/share/afc-tools/backend-tests/bin/python3.12', '-m', 'pytest', '-q', '-c', '/dev/null', '-p', 'no:cacheprovider', '--confcutdir', '<pytest-tmp>/test_guard_precedes_session_li0', '<pytest-tmp>/test_guard_precedes_session_li0'], returncode=1, stdout='E                                                                        [100%]\n==================================== ERRORS ====================================\n_________________________ ERROR at setup of test_link __________________________\n\ndeployed = namespace(base=\'https://api.example.invalid\', profile=\'deployed-smoke\')\n\n    @pytest.fixture(scope="session")\n    def linked(deployed):\n        passphrase = os.environ.get("AFC_DEPLOYED_LINK_PASSPHRASE", "")\n        if not passphrase:\n            pytest.skip("NOT_RUN: linking needs AFC_DEPLOYED_LINK_PASSPHRASE at L02/L03 time")\n>       status, device = call(deployed.base, "POST", "/v1/link")\n                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\nbackend/tests/deployed/conftest.py:68: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nbase = \'https://api.example.invalid\', method = \'POST\', path = \'/v1/link\'\nbody = None\n\n    def call(base, method, path, body=None):\n        with socket.socket() as sock:\n            sock.connect(("192.0.2.10", 443))\n>           with pytest.raises(AssertionError, match="may only contact"):\nE           Failed: DID NOT RAISE <class \'AssertionError\'>\n\n<pytest-tmp>/test_guard_precedes_session_li0/conftest.py:22: Failed\n=========================== short test summary info ============================\nERROR ../../../../../dev/test_link.py::test_link - Failed: DID NOT RAISE <cla...\n1 error in 0.01s\n', stderr='').returncode
+============================= slowest 10 durations =============================
+0.19s call     tests/unit/test_deployed_guard.py::test_guard_precedes_session_link_flow
+
+(9 durations < 0.005s hidden.  Use -vv to show these durations.)
+=========================== short test summary info ============================
+FAILED backend/tests/unit/test_deployed_guard.py::test_create_connection_accepts_rotated_api_dns[connect-2-192.0.2.12]
+FAILED backend/tests/unit/test_deployed_guard.py::test_create_connection_accepts_rotated_api_dns[connect-10-2001:db8::12]
+FAILED backend/tests/unit/test_deployed_guard.py::test_create_connection_accepts_rotated_api_dns[connect_ex-2-192.0.2.12]
+FAILED backend/tests/unit/test_deployed_guard.py::test_create_connection_accepts_rotated_api_dns[connect_ex-10-2001:db8::12]
+FAILED backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect-2-address0-True-False-sendto]
+FAILED backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect-2-address0-True-False-sendmsg]
+FAILED backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect-10-address1-True-False-sendto]
+FAILED backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect-10-address1-True-False-sendmsg]
+FAILED backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect-2-address2-False-True-sendto]
+FAILED backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect-2-address2-False-True-sendmsg]
+FAILED backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect-2-address2-False-False-sendto]
+FAILED backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect-2-address2-False-False-sendmsg]
+FAILED backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect-10-address3-False-True-sendto]
+FAILED backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect-10-address3-False-True-sendmsg]
+FAILED backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect-10-address3-False-False-sendto]
+FAILED backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect-10-address3-False-False-sendmsg]
+FAILED backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect-1-guard-test.sock-False-True-sendto]
+FAILED backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect-1-guard-test.sock-False-True-sendmsg]
+FAILED backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect-1-guard-test.sock-False-False-sendto]
+FAILED backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect-1-guard-test.sock-False-False-sendmsg]
+FAILED backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect_ex-2-address0-True-False-sendto]
+FAILED backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect_ex-2-address0-True-False-sendmsg]
+FAILED backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect_ex-10-address1-True-False-sendto]
+FAILED backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect_ex-10-address1-True-False-sendmsg]
+FAILED backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect_ex-2-address2-False-True-sendto]
+FAILED backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect_ex-2-address2-False-True-sendmsg]
+FAILED backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect_ex-2-address2-False-False-sendto]
+FAILED backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect_ex-2-address2-False-False-sendmsg]
+FAILED backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect_ex-10-address3-False-True-sendto]
+FAILED backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect_ex-10-address3-False-True-sendmsg]
+FAILED backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect_ex-10-address3-False-False-sendto]
+FAILED backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect_ex-10-address3-False-False-sendmsg]
+FAILED backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect_ex-1-guard-test.sock-False-True-sendto]
+FAILED backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect_ex-1-guard-test.sock-False-True-sendmsg]
+FAILED backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect_ex-1-guard-test.sock-False-False-sendto]
+FAILED backend/tests/unit/test_deployed_guard.py::test_addressed_sends_follow_guard[connect_ex-1-guard-test.sock-False-False-sendmsg]
+FAILED backend/tests/unit/test_deployed_guard.py::test_guard_precedes_session_link_flow
+======================== 37 failed, 36 passed in 0.45s =========================

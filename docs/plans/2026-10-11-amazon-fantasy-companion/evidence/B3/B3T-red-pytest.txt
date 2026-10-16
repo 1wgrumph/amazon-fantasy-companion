@@ -9,7 +9,7 @@ tmp_path = PosixPath('/tmp/pytest-of-spectre/pytest-328/test_b3_appendix_a_secti
         text = built(tmp_path)
         anchors = heading_anchors(text)
         rows = appendix_rows(text)
-    
+
         assert set(rows) == set(TRACE)
         for requirement, sections in TRACE.items():
             cell = rows[requirement]
@@ -19,7 +19,7 @@ tmp_path = PosixPath('/tmp/pytest-of-spectre/pytest-328/test_b3_appendix_a_secti
             )
 E           AssertionError: AC-EX-DATA-01: Appendix A sections are not links: 'Overview'
 E           assert [] == ['Overview']
-E             
+E
 E             Right contains one more item: 'Overview'
 E             Use -v to get more diff
 

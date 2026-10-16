@@ -11,18 +11,35 @@
   },
   "checkout_lease": {
     "journey": "AFC-2026-10-11",
-    "controller": "Codex current API session / Planning Lead",
+    "controller": "Claude Code Orchestrator (Claude Opus 5.5) / Phase 2 execution",
     "repository": "github:1wgrumph/amazon-fantasy-companion",
-    "checkout": "$HOME/alphazede/worktrees/amazon-fantasy-companion-planning",
-    "branch": "plan/2026-10-11-amazon-fantasy-companion",
-    "candidate_revision": "0b987de5eac88bbcf903a7de73d2d58e545652cb",
-    "acquired_at": "2026-10-11T19:21:56Z",
-    "generation": 1,
+    "checkout": "$HOME/alphazede/worktrees/amazon-fantasy-companion-implementation",
+    "branch": "afc/p2-implementation",
+    "candidate_revision": "4994aad44ace64f3c9434f73461f3fe2d12f694b",
+    "acquired_at": "2026-10-13T23:51:05Z",
+    "generation": 2,
     "state": "active",
-    "resumed_at": "2026-10-13T13:54:42Z",
-    "liveness": "No agents active. Planning and tracking complete, branches/worktrees cleaned. Product held pending owner instruction.",
-    "heartbeat_at": "2026-10-13T18:39:48.397549+00:00",
-    "active_candidate": "88db101edb61a08dedea8037e4e9207d262a7e0f"
+    "generation_increment": {
+      "from_generation": 1,
+      "reason": "Planning controller idle (liveness 'no agent active; product held'); owner execution instruction 2026-10-13 'yes we can begin what is left in milestone 01' starts Phase 2 execution under a new controller.",
+      "prior_lease": {
+        "journey": "AFC-2026-10-11",
+        "controller": "Codex current API session / Planning Lead",
+        "repository": "github:1wgrumph/amazon-fantasy-companion",
+        "checkout": "$HOME/alphazede/worktrees/amazon-fantasy-companion-planning",
+        "branch": "plan/2026-10-11-amazon-fantasy-companion",
+        "candidate_revision": "0b987de5eac88bbcf903a7de73d2d58e545652cb",
+        "acquired_at": "2026-10-11T19:21:56Z",
+        "generation": 1,
+        "state": "active",
+        "resumed_at": "2026-10-13T13:54:42Z",
+        "liveness": "Review complete; no agent active; landing tracking receipts PR55; product held",
+        "heartbeat_at": "2026-10-13T18:39:48.397549+00:00",
+        "active_candidate": "88db101edb61a08dedea8037e4e9207d262a7e0f"
+      }
+    },
+    "liveness": "M01 complete; no agent active; awaiting owner instruction for further milestones",
+    "heartbeat_at": "2026-10-14T01:03:23Z"
   },
   "stages": {
     "intake": "accepted",
@@ -92,7 +109,7 @@
       "id": "DEC-AFC-SD-006a",
       "status": "confirmed",
       "decided_at": "2026-10-11T20:06:30Z",
-      "decision": "Authorized footage = CC-BY/CC0 video, credited, labeled 'Sample footage \u2014 not a live broadcast'; NFL broadcasts/highlights excluded.",
+      "decision": "Authorized footage = CC-BY/CC0 video, credited, labeled 'Sample footage — not a live broadcast'; NFL broadcasts/highlights excluded.",
       "source": "Scope Definition final batch (scope-decision-batch.md); owner answers logged in specialists/sd-qa-log.txt"
     },
     {
@@ -351,7 +368,7 @@
         "Q10": "restore the missing engineering-methods S8 ledger (Alphazedehq skills task)",
         "P1": "close_game_margin = within 8 points in the 4th quarter or overtime",
         "P3": "stale_after = 60 seconds",
-        "D1": "owner 2026-10-12: 'we give the user options 2 of the most popular scoring fantasy modes' \u2014 manual-lineup scoring is a customer-selectable preset of exactly two: PPR (1 pt/reception; ESPN and Sleeper default) and Half-PPR (0.5 pt/reception; Yahoo default). Each preset is a documented statistic/coefficient table (AFC-PR-065); other coefficients identical (1 pt/10 rush+rec yds, 6 per rush/rec TD, 1 pt/25 pass yds, 4 per pass TD, -1 INT, -2 fumble lost). Default preset: Half-PPR. Yahoo leagues use Yahoo's own league scoring."
+        "D1": "owner 2026-10-12: 'we give the user options 2 of the most popular scoring fantasy modes' — manual-lineup scoring is a customer-selectable preset of exactly two: PPR (1 pt/reception; ESPN and Sleeper default) and Half-PPR (0.5 pt/reception; Yahoo default). Each preset is a documented statistic/coefficient table (AFC-PR-065); other coefficients identical (1 pt/10 rush+rec yds, 6 per rush/rec TD, 1 pt/25 pass yds, 4 per pass TD, -1 INT, -2 fumble lost). Default preset: Half-PPR. Yahoo leagues use Yahoo's own league scoring."
       }
     },
     {
@@ -387,7 +404,7 @@
     {
       "id": "DEC-AFC-SD-040",
       "at": "2026-10-13T12:51:31Z",
-      "decision": "Owner requests a fresh Claude Opus high session to review and revise overloaded milestones into a clearer chronological dependency order. Target3 issues per milestone; permitted range2\u20136 (+3/-1). Preserve full intended scope. This explicitly authorizes the additional focused chronology review after the prior planning review/repair; prior spent budgets remain historical, not reset. Planning/tracking approval not granted; product execution remains held.",
+      "decision": "Owner requests a fresh Claude Opus high session to review and revise overloaded milestones into a clearer chronological dependency order. Target3 issues per milestone; permitted range2–6 (+3/-1). Preserve full intended scope. This explicitly authorizes the additional focused chronology review after the prior planning review/repair; prior spent budgets remain historical, not reset. Planning/tracking approval not granted; product execution remains held.",
       "source": "Current user message; exact request retained in packet"
     },
     {
@@ -3560,6 +3577,268 @@
         "recovery": "Recreated detached checkout at merged4994aad, reran ordinary remote deletion with hooks; wait for process completion before removing checkout.",
         "prevention": "Dependent cleanup steps must await exit_code, not a yielded session ID."
       }
+    },
+    {
+      "at": "2026-10-13T23:51:05Z",
+      "kind": "dispatch_lease",
+      "lease_id": "P2-D01-g1",
+      "journey": "AFC-2026-10-11",
+      "generation": 2,
+      "slice": "P2-D01",
+      "milestone": "M01",
+      "role": "implementer",
+      "route": "Claude Code / Claude Opus 5.5 / medium",
+      "repository": "github:1wgrumph/amazon-fantasy-companion",
+      "checkout": "$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-d01",
+      "branch": "afc/p2-d01",
+      "candidate_revision": "4994aad44ace64f3c9434f73461f3fe2d12f694b",
+      "state": "released",
+      "authority": "AUTH-AFC-2026-10-12-P2-001 + owner execution instruction 2026-10-13 (M01 only)"
+    },
+    {
+      "at": "2026-10-13T23:51:05Z",
+      "kind": "dispatch_lease",
+      "lease_id": "P2-G01T-g1",
+      "journey": "AFC-2026-10-11",
+      "generation": 2,
+      "slice": "P2-G01T",
+      "milestone": "M01",
+      "role": "test_implementer",
+      "route": "Codex CLI / GPT-6.1 Sol / high",
+      "repository": "github:1wgrumph/amazon-fantasy-companion",
+      "checkout": "$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-g01",
+      "branch": "afc/p2-g01",
+      "candidate_revision": "4994aad44ace64f3c9434f73461f3fe2d12f694b",
+      "state": "released",
+      "authority": "AUTH-AFC-2026-10-12-P2-001 + owner execution instruction 2026-10-13 (M01 only)"
+    },
+    {
+      "at": "2026-10-13T23:51:55Z",
+      "kind": "author_return",
+      "lease_id": "P2-D01-g1",
+      "outcome": "PASS",
+      "candidate": "f965305",
+      "checks": "orchestrator re-ran gate.sh docs exit 0"
+    },
+    {
+      "at": "2026-10-13T23:51:55Z",
+      "kind": "dispatch_lease",
+      "lease_id": "P2-D01-review",
+      "journey": "AFC-2026-10-11",
+      "generation": 2,
+      "slice": "P2-D01",
+      "role": "reviewer",
+      "route": "Cursor Agent / Grok 4.7 / high",
+      "review_unit": "IE-P2-2",
+      "checkout": "$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-d01",
+      "branch": "afc/p2-d01",
+      "candidate_revision": "f965305",
+      "base": "4994aad44ace64f3c9434f73461f3fe2d12f694b",
+      "state": "released",
+      "budget": "1 review + 1 repair"
+    },
+    {
+      "at": "2026-10-14T00:00:02Z",
+      "kind": "route_fallback",
+      "lease_id": "P2-D01-review",
+      "from": "Cursor Agent / Grok 4.7 / high",
+      "to": "Muse Code / Muse Spark 1.3 / max (--contributor-mode on)",
+      "evidence": "cursor-agent: 'You're out of usage.' exit 1"
+    },
+    {
+      "at": "2026-10-14T00:00:02Z",
+      "kind": "review_and_landing",
+      "lease_id": "P2-D01-review",
+      "verdict": "ACCEPT",
+      "findings": 0,
+      "repairs": 0,
+      "pr": 56,
+      "merge_commit": "d86daa46fafb278f834fe395141a433b214a6989",
+      "issue": "#17 closed"
+    },
+    {
+      "at": "2026-10-14T00:00:02Z",
+      "kind": "author_return",
+      "lease_id": "P2-G01T-g1",
+      "outcome": "ENVIRONMENT_FAILURE (red valid; tool qualification gaps diff_cover, mutmut, cfn-lint)",
+      "candidate": "51acc5c65cdc72a50b78bf6f10712d2a8b55539b",
+      "red": "CMD-RED exit 1; 50 tests, 39 existing pass, 24 behavioral failures, 0 errors"
+    },
+    {
+      "at": "2026-10-14T00:00:02Z",
+      "kind": "dispatch_lease",
+      "lease_id": "P2-G01-g1",
+      "journey": "AFC-2026-10-11",
+      "generation": 2,
+      "slice": "P2-G01",
+      "role": "implementer",
+      "route": "Claude Code / Claude Opus 5.5 / medium",
+      "checkout": "$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-g01",
+      "branch": "afc/p2-g01",
+      "candidate_revision": "51acc5c65cdc72a50b78bf6f10712d2a8b55539b",
+      "state": "released"
+    },
+    {
+      "at": "2026-10-14T00:13:54Z",
+      "kind": "owner_instruction",
+      "text": "I want to get all the work that can be done without the firetv",
+      "scope": "all dependency-ready slices without the fire-tv-stick lease",
+      "disposition": "misread by orchestrator as an execution instruction; owner corrected: focus on M01 only"
+    },
+    {
+      "at": "2026-10-14T00:13:54Z",
+      "kind": "dispatch_lease",
+      "lease_id": "P2-B01T-g1",
+      "journey": "AFC-2026-10-11",
+      "generation": 2,
+      "slice": "P2-B01T",
+      "milestone": "M02",
+      "role": "test_implementer",
+      "route": "Codex CLI / GPT-6.1 Sol / high",
+      "checkout": "$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b01",
+      "branch": "afc/p2-b01",
+      "candidate_revision": "d86daa46fafb278f834fe395141a433b214a6989",
+      "resource_leases": [
+        "backend-template"
+      ],
+      "state": "cancelled"
+    },
+    {
+      "at": "2026-10-14T00:14:45Z",
+      "kind": "lease_cancelled",
+      "lease_id": "P2-B01T-g1",
+      "reason": "owner: 'No I didn't ask you to start it just focus on M01'",
+      "writes": "none; worktree and branch removed"
+    },
+    {
+      "at": "2026-10-14T00:16:35Z",
+      "kind": "author_return",
+      "lease_id": "P2-G01-g1",
+      "outcome": "CONTRACT_FAILURE (green 50/50, gate+actionlint 0; qualification blocked by 2 frozen G01T probe defects)",
+      "candidate": "df50318"
+    },
+    {
+      "at": "2026-10-14T00:16:35Z",
+      "kind": "dispatch_lease",
+      "lease_id": "P2-G01T-bug1",
+      "journey": "AFC-2026-10-11",
+      "generation": 2,
+      "slice": "P2-G01T (bug repair)",
+      "role": "implementer",
+      "profile": "bug-triager",
+      "route": "Muse Code / Muse Spark 1.3 / max (--contributor-mode on)",
+      "checkout": "$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-g01",
+      "branch": "afc/p2-g01",
+      "candidate_revision": "df50318",
+      "state": "released",
+      "write_set": [
+        "tools/ci/tests/coverage/test_native_coverage.py",
+        "tools/ci/tests/mutation/test_native_mutation.py",
+        "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-G01T/bug1/"
+      ]
+    },
+    {
+      "at": "2026-10-14T00:27:15Z",
+      "kind": "owner_route_amendment",
+      "scope": "P2-G01T/P2-G01 review (issue #18)",
+      "route": "Codex CLI / GPT-6 Astra / high",
+      "text": "Cursor might be down until tomorrow lets use codex astra",
+      "reason": "Primary Cursor Agent / Grok 4.7 usage-limited; fallback 1 Muse authored the bug repair, so skip to frozen fallback 2 for independence"
+    },
+    {
+      "at": "2026-10-14T00:28:25Z",
+      "kind": "author_return",
+      "lease_id": "P2-G01T-bug1",
+      "outcome": "REPAIRABLE_FAILURE (probes fixed red->green with drift prevention; full-tree pytest collection collision on duplicate test_backend_adapter.py basenames, outside write set)",
+      "candidate": "83603fe"
+    },
+    {
+      "at": "2026-10-14T00:28:25Z",
+      "kind": "dispatch_lease",
+      "lease_id": "P2-G01-review",
+      "journey": "AFC-2026-10-11",
+      "generation": 2,
+      "slice": "P2-G01T+P2-G01",
+      "role": "reviewer",
+      "route": "Codex CLI / GPT-6 Astra / high (owner amendment)",
+      "review_unit": "IE-P2-3",
+      "checkout": "$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-g01",
+      "branch": "afc/p2-g01",
+      "candidate_revision": "83603fe",
+      "base": "4994aad44ace64f3c9434f73461f3fe2d12f694b",
+      "state": "released",
+      "budget": "1 review + 1 repair"
+    },
+    {
+      "at": "2026-10-14T00:35:04Z",
+      "kind": "review_verdict",
+      "lease_id": "P2-G01-review",
+      "verdict": "REPAIR_REQUIRED",
+      "findings": [
+        "G01-R01",
+        "G01-R02",
+        "G01-R03",
+        "G01-R04",
+        "G01-R05",
+        "G01-R06",
+        "G01-R07"
+      ],
+      "receipt": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-G01/review/receipt.json",
+      "reviews_spent": "1/1"
+    },
+    {
+      "at": "2026-10-14T00:35:04Z",
+      "kind": "dispatch_lease",
+      "lease_id": "P2-G01-repair1",
+      "journey": "AFC-2026-10-11",
+      "generation": 2,
+      "slice": "P2-G01 review repair",
+      "role": "implementer",
+      "profile": "bug-triager",
+      "route": "Muse Code / Muse Spark 1.3 / max (--contributor-mode on)",
+      "checkout": "$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-g01",
+      "branch": "afc/p2-g01",
+      "candidate_revision": "83603fe",
+      "state": "released",
+      "repairs_spent": "1/1"
+    },
+    {
+      "at": "2026-10-14T01:03:23Z",
+      "kind": "repair_return",
+      "lease_id": "P2-G01-repair1",
+      "outcome": "PASS",
+      "candidate": "c94a486",
+      "findings_fixed": [
+        "G01-R01",
+        "G01-R02",
+        "G01-R03",
+        "G01-R04",
+        "G01-R05",
+        "G01-R06",
+        "G01-R07"
+      ],
+      "orchestrator_verification": "pytest 75 passed; gate.sh exit 0 (tvapp/backend PASS no tree); actionlint 0; frozen G01T test_gate/test_workflows/test_product_gate byte-identical to 51acc5c"
+    },
+    {
+      "at": "2026-10-14T01:03:23Z",
+      "kind": "milestone_closeout",
+      "milestone": "M01",
+      "prs": {
+        "56": "d86daa46fafb278f834fe395141a433b214a6989",
+        "57": "71a99e7b4185d11f4cb422484ca495be2ba22d43"
+      },
+      "issues_closed": [
+        16,
+        17,
+        18
+      ],
+      "ci": "PR57 6/6 green",
+      "reviews": {
+        "P2-D01": "ACCEPT (Muse fallback)",
+        "P2-G01T+G01": "REPAIR_REQUIRED 7 -> repaired 1/1 (Codex Astra owner amendment)"
+      },
+      "cleanup": "worktrees, local and remote branches afc/p2-d01, afc/p2-g01 removed",
+      "installs": "diff_cover 10.6.0, cfn-lint 1.57.2 (python3.12 user site), mutmut 3.8.0 (venv ~/.local/share/afc-tools/mutmut), click 8.1.8 restored for semgrep; Trivy DB refreshed 2026-10-13"
     }
   ],
   "planning_review": {

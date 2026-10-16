@@ -1,0 +1,54 @@
+**Verdict: no introduced bypass or regression found.** The one non-security item: the CHANGELOG entry still says `PR #TBD`.
+
+## Findings
+
+**SEC-2: fixed. Removing the grant is safe.**
+- The 6 lines removed from `backend/template.yaml` are the only SSM grant `ApiFunction` had. `PolicyFunction` keeps its own grant for both parameters (`backend/template.yaml:126-131`).
+- Nothing the API handler can reach reads SSM:
+  - `api/handler.py:17-21` imports only `alert_policy`, `device_auth`, `panel`, `provider_resolver` and `store`.
+  - Those modules import only `store`, and `store` uses only DynamoDB.
+  - No source file calls `ssm` or `get_parameter`. `lineup/yahoo.py` takes its token from the caller, and the API never imports `lineup`.
+- Side note: `PolicyFunction` has no SSM caller either. The grant was kept there as you specified.
+- The env vars `YAHOO_*_PARAMETER` still go to every function through `Globals`. They hold only parameter names, not secret values, so this is harmless.
+- To verify: `grep -rn "ssm\|get_parameter" backend/src` finds nothing. Also check the import graph from `api/handler.py`.
+
+**SEC-3: fixed within DEC-AFC-SD-048.**
+- `link.html:17-18` now tells users to enter only a code shown on their own TV in front of them, says what linking grants, and warns against codes sent by others or by fake "support". This is the user prompt RFC 8628 §5.4 recommends.
+- No passphrase or login was added, and `device_auth` is unchanged:
+  - Expiry and one-time use still hold. `store.confirm_link` (`store/__init__.py:74-82`) only accepts a code that is still pending and not expired, so a second confirm cannot rebind it.
+  - Each new poll token replaces the previous session, as before.
+- The result message still uses `textContent`, so there is no XSS path.
+
+**Tests**
+- `test_security_auth_link.py` checks that the warning appears before the form, and that a second confirm by a different profile gets `410 code_expired`. Afterwards the device is still linked to `owner`. This test is correct.
+- `test_security_auth_iam.py` fails on any `ssm:` or `SSMParameter*` in `ApiFunction`'s policies. That is stronger than the flipped assertion in `test_template_iam.py:106`.
+- The edit to `test_backend_template.py:91` moves the positive SSM check to `PolicyFunction`, consistent with the template.
+- I found no other test or doc that still expects the old link-page text.
+
+**Minor (not security)**
+- `CHANGELOG.md` says `(PR #TBD)`. Rule 21 needs the real PR link before merge.
+
+## OCR (delegation mode, workspace)
+`preview` listed 2 files for review and excluded 12: tests, CHANGELOG and evidence. I reviewed the tests and CHANGELOG by hand (above); I did not inspect the evidence files.
+- **`backend/src/api/link.html`** (default rules):
+  - Correctness: static text only; form and script unchanged.
+  - Security: no new injection path; the result still uses `textContent`.
+  - Performance: nothing changed.
+  - Maintainability: the wording is clear.
+  - Test coverage: the new unit test covers the warning text and its position. No findings.
+- **`backend/template.yaml`** (YAML key spelling): only lines were deleted, so no new keys. The keys still there are spelled correctly. No findings.
+
+## Residual risk (existing, not introduced)
+Linking by code alone, with no login, is still open to remote phishing. An attacker can send a victim a live code. If the victim ignores the warning and confirms within the code's lifetime (600 s by default), the attacker's TV gets a session.
+- The profile field on the link page is free text, so whoever confirms picks which profile the TV links to.
+
+Both follow from the DEC-AFC-SD-048 design. Fully closing this would need user authentication, which that decision rules out. The warning only reduces the risk.
+
+## Tooling gaps
+- **BRAN:** unavailable (no `.bran/policy.yaml`).
+- **Reverify:** not applicable, since nothing here makes a compiled-binary claim.
+- **Tests:** not run, as instructed.
+- **Visual review:** `link.html` changes rendered UI, and I did no browser review at desktop or phone width. Rule 16 counts that as a typed gap.
+- **Plan mode:** the session was in plan mode, but no plan-file write or ExitPlanMode tool was available. This review exists only as this reply.
+
+I made no independent lifecycle assurance or owner-acceptance claim.

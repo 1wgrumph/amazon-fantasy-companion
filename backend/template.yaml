@@ -1,0 +1,280 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >-
+  Amazon Fantasy Companion backend (DES-AFC-P2-BACKEND). Free-plan services only:
+  Lambda, HTTP API, DynamoDB on-demand, EventBridge Scheduler, SSM SecureString,
+  CloudWatch Logs. Deploy with the deployed commit tag: --tags GitCommit=<sha>.
+
+Parameters:
+  YahooClientSecretParameter:
+    Type: String
+    Default: /afc/dev/yahoo-client-secret
+    Description: Name of the SSM SecureString holding the Yahoo OAuth client secret.
+  YahooTokenParameter:
+    Type: String
+    Default: /afc/dev/yahoo-token
+    Description: Name of the SSM SecureString holding the Yahoo OAuth refresh token.
+  DeviceCodeTtlSeconds:
+    Type: Number
+    Default: 600
+    MinValue: 60
+    MaxValue: 1800
+    Description: device_code_ttl (DES-AFC-P2-AUTH).
+  FeedPollIntervalSeconds:
+    Type: Number
+    Default: 15
+    MinValue: 5
+    MaxValue: 60
+    Description: feed_poll_interval inside one IngestFunction invocation (DES-AFC-P2-FEED).
+  IngestScheduleState:
+    Type: String
+    Default: DISABLED
+    AllowedValues: [ENABLED, DISABLED]
+    Description: The ingest schedule runs only while a profile-relevant game is in progress.
+
+Globals:
+  Function:
+    Runtime: python3.12
+    CodeUri: src/
+    Architectures: [x86_64]
+    MemorySize: 256
+    Timeout: 30
+    Environment:
+      Variables:
+        PROFILES_TABLE: !Ref ProfilesTable
+        LINKS_TABLE: !Ref LinksTable
+        EVENTS_TABLE: !Ref EventsTable
+        ALERTS_TABLE: !Ref AlertsTable
+        LINEUPS_TABLE: !Ref LineupsTable
+        PANELS_TABLE: !Ref PanelsTable
+        YAHOO_CLIENT_SECRET_PARAMETER: !Ref YahooClientSecretParameter
+        YAHOO_TOKEN_PARAMETER: !Ref YahooTokenParameter
+        DEVICE_CODE_TTL_SECONDS: !Ref DeviceCodeTtlSeconds
+        FEED_POLL_INTERVAL_SECONDS: !Ref FeedPollIntervalSeconds
+
+Resources:
+  HttpApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      DefaultRouteSettings:
+        ThrottlingBurstLimit: 10
+        ThrottlingRateLimit: 5
+
+  ApiFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: api.handler.lambda_handler
+      Description: Router for every /v1 route and the /link page.
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action: [dynamodb:GetItem, dynamodb:PutItem, dynamodb:UpdateItem]
+              Resource: [!GetAtt ProfilesTable.Arn]
+            - Effect: Allow
+              Action: [dynamodb:GetItem, dynamodb:PutItem, dynamodb:UpdateItem, dynamodb:Query, dynamodb:DeleteItem]
+              Resource: [!GetAtt LinksTable.Arn, !Sub "${LinksTable.Arn}/index/*"]
+            - Effect: Allow
+              Action: [dynamodb:Query]
+              Resource: [!GetAtt AlertsTable.Arn]
+            - Effect: Allow
+              Action: [dynamodb:GetItem, dynamodb:PutItem]
+              Resource: [!GetAtt LineupsTable.Arn]
+            - Effect: Allow
+              Action: [dynamodb:GetItem]
+              Resource: [!GetAtt EventsTable.Arn]
+            - Effect: Allow
+              Action: [dynamodb:GetItem]
+              Resource: [!GetAtt PanelsTable.Arn]
+      Events:
+        DefaultRoute: {Type: HttpApi, Properties: {ApiId: !Ref HttpApi}}
+        LinkIssue: {Type: HttpApi, Properties: {ApiId: !Ref HttpApi, Method: POST, Path: /v1/link}}
+        LinkPoll: {Type: HttpApi, Properties: {ApiId: !Ref HttpApi, Method: GET, Path: /v1/link}}
+        LinkConfirm: {Type: HttpApi, Properties: {ApiId: !Ref HttpApi, Method: POST, Path: /v1/link/confirm}}
+        LinkPage: {Type: HttpApi, Properties: {ApiId: !Ref HttpApi, Method: GET, Path: /link}}
+        ProfileGet: {Type: HttpApi, Properties: {ApiId: !Ref HttpApi, Method: GET, Path: /v1/profile}}
+        ProfilePut: {Type: HttpApi, Properties: {ApiId: !Ref HttpApi, Method: PUT, Path: /v1/profile}}
+        Alerts: {Type: HttpApi, Properties: {ApiId: !Ref HttpApi, Method: GET, Path: /v1/alerts}}
+        Panel: {Type: HttpApi, Properties: {ApiId: !Ref HttpApi, Method: GET, Path: /v1/panel}}
+        Providers: {Type: HttpApi, Properties: {ApiId: !Ref HttpApi, Method: GET, Path: /v1/providers}}
+        RoutingOutcome: {Type: HttpApi, Properties: {ApiId: !Ref HttpApi, Method: POST, Path: /v1/routing-outcome}}
+        InstalledApps: {Type: HttpApi, Properties: {ApiId: !Ref HttpApi, Method: POST, Path: /v1/installed-apps}}
+
+  IngestFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: feed_ingest.lambda_handler
+      Description: ESPN ingest while a profile-relevant game is in progress.
+      Timeout: 60
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action: [dynamodb:GetItem, dynamodb:PutItem]
+              Resource: [!GetAtt EventsTable.Arn]
+            - Effect: Allow
+              Action: [dynamodb:GetItem, dynamodb:Scan]
+              Resource: [!GetAtt ProfilesTable.Arn]
+            - Effect: Allow
+              Action: [dynamodb:GetItem]
+              Resource: [!GetAtt LineupsTable.Arn]
+
+  PolicyFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: pipeline.handler.lambda_handler
+      Description: Events stream consumer (matcher, policy, provider route, panel).
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action: [dynamodb:GetItem]
+              Resource: [!GetAtt ProfilesTable.Arn]
+            - Effect: Allow
+              Action: [dynamodb:GetItem]
+              Resource: [!GetAtt EventsTable.Arn]
+            - Effect: Allow
+              Action: [dynamodb:PutItem, dynamodb:Query]
+              Resource: [!GetAtt AlertsTable.Arn]
+            - Effect: Allow
+              Action: [dynamodb:GetItem, dynamodb:PutItem, dynamodb:Scan]
+              Resource: [!GetAtt LineupsTable.Arn]
+            - Effect: Allow
+              Action: [dynamodb:GetItem, dynamodb:PutItem]
+              Resource: [!GetAtt PanelsTable.Arn]
+        - Statement:
+            - Effect: Allow
+              Action: [ssm:GetParameter]
+              Resource:
+                - !Sub arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:parameter${YahooClientSecretParameter}
+                - !Sub arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:parameter${YahooTokenParameter}
+      Events:
+        EventStream:
+          Type: DynamoDB
+          Properties:
+            Stream: !GetAtt EventsTable.StreamArn
+            StartingPosition: LATEST
+            BatchSize: 10
+            MaximumRetryAttempts: 2
+            BisectBatchOnFunctionError: true
+
+  IngestScheduleRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal: {Service: scheduler.amazonaws.com}
+            Action: sts:AssumeRole
+            Condition:
+              StringEquals: {aws:SourceAccount: !Ref AWS::AccountId}
+      Policies:
+        - PolicyName: invoke-ingest
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: lambda:InvokeFunction
+                Resource: !GetAtt IngestFunction.Arn
+
+  IngestSchedule:
+    Type: AWS::Scheduler::Schedule
+    Properties:
+      Description: Each minute while a profile-relevant game is in progress.
+      ScheduleExpression: rate(1 minute)
+      FlexibleTimeWindow: {Mode: "OFF"}
+      State: !Ref IngestScheduleState
+      Target:
+        Arn: !GetAtt IngestFunction.Arn
+        RoleArn: !GetAtt IngestScheduleRole.Arn
+        RetryPolicy: {MaximumRetryAttempts: 0}
+
+  ApiLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${ApiFunction}
+      RetentionInDays: 7
+  IngestLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${IngestFunction}
+      RetentionInDays: 7
+  PolicyLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${PolicyFunction}
+      RetentionInDays: 7
+
+  ProfilesTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - {AttributeName: profileId, AttributeType: S}
+      KeySchema:
+        - {AttributeName: profileId, KeyType: HASH}
+
+  LinksTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - {AttributeName: pk, AttributeType: S}
+        - {AttributeName: handleHash, AttributeType: S}
+      KeySchema:
+        - {AttributeName: pk, KeyType: HASH}
+      GlobalSecondaryIndexes:
+        - IndexName: handle
+          KeySchema:
+            - {AttributeName: handleHash, KeyType: HASH}
+          Projection: {ProjectionType: ALL}
+      TimeToLiveSpecification:
+        AttributeName: expiresAt
+        Enabled: true
+
+  EventsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - {AttributeName: gameId, AttributeType: S}
+        - {AttributeName: eventId, AttributeType: S}
+      KeySchema:
+        - {AttributeName: gameId, KeyType: HASH}
+        - {AttributeName: eventId, KeyType: RANGE}
+      StreamSpecification:
+        StreamViewType: NEW_IMAGE
+
+  AlertsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - {AttributeName: profileId, AttributeType: S}
+        - {AttributeName: cursor, AttributeType: S}
+      KeySchema:
+        - {AttributeName: profileId, KeyType: HASH}
+        - {AttributeName: cursor, KeyType: RANGE}
+
+  LineupsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - {AttributeName: profileId, AttributeType: S}
+      KeySchema:
+        - {AttributeName: profileId, KeyType: HASH}
+
+  PanelsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - {AttributeName: profileId, AttributeType: S}
+        - {AttributeName: teamLeague, AttributeType: S}
+      KeySchema:
+        - {AttributeName: profileId, KeyType: HASH}
+        - {AttributeName: teamLeague, KeyType: RANGE}
+
+Outputs:
+  ApiUrl:
+    Description: HTTP API base URL for the TV app and the /link page.
+    Value: !Sub https://${HttpApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}

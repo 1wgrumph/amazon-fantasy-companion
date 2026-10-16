@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="640" viewBox="0 0 960 640" font-family="monospace">
+  <desc>Derived projection of AFCStructure (AFC-Structure.sysml). Model revision digest 8f5798823b3a9463f8963c7c6fa2cf94d018189edd0ca6160123362d48a075ff. Native source is the .sysml file; this SVG replaces nothing.</desc>
+  <rect x="0" y="0" width="960" height="640" fill="#ffffff"/>
+  <text x="20" y="28" font-size="18" font-weight="bold">AFC structure: parts and ports (derived view)</text>
+  <text x="20" y="48" font-size="11" fill="#444">Source AFCStructure d16b0e3d0badb… — see models/views.md for full digest</text>
+
+  <rect x="20" y="60" width="450" height="262" fill="#f4f8ff" stroke="#333" stroke-width="2"/>
+  <text x="34" y="86" font-size="14" font-weight="bold">tvApp (Fire TV app)</text>
+  <text x="34" y="106" font-size="12">parts: shell, build, manifest,</text>
+  <text x="34" y="122" font-size="12">profileUI, detector, alertSvc,</text>
+  <text x="34" y="138" font-size="12">notifier, launcher, panel</text>
+  <text x="34" y="162" font-size="12">ports: apiPort, notifyPort,</text>
+  <text x="34" y="178" font-size="12">launchPort, alexaPort</text>
+  <text x="34" y="206" font-size="11" fill="#444">PR-002..003, 005, 009..010, 015..016,</text>
+  <text x="34" y="220" font-size="11" fill="#444">021..022, 030..031, 035..036, 039..045,</text>
+  <text x="34" y="234" font-size="11" fill="#444">047..048, 052..053, 056..057, 061..063, 066</text>
+  <text x="34" y="262" font-size="11" fill="#444">panel: full-screen fallback (C5)</text>
+  <text x="34" y="278" font-size="11" fill="#444">build: minSdk 25</text>
+
+  <rect x="490" y="60" width="450" height="262" fill="#f4fff4" stroke="#333" stroke-width="2"/>
+  <text x="504" y="86" font-size="14" font-weight="bold">backend (AWS serverless)</text>
+  <text x="504" y="106" font-size="12">parts: auth, api, ingest, replay,</text>
+  <text x="504" y="122" font-size="12">lineup, matcher, policy, resolver,</text>
+  <text x="504" y="138" font-size="12">panelSvc, iac</text>
+  <text x="504" y="162" font-size="12">ports: apiPort, espnPort,</text>
+  <text x="504" y="178" font-size="12">yahooPort, linkPort</text>
+  <text x="504" y="206" font-size="11" fill="#444">PR-001..002, 004, 006..009, 011..014,</text>
+  <text x="504" y="220" font-size="11" fill="#444">016..020, 023..029, 032..034, 037..040,</text>
+  <text x="504" y="234" font-size="11" fill="#444">044, 046, 054..060, 064..065</text>
+  <text x="504" y="262" font-size="11" fill="#444">iac: Free-tier services only (C4)</text>
+  <text x="504" y="278" font-size="11" fill="#444">replay: labeled fixtures (C2)</text>
+
+  <rect x="20" y="340" width="450" height="220" fill="#fff8f0" stroke="#333" stroke-width="2"/>
+  <text x="34" y="366" font-size="14" font-weight="bold">stores (backend-owned)</text>
+  <text x="34" y="390" font-size="12">profileStore (DynamoDB)</text>
+  <text x="34" y="408" font-size="12">eventStore (DynamoDB cache + dedup)</text>
+  <text x="34" y="426" font-size="12">secrets (SSM SecureString, owner-set)</text>
+  <text x="34" y="444" font-size="12">fixtures (replay/)</text>
+  <text x="34" y="472" font-size="11" fill="#444">PR-002, 005, 012..013, 025, 055, 064</text>
+  <text x="34" y="500" font-size="11" fill="#444">No secret value in APK or repo (C9)</text>
+
+  <rect x="490" y="340" width="450" height="220" fill="#f8f4ff" stroke="#333" stroke-width="2"/>
+  <text x="504" y="366" font-size="14" font-weight="bold">externals (endpoints only)</text>
+  <text x="504" y="390" font-size="12">espn, yahoo, manualEntry (C6),</text>
+  <text x="504" y="408" font-size="12">providerApps, fireOSNotify,</text>
+  <text x="504" y="426" font-size="12">alexaRoute (conditional, C8),</text>
+  <text x="504" y="444" font-size="12">linkConsumer (phone/browser)</text>
+  <text x="504" y="472" font-size="11" fill="#444">PR-001, 006..007, 012..013, 015,</text>
+  <text x="504" y="486" font-size="11" fill="#444">022, 029..031, 036, 038, 052, 064</text>
+
+  <text x="20" y="590" font-size="11" fill="#444">Derived projection — native source AFC-Structure.sysml. Allocation: models/allocation.md.</text>
+  <text x="20" y="606" font-size="11" fill="#444">Ports bind to interfaces: api→TvBackendApi, notify→TvFireOSNotify, launch→TvProviderLaunch,</text>
+  <text x="20" y="622" font-size="11" fill="#444">alexa→TvAlexa, espn→BackendEspn, yahoo→BackendYahoo, link→BackendDeviceLink.</text>
+</svg>

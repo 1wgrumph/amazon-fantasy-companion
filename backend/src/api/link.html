@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Link your TV</title>
+<style>
+body { font-family: system-ui, sans-serif; margin: 0 auto; max-width: 28rem; padding: 1.5rem 1rem; }
+label { display: block; margin-top: 1rem; font-weight: 600; }
+input, button { box-sizing: border-box; width: 100%; font-size: 1.25rem; padding: 0.6rem; margin-top: 0.25rem; }
+button { margin-top: 1.5rem; }
+#result { margin-top: 1rem; min-height: 1.5rem; }
+</style>
+</head>
+<body>
+<h1>Link your TV</h1>
+<p>Only enter a code displayed on your own TV in front of you.</p>
+<p>Linking gives that TV access to your profile. Do not enter a code sent by someone else, even if they claim to be support.</p>
+<form id="link-form" method="post" action="/v1/link/confirm">
+<label for="code">TV code</label>
+<input id="code" name="code" autocomplete="off" autocapitalize="characters" maxlength="16" required>
+<label for="profileId">Profile</label>
+<input id="profileId" name="profileId" value="owner" pattern="[A-Za-z0-9_\-]{1,64}" required>
+<button type="submit">Link TV</button>
+</form>
+<p id="result" role="status" aria-live="polite"></p>
+<script>
+document.getElementById("link-form").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const form = new FormData(event.target);
+  const result = document.getElementById("result");
+  result.textContent = "Linking...";
+  try {
+    const response = await fetch("/v1/link/confirm", {
+      method: "POST",
+      headers: {"content-type": "application/json"},
+      body: JSON.stringify(Object.fromEntries(form.entries())),
+    });
+    const body = await response.json();
+    result.textContent = response.ok ? "Linked. Return to your TV." : body.error.message;
+  } catch (error) {
+    result.textContent = "Could not reach the service. Try again.";
+  }
+});
+</script>
+</body>
+</html>

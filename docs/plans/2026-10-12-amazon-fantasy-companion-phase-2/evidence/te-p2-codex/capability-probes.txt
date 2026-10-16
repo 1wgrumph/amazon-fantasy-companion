@@ -1,0 +1,143 @@
+$ reverify --help
+usage: reverify [-h]
+                {auto,parse-pe,pattern-scan,strings,diff-patch,disasm,decode-protobuf,decode-tlv,emulate,parse,backends,gen-hook,hexdump,reconstruct,functions,orchestrate,ledger,verify,audit-boundary,rollover}
+                ...
+
+Reverify - verified reverse engineering, protocol dissection, and emulation
+toolkit
+
+positional arguments:
+  {auto,parse-pe,pattern-scan,strings,diff-patch,disasm,decode-protobuf,decode-tlv,emulate,parse,backends,gen-hook,hexdump,reconstruct,functions,orchestrate,ledger,verify,audit-boundary,rollover}
+    auto                Automatically triage and inspect target binary
+    parse-pe            Parse PE32/PE32+ binary structure
+    pattern-scan        Scan binary data for AOB hex pattern with wildcards
+    strings             Extract ASCII and Unicode strings from binary
+    diff-patch          Compare original and patched binaries and output patch
+                        diff
+    disasm              Disassemble binary code or hex stream
+    decode-protobuf     Dissect raw Protobuf binary stream
+    decode-tlv          Dissect TLV binary packet
+    emulate             Emulate instruction execution
+    parse               Parse PE, ELF or Mach-O: arch, entry, sections,
+                        imports, exports
+    backends            Show which engines are active (capstone / unicorn /
+                        lief)
+    gen-hook            Generate Frida hook script
+    hexdump             Display formatted hexadecimal dump
+    reconstruct         Closed loop: model proposes claims, the tools verify,
+                        iterate until grounded
+    functions           List recovered functions: angr when installed,
+                        otherwise only the entry point and exports
+    orchestrate         Run a goal across fresh-context sessions: the model
+                        asks for rollovers, the hand-off is verified from the
+                        ledger
+    ledger              Durable ledger of grounded facts per binary - the
+                        state that survives /clear, compaction and restarts
+    verify              Verify claims about a binary against the deterministic
+                        tools (the core Reverify loop)
+    audit-boundary      Audit filesystem path and network SSRF boundaries
+    rollover            Rollover for Claude Code / Codex / Gemini CLI /
+                        OpenCode: hooks that hand off to files instead of
+                        compacting, and a launcher that replaces the session
+                        with a fresh one
+
+options:
+  -h, --help            show this help message and exit
+exit=0
+
+$ reverify verify --help
+usage: reverify verify [-h] [--claim CLAIM] [--claims-file CLAIMS_FILE]
+                       [--min-information MIN_INFORMATION] [--json]
+                       target
+
+positional arguments:
+  target                File path or hex stream to check claims against
+
+options:
+  -h, --help            show this help message and exit
+  --claim CLAIM         A claim as a JSON object, or a JSON array of claims
+                        (repeatable)
+  --claims-file CLAIMS_FILE
+                        Path to a JSON file with a claim object or array
+  --min-information MIN_INFORMATION
+                        Weight sum verified claims must reach to count as
+                        grounded
+  --json                Output the full JSON verdict report
+exit=0
+
+$ reverify auto --help
+usage: reverify auto [-h] [--json] target
+
+positional arguments:
+  target      File path or hex stream
+
+options:
+  -h, --help  show this help message and exit
+  --json      Output full JSON triage report
+exit=0
+
+$ reverify backends
+=== Reverify backends ===
+disassembly      capstone 5.0.7
+emulation        unicorn 2.1.4
+binary_parsing   lief 1.0.0-d05b3499b
+proof            z3 4.13.0
+semantic         angr 9.3.4
+full fidelity:   True
+exit=0
+
+$ ocr delegate preview --help
+Outputs reviewable file list with mode/ref metadata for the host agent to construct git commands.
+
+Usage:
+  ocr delegate preview [flags]
+
+Flags:
+  -b, --background string        optional requirement/business context for the review
+  -B, --background-file string   path to a Markdown file used as review background (takes precedence over --background)
+  -c, --commit string            single commit hash or tag to review (vs its parent)
+      --exclude string           comma-separated gitignore-style patterns to exclude; merged with rule.json excludes
+  -f, --format string            output format: text or json (sarif is not supported by delegate mode) (default "text")
+      --from string              source ref to start diff from (e.g., 'main')
+  -h, --help                     help for preview
+      --max-git-procs int        max concurrent git subprocesses (default 16)
+      --repo string              root directory of the git repository (default: current dir)
+      --rule string              path to JSON file with system review rules
+      --to string                target ref to end diff at (e.g., 'feature-branch')
+
+Global Flags:
+      --color string   when to emit ANSI color: auto (only when stdout is a terminal), always, or never (default "auto")
+exit=0
+
+$ ocr delegate rule --help
+Outputs resolved review rules grouped by content. Accepts multiple paths.
+
+Usage:
+  ocr delegate rule [flags] <path...>
+
+Flags:
+  -b, --background string        optional requirement/business context for the review
+  -B, --background-file string   path to a Markdown file used as review background (takes precedence over --background)
+  -c, --commit string            single commit hash or tag to review (vs its parent)
+      --exclude string           comma-separated gitignore-style patterns to exclude; merged with rule.json excludes
+  -f, --format string            output format: text or json (sarif is not supported by delegate mode) (default "text")
+      --from string              source ref to start diff from (e.g., 'main')
+  -h, --help                     help for rule
+      --max-git-procs int        max concurrent git subprocesses (default 16)
+      --repo string              root directory of the git repository (default: current dir)
+      --rule string              path to JSON file with system review rules
+      --to string                target ref to end diff at (e.g., 'feature-branch')
+
+Global Flags:
+      --color string   when to emit ANSI color: auto (only when stdout is a terminal), always, or never (default "auto")
+exit=0
+
+$ ocr --version
+open-code-review v1.12.13 (fabbdb2) linux/amd64
+built at: 2026-10-08T11:52:18Z
+https://github.com/alibaba/open-code-review
+exit=0
+
+$ node --version
+v22.23.3
+exit=0

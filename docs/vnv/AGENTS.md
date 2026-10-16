@@ -2,22 +2,27 @@
 
 ## Scope
 
-Phase 1 guidance for AC-AFC-VNV-01 and DES-AFC-VNV. Read the area files
-in this order; the first matching repository-relative scope owns a path:
+Guidance for AC-AFC-VNV-01 and DES-AFC-VNV (Phase 1) and AC-AFC-P2-VNV-01
+(Phase 2). Read the area files in this order; the first matching
+repository-relative scope owns a path:
 
 1. [CI/CD](ci-cd/AGENTS.md): gates, hooks, workflows and general documentation.
 2. [Specifications](spec/AGENTS.md): section sources and vendored spec tools.
 3. [Developer feedback](developer-feedback/AGENTS.md): the observation log.
+4. [TV app](tv-app/AGENTS.md): the Fire TV app under `tv-app/`.
+5. [Backend](backend/AGENTS.md): the SAM backend under `backend/`.
+6. [Device integration](device-integration/AGENTS.md): spikes, on-device
+   captures, live run records and the demo manifest.
 
-The CI/CD scope excludes the paths owned by the other two areas. Report
-unmatched paths as `(unmapped)` rather than inventing coverage. Product areas
-(`tv-app`, `backend`, `device-integration`) are added in Phase 2 when they exist.
+The CI/CD scope excludes the paths owned by the other five areas. Report
+unmatched paths as `(unmapped)` rather than inventing coverage.
 
 ## Tools
 
 The area files list commands from CONTRACT-AFC-GATE, run from the repository
-root. The gate and spec kit are delivered by S09 and S42; their absence before
-those slices land is a typed gap, never passing evidence. Guidance does not
+root. The gate and spec kit are delivered by S09 and S42, and the `tvapp` and
+`backend` areas by P2-G01; their absence before those slices land is a typed
+gap, never passing evidence. Guidance does not
 claim those commands have run.
 
 The gate accepts `--list`, `--changed[=<base>]` and area names. No area selects
@@ -50,5 +55,7 @@ preserve reporting and publication authority. Do not create labels or file
 upstream reports implicitly. If filing is unavailable or unauthorized, retain
 the finding in the active review output with the exact gap.
 
-`docs/vnv/` is the guidance root, not a raw-evidence store. No separate evidence
-root is declared; link sanitized command receipts from the review or issue.
+`docs/vnv/` is the guidance root, not a raw-evidence store. Review evidence has
+no separate root; link sanitized command receipts from the review or issue.
+On-device captures and run records live under `evidence/`, owned by the
+device integration area.

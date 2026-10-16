@@ -17,7 +17,7 @@ pushes, merges, or issue writes were made.
 - Candidate: `b8604b5db6448b72b2cc2068ebe69383b3d1a00b` (HEAD at review time)
 - Base: `a82244bfbd2688dac740c231fc2550a327d008f7`
 - PR: azedge #304
-- Worktree: `/home/spectre/alphazede/worktrees/azedge-afc-s44`
+- Worktree: `$HOME/alphazede/worktrees/azedge-afc-s44`
   (clean tracked tree and index at start and finish)
 - Changed paths (3 files, +28/-1):
   - `AGENTS.md` (+10/-0)

@@ -1,0 +1,831 @@
+gate: spec: PASS checks completed
+gate: docs: PASS checks completed
+.github/workflows/ci.yml: PASS
+...............fatal: not a git repository (or any parent up to mount point /)
+Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+........fatal: not a git repository (or any parent up to mount point /)
+Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+......................................
+----------------------------------------------------------------------
+Ran 61 tests in 36.154s
+
+OK
+mutation adapter exit=3: ['GAP REPORT_INCOMPLETE: mutmut stats absent']
+mutation adapter exit=0: ['PASS mutation score 100.00% (threshold 70%)']
+coverage adapter exit=0: ['PASS changed-line coverage 100% (threshold 90%)']
+coverage adapter exit=3: ['GAP REPORT_INCOMPLETE: unmapped changed files: backend/src/control.py']
+gate: hygiene: PASS checks completed
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.7.0/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preDebugBuild UP-TO-DATE
+> Task :app:generateDebugResources UP-TO-DATE
+> Task :app:packageDebugResources UP-TO-DATE
+> Task :app:processDebugNavigationResources UP-TO-DATE
+> Task :app:parseDebugLocalResources UP-TO-DATE
+> Task :app:generateDebugRFile UP-TO-DATE
+> Task :app:compileDebugKotlin UP-TO-DATE
+> Task :app:javaPreCompileDebug UP-TO-DATE
+> Task :app:compileDebugJavaWithJavac NO-SOURCE
+> Task :app:checkDebugAarMetadata UP-TO-DATE
+> Task :app:mapDebugSourceSetPaths UP-TO-DATE
+> Task :app:compileDebugNavigationResources UP-TO-DATE
+> Task :app:mergeDebugResources UP-TO-DATE
+> Task :app:createDebugCompatibleScreenManifests UP-TO-DATE
+> Task :app:extractDeepLinksDebug UP-TO-DATE
+> Task :app:processDebugMainManifest UP-TO-DATE
+> Task :app:processDebugManifest UP-TO-DATE
+> Task :app:processDebugManifestForPackage UP-TO-DATE
+> Task :app:processDebugResources UP-TO-DATE
+> Task :app:bundleDebugClassesToRuntimeJar UP-TO-DATE
+> Task :app:bundleDebugClassesToCompileJar UP-TO-DATE
+> Task :app:preDebugUnitTestBuild UP-TO-DATE
+> Task :app:compileDebugUnitTestKotlin UP-TO-DATE
+> Task :app:javaPreCompileDebugUnitTest UP-TO-DATE
+> Task :app:compileDebugUnitTestJavaWithJavac NO-SOURCE
+> Task :app:processDebugJavaRes UP-TO-DATE
+> Task :app:processDebugUnitTestJavaRes UP-TO-DATE
+
+> Task :app:testDebugUnitTest FAILED
+
+ApiNoRetryTest > [POST /v1/link 503] > returnsPermanentOrNonIdempotentErrorWithoutRetry[POST /v1/link 503] FAILED
+    java.lang.AssertionError: Missing behavior: preserve contract failure expected:<503> but was:<0>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at com.afc.companion.ApiNoRetryTest$returnsPermanentOrNonIdempotentErrorWithoutRetry$1.invokeSuspend(ApiPolicyTest.kt:135)
+        at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+        at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+        at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+        at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+        at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+        at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+        at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+        at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source)
+        at com.afc.companion.ApiNoRetryTest.returnsPermanentOrNonIdempotentErrorWithoutRetry(ApiPolicyTest.kt:129)
+
+ApiNoRetryTest > [POST /v1/link/confirm 503] > returnsPermanentOrNonIdempotentErrorWithoutRetry[POST /v1/link/confirm 503] FAILED
+    java.lang.AssertionError: Missing behavior: preserve contract failure expected:<503> but was:<0>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at com.afc.companion.ApiNoRetryTest$returnsPermanentOrNonIdempotentErrorWithoutRetry$1.invokeSuspend(ApiPolicyTest.kt:135)
+        at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+        at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+        at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+        at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+        at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+        at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+        at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+        at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source)
+        at com.afc.companion.ApiNoRetryTest.returnsPermanentOrNonIdempotentErrorWithoutRetry(ApiPolicyTest.kt:129)
+
+ApiNoRetryTest > [POST /v1/routing-outcome 503] > returnsPermanentOrNonIdempotentErrorWithoutRetry[POST /v1/routing-outcome 503] FAILED
+    java.lang.AssertionError: Missing behavior: preserve contract failure expected:<503> but was:<0>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at com.afc.companion.ApiNoRetryTest$returnsPermanentOrNonIdempotentErrorWithoutRetry$1.invokeSuspend(ApiPolicyTest.kt:135)
+        at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+        at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+        at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+        at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+        at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+        at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+        at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+        at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source)
+        at com.afc.companion.ApiNoRetryTest.returnsPermanentOrNonIdempotentErrorWithoutRetry(ApiPolicyTest.kt:129)
+
+ApiNoRetryTest > [POST /v1/installed-apps 503] > returnsPermanentOrNonIdempotentErrorWithoutRetry[POST /v1/installed-apps 503] FAILED
+    java.lang.AssertionError: Missing behavior: preserve contract failure expected:<503> but was:<0>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at com.afc.companion.ApiNoRetryTest$returnsPermanentOrNonIdempotentErrorWithoutRetry$1.invokeSuspend(ApiPolicyTest.kt:135)
+        at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+        at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+        at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+        at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+        at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+        at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+        at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+        at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source)
+        at com.afc.companion.ApiNoRetryTest.returnsPermanentOrNonIdempotentErrorWithoutRetry(ApiPolicyTest.kt:129)
+
+ApiNoRetryTest > [GET /v1/link?handle=fixture 400] > returnsPermanentOrNonIdempotentErrorWithoutRetry[GET /v1/link?handle=fixture 400] FAILED
+    java.lang.AssertionError: Missing behavior: preserve contract failure expected:<400> but was:<0>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at com.afc.companion.ApiNoRetryTest$returnsPermanentOrNonIdempotentErrorWithoutRetry$1.invokeSuspend(ApiPolicyTest.kt:135)
+        at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+        at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+        at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+        at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+        at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+        at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+        at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+        at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source)
+        at com.afc.companion.ApiNoRetryTest.returnsPermanentOrNonIdempotentErrorWithoutRetry(ApiPolicyTest.kt:129)
+
+ApiNoRetryTest > [GET /v1/profile 401] > returnsPermanentOrNonIdempotentErrorWithoutRetry[GET /v1/profile 401] FAILED
+    java.lang.AssertionError: Missing behavior: preserve contract failure expected:<401> but was:<0>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at com.afc.companion.ApiNoRetryTest$returnsPermanentOrNonIdempotentErrorWithoutRetry$1.invokeSuspend(ApiPolicyTest.kt:135)
+        at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+        at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+        at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+        at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+        at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+        at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+        at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+        at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source)
+        at com.afc.companion.ApiNoRetryTest.returnsPermanentOrNonIdempotentErrorWithoutRetry(ApiPolicyTest.kt:129)
+
+ApiNoRetryTest > [GET /v1/profile 403] > returnsPermanentOrNonIdempotentErrorWithoutRetry[GET /v1/profile 403] FAILED
+    java.lang.AssertionError: Missing behavior: preserve contract failure expected:<403> but was:<0>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at com.afc.companion.ApiNoRetryTest$returnsPermanentOrNonIdempotentErrorWithoutRetry$1.invokeSuspend(ApiPolicyTest.kt:135)
+        at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+        at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+        at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+        at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+        at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+        at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+        at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+        at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source)
+        at com.afc.companion.ApiNoRetryTest.returnsPermanentOrNonIdempotentErrorWithoutRetry(ApiPolicyTest.kt:129)
+
+ApiNoRetryTest > [PUT /v1/profile 409] > returnsPermanentOrNonIdempotentErrorWithoutRetry[PUT /v1/profile 409] FAILED
+    java.lang.AssertionError: Missing behavior: preserve contract failure expected:<409> but was:<0>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at com.afc.companion.ApiNoRetryTest$returnsPermanentOrNonIdempotentErrorWithoutRetry$1.invokeSuspend(ApiPolicyTest.kt:135)
+        at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+        at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+        at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+        at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+        at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+        at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+        at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+        at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source)
+        at com.afc.companion.ApiNoRetryTest.returnsPermanentOrNonIdempotentErrorWithoutRetry(ApiPolicyTest.kt:129)
+
+ApiNoRetryTest > [POST /v1/link/confirm 410] > returnsPermanentOrNonIdempotentErrorWithoutRetry[POST /v1/link/confirm 410] FAILED
+    java.lang.AssertionError: Missing behavior: preserve contract failure expected:<410> but was:<0>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at com.afc.companion.ApiNoRetryTest$returnsPermanentOrNonIdempotentErrorWithoutRetry$1.invokeSuspend(ApiPolicyTest.kt:135)
+        at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+        at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+        at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+        at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+        at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+        at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+        at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+        at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source)
+        at com.afc.companion.ApiNoRetryTest.returnsPermanentOrNonIdempotentErrorWithoutRetry(ApiPolicyTest.kt:129)
+
+ApiOperationsTest > [POST /v1/link] > sendsFrozenOperationAndDecodesJson[POST /v1/link] FAILED
+    java.lang.AssertionError: Missing behavior: HTTP status for POST /v1/link expected:<201> but was:<0>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at com.afc.companion.ApiOperationsTest$sendsFrozenOperationAndDecodesJson$1.invokeSuspend(ApiOperationsTest.kt:46)
+        at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+        at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+        at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+        at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+        at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+        at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+        at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+        at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source)
+        at com.afc.companion.ApiOperationsTest.sendsFrozenOperationAndDecodesJson(ApiOperationsTest.kt:25)
+
+ApiOperationsTest > [GET /v1/link?handle=fixture] > sendsFrozenOperationAndDecodesJson[GET /v1/link?handle=fixture] FAILED
+    java.lang.AssertionError: Missing behavior: HTTP status for GET /v1/link?handle=fixture expected:<200> but was:<0>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at com.afc.companion.ApiOperationsTest$sendsFrozenOperationAndDecodesJson$1.invokeSuspend(ApiOperationsTest.kt:46)
+        at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+        at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+        at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+        at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+        at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+        at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+        at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+        at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source)
+        at com.afc.companion.ApiOperationsTest.sendsFrozenOperationAndDecodesJson(ApiOperationsTest.kt:25)
+
+ApiOperationsTest > [POST /v1/link/confirm] > sendsFrozenOperationAndDecodesJson[POST /v1/link/confirm] FAILED
+    java.lang.AssertionError: Missing behavior: HTTP status for POST /v1/link/confirm expected:<200> but was:<0>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at com.afc.companion.ApiOperationsTest$sendsFrozenOperationAndDecodesJson$1.invokeSuspend(ApiOperationsTest.kt:46)
+        at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+        at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+        at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+        at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+        at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+        at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+        at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+        at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source)
+        at com.afc.companion.ApiOperationsTest.sendsFrozenOperationAndDecodesJson(ApiOperationsTest.kt:25)
+
+ApiOperationsTest > [GET /v1/profile] > sendsFrozenOperationAndDecodesJson[GET /v1/profile] FAILED
+    java.lang.AssertionError: Missing behavior: HTTP status for GET /v1/profile expected:<200> but was:<0>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at com.afc.companion.ApiOperationsTest$sendsFrozenOperationAndDecodesJson$1.invokeSuspend(ApiOperationsTest.kt:46)
+        at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+        at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+        at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+        at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+        at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+        at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+        at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+        at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source)
+        at com.afc.companion.ApiOperationsTest.sendsFrozenOperationAndDecodesJson(ApiOperationsTest.kt:25)
+
+ApiOperationsTest > [PUT /v1/profile] > sendsFrozenOperationAndDecodesJson[PUT /v1/profile] FAILED
+    java.lang.AssertionError: Missing behavior: HTTP status for PUT /v1/profile expected:<200> but was:<0>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at com.afc.companion.ApiOperationsTest$sendsFrozenOperationAndDecodesJson$1.invokeSuspend(ApiOperationsTest.kt:46)
+        at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+        at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+        at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+        at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+        at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+        at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+        at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+        at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source)
+        at com.afc.companion.ApiOperationsTest.sendsFrozenOperationAndDecodesJson(ApiOperationsTest.kt:25)
+
+ApiOperationsTest > [GET /v1/alerts?cursor=fixture] > sendsFrozenOperationAndDecodesJson[GET /v1/alerts?cursor=fixture] FAILED
+    java.lang.AssertionError: Missing behavior: HTTP status for GET /v1/alerts?cursor=fixture expected:<200> but was:<0>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at com.afc.companion.ApiOperationsTest$sendsFrozenOperationAndDecodesJson$1.invokeSuspend(ApiOperationsTest.kt:46)
+        at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+        at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+        at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+        at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+        at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+        at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+        at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+        at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source)
+        at com.afc.companion.ApiOperationsTest.sendsFrozenOperationAndDecodesJson(ApiOperationsTest.kt:25)
+
+ApiOperationsTest > [GET /v1/panel] > sendsFrozenOperationAndDecodesJson[GET /v1/panel] FAILED
+    java.lang.AssertionError: Missing behavior: HTTP status for GET /v1/panel expected:<200> but was:<0>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at com.afc.companion.ApiOperationsTest$sendsFrozenOperationAndDecodesJson$1.invokeSuspend(ApiOperationsTest.kt:46)
+        at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+        at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+        at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+        at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+        at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+        at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+        at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+        at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source)
+        at com.afc.companion.ApiOperationsTest.sendsFrozenOperationAndDecodesJson(ApiOperationsTest.kt:25)
+
+ApiOperationsTest > [GET /v1/providers] > sendsFrozenOperationAndDecodesJson[GET /v1/providers] FAILED
+    java.lang.AssertionError: Missing behavior: HTTP status for GET /v1/providers expected:<200> but was:<0>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at com.afc.companion.ApiOperationsTest$sendsFrozenOperationAndDecodesJson$1.invokeSuspend(ApiOperationsTest.kt:46)
+        at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+        at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+        at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+        at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+        at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+        at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+        at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+        at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source)
+        at com.afc.companion.ApiOperationsTest.sendsFrozenOperationAndDecodesJson(ApiOperationsTest.kt:25)
+
+ApiOperationsTest > [POST /v1/routing-outcome] > sendsFrozenOperationAndDecodesJson[POST /v1/routing-outcome] FAILED
+    java.lang.AssertionError: Missing behavior: HTTP status for POST /v1/routing-outcome expected:<200> but was:<0>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at com.afc.companion.ApiOperationsTest$sendsFrozenOperationAndDecodesJson$1.invokeSuspend(ApiOperationsTest.kt:46)
+        at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+        at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+        at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+        at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+        at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+        at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+        at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+        at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source)
+        at com.afc.companion.ApiOperationsTest.sendsFrozenOperationAndDecodesJson(ApiOperationsTest.kt:25)
+
+ApiOperationsTest > [POST /v1/installed-apps] > sendsFrozenOperationAndDecodesJson[POST /v1/installed-apps] FAILED
+    java.lang.AssertionError: Missing behavior: HTTP status for POST /v1/installed-apps expected:<200> but was:<0>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at com.afc.companion.ApiOperationsTest$sendsFrozenOperationAndDecodesJson$1.invokeSuspend(ApiOperationsTest.kt:46)
+        at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+        at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+        at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+        at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+        at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+        at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+        at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+        at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source)
+        at com.afc.companion.ApiOperationsTest.sendsFrozenOperationAndDecodesJson(ApiOperationsTest.kt:25)
+
+ApiPolicyTest > setsLongPollReadTimeoutAboveServerWait FAILED
+    java.lang.AssertionError: Missing behavior: complete HTTP request expected:<200> but was:<0>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at com.afc.companion.ApiPolicyTest.assertTimeouts(ApiPolicyTest.kt:25)
+        at com.afc.companion.ApiPolicyTest.access$assertTimeouts(ApiPolicyTest.kt:14)
+        at com.afc.companion.ApiPolicyTest$setsLongPollReadTimeoutAboveServerWait$1.invokeSuspend(ApiPolicyTest.kt:19)
+        at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+        at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+        at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+        at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+        at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+        at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+        at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+        at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source)
+        at com.afc.companion.ApiPolicyTest.setsLongPollReadTimeoutAboveServerWait(ApiPolicyTest.kt:18)
+
+ApiPolicyTest > rejectsMalformedJsonResponse FAILED
+    java.lang.AssertionError: Malformed input cannot be accepted: expected java.lang.IllegalArgumentException to be thrown, but nothing was thrown
+        at org.junit.Assert.assertThrows(Assert.java:1028)
+        at com.afc.companion.ApiPolicyTest.rejectsMalformedJsonResponse(ApiPolicyTest.kt:45)
+
+ApiPolicyTest > rejectsRequestOverContract64KiBBeforeSending FAILED
+    java.lang.AssertionError: Oversized output cannot cross the API boundary: expected java.lang.IllegalArgumentException to be thrown, but nothing was thrown
+        at org.junit.Assert.assertThrows(Assert.java:1028)
+        at com.afc.companion.ApiPolicyTest.rejectsRequestOverContract64KiBBeforeSending(ApiPolicyTest.kt:59)
+
+ApiPolicyTest > retriesPutWithTheSameRevisionAndBody FAILED
+    java.lang.AssertionError: Missing behavior: retry an idempotent PUT expected:<200> but was:<0>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at com.afc.companion.ApiPolicyTest$retriesPutWithTheSameRevisionAndBody$1.invokeSuspend(ApiPolicyTest.kt:79)
+        at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+        at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+        at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+        at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+        at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+        at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+        at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+        at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source)
+        at com.afc.companion.ApiPolicyTest.retriesPutWithTheSameRevisionAndBody(ApiPolicyTest.kt:74)
+
+ApiPolicyTest > defaultBackoffWaitsAtLeastThePrescribedOneSecond FAILED
+    java.lang.AssertionError: Missing behavior: default retry succeeds expected:<200> but was:<0>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at com.afc.companion.ApiPolicyTest$defaultBackoffWaitsAtLeastThePrescribedOneSecond$1.invokeSuspend(ApiPolicyTest.kt:68)
+        at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+        at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+        at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+        at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+        at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+        at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+        at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+        at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source)
+        at com.afc.companion.ApiPolicyTest.defaultBackoffWaitsAtLeastThePrescribedOneSecond(ApiPolicyTest.kt:65)
+
+ApiPolicyTest > setsNormalTimeoutsOnRealConnection FAILED
+    java.lang.AssertionError: Missing behavior: complete HTTP request expected:<200> but was:<0>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at com.afc.companion.ApiPolicyTest.assertTimeouts(ApiPolicyTest.kt:25)
+        at com.afc.companion.ApiPolicyTest.access$assertTimeouts(ApiPolicyTest.kt:14)
+        at com.afc.companion.ApiPolicyTest$setsNormalTimeoutsOnRealConnection$1.invokeSuspend(ApiPolicyTest.kt:16)
+        at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+        at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+        at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+        at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+        at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+        at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+        at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+        at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source)
+        at com.afc.companion.ApiPolicyTest.setsNormalTimeoutsOnRealConnection(ApiPolicyTest.kt:15)
+
+ApiPolicyTest > rejectsResponseOverContract64KiB FAILED
+    java.lang.AssertionError: Oversized input cannot be accepted: expected java.lang.IllegalArgumentException to be thrown, but nothing was thrown
+        at org.junit.Assert.assertThrows(Assert.java:1028)
+        at com.afc.companion.ApiPolicyTest.rejectsResponseOverContract64KiB(ApiPolicyTest.kt:52)
+
+ApiPolicyTest > opensAndReadsNetworkOffCallingUiThread FAILED
+    java.lang.AssertionError: Missing behavior: request produces a response expected:<200> but was:<0>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at com.afc.companion.ApiPolicyTest$opensAndReadsNetworkOffCallingUiThread$1.invokeSuspend(ApiPolicyTest.kt:38)
+        at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+        at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+        at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+        at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+        at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+        at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+        at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+        at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source)
+        at com.afc.companion.ApiPolicyTest.opensAndReadsNetworkOffCallingUiThread(ApiPolicyTest.kt:31)
+
+ApiRetryTest > [transient 429] > retriesIdempotentGetWithBoundedExponentialBackoff[transient 429] FAILED
+    java.lang.AssertionError: Missing behavior: recover on final permitted attempt expected:<200> but was:<0>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at com.afc.companion.ApiRetryTest$retriesIdempotentGetWithBoundedExponentialBackoff$1.invokeSuspend(ApiPolicyTest.kt:99)
+        at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+        at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+        at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+        at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+        at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+        at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+        at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+        at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source)
+        at com.afc.companion.ApiRetryTest.retriesIdempotentGetWithBoundedExponentialBackoff(ApiPolicyTest.kt:92)
+
+ApiRetryTest > [transient 429] > stopsAfterThreeRetriesAndKeepsStructuredError[transient 429] FAILED
+    java.lang.AssertionError: Missing behavior: return final contract error expected:<429> but was:<0>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at com.afc.companion.ApiRetryTest$stopsAfterThreeRetriesAndKeepsStructuredError$1.invokeSuspend(ApiPolicyTest.kt:111)
+        at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+        at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+        at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+        at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+        at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+        at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+        at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+        at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source)
+        at com.afc.companion.ApiRetryTest.stopsAfterThreeRetriesAndKeepsStructuredError(ApiPolicyTest.kt:106)
+
+ApiRetryTest > [transient 503] > retriesIdempotentGetWithBoundedExponentialBackoff[transient 503] FAILED
+    java.lang.AssertionError: Missing behavior: recover on final permitted attempt expected:<200> but was:<0>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at com.afc.companion.ApiRetryTest$retriesIdempotentGetWithBoundedExponentialBackoff$1.invokeSuspend(ApiPolicyTest.kt:99)
+        at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+        at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+        at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+        at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+        at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+        at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+        at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+        at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source)
+        at com.afc.companion.ApiRetryTest.retriesIdempotentGetWithBoundedExponentialBackoff(ApiPolicyTest.kt:92)
+
+ApiRetryTest > [transient 503] > stopsAfterThreeRetriesAndKeepsStructuredError[transient 503] FAILED
+    java.lang.AssertionError: Missing behavior: return final contract error expected:<503> but was:<0>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at com.afc.companion.ApiRetryTest$stopsAfterThreeRetriesAndKeepsStructuredError$1.invokeSuspend(ApiPolicyTest.kt:111)
+        at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+        at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+        at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+        at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+        at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+        at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+        at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+        at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source)
+        at com.afc.companion.ApiRetryTest.stopsAfterThreeRetriesAndKeepsStructuredError(ApiPolicyTest.kt:106)
+
+EnvelopeSourceTest > [source live] > preservesEveryOpenApiProvenanceSource[source live] FAILED
+    java.lang.AssertionError: Missing behavior: preserve live provenance
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at org.junit.Assert.assertNotNull(Assert.java:713)
+        at com.afc.companion.EnvelopeSourceTest$preservesEveryOpenApiProvenanceSource$1.invokeSuspend(EnvelopeTest.kt:63)
+        at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+        at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+        at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+        at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+        at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+        at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+        at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+        at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source)
+        at com.afc.companion.EnvelopeSourceTest.preservesEveryOpenApiProvenanceSource(EnvelopeTest.kt:61)
+
+EnvelopeSourceTest > [source replay] > preservesEveryOpenApiProvenanceSource[source replay] FAILED
+    java.lang.AssertionError: Missing behavior: preserve replay provenance
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at org.junit.Assert.assertNotNull(Assert.java:713)
+        at com.afc.companion.EnvelopeSourceTest$preservesEveryOpenApiProvenanceSource$1.invokeSuspend(EnvelopeTest.kt:63)
+        at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+        at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+        at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+        at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+        at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+        at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+        at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+        at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source)
+        at com.afc.companion.EnvelopeSourceTest.preservesEveryOpenApiProvenanceSource(EnvelopeTest.kt:61)
+
+EnvelopeSourceTest > [source yahoo] > preservesEveryOpenApiProvenanceSource[source yahoo] FAILED
+    java.lang.AssertionError: Missing behavior: preserve yahoo provenance
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at org.junit.Assert.assertNotNull(Assert.java:713)
+        at com.afc.companion.EnvelopeSourceTest$preservesEveryOpenApiProvenanceSource$1.invokeSuspend(EnvelopeTest.kt:63)
+        at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+        at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+        at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+        at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+        at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+        at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+        at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+        at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source)
+        at com.afc.companion.EnvelopeSourceTest.preservesEveryOpenApiProvenanceSource(EnvelopeTest.kt:61)
+
+EnvelopeSourceTest > [source manual] > preservesEveryOpenApiProvenanceSource[source manual] FAILED
+    java.lang.AssertionError: Missing behavior: preserve manual provenance
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at org.junit.Assert.assertNotNull(Assert.java:713)
+        at com.afc.companion.EnvelopeSourceTest$preservesEveryOpenApiProvenanceSource$1.invokeSuspend(EnvelopeTest.kt:63)
+        at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+        at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+        at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+        at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+        at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+        at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+        at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+        at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source)
+        at com.afc.companion.EnvelopeSourceTest.preservesEveryOpenApiProvenanceSource(EnvelopeTest.kt:61)
+
+EnvelopeTest > rejectsUnknownSource PASSED
+
+EnvelopeTest > rejectsUnknownSchemaVersion PASSED
+
+EnvelopeTest > rejectsNegativeRevision PASSED
+
+EnvelopeTest > rejectsInvalidFreshnessTimestamp PASSED
+
+EnvelopeTest > rejectsWrongFieldTypes PASSED
+
+EnvelopeTest > acceptsEqualRevisionWithoutChangingIdentity FAILED
+    java.lang.AssertionError: Missing behavior: retry keeps the same entity and revision
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at org.junit.Assert.assertNotNull(Assert.java:713)
+        at com.afc.companion.EnvelopeTest$acceptsEqualRevisionWithoutChangingIdentity$1.invokeSuspend(EnvelopeTest.kt:28)
+        at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+        at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+        at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+        at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+        at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+        at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+        at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+        at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source)
+        at com.afc.companion.EnvelopeTest.acceptsEqualRevisionWithoutChangingIdentity(EnvelopeTest.kt:26)
+
+EnvelopeTest > decodesAllRequiredFieldsWithoutLosingProvenance FAILED
+    java.lang.AssertionError: Missing behavior: decode the frozen envelope
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at org.junit.Assert.assertNotNull(Assert.java:713)
+        at com.afc.companion.EnvelopeTest$decodesAllRequiredFieldsWithoutLosingProvenance$1.invokeSuspend(EnvelopeTest.kt:18)
+        at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+        at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+        at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+        at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+        at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+        at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+        at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+        at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source)
+        at com.afc.companion.EnvelopeTest.decodesAllRequiredFieldsWithoutLosingProvenance(EnvelopeTest.kt:13)
+
+EnvelopeTest > acceptsNewerRevision FAILED
+    java.lang.AssertionError: Missing behavior: accept the newer snapshot
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at org.junit.Assert.assertNotNull(Assert.java:713)
+        at com.afc.companion.EnvelopeTest$acceptsNewerRevision$1.invokeSuspend(EnvelopeTest.kt:33)
+        at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+        at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+        at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+        at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+        at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+        at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+        at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+        at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source)
+        at com.afc.companion.EnvelopeTest.acceptsNewerRevision(EnvelopeTest.kt:31)
+
+EnvelopeTest > rejectsOlderRevision PASSED
+
+LinkScreenTest > pendingPollKeepsLinkFlowOpen FAILED
+    java.lang.AssertionError: Missing behavior: pending state
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at org.junit.Assert.assertNotNull(Assert.java:713)
+        at com.afc.companion.LinkScreenTest.pendingPollKeepsLinkFlowOpen(LinkScreenTest.kt:23)
+
+LinkScreenTest > codeShownWithItsExpiry FAILED
+    java.lang.AssertionError: Missing behavior: present issued device code
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at org.junit.Assert.assertNotNull(Assert.java:713)
+        at com.afc.companion.LinkScreenTest.codeShownWithItsExpiry(LinkScreenTest.kt:16)
+
+LinkScreenTest > expiredCodeShowsExpiryAndCannotContinueToProfile FAILED
+    java.lang.AssertionError: Missing behavior: expired state
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at org.junit.Assert.assertNotNull(Assert.java:713)
+        at com.afc.companion.LinkScreenTest.expiredCodeShowsExpiryAndCannotContinueToProfile(LinkScreenTest.kt:28)
+
+LinkScreenTest > linkedStateContinuesWithoutDisplayingSessionToken FAILED
+    java.lang.AssertionError: Missing behavior: linked state
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at org.junit.Assert.assertNotNull(Assert.java:713)
+        at com.afc.companion.LinkScreenTest.linkedStateContinuesWithoutDisplayingSessionToken(LinkScreenTest.kt:35)
+
+LinkScreenTest > unlinkedStateRequiresCodeIssuance FAILED
+    java.lang.AssertionError: Missing behavior: unlinked state
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at org.junit.Assert.assertNotNull(Assert.java:713)
+        at com.afc.companion.LinkScreenTest.unlinkedStateRequiresCodeIssuance(LinkScreenTest.kt:41)
+
+ShellContractTest > buildDeclaresMinSdk25 PASSED
+
+ShellContractTest > exposesOnlyLinkProfileAndPanelNavigation FAILED
+    java.lang.AssertionError: Missing behavior: shell navigation without social surfaces expected:<[Link, Profile/Settings, Panel]> but was:<[]>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at com.afc.companion.ShellContractTest.exposesOnlyLinkProfileAndPanelNavigation(ShellContractTest.kt:12)
+
+ShellContractTest > noMessagingEndpointsInFrozenContract PASSED
+
+ShellContractTest > committedTestTokensDoNotMatchCredentialShapes PASSED
+
+EnvelopeRequiredFieldTest > [missing schemaVersion] > rejectsIncompleteEnvelopeWithoutPartialUpdate[missing schemaVersion] PASSED
+
+EnvelopeRequiredFieldTest > [missing id] > rejectsIncompleteEnvelopeWithoutPartialUpdate[missing id] PASSED
+
+EnvelopeRequiredFieldTest > [missing revision] > rejectsIncompleteEnvelopeWithoutPartialUpdate[missing revision] PASSED
+
+EnvelopeRequiredFieldTest > [missing source] > rejectsIncompleteEnvelopeWithoutPartialUpdate[missing source] PASSED
+
+EnvelopeRequiredFieldTest > [missing updatedAt] > rejectsIncompleteEnvelopeWithoutPartialUpdate[missing updatedAt] PASSED
+
+EnvelopeRequiredFieldTest > [missing data] > rejectsIncompleteEnvelopeWithoutPartialUpdate[missing data] PASSED
+
+FixtureCalibrationTest > realHttpPeerProducesOpenApiEnvelopeAndStructuredError PASSED
+
+60 tests completed, 44 failed
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:testDebugUnitTest'.
+> There were failing tests. See the report at: file://$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-a01/tv-app/app/build/reports/tests/testDebugUnitTest/index.html
+
+* Try:
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+
+BUILD FAILED in 5s
+24 actionable tasks: 1 executed, 23 up-to-date
+gate: tvapp: FAIL check exit 1
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.2, pluggy-1.6.0
+rootdir: $HOME/alphazede/worktrees/amazon-fantasy-companion-p2-a01/backend
+configfile: pyproject.toml
+plugins: cov-7.1.0, anyio-4.13.0, asyncio-1.3.0, mock-3.15.1, typeguard-4.4.4
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 158 items
+
+backend/tests/unit/test_bug_auth002.py ..                                [  1%]
+backend/tests/unit/test_device_auth.py ..............................    [ 20%]
+backend/tests/unit/test_device_auth_units.py ..........                  [ 26%]
+backend/tests/unit/test_pipeline_and_stubs.py .............              [ 34%]
+backend/tests/unit/test_router.py ...................................... [ 58%]
+....................                                                     [ 71%]
+backend/tests/unit/test_store.py .......                                 [ 75%]
+backend/tests/contract/test_api_contract.py ........................     [ 91%]
+backend/tests/contract/test_backend_template.py ...........              [ 98%]
+backend/tests/contract/test_template_iam.py ...                          [100%]
+
+=============================== warnings summary ===============================
+tests/unit/test_bug_auth002.py: 42 warnings
+tests/unit/test_device_auth.py: 324 warnings
+tests/unit/test_device_auth_units.py: 133 warnings
+tests/unit/test_pipeline_and_stubs.py: 87 warnings
+tests/unit/test_router.py: 870 warnings
+tests/unit/test_store.py: 92 warnings
+tests/contract/test_api_contract.py: 109 warnings
+  $HOME/.local/lib/python3.12/site-packages/botocore/auth.py:424: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    datetime_now = datetime.datetime.utcnow()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+============================= slowest 10 durations =============================
+0.44s setup    tests/unit/test_bug_auth002.py::test_poll_after_expiry_mints_no_session
+0.26s setup    tests/unit/test_router.py::test_response_cap_counts_serialized_bytes_not_characters
+0.24s setup    tests/unit/test_store.py::test_events_keep_the_game_event_shape
+0.23s setup    tests/unit/test_router.py::test_every_settings_attribute_is_accepted[quietHours]
+0.23s setup    tests/unit/test_router.py::test_routing_outcomes_are_validated
+0.23s setup    tests/unit/test_pipeline_and_stubs.py::test_stubs_name_their_owning_slice[provider_resolver-record_outcome-3-P2-B06]
+0.23s setup    tests/unit/test_router.py::test_invalid_profile_updates_change_nothing[body4]
+0.23s setup    tests/unit/test_router.py::test_unhandled_failures_are_logged_without_detail_in_the_response
+0.23s setup    tests/unit/test_router.py::test_every_settings_attribute_is_accepted[excitement]
+0.23s setup    tests/unit/test_router.py::test_every_settings_attribute_is_accepted[voice]
+===================== 158 passed, 1657 warnings in 16.90s ======================
+gate: backend: PASS checks completed

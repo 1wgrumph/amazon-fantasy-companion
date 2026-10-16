@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "dependency": "boto3/botocore with admitted Moto 5.2.4 in-process backend",
+  "observed_operations": [
+    "DynamoDB CreateTable (botocore parameter validation)",
+    "PutItem/GetItem round-trip: state=codePending, TTL numeric epoch",
+    "SSM SecureString PutParameter/GetParameter(WithDecryption=True) round-trip"
+  ],
+  "input_basis": [
+    "committed design DES-AFC-P2-BACKEND/AUTH",
+    "installed botocore DynamoDB/SSM service model"
+  ],
+  "network": "socket connect blocked; no AWS request",
+  "secret_values": "generated at runtime; never recorded",
+  "limitations": "simulated AWS behavior; not deployment or credential evidence"
+}

@@ -1,0 +1,1415 @@
+Installed 1 package in 8ms
+Installed 1 package in 8ms
+Installed 1 package in 4ms
+gate: spec: PASS checks completed
+gate: docs: PASS checks completed
+.github/workflows/ci.yml: PASS
+...............fatal: not a git repository (or any parent up to mount point /)
+Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+........fatal: not a git repository (or any parent up to mount point /)
+Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+....................................................
+----------------------------------------------------------------------
+Ran 75 tests in 122.872s
+
+OK
+mutation adapter exit=3: ['GAP REPORT_INCOMPLETE: mutmut stats absent']
+mutation adapter exit=0: ['PASS mutation score 100.00% (threshold 70%)']
+coverage adapter exit=0: ['PASS changed-line coverage 100% (threshold 90%)']
+coverage adapter exit=3: ['GAP REPORT_INCOMPLETE: unmapped changed files: backend/src/control.py']
+gate: hygiene: PASS checks completed
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.2, pluggy-1.6.0
+rootdir: $WORKTREE/backend
+configfile: pyproject.toml
+plugins: cov-7.1.0, anyio-4.13.0, asyncio-1.3.0, mock-3.15.1, typeguard-4.4.4
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 628 items
+
+backend/tests/unit/feed_ingest/test_feed_edges.py ...................... [  3%]
+..........                                                               [  5%]
+backend/tests/unit/feed_ingest/test_monitoring.py ............           [  7%]
+backend/tests/unit/feed_ingest/test_normalization.py ...............     [  9%]
+backend/tests/unit/feed_ingest/test_outage_repairs.py .....              [ 10%]
+backend/tests/unit/feed_ingest/test_replay_labels.py ........            [ 11%]
+backend/tests/unit/feed_ingest/test_review_repairs.py .................. [ 14%]
+....................                                                     [ 17%]
+backend/tests/unit/feed_ingest/test_revisions.py .......                 [ 18%]
+backend/tests/unit/feed_ingest/test_validation.py ...............        [ 21%]
+backend/tests/unit/lineup/test_active_lineup.py ...........              [ 22%]
+backend/tests/unit/lineup/test_lineup_rejections.py .................... [ 25%]
+........................                                                 [ 29%]
+backend/tests/unit/lineup/test_manual_source.py ..................       [ 32%]
+backend/tests/unit/lineup/test_manual_team.py ...................        [ 35%]
+backend/tests/unit/lineup/test_presets.py .............................. [ 40%]
+                                                                         [ 40%]
+backend/tests/unit/lineup/test_review_regressions.py ................... [ 43%]
+.                                                                        [ 43%]
+backend/tests/unit/lineup/test_yahoo_client.py ..................        [ 46%]
+backend/tests/unit/matcher/test_matcher_corrections.py FFFFFF            [ 47%]
+backend/tests/unit/matcher/test_matcher_dedup.py FFFFFFFF                [ 48%]
+backend/tests/unit/matcher/test_matcher_identity.py FFFFFFFFFF           [ 50%]
+backend/tests/unit/provider_resolver/test_resolver_access_basis.py ..... [ 51%]
+....                                                                     [ 51%]
+backend/tests/unit/provider_resolver/test_resolver_local_broadcast.py .. [ 52%]
+....                                                                     [ 52%]
+backend/tests/unit/provider_resolver/test_resolver_overrides.py ....     [ 53%]
+backend/tests/unit/provider_resolver/test_resolver_platform_routes.py .. [ 53%]
+...                                                                      [ 54%]
+backend/tests/unit/provider_resolver/test_resolver_preference_shapes.py . [ 54%]
+......................                                                   [ 57%]
+backend/tests/unit/provider_resolver/test_resolver_records.py .......... [ 59%]
+....                                                                     [ 60%]
+backend/tests/unit/provider_resolver/test_resolver_selection.py ........ [ 61%]
+.                                                                        [ 61%]
+backend/tests/unit/test_bug_auth002.py ..                                [ 61%]
+backend/tests/unit/test_deployed_guard.py .............................. [ 66%]
+...........................................                              [ 73%]
+backend/tests/unit/test_device_auth.py ..............................    [ 78%]
+backend/tests/unit/test_device_auth_units.py ..........                  [ 79%]
+backend/tests/unit/test_link_patterns.py .                               [ 79%]
+backend/tests/unit/test_pipeline_and_stubs.py ........                   [ 81%]
+backend/tests/unit/test_router.py ...................................... [ 87%]
+......................                                                   [ 90%]
+backend/tests/unit/test_security_auth_link.py ..                         [ 91%]
+backend/tests/unit/test_store.py .......                                 [ 92%]
+backend/tests/unit/test_unknown_route_envelope.py .....                  [ 92%]
+backend/tests/contract/feed_ingest/test_feed_contracts.py ......         [ 93%]
+backend/tests/contract/feed_ingest/test_replay_packaging.py ..           [ 94%]
+backend/tests/contract/test_api_contract.py .......................      [ 97%]
+backend/tests/contract/test_backend_template.py .........                [ 99%]
+backend/tests/contract/test_security_auth_iam.py .                       [ 99%]
+backend/tests/contract/test_template_iam.py ...                          [100%]
+
+=================================== FAILURES ===================================
+__________________ test_correction_revises_the_existing_alert __________________
+
+func = <function resolve at 0x7795615aa840>
+args = ({'correctionOf': 1, 'eventId': '401999001301', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...},)
+kwargs = {}
+
+    def attempt(func, *args, **kwargs):
+        """Call product code; an AFC-STUB NotImplementedError is an assertion failure."""
+        try:
+>           return func(*args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/matcher/matcher_support.py:74:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+game_event = {'correctionOf': 1, 'eventId': '401999001301', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...}
+
+    def resolve(game_event):
+        """AFC-STUB (P2-B04): Profiles and starters the GameEvent concerns, keyed by (profile, event id); corrections revise, never duplicate."""
+>       raise NotImplementedError(_pending())
+E       NotImplementedError: AFC-STUB: matcher is implemented by P2-B04
+
+backend/src/matcher/__init__.py:13: NotImplementedError
+
+During handling of the above exception, another exception occurred:
+
+match_env = namespace(module=<module 'matcher' from '$HOME/alphazede/Hackathons/amazon-fantasy-companion/.claude/worktrees..._reads=[]), player_map=PosixPath('/tmp/pytest-of-spectre/pytest-1466/test_correction_revises_the_ex0/player_map.json'))
+
+    def test_correction_revises_the_existing_alert(match_env):
+        seed_lineup("fan", "manual", [MANUAL_RECEIVER])
+        seed_alert("fan", "c-0001", EVENT, 1)
+>       matches = match_env.resolve(corrected())
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/matcher/test_matcher_corrections.py:23:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend/tests/unit/matcher/matcher_support.py:128: in resolve
+    result = attempt(module.resolve, event)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+func = <function resolve at 0x7795615aa840>
+args = ({'correctionOf': 1, 'eventId': '401999001301', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...},)
+kwargs = {}
+
+    def attempt(func, *args, **kwargs):
+        """Call product code; an AFC-STUB NotImplementedError is an assertion failure."""
+        try:
+            return func(*args, **kwargs)
+        except NotImplementedError as exc:
+>           raise AssertionError(f"matcher behavior is not implemented (AFC-STUB): {exc}")
+E           AssertionError: matcher behavior is not implemented (AFC-STUB): AFC-STUB: matcher is implemented by P2-B04
+
+backend/tests/unit/matcher/matcher_support.py:76: AssertionError
+_______________ test_correction_does_not_allocate_a_new_alert_id _______________
+
+func = <function resolve at 0x7795629d1e40>
+args = ({'correctionOf': 1, 'eventId': '401999001301', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...},)
+kwargs = {}
+
+    def attempt(func, *args, **kwargs):
+        """Call product code; an AFC-STUB NotImplementedError is an assertion failure."""
+        try:
+>           return func(*args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/matcher/matcher_support.py:74:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+game_event = {'correctionOf': 1, 'eventId': '401999001301', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...}
+
+    def resolve(game_event):
+        """AFC-STUB (P2-B04): Profiles and starters the GameEvent concerns, keyed by (profile, event id); corrections revise, never duplicate."""
+>       raise NotImplementedError(_pending())
+E       NotImplementedError: AFC-STUB: matcher is implemented by P2-B04
+
+backend/src/matcher/__init__.py:13: NotImplementedError
+
+During handling of the above exception, another exception occurred:
+
+match_env = namespace(module=<module 'matcher' from '$HOME/alphazede/Hackathons/amazon-fantasy-companion/.claude/worktrees..._reads=[]), player_map=PosixPath('/tmp/pytest-of-spectre/pytest-1466/test_correction_does_not_alloc0/player_map.json'))
+
+    def test_correction_does_not_allocate_a_new_alert_id(match_env):
+        seed_lineup("fan", "manual", [MANUAL_RECEIVER])
+        seed_alert("fan", "c-0001", EVENT, 1)
+>       matches = match_env.resolve(corrected())
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/matcher/test_matcher_corrections.py:33:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend/tests/unit/matcher/matcher_support.py:128: in resolve
+    result = attempt(module.resolve, event)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+func = <function resolve at 0x7795629d1e40>
+args = ({'correctionOf': 1, 'eventId': '401999001301', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...},)
+kwargs = {}
+
+    def attempt(func, *args, **kwargs):
+        """Call product code; an AFC-STUB NotImplementedError is an assertion failure."""
+        try:
+            return func(*args, **kwargs)
+        except NotImplementedError as exc:
+>           raise AssertionError(f"matcher behavior is not implemented (AFC-STUB): {exc}")
+E           AssertionError: matcher behavior is not implemented (AFC-STUB): AFC-STUB: matcher is implemented by P2-B04
+
+backend/tests/unit/matcher/matcher_support.py:76: AssertionError
+_________ test_correction_reassigning_the_play_still_revises_the_alert _________
+
+func = <function resolve at 0x77955d7e5080>
+args = ({'correctionOf': 1, 'eventId': '401999001301', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...},)
+kwargs = {}
+
+    def attempt(func, *args, **kwargs):
+        """Call product code; an AFC-STUB NotImplementedError is an assertion failure."""
+        try:
+>           return func(*args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/matcher/matcher_support.py:74:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+game_event = {'correctionOf': 1, 'eventId': '401999001301', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...}
+
+    def resolve(game_event):
+        """AFC-STUB (P2-B04): Profiles and starters the GameEvent concerns, keyed by (profile, event id); corrections revise, never duplicate."""
+>       raise NotImplementedError(_pending())
+E       NotImplementedError: AFC-STUB: matcher is implemented by P2-B04
+
+backend/src/matcher/__init__.py:13: NotImplementedError
+
+During handling of the above exception, another exception occurred:
+
+match_env = namespace(module=<module 'matcher' from '$HOME/alphazede/Hackathons/amazon-fantasy-companion/.claude/worktrees..._reads=[]), player_map=PosixPath('/tmp/pytest-of-spectre/pytest-1466/test_correction_reassigning_th0/player_map.json'))
+
+    def test_correction_reassigning_the_play_still_revises_the_alert(match_env):
+        # The corrected play no longer credits the starter: the stale alert and
+        # panel fact must still be revised for that profile, not left behind.
+        seed_lineup("fan", "manual", [MANUAL_RECEIVER])
+        seed_alert("fan", "c-0001", EVENT, 1)
+>       matches = match_env.resolve(corrected(players=("9000077",)))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/matcher/test_matcher_corrections.py:45:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend/tests/unit/matcher/matcher_support.py:128: in resolve
+    result = attempt(module.resolve, event)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+func = <function resolve at 0x77955d7e5080>
+args = ({'correctionOf': 1, 'eventId': '401999001301', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...},)
+kwargs = {}
+
+    def attempt(func, *args, **kwargs):
+        """Call product code; an AFC-STUB NotImplementedError is an assertion failure."""
+        try:
+            return func(*args, **kwargs)
+        except NotImplementedError as exc:
+>           raise AssertionError(f"matcher behavior is not implemented (AFC-STUB): {exc}")
+E           AssertionError: matcher behavior is not implemented (AFC-STUB): AFC-STUB: matcher is implemented by P2-B04
+
+backend/tests/unit/matcher/matcher_support.py:76: AssertionError
+___________ test_correction_revises_every_concerned_profile_in_place ___________
+
+func = <function resolve at 0x77955ee34720>
+args = ({'correctionOf': 1, 'eventId': '401999001301', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...},)
+kwargs = {}
+
+    def attempt(func, *args, **kwargs):
+        """Call product code; an AFC-STUB NotImplementedError is an assertion failure."""
+        try:
+>           return func(*args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/matcher/matcher_support.py:74:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+game_event = {'correctionOf': 1, 'eventId': '401999001301', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...}
+
+    def resolve(game_event):
+        """AFC-STUB (P2-B04): Profiles and starters the GameEvent concerns, keyed by (profile, event id); corrections revise, never duplicate."""
+>       raise NotImplementedError(_pending())
+E       NotImplementedError: AFC-STUB: matcher is implemented by P2-B04
+
+backend/src/matcher/__init__.py:13: NotImplementedError
+
+During handling of the above exception, another exception occurred:
+
+match_env = namespace(module=<module 'matcher' from '$HOME/alphazede/Hackathons/amazon-fantasy-companion/.claude/worktrees..._reads=[]), player_map=PosixPath('/tmp/pytest-of-spectre/pytest-1466/test_correction_revises_every_0/player_map.json'))
+
+    def test_correction_revises_every_concerned_profile_in_place(match_env):
+        seed_lineup("fan-one", "manual", [MANUAL_RECEIVER])
+        seed_lineup("fan-two", "yahoo", [YAHOO_RECEIVER])
+        seed_alert("fan-one", "c-0101", EVENT, 1)
+        seed_alert("fan-two", "c-0202", EVENT, 1)
+>       matches = match_env.resolve(corrected())
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/matcher/test_matcher_corrections.py:55:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend/tests/unit/matcher/matcher_support.py:128: in resolve
+    result = attempt(module.resolve, event)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+func = <function resolve at 0x77955ee34720>
+args = ({'correctionOf': 1, 'eventId': '401999001301', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...},)
+kwargs = {}
+
+    def attempt(func, *args, **kwargs):
+        """Call product code; an AFC-STUB NotImplementedError is an assertion failure."""
+        try:
+            return func(*args, **kwargs)
+        except NotImplementedError as exc:
+>           raise AssertionError(f"matcher behavior is not implemented (AFC-STUB): {exc}")
+E           AssertionError: matcher behavior is not implemented (AFC-STUB): AFC-STUB: matcher is implemented by P2-B04
+
+backend/tests/unit/matcher/matcher_support.py:76: AssertionError
+_____________ test_stale_revision_after_correction_yields_nothing ______________
+
+func = <function resolve at 0x77955e977100>
+args = ({'correctionOf': None, 'eventId': '401999001301', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...},)
+kwargs = {}
+
+    def attempt(func, *args, **kwargs):
+        """Call product code; an AFC-STUB NotImplementedError is an assertion failure."""
+        try:
+>           return func(*args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/matcher/matcher_support.py:74:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+game_event = {'correctionOf': None, 'eventId': '401999001301', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...}
+
+    def resolve(game_event):
+        """AFC-STUB (P2-B04): Profiles and starters the GameEvent concerns, keyed by (profile, event id); corrections revise, never duplicate."""
+>       raise NotImplementedError(_pending())
+E       NotImplementedError: AFC-STUB: matcher is implemented by P2-B04
+
+backend/src/matcher/__init__.py:13: NotImplementedError
+
+During handling of the above exception, another exception occurred:
+
+match_env = namespace(module=<module 'matcher' from '$HOME/alphazede/Hackathons/amazon-fantasy-companion/.claude/worktrees..._reads=[]), player_map=PosixPath('/tmp/pytest-of-spectre/pytest-1466/test_stale_revision_after_corr0/player_map.json'))
+
+    def test_stale_revision_after_correction_yields_nothing(match_env):
+        seed_lineup("fan", "manual", [MANUAL_RECEIVER])
+        seed_alert("fan", "c-0001", EVENT, 2)
+>       assert match_env.resolve(game_event(EVENT, ["9000001"], revision=1)) == []
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/matcher/test_matcher_corrections.py:64:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend/tests/unit/matcher/matcher_support.py:128: in resolve
+    result = attempt(module.resolve, event)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+func = <function resolve at 0x77955e977100>
+args = ({'correctionOf': None, 'eventId': '401999001301', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...},)
+kwargs = {}
+
+    def attempt(func, *args, **kwargs):
+        """Call product code; an AFC-STUB NotImplementedError is an assertion failure."""
+        try:
+            return func(*args, **kwargs)
+        except NotImplementedError as exc:
+>           raise AssertionError(f"matcher behavior is not implemented (AFC-STUB): {exc}")
+E           AssertionError: matcher behavior is not implemented (AFC-STUB): AFC-STUB: matcher is implemented by P2-B04
+
+backend/tests/unit/matcher/matcher_support.py:76: AssertionError
+__________________ test_correction_redelivery_yields_nothing ___________________
+
+func = <function resolve at 0x77955d1f9a80>
+args = ({'correctionOf': 1, 'eventId': '401999001301', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...},)
+kwargs = {}
+
+    def attempt(func, *args, **kwargs):
+        """Call product code; an AFC-STUB NotImplementedError is an assertion failure."""
+        try:
+>           return func(*args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/matcher/matcher_support.py:74:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+game_event = {'correctionOf': 1, 'eventId': '401999001301', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...}
+
+    def resolve(game_event):
+        """AFC-STUB (P2-B04): Profiles and starters the GameEvent concerns, keyed by (profile, event id); corrections revise, never duplicate."""
+>       raise NotImplementedError(_pending())
+E       NotImplementedError: AFC-STUB: matcher is implemented by P2-B04
+
+backend/src/matcher/__init__.py:13: NotImplementedError
+
+During handling of the above exception, another exception occurred:
+
+match_env = namespace(module=<module 'matcher' from '$HOME/alphazede/Hackathons/amazon-fantasy-companion/.claude/worktrees..._reads=[]), player_map=PosixPath('/tmp/pytest-of-spectre/pytest-1466/test_correction_redelivery_yie0/player_map.json'))
+
+    def test_correction_redelivery_yields_nothing(match_env):
+        seed_lineup("fan", "manual", [MANUAL_RECEIVER])
+        seed_alert("fan", "c-0001", EVENT, 2)
+>       assert match_env.resolve(corrected()) == []
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/matcher/test_matcher_corrections.py:70:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend/tests/unit/matcher/matcher_support.py:128: in resolve
+    result = attempt(module.resolve, event)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+func = <function resolve at 0x77955d1f9a80>
+args = ({'correctionOf': 1, 'eventId': '401999001301', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...},)
+kwargs = {}
+
+    def attempt(func, *args, **kwargs):
+        """Call product code; an AFC-STUB NotImplementedError is an assertion failure."""
+        try:
+            return func(*args, **kwargs)
+        except NotImplementedError as exc:
+>           raise AssertionError(f"matcher behavior is not implemented (AFC-STUB): {exc}")
+E           AssertionError: matcher behavior is not implemented (AFC-STUB): AFC-STUB: matcher is implemented by P2-B04
+
+backend/tests/unit/matcher/matcher_support.py:76: AssertionError
+___________________ test_first_delivery_yields_one_new_match ___________________
+
+func = <function resolve at 0x77955de3f920>
+args = ({'correctionOf': None, 'eventId': '401999001201', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...},)
+kwargs = {}
+
+    def attempt(func, *args, **kwargs):
+        """Call product code; an AFC-STUB NotImplementedError is an assertion failure."""
+        try:
+>           return func(*args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/matcher/matcher_support.py:74:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+game_event = {'correctionOf': None, 'eventId': '401999001201', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...}
+
+    def resolve(game_event):
+        """AFC-STUB (P2-B04): Profiles and starters the GameEvent concerns, keyed by (profile, event id); corrections revise, never duplicate."""
+>       raise NotImplementedError(_pending())
+E       NotImplementedError: AFC-STUB: matcher is implemented by P2-B04
+
+backend/src/matcher/__init__.py:13: NotImplementedError
+
+During handling of the above exception, another exception occurred:
+
+match_env = namespace(module=<module 'matcher' from '$HOME/alphazede/Hackathons/amazon-fantasy-companion/.claude/worktrees..._reads=[]), player_map=PosixPath('/tmp/pytest-of-spectre/pytest-1466/test_first_delivery_yields_one0/player_map.json'))
+
+    def test_first_delivery_yields_one_new_match(match_env):
+        seed_lineup("fan", "manual", [MANUAL_RECEIVER])
+>       matches = match_env.resolve(game_event(EVENT, ["9000001"]))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/matcher/test_matcher_dedup.py:19:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend/tests/unit/matcher/matcher_support.py:128: in resolve
+    result = attempt(module.resolve, event)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+func = <function resolve at 0x77955de3f920>
+args = ({'correctionOf': None, 'eventId': '401999001201', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...},)
+kwargs = {}
+
+    def attempt(func, *args, **kwargs):
+        """Call product code; an AFC-STUB NotImplementedError is an assertion failure."""
+        try:
+            return func(*args, **kwargs)
+        except NotImplementedError as exc:
+>           raise AssertionError(f"matcher behavior is not implemented (AFC-STUB): {exc}")
+E           AssertionError: matcher behavior is not implemented (AFC-STUB): AFC-STUB: matcher is implemented by P2-B04
+
+backend/tests/unit/matcher/matcher_support.py:76: AssertionError
+__________________ test_redelivery_after_alert_yields_nothing __________________
+
+func = <function resolve at 0x779560c46d40>
+args = ({'correctionOf': None, 'eventId': '401999001201', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...},)
+kwargs = {}
+
+    def attempt(func, *args, **kwargs):
+        """Call product code; an AFC-STUB NotImplementedError is an assertion failure."""
+        try:
+>           return func(*args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/matcher/matcher_support.py:74:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+game_event = {'correctionOf': None, 'eventId': '401999001201', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...}
+
+    def resolve(game_event):
+        """AFC-STUB (P2-B04): Profiles and starters the GameEvent concerns, keyed by (profile, event id); corrections revise, never duplicate."""
+>       raise NotImplementedError(_pending())
+E       NotImplementedError: AFC-STUB: matcher is implemented by P2-B04
+
+backend/src/matcher/__init__.py:13: NotImplementedError
+
+During handling of the above exception, another exception occurred:
+
+match_env = namespace(module=<module 'matcher' from '$HOME/alphazede/Hackathons/amazon-fantasy-companion/.claude/worktrees..._reads=[]), player_map=PosixPath('/tmp/pytest-of-spectre/pytest-1466/test_redelivery_after_alert_yi0/player_map.json'))
+
+    def test_redelivery_after_alert_yields_nothing(match_env):
+        seed_lineup("fan", "manual", [MANUAL_RECEIVER])
+        event = game_event(EVENT, ["9000001"])
+>       assert len(match_env.resolve(event)) == 1
+                   ^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/matcher/test_matcher_dedup.py:28:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend/tests/unit/matcher/matcher_support.py:128: in resolve
+    result = attempt(module.resolve, event)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+func = <function resolve at 0x779560c46d40>
+args = ({'correctionOf': None, 'eventId': '401999001201', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...},)
+kwargs = {}
+
+    def attempt(func, *args, **kwargs):
+        """Call product code; an AFC-STUB NotImplementedError is an assertion failure."""
+        try:
+            return func(*args, **kwargs)
+        except NotImplementedError as exc:
+>           raise AssertionError(f"matcher behavior is not implemented (AFC-STUB): {exc}")
+E           AssertionError: matcher behavior is not implemented (AFC-STUB): AFC-STUB: matcher is implemented by P2-B04
+
+backend/tests/unit/matcher/matcher_support.py:76: AssertionError
+___________ test_repeated_retries_yield_one_match_per_resolved_event ___________
+
+func = <function resolve at 0x77955d65da80>
+args = ({'correctionOf': None, 'eventId': '401999001201', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...},)
+kwargs = {}
+
+    def attempt(func, *args, **kwargs):
+        """Call product code; an AFC-STUB NotImplementedError is an assertion failure."""
+        try:
+>           return func(*args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/matcher/matcher_support.py:74:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+game_event = {'correctionOf': None, 'eventId': '401999001201', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...}
+
+    def resolve(game_event):
+        """AFC-STUB (P2-B04): Profiles and starters the GameEvent concerns, keyed by (profile, event id); corrections revise, never duplicate."""
+>       raise NotImplementedError(_pending())
+E       NotImplementedError: AFC-STUB: matcher is implemented by P2-B04
+
+backend/src/matcher/__init__.py:13: NotImplementedError
+
+During handling of the above exception, another exception occurred:
+
+match_env = namespace(module=<module 'matcher' from '$HOME/alphazede/Hackathons/amazon-fantasy-companion/.claude/worktrees..._reads=[]), player_map=PosixPath('/tmp/pytest-of-spectre/pytest-1466/test_repeated_retries_yield_on0/player_map.json'))
+
+    def test_repeated_retries_yield_one_match_per_resolved_event(match_env):
+        seed_lineup("fan", "manual", [MANUAL_RECEIVER])
+        event = game_event(EVENT, ["9000001"])
+        total = []
+        for delivery in range(4):
+>           matches = match_env.resolve(dict(event))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/matcher/test_matcher_dedup.py:38:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend/tests/unit/matcher/matcher_support.py:128: in resolve
+    result = attempt(module.resolve, event)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+func = <function resolve at 0x77955d65da80>
+args = ({'correctionOf': None, 'eventId': '401999001201', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...},)
+kwargs = {}
+
+    def attempt(func, *args, **kwargs):
+        """Call product code; an AFC-STUB NotImplementedError is an assertion failure."""
+        try:
+            return func(*args, **kwargs)
+        except NotImplementedError as exc:
+>           raise AssertionError(f"matcher behavior is not implemented (AFC-STUB): {exc}")
+E           AssertionError: matcher behavior is not implemented (AFC-STUB): AFC-STUB: matcher is implemented by P2-B04
+
+backend/tests/unit/matcher/matcher_support.py:76: AssertionError
+_________________ test_two_starters_in_one_event_are_one_match _________________
+
+func = <function resolve at 0x779561a4c680>
+args = ({'correctionOf': None, 'eventId': '401999001201', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...},)
+kwargs = {}
+
+    def attempt(func, *args, **kwargs):
+        """Call product code; an AFC-STUB NotImplementedError is an assertion failure."""
+        try:
+>           return func(*args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/matcher/matcher_support.py:74:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+game_event = {'correctionOf': None, 'eventId': '401999001201', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...}
+
+    def resolve(game_event):
+        """AFC-STUB (P2-B04): Profiles and starters the GameEvent concerns, keyed by (profile, event id); corrections revise, never duplicate."""
+>       raise NotImplementedError(_pending())
+E       NotImplementedError: AFC-STUB: matcher is implemented by P2-B04
+
+backend/src/matcher/__init__.py:13: NotImplementedError
+
+During handling of the above exception, another exception occurred:
+
+match_env = namespace(module=<module 'matcher' from '$HOME/alphazede/Hackathons/amazon-fantasy-companion/.claude/worktrees..._reads=[]), player_map=PosixPath('/tmp/pytest-of-spectre/pytest-1466/test_two_starters_in_one_event0/player_map.json'))
+
+    def test_two_starters_in_one_event_are_one_match(match_env):
+        seed_lineup("fan", "manual", [MANUAL_RECEIVER, MANUAL_PASSER])
+>       matches = match_env.resolve(game_event(EVENT, ["9000005", "9000001"]))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/matcher/test_matcher_dedup.py:47:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend/tests/unit/matcher/matcher_support.py:128: in resolve
+    result = attempt(module.resolve, event)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+func = <function resolve at 0x779561a4c680>
+args = ({'correctionOf': None, 'eventId': '401999001201', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...},)
+kwargs = {}
+
+    def attempt(func, *args, **kwargs):
+        """Call product code; an AFC-STUB NotImplementedError is an assertion failure."""
+        try:
+            return func(*args, **kwargs)
+        except NotImplementedError as exc:
+>           raise AssertionError(f"matcher behavior is not implemented (AFC-STUB): {exc}")
+E           AssertionError: matcher behavior is not implemented (AFC-STUB): AFC-STUB: matcher is implemented by P2-B04
+
+backend/tests/unit/matcher/matcher_support.py:76: AssertionError
+____________ test_event_matching_multiple_alert_types_is_one_match _____________
+
+func = <function resolve at 0x779561aa6f20>
+args = ({'correctionOf': None, 'eventId': '401999001201', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 3, ...},)
+kwargs = {}
+
+    def attempt(func, *args, **kwargs):
+        """Call product code; an AFC-STUB NotImplementedError is an assertion failure."""
+        try:
+>           return func(*args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/matcher/matcher_support.py:74:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+game_event = {'correctionOf': None, 'eventId': '401999001201', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 3, ...}
+
+    def resolve(game_event):
+        """AFC-STUB (P2-B04): Profiles and starters the GameEvent concerns, keyed by (profile, event id); corrections revise, never duplicate."""
+>       raise NotImplementedError(_pending())
+E       NotImplementedError: AFC-STUB: matcher is implemented by P2-B04
+
+backend/src/matcher/__init__.py:13: NotImplementedError
+
+During handling of the above exception, another exception occurred:
+
+match_env = namespace(module=<module 'matcher' from '$HOME/alphazede/Hackathons/amazon-fantasy-companion/.claude/worktrees..._reads=[]), player_map=PosixPath('/tmp/pytest-of-spectre/pytest-1466/test_event_matching_multiple_a0/player_map.json'))
+
+    def test_event_matching_multiple_alert_types_is_one_match(match_env):
+        # A starter's touchdown inside the 20 that leaves a one-point fourth-quarter
+        # margin is a player score, a red-zone play and a close game at once.
+        seed_lineup("fan", "yahoo", [YAHOO_RECEIVER])
+        event = game_event(EVENT, ["9000001"], score=(21, 20), field_position=3)
+>       matches = match_env.resolve(event)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/matcher/test_matcher_dedup.py:57:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend/tests/unit/matcher/matcher_support.py:128: in resolve
+    result = attempt(module.resolve, event)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+func = <function resolve at 0x779561aa6f20>
+args = ({'correctionOf': None, 'eventId': '401999001201', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 3, ...},)
+kwargs = {}
+
+    def attempt(func, *args, **kwargs):
+        """Call product code; an AFC-STUB NotImplementedError is an assertion failure."""
+        try:
+            return func(*args, **kwargs)
+        except NotImplementedError as exc:
+>           raise AssertionError(f"matcher behavior is not implemented (AFC-STUB): {exc}")
+E           AssertionError: matcher behavior is not implemented (AFC-STUB): AFC-STUB: matcher is implemented by P2-B04
+
+backend/tests/unit/matcher/matcher_support.py:76: AssertionError
+___________________ test_each_concerned_profile_matches_once ___________________
+
+func = <function resolve at 0x779562abafc0>
+args = ({'correctionOf': None, 'eventId': '401999001201', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...},)
+kwargs = {}
+
+    def attempt(func, *args, **kwargs):
+        """Call product code; an AFC-STUB NotImplementedError is an assertion failure."""
+        try:
+>           return func(*args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/matcher/matcher_support.py:74:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+game_event = {'correctionOf': None, 'eventId': '401999001201', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...}
+
+    def resolve(game_event):
+        """AFC-STUB (P2-B04): Profiles and starters the GameEvent concerns, keyed by (profile, event id); corrections revise, never duplicate."""
+>       raise NotImplementedError(_pending())
+E       NotImplementedError: AFC-STUB: matcher is implemented by P2-B04
+
+backend/src/matcher/__init__.py:13: NotImplementedError
+
+During handling of the above exception, another exception occurred:
+
+match_env = namespace(module=<module 'matcher' from '$HOME/alphazede/Hackathons/amazon-fantasy-companion/.claude/worktrees..._reads=[]), player_map=PosixPath('/tmp/pytest-of-spectre/pytest-1466/test_each_concerned_profile_ma0/player_map.json'))
+
+    def test_each_concerned_profile_matches_once(match_env):
+        seed_lineup("fan-one", "manual", [MANUAL_RECEIVER])
+        seed_lineup("fan-two", "yahoo", [YAHOO_RECEIVER])
+>       matches = match_env.resolve(game_event(EVENT, ["9000001"]))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/matcher/test_matcher_dedup.py:66:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend/tests/unit/matcher/matcher_support.py:128: in resolve
+    result = attempt(module.resolve, event)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+func = <function resolve at 0x779562abafc0>
+args = ({'correctionOf': None, 'eventId': '401999001201', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...},)
+kwargs = {}
+
+    def attempt(func, *args, **kwargs):
+        """Call product code; an AFC-STUB NotImplementedError is an assertion failure."""
+        try:
+            return func(*args, **kwargs)
+        except NotImplementedError as exc:
+>           raise AssertionError(f"matcher behavior is not implemented (AFC-STUB): {exc}")
+E           AssertionError: matcher behavior is not implemented (AFC-STUB): AFC-STUB: matcher is implemented by P2-B04
+
+backend/tests/unit/matcher/matcher_support.py:76: AssertionError
+___________ test_distinct_event_for_same_starter_is_not_deduplicated ___________
+
+func = <function resolve at 0x77955d8acf40>
+args = ({'correctionOf': None, 'eventId': '401999001202', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...},)
+kwargs = {}
+
+    def attempt(func, *args, **kwargs):
+        """Call product code; an AFC-STUB NotImplementedError is an assertion failure."""
+        try:
+>           return func(*args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/matcher/matcher_support.py:74:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+game_event = {'correctionOf': None, 'eventId': '401999001202', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...}
+
+    def resolve(game_event):
+        """AFC-STUB (P2-B04): Profiles and starters the GameEvent concerns, keyed by (profile, event id); corrections revise, never duplicate."""
+>       raise NotImplementedError(_pending())
+E       NotImplementedError: AFC-STUB: matcher is implemented by P2-B04
+
+backend/src/matcher/__init__.py:13: NotImplementedError
+
+During handling of the above exception, another exception occurred:
+
+match_env = namespace(module=<module 'matcher' from '$HOME/alphazede/Hackathons/amazon-fantasy-companion/.claude/worktrees..._reads=[]), player_map=PosixPath('/tmp/pytest-of-spectre/pytest-1466/test_distinct_event_for_same_s0/player_map.json'))
+
+    def test_distinct_event_for_same_starter_is_not_deduplicated(match_env):
+        seed_lineup("fan", "manual", [MANUAL_RECEIVER])
+        seed_alert("fan", "c-0001", EVENT, 1)
+>       matches = match_env.resolve(game_event("401999001202", ["9000001"]))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/matcher/test_matcher_dedup.py:73:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend/tests/unit/matcher/matcher_support.py:128: in resolve
+    result = attempt(module.resolve, event)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+func = <function resolve at 0x77955d8acf40>
+args = ({'correctionOf': None, 'eventId': '401999001202', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...},)
+kwargs = {}
+
+    def attempt(func, *args, **kwargs):
+        """Call product code; an AFC-STUB NotImplementedError is an assertion failure."""
+        try:
+            return func(*args, **kwargs)
+        except NotImplementedError as exc:
+>           raise AssertionError(f"matcher behavior is not implemented (AFC-STUB): {exc}")
+E           AssertionError: matcher behavior is not implemented (AFC-STUB): AFC-STUB: matcher is implemented by P2-B04
+
+backend/tests/unit/matcher/matcher_support.py:76: AssertionError
+____________________ test_matcher_creates_no_alert_records _____________________
+
+func = <function resolve at 0x77955e131620>
+args = ({'correctionOf': None, 'eventId': '401999001201', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...},)
+kwargs = {}
+
+    def attempt(func, *args, **kwargs):
+        """Call product code; an AFC-STUB NotImplementedError is an assertion failure."""
+        try:
+>           return func(*args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/matcher/matcher_support.py:74:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+game_event = {'correctionOf': None, 'eventId': '401999001201', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...}
+
+    def resolve(game_event):
+        """AFC-STUB (P2-B04): Profiles and starters the GameEvent concerns, keyed by (profile, event id); corrections revise, never duplicate."""
+>       raise NotImplementedError(_pending())
+E       NotImplementedError: AFC-STUB: matcher is implemented by P2-B04
+
+backend/src/matcher/__init__.py:13: NotImplementedError
+
+During handling of the above exception, another exception occurred:
+
+match_env = namespace(module=<module 'matcher' from '$HOME/alphazede/Hackathons/amazon-fantasy-companion/.claude/worktrees..._reads=[]), player_map=PosixPath('/tmp/pytest-of-spectre/pytest-1466/test_matcher_creates_no_alert_0/player_map.json'))
+
+    def test_matcher_creates_no_alert_records(match_env):
+        seed_lineup("fan", "manual", [MANUAL_RECEIVER])
+>       matches = match_env.resolve(game_event(EVENT, ["9000001"]))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/matcher/test_matcher_dedup.py:80:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend/tests/unit/matcher/matcher_support.py:128: in resolve
+    result = attempt(module.resolve, event)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+func = <function resolve at 0x77955e131620>
+args = ({'correctionOf': None, 'eventId': '401999001201', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...},)
+kwargs = {}
+
+    def attempt(func, *args, **kwargs):
+        """Call product code; an AFC-STUB NotImplementedError is an assertion failure."""
+        try:
+            return func(*args, **kwargs)
+        except NotImplementedError as exc:
+>           raise AssertionError(f"matcher behavior is not implemented (AFC-STUB): {exc}")
+E           AssertionError: matcher behavior is not implemented (AFC-STUB): AFC-STUB: matcher is implemented by P2-B04
+
+backend/tests/unit/matcher/matcher_support.py:76: AssertionError
+_______________ test_manual_starter_resolves_by_espn_athlete_id ________________
+
+func = <function resolve at 0x77955da94040>
+args = ({'correctionOf': None, 'eventId': '401999001101', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...},)
+kwargs = {}
+
+    def attempt(func, *args, **kwargs):
+        """Call product code; an AFC-STUB NotImplementedError is an assertion failure."""
+        try:
+>           return func(*args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/matcher/matcher_support.py:74:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+game_event = {'correctionOf': None, 'eventId': '401999001101', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...}
+
+    def resolve(game_event):
+        """AFC-STUB (P2-B04): Profiles and starters the GameEvent concerns, keyed by (profile, event id); corrections revise, never duplicate."""
+>       raise NotImplementedError(_pending())
+E       NotImplementedError: AFC-STUB: matcher is implemented by P2-B04
+
+backend/src/matcher/__init__.py:13: NotImplementedError
+
+During handling of the above exception, another exception occurred:
+
+match_env = namespace(module=<module 'matcher' from '$HOME/alphazede/Hackathons/amazon-fantasy-companion/.claude/worktrees..._reads=[]), player_map=PosixPath('/tmp/pytest-of-spectre/pytest-1466/test_manual_starter_resolves_b0/player_map.json'))
+
+    def test_manual_starter_resolves_by_espn_athlete_id(match_env):
+        seed_lineup("manual-fan", "manual", [MANUAL_RECEIVER])
+>       matches = match_env.resolve(game_event("401999001101", ["9000001"]))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/matcher/test_matcher_identity.py:21:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend/tests/unit/matcher/matcher_support.py:128: in resolve
+    result = attempt(module.resolve, event)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+func = <function resolve at 0x77955da94040>
+args = ({'correctionOf': None, 'eventId': '401999001101', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...},)
+kwargs = {}
+
+    def attempt(func, *args, **kwargs):
+        """Call product code; an AFC-STUB NotImplementedError is an assertion failure."""
+        try:
+            return func(*args, **kwargs)
+        except NotImplementedError as exc:
+>           raise AssertionError(f"matcher behavior is not implemented (AFC-STUB): {exc}")
+E           AssertionError: matcher behavior is not implemented (AFC-STUB): AFC-STUB: matcher is implemented by P2-B04
+
+backend/tests/unit/matcher/matcher_support.py:76: AssertionError
+______________ test_yahoo_starter_resolves_to_its_espn_athlete_id ______________
+
+func = <function resolve at 0x77955d8af100>
+args = ({'correctionOf': None, 'eventId': '401999001102', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...},)
+kwargs = {}
+
+    def attempt(func, *args, **kwargs):
+        """Call product code; an AFC-STUB NotImplementedError is an assertion failure."""
+        try:
+>           return func(*args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/matcher/matcher_support.py:74:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+game_event = {'correctionOf': None, 'eventId': '401999001102', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...}
+
+    def resolve(game_event):
+        """AFC-STUB (P2-B04): Profiles and starters the GameEvent concerns, keyed by (profile, event id); corrections revise, never duplicate."""
+>       raise NotImplementedError(_pending())
+E       NotImplementedError: AFC-STUB: matcher is implemented by P2-B04
+
+backend/src/matcher/__init__.py:13: NotImplementedError
+
+During handling of the above exception, another exception occurred:
+
+match_env = namespace(module=<module 'matcher' from '$HOME/alphazede/Hackathons/amazon-fantasy-companion/.claude/worktrees..._reads=[]), player_map=PosixPath('/tmp/pytest-of-spectre/pytest-1466/test_yahoo_starter_resolves_to0/player_map.json'))
+
+    def test_yahoo_starter_resolves_to_its_espn_athlete_id(match_env):
+        seed_lineup("yahoo-fan", "yahoo", [YAHOO_RECEIVER])
+>       matches = match_env.resolve(game_event("401999001102", ["9000001"]))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/matcher/test_matcher_identity.py:28:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend/tests/unit/matcher/matcher_support.py:128: in resolve
+    result = attempt(module.resolve, event)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+func = <function resolve at 0x77955d8af100>
+args = ({'correctionOf': None, 'eventId': '401999001102', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...},)
+kwargs = {}
+
+    def attempt(func, *args, **kwargs):
+        """Call product code; an AFC-STUB NotImplementedError is an assertion failure."""
+        try:
+            return func(*args, **kwargs)
+        except NotImplementedError as exc:
+>           raise AssertionError(f"matcher behavior is not implemented (AFC-STUB): {exc}")
+E           AssertionError: matcher behavior is not implemented (AFC-STUB): AFC-STUB: matcher is implemented by P2-B04
+
+backend/tests/unit/matcher/matcher_support.py:76: AssertionError
+______________ test_same_player_across_providers_is_one_identity _______________
+
+func = <function resolve at 0x779560f4d300>
+args = ({'correctionOf': None, 'eventId': '401999001103', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...},)
+kwargs = {}
+
+    def attempt(func, *args, **kwargs):
+        """Call product code; an AFC-STUB NotImplementedError is an assertion failure."""
+        try:
+>           return func(*args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/matcher/matcher_support.py:74:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+game_event = {'correctionOf': None, 'eventId': '401999001103', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...}
+
+    def resolve(game_event):
+        """AFC-STUB (P2-B04): Profiles and starters the GameEvent concerns, keyed by (profile, event id); corrections revise, never duplicate."""
+>       raise NotImplementedError(_pending())
+E       NotImplementedError: AFC-STUB: matcher is implemented by P2-B04
+
+backend/src/matcher/__init__.py:13: NotImplementedError
+
+During handling of the above exception, another exception occurred:
+
+match_env = namespace(module=<module 'matcher' from '$HOME/alphazede/Hackathons/amazon-fantasy-companion/.claude/worktrees..._reads=[]), player_map=PosixPath('/tmp/pytest-of-spectre/pytest-1466/test_same_player_across_provid0/player_map.json'))
+
+    def test_same_player_across_providers_is_one_identity(match_env):
+        seed_lineup("yahoo-fan", "yahoo", [YAHOO_RECEIVER])
+        seed_lineup("manual-fan", "manual", [MANUAL_RECEIVER])
+>       matches = match_env.resolve(game_event("401999001103", ["9000001"]))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/matcher/test_matcher_identity.py:36:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend/tests/unit/matcher/matcher_support.py:128: in resolve
+    result = attempt(module.resolve, event)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+func = <function resolve at 0x779560f4d300>
+args = ({'correctionOf': None, 'eventId': '401999001103', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...},)
+kwargs = {}
+
+    def attempt(func, *args, **kwargs):
+        """Call product code; an AFC-STUB NotImplementedError is an assertion failure."""
+        try:
+            return func(*args, **kwargs)
+        except NotImplementedError as exc:
+>           raise AssertionError(f"matcher behavior is not implemented (AFC-STUB): {exc}")
+E           AssertionError: matcher behavior is not implemented (AFC-STUB): AFC-STUB: matcher is implemented by P2-B04
+
+backend/tests/unit/matcher/matcher_support.py:76: AssertionError
+_____________ test_same_name_on_another_team_is_a_distinct_player ______________
+
+func = <function resolve at 0x77955d7e6200>
+args = ({'correctionOf': None, 'eventId': '401999001104', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...},)
+kwargs = {}
+
+    def attempt(func, *args, **kwargs):
+        """Call product code; an AFC-STUB NotImplementedError is an assertion failure."""
+        try:
+>           return func(*args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/matcher/matcher_support.py:74:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+game_event = {'correctionOf': None, 'eventId': '401999001104', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...}
+
+    def resolve(game_event):
+        """AFC-STUB (P2-B04): Profiles and starters the GameEvent concerns, keyed by (profile, event id); corrections revise, never duplicate."""
+>       raise NotImplementedError(_pending())
+E       NotImplementedError: AFC-STUB: matcher is implemented by P2-B04
+
+backend/src/matcher/__init__.py:13: NotImplementedError
+
+During handling of the above exception, another exception occurred:
+
+match_env = namespace(module=<module 'matcher' from '$HOME/alphazede/Hackathons/amazon-fantasy-companion/.claude/worktrees..._reads=[]), player_map=PosixPath('/tmp/pytest-of-spectre/pytest-1466/test_same_name_on_another_team0/player_map.json'))
+
+    def test_same_name_on_another_team_is_a_distinct_player(match_env):
+        seed_lineup("yahoo-fan", "yahoo", [YAHOO_RECEIVER])
+        # 9000002 is the DAL "Sample Receiver"; the Yahoo starter plays for PHI.
+>       assert match_env.resolve(game_event("401999001104", ["9000002"])) == []
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/matcher/test_matcher_identity.py:44:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend/tests/unit/matcher/matcher_support.py:128: in resolve
+    result = attempt(module.resolve, event)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+func = <function resolve at 0x77955d7e6200>
+args = ({'correctionOf': None, 'eventId': '401999001104', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...},)
+kwargs = {}
+
+    def attempt(func, *args, **kwargs):
+        """Call product code; an AFC-STUB NotImplementedError is an assertion failure."""
+        try:
+            return func(*args, **kwargs)
+        except NotImplementedError as exc:
+>           raise AssertionError(f"matcher behavior is not implemented (AFC-STUB): {exc}")
+E           AssertionError: matcher behavior is not implemented (AFC-STUB): AFC-STUB: matcher is implemented by P2-B04
+
+backend/tests/unit/matcher/matcher_support.py:76: AssertionError
+____________________ test_position_mismatch_is_not_matched _____________________
+
+func = <function resolve at 0x77955e3eaa20>
+args = ({'correctionOf': None, 'eventId': '401999001105', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...},)
+kwargs = {}
+
+    def attempt(func, *args, **kwargs):
+        """Call product code; an AFC-STUB NotImplementedError is an assertion failure."""
+        try:
+>           return func(*args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/matcher/matcher_support.py:74:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+game_event = {'correctionOf': None, 'eventId': '401999001105', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...}
+
+    def resolve(game_event):
+        """AFC-STUB (P2-B04): Profiles and starters the GameEvent concerns, keyed by (profile, event id); corrections revise, never duplicate."""
+>       raise NotImplementedError(_pending())
+E       NotImplementedError: AFC-STUB: matcher is implemented by P2-B04
+
+backend/src/matcher/__init__.py:13: NotImplementedError
+
+During handling of the above exception, another exception occurred:
+
+match_env = namespace(module=<module 'matcher' from '$HOME/alphazede/Hackathons/amazon-fantasy-companion/.claude/worktrees..._reads=[]), player_map=PosixPath('/tmp/pytest-of-spectre/pytest-1466/test_position_mismatch_is_not_0/player_map.json'))
+
+    def test_position_mismatch_is_not_matched(match_env):
+        misplaced = dict(YAHOO_RECEIVER, positions=["TE"], slot="TE")
+        seed_lineup("yahoo-fan", "yahoo", [misplaced])
+>       assert match_env.resolve(game_event("401999001105", ["9000001"])) == []
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/matcher/test_matcher_identity.py:50:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend/tests/unit/matcher/matcher_support.py:128: in resolve
+    result = attempt(module.resolve, event)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+func = <function resolve at 0x77955e3eaa20>
+args = ({'correctionOf': None, 'eventId': '401999001105', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...},)
+kwargs = {}
+
+    def attempt(func, *args, **kwargs):
+        """Call product code; an AFC-STUB NotImplementedError is an assertion failure."""
+        try:
+            return func(*args, **kwargs)
+        except NotImplementedError as exc:
+>           raise AssertionError(f"matcher behavior is not implemented (AFC-STUB): {exc}")
+E           AssertionError: matcher behavior is not implemented (AFC-STUB): AFC-STUB: matcher is implemented by P2-B04
+
+backend/tests/unit/matcher/matcher_support.py:76: AssertionError
+_______________ test_ambiguous_mapping_is_unmatched_not_guessed ________________
+
+func = <function resolve at 0x77955e64d300>
+args = ({'correctionOf': None, 'eventId': '401999001106', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...},)
+kwargs = {}
+
+    def attempt(func, *args, **kwargs):
+        """Call product code; an AFC-STUB NotImplementedError is an assertion failure."""
+        try:
+>           return func(*args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/matcher/matcher_support.py:74:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+game_event = {'correctionOf': None, 'eventId': '401999001106', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...}
+
+    def resolve(game_event):
+        """AFC-STUB (P2-B04): Profiles and starters the GameEvent concerns, keyed by (profile, event id); corrections revise, never duplicate."""
+>       raise NotImplementedError(_pending())
+E       NotImplementedError: AFC-STUB: matcher is implemented by P2-B04
+
+backend/src/matcher/__init__.py:13: NotImplementedError
+
+During handling of the above exception, another exception occurred:
+
+match_env = namespace(module=<module 'matcher' from '$HOME/alphazede/Hackathons/amazon-fantasy-companion/.claude/worktrees..._reads=[]), player_map=PosixPath('/tmp/pytest-of-spectre/pytest-1466/test_ambiguous_mapping_is_unma0/player_map.json'))
+
+    def test_ambiguous_mapping_is_unmatched_not_guessed(match_env):
+        seed_lineup("yahoo-fan", "yahoo", [YAHOO_TWIN])
+        # Two mapping entries share name, team and position: neither may be guessed.
+        for event_id, athlete in (("401999001106", "9000003"), ("401999001107", "9000004")):
+>           assert match_env.resolve(game_event(event_id, [athlete])) == [], athlete
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/matcher/test_matcher_identity.py:57:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend/tests/unit/matcher/matcher_support.py:128: in resolve
+    result = attempt(module.resolve, event)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+func = <function resolve at 0x77955e64d300>
+args = ({'correctionOf': None, 'eventId': '401999001106', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...},)
+kwargs = {}
+
+    def attempt(func, *args, **kwargs):
+        """Call product code; an AFC-STUB NotImplementedError is an assertion failure."""
+        try:
+            return func(*args, **kwargs)
+        except NotImplementedError as exc:
+>           raise AssertionError(f"matcher behavior is not implemented (AFC-STUB): {exc}")
+E           AssertionError: matcher behavior is not implemented (AFC-STUB): AFC-STUB: matcher is implemented by P2-B04
+
+backend/tests/unit/matcher/matcher_support.py:76: AssertionError
+___________________ test_unmapped_yahoo_starter_is_unmatched ___________________
+
+func = <function resolve at 0x77955e984e00>
+args = ({'correctionOf': None, 'eventId': '401999001108', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...},)
+kwargs = {}
+
+    def attempt(func, *args, **kwargs):
+        """Call product code; an AFC-STUB NotImplementedError is an assertion failure."""
+        try:
+>           return func(*args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/matcher/matcher_support.py:74:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+game_event = {'correctionOf': None, 'eventId': '401999001108', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...}
+
+    def resolve(game_event):
+        """AFC-STUB (P2-B04): Profiles and starters the GameEvent concerns, keyed by (profile, event id); corrections revise, never duplicate."""
+>       raise NotImplementedError(_pending())
+E       NotImplementedError: AFC-STUB: matcher is implemented by P2-B04
+
+backend/src/matcher/__init__.py:13: NotImplementedError
+
+During handling of the above exception, another exception occurred:
+
+match_env = namespace(module=<module 'matcher' from '$HOME/alphazede/Hackathons/amazon-fantasy-companion/.claude/worktrees..._reads=[]), player_map=PosixPath('/tmp/pytest-of-spectre/pytest-1466/test_unmapped_yahoo_starter_is0/player_map.json'))
+
+    def test_unmapped_yahoo_starter_is_unmatched(match_env):
+        unknown = {"player_key": "nfl.p.7999", "name": "Unlisted Kicker", "team": "PHI",
+                   "positions": ["K"], "slot": "K"}
+        seed_lineup("yahoo-fan", "yahoo", [unknown, YAHOO_PASSER])
+>       matches = match_env.resolve(game_event("401999001108", ["9000005", "9000099"]))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/matcher/test_matcher_identity.py:64:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend/tests/unit/matcher/matcher_support.py:128: in resolve
+    result = attempt(module.resolve, event)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+func = <function resolve at 0x77955e984e00>
+args = ({'correctionOf': None, 'eventId': '401999001108', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...},)
+kwargs = {}
+
+    def attempt(func, *args, **kwargs):
+        """Call product code; an AFC-STUB NotImplementedError is an assertion failure."""
+        try:
+            return func(*args, **kwargs)
+        except NotImplementedError as exc:
+>           raise AssertionError(f"matcher behavior is not implemented (AFC-STUB): {exc}")
+E           AssertionError: matcher behavior is not implemented (AFC-STUB): AFC-STUB: matcher is implemented by P2-B04
+
+backend/tests/unit/matcher/matcher_support.py:76: AssertionError
+________________ test_event_without_starters_matches_no_profile ________________
+
+func = <function resolve at 0x779560f4df80>
+args = ({'correctionOf': None, 'eventId': '401999001109', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...},)
+kwargs = {}
+
+    def attempt(func, *args, **kwargs):
+        """Call product code; an AFC-STUB NotImplementedError is an assertion failure."""
+        try:
+>           return func(*args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/matcher/matcher_support.py:74:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+game_event = {'correctionOf': None, 'eventId': '401999001109', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...}
+
+    def resolve(game_event):
+        """AFC-STUB (P2-B04): Profiles and starters the GameEvent concerns, keyed by (profile, event id); corrections revise, never duplicate."""
+>       raise NotImplementedError(_pending())
+E       NotImplementedError: AFC-STUB: matcher is implemented by P2-B04
+
+backend/src/matcher/__init__.py:13: NotImplementedError
+
+During handling of the above exception, another exception occurred:
+
+match_env = namespace(module=<module 'matcher' from '$HOME/alphazede/Hackathons/amazon-fantasy-companion/.claude/worktrees..._reads=[]), player_map=PosixPath('/tmp/pytest-of-spectre/pytest-1466/test_event_without_starters_ma0/player_map.json'))
+
+    def test_event_without_starters_matches_no_profile(match_env):
+        seed_lineup("manual-fan", "manual", [MANUAL_RECEIVER])
+        seed_lineup("yahoo-fan", "yahoo", [YAHOO_RECEIVER])
+>       assert match_env.resolve(game_event("401999001109", ["9000077"])) == []
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/matcher/test_matcher_identity.py:72:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend/tests/unit/matcher/matcher_support.py:128: in resolve
+    result = attempt(module.resolve, event)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+func = <function resolve at 0x779560f4df80>
+args = ({'correctionOf': None, 'eventId': '401999001109', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...},)
+kwargs = {}
+
+    def attempt(func, *args, **kwargs):
+        """Call product code; an AFC-STUB NotImplementedError is an assertion failure."""
+        try:
+            return func(*args, **kwargs)
+        except NotImplementedError as exc:
+>           raise AssertionError(f"matcher behavior is not implemented (AFC-STUB): {exc}")
+E           AssertionError: matcher behavior is not implemented (AFC-STUB): AFC-STUB: matcher is implemented by P2-B04
+
+backend/tests/unit/matcher/matcher_support.py:76: AssertionError
+______________________ test_only_concerned_profiles_match ______________________
+
+func = <function resolve at 0x77955d8afe20>
+args = ({'correctionOf': None, 'eventId': '401999001110', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...},)
+kwargs = {}
+
+    def attempt(func, *args, **kwargs):
+        """Call product code; an AFC-STUB NotImplementedError is an assertion failure."""
+        try:
+>           return func(*args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/matcher/matcher_support.py:74:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+game_event = {'correctionOf': None, 'eventId': '401999001110', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...}
+
+    def resolve(game_event):
+        """AFC-STUB (P2-B04): Profiles and starters the GameEvent concerns, keyed by (profile, event id); corrections revise, never duplicate."""
+>       raise NotImplementedError(_pending())
+E       NotImplementedError: AFC-STUB: matcher is implemented by P2-B04
+
+backend/src/matcher/__init__.py:13: NotImplementedError
+
+During handling of the above exception, another exception occurred:
+
+match_env = namespace(module=<module 'matcher' from '$HOME/alphazede/Hackathons/amazon-fantasy-companion/.claude/worktrees..._reads=[]), player_map=PosixPath('/tmp/pytest-of-spectre/pytest-1466/test_only_concerned_profiles_m0/player_map.json'))
+
+    def test_only_concerned_profiles_match(match_env):
+        seed_lineup("receiver-fan", "manual", [MANUAL_RECEIVER])
+        seed_lineup("passer-fan", "manual", [MANUAL_PASSER])
+>       matches = match_env.resolve(game_event("401999001110", ["9000005"]))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/unit/matcher/test_matcher_identity.py:78:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend/tests/unit/matcher/matcher_support.py:128: in resolve
+    result = attempt(module.resolve, event)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+func = <function resolve at 0x77955d8afe20>
+args = ({'correctionOf': None, 'eventId': '401999001110', 'eventTime': '2026-10-15T20:00:00Z', 'fieldPosition': 8, ...},)
+kwargs = {}
+
+    def attempt(func, *args, **kwargs):
+        """Call product code; an AFC-STUB NotImplementedError is an assertion failure."""
+        try:
+            return func(*args, **kwargs)
+        except NotImplementedError as exc:
+>           raise AssertionError(f"matcher behavior is not implemented (AFC-STUB): {exc}")
+E           AssertionError: matcher behavior is not implemented (AFC-STUB): AFC-STUB: matcher is implemented by P2-B04
+
+backend/tests/unit/matcher/matcher_support.py:76: AssertionError
+_________________ test_landed_player_map_is_the_default_table __________________
+
+api = namespace(request=<function api.<locals>.request at 0x77955e089120>, table=<function api.<locals>.table at 0x77955e088...me='LineupsTable'), 'PanelsTable': dynamodb.Table(name='PanelsTable')}, ttls={'LinksTable': 'expiresAt'}, ssm_reads=[])
+
+    def test_landed_player_map_is_the_default_table(api):
+        module = require_module("matcher")
+        default = getattr(module, "PLAYER_MAP_PATH", None)
+>       assert default is not None, "matcher.PLAYER_MAP_PATH must name the mapping table"
+E       AssertionError: matcher.PLAYER_MAP_PATH must name the mapping table
+E       assert None is not None
+
+backend/tests/unit/matcher/test_matcher_identity.py:86: AssertionError
+=============================== warnings summary ===============================
+tests/unit/feed_ingest/test_feed_edges.py: 422 warnings
+tests/unit/feed_ingest/test_normalization.py: 405 warnings
+tests/unit/feed_ingest/test_outage_repairs.py: 3613 warnings
+tests/unit/feed_ingest/test_replay_labels.py: 405 warnings
+tests/unit/feed_ingest/test_review_repairs.py: 6942 warnings
+tests/unit/feed_ingest/test_revisions.py: 1209 warnings
+tests/unit/feed_ingest/test_validation.py: 786 warnings
+tests/unit/lineup/test_active_lineup.py: 106 warnings
+tests/unit/lineup/test_lineup_rejections.py: 18 warnings
+tests/unit/lineup/test_review_regressions.py: 16 warnings
+tests/unit/matcher/test_matcher_corrections.py: 69 warnings
+tests/unit/matcher/test_matcher_dedup.py: 83 warnings
+tests/unit/matcher/test_matcher_identity.py: 102 warnings
+tests/unit/provider_resolver/test_resolver_access_basis.py: 93 warnings
+tests/unit/provider_resolver/test_resolver_local_broadcast.py: 60 warnings
+tests/unit/provider_resolver/test_resolver_overrides.py: 37 warnings
+tests/unit/provider_resolver/test_resolver_platform_routes.py: 50 warnings
+tests/unit/provider_resolver/test_resolver_preference_shapes.py: 216 warnings
+tests/unit/provider_resolver/test_resolver_records.py: 104 warnings
+tests/unit/provider_resolver/test_resolver_selection.py: 89 warnings
+tests/unit/test_bug_auth002.py: 38 warnings
+tests/unit/test_device_auth.py: 281 warnings
+tests/unit/test_device_auth_units.py: 115 warnings
+tests/unit/test_pipeline_and_stubs.py: 45 warnings
+tests/unit/test_router.py: 802 warnings
+tests/unit/test_security_auth_link.py: 21 warnings
+tests/unit/test_store.py: 85 warnings
+tests/unit/test_unknown_route_envelope.py: 30 warnings
+tests/contract/test_api_contract.py: 86 warnings
+  $HOME/.local/lib/python3.12/site-packages/botocore/auth.py:424: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    datetime_now = datetime.datetime.utcnow()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+============================= slowest 10 durations =============================
+4.63s call     tests/unit/feed_ingest/test_outage_repairs.py::test_r3_failures_persist_across_invocations_until_threshold
+2.80s call     tests/unit/feed_ingest/test_review_repairs.py::test_f3_repeated_fallback_keeps_revisions_stable
+2.75s call     tests/unit/feed_ingest/test_outage_repairs.py::test_r3_success_in_later_invocation_resets_the_count
+2.55s call     tests/unit/feed_ingest/test_review_repairs.py::test_f3_three_failures_replace_live_with_labeled_replay[failure0]
+2.40s call     tests/unit/feed_ingest/test_review_repairs.py::test_f3_three_failures_replace_live_with_labeled_replay[failure1]
+2.31s call     tests/unit/feed_ingest/test_outage_repairs.py::test_r2_scoreboard_outage_reaches_labeled_replay
+2.21s call     tests/unit/feed_ingest/test_outage_repairs.py::test_r4_second_poll_not_started_when_it_cannot_finish
+1.59s call     tests/unit/feed_ingest/test_revisions.py::test_ingesting_a_correction_revises_the_stored_event_in_place
+1.56s call     tests/unit/feed_ingest/test_revisions.py::test_ingesting_the_same_poll_twice_changes_no_revision
+1.52s call     tests/unit/feed_ingest/test_review_repairs.py::test_f3_success_resets_consecutive_failures
+=========================== short test summary info ============================
+FAILED backend/tests/unit/matcher/test_matcher_corrections.py::test_correction_revises_the_existing_alert
+FAILED backend/tests/unit/matcher/test_matcher_corrections.py::test_correction_does_not_allocate_a_new_alert_id
+FAILED backend/tests/unit/matcher/test_matcher_corrections.py::test_correction_reassigning_the_play_still_revises_the_alert
+FAILED backend/tests/unit/matcher/test_matcher_corrections.py::test_correction_revises_every_concerned_profile_in_place
+FAILED backend/tests/unit/matcher/test_matcher_corrections.py::test_stale_revision_after_correction_yields_nothing
+FAILED backend/tests/unit/matcher/test_matcher_corrections.py::test_correction_redelivery_yields_nothing
+FAILED backend/tests/unit/matcher/test_matcher_dedup.py::test_first_delivery_yields_one_new_match
+FAILED backend/tests/unit/matcher/test_matcher_dedup.py::test_redelivery_after_alert_yields_nothing
+FAILED backend/tests/unit/matcher/test_matcher_dedup.py::test_repeated_retries_yield_one_match_per_resolved_event
+FAILED backend/tests/unit/matcher/test_matcher_dedup.py::test_two_starters_in_one_event_are_one_match
+FAILED backend/tests/unit/matcher/test_matcher_dedup.py::test_event_matching_multiple_alert_types_is_one_match
+FAILED backend/tests/unit/matcher/test_matcher_dedup.py::test_each_concerned_profile_matches_once
+FAILED backend/tests/unit/matcher/test_matcher_dedup.py::test_distinct_event_for_same_starter_is_not_deduplicated
+FAILED backend/tests/unit/matcher/test_matcher_dedup.py::test_matcher_creates_no_alert_records
+FAILED backend/tests/unit/matcher/test_matcher_identity.py::test_manual_starter_resolves_by_espn_athlete_id
+FAILED backend/tests/unit/matcher/test_matcher_identity.py::test_yahoo_starter_resolves_to_its_espn_athlete_id
+FAILED backend/tests/unit/matcher/test_matcher_identity.py::test_same_player_across_providers_is_one_identity
+FAILED backend/tests/unit/matcher/test_matcher_identity.py::test_same_name_on_another_team_is_a_distinct_player
+FAILED backend/tests/unit/matcher/test_matcher_identity.py::test_position_mismatch_is_not_matched
+FAILED backend/tests/unit/matcher/test_matcher_identity.py::test_ambiguous_mapping_is_unmatched_not_guessed
+FAILED backend/tests/unit/matcher/test_matcher_identity.py::test_unmapped_yahoo_starter_is_unmatched
+FAILED backend/tests/unit/matcher/test_matcher_identity.py::test_event_without_starters_matches_no_profile
+FAILED backend/tests/unit/matcher/test_matcher_identity.py::test_only_concerned_profiles_match
+FAILED backend/tests/unit/matcher/test_matcher_identity.py::test_landed_player_map_is_the_default_table
+========== 24 failed, 604 passed, 16328 warnings in 110.72s (0:01:50) ==========
+gate: backend: FAIL check exit 1

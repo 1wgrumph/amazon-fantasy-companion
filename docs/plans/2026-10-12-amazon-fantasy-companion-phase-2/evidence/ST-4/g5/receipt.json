@@ -1,0 +1,223 @@
+{
+  "outcome": "PASS",
+  "claim": "Author realization only; independent amendment review remains required. Evidence-only commit follows this named product candidate.",
+  "lease_id": "ST-4-g5",
+  "generation": 5,
+  "head": "531eea3b5487c52fd83602ef510cdd702af0b632",
+  "candidate_head": "531eea3b5487c52fd83602ef510cdd702af0b632",
+  "dispatch_base": "8f46cb5280146073c4de088d31a1fe0279131f2c",
+  "approved_content_base": "771c28958f78e611048528aedbd9ed4490f308e1",
+  "source_pin": "04678835350b529b44ab69ee5f805ca21cab5e76",
+  "branch": "afc/st4-spec",
+  "pr": "https://github.com/1wgrumph/amazon-fantasy-companion/pull/10",
+  "push": "product candidate pushed normally; PR body PATCH/readback verified; PR left unmerged",
+  "commands": [
+    {
+      "command": "uv run --script tools/spec/spec_build.py spec/amazon-fantasy-companion spec/amazon-fantasy-companion/amazon-fantasy-companion.md",
+      "exit": 0,
+      "output_tail": ""
+    },
+    {
+      "command": "uv run --script tools/spec/spec_lint.py spec/amazon-fantasy-companion",
+      "exit": 0,
+      "output_tail": ""
+    },
+    {
+      "command": "uv run --script tools/spec/diagram.py lint spec/amazon-fantasy-companion",
+      "exit": 0,
+      "output_tail": ""
+    },
+    {
+      "command": "uv run --script tools/spec/spec_build.py spec/amazon-fantasy-companion /var/tmp/tmp.AlLvziuAIb",
+      "exit": 0,
+      "output_tail": ""
+    },
+    {
+      "command": "cmp spec/amazon-fantasy-companion/amazon-fantasy-companion.md /var/tmp/tmp.AlLvziuAIb",
+      "exit": 0,
+      "output_tail": ""
+    },
+    {
+      "command": "python3 docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/ST-4/g5/check-links.py",
+      "exit": 0,
+      "output_tail": "Relative links/anchors: 749 resolved; source links added: 184; product prose unchanged outside revision/provenance metadata\nUID coverage: 66/66; Appendix A: 66/66; unknown UIDs: 0\nGenerated Appendix A: 0/66 rows have unlinked section references"
+    },
+    {
+      "command": "python3 -c from\\ pathlib\\ import\\ Path\\;\\ import\\ re\\;\\ assert\\ not\\ any\\(re.search\\(r\\\"\\\\\\*\\\\\\*\\(BLUF\\|Frame\\|Who\\|What\\|Why\\|How\\|When\\|Where\\):\\?\\\\\\*\\\\\\*\\\"\\,\\ p.read_text\\(\\)\\)\\ for\\ p\\ in\\ Path\\(\\\"spec/amazon-fantasy-companion\\\"\\).glob\\(\\\"\\*.md\\\"\\)\\)\\;\\ print\\(\\\"Label\\ grep\\ clean\\\"\\)",
+      "exit": 0,
+      "output_tail": "Label grep clean"
+    },
+    {
+      "command": "python3 tools/ci/check_paths.py",
+      "exit": 0,
+      "output_tail": ""
+    },
+    {
+      "command": "bash tools/ci/gate.sh",
+      "exit": 0,
+      "output_tail": ".....fatal: not a git repository (or any of the parent directories): .git\n........fatal: not a git repository (or any of the parent directories): .git\n..........................\n----------------------------------------------------------------------\nRan 39 tests in 12.020s\n\nOK\ngate: hygiene: PASS checks completed"
+    },
+    {
+      "command": "git fetch origin && git merge --no-edit origin/main",
+      "exit": 0
+    },
+    {
+      "command": "bash <source-skill>/scripts/vendor.sh <repo-root>",
+      "exit": 0
+    },
+    {
+      "command": "bash docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/ST-4/g5/vendor-check.sh",
+      "exit": 0
+    },
+    {
+      "command": "git diff --cached --check",
+      "exit": 0
+    },
+    {
+      "command": "git commit -m \"docs: link specification references and revision history\" (normal hook)",
+      "exit": 0
+    },
+    {
+      "command": "git push origin afc/st4-spec (normal hook)",
+      "exit": 0
+    },
+    {
+      "command": "gh api -X PATCH repos/1wgrumph/amazon-fantasy-companion/pulls/10 -F body=@<evidence>/pr-body.md",
+      "exit": 0
+    },
+    {
+      "command": "gh api repos/1wgrumph/amazon-fantasy-companion/pulls/10 (exact body readback)",
+      "exit": 0
+    }
+  ],
+  "link_count_added": {
+    "source": 184,
+    "g4_preserved": 144,
+    "additional_scope_decision_and_model_links": 40,
+    "relative_links_and_anchors_resolved": 749,
+    "appendix_rows_linked": 66
+  },
+  "uid_coverage": {
+    "known": 66,
+    "traced": 66,
+    "unknown": 0
+  },
+  "build_sha256": "5ac2c3a146d13c15969c82fc86a207b18a794428a0746ba739a27398b14a313e",
+  "changed_product_paths": [
+    "CHANGELOG.md",
+    "spec/amazon-fantasy-companion/01-introduction.md",
+    "spec/amazon-fantasy-companion/01.1-background.md",
+    "spec/amazon-fantasy-companion/01.1.1-identification.md",
+    "spec/amazon-fantasy-companion/01.2-baseline.md",
+    "spec/amazon-fantasy-companion/01.2.1-baselines.md",
+    "spec/amazon-fantasy-companion/01.3-feature-set.md",
+    "spec/amazon-fantasy-companion/01.4-scope.md",
+    "spec/amazon-fantasy-companion/01.4.1-purpose-and-scope.md",
+    "spec/amazon-fantasy-companion/01.4.2-stakeholders.md",
+    "spec/amazon-fantasy-companion/01.6-terms.md",
+    "spec/amazon-fantasy-companion/01.6.1-requirements.md",
+    "spec/amazon-fantasy-companion/02-open-items.md",
+    "spec/amazon-fantasy-companion/02.1-risks.md",
+    "spec/amazon-fantasy-companion/04.1-feature-decomposition.md",
+    "spec/amazon-fantasy-companion/04.1.12-panel-video.md",
+    "spec/amazon-fantasy-companion/04.1.13-withdrawn-requirements.md",
+    "spec/amazon-fantasy-companion/04.1.2-lineup-source.md",
+    "spec/amazon-fantasy-companion/04.1.3-monitoring.md",
+    "spec/amazon-fantasy-companion/04.1.9-controls.md",
+    "spec/amazon-fantasy-companion/04.1.99-allocation.md",
+    "spec/amazon-fantasy-companion/04.2.2-external-interfaces.md",
+    "spec/amazon-fantasy-companion/04.2.3-interfaces-and-contracts.md",
+    "spec/amazon-fantasy-companion/04.3-data-model.md",
+    "spec/amazon-fantasy-companion/04.4-performance.md",
+    "spec/amazon-fantasy-companion/04.6-architecture-views.md",
+    "spec/amazon-fantasy-companion/04.7-model-correspondence.md",
+    "spec/amazon-fantasy-companion/04.8-rationale.md",
+    "spec/amazon-fantasy-companion/04.8.1-future-direction.md",
+    "spec/amazon-fantasy-companion/05.3-security-interfaces.md",
+    "spec/amazon-fantasy-companion/07-verification.md",
+    "spec/amazon-fantasy-companion/07.1-verification-approach.md",
+    "spec/amazon-fantasy-companion/07.1.1-verification.md",
+    "spec/amazon-fantasy-companion/07.1.10-verification.md",
+    "spec/amazon-fantasy-companion/07.1.11-verification.md",
+    "spec/amazon-fantasy-companion/07.1.12-verification.md",
+    "spec/amazon-fantasy-companion/07.1.13-verification.md",
+    "spec/amazon-fantasy-companion/07.1.14-verification.md",
+    "spec/amazon-fantasy-companion/07.1.15-verification.md",
+    "spec/amazon-fantasy-companion/07.1.2-verification.md",
+    "spec/amazon-fantasy-companion/07.1.3-verification.md",
+    "spec/amazon-fantasy-companion/07.1.4-verification.md",
+    "spec/amazon-fantasy-companion/07.1.5-verification.md",
+    "spec/amazon-fantasy-companion/07.1.6-verification.md",
+    "spec/amazon-fantasy-companion/07.1.7-verification.md",
+    "spec/amazon-fantasy-companion/07.1.8-verification.md",
+    "spec/amazon-fantasy-companion/07.1.9-verification.md",
+    "spec/amazon-fantasy-companion/amazon-fantasy-companion.md",
+    "spec/amazon-fantasy-companion/spec.yaml",
+    "tools/spec/VENDORED.md",
+    "tools/spec/spec_build.py",
+    "tools/spec/spec_lint.py",
+    "tools/spec/template/spec.yaml"
+  ],
+  "changed_evidence_paths": [
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/ST-4/g5/changed-product-paths.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/ST-4/g5/changelog-g4.md",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/ST-4/g5/check-links.py",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/ST-4/g5/check-vendor.py",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/ST-4/g5/commit-product.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/ST-4/g5/lease-binding.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/ST-4/g5/merged-prs.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/ST-4/g5/pr-body.md",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/ST-4/g5/pr-readback.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/ST-4/g5/prior-vendor-hashes.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/ST-4/g5/push-product.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/ST-4/g5/supply-chain.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/ST-4/g5/vendor-check.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/ST-4/g5/vendor-check.sh",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/ST-4/g5/vendor-hashes.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/ST-4/g5/vendor-secrets.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/ST-4/g5/verification-attempt-1.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/ST-4/g5/verification.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/ST-4/g5/verify.sh",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/ST-4/g5/receipt.json"
+  ],
+  "supply_chain": "PASS; supply-chain.json, vendor-hashes.json, prior-vendor-hashes.json and vendor-check.json; unchanged MIT notice",
+  "correction": {
+    "class": "content",
+    "route": "BUG_ROUTE: not-a-bug invalid source-heading metadata introduced in this authoring attempt; tooling correctly rejected generated Appendix A as a source heading.",
+    "attempt_1": "build exit 1; byte comparison exit 1; stale-output link check exit 1; gate exit 1; lint/figure lint/labels/path scan exit 0. See verification-attempt-1.txt.",
+    "repair": "List only source headings in changes; describe Appendix A change in summary. Second complete attempt and both hooks pass. No gate bypass."
+  },
+  "capabilities": {
+    "profile": "tech-writing",
+    "route": "Codex CLI / GPT-6 Astra / medium",
+    "review.coverage_assist": {
+      "enabled": true,
+      "required": true,
+      "backend": "OpenCodeReview delegation",
+      "execution": "not_run: author lane; independent reviewer resolves availability and runs it. Not passing review evidence."
+    },
+    "deterministic_verification.reverify": {
+      "enabled": true,
+      "execution": "not_applicable: no compiled binary claim"
+    }
+  },
+  "developer_feedback": {
+    "worked_well": "Link and revision rules validate source references and changed heading identities; reviewed B3 builder now emits clickable Appendix A traces. B2 permits staged regenerated output with normal hooks.",
+    "needs_work": "Changed-section metadata accepts source headings only, so generated Appendix A changes must be described in summary. Arbitrary named-document and scope-decision references still need author inspection beyond lint.",
+    "would_build_again": true
+  },
+  "create_lean_skill": {
+    "outcome": "NO_CHANGE",
+    "proof": "Existing spec-authoring owns Markdown assembly; strongest installed peer use-requirements-system owns SDoc and hosted review. Creating another skill duplicates ownership and exceeds this packet.",
+    "matching_request": "Link and rebuild a Markdown specification: exercised successfully.",
+    "non_matching_request": "Publish a hosted SDoc revision: excluded; no host review or publication invoked.",
+    "creator_scripts": "No new skill or skill modification; initialization, metadata generation and generic skill validation are not applicable."
+  },
+  "limitations": [
+    "BRAN unavailable: no native policy.",
+    "No independent review, hosted checks acceptance, product/runtime verification, release, tag or export claimed.",
+    "Existing g4 evidence remains untracked and untouched; only g5 evidence added.",
+    "PR #11 is OPEN, not merged history.",
+    "Approved product prose preserved; only links plus revision/provenance metadata changed."
+  ]
+}

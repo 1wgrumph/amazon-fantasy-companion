@@ -1,0 +1,352 @@
+openapi: 3.0.3
+info:
+  title: Amazon Fantasy Companion TV API
+  version: "1"
+  description: >-
+    CONTRACT-AFC-P2-API (frozen in P2-B01). JSON over TLS; request and response
+    bodies at most 64 KiB; entity responses use CONTRACT-AFC-P2-ENVELOPE. Every
+    operation except device linking needs a device session bound to the profile.
+security:
+  - deviceSession: []
+paths:
+  /v1/link:
+    post:
+      summary: Issue a device code and polling handle (unlinked bootstrap).
+      security: []
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema: {type: object}
+      responses:
+        "201":
+          description: Pending device code.
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/DeviceCode"}
+        "400": {$ref: "#/components/responses/BadRequest"}
+        "429": {$ref: "#/components/responses/TooManyRequests"}
+        "503": {$ref: "#/components/responses/Unavailable"}
+    get:
+      summary: Poll link state by handle; a linked poll inside the retry window carries a new session token that supersedes the previous one.
+      security: []
+      parameters:
+        - {name: handle, in: query, required: true, schema: {type: string, maxLength: 256}}
+      responses:
+        "200":
+          description: Link state.
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/LinkState"}
+        "400": {$ref: "#/components/responses/BadRequest"}
+        "429": {$ref: "#/components/responses/TooManyRequests"}
+        "503": {$ref: "#/components/responses/Unavailable"}
+  /v1/link/confirm:
+    post:
+      summary: Confirm a code from a phone or browser with the TV code alone (one time).
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [code, profileId]
+              properties:
+                code: {type: string, maxLength: 16}
+                profileId: {$ref: "#/components/schemas/ProfileId"}
+      responses:
+        "200":
+          description: Code linked.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [state]
+                properties:
+                  state: {type: string, enum: [linked]}
+        "400": {$ref: "#/components/responses/BadRequest"}
+        "410": {$ref: "#/components/responses/Gone"}
+        "429": {$ref: "#/components/responses/TooManyRequests"}
+        "503": {$ref: "#/components/responses/Unavailable"}
+  /link:
+    get:
+      summary: Phone/browser page for code confirmation.
+      security: []
+      responses:
+        "200":
+          description: HTML confirmation form.
+          content:
+            text/html:
+              schema: {type: string}
+  /v1/profile:
+    get:
+      summary: Canonical Settings and revision.
+      parameters:
+        - $ref: "#/components/parameters/ProfileId"
+      responses:
+        "200":
+          description: Profile envelope.
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/ProfileEnvelope"}
+        "401": {$ref: "#/components/responses/Unauthenticated"}
+        "403": {$ref: "#/components/responses/Forbidden"}
+        "429": {$ref: "#/components/responses/TooManyRequests"}
+        "503": {$ref: "#/components/responses/Unavailable"}
+    put:
+      summary: Full validated Settings update against the revision the client holds.
+      parameters:
+        - $ref: "#/components/parameters/ProfileId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [revision, data]
+              properties:
+                profileId: {$ref: "#/components/schemas/ProfileId"}
+                revision: {type: integer, minimum: 0}
+                data: {$ref: "#/components/schemas/Settings"}
+      responses:
+        "200":
+          description: Stored profile envelope with the next revision.
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/ProfileEnvelope"}
+        "400": {$ref: "#/components/responses/BadRequest"}
+        "401": {$ref: "#/components/responses/Unauthenticated"}
+        "403": {$ref: "#/components/responses/Forbidden"}
+        "409": {$ref: "#/components/responses/Conflict"}
+        "429": {$ref: "#/components/responses/TooManyRequests"}
+        "503": {$ref: "#/components/responses/Unavailable"}
+  /v1/alerts:
+    get:
+      summary: Alerts after the cursor; an empty list means no change, not feed health.
+      parameters:
+        - $ref: "#/components/parameters/ProfileId"
+        - {name: cursor, in: query, required: false, schema: {type: string, maxLength: 256}}
+      responses:
+        "200":
+          description: Alert envelopes and the next cursor.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [alerts, cursor]
+                properties:
+                  alerts:
+                    type: array
+                    items: {$ref: "#/components/schemas/Envelope"}
+                  cursor: {type: string}
+        "401": {$ref: "#/components/responses/Unauthenticated"}
+        "403": {$ref: "#/components/responses/Forbidden"}
+        "429": {$ref: "#/components/responses/TooManyRequests"}
+        "503": {$ref: "#/components/responses/Unavailable"}
+  /v1/panel:
+    get:
+      summary: PanelState and scoring basis for the selected team/league.
+      parameters:
+        - $ref: "#/components/parameters/ProfileId"
+        - {name: teamLeague, in: query, required: false, schema: {type: string, maxLength: 128}}
+      responses:
+        "200":
+          description: Panel envelope.
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/Envelope"}
+        "401": {$ref: "#/components/responses/Unauthenticated"}
+        "403": {$ref: "#/components/responses/Forbidden"}
+        "429": {$ref: "#/components/responses/TooManyRequests"}
+        "503": {$ref: "#/components/responses/Unavailable"}
+  /v1/providers:
+    get:
+      summary: Resolved provider route and access basis; never inferred from installed apps.
+      parameters:
+        - $ref: "#/components/parameters/ProfileId"
+        - {name: eventId, in: query, required: false, schema: {type: string, maxLength: 256}}
+      responses:
+        "200":
+          description: Provider route.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [accessBasis]
+                properties:
+                  provider: {type: string, nullable: true}
+                  channel: {type: string, nullable: true}
+                  route: {type: object, nullable: true}
+                  accessBasis: {type: string, enum: [verified, customerConfirmed, unknown]}
+        "401": {$ref: "#/components/responses/Unauthenticated"}
+        "403": {$ref: "#/components/responses/Forbidden"}
+        "429": {$ref: "#/components/responses/TooManyRequests"}
+        "503": {$ref: "#/components/responses/Unavailable"}
+  /v1/routing-outcome:
+    post:
+      summary: Record one Watch attempt's RoutingOutcome.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [eventId, outcome]
+              properties:
+                profileId: {$ref: "#/components/schemas/ProfileId"}
+                eventId: {type: string, maxLength: 256}
+                outcome: {$ref: "#/components/schemas/RoutingOutcome"}
+      responses:
+        "200":
+          description: Recorded outcome.
+          content:
+            application/json:
+              schema: {type: object}
+        "400": {$ref: "#/components/responses/BadRequest"}
+        "401": {$ref: "#/components/responses/Unauthenticated"}
+        "403": {$ref: "#/components/responses/Forbidden"}
+        "429": {$ref: "#/components/responses/TooManyRequests"}
+        "503": {$ref: "#/components/responses/Unavailable"}
+  /v1/installed-apps:
+    post:
+      summary: TV detector report of installed provider packages.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [packages]
+              properties:
+                profileId: {$ref: "#/components/schemas/ProfileId"}
+                packages:
+                  type: array
+                  maxItems: 500
+                  items: {type: string, pattern: "^[A-Za-z0-9._]{1,255}$"}
+      responses:
+        "200":
+          description: Recorded report.
+          content:
+            application/json:
+              schema: {type: object}
+        "400": {$ref: "#/components/responses/BadRequest"}
+        "401": {$ref: "#/components/responses/Unauthenticated"}
+        "403": {$ref: "#/components/responses/Forbidden"}
+        "429": {$ref: "#/components/responses/TooManyRequests"}
+        "503": {$ref: "#/components/responses/Unavailable"}
+components:
+  securitySchemes:
+    deviceSession:
+      type: http
+      scheme: bearer
+      description: 256-bit opaque device session token from the linked poll; stored only as a hash.
+  parameters:
+    ProfileId:
+      name: profileId
+      in: query
+      required: false
+      description: Defaults to the session's profile; any other profile is refused with 403.
+      schema: {$ref: "#/components/schemas/ProfileId"}
+  schemas:
+    ProfileId: {type: string, pattern: "^[A-Za-z0-9_-]{1,64}$"}
+    DeviceCode:
+      type: object
+      required: [code, expires, handle]
+      properties:
+        code: {type: string, pattern: "^[ABCDEFGHJKLMNPQRSTUVWXYZ23456789]{8}$"}
+        expires: {type: string, format: date-time}
+        handle: {type: string}
+    LinkState:
+      type: object
+      required: [state]
+      properties:
+        state: {type: string, enum: [unlinked, codePending, linked, expired]}
+        sessionToken: {type: string}
+    Envelope:
+      type: object
+      required: [schemaVersion, id, revision, source, updatedAt, data]
+      properties:
+        schemaVersion: {type: integer}
+        id: {type: string}
+        revision: {type: integer, minimum: 0}
+        source: {type: string, enum: [live, replay, yahoo, manual]}
+        eventTime: {type: string, format: date-time}
+        updatedAt: {type: string, format: date-time}
+        data: {type: object}
+    ProfileEnvelope:
+      allOf:
+        - $ref: "#/components/schemas/Envelope"
+        - type: object
+          properties:
+            data: {$ref: "#/components/schemas/Settings"}
+    Settings:
+      type: object
+      additionalProperties: false
+      properties:
+        fantasySelections: {}
+        teamLeague: {}
+        alertTypes: {}
+        frequency: {}
+        quietHours: {}
+        gameDayPeriods: {}
+        spoilerDelay: {}
+        presentation: {}
+        voice: {}
+        excitement: {}
+        providerPref: {}
+        switchingConfirm: {}
+        panelPrefs: {}
+        detectionOptIn: {}
+        scoringPreset: {type: string, enum: [ppr, halfPpr], default: halfPpr}
+    RoutingOutcome:
+      type: string
+      enum: [gameOpened, searchOpened, appHomeOpened, appAbsent, accessUnknown, playbackDenied]
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: object
+          required: [code, message]
+          properties:
+            code: {type: string}
+            message: {type: string}
+  responses:
+    BadRequest:
+      description: Malformed or oversized input; nothing was changed.
+      content:
+        application/json:
+          schema: {$ref: "#/components/schemas/Error"}
+    Unauthenticated:
+      description: Missing or unknown session.
+      content:
+        application/json:
+          schema: {$ref: "#/components/schemas/Error"}
+    Forbidden:
+      description: The session is bound to a different profile.
+      content:
+        application/json:
+          schema: {$ref: "#/components/schemas/Error"}
+    Conflict:
+      description: Stale profile revision; read and merge before writing.
+      content:
+        application/json:
+          schema: {$ref: "#/components/schemas/Error"}
+    Gone:
+      description: The code is expired, already used or unknown.
+      content:
+        application/json:
+          schema: {$ref: "#/components/schemas/Error"}
+    TooManyRequests:
+      description: Throttled; retry with bounded backoff.
+      headers:
+        Retry-After: {schema: {type: integer}}
+      content:
+        application/json:
+          schema: {$ref: "#/components/schemas/Error"}
+    Unavailable:
+      description: Service unavailable, or not implemented yet (code not_implemented).
+      content:
+        application/json:
+          schema: {$ref: "#/components/schemas/Error"}

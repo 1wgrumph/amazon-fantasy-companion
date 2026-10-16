@@ -1,0 +1,540 @@
+{
+  "outcome": "PASS",
+  "baseline": "51bc730a880105c9b21d37a7a2dc5da79ada875f",
+  "seit_sha256": "8db198397d019aa44310a7132b5b1dd98ef53f33b622fbb3ac34b7732c00c848",
+  "baseline_seit_sha256": "5d52c1aefaa105404dde3acd51f90a2ee78b54604b51dede56429b81074e6f1d",
+  "checks": [
+    {
+      "id": "S01-seit-schema-1.1.7",
+      "outcome": "PASS",
+      "detail": "seit.schema.json sha256 3d46eda18fde76923d646ce1b3442413ed0363ff910d2e133323ce79b6e65edd; errors=[]"
+    },
+    {
+      "id": "S02-stable-ids-and-counts",
+      "outcome": "PASS",
+      "detail": "identical id order {'proof_cases': True, 'procedures_and_commands': True, 'cross_cutting_checks': True, 'traceability_matrix': True, 'integration_vv_sequence': True}; counts {'proof_cases': 100, 'procedures_and_commands': 70, 'required_commands': 27, 'traceability_matrix': 100, 'integration_vv_sequence': 44, 'levels': 5, 'wave_gate_costs': 5}"
+    },
+    {
+      "id": "P01-proof-allocations-and-assertions",
+      "outcome": "PASS",
+      "detail": "100 proofs: 13 allocation/identity fields identical; 63 product PR rows equal baseline after the W3 token only; assertion text changed only in MS-01/REL-02/RISK-13; negatives unchanged except MS-01 (fixed_bad=[], pr_bad=[], core_bad=[])"
+    },
+    {
+      "id": "P02-product-row-count",
+      "outcome": "PASS",
+      "detail": "63 SEIT-AFC-PR rows; 14 carry only the X11 W3 token"
+    },
+    {
+      "id": "C01-commands",
+      "outcome": "PASS",
+      "detail": "70 commands; executable command/used_by/status identical; text changed only in ['CMD-CHANGELOG-CHECK', 'CMD-MILESTONES-CREATE', 'CMD-MILESTONES-READBACK', 'CMD-RELEASE-PREP', 'CMD-STUB-SCAN', 'PROC-TRACKING-SETUP', 'PROC-VISUAL-REVIEW']"
+    },
+    {
+      "id": "T01-traceability",
+      "outcome": "PASS",
+      "detail": "columns/IDs/allocations unchanged; changed cells [('SEIT-AFC-P2-MS-01', 'Negative/failure case'), ('SEIT-AFC-P2-MS-01', 'Positive case'), ('SEIT-AFC-P2-REL-02', 'Positive case')] mirror the proof rows"
+    },
+    {
+      "id": "G01-levels-and-gate-costs",
+      "outcome": "PASS",
+      "detail": "W1..W5 dues, slices, steps, resource groups and gate seconds 720/900/2100/0/120 unchanged; Mn key -> release_checkpoint Wn"
+    },
+    {
+      "id": "I01-integration-steps",
+      "outcome": "PASS",
+      "detail": "44 steps: order/after/slices/proofs/commands unchanged; milestone = IE GitHub milestone; bad=[]"
+    },
+    {
+      "id": "G02-cutoffs-and-live-windows",
+      "outcome": "PASS",
+      "detail": "every baseline UTC time still present (15); missing=[]"
+    },
+    {
+      "id": "G03-cutoff-ids",
+      "outcome": "PASS",
+      "detail": "cut-off IDs referenced in SEIT unchanged (0; CO-* cut-offs are carried by integration-plan.md, not SEIT)"
+    },
+    {
+      "id": "K01-milestone-table",
+      "outcome": "PASS",
+      "detail": "13 rows equal technical-plan D3 table and payload (id, title, due_on, issues in order)"
+    },
+    {
+      "id": "K02-groups",
+      "outcome": "PASS",
+      "detail": "39 groups, 52 slices once, 13 pairs, group order/slices unchanged, per-milestone {'M01': 3, 'M02': 2, 'M03': 3, 'M04': 4, 'M05': 3, 'M06': 3, 'M07': 3, 'M08': 3, 'M09': 2, 'M10': 2, 'M11': 4, 'M12': 4, 'M13': 3} = proposal"
+    },
+    {
+      "id": "K03-payload-binding",
+      "outcome": "PASS",
+      "detail": "tracking_workflow, MS-01 copy and PROC-TRACKING-SETUP bind github-work-items.json sha256 f0b8d5bf26d3959948e65960fc2b06525a96f964ab3454633eb6c1aaeab9acdb; filing evidence hashes current"
+    },
+    {
+      "id": "K04-no-fixed-M2-assertion",
+      "outcome": "PASS",
+      "detail": "old M2 due assertion removed; M1..M5 only as 'former M1..M5' history; PROC-TRACKING-SETUP step 4 lists all 13 per-row due times"
+    },
+    {
+      "id": "R01-re-gated-statements",
+      "outcome": "PASS",
+      "detail": "live plan sha equals RE re-gate candidate; MS-01 names the D3 table; four rows bound to current RE receipts"
+    },
+    {
+      "id": "F01-profile-binding",
+      "outcome": "PASS",
+      "detail": "opensource-hackathon snapshot sha 7d501eb8c103831a38c50d237b5d1e2e015a564b9ade8aef09a32dfc39b26ab1 equals journey; bug-triager byte-identical; 4 superseded digests preserved by reference"
+    },
+    {
+      "id": "F02-lane-profiles-and-assurance",
+      "outcome": "PASS",
+      "detail": "4 lanes opensource-hackathon, defects bug-triager; every lane assurance enabled; Muse hold, OCR .md gap and Reverify gap stated; lane coverage_assist/reverify unchanged"
+    },
+    {
+      "id": "F03-no-stale-exemption",
+      "outcome": "PASS",
+      "detail": "no active tech-writing binding or disabled-assurance text outside superseded history"
+    },
+    {
+      "id": "H01-no-stale-wave-tokens",
+      "outcome": "PASS",
+      "detail": "standalone M1..M5 tokens remaining outside planning-findings history: []"
+    },
+    {
+      "id": "H02-no-home-paths",
+      "outcome": "PASS",
+      "detail": "no absolute home paths"
+    },
+    {
+      "id": "H03-source-binding",
+      "outcome": "PASS",
+      "detail": "9 planning inputs equal live bytes; revision = HEAD"
+    },
+    {
+      "id": "H04-decision-baseline",
+      "outcome": "PASS",
+      "detail": "52 decisions projected; prior statuses unchanged; SD-040/041/041-AMENDMENT-1 = ['not_recorded', 'not_recorded', 'not_recorded']"
+    }
+  ],
+  "changed_fields_by_scope": {
+    "artifact": [
+      "/artifact/finalized_by",
+      "/artifact/note",
+      "/artifact/receipt",
+      "/artifact/status"
+    ],
+    "decision_baseline": [
+      "/decision_baseline/chronology_profile_authority (added)",
+      "/decision_baseline/confirmed_decisions/DEC-AFC-SD-040 (added)",
+      "/decision_baseline/confirmed_decisions/DEC-AFC-SD-041 (added)",
+      "/decision_baseline/confirmed_decisions/DEC-AFC-SD-041-AMENDMENT-1 (added)"
+    ],
+    "environments_fixtures_data_simulations_support": [
+      "/environments_fixtures_data_simulations_support/lease_order"
+    ],
+    "frozen_profile_binding": [
+      "/frozen_profile_binding/frontend (removed)",
+      "/frozen_profile_binding/heavyweight (removed)",
+      "/frozen_profile_binding/opensource-hackathon (added)",
+      "/frozen_profile_binding/primary (removed)",
+      "/frozen_profile_binding/tech-writing (removed)"
+    ],
+    "frozen_profile_binding_note": [
+      "/frozen_profile_binding_note"
+    ],
+    "gate_declarations": [
+      "/gate_declarations/backend/profile",
+      "/gate_declarations/device-integration-spikes/profile",
+      "/gate_declarations/policy/coverage_assist_backend (added)",
+      "/gate_declarations/policy/muse_contributor_mode_hold (added)",
+      "/gate_declarations/policy/reverify_backend (added)",
+      "/gate_declarations/spec-and-docs/assurance/cadence",
+      "/gate_declarations/spec-and-docs/assurance/candidate (added)",
+      "/gate_declarations/spec-and-docs/assurance/enabled",
+      "/gate_declarations/spec-and-docs/assurance/independence (added)",
+      "/gate_declarations/spec-and-docs/profile",
+      "/gate_declarations/spec-and-docs/red_then_green/reason",
+      "/gate_declarations/spec-and-docs/strategy",
+      "/gate_declarations/tv-app-ui/profile"
+    ],
+    "integration_vv_sequence": [
+      "/integration_vv_sequence/0/milestone",
+      "/integration_vv_sequence/0/milestone_note (added)",
+      "/integration_vv_sequence/0/release_checkpoint (added)",
+      "/integration_vv_sequence/1/entry_criteria",
+      "/integration_vv_sequence/1/milestone",
+      "/integration_vv_sequence/1/release_checkpoint (added)",
+      "/integration_vv_sequence/10/milestone",
+      "/integration_vv_sequence/10/milestone_note (added)",
+      "/integration_vv_sequence/10/release_checkpoint (added)",
+      "/integration_vv_sequence/11/milestone",
+      "/integration_vv_sequence/11/release_checkpoint (added)",
+      "/integration_vv_sequence/12/milestone",
+      "/integration_vv_sequence/12/release_checkpoint (added)",
+      "/integration_vv_sequence/13/milestone",
+      "/integration_vv_sequence/13/release_checkpoint (added)",
+      "/integration_vv_sequence/14/milestone",
+      "/integration_vv_sequence/14/release_checkpoint (added)",
+      "/integration_vv_sequence/15/milestone",
+      "/integration_vv_sequence/15/release_checkpoint (added)",
+      "/integration_vv_sequence/16/milestone",
+      "/integration_vv_sequence/16/release_checkpoint (added)",
+      "/integration_vv_sequence/17/milestone",
+      "/integration_vv_sequence/17/release_checkpoint (added)",
+      "/integration_vv_sequence/18/milestone",
+      "/integration_vv_sequence/18/release_checkpoint (added)",
+      "/integration_vv_sequence/19/entry_criteria",
+      "/integration_vv_sequence/19/milestone",
+      "/integration_vv_sequence/19/release_checkpoint (added)",
+      "/integration_vv_sequence/2/milestone",
+      "/integration_vv_sequence/2/release_checkpoint (added)",
+      "/integration_vv_sequence/20/milestone",
+      "/integration_vv_sequence/20/release_checkpoint (added)",
+      "/integration_vv_sequence/21/milestone",
+      "/integration_vv_sequence/21/release_checkpoint (added)",
+      "/integration_vv_sequence/22/milestone",
+      "/integration_vv_sequence/22/release_checkpoint (added)",
+      "/integration_vv_sequence/23/milestone",
+      "/integration_vv_sequence/23/release_checkpoint (added)",
+      "/integration_vv_sequence/24/milestone",
+      "/integration_vv_sequence/24/release_checkpoint (added)",
+      "/integration_vv_sequence/25/milestone",
+      "/integration_vv_sequence/25/release_checkpoint (added)",
+      "/integration_vv_sequence/26/milestone",
+      "/integration_vv_sequence/26/release_checkpoint (added)",
+      "/integration_vv_sequence/27/milestone",
+      "/integration_vv_sequence/27/release_checkpoint (added)",
+      "/integration_vv_sequence/28/entry_criteria",
+      "/integration_vv_sequence/28/milestone",
+      "/integration_vv_sequence/28/release_checkpoint (added)",
+      "/integration_vv_sequence/29/milestone",
+      "/integration_vv_sequence/29/release_checkpoint (added)",
+      "/integration_vv_sequence/3/milestone",
+      "/integration_vv_sequence/3/release_checkpoint (added)",
+      "/integration_vv_sequence/30/entry_criteria",
+      "/integration_vv_sequence/30/milestone",
+      "/integration_vv_sequence/30/release_checkpoint (added)",
+      "/integration_vv_sequence/31/milestone",
+      "/integration_vv_sequence/31/release_checkpoint (added)",
+      "/integration_vv_sequence/32/milestone",
+      "/integration_vv_sequence/32/release_checkpoint (added)",
+      "/integration_vv_sequence/33/entry_criteria",
+      "/integration_vv_sequence/33/milestone",
+      "/integration_vv_sequence/33/release_checkpoint (added)",
+      "/integration_vv_sequence/34/entry_criteria",
+      "/integration_vv_sequence/34/milestone",
+      "/integration_vv_sequence/34/release_checkpoint (added)",
+      "/integration_vv_sequence/35/entry_criteria",
+      "/integration_vv_sequence/35/milestone",
+      "/integration_vv_sequence/35/release_checkpoint (added)",
+      "/integration_vv_sequence/36/milestone",
+      "/integration_vv_sequence/36/release_checkpoint (added)",
+      "/integration_vv_sequence/37/milestone",
+      "/integration_vv_sequence/37/release_checkpoint (added)",
+      "/integration_vv_sequence/38/milestone",
+      "/integration_vv_sequence/38/release_checkpoint (added)",
+      "/integration_vv_sequence/39/entry_criteria",
+      "/integration_vv_sequence/39/milestone",
+      "/integration_vv_sequence/39/release_checkpoint (added)",
+      "/integration_vv_sequence/4/milestone",
+      "/integration_vv_sequence/4/release_checkpoint (added)",
+      "/integration_vv_sequence/40/milestone",
+      "/integration_vv_sequence/40/release_checkpoint (added)",
+      "/integration_vv_sequence/41/milestone",
+      "/integration_vv_sequence/41/release_checkpoint (added)",
+      "/integration_vv_sequence/42/milestone",
+      "/integration_vv_sequence/42/release_checkpoint (added)",
+      "/integration_vv_sequence/43/milestone",
+      "/integration_vv_sequence/43/post_step_vv",
+      "/integration_vv_sequence/43/release_checkpoint (added)",
+      "/integration_vv_sequence/5/milestone",
+      "/integration_vv_sequence/5/milestone_note (added)",
+      "/integration_vv_sequence/5/release_checkpoint (added)",
+      "/integration_vv_sequence/6/milestone",
+      "/integration_vv_sequence/6/release_checkpoint (added)",
+      "/integration_vv_sequence/7/X05_checkpoint_binding",
+      "/integration_vv_sequence/7/entry_criteria",
+      "/integration_vv_sequence/7/milestone",
+      "/integration_vv_sequence/7/release_checkpoint (added)",
+      "/integration_vv_sequence/8/milestone",
+      "/integration_vv_sequence/8/release_checkpoint (added)",
+      "/integration_vv_sequence/9/milestone",
+      "/integration_vv_sequence/9/release_checkpoint (added)"
+    ],
+    "levels": [
+      "/levels/0/cost_limits",
+      "/levels/0/entry_criteria_ref",
+      "/levels/0/exit_criteria_ref",
+      "/levels/0/github_milestones (added)",
+      "/levels/0/milestone (removed)",
+      "/levels/0/release_checkpoint (added)",
+      "/levels/1/cost_limits",
+      "/levels/1/entry_criteria_ref",
+      "/levels/1/exit_criteria_ref",
+      "/levels/1/github_milestones (added)",
+      "/levels/1/milestone (removed)",
+      "/levels/1/release_checkpoint (added)",
+      "/levels/2/cost_limits",
+      "/levels/2/entry_criteria_ref",
+      "/levels/2/exit_criteria_ref",
+      "/levels/2/github_milestones (added)",
+      "/levels/2/milestone (removed)",
+      "/levels/2/release_checkpoint (added)",
+      "/levels/3/cost_limits",
+      "/levels/3/entry_criteria_ref",
+      "/levels/3/exit_criteria_ref",
+      "/levels/3/github_milestones (added)",
+      "/levels/3/milestone (removed)",
+      "/levels/3/release_checkpoint (added)",
+      "/levels/4/cost_limits",
+      "/levels/4/entry_criteria_ref",
+      "/levels/4/exit_criteria_ref",
+      "/levels/4/github_milestones (added)",
+      "/levels/4/milestone (removed)",
+      "/levels/4/release_checkpoint (added)"
+    ],
+    "planning_findings_for_plan_integrator": [
+      "/planning_findings_for_plan_integrator/cases_needing_owner_decision/4/rule",
+      "/planning_findings_for_plan_integrator/integration_step_proof_policy",
+      "/planning_findings_for_plan_integrator/mechanical_pi_refresh/checks",
+      "/planning_findings_for_plan_integrator/mechanical_pi_refresh/milestone_due",
+      "/planning_findings_for_plan_integrator/mechanical_pi_refresh/tracking",
+      "/planning_findings_for_plan_integrator/mechanical_pi_refresh/vv_and_capabilities"
+    ],
+    "procedures_and_commands/CMD-CHANGELOG-CHECK": [
+      "/pass"
+    ],
+    "procedures_and_commands/CMD-MILESTONES-CREATE": [
+      "/description",
+      "/pass",
+      "/procedure_steps"
+    ],
+    "procedures_and_commands/CMD-MILESTONES-READBACK": [
+      "/pass",
+      "/procedure_steps"
+    ],
+    "procedures_and_commands/CMD-RELEASE-PREP": [
+      "/pass"
+    ],
+    "procedures_and_commands/CMD-STUB-SCAN": [
+      "/pass"
+    ],
+    "procedures_and_commands/PROC-TRACKING-SETUP": [
+      "/pass",
+      "/procedure_steps",
+      "/tracking_payload_ref",
+      "/tracking_payload_sha256"
+    ],
+    "procedures_and_commands/PROC-VISUAL-REVIEW": [
+      "/procedure_steps"
+    ],
+    "proof_cases/SEIT-AFC-P2-DX-02": [
+      "/method_fields/requirement_gate_receipt"
+    ],
+    "proof_cases/SEIT-AFC-P2-MS-01": [
+      "/expected_result",
+      "/method_fields/additional_negative_observations",
+      "/method_fields/requirement_gate_receipt",
+      "/method_fields/tracking_evidence/X05",
+      "/method_fields/tracking_evidence/filing_scope/local_preview",
+      "/method_fields/tracking_evidence/filing_scope/payload_note",
+      "/method_fields/tracking_evidence/groups/0/milestone",
+      "/method_fields/tracking_evidence/groups/1/milestone",
+      "/method_fields/tracking_evidence/groups/10/milestone",
+      "/method_fields/tracking_evidence/groups/11/milestone",
+      "/method_fields/tracking_evidence/groups/12/milestone",
+      "/method_fields/tracking_evidence/groups/13/milestone",
+      "/method_fields/tracking_evidence/groups/14/milestone",
+      "/method_fields/tracking_evidence/groups/15/milestone",
+      "/method_fields/tracking_evidence/groups/16/milestone",
+      "/method_fields/tracking_evidence/groups/17/milestone",
+      "/method_fields/tracking_evidence/groups/18/milestone",
+      "/method_fields/tracking_evidence/groups/19/milestone",
+      "/method_fields/tracking_evidence/groups/2/milestone",
+      "/method_fields/tracking_evidence/groups/20/milestone",
+      "/method_fields/tracking_evidence/groups/21/milestone",
+      "/method_fields/tracking_evidence/groups/22/milestone",
+      "/method_fields/tracking_evidence/groups/23/milestone",
+      "/method_fields/tracking_evidence/groups/24/milestone",
+      "/method_fields/tracking_evidence/groups/25/milestone",
+      "/method_fields/tracking_evidence/groups/26/milestone",
+      "/method_fields/tracking_evidence/groups/27/milestone",
+      "/method_fields/tracking_evidence/groups/28/milestone",
+      "/method_fields/tracking_evidence/groups/29/milestone",
+      "/method_fields/tracking_evidence/groups/3/milestone",
+      "/method_fields/tracking_evidence/groups/30/milestone",
+      "/method_fields/tracking_evidence/groups/31/milestone",
+      "/method_fields/tracking_evidence/groups/32/milestone",
+      "/method_fields/tracking_evidence/groups/33/milestone",
+      "/method_fields/tracking_evidence/groups/34/milestone",
+      "/method_fields/tracking_evidence/groups/35/milestone",
+      "/method_fields/tracking_evidence/groups/36/milestone",
+      "/method_fields/tracking_evidence/groups/37/milestone",
+      "/method_fields/tracking_evidence/groups/38/milestone",
+      "/method_fields/tracking_evidence/groups/4/milestone",
+      "/method_fields/tracking_evidence/groups/5/milestone",
+      "/method_fields/tracking_evidence/groups/6/milestone",
+      "/method_fields/tracking_evidence/groups/7/milestone",
+      "/method_fields/tracking_evidence/groups/8/milestone",
+      "/method_fields/tracking_evidence/groups/9/milestone",
+      "/method_fields/tracking_evidence/inspection_evidence",
+      "/method_fields/tracking_evidence/milestone_table (added)",
+      "/method_fields/tracking_evidence/milestone_table_ref (added)",
+      "/method_fields/tracking_evidence/milestones",
+      "/method_fields/tracking_evidence/negative_cases",
+      "/method_fields/tracking_evidence/no_new_requirement",
+      "/method_fields/tracking_evidence/payload_sha256",
+      "/negative_or_failure_case",
+      "/pass_fail_rule",
+      "/stimulus_or_procedure"
+    ],
+    "proof_cases/SEIT-AFC-P2-REL-02": [
+      "/expected_result",
+      "/method_fields/requirement_gate_receipt",
+      "/stimulus_or_procedure"
+    ],
+    "proof_cases/SEIT-AFC-P2-SPIKE-01": [
+      "/method_fields/aggregate_closure"
+    ],
+    "proof_cases/SEIT-AFC-PR-002": [
+      "/method_fields/live_window_or_replay_basis"
+    ],
+    "proof_cases/SEIT-AFC-PR-003": [
+      "/method_fields/live_window_or_replay_basis"
+    ],
+    "proof_cases/SEIT-AFC-PR-005": [
+      "/method_fields/live_window_or_replay_basis"
+    ],
+    "proof_cases/SEIT-AFC-PR-010": [
+      "/method_fields/live_window_or_replay_basis"
+    ],
+    "proof_cases/SEIT-AFC-PR-021": [
+      "/method_fields/live_window_or_replay_basis"
+    ],
+    "proof_cases/SEIT-AFC-PR-022": [
+      "/method_fields/live_window_or_replay_basis"
+    ],
+    "proof_cases/SEIT-AFC-PR-031": [
+      "/method_fields/live_window_or_replay_basis"
+    ],
+    "proof_cases/SEIT-AFC-PR-035": [
+      "/method_fields/live_window_or_replay_basis"
+    ],
+    "proof_cases/SEIT-AFC-PR-036": [
+      "/method_fields/live_window_or_replay_basis"
+    ],
+    "proof_cases/SEIT-AFC-PR-038": [
+      "/method_fields/live_window_or_replay_basis"
+    ],
+    "proof_cases/SEIT-AFC-PR-042": [
+      "/method_fields/live_window_or_replay_basis"
+    ],
+    "proof_cases/SEIT-AFC-PR-043": [
+      "/method_fields/live_window_or_replay_basis"
+    ],
+    "proof_cases/SEIT-AFC-PR-045": [
+      "/method_fields/live_window_or_replay_basis"
+    ],
+    "proof_cases/SEIT-AFC-PR-047": [
+      "/method_fields/live_window_or_replay_basis"
+    ],
+    "proof_cases/SEIT-RISK-AFC-P2-13": [
+      "/method_fields/requirement_gate_receipt",
+      "/stimulus_or_procedure"
+    ],
+    "required_command_scopes": [
+      "/required_command_scopes/tech_writing"
+    ],
+    "responsibility_and_change_authority": [
+      "/responsibility_and_change_authority/assurance",
+      "/responsibility_and_change_authority/planning_test_engineer"
+    ],
+    "source_baseline": [
+      "/source_baseline/planning_input_note",
+      "/source_baseline/planning_inputs/0/sha256",
+      "/source_baseline/planning_inputs/1/sha256",
+      "/source_baseline/read_only_context",
+      "/source_baseline/revision"
+    ],
+    "superseded_profile_bindings (added)": [
+      "/superseded_profile_bindings (added)"
+    ],
+    "traceability_matrix": [
+      "/traceability_matrix/75/Positive case",
+      "/traceability_matrix/78/Negative/failure case",
+      "/traceability_matrix/78/Positive case"
+    ],
+    "tracking_workflow": [
+      "/tracking_workflow/X05",
+      "/tracking_workflow/filing_scope/local_preview",
+      "/tracking_workflow/filing_scope/payload_note",
+      "/tracking_workflow/groups/0/milestone",
+      "/tracking_workflow/groups/1/milestone",
+      "/tracking_workflow/groups/10/milestone",
+      "/tracking_workflow/groups/11/milestone",
+      "/tracking_workflow/groups/12/milestone",
+      "/tracking_workflow/groups/13/milestone",
+      "/tracking_workflow/groups/14/milestone",
+      "/tracking_workflow/groups/15/milestone",
+      "/tracking_workflow/groups/16/milestone",
+      "/tracking_workflow/groups/17/milestone",
+      "/tracking_workflow/groups/18/milestone",
+      "/tracking_workflow/groups/19/milestone",
+      "/tracking_workflow/groups/2/milestone",
+      "/tracking_workflow/groups/20/milestone",
+      "/tracking_workflow/groups/21/milestone",
+      "/tracking_workflow/groups/22/milestone",
+      "/tracking_workflow/groups/23/milestone",
+      "/tracking_workflow/groups/24/milestone",
+      "/tracking_workflow/groups/25/milestone",
+      "/tracking_workflow/groups/26/milestone",
+      "/tracking_workflow/groups/27/milestone",
+      "/tracking_workflow/groups/28/milestone",
+      "/tracking_workflow/groups/29/milestone",
+      "/tracking_workflow/groups/3/milestone",
+      "/tracking_workflow/groups/30/milestone",
+      "/tracking_workflow/groups/31/milestone",
+      "/tracking_workflow/groups/32/milestone",
+      "/tracking_workflow/groups/33/milestone",
+      "/tracking_workflow/groups/34/milestone",
+      "/tracking_workflow/groups/35/milestone",
+      "/tracking_workflow/groups/36/milestone",
+      "/tracking_workflow/groups/37/milestone",
+      "/tracking_workflow/groups/38/milestone",
+      "/tracking_workflow/groups/4/milestone",
+      "/tracking_workflow/groups/5/milestone",
+      "/tracking_workflow/groups/6/milestone",
+      "/tracking_workflow/groups/7/milestone",
+      "/tracking_workflow/groups/8/milestone",
+      "/tracking_workflow/groups/9/milestone",
+      "/tracking_workflow/inspection_evidence",
+      "/tracking_workflow/milestone_table (added)",
+      "/tracking_workflow/milestone_table_ref (added)",
+      "/tracking_workflow/milestones",
+      "/tracking_workflow/negative_cases",
+      "/tracking_workflow/no_new_requirement",
+      "/tracking_workflow/payload_sha256"
+    ],
+    "wave_gate_costs": [
+      "/wave_gate_costs/0/github_milestones (added)",
+      "/wave_gate_costs/0/limits",
+      "/wave_gate_costs/0/milestone (removed)",
+      "/wave_gate_costs/0/release_checkpoint (added)",
+      "/wave_gate_costs/1/github_milestones (added)",
+      "/wave_gate_costs/1/limits",
+      "/wave_gate_costs/1/milestone (removed)",
+      "/wave_gate_costs/1/release_checkpoint (added)",
+      "/wave_gate_costs/2/github_milestones (added)",
+      "/wave_gate_costs/2/limits",
+      "/wave_gate_costs/2/milestone (removed)",
+      "/wave_gate_costs/2/release_checkpoint (added)",
+      "/wave_gate_costs/3/github_milestones (added)",
+      "/wave_gate_costs/3/limits",
+      "/wave_gate_costs/3/milestone (removed)",
+      "/wave_gate_costs/3/release_checkpoint (added)",
+      "/wave_gate_costs/4/github_milestones (added)",
+      "/wave_gate_costs/4/limits",
+      "/wave_gate_costs/4/milestone (removed)",
+      "/wave_gate_costs/4/release_checkpoint (added)"
+    ]
+  }
+}

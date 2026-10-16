@@ -1,0 +1,47 @@
+P2-A04 device steps pending (no Fire TV stick in this slice, 2026-10-15)
+
+Typed gaps: DEVICE_INSTALL_PENDING (CMD-TVAPP-INSTRUMENTED / on-stick launch),
+VISUAL_EMULATOR_UNAVAILABLE (PROC-VISUAL-REVIEW), X03_VERDICT_PENDING
+(provider packages, launch values, current-attempt observation mechanism) and
+X11_VERDICT_PENDING (Alexa-assisted tuning route). None is a pass. The host
+slice is green: 17/17 watch unit tests, full gate exit 0 (132 TV unit tests),
+assembleDebug. Synthetic registry fixtures stay in tests; no on-stick launch
+is claimed. Each step below needs the fire-tv-stick lease.
+
+1. Install and on-stick launch per provider (AFC-PR-030/-031)
+   Build from the P2-A04 commit (or its reviewed successor):
+     ./tv-app/gradlew -p tv-app assembleDebug -PafcApiBaseUrl=<afc-dev ApiUrl>
+   Record the APK sha256, then: adb -s <stick_serial> install -r <apk>;
+   record exit status, sanitized device model, Fire OS and API level.
+   For each registry provider in X03 spike order (Prime Video TNF, ESPN,
+   DirecTV Stream, YouTube TV, local broadcast): trigger a Watch attempt for
+   a live event, record the observed destination (game, app home, search,
+   denial), the single reported RoutingOutcome, and whether it matches the
+   observation. A started launch with no supported observation must stay
+   accessUnknown on device too; never record gameOpened from the launch call
+   or the registry's historical verified_outcome (RISK-AFC-P2-10).
+   Uninstall one provider app and confirm appAbsent with no launch.
+
+2. PROC-VISUAL-REVIEW (DES-AFC-P2-VISUAL), 1080p is the only viewport.
+   Capture adb exec-out screencap -p > evidence/visual/P2-A04/<state>.png
+   plus adb shell dumpsys window > evidence/visual/P2-A04/<state>-window.txt
+   for each state, using sanitized fixtures (no account names or tokens):
+     - confirm-switch: switching confirmation on; the confirm prompt precedes
+       any launch, declining launches nothing and reports nothing.
+     - outcome-shown: after an attempt the shown outcome equals the reported
+       one, including appAbsent staying in the app.
+     - fullscreen-leaves: under PanelMode.FullScreen a started launch leaves
+       the companion app for the provider app (AFC-PR-048); a failed launch
+       stays to show the outcome.
+     - alexa-hidden: Alexa-assisted tuning is not offered while no verified
+       route exists (AFC-PR-036, X11_VERDICT_PENDING).
+   Judge layout, focus visibility, overscan margins and couch legibility.
+   Protected provider video captures show black; geometry evidence backs
+   layout claims.
+
+3. Real PackageManager / startActivity path (X03_VERDICT_PENDING): confirm
+   the documented intent/URI forms per provider, including how an intent
+   value's query suffix is carried (the host code drops it today; see the
+   shortcut comment in WatchLauncher.kt). Record any supported
+   current-attempt observation mechanism and its limits before any outcome
+   stronger than accessUnknown is reported for a started launch.

@@ -1,0 +1,30 @@
+--- before/authority.json
++++ after/authority.json
+@@ -106,7 +106,8 @@
+       "squash merge, force-push, commit on local main, git switch, destructive git on unmerged work",
+       "route or profile change outside the frozen profiles and their fallback conditions",
+       "device purchase or platform switch (C1)",
+-      "upstream issue or PR to any third-party project"
++      "upstream issue or PR to any third-party project",
++      "Current-task hold: no Phase 2 product/backend/spike/deployment execution from planning or tracking approval alone; owner must request the subsequent execution stage. P2-L01 tracking setup may be explicitly approved separately from that hold."
+     ],
+     "paths": [
+       ".env",
+@@ -163,8 +164,16 @@
+       "budget_exhaustion",
+       "owner_hold",
+       "owner_only_actions",
+-      "route_or_profile_change"
++      "route_or_profile_change",
++      "current_task_product_execution_hold"
+     ],
+     "expires_at": "2026-11-20T23:59:59Z"
++  },
++  "current_task_scope": {
++    "planning_lead_decision": "DEC-AFC-SD-039",
++    "planning_completion": true,
++    "tracking_setup": "P2-L01 only after explicit integrated approval",
++    "product_execution": "held until subsequent owner execution instruction",
++    "publication": "separate owner authority; history/content scope review required"
+   }
+ }

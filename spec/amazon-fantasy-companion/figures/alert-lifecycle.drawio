@@ -1,0 +1,73 @@
+<mxfile host="azdiagram">
+  <diagram id="alert-lifecycle" name="AlertLifecycle">
+    <mxGraphModel pageWidth="953.8" pageHeight="163">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="detected" value="detected" vertex="1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;">
+          <mxGeometry x="19.9994" y="89" width="82.0512" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="matched" value="matched" vertex="1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;">
+          <mxGeometry x="174.794" y="89" width="82.0512" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="gated" value="gated" vertex="1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;">
+          <mxGeometry x="365.6" y="53" width="63.3002" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="emitted" value="emitted" vertex="1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;">
+          <mxGeometry x="546.651" y="53" width="75.2976" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="delivered" value="delivered" vertex="1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;">
+          <mxGeometry x="694.696" y="20" width="83.5488" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="suppressed" value="suppressed" vertex="1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;">
+          <mxGeometry x="349.1" y="107" width="96.3" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="corrected" value="corrected" vertex="1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;">
+          <mxGeometry x="847.999" y="53" width="85.8024" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-1" value="identify" edge="1" parent="1" style="html=1;" source="detected" target="matched">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="102.171" y="107" as="sourcePoint" />
+            <mxPoint x="174.42" y="107" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-2" value="passFilters" edge="1" parent="1" style="html=1;" source="matched" target="gated">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="257.09" y="98.921" as="sourcePoint" />
+            <mxPoint x="365.32" y="77.205" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-3" value="blockFilters" edge="1" parent="1" style="html=1;" source="matched" target="suppressed">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="257.06" y="112.631" as="sourcePoint" />
+            <mxPoint x="348.63" y="121.517" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-4" value="delayElapsed" edge="1" parent="1" style="html=1;" source="gated" target="emitted">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="429.22" y="71" as="sourcePoint" />
+            <mxPoint x="546.16" y="71" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-5" value="present" edge="1" parent="1" style="html=1;" source="emitted" target="delivered">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="622.42" y="62.843" as="sourcePoint" />
+            <mxPoint x="694.29" y="47.05" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-6" value="correct" edge="1" parent="1" style="html=1;" source="emitted" target="corrected">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="622.24" y="73.847" as="sourcePoint" />
+            <mxPoint x="847.51" y="74.167" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-7" value="correct" edge="1" parent="1" style="html=1;" source="delivered" target="corrected">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="778.72" y="46.93" as="sourcePoint" />
+            <mxPoint x="847.56" y="61.833" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,33 @@
+FF.                                                                      [100%]
+=================================== FAILURES ===================================
+_______ TvappMutationAdapter.test_mutation_missing_required_data_is_gap ________
+
+self = <test_mutation_tvapp_adapter.TvappMutationAdapter testMethod=test_mutation_missing_required_data_is_gap>
+
+    def test_mutation_missing_required_data_is_gap(self):
+        self.candidate()
+        rc, out = self.run_adapter('<mutations partial="true"><mutation status="KILLED"/></mutations>')
+        self.assertEqual(rc, 3, out)
+>       self.assertIn('lacks file, class or line', out)
+E       AssertionError: 'lacks file, class or line' not found in 'GAP REPORT_INCOMPLETE: not a complete PIT mutations report\n'
+
+tools/ci/tests/mutation/test_mutation_tvapp_adapter.py:156: AssertionError
+----------------------------- Captured stdout call -----------------------------
+tvapp mutation adapter exit=3: ['GAP REPORT_INCOMPLETE: not a complete PIT mutations report']
+____ TvappMutationAdapter.test_partial_true_with_complete_data_is_accepted _____
+
+self = <test_mutation_tvapp_adapter.TvappMutationAdapter testMethod=test_partial_true_with_complete_data_is_accepted>
+
+    def test_partial_true_with_complete_data_is_accepted(self):
+        self.candidate()
+        rc, out = self.run_adapter(pit([(4, 'KILLED')], partial='true'))
+>       self.assertEqual(rc, 0, out)
+E       AssertionError: 3 != 0 : GAP REPORT_INCOMPLETE: not a complete PIT mutations report
+
+tools/ci/tests/mutation/test_mutation_tvapp_adapter.py:140: AssertionError
+----------------------------- Captured stdout call -----------------------------
+tvapp mutation adapter exit=3: ['GAP REPORT_INCOMPLETE: not a complete PIT mutations report']
+=========================== short test summary info ============================
+FAILED tools/ci/tests/mutation/test_mutation_tvapp_adapter.py::TvappMutationAdapter::test_mutation_missing_required_data_is_gap
+FAILED tools/ci/tests/mutation/test_mutation_tvapp_adapter.py::TvappMutationAdapter::test_partial_true_with_complete_data_is_accepted
+2 failed, 1 passed, 10 deselected in 1.37s

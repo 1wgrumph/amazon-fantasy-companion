@@ -5,7 +5,7 @@ _____________ test_seit_example_spec_02_conforming_section_passes ______________
     def test_seit_example_spec_02_conforming_section_passes() -> None:
 >       assert spec_lint().lint_section(CONFORMING) == []
 E       AssertionError: assert ['missing BLU...** ...)', ...] == []
-E         
+E
 E         Left contains 7 more items, first extra item: 'missing BLUF line (**BLUF:** ...)'
 E         Use -v to get more diff
 
@@ -15,7 +15,7 @@ _______________ test_seit_example_spec_02_five_requirements_pass _______________
     def test_seit_example_spec_02_five_requirements_pass() -> None:
 >       assert spec_lint().lint_section(with_requirements(5)) == []
 E       AssertionError: assert ['missing BLU...** ...)', ...] == []
-E         
+E
 E         Left contains 7 more items, first extra item: 'missing BLUF line (**BLUF:** ...)'
 E         Use -v to get more diff
 
@@ -24,7 +24,7 @@ _______________ test_seit_example_spec_02_six_requirements_fail ________________
 
     def test_seit_example_spec_02_six_requirements_fail() -> None:
         findings = spec_lint().lint_section(with_requirements(6))
-    
+
 >       assert len(findings) == 1
 E       AssertionError: assert 8 == 1
 E        +  where 8 = len(['binds 6 requirements; at most 5 per section', 'missing BLUF line (**BLUF:** ...)', 'Frame missing Who field (- **Who... field (- **What:** ...)', 'Frame missing Why field (- **Why:** ...)', 'Frame missing How field (- **How:** ...)', ...])
@@ -396,7 +396,7 @@ ________________ test_sd034_comment_before_opening_prose_passes ________________
         text = CONFORMING.replace("## Market\n", "## Market\n<!-- private guidance -->\n")
 >       assert spec_lint().lint_section(text) == []
 E       AssertionError: assert ['missing BLU...** ...)', ...] == []
-E         
+E
 E         Left contains 7 more items, first extra item: 'missing BLUF line (**BLUF:** ...)'
 E         Use -v to get more diff
 
@@ -416,7 +416,7 @@ old = 'Table (T2):', new = 'Table (T9):', bad_class = 'T9'
         old: str, new: str, bad_class: str
     ) -> None:
         findings = spec_lint().lint_section(replace_once(CONFORMING, old, new))
-    
+
 >       assert len(findings) == 1
 E       AssertionError: assert 8 == 1
 E        +  where 8 = len(['missing BLUF line (**BLUF:** ...)', 'Frame missing Who field (- **Who:** ...)', 'Frame missing What field (- **What:...field (- **Why:** ...)', 'Frame missing How field (- **How:** ...)', 'Frame missing When field (- **When:** ...)', ...])
@@ -437,7 +437,7 @@ old = 'Figure (F1):', new = 'Figure (F9):', bad_class = 'F9'
         old: str, new: str, bad_class: str
     ) -> None:
         findings = spec_lint().lint_section(replace_once(CONFORMING, old, new))
-    
+
 >       assert len(findings) == 1
 E       AssertionError: assert 8 == 1
 E        +  where 8 = len(['missing BLUF line (**BLUF:** ...)', 'Frame missing Who field (- **Who:** ...)', 'Frame missing What field (- **What:...field (- **Why:** ...)', 'Frame missing How field (- **How:** ...)', 'Frame missing When field (- **When:** ...)', ...])
@@ -447,9 +447,9 @@ _________ test_seit_example_spec_02_attribute_list_without_table_fails _________
 
     def test_seit_example_spec_02_attribute_list_without_table_fails() -> None:
         text = replace_once(CONFORMING, TABLE_BLOCK, ATTRIBUTE_LIST)
-    
+
         findings = spec_lint().lint_section(text)
-    
+
 >       assert len(findings) == 1
 E       AssertionError: assert 8 == 1
 E        +  where 8 = len(['missing BLUF line (**BLUF:** ...)', 'Frame missing Who field (- **Who:** ...)', 'Frame missing What field (- **What:...field (- **Why:** ...)', 'Frame missing How field (- **How:** ...)', 'Frame missing When field (- **When:** ...)', ...])
@@ -465,9 +465,9 @@ trigger = '- ERCOT Worker -> Market\n- Bot population -> Market\n- Market -> Das
     def test_seit_example_spec_02_related_entities_without_figure_fail(trigger: str) -> None:
         text = replace_once(CONFORMING, FIGURE_BLOCK, "")
         text = replace_once(text, ARROW_LIST, trigger)
-    
+
         findings = spec_lint().lint_section(text)
-    
+
 >       assert len(findings) == 1
 E       AssertionError: assert 8 == 1
 E        +  where 8 = len(['missing BLUF line (**BLUF:** ...)', 'Frame missing Who field (- **Who:** ...)', 'Frame missing What field (- **What:...field (- **Why:** ...)', 'Frame missing How field (- **How:** ...)', 'Frame missing When field (- **When:** ...)', ...])
@@ -483,9 +483,9 @@ trigger = '1. The Worker polls ERCOT.\n2. The market reprices open orders.\n3. T
     def test_seit_example_spec_02_related_entities_without_figure_fail(trigger: str) -> None:
         text = replace_once(CONFORMING, FIGURE_BLOCK, "")
         text = replace_once(text, ARROW_LIST, trigger)
-    
+
         findings = spec_lint().lint_section(text)
-    
+
 >       assert len(findings) == 1
 E       AssertionError: assert 8 == 1
 E        +  where 8 = len(['missing BLUF line (**BLUF:** ...)', 'Frame missing Who field (- **Who:** ...)', 'Frame missing What field (- **What:...field (- **Why:** ...)', 'Frame missing How field (- **How:** ...)', 'Frame missing When field (- **When:** ...)', ...])
@@ -501,10 +501,10 @@ tmp_path = PosixPath('/tmp/pytest-of-spectre/pytest-304/test_seit_example_spec_0
         bad.mkdir()
         (good / "02-market.md").write_text(CONFORMING)
         (bad / "02-market.md").write_text(with_requirements(6))
-    
+
 >       assert spec_lint().lint_section(CONFORMING) == []
 E       AssertionError: assert ['missing BLU...** ...)', ...] == []
-E         
+E
 E         Left contains 7 more items, first extra item: 'missing BLUF line (**BLUF:** ...)'
 E         Use -v to get more diff
 

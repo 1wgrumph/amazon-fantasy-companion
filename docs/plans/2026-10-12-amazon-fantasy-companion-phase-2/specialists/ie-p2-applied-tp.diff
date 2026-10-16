@@ -1,0 +1,98 @@
+141c141
+< | Phase 1 gate | `tools/ci/gate.sh` with areas `spec`, `docs`, `hygiene`, landing through Phase 1 slice S09 (PR #9 is S09T). |
+---
+> | Phase 1 gate | `tools/ci/gate.sh` with areas `spec`, `docs`, `hygiene`, local hooks (`core.hooksPath=.githooks`) and `.github/workflows/ci.yml`; landed by Phase 1 S09 (origin/main 17b40b4, 2026-10-12). |
+183c183
+< | AC-AFC-P2-MS-01 | After the owner approves this package, the program shall create GitHub milestones M1..M5 in `1wgrumph/amazon-fantasy-companion` whose title, due date and description (entry criteria, exit criteria, slice list) equal the approved milestone table, and shall record a `gh api` readback that matches it field for field; no milestone is created before approval. | SD-012 (D3); DEC-AFC-SD-023 (P2-7) | inspection | P2-L01 |
+---
+> | AC-AFC-P2-MS-01 | After the owner approves this package, the program shall create GitHub milestones M1..M5 in `1wgrumph/amazon-fantasy-companion` whose title, due date (calendar date; the UTC due time is stated in the description) and description (entry criteria, exit criteria, slice list) equal the approved milestone table, and shall record a `gh api` readback that matches it field for field; no milestone is created before approval. | SD-012 (D3); DEC-AFC-SD-023 (P2-7) | inspection | P2-L01 |
+255,259c255,259
+< | `live-game-window` | A live NFL window | P2-X03 (TNF check), P2-X05, P2-X09, P2-X10 |
+< | `tv-app-manifest` | `tv-app/app/src/main/AndroidManifest.xml` | P2-A01 (creates), then one of P2-A02, A03, A04 at a time |
+< | `tv-app-gradle` | `tv-app/app/build.gradle.kts`, `tv-app/gradle/libs.versions.toml` | P2-A01 (creates); later dependency edits; P2-R1..R5 version bump |
+< | `backend-template` | `backend/template.yaml` | P2-B01 (creates every function, route, table and parameter up front); later edits one at a time |
+< | `main-landing` | Merging to `main` and the `CHANGELOG.md` append | Landing procedure; one merge at a time |
+---
+> | `live-game-window` | A live NFL window | Shared by slices whose other leases are disjoint (P2-X05 host-only capture may hold it together with P2-X03, P2-X09, P2-X10 or P2-X12 on the stick); it serializes only competing demands on fire-tv-stick or aws-afc-dev during the game |
+> | `tv-app-manifest` | `tv-app/app/src/main/AndroidManifest.xml` | P2-A01 (creates, declaring every component and permission), then one of P2-A02..A05 at a time |
+> | `tv-app-gradle` | `tv-app/app/build.gradle.kts`, `tv-app/gradle/libs.versions.toml` | P2-A01 (creates); P2-A02..A05 own entries one at a time; P2-R1..R5 version bump |
+> | `backend-template` | `backend/template.yaml`, `backend/samconfig.toml`, `backend/requirements.txt`, `backend/requirements-dev.txt`, `backend/src/api/openapi.yaml`, `backend/src/store/`, `backend/src/pipeline/`, `backend/tests/conftest.py` | P2-B01 (creates); later edits one at a time, declared in the PR body |
+> | `main-landing` | Merging to `main` and the `CHANGELOG.md` append | Landing procedure; one merge at a time; before each merge CMD-PR-CHECKS (every check on the head commit passes, including gate / hygiene and each path-selected gate / <area>); merge only with gh pr merge --rebase or --merge; delete the remote branch. While the repository is private, GitHub enforces no ruleset; after the OA-5 visibility flip the Orchestrator applies the main ruleset (PR-only, required checks, no squash). |
+265,267c265,267
+< | M1 | Foundations and device baseline | 2026-10-14T23:00:00Z | This package approved; OA-1 (stick located, ADB enabled, model and Fire OS recorded) for P2-X01; Phase 1 S09 merged for P2-G01 landing. | Gate areas `tvapp` and `backend` on `main`; Vnv areas added; `tv-app/` scaffold builds and installs on the stick; backend skeleton with device-code link passes tests; P2-X01 verdict landed with first-install time; ESPN capture tool and first fixtures landed; milestones created and read back; release prepared (P2-R1). | P2-L01, P2-X01, P2-X05, P2-D01, P2-G01T, P2-G01, P2-A01T, P2-A01, P2-B01T, P2-B01, P2-R1 |
+< | M2 | Spike verdicts and backend baseline | 2026-10-16T19:00:00Z (T_yahoo) | M1 exit for device and backend slices; OA-3 (AWS account and `afc-dev` profile) for P2-L02; OA-4 (provider apps signed in) for P2-X02..X04. | Verdicts landed for panel (within spike_panel_max), notification, provider links (TNF check included), detection, ESPN live timing, Yahoo or manual; ingest and lineup slices merged; profile/settings UI merged with visual review; backend deployed to aws-afc-dev with link and profile smoke; release prepared (P2-R2). | P2-X04, P2-X02, P2-X03, P2-X07, P2-X06, P2-B02T, P2-B02, P2-B03T, P2-B03, P2-A02T, P2-A02, P2-L02, P2-R2 |
+< | M3 | End-to-end on the stick | 2026-10-19T06:00:00Z | M2 verdicts; T_yahoo outcome applied. | On Sun 2026-10-18 with simultaneous live games: alert over provider playback → Watch → recorded routing outcome on the stick; panel in the verdict's mode with live points and freshness; matcher, policy, resolver, panel service, alert, Watch and panel UI merged; release prepared (P2-R3). | P2-B04T, P2-B04, P2-B05T, P2-B05, P2-B06T, P2-B06, P2-B07T, P2-B07, P2-A03T, P2-A03, P2-A04T, P2-A04, P2-A05T, P2-A05, P2-L03, P2-X09, P2-R3 |
+---
+> | M1 | Foundations and device baseline | 2026-10-14T23:00:00Z | This package approved and landed (entry criterion 2); OA-1 (stick located, ADB enabled, model and Fire OS recorded) and OA-4 (Prime Video signed in) for P2-X01; Phase 1 S09 merged (met: origin/main 17b40b4). | Gate areas `tvapp` and `backend` on `main`; Vnv areas added; `tv-app/` scaffold builds and installs on the stick; backend skeleton with device-code link passes tests; P2-X01 verdict landed with first-install time; ESPN capture tool and first fixtures landed; milestones created and read back; release prepared (P2-R1). | P2-L01, P2-X01, P2-X05, P2-D01, P2-G01T, P2-G01, P2-A01T, P2-A01, P2-B01T, P2-B01, P2-R1 |
+> | M2 | Spike verdicts and backend baseline | 2026-10-17T01:00:00Z (T_yahoo + 6 h for the P2-X06 verdict pull request and P2-R2) | M1 exit for device and backend slices; OA-3 (AWS account and `afc-dev` profile) and OA-10 (link passphrase) for P2-L02; OA-4 (ESPN, DirecTV Stream, YouTube TV signed in) for P2-X03. | Verdicts landed for panel (within spike_panel_max), notification, provider links (TNF check included), detection, ESPN live timing, Yahoo or manual; ingest and lineup slices merged; profile/settings UI merged with visual review; backend deployed to aws-afc-dev with link and profile smoke; release prepared (P2-R2). | P2-X04, P2-X02, P2-X03, P2-X07, P2-X06, P2-B02T, P2-B02, P2-B03T, P2-B03, P2-A02T, P2-A02, P2-L02, P2-R2 |
+> | M3 | End-to-end on the stick | 2026-10-19T12:00:00Z | M2 verdicts; T_yahoo outcome applied. | On Sun 2026-10-18 with simultaneous live games: alert over provider playback → Watch → recorded routing outcome on the stick; panel in the verdict's mode with live points and freshness; matcher, policy, resolver, panel service, alert, Watch and panel UI merged; release prepared (P2-R3). | P2-B04T, P2-B04, P2-B05T, P2-B05, P2-B06T, P2-B06, P2-B07T, P2-B07, P2-A03T, P2-A03, P2-A04T, P2-A04, P2-A05T, P2-A05, P2-L03, P2-X09, P2-R3 |
+269c269
+< | M5 | Submission ready | 2026-10-23T12:00:00Z | M4 exit; OA-5 (LICENSE file and visibility flip) before judge-access verification; OA-6 (ESPN terms) before the write-up is final. | README and setup verified from a clean checkout; write-up, demo plan and clips ready; developer feedback assembled and sanitized; final APK tagged, hashed and Reverify run; Assurance Test Engineer and Integration Engineer execution verdicts on the M5 candidate; release prepared (P2-R5); owner checklist for submission handed over. | P2-D03, P2-D04, P2-D05, P2-X12, P2-SCR1, P2-L05, P2-R5 |
+---
+> | M5 | Submission ready | 2026-10-23T12:00:00Z | M4 exit; OA-5 (LICENSE file and visibility flip) before judge-access verification; OA-6 (ESPN terms) before the write-up is final. | README and setup verified from a clean checkout; write-up, demo plan and clips ready; developer feedback assembled and sanitized; final APK tagged, hashed and Reverify run; Assurance Test Engineer and Integration Engineer execution verdicts on the M5 candidate; release prepared (P2-R5); owner checklist for submission handed over. | P2-D03, P2-D04, P2-D05, P2-SCR1, P2-R5, P2-L05, P2-X12 |
+293c293
+< Wave 5: P2-D03, P2-D04, P2-D05, P2-X12, P2-SCR1, P2-L05, P2-R5
+---
+> Wave 5: P2-D03, P2-D04, P2-D05, P2-SCR1, P2-R5, P2-L05, P2-X12
+297,298c297,298
+< | Wave 1 | At approval: P2-X01 (needs OA-1; holds `fire-tv-stick`; its first install starts the spike_panel_max clock), P2-X05 (ESPN capture; MNF 10-12 if approved before kickoff, else TNF 10-15), P2-A01T, P2-B01T, P2-D01. As slots free: P2-L01, then P2-A01 after A01T, P2-B01 after B01T, P2-G01T after Phase 1 S09 merges, P2-G01 after G01T. P2-A01 and P2-B01 land after P2-G01. P2-R1 after every other M1 slice has merged. |
+< | Wave 2 | P2-X04 immediately after P2-X01 (stick), then P2-X02, P2-X03 (its Prime Video TNF check holds `live-game-window` on 2026-10-15), P2-X07, all serialized on `fire-tv-stick`; the stick chain counts as one agent. P2-B02T/B02 after P2-X05 lands fixtures. P2-B03T/B03 after P2-B01. P2-A02T/A02 after P2-A01. P2-L02 after P2-B01 and OA-3. P2-X06 at T_yahoo (or earlier when Yahoo approval arrives). P2-R2 last. |
+---
+> | Wave 1 | At approval: P2-X01 (needs OA-1; holds `fire-tv-stick`; its first install starts the spike_panel_max clock), P2-X05 (ESPN capture; MNF 10-12 if approved before kickoff, else TNF 10-15), P2-A01T, P2-B01T, P2-D01. As slots free: P2-L01, then P2-A01 after A01T, P2-B01 after B01T, P2-G01T at once (Phase 1 S09 merged on 2026-10-12, origin/main 17b40b4), P2-G01 after G01T. P2-A01 and P2-B01 land after P2-G01; P2-X05 PR 1 lands after P2-B01. P2-R1 after every other M1 slice has merged. |
+> | Wave 2 | P2-X04 holds fire-tv-stick from P2-X01's release until its verdict or first_install_at + spike_panel_max, without interruption; P2-A01's on-device review queues behind it and runs between P2-X04 and P2-X02. P2-X04 immediately after P2-X01 (stick), then P2-X02, P2-X03 PR 1 (desk evidence, then the stick is released) and P2-X07, all serialized on `fire-tv-stick`; P2-X03 PR 2 (Prime Video TNF check) holds the stick and `live-game-window` for the 2026-10-15 game only, while P2-X05 PR 2 captures the same game host-only; the stick chain counts as one agent. P2-B02T/B02 after P2-X05 PR 1 lands fixtures (completed 2026-10-11 games and MNF 2026-10-12). P2-B03T/B03 after P2-B01. P2-A02T/A02 after P2-A01. P2-L02 after P2-B01 and OA-3. P2-X06: Yahoo path after P2-B03 is deployed (OA-2), manual path at T_yahoo; its verdict configures P2-L03. P2-R2 last (after P2-R1). |
+301c301,303
+< | Wave 5 | P2-D03, P2-D04, P2-D05 in parallel; P2-X12 after P2-D05 (stick; Thu 2026-10-22 TNF is the last live capture window); P2-SCR1 after M4 (Scribe, not counted); P2-L05 after every M5 code change has merged; P2-R5 last. |
+---
+> | Wave 5 | P2-D03, P2-D04, P2-D05 in parallel; P2-SCR1 after M4 (Scribe, not counted); P2-R5 after those four merge; P2-L05 at the P2-R5 merge commit; P2-X12 on the final APK in the Thu 2026-10-22 TNF window, landing a docs-only manifest PR after the candidate. |
+>
+> Phase 1 RISK-AFC-08 (Actions minutes on the private repository, gh_private_minutes) continues to apply: the `tvapp` and `backend` jobs are path-filtered, and hosted runs stop rather than buy overage.
+317c319
+<   S09[Phase 1 S09 gate] --> G01T[P2-G01T] --> G01[P2-G01 tvapp/backend areas]
+---
+>   S09[Phase 1 S09 gate, merged] --> G01T[P2-G01T] --> G01[P2-G01 tvapp/backend areas]
+328c330,331
+<   X06[P2-X06 Yahoo verdict at T_yahoo] --> B03
+---
+>   B03 --> X06[P2-X06 Yahoo verdict / manual at T_yahoo]
+>   X06 --> L03
+347c350
+<   X10 --> D05[P2-D05 demo plan] --> X12[P2-X12 clips]
+---
+>   X10 --> D05[P2-D05 demo plan]
+349c352,355
+<   X12 --> L05[P2-L05 final APK + Reverify]
+---
+>   D03 --> R5[P2-R5 v1.0.0 candidate]
+>   D04 --> R5
+>   D05 --> R5
+>   R5 --> L05[P2-L05 final APK + Reverify] --> X12[P2-X12 clips on final APK]
+361c367
+< | OA-2 | Q7: Yahoo application submitted now; if approved, the owner stores the client id and secret as SSM SecureString parameters in aws-afc-dev and completes the OAuth consent in a browser. | P2-X06 (by T_yahoo) | Yahoo path only; manual path proceeds (C6) |
+---
+> | OA-2 | Q7: Yahoo application submitted now; if approved, the owner stores the client id and secret as SSM SecureString parameters in aws-afc-dev and completes the OAuth consent in a browser. After P2-L02 reports the stack's ApiUrl, register the deployed /link callback as the Yahoo app redirect URI. | P2-X06 (by T_yahoo) | Yahoo path only; manual path proceeds (C6) |
+363c369
+< | OA-4 | Provider apps installed and signed in on the stick: Prime Video; ESPN; DirecTV Stream (current subscription); YouTube TV if a subscription exists. | P2-X02..X04 (M2) | Provider routes without a session are recorded as `accessUnknown` or `appAbsent` |
+---
+> | OA-4 | Provider apps installed and signed in on the stick: Prime Video; ESPN; DirecTV Stream (current subscription); YouTube TV if a subscription exists. | P2-X01's first install (Prime Video signed in at minimum; the spike_panel_max clock starts at that install); ESPN, DirecTV Stream and YouTube TV before P2-X03 | Provider routes without a session are recorded as `accessUnknown` or `appAbsent` |
+367a374,375
+> | OA-10 | Store the manual-mode link passphrase as an SSM SecureString parameter in aws-afc-dev under the name P2-B01's template declares, and perform the /link confirmation for the stick when P2-L02 smoke, P2-X09, P2-X10 or a data-clearing APK rollback needs a linked device. | P2-L02 link smoke (M2) | Deployed link confirmation; linked-device live runs |
+> | OA-11 (optional) | Supply a release signing keystore for the submitted APK. | P2-L05 (M5) | Debug signing configuration is used |
+374,380c382,387
+< 2. The Orchestrator commits the package on `plan/2026-10-12-afc-phase-2`
+<    after scrubbing absolute local paths from `specialists/` prompts and
+<    logs, and lands it on `main` through a pull request before any Phase 2
+<    lane branches from `main`.
+< 3. The ST-5 conditions ST5-F1 and ST5-F2 (clickable links, revision-row
+<    links) land with PR #10 before P2-D02 edits the specification.
+< 4. Each owner action in §Owner-action entry criteria is met before the
+---
+> 2. The Orchestrator lands PR #10 (with ST5-F1 and ST5-F2) and PR #11 first,
+>    merges origin/main into plan/2026-10-12-afc-phase-2, commits the package
+>    after scrubbing absolute local paths from specialists/ prompts and logs,
+>    and lands it on main through a pull request that also seeds CHANGELOG.md,
+>    before any Phase 2 lane branches from main.
+> 3. Each owner action in §Owner-action entry criteria is met before the
+382c389
+< 5. Every imported tool passes scan-software-supply-chain before first use
+---
+> 4. Every imported tool passes scan-software-supply-chain before first use

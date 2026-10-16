@@ -1,0 +1,5 @@
+$ aws cloudformation describe-stacks --stack-name afc-dev --profile afc-dev --region us-east-2 --query Stacks[0].{Status:StackStatus,ApiUrl:Outputs[?OutputKey==`ApiUrl`].OutputValue,GitCommit:Tags[?Key==`GitCommit`].Value} --output json
+
+aws: [ERROR]: An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id afc-dev does not exist
+
+exit=254

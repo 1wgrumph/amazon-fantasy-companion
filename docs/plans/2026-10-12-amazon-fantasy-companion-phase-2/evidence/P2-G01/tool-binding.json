@@ -1,0 +1,40 @@
+{
+  "runtime": "Python 3.12.3 (/usr/bin/python3.12)",
+  "coverage": {
+    "binding": "python3.12 -m coverage",
+    "version": "7.13.5",
+    "status": "QUALIFIED native + repo adapter (backend)"
+  },
+  "diff_cover": {
+    "binding": "diff-cover CLI at $HOME/.local/bin/diff-cover (#!/usr/bin/python3.12)",
+    "version": "10.6.0",
+    "entry_sha256": "5656de9e5d9eea59932cc311919f3d2ff637af3fdf60b2019a70d5d9a65fc42e",
+    "status": "QUALIFIED via CMD-COVERAGE-BACKEND adapter controls",
+    "note": "python3.12 -m diff_cover fails: no __main__ (frozen G01T probe)"
+  },
+  "mutmut": {
+    "binding": "mutmut on PATH: $HOME/.local/bin/mutmut -> $HOME/.local/share/afc-tools/mutmut/bin/mutmut (venv python3.12)",
+    "version": "3.8.0",
+    "venv_packages": {
+      "pytest": "9.1.1",
+      "coverage": "7.13.5",
+      "click": "8.5.0"
+    },
+    "entry_sha256": "67db0d83acde871e341562533a99d2c5ab5da5ff20071996ed72d82d4c95fb0e",
+    "status": "QUALIFIED via CMD-MUTATION-BACKEND adapter controls",
+    "note": "Backend runtime test dependencies must be installed into this venv before real backend mutation (P2-B01 era)."
+  },
+  "cfn_lint": {
+    "binding": "cfn-lint at $HOME/.local/bin/cfn-lint (#!/usr/bin/python3.12)",
+    "version": "1.57.2",
+    "entry_sha256": "87e764ee60bdfdf6a51b2c846412629043828518756e09b6355c3899c1380337",
+    "status": "BOUND to gate.sh backend; command-protocol fixtures only; native SAM lint qualification needs backend/template.yaml (P2-B01)"
+  },
+  "pytest_python312": "8.4.2 (gate.sh backend)",
+  "actionlint": {
+    "path": "/usr/local/bin/actionlint",
+    "version": "1.7.7",
+    "sha256": "9f7dedb4e23f89f2922073d1a6720405b7b520d4f5832ebb96f0d55a2958886c"
+  },
+  "install_provenance": "Owner-approved installs performed by the coordinator at 2026-10-13T19:05 CDT (hash-verified against PyPI, ClamAV clean per coordinator); this slice installed nothing."
+}

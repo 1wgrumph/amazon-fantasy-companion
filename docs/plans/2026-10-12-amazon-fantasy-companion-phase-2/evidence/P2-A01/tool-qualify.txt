@@ -1,0 +1,53 @@
+test_absent_xml_rejects (test_backend_adapter.BackendCoverageAdapter.test_absent_xml_rejects) ... ok
+test_covered_changed_statements_pass (test_backend_adapter.BackendCoverageAdapter.test_covered_changed_statements_pass) ... ok
+test_failing_tests_fail_before_report (test_backend_adapter.BackendCoverageAdapter.test_failing_tests_fail_before_report) ... ok
+test_no_changed_source_is_empty_denominator_gap (test_backend_adapter.BackendCoverageAdapter.test_no_changed_source_is_empty_denominator_gap) ... ok
+test_stale_same_file_xml_rejects (test_backend_adapter.BackendCoverageAdapter.test_stale_same_file_xml_rejects) ... ok
+test_stale_xml_missing_changed_file_rejects (test_backend_adapter.BackendCoverageAdapter.test_stale_xml_missing_changed_file_rejects) ... ok
+test_uncovered_changed_statement_fails_threshold (test_backend_adapter.BackendCoverageAdapter.test_uncovered_changed_statement_fails_threshold) ... ok
+test_absent_native_data_rejects_report (test_native_coverage.NativeCoverage.test_absent_native_data_rejects_report) ... ok
+test_covered_statements_pass_native_threshold (test_native_coverage.NativeCoverage.test_covered_statements_pass_native_threshold) ... ok
+test_diff_cover_binding_is_available (test_native_coverage.NativeCoverage.test_diff_cover_binding_is_available) ... ok
+test_probe_executable_matches_adapter (test_native_coverage.NativeCoverage.test_probe_executable_matches_adapter) ... ok
+test_uncovered_statement_fails_native_threshold (test_native_coverage.NativeCoverage.test_uncovered_statement_fails_native_threshold) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 5.754s
+
+OK
+coverage adapter exit=0: ['PASS changed-line coverage 100% (threshold 90%)']
+coverage adapter exit=1: ['FAIL backend tests failed under coverage']
+coverage adapter exit=3: ['  self._warn("No data was collected.", slug="no-data-collected")']
+coverage adapter exit=0: ['PASS changed-line coverage 100% (threshold 90%)']
+coverage adapter exit=1: ['FAIL changed-line coverage 75% (threshold 90%)']
+native coverage both=True exit=0 lines={4: 1, 5: 1, 6: 1, 7: 1}; Wrote XML report to coverage.xml
+native coverage both=False exit=2 lines={4: 1, 5: 1, 6: 1, 7: 0}; Wrote XML report to coverage.xml
+Coverage failure: total of 75 is less than fail-under=90
+test_changed_module_level_without_mutants_is_nonfunction_gap (test_mutation_backend_adapter.BackendMutationAdapter.test_changed_module_level_without_mutants_is_nonfunction_gap) ... ok
+test_deliberate_survivor_fails_and_is_listed (test_mutation_backend_adapter.BackendMutationAdapter.test_deliberate_survivor_fails_and_is_listed) ... ok
+test_known_mutants_killed_pass (test_mutation_backend_adapter.BackendMutationAdapter.test_known_mutants_killed_pass) ... ok
+test_mixed_module_level_change_is_nonfunction_gap (test_mutation_backend_adapter.BackendMutationAdapter.test_mixed_module_level_change_is_nonfunction_gap) ... ok
+test_mutant_outside_changed_behavior_is_scope_gap (test_mutation_backend_adapter.BackendMutationAdapter.test_mutant_outside_changed_behavior_is_scope_gap) ... ok
+test_no_changed_source_is_empty_inventory_gap (test_mutation_backend_adapter.BackendMutationAdapter.test_no_changed_source_is_empty_inventory_gap) ... ok
+test_owned_workspace_is_removed (test_mutation_backend_adapter.BackendMutationAdapter.test_owned_workspace_is_removed) ... ok
+test_stale_cached_results_are_not_reused (test_mutation_backend_adapter.BackendMutationAdapter.test_stale_cached_results_are_not_reused) ... ok
+test_timeout_or_error_is_unresolved_never_killed (test_mutation_backend_adapter.BackendMutationAdapter.test_timeout_or_error_is_unresolved_never_killed) ... ok
+test_truncated_inventory_rejects (test_mutation_backend_adapter.BackendMutationAdapter.test_truncated_inventory_rejects) ... ok
+test_unchanged_functions_do_not_dilute_changed_score (test_mutation_backend_adapter.BackendMutationAdapter.test_unchanged_functions_do_not_dilute_changed_score) ... ok
+test_mutmut_binding_is_available (test_native_mutation.NativeMutation.test_mutmut_binding_is_available) ... ok
+test_probe_executable_matches_adapter (test_native_mutation.NativeMutation.test_probe_executable_matches_adapter) ... ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 11.266s
+
+OK
+mutation adapter exit=3: ['GAP PYTHON_NONFUNCTION_MUTATION_GAP: changed module-level behavior in backend/src/constants.py has no mutant binding']
+mutation adapter exit=1: ['FAIL mutation score 50.00% (threshold 70%)']
+mutation adapter exit=0: ['PASS mutation score 100.00% (threshold 70%)']
+mutation adapter exit=3: ['GAP PYTHON_NONFUNCTION_MUTATION_GAP: changed module-level behavior in backend/src/control.py has no mutant binding']
+mutation adapter exit=3: ['GAP EMPTY_INVENTORY: no changed backend/src Python files']
+mutation adapter exit=0: ['PASS mutation score 100.00% (threshold 70%)']
+mutation adapter exit=1: ['FAIL mutation score 50.00% (threshold 70%)']
+mutation adapter exit=0: ['PASS mutation score 100.00% (threshold 70%)']
+mutation adapter exit=1: ['FAIL mutation score 0.00% (threshold 70%)']
+exit=0

@@ -1,0 +1,58 @@
+{
+  "verdict": "REPAIRABLE_FAILURE",
+  "candidate_sha256": "17ae87e55873b5c91b14015a13d9cd1884825b8f6f2d081135c66ab106711b90",
+  "before_sha256": "6a2520ea8e235b1c21210b801bb2570803678ec013123935b7d9ea8e752a5464",
+  "s8_rows": [
+    "SRC-EMV-NASA-SEH",
+    "SRC-EMV-COE",
+    "SRC-EMV-29148"
+  ],
+  "findings": [
+    {
+      "uid": "AC-AFC-P2-MS-01",
+      "finding_type": "requires_regate",
+      "disposition": "FAIL",
+      "open": true,
+      "checklist_item": "CHK-RE-13",
+      "typed_failure": "AMBIGUOUS",
+      "also_failed": [
+        "CHK-RE-30 INCORRECT",
+        "CHK-RE-48 NO_PASS_FAIL"
+      ],
+      "evidence": "Current text names GitHub milestones M01..M13 but still says the description slice list equals the approved milestone table. The plan now has two tables. Technical waves and release checkpoints (W1..W5) keeps the former M1..M5 dues and the Slices column. GitHub milestones in order (D3; create only after approval) has rows M01..M13 and column Issues in order. A field-for-field readback has two targets, so pass/fail is not unique and the comparison object is not the agreed 13-row table. Source, verification, and allocation cells are unchanged.",
+      "corrected_text": "After the owner approves this package, the program shall create GitHub milestones M01..M13 in `1wgrumph/amazon-fantasy-companion` whose title, due date (calendar date; the UTC due time is stated in the description) and description (entry criteria, exit criteria, issues in order) equal the approved table `GitHub milestones in order (D3; create only after approval)`, and shall record a `gh api` readback that matches it field for field; no milestone is created before approval.",
+      "statement_sha256": "3f63c1ea72b6cffa2591283103905c95abf0f7f089383cfe95ce9b4630c44b46"
+    },
+    {
+      "uid": "AC-AFC-P2-REL-02",
+      "finding_type": "requires_regate",
+      "disposition": "PASS",
+      "open": false,
+      "checklist_item": null,
+      "typed_failure": null,
+      "evidence": "Semantic delta re-gated. milestone exit is now technical-wave release checkpoint W1..W5. Those five dues and slice lists equal former M1..M5. Allocation stays P2-R1..P2-R5. The release duty is otherwise the prior PASS. It does not require a release at each of M01..M13. No correction.",
+      "statement_sha256": "7ccb11aec16c13aa2f68a01ff5334a64288eac1727112dd46599d74b86c0304b"
+    },
+    {
+      "uid": "RISK-AFC-P2-13",
+      "finding_type": "requires_regate",
+      "disposition": "PASS",
+      "open": false,
+      "checklist_item": null,
+      "typed_failure": null,
+      "evidence": "Semantic delta re-gated. Trigger is a technical-wave release checkpoint W1..W5, not a GitHub milestone. The 12 h bound and \u00a7Program plan priority order are unchanged. W1..W5 dues equal former M1..M5 dues, so the trigger instants are unchanged. Source, verification, allocation, rationale, and response cells are unchanged. No correction.",
+      "statement_sha256": "89a2b279c0cfc2a96f6a30949eedf0229811060948f08aa26928cc63d5c507df"
+    },
+    {
+      "uid": "AC-AFC-P2-DX-02",
+      "finding_type": "exact_text",
+      "disposition": "PASS",
+      "open": false,
+      "checklist_item": "CHK-RE-04",
+      "typed_failure": null,
+      "evidence": "Only token change from technical-plan.before.txt is M5 to W5. W5 due 2026-10-23T12:00:00Z equals former M5 due. W5 slices include P2-SCR1 and the exit still requires developer feedback assembled and sanitized. Remainder matches the repaired sentence in specialists/re-p2-ac-receipt.md. Candidate text already equals this replacement. No re-gate.",
+      "corrected_text": "Before W5 exit the Scribe shall assemble, from `docs/developer-feedback/observations.md`, a per-tool Product Feedback file (used for, what worked well, what needs work, onboarding from zero to hello world, would build again Yes/No and why, AWS services used and how), optional Feature Requests with priority Critical / Important / Nice-to-have, and a sanitized Friction Log with the Devpost entry fields, covering every tool, API, SDK and device used in Phase 2, with no credentials, account details or local paths, and shall check the Product Feedback file and the Friction Log against the official rules current at submission.",
+      "statement_sha256": "c489abe2c3c14f36df25f03a247730cc521980f05394e3307868a862e3c7e573"
+    }
+  ]
+}

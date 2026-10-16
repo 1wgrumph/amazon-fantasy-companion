@@ -1,0 +1,22 @@
+{
+  "status": "RESOLVED_BY_DOCUMENTED_PURE_INTERFACE",
+  "supersedes_gap": "evidence/profile-migration-041/contract-gap.json (historical; unchanged)",
+  "owner_decision_preserved": "DEC-AFC-SD-027 Markdown register authority",
+  "native_precheck": "PASS",
+  "projection": "63 active rows with UID, statement, rationale, verification, allocation and sources verbatim; 3 withdrawn rows retained in original and rows.json; no new register or SDoc file",
+  "checks": [
+    "strict 66-UID inventory",
+    "duplicate/missing row negatives",
+    "missing verification method negative",
+    "installed checkRegister unmodified",
+    "original source unchanged"
+  ],
+  "lint": {
+    "command": "python3 <Alphazedehq>/tools/coe/lint-sdoc.py --profile library docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/requirements-register.md",
+    "exit_code": 0,
+    "stdout": "empty",
+    "coverage": "INAPPLICABLE_TO_MARKDOWN; zero SDoc nodes, NOT semantic validation PASS"
+  },
+  "semantic_gate": "Requirements Engineer on frozen route checks changed Lifecycle-local rows; prior product register gate preserved",
+  "amendment": "No exception or skipped native precheck; prior CLI-only stop had not tested the documented pure interface. No plugin/global config change."
+}

@@ -1,0 +1,9 @@
+>       assert status == 200 and body["state"] == "expired"
+E       AssertionError: assert (200 == 200 and 'linked' == 'expired'
+        assert status == 200 and retry.get("state") == "linked"
+        assert second_token != first_token
+>       assert device_auth.authenticate(first_token) is None
+E       AssertionError: assert 'owner' is None
+FAILED backend/tests/unit/test_bug_auth002.py::test_poll_after_expiry_mints_no_session
+FAILED backend/tests/unit/test_bug_auth002.py::test_second_linked_poll_supersedes_the_first
+2 failed, 35 warnings in 0.57s

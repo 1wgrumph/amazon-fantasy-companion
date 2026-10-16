@@ -1,0 +1,27 @@
+CHANGED_ONLY_UNTESTED_EXIT 1 FAIL mutation score 0.00% (threshold 70%)
+SCOPE_RESULT {   "status": "FAIL",   "detail": "mutation score 0.00% (threshold 70%)",   "threshold": 0.7,   "score": 0.0,   "survivors": [     "control.x_untested__mutmut_1",     "control.x_untested__mutmut_2"   ],   "scored_mutants": 2,   "changed_functions": {     "backend/src/control.py": [       "untested"     ]   },   "changed": [     "backend/src/control.py"   ],   "stats": {     "killed": 8,     "survived": 0,     "total": 10,     "no_tests": 2,     "skipped": 0,     "suspicious": 0,     "timeout": 0,     "check_was_interrupted_by_user": 0,     "segfault": 0   },   "mutants": 10,   "inventory": {     "control.x_verdict__mutmut_1": "killed",     "control.x_verdict__mutmut_2": "killed",     "control.x_verdict__mutmut_3": "killed",     "control.x_verdict__mutmut_4": "killed",     "control.x_verdict2__mutmut_1": "killed",     "control.x_verdict2__mutmut_2": "killed",     "control.x_verdict2__mutmut_3": "killed",     "control.x_verdict2__mutmut_4": "killed",     "control.x_untested__mutmut_1": "no tests",     "control.x_untested__mutmut_2": "no tests"   } }
+SCOPE_INVENTORY
+Saved CI/CD stats to mutants/mutmut-cicd-stats.json
+    control.x_verdict__mutmut_1: killed
+    control.x_verdict__mutmut_2: killed
+    control.x_verdict__mutmut_3: killed
+    control.x_verdict__mutmut_4: killed
+    control.x_verdict2__mutmut_1: killed
+    control.x_verdict2__mutmut_2: killed
+    control.x_verdict2__mutmut_3: killed
+    control.x_verdict2__mutmut_4: killed
+    control.x_untested__mutmut_1: no tests
+    control.x_untested__mutmut_2: no tests
+
+diff --git a/backend/src/control.py b/backend/src/control.py
+index c68a7b1..9261c0d 100644
+--- a/backend/src/control.py
++++ b/backend/src/control.py
+@@ -6,3 +6,7 @@ def verdict2(ok):
+     if ok:
+         return "covered"
+     return "uncovered"
++
++
++def untested():
++    return "untested"

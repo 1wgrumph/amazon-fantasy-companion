@@ -53,9 +53,9 @@ All commands read-only against the candidate except where noted; no generator wa
 - Parent local preview serves byte-identical HTML (`fc39124f…`, 235281 bytes). DOM claims (7 SVGs, 1225px, 0 out-of-bounds text) attach to these exact bytes. Screenshots unavailable (3 timeouts, recorded not-pixel-PASS); no pixel verification claimed by this review, and no browser UI API was available in-session to repeat the DOM pass.
 - Whitespace ledger round-trips 23/23 files to exact `before_sha256` (independent reimplementation of the documented reconstruction).
 - `gen_impl.py:13` uses portable `PJ = P1 / "journey.json"`; the one residual planning-worktree string is a `$HOME`-placeholder provenance note, not a literal home path.
-- Record-copy redaction verified: published `3590fb22…` vs control-worktree source `f7c23db6…`, diff is exactly one line `/home/spectre` → `$HOME`.
+- Record-copy redaction verified: published `3590fb22…` vs control-worktree source `f7c23db6…`, diff is exactly one line `$HOME` → `$HOME`.
 - Template figures: all three copies `614ccf87…`, byte-identical. SysML: all four current files match the SM-delta receipt digests.
-- Hygiene: 0 `/home/spectre` matches across all 226 changed files; 0 `*.log` added; `.gitignore` change removes the specialists `*.log` exception (raw logs stay local, intended); `gitleaks detect --no-git`: no leaks found. 0 APK/AAB tracked → Reverify N/A holds.
+- Hygiene: 0 `$HOME` matches across all 226 changed files; 0 `*.log` added; `.gitignore` change removes the specialists `*.log` exception (raw logs stay local, intended); `gitleaks detect --no-git`: no leaks found. 0 APK/AAB tracked → Reverify N/A holds.
 
 ## Scope mapping (issue #1 + journey)
 

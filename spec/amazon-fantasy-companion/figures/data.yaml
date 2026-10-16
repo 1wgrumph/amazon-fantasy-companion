@@ -1,0 +1,80 @@
+# Derived from ST-3d model views; model digest 14fb815b78c2c6817d556c36d351b22dd3996db5f5a7e34a87251ce69bfdcfe5
+{
+  "class": "F3",
+  "title": "AFC logical data dependencies",
+  "max_width": 2400,
+  "max_height": 1600,
+  "direction": "LR",
+  "nodes": [
+    {
+      "id": "Settings",
+      "label": "Settings"
+    },
+    {
+      "id": "Lineup",
+      "label": "Lineup"
+    },
+    {
+      "id": "GameEvent",
+      "label": "GameEvent"
+    },
+    {
+      "id": "Alert",
+      "label": "Alert"
+    },
+    {
+      "id": "PanelState",
+      "label": "PanelState"
+    },
+    {
+      "id": "RoutingOutcome",
+      "label": "RoutingOutcome"
+    },
+    {
+      "id": "DeviceCode",
+      "label": "DeviceCode"
+    }
+  ],
+  "edges": [
+    {
+      "from": "Settings",
+      "to": "Alert",
+      "label": "gates"
+    },
+    {
+      "from": "Lineup",
+      "to": "Alert",
+      "label": "context"
+    },
+    {
+      "from": "GameEvent",
+      "to": "Alert",
+      "label": "trigger / correction"
+    },
+    {
+      "from": "Lineup",
+      "to": "PanelState",
+      "label": "scoring context"
+    },
+    {
+      "from": "GameEvent",
+      "to": "PanelState",
+      "label": "points / corrections"
+    },
+    {
+      "from": "Settings",
+      "to": "PanelState",
+      "label": "display / selection"
+    },
+    {
+      "from": "Alert",
+      "to": "RoutingOutcome",
+      "label": "Watch attempt"
+    },
+    {
+      "from": "DeviceCode",
+      "to": "Settings",
+      "label": "account link context"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+# P2-B01 repair1: deployed auth/API tests NOT_RUN (R06)
+
+Authored (this repair, collectible offline, all skipped without a stack):
+
+- backend/tests/deployed/conftest.py (fixtures + host-pinned offline guard)
+- backend/tests/deployed/deployed_helpers.py (stdlib HTTPS helpers)
+- backend/tests/deployed/device_auth/test_link_flow.py (4 tests)
+- backend/tests/deployed/api/test_profile.py (4 tests)
+
+Execution stays an L02/L03 obligation: it needs an authorized dev-stack lease
+(AFC_DEPLOYED_API_URL), the owner link passphrase (AFC_DEPLOYED_LINK_PASSPHRASE,
+never committed), and owner-directed execution. Collection proof and the
+8-skipped default run are recorded in repair1/commands.log. Absent
+prerequisites are a typed gap (NOT_RUN), never PASS.

@@ -1,0 +1,48 @@
+COMMAND: uv run --script tools/spec/diagram.py render spec/amazon-fantasy-companion/figures/alert-lifecycle.yaml
+graphviz: spec/amazon-fantasy-companion/figures/alert-lifecycle.svg spec/amazon-fantasy-companion/figures/alert-lifecycle.drawio
+EXIT: 0
+COMMAND: uv run --script tools/spec/diagram.py render spec/amazon-fantasy-companion/figures/data.yaml
+graphviz: spec/amazon-fantasy-companion/figures/data.svg spec/amazon-fantasy-companion/figures/data.drawio
+EXIT: 0
+COMMAND: uv run --script tools/spec/diagram.py render spec/amazon-fantasy-companion/figures/device-link.yaml
+graphviz: spec/amazon-fantasy-companion/figures/device-link.svg spec/amazon-fantasy-companion/figures/device-link.drawio
+EXIT: 0
+COMMAND: uv run --script tools/spec/diagram.py render spec/amazon-fantasy-companion/figures/interfaces.yaml
+graphviz: spec/amazon-fantasy-companion/figures/interfaces.svg spec/amazon-fantasy-companion/figures/interfaces.drawio
+EXIT: 0
+COMMAND: uv run --script tools/spec/diagram.py render spec/amazon-fantasy-companion/figures/panel-mode.yaml
+graphviz: spec/amazon-fantasy-companion/figures/panel-mode.svg spec/amazon-fantasy-companion/figures/panel-mode.drawio
+EXIT: 0
+COMMAND: uv run --script tools/spec/diagram.py render spec/amazon-fantasy-companion/figures/structure.yaml
+graphviz: spec/amazon-fantasy-companion/figures/structure.svg spec/amazon-fantasy-companion/figures/structure.drawio
+EXIT: 0
+COMMAND: uv run --script tools/spec/diagram.py render spec/amazon-fantasy-companion/figures/system-context.yaml
+graphviz: spec/amazon-fantasy-companion/figures/system-context.svg spec/amazon-fantasy-companion/figures/system-context.drawio
+EXIT: 0
+COMMAND: uv run --script tools/spec/diagram.py render spec/amazon-fantasy-companion/figures/watch-flow.yaml
+grid: spec/amazon-fantasy-companion/figures/watch-flow.svg spec/amazon-fantasy-companion/figures/watch-flow.drawio
+EXIT: 0
+COMMAND: uv run --script tools/spec/spec_build.py spec/amazon-fantasy-companion spec/amazon-fantasy-companion/amazon-fantasy-companion.md
+EXIT: 0
+COMMAND: uv run --script tools/spec/spec_lint.py spec/amazon-fantasy-companion
+EXIT: 0
+COMMAND: uv run --script tools/spec/diagram.py lint spec/amazon-fantasy-companion
+EXIT: 0
+COMMAND: uv run --script tools/spec/spec_build.py spec/amazon-fantasy-companion docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/ST-4/rebuild.tmp.md
+EXIT: 0
+COMMAND: cmp spec/amazon-fantasy-companion/amazon-fantasy-companion.md docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/ST-4/rebuild.tmp.md
+EXIT: 0
+COMMAND: python3 docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/ST-4/check-spec.py
+UID coverage: 65/65; Appendix A: 65/65; unknown UIDs: 0
+Section and local-link checks: 65 sections; PASS
+Generated whitespace: only the builder’s intentional Markdown hard break at line 3
+Rule-12 / C7 path scan: 97 authorized files; 0 findings
+Write-set check: 97 changed paths; PASS
+EXIT: 0
+COMMAND: git diff --check -- . :\!spec/amazon-fantasy-companion/amazon-fantasy-companion.md
+EXIT: 0
+COMMAND: git diff --cached --check -- . :\!spec/amazon-fantasy-companion/amazon-fantasy-companion.md
+EXIT: 0
+COMMAND: sha256sum spec/amazon-fantasy-companion/amazon-fantasy-companion.md
+1b391d232e95ff8c240fb697b1a7331d5738a6caac0fc305e6893ecb6c162509  spec/amazon-fantasy-companion/amazon-fantasy-companion.md
+EXIT: 0

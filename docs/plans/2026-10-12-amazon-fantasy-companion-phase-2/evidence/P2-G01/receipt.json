@@ -1,0 +1,161 @@
+{
+  "slice": "P2-G01",
+  "lease_id": "P2-G01-g1",
+  "generation": 2,
+  "outcome": "CONTRACT_FAILURE",
+  "outcome_reason": "G01T suite green (50/50), gate and workflow checker exit 0; PROC-GATE-TOOL-QUALIFY exits 1 only because two frozen G01T binding probes use invocations the admitted tools do not support (python3.12 -m diff_cover has no __main__; mutmut lives in a venv, not python3.12 user site). Frozen tests are outside this write set.",
+  "branch": "afc/p2-g01",
+  "base": "51acc5c65cdc72a50b78bf6f10712d2a8b55539b",
+  "green_commit": "dfb12ca",
+  "route": "Claude Code / Claude Opus 5.5 / medium",
+  "green": {
+    "command": "python3 -m unittest discover -s tools/ci/tests -v",
+    "exit": 0,
+    "tests": 50,
+    "failures": 0,
+    "errors": 0,
+    "outputs": [
+      "CMD-RED-green.txt (before tool install)",
+      "CMD-RED-green-with-tools.txt (after)"
+    ],
+    "frozen_sha256_unchanged": true,
+    "frozen_files_checked": 10
+  },
+  "gate_all": {
+    "command": "bash tools/ci/gate.sh",
+    "exit": 0,
+    "output": "CMD-GATE-ALL.txt",
+    "tvapp": "PASS no tv-app/ tree",
+    "backend": "PASS no backend/ tree"
+  },
+  "workflow_check": {
+    "check_workflows_exit": 0,
+    "actionlint_exit": 0,
+    "output": "CMD-WORKFLOW-CHECK.txt"
+  },
+  "negative_controls": {
+    "file": "negative-controls.txt",
+    "gradlew_exit_3": "FAIL not GAP",
+    "pytest_zero_collected": "FAIL",
+    "exit": 1
+  },
+  "supply_scan": {
+    "file": "supply-scan.json",
+    "actions/setup-java@de7274f0 (v6.0.1)": "PASS",
+    "actions/setup-python@5fda3b95 (v7.0.0)": "PASS"
+  },
+  "qualification": {
+    "command": "PROC-GATE-TOOL-QUALIFY (coverage and mutation discovered separately)",
+    "coverage_exit": 1,
+    "mutation_exit": 1,
+    "output": "PROC-GATE-TOOL-QUALIFY.txt",
+    "controls_pass": {
+      "coverage_native": [
+        "covered passes",
+        "uncovered fails exit 2",
+        "absent data rejects"
+      ],
+      "coverage_adapter": [
+        "covered changed PASS exit 0",
+        "uncovered changed FAIL exit 1 (75%)",
+        "failing tests FAIL",
+        "no changed source EMPTY_DENOMINATOR exit 3",
+        "absent XML GAP exit 3",
+        "stale XML unmapped GAP exit 3"
+      ],
+      "mutation_adapter": [
+        "known mutants killed PASS exit 0, checkout untouched",
+        "deliberate survivor FAIL exit 1 and listed",
+        "stale cached stats ignored",
+        "empty inventory GAP exit 3",
+        "wrong target mapping GAP exit 3",
+        "timeout and nonzero run UNRESOLVED exit 3"
+      ]
+    },
+    "sanity_mutation": "Disabling the unmapped check made test_stale_xml_missing_changed_file_rejects fail (restored)",
+    "failing_frozen_probes": [
+      {
+        "test": "test_native_coverage.test_diff_cover_binding_is_available",
+        "error": "/usr/bin/python3.12: No module named diff_cover.__main__; 'diff_cover' is a package and cannot be directly executed",
+        "fix": "probe `diff-cover --version`"
+      },
+      {
+        "test": "test_native_mutation.test_mutmut_binding_is_available",
+        "error": "/usr/bin/python3.12: No module named mutmut",
+        "fix": "probe `mutmut --version` from a directory with mutmut config (3.8.0 loads config at import)"
+      }
+    ],
+    "open_gaps": [
+      {
+        "id": "ANDROID_COVERAGE_COMPATIBILITY_GAP",
+        "blocks": "CMD-COVERAGE-TVAPP; no tools/ci/coverage/tvapp.sh until A01 provides JaCoCo XML"
+      },
+      {
+        "id": "ANDROID_MUTATION_COMPATIBILITY_GAP",
+        "blocks": "CMD-MUTATION-TVAPP; no tools/ci/mutation/tvapp.sh until A01 admits a PIT plugin"
+      },
+      {
+        "id": "CFN_LINT_NATIVE_QUALIFICATION_PENDING",
+        "blocks": "native SAM lint controls need backend/template.yaml (P2-B01)"
+      },
+      {
+        "id": "SHELL_GATE_CAPABILITY_GAP",
+        "blocks": "coverage/mutation claims on changed shell gate code"
+      },
+      {
+        "id": "MUTMUT_VENV_BACKEND_DEPS",
+        "blocks": "real backend mutation until backend test deps are installed into the mutmut venv (P2-B01)"
+      }
+    ]
+  },
+  "proof_rows": {
+    "satisfied_by_this_slice_pending_review": [
+      "SEIT-AFC-P2-GATE-01 (green half: G01T green, gate exit 0, no-tree detail)",
+      "SEIT-AFC-P2-SUPPLY-01 (two new actions PASS)",
+      "SEIT-AFC-P2-DX-01 (this return)"
+    ],
+    "open": [
+      "SEIT-AFC-P2-GATE-01 qualification (frozen probe defects)",
+      "SEIT-AFC-P2-PATH-01 full candidate scan",
+      "SEIT-AFC-PR-056",
+      "SEIT-AFC-P2-LAND-01",
+      "SEIT-AFC-P2-REL-01",
+      "SEIT-AFC-P2-REV-01",
+      "SEIT-RISK-AFC-P2-10",
+      "SEIT-RISK-AFC-P2-11",
+      "SEIT-RISK-AFC-P2-12"
+    ]
+  },
+  "review_capabilities": {
+    "coverage_assist": "OCR delegate mode required at review; not run by author",
+    "reverify": "not applicable: shell/Python gate code and workflow YAML, no compiled-binary claim"
+  },
+  "developer_feedback": [
+    {
+      "id": "G01-DX-01",
+      "observation": "Product gate tests raised the hygiene suite from 18.8 s to about 35-47 s (repo copies per case).",
+      "evidence": [
+        "CMD-RED-green.txt",
+        "CMD-RED-green-with-tools.txt"
+      ]
+    },
+    {
+      "id": "G01-DX-02",
+      "observation": "Frozen G01T binding probes assume `python3.12 -m <tool>`; diff_cover 10.6.0 has no __main__ and mutmut is venv-isolated, so the probes can never pass on the admitted install.",
+      "evidence": "PROC-GATE-TOOL-QUALIFY.txt"
+    },
+    {
+      "id": "G01-DX-03",
+      "observation": "Tools appeared mid-run without a receipt in the checkout; install provenance arrived only by coordinator message.",
+      "evidence": "tool-binding.json install_provenance"
+    },
+    {
+      "id": "G01-DX-04",
+      "observation": "Latest setup-java/setup-python bundle HIGH DoS advisories; PASS rests on not enabling `cache:`.",
+      "evidence": "supply-scan.json"
+    }
+  ],
+  "bug_route": "BUG_ROUTE: not-a-bug frozen-probe defects are G01T test-contract mismatches reported to the controller; expected negative controls and a deliberate sanity mutation produced the other failures",
+  "bran": "unavailable; no native policy",
+  "protected_actions": "No installs, pushes, PRs, GitHub mutations, credentials, AWS or adb."
+}

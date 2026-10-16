@@ -1,0 +1,26 @@
+{
+  "id": "BUG-AFC-L01-DATE-001",
+  "step": "2-probe",
+  "target": {
+    "id": "M04",
+    "number": 4
+  },
+  "wire_value_sent": {
+    "due_on": "2026-10-17T12:00:00Z"
+  },
+  "patch_response_due_on": "2026-10-17T00:00:00Z",
+  "readback": {
+    "number": 4,
+    "title_equal": true,
+    "description_equal": true,
+    "description_contains_exact_deadline": true,
+    "due_on": "2026-10-17T00:00:00Z",
+    "calendar": "2026-10-17",
+    "state": "open"
+  },
+  "outcome": "PROBE_POSITIVE",
+  "commands": [
+    "echo quoted due_on JSON | gh api repos/1wgrumph/amazon-fantasy-companion/milestones/4 --method PATCH --input - (exit 0)",
+    "gh api repos/1wgrumph/amazon-fantasy-companion/milestones/4 (GET, exit 0)"
+  ]
+}

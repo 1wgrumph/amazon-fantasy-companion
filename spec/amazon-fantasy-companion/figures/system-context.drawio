@@ -1,0 +1,73 @@
+<mxfile host="azdiagram">
+  <diagram id="system-context" name="AFC system context">
+    <mxGraphModel pageWidth="805.9" pageHeight="307">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="customer" value="Customer / phone" vertex="1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;">
+          <mxGeometry x="19.9994" y="127" width="136.051" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="tv" value="tvApp: Fire TV" vertex="1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;">
+          <mxGeometry x="300.051" y="83" width="111.298" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="backend" value="backend: AWS" vertex="1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;">
+          <mxGeometry x="636.73" y="170" width="114.3" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="yahoo" value="Yahoo / manual lineup" vertex="1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;">
+          <mxGeometry x="275.301" y="197" width="160.798" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="espn" value="ESPN / labeled replay" vertex="1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;">
+          <mxGeometry x="277.926" y="251" width="155.549" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="provider" value="Provider apps" vertex="1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;">
+          <mxGeometry x="638.98" y="20" width="109.8" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="os" value="Fire OS / conditional Alexa" vertex="1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;">
+          <mxGeometry x="601.853" y="74" width="184.054" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-1" value="settings / remote" edge="1" parent="1" style="html=1;" source="customer" target="tv">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="156.41" y="133.84" as="sourcePoint" />
+            <mxPoint x="299.9" y="110.08" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-2" value="device-code confirmation" edge="1" parent="1" style="html=1;" source="customer" target="backend">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="156.54" y="149.81" as="sourcePoint" />
+            <mxPoint x="636.48" y="183.98" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-3" value="TvBackendApi" edge="1" parent="1" style="html=1;" source="tv" target="backend">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="411.78" y="110.91" as="sourcePoint" />
+            <mxPoint x="644.17" y="169.59" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-4" value="lineup context" edge="1" parent="1" style="html=1;" source="yahoo" target="backend">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="436.37" y="208.601" as="sourcePoint" />
+            <mxPoint x="636.38" y="192.538" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-5" value="event facts" edge="1" parent="1" style="html=1;" source="espn" target="backend">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="433.72" y="256.036" as="sourcePoint" />
+            <mxPoint x="640.85" y="206.471" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-6" value="Watch" edge="1" parent="1" style="html=1;" source="tv" target="provider">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="411.68" y="87.35" as="sourcePoint" />
+            <mxPoint x="638.63" y="46.04" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-7" value="notification / verified voice" edge="1" parent="1" style="html=1;" source="tv" target="os">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="411.84" y="99.52" as="sourcePoint" />
+            <mxPoint x="601.56" y="94.44" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

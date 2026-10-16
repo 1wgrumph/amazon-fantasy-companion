@@ -1,0 +1,36 @@
+{
+  "observed_at": "2026-10-13T13:43:31Z",
+  "owner_selected_name": "opensource-hackathon",
+  "observed_catalog_name": "opensource-hackathon",
+  "source": "$HOME/.agents/bearing-lite/profiles.json",
+  "canonical_profile_sha256": "69aaf71fa4928ebdd871014725cdd1aca00c1ba7e1d34463d662bb96471ee522",
+  "canonicalization": "UTF-8 json.dumps(profile, sort_keys=True, separators=(comma, colon))",
+  "status": "OBSERVATION_ONLY; not activated or frozen for dispatch. Owner authorizes new profile and rename; fresh session reads final named entry and records dated visible migration before dispatch.",
+  "bearing_version_observed": "1.1.7 in both Codex and Claude plugin caches",
+  "capabilities": {
+    "coverage_assist": {
+      "enabled": true,
+      "required": true
+    },
+    "reverify": {
+      "enabled": true
+    }
+  },
+  "holds": [
+    {
+      "id": "muse-contributor-mode",
+      "harness": "Muse Code",
+      "contributor_mode": "on",
+      "required_cli_args": [
+        "--contributor-mode",
+        "on"
+      ],
+      "effect": "Every Muse Code primary and fallback dispatch for opensource-hackathon must launch with --contributor-mode on. Freeze this requirement in the lifecycle binding and carry it into every Muse execution packet. Verify the exact per-run flag; if it cannot be honored, return a typed configuration gap. This profile-specific requirement does not change the global Muse setting."
+    }
+  ],
+  "catalog_schema_check": {
+    "errors": 0,
+    "status": "PASS",
+    "messages": []
+  }
+}

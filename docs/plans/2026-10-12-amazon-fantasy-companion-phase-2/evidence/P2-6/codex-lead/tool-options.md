@@ -1,0 +1,10 @@
+# Tool-allocation research for the Test Engineer delta
+
+Inspected 2026-10-13; documentation evidence only, not installation, qualification or supply-chain admission. Frozen OCR/Reverify backends remain unchanged.
+
+- [Gradle JaCoCo](https://docs.gradle.org/current/userguide/jacoco_plugin.html) documents XML reporting and coverage verification tasks. Android application configuration still needs qualification against the pinned starter and Android Gradle plugin; do not assume Java-plugin task wiring applies unchanged.
+- [diff-cover upstream README](https://github.com/Bachmann1234/diff_cover/blob/main/README.rst) supports Cobertura/Clover/JaCoCo XML and LCov reports, with source-directory mapping for JaCoCo. This offers one changed-line report comparator across Python and JVM reports.
+- [mutmut documentation](https://mutmut.readthedocs.io/en/latest/) documents Python mutation testing. Phase1 already names mutmut2.x for its Python checkers; do not copy that version's command flags into mutmut3 without checking the admitted version. Backend Python3.12 and exact target files need a pinned qualification case.
+- [Gradle PIT plugin FAQ](https://github.com/szpak/gradle-pitest-plugin/blob/master/README.md#can-i-use-gradle-pitest-plugin-with-my-android-application) says the standard plugin does not directly support Android applications and points to an Android fork. This is evidence against assuming that adding the ordinary plugin proves Kotlin/Android mutation support. Select only a compatible documented backend and qualify it under P2-G01/A01, or retain the explicit capability gap. Do not add a new application module or redesign the product just to satisfy a tool.
+
+P2-G01T/G01 now own prospective tool qualification/binding; A01T/A01 own Android build/report configuration and B01T/B01 Python test dependencies, under existing shared-file leases. All downloads require scan receipts and actual version pins before use. TE selects the concrete command/report/threshold declarations, not this research note. No tool gap can be relabeled PASS.

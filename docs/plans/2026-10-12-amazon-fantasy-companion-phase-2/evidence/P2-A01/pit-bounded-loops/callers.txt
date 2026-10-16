@@ -1,0 +1,27 @@
+tv-app/app/src/test/java/com/afc/companion/ApiLoopBoundTest.kt:25:        val client = ApiClient("https://api.example.test", openConnection = { url ->
+tv-app/app/src/test/java/com/afc/companion/ApiLoopBoundTest.kt:55:        val client = ApiClient("https://api.example.test", openConnection = { url ->
+tv-app/app/src/test/java/com/afc/companion/TypedOperationsTest.kt:24:            val result = runBlocking { block(ApiClient(server.baseUrl, { token })) }
+tv-app/app/src/test/java/com/afc/companion/ApiOperationsTest.kt:45:            val result = ApiClient(server.baseUrl, { token }).request(method, path, if (method == "GET") null else request)
+tv-app/app/src/test/java/com/afc/companion/ClientBoundaryTest.kt:22:        ApiClient("https://api.example.test/prod/"); ApiClient("http://localhost:8080")
+tv-app/app/src/test/java/com/afc/companion/ClientBoundaryTest.kt:24:            assertThrows(bad, IllegalArgumentException::class.java) { ApiClient(bad) }
+tv-app/app/src/test/java/com/afc/companion/ClientBoundaryTest.kt:33:                val client = ApiClient(server.baseUrl)
+tv-app/app/src/test/java/com/afc/companion/ClientBoundaryTest.kt:42:            val client = ApiClient(server.baseUrl)
+tv-app/app/src/test/java/com/afc/companion/ClientBoundaryTest.kt:51:            val client = ApiClient(server.baseUrl)
+tv-app/app/src/test/java/com/afc/companion/ClientBoundaryTest.kt:79:            runBlocking { LinkFlow(ApiClient(server.baseUrl), LinkScreen("page"), sleep = { sleeps.add(it) }).run({ shown.add(it) }, { stored.add(it) }) }
+tv-app/app/src/test/java/com/afc/companion/ClientBoundaryTest.kt:97:            runBlocking { LinkFlow(ApiClient(server.baseUrl), LinkScreen(), sleep = {}).run({ shown.add(it) }, { stored.add(it) }) }
+tv-app/app/src/test/java/com/afc/companion/DefaultArgumentsTest.kt:14:            val panel = runBlocking { ApiClient(server.baseUrl, { "t" }).getPanel() }
+tv-app/app/src/test/java/com/afc/companion/EnvelopeTest.kt:12:    private val client = ApiClient("http://127.0.0.1")
+tv-app/app/src/test/java/com/afc/companion/EnvelopeTest.kt:51:        assertNull(ApiClient("http://127.0.0.1").envelope(body))
+tv-app/app/src/test/java/com/afc/companion/EnvelopeTest.kt:62:        val result = ApiClient("http://127.0.0.1").envelope(envelopeFixture().put("source", source))
+tv-app/app/src/test/java/com/afc/companion/ApiPolicyTest.kt:24:            val result = ApiClient(server.baseUrl, openConnection = { url -> connect(url).also { connections.add(it) } }).request("GET", path)
+tv-app/app/src/test/java/com/afc/companion/ApiPolicyTest.kt:35:            val result = ApiClient(server.baseUrl, openConnection = { url ->
+tv-app/app/src/test/java/com/afc/companion/ApiPolicyTest.kt:46:                runBlocking { ApiClient(server.baseUrl).request("GET", "/v1/profile") }
+tv-app/app/src/test/java/com/afc/companion/ApiPolicyTest.kt:53:                runBlocking { ApiClient(server.baseUrl).request("GET", "/v1/profile") }
+tv-app/app/src/test/java/com/afc/companion/ApiPolicyTest.kt:60:                runBlocking { ApiClient(server.baseUrl).request("POST", "/v1/link", JSONObject().put("padding", "x".repeat(65_536))) }
+tv-app/app/src/test/java/com/afc/companion/ApiPolicyTest.kt:67:            val result = ApiClient(server.baseUrl).request("GET", "/v1/profile")
+tv-app/app/src/test/java/com/afc/companion/ApiPolicyTest.kt:78:            val result = ApiClient(server.baseUrl, backoff = { delays.add(it) }).request("PUT", "/v1/profile", body)
+tv-app/app/src/test/java/com/afc/companion/ApiPolicyTest.kt:98:            val result = ApiClient(server.baseUrl, backoff = { delays.add(it) }).request("GET", "/v1/profile")
+tv-app/app/src/test/java/com/afc/companion/ApiPolicyTest.kt:110:            val result = ApiClient(server.baseUrl, backoff = { delays.add(it) }).request("GET", "/v1/profile")
+tv-app/app/src/test/java/com/afc/companion/ApiPolicyTest.kt:134:            val result = ApiClient(server.baseUrl, backoff = { delays.add(it) }).request(method, path, if (method == "GET") null else JSONObject())
+tv-app/app/src/main/java/com/afc/companion/net/ApiClient.kt:20:class ApiClient(
+tv-app/app/src/main/java/com/afc/companion/Shell.kt:15:        baseUrl.takeIf { it.isNotBlank() }?.let { runCatching { ApiClient(it, sessionToken) }.getOrNull() }

@@ -1,0 +1,19 @@
+$ git branch --show-current
+afc/p2-l02
+EXIT_CODE=0
+$ git rev-parse HEAD
+98bdb9c08b07fc19b39773f07305bc6096cb0475
+EXIT_CODE=0
+$ git rev-parse origin/main
+2d973bd66182364a69b5a3088286e88c08f1107d
+EXIT_CODE=0
+$ git diff --exit-code origin/main -- backend
+
+EXIT_CODE=0
+$ git config --get core.hooksPath
+.githooks
+EXIT_CODE=0
+f95e5fbc6c69e2015524c2f4176b099cd39a17691b373574a280b6a0631d864f  backend/template.yaml
+90624d8d3528b60ccf079ac33e15f3924e8eb939f4c5b1a0a3360242de4f884d  backend/.aws-sam/build/template.yaml
+18aa378cc2b5671f04d3a15051c51010e8cd2959bc4e4761b30b1d219fd1e396  backend/src/api/handler.py
+18aa378cc2b5671f04d3a15051c51010e8cd2959bc4e4761b30b1d219fd1e396  backend/.aws-sam/build/ApiFunction/api/handler.py
