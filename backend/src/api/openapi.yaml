@@ -155,7 +155,7 @@ paths:
           description: Panel envelope.
           content:
             application/json:
-              schema: {$ref: "#/components/schemas/Envelope"}
+              schema: {$ref: "#/components/schemas/PanelEnvelope"}
         "401": {$ref: "#/components/responses/Unauthenticated"}
         "403": {$ref: "#/components/responses/Forbidden"}
         "429": {$ref: "#/components/responses/TooManyRequests"}
@@ -280,6 +280,53 @@ components:
         - type: object
           properties:
             data: {$ref: "#/components/schemas/Settings"}
+    PanelEnvelope:
+      allOf:
+        - $ref: "#/components/schemas/Envelope"
+        - type: object
+          properties:
+            source: {type: string, enum: [yahoo, manual]}
+            data: {$ref: "#/components/schemas/PanelData"}
+    PanelData:
+      type: object
+      required: [teamLeague, scoringBasis, visible, rows, teamTotal, progress, games]
+      properties:
+        teamLeague: {type: string, minLength: 1}
+        scoringBasis: {type: string, enum: [yahooLeague, ppr, halfPpr]}
+        visible: {type: boolean}
+        rows:
+          type: array
+          maxItems: 32
+          items: {$ref: "#/components/schemas/PanelRow"}
+        teamTotal: {$ref: "#/components/schemas/PanelValue"}
+        progress: {$ref: "#/components/schemas/PanelValue"}
+        games:
+          type: object
+          additionalProperties:
+            type: object
+            required: [eventId, revision, score, source]
+            properties:
+              eventId: {type: string}
+              revision: {type: integer}
+              score: {type: object}
+              source: {type: string, nullable: true, enum: [live, replay, null]}
+    PanelRow:
+      type: object
+      required: [playerId, name, points, gameStatus]
+      properties:
+        playerId: {type: string, minLength: 1}
+        name: {type: string}
+        points: {$ref: "#/components/schemas/PanelValue"}
+        gameStatus: {type: string, nullable: true}
+    PanelValue:
+      type: object
+      required: [value, reason, source, asOf, stale]
+      properties:
+        value: {type: number, nullable: true}
+        reason: {type: string, nullable: true}
+        source: {type: string, nullable: true, enum: [live, replay, null]}
+        asOf: {type: string, format: date-time, nullable: true}
+        stale: {type: boolean}
     Settings:
       type: object
       additionalProperties: false

@@ -10,6 +10,11 @@ the next read with a higher revision and no panel write on the read path.
 project() records a fingerprint of the lineup it projected; snapshot()
 spends the revision's low bit when the current lineup differs from that
 fingerprint, so a starter change outruns the last projected revision.
+The revision also carries the store-allocated lineupVersion, which
+advances on every lineup content change (including a change back and an
+empty/removal row), so distinct content never reuses a revision and a
+served revision never goes backwards for one profile/pair (every revision
+input is read strongly consistent, so no lagging replica serves an older one).
 Projections write conditionally on the stored counter and re-read and
 merge on a lost race, so overlapping games never erase each other.
 
@@ -30,7 +35,12 @@ import store
 from lineup import presets
 
 STALE_AFTER = 60
+MAX_ROWS = 32  # frozen panel row bound the TV decoder enforces
 _PRESETS = {"ppr": "PPR", "halfPpr": "Half-PPR"}
+
+
+class InvalidLineupError(ValueError):
+    """The stored lineup cannot produce a contract-valid panel (legacy rows)."""
 
 
 def now():
@@ -93,6 +103,15 @@ def _value(record, table):
     stale = as_of is None or (_parse(now()) - _parse(as_of)).total_seconds() >= STALE_AFTER
     return {"value": round(points, 2), "reason": None, "source": record.get("source"),
             "asOf": as_of, "stale": stale}
+
+
+def _oldest(points):
+    """(source, asOf) of the oldest contributor; unknown if any is undated,
+    so a mixed dated/undated aggregate can never look fresh."""
+    if not points or any(p["asOf"] is None for p in points):
+        return None, None
+    oldest = min(points, key=lambda p: p["asOf"])
+    return oldest["source"], oldest["asOf"]
 
 
 def _fingerprint(lineup):
@@ -160,7 +179,7 @@ def project(game_event, matches):
 def snapshot(profile_id, team_league):
     """GET /v1/panel body: enveloped PanelState with scoring basis."""
     profile, settings = _settings(profile_id)
-    lineup = store.get_lineup(profile_id)
+    lineup, lineup_version = store.get_lineup_with_version(profile_id)
     if team_league is None:
         selected = settings.get("teamLeague") or {}
         team_league = (f"{selected['league']}/{selected['team']}"
@@ -168,9 +187,18 @@ def snapshot(profile_id, team_league):
                        else _pair(lineup) if lineup else "unassigned/unassigned")
     basis, table = _basis(lineup, settings)
     games, counter, projected = _stored(profile_id, team_league)
-    rows, states = [], []
+    rows, states, source_ids = [], [], []
     if lineup and _pair(lineup) == team_league:
+        if len(lineup.get("starters") or []) > MAX_ROWS:
+            raise InvalidLineupError(
+                "stored lineup violates the panel row contract (count, blank or duplicate id)")
+        source_key = "player_key" if lineup.get("source") == "yahoo" else "athlete_id"
         for starter in lineup.get("starters") or []:
+            raw_id = starter.get(source_key) if isinstance(starter, dict) else None
+            if not isinstance(raw_id, str) or not raw_id.strip():
+                raise InvalidLineupError(
+                    "stored lineup violates the panel row contract (count, blank or duplicate id)")
+            source_ids.append(raw_id)
             espn_id = _espn_id(starter)
             record = player_statistics(espn_id) if espn_id else None
             # The starter's current game is the latest projected game whose
@@ -193,40 +221,41 @@ def snapshot(profile_id, team_league):
                          "name": starter.get("name") or "", "points": value,
                          "gameStatus": record.get("gameStatus") if record else None})
             states.append(record.get("gameState") if record else None)
+    ids = [row["playerId"] for row in rows]
+    if (len(rows) > MAX_ROWS or len(set(source_ids)) != len(source_ids)
+            or any(not player_id.strip() for player_id in ids)
+            or len(set(ids)) != len(ids)):
+        raise InvalidLineupError(
+            "stored lineup violates the panel row contract (count, blank or duplicate id)")
     known = [r["points"] for r in rows if r["points"]["value"] is not None]
     if rows and len(known) == len(rows):
-        dated = [p for p in known if p["asOf"]]
-        oldest = min(dated, key=lambda p: p["asOf"]) if dated else None
+        source, as_of = _oldest(known)
         total = {"value": round(sum(p["value"] for p in known), 2), "reason": None,
-                 "source": oldest["source"] if oldest else None,
-                 "asOf": oldest["asOf"] if oldest else None,
+                 "source": source, "asOf": as_of,
                  "stale": any(p["stale"] for p in known)}
     else:
-        dated = [p for p in known if p["asOf"]]
-        oldest = min(dated, key=lambda p: p["asOf"]) if dated else None
+        source, as_of = _oldest(known)
         total = {"value": None,
                  "reason": "team total unavailable" if rows else "no lineup for this team/league",
-                 "source": oldest["source"] if oldest else None,
-                 "asOf": oldest["asOf"] if oldest else None,
-                 "stale": not dated or any(p["stale"] for p in known)}
+                 "source": source, "asOf": as_of,
+                 "stale": not known or any(p["stale"] for p in known)}
     scored = [{"pre": 0.0, "in": 0.5, "post": 1.0}[s] for s in states if s in ("pre", "in", "post")]
     if scored and len(scored) == len(rows):
-        dated = [r["points"] for r in rows if r["points"]["asOf"]]
-        oldest = min(dated, key=lambda p: p["asOf"]) if dated else None
+        source, as_of = _oldest([r["points"] for r in rows])
         progress = {"value": round(sum(scored) / len(scored), 4), "reason": None,
-                    "source": oldest["source"] if oldest else None,
-                    "asOf": oldest["asOf"] if oldest else None,
-                    "stale": not dated or any(r["points"]["stale"] for r in rows)}
+                    "source": source, "asOf": as_of,
+                    "stale": any(r["points"]["stale"] for r in rows)}
     else:
         progress = {"value": None, "reason": "game progress unavailable", "source": None,
                     "asOf": None, "stale": True}
-    # shortcut: the low bit only distinguishes "lineup as projected" from
-    # "lineup changed since", so a second change (or a change back) before the
-    # next projection reuses a revision; a stored lineup revision would fix
-    # that, but the read path cannot write one. The x2 keeps every counter
-    # or profile bump strictly above a spent low bit.
+    # lineupVersion (allocated by store.put_lineup at the write boundary)
+    # makes every lineup content change strictly advance this sum, so the
+    # low fingerprint bit can never reuse or regress a revision. The x2
+    # keeps every bump strictly above a spent low bit.
     current = _fingerprint(lineup) if lineup and _pair(lineup) == team_league else ""
-    revision = 2 * ((counter or 0) + int(profile.get("revision", 0))) + (current != projected)
+    revision = (2 * ((counter or 0) + int(profile.get("revision", 0))
+                     + lineup_version)
+                + (current != projected))
     return {"schemaVersion": 1, "id": f"panel/{profile_id}/{team_league}",
             "revision": revision,
             "source": lineup.get("source", "manual") if lineup else "manual",
