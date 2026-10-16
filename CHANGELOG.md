@@ -67,6 +67,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Keep only the pre-push hook; commits no longer run the gate locally (CI and pre-push still do) (PR TBD).
 - Select Vega OS as the primary TV target with Fire OS remaining the secondary target, and rebind the Phase 2 plan package (DEC-AFC-SD-048 through DEC-AFC-SD-054) ([#72](https://github.com/1wgrumph/amazon-fantasy-companion/pull/72)).
 - Link a TV with its device code alone (DEC-AFC-SD-048): drop the link
   passphrase from the `/link` page, the confirm API and its OpenAPI
@@ -86,7 +87,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Scope the git-hook gate to the change being committed or pushed: pre-commit checks the staged diff only (during a merge, only what the merge itself introduces), and pre-push checks the pushed commit range, so merged-in already-landed whitespace no longer blocks a merge commit and unrelated unstaged or untracked files no longer select the tvapp/backend areas for a docs-only commit (PR TBD).
+- Scope the git-hook gate to the change being committed or pushed: pre-commit checks the staged diff only (during a merge, only what the merge itself introduces), and pre-push checks the pushed commit range, so merged-in already-landed whitespace no longer blocks a merge commit and unrelated unstaged or untracked files no longer select the tvapp/backend areas for a docs-only commit ([#93](https://github.com/1wgrumph/amazon-fantasy-companion/pull/93)).
 - Correct the Yahoo setup notes: one app with redirect `https://localhost:8443/link`, the one-command `setup` token flow, and the errors seen on 2026-10-16 ([#92](https://github.com/1wgrumph/amazon-fantasy-companion/pull/92)).
 - Grant the policy function table-scoped Lineups Scan access used by the matcher
   and the API function Profiles UpdateItem access for provider routing outcomes
