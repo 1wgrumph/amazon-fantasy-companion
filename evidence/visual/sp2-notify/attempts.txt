@@ -1,0 +1,238 @@
+=== ATTEMPT 1: sanity post over spike activity (no playback) ===
+cmd: am start MainActivity exit=0
+cmd: screencap attempt1 exit=0
+    NotificationRecord(0x0e1ef7ee: pkg=com.afc.spike.sp2 user=UserHandle{0} id=2002 tag=null importance=4 key=0|com.afc.spike.sp2|2002|null|10270: Notification(channel=sp2-alerts shortcut=null contentView=null vibrate=null sound=null defaults=0x0 flags=0x10 color=0x00000000 category=event actions=2 vis=PRIVATE))
+      uid=10270 userId=0
+      opPkg=com.afc.spike.sp2
+      icon=Icon(typ=RESOURCE pkg=com.afc.spike.sp2 id=0x0108009b)
+      flags=0x10
+      pri=0
+      key=0|com.afc.spike.sp2|2002|null|10270
+      seen=false
+      groupKey=0|com.afc.spike.sp2|2002|null|10270
+      fullscreenIntent=null
+      contentIntent=PendingIntent{654285a: PendingIntentRecord{b2747f0 com.afc.spike.sp2 startActivity (whitelist: 8479bb7:+30s0ms)}}
+      deleteIntent=null
+      number=0
+      groupAlertBehavior=0
+--
+          [0] "Watch" -> PendingIntent{5bcca8b: PendingIntentRecord{b2747f0 com.afc.spike.sp2 startActivity (whitelist: 8479bb7:+30s0ms)}}
+          [1] "Dismiss" -> PendingIntent{99ac768: PendingIntentRecord{b44f169 com.afc.spike.sp2 startService (whitelist: 8479bb7:+30s0ms)}}
+        }
+      extras={
+          android.title=String (SP2 test alert: player in the red zone)
+--
+          android.appInfo=ApplicationInfo (ApplicationInfo{218c781 com.afc.spike.sp2})
+      }
+      stats=SingleNotificationStats{posttimeElapsedMs=26735050, posttimeToFirstClickMs=-1, posttimeToDismissMs=-1, airtimeCount=0, airtimeMs=0, currentAirtimeStartElapsedMs=-1, airtimeExpandedMs=0, posttimeToFirstVisibleExpansionMs=-1, currentAirtimeExpandedStartElapsedMs=-1, requestedImportance=3, naturalImportance=4, isNoisy=false}
+      mContactAffinity=0.0
+--
+    NotificationRecord(0x06460b6d: pkg=com.afc.spike.sp2 user=UserHandle{0} id=2001 tag=null importance=4 key=0|com.afc.spike.sp2|2001|null|10270: Notification(channel=sp2-alerts shortcut=null contentView=null vibrate=null sound=null defaults=0x0 flags=0x62 color=0x00000000 vis=PRIVATE))
+      uid=10270 userId=0
+      opPkg=com.afc.spike.sp2
+      icon=Icon(typ=RESOURCE pkg=com.afc.spike.sp2 id=0x0108009b)
+      flags=0x62
+      pri=0
+      key=0|com.afc.spike.sp2|2001|null|10270
+      seen=false
+      groupKey=0|com.afc.spike.sp2|2001|null|10270
+      fullscreenIntent=null
+      contentIntent=null
+      deleteIntent=null
+--
+          android.appInfo=ApplicationInfo (ApplicationInfo{1c7026 com.afc.spike.sp2})
+cmd: start-foreground-service POST exit=0
+cmd: screencap attempt1-headsup exit=0
+    mResumedActivity: ActivityRecord{63445c u0 com.amazon.ftv.screensaver/android.service.dreams.DreamActivity t43}
+  ResumedActivity: ActivityRecord{63445c u0 com.amazon.ftv.screensaver/android.service.dreams.DreamActivity t43}
+=== ATTEMPT 1B: wake + home + spike, posts over own activity ===
+cmd: WAKEUP exit=0
+cmd: HOME exit=0
+cmd: am start MainActivity exit=0
+cmd: screencap attempt1-activity exit=0
+cmd: POST exit=0
+cmd: screencap attempt1-headsup exit=0
+    mResumedActivity: ActivityRecord{d9e32a8 u0 com.afc.spike.sp2/.MainActivity t44}
+  ResumedActivity: ActivityRecord{d9e32a8 u0 com.afc.spike.sp2/.MainActivity t44}
+=== ATTEMPT 2: notification center + Prime Video launch ===
+cmd: expand-notifications exit=0
+cmd: screencap exit=0
+cmd: monkey primevideo exit=252
+cmd: screencap prime-home exit=0
+    mResumedActivity: ActivityRecord{fc04181 u0 com.amazon.tv.launcher/.ui.HomeActivity_vNext t16}
+  ResumedActivity: ActivityRecord{fc04181 u0 com.amazon.tv.launcher/.ui.HomeActivity_vNext t16}
+=== ATTEMPT 3: heads-up over Prime Video playback ===
+cmd: am start firebat exit=0
+cmd: screencap prime-home exit=0
+cmd: BACK dismiss promo exit=0
+cmd: DOWN DOWN UP SELECT exit=0
+cmd: screencap after-select exit=0
+  Media button session is com.amazon.firebat/com.amazon.firebat (userId=0)
+    com.amazon.firebat com.amazon.firebat/com.amazon.firebat (userId=0)
+      package=com.amazon.firebat
+      state=PlaybackState {state=3, position=0, buffered position=0, speed=1.0, updated=26934538, actions=1049455, custom actions=[], active item id=-1, error=null}
+      state=PlaybackState {state=0, position=0, buffered position=0, speed=0.0, updated=0, actions=6, custom actions=[], active item id=-1, error=null}
+  uid=10144 packages=com.amazon.firebat
+=== ATTEMPT 3B: press Play, then post heads-up during playback ===
+cmd: SELECT Play exit=0
+      state=PlaybackState {state=3, position=0, buffered position=0, speed=1.0, updated=26976969, actions=1049455, custom actions=[], active item id=-1, error=null}
+      state=PlaybackState {state=0, position=0, buffered position=0, speed=0.0, updated=0, actions=6, custom actions=[], active item id=-1, error=null}
+cmd: screencap playing exit=0
+cmd: POST over playback exit=0
+cmd: screencap headsup-1s exit=0
+cmd: screencap headsup-3s exit=0
+      state=PlaybackState {state=3, position=0, buffered position=0, speed=1.0, updated=26976969, actions=1049455, custom actions=[], active item id=-1, error=null}
+      state=PlaybackState {state=0, position=0, buffered position=0, speed=0.0, updated=0, actions=6, custom actions=[], active item id=-1, error=null}
+    mResumedActivity: ActivityRecord{630e1ce u0 com.amazon.firebat/com.amazon.pyrocore.IgnitionActivity t36}
+  ResumedActivity: ActivityRecord{630e1ce u0 com.amazon.firebat/com.amazon.pyrocore.IgnitionActivity t36}
+18
+=== ATTEMPT 4: toast fallback over playback ===
+      state=PlaybackState {state=3, position=0, buffered position=0, speed=1.0, updated=26976969, actions=1049455, custom actions=[], active item id=-1, error=null}
+cmd: TOAST exit=0
+cmd: screencap toast exit=0
+      state=PlaybackState {state=3, position=0, buffered position=0, speed=1.0, updated=26976969, actions=1049455, custom actions=[], active item id=-1, error=null}
+=== ATTEMPT 5: heads-up retry with sound+vibrate (channel v2) ===
+cmd: rebuild exit=0
+009f0b9fd52d03cfeea273b2052c037b2140e45c2fe594136e5020e86a3d3bf8  spikes/sp2-notify/app/build/outputs/apk/debug/app-debug.apk
+cmd: reinstall exit=1
+cmd: am start firebat exit=0
+      state=PlaybackState {state=3, position=0, buffered position=0, speed=1.0, updated=26976969, actions=1049455, custom actions=[], active item id=-1, error=null}
+cmd: screencap before exit=0
+cmd: POST v2 exit=0
+cmd: screencap 1s exit=0
+cmd: screencap 3s exit=0
+cmd: DPAD_UP exit=0
+cmd: screencap dpad-up exit=0
+      state=PlaybackState {state=3, position=0, buffered position=0, speed=1.0, updated=26976969, actions=1049455, custom actions=[], active item id=-1, error=null}
+    mResumedActivity: ActivityRecord{630e1ce u0 com.amazon.firebat/com.amazon.pyrocore.IgnitionActivity t36}
+  ResumedActivity: ActivityRecord{630e1ce u0 com.amazon.firebat/com.amazon.pyrocore.IgnitionActivity t36}
+=== ATTEMPT 5B: uninstall own spike (signature mismatch), fresh install, POST v2 ===
+cmd: uninstall own spike exit=0
+cmd: fresh install exit=0
+    firstInstallTime=2026-10-16 19:44:28
+cmd: arm+POST exit=0
+cmd: firebat front exit=0
+      state=PlaybackState {state=3, position=0, buffered position=0, speed=1.0, updated=26976969, actions=1049455, custom actions=[], active item id=-1, error=null}
+cmd: POST v2 over playback exit=0
+cmd: screencap 1s exit=0
+cmd: screencap 3s exit=0
+cmd: DPAD_UP exit=0
+cmd: screencap dpad-up exit=0
+    NotificationRecord(0x0eb019b8: pkg=com.afc.spike.sp2 user=UserHandle{0} id=2002 tag=null importance=4 key=0|com.afc.spike.sp2|2002|null|10271: Notification(channel=sp2-alerts-v2 shortcut=null contentView=null vibrate=default sound=default defaults=0x3 flags=0x10 color=0x00000000 category=event actions=2 vis=PRIVATE))
+      opPkg=com.afc.spike.sp2
+      icon=Icon(typ=RESOURCE pkg=com.afc.spike.sp2 id=0x0108009b)
+      key=0|com.afc.spike.sp2|2002|null|10271
+      state=PlaybackState {state=3, position=0, buffered position=0, speed=1.0, updated=26976969, actions=1049455, custom actions=[], active item id=-1, error=null}
+    mResumedActivity: ActivityRecord{630e1ce u0 com.amazon.firebat/com.amazon.pyrocore.IgnitionActivity t36}
+  ResumedActivity: ActivityRecord{630e1ce u0 com.amazon.firebat/com.amazon.pyrocore.IgnitionActivity t36}
+=== ATTEMPT 6: notification center routes + action targets ===
+      headsUpContentView=null
+      headsUpContentView=null
+      headsUpContentView=null
+      headsUpContentView=null
+      headsUpContentView=null
+cmd: HOME exit=0
+cmd: screencap home exit=0
+cmd: KEYCODE_NOTIFICATION exit=0
+cmd: screencap notif-key exit=0
+cmd: DISMISS target exit=0
+cmd: screencap dismiss exit=0
+0
+cmd: WATCH target exit=0
+cmd: screencap watch exit=0
+=== ATTEMPT 7: fresh POST while Home is foreground ===
+cmd: POST over Home exit=0
+cmd: screencap exit=0
+cleanup: uninstall spike exit=0
+=== REPAIR SWEEP (review RX02-01..03) build/install ===
+cmd: rebuild with PRIORITY_HIGH + FSI variant exit=0
+81d840c9cf23b5044bd8890d990ff01d28983da8868481a205cbf1bf2afc83fa  spikes/sp2-notify/app/build/outputs/apk/debug/app-debug.apk
+cmd: fresh install exit=0 (USE_FULL_SCREEN_INTENT granted=true, normal permission)
+cmd: launch Prime Video, resume Prime-included title, media state=3 exit=0
+=== REPAIR ATTEMPT 8: PRIORITY_HIGH heads-up over Prime Video playback ===
+Starting service: Intent { act=com.afc.spike.sp2.POST cmp=com.afc.spike.sp2/.NotifyService }
+cmd: POST priority-high exit=0
+cmd: screencap repair8-headsup-1s exit=0
+cmd: screencap repair8-headsup-3s exit=0
+    NotificationRecord(0x06c82712: pkg=com.afc.spike.sp2 user=UserHandle{0} id=2002 tag=null importance=4 key=0|com.afc.spike.sp2|2002|null|10272: Notification(channel=sp2-alerts-v2 shortcut=null contentView=null vibrate=default sound=default defaults=0x3 flags=0x10 color=0x00000000 category=event actions=2 vis=PRIVATE))
+      uid=10272 userId=0
+      opPkg=com.afc.spike.sp2
+      icon=Icon(typ=RESOURCE pkg=com.afc.spike.sp2 id=0x0108009b)
+      flags=0x10
+      pri=1
+      key=0|com.afc.spike.sp2|2002|null|10272
+      seen=false
+      groupKey=0|com.afc.spike.sp2|2002|null|10272
+      fullscreenIntent=null
+      contentIntent=PendingIntent{b400a43: PendingIntentRecord{e303174 com.afc.spike.sp2 startActivity (whitelist: 8479bb7:+30s0ms)}}
+      deleteIntent=null
+      number=0
+      groupAlertBehavior=0
+      when=1792182672990
+      tickerText=null
+      contentView=null
+      bigContentView=null
+      headsUpContentView=null
+      color=0x00000000      timeout=unknown
+      actions={
+          [0] "Watch" -> PendingIntent{36f8c0: PendingIntentRecord{e303174 com.afc.spike.sp2 startActivity (whitelist: 8479bb7:+30s0ms)}}
+          [1] "Dismiss" -> PendingIntent{bb299f9: PendingIntentRecord{d4e969d com.afc.spike.sp2 startService (whitelist: 8479bb7:+30s0ms)}}
+      state=PlaybackState {state=3, position=0, buffered position=0, speed=1.0, updated=29921106, actions=1049455, custom actions=[], active item id=-1, error=null}
+    mResumedActivity: ActivityRecord{2c6cbb5 u0 com.amazon.firebat/com.amazon.pyrocore.IgnitionActivity t61}
+  ResumedActivity: ActivityRecord{2c6cbb5 u0 com.amazon.firebat/com.amazon.pyrocore.IgnitionActivity t61}
+=== REPAIR ATTEMPT 9: full-screen intent over Prime Video playback ===
+Starting service: Intent { act=com.afc.spike.sp2.POST_FSI cmp=com.afc.spike.sp2/.NotifyService }
+cmd: POST_FSI exit=0
+cmd: screencap repair9-fsi-1s exit=0
+    mResumedActivity: ActivityRecord{2c6cbb5 u0 com.amazon.firebat/com.amazon.pyrocore.IgnitionActivity t61}
+  ResumedActivity: ActivityRecord{2c6cbb5 u0 com.amazon.firebat/com.amazon.pyrocore.IgnitionActivity t61}
+cmd: screencap repair9-fsi-3s exit=0
+    NotificationRecord(0x01593a97: pkg=com.afc.spike.sp2 user=UserHandle{0} id=2002 tag=null importance=4 key=0|com.afc.spike.sp2|2002|null|10272: Notification(channel=sp2-alerts-v2 shortcut=null contentView=null vibrate=default sound=default defaults=0x3 flags=0x90 color=0x00000000 category=event actions=2 vis=PRIVATE))
+      uid=10272 userId=0
+      opPkg=com.afc.spike.sp2
+      icon=Icon(typ=RESOURCE pkg=com.afc.spike.sp2 id=0x0108009b)
+      flags=0x90
+      pri=2
+      key=0|com.afc.spike.sp2|2002|null|10272
+      seen=false
+      groupKey=0|com.afc.spike.sp2|2002|null|10272
+      fullscreenIntent=PendingIntent{53bbc6a: PendingIntentRecord{6936116 com.afc.spike.sp2 startActivity (whitelist: 8479bb7:+30s0ms)}}
+      contentIntent=PendingIntent{1d3b55b: PendingIntentRecord{e303174 com.afc.spike.sp2 startActivity (whitelist: 8479bb7:+30s0ms)}}
+      deleteIntent=null
+      number=0
+      groupAlertBehavior=0
+      when=1792182709520
+      tickerText=null
+      contentView=null
+      bigContentView=null
+      headsUpContentView=null
+      color=0x00000000      timeout=unknown
+      actions={
+          [0] "Watch" -> PendingIntent{7c821f8: PendingIntentRecord{e303174 com.afc.spike.sp2 startActivity (whitelist: 8479bb7:+30s0ms)}}
+          [1] "Dismiss" -> PendingIntent{86036d1: PendingIntentRecord{d4e969d com.afc.spike.sp2 startService (whitelist: 8479bb7:+30s0ms)}}
+      state=PlaybackState {state=3, position=0, buffered position=0, speed=1.0, updated=29921106, actions=1049455, custom actions=[], active item id=-1, error=null}
+    mResumedActivity: ActivityRecord{2c6cbb5 u0 com.amazon.firebat/com.amazon.pyrocore.IgnitionActivity t61}
+  ResumedActivity: ActivityRecord{2c6cbb5 u0 com.amazon.firebat/com.amazon.pyrocore.IgnitionActivity t61}
+cmd: DPAD_UP after FSI exit=0
+cmd: screencap repair9-fsi-dpad-up exit=0
+=== REPAIR ATTEMPT 10: Settings > Notifications (read-only) ===
+Starting: Intent { act=android.settings.SETTINGS }
+cmd: open Settings exit=0
+    mResumedActivity: ActivityRecord{6683486 u0 com.amazon.tv.launcher/.ui.MainSettingsActivity t63}
+  ResumedActivity: ActivityRecord{6683486 u0 com.amazon.tv.launcher/.ui.MainSettingsActivity t63}
+cmd: DPAD DOWN DOWN RIGHTx4 to Notifications tile exit=0
+cmd: SELECT Notifications tile exit=0
+    mResumedActivity: ActivityRecord{36af846 u0 com.amazon.tv.notificationcenter/.NotificationCenterActivity t64}
+  ResumedActivity: ActivityRecord{36af846 u0 com.amazon.tv.notificationcenter/.NotificationCenterActivity t64}
+    NotificationRecord(0x01593a97: pkg=com.afc.spike.sp2 user=UserHandle{0} id=2002 tag=null importance=4 key=0|com.afc.spike.sp2|2002|null|10272: Notification(channel=sp2-alerts-v2 shortcut=null contentView=null vibrate=default sound=default defaults=0x3 flags=0x90 color=0x00000000 category=event actions=2 vis=PRIVATE))
+    NotificationRecord(0x03e8b2d8: pkg=com.afc.spike.sp2 user=UserHandle{0} id=2001 tag=null importance=4 key=0|com.afc.spike.sp2|2001|null|10272: Notification(channel=sp2-alerts-v2 shortcut=null contentView=null vibrate=null sound=null defaults=0x0 flags=0x62 color=0x00000000 vis=PRIVATE))
+cmd: dumpsys spike records exit=0
+cmd: SELECT spike card exit=0
+    mResumedActivity: ActivityRecord{36af846 u0 com.amazon.tv.notificationcenter/.NotificationCenterActivity t64}
+  ResumedActivity: ActivityRecord{36af846 u0 com.amazon.tv.notificationcenter/.NotificationCenterActivity t64}
+cmd: BACK BACK HOME (no Dismiss/Manage/Dismiss All pressed) exit=0
+    mResumedActivity: ActivityRecord{fc04181 u0 com.amazon.tv.launcher/.ui.HomeActivity_vNext t16}
+  ResumedActivity: ActivityRecord{fc04181 u0 com.amazon.tv.launcher/.ui.HomeActivity_vNext t16}
+5
+Success
+cleanup: uninstall spike exit=0

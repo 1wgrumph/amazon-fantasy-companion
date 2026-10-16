@@ -1,0 +1,184 @@
+SP-3 provider links, PR 1 desk evidence (sanitized; stick IP, serial and account data omitted)
+Device: AFTKM, Fire OS 8.1.8.5 (RS8185/3891), Android 11, API 30
+Session: 2026-10-16T20:00:12Z adb connect exit 0; adb devices shows the stick as device.
+
+== Device identity (getprop) ==
+ro.product.model = AFTKM
+ro.build.version.name = Fire OS 8.1.8.5 (RS8185/3891)
+ro.build.version.sdk = 30
+ro.build.version.release = 11
+
+== Installed packages (pm list packages, 289 total) ==
+Third-party (pm list packages -3):
+package:com.amazonappstore.helloworldtv
+package:com.amazon.tv.legal.notices.overlay.localisation.common
+package:com.amazon.tv.settings.v2.overlay.localisation.common
+package:com.amazon.tv.parentalcontrols.overlay.localisation.common
+package:com.netflix.ninja
+Provider keyword matches over all 289 packages
+(firebat|espn|directv|youtube|att|dtv|prime|pyrocore|sports|google|fox|cbs|nbc|paramount|peacock|hulu|sling|fubo):
+package:com.amazon.firebat
+(plus unrelated com.amazon.tv.matter, com.amazon.tv.mattercohost,
+com.google.android.networkstack.tethering.overlay, com.amazon.alexadirectivebrokerservice)
+No ESPN, DirecTV Stream or YouTube TV package is installed.
+
+== Prime Video package identity ==
+package:com.amazon.firebat (system app, versionName=PVFTV-324.0104-L)
+Launch activity: com.amazon.firebat/com.amazon.pyrocore.IgnitionActivity
+Intent filters (dumpsys package com.amazon.firebat), relevant entries:
+- Action MAIN, Category LEANBACK_LAUNCHER -> IgnitionActivity
+- Action com.amazon.firebat.action.YAC_LAUNCH / VIEW, Category DEFAULT -> IgnitionActivity
+- Action VIEW, Scheme amzn, Authority avod|pvde|firebat, Categories DEFAULT+BROWSABLE -> IgnitionActivity
+- Action VIEW, Scheme https, Authorities watch.amazon.com|app.primevideo.com (plus regional
+  watch.amazon.*), Paths /collections /detail /landing /search /settings,
+  Categories DEFAULT+BROWSABLE -> IgnitionActivity
+
+== Probe: prime-home (warm) 2026-10-16T20:01:05Z ==
+CMD: adb shell am start -n com.amazon.firebat/com.amazon.pyrocore.IgnitionActivity
+Starting: Intent { cmp=com.amazon.firebat/com.amazon.pyrocore.IgnitionActivity }
+Warning: Activity not started, its current task has been brought to the front
+exit=0
+ResumedActivity: com.amazon.firebat/com.amazon.pyrocore.IgnitionActivity
+Screenshot (not retained): a title details page from the earlier task, not home.
+Retried cold after am force-stop com.amazon.firebat (exit 0).
+
+== Probe: prime-home-cold 2026-10-16T20:01:32Z ==
+CMD: adb shell am start -a android.intent.action.MAIN -c android.intent.category.LAUNCHER -n com.amazon.firebat/com.amazon.pyrocore.IgnitionActivity
+Starting: Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] cmp=com.amazon.firebat/com.amazon.pyrocore.IgnitionActivity }
+exit=0
+ResumedActivity: com.amazon.firebat/com.amazon.pyrocore.IgnitionActivity
+screencap_exit=0 -> evidence/visual/sp3-provider-links/prime-video-home.png
+Observed: Prime Video home (Home tab, Continue watching row; signed in; no account name shown).
+
+== Probe: prime-search-watch 2026-10-16T20:02:04Z ==
+CMD: adb shell am start -a android.intent.action.VIEW -d 'https://watch.amazon.com/search?query=Thursday+Night+Football' com.amazon.firebat
+Starting: Intent { act=android.intent.action.VIEW (has data) pkg=com.amazon.firebat }
+exit=0
+ResumedActivity: com.amazon.firebat/com.amazon.pyrocore.IgnitionActivity
+Observed: Prime Video search screen with an empty on-screen keyboard; the query was not prefilled.
+
+== Probe: prime-search-k 2026-10-16T20:02:34Z ==
+CMD: adb shell am start -a android.intent.action.VIEW -d 'https://app.primevideo.com/search?k=Thursday+Night+Football' com.amazon.firebat
+Starting: Intent { act=android.intent.action.VIEW (has data) pkg=com.amazon.firebat }
+exit=0
+ResumedActivity: com.amazon.firebat/com.amazon.pyrocore.IgnitionActivity
+Observed: same empty search screen; k parameter also ignored.
+
+== Probe: prime-amzn-avod 2026-10-16T20:03:19Z ==
+CMD: adb shell am start -a android.intent.action.VIEW -d 'amzn://avod' com.amazon.firebat
+Starting: Intent { act=android.intent.action.VIEW dat=amzn://avod pkg=com.amazon.firebat }
+exit=0
+ResumedActivity: com.amazon.firebat/com.amazon.pyrocore.IgnitionActivity
+Observed: Prime Video home; screenshot md5 identical to prime-home-cold.
+
+== Probe: prime on-demand playback 2026-10-16T20:03:53Z ==
+From Prime Video home, KEYCODE_DPAD_CENTER on the focused "Watch now" for the
+Included-with-Prime hero title (exit 0). Screencap 8 s later:
+-> evidence/visual/sp3-provider-links/prime-video-ondemand-play.png
+Observed: black secure video surface with an "Ad 0:35" countdown overlay (video
+itself is not capturable; RISK-AFC-P2-09 evidence gap for the picture only).
+dumpsys media_session: Media button session is com.amazon.firebat/com.amazon.firebat,
+active=true, PlaybackState state=3 (STATE_PLAYING), metadata description=PrimeVideo.
+Playback stopped with KEYCODE_BACK, then KEYCODE_HOME.
+
+== Probe: prime-main-pkgonly 2026-10-16T20:08:47Z ==
+(WatchLauncher intent form: action only, package set, no category.)
+CMD: adb shell am start -a android.intent.action.MAIN com.amazon.firebat
+Starting: Intent { act=android.intent.action.MAIN pkg=com.amazon.firebat }
+Error: Activity not started, unable to resolve Intent { act=android.intent.action.MAIN flg=0x10000000 pkg=com.amazon.firebat }
+exit=0 (am exit code; the Error line is the result)
+ResumedActivity stayed com.amazon.tv.launcher/.ui.HomeActivity_vNext
+Conclusion: MAIN requires the LEANBACK_LAUNCHER category; a bare MAIN intent
+value must not be registered for the current Watch launcher.
+
+== Probe: prime-yac 2026-10-16T20:09:19Z ==
+CMD: adb shell am start -a com.amazon.firebat.action.YAC_LAUNCH com.amazon.firebat
+Starting: Intent { act=com.amazon.firebat.action.YAC_LAUNCH pkg=com.amazon.firebat }
+exit=0
+ResumedActivity: com.amazon.firebat/com.amazon.pyrocore.IgnitionActivity
+Observed: Prime Video home (screenshot inspected, not retained; same state as prime-video-home.png).
+
+== Probe: prime-search-bare 2026-10-16T20:10:00Z ==
+CMD: adb shell am start -a android.intent.action.VIEW -d 'https://watch.amazon.com/search' com.amazon.firebat
+Starting: Intent { act=android.intent.action.VIEW (has data) pkg=com.amazon.firebat }
+exit=0
+ResumedActivity: com.amazon.firebat/com.amazon.pyrocore.IgnitionActivity
+screencap_exit=0 -> evidence/visual/sp3-provider-links/prime-video-search.png
+Observed: Prime Video search screen, empty keyboard. This exact URI is the registered
+fire_os launch for prime_video; observed outcome searchOpened.
+
+== Provider web URI resolution (no launch) ==
+cmd package resolve-activity --brief -a android.intent.action.VIEW -d <uri>:
+https://www.espn.com/watch/    -> com.amazon.cloud9/com.google.android.apps.chrome.IntentDispatcher exit=0
+https://tv.youtube.com/        -> com.amazon.cloud9/com.google.android.apps.chrome.IntentDispatcher exit=0
+https://stream.directv.com/    -> com.amazon.cloud9/com.google.android.apps.chrome.IntentDispatcher exit=0
+Only the Silk browser (com.amazon.cloud9) resolves these; no provider app does.
+
+== Probe: espn-view 2026-10-16T20:07:02Z ==
+CMD: adb shell am start -a android.intent.action.VIEW -d 'https://www.espn.com/watch/'
+Starting: Intent { act=android.intent.action.VIEW dat=https://www.espn.com/... }
+exit=0
+ResumedActivity: com.amazon.cloud9/com.amazon.slate.fire_tv.FireTvSlateActivity
+screencap_exit=0 -> evidence/visual/sp3-provider-links/espn-view-browser.png
+Observed: Silk browser loading www.espn.com. No ESPN app opened.
+
+== Probe: directv-view 2026-10-16T20:07:15Z ==
+CMD: adb shell am start -a android.intent.action.VIEW -d 'https://stream.directv.com/'
+Starting: Intent { act=android.intent.action.VIEW dat=https://stream.directv.com/... }
+exit=0
+ResumedActivity: com.amazon.cloud9/com.amazon.slate.fire_tv.FireTvSlateActivity
+screencap_exit=0 -> evidence/visual/sp3-provider-links/directv-stream-view-browser.png
+Observed: Silk browser on stream.directv.com "Loading, please wait.". No DirecTV app opened.
+
+== Probe: yttv-view 2026-10-16T20:07:29Z ==
+CMD: adb shell am start -a android.intent.action.VIEW -d 'https://tv.youtube.com/'
+Starting: Intent { act=android.intent.action.VIEW dat=https://tv.youtube.com/... }
+exit=0
+ResumedActivity: com.amazon.cloud9/com.amazon.slate.fire_tv.FireTvSlateActivity
+screencap_exit=0 -> evidence/visual/sp3-provider-links/youtube-tv-view-browser.png
+Observed: Silk browser on the tv.youtube.com marketing page (generic SIGN IN button,
+no account data). No YouTube TV app opened. Nothing was signed in or purchased.
+
+== Local broadcast ==
+cmd package resolve-activity -a MAIN -c LAUNCHER com.amazon.tv.livetv -> No activity found (exit 0)
+dumpsys package com.amazon.tv.livetv: only TvChannelsPlayerActivity(Alias) filters; no LAUNCHER activity.
+== Probe: local-livetv 2026-10-16T20:08:09Z ==
+CMD: adb shell monkey -p com.amazon.tv.livetv -c android.intent.category.LAUNCHER 1
+** No activities found to run, monkey aborted.
+exit=252
+ResumedActivity stayed com.amazon.tv.launcher/.ui.HomeActivity_vNext
+screencap_exit=0 -> evidence/visual/sp3-provider-links/local-broadcast-home.png
+dumpsys tv_input (exit 0): inputs are com.mediatek.tvinput ARC (HDMI),
+com.amazon.hedwig, com.amazon.franktvinput, com.amazon.tv.devicecontrol STB,
+com.amazon.firebat FirebatTvInputService. No broadcast tuner and no installed
+app carrying CBS, Fox or NBC.
+
+== Cleanup 2026-10-16T20:10:13Z ==
+KEYCODE_HOME; am force-stop com.amazon.cloud9 and com.amazon.firebat.
+No app was installed or uninstalled by this spike. No sign-in, sign-out,
+purchase, account or settings change was made.
+
+== Repair probe (RX03 lead): Prime Video /detail deep link ==
+Title GTI from the public Prime Video page of the 2026-10-15 TNF replay
+(Seahawks vs. Broncos, ESPN event 401872995):
+amzn1.dv.gti.0519bea8-4415-4b18-b309-d06ff66617cf
+Warm attempt 2026-10-16T21:04:25Z: the stick was asleep (mWakefulness=Asleep,
+Display Power state=OFF); screencap black, mCurrentFocus=null. Environment,
+not a launch result. KEYCODE_WAKEUP sent.
+Warm attempt 2026-10-16T21:05:19Z: exit 0, "intent has been delivered to
+currently running top-most instance", ResumedActivity
+com.amazon.firebat/com.amazon.pyrocore.IgnitionActivity; logcat
+"[deeplink] Entering Rust NavigationGateway", "Source: Details". Screencap
+black until one KEYCODE_DPAD_UP (21:05:52Z), then the title detail page.
+Not retained: the page may have been left over from the earlier task.
+Control: am force-stop com.amazon.firebat (exit 0), logcat -c.
+== Probe: prime-video-detail-cold 2026-10-16T21:06:09Z ==
+CMD: adb shell am start -a android.intent.action.VIEW -d https://watch.amazon.com/detail?gti=amzn1.dv.gti.0519bea8-4415-4b18-b309-d06ff66617cf com.amazon.firebat
+Starting: Intent { act=android.intent.action.VIEW dat=https://watch.amazon.com/... pkg=com.amazon.firebat }
+exit=0
+ResumedActivity: com.amazon.firebat/com.amazon.pyrocore.IgnitionActivity
+logcat: "[deeplink] Entering Rust NavigationGateway" (21:06:14Z)
+screencap_exit=0 -> evidence/visual/sp3-provider-links/prime-video-detail-cold.png
+Observed with no key input: the "Seahawks vs. Broncos" REPLAY title detail
+page (Oct 15, 2026, Watch Replay focused, "Included with Prime"). Nothing was
+selected or played. No sign-in, purchase, account or settings change.
