@@ -81,6 +81,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Restore legible inherited text and unfocused button labels across the dark TV app theme (PR TBD).
+
 - Preserve ESPN play period and scoringPlay in stored GameEvents, validate both before writes, and revise events when either fact changes ([#79](https://github.com/1wgrumph/amazon-fantasy-companion/pull/79)).
 
 - Discover the user-scope JDK 17 and Android SDK for local gate and hook runs
