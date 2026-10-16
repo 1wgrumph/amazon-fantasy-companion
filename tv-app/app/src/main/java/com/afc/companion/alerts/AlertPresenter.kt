@@ -46,8 +46,8 @@ object AlertPresenter {
                 val starter = starters.opt(i) as? JSONObject ?: return null
                 clean(starter.opt("name"))?.takeUnless(::isUnsafe) ?: return null
             }
-            // Empty starters is a correction: present without claiming any player triggered it.
-            if (names.isEmpty()) "Update for your lineup" else boundedNames(names)
+            // Empty starters is a correction: no player line at all (owner, 2026-10-16: no extra wording).
+            if (names.isEmpty()) "" else boundedNames(names)
         } else {
             // Legacy fixture shape: both player and matchup remain required, as before.
             if (matchup == null) return null

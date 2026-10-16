@@ -44,7 +44,7 @@ class AlertNotifier(private val context: Context) {
             .setAction(AlertService.ACTION_DISMISS)
             .setData(Uri.parse(actionData(alertId, "dismiss")))
             .putExtra(EXTRA_ALERT_ID, alertId)
-        val body = listOfNotNull(text.context, text.access, text.commentary).joinToString("\n")
+        val body = listOfNotNull(text.context.ifEmpty { null }, text.access, text.commentary).joinToString("\n")
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(android.R.drawable.ic_dialog_info)
             .setContentTitle(text.headline)

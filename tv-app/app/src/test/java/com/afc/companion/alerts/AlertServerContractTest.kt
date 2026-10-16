@@ -73,6 +73,7 @@ class AlertServerContractTest {
         assertNotNull("correction must still present", text)
         assertFalse("no player claimed: ${text!!.context}", "Sample Receiver" in text.context)
         assertFalse("no fabricated matchup: ${text.context}", "—" in text.context)
+        assertEquals("empty starters show no context wording", "", text.context)
     }
 
     @Test fun unsafeStarterNameIsNotRendered() {
