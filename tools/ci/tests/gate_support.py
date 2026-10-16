@@ -56,10 +56,23 @@ def run_as_script(name, argv, cwd):
     return None
 
 
+# Host/hook git locations must not redirect fixture commands (mirrors gate.sh).
+_GIT_ENV_DROP = ('GIT_DIR', 'GIT_WORK_TREE', 'GIT_INDEX_FILE', 'GIT_PREFIX', 'GIT_COMMON_DIR',
+                 'GIT_OBJECT_DIRECTORY', 'GIT_ALTERNATE_OBJECT_DIRECTORIES', 'GIT_IMPLICIT_WORK_TREE',
+                 'GIT_GRAFT_FILE', 'GIT_SHALLOW_FILE', 'GIT_INTERNAL_SUPER_PREFIX')
+
+
 def git(cwd, *args):
-    subprocess.run(['git', '-c', 'user.name=Gate Test', '-c', 'user.email=gate-test@example.invalid',
-                    '-c', 'commit.gpgsign=false', *args],
-                   cwd=cwd, check=True, capture_output=True, text=True)
+    env = {k: v for k, v in os.environ.items() if k not in _GIT_ENV_DROP}
+    # Rule 22A: never discover a repository above cwd (a temp root on /tmp otherwise
+    # ascends to the mount point: "Stopping at filesystem boundary", exit 128).
+    env['GIT_CEILING_DIRECTORIES'] = str(Path(cwd).resolve().parent)
+    result = subprocess.run(['git', '-c', 'user.name=Gate Test', '-c', 'user.email=gate-test@example.invalid',
+                             '-c', 'commit.gpgsign=false', *args],
+                            cwd=cwd, env=env, capture_output=True, text=True)
+    if result.returncode:
+        raise RuntimeError(f'git {" ".join(args)} failed ({result.returncode}) in {cwd}: '
+                           f'{result.stderr.strip() or result.stdout.strip()}')
 
 
 def write(root, files):
