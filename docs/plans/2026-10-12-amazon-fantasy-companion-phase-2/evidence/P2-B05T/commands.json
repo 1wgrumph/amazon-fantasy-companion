@@ -1,0 +1,76 @@
+{
+ "commands": [
+  {
+   "id": "B05T-C01",
+   "command": "git status --short; git log --oneline -3",
+   "exit_code": 0,
+   "purpose": "Discovery: clean worktree at 36b54ca (P2-B04T red) on origin/main 1518e57"
+  },
+  {
+   "id": "B05T-C02",
+   "command": "read implementation.json P2-B05T/P2-B05, requirements-register.md, design.md DES-AFC-P2-POLICY/MATCH, technical plan parameters, AFC-Data/States.sysml, store, pipeline, api handler, openapi, TV ProfileModel/Dto, P2-B04T evidence",
+   "exit_code": 0,
+   "purpose": "Contract reading; stub assumption confirmed (NotImplementedError)"
+  },
+  {
+   "id": "B05T-C03",
+   "command": "write backend/tests/unit/alert_policy/{policy_support.py,test_policy_*.py} and backend/tests/deployed/alert_policy/test_alert_policy_deployed.py",
+   "exit_code": 0,
+   "purpose": "Red suite authoring"
+  },
+  {
+   "id": "B05T-C04",
+   "command": "CMD-RED trial run (--tb=line)",
+   "exit_code": 2,
+   "purpose": "1 collection error: conftest name clash between unit and deployed dirs; fixed test-side (link helper in policy_support)"
+  },
+  {
+   "id": "B05T-C05",
+   "command": "CMD-RED trial run (--tb=line)",
+   "exit_code": 1,
+   "purpose": "70 failed, 3 skipped, 0 errors"
+  },
+  {
+   "id": "B05T-C06",
+   "command": "scratch copy of backend/ with reference alert_policy; REF_MODE honest/inclusive20/count_suppressed/overclaim/early",
+   "exit_code": 0,
+   "purpose": "Satisfiability: honest 70 passed; mutants fail 2/3/1/1"
+  },
+  {
+   "id": "B05T-C07",
+   "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 $HOME/.local/share/afc-tools/backend-tests/bin/python3.12 -m pytest backend/tests/unit/alert_policy backend/tests/deployed/alert_policy -v -p no:cacheprovider --tb=short --junitxml=docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B05T/CMD-RED.xml",
+   "exit_code": 1,
+   "purpose": "CMD-RED frozen run: 70 AssertionError failures, 0 errors, 3 NOT_RUN skips"
+  },
+  {
+   "id": "B05T-C08",
+   "command": "pytest --collect-only -q (same two dirs)",
+   "exit_code": 0,
+   "purpose": "73 collected, zero errors"
+  },
+  {
+   "id": "B05T-C09",
+   "command": "bash tools/ci/gate.sh",
+   "exit_code": 1,
+   "purpose": "spec/docs/hygiene/tvapp PASS; backend FAIL with 70 new + 24 inherited B04T red tests, 604 passed, 0 errors"
+  },
+  {
+   "id": "B05T-C10",
+   "command": "PYTHONDONTWRITEBYTECODE=1 python3.12 tools/ci/check_paths.py",
+   "exit_code": 0,
+   "purpose": "Path hygiene"
+  },
+  {
+   "id": "B05T-C11",
+   "command": "python3 docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B05T/verify_receipt.py docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B05T/receipt.json",
+   "exit_code": 0,
+   "purpose": "Receipt verifier PASS"
+  },
+  {
+   "id": "B05T-C12",
+   "command": "verifier against a scratch receipt copy with one frozen hash altered",
+   "exit_code": 1,
+   "purpose": "Tampered-hash rejection"
+  }
+ ]
+}
