@@ -94,7 +94,7 @@ def test_template_uses_ssm_parameter_names_instead_of_embedded_secret_values():
     assert "secretsmanager" not in json.dumps(template).lower()
 
 
-@pytest.mark.parametrize("module", ["alert_policy", "panel"])
+@pytest.mark.parametrize("module", ["panel"])
 def test_future_backend_modules_have_explicit_unimplemented_public_interfaces(module):
     files = list((BACKEND / "src" / module).rglob("*.py"))
     assert files, f"Backend must contain the future {module} interface"

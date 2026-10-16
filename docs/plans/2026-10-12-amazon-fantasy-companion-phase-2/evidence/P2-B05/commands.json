@@ -1,0 +1,12 @@
+{"commands": [
+ {"id": "B05-C01", "command": "git fetch origin && git merge origin/main --no-edit", "exit_code": 0, "purpose": "Merge fc206b4 (landed matcher #84) into afc/p2-b05t as 09d9027; no conflicts"},
+ {"id": "B05-C02", "command": "python3 evidence/P2-B05T/verify_receipt.py evidence/P2-B05T/receipt.json", "exit_code": 0, "purpose": "PASS before product: 70 red cases, 6 frozen files byte-identical"},
+ {"id": "B05-C03", "command": "write backend/src/alert_policy/__init__.py (evaluate, pending); GET /v1/alerts already routed to alert_policy.pending in backend/src/api/handler.py, so no router/control change was needed", "exit_code": 0, "purpose": "Product implementation"},
+ {"id": "B05-C04", "command": "remove alert_policy rows from test_pipeline_and_stubs.py STUBS; remove alert_policy from test_backend_template.py future-modules pin; remove /v1/alerts from test_api_contract.py future-stub 503 pin (flagged deviation)", "exit_code": 0, "purpose": "Stub-pin retirement, B04/B06 precedent; panel pins kept"},
+ {"id": "CMD-GREEN", "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 $HOME/.local/share/afc-tools/backend-tests/bin/python3.12 -m pytest backend/tests/unit/alert_policy -v -p no:cacheprovider --tb=short --junitxml=evidence/P2-B05/CMD-GREEN.xml", "exit_code": 0, "purpose": "70 passed"},
+ {"id": "negative-check", "command": "pytest backend/tests/unit/alert_policy -k 'twenty_yards or q3 or 20-boundary'", "exit_code": 0, "purpose": "3 passed: 20 yards is not inside-20; Q3 close margin does not fire"},
+ {"id": "deployed", "command": "pytest backend/tests/deployed/alert_policy -q", "exit_code": 0, "purpose": "3 skipped NOT_RUN without AFC_DEPLOYED_API_URL (no stack)"},
+ {"id": "verify_receipt", "command": "python3 evidence/P2-B05T/verify_receipt.py evidence/P2-B05T/receipt.json", "exit_code": 0, "purpose": "PASS after product; frozen hashes in frozen-hash-check.txt"},
+ {"id": "CMD-GATE", "command": "bash tools/ci/gate.sh", "exit_code": 0, "purpose": "spec, docs, hygiene, tvapp, backend PASS (734 backend passed); first run exit 1 on the stale /v1/alerts 503 pin, fixed by B05-C04"},
+ {"id": "path-check", "command": "PYTHONDONTWRITEBYTECODE=1 python3.12 tools/ci/check_paths.py", "exit_code": 0, "purpose": "No home-directory user paths; evidence sanitized to $HOME"}
+], "scope": "Command/exit ledger for P2-B05. Installed paths normalized to $HOME; no push, PR, deploy, or AWS call."}

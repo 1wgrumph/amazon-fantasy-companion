@@ -151,11 +151,16 @@ def put_alert(alert):
         "providerRoute", "commentary", "emittedAt"}))
 
 
-def list_alerts(profile_id, after, limit):
-    """Alerts for one profile with cursor strictly after `after` (None = from the start)."""
+def list_alerts(profile_id, after, limit, include_after=False):
+    """Alerts for one profile with cursor strictly after `after` (None = from the start).
+
+    include_after also returns the row at `after` itself, so revision-aware
+    delivery can re-serve a corrected alert at the client's progress cursor.
+    """
     condition = Key("profileId").eq(profile_id)
     if after is not None:
-        condition = condition & Key("cursor").gt(after)
+        bound = Key("cursor").gte(after) if include_after else Key("cursor").gt(after)
+        condition = condition & bound
     return _table("ALERTS_TABLE").query(KeyConditionExpression=condition, Limit=limit)["Items"]
 
 
