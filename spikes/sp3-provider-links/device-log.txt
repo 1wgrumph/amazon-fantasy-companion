@@ -157,3 +157,28 @@ app carrying CBS, Fox or NBC.
 KEYCODE_HOME; am force-stop com.amazon.cloud9 and com.amazon.firebat.
 No app was installed or uninstalled by this spike. No sign-in, sign-out,
 purchase, account or settings change was made.
+
+== Repair probe (RX03 lead): Prime Video /detail deep link ==
+Title GTI from the public Prime Video page of the 2026-10-15 TNF replay
+(Seahawks vs. Broncos, ESPN event 401872995):
+amzn1.dv.gti.0519bea8-4415-4b18-b309-d06ff66617cf
+Warm attempt 2026-10-16T21:04:25Z: the stick was asleep (mWakefulness=Asleep,
+Display Power state=OFF); screencap black, mCurrentFocus=null. Environment,
+not a launch result. KEYCODE_WAKEUP sent.
+Warm attempt 2026-10-16T21:05:19Z: exit 0, "intent has been delivered to
+currently running top-most instance", ResumedActivity
+com.amazon.firebat/com.amazon.pyrocore.IgnitionActivity; logcat
+"[deeplink] Entering Rust NavigationGateway", "Source: Details". Screencap
+black until one KEYCODE_DPAD_UP (21:05:52Z), then the title detail page.
+Not retained: the page may have been left over from the earlier task.
+Control: am force-stop com.amazon.firebat (exit 0), logcat -c.
+== Probe: prime-video-detail-cold 2026-10-16T21:06:09Z ==
+CMD: adb shell am start -a android.intent.action.VIEW -d https://watch.amazon.com/detail?gti=amzn1.dv.gti.0519bea8-4415-4b18-b309-d06ff66617cf com.amazon.firebat
+Starting: Intent { act=android.intent.action.VIEW dat=https://watch.amazon.com/... pkg=com.amazon.firebat }
+exit=0
+ResumedActivity: com.amazon.firebat/com.amazon.pyrocore.IgnitionActivity
+logcat: "[deeplink] Entering Rust NavigationGateway" (21:06:14Z)
+screencap_exit=0 -> evidence/visual/sp3-provider-links/prime-video-detail-cold.png
+Observed with no key input: the "Seahawks vs. Broncos" REPLAY title detail
+page (Oct 15, 2026, Watch Replay focused, "Included with Prime"). Nothing was
+selected or played. No sign-in, purchase, account or settings change.

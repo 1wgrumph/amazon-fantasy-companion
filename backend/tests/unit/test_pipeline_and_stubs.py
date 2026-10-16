@@ -1,7 +1,9 @@
 """PolicyFunction chain wiring and the AFC-STUB interfaces for B02..B07 (host-pytest)."""
 
+import copy
 import importlib
 import json
+from datetime import datetime
 
 import pytest
 from boto3.dynamodb.types import TypeSerializer
@@ -61,36 +63,90 @@ def test_stubs_name_their_owning_slice(api, module, function, arity, slice_id):
 
 
 SPIKE_ORDER = ["prime_video", "espn", "directv_stream", "youtube_tv", "local_broadcast"]
+ROUTING_OUTCOMES = ("gameOpened", "searchOpened", "appHomeOpened", "appAbsent",
+                    "accessUnknown", "playbackDenied")
+# SP-3 desk evidence (spikes/sp3-provider-links/VERDICT.md): Prime Video is the
+# only provider with a verified route; every absent provider stays a gap.
+EVIDENCED_ROUTES = {"prime_video": {"fire_os"}}
+
+
+def _parse_timestamp(value):
+    parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    assert parsed.tzinfo is not None, f"verified_at has no timezone: {value!r}"
 
 
 def assert_registry_contract(registry):
-    # CONTRACT-AFC-P2-PROVIDER-REGISTRY: spike order, verified routes carry outcome+time,
-    # and the exact provider list leaves no room for a route invented for an absent provider.
+    # CONTRACT-AFC-P2-PROVIDER-REGISTRY: spike order; a verified route carries
+    # one of the six RoutingOutcome values and a parseable verification time;
+    # absent providers carry no route, so no route can be invented for them.
     assert registry["schemaVersion"] == 1
     assert registry["currentAttemptObservation"] == "none"
-    assert [p["id"] for p in registry["providers"]] == SPIKE_ORDER
+    assert [p["id"] for p in registry["providers"]] == SPIKE_ORDER, "provider order"
     assert [p["name"] for p in registry["providers"]] == [
         "Prime Video", "ESPN", "DirecTV Stream", "YouTube TV", "Local broadcast"]
     for provider in registry["providers"]:
         assert isinstance(provider["channels_carried"], list)
         assert set(provider["platform_routes"]) <= {"fire_os", "vega"}
+        evidenced = EVIDENCED_ROUTES.get(provider["id"], set())
+        assert set(provider["platform_routes"]) == evidenced, (
+            f"{provider['id']}: evidenced routes are {sorted(evidenced)}, "
+            f"registry carries {sorted(provider['platform_routes'])}")
         for route in provider["platform_routes"].values():
             assert route["package"] and route["doc_source"]
             assert route["launch"]["type"] in ("intent", "uri") and route["launch"]["value"]
-            assert route["verified_outcome"] and route["verified_at"]
+            assert route["verified_outcome"] in ROUTING_OUTCOMES, (
+                f"verified_outcome not a RoutingOutcome: {route['verified_outcome']!r}")
+            _parse_timestamp(route["verified_at"])
             assert "currentAttemptObservation" in route
 
 
+def _committed_registry():
+    return json.loads((BACKEND / "src/provider_resolver/registry.json").read_text())
+
+
 def test_provider_registry_filled_in_contract_shape():
-    registry = json.loads((BACKEND / "src/provider_resolver/registry.json").read_text())
-    assert_registry_contract(registry)
+    assert_registry_contract(_committed_registry())
 
 
-def test_provider_registry_contract_rejects_malformed_registry(tmp_path):
-    registry = json.loads((BACKEND / "src/provider_resolver/registry.json").read_text())
-    del registry["providers"][0]["platform_routes"]["fire_os"]["verified_at"]
+def _prime_route(registry):
+    return registry["providers"][0]["platform_routes"]["fire_os"]
+
+
+def _mutate_invalid_outcome(registry):
+    _prime_route(registry)["verified_outcome"] = "teleported"
+
+
+def _mutate_invalid_timestamp(registry):
+    _prime_route(registry)["verified_at"] = "not-a-timestamp"
+
+
+def _mutate_missing_timestamp(registry):
+    del _prime_route(registry)["verified_at"]
+
+
+def _mutate_fabricated_absent_route(registry):
+    registry["providers"][1]["platform_routes"]["fire_os"] = copy.deepcopy(
+        _prime_route(registry))
+
+
+def _mutate_missing_prime_route(registry):
+    registry["providers"][0]["platform_routes"] = {}
+
+
+def _mutate_reversed_order(registry):
     registry["providers"].reverse()
-    copy = tmp_path / "registry.json"
-    copy.write_text(json.dumps(registry))
-    with pytest.raises((AssertionError, KeyError)):
-        assert_registry_contract(json.loads(copy.read_text()))
+
+
+@pytest.mark.parametrize("mutate,error", [
+    (_mutate_invalid_outcome, "verified_outcome not a RoutingOutcome"),
+    (_mutate_invalid_timestamp, "Invalid isoformat string"),
+    (_mutate_missing_timestamp, "verified_at"),
+    (_mutate_fabricated_absent_route, "espn: evidenced routes"),
+    (_mutate_missing_prime_route, "prime_video: evidenced routes"),
+    (_mutate_reversed_order, "provider order"),
+])
+def test_provider_registry_contract_rejects_each_malformed_case_alone(mutate, error):
+    registry = _committed_registry()
+    mutate(registry)
+    with pytest.raises((AssertionError, KeyError, ValueError), match=error):
+        assert_registry_contract(registry)

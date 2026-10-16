@@ -18,7 +18,9 @@ conditional: none
 
 **Verdict: PARTIAL.** Desk evidence only. The live Prime Video Thursday Night
 Football check is **pending** (PR 2; next TNF game 2026-10-22, Patriots at
-Bears, ESPN event 401873010), so `gameOpened` is not claimed for any provider.
+Bears, ESPN event 401873010 — matchup and 2026-10-23T00:15Z kickoff per
+`espn-summary-receipt.json` in this directory), so `gameOpened` is not
+claimed for any provider.
 ESPN, DirecTV Stream and YouTube TV are not installed on the stick (typed
 gap, `appAbsent` observed), and local broadcast has no carrying app. This
 interim verdict blocks only the still-unproven routes: the Prime Video
@@ -75,6 +77,18 @@ filters was invented.
   `PlaybackState state=3` (STATE_PLAYING). The picture itself is not
   capturable (RISK-AFC-P2-09), only the playback state is evidenced.
   Evidence: `evidence/visual/sp3-provider-links/prime-video-ondemand-play.png`.
+- Investigation result (review lead, not registered):
+  `VIEW https://watch.amazon.com/detail?gti=<title GTI>` with package
+  `com.amazon.firebat`, cold after `am force-stop`, with the public GTI of
+  the 2026-10-15 TNF replay (`amzn1.dv.gti.0519bea8-4415-4b18-b309-d06ff66617cf`,
+  ESPN event 401872995). Exit 0, foreground `IgnitionActivity`, logcat
+  `[deeplink] Entering Rust NavigationGateway`. With no key input, the
+  "Seahawks vs. Broncos" replay title detail page opened, not search.
+  Nothing was selected or played. A per-title `/detail` link therefore
+  reaches the title page. It is not registered: the launch needs a Prime
+  title GTI, and no documented mapping from an ESPN event to a GTI exists.
+  Evidence: `device-log.txt` (repair probe section),
+  `evidence/visual/sp3-provider-links/prime-video-detail-cold.png`.
 
 ### 2. ESPN — `appAbsent`
 
@@ -142,8 +156,10 @@ resolver hand out unverified launch data as a verified route, so absent
 providers record the gap instead; their observed `appAbsent` is recorded
 here and in device-log.txt. Prime Video's channel is `Prime Video`, the
 ESPN summary `header.competitions[0].broadcasts[].media.shortName` for
-TNF event 401873010 (checked 2026-10-16; likewise the 2026-10-15 TNF
-game 401872995).
+TNF event 401873010 (likewise the 2026-10-15 TNF game 401872995);
+endpoint, retrieval time, HTTP status and the event/date/broadcast
+fields for both are committed in `espn-summary-receipt.json` (this
+directory, retrieved 2026-10-16T20:59:23Z).
 
 ## Evidence
 
@@ -156,7 +172,11 @@ game 401872995).
 - `evidence/visual/sp3-provider-links/directv-stream-view-browser.png`.
 - `evidence/visual/sp3-provider-links/youtube-tv-view-browser.png`.
 - `evidence/visual/sp3-provider-links/local-broadcast-home.png`.
+- `evidence/visual/sp3-provider-links/prime-video-detail-cold.png` — the
+  `/detail?gti=` investigation probe.
 - `probe.sh` — the probe harness used (serial supplied by environment).
+- `espn-summary-receipt.json` — sanitized ESPN summary receipt for
+  events 401873010 and 401872995 (channel, date and matchup claims).
 
 ## Limits
 
@@ -174,6 +194,9 @@ game 401872995).
 - The registered Prime Video search URI ignores any query, and no
   documented form carrying `{channel}` or `{event}` was found; the Watch
   action therefore lands the customer on the search screen, not the game.
+  A `/detail?gti=` link opens a title page (see Prime Video above), but
+  only with a Prime title GTI; ESPN events carry no GTI, so it is not
+  registered.
 - No current-attempt observation mechanism exists
   (`currentAttemptObservation: "none"`): the historical
   `verified_outcome` never establishes what a new launch did; the TV
