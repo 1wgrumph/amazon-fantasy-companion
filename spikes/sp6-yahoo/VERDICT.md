@@ -91,7 +91,9 @@ scope missing at consent. Attempt 2 requested `fspt-r` and still received
   attempts).
 - The spike did not call Yahoo under the deployed backend role.
 - Client secret, refresh token, SSM values, account email, account name,
-  and IP addresses are not in this tree.
+  and IP addresses are not in `spikes/sp6-yahoo/` or
+  `docs/operations/aws-and-yahoo-setup.md` (nor in any file changed by this
+  slice).
 - App ID `AyogcOTv` is the public Yahoo developer-console id.
 
 ## developer_feedback

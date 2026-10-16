@@ -19,8 +19,10 @@ Stdlib + boto3 only. Sources: Yahoo OAuth 2.0 guide
 import base64
 import getpass
 import json
+import math
 import os
 import re
+import secrets
 import shutil
 import sys
 import urllib.error
@@ -51,16 +53,21 @@ class HttpError(Exception):
         self.status = status
 
 
-def build_auth_url(client_id, redirect_uri=REDIRECT_URI):
+def build_auth_url(client_id, redirect_uri=REDIRECT_URI, state=None):
     # fspt-r is Fantasy Sports read. A 403 "This application is not
     # authorized" after a 200 token refresh is Yahoo's API access program
     # (VERDICT.md), not a missing scope.
-    query = urllib.parse.urlencode({
+    params = {
         "client_id": client_id,
         "redirect_uri": redirect_uri,
         "response_type": "code",
         "scope": "fspt-r",
-    })
+    }
+    if state is not None:
+        if not isinstance(state, str) or not state:
+            raise ValueError("OAuth state must be a non-empty string")
+        params["state"] = state
+    query = urllib.parse.urlencode(params)
     return f"{AUTH_URL}?{query}"
 
 
@@ -218,20 +225,33 @@ def normalize_roster(raw, team_key, week):
     return {"team_key": team_key, "week": week, "players": players}
 
 
+def _modifier_value(raw_value):
+    if (raw_value is None or isinstance(raw_value, bool)
+            or not isinstance(raw_value, (int, float, str))):
+        raise ValueError("Yahoo stat modifier value is missing or invalid")
+    value = float(raw_value)
+    if not math.isfinite(value):
+        raise ValueError("Yahoo stat modifier value must be finite")
+    return value
+
+
 def normalize_settings(raw, league_key):
     modifiers, slots = {}, []
     for node in _walk(raw):
         if not isinstance(node, dict):
             continue
-        stats = node.get("stat_modifiers", {})
-        stats = stats.get("stats", []) if isinstance(stats, dict) else []
-        for entry in stats if isinstance(stats, list) else []:
-            stat = entry.get("stat", {}) if isinstance(entry, dict) else {}
-            if "stat_id" in stat:
-                try:
-                    modifiers[str(stat["stat_id"])] = float(stat.get("value", 0))
-                except (TypeError, ValueError):
-                    modifiers[str(stat["stat_id"])] = 0.0
+        if "stat_modifiers" in node:
+            stats_node = node["stat_modifiers"]
+            if not isinstance(stats_node, dict) or not isinstance(stats_node.get("stats", []), list):
+                raise ValueError("Yahoo stat_modifiers must contain a stats list")
+            for entry in stats_node.get("stats", []):
+                if not isinstance(entry, dict) or not isinstance(entry.get("stat"), dict):
+                    raise ValueError("Yahoo stat modifier entry must contain a stat object")
+                stat = entry["stat"]
+                stat_id = stat.get("stat_id")
+                if stat_id is None or isinstance(stat_id, bool) or not str(stat_id).strip():
+                    raise ValueError("Yahoo stat modifier is missing stat_id")
+                modifiers[str(stat_id)] = _modifier_value(stat.get("value"))
         for entry in node.get("roster_positions", []) or []:
             position = entry.get("roster_position", {}) if isinstance(entry, dict) else {}
             if "position" in position:
@@ -331,6 +351,7 @@ def cmd_capture():
     import ssl
     import subprocess
     import tempfile
+    state = secrets.token_urlsafe(32)
     with tempfile.TemporaryDirectory() as tmp:
         cert, key = os.path.join(tmp, "c.pem"), os.path.join(tmp, "k.pem")
         subprocess.run(["openssl", "req", "-x509", "-newkey", "rsa:2048", "-nodes",
@@ -340,9 +361,23 @@ def cmd_capture():
 
         class Handler(http.server.BaseHTTPRequestHandler):
             def do_GET(self):
-                query = urllib.parse.urlparse(self.path).query
-                got["code"] = (urllib.parse.parse_qs(query).get("code") or [""])[0]
-                got["error"] = (urllib.parse.parse_qs(query).get("error") or [""])[0]
+                parsed = urllib.parse.urlparse(self.path)
+                params = urllib.parse.parse_qs(parsed.query)
+                returned_state = (params.get("state") or [""])[0]
+                code = (params.get("code") or [""])[0]
+                error = (params.get("error") or [""])[0]
+                if (parsed.path != "/link"
+                        or not returned_state
+                        or not secrets.compare_digest(returned_state, state)
+                        or (not code and not error)):
+                    self.send_response(400)
+                    self.send_header("Content-Type", "text/plain")
+                    self.end_headers()
+                    self.wfile.write(b"AFC: invalid OAuth callback.")
+                    return
+                got["code"] = code
+                got["error"] = error
+                got["state"] = returned_state
                 self.send_response(200)
                 self.send_header("Content-Type", "text/plain")
                 self.end_headers()
@@ -351,19 +386,21 @@ def cmd_capture():
             def log_message(self, *args):  # never log the request line (it holds the code)
                 pass
 
-        server = http.server.HTTPServer(("127.0.0.1", CAPTURE_PORT), Handler)
+        server = http.server.HTTPServer(("localhost", CAPTURE_PORT), Handler)
         context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
         context.load_cert_chain(cert, key)
         server.socket = context.wrap_socket(server.socket, server_side=True)
         print("Open this URL, approve, then click Advanced -> Proceed on the certificate warning:")
-        print(build_auth_url(ssm_get(CLIENT_ID_PARAM).strip(), CAPTURE_REDIRECT_URI), flush=True)
-        while not got.get("code") and not got.get("error"):
+        print(build_auth_url(ssm_get(CLIENT_ID_PARAM).strip(), CAPTURE_REDIRECT_URI, state=state), flush=True)
+        for _ in range(32):
+            if got.get("code") or got.get("error"):
+                break
             try:
                 server.handle_request()
             except ssl.SSLError:
                 continue  # the browser's first, rejected TLS attempt
         server.server_close()
-    if not got.get("code"):
+    if not got.get("code") or not secrets.compare_digest(got.get("state", ""), state):
         print(f"no code: {got.get('error')}", file=sys.stderr)
         return 2
     return _exchange_and_store(got["code"], CAPTURE_REDIRECT_URI)
@@ -391,6 +428,13 @@ def cmd_exchange():
     return _exchange_and_store(code, REDIRECT_URI)
 
 
+class _AccessToken(str):
+    def __new__(cls, access_token, refresh_token):
+        instance = super().__new__(cls, access_token)
+        instance.refresh_token = refresh_token
+        return instance
+
+
 def _access_token(client_id, client_secret, refresh):
     status, payload = _token_post(
         client_id, client_secret,
@@ -399,7 +443,14 @@ def _access_token(client_id, client_secret, refresh):
     token = payload.get("access_token")
     if status != 200 or not isinstance(token, str) or not token:
         raise HttpError(status, "token refresh (no access token)")
-    return token
+    if "refresh_token" in payload and payload["refresh_token"] is not None:
+        rotated = payload["refresh_token"]
+        if not isinstance(rotated, str) or not rotated.strip():
+            raise ValueError("token refresh returned an invalid refresh_token")
+        if rotated != refresh:
+            ssm_put_token(rotated)
+        refresh = rotated
+    return _AccessToken(token, refresh)
 
 
 def _read_once(access):
@@ -443,7 +494,9 @@ def cmd_read():
     evidence, refreshed = None, False
     while True:
         try:
-            _, evidence = _read_once(_access_token(client_id, client_secret, refresh))
+            access = _access_token(client_id, client_secret, refresh)
+            refresh = getattr(access, "refresh_token", refresh)
+            _, evidence = _read_once(access)
             break
         except HttpError as error:
             if error.status == 401 and not refreshed:

@@ -14,7 +14,7 @@ project, as set up on 2026-10-16. No secret values belong in this file.
   ```
 
   The command opens the AWS sign-in page and waits for the browser to call back
-  to `127.0.0.1:<port>`. Check it worked with
+  to `localhost:<port>`. Check it worked with
   `aws sts get-caller-identity --profile afc-dev`.
 - Known failure (2026-10-16): choosing **Continue with an active session** on
   the sign-in page ends on `signin.aws.amazon.com/oauth?...iam_user=true` with
