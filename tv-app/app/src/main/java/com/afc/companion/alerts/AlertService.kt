@@ -5,6 +5,7 @@ import android.app.NotificationManager
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.ServiceInfo
 import android.os.Build
 import android.os.IBinder
@@ -62,7 +63,7 @@ class AlertService : Service() {
         }
         if (polling?.isActive == true) return START_STICKY
         startForeground()
-        val activeFeed = AlertFeed(client).also { feed = it }
+        val activeFeed = AlertFeed(client, alertFeedMemory(this)).also { feed = it }
         AlertInbox.attach(activeFeed)
         val activeProfiles = ProfileStore(client).also { profiles = it }
         val notifier = AlertNotifier(this)
@@ -124,6 +125,9 @@ class AlertService : Service() {
     }
 }
 
+/** App-private store of [AlertFeed]'s cursor and dismissals; a new link clears it, as the cursor belongs to the old profile. */
+fun alertFeedMemory(context: Context): SharedPreferences = context.getSharedPreferences("afc_alert_feed", Context.MODE_PRIVATE)
+
 /** Starts and stops [AlertService] from the shell (DES-AFC-P2-TV). */
 class AlertServiceControl(private val context: Context) : MonitorControl {
     override fun start() = ContextCompat.startForegroundService(context, Intent(context, AlertService::class.java))
@@ -144,18 +148,19 @@ object AlertInbox {
     val alerts: StateFlow<List<Alert>> = state.asStateFlow()
 
     /** Null when monitoring stops: the panel then shows no alerts. */
-    fun attach(feed: AlertFeed?) {
+    @Synchronized fun attach(feed: AlertFeed?) {
         this.feed = feed
         publish()
     }
 
-    fun publish() {
+    // Reading the queue and writing the state is one step, so a poll thread's stale read never lands after a dismiss.
+    @Synchronized fun publish() {
         state.value = feed?.queue.orEmpty()
     }
 
     fun find(id: String?): Alert? = alerts.value.firstOrNull { it.envelope.id == id }
 
-    fun dismiss(id: String) {
+    @Synchronized fun dismiss(id: String) {
         feed?.dismiss(id)
         publish()
     }

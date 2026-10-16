@@ -27,6 +27,24 @@ class AlertInboxTest {
         }
     }
 
+    @Test fun dismissWaitsForAnInFlightPublishSoAStaleQueueNeverOverwritesIt() = runBlocking {
+        LocalApi(listOf(page("c1", alertJson("a1"), alertJson("a2")))).use { api ->
+            val feed = AlertFeed(ApiClient(api.baseUrl, { "session-fixture" }))
+            AlertInbox.attach(feed)
+            feed.poll()
+            val dismisser = Thread { AlertInbox.dismiss("a1") }
+            // Holding the inbox lock stands in for a poll-thread publish that has read [a1, a2] but not written it.
+            synchronized(AlertInbox) {
+                dismisser.start()
+                val deadline = System.nanoTime() + 5_000_000_000L
+                while (dismisser.state != Thread.State.BLOCKED && dismisser.isAlive && System.nanoTime() < deadline) Thread.sleep(1)
+                assertEquals("dismiss must not interleave with a publish", Thread.State.BLOCKED, dismisser.state)
+            }
+            dismisser.join(5_000)
+            assertEquals(listOf("a2"), AlertInbox.alerts.value.map { it.envelope.id })
+        }
+    }
+
     @Test fun stoppedServiceClearsThePanelAlerts() = runBlocking {
         LocalApi(listOf(page("c1", alertJson("a1")))).use { api ->
             val feed = AlertFeed(ApiClient(api.baseUrl, { "session-fixture" }))

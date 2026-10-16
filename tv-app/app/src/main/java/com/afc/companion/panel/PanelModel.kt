@@ -230,13 +230,25 @@ data class PanelDelta(val changedRows: Set<String>, val removedRows: Set<String>
     companion object { val NONE = PanelDelta(emptySet(), emptySet(), false) }
 }
 
-/** Remote-driven panel state: one snapshot, visibility, team/league, focus and refresh timing. */
-class PanelController(teamLeagues: List<String>, selected: String?, visible: Boolean) {
+/** The device setting "Show panel on new alert" applies to the fullScreen panel only. */
+fun revealsOnNewAlert(setting: Boolean, mode: PanelMode): Boolean = setting && mode == PanelMode.FullScreen
+
+/**
+ * Remote-driven panel state: one snapshot, visibility, team/league, focus and refresh timing.
+ * With [revealOnNewAlert], an alert that arrives after the first [onAlerts] re-shows a hidden panel.
+ */
+class PanelController(
+    teamLeagues: List<String>,
+    selected: String?,
+    visible: Boolean,
+    private val revealOnNewAlert: Boolean = false,
+) {
     private val teamLeagues = teamLeagues.toList()
     private var shown = visible
     private var currentTeamLeague: String? = selected ?: this.teamLeagues.firstOrNull()
     private var held: PanelSnapshot? = null
     private var alerts: List<PanelAlert> = emptyList()
+    private var alertsSeen = false
     private var armed: String? = null
     private var focus: FocusTarget? = FocusTarget.TeamLeagueSwitch
     private var lastFetchMs: Long? = null
@@ -259,8 +271,14 @@ class PanelController(teamLeagues: List<String>, selected: String?, visible: Boo
     }
 
     fun onAlerts(next: List<PanelAlert>) = keepFocus {
+        val arrived = alertsSeen && next.any { alert -> alerts.none { it.id == alert.id } }
+        alertsSeen = true
         alerts = next
         if (next.none { it.id == armed }) armed = null
+        if (arrived && revealOnNewAlert && !shown) {
+            shown = true
+            needsFetch = true
+        }
     }
 
     /** OK on a focused alert action; with [confirmSwitch] the first OK on Watch only arms it. */
@@ -285,6 +303,10 @@ class PanelController(teamLeagues: List<String>, selected: String?, visible: Boo
         KeyEvent.KEYCODE_DPAD_DOWN to PanelAction.FocusNext,
         KeyEvent.KEYCODE_DPAD_UP to PanelAction.FocusPrevious,
         KeyEvent.KEYCODE_DPAD_CENTER to PanelAction.Select,
+        // Keyboards, the Fire TV app remote and game controllers send these for OK.
+        KeyEvent.KEYCODE_ENTER to PanelAction.Select,
+        KeyEvent.KEYCODE_NUMPAD_ENTER to PanelAction.Select,
+        KeyEvent.KEYCODE_BUTTON_A to PanelAction.Select,
     )
 
     fun onKey(keyCode: Int, nowMs: Long): Boolean {
