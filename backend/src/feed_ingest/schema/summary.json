@@ -16,6 +16,22 @@
           "items": {
             "type": "object",
             "properties": {
+              "competitors": {
+                "type": "array",
+                "maxItems": 4,
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "homeAway": {"type": "string", "maxLength": 16},
+                    "team": {
+                      "type": "object",
+                      "properties": {
+                        "abbreviation": {"type": "string", "maxLength": 16}
+                      }
+                    }
+                  }
+                }
+              },
               "broadcasts": {
                 "type": "array",
                 "items": {

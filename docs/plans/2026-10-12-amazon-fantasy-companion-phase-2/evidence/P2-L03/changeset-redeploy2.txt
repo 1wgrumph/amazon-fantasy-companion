@@ -1,0 +1,662 @@
+{
+    "Changes": [
+        {
+            "Type": "Resource",
+            "ResourceChange": {
+                "Action": "Modify",
+                "LogicalResourceId": "AlertsTable",
+                "PhysicalResourceId": "afc-dev-AlertsTable-6N1HPFI0OCXJ",
+                "ResourceType": "AWS::DynamoDB::Table",
+                "Replacement": "False",
+                "Scope": [
+                    "Tags"
+                ],
+                "Details": [
+                    {
+                        "Target": {
+                            "Attribute": "Tags",
+                            "RequiresRecreation": "Never",
+                            "Path": "/Tags/0/Value",
+                            "BeforeValue": "66aa5314b2a3f3f56b066e338b5f223db7bd0db2",
+                            "AfterValue": "37dcb7fff789cb207d3200a9098118d9d0aaf3e3",
+                            "AttributeChangeType": "Modify"
+                        },
+                        "Evaluation": "Static"
+                    }
+                ],
+                "BeforeContext": "{\"Properties\":{\"BillingMode\":\"PAY_PER_REQUEST\",\"AttributeDefinitions\":[{\"AttributeType\":\"S\",\"AttributeName\":\"profileId\"},{\"AttributeType\":\"S\",\"AttributeName\":\"cursor\"}],\"KeySchema\":[{\"KeyType\":\"HASH\",\"AttributeName\":\"profileId\"},{\"KeyType\":\"RANGE\",\"AttributeName\":\"cursor\"}]},\"Metadata\":{\"SamResourceId\":\"AlertsTable\"}}",
+                "AfterContext": "{\"Properties\":{\"BillingMode\":\"PAY_PER_REQUEST\",\"AttributeDefinitions\":[{\"AttributeType\":\"S\",\"AttributeName\":\"profileId\"},{\"AttributeType\":\"S\",\"AttributeName\":\"cursor\"}],\"KeySchema\":[{\"KeyType\":\"HASH\",\"AttributeName\":\"profileId\"},{\"KeyType\":\"RANGE\",\"AttributeName\":\"cursor\"}]},\"Metadata\":{\"SamResourceId\":\"AlertsTable\"}}"
+            }
+        },
+        {
+            "Type": "Resource",
+            "ResourceChange": {
+                "Action": "Modify",
+                "LogicalResourceId": "ApiFunctionDefaultRoutePermission",
+                "PhysicalResourceId": "afc-dev-ApiFunctionDefaultRoutePermission-VWfpKP6uU0sX",
+                "ResourceType": "AWS::Lambda::Permission",
+                "Replacement": "False",
+                "Scope": [
+                    "Tags"
+                ],
+                "Details": [
+                    {
+                        "Target": {
+                            "Attribute": "Tags",
+                            "RequiresRecreation": "Never",
+                            "Path": "/Tags/0/Value",
+                            "BeforeValue": "66aa5314b2a3f3f56b066e338b5f223db7bd0db2",
+                            "AfterValue": "37dcb7fff789cb207d3200a9098118d9d0aaf3e3",
+                            "AttributeChangeType": "Modify"
+                        },
+                        "Evaluation": "Static"
+                    }
+                ],
+                "BeforeContext": "{\"Properties\":{\"FunctionName\":\"afc-dev-ApiFunction-SQ4LGLtWYxNh\",\"Action\":\"lambda:InvokeFunction\",\"SourceArn\":\"arn:aws:execute-api:us-east-2:<acct>:le3r79003f/*/*\",\"Principal\":\"apigateway.amazonaws.com\"}}",
+                "AfterContext": "{\"Properties\":{\"FunctionName\":\"afc-dev-ApiFunction-SQ4LGLtWYxNh\",\"Action\":\"lambda:InvokeFunction\",\"SourceArn\":\"arn:aws:execute-api:us-east-2:<acct>:le3r79003f/*/*\",\"Principal\":\"apigateway.amazonaws.com\"}}"
+            }
+        },
+        {
+            "Type": "Resource",
+            "ResourceChange": {
+                "Action": "Modify",
+                "LogicalResourceId": "ApiFunctionRole",
+                "PhysicalResourceId": "afc-dev-ApiFunctionRole-VYFrCM4EZALP",
+                "ResourceType": "AWS::IAM::Role",
+                "Replacement": "False",
+                "Scope": [
+                    "Tags"
+                ],
+                "Details": [
+                    {
+                        "Target": {
+                            "Attribute": "Tags",
+                            "RequiresRecreation": "Never",
+                            "Path": "/Tags/0/Value",
+                            "BeforeValue": "66aa5314b2a3f3f56b066e338b5f223db7bd0db2",
+                            "AfterValue": "37dcb7fff789cb207d3200a9098118d9d0aaf3e3",
+                            "AttributeChangeType": "Modify"
+                        },
+                        "Evaluation": "Static"
+                    }
+                ],
+                "BeforeContext": "{\"Properties\":{\"ManagedPolicyArns\":[\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\"],\"Policies\":[{\"PolicyName\":\"ApiFunctionRolePolicy0\",\"PolicyDocument\":{\"Statement\":[{\"Action\":[\"dynamodb:GetItem\",\"dynamodb:PutItem\",\"dynamodb:UpdateItem\"],\"Resource\":[\"arn:aws:dynamodb:us-east-2:<acct>:table/afc-dev-ProfilesTable-5T8T9R257997\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\",\"dynamodb:PutItem\",\"dynamodb:UpdateItem\",\"dynamodb:Query\",\"dynamodb:DeleteItem\"],\"Resource\":[\"arn:aws:dynamodb:us-east-2:<acct>:table/afc-dev-LinksTable-SWRCL1ZSX3AQ\",\"arn:aws:dynamodb:us-east-2:<acct>:table/afc-dev-LinksTable-SWRCL1ZSX3AQ/index/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:Query\"],\"Resource\":[\"arn:aws:dynamodb:us-east-2:<acct>:table/afc-dev-AlertsTable-6N1HPFI0OCXJ\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\",\"dynamodb:PutItem\"],\"Resource\":[\"arn:aws:dynamodb:us-east-2:<acct>:table/afc-dev-LineupsTable-1F4C3N1F9JTEP\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"arn:aws:dynamodb:us-east-2:<acct>:table/afc-dev-EventsTable-14XU2IPT4CQOQ\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"arn:aws:dynamodb:us-east-2:<acct>:table/afc-dev-PanelsTable-1OMYPL571ZPS6\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"arn:aws:dynamodb:us-east-2:<acct>:table/afc-dev-PlayerStatsTable-GHAHIMU9XR4W\"],\"Effect\":\"Allow\"}]}}],\"AssumeRolePolicyDocument\":{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"sts:AssumeRole\"],\"Effect\":\"Allow\",\"Principal\":{\"Service\":[\"lambda.amazonaws.com\"]}}]},\"Tags\":[{\"Value\":\"SAM\",\"Key\":\"lambda:createdBy\"}]}}",
+                "AfterContext": "{\"Properties\":{\"ManagedPolicyArns\":[\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\"],\"Policies\":[{\"PolicyName\":\"ApiFunctionRolePolicy0\",\"PolicyDocument\":{\"Statement\":[{\"Action\":[\"dynamodb:GetItem\",\"dynamodb:PutItem\",\"dynamodb:UpdateItem\"],\"Resource\":[\"arn:aws:dynamodb:us-east-2:<acct>:table/afc-dev-ProfilesTable-5T8T9R257997\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\",\"dynamodb:PutItem\",\"dynamodb:UpdateItem\",\"dynamodb:Query\",\"dynamodb:DeleteItem\"],\"Resource\":[\"arn:aws:dynamodb:us-east-2:<acct>:table/afc-dev-LinksTable-SWRCL1ZSX3AQ\",\"arn:aws:dynamodb:us-east-2:<acct>:table/afc-dev-LinksTable-SWRCL1ZSX3AQ/index/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:Query\"],\"Resource\":[\"arn:aws:dynamodb:us-east-2:<acct>:table/afc-dev-AlertsTable-6N1HPFI0OCXJ\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\",\"dynamodb:PutItem\"],\"Resource\":[\"arn:aws:dynamodb:us-east-2:<acct>:table/afc-dev-LineupsTable-1F4C3N1F9JTEP\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"arn:aws:dynamodb:us-east-2:<acct>:table/afc-dev-EventsTable-14XU2IPT4CQOQ\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"arn:aws:dynamodb:us-east-2:<acct>:table/afc-dev-PanelsTable-1OMYPL571ZPS6\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"arn:aws:dynamodb:us-east-2:<acct>:table/afc-dev-PlayerStatsTable-GHAHIMU9XR4W\"],\"Effect\":\"Allow\"}]}}],\"AssumeRolePolicyDocument\":{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"sts:AssumeRole\"],\"Effect\":\"Allow\",\"Principal\":{\"Service\":[\"lambda.amazonaws.com\"]}}]},\"Tags\":[{\"Value\":\"SAM\",\"Key\":\"lambda:createdBy\"}]}}"
+            }
+        },
+        {
+            "Type": "Resource",
+            "ResourceChange": {
+                "Action": "Modify",
+                "LogicalResourceId": "ApiFunction",
+                "PhysicalResourceId": "afc-dev-ApiFunction-SQ4LGLtWYxNh",
+                "ResourceType": "AWS::Lambda::Function",
+                "Replacement": "False",
+                "Scope": [
+                    "Properties",
+                    "Tags"
+                ],
+                "Details": [
+                    {
+                        "Target": {
+                            "Attribute": "Tags",
+                            "RequiresRecreation": "Never",
+                            "Path": "/Tags/0/Value",
+                            "BeforeValue": "66aa5314b2a3f3f56b066e338b5f223db7bd0db2",
+                            "AfterValue": "37dcb7fff789cb207d3200a9098118d9d0aaf3e3",
+                            "AttributeChangeType": "Modify"
+                        },
+                        "Evaluation": "Static"
+                    },
+                    {
+                        "Target": {
+                            "Attribute": "Properties",
+                            "Name": "Code",
+                            "RequiresRecreation": "Never",
+                            "Path": "/Properties/Code/S3Key",
+                            "BeforeValue": "086c5bb4d88361e470fcc2fc6f2c33ce",
+                            "AfterValue": "45367a33f426f309d7f97218b5a5c1a0",
+                            "AttributeChangeType": "Modify"
+                        },
+                        "Evaluation": "Static",
+                        "ChangeSource": "DirectModification"
+                    }
+                ],
+                "BeforeContext": "{\"Properties\":{\"Role\":\"arn:aws:iam::<acct>:role/afc-dev-ApiFunctionRole-VYFrCM4EZALP\",\"MemorySize\":\"256\",\"Runtime\":\"python3.12\",\"Description\":\"Router for every /v1 route and the /link page.\",\"Timeout\":\"30\",\"Handler\":\"api.handler.lambda_handler\",\"Environment\":{\"Variables\":{\"LINKS_TABLE\":\"afc-dev-LinksTable-SWRCL1ZSX3AQ\",\"PLAYER_STATS_TABLE\":\"afc-dev-PlayerStatsTable-GHAHIMU9XR4W\",\"EVENTS_TABLE\":\"afc-dev-EventsTable-14XU2IPT4CQOQ\",\"YAHOO_TOKEN_PARAMETER\":\"/afc/dev/yahoo-token\",\"DEVICE_CODE_TTL_SECONDS\":\"600\",\"YAHOO_CLIENT_SECRET_PARAMETER\":\"/afc/dev/yahoo-client-secret\",\"PROFILES_TABLE\":\"afc-dev-ProfilesTable-5T8T9R257997\",\"LINEUPS_TABLE\":\"afc-dev-LineupsTable-1F4C3N1F9JTEP\",\"FEED_POLL_INTERVAL_SECONDS\":\"15\",\"PANELS_TABLE\":\"afc-dev-PanelsTable-1OMYPL571ZPS6\",\"ALERTS_TABLE\":\"afc-dev-AlertsTable-6N1HPFI0OCXJ\"}},\"Code\":{\"S3Bucket\":\"aws-sam-cli-managed-default-samclisourcebucket-kpyrjq2yreuk\",\"S3Key\":\"086c5bb4d88361e470fcc2fc6f2c33ce\"},\"Tags\":[{\"Value\":\"SAM\",\"Key\":\"lambda:createdBy\"}],\"Architectures\":[\"x86_64\"]},\"Metadata\":{\"SamResourceId\":\"ApiFunction\"}}",
+                "AfterContext": "{\"Properties\":{\"Role\":\"arn:aws:iam::<acct>:role/afc-dev-ApiFunctionRole-VYFrCM4EZALP\",\"MemorySize\":\"256\",\"Runtime\":\"python3.12\",\"Description\":\"Router for every /v1 route and the /link page.\",\"Timeout\":\"30\",\"Handler\":\"api.handler.lambda_handler\",\"Environment\":{\"Variables\":{\"LINKS_TABLE\":\"afc-dev-LinksTable-SWRCL1ZSX3AQ\",\"PLAYER_STATS_TABLE\":\"afc-dev-PlayerStatsTable-GHAHIMU9XR4W\",\"EVENTS_TABLE\":\"afc-dev-EventsTable-14XU2IPT4CQOQ\",\"YAHOO_TOKEN_PARAMETER\":\"/afc/dev/yahoo-token\",\"DEVICE_CODE_TTL_SECONDS\":\"600\",\"YAHOO_CLIENT_SECRET_PARAMETER\":\"/afc/dev/yahoo-client-secret\",\"PROFILES_TABLE\":\"afc-dev-ProfilesTable-5T8T9R257997\",\"LINEUPS_TABLE\":\"afc-dev-LineupsTable-1F4C3N1F9JTEP\",\"FEED_POLL_INTERVAL_SECONDS\":\"15\",\"PANELS_TABLE\":\"afc-dev-PanelsTable-1OMYPL571ZPS6\",\"ALERTS_TABLE\":\"afc-dev-AlertsTable-6N1HPFI0OCXJ\"}},\"Code\":{\"S3Bucket\":\"aws-sam-cli-managed-default-samclisourcebucket-kpyrjq2yreuk\",\"S3Key\":\"45367a33f426f309d7f97218b5a5c1a0\"},\"Tags\":[{\"Value\":\"SAM\",\"Key\":\"lambda:createdBy\"}],\"Architectures\":[\"x86_64\"]},\"Metadata\":{\"SamResourceId\":\"ApiFunction\"}}"
+            }
+        },
+        {
+            "Type": "Resource",
+            "ResourceChange": {
+                "Action": "Modify",
+                "LogicalResourceId": "ApiLogGroup",
+                "PhysicalResourceId": "/aws/lambda/afc-dev-ApiFunction-SQ4LGLtWYxNh",
+                "ResourceType": "AWS::Logs::LogGroup",
+                "Replacement": "False",
+                "Scope": [
+                    "Tags"
+                ],
+                "Details": [
+                    {
+                        "Target": {
+                            "Attribute": "Tags",
+                            "RequiresRecreation": "Never",
+                            "Path": "/Tags/0/Value",
+                            "BeforeValue": "66aa5314b2a3f3f56b066e338b5f223db7bd0db2",
+                            "AfterValue": "37dcb7fff789cb207d3200a9098118d9d0aaf3e3",
+                            "AttributeChangeType": "Modify"
+                        },
+                        "Evaluation": "Static"
+                    }
+                ],
+                "BeforeContext": "{\"Properties\":{\"RetentionInDays\":\"7\",\"LogGroupName\":\"/aws/lambda/afc-dev-ApiFunction-SQ4LGLtWYxNh\"},\"Metadata\":{\"SamResourceId\":\"ApiLogGroup\"}}",
+                "AfterContext": "{\"Properties\":{\"RetentionInDays\":\"7\",\"LogGroupName\":\"/aws/lambda/afc-dev-ApiFunction-SQ4LGLtWYxNh\"},\"Metadata\":{\"SamResourceId\":\"ApiLogGroup\"}}"
+            }
+        },
+        {
+            "Type": "Resource",
+            "ResourceChange": {
+                "Action": "Modify",
+                "LogicalResourceId": "EventsTable",
+                "PhysicalResourceId": "afc-dev-EventsTable-14XU2IPT4CQOQ",
+                "ResourceType": "AWS::DynamoDB::Table",
+                "Replacement": "False",
+                "Scope": [
+                    "Tags"
+                ],
+                "Details": [
+                    {
+                        "Target": {
+                            "Attribute": "Tags",
+                            "RequiresRecreation": "Never",
+                            "Path": "/Tags/0/Value",
+                            "BeforeValue": "66aa5314b2a3f3f56b066e338b5f223db7bd0db2",
+                            "AfterValue": "37dcb7fff789cb207d3200a9098118d9d0aaf3e3",
+                            "AttributeChangeType": "Modify"
+                        },
+                        "Evaluation": "Static"
+                    }
+                ],
+                "BeforeContext": "{\"Properties\":{\"BillingMode\":\"PAY_PER_REQUEST\",\"AttributeDefinitions\":[{\"AttributeType\":\"S\",\"AttributeName\":\"gameId\"},{\"AttributeType\":\"S\",\"AttributeName\":\"eventId\"}],\"KeySchema\":[{\"KeyType\":\"HASH\",\"AttributeName\":\"gameId\"},{\"KeyType\":\"RANGE\",\"AttributeName\":\"eventId\"}],\"StreamSpecification\":{\"StreamViewType\":\"NEW_IMAGE\"}},\"Metadata\":{\"SamResourceId\":\"EventsTable\"}}",
+                "AfterContext": "{\"Properties\":{\"BillingMode\":\"PAY_PER_REQUEST\",\"AttributeDefinitions\":[{\"AttributeType\":\"S\",\"AttributeName\":\"gameId\"},{\"AttributeType\":\"S\",\"AttributeName\":\"eventId\"}],\"KeySchema\":[{\"KeyType\":\"HASH\",\"AttributeName\":\"gameId\"},{\"KeyType\":\"RANGE\",\"AttributeName\":\"eventId\"}],\"StreamSpecification\":{\"StreamViewType\":\"NEW_IMAGE\"}},\"Metadata\":{\"SamResourceId\":\"EventsTable\"}}"
+            }
+        },
+        {
+            "Type": "Resource",
+            "ResourceChange": {
+                "Action": "Modify",
+                "LogicalResourceId": "HttpApiApiGatewayDefaultStage",
+                "PhysicalResourceId": "$default",
+                "ResourceType": "AWS::ApiGatewayV2::Stage",
+                "Replacement": "False",
+                "Scope": [
+                    "Tags"
+                ],
+                "Details": [
+                    {
+                        "Target": {
+                            "Attribute": "Tags",
+                            "RequiresRecreation": "Never",
+                            "Path": "/Tags/0/Value",
+                            "BeforeValue": "66aa5314b2a3f3f56b066e338b5f223db7bd0db2",
+                            "AfterValue": "37dcb7fff789cb207d3200a9098118d9d0aaf3e3",
+                            "AttributeChangeType": "Modify"
+                        },
+                        "Evaluation": "Static"
+                    }
+                ],
+                "BeforeContext": "{\"Properties\":{\"AutoDeploy\":\"true\",\"StageName\":\"$default\",\"ApiId\":\"le3r79003f\",\"DefaultRouteSettings\":{\"ThrottlingBurstLimit\":\"10\",\"ThrottlingRateLimit\":\"5\"},\"Tags\":{\"httpapi:createdBy\":\"SAM\"}}}",
+                "AfterContext": "{\"Properties\":{\"AutoDeploy\":\"true\",\"StageName\":\"$default\",\"ApiId\":\"le3r79003f\",\"DefaultRouteSettings\":{\"ThrottlingBurstLimit\":\"10\",\"ThrottlingRateLimit\":\"5\"},\"Tags\":{\"httpapi:createdBy\":\"SAM\"}}}"
+            }
+        },
+        {
+            "Type": "Resource",
+            "ResourceChange": {
+                "Action": "Modify",
+                "LogicalResourceId": "HttpApi",
+                "PhysicalResourceId": "le3r79003f",
+                "ResourceType": "AWS::ApiGatewayV2::Api",
+                "Replacement": "False",
+                "Scope": [
+                    "Tags"
+                ],
+                "Details": [
+                    {
+                        "Target": {
+                            "Attribute": "Tags",
+                            "RequiresRecreation": "Never",
+                            "Path": "/Tags/0/Value",
+                            "BeforeValue": "66aa5314b2a3f3f56b066e338b5f223db7bd0db2",
+                            "AfterValue": "37dcb7fff789cb207d3200a9098118d9d0aaf3e3",
+                            "AttributeChangeType": "Modify"
+                        },
+                        "Evaluation": "Static"
+                    }
+                ],
+                "BeforeContext": "{\"Properties\":{\"Body\":{\"openapi\":\"3.0.1\",\"paths\":{\"/link\":{\"get\":{\"responses\":{},\"x-amazon-apigateway-integration\":{\"payloadFormatVersion\":\"2.0\",\"httpMethod\":\"POST\",\"type\":\"aws_proxy\",\"uri\":\"arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:<acct>:function:afc-dev-ApiFunction-SQ4LGLtWYxNh/invocations\"}}},\"/v1/routing-outcome\":{\"post\":{\"responses\":{},\"x-amazon-apigateway-integration\":{\"payloadFormatVersion\":\"2.0\",\"httpMethod\":\"POST\",\"type\":\"aws_proxy\",\"uri\":\"arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:<acct>:function:afc-dev-ApiFunction-SQ4LGLtWYxNh/invocations\"}}},\"/v1/alerts\":{\"get\":{\"responses\":{},\"x-amazon-apigateway-integration\":{\"payloadFormatVersion\":\"2.0\",\"httpMethod\":\"POST\",\"type\":\"aws_proxy\",\"uri\":\"arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:<acct>:function:afc-dev-ApiFunction-SQ4LGLtWYxNh/invocations\"}}},\"/v1/profile\":{\"get\":{\"responses\":{},\"x-amazon-apigateway-integration\":{\"payloadFormatVersion\":\"2.0\",\"httpMethod\":\"POST\",\"type\":\"aws_proxy\",\"uri\":\"arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:<acct>:function:afc-dev-ApiFunction-SQ4LGLtWYxNh/invocations\"}},\"put\":{\"responses\":{},\"x-amazon-apigateway-integration\":{\"payloadFormatVersion\":\"2.0\",\"httpMethod\":\"POST\",\"type\":\"aws_proxy\",\"uri\":\"arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:<acct>:function:afc-dev-ApiFunction-SQ4LGLtWYxNh/invocations\"}}},\"/v1/link\":{\"post\":{\"responses\":{},\"x-amazon-apigateway-integration\":{\"payloadFormatVersion\":\"2.0\",\"httpMethod\":\"POST\",\"type\":\"aws_proxy\",\"uri\":\"arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:<acct>:function:afc-dev-ApiFunction-SQ4LGLtWYxNh/invocations\"}},\"get\":{\"responses\":{},\"x-amazon-apigateway-integration\":{\"payloadFormatVersion\":\"2.0\",\"httpMethod\":\"POST\",\"type\":\"aws_proxy\",\"uri\":\"arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:<acct>:function:afc-dev-ApiFunction-SQ4LGLtWYxNh/invocations\"}}},\"/v1/providers\":{\"get\":{\"responses\":{},\"x-amazon-apigateway-integration\":{\"payloadFormatVersion\":\"2.0\",\"httpMethod\":\"POST\",\"type\":\"aws_proxy\",\"uri\":\"arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:<acct>:function:afc-dev-ApiFunction-SQ4LGLtWYxNh/invocations\"}}},\"$default\":{\"x-amazon-apigateway-any-method\":{\"isDefaultRoute\":\"true\",\"responses\":{},\"x-amazon-apigateway-integration\":{\"payloadFormatVersion\":\"2.0\",\"httpMethod\":\"POST\",\"type\":\"aws_proxy\",\"uri\":\"arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:<acct>:function:afc-dev-ApiFunction-SQ4LGLtWYxNh/invocations\"}}},\"/v1/installed-apps\":{\"post\":{\"responses\":{},\"x-amazon-apigateway-integration\":{\"payloadFormatVersion\":\"2.0\",\"httpMethod\":\"POST\",\"type\":\"aws_proxy\",\"uri\":\"arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:<acct>:function:afc-dev-ApiFunction-SQ4LGLtWYxNh/invocations\"}}},\"/v1/panel\":{\"get\":{\"responses\":{},\"x-amazon-apigateway-integration\":{\"payloadFormatVersion\":\"2.0\",\"httpMethod\":\"POST\",\"type\":\"aws_proxy\",\"uri\":\"arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:<acct>:function:afc-dev-ApiFunction-SQ4LGLtWYxNh/invocations\"}}},\"/v1/link/confirm\":{\"post\":{\"responses\":{},\"x-amazon-apigateway-integration\":{\"payloadFormatVersion\":\"2.0\",\"httpMethod\":\"POST\",\"type\":\"aws_proxy\",\"uri\":\"arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:<acct>:function:afc-dev-ApiFunction-SQ4LGLtWYxNh/invocations\"}}}},\"info\":{\"title\":\"afc-dev\",\"version\":\"1.0\"},\"tags\":[{\"x-amazon-apigateway-tag-value\":\"SAM\",\"name\":\"httpapi:createdBy\"}]}},\"Metadata\":{\"SamResourceId\":\"HttpApi\"}}",
+                "AfterContext": "{\"Properties\":{\"Body\":{\"openapi\":\"3.0.1\",\"paths\":{\"/link\":{\"get\":{\"responses\":{},\"x-amazon-apigateway-integration\":{\"payloadFormatVersion\":\"2.0\",\"httpMethod\":\"POST\",\"type\":\"aws_proxy\",\"uri\":\"arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:<acct>:function:afc-dev-ApiFunction-SQ4LGLtWYxNh/invocations\"}}},\"/v1/routing-outcome\":{\"post\":{\"responses\":{},\"x-amazon-apigateway-integration\":{\"payloadFormatVersion\":\"2.0\",\"httpMethod\":\"POST\",\"type\":\"aws_proxy\",\"uri\":\"arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:<acct>:function:afc-dev-ApiFunction-SQ4LGLtWYxNh/invocations\"}}},\"/v1/alerts\":{\"get\":{\"responses\":{},\"x-amazon-apigateway-integration\":{\"payloadFormatVersion\":\"2.0\",\"httpMethod\":\"POST\",\"type\":\"aws_proxy\",\"uri\":\"arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:<acct>:function:afc-dev-ApiFunction-SQ4LGLtWYxNh/invocations\"}}},\"/v1/profile\":{\"get\":{\"responses\":{},\"x-amazon-apigateway-integration\":{\"payloadFormatVersion\":\"2.0\",\"httpMethod\":\"POST\",\"type\":\"aws_proxy\",\"uri\":\"arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:<acct>:function:afc-dev-ApiFunction-SQ4LGLtWYxNh/invocations\"}},\"put\":{\"responses\":{},\"x-amazon-apigateway-integration\":{\"payloadFormatVersion\":\"2.0\",\"httpMethod\":\"POST\",\"type\":\"aws_proxy\",\"uri\":\"arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:<acct>:function:afc-dev-ApiFunction-SQ4LGLtWYxNh/invocations\"}}},\"/v1/link\":{\"post\":{\"responses\":{},\"x-amazon-apigateway-integration\":{\"payloadFormatVersion\":\"2.0\",\"httpMethod\":\"POST\",\"type\":\"aws_proxy\",\"uri\":\"arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:<acct>:function:afc-dev-ApiFunction-SQ4LGLtWYxNh/invocations\"}},\"get\":{\"responses\":{},\"x-amazon-apigateway-integration\":{\"payloadFormatVersion\":\"2.0\",\"httpMethod\":\"POST\",\"type\":\"aws_proxy\",\"uri\":\"arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:<acct>:function:afc-dev-ApiFunction-SQ4LGLtWYxNh/invocations\"}}},\"/v1/providers\":{\"get\":{\"responses\":{},\"x-amazon-apigateway-integration\":{\"payloadFormatVersion\":\"2.0\",\"httpMethod\":\"POST\",\"type\":\"aws_proxy\",\"uri\":\"arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:<acct>:function:afc-dev-ApiFunction-SQ4LGLtWYxNh/invocations\"}}},\"$default\":{\"x-amazon-apigateway-any-method\":{\"isDefaultRoute\":\"true\",\"responses\":{},\"x-amazon-apigateway-integration\":{\"payloadFormatVersion\":\"2.0\",\"httpMethod\":\"POST\",\"type\":\"aws_proxy\",\"uri\":\"arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:<acct>:function:afc-dev-ApiFunction-SQ4LGLtWYxNh/invocations\"}}},\"/v1/installed-apps\":{\"post\":{\"responses\":{},\"x-amazon-apigateway-integration\":{\"payloadFormatVersion\":\"2.0\",\"httpMethod\":\"POST\",\"type\":\"aws_proxy\",\"uri\":\"arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:<acct>:function:afc-dev-ApiFunction-SQ4LGLtWYxNh/invocations\"}}},\"/v1/panel\":{\"get\":{\"responses\":{},\"x-amazon-apigateway-integration\":{\"payloadFormatVersion\":\"2.0\",\"httpMethod\":\"POST\",\"type\":\"aws_proxy\",\"uri\":\"arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:<acct>:function:afc-dev-ApiFunction-SQ4LGLtWYxNh/invocations\"}}},\"/v1/link/confirm\":{\"post\":{\"responses\":{},\"x-amazon-apigateway-integration\":{\"payloadFormatVersion\":\"2.0\",\"httpMethod\":\"POST\",\"type\":\"aws_proxy\",\"uri\":\"arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:<acct>:function:afc-dev-ApiFunction-SQ4LGLtWYxNh/invocations\"}}}},\"info\":{\"title\":\"afc-dev\",\"version\":\"1.0\"},\"tags\":[{\"x-amazon-apigateway-tag-value\":\"SAM\",\"name\":\"httpapi:createdBy\"}]}},\"Metadata\":{\"SamResourceId\":\"HttpApi\"}}"
+            }
+        },
+        {
+            "Type": "Resource",
+            "ResourceChange": {
+                "Action": "Modify",
+                "LogicalResourceId": "IngestFunctionRole",
+                "PhysicalResourceId": "afc-dev-IngestFunctionRole-87MdyYpdhMtj",
+                "ResourceType": "AWS::IAM::Role",
+                "Replacement": "False",
+                "Scope": [
+                    "Tags"
+                ],
+                "Details": [
+                    {
+                        "Target": {
+                            "Attribute": "Tags",
+                            "RequiresRecreation": "Never",
+                            "Path": "/Tags/0/Value",
+                            "BeforeValue": "66aa5314b2a3f3f56b066e338b5f223db7bd0db2",
+                            "AfterValue": "37dcb7fff789cb207d3200a9098118d9d0aaf3e3",
+                            "AttributeChangeType": "Modify"
+                        },
+                        "Evaluation": "Static"
+                    }
+                ],
+                "BeforeContext": "{\"Properties\":{\"ManagedPolicyArns\":[\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\"],\"Policies\":[{\"PolicyName\":\"IngestFunctionRolePolicy0\",\"PolicyDocument\":{\"Statement\":[{\"Action\":[\"dynamodb:GetItem\",\"dynamodb:PutItem\"],\"Resource\":[\"arn:aws:dynamodb:us-east-2:<acct>:table/afc-dev-EventsTable-14XU2IPT4CQOQ\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\",\"dynamodb:Scan\"],\"Resource\":[\"arn:aws:dynamodb:us-east-2:<acct>:table/afc-dev-ProfilesTable-5T8T9R257997\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"arn:aws:dynamodb:us-east-2:<acct>:table/afc-dev-LineupsTable-1F4C3N1F9JTEP\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:PutItem\"],\"Resource\":[\"arn:aws:dynamodb:us-east-2:<acct>:table/afc-dev-PlayerStatsTable-GHAHIMU9XR4W\"],\"Effect\":\"Allow\"}]}}],\"AssumeRolePolicyDocument\":{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"sts:AssumeRole\"],\"Effect\":\"Allow\",\"Principal\":{\"Service\":[\"lambda.amazonaws.com\"]}}]},\"Tags\":[{\"Value\":\"SAM\",\"Key\":\"lambda:createdBy\"}]}}",
+                "AfterContext": "{\"Properties\":{\"ManagedPolicyArns\":[\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\"],\"Policies\":[{\"PolicyName\":\"IngestFunctionRolePolicy0\",\"PolicyDocument\":{\"Statement\":[{\"Action\":[\"dynamodb:GetItem\",\"dynamodb:PutItem\"],\"Resource\":[\"arn:aws:dynamodb:us-east-2:<acct>:table/afc-dev-EventsTable-14XU2IPT4CQOQ\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\",\"dynamodb:Scan\"],\"Resource\":[\"arn:aws:dynamodb:us-east-2:<acct>:table/afc-dev-ProfilesTable-5T8T9R257997\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"arn:aws:dynamodb:us-east-2:<acct>:table/afc-dev-LineupsTable-1F4C3N1F9JTEP\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:PutItem\"],\"Resource\":[\"arn:aws:dynamodb:us-east-2:<acct>:table/afc-dev-PlayerStatsTable-GHAHIMU9XR4W\"],\"Effect\":\"Allow\"}]}}],\"AssumeRolePolicyDocument\":{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"sts:AssumeRole\"],\"Effect\":\"Allow\",\"Principal\":{\"Service\":[\"lambda.amazonaws.com\"]}}]},\"Tags\":[{\"Value\":\"SAM\",\"Key\":\"lambda:createdBy\"}]}}"
+            }
+        },
+        {
+            "Type": "Resource",
+            "ResourceChange": {
+                "Action": "Modify",
+                "LogicalResourceId": "IngestFunction",
+                "PhysicalResourceId": "afc-dev-IngestFunction-rRxYOuWakl88",
+                "ResourceType": "AWS::Lambda::Function",
+                "Replacement": "False",
+                "Scope": [
+                    "Properties",
+                    "Tags"
+                ],
+                "Details": [
+                    {
+                        "Target": {
+                            "Attribute": "Tags",
+                            "RequiresRecreation": "Never",
+                            "Path": "/Tags/0/Value",
+                            "BeforeValue": "66aa5314b2a3f3f56b066e338b5f223db7bd0db2",
+                            "AfterValue": "37dcb7fff789cb207d3200a9098118d9d0aaf3e3",
+                            "AttributeChangeType": "Modify"
+                        },
+                        "Evaluation": "Static"
+                    },
+                    {
+                        "Target": {
+                            "Attribute": "Properties",
+                            "Name": "Code",
+                            "RequiresRecreation": "Never",
+                            "Path": "/Properties/Code/S3Key",
+                            "BeforeValue": "086c5bb4d88361e470fcc2fc6f2c33ce",
+                            "AfterValue": "45367a33f426f309d7f97218b5a5c1a0",
+                            "AttributeChangeType": "Modify"
+                        },
+                        "Evaluation": "Static",
+                        "ChangeSource": "DirectModification"
+                    }
+                ],
+                "BeforeContext": "{\"Properties\":{\"Role\":\"arn:aws:iam::<acct>:role/afc-dev-IngestFunctionRole-87MdyYpdhMtj\",\"MemorySize\":\"256\",\"Runtime\":\"python3.12\",\"Description\":\"ESPN ingest while a profile-relevant game is in progress.\",\"Timeout\":\"60\",\"Handler\":\"feed_ingest.lambda_handler\",\"Environment\":{\"Variables\":{\"LINKS_TABLE\":\"afc-dev-LinksTable-SWRCL1ZSX3AQ\",\"PLAYER_STATS_TABLE\":\"afc-dev-PlayerStatsTable-GHAHIMU9XR4W\",\"EVENTS_TABLE\":\"afc-dev-EventsTable-14XU2IPT4CQOQ\",\"YAHOO_TOKEN_PARAMETER\":\"/afc/dev/yahoo-token\",\"DEVICE_CODE_TTL_SECONDS\":\"600\",\"YAHOO_CLIENT_SECRET_PARAMETER\":\"/afc/dev/yahoo-client-secret\",\"PROFILES_TABLE\":\"afc-dev-ProfilesTable-5T8T9R257997\",\"LINEUPS_TABLE\":\"afc-dev-LineupsTable-1F4C3N1F9JTEP\",\"FEED_POLL_INTERVAL_SECONDS\":\"15\",\"PANELS_TABLE\":\"afc-dev-PanelsTable-1OMYPL571ZPS6\",\"ALERTS_TABLE\":\"afc-dev-AlertsTable-6N1HPFI0OCXJ\"}},\"Code\":{\"S3Bucket\":\"aws-sam-cli-managed-default-samclisourcebucket-kpyrjq2yreuk\",\"S3Key\":\"086c5bb4d88361e470fcc2fc6f2c33ce\"},\"Tags\":[{\"Value\":\"SAM\",\"Key\":\"lambda:createdBy\"}],\"Architectures\":[\"x86_64\"]},\"Metadata\":{\"SamResourceId\":\"IngestFunction\"}}",
+                "AfterContext": "{\"Properties\":{\"Role\":\"arn:aws:iam::<acct>:role/afc-dev-IngestFunctionRole-87MdyYpdhMtj\",\"MemorySize\":\"256\",\"Runtime\":\"python3.12\",\"Description\":\"ESPN ingest while a profile-relevant game is in progress.\",\"Timeout\":\"60\",\"Handler\":\"feed_ingest.lambda_handler\",\"Environment\":{\"Variables\":{\"LINKS_TABLE\":\"afc-dev-LinksTable-SWRCL1ZSX3AQ\",\"PLAYER_STATS_TABLE\":\"afc-dev-PlayerStatsTable-GHAHIMU9XR4W\",\"EVENTS_TABLE\":\"afc-dev-EventsTable-14XU2IPT4CQOQ\",\"YAHOO_TOKEN_PARAMETER\":\"/afc/dev/yahoo-token\",\"DEVICE_CODE_TTL_SECONDS\":\"600\",\"YAHOO_CLIENT_SECRET_PARAMETER\":\"/afc/dev/yahoo-client-secret\",\"PROFILES_TABLE\":\"afc-dev-ProfilesTable-5T8T9R257997\",\"LINEUPS_TABLE\":\"afc-dev-LineupsTable-1F4C3N1F9JTEP\",\"FEED_POLL_INTERVAL_SECONDS\":\"15\",\"PANELS_TABLE\":\"afc-dev-PanelsTable-1OMYPL571ZPS6\",\"ALERTS_TABLE\":\"afc-dev-AlertsTable-6N1HPFI0OCXJ\"}},\"Code\":{\"S3Bucket\":\"aws-sam-cli-managed-default-samclisourcebucket-kpyrjq2yreuk\",\"S3Key\":\"45367a33f426f309d7f97218b5a5c1a0\"},\"Tags\":[{\"Value\":\"SAM\",\"Key\":\"lambda:createdBy\"}],\"Architectures\":[\"x86_64\"]},\"Metadata\":{\"SamResourceId\":\"IngestFunction\"}}"
+            }
+        },
+        {
+            "Type": "Resource",
+            "ResourceChange": {
+                "Action": "Modify",
+                "LogicalResourceId": "IngestLogGroup",
+                "PhysicalResourceId": "/aws/lambda/afc-dev-IngestFunction-rRxYOuWakl88",
+                "ResourceType": "AWS::Logs::LogGroup",
+                "Replacement": "False",
+                "Scope": [
+                    "Tags"
+                ],
+                "Details": [
+                    {
+                        "Target": {
+                            "Attribute": "Tags",
+                            "RequiresRecreation": "Never",
+                            "Path": "/Tags/0/Value",
+                            "BeforeValue": "66aa5314b2a3f3f56b066e338b5f223db7bd0db2",
+                            "AfterValue": "37dcb7fff789cb207d3200a9098118d9d0aaf3e3",
+                            "AttributeChangeType": "Modify"
+                        },
+                        "Evaluation": "Static"
+                    }
+                ],
+                "BeforeContext": "{\"Properties\":{\"RetentionInDays\":\"7\",\"LogGroupName\":\"/aws/lambda/afc-dev-IngestFunction-rRxYOuWakl88\"},\"Metadata\":{\"SamResourceId\":\"IngestLogGroup\"}}",
+                "AfterContext": "{\"Properties\":{\"RetentionInDays\":\"7\",\"LogGroupName\":\"/aws/lambda/afc-dev-IngestFunction-rRxYOuWakl88\"},\"Metadata\":{\"SamResourceId\":\"IngestLogGroup\"}}"
+            }
+        },
+        {
+            "Type": "Resource",
+            "ResourceChange": {
+                "Action": "Modify",
+                "LogicalResourceId": "IngestScheduleRole",
+                "PhysicalResourceId": "afc-dev-IngestScheduleRole-t6HTvxAcafeL",
+                "ResourceType": "AWS::IAM::Role",
+                "Replacement": "False",
+                "Scope": [
+                    "Tags"
+                ],
+                "Details": [
+                    {
+                        "Target": {
+                            "Attribute": "Tags",
+                            "RequiresRecreation": "Never",
+                            "Path": "/Tags/0/Value",
+                            "BeforeValue": "66aa5314b2a3f3f56b066e338b5f223db7bd0db2",
+                            "AfterValue": "37dcb7fff789cb207d3200a9098118d9d0aaf3e3",
+                            "AttributeChangeType": "Modify"
+                        },
+                        "Evaluation": "Static"
+                    }
+                ],
+                "BeforeContext": "{\"Properties\":{\"AssumeRolePolicyDocument\":{\"Version\":\"2012-10-17\",\"Statement\":[{\"Condition\":{\"StringEquals\":{\"aws:SourceAccount\":\"<acct>\"}},\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"scheduler.amazonaws.com\"}}]},\"Policies\":[{\"PolicyName\":\"invoke-ingest\",\"PolicyDocument\":{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"lambda:InvokeFunction\",\"Resource\":\"arn:aws:lambda:us-east-2:<acct>:function:afc-dev-IngestFunction-rRxYOuWakl88\",\"Effect\":\"Allow\"}]}}]},\"Metadata\":{\"SamResourceId\":\"IngestScheduleRole\"}}",
+                "AfterContext": "{\"Properties\":{\"AssumeRolePolicyDocument\":{\"Version\":\"2012-10-17\",\"Statement\":[{\"Condition\":{\"StringEquals\":{\"aws:SourceAccount\":\"<acct>\"}},\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"scheduler.amazonaws.com\"}}]},\"Policies\":[{\"PolicyName\":\"invoke-ingest\",\"PolicyDocument\":{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"lambda:InvokeFunction\",\"Resource\":\"arn:aws:lambda:us-east-2:<acct>:function:afc-dev-IngestFunction-rRxYOuWakl88\",\"Effect\":\"Allow\"}]}}]},\"Metadata\":{\"SamResourceId\":\"IngestScheduleRole\"}}"
+            }
+        },
+        {
+            "Type": "Resource",
+            "ResourceChange": {
+                "Action": "Modify",
+                "LogicalResourceId": "IngestSchedule",
+                "PhysicalResourceId": "afc-dev-IngestSchedule-1QZJFHBOVMJCW",
+                "ResourceType": "AWS::Scheduler::Schedule",
+                "Replacement": "False",
+                "Scope": [
+                    "Tags"
+                ],
+                "Details": [
+                    {
+                        "Target": {
+                            "Attribute": "Tags",
+                            "RequiresRecreation": "Never",
+                            "Path": "/Tags/0/Value",
+                            "BeforeValue": "66aa5314b2a3f3f56b066e338b5f223db7bd0db2",
+                            "AfterValue": "37dcb7fff789cb207d3200a9098118d9d0aaf3e3",
+                            "AttributeChangeType": "Modify"
+                        },
+                        "Evaluation": "Static"
+                    }
+                ],
+                "BeforeContext": "{\"Properties\":{\"ScheduleExpression\":\"rate(1 minute)\",\"FlexibleTimeWindow\":{\"Mode\":\"OFF\"},\"Target\":{\"Arn\":\"arn:aws:lambda:us-east-2:<acct>:function:afc-dev-IngestFunction-rRxYOuWakl88\",\"RetryPolicy\":{\"MaximumRetryAttempts\":\"0\"},\"RoleArn\":\"arn:aws:iam::<acct>:role/afc-dev-IngestScheduleRole-t6HTvxAcafeL\"},\"Description\":\"Each minute while a profile-relevant game is in progress.\",\"State\":\"DISABLED\"},\"Metadata\":{\"SamResourceId\":\"IngestSchedule\"}}",
+                "AfterContext": "{\"Properties\":{\"ScheduleExpression\":\"rate(1 minute)\",\"FlexibleTimeWindow\":{\"Mode\":\"OFF\"},\"Target\":{\"Arn\":\"arn:aws:lambda:us-east-2:<acct>:function:afc-dev-IngestFunction-rRxYOuWakl88\",\"RetryPolicy\":{\"MaximumRetryAttempts\":\"0\"},\"RoleArn\":\"arn:aws:iam::<acct>:role/afc-dev-IngestScheduleRole-t6HTvxAcafeL\"},\"Description\":\"Each minute while a profile-relevant game is in progress.\",\"State\":\"DISABLED\"},\"Metadata\":{\"SamResourceId\":\"IngestSchedule\"}}"
+            }
+        },
+        {
+            "Type": "Resource",
+            "ResourceChange": {
+                "Action": "Modify",
+                "LogicalResourceId": "LineupsTable",
+                "PhysicalResourceId": "afc-dev-LineupsTable-1F4C3N1F9JTEP",
+                "ResourceType": "AWS::DynamoDB::Table",
+                "Replacement": "False",
+                "Scope": [
+                    "Tags"
+                ],
+                "Details": [
+                    {
+                        "Target": {
+                            "Attribute": "Tags",
+                            "RequiresRecreation": "Never",
+                            "Path": "/Tags/0/Value",
+                            "BeforeValue": "66aa5314b2a3f3f56b066e338b5f223db7bd0db2",
+                            "AfterValue": "37dcb7fff789cb207d3200a9098118d9d0aaf3e3",
+                            "AttributeChangeType": "Modify"
+                        },
+                        "Evaluation": "Static"
+                    }
+                ],
+                "BeforeContext": "{\"Properties\":{\"BillingMode\":\"PAY_PER_REQUEST\",\"AttributeDefinitions\":[{\"AttributeType\":\"S\",\"AttributeName\":\"profileId\"}],\"KeySchema\":[{\"KeyType\":\"HASH\",\"AttributeName\":\"profileId\"}]},\"Metadata\":{\"SamResourceId\":\"LineupsTable\"}}",
+                "AfterContext": "{\"Properties\":{\"BillingMode\":\"PAY_PER_REQUEST\",\"AttributeDefinitions\":[{\"AttributeType\":\"S\",\"AttributeName\":\"profileId\"}],\"KeySchema\":[{\"KeyType\":\"HASH\",\"AttributeName\":\"profileId\"}]},\"Metadata\":{\"SamResourceId\":\"LineupsTable\"}}"
+            }
+        },
+        {
+            "Type": "Resource",
+            "ResourceChange": {
+                "Action": "Modify",
+                "LogicalResourceId": "LinksTable",
+                "PhysicalResourceId": "afc-dev-LinksTable-SWRCL1ZSX3AQ",
+                "ResourceType": "AWS::DynamoDB::Table",
+                "Replacement": "False",
+                "Scope": [
+                    "Tags"
+                ],
+                "Details": [
+                    {
+                        "Target": {
+                            "Attribute": "Tags",
+                            "RequiresRecreation": "Never",
+                            "Path": "/Tags/0/Value",
+                            "BeforeValue": "66aa5314b2a3f3f56b066e338b5f223db7bd0db2",
+                            "AfterValue": "37dcb7fff789cb207d3200a9098118d9d0aaf3e3",
+                            "AttributeChangeType": "Modify"
+                        },
+                        "Evaluation": "Static"
+                    }
+                ],
+                "BeforeContext": "{\"Properties\":{\"BillingMode\":\"PAY_PER_REQUEST\",\"GlobalSecondaryIndexes\":[{\"IndexName\":\"handle\",\"Projection\":{\"ProjectionType\":\"ALL\"},\"KeySchema\":[{\"KeyType\":\"HASH\",\"AttributeName\":\"handleHash\"}]}],\"AttributeDefinitions\":[{\"AttributeType\":\"S\",\"AttributeName\":\"pk\"},{\"AttributeType\":\"S\",\"AttributeName\":\"handleHash\"}],\"KeySchema\":[{\"KeyType\":\"HASH\",\"AttributeName\":\"pk\"}],\"TimeToLiveSpecification\":{\"Enabled\":\"true\",\"AttributeName\":\"expiresAt\"}},\"Metadata\":{\"SamResourceId\":\"LinksTable\"}}",
+                "AfterContext": "{\"Properties\":{\"BillingMode\":\"PAY_PER_REQUEST\",\"GlobalSecondaryIndexes\":[{\"IndexName\":\"handle\",\"Projection\":{\"ProjectionType\":\"ALL\"},\"KeySchema\":[{\"KeyType\":\"HASH\",\"AttributeName\":\"handleHash\"}]}],\"AttributeDefinitions\":[{\"AttributeType\":\"S\",\"AttributeName\":\"pk\"},{\"AttributeType\":\"S\",\"AttributeName\":\"handleHash\"}],\"KeySchema\":[{\"KeyType\":\"HASH\",\"AttributeName\":\"pk\"}],\"TimeToLiveSpecification\":{\"Enabled\":\"true\",\"AttributeName\":\"expiresAt\"}},\"Metadata\":{\"SamResourceId\":\"LinksTable\"}}"
+            }
+        },
+        {
+            "Type": "Resource",
+            "ResourceChange": {
+                "Action": "Modify",
+                "LogicalResourceId": "PanelsTable",
+                "PhysicalResourceId": "afc-dev-PanelsTable-1OMYPL571ZPS6",
+                "ResourceType": "AWS::DynamoDB::Table",
+                "Replacement": "False",
+                "Scope": [
+                    "Tags"
+                ],
+                "Details": [
+                    {
+                        "Target": {
+                            "Attribute": "Tags",
+                            "RequiresRecreation": "Never",
+                            "Path": "/Tags/0/Value",
+                            "BeforeValue": "66aa5314b2a3f3f56b066e338b5f223db7bd0db2",
+                            "AfterValue": "37dcb7fff789cb207d3200a9098118d9d0aaf3e3",
+                            "AttributeChangeType": "Modify"
+                        },
+                        "Evaluation": "Static"
+                    }
+                ],
+                "BeforeContext": "{\"Properties\":{\"BillingMode\":\"PAY_PER_REQUEST\",\"AttributeDefinitions\":[{\"AttributeType\":\"S\",\"AttributeName\":\"profileId\"},{\"AttributeType\":\"S\",\"AttributeName\":\"teamLeague\"}],\"KeySchema\":[{\"KeyType\":\"HASH\",\"AttributeName\":\"profileId\"},{\"KeyType\":\"RANGE\",\"AttributeName\":\"teamLeague\"}]},\"Metadata\":{\"SamResourceId\":\"PanelsTable\"}}",
+                "AfterContext": "{\"Properties\":{\"BillingMode\":\"PAY_PER_REQUEST\",\"AttributeDefinitions\":[{\"AttributeType\":\"S\",\"AttributeName\":\"profileId\"},{\"AttributeType\":\"S\",\"AttributeName\":\"teamLeague\"}],\"KeySchema\":[{\"KeyType\":\"HASH\",\"AttributeName\":\"profileId\"},{\"KeyType\":\"RANGE\",\"AttributeName\":\"teamLeague\"}]},\"Metadata\":{\"SamResourceId\":\"PanelsTable\"}}"
+            }
+        },
+        {
+            "Type": "Resource",
+            "ResourceChange": {
+                "Action": "Modify",
+                "LogicalResourceId": "PlayerStatsTable",
+                "PhysicalResourceId": "afc-dev-PlayerStatsTable-GHAHIMU9XR4W",
+                "ResourceType": "AWS::DynamoDB::Table",
+                "Replacement": "False",
+                "Scope": [
+                    "Tags"
+                ],
+                "Details": [
+                    {
+                        "Target": {
+                            "Attribute": "Tags",
+                            "RequiresRecreation": "Never",
+                            "Path": "/Tags/0/Value",
+                            "BeforeValue": "66aa5314b2a3f3f56b066e338b5f223db7bd0db2",
+                            "AfterValue": "37dcb7fff789cb207d3200a9098118d9d0aaf3e3",
+                            "AttributeChangeType": "Modify"
+                        },
+                        "Evaluation": "Static"
+                    }
+                ],
+                "BeforeContext": "{\"Properties\":{\"BillingMode\":\"PAY_PER_REQUEST\",\"AttributeDefinitions\":[{\"AttributeType\":\"S\",\"AttributeName\":\"athleteId\"}],\"KeySchema\":[{\"KeyType\":\"HASH\",\"AttributeName\":\"athleteId\"}]},\"Metadata\":{\"SamResourceId\":\"PlayerStatsTable\"}}",
+                "AfterContext": "{\"Properties\":{\"BillingMode\":\"PAY_PER_REQUEST\",\"AttributeDefinitions\":[{\"AttributeType\":\"S\",\"AttributeName\":\"athleteId\"}],\"KeySchema\":[{\"KeyType\":\"HASH\",\"AttributeName\":\"athleteId\"}]},\"Metadata\":{\"SamResourceId\":\"PlayerStatsTable\"}}"
+            }
+        },
+        {
+            "Type": "Resource",
+            "ResourceChange": {
+                "Action": "Modify",
+                "LogicalResourceId": "PolicyFunctionEventStream",
+                "PhysicalResourceId": "9f29f6fe-32a9-4f28-9b1e-fb6954371f62",
+                "ResourceType": "AWS::Lambda::EventSourceMapping",
+                "Replacement": "False",
+                "Scope": [
+                    "Tags"
+                ],
+                "Details": [
+                    {
+                        "Target": {
+                            "Attribute": "Tags",
+                            "RequiresRecreation": "Never",
+                            "Path": "/Tags/0/Value",
+                            "BeforeValue": "66aa5314b2a3f3f56b066e338b5f223db7bd0db2",
+                            "AfterValue": "37dcb7fff789cb207d3200a9098118d9d0aaf3e3",
+                            "AttributeChangeType": "Modify"
+                        },
+                        "Evaluation": "Static"
+                    }
+                ],
+                "BeforeContext": "{\"Properties\":{\"StartingPosition\":\"LATEST\",\"BatchSize\":\"10\",\"FunctionName\":\"afc-dev-PolicyFunction-LEaQlcs3Eq0A\",\"MaximumRetryAttempts\":\"2\",\"BisectBatchOnFunctionError\":\"true\",\"EventSourceArn\":\"arn:aws:dynamodb:us-east-2:<acct>:table/afc-dev-EventsTable-14XU2IPT4CQOQ/stream/2026-10-14T15:04:31.775\"}}",
+                "AfterContext": "{\"Properties\":{\"StartingPosition\":\"LATEST\",\"BatchSize\":\"10\",\"FunctionName\":\"afc-dev-PolicyFunction-LEaQlcs3Eq0A\",\"MaximumRetryAttempts\":\"2\",\"BisectBatchOnFunctionError\":\"true\",\"EventSourceArn\":\"arn:aws:dynamodb:us-east-2:<acct>:table/afc-dev-EventsTable-14XU2IPT4CQOQ/stream/2026-10-14T15:04:31.775\"}}"
+            }
+        },
+        {
+            "Type": "Resource",
+            "ResourceChange": {
+                "Action": "Modify",
+                "LogicalResourceId": "PolicyFunctionRole",
+                "PhysicalResourceId": "afc-dev-PolicyFunctionRole-repRa8YzZJjT",
+                "ResourceType": "AWS::IAM::Role",
+                "Replacement": "False",
+                "Scope": [
+                    "Tags"
+                ],
+                "Details": [
+                    {
+                        "Target": {
+                            "Attribute": "Tags",
+                            "RequiresRecreation": "Never",
+                            "Path": "/Tags/0/Value",
+                            "BeforeValue": "66aa5314b2a3f3f56b066e338b5f223db7bd0db2",
+                            "AfterValue": "37dcb7fff789cb207d3200a9098118d9d0aaf3e3",
+                            "AttributeChangeType": "Modify"
+                        },
+                        "Evaluation": "Static"
+                    }
+                ],
+                "BeforeContext": "{\"Properties\":{\"ManagedPolicyArns\":[\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\",\"arn:aws:iam::aws:policy/service-role/AWSLambdaDynamoDBExecutionRole\"],\"Policies\":[{\"PolicyName\":\"PolicyFunctionRolePolicy0\",\"PolicyDocument\":{\"Statement\":[{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"arn:aws:dynamodb:us-east-2:<acct>:table/afc-dev-ProfilesTable-5T8T9R257997\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"arn:aws:dynamodb:us-east-2:<acct>:table/afc-dev-EventsTable-14XU2IPT4CQOQ\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:PutItem\",\"dynamodb:Query\"],\"Resource\":[\"arn:aws:dynamodb:us-east-2:<acct>:table/afc-dev-AlertsTable-6N1HPFI0OCXJ\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\",\"dynamodb:PutItem\",\"dynamodb:Scan\"],\"Resource\":[\"arn:aws:dynamodb:us-east-2:<acct>:table/afc-dev-LineupsTable-1F4C3N1F9JTEP\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\",\"dynamodb:PutItem\"],\"Resource\":[\"arn:aws:dynamodb:us-east-2:<acct>:table/afc-dev-PanelsTable-1OMYPL571ZPS6\"],\"Effect\":\"Allow\"}]}},{\"PolicyName\":\"PolicyFunctionRolePolicy1\",\"PolicyDocument\":{\"Statement\":[{\"Action\":[\"ssm:GetParameter\"],\"Resource\":[\"arn:aws:ssm:us-east-2:<acct>:parameter/afc/dev/yahoo-client-secret\",\"arn:aws:ssm:us-east-2:<acct>:parameter/afc/dev/yahoo-token\"],\"Effect\":\"Allow\"}]}}],\"AssumeRolePolicyDocument\":{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"sts:AssumeRole\"],\"Effect\":\"Allow\",\"Principal\":{\"Service\":[\"lambda.amazonaws.com\"]}}]},\"Tags\":[{\"Value\":\"SAM\",\"Key\":\"lambda:createdBy\"}]}}",
+                "AfterContext": "{\"Properties\":{\"ManagedPolicyArns\":[\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\",\"arn:aws:iam::aws:policy/service-role/AWSLambdaDynamoDBExecutionRole\"],\"Policies\":[{\"PolicyName\":\"PolicyFunctionRolePolicy0\",\"PolicyDocument\":{\"Statement\":[{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"arn:aws:dynamodb:us-east-2:<acct>:table/afc-dev-ProfilesTable-5T8T9R257997\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"arn:aws:dynamodb:us-east-2:<acct>:table/afc-dev-EventsTable-14XU2IPT4CQOQ\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:PutItem\",\"dynamodb:Query\"],\"Resource\":[\"arn:aws:dynamodb:us-east-2:<acct>:table/afc-dev-AlertsTable-6N1HPFI0OCXJ\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\",\"dynamodb:PutItem\",\"dynamodb:Scan\"],\"Resource\":[\"arn:aws:dynamodb:us-east-2:<acct>:table/afc-dev-LineupsTable-1F4C3N1F9JTEP\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\",\"dynamodb:PutItem\"],\"Resource\":[\"arn:aws:dynamodb:us-east-2:<acct>:table/afc-dev-PanelsTable-1OMYPL571ZPS6\"],\"Effect\":\"Allow\"}]}},{\"PolicyName\":\"PolicyFunctionRolePolicy1\",\"PolicyDocument\":{\"Statement\":[{\"Action\":[\"ssm:GetParameter\"],\"Resource\":[\"arn:aws:ssm:us-east-2:<acct>:parameter/afc/dev/yahoo-client-secret\",\"arn:aws:ssm:us-east-2:<acct>:parameter/afc/dev/yahoo-token\"],\"Effect\":\"Allow\"}]}}],\"AssumeRolePolicyDocument\":{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"sts:AssumeRole\"],\"Effect\":\"Allow\",\"Principal\":{\"Service\":[\"lambda.amazonaws.com\"]}}]},\"Tags\":[{\"Value\":\"SAM\",\"Key\":\"lambda:createdBy\"}]}}"
+            }
+        },
+        {
+            "Type": "Resource",
+            "ResourceChange": {
+                "Action": "Modify",
+                "LogicalResourceId": "PolicyFunction",
+                "PhysicalResourceId": "afc-dev-PolicyFunction-LEaQlcs3Eq0A",
+                "ResourceType": "AWS::Lambda::Function",
+                "Replacement": "False",
+                "Scope": [
+                    "Properties",
+                    "Tags"
+                ],
+                "Details": [
+                    {
+                        "Target": {
+                            "Attribute": "Tags",
+                            "RequiresRecreation": "Never",
+                            "Path": "/Tags/0/Value",
+                            "BeforeValue": "66aa5314b2a3f3f56b066e338b5f223db7bd0db2",
+                            "AfterValue": "37dcb7fff789cb207d3200a9098118d9d0aaf3e3",
+                            "AttributeChangeType": "Modify"
+                        },
+                        "Evaluation": "Static"
+                    },
+                    {
+                        "Target": {
+                            "Attribute": "Properties",
+                            "Name": "Code",
+                            "RequiresRecreation": "Never",
+                            "Path": "/Properties/Code/S3Key",
+                            "BeforeValue": "086c5bb4d88361e470fcc2fc6f2c33ce",
+                            "AfterValue": "45367a33f426f309d7f97218b5a5c1a0",
+                            "AttributeChangeType": "Modify"
+                        },
+                        "Evaluation": "Static",
+                        "ChangeSource": "DirectModification"
+                    }
+                ],
+                "BeforeContext": "{\"Properties\":{\"Role\":\"arn:aws:iam::<acct>:role/afc-dev-PolicyFunctionRole-repRa8YzZJjT\",\"MemorySize\":\"256\",\"Runtime\":\"python3.12\",\"Description\":\"Events stream consumer (matcher, policy, provider route, panel).\",\"Timeout\":\"30\",\"Handler\":\"pipeline.handler.lambda_handler\",\"Environment\":{\"Variables\":{\"LINKS_TABLE\":\"afc-dev-LinksTable-SWRCL1ZSX3AQ\",\"PLAYER_STATS_TABLE\":\"afc-dev-PlayerStatsTable-GHAHIMU9XR4W\",\"EVENTS_TABLE\":\"afc-dev-EventsTable-14XU2IPT4CQOQ\",\"YAHOO_TOKEN_PARAMETER\":\"/afc/dev/yahoo-token\",\"DEVICE_CODE_TTL_SECONDS\":\"600\",\"YAHOO_CLIENT_SECRET_PARAMETER\":\"/afc/dev/yahoo-client-secret\",\"PROFILES_TABLE\":\"afc-dev-ProfilesTable-5T8T9R257997\",\"LINEUPS_TABLE\":\"afc-dev-LineupsTable-1F4C3N1F9JTEP\",\"FEED_POLL_INTERVAL_SECONDS\":\"15\",\"PANELS_TABLE\":\"afc-dev-PanelsTable-1OMYPL571ZPS6\",\"ALERTS_TABLE\":\"afc-dev-AlertsTable-6N1HPFI0OCXJ\"}},\"Code\":{\"S3Bucket\":\"aws-sam-cli-managed-default-samclisourcebucket-kpyrjq2yreuk\",\"S3Key\":\"086c5bb4d88361e470fcc2fc6f2c33ce\"},\"Tags\":[{\"Value\":\"SAM\",\"Key\":\"lambda:createdBy\"}],\"Architectures\":[\"x86_64\"]},\"Metadata\":{\"SamResourceId\":\"PolicyFunction\"}}",
+                "AfterContext": "{\"Properties\":{\"Role\":\"arn:aws:iam::<acct>:role/afc-dev-PolicyFunctionRole-repRa8YzZJjT\",\"MemorySize\":\"256\",\"Runtime\":\"python3.12\",\"Description\":\"Events stream consumer (matcher, policy, provider route, panel).\",\"Timeout\":\"30\",\"Handler\":\"pipeline.handler.lambda_handler\",\"Environment\":{\"Variables\":{\"LINKS_TABLE\":\"afc-dev-LinksTable-SWRCL1ZSX3AQ\",\"PLAYER_STATS_TABLE\":\"afc-dev-PlayerStatsTable-GHAHIMU9XR4W\",\"EVENTS_TABLE\":\"afc-dev-EventsTable-14XU2IPT4CQOQ\",\"YAHOO_TOKEN_PARAMETER\":\"/afc/dev/yahoo-token\",\"DEVICE_CODE_TTL_SECONDS\":\"600\",\"YAHOO_CLIENT_SECRET_PARAMETER\":\"/afc/dev/yahoo-client-secret\",\"PROFILES_TABLE\":\"afc-dev-ProfilesTable-5T8T9R257997\",\"LINEUPS_TABLE\":\"afc-dev-LineupsTable-1F4C3N1F9JTEP\",\"FEED_POLL_INTERVAL_SECONDS\":\"15\",\"PANELS_TABLE\":\"afc-dev-PanelsTable-1OMYPL571ZPS6\",\"ALERTS_TABLE\":\"afc-dev-AlertsTable-6N1HPFI0OCXJ\"}},\"Code\":{\"S3Bucket\":\"aws-sam-cli-managed-default-samclisourcebucket-kpyrjq2yreuk\",\"S3Key\":\"45367a33f426f309d7f97218b5a5c1a0\"},\"Tags\":[{\"Value\":\"SAM\",\"Key\":\"lambda:createdBy\"}],\"Architectures\":[\"x86_64\"]},\"Metadata\":{\"SamResourceId\":\"PolicyFunction\"}}"
+            }
+        },
+        {
+            "Type": "Resource",
+            "ResourceChange": {
+                "Action": "Modify",
+                "LogicalResourceId": "PolicyLogGroup",
+                "PhysicalResourceId": "/aws/lambda/afc-dev-PolicyFunction-LEaQlcs3Eq0A",
+                "ResourceType": "AWS::Logs::LogGroup",
+                "Replacement": "False",
+                "Scope": [
+                    "Tags"
+                ],
+                "Details": [
+                    {
+                        "Target": {
+                            "Attribute": "Tags",
+                            "RequiresRecreation": "Never",
+                            "Path": "/Tags/0/Value",
+                            "BeforeValue": "66aa5314b2a3f3f56b066e338b5f223db7bd0db2",
+                            "AfterValue": "37dcb7fff789cb207d3200a9098118d9d0aaf3e3",
+                            "AttributeChangeType": "Modify"
+                        },
+                        "Evaluation": "Static"
+                    }
+                ],
+                "BeforeContext": "{\"Properties\":{\"RetentionInDays\":\"7\",\"LogGroupName\":\"/aws/lambda/afc-dev-PolicyFunction-LEaQlcs3Eq0A\"},\"Metadata\":{\"SamResourceId\":\"PolicyLogGroup\"}}",
+                "AfterContext": "{\"Properties\":{\"RetentionInDays\":\"7\",\"LogGroupName\":\"/aws/lambda/afc-dev-PolicyFunction-LEaQlcs3Eq0A\"},\"Metadata\":{\"SamResourceId\":\"PolicyLogGroup\"}}"
+            }
+        },
+        {
+            "Type": "Resource",
+            "ResourceChange": {
+                "Action": "Modify",
+                "LogicalResourceId": "ProfilesTable",
+                "PhysicalResourceId": "afc-dev-ProfilesTable-5T8T9R257997",
+                "ResourceType": "AWS::DynamoDB::Table",
+                "Replacement": "False",
+                "Scope": [
+                    "Tags"
+                ],
+                "Details": [
+                    {
+                        "Target": {
+                            "Attribute": "Tags",
+                            "RequiresRecreation": "Never",
+                            "Path": "/Tags/0/Value",
+                            "BeforeValue": "66aa5314b2a3f3f56b066e338b5f223db7bd0db2",
+                            "AfterValue": "37dcb7fff789cb207d3200a9098118d9d0aaf3e3",
+                            "AttributeChangeType": "Modify"
+                        },
+                        "Evaluation": "Static"
+                    }
+                ],
+                "BeforeContext": "{\"Properties\":{\"BillingMode\":\"PAY_PER_REQUEST\",\"AttributeDefinitions\":[{\"AttributeType\":\"S\",\"AttributeName\":\"profileId\"}],\"KeySchema\":[{\"KeyType\":\"HASH\",\"AttributeName\":\"profileId\"}]},\"Metadata\":{\"SamResourceId\":\"ProfilesTable\"}}",
+                "AfterContext": "{\"Properties\":{\"BillingMode\":\"PAY_PER_REQUEST\",\"AttributeDefinitions\":[{\"AttributeType\":\"S\",\"AttributeName\":\"profileId\"}],\"KeySchema\":[{\"KeyType\":\"HASH\",\"AttributeName\":\"profileId\"}]},\"Metadata\":{\"SamResourceId\":\"ProfilesTable\"}}"
+            }
+        }
+    ]
+}

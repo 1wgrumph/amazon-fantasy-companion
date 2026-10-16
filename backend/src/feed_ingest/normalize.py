@@ -35,6 +35,35 @@ def _athletes(payload):
             for entry in stat.get("athletes", [])}
 
 
+MAX_MATCHUP_LENGTH = 80  # the TV alert context bound
+
+
+def _matchup(payload):
+    """Sourced "AWY at HOM" label from header competitors, or None; never fabricated."""
+    try:
+        competitors = payload["header"]["competitions"][0]["competitors"]
+    except (KeyError, IndexError, TypeError):
+        return None
+    if not isinstance(competitors, list):
+        return None
+    sides = {}
+    for competitor in competitors:
+        if not isinstance(competitor, dict):
+            return None
+        team = competitor.get("team") or {}
+        abbreviation = team.get("abbreviation") if isinstance(team, dict) else None
+        side = competitor.get("homeAway")
+        if (side not in ("away", "home") or side in sides
+                or not isinstance(abbreviation, str)
+                or not re.fullmatch(r"[A-Z0-9]{1,8}", abbreviation)):
+            return None
+        sides[side] = abbreviation
+    if set(sides) != {"away", "home"}:
+        return None
+    label = f"{sides['away']} at {sides['home']}"
+    return label if len(label) <= MAX_MATCHUP_LENGTH else None
+
+
 def _offense(play):
     return next((team["id"] for team in play.get("teamParticipants", [])
                  if team.get("type") == "offense"), None)
@@ -60,6 +89,7 @@ def normalize_summary(payload, game_id, source="live", prior=None):
         raise ValueError(f"Feed events must be labeled live or replay, not {source!r}")
     prior = prior or {}
     known = _athletes(payload)
+    matchup = _matchup(payload)
     events = []
     for play in _plays(payload):
         facts = _facts(play, known, source)
@@ -71,8 +101,11 @@ def normalize_summary(payload, game_id, source="live", prior=None):
             revision = correction_of + 1
         else:
             continue
-        events.append({"gameId": game_id, "eventId": play["id"], "revision": revision,
-                       "correctionOf": correction_of, **facts})
+        event = {"gameId": game_id, "eventId": play["id"], "revision": revision,
+                 "correctionOf": correction_of, **facts}
+        if matchup is not None:
+            event["matchup"] = matchup
+        events.append(event)
     return events
 
 

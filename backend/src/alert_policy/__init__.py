@@ -9,6 +9,7 @@ Commentary is a fixed template per excitement level, filled only from the
 event, and names no player or team, so it cannot claim on-field position.
 """
 
+import hashlib
 import json
 import re
 from datetime import datetime, timedelta, timezone
@@ -19,6 +20,9 @@ _TYPES = ("RedZone", "PlayerScore", "CloseGame")
 _RED_ZONE_YARDS = 20
 _CLOSE_MARGIN = 8
 _PENDING_BUDGET = 60000  # serialized bytes; the API envelope limit is 65536
+MAX_CURSOR_LENGTH = 256  # the TV accepts no longer page cursor (G4-04)
+_CURSOR_RESERVE = 16  # room for a "~r<revision>" progress suffix
+_MAX_MATCHUP_LENGTH = 80  # the TV alert context bound
 
 # ESPN teamParticipant ids are numeric; starters carry abbreviations. Both
 # sides canonicalize to the ESPN abbreviation at this boundary (R01).
@@ -191,9 +195,12 @@ def _alert(profile_id, match, game_event, settings, starters, enabled, score, re
                "source": game_event.get("source"), "score": dict(score),
                "starters": starters, "alertTypes": enabled,
                "basis": "observed-playback" if observed else "profile-assumption"}
+    matchup = game_event.get("matchup")
+    if isinstance(matchup, str) and matchup.strip() and len(matchup) <= _MAX_MATCHUP_LENGTH:
+        context["matchup"] = matchup
     return {
         "profileId": profile_id,
-        "cursor": match.get("cursor") or f"{emitted_at}#{game_event.get('eventId')}",
+        "cursor": match.get("cursor") or _new_cursor(emitted_at, game_event.get("eventId")),
         "eventId": game_event.get("eventId"),
         "revision": _int(game_event.get("revision"), _int(match.get("revision"), 1)),
         "alertType": enabled[0], "triggerContext": context,
@@ -201,10 +208,52 @@ def _alert(profile_id, match, game_event, settings, starters, enabled, score, re
         "emittedAt": emitted_at}
 
 
+def _new_cursor(emitted_at, event_id):
+    """Stored cursor for a new alert, compact enough for its progress token.
+
+    The readable ``emittedAt#eventId`` form is kept while it leaves room for a
+    revision suffix; a longer eventId is replaced by a deterministic digest
+    (the original stays in eventId/triggerContext).
+    """
+    readable = f"{emitted_at}#{event_id}"
+    if len(readable) <= MAX_CURSOR_LENGTH - _CURSOR_RESERVE:
+        return readable
+    digest = hashlib.sha256(str(event_id).encode()).hexdigest()[:32]
+    return f"{emitted_at}#h{digest}"
+
+
+def _digest(cursor):
+    return "~h" + hashlib.sha256(str(cursor).encode()).hexdigest()[:32]
+
+
+def _token(cursor, revision):
+    """Progress token for a stored cursor at a consumed revision, <= 256 chars.
+
+    shortcut: a legacy stored cursor too long for the wire is named by a
+    128-bit digest token ("~h<hex>") resolved against the profile's own
+    alerts on resume; upgrade to a stored alias if profiles ever hold so
+    many alerts that the scan matters, or digest collisions become plausible.
+    """
+    readable = f"{cursor}~r{revision}" if revision > 1 else cursor
+    if len(readable) <= MAX_CURSOR_LENGTH:
+        return readable
+    digest = _digest(cursor)
+    return f"{digest}~r{revision}" if revision > 1 else digest
+
+
+def _resolve_token(profile_id, base):
+    """Stored cursor named by a "~h" digest token, or the token itself if plain."""
+    if not re.fullmatch(r"~h[0-9a-f]{32}", base or ""):
+        return base
+    for alert in _all_alerts(profile_id):
+        if _digest(alert["cursor"]) == base:
+            return alert["cursor"]
+    return None  # row gone: resume from the start rather than lose later alerts
+
+
 def _progress(alert):
     """Delivery-progress token for an alert: cursor, plus its revision when > 1 (R03)."""
-    revision = _int(alert.get("revision"), 1)
-    return f"{alert['cursor']}~r{revision}" if revision > 1 else alert["cursor"]
+    return _token(alert["cursor"], _int(alert.get("revision"), 1))
 
 
 def pending(profile_id, cursor):
@@ -217,10 +266,13 @@ def pending(profile_id, cursor):
     API envelope and resume from the last served alert (R04).
     """
     now = datetime.now(timezone.utc)
-    served, current, size = [], cursor or "", 64
+    served, size = [], 64
     token = re.match(r"^(.*)~r(\d+)$", cursor or "")
     base, consumed = (token.group(1), int(token.group(2))) if token else (cursor, 1)
-    base = base or None  # an empty cursor is the start, never a Dynamo key
+    # A held/empty page echoes the caller's progress in bounded token form, so
+    # a legacy long cursor can never bounce back as a rejected page.
+    current = _token(base, consumed) if base else ""
+    base = _resolve_token(profile_id, base) if base else None
     after, include = base, base is not None
     while True:
         page = store.list_alerts(profile_id, after, 100, include_after=include)
