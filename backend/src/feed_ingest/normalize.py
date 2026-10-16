@@ -1,6 +1,8 @@
 """ESPN summary plays to GameEvents in the store.put_event shape (AFC-PR-012)."""
 
 from decimal import Decimal, InvalidOperation
+import logging
+import re
 
 # ESPN boxscore (category, key) -> CONTRACT-AFC-P2-PRESETS stat name. The
 # defensive "interceptions" category is deliberately absent: only a passer's
@@ -74,6 +76,27 @@ def normalize_summary(payload, game_id, source="live", prior=None):
     return events
 
 
+def _bounds():
+    return {
+        "MAX_ATHLETE_ID_LENGTH": 20,
+        "MAX_BOXSCORE_ATHLETES": 200,
+        "MAX_ATHLETE_STATS": 64,
+        "MAX_STAT_VALUE_LENGTH": 16,
+    }
+
+
+def __getattr__(name):
+    bounds = _bounds()
+    if name in bounds:
+        return bounds[name]
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
+
+
+def _valid_athlete_id(athlete_id):
+    return (isinstance(athlete_id, str)
+            and bool(re.fullmatch(rf"[0-9]{{1,{_bounds()['MAX_ATHLETE_ID_LENGTH']}}}", athlete_id)))
+
+
 def boxscore_statistics(payload, game_id, source="live"):
     """Per-athlete preset statistics from a validated summary's boxscore.
 
@@ -85,44 +108,79 @@ def boxscore_statistics(payload, game_id, source="live"):
         raise ValueError(f"Feed events must be labeled live or replay, not {source!r}")
     try:
         status = payload["header"]["competitions"][0]["status"]["type"]
+        plays = _plays(payload)
     except (KeyError, IndexError, TypeError):
         return []
     state = status.get("state") if isinstance(status, dict) else None
     if state not in ("pre", "in", "post"):
         return []
     detail = status.get("shortDetail") or status.get("detail")
-    clocks = [play.get("wallclock") for play in _plays(payload)]
-    clocks = [clock for clock in clocks if isinstance(clock, str)]
-    by_athlete = {}
-    for team in payload.get("boxscore", {}).get("players", []) or []:
+    clocks = [play.get("wallclock") for play in plays if isinstance(play, dict)]
+    clocks = [clock for clock in clocks if isinstance(clock, str) and clock]
+    bounds = _bounds()
+    max_athletes = bounds["MAX_BOXSCORE_ATHLETES"]
+    max_stats = bounds["MAX_ATHLETE_STATS"]
+    max_value_len = bounds["MAX_STAT_VALUE_LENGTH"]
+    logger = logging.getLogger(__name__)
+    boxscore = payload.get("boxscore")
+    players = boxscore.get("players") if isinstance(boxscore, dict) else None
+    by_athlete, stat_counts = {}, {}
+    for team in players if isinstance(players, list) else []:
         if not isinstance(team, dict):
             continue
-        for category in team.get("statistics", []) or []:
+        categories = team.get("statistics")
+        for category in categories if isinstance(categories, list) else []:
             if not isinstance(category, dict):
                 continue
             name, keys = category.get("name"), category.get("keys")
             if not isinstance(name, str) or not isinstance(keys, list):
                 continue
-            for entry in category.get("athletes", []) or []:
+            entries = category.get("athletes")
+            for entry in entries if isinstance(entries, list) else []:
                 if not isinstance(entry, dict) or not isinstance(entry.get("stats"), list):
                     continue
-                athlete_id = (entry.get("athlete") or {}).get("id")
-                if not isinstance(athlete_id, str):
+                athlete = entry.get("athlete")
+                athlete_id = athlete.get("id") if isinstance(athlete, dict) else None
+                if not _valid_athlete_id(athlete_id):
+                    logger.warning("Skipping boxscore athlete with invalid athleteId: %r", athlete_id)
                     continue
-                stats = by_athlete.setdefault(athlete_id, {})
-                for key, value in zip(keys, entry["stats"]):
+                if athlete_id not in by_athlete:
+                    if len(by_athlete) >= max_athletes:
+                        logger.warning("Dropping excess boxscore athlete %s beyond %d",
+                                       athlete_id, max_athletes)
+                        continue
+                    by_athlete[athlete_id] = {}
+                    stat_counts[athlete_id] = 0
+                stats = by_athlete[athlete_id]
+                raw_stats = entry["stats"]
+                remaining = max_stats - stat_counts[athlete_id]
+                if len(keys) > remaining or len(raw_stats) > remaining:
+                    logger.warning("Dropping excess boxscore stats for athlete %s beyond %d",
+                                   athlete_id, max_stats)
+                pairs = list(zip(keys[:remaining], raw_stats[:remaining]))
+                stat_counts[athlete_id] += len(pairs)
+                for key, value in pairs:
                     if not isinstance(key, str):
                         continue
                     mapped = _BOX.get((name, key))
                     if mapped is None:
                         continue
+                    if isinstance(value, bool) or not isinstance(value, (str, int, float, Decimal)):
+                        continue
+                    if isinstance(value, int) and abs(value) > 99999:
+                        continue
+                    text = value if isinstance(value, str) else str(value)
+                    if len(text) > max_value_len:
+                        logger.warning("Skipping oversize boxscore stat for %s.%s (len=%d)",
+                                       name, key, len(text))
+                        continue
                     try:
-                        number = Decimal(str(value))
+                        number = Decimal(text)
                     except (InvalidOperation, ArithmeticError, ValueError):
                         continue
-                    # Untrusted body: DynamoDB rejects non-finite Decimals, and
-                    # no real boxscore stat needs more than five digits.
-                    if number.is_finite() and abs(number) <= 99999:
+                    # Untrusted body: DynamoDB rejects non-finite or subnormal Decimals,
+                    # and no real boxscore stat needs more than five integer or four fractional digits.
+                    if number.is_finite() and abs(number) <= 99999 and number.as_tuple().exponent >= -4:
                         stats[mapped] = number
     return [{"athleteId": athlete_id, "gameId": game_id, "gameState": state,
              "gameStatus": detail if isinstance(detail, str) else None,

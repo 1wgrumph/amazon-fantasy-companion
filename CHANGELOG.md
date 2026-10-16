@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+- Bound ESPN boxscore statistics ingest against denial-of-service inputs: validate numeric `athleteId` keys (`1..20` ASCII digits) before any DynamoDB write, cap boxscore athletes per payload (`MAX_BOXSCORE_ATHLETES = 200`) and stats per athlete (`MAX_ATHLETE_STATS = 64`) with deterministic truncation, reject oversize (`MAX_STAT_VALUE_LENGTH = 16`) and subnormal stat strings before `Decimal` conversion, and isolate single-record `PlayerStats` write failures so valid records, `GameEvent`s, and alerts keep ingesting (PR #TBD).
 - Remove unused Yahoo SSM read access from the public API function and warn
   users to confirm only a code on their own TV; preserve code-only linking,
   short code expiry and one-time confirmation ([#68](https://github.com/1wgrumph/amazon-fantasy-companion/pull/68)).

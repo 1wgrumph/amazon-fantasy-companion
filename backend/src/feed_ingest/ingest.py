@@ -1,5 +1,9 @@
 """Validate, normalize and store ESPN polls and labeled replay (DES-AFC-P2-FEED)."""
 
+import logging
+
+from botocore.exceptions import BotoCoreError, ClientError
+
 import store
 from feed_ingest.normalize import boxscore_statistics, normalize_summary
 from feed_ingest.validation import validate_summary
@@ -25,7 +29,10 @@ def store_events(events):
 def store_player_statistics(records):
     """Overwrite each athlete's stored boxscore with the latest summary's."""
     for record in records:
-        store.put_player_statistics(record)
+        try:
+            store.put_player_statistics(record)
+        except (ClientError, BotoCoreError, ValueError, ArithmeticError, TypeError, KeyError) as exc:
+            logging.getLogger(__name__).warning("Skipping failed player statistics write: %s", exc)
 
 
 def ingest_summary(payload, game_id, source="live"):
