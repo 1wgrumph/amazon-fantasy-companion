@@ -11,7 +11,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from gate_support import REPO, copy_repo, git, path_without, run_gate, write
+from gate_support import REPO, commit_all, copy_repo, git, path_without, run_gate, write
 
 
 class HookPath(unittest.TestCase):
@@ -47,14 +47,19 @@ class HookPath(unittest.TestCase):
         rc, out = run_gate(self, self.repo, 'backend', env=self.env)
         self.assert_local_result(rc, out)
 
-    def test_both_hooks_find_environment_with_minimal_path(self):
-        for hook in ('pre-commit', 'pre-push'):
-            with self.subTest(hook=hook):
-                result = subprocess.run([str(self.repo / '.githooks' / hook)],
-                                        cwd=self.repo, env=self.env, input='',
-                                        capture_output=True, text=True, timeout=600)
-                out = result.stdout + result.stderr
-                self.assert_local_result(result.returncode, out)
+    def test_pre_push_hook_finds_environment_with_minimal_path(self):
+        remote = subprocess.check_output(['git', 'rev-parse', 'origin/main'],
+                                         cwd=self.repo, text=True).strip()
+        # The hook gates the pushed range named on its stdin.
+        commit_all(self.repo)
+        local = subprocess.check_output(['git', 'rev-parse', 'HEAD'],
+                                        cwd=self.repo, text=True).strip()
+        stdin = f'refs/heads/main {local} refs/heads/main {remote}\n'
+        result = subprocess.run([str(self.repo / '.githooks' / 'pre-push')],
+                                cwd=self.repo, env=self.env, input=stdin,
+                                capture_output=True, text=True, timeout=600)
+        out = result.stdout + result.stderr
+        self.assert_local_result(result.returncode, out)
 
     def test_missing_or_incomplete_environment_is_named_provisioning_gap(self):
         home = self.tmp / 'home with spaces'

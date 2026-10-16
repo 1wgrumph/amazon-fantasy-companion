@@ -1,0 +1,33 @@
+P2-X01 part A - host Android build toolchain pins (recorded 2026-10-14)
+Install root: $HOME/.local/share/afc-tools (user scope; no sudo, no system packages)
+Downloads: $HOME/.local/share/afc-tools/downloads/p2-x01 (kept out of the repository)
+
+| Tool | Version | Source URL | Official check | sha256 | Location |
+|---|---|---|---|---|---|
+| Temurin JDK | 17.0.20.1+1 | https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.20.1%2B1/OpenJDK17U-jdk_x64_linux_hotspot_17.0.20.1_1.tar.gz | sha256 from api.adoptium.net + GPG signature (Adoptium key 3B04D753C9050D9A5D343F39843C48A565F8F04B, gpgv Good signature) | 3808d1d15e3ec6bd5b84057fb5d84c33d8a1536a258146bcea2e603fc726e08e | $HOME/.local/share/afc-tools/jdk-17.0.20.1+1 |
+| Android cmdline-tools | 19.0 (build 13114758) | https://dl.google.com/android/repository/commandlinetools-linux-13114758_latest.zip | sha1 5fdcc763663eefb86a5b8879697aa6088b041e70 from dl.google.com/android/repository/repository2-3.xml | 7ec965280a073311c339e571cd5de778b9975026cfcbe79f2b1cdcb1e15317ee | $HOME/.local/share/afc-tools/android-sdk/cmdline-tools/latest |
+| Android platform-tools (adb) | 37.0.1 | https://dl.google.com/android/repository/platform-tools_r37.0.1-linux.zip | sha1 477254aa5f903c15cf51001717bdf347fb6b53e0 (repository2-3.xml) | d230f13842f60f782a8645f9c813f8f845bf36089ea7289f28c48f17979313f1 | $HOME/.local/share/afc-tools/android-sdk/platform-tools |
+| Android platform | platforms;android-34 rev 3 (ext7) | https://dl.google.com/android/repository/platform-34-ext7_r03.zip | sha1 1f2e9478d6a7601425ceaa553311dc43191f103d (repository2-3.xml) | 16fdb74c55e59ae3ef52def135aec713508467bd56d7dabcd8c9be31fa8b20f3 | $HOME/.local/share/afc-tools/android-sdk/platforms/android-34 |
+| Android build-tools (apksigner) | 34.0.0 | https://dl.google.com/android/repository/build-tools_r34-linux.zip | sha1 d6d58e0c6925a9e4d9a541e84cd1f405c2f9d2a9 (repository2-3.xml) | e858c4b60069d0431051b225d384413b1643e1289b00a4825aed347f25bd510f | $HOME/.local/share/afc-tools/android-sdk/build-tools/34.0.0 |
+| apkanalyzer | ships in cmdline-tools 19.0 | (see cmdline-tools) | (see cmdline-tools) | (see cmdline-tools) | android-sdk/cmdline-tools/latest/bin/apkanalyzer |
+| Gradle distribution | 8.2 (bin) | https://services.gradle.org/distributions/gradle-8.2-bin.zip | services.gradle.org/distributions/gradle-8.2-bin.zip.sha256; enforced by distributionSha256Sum in starter/gradle/wrapper/gradle-wrapper.properties | 38f66cd6eef217b4c35855bb11ea4e9fbc53594ccccb5fb82dfd317ef8c2c5a3 | $HOME/.gradle/wrapper/dists/gradle-8.2-bin |
+| Gradle wrapper jar (starter) | jar from Gradle 6.9.4 | starter commit 50108f4f, gradle/wrapper/gradle-wrapper.jar | matches services.gradle.org/distributions/gradle-6.9.4-wrapper.jar.sha256 (searched 171 release checksums) | e996d452d2645e70c01c11143ca2d3742734a28da2bf61f25c82bdc288c9e637 | spikes/sp1-device/starter/gradle/wrapper/ |
+| Starter | AmazonAppDev/hello-world-fire-tv @ 50108f4fc4a9dc054be86d851286355df027524a (main HEAD, 2024-10-10, "Fix README"; MIT-0) | https://github.com/AmazonAppDev/hello-world-fire-tv | git rev-parse HEAD after checkout = pinned SHA; tree exported with git archive | (git object id) | spikes/sp1-device/starter |
+
+Starter build pins (from its build files, unchanged): AGP com.android.application 8.2.2; Kotlin
+org.jetbrains.kotlin.android 1.9.0; Compose compiler 1.5.1; compileSdk 34; targetSdk 34; minSdk 21;
+compose-bom 2023.08.00; tv-foundation 1.0.0-alpha11; tv-material 1.0.0. Starter edits: the added
+distributionSha256Sum line plus gate-required whitespace/link fixes (starter-local-changes.txt). minSdk 25 (AFC-PR-053) is applied in tv-app/ by P2-A01, not here.
+
+Not used: system JDK /usr/lib/jvm/java-21-openjdk-amd64 (OpenJDK 21.0.12.1) - not 17, left untouched.
+Rejected: cmdline-tools 23.0 (commandlinetools-linux-16111833_latest.zip, sha256
+0877a1d048fe4a24efe2eff536ca4223f7adeb58648bb81909d33c446918cfa8). Hash and ClamAV were clean, but its
+sdkmanager is a shim that runs bin/android, a native launcher whose strings reference
+https://dl.google.com/android/cli/latest//android-cli (runtime download of an unscanned binary). It was
+installed but never executed, then removed; 19.0 (Java sdkmanager, no launcher download) used instead.
+
+Environment used for every command:
+  JAVA_HOME=$HOME/.local/share/afc-tools/jdk-17.0.20.1+1
+  ANDROID_HOME=$HOME/.local/share/afc-tools/android-sdk
+  ANDROID_USER_HOME=$HOME/.local/share/afc-tools/android-user   (debug keystore lives here)
+  PATH=$JAVA_HOME/bin:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/build-tools/34.0.0:$ANDROID_HOME/platform-tools:$PATH
