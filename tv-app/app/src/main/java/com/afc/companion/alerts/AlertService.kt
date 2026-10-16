@@ -3,13 +3,16 @@ package com.afc.companion.alerts
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ServiceInfo
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.core.app.ServiceCompat
+import androidx.core.content.ContextCompat
 import com.afc.companion.BuildConfig
+import com.afc.companion.MonitorControl
 import com.afc.companion.net.Alert
 import com.afc.companion.net.ApiClient
 import com.afc.companion.net.SessionStore
@@ -23,6 +26,9 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 /**
@@ -44,6 +50,7 @@ class AlertService : Service() {
         if (intent?.action == ACTION_DISMISS) {
             (intent.getStringExtra(AlertNotifier.EXTRA_ALERT_ID))?.let { id ->
                 feed?.dismiss(id)
+                AlertInbox.publish()
                 AlertNotifier(this).cancel(id)
             }
             if (polling?.isActive != true) stopSelf(startId)
@@ -56,6 +63,7 @@ class AlertService : Service() {
         if (polling?.isActive == true) return START_STICKY
         startForeground()
         val activeFeed = AlertFeed(client).also { feed = it }
+        AlertInbox.attach(activeFeed)
         val activeProfiles = ProfileStore(client).also { profiles = it }
         val notifier = AlertNotifier(this)
         val gate = PresentationGate()
@@ -63,6 +71,7 @@ class AlertService : Service() {
             while (isActive) {
                 val startedAt = System.currentTimeMillis()
                 val delivered = activeFeed.poll()
+                if (delivered.isNotEmpty()) AlertInbox.publish()
                 if (delivered.isNotEmpty() || gate.hasPending()) {
                     gate.drain(delivered, activeProfiles.load()).forEach(notifier::show)
                 }
@@ -76,6 +85,7 @@ class AlertService : Service() {
 
     override fun onDestroy() {
         scope.cancel()
+        AlertInbox.attach(null)
         super.onDestroy()
     }
 
@@ -111,6 +121,43 @@ class AlertService : Service() {
         private const val STATUS_NOTIFICATION_ID = 1
         private const val FAST_FAILURE_MS = 1_000L
         private const val ERROR_BACKOFF_MS = 5_000L
+    }
+}
+
+/** Starts and stops [AlertService] from the shell (DES-AFC-P2-TV). */
+class AlertServiceControl(private val context: Context) : MonitorControl {
+    override fun start() = ContextCompat.startForegroundService(context, Intent(context, AlertService::class.java))
+    override fun stop() {
+        context.stopService(Intent(context, AlertService::class.java))
+    }
+}
+
+/**
+ * In-process hand-off from [AlertService] to the panel. P2-X02 FAILS (Fire OS 8.1 never shows a heads-up
+ * notification), so the panel is the only customer-reachable alert surface: it shows every retained
+ * alert whatever the presentation setting, and its Dismiss acknowledges locally like the notification's.
+ */
+object AlertInbox {
+    private val state = MutableStateFlow<List<Alert>>(emptyList())
+    @Volatile private var feed: AlertFeed? = null
+
+    val alerts: StateFlow<List<Alert>> = state.asStateFlow()
+
+    /** Null when monitoring stops: the panel then shows no alerts. */
+    fun attach(feed: AlertFeed?) {
+        this.feed = feed
+        publish()
+    }
+
+    fun publish() {
+        state.value = feed?.queue.orEmpty()
+    }
+
+    fun find(id: String?): Alert? = alerts.value.firstOrNull { it.envelope.id == id }
+
+    fun dismiss(id: String) {
+        feed?.dismiss(id)
+        publish()
     }
 }
 

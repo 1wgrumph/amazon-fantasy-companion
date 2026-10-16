@@ -11,21 +11,25 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.Button
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
+import com.afc.companion.alerts.AlertServiceControl
 import com.afc.companion.link.LinkView
 import com.afc.companion.net.ApiClient
 import com.afc.companion.net.SessionStore
 import com.afc.companion.panel.LineupPanel
 import com.afc.companion.panel.panelModeFor
 import com.afc.companion.profile.ProfileSettingsScreen
+import com.afc.companion.profile.ProfileStore
 import com.afc.companion.ui.theme.AfcTheme
 
 /** SHELL: single activity hosting Link, Profile/Settings and Panel. Only P2-A05 edits this file after P2-A01. */
@@ -56,6 +60,12 @@ private fun NotConfigured() {
 @Composable
 private fun AppShell(shell: Shell, client: ApiClient, sessions: SessionStore) {
     var destination by remember { mutableStateOf(shell.start(sessions.token() != null)) }
+    val monitor = AlertServiceControl(LocalContext.current)
+    // Every navigation re-reads the enablement, so leaving Profile/Settings applies a changed alert-type choice.
+    LaunchedEffect(destination) {
+        val hasSession = sessions.token() != null
+        shell.syncMonitoring(hasSession, if (hasSession) ProfileStore(client).load() else null, monitor)
+    }
     Row(Modifier.fillMaxSize()) {
         Column(Modifier.padding(32.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
             Destination.entries.forEach { target ->
@@ -69,8 +79,8 @@ private fun AppShell(shell: Shell, client: ApiClient, sessions: SessionStore) {
                     destination = Destination.ProfileSettings
                 })
                 Destination.ProfileSettings -> ProfileSettingsScreen(client)
-                // X04_VERDICT_PENDING: no P2-X04 verdict exists in this build, so
-                // panelModeFor(null) hosts the panel fullScreen with no stand-in video.
+                // P2-X04 FAILS (spikes/sp4-panel-video/VERDICT.md): no modeB route on Fire OS 8.1,
+                // so the panel is fullScreen with no stand-in video.
                 Destination.Panel -> LineupPanel(client, panelModeFor(null))
             }
         }
