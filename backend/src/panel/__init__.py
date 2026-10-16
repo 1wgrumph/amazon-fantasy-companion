@@ -15,9 +15,8 @@ merge on a lost race, so overlapping games never erase each other.
 
 Seams, read at call time through this module: player_statistics(athlete_id)
 -> None (unknown) or {gameId, gameState pre|in|post, gameStatus, source
-live|replay, asOf, stats}; now() -> RFC 3339 UTC. Stored GameEvents carry no
-per-player statistics yet, so production statistics are unknown until a
-stats slice lands (P2-B07T R1).
+live|replay, asOf, stats}; now() -> RFC 3339 UTC. Production statistics are
+the per-athlete boxscore records feed_ingest stores at ingest.
 """
 
 import hashlib
@@ -39,9 +38,11 @@ def now():
 
 
 def player_statistics(athlete_id):
-    # shortcut: no per-player statistics are stored yet (P2-B07T R1); every
-    # production point reads unknown until a feed slice stores boxscores.
-    return None
+    record = store.get_player_statistics(str(athlete_id))
+    if record is None:
+        return None
+    return {key: record.get(key)
+            for key in ("gameId", "gameState", "gameStatus", "source", "asOf", "stats")}
 
 
 def _parse(stamp):

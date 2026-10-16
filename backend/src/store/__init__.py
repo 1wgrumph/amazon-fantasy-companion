@@ -204,3 +204,16 @@ def put_panel_conditional(panel, expected_counter):
 def get_panel(profile_id, team_league):
     return _table("PANELS_TABLE").get_item(
         Key={"profileId": profile_id, "teamLeague": team_league}).get("Item")
+
+
+# Player statistics: latest stored boxscore per ESPN athlete (panel seam).
+# shortcut: one record per athlete, so the latest ingested game wins across
+# games too; add a gameId range key when the panel needs per-game history.
+def put_player_statistics(record):
+    _table("PLAYER_STATS_TABLE").put_item(Item=_shaped(record, {
+        "athleteId", "gameId", "gameState", "gameStatus", "source", "asOf", "stats"}))
+
+
+def get_player_statistics(athlete_id):
+    return _table("PLAYER_STATS_TABLE").get_item(
+        Key={"athleteId": athlete_id}).get("Item")

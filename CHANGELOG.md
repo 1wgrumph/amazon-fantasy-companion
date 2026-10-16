@@ -83,6 +83,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Store per-player ESPN boxscore statistics at ingest and read them through the panel's statistics seam, so the deployed panel shows real fantasy points instead of "statistics unavailable" for every starter (PR TBD).
 - Grant the policy function table-scoped Lineups Scan access used by the matcher
   and the API function Profiles UpdateItem access for provider routing outcomes
   and installed-app reports, with source-to-template IAM contracts to catch
