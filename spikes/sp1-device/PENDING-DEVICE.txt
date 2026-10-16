@@ -1,0 +1,36 @@
+COMPLETED 2026-10-16: part B is done. Verdict: spikes/sp1-device/VERDICT.md (WORKS);
+device evidence: spikes/sp1-device/device-log.txt. Scan row 9 was owner-accepted on
+2026-10-16 (scan-verdicts.txt OWNER DECISION, option (a)). The plan below is kept as
+history only; no step below is still pending.
+
+P2-X01 - remaining device steps (part B). Blocked on owner action OA-1 (Fire TV stick available on the
+LAN with ADB debugging enabled) and OA-4 (Prime Video signed in before the first install).
+Host toolchain is qualified (toolchain-pins.txt, install-log.txt, scan-verdicts.txt, build-log.txt).
+
+Environment for every step:
+  export JAVA_HOME=$HOME/.local/share/afc-tools/jdk-17.0.20.1+1
+  export ANDROID_HOME=$HOME/.local/share/afc-tools/android-sdk
+  export ANDROID_USER_HOME=$HOME/.local/share/afc-tools/android-user
+  export PATH=$ANDROID_HOME/platform-tools:$PATH
+Hold the fire-tv-stick lease for steps 1-6. Never record the device serial, account names or IP in
+committed files.
+
+1. CMD-ADB-BASELINE: `adb connect <stick-ip>:5555`, accept the RSA prompt on the TV, then
+   `adb devices` shows the stick as "device".
+2. Record model, Fire OS and API level: `adb shell getprop ro.product.model`,
+   `adb shell getprop ro.build.version.sdk`, `adb shell getprop ro.build.version.release`,
+   `adb shell getprop ro.build.version.name` (Fire OS name/version), `adb shell wm size`.
+   RISK-AFC-P2-01: Fire OS 5 or API < 25 is a class C owner stop; device slices halt.
+3. CMD-ADB-INSTALL: rebuild if needed (`./gradlew --offline assembleDebug` in spikes/sp1-device/starter),
+   then `adb install -r app/build/outputs/apk/debug/app-debug.apk`; record the output and
+   `first_install_at` as `date -u +%FT%TZ` taken at install success (starts the spike_panel_max clock).
+4. Launch: `adb shell monkey -p com.amazonappstore.helloworldtv -c android.intent.category.LAUNCHER 1`;
+   confirm on screen.
+5. CMD-ADB-SCREENCAP: `adb exec-out screencap -p > evidence/visual/sp1-device/<state>.png` for the
+   launched starter home; sanitize (no account data).
+6. Write spikes/sp1-device/VERDICT.md per CONTRACT-AFC-P2-VERDICT (spike, slice, verdict, device
+   model/Fire OS/API level, started_at, ended_at, first_install_at, unblocks, conditional) and run
+   CMD-VERDICT-CHECK. Part A deliberately did not write VERDICT.md.
+
+Open item carried from part A: scan-verdicts.txt row 9 (Gradle plugin/dependency set) is INDETERMINATE
+pending an owner decision.
