@@ -89,9 +89,7 @@ for the sweep and uninstalled after it. Full commands with exit codes:
    Outcome: **fails (blocked by platform)**.
 5. **Freeform windowing**: spike launched fresh with `--windowingMode 5`.
    Same result as route 4: `mode=fullscreen`, `multiWindow=false`
-   (`r5-freeform-windowingmode-*`). The device also does not advertise
-   `android.software.freeform_window_management` (`pm list features`, in
-   `commands.txt` session record).
+   (`r5-freeform-windowingmode-*`).
    Source: Android developer docs, "Multi-window support" (URL in route 4).
    Outcome: **fails (blocked by platform)**.
 
