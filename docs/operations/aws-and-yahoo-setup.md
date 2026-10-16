@@ -42,23 +42,49 @@ aws ssm put-parameter --profile afc-dev --type SecureString \
 
 ## Yahoo app
 
-- Created at `developer.yahoo.com/apps/create` as **Amazon Fantasy Companion**.
+- Use exactly one app: **Amazon Fantasy Companion**, created 2026-10-13
+  ("...alongside live games. Read-only."), homepage
+  `https://github.com/1wgrumph/amazon-fantasy-companion`. A duplicate app created
+  on 2026-10-16 was deleted; do not create another.
 - OAuth client type: Confidential. API permission: **Fantasy Sports - Read**.
-- Redirect URI: `https://localhost/link`. Yahoo rejects `oob` and requires an
-  `https` URI. After approval the browser lands on a page that does not load;
-  the authorization `code` is in its address bar. Add the deployed
-  `<ApiUrl>/link` later in the app settings if the backend takes over the flow.
-- The description may not contain the word "Yahoo".
+- Redirect URI: `https://localhost:8443/link`. Yahoo rejects `oob` and requires
+  `https`. Add the deployed `<ApiUrl>/link` later if the backend takes over the
+  flow.
+- The app description may not contain the word "Yahoo".
+- The Client ID is the long `dj0y...` value (96 characters); the Client Secret
+  is about 40 characters.
 
-## Consent and token (P2-X06)
+## Getting the Yahoo token (one command)
 
-1. `python3 spikes/sp6-yahoo/yahoo_oauth.py url` prints the approval URL.
-2. Open it, approve, copy `code` from the address bar.
-3. `python3 spikes/sp6-yahoo/yahoo_oauth.py exchange` and paste the code at the
-   prompt. It stores the refresh token in `/afc/dev/yahoo-token` and prints only
-   `stored`.
-4. The spike reads roster and settings; its result is
-   `spikes/sp6-yahoo/VERDICT.md`.
+Run in a normal terminal window, not through a tool runner's `!` prefix (that
+has no keyboard input and fails with `EOFError`):
+
+```
+cd <worktree with spikes/sp6-yahoo>
+python3 spikes/sp6-yahoo/yahoo_oauth.py setup
+```
+
+1. Copy the **Client ID** from the app page, paste it at the first prompt
+   (Ctrl+Shift+V; nothing is shown), Enter.
+2. Go back and copy the **Client Secret**, paste it at the second prompt, Enter.
+   Copy right before each paste; on 2026-10-16 the ID was pasted twice.
+3. It prints `saved to SSM (client id 96 chars, secret 40 chars)` and an
+   approval URL. Open it, approve, then on the certificate warning click
+   **Advanced -> Proceed to localhost**. The script catches the redirect on
+   `https://localhost:8443/link` with a throwaway self-signed certificate.
+4. It prints `stored`: the refresh token is in `/afc/dev/yahoo-token`.
+
+`capture` repeats steps 3-4 with the stored ID and secret.
+`read` uses the stored token to read leagues, roster and settings.
+
+### Errors seen and their meaning
+
+| Output | Cause | Fix |
+|---|---|---|
+| `token exchange: INVALID_CLIENT_SECRET` | wrong value in `/afc/dev/yahoo-client-secret` (a placeholder, or the Client ID pasted twice) | run `setup` again |
+| `no code given` / `EOFError` | paste did not land, or run without a terminal | use Ctrl+Shift+V in a real terminal |
+| HTTP 400 on exchange with an old code | authorization codes expire in about 10 minutes and are single use | run `capture` again |
 
 The plan intended the Yahoo read to run under the deployed backend role; the
-spike runs it locally as the `afc-dev` user (recorded in the X06 verdict).
+P2-X06 spike runs it locally as the `afc-dev` user (recorded in its verdict).
+Token stored 2026-10-16T14:18Z.
