@@ -2321,7 +2321,7 @@ PY" in $HOME/alphazede/worktrees/alphazedehq-afc-s06-spec-authoring
   "lane": "spec-and-docs",
   "status": "planned"
 }
-design.md 
+design.md
 ## Decisions
 
 ### DES-AFC-D5 — Shared spec-authoring skill (Alphazedehq)
@@ -2354,7 +2354,7 @@ design.md
   absolute paths, no assumption of a git repository except the staleness
   check, which uses `git diff --exit-code` only when the target is in a git
   work tree and otherwise compares two builds byte-for-byte. CMD-D5-AGNOSTIC
-design.md 
+design.md
   n = 1..5; the design ID DES-AFC-PHASE2 is kept).
 - Interfaces from the D5/D4 waves to the spec track and Phase 2:
   - **CONTRACT-AFC-SPECKIT**, through the vendored `tools/spec/`: D1 is
@@ -2387,7 +2387,7 @@ design.md
 
 `tools/ci/gate.sh [--changed[=<base>]] [--list] [<area>...]`. No area means
 all areas. `--changed` runs only areas whose paths changed against `<base>`
-design.md 
+design.md
 verified; otherwise a typed gap (AC-AFC-D4-04).
 
 ### CONTRACT-AFC-SPECKIT — Spec-authoring commands (shared contract, D5)
@@ -2763,15 +2763,15 @@ index a9be3c3..e8eca86 100755
  import subprocess
  import sys
  import tempfile
- 
+
  skill, destination = map(pathlib.Path, sys.argv[1:])
 +root = pathlib.Path(subprocess.check_output(
 +    ['git', '-C', str(skill), 'rev-parse', '--show-toplevel']).decode().strip())
- 
+
  def git(*args):
 -    return subprocess.check_output(['git', '-C', str(skill), *args])
 +    return subprocess.check_output(['git', '-C', str(root), *args])
- 
+
 -root = pathlib.Path(git('rev-parse', '--show-toplevel').decode().strip())
  relative = skill.relative_to(root).as_posix()
  if git('status', '--porcelain', '--untracked-files=all', '--', relative):
@@ -3514,10 +3514,10 @@ AFC S06 introduces portable Markdown assembly in Alphazedehq. The reciprocal non
 PY
 git push -u origin afc/s06-spec-authoring && gh pr create --repo alphazede/Alphazedehq --base main --head afc/s06-spec-authoring --draft --title 'feat(skills): add portable Markdown specification authoring' --body-file $HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/g4/hq-pr-body.md" in $HOME/alphazede/worktrees/alphazedehq-afc-s06-spec-authoring
  succeeded in 3430ms:
-remote: 
-remote: Create a pull request for 'afc/s06-spec-authoring' on GitHub by visiting:        
-remote:      https://github.com/alphazede/Alphazedehq/pull/new/afc/s06-spec-authoring        
-remote: 
+remote:
+remote: Create a pull request for 'afc/s06-spec-authoring' on GitHub by visiting:
+remote:      https://github.com/alphazede/Alphazedehq/pull/new/afc/s06-spec-authoring
+remote:
 To https://github.com/alphazede/Alphazedehq.git
  * [new branch]      afc/s06-spec-authoring -> afc/s06-spec-authoring
 branch 'afc/s06-spec-authoring' set up to track 'origin/afc/s06-spec-authoring'.
@@ -3546,10 +3546,10 @@ hook: PreToolUse Completed
 exec
 /bin/bash -lc "git diff --check && git push -u origin afc/s06-use-rs-nontrigger && gh pr create --repo alphazede/requirements-system --base main --head afc/s06-use-rs-nontrigger --draft --title 'docs(skill): exclude Markdown assembly from Requirements System routing' --body-file $HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S06/g4/rs-pr-body.md" in $HOME/alphazede/worktrees/requirements-system-afc-s06
  succeeded in 3183ms:
-remote: 
-remote: Create a pull request for 'afc/s06-use-rs-nontrigger' on GitHub by visiting:        
-remote:      https://github.com/alphazede/requirements-system/pull/new/afc/s06-use-rs-nontrigger        
-remote: 
+remote:
+remote: Create a pull request for 'afc/s06-use-rs-nontrigger' on GitHub by visiting:
+remote:      https://github.com/alphazede/requirements-system/pull/new/afc/s06-use-rs-nontrigger
+remote:
 To https://github.com/alphazede/requirements-system.git
  * [new branch]        afc/s06-use-rs-nontrigger -> afc/s06-use-rs-nontrigger
 branch 'afc/s06-use-rs-nontrigger' set up to track 'origin/afc/s06-use-rs-nontrigger'.
