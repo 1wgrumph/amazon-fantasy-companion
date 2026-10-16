@@ -78,8 +78,10 @@ class AlertNotifier(private val context: Context) {
 
         /** The server carries the event ID in triggerContext; the data-level key is a legacy fallback. */
         internal fun watchEventId(alert: Alert): String? =
-            (alert.envelope.data.opt("triggerContext") as? JSONObject)?.opt("eventId") as? String
-                ?: alert.envelope.data.opt("eventId") as? String
+            ((alert.envelope.data.opt("triggerContext") as? JSONObject)?.opt("eventId") as? String)?.validEventId()
+                ?: (alert.envelope.data.opt("eventId") as? String)?.validEventId()
+
+        private fun String.validEventId(): String? = takeIf { it.isNotBlank() && it.length in 1..256 }
 
         internal fun notificationTag(alertId: String): String = "alert:$alertId"
 

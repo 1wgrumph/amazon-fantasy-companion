@@ -83,4 +83,80 @@ class AlertServerContractTest {
     @Test fun watchEventIdComesFromTriggerContext() {
         assertEquals("401999001770", AlertNotifier.watchEventId(serverAlert("RedZone", "401999001770")))
     }
+
+    private fun triggerOf(alert: Alert): JSONObject = alert.envelope.data.getJSONObject("triggerContext")
+
+    // F1: the joined starter context is bounded, with the remainder counted, not spelled out.
+    @Test fun manyLongStarterNamesAreBoundedWithRemainderCount() {
+        val starters = (0 until 8).map { "Starter$it " + "a".repeat(65) }
+        val text = AlertPresenter.text(serverAlert("RedZone", "401999001770", starters = starters))
+        assertNotNull(text)
+        assertTrue("context bounded (${text!!.context.length}): '${text.context}'", text.context.length <= 80)
+        assertTrue("remainder counted: '${text.context}'", text.context.contains("more"))
+    }
+
+    // F2: an explicit null matchup is absent, not a suppression.
+    @Test fun nullMatchupIsTreatedAsAbsent() {
+        val alert = serverAlert("RedZone", "401999001770")
+        triggerOf(alert).put("matchup", JSONObject.NULL)
+        val text = AlertPresenter.text(alert)
+        assertNotNull("null matchup must not suppress the alert", text)
+        assertTrue("Sample Receiver" in text!!.context)
+    }
+
+    // F4: empty/blank trigger IDs fall back to the legacy key; the trigger key wins when both are valid.
+    @Test fun watchEventIdFallsBackToLegacyDataKey() {
+        val alert = serverAlert("RedZone", "401999001770")
+        triggerOf(alert).remove("eventId")
+        alert.envelope.data.put("eventId", "legacy-event")
+        assertEquals("legacy-event", AlertNotifier.watchEventId(alert))
+    }
+
+    @Test fun watchEventIdPrefersTriggerContextOverLegacyKey() {
+        val alert = serverAlert("RedZone", "401999001770")
+        alert.envelope.data.put("eventId", "legacy-event")
+        assertEquals("401999001770", AlertNotifier.watchEventId(alert))
+    }
+
+    @Test fun emptyOrBlankWatchEventIdFallsBackOrIsRejected() {
+        val empty = serverAlert("RedZone", ""); empty.envelope.data.put("eventId", "legacy-event")
+        assertEquals("legacy-event", AlertNotifier.watchEventId(empty))
+        val blank = serverAlert("RedZone", "   "); blank.envelope.data.put("eventId", "legacy-event")
+        assertEquals("legacy-event", AlertNotifier.watchEventId(blank))
+        assertEquals(null, AlertNotifier.watchEventId(serverAlert("RedZone", "")))
+    }
+
+    // F5: a safety claim split across two starter names still suppresses the alert.
+    @Test fun claimSplitAcrossStarterNamesIsNotRendered() {
+        val text = AlertPresenter.text(serverAlert("RedZone", "401999001770", starters = listOf("Sample Will", "Score Sample")))
+        assertEquals("split claim suppresses presentation", null, text)
+    }
+
+    // F5: one unsafe starter among several suppresses the whole alert, never just that starter.
+    @Test fun oneUnsafeStarterAmongSeveralSuppressesTheWholeAlert() {
+        val text = AlertPresenter.text(
+            serverAlert("RedZone", "401999001770", starters = listOf("Sample Receiver", "Sample Runner will score")),
+        )
+        assertEquals(null, text)
+    }
+
+    // F5: a starter that is not an object, or has no name, suppresses the alert.
+    @Test fun malformedStarterIsNotRendered() {
+        val notObject = serverAlert("RedZone", "401999001770")
+        triggerOf(notObject).put("starters", JSONArray(listOf("Sample Receiver")))
+        assertEquals(null, AlertPresenter.text(notObject))
+        val noName = serverAlert("RedZone", "401999001770")
+        triggerOf(noName).put("starters", JSONArray().put(JSONObject().put("athlete_id", "9000001")))
+        assertEquals(null, AlertPresenter.text(noName))
+    }
+
+    // F5: starters win over a legacy player field sent alongside them.
+    @Test fun startersWinOverLegacyPlayerField() {
+        val alert = serverAlert("RedZone", "401999001770", starters = listOf("Starter Name"))
+        triggerOf(alert).put("player", "Legacy Player")
+        val text = AlertPresenter.text(alert)
+        assertNotNull(text)
+        assertTrue("Starter Name" in text!!.context)
+        assertFalse("legacy player not shown: '${text.context}'", "Legacy Player" in text.context)
+    }
 }

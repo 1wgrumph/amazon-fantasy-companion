@@ -122,11 +122,8 @@ object PanelText {
     fun value(value: PanelValue, nowMs: Long): String {
         val number = value.value ?: return "Unavailable"
         val text = number.toString()
-        val provenance = when (value.source) {
-            "live" -> "live"
-            "replay" -> "replay"
-            else -> null
-        }
+        // Only the non-default provenance is labeled: a fresh live value is the bare number.
+        val provenance = if (value.source == "replay") "replay" else null
         val stale = when {
             value.asOfMs == null -> "stale"
             nowMs - value.asOfMs >= STALE_AFTER_MS -> "stale ${(nowMs - value.asOfMs) / 1_000}s"
@@ -151,6 +148,9 @@ object PanelText {
     }
 
     fun gameStatus(status: String?): String = status?.takeIf { it.isNotBlank() } ?: "Unavailable"
+
+    /** The panel header: scoring basis beside lineup source (AFC-PR-039). */
+    fun header(snapshot: PanelSnapshot): String = "${basis(snapshot.basis)} · ${lineupSource(snapshot.source)}"
 }
 
 /** Font sizes in sp; at 1080p 1 sp renders as at least 1 px (AFC-PR-045). */
