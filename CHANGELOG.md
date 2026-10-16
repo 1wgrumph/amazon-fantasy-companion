@@ -15,6 +15,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Document the dev AWS CLI sign-in, the Yahoo app settings and the Yahoo SSM parameters in docs/operations/aws-and-yahoo-setup.md ([#91](https://github.com/1wgrumph/amazon-fantasy-companion/pull/91)).
+- Record the Phase 1 plan evidence, packets and handoff that were left uncommitted in the planning worktree ([#90](https://github.com/1wgrumph/amazon-fantasy-companion/pull/90)).
+- Record the P2-X01 device baseline on the Fire TV stick: Fire OS 8.1.8.5 / API 30, the pinned starter installed and launched, spike verdict WORKS ([#89](https://github.com/1wgrumph/amazon-fantasy-companion/pull/89)).
 - Add the backend panel service: GET /v1/panel serves the followed team/league PanelState with one row per starter, points scored under the selected PPR/Half-PPR preset or the Yahoo league stat modifiers, game status, team total and progress, the scoring basis on every panel, unavailable values as null with a reason (never zero), stale values labeled at 60 s, and game facts that agree with the alert record across scoring corrections ([#88](https://github.com/1wgrumph/amazon-fantasy-companion/pull/88)).
 - Add the backend alert policy: red-zone (strictly inside the 20 by a matched starter's team), player-score and close-game (margin within 8 in Q4 or overtime, once per entry) alerts gated by enabled types, game-day periods, quiet hours, per-game minimum gap and spoiler delay; fixed-template Mild/Hype commentary that makes no on-field claim; and GET /v1/alerts serving only the linked profile's released alerts ([#85](https://github.com/1wgrumph/amazon-fantasy-companion/pull/85)).
 - Add the backend event matcher: ESPN-athlete-id identity for manual starters and Yahoo starters mapped by exact name, team and position through the explicit player map (unmatched or ambiguous players are never guessed), one match per profile and event, and scoring corrections that revise the existing alert in place instead of allocating a new one ([#84](https://github.com/1wgrumph/amazon-fantasy-companion/pull/84)).
@@ -84,6 +87,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Store per-player ESPN boxscore statistics at ingest and read them through the panel's statistics seam, so the deployed panel shows real fantasy points instead of "statistics unavailable" for every starter (PR TBD).
+- Correct the Yahoo setup notes: one app with redirect `https://localhost:8443/link`, the one-command `setup` token flow, and the errors seen on 2026-10-16 ([#92](https://github.com/1wgrumph/amazon-fantasy-companion/pull/92)).
 - Grant the policy function table-scoped Lineups Scan access used by the matcher
   and the API function Profiles UpdateItem access for provider routing outcomes
   and installed-app reports, with source-to-template IAM contracts to catch

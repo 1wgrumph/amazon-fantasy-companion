@@ -1,0 +1,42 @@
+# ST-4-g5 independent review: reviewer-executed commands
+
+Candidate 2090e2dc3f804c983e0ddc25cc506f9f98922824, baseline 771c28958f78e611048528aedbd9ed4490f308e1.
+Workdir: PR10 branch worktree (afc/st4-spec). Env: TMPDIR=/var/tmp/az, UV_OFFLINE=1.
+All paths repository-relative. No candidate writes; no commits, PR comments, or merges.
+
+| # | Command | Exit | Result |
+|---|---|---|---|
+| 1 | git rev-parse HEAD | 0 | 2090e2dc3f804c983e0ddc25cc506f9f98922824 |
+| 2 | ocr delegate preview --from 771c289... --to 2090e2d... | 0 | 80 reviewable / 290 total (see ocr-preview.txt) |
+| 3 | ocr delegate rule <each of 80 reviewable files> | 0 x80, 0 nonzero | (see ocr-rules.txt) |
+| 4 | uv run --script tools/spec/spec_lint.py spec/amazon-fantasy-companion | 0 | clean |
+| 5 | uv run --script tools/spec/diagram.py lint spec/amazon-fantasy-companion | 0 | clean |
+| 6 | uv run --script tools/spec/spec_build.py spec/amazon-fantasy-companion /var/tmp/az/review-build1.md | 0 | sha256 5ac2c3a146d13c15969c82fc86a207b18a794428a0746ba739a27398b14a313e |
+| 7 | uv run --script tools/spec/spec_build.py spec/amazon-fantasy-companion /var/tmp/az/review-build2.md | 0 | |
+| 8 | cmp review-build1.md review-build2.md | 0 | identical |
+| 9 | cmp review-build1.md spec/amazon-fantasy-companion/amazon-fantasy-companion.md | 0 | identical; matches g5/receipt.json build_sha256 |
+| 10 | python3 <g5 evidence>/check-links.py | 0 | 749 resolved; 184 source links added; prose unchanged; 66/66 UIDs; 0/66 unlinked rows |
+| 11 | grep -rnE label pattern over spec sources + built file | 1 | no matches = pass |
+| 12 | bash <g5 evidence>/vendor-check.sh (first run) | 1 | reviewer-environment artifact only: untracked __pycache__ created by runs 4-7 tripped the exact file-set assertion; removed (reviewer-owned files), see note |
+| 13 | bash <g5 evidence>/vendor-check.sh (after pycache removal) | 0 | byte-identical to committed vendor-check.json (diff clean) |
+| 14 | python3 tools/ci/check_paths.py | 0 | clean |
+| 15 | bash tools/ci/gate.sh | 0 | 39 tests OK; spec/docs/hygiene PASS (see gate-rerun.txt) |
+| 16 | private-path grep over spec/ + phase-2 docs + CHANGELOG | 1 | no matches = pass |
+| 17 | secret-shape grep over spec/ + CHANGELOG + g5 evidence | 1 | no matches = pass |
+| 18 | git -C <HQ> diff --exit-code 0467883 1eadf6e -- skills/spec-authoring | 0 | skill tree identical (supply-chain claim holds) |
+| 19 | git -C <HQ> merge-base --is-ancestor 0467883 origin/main | 0 | pin on HQ main |
+| 20 | gh pr view 10 (head/state/mergeable) | 0 | head 2090e2d, OPEN, MERGEABLE, CLEAN |
+| 21 | gh pr checks 10 + actions run 38344446642 readback | 0 | 4/4 pass, head_sha 2090e2d, conclusion success |
+| 22 | git cherry origin/main 579b951; gh pr view 11 | 0 | '-'/OPEN: patch-equivalent, correctly unmerged and absent from CHANGELOG |
+| 23 | gh api repos/.../issues/1 | 0 | issue #1 exists (open, hackathon title) |
+| 24 | independent UID check (register vs Appendix A vs built text) | pass | 66 rows; sets equal; 049-051 rows link withdrawn section; 0 unlinked |
+| 25 | link-stripped built-file diff baseline vs candidate | pass | only revision header/table, 0.2->0.3, build-tools provenance row |
+| 26 | rev-0.3 changes vs changed-source-file headings | pass | 46/46 identities match, no extras |
+| 27 | gh pr list --state merged vs CHANGELOG PRs | pass | merged 2-9,12-14; changelog adds pending PR10 only; PR11 absent |
+| 28 | write-set scan 15b3a55..2090e2d | pass | 72 files, all inside allowed prefixes; 2090e2d touches only g5 evidence |
+
+Note on run 12: the author's verify.sh exports PYTHONDONTWRITEBYTECODE=1; the
+reviewer's runs did not, so runs 4-7 wrote untracked tools/**/__pycache__/.
+check-vendor.py asserts an exact vendored file set, so it failed until the
+reviewer removed its own untracked artifacts. Not an author defect; the
+committed tree was never dirty (git status showed only ?? entries).
