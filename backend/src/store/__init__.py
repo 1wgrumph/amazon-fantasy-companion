@@ -204,3 +204,34 @@ def put_panel_conditional(panel, expected_counter):
 def get_panel(profile_id, team_league):
     return _table("PANELS_TABLE").get_item(
         Key={"profileId": profile_id, "teamLeague": team_league}).get("Item")
+
+
+# Player statistics: latest stored boxscore per ESPN athlete (panel seam).
+# One record per athlete; the panel refuses a record from another game than
+# the starter's latest projected game, so no gameId range key is needed.
+def put_player_statistics(record):
+    """Store unless a newer (or live, vs replay) record for the game exists.
+
+    Conditional PutItem only: IngestFunction has no GetItem grant on this
+    table. Returns False when the stored record was kept.
+    """
+    item = {key: value for key, value in _shaped(record, {
+        "athleteId", "gameId", "gameState", "gameStatus", "source", "asOf",
+        "stats"}).items() if not (key == "asOf" and value is None)}
+    values = {":gameId": item.get("gameId"), ":live": "live",
+              ":source": item.get("source"), ":replay": "replay"}
+    fresh = "attribute_not_exists(athleteId)"
+    if isinstance(item.get("asOf"), str):
+        values[":asOf"] = item["asOf"]
+        fresh += " OR attribute_not_exists(asOf) OR asOf <= :asOf"
+    condition = (f"({fresh}) AND (attribute_not_exists(athleteId) OR NOT "
+                 "(gameId = :gameId AND #source = :live AND :source = :replay))")
+    return _written(_table("PLAYER_STATS_TABLE").put_item, Item=item,
+                    ConditionExpression=condition,
+                    ExpressionAttributeNames={"#source": "source"},
+                    ExpressionAttributeValues=values)
+
+
+def get_player_statistics(athlete_id):
+    return _table("PLAYER_STATS_TABLE").get_item(
+        Key={"athleteId": athlete_id}).get("Item")

@@ -1,7 +1,7 @@
 """Validate, normalize and store ESPN polls and labeled replay (DES-AFC-P2-FEED)."""
 
 import store
-from feed_ingest.normalize import normalize_summary
+from feed_ingest.normalize import boxscore_statistics, normalize_summary
 from feed_ingest.validation import validate_summary
 
 
@@ -22,7 +22,15 @@ def store_events(events):
     return changed
 
 
+def store_player_statistics(records):
+    """Overwrite each athlete's stored boxscore with the latest summary's."""
+    for record in records:
+        store.put_player_statistics(record)
+
+
 def ingest_summary(payload, game_id, source="live"):
     """Validate before any event read or write, then store new or corrected plays."""
     validate_summary(payload, game_id)
-    return store_events(normalize_summary(payload, game_id, source=source))
+    events = store_events(normalize_summary(payload, game_id, source=source))
+    store_player_statistics(boxscore_statistics(payload, game_id, source=source))
+    return events

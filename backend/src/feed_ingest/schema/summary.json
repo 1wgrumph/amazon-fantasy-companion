@@ -61,6 +61,8 @@
                 "items": {
                   "type": "object",
                   "properties": {
+                    "name": {"type": "string"},
+                    "keys": {"type": "array", "items": {"type": "string"}},
                     "athletes": {
                       "type": "array",
                       "items": {
@@ -71,7 +73,9 @@
                             "type": "object",
                             "required": ["id"],
                             "properties": {"id": {"type": "string"}}
-                          }
+                          },
+                          "stats": {"type": "array",
+                                    "items": {"type": ["string", "number"]}}
                         }
                       }
                     }
