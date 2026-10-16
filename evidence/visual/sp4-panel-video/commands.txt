@@ -1,0 +1,54 @@
+SP-4 (P2-X04) command record. Device: AFTKM, Fire OS 8.1.8.5 (RS8185/3891),
+Android 11, API 30, display override 1920x1080. <stick> = leased Fire TV stick
+(address and serial deliberately not recorded). All times UTC 2026-10-16.
+
+Build and install (CMD-ADB-INSTALL):
+$ cd spikes/sp4-panel-video && ./gradlew --offline assembleDebug
+  first attempt exit:1 (AGP 9.3.1 transitive pins absent from offline cache;
+  fixed by mirroring the tv-app resolutionStrategy pins in build.gradle.kts)
+  second attempt: BUILD SUCCESSFUL
+$ sha256sum app/build/outputs/apk/debug/app-debug.apk
+  08aa7e8401d0649f9811895067cec05d3744165f078ceea712e40000fc24e089
+$ adb -s <stick> install -r app-debug.apk
+  Success, exit:0 (firstInstallTime 2026-10-16 19:09:00 device time, GMT)
+
+Playback (Prime Video = com.amazon.firebat/com.amazon.pyrocore.IgnitionActivity,
+versionName PVFTV-324.0104-L; owner-signed-in account, no purchase):
+$ adb -s <stick> shell am start -n com.amazon.firebat/com.amazon.pyrocore.IgnitionActivity  exit:0
+$ adb -s <stick> shell input keyevent 4    (dismiss promo) exit:0
+$ adb -s <stick> shell input keyevent 20 20 19 23  (navigate to Watch now on a
+  Prime-included title and select) exit:0
+$ adb -s <stick> shell dumpsys media_session
+  com.amazon.firebat PlaybackState state=3 (PLAYING)
+  Screencap of the player is black except player chrome ("Ad 0:32" pre-roll
+  badge): the video renders on a secure surface screencap cannot read
+  (RISK-AFC-P2-09). Episode playback was re-established the same way before
+  the round-2 sweep (Continue watching -> Watch again, state=3).
+
+Route sweep (each attempt: command, exit, *-logcat.txt, *.png, *-geometry.txt):
+R0 baseline playback: screencap exit:0 (black secure surface), media state=3,
+  firebat task mode=fullscreen 1920x1080.
+R1 provider PiP: $ adb shell input keyevent 3 (HOME) exit:0
+  -> launcher resumed, media state=0 (stopped), no pinned task;
+  firebat ActivityRecord mSupportsPictureInPicture=false.
+R2 panel PiP: $ adb shell am force-stop com.afc.spike.sp4 exit:0
+  $ adb shell am start -n com.afc.spike.sp4/.MainActivity --es mode pip exit:0
+  logcat: enterPictureInPictureMode returned true; inPip=true.
+  Then Prime foregrounded (am start firebat, exit:0) and Resume selected
+  (keyevent 23, exit:0): media state=3 with spike task mode=pinned
+  mBounds=Rect(1424, 54 - 1808, 270) over the fullscreen player (r2b).
+R3 overlay: $ adb shell am start ... --es mode overlay exit:0
+  logcat: Settings.canDrawOverlays=false; addView TYPE_APPLICATION_OVERLAY
+  threw BadTokenException (permission denied for window type 2038).
+  $ adb shell appops get com.afc.spike.sp4 SYSTEM_ALERT_WINDOW exit:0
+  -> "SYSTEM_ALERT_WINDOW: default; rejectTime=+4s840ms ago" (read-only probe;
+  no grant attempted: granting needs the system Settings screen).
+R4 split: $ adb shell am start --windowingMode 3 -n com.afc.spike.sp4/.MainActivity exit:0
+  -> task mode=fullscreen, spike logcat multiWindow=false.
+R5 freeform: $ adb shell am start --windowingMode 5 -n com.afc.spike.sp4/.MainActivity exit:0
+  -> task mode=fullscreen, spike logcat multiWindow=false.
+
+Cleanup:
+$ adb -s <stick> shell input keyevent 127 (pause) exit:0
+$ adb -s <stick> uninstall com.afc.spike.sp4 -> Success, exit:0
+No other app was installed, uninstalled, or cleared; no settings changed.
