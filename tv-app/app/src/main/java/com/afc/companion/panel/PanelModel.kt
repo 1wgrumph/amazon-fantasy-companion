@@ -1,7 +1,12 @@
 package com.afc.companion.panel
 
 import android.view.KeyEvent
+import com.afc.companion.alerts.AlertNotifier
+import com.afc.companion.alerts.AlertPresenter
+import com.afc.companion.alerts.AlertText
+import com.afc.companion.net.Alert
 import com.afc.companion.net.PanelState
+import com.afc.companion.net.RoutingOutcome
 import java.util.Calendar
 import java.util.TimeZone
 import org.json.JSONArray
@@ -151,6 +156,16 @@ object PanelText {
 
     /** The panel header: scoring basis beside lineup source (AFC-PR-039). */
     fun header(snapshot: PanelSnapshot): String = "${basis(snapshot.basis)} · ${lineupSource(snapshot.source)}"
+
+    /** The reported outcome of the last Watch attempt, shown to the customer (AFC-PR-031). */
+    fun watchOutcome(outcome: RoutingOutcome): String = when (outcome) {
+        RoutingOutcome.GameOpened -> "Watch: game opened."
+        RoutingOutcome.SearchOpened -> "Watch: provider search opened."
+        RoutingOutcome.AppHomeOpened -> "Watch: provider app opened."
+        RoutingOutcome.AppAbsent -> "Watch: the provider app is not installed."
+        RoutingOutcome.AccessUnknown -> "Watch: could not confirm the game is playing."
+        RoutingOutcome.PlaybackDenied -> "Watch: the provider app refused the launch."
+    }
 }
 
 /** Font sizes in sp; at 1080p 1 sp renders as at least 1 px (AFC-PR-045). */
@@ -184,12 +199,30 @@ fun panelLayout(mode: PanelMode, screenWidth: Int, screenHeight: Int, videoAspec
     return PanelLayout(video, panel)
 }
 
-enum class PanelAction { ToggleVisibility, NextTeamLeague, FocusNext, FocusPrevious }
+enum class PanelAction { ToggleVisibility, NextTeamLeague, FocusNext, FocusPrevious, Select }
 
 sealed interface FocusTarget {
+    data class AlertWatch(val alertId: String) : FocusTarget
+    data class AlertDismiss(val alertId: String) : FocusTarget
     data object TeamLeagueSwitch : FocusTarget
     data class Row(val playerId: String) : FocusTarget
     data object Total : FocusTarget
+}
+
+/** One panel-only alert (P2-X02 FAILS); Watch only when the alert names an event an outcome can be reported for. */
+data class PanelAlert(val id: String, val text: AlertText, val watchable: Boolean)
+
+/** Alerts shown above the lineup at once; older retained ones appear as newer ones are dismissed. */
+const val PANEL_ALERTS_MAX: Int = 3
+
+/** Retained alerts newest first; an alert without safe text is not shown, as the notifier posts nothing for it. */
+fun panelAlerts(alerts: List<Alert>): List<PanelAlert> = alerts.asReversed().mapNotNull { alert ->
+    AlertPresenter.text(alert)?.let { PanelAlert(alert.envelope.id, it, AlertNotifier.watchEventId(alert) != null) }
+}.take(PANEL_ALERTS_MAX)
+
+sealed interface AlertCommand {
+    data class Watch(val alertId: String) : AlertCommand
+    data class Dismiss(val alertId: String) : AlertCommand
 }
 
 /** Rows and totals that one applied update changed; the UI recomposes only these (AFC-PR-061). */
@@ -203,6 +236,8 @@ class PanelController(teamLeagues: List<String>, selected: String?, visible: Boo
     private var shown = visible
     private var currentTeamLeague: String? = selected ?: this.teamLeagues.firstOrNull()
     private var held: PanelSnapshot? = null
+    private var alerts: List<PanelAlert> = emptyList()
+    private var armed: String? = null
     private var focus: FocusTarget? = FocusTarget.TeamLeagueSwitch
     private var lastFetchMs: Long? = null
     private var needsFetch = true
@@ -211,10 +246,37 @@ class PanelController(teamLeagues: List<String>, selected: String?, visible: Boo
     val teamLeague: String? get() = currentTeamLeague
     val snapshot: PanelSnapshot? get() = held
     val focused: FocusTarget? get() = focus
+    val panelAlerts: List<PanelAlert> get() = alerts
+    /** Alert whose Watch awaits the confirming second press (switching confirmation, AFC-PR-035). */
+    val armedWatch: String? get() = armed
 
     fun focusTargets(): List<FocusTarget> {
-        val snap = held ?: return listOf(FocusTarget.TeamLeagueSwitch)
-        return listOf(FocusTarget.TeamLeagueSwitch) + snap.rows.map { FocusTarget.Row(it.playerId) } + FocusTarget.Total
+        val alertTargets = alerts.flatMap { alert ->
+            listOfNotNull(FocusTarget.AlertWatch(alert.id).takeIf { alert.watchable }, FocusTarget.AlertDismiss(alert.id))
+        }
+        val snap = held ?: return alertTargets + FocusTarget.TeamLeagueSwitch
+        return alertTargets + FocusTarget.TeamLeagueSwitch + snap.rows.map { FocusTarget.Row(it.playerId) } + FocusTarget.Total
+    }
+
+    fun onAlerts(next: List<PanelAlert>) = keepFocus {
+        alerts = next
+        if (next.none { it.id == armed }) armed = null
+    }
+
+    /** OK on a focused alert action; with [confirmSwitch] the first OK on Watch only arms it. */
+    fun select(confirmSwitch: Boolean): AlertCommand? {
+        if (!shown) return null
+        return when (val target = focus) {
+            is FocusTarget.AlertDismiss -> AlertCommand.Dismiss(target.alertId)
+            is FocusTarget.AlertWatch -> if (confirmSwitch && armed != target.alertId) {
+                armed = target.alertId
+                null
+            } else {
+                armed = null
+                AlertCommand.Watch(target.alertId)
+            }
+            else -> null
+        }
     }
 
     fun bindings(): Map<Int, PanelAction> = mapOf(
@@ -222,6 +284,7 @@ class PanelController(teamLeagues: List<String>, selected: String?, visible: Boo
         KeyEvent.KEYCODE_MEDIA_FAST_FORWARD to PanelAction.NextTeamLeague,
         KeyEvent.KEYCODE_DPAD_DOWN to PanelAction.FocusNext,
         KeyEvent.KEYCODE_DPAD_UP to PanelAction.FocusPrevious,
+        KeyEvent.KEYCODE_DPAD_CENTER to PanelAction.Select,
     )
 
     fun onKey(keyCode: Int, nowMs: Long): Boolean {
@@ -250,10 +313,12 @@ class PanelController(teamLeagues: List<String>, selected: String?, visible: Boo
             }
             PanelAction.FocusNext -> moveFocus(1)
             PanelAction.FocusPrevious -> moveFocus(-1)
+            PanelAction.Select -> Unit // the host runs select(), which needs the profile's switching confirmation
         }
     }
 
     private fun moveFocus(delta: Int) {
+        armed = null
         val targets = focusTargets()
         if (targets.isEmpty()) return
         val index = targets.indexOf(focus)
@@ -287,13 +352,17 @@ class PanelController(teamLeagues: List<String>, selected: String?, visible: Boo
                 previous.progress != snapshot.progress || previous.basis != snapshot.basis || previous.source != snapshot.source
             PanelDelta(changed, removed, totalsChanged)
         }
-        val oldTargets = focusTargets()
-        val oldIndex = oldTargets.indexOf(focus)
-        held = snapshot
+        keepFocus { held = snapshot }
+        return delta
+    }
+
+    /** Applies [change]; focus on a vanished element moves to the element now at its position. */
+    private fun keepFocus(change: () -> Unit) {
+        val oldIndex = focusTargets().indexOf(focus)
+        change()
         val newTargets = focusTargets()
         if (focus !in newTargets) {
             focus = if (newTargets.isEmpty()) null else newTargets[oldIndex.coerceIn(0, newTargets.lastIndex)]
         }
-        return delta
     }
 }

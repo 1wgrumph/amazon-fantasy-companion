@@ -21,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -29,18 +30,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
+import com.afc.companion.alerts.AlertInbox
+import com.afc.companion.alerts.AlertNotifier
 import com.afc.companion.net.ApiClient
 import com.afc.companion.profile.ProfileState
 import com.afc.companion.profile.ProfileStore
+import com.afc.companion.watch.WatchLauncher
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 /** PanelMode fixed by the P2-X04 verdict: modeB side-by-side route or fullScreen in this app. */
@@ -51,6 +57,8 @@ enum class PanelMode { ModeB, FullScreen }
  * the followed team/league, refreshed every 30 s while visible. All state and
  * key handling live in [PanelController]; this composable only renders it.
  * Rows are keyed by player ID, so an update recomposes only changed rows.
+ * Monitoring alerts sit above the lineup (panel-only presentation, P2-X02), each
+ * with Watch and Dismiss, also when no team/league is selected.
  */
 @Composable
 fun LineupPanel(client: ApiClient, mode: PanelMode, modifier: Modifier = Modifier) {
@@ -67,24 +75,55 @@ fun LineupPanel(client: ApiClient, mode: PanelMode, modifier: Modifier = Modifie
     }
     val current = profile
     val teamLeague = current?.teamLeague?.let { "${it.league}/${it.team}" }
-    if (current == null || teamLeague == null) {
-        PanelMessage("Panel unavailable: no team/league is selected in Profile/Settings.", modifier)
-        return
-    }
     val controller = remember(client, teamLeague) {
         // The profile stores exactly one team/league pair (ProfileState.teamLeague);
         // its leagues/teams selection sets are unpaired, so the switch cycles this
         // one actual selection and a one-choice switch is a no-op in the controller.
-        PanelController(listOf(teamLeague), teamLeague, current.panel.visible)
+        PanelController(listOfNotNull(teamLeague), teamLeague, current?.panel?.visible ?: true)
     }
     var tick by remember(controller) { mutableIntStateOf(0) }
     var fetchAttempted by remember(controller) { mutableStateOf(false) }
+    var watchOutcome by remember { mutableStateOf<String?>(null) }
+    var watching by remember { mutableStateOf(false) }
     val focusRequester = remember { FocusRequester() }
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+
+    LaunchedEffect(controller) {
+        AlertInbox.alerts.collect { alerts ->
+            controller.onAlerts(panelAlerts(alerts))
+            tick++
+        }
+    }
+
+    fun onAlertCommand(command: AlertCommand) {
+        when (command) {
+            is AlertCommand.Dismiss -> {
+                AlertInbox.dismiss(command.alertId)
+                AlertNotifier(context).cancel(command.alertId)
+            }
+            is AlertCommand.Watch -> {
+                val alert = AlertInbox.find(command.alertId) ?: return
+                val eventId = AlertNotifier.watchEventId(alert) ?: return
+                if (watching) return
+                watching = true
+                scope.launch {
+                    try {
+                        // The second OK press was the switching confirmation (PanelController.select).
+                        WatchLauncher(context).watchAlert(eventId, alert.route, client, current?.switchingConfirm ?: true, mode) { true }
+                            ?.let { watchOutcome = PanelText.watchOutcome(it) }
+                    } finally {
+                        watching = false
+                    }
+                }
+            }
+        }
+    }
 
     LaunchedEffect(controller) {
         runCatching { focusRequester.requestFocus() }
         while (true) {
-            if (controller.shouldFetch(System.currentTimeMillis())) {
+            if (controller.teamLeague != null && controller.shouldFetch(System.currentTimeMillis())) {
                 try {
                     // Network and parsing stay off the rendering thread (AFC-PR-063).
                     val decoded = withContext(Dispatchers.Default) {
@@ -115,7 +154,11 @@ fun LineupPanel(client: ApiClient, mode: PanelMode, modifier: Modifier = Modifie
                 if (event.type != KeyEventType.KeyDown) {
                     false
                 } else {
-                    controller.onKey(event.nativeKeyEvent.keyCode, System.currentTimeMillis()).also { if (it) tick++ }
+                    val key = event.nativeKeyEvent.keyCode
+                    if (controller.bindings()[key] == PanelAction.Select) {
+                        controller.select(current?.switchingConfirm ?: true)?.let(::onAlertCommand)
+                    }
+                    controller.onKey(key, System.currentTimeMillis()).also { if (it) tick++ }
                 }
             },
     ) {
@@ -147,6 +190,9 @@ fun LineupPanel(client: ApiClient, mode: PanelMode, modifier: Modifier = Modifie
                 // Pass changed immutable state, not the controller: equal parameters
                 // would let Compose skip the child and freeze later scores/focus.
                 PanelContent(
+                    alerts = controller.panelAlerts,
+                    armedWatch = controller.armedWatch,
+                    watchOutcome = watchOutcome,
                     snapshot = controller.snapshot,
                     teamLeague = controller.teamLeague,
                     focused = controller.focused,
@@ -160,6 +206,9 @@ fun LineupPanel(client: ApiClient, mode: PanelMode, modifier: Modifier = Modifie
 
 @Composable
 private fun PanelContent(
+    alerts: List<PanelAlert>,
+    armedWatch: String?,
+    watchOutcome: String?,
     snapshot: PanelSnapshot?,
     teamLeague: String?,
     focused: FocusTarget?,
@@ -167,11 +216,22 @@ private fun PanelContent(
     nowMs: Long,
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        watchOutcome?.let {
+            Text(it, style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = Color.White))
+        }
+        alerts.forEach { alert -> AlertCard(alert, armedWatch == alert.id, focused) }
         FocusableRow(focused == FocusTarget.TeamLeagueSwitch) {
             Text(
                 "Team/league: ${teamLeague ?: "Unavailable"}",
                 style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = Color.White),
             )
+        }
+        if (teamLeague == null) {
+            Text(
+                "Panel unavailable: no team/league is selected in Profile/Settings.",
+                style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = Color.White),
+            )
+            return@Column
         }
         if (snapshot == null) {
             Text(
@@ -223,6 +283,25 @@ private fun PanelContent(
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun AlertCard(alert: PanelAlert, armed: Boolean, focused: FocusTarget?) {
+    Column(
+        Modifier.fillMaxWidth().border(1.dp, Color.White).padding(12.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        val body = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = Color.White)
+        Text(alert.text.headline, style = TextStyle(fontSize = PanelTextSizes.scoreSp.sp, color = Color.White))
+        listOfNotNull(alert.text.context.ifEmpty { null }, alert.text.access, alert.text.commentary).forEach { Text(it, style = body) }
+        // Stacked, matching the UP/DOWN focus order.
+        if (alert.watchable) {
+            FocusableRow(focused == FocusTarget.AlertWatch(alert.id)) {
+                Text(if (armed) "Press OK again to switch apps" else "Watch", style = body)
+            }
+        }
+        FocusableRow(focused == FocusTarget.AlertDismiss(alert.id)) { Text("Dismiss", style = body) }
     }
 }
 
