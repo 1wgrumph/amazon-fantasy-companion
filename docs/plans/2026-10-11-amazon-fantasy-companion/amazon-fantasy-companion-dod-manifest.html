@@ -673,7 +673,7 @@
         <section class="block" id="s1" aria-labelledby="h-s1">
           <h2 id="h-s1"><span class="secno">1</span>BLUF and Lifecycle state</h2>
           <div class="bluf">
-            <p><strong>Phase 1 regeneration after integrated review round 1 CHANGE_REQUESTED (DEC-AFC-SD-023, DEC-AFC-SD-024): 13 slices in 2 waves on the spec-and-docs (tech-writing), ci (primary) and scribe-side-lane lanes; 33 Lifecycle-local requirement rows traced to 55 SEIT proof cases (47 commands); S41 conditional on OD-AFC-01 = B; 9 open owner items await the integrated review; no GitHub milestones in Phase 1; Phase 1 spec track planned as sequence ST-1..ST-5 and Phase 2 as P2-6..P2-7. Revision: 54 slices/5 waves/M1..M5 → 13 slices/2 waves; 81 requirement rows → 32; 126 proof cases → 54. Owner change DEC-AFC-SD-025 at integrated review P1: the Scribe log follows the Devpost product-feedback, feature-request and friction-log fields from its first row (AC-AFC-DX-04 new, AC-AFC-DX-02 amended).</strong></p>
+            <p><strong>Phase 1 regeneration after integrated review round 1 CHANGE_REQUESTED (DEC-AFC-SD-023, DEC-AFC-SD-024): 13 slices in 2 waves on the spec-and-docs (tech-writing), ci (primary) and scribe-side-lane lanes; 33 Lifecycle-local requirement rows traced to 55 SEIT proof cases (47 commands); S41 dispatched under OD-AFC-01 = B (owner, 2026-10-16) and landed with S11T and S11 (closeout overlay); 9 open owner items await the integrated review; no GitHub milestones in Phase 1; Phase 1 spec track planned as sequence ST-1..ST-5 and Phase 2 as P2-6..P2-7. Revision: 54 slices/5 waves/M1..M5 → 13 slices/2 waves; 81 requirement rows → 32; 126 proof cases → 54. Owner change DEC-AFC-SD-025 at integrated review P1: the Scribe log follows the Devpost product-feedback, feature-request and friction-log fields from its first row (AC-AFC-DX-04 new, AC-AFC-DX-02 amended).</strong></p>
             <p><strong>Lifecycle state.</strong> <span class="status status-plan"><span class="mark" aria-hidden="true"></span>planning</span></p>
             <p>This manifest compares authorized intent with planned work, evidence, and gaps. It does not grant execution, acceptance, release, or deployment.</p>
           <ul class="legend status-key" aria-label="Status key">
@@ -731,7 +731,7 @@
           <h3>Scope</h3>
           <ul class="plain">
             <li>D5 shared spec-authoring skill in Alphazedehq (S06), linked into harness skill directories (S06L, S11)</li>
-            <li>D4 shared CI/CD skill extensions in Alphazedehq (S01, S02, S03) and harness hooks (S11T, S11); thin entry skill only if OD-AFC-01 = B (S41)</li>
+            <li>D4 shared CI/CD skill extensions in Alphazedehq (S01, S02, S03) and harness hooks (S11T, S11); thin entry skill S41 (OD-AFC-01 = B, owner 2026-10-16)</li>
             <li>This repository gate entrypoint with spec, docs, hygiene areas, local hooks and Actions workflow (S09T, S09)</li>
             <li>Vendored D5 tools in tools/spec/ with MIT notices (S42)</li>
             <li>Vnv guidance tree for the Phase 1 areas (S07)</li>
@@ -1644,21 +1644,21 @@
                   <td>Test Implementer</td>
                   <td>S01, S02, S03</td>
                   <td>Alphazedehq:hooks/test-ci-gate-hook.sh</td>
-                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>landed</span></td>
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">S11</th>
                   <td>Product Implementer</td>
                   <td>S11T, S09, S06, S06L, S41</td>
                   <td>Alphazedehq:hooks/ci-gate-hook.sh, Alphazedehq:hooks/install-ci-gate-hook.py, Alphazedehq:hooks/README.md</td>
-                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>landed</span></td>
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">S41</th>
                   <td>Product Implementer</td>
                   <td>S01, S02, S03</td>
                   <td>Alphazedehq:skills/ci-cd/SKILL.md, Alphazedehq:skills/ci-cd/tests/test_ci_cd.py, Alphazedehq:skills/ci-cd/tests/trigger-requests.json</td>
-                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>landed</span></td>
                 </tr>
                 <tr class="row-plan">
                   <th scope="row" class="id">S08</th>
@@ -2081,11 +2081,11 @@
                   <td>granted=false until DEC-AFC-APPROVAL-001; exclusions scope_change, budget_exhaustion, owner_hold, owner_only_actions, route_or_profile_change</td>
                   <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>proposed</span></td>
                 </tr>
-                <tr class="row-hold">
-                  <th scope="row" class="id">Open decision OD-AFC-01</th>
+                <tr class="row-pass">
+                  <th scope="row" class="id">Decided OD-AFC-01 = B (owner, 2026-10-16)</th>
                   <td>William Rumph</td>
-                  <td>D4 form: extend the existing shared skills only (SD-018), or extend them and add one thin shared entry-point skill (the owner’s latest words were “Just create the shared skill please”). Recommendation: **A — extensions only.** `setup-pre-commit` becomes the shared CI/CD gate skill and is already linked into every harness. A second entry-point skill would only route to the three extended skills and duplicate their trigger surface, which C10 forbids. If “the shared skill” meant one new named skill, option B costs one judgement slice (S41, `skills/ci-cd/SKILL.md`, a router under 25 lines) and changes nothing else.</td>
-                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>open_for_integrated_review</span></td>
+                  <td>Owner, asked “settle OD-AFC-01 (A or B)”, selected “B: add thin entry skill”: extend the shared skills and add one thin shared entry-point skill, S41 skills/ci-cd/. The plan had recommended A; the question and recommendation stay in implementation.json open_decisions[OD-AFC-01].</td>
+                  <td><span class="status status-pass"><span class="mark" aria-hidden="true"></span>confirmed</span></td>
                 </tr>
                 <tr class="row-hold">
                   <th scope="row" class="id">Open decision OD-AFC-06</th>
@@ -2165,6 +2165,24 @@
                   <td>The ST-3 parse check imports the spec-track models directly into the local SysON as its own new project (CMD-MODEL-SYSON); supersedes the syside method of DEC-AFC-SD-031; no API keys.</td>
                   <td><span class="status status-pass"><span class="mark" aria-hidden="true"></span>confirmed</span></td>
                 </tr>
+                <tr class="row-pass">
+                  <th scope="row" class="id">Owner amendment OA-AFC-P1-2026-10-16-01</th>
+                  <td>William Rumph</td>
+                  <td>Owner: “Yes to both”. S41 and S11 may land before S06/S06L; the S06→S11 and S06L→S11 edges are waived for ordering only and stay as planned.</td>
+                  <td><span class="status status-pass"><span class="mark" aria-hidden="true"></span>confirmed</span></td>
+                </tr>
+                <tr class="row-pass">
+                  <th scope="row" class="id">Owner amendment OA-AFC-P1-2026-10-16-02</th>
+                  <td>William Rumph</td>
+                  <td>Pre-existing references in Alphazedehq hooks/README.md scrubbed in a separate change, Alphazedehq #363 (merge 0d11da5e637d), so S11 can pass CMD-D4-AGNOSTIC.</td>
+                  <td><span class="status status-pass"><span class="mark" aria-hidden="true"></span>confirmed</span></td>
+                </tr>
+                <tr class="row-pass">
+                  <th scope="row" class="id">Owner amendment OA-AFC-P1-2026-10-16-03</th>
+                  <td>William Rumph</td>
+                  <td>Owner: “Yes get claude cloud to”. Planning delta P1-DELTA-OD-AFC-01-B runs on a Claude Code cloud session; frozen profile snapshots unchanged.</td>
+                  <td><span class="status status-pass"><span class="mark" aria-hidden="true"></span>confirmed</span></td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -2184,18 +2202,77 @@
               </thead>
               <tbody>
                 <tr class="row-hold">
-                  <th scope="row" class="id"><span class="status status-hold"><span class="mark" aria-hidden="true"></span>pending</span></th>
-                  <td>pending</td>
-                  <td>pending</td>
-                  <td>none recorded</td>
+                  <th scope="row" class="id"><span class="status status-hold"><span class="mark" aria-hidden="true"></span>pending (Phase 1 not closed; execution overlay only)</span></th>
+                  <td>docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json, docs/plans/2026-10-11-amazon-fantasy-companion/amazon-fantasy-companion-dod-manifest.html, docs/plans/2026-10-11-amazon-fantasy-companion/seit.json, docs/plans/2026-10-11-amazon-fantasy-companion/HANDOFF.md</td>
+                  <td>implementation.json dispatch_records.records (S41, S11T, S11), implementation.json native_check_record, docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S11T/g1/red-receipt.json</td>
+                  <td>candidate_digest_mismatch: plan-package.cjs reports recorded a018168f… vs actual e9aa0c8e… because this delta adds the proposed SEIT amendment block to seit.json, which the digest covers. The digest is not re-frozen (orchestrator instruction); owner decision required., manifest_task_field_missing (route, 13 tasks) and manifest_model_view_missing (MODEL-AFC-V1..V3): pre-existing on origin/main; not changed by this delta., S06 (requirements-system #532) and S06L (draft #8) are not recorded as landed; S11 landed ahead of them under OA-AFC-P1-2026-10-16-01., PC-AFC-P1-2026-10-16-01: the Muse skill directory in the IE-P1-10 text is stale (proposed correction only)., SEIT-AMD-P1-2026-10-16: four command corrections await owner review (proposed only).</td>
                   <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>pending</span></td>
                 </tr>
               </tbody>
             </table>
           </div>
-
-
-
+          <dl class="meta">
+            <dt>Completion status</dt>
+            <dd>partial; execution overlay for S41, S11T and S11 only; planning statuses unchanged</dd>
+            <dt>current_execution_state</dt>
+            <dd>{&quot;as_of&quot;:&quot;alphazede/Alphazedehq c389102d0a66 (S11 and S11T merge, 2026-10-16T20:08:20Z)&quot;,&quot;rule&quot;:&quot;slice_state overlays the task Status column for the slices this delta records. Planned task status fields are unchanged; other slices&#39; landings are in journey.json execution_receipts.&quot;,&quot;slice_state&quot;:{&quot;S41&quot;:&quot;landed&quot;,&quot;S11T&quot;:&quot;landed&quot;,&quot;S11&quot;:&quot;landed&quot;}}</dd>
+          </dl>
+          <h3>Slice receipts</h3>
+          <p class="table-hint">Tables scroll horizontally on a narrow screen.</p>
+          <div class="table-scroll" role="region" tabindex="0" aria-labelledby="cap-receipts">
+            <table>
+              <caption id="cap-receipts">Append-only slice receipts</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Slice</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Route</th>
+                  <th scope="col">Residual / blocker</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="row-plan">
+                  <th scope="row" class="id">S41</th>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>landed</span></td>
+                  <td>Claude Code / Claude Opus 5.5 / medium</td>
+                  <td>alphazede/Alphazedehq #361, merge 7fc081bdaf21, 2026-10-16T19:58:14Z</td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">S11T</th>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>landed</span></td>
+                  <td>S11T-g1 (pre-DEC-AFC-SD-041 primary route), commit bf4f159</td>
+                  <td>alphazede/Alphazedehq #307, marked merged with #364 at c389102d0a66, 2026-10-16T20:08:22Z</td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">S11</th>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>landed</span></td>
+                  <td>Claude Code / Claude Opus 5.5 / medium; repair Muse Code / Muse Spark 1.3 / max</td>
+                  <td>alphazede/Alphazedehq #364, merge c389102d0a66, 2026-10-16T20:08:20Z; review 1/1 and repair 1/1 spent; live install: muse and agy typed_gap</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <h3>Owner-approved amendments</h3>
+          <p class="table-hint">Tables scroll horizontally on a narrow screen.</p>
+          <div class="table-scroll" role="region" tabindex="0" aria-labelledby="cap-amend">
+            <table>
+              <caption id="cap-amend">Append-only owner amendments</caption>
+              <thead>
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Decision</th>
+                  <th scope="col">Evidence</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="row-pass">
+                  <th scope="row" class="id">P1-DELTA-OD-AFC-01-B</th>
+                  <td>Owner 2026-10-16: record OD-AFC-01 = B and the S41, S11T and S11 landings beside the approved plan. Planned task statuses, goals, routes, write sets and dependencies stay unchanged.</td>
+                  <td>implementation.json owner_amendments, dispatch_records.records, native_check_record</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
           <p class="banner"><strong>Non-authoritative projection.</strong> Source artifacts remain the authority. State: planning.</p>
         </section>
       </main>

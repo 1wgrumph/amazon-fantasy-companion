@@ -1,43 +1,52 @@
 # Planning delta checkpoint — 2026-10-16 (P1-DELTA-OD-AFC-01-B)
 
-Recorded in `implementation.json`; facts are Orchestrator-verified on 2026-10-16
-and were not re-read in this session.
+Recorded in `implementation.json`. The facts come from the Orchestrator
+(2026-10-16) and from its PR #108 follow-up; this session did not re-read them
+in Alphazedehq.
 
 - **OD-AFC-01 = B** (owner, 2026-10-16: "B: add thin entry skill"). S41 is
   `dispatchable: true`.
 - **Ordering waiver** OA-AFC-P1-2026-10-16-01 (owner: "Yes to both"): S41 and
   S11 may land before S06/S06L. The planned dependency edges are not rewritten.
 - **README scrub** OA-AFC-P1-2026-10-16-02: Alphazedehq #363, merge `0d11da5e637d`.
-- **Landed in Alphazedehq:**
-  - S41 `skills/ci-cd/` router: #361, merge `7fc081bdaf21`.
-  - S11T T01-T17: #307, marked merged with #364.
-  - S11 hook and installer, T18-T38: #364, merge `c389102d0a66`. The IE-P1-10
-    review returned REPAIR_REQUIRED F1-F5; one repair round fixed all five
-    (T31-T38). S11 review 1/1 and repair 1/1 are **spent**.
-- **Live install:** claude-code, codex and cursor are wired. muse is a
-  typed_gap; its skills were linked into `$HOME/.agents/skills`, not the plan's
-  `$HOME/.config/muse/skills`. agy is a typed_gap.
-- **Route note:** the slices ran on `opensource-hackathon` (DEC-AFC-SD-041).
-  The per-slice `model_route` blocks still show the pre-migration routes.
-- **SEIT:** `seit.json proposed_command_amendments`
-  (SEIT-AMD-P1-2026-10-16, `proposed_owner_review`) proposes fixes to
-  CMD-SKILL-TRIGGER, CMD-SKILL-SIZE, CMD-COVERAGE-HOOK and CMD-D4-AGNOSTIC. The
-  live command strings are unchanged until the owner accepts.
+- **Landed in Alphazedehq** (dispatch details in `dispatch_records.records`):
+  - S41 `skills/ci-cd/` router: #361, merge `7fc081bdaf21`. Branch
+    `ci-cd/router`, base `da08876`.
+  - S11T T01-T17: #307 (commit `bf4f159`, S11T-g1, 2026-10-12, before
+    DEC-AFC-SD-041), marked merged with #364.
+  - S11 hook and installer, T18-T38: #364, merge `c389102d0a66`. Branch
+    `ci-cd/harness-hook`, base `fc5da79`, landed candidate `5716491`.
+  - One IE-P1-10 review covered #361, #307 and #364 together:
+    - S41: no findings.
+    - S11: REPAIR_REQUIRED, F1-F5. One Muse repair round (`fb30ce0`) fixed
+      all five with tests T31-T38.
+    - S11 review 1/1 and repair 1/1 are **spent**.
+- **DoD Manifest:** regenerated with Bearing Lite 1.1.7. S41, S11T and S11 show
+  as landed through `closeout.current_execution_state`; planned task statuses
+  are unchanged. Renderer `--check`: RENDER_CHECK_PASS.
+- **Native checks** (`native_check_record`):
+  - Schemas: implementation and seit pass with 0 errors. journey has 2 errors,
+    the same on origin/main; this delta does not touch it.
+  - `plan-package.cjs`: 13 `manifest_task_field_missing` and 3
+    `manifest_model_view_missing` findings, both pre-existing on origin/main.
+  - **New:** `candidate_digest_mismatch`. The digest covers seit.json, and this
+    delta adds the proposed SEIT block to it. The digest is not re-frozen.
+- **Muse path:** skills live in `$HOME/.agents/skills` (confirmed with `muse
+  skills list`). The IE-P1-10 `$HOME/.config/muse/skills` text is stale.
+  Correction PC-AFC-P1-2026-10-16-01 is proposed only.
+- **Route note:** S41 and S11 ran on `opensource-hackathon`
+  (DEC-AFC-SD-041). S11T's T01-T17 predate it. The per-slice `model_route`
+  blocks still show the pre-migration routes.
+- **SEIT:** SEIT-AMD-P1-2026-10-16 (`proposed_owner_review`). The live command
+  strings are unchanged.
 
-**Typed gaps:**
-- TOOLING_UNAVAILABLE: the Bearing Lite 1.1.7 schemas, `plan-package.cjs` and
-  `render-dod-manifest.mjs` were not installed in the cloud session. Schema
-  validation and the render check were NOT_RUN. The `dod_manifest` block is
-  byte-identical, so the committed Manifest HTML is unchanged by this delta.
-  However, it still shows S41 as conditional.
-- Not supplied to this delta, so recorded as `not_supplied_to_this_delta`:
-  - the S41 and S11 dispatch lease, base, branch and evidence_dir;
-  - journey.json receipts for these dispatches.
+**Owner decisions needed:**
+- `candidate_digest_mismatch`. Either keep the SEIT proposal in seit.json and
+  re-freeze the digest after review, or move the proposal out of seit.json so
+  the frozen digest verifies again.
+- SEIT-AMD-P1-2026-10-16 and PC-AFC-P1-2026-10-16-01.
 
-**Next:**
-- Re-run the native schema and renderer checks with Bearing 1.1.7.
-- Owner review of SEIT-AMD-P1-2026-10-16.
-- Land S06/S06L.
+**Next:** land S06/S06L.
 
 Earlier checkpoints below are historical.
 

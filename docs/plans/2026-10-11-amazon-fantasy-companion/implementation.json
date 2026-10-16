@@ -3963,7 +3963,7 @@
     "state": "planning",
     "title": "Amazon Fantasy Companion — Definition of Done Manifest (AFC-2026-10-11, Phase 1)",
     "lede": "Planning projection of implementation.json for the single integrated owner review. The five planning artifacts remain authoritative.",
-    "bluf": "Phase 1 regeneration after integrated review round 1 CHANGE_REQUESTED (DEC-AFC-SD-023, DEC-AFC-SD-024): 13 slices in 2 waves on the spec-and-docs (tech-writing), ci (primary) and scribe-side-lane lanes; 33 Lifecycle-local requirement rows traced to 55 SEIT proof cases (47 commands); S41 conditional on OD-AFC-01 = B; 9 open owner items await the integrated review; no GitHub milestones in Phase 1; Phase 1 spec track planned as sequence ST-1..ST-5 and Phase 2 as P2-6..P2-7. Revision: 54 slices/5 waves/M1..M5 → 13 slices/2 waves; 81 requirement rows → 32; 126 proof cases → 54. Owner change DEC-AFC-SD-025 at integrated review P1: the Scribe log follows the Devpost product-feedback, feature-request and friction-log fields from its first row (AC-AFC-DX-04 new, AC-AFC-DX-02 amended).",
+    "bluf": "Phase 1 regeneration after integrated review round 1 CHANGE_REQUESTED (DEC-AFC-SD-023, DEC-AFC-SD-024): 13 slices in 2 waves on the spec-and-docs (tech-writing), ci (primary) and scribe-side-lane lanes; 33 Lifecycle-local requirement rows traced to 55 SEIT proof cases (47 commands); S41 dispatched under OD-AFC-01 = B (owner, 2026-10-16) and landed with S11T and S11 (closeout overlay); 9 open owner items await the integrated review; no GitHub milestones in Phase 1; Phase 1 spec track planned as sequence ST-1..ST-5 and Phase 2 as P2-6..P2-7. Revision: 54 slices/5 waves/M1..M5 → 13 slices/2 waves; 81 requirement rows → 32; 126 proof cases → 54. Owner change DEC-AFC-SD-025 at integrated review P1: the Scribe log follows the Devpost product-feedback, feature-request and friction-log fields from its first row (AC-AFC-DX-04 new, AC-AFC-DX-02 amended).",
     "identity": [
       {
         "label": "Lifecycle",
@@ -4021,7 +4021,7 @@
     "outcome": "Phase 1 of the spec-first order (DEC-AFC-SD-023): D5 — one shared, repo-agnostic `spec-authoring` skill in the owner’s shared skills, generalized from the GridMarket spec kit; D4 — the shared, repo-agnostic CI/CD capability (`setup-pre-commit`, `setup-a-repo`, `ship-pull-request` extended, harness hooks calling the one gate entrypoint); this repository usable with them (one gate entrypoint with `spec`, `docs`, `hygiene` areas, vendored D5 tools, Vnv guidance tree); Scribe developer-feedback log started; the Phase 1 spec track ST-1..ST-5 (requirements register, SysML v2 models, D1 with D5, owner spec review) and the Phase 2 sequence P2-6..P2-7 planned with entry criteria.",
     "scope": [
       "D5 shared spec-authoring skill in Alphazedehq (S06), linked into harness skill directories (S06L, S11)",
-      "D4 shared CI/CD skill extensions in Alphazedehq (S01, S02, S03) and harness hooks (S11T, S11); thin entry skill only if OD-AFC-01 = B (S41)",
+      "D4 shared CI/CD skill extensions in Alphazedehq (S01, S02, S03) and harness hooks (S11T, S11); thin entry skill S41 (OD-AFC-01 = B, owner 2026-10-16)",
       "This repository gate entrypoint with spec, docs, hygiene areas, local hooks and Actions workflow (S09T, S09)",
       "Vendored D5 tools in tools/spec/ with MIT notices (S42)",
       "Vnv guidance tree for the Phase 1 areas (S07)",
@@ -5249,10 +5249,10 @@
         "status": "proposed"
       },
       {
-        "event": "Open decision OD-AFC-01",
+        "event": "Decided OD-AFC-01 = B (owner, 2026-10-16)",
         "owner": "William Rumph",
-        "evidence": "D4 form: extend the existing shared skills only (SD-018), or extend them and add one thin shared entry-point skill (the owner’s latest words were “Just create the shared skill please”). Recommendation: **A — extensions only.** `setup-pre-commit` becomes the shared CI/CD gate skill and is already linked into every harness. A second entry-point skill would only route to the three extended skills and duplicate their trigger surface, which C10 forbids. If “the shared skill” meant one new named skill, option B costs one judgement slice (S41, `skills/ci-cd/SKILL.md`, a router under 25 lines) and changes nothing else.",
-        "status": "open_for_integrated_review"
+        "evidence": "Owner, asked “settle OD-AFC-01 (A or B)”, selected “B: add thin entry skill”: extend the shared skills and add one thin shared entry-point skill, S41 skills/ci-cd/. The plan had recommended A; the question and recommendation stay in implementation.json open_decisions[OD-AFC-01].",
+        "status": "confirmed"
       },
       {
         "event": "Open decision OD-AFC-06",
@@ -5331,8 +5331,85 @@
         "owner": "William Rumph",
         "evidence": "The ST-3 parse check imports the spec-track models directly into the local SysON as its own new project (CMD-MODEL-SYSON); supersedes the syside method of DEC-AFC-SD-031; no API keys.",
         "status": "confirmed"
+      },
+      {
+        "event": "Owner amendment OA-AFC-P1-2026-10-16-01",
+        "owner": "William Rumph",
+        "status": "confirmed",
+        "evidence": "Owner: “Yes to both”. S41 and S11 may land before S06/S06L; the S06→S11 and S06L→S11 edges are waived for ordering only and stay as planned."
+      },
+      {
+        "event": "Owner amendment OA-AFC-P1-2026-10-16-02",
+        "owner": "William Rumph",
+        "status": "confirmed",
+        "evidence": "Pre-existing references in Alphazedehq hooks/README.md scrubbed in a separate change, Alphazedehq #363 (merge 0d11da5e637d), so S11 can pass CMD-D4-AGNOSTIC."
+      },
+      {
+        "event": "Owner amendment OA-AFC-P1-2026-10-16-03",
+        "owner": "William Rumph",
+        "status": "confirmed",
+        "evidence": "Owner: “Yes get claude cloud to”. Planning delta P1-DELTA-OD-AFC-01-B runs on a Claude Code cloud session; frozen profile snapshots unchanged."
       }
-    ]
+    ],
+    "closeout": {
+      "candidate": "pending (Phase 1 not closed; execution overlay only)",
+      "changed_paths": [
+        "docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json",
+        "docs/plans/2026-10-11-amazon-fantasy-companion/amazon-fantasy-companion-dod-manifest.html",
+        "docs/plans/2026-10-11-amazon-fantasy-companion/seit.json",
+        "docs/plans/2026-10-11-amazon-fantasy-companion/HANDOFF.md"
+      ],
+      "evidence": [
+        "implementation.json dispatch_records.records (S41, S11T, S11)",
+        "implementation.json native_check_record",
+        "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S11T/g1/red-receipt.json"
+      ],
+      "open_gaps": [
+        "candidate_digest_mismatch: plan-package.cjs reports recorded a018168f… vs actual e9aa0c8e… because this delta adds the proposed SEIT amendment block to seit.json, which the digest covers. The digest is not re-frozen (orchestrator instruction); owner decision required.",
+        "manifest_task_field_missing (route, 13 tasks) and manifest_model_view_missing (MODEL-AFC-V1..V3): pre-existing on origin/main; not changed by this delta.",
+        "S06 (requirements-system #532) and S06L (draft #8) are not recorded as landed; S11 landed ahead of them under OA-AFC-P1-2026-10-16-01.",
+        "PC-AFC-P1-2026-10-16-01: the Muse skill directory in the IE-P1-10 text is stale (proposed correction only).",
+        "SEIT-AMD-P1-2026-10-16: four command corrections await owner review (proposed only)."
+      ],
+      "owner_acceptance": "pending",
+      "slice_receipts": [
+        {
+          "slice": "S41",
+          "status": "landed",
+          "route": "Claude Code / Claude Opus 5.5 / medium",
+          "residual": "alphazede/Alphazedehq #361, merge 7fc081bdaf21, 2026-10-16T19:58:14Z"
+        },
+        {
+          "slice": "S11T",
+          "status": "landed",
+          "route": "S11T-g1 (pre-DEC-AFC-SD-041 primary route), commit bf4f159",
+          "residual": "alphazede/Alphazedehq #307, marked merged with #364 at c389102d0a66, 2026-10-16T20:08:22Z"
+        },
+        {
+          "slice": "S11",
+          "status": "landed",
+          "route": "Claude Code / Claude Opus 5.5 / medium; repair Muse Code / Muse Spark 1.3 / max",
+          "residual": "alphazede/Alphazedehq #364, merge c389102d0a66, 2026-10-16T20:08:20Z; review 1/1 and repair 1/1 spent; live install: muse and agy typed_gap"
+        }
+      ],
+      "amendments": [
+        {
+          "id": "P1-DELTA-OD-AFC-01-B",
+          "decision": "Owner 2026-10-16: record OD-AFC-01 = B and the S41, S11T and S11 landings beside the approved plan. Planned task statuses, goals, routes, write sets and dependencies stay unchanged.",
+          "evidence": "implementation.json owner_amendments, dispatch_records.records, native_check_record"
+        }
+      ],
+      "completion_status": "partial; execution overlay for S41, S11T and S11 only; planning statuses unchanged",
+      "current_execution_state": {
+        "as_of": "alphazede/Alphazedehq c389102d0a66 (S11 and S11T merge, 2026-10-16T20:08:20Z)",
+        "rule": "slice_state overlays the task Status column for the slices this delta records. Planned task status fields are unchanged; other slices' landings are in journey.json execution_receipts.",
+        "slice_state": {
+          "S41": "landed",
+          "S11T": "landed",
+          "S11": "landed"
+        }
+      }
+    }
   },
   "phase2_sequence_note": "OR-01 relabel: entries ST-1..ST-5 are the Phase 1 spec track (were P2-1..P2-5; content, roles and dependencies unchanged); P2-6 and P2-7 are Phase 2. The key name phase2_sequence, deferred_to_phase_2, phase2_entry_receipt, the plan-directory glob and evidence/phase2-entry-receipt.json are stable identifiers.",
   "revision_history": [
@@ -5475,13 +5552,20 @@
         "dispatch": {
           "authorized_by": "OD-AFC-01 = B (owner, 2026-10-16); OA-AFC-P1-2026-10-16-01",
           "route": "implementer Claude Code / Claude Opus 5.5 / medium (opensource-hackathon, DEC-AFC-SD-041)",
-          "lease_id": "not_supplied_to_this_delta",
-          "generation": "not_supplied_to_this_delta",
-          "branch": "not_supplied_to_this_delta",
-          "base": "not_supplied_to_this_delta",
-          "evidence_dir": "not_supplied_to_this_delta",
-          "dispatched_at": "not_supplied_to_this_delta",
-          "journey_receipt": "not written by this delta (journey.json is outside its authority)"
+          "lease_id": "alphazedehq-skills/ci-cd",
+          "generation": 1,
+          "repository": "alphazede/Alphazedehq",
+          "branch": "ci-cd/router",
+          "base": "da08876 (alphazede/Alphazedehq origin/main at dispatch)",
+          "dispatched_at": "2026-10-16T13:33-05:00",
+          "candidates": [
+            "8817b50",
+            "74db55a (after the changelog link)"
+          ],
+          "evidence_dir": "orchestrator-local scratch; not retained in this repository",
+          "journey_receipt": "not written by this delta (journey.json is outside its authority)",
+          "times": "times as supplied, -05:00",
+          "source": "Alphazedehq orchestrator follow-up for PR #108 (session 'Alphazedehq pull requests merge', 2026-10-16T20:56:49Z), processed on owner instruction 2026-10-16; not re-read in Alphazedehq by this session"
         },
         "landing": {
           "repository": "alphazede/Alphazedehq",
@@ -5512,7 +5596,14 @@
             "exit": 0
           }
         ],
-        "review": "not_supplied_to_this_delta"
+        "review": {
+          "unit": "IE-P1-10 single phase review of the combined #361 + #307 + #364 diff",
+          "reviewer_route": "Cursor Agent / Grok 4.7 / high (opensource-hackathon)",
+          "s41_result": "skills/ci-cd/SKILL.md is 17 lines and 145 words; names setup-pre-commit, setup-a-repo, ship-pull-request; adds no gate procedure. D4-F holds.",
+          "s41_findings": [],
+          "note": "The REPAIR_REQUIRED verdict and findings F1-F5 of the same review are S11's (dispatch_records.records S11).",
+          "source": "Alphazedehq orchestrator follow-up for PR #108 (session 'Alphazedehq pull requests merge', 2026-10-16T20:56:49Z), processed on owner instruction 2026-10-16; not re-read in Alphazedehq by this session"
+        }
       },
       {
         "slice": "S11T",
@@ -5521,8 +5612,10 @@
         "dispatch": {
           "existing_record": "journey.json execution_receipts dispatch_record S11T-g1, 2026-10-12T08:17:56Z, branch afc/s11t-ci-gate-hook-tests, base ac47f0eca149eb281e41a6bdd9d490221c7a14cf",
           "red_receipt": "evidence/S11T/g1/red-receipt.json: CMD-RED exit 1, T01-T17 red by assertion, candidate bf4f15907a2cd2aba6681d628b4b29cde53c984c",
-          "route": "test implementer Codex CLI / GPT-6.1 Sol / high (opensource-hackathon, DEC-AFC-SD-041)",
-          "route_note": "the S11T-g1 dispatch record predates DEC-AFC-SD-041 (2026-10-13T13:43:31Z); the generation whose content PR #307 carried is not_supplied_to_this_delta"
+          "route": "S11T-g1 ran under the frozen primary snapshot test_implementer route in slices[S11T].model_route (DEC-AFC-PROFILE-001), before DEC-AFC-SD-041",
+          "route_note": "PR #307 carries commit bf4f159 (2026-10-12T03:20-05:00), the S11T-g1 output, which predates DEC-AFC-SD-041 (2026-10-13T13:43:31Z)",
+          "pr_commit": "bf4f159",
+          "source": "Alphazedehq orchestrator follow-up for PR #108 (session 'Alphazedehq pull requests merge', 2026-10-16T20:56:49Z), processed on owner instruction 2026-10-16; not re-read in Alphazedehq by this session"
         },
         "landing": {
           "repository": "alphazede/Alphazedehq",
@@ -5540,13 +5633,34 @@
         "dispatch": {
           "authorized_by": "OA-AFC-P1-2026-10-16-01 (S11 may start and land before S06/S06L)",
           "route": "implementer Claude Code / Claude Opus 5.5 / medium (opensource-hackathon, DEC-AFC-SD-041)",
-          "lease_id": "not_supplied_to_this_delta",
-          "generation": "not_supplied_to_this_delta",
-          "branch": "not_supplied_to_this_delta",
-          "base": "not_supplied_to_this_delta",
-          "evidence_dir": "not_supplied_to_this_delta",
-          "dispatched_at": "not_supplied_to_this_delta",
-          "journey_receipt": "not written by this delta (journey.json is outside its authority)"
+          "lease_id": "harness-configs",
+          "generation": 1,
+          "repository": "alphazede/Alphazedehq",
+          "branch": "ci-cd/harness-hook (stacked on ci-cd/router plus a merge of afc/s11t-ci-gate-hook-tests)",
+          "base": "fc5da79",
+          "dispatched_at": "2026-10-16T13:37-05:00",
+          "first_product_commit": "d02b795",
+          "later_dispatches": [
+            {
+              "what": "test strengthening, T18-T30",
+              "dispatched_at": "2026-10-16T14:16-05:00"
+            },
+            {
+              "what": "phase review (IE-P1-10)",
+              "dispatched_at": "2026-10-16T14:40-05:00",
+              "candidate": "45a1183"
+            },
+            {
+              "what": "repair, Muse Code",
+              "dispatched_at": "2026-10-16T14:57-05:00",
+              "commit": "fb30ce0"
+            }
+          ],
+          "landed_candidate": "5716491",
+          "evidence_dir": "orchestrator-local scratch; not retained in this repository",
+          "journey_receipt": "not written by this delta (journey.json is outside its authority)",
+          "times": "times as supplied, -05:00",
+          "source": "Alphazedehq orchestrator follow-up for PR #108 (session 'Alphazedehq pull requests merge', 2026-10-16T20:56:49Z), processed on owner instruction 2026-10-16; not re-read in Alphazedehq by this session"
         },
         "landing": {
           "repository": "alphazede/Alphazedehq",
@@ -5585,7 +5699,7 @@
           }
         ],
         "review": {
-          "unit": "IE-P1-10",
+          "unit": "IE-P1-10 single phase review of the combined #361 + #307 + #364 diff",
           "reviewer_route": "Cursor Agent / Grok 4.7 / high (opensource-hackathon)",
           "verdict": "REPAIR_REQUIRED",
           "findings": [
@@ -5631,7 +5745,7 @@
             "muse": "typed_gap; all 6 skills linked into $HOME/.agents/skills",
             "agy": "typed_gap"
           },
-          "plan_text_difference": "IE-P1-10 post_step_vv names $HOME/.config/muse/skills as the Muse skill directory; the live install linked into $HOME/.agents/skills"
+          "plan_text_difference": "observed: the installer linked the skills into $HOME/.agents/skills, and the S11 implementer confirmed with `muse skills list` that Muse loads user skills from there (orchestrator report). The plan's $HOME/.config/muse/skills text is stale; see proposed_plan_corrections PC-AFC-P1-2026-10-16-01"
         }
       }
     ]
@@ -5684,7 +5798,7 @@
   "execution_route_note": {
     "date": "2026-10-16",
     "recorded_by_delta": "P1-DELTA-OD-AFC-01-B",
-    "note": "Every slice in this delta (S41, S11T, S11) ran on the frozen opensource-hackathon snapshot per DEC-AFC-SD-041, with the plan's ci lane run as the backend lane: implementer Claude Code / Claude Opus 5.5 / medium, test implementer Codex CLI / GPT-6.1 Sol / high, reviewer Cursor Agent / Grok 4.7 / high. The S11 review repair ran on the frozen bug-triager snapshot: Muse Code / Muse Spark 1.3 / max. The per-slice model_route and review_path.reviewer_route blocks in slices[] still show the pre-migration (DEC-AFC-PROFILE-001) routes and are kept as the planned record; this note, not those blocks, states the executed routes.",
+    "note": "S41 and S11, including S11's T18-T30 test strengthening, ran on the frozen opensource-hackathon snapshot per DEC-AFC-SD-041; S11T's T01-T17 (commit bf4f159, S11T-g1, 2026-10-12) predate DEC-AFC-SD-041 and ran on the pre-migration primary snapshot route, with the plan's ci lane run as the backend lane: implementer Claude Code / Claude Opus 5.5 / medium, test implementer Codex CLI / GPT-6.1 Sol / high, reviewer Cursor Agent / Grok 4.7 / high. The S11 review repair ran on the frozen bug-triager snapshot: Muse Code / Muse Spark 1.3 / max. The per-slice model_route and review_path.reviewer_route blocks in slices[] still show the pre-migration (DEC-AFC-PROFILE-001) routes and are kept as the planned record; this note, not those blocks, states the executed routes.",
     "executed_routes": {
       "snapshot_profile": "opensource-hackathon",
       "authority": "DEC-AFC-SD-041 (DEC-AFC-SD-041-AMENDMENT-1)",
@@ -5694,6 +5808,83 @@
       "reviewer": "Cursor Agent / Grok 4.7 / high",
       "repair": "Muse Code / Muse Spark 1.3 / max (frozen bug-triager snapshot)"
     },
-    "source": "Orchestrator-verified 2026-10-16 (delta packet STATE FACTS); not re-read by this session"
+    "source": "Orchestrator-verified 2026-10-16 (delta packet STATE FACTS); not re-read by this session",
+    "correction": "Corrected by the orchestrator follow-up: the packet said every slice ran on opensource-hackathon; S11T-g1 predates the migration"
+  },
+  "proposed_plan_corrections": [
+    {
+      "id": "PC-AFC-P1-2026-10-16-01",
+      "status": "proposed_owner_review",
+      "live_text_changed": false,
+      "recorded_by_delta": "P1-DELTA-OD-AFC-01-B",
+      "subject": "Muse user skill directory",
+      "stale_text_locations": [
+        "integration_plan.steps[IE-P1-10].post_step_vv (CMD-HOOK-INSTALL --verify line)",
+        "integration_plan.configuration_identity.harness_hook_configs"
+      ],
+      "stale_value": "$HOME/.config/muse/skills",
+      "observed_value": "$HOME/.agents/skills",
+      "evidence": "S11 live CMD-HOOK-INSTALL linked all 6 skills into $HOME/.agents/skills; the S11 implementer confirmed with `muse skills list` that Muse loads user skills from there",
+      "source": "Alphazedehq orchestrator follow-up for PR #108 (session 'Alphazedehq pull requests merge', 2026-10-16T20:56:49Z), processed on owner instruction 2026-10-16; not re-read in Alphazedehq by this session",
+      "proposed_change": "replace $HOME/.config/muse/skills with $HOME/.agents/skills in both locations"
+    }
+  ],
+  "native_check_record": {
+    "date": "2026-10-16",
+    "bearing_lite": "@alphazede/bearing-lite@1.1.7 (npm install -g, exit 0; integrity sha512-tOb12WQD+YXeJDfOpIMHKiF/9nlFT9cXR8wu8l/uVAUK/fmeZ2qou0qWyqGpZfaCw6bkJdM10FfLH0hnFWfEGg==)",
+    "run_by": "P1-DELTA-OD-AFC-01-B planning-delta session (Claude Code cloud)",
+    "commands": {
+      "plan_package": "node <pkg>/hooks/plan-package.cjs docs/plans/2026-10-11-amazon-fantasy-companion",
+      "schema": "jsonschema Draft202012Validator(<pkg>/schemas/<name>.schema.json, <name>.json) for implementation, seit, journey, authority",
+      "render": "node <pkg>/tools/render-dod-manifest.mjs docs/plans/2026-10-11-amazon-fantasy-companion/implementation.json, then --check"
+    },
+    "before": {
+      "plan_package": {
+        "ref": "origin/main f038885 (git worktree)",
+        "exit": 1,
+        "outcome": "FAIL",
+        "manifest_digest": "a018168f575741b5f53bbe7fac4bcb13128e31f37f69d73ba2433cf8d09d5144",
+        "finding_count": 16,
+        "codes": {
+          "manifest_model_view_missing": 3,
+          "manifest_task_field_missing": 13
+        }
+      },
+      "schema_errors": {
+        "implementation": 0,
+        "seit": 0,
+        "journey": 2,
+        "authority": 0
+      },
+      "render_check": "RENDER_CHECK_PASS sha256:ad2d4d3d124b0bd4017e1f7701ce24fe15e393f55eb6ab02bc9e5ac696419067"
+    },
+    "after": {
+      "plan_package": {
+        "ref": "this delta",
+        "exit": 1,
+        "outcome": "FAIL",
+        "manifest_digest": "e9aa0c8e9e3570486f1ff7ea3ac96ae89525756b3c267d7fcbfb93f4fdb5dabf",
+        "finding_count": 17,
+        "codes": {
+          "candidate_digest_mismatch": 1,
+          "manifest_model_view_missing": 3,
+          "manifest_task_field_missing": 13
+        }
+      },
+      "schema_errors": {
+        "implementation": 0,
+        "seit": 0,
+        "journey": 2,
+        "authority": 0
+      },
+      "render_check": "see HANDOFF.md and the PR body (the rendered HTML's digest cannot be stored in its own source)"
+    },
+    "findings": {
+      "candidate_digest_mismatch": "New in this delta. The manifest digest covers the planning inputs and seit.json; the proposed SEIT amendment block (SEIT-AMD-P1-2026-10-16) changes seit.json, so the recorded candidate digest a018168f... no longer matches. origin/main verifies to the recorded digest. Not re-frozen, per the orchestrator follow-up.",
+      "manifest_task_field_missing": "Pre-existing on origin/main: dod_manifest.tasks rows have no route field (13 tasks).",
+      "manifest_model_view_missing": "Pre-existing on origin/main: MODEL-AFC-V1..V3 (diagram-assisted) bind no view.",
+      "journey_schema_errors": "Pre-existing on origin/main: checkout_lease extra properties and one history item; journey.json is not touched by this delta."
+    },
+    "orchestrator_baseline_correction": "The orchestrator follow-up reported the same three codes on origin/main with actual digest a8dadf56.... That run used a git-archive copy outside a git checkout; plan-package.cjs then cannot resolve the planning inputs, so it reports a different digest. Reproduced here: the same archive method gives a8dadf56... plus 3 missing_input findings, and a real origin/main worktree verifies to a018168f... with no candidate_digest_mismatch."
   }
 }
