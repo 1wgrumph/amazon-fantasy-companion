@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Record Phase 2 execution state through wave 4 in implementation.json (planning delta P2-W4-EXECUTION-STATE) and regenerate the DoD Manifest ([#98](https://github.com/1wgrumph/amazon-fantasy-companion/pull/98)).
 - Document the dev AWS CLI sign-in, the Yahoo app settings and the Yahoo SSM parameters in docs/operations/aws-and-yahoo-setup.md ([#91](https://github.com/1wgrumph/amazon-fantasy-companion/pull/91)).
 - Record the Phase 1 plan evidence, packets and handoff that were left uncommitted in the planning worktree ([#90](https://github.com/1wgrumph/amazon-fantasy-companion/pull/90)).
 - Record the P2-X01 device baseline on the Fire TV stick: Fire OS 8.1.8.5 / API 30, the pinned starter installed and launched, spike verdict WORKS ([#89](https://github.com/1wgrumph/amazon-fantasy-companion/pull/89)).
