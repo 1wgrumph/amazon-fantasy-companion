@@ -53,7 +53,7 @@ Proof rows:
 
 - SEIT-AFC-D5-05.K (AC-AFC-D5-05 via CMD-SKILL-LINK): PASS — the four existing
   shared-skill directories link `spec-authoring` to the merged skill
-  (`/home/spectre/alphazede/Alphazedehq/skills/spec-authoring`, verified live via
+  (`$HOME/alphazede/Alphazedehq/skills/spec-authoring`, verified live via
   `readlink -f` and `ls -la` on all four symlinks).
 - SEIT-AFC-PATH-01.P (AC-AFC-PATH-01 via CMD-PATH-SCAN-PLAN): PASS for S06L output —
   write set has no absolute home path; whole-dir hits are pre-existing base content

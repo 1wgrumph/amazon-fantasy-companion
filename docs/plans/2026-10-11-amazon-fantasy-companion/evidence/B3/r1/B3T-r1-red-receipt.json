@@ -1,0 +1,26 @@
+{
+  "lease_id": "B3T-r1",
+  "role": "test_implementer",
+  "bug_route": "bug-triager test_implementer (Claude Code / Claude Opus 5.5 / medium)",
+  "findings": ["B3-R1", "B3-R2"],
+  "base_head": "2b46eae6e855629ef161075ba32bf76d9c7cc0c1",
+  "head": "f19f44a57d13c5cd6dfebfd3dce429c7a70ceb4b",
+  "branch": "afc/b3-appendix-links",
+  "pr": "https://github.com/alphazede/Alphazedehq/pull/320",
+  "changed_paths": ["skills/spec-authoring/tests/test_appendix_links.py"],
+  "command": "TMPDIR=/var/tmp/az PYTHONDONTWRITEBYTECODE=1 python3 -m pytest skills/spec-authoring/tests -q -p no:cacheprovider --deselect skills/spec-authoring/tests/test_spec_authoring.py::SpecAuthoringTests::test_trigger_classifications",
+  "tree": "clean (committed before run)",
+  "deselected": ["test_spec_authoring.py::SpecAuthoringTests::test_trigger_classifications (needs evaluator SPEC_AUTHORING_TRIGGER_RESULTS)"],
+  "exit": 1,
+  "result": "3 failed, 77 passed, 1 deselected",
+  "failures": {
+    "test_b3_r1_duplicate_headings_link_to_their_own_occurrence": "AssertionError: REQ-1: links '[Repeated](#repeated-1)', expected targets ['#repeated']",
+    "test_b3_r2_section_titled_like_the_document_links_past_the_title": "AssertionError: REQ-1: links '[Example Fixture Specification](#example-fixture-specification)', expected targets ['#example-fixture-specification-1']",
+    "test_b3_r2_heading_colliding_with_a_deduplicated_slug_gets_a_fresh_anchor": "AssertionError: REQ-1: links '[Foo](#foo-1)', expected targets ['#foo']"
+  },
+  "oracle": "github_anchors(): GitHub/github-slugger rule over the built file's headings in document order (suffix advances until unused); literal expected targets are cross-checked against it",
+  "sha256": {
+    "skills/spec-authoring/tests/test_appendix_links.py": "bc8e2a9dab9d6ef4d7d06e1953c89cdc0ca5157b58d54a69fc3a20e09e2d0dab",
+    "skills/spec-authoring/scripts/spec_build.py (unchanged)": "99f268c002cc3c9dc5aa71ed5463121ef4175bccb8b0cb9657303c452ee01f0e"
+  }
+}

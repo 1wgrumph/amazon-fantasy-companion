@@ -19,19 +19,19 @@
   "commands": [
     {
       "id": "REPRO-FILE",
-      "command": "python3 /home/spectre/alphazede/Alphazedehq/skills/setup-a-repo/scripts/check-workflows.py /home/spectre/alphazede/Alphazedehq/skills/setup-a-repo/templates/ci.yml",
+      "command": "python3 $HOME/alphazede/Alphazedehq/skills/setup-a-repo/scripts/check-workflows.py $HOME/alphazede/Alphazedehq/skills/setup-a-repo/templates/ci.yml",
       "candidate_sha": "8b4cd9dfeafa4dd1e268a1d7c1b78dc03a1b2eb7",
       "checker_source_commit": "7090d44a60218f928e3bc4d4b12ef33f0ba232d7",
       "exit_code": 0,
-      "output_tail": "/home/spectre/alphazede/Alphazedehq/skills/setup-a-repo/templates/ci.yml: PASS"
+      "output_tail": "$HOME/alphazede/Alphazedehq/skills/setup-a-repo/templates/ci.yml: PASS"
     },
     {
       "id": "REPRO-DIRECTORY",
-      "command": "python3 /home/spectre/alphazede/Alphazedehq/skills/setup-a-repo/scripts/check-workflows.py /home/spectre/alphazede/Alphazedehq/skills/setup-a-repo/templates",
+      "command": "python3 $HOME/alphazede/Alphazedehq/skills/setup-a-repo/scripts/check-workflows.py $HOME/alphazede/Alphazedehq/skills/setup-a-repo/templates",
       "candidate_sha": "8b4cd9dfeafa4dd1e268a1d7c1b78dc03a1b2eb7",
       "checker_source_commit": "7090d44a60218f928e3bc4d4b12ef33f0ba232d7",
       "exit_code": 1,
-      "output_tail": "/home/spectre/alphazede/Alphazedehq/skills/setup-a-repo/templates: unreadable, malformed or unsupported workflow structure"
+      "output_tail": "$HOME/alphazede/Alphazedehq/skills/setup-a-repo/templates: unreadable, malformed or unsupported workflow structure"
     }
   ],
   "required_commands": {
@@ -95,7 +95,7 @@
     "source_sha256": "04d4eaeb59f0aee7ae5910f177bd3feacf1c39b4b034a8ec3618b56be5d1b24b",
     "source_evidence": "main(paths) calls Path(path).read_text for every argument; no directory expansion; OSError maps to unreadable, malformed or unsupported workflow structure",
     "test_evidence": "tools/ci/tests/test_workflows.py:test_committed_workflows_pass_the_checker passes the .github/workflows directory and requires exit 0",
-    "exact_error": "/home/spectre/alphazede/Alphazedehq/skills/setup-a-repo/templates: unreadable, malformed or unsupported workflow structure",
+    "exact_error": "$HOME/alphazede/Alphazedehq/skills/setup-a-repo/templates: unreadable, malformed or unsupported workflow structure",
     "resolution_needed": "Reconcile directory input with the frozen vendor pin through the orchestrator: corrected file-input commands and tests, or a merged directory-capable checker with an explicitly amended pin. Do not edit tests or the prescribed commands under this lease."
   },
   "proof_rows": {

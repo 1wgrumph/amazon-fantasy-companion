@@ -6,18 +6,23 @@
     "status": "implementation",
     "planning_repository": "github:1wgrumph/amazon-fantasy-companion",
     "tracking_issue": "1wgrumph/amazon-fantasy-companion#1",
-    "deadline": "2026-10-23T19:00:00Z"
+    "deadline": "2026-10-23T19:00:00Z",
+    "current_activity": "Approved planning/tracking closeout: merge PR15, create/readback13milestones39issues; product execution held."
   },
   "checkout_lease": {
     "journey": "AFC-2026-10-11",
-    "controller": "Claude Code Orchestrator (Claude Opus 5.5)",
+    "controller": "Codex current API session / Planning Lead",
     "repository": "github:1wgrumph/amazon-fantasy-companion",
     "checkout": "$HOME/alphazede/worktrees/amazon-fantasy-companion-planning",
     "branch": "plan/2026-10-11-amazon-fantasy-companion",
-    "candidate_revision": "2c13a6bf560e87d11864cc6234f48e40dd9cf529",
+    "candidate_revision": "0b987de5eac88bbcf903a7de73d2d58e545652cb",
     "acquired_at": "2026-10-11T19:21:56Z",
     "generation": 1,
-    "state": "active"
+    "state": "active",
+    "resumed_at": "2026-10-13T13:54:42Z",
+    "liveness": "No agents active. Planning and tracking complete, branches/worktrees cleaned. Product held pending owner instruction.",
+    "heartbeat_at": "2026-10-13T18:39:48.397549+00:00",
+    "active_candidate": "88db101edb61a08dedea8037e4e9207d262a7e0f"
   },
   "stages": {
     "intake": "accepted",
@@ -328,6 +333,102 @@
       "decided_at": "2026-10-12T11:58:20Z",
       "decision": "spec-authoring sections read like a real specification: no printed BLUF or Who/What/Why/How/When/Where labels. The opening sentence states the section's point. An unprinted writer's checklist guides each section: Decision (what it decides/defines), Concern (driving requirement/stakeholder concern, cite UIDs), Mechanism (how it works: interfaces, dependencies), Rationale (why this option, alternatives rejected), Verification (how it is proven). Fix the shared skill (rule, template, lint, tests), then rewrite the AFC spec. Inherited from the GridMarket kit; GridMarket's own spec is not changed by this Lifecycle.",
       "source": "Owner at ST-5 spec review: 'the 5 qs are wrong and the bluf all both should not be explicit it should read like a real spec'; chose 'Yes, use those 5'"
+    },
+    {
+      "id": "DEC-AFC-SD-035",
+      "at": "2026-10-12T12:26:30Z",
+      "source": "owner answers to spec open items (AskUserQuestion, this session)",
+      "answers": {
+        "Q2/P2": "excitement_levels = Off / Mild / Hype (three fixed levels)",
+        "Q3": "numeric legibility minimum in addition to owner acceptance: body text >= 24px, scores >= 32px at 1080p",
+        "Q4": "no Mode A footage. If the spike shows the panel cannot sit beside a provider's live video, the demo is alerts + Watch only and the panel is a full screen in our app. Owner rationale: the product is a tune-in alert system; Watch must know the broadcast channel and whether the customer can watch it (location + subscription, or the provider's own out-of-region / not-in-plan answer)",
+        "Q5": "provider spike order: Prime Video (TNF), ESPN app, DirecTV Stream app (owner's current subscription), YouTube TV (owner may switch later). Local broadcast (CBS/FOX/NBC): show the channel; offer a provider app that carries it, otherwise no deep link",
+        "competitive": "owner asked to confirm YouTube TV does not already do this: YouTube TV Fantasy View (NFL.com/Yahoo) shows roster scores beside the game; no evidence of tune-in alerts or cross-provider Watch. Submission must state this differentiation",
+        "Q6": "stick found; exact model and Fire OS version still to be recorded",
+        "Q7": "Yahoo application not yet submitted",
+        "Q8": "AWS Free-plan account not yet created",
+        "Q9": "license Apache-2.0",
+        "Q10": "restore the missing engineering-methods S8 ledger (Alphazedehq skills task)",
+        "P1": "close_game_margin = within 8 points in the 4th quarter or overtime",
+        "P3": "stale_after = 60 seconds",
+        "D1": "owner 2026-10-12: 'we give the user options 2 of the most popular scoring fantasy modes' \u2014 manual-lineup scoring is a customer-selectable preset of exactly two: PPR (1 pt/reception; ESPN and Sleeper default) and Half-PPR (0.5 pt/reception; Yahoo default). Each preset is a documented statistic/coefficient table (AFC-PR-065); other coefficients identical (1 pt/10 rush+rec yds, 6 per rush/rec TD, 1 pt/25 pass yds, 4 per pass TD, -1 INT, -2 fumble lost). Default preset: Half-PPR. Yahoo leagues use Yahoo's own league scoring."
+      }
+    },
+    {
+      "id": "DEC-AFC-SD-036",
+      "at": "2026-10-12T12:41:50Z",
+      "source": "owner 2026-10-12: 'also we discuss how this can also potientially be used in AWS analytics channel and with Amazon new basketball contract with the NBA also'",
+      "decision": "Discussion only, no new requirements or build scope. The spec (rationale / future-direction text) and the hackathon submission write-up discuss extensibility to (1) an AWS-powered sports analytics viewing experience on Prime Video (e.g. the analytics-focused alternate TNF stream and AWS-powered Next Gen Stats) and (2) Amazon's NBA media-rights package on Prime Video. Claims about those offerings must cite public sources and be marked as external context, not product capability; the architecture section notes which components are sport-agnostic (alert policy, Watch handoff, panel) versus NFL-specific (feed adapter, scoring presets)."
+    },
+    {
+      "id": "DEC-AFC-SD-037",
+      "at": "2026-10-12T12:43:44Z",
+      "source": "owner 2026-10-12: 'in the agents.md file I have a new way to use bugs triage ... I think we need it in here to make sure we fix bugs effciently with our tight squeeze we have'",
+      "decision": "Dated visible amendment to the frozen routing: defects found during this Lifecycle (failing gate/landing, acceptance check, flaky test, review finding) are triaged with bug-hunter-triage and their fix and review dispatch on the bug-triager profile routes (Implementer Muse Code / Muse Spark 1.3 / max; Reviewer Codex CLI / GPT-6 Astra / high). Planned slices keep their lane profiles. Packets keeping a lane route for a defect state BUG_ROUTE. Written to Hackathons/AGENTS.md (workspace rule #20). In-flight S09-g6 (finishing an already-written repair) is not re-routed."
+    },
+    {
+      "id": "DEC-AFC-SD-038",
+      "at": "2026-10-12T13:17:35Z",
+      "source": "owner 2026-10-12: 'yes make sure this is used here and also add to all agents.md on this computer to use this in a push and maybe also in the other skills to use this release process'",
+      "decision": "Revision-record rule: every landed PR adds a CHANGELOG.md [Unreleased] entry linking the PR (ship-pull-request does it); spec-authoring revision rows list changed sections and link PR + diff (lint-enforced); releases via release-process. Canonical workspace AGENTS.md rule #21 (added), Hackathons/AGENTS.md (added); pointer sections in each repo AGENTS.md (Alphazedehq, requirements-system, azedge, betbot, odi-graph, maestro) by PR; skills spec-authoring, ship-pull-request, setup-a-repo (seed CHANGELOG.md), release-process (notes from changelog). Applies to this repo: CHANGELOG.md and a release per spec revision; owner authorizes AFC spec releases ('make sure this is used here')."
+    },
+    {
+      "id": "DEC-AFC-APPROVAL-ST5",
+      "at": "2026-10-12T13:17:35Z",
+      "source": "owner 2026-10-12: 'ok I am done reviewing everything else was sound and once that has been done you can continue to the next steps of coming up with the implementation plan'",
+      "decision": "ST-5 spec approval of PR #10 candidate 771c28958f78e611048528aedbd9ed4490f308e1 content, conditional on ST5-F1 (clickable links: external docs, issues, in-document section cross-references; skill rule + lint) and ST5-F2 (revision rows with changed sections + PR/diff links) being applied and verified deterministically. Owner authorizes starting Phase 2 Planning and Design (implementation plan + milestones) now."
+    },
+    {
+      "id": "DEC-AFC-SD-039",
+      "at": "2026-10-13T03:55:05Z",
+      "source": "Owner this session: \"You are the planning lead now\"",
+      "decision": "The current Codex session is the Planning and Design lead as well as the controlling Orchestrator. This supersedes the interrupted Claude planning-lead dispatch and closes the pending lead-route question. Retain frozen specialist profiles, selected capabilities, independent planning review and all spent bounds. Complete program planning and prepare issue/milestone organization; no Phase 2 product execution before integrated approval."
+    },
+    {
+      "id": "DEC-AFC-SD-040",
+      "at": "2026-10-13T12:51:31Z",
+      "decision": "Owner requests a fresh Claude Opus high session to review and revise overloaded milestones into a clearer chronological dependency order. Target3 issues per milestone; permitted range2\u20136 (+3/-1). Preserve full intended scope. This explicitly authorizes the additional focused chronology review after the prior planning review/repair; prior spent budgets remain historical, not reset. Planning/tracking approval not granted; product execution remains held.",
+      "source": "Current user message; exact request retained in packet"
+    },
+    {
+      "id": "DEC-AFC-SD-041",
+      "at": "2026-10-13T13:43:31Z",
+      "decision": "Owner requests a fresh-session handoff after updating Bearing and selects the newly combined profile instead of the previous Lifecycle profiles. Final requested name is opensource-hackathon (owner is renaming hackathon). Authorizes dated visible migration to the selected named profile and installed Bearing1.1.7 in the fresh session, including role/session routes, cadences, capabilities and holds; preserve prior snapshots and spent review/repair records. Current session prepares handoff only; no product execution or tracking approval granted.",
+      "source": "Current user requests for fresh session and opensource-hackathon rename"
+    },
+    {
+      "id": "DEC-AFC-SD-041-AMENDMENT-1",
+      "at": "2026-10-13T13:54:42Z",
+      "authority": "DEC-AFC-SD-041",
+      "decision": "Activate complete final opensource-hackathon profile for planning and proposed implementation under Bearing 1.1.7. Coordinator fallbacks differ from handoff observation: Cursor/Haiku5.5/xhigh, Cursor/Grok4.7/low, Deep Code CLI/DeepSeek V4 Flash/max. Preserve bug-triager authority, prior snapshots and spent review/repair. Muse requires --contributor-mode on. No product execution, tracking creation or PR15 merge authorized.",
+      "full_profile_sha256": "7d501eb8c103831a38c50d237b5d1e2e015a564b9ade8aef09a32dfc39b26ab1",
+      "bearing_route_digest_sha256": "11c4478edb7b0c94da196cdc8be2317f498378724ae041bde0c108832b1e2036"
+    },
+    {
+      "id": "DEC-AFC-P2-APPROVAL-001",
+      "status": "confirmed",
+      "at": "2026-10-13T16:21:37Z",
+      "owner_statement": "approved",
+      "source": "Current owner reply to integrated planning/tracking review",
+      "candidate_revision": "a7a16570c376222635f48a6702cd0e3eca694493",
+      "package_digest": "e02871029b86f8d0f2fdef6617feb989413883cc6bdb70e5dec3a47e64c86da8",
+      "profile_full_sha256": "7d501eb8c103831a38c50d237b5d1e2e015a564b9ade8aef09a32dfc39b26ab1",
+      "payload_sha256": "f0b8d5bf26d3959948e65960fc2b06525a96f964ab3454633eb6c1aaeab9acdb",
+      "decision": "Approve exact Phase2 planning/tracking package and disclosed visual-check gap; authorize PR15 merge and P2-L01 creation/readback of13milestones39issues after landing. Product execution remains held until a separate instruction.",
+      "visual_gap": "owner accepted for planning approval; remains NOT_RUN, never PASS",
+      "timing": "W1 risk acknowledged with approved package; no deadline or scope change",
+      "allowed": [
+        "merge PR15 exact approved head after green required checks",
+        "P2-L01 tracking creation and dependency-link metadata reconciliation after landing",
+        "sanitized approval/tracking receipts through safe follow-up PR"
+      ],
+      "prohibited": [
+        "product implementation or runtime/device/AWS work",
+        "credential access",
+        "public export, visibility change, release/tag publication",
+        "production DB changes",
+        "new automatic planning review or review-budget reset"
+      ]
     }
   ],
   "open_decisions": [],
@@ -388,738 +489,59 @@
       "dispatched_at": "2026-10-11T23:25:16Z",
       "result": "pending",
       "packet": "specialists/pd-resume-prompt.md"
+    },
+    {
+      "stage": "planning_and_design",
+      "phase": 2,
+      "role": "planning_and_design",
+      "host": "Claude Code headless (claude -p, Claude Opus 5.5, effort high, BEARING_ROLE=planning_and_design)",
+      "dispatched_at": "2026-10-12T13:18:26Z",
+      "result": "pending",
+      "packet": "specialists/pd-phase2-prompt.md",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-phase2-plan",
+      "branch": "plan/2026-10-12-afc-phase-2",
+      "base_sha": "771c28958f78e611048528aedbd9ed4490f308e1",
+      "authority": "DEC-AFC-APPROVAL-ST5"
+    },
+    {
+      "stage": "planning_and_design",
+      "phase": 2,
+      "role": "planning_and_design",
+      "host": "Codex current owner-appointed lead DEC-AFC-SD-039",
+      "at": "2026-10-13T07:44:19Z",
+      "result": "PLAN_REVIEW_READY",
+      "candidate_digest": "67ac7a9071859e8d4ef05b863c3e6e4d4931d2451a162abb5bb8115eeb1b7d46",
+      "evidence": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-review-repair",
+      "supersedes": "Historical Phase2 pending author-launch status; does not rewrite original launch receipt"
     }
   ],
   "profile_selection": {
     "status": "frozen",
-    "selected_at": "2026-10-11T20:10:26Z",
-    "catalog": "~/.agents/bearing-lite/profiles.json",
+    "selected_at": "2026-10-13T13:54:42Z",
+    "catalog": "$HOME/.agents/bearing-lite/profiles.json",
     "owner_statement": {
-      "planning": "primary",
-      "implementation": "Owner asked for a recommendation across all profiles (not GridMarket precedent) and accepted the lane map."
+      "planning": "opensource-hackathon",
+      "implementation": "opensource-hackathon; defect-specific DEC-AFC-SD-037 retained"
     },
     "lane_profiles": {
-      "planning": "primary",
+      "planning": "opensource-hackathon",
       "implementation": {
-        "tv-app-ui": "frontend",
-        "backend": "primary",
-        "device-integration-spikes": "heavyweight",
-        "spec-and-docs": "tech-writing",
+        "tv-app-ui": "opensource-hackathon",
+        "backend": "opensource-hackathon",
+        "device-integration-spikes": "opensource-hackathon",
+        "spec-and-docs": "opensource-hackathon",
         "defects": "bug-triager"
       }
     },
     "observed_orchestrator": {
-      "harness": "Claude Code",
-      "model": "Claude Opus 5.5",
-      "reasoning": "session default"
+      "harness": "Codex current API session",
+      "model": "not exposed by session metadata",
+      "reasoning": "not exposed by session metadata",
+      "role": "Planning Lead; continuing DEC-AFC-SD-039"
     },
-    "note": "Frozen copies; later catalog edits have no effect without an owner-confirmed dated amendment.",
+    "note": "DEC-AFC-SD-041 owner-authorized migration under Bearing 1.1.7. Complete frozen profile; future catalog changes ignored. No planning review/repair reset or product authority. Historical selection: Phase2 evidence/profile-migration-041/prior-profile-selection.json. Fallback activation only on confirmed usage/rate limits under owner instruction.",
     "frozen_snapshots": {
-      "primary": {
-        "snapshot": {
-          "roles": {
-            "implementer": {
-              "enabled": true,
-              "primary": {
-                "harness": "Codex CLI",
-                "model": "GPT-6.1 Sol",
-                "reasoning": "high"
-              },
-              "ordered_fallbacks": [
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
-                  "harness": "Muse Code",
-                  "model": "Muse Spark 1.3",
-                  "reasoning": "max"
-                },
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                  "harness": "Claude Code",
-                  "model": "Claude Opus 5.5",
-                  "reasoning": "medium"
-                }
-              ]
-            },
-            "test_implementer": {
-              "enabled": true,
-              "primary": {
-                "harness": "Claude Code",
-                "model": "Claude Opus 5.5",
-                "reasoning": "medium"
-              },
-              "ordered_fallbacks": [
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
-                  "harness": "Codex CLI",
-                  "model": "GPT-6.1 Sol",
-                  "reasoning": "high"
-                },
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                  "harness": "Muse Code",
-                  "model": "Muse Spark 1.3",
-                  "reasoning": "max"
-                }
-              ]
-            },
-            "light_implementer": {
-              "enabled": true,
-              "primary": {
-                "harness": "Muse Code",
-                "model": "Muse Spark 1.3",
-                "reasoning": "max"
-              },
-              "ordered_fallbacks": [
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
-                  "harness": "AGY",
-                  "model": "Claude Sonnet 5.5",
-                  "reasoning": "medium"
-                },
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                  "harness": "AGY",
-                  "model": "Gemini 3.8 Flash",
-                  "reasoning": "high"
-                },
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                  "harness": "Codex CLI",
-                  "model": "GPT-6.1 Sol",
-                  "reasoning": "high"
-                }
-              ]
-            },
-            "coordinator": {
-              "enabled": true,
-              "primary": {
-                "harness": "AGY",
-                "model": "Gemini 3.8 Flash",
-                "reasoning": "medium"
-              },
-              "ordered_fallbacks": [
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
-                  "harness": "Claude Code",
-                  "model": "Claude Haiku 5.5",
-                  "reasoning": "high"
-                },
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                  "harness": "Muse Code",
-                  "model": "Muse Spark 1.3",
-                  "reasoning": "xhigh"
-                },
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                  "harness": "Deep Code CLI",
-                  "model": "DeepSeek V4.1",
-                  "reasoning": "max"
-                }
-              ]
-            },
-            "reviewer": {
-              "enabled": true,
-              "primary": {
-                "harness": "Muse Code",
-                "model": "Muse Spark 1.3",
-                "reasoning": "max"
-              },
-              "ordered_fallbacks": [
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
-                  "harness": "Codex CLI",
-                  "model": "GPT-6 Astra",
-                  "reasoning": "high"
-                },
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                  "harness": "Claude Code",
-                  "model": "Fable",
-                  "reasoning": "high"
-                }
-              ],
-              "cadence": "phase"
-            },
-            "scribe": {
-              "enabled": true,
-              "primary": {
-                "harness": "Muse Code",
-                "model": "Muse Spark 1.3",
-                "reasoning": "max"
-              },
-              "ordered_fallbacks": [
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
-                  "harness": "Claude Code",
-                  "model": "Claude Haiku 5.5",
-                  "reasoning": "xhigh"
-                },
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                  "harness": "AGY",
-                  "model": "Claude Sonnet 5.5",
-                  "reasoning": "medium"
-                },
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                  "harness": "Codex CLI",
-                  "model": "GPT-6.1 Sol",
-                  "reasoning": "medium"
-                },
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                  "harness": "AGY",
-                  "model": "Gemini 3.8 Flash",
-                  "reasoning": "high"
-                }
-              ]
-            },
-            "plan_integrator": {
-              "enabled": true,
-              "primary": {
-                "harness": "Muse Code",
-                "model": "Muse Spark 1.3",
-                "reasoning": "max"
-              },
-              "ordered_fallbacks": [
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
-                  "harness": "Claude Code",
-                  "model": "Claude Opus 5.5",
-                  "reasoning": "high"
-                },
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                  "harness": "Codex CLI",
-                  "model": "GPT-6.1 Sol",
-                  "reasoning": "xhigh"
-                }
-              ]
-            },
-            "systems_modeler": {
-              "sessions": {
-                "planning": {
-                  "enabled": true,
-                  "primary": {
-                    "harness": "Muse Code",
-                    "model": "Muse Spark 1.3",
-                    "reasoning": "max"
-                  },
-                  "ordered_fallbacks": [
-                    {
-                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
-                      "harness": "Claude Code",
-                      "model": "Claude Opus 5.5",
-                      "reasoning": "high"
-                    },
-                    {
-                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                      "harness": "Codex CLI",
-                      "model": "GPT-6.1 Sol",
-                      "reasoning": "xhigh"
-                    }
-                  ]
-                }
-              }
-            },
-            "test_engineer": {
-              "sessions": {
-                "planning": {
-                  "enabled": true,
-                  "primary": {
-                    "harness": "Claude Code",
-                    "model": "Claude Opus 5.5",
-                    "reasoning": "high"
-                  },
-                  "ordered_fallbacks": [
-                    {
-                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
-                      "harness": "Codex CLI",
-                      "model": "GPT-6 Astra",
-                      "reasoning": "xhigh"
-                    },
-                    {
-                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                      "harness": "Muse Code",
-                      "model": "Muse Spark 1.3",
-                      "reasoning": "max"
-                    }
-                  ]
-                },
-                "assurance": {
-                  "enabled": true,
-                  "primary": {
-                    "harness": "Codex CLI",
-                    "model": "GPT-6.1 Sol",
-                    "reasoning": "xhigh"
-                  },
-                  "ordered_fallbacks": [
-                    {
-                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
-                      "harness": "Claude Code",
-                      "model": "Claude Opus 5.5",
-                      "reasoning": "medium"
-                    },
-                    {
-                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                      "harness": "Muse Code",
-                      "model": "Muse Spark 1.3",
-                      "reasoning": "max"
-                    }
-                  ],
-                  "cadence": "lifecycle"
-                }
-              }
-            },
-            "integration_engineer": {
-              "sessions": {
-                "planning": {
-                  "enabled": true,
-                  "primary": {
-                    "harness": "Claude Code",
-                    "model": "Claude Opus 5.5",
-                    "reasoning": "high"
-                  },
-                  "ordered_fallbacks": [
-                    {
-                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
-                      "harness": "Codex CLI",
-                      "model": "GPT-6.1 Sol",
-                      "reasoning": "xhigh"
-                    },
-                    {
-                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                      "harness": "Muse Code",
-                      "model": "Muse Spark 1.3",
-                      "reasoning": "max"
-                    }
-                  ]
-                },
-                "execution": {
-                  "enabled": true,
-                  "primary": {
-                    "harness": "Codex CLI",
-                    "model": "GPT-6.1 Sol",
-                    "reasoning": "high"
-                  },
-                  "ordered_fallbacks": [
-                    {
-                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
-                      "harness": "Claude Code",
-                      "model": "Claude Opus 5.5",
-                      "reasoning": "medium"
-                    },
-                    {
-                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                      "harness": "Muse Code",
-                      "model": "Muse Spark 1.3",
-                      "reasoning": "max"
-                    }
-                  ],
-                  "cadence": "lifecycle"
-                }
-              }
-            },
-            "requirements_engineer": {
-              "sessions": {
-                "planning": {
-                  "enabled": true,
-                  "primary": {
-                    "harness": "Muse Code",
-                    "model": "Muse Spark 1.3",
-                    "reasoning": "max"
-                  },
-                  "ordered_fallbacks": [
-                    {
-                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
-                      "harness": "Codex CLI",
-                      "model": "GPT-6 Astra",
-                      "reasoning": "xhigh"
-                    },
-                    {
-                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                      "harness": "Claude Code",
-                      "model": "Claude Opus 5.5",
-                      "reasoning": "high"
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          "review": {
-            "coverage_assist": {
-              "enabled": true,
-              "required": true
-            }
-          },
-          "deterministic_verification": {
-            "reverify": {
-              "enabled": true
-            }
-          }
-        },
-        "configuration_digest_sha256": "b81a141be5b9d83cbecbb34df460b0f25929c2ae0df165f16ff529acfc50bafa",
-        "development_strategy": {
-          "mode": "tdd"
-        },
-        "concurrency": {
-          "dispatch_ready_independent_work": true,
-          "preserve_order_for_dependencies_interfaces_write_overlap_and_shared_mutable_resources": true
-        },
-        "planning_to_implementation_clean_session": true
-      },
-      "frontend": {
-        "snapshot": {
-          "roles": {
-            "implementer": {
-              "enabled": true,
-              "primary": {
-                "harness": "Codex CLI",
-                "model": "GPT-6 Astra",
-                "reasoning": "high"
-              },
-              "ordered_fallbacks": [
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
-                  "harness": "Claude Code",
-                  "model": "Claude Opus 5.5",
-                  "reasoning": "high"
-                },
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                  "harness": "Muse Code",
-                  "model": "Muse Spark 1.3",
-                  "reasoning": "max"
-                }
-              ]
-            },
-            "test_implementer": {
-              "enabled": true,
-              "primary": {
-                "harness": "Claude Code",
-                "model": "Claude Opus 5.5",
-                "reasoning": "medium"
-              },
-              "ordered_fallbacks": [
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
-                  "harness": "Muse Code",
-                  "model": "Muse Spark 1.3",
-                  "reasoning": "max"
-                },
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                  "harness": "Codex CLI",
-                  "model": "GPT-6.1 Sol",
-                  "reasoning": "high"
-                }
-              ]
-            },
-            "light_implementer": {
-              "enabled": true,
-              "primary": {
-                "harness": "Muse Code",
-                "model": "Muse Spark 1.3",
-                "reasoning": "max"
-              },
-              "ordered_fallbacks": [
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
-                  "harness": "AGY",
-                  "model": "Claude Sonnet 5.5",
-                  "reasoning": "medium"
-                },
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                  "harness": "AGY",
-                  "model": "Gemini 3.8 Flash",
-                  "reasoning": "high"
-                },
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                  "harness": "Codex CLI",
-                  "model": "GPT-6.1 Sol",
-                  "reasoning": "high"
-                }
-              ]
-            },
-            "coordinator": {
-              "enabled": true,
-              "primary": {
-                "harness": "AGY",
-                "model": "Gemini 3.8 Flash",
-                "reasoning": "medium"
-              },
-              "ordered_fallbacks": [
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
-                  "harness": "Claude Code",
-                  "model": "Claude Haiku 5.5",
-                  "reasoning": "high"
-                },
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                  "harness": "Muse Code",
-                  "model": "Muse Spark 1.3",
-                  "reasoning": "xhigh"
-                },
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                  "harness": "Deep Code CLI",
-                  "model": "DeepSeek V4.1",
-                  "reasoning": "max"
-                }
-              ]
-            },
-            "reviewer": {
-              "enabled": true,
-              "primary": {
-                "harness": "Claude Code",
-                "model": "Claude Opus 5.5",
-                "reasoning": "high"
-              },
-              "ordered_fallbacks": [
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
-                  "harness": "Codex CLI",
-                  "model": "GPT-6.1 Sol",
-                  "reasoning": "high"
-                }
-              ],
-              "cadence": "phase"
-            },
-            "scribe": {
-              "enabled": true,
-              "primary": {
-                "harness": "Muse Code",
-                "model": "Muse Spark 1.3",
-                "reasoning": "max"
-              },
-              "ordered_fallbacks": [
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
-                  "harness": "Claude Code",
-                  "model": "Claude Haiku 5.5",
-                  "reasoning": "xhigh"
-                },
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                  "harness": "AGY",
-                  "model": "Claude Sonnet 5.5",
-                  "reasoning": "medium"
-                },
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                  "harness": "Codex CLI",
-                  "model": "GPT-6.1 Sol",
-                  "reasoning": "medium"
-                },
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                  "harness": "AGY",
-                  "model": "Gemini 3.8 Flash",
-                  "reasoning": "high"
-                }
-              ]
-            },
-            "plan_integrator": {
-              "enabled": true,
-              "primary": {
-                "harness": "Muse Code",
-                "model": "Muse Spark 1.3",
-                "reasoning": "max"
-              },
-              "ordered_fallbacks": [
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
-                  "harness": "Claude Code",
-                  "model": "Claude Opus 5.5",
-                  "reasoning": "high"
-                },
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                  "harness": "Codex CLI",
-                  "model": "GPT-6.1 Sol",
-                  "reasoning": "xhigh"
-                }
-              ]
-            },
-            "systems_modeler": {
-              "sessions": {
-                "planning": {
-                  "enabled": true,
-                  "primary": {
-                    "harness": "Muse Code",
-                    "model": "Muse Spark 1.3",
-                    "reasoning": "max"
-                  },
-                  "ordered_fallbacks": [
-                    {
-                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
-                      "harness": "Claude Code",
-                      "model": "Claude Opus 5.5",
-                      "reasoning": "high"
-                    },
-                    {
-                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                      "harness": "Codex CLI",
-                      "model": "GPT-6.1 Sol",
-                      "reasoning": "xhigh"
-                    }
-                  ]
-                }
-              }
-            },
-            "test_engineer": {
-              "sessions": {
-                "planning": {
-                  "enabled": true,
-                  "primary": {
-                    "harness": "Claude Code",
-                    "model": "Claude Opus 5.5",
-                    "reasoning": "high"
-                  },
-                  "ordered_fallbacks": [
-                    {
-                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
-                      "harness": "Codex CLI",
-                      "model": "GPT-6 Astra",
-                      "reasoning": "xhigh"
-                    },
-                    {
-                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                      "harness": "Muse Code",
-                      "model": "Muse Spark 1.3",
-                      "reasoning": "max"
-                    }
-                  ]
-                },
-                "assurance": {
-                  "enabled": true,
-                  "primary": {
-                    "harness": "Codex CLI",
-                    "model": "GPT-6 Astra",
-                    "reasoning": "high"
-                  },
-                  "ordered_fallbacks": [
-                    {
-                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
-                      "harness": "Muse Code",
-                      "model": "Muse Spark 1.3",
-                      "reasoning": "max"
-                    },
-                    {
-                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                      "harness": "Claude Code",
-                      "model": "Claude Opus 5.5",
-                      "reasoning": "high"
-                    }
-                  ],
-                  "cadence": "lifecycle"
-                }
-              }
-            },
-            "integration_engineer": {
-              "sessions": {
-                "planning": {
-                  "enabled": true,
-                  "primary": {
-                    "harness": "Claude Code",
-                    "model": "Claude Opus 5.5",
-                    "reasoning": "high"
-                  },
-                  "ordered_fallbacks": [
-                    {
-                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
-                      "harness": "Codex CLI",
-                      "model": "GPT-6 Astra",
-                      "reasoning": "high"
-                    },
-                    {
-                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                      "harness": "Muse Code",
-                      "model": "Muse Spark 1.3",
-                      "reasoning": "max"
-                    }
-                  ]
-                },
-                "execution": {
-                  "enabled": true,
-                  "primary": {
-                    "harness": "Claude Code",
-                    "model": "Claude Opus 5.5",
-                    "reasoning": "medium"
-                  },
-                  "ordered_fallbacks": [
-                    {
-                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
-                      "harness": "Codex CLI",
-                      "model": "GPT-6.1 Sol",
-                      "reasoning": "high"
-                    },
-                    {
-                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                      "harness": "Muse Code",
-                      "model": "Muse Spark 1.3",
-                      "reasoning": "max"
-                    }
-                  ],
-                  "cadence": "lifecycle"
-                }
-              }
-            },
-            "requirements_engineer": {
-              "sessions": {
-                "planning": {
-                  "enabled": true,
-                  "primary": {
-                    "harness": "Muse Code",
-                    "model": "Muse Spark 1.3",
-                    "reasoning": "max"
-                  },
-                  "ordered_fallbacks": [
-                    {
-                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
-                      "harness": "Codex CLI",
-                      "model": "GPT-6 Astra",
-                      "reasoning": "xhigh"
-                    },
-                    {
-                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                      "harness": "Claude Code",
-                      "model": "Claude Opus 5.5",
-                      "reasoning": "high"
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          "review": {
-            "coverage_assist": {
-              "enabled": true,
-              "required": true
-            }
-          },
-          "deterministic_verification": {
-            "reverify": {
-              "enabled": true
-            }
-          }
-        },
-        "configuration_digest_sha256": "8e533b92b43f463f75272e9b498b694fbf66f32825f09917506574e65534ff5a",
-        "development_strategy": {
-          "mode": "tdd"
-        },
-        "concurrency": {
-          "dispatch_ready_independent_work": true,
-          "preserve_order_for_dependencies_interfaces_write_overlap_and_shared_mutable_resources": true
-        },
-        "planning_to_implementation_clean_session": true
-      },
-      "heavyweight": {
+      "opensource-hackathon": {
         "snapshot": {
           "roles": {
             "implementer": {
@@ -1127,20 +549,20 @@
               "primary": {
                 "harness": "Claude Code",
                 "model": "Claude Opus 5.5",
-                "reasoning": "high"
+                "reasoning": "medium"
               },
               "ordered_fallbacks": [
                 {
                   "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
                   "harness": "Muse Code",
-                  "model": "Muse Spark 1.3",
-                  "reasoning": "max"
+                  "model": "Muse WonderFull",
+                  "reasoning": "xhigh"
                 },
                 {
                   "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
                   "harness": "Codex CLI",
                   "model": "GPT-6.1 Sol",
-                  "reasoning": "xhigh"
+                  "reasoning": "high"
                 }
               ]
             },
@@ -1149,48 +571,48 @@
               "primary": {
                 "harness": "Codex CLI",
                 "model": "GPT-6.1 Sol",
+                "reasoning": "high"
+              },
+              "ordered_fallbacks": [
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                  "harness": "Muse Code",
+                  "model": "Muse WonderFull",
+                  "reasoning": "xhigh"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "Claude Code",
+                  "model": "Claude Opus 5.5",
+                  "reasoning": "medium"
+                }
+              ]
+            },
+            "light_implementer": {
+              "enabled": true,
+              "primary": {
+                "harness": "Muse Code",
+                "model": "Muse Spark 1.3",
                 "reasoning": "xhigh"
               },
               "ordered_fallbacks": [
                 {
                   "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
-                  "harness": "AGY",
-                  "model": "Claude Opus 5.5",
-                  "reasoning": "high"
-                },
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                  "harness": "Muse Code",
-                  "model": "Muse Spark 1.3",
-                  "reasoning": "max"
-                }
-              ]
-            },
-            "light_implementer": {
-              "enabled": true,
-              "primary": {
-                "harness": "Muse Code",
-                "model": "Muse Spark 1.3",
-                "reasoning": "max"
-              },
-              "ordered_fallbacks": [
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
-                  "harness": "AGY",
-                  "model": "Claude Sonnet 5.5",
+                  "harness": "Cursor Agent",
+                  "model": "Grok 4.7",
                   "reasoning": "medium"
                 },
                 {
                   "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                  "harness": "AGY",
-                  "model": "Gemini 3.8 Flash",
+                  "harness": "Cursor Agent",
+                  "model": "Muse Spark 1.3",
                   "reasoning": "high"
                 },
                 {
                   "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                  "harness": "Codex CLI",
-                  "model": "GPT-6.1 Sol",
-                  "reasoning": "xhigh"
+                  "harness": "Claude Code",
+                  "model": "Claude Sonnet 5.5",
+                  "reasoning": "medium"
                 }
               ]
             },
@@ -1204,20 +626,20 @@
               "ordered_fallbacks": [
                 {
                   "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
-                  "harness": "Claude Code",
+                  "harness": "Cursor Agent",
                   "model": "Claude Haiku 5.5",
-                  "reasoning": "high"
-                },
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                  "harness": "Muse Code",
-                  "model": "Muse Spark 1.3",
                   "reasoning": "xhigh"
                 },
                 {
                   "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                  "harness": "Cursor Agent",
+                  "model": "Grok 4.7",
+                  "reasoning": "low"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
                   "harness": "Deep Code CLI",
-                  "model": "DeepSeek V4.1",
+                  "model": "DeepSeek V4 Flash",
                   "reasoning": "max"
                 }
               ]
@@ -1225,22 +647,28 @@
             "reviewer": {
               "enabled": true,
               "primary": {
-                "harness": "Muse Code",
-                "model": "Muse Spark 1.3",
-                "reasoning": "max"
+                "harness": "Cursor Agent",
+                "model": "Grok 4.7",
+                "reasoning": "high"
               },
               "ordered_fallbacks": [
                 {
                   "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                  "harness": "Muse Code",
+                  "model": "Muse Spark 1.3",
+                  "reasoning": "max"
+                },
+                {
+                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
                   "harness": "Codex CLI",
                   "model": "GPT-6 Astra",
-                  "reasoning": "xhigh"
+                  "reasoning": "high"
                 },
                 {
                   "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
                   "harness": "Claude Code",
                   "model": "Claude Opus 5.5",
-                  "reasoning": "xhigh"
+                  "reasoning": "high"
                 }
               ],
               "cadence": "phase"
@@ -1250,7 +678,7 @@
               "primary": {
                 "harness": "Muse Code",
                 "model": "Muse Spark 1.3",
-                "reasoning": "max"
+                "reasoning": "xhigh"
               },
               "ordered_fallbacks": [
                 {
@@ -1269,7 +697,7 @@
                   "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
                   "harness": "Codex CLI",
                   "model": "GPT-6.1 Sol",
-                  "reasoning": "xhigh"
+                  "reasoning": "medium"
                 },
                 {
                   "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
@@ -1313,6 +741,12 @@
                   "ordered_fallbacks": [
                     {
                       "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                      "harness": "Cursor Agent",
+                      "model": "Grok 4.7",
+                      "reasoning": "medium"
+                    },
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
                       "harness": "Claude Code",
                       "model": "Claude Opus 5.5",
                       "reasoning": "high"
@@ -1321,13 +755,74 @@
                       "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
                       "harness": "Codex CLI",
                       "model": "GPT-6.1 Sol",
-                      "reasoning": "xhigh"
+                      "reasoning": "high"
                     }
                   ]
                 }
               }
             },
             "test_engineer": {
+              "sessions": {
+                "planning": {
+                  "enabled": true,
+                  "primary": {
+                    "harness": "Claude Code",
+                    "model": "Claude Opus 5.5",
+                    "reasoning": "high"
+                  },
+                  "ordered_fallbacks": [
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                      "harness": "Cursor Agent",
+                      "model": "Grok 4.7",
+                      "reasoning": "xhigh"
+                    },
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                      "harness": "Codex CLI",
+                      "model": "GPT-6 Astra",
+                      "reasoning": "xhigh"
+                    },
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                      "harness": "Muse Code",
+                      "model": "Muse WonderFull",
+                      "reasoning": "xhigh"
+                    }
+                  ]
+                },
+                "assurance": {
+                  "enabled": true,
+                  "primary": {
+                    "harness": "Codex CLI",
+                    "model": "GPT-6.1 Sol",
+                    "reasoning": "xhigh"
+                  },
+                  "ordered_fallbacks": [
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                      "harness": "Cursor Agent",
+                      "model": "Grok 4.7",
+                      "reasoning": "high"
+                    },
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                      "harness": "Claude Code",
+                      "model": "Claude Opus 5.5",
+                      "reasoning": "medium"
+                    },
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                      "harness": "Muse Code",
+                      "model": "Muse WonderFull",
+                      "reasoning": "xhigh"
+                    }
+                  ],
+                  "cadence": "lifecycle"
+                }
+              }
+            },
+            "integration_engineer": {
               "sessions": {
                 "planning": {
                   "enabled": true,
@@ -1346,79 +841,42 @@
                     {
                       "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
                       "harness": "Muse Code",
-                      "model": "Muse Spark 1.3",
-                      "reasoning": "max"
-                    }
-                  ]
-                },
-                "assurance": {
-                  "enabled": true,
-                  "primary": {
-                    "harness": "Muse Code",
-                    "model": "Muse Spark 1.3",
-                    "reasoning": "max"
-                  },
-                  "ordered_fallbacks": [
-                    {
-                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
-                      "harness": "AGY",
-                      "model": "Claude Sonnet 5.5",
-                      "reasoning": "medium"
+                      "model": "Muse WonderFull",
+                      "reasoning": "xhigh"
                     },
                     {
                       "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                      "harness": "Claude Code",
-                      "model": "Claude Opus 5.5",
-                      "reasoning": "high"
-                    }
-                  ],
-                  "cadence": "lifecycle"
-                }
-              }
-            },
-            "integration_engineer": {
-              "sessions": {
-                "planning": {
-                  "enabled": true,
-                  "primary": {
-                    "harness": "Codex CLI",
-                    "model": "GPT-6 Astra",
-                    "reasoning": "xhigh"
-                  },
-                  "ordered_fallbacks": [
-                    {
-                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
-                      "harness": "Muse Code",
-                      "model": "Muse Spark 1.3",
-                      "reasoning": "max"
-                    },
-                    {
-                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                      "harness": "Claude Code",
-                      "model": "Claude Opus 5.5",
-                      "reasoning": "high"
+                      "harness": "Cursor Agent",
+                      "model": "Grok 4.7",
+                      "reasoning": "xhigh"
                     }
                   ]
                 },
                 "execution": {
                   "enabled": true,
                   "primary": {
-                    "harness": "Claude Code",
-                    "model": "Claude Opus 5.5",
-                    "reasoning": "medium"
+                    "harness": "Codex CLI",
+                    "model": "GPT-6.1 Sol",
+                    "reasoning": "high"
                   },
                   "ordered_fallbacks": [
                     {
                       "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
-                      "harness": "Codex CLI",
-                      "model": "GPT-6.1 Sol",
-                      "reasoning": "xhigh"
+                      "harness": "Claude Code",
+                      "model": "Claude Opus 5.5",
+                      "reasoning": "medium"
+                    },
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                      "harness": "Cursor Agent",
+                      "model": "Grok 4.7",
+                      "reasoning": "high"
                     },
                     {
                       "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
                       "harness": "Muse Code",
-                      "model": "Muse Spark 1.3",
-                      "reasoning": "max"
+                      "model": "Muse WonderFull",
+                      "reasoning": "xhigh"
                     }
                   ],
                   "cadence": "lifecycle"
@@ -1430,26 +888,45 @@
                 "planning": {
                   "enabled": true,
                   "primary": {
-                    "harness": "Muse Code",
-                    "model": "Muse Spark 1.3",
-                    "reasoning": "max"
+                    "harness": "Cursor Agent",
+                    "model": "Grok 4.7",
+                    "reasoning": "high"
                   },
                   "ordered_fallbacks": [
                     {
                       "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+                      "harness": "Muse Code",
+                      "model": "Muse Wonder",
+                      "reasoning": "xhigh"
+                    },
+                    {
+                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
                       "harness": "Codex CLI",
                       "model": "GPT-6 Astra",
-                      "reasoning": "xhigh"
+                      "reasoning": "high"
                     },
                     {
                       "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
                       "harness": "Claude Code",
                       "model": "Claude Opus 5.5",
-                      "reasoning": "high"
+                      "reasoning": "medium"
                     }
                   ]
                 }
               }
+            }
+          },
+          "development_strategy": {
+            "mode": "tdd"
+          },
+          "concurrency": {
+            "dispatch_ready_independent_work": true,
+            "preserve_order_for_dependencies_interfaces_write_overlap_and_shared_mutable_resources": true
+          },
+          "planning_to_implementation_clean_session": true,
+          "deterministic_verification": {
+            "reverify": {
+              "enabled": true
             }
           },
           "review": {
@@ -1458,13 +935,21 @@
               "required": true
             }
           },
-          "deterministic_verification": {
-            "reverify": {
-              "enabled": true
+          "holds": [
+            {
+              "id": "muse-contributor-mode",
+              "harness": "Muse Code",
+              "contributor_mode": "on",
+              "required_cli_args": [
+                "--contributor-mode",
+                "on"
+              ],
+              "effect": "Every Muse Code primary and fallback dispatch for opensource-hackathon must launch with --contributor-mode on. Freeze this requirement in the lifecycle binding and carry it into every Muse execution packet. Verify the exact per-run flag; if it cannot be honored, return a typed configuration gap. This profile-specific requirement does not change the global Muse setting."
             }
-          }
+          ]
         },
-        "configuration_digest_sha256": "f2c555d5f1a30a855dfcce52d6361475da198af0fd79cd7dfbc7ec74845f8a73",
+        "configuration_digest_sha256": "11c4478edb7b0c94da196cdc8be2317f498378724ae041bde0c108832b1e2036",
+        "full_profile_sha256": "7d501eb8c103831a38c50d237b5d1e2e015a564b9ade8aef09a32dfc39b26ab1",
         "development_strategy": {
           "mode": "tdd"
         },
@@ -1472,317 +957,19 @@
           "dispatch_ready_independent_work": true,
           "preserve_order_for_dependencies_interfaces_write_overlap_and_shared_mutable_resources": true
         },
-        "planning_to_implementation_clean_session": true
-      },
-      "tech-writing": {
-        "snapshot": {
-          "roles": {
-            "implementer": {
-              "enabled": true,
-              "primary": {
-                "harness": "Codex CLI",
-                "model": "GPT-6 Astra",
-                "reasoning": "medium"
-              },
-              "ordered_fallbacks": [
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
-                  "harness": "Claude Code",
-                  "model": "Claude Opus 5.5",
-                  "reasoning": "medium"
-                },
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                  "harness": "Muse Code",
-                  "model": "Muse Spark 1.3",
-                  "reasoning": "max"
-                }
-              ]
-            },
-            "light_implementer": {
-              "enabled": true,
-              "primary": {
-                "harness": "Muse Code",
-                "model": "Muse Spark 1.3",
-                "reasoning": "max"
-              },
-              "ordered_fallbacks": [
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
-                  "harness": "AGY",
-                  "model": "Claude Sonnet 5.5",
-                  "reasoning": "medium"
-                },
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                  "harness": "AGY",
-                  "model": "Gemini 3.8 Flash",
-                  "reasoning": "high"
-                },
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                  "harness": "Codex CLI",
-                  "model": "GPT-6.1 Sol",
-                  "reasoning": "high"
-                }
-              ]
-            },
-            "reviewer": {
-              "enabled": true,
-              "primary": {
-                "harness": "Muse Code",
-                "model": "Muse Spark 1.3",
-                "reasoning": "max"
-              },
-              "ordered_fallbacks": [
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
-                  "harness": "Claude Code",
-                  "model": "Claude Opus 5.5",
-                  "reasoning": "xhigh"
-                },
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                  "harness": "Codex CLI",
-                  "model": "GPT-6 Astra",
-                  "reasoning": "xhigh"
-                }
-              ],
-              "cadence": "phase"
-            },
-            "plan_integrator": {
-              "enabled": true,
-              "primary": {
-                "harness": "Muse Code",
-                "model": "Muse Spark 1.3",
-                "reasoning": "max"
-              },
-              "ordered_fallbacks": [
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
-                  "harness": "Claude Code",
-                  "model": "Claude Opus 5.5",
-                  "reasoning": "high"
-                },
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                  "harness": "Codex CLI",
-                  "model": "GPT-6.1 Sol",
-                  "reasoning": "xhigh"
-                }
-              ]
-            },
-            "requirements_engineer": {
-              "sessions": {
-                "planning": {
-                  "enabled": true,
-                  "primary": {
-                    "harness": "Muse Code",
-                    "model": "Muse Spark 1.3",
-                    "reasoning": "max"
-                  },
-                  "ordered_fallbacks": [
-                    {
-                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
-                      "harness": "Codex CLI",
-                      "model": "GPT-6 Astra",
-                      "reasoning": "xhigh"
-                    },
-                    {
-                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                      "harness": "Claude Code",
-                      "model": "Claude Opus 5.5",
-                      "reasoning": "high"
-                    }
-                  ]
-                }
-              }
-            },
-            "test_engineer": {
-              "sessions": {
-                "planning": {
-                  "enabled": true,
-                  "primary": {
-                    "harness": "Claude Code",
-                    "model": "Claude Opus 5.5",
-                    "reasoning": "high"
-                  },
-                  "ordered_fallbacks": [
-                    {
-                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
-                      "harness": "Codex CLI",
-                      "model": "GPT-6 Astra",
-                      "reasoning": "xhigh"
-                    },
-                    {
-                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                      "harness": "Muse Code",
-                      "model": "Muse Spark 1.3",
-                      "reasoning": "max"
-                    }
-                  ]
-                },
-                "assurance": {
-                  "enabled": false,
-                  "primary": {
-                    "harness": "Muse Code",
-                    "model": "Muse Spark 1.3",
-                    "reasoning": "max"
-                  },
-                  "ordered_fallbacks": [
-                    {
-                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
-                      "harness": "AGY",
-                      "model": "Claude Sonnet 5.5",
-                      "reasoning": "medium"
-                    },
-                    {
-                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                      "harness": "Codex CLI",
-                      "model": "GPT-6.1 Sol",
-                      "reasoning": "high"
-                    }
-                  ],
-                  "cadence": "phase"
-                }
-              }
-            },
-            "systems_modeler": {
-              "sessions": {
-                "planning": {
-                  "enabled": true,
-                  "primary": {
-                    "harness": "Muse Code",
-                    "model": "Muse Spark 1.3",
-                    "reasoning": "max"
-                  },
-                  "ordered_fallbacks": [
-                    {
-                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
-                      "harness": "Claude Code",
-                      "model": "Claude Opus 5.5",
-                      "reasoning": "high"
-                    },
-                    {
-                      "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                      "harness": "Codex CLI",
-                      "model": "GPT-6.1 Sol",
-                      "reasoning": "xhigh"
-                    }
-                  ]
-                }
-              }
-            },
-            "scribe": {
-              "enabled": true,
-              "primary": {
-                "harness": "Muse Code",
-                "model": "Muse Spark 1.3",
-                "reasoning": "max"
-              },
-              "ordered_fallbacks": [
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
-                  "harness": "Claude Code",
-                  "model": "Claude Haiku 5.5",
-                  "reasoning": "xhigh"
-                },
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                  "harness": "AGY",
-                  "model": "Claude Sonnet 5.5",
-                  "reasoning": "medium"
-                },
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                  "harness": "Codex CLI",
-                  "model": "GPT-6.1 Sol",
-                  "reasoning": "medium"
-                },
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                  "harness": "AGY",
-                  "model": "Gemini 3.8 Flash",
-                  "reasoning": "high"
-                }
-              ]
-            },
-            "coordinator": {
-              "enabled": true,
-              "primary": {
-                "harness": "AGY",
-                "model": "Gemini 3.8 Flash",
-                "reasoning": "medium"
-              },
-              "ordered_fallbacks": [
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
-                  "harness": "Claude Code",
-                  "model": "Claude Haiku 5.5",
-                  "reasoning": "high"
-                },
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                  "harness": "Muse Code",
-                  "model": "Muse Spark 1.3",
-                  "reasoning": "xhigh"
-                },
-                {
-                  "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                  "harness": "Deep Code CLI",
-                  "model": "DeepSeek V4.1",
-                  "reasoning": "max"
-                }
-              ]
-            },
-            "integration_engineer": {
-              "sessions": {
-                "execution": {
-                  "enabled": true,
-                  "primary": {
-                    "harness": "Claude Code",
-                    "model": "Claude Opus 5.5",
-                    "reasoning": "medium"
-                  },
-                  "ordered_fallbacks": [
-                    {
-                      "condition": "Verified usage/rate-limit exhaustion of the primary route.",
-                      "harness": "Codex CLI",
-                      "model": "GPT-6.1 Sol",
-                      "reasoning": "high"
-                    },
-                    {
-                      "condition": "Verified usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
-                      "harness": "Muse Code",
-                      "model": "Muse Spark 1.3",
-                      "reasoning": "max"
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          "review": {
-            "coverage_assist": {
-              "enabled": true,
-              "required": true
-            }
-          },
-          "deterministic_verification": {
-            "reverify": {
-              "enabled": true
-            }
+        "planning_to_implementation_clean_session": true,
+        "holds": [
+          {
+            "id": "muse-contributor-mode",
+            "harness": "Muse Code",
+            "contributor_mode": "on",
+            "required_cli_args": [
+              "--contributor-mode",
+              "on"
+            ],
+            "effect": "Every Muse Code primary and fallback dispatch for opensource-hackathon must launch with --contributor-mode on. Freeze this requirement in the lifecycle binding and carry it into every Muse execution packet. Verify the exact per-run flag; if it cannot be honored, return a typed configuration gap. This profile-specific requirement does not change the global Muse setting."
           }
-        },
-        "configuration_digest_sha256": "8a6b57450b92f5658666150c7cdcb05553016240061befb226c0ae4eb83c94ce",
-        "development_strategy": {
-          "mode": "single_implementer"
-        },
-        "concurrency": {
-          "dispatch_ready_independent_work": true,
-          "preserve_order_for_dependencies_interfaces_write_overlap_and_shared_mutable_resources": true
-        },
-        "planning_to_implementation_clean_session": true
+        ]
       },
       "bug-triager": {
         "snapshot": {
@@ -2491,6 +1678,1888 @@
       "leases": [
         "alphazedehq-skills/spec-authoring"
       ]
+    },
+    {
+      "at": "2026-10-12T12:09:38Z",
+      "kind": "dispatch_record",
+      "lease_id": "S09T-g3",
+      "slice": "S09T",
+      "generation": 3,
+      "repository": "1wgrumph/amazon-fantasy-companion",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-s09",
+      "branch": "afc/s09-gate",
+      "base": "733d00fa8beea517211a38c20b25ed1c71d9e169",
+      "base_sha": "733d00fa8beea517211a38c20b25ed1c71d9e169",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S09T/g3/",
+      "authority": "AUTH-AFC-2026-10-11-002",
+      "package_digest": "a018168f575741b5f53bbe7fac4bcb13128e31f37f69d73ba2433cf8d09d5144",
+      "route": "Claude Code / Claude Opus 5.5 / medium (primary test_implementer)",
+      "note": "S09-g3 CONTRACT_FAILURE + Orchestrator-observed hook env leak D1; candidate 733d00f committed by Orchestrator --no-verify; first launch aborted by Orchestrator (pre-push leak repolluted branch, base f9b049b was junk); relaunched on clean base; core.hooksPath unset",
+      "remote_branch": "afc/s09-gate-r2"
+    },
+    {
+      "at": "2026-10-12T12:09:38Z",
+      "kind": "orchestrator_note",
+      "id": "NOTE-AFC-CMD-COVERAGE-EXCLUDE",
+      "text": "CMD-COVERAGE-CI --exclude tools/ci/check_workflows.py does not match in diff-cover 9.7.2 (matches basename or absolute path). Plan-command defect; fix in next plan delta together with CMD-PATH-SCAN-PLAN pattern. S09 proceeds with the vendored checker counted, which is stricter."
+    },
+    {
+      "at": "2026-10-12T12:12:22Z",
+      "kind": "dispatch_record",
+      "lease_id": "S42-g2",
+      "slice": "S42",
+      "generation": 2,
+      "repository": "1wgrumph/amazon-fantasy-companion",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-s42",
+      "branch": "afc/s42-revendor-prose",
+      "base": "5e59270b8320d6085039f26b64f14897736845f6",
+      "base_sha": "5e59270b8320d6085039f26b64f14897736845f6",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S42/",
+      "authority": "AUTH-AFC-2026-10-11-002",
+      "package_digest": "a018168f575741b5f53bbe7fac4bcb13128e31f37f69d73ba2433cf8d09d5144",
+      "leases": [
+        "alphazedehq-main-checkout"
+      ]
+    },
+    {
+      "at": "2026-10-12T12:20:08Z",
+      "kind": "return_record",
+      "lease_id": "S09T-g3",
+      "outcome": "PASS (red receipt)",
+      "head": "2b275766ef67c63f697f4d7022038115863364aa",
+      "receipt": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S09T/g3/return.json"
+    },
+    {
+      "at": "2026-10-12T12:20:08Z",
+      "kind": "return_record",
+      "lease_id": "S06-fix-g1",
+      "outcome": "PASS; independent review PASS (packets/S06-fix-review-result.md); merged Alphazedehq #309 c24e4a36131c03dcda283b5431990cf14e603e68"
+    },
+    {
+      "at": "2026-10-12T12:20:08Z",
+      "kind": "dispatch_record",
+      "lease_id": "S09-g4",
+      "slice": "S09",
+      "generation": 4,
+      "repository": "1wgrumph/amazon-fantasy-companion",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-s09",
+      "branch": "afc/s09-gate",
+      "remote_branch": "afc/s09-gate-r2",
+      "base": "2b275766ef67c63f697f4d7022038115863364aa",
+      "base_sha": "2b275766ef67c63f697f4d7022038115863364aa",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S09/g4/",
+      "authority": "AUTH-AFC-2026-10-11-002",
+      "package_digest": "a018168f575741b5f53bbe7fac4bcb13128e31f37f69d73ba2433cf8d09d5144",
+      "route": "Codex CLI / GPT-6.1 Sol / high (primary implementer)"
+    },
+    {
+      "repository": "1wgrumph/amazon-fantasy-companion",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-s09",
+      "branch": "afc/s09-gate",
+      "remote_branch": "afc/s09-gate-r2",
+      "authority": "AUTH-AFC-2026-10-11-002",
+      "package_digest": "a018168f575741b5f53bbe7fac4bcb13128e31f37f69d73ba2433cf8d09d5144",
+      "at": "2026-10-12T12:43:13Z",
+      "kind": "dispatch_record",
+      "lease_id": "S09T-g4",
+      "slice": "S09T",
+      "generation": 4,
+      "base": "2b275766ef67c63f697f4d7022038115863364aa",
+      "base_sha": "2b275766ef67c63f697f4d7022038115863364aa",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S09T/g4/",
+      "route": "Claude Code / Claude Opus 5.5 / medium",
+      "note": "recorded late by Orchestrator (omitted before dispatch)"
+    },
+    {
+      "at": "2026-10-12T12:43:13Z",
+      "kind": "return_record",
+      "lease_id": "S09T-g4",
+      "outcome": "PASS",
+      "head": "ad0f8576b58cf8b9acb5bc4592fb722496500aea"
+    },
+    {
+      "at": "2026-10-12T12:43:13Z",
+      "kind": "return_record",
+      "lease_id": "S09-g4",
+      "outcome": "CONTRACT_FAILURE (test fixture missing origin/main; fixed by S09T-g4)",
+      "receipt": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S09/g4/return.json"
+    },
+    {
+      "at": "2026-10-12T12:43:13Z",
+      "kind": "return_record",
+      "lease_id": "S09-g5",
+      "outcome": "CONTRACT_FAILURE (no dispatch record; Orchestrator omission)",
+      "receipt": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S09/g5/return.json"
+    },
+    {
+      "repository": "1wgrumph/amazon-fantasy-companion",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-s09",
+      "branch": "afc/s09-gate",
+      "remote_branch": "afc/s09-gate-r2",
+      "authority": "AUTH-AFC-2026-10-11-002",
+      "package_digest": "a018168f575741b5f53bbe7fac4bcb13128e31f37f69d73ba2433cf8d09d5144",
+      "at": "2026-10-12T12:43:13Z",
+      "kind": "dispatch_record",
+      "lease_id": "S09-g6",
+      "slice": "S09",
+      "generation": 6,
+      "base": "ad0f8576b58cf8b9acb5bc4592fb722496500aea",
+      "base_sha": "ad0f8576b58cf8b9acb5bc4592fb722496500aea",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S09/g6/",
+      "route": "Codex CLI / GPT-6.1 Sol / high",
+      "note": "uncommitted g4 gate.sh change, diff sha256 b94ac96f3fa8fca1dfff3201f0de0ae859dd47ea647eb4b78a340d20534ecd0f"
+    },
+    {
+      "at": "2026-10-12T12:48:24Z",
+      "kind": "return_record",
+      "lease_id": "ST-2-sd035",
+      "outcome": "PASS",
+      "head": "429e064524820ba0fdf4c56a1e2b4d58b5fbdb11",
+      "route": "Muse Code / Muse Spark 1.3 / max"
+    },
+    {
+      "at": "2026-10-12T12:48:24Z",
+      "kind": "return_record",
+      "lease_id": "ST-2-sd035-d1",
+      "outcome": "PASS (AFC-PR-065 presets; new AFC-PR-066; register 66 UIDs)",
+      "head": "4d9b549696408ddaa5f432bac4911cbc349cb874"
+    },
+    {
+      "at": "2026-10-12T12:48:24Z",
+      "kind": "dispatch_record",
+      "lease_id": "ST-4-g3",
+      "slice": "ST-4",
+      "generation": 3,
+      "repository": "1wgrumph/amazon-fantasy-companion",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-st4",
+      "branch": "afc/st4-spec",
+      "base": "4d9b549696408ddaa5f432bac4911cbc349cb874",
+      "base_sha": "4d9b549696408ddaa5f432bac4911cbc349cb874",
+      "evidence_dir": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/ST-4/g3/",
+      "authority": "AUTH-AFC-2026-10-11-002",
+      "decisions": [
+        "DEC-AFC-SD-034",
+        "DEC-AFC-SD-035",
+        "DEC-AFC-SD-036"
+      ],
+      "route": "Codex CLI / GPT-6 Astra / medium (tech-writing implementer)"
+    },
+    {
+      "at": "2026-10-12T13:12:27Z",
+      "kind": "owner_review_feedback",
+      "stage": "ST-5",
+      "candidate": "PR #10 771c28958f78e611048528aedbd9ed4490f308e1",
+      "status": "collecting; owner still reviewing, hold changes",
+      "items": [
+        {
+          "id": "ST5-F1",
+          "text": "owner: 'I think we need hyperlinks when you are referencing either to the document or to other sections in the document this might need to ge in the skill. I know what #Issue 1 is but someone else wouldn't so clickable links would be nice'",
+          "disposition": "pending batch: spec-authoring skill rule+lint for clickable references (external docs, issues, in-document section cross-references), then AFC spec relink"
+        },
+        {
+          "id": "ST5-F2",
+          "text": "owner: 'Do we have release standard for when we push so they can see the changes in the revs of the push?'",
+          "finding": "Partial: spec-authoring gives a Revision History table (rev, date, author, one-line summary) from spec.yaml; no per-revision change list, no link to the PR/commit/diff, no tag. Repo has no CHANGELOG or GitHub releases yet; Alphazedehq release-process skill covers versioned releases.",
+          "disposition": "pending owner answer on proposal; batch with ST5-F1"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T13:18:55Z",
+      "kind": "dispatch_record",
+      "lease_id": "S43-g1",
+      "slice": "S43",
+      "generation": 1,
+      "repository": "alphazede/Alphazedehq",
+      "worktree": "$HOME/alphazede/worktrees/alphazedehq-afc-s43",
+      "branch": "afc/s43-revision-record",
+      "base": "23f0bb28a9ef9e0ec6ca1d4ec130489e8c569beb",
+      "base_sha": "23f0bb28a9ef9e0ec6ca1d4ec130489e8c569beb",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S43/",
+      "authority": "DEC-AFC-SD-038; DEC-AFC-APPROVAL-ST5 (ST5-F1, ST5-F2)",
+      "route": "Codex CLI / GPT-6.1 Sol / high (primary implementer)"
+    },
+    {
+      "at": "2026-10-12T13:19:34Z",
+      "kind": "dispatch_record",
+      "lease_id": "S44-g1",
+      "slice": "S44",
+      "generation": 1,
+      "repositories": {
+        "alphazede/requirements-system": "69f0f8b5b07694d5ce1f1c6ef79e14f7e07d194b",
+        "alphazede/azedge": "a82244bfbd2688dac740c231fc2550a327d008f7",
+        "1wgrumph/betbot": "8ac179dfd08671093aa60f36ff9cdd5d100cb503",
+        "alphazede/odi-graph": "eb1ced2e63f1276ed8499d942d8c4e39f1212c93",
+        "alphazede/maestro": "1207ba060792fd93aca46fca27eb6430d612dd00"
+      },
+      "worktrees": "$HOME/alphazede/worktrees/<repo>-afc-s44",
+      "branch": "afc/s44-revision-record",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S44/",
+      "authority": "DEC-AFC-SD-038",
+      "route": "Muse Code / Muse Spark 1.3 / max (primary light_implementer)"
+    },
+    {
+      "at": "2026-10-12T13:23:29Z",
+      "kind": "review_record",
+      "unit": "S09T+S09 pair",
+      "candidate": "be366cc2612edfa56ef20ff018a35bd12d95f3af",
+      "verdict": "REPAIR_REQUIRED",
+      "findings": [
+        "R1 P1 test-only test_gate.py stale template anchor",
+        "R2 P2 product gate.sh diff --check echoes content"
+      ],
+      "route": "Muse Code / Muse Spark 1.3 / max",
+      "result": "packets/S09-pair-review-result.md",
+      "plan_command_defects": [
+        "CMD-PR-CHECKS gh pr checks --json unsupported in gh 2.46.0"
+      ]
+    },
+    {
+      "at": "2026-10-12T13:23:29Z",
+      "kind": "triage_record",
+      "skill": "bug-hunter-triage",
+      "items": {
+        "R1": {
+          "route": "valid-actionable",
+          "class": "test-only",
+          "origin": "S09T test coupled to vendored template prose",
+          "escape": "PR #9 not re-run against main after S42-g2 re-vendor"
+        },
+        "R2": {
+          "route": "valid-actionable",
+          "class": "product",
+          "origin": "inherited from shared D4-A setup-pre-commit gate template",
+          "escape": "design-silent, untested failure output",
+          "prevention": "regression test here + same fix in Alphazedehq skills/setup-pre-commit template"
+        }
+      }
+    },
+    {
+      "at": "2026-10-12T13:23:29Z",
+      "kind": "dispatch_record",
+      "lease_id": "S09T-r1",
+      "slice": "S09T",
+      "repair_round": 1,
+      "repository": "1wgrumph/amazon-fantasy-companion",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-s09",
+      "branch": "afc/s09-gate",
+      "pr_branch": "afc/s09t-gate-tests",
+      "base": "be366cc2612edfa56ef20ff018a35bd12d95f3af",
+      "base_sha": "be366cc2612edfa56ef20ff018a35bd12d95f3af",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S09T/r1/",
+      "authority": "AUTH-AFC-2026-10-11-002; DEC-AFC-SD-037",
+      "route": "Claude Code / Claude Opus 5.5 / medium (bug-triager test_implementer)"
+    },
+    {
+      "at": "2026-10-12T13:25:05Z",
+      "kind": "return_record",
+      "lease_id": "S09T-r1",
+      "outcome": "PASS (R1 fixed; R2 red)",
+      "head": "36f82f425b0cdd6b57ce2d7223522d9f2b3f2a06",
+      "note": "evidence/S09T/r1/suite-r2-red.txt contains a generated fake AKIA value; redact before committing evidence"
+    },
+    {
+      "at": "2026-10-12T13:25:05Z",
+      "kind": "dispatch_record",
+      "lease_id": "S09-r1",
+      "slice": "S09",
+      "repair_round": 1,
+      "repository": "1wgrumph/amazon-fantasy-companion",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-s09",
+      "branch": "afc/s09-gate",
+      "pr_branch": "afc/s09t-gate-tests",
+      "base": "36f82f425b0cdd6b57ce2d7223522d9f2b3f2a06",
+      "base_sha": "36f82f425b0cdd6b57ce2d7223522d9f2b3f2a06",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S09/r1/",
+      "authority": "AUTH-AFC-2026-10-11-002; DEC-AFC-SD-037",
+      "route": "Muse Code / Muse Spark 1.3 / max (bug-triager implementer)"
+    },
+    {
+      "at": "2026-10-12T13:29:04Z",
+      "kind": "landing_record",
+      "unit": "S09T+S09 (PR #9)",
+      "outcome": "MERGED",
+      "merge_head": "17b40b4bdf8214b300bee05d594e13100d5d0d93",
+      "candidate": "2f6aa18e1b728f438e4d047ae3f35c7afdd27e24",
+      "tree_equal": true,
+      "verification": "Orchestrator re-ran unittest 34 OK and gate.sh all areas PASS; hosted checks run 38255792206 all pass",
+      "post": "install-hooks.sh re-run; core.hooksPath=.githooks restored; worktrees s09/s09t removed; afc/s09-gate-r2 deleted"
+    },
+    {
+      "at": "2026-10-12T13:29:33Z",
+      "kind": "dispatch_record",
+      "lease_id": "S45T-g1",
+      "slice": "S45T",
+      "generation": 1,
+      "repository": "alphazede/Alphazedehq",
+      "worktree": "$HOME/alphazede/worktrees/alphazedehq-afc-s45",
+      "branch": "afc/s45-gate-template-bugs",
+      "base": "23f0bb28a9ef9e0ec6ca1d4ec130489e8c569beb",
+      "base_sha": "23f0bb28a9ef9e0ec6ca1d4ec130489e8c569beb",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S45/",
+      "authority": "DEC-AFC-SD-037 (prevention for D1, R2)",
+      "route": "Claude Code / Claude Opus 5.5 / medium (bug-triager test_implementer)"
+    },
+    {
+      "at": "2026-10-12T13:31:34Z",
+      "kind": "return_record",
+      "lease_id": "S45T-g1",
+      "outcome": "PASS (2 red)",
+      "head": "2262a1c795ec59a4a23672fe8b6a1fd48c337a99"
+    },
+    {
+      "at": "2026-10-12T13:31:34Z",
+      "kind": "dispatch_record",
+      "lease_id": "S45-g1",
+      "slice": "S45",
+      "generation": 1,
+      "repository": "alphazede/Alphazedehq",
+      "worktree": "$HOME/alphazede/worktrees/alphazedehq-afc-s45",
+      "branch": "afc/s45-gate-template-bugs",
+      "base": "2262a1c795ec59a4a23672fe8b6a1fd48c337a99",
+      "base_sha": "2262a1c795ec59a4a23672fe8b6a1fd48c337a99",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S45/",
+      "authority": "DEC-AFC-SD-037",
+      "route": "Muse Code / Muse Spark 1.3 / max (bug-triager implementer)"
+    },
+    {
+      "at": "2026-10-12T13:38:26Z",
+      "kind": "return_record",
+      "lease_id": "S43-g1",
+      "outcome": "PASS",
+      "head": "68172c3e987d1825efff3b9fead02ff05d3a9def",
+      "pr": "alphazede/Alphazedehq#316"
+    },
+    {
+      "at": "2026-10-12T13:38:26Z",
+      "kind": "review_record",
+      "unit": "S43",
+      "candidate": "68172c3e987d1825efff3b9fead02ff05d3a9def",
+      "verdict": "REPAIR_REQUIRED",
+      "findings": [
+        "S43-R1 P3 AGENTS.md:364 relative link escapes checkout"
+      ],
+      "route": "Muse Code / Muse Spark 1.3 / max",
+      "result": "packets/S43-review-result.md",
+      "afc_spec_lint_probe": "19 findings, 0 false positives, 0 false negatives"
+    },
+    {
+      "at": "2026-10-12T13:38:26Z",
+      "kind": "dispatch_record",
+      "lease_id": "S43-r1",
+      "slice": "S43",
+      "repair_round": 1,
+      "repository": "alphazede/Alphazedehq",
+      "worktree": "$HOME/alphazede/worktrees/alphazedehq-afc-s43",
+      "branch": "afc/s43-revision-record",
+      "base": "68172c3e987d1825efff3b9fead02ff05d3a9def",
+      "base_sha": "68172c3e987d1825efff3b9fead02ff05d3a9def",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S43/",
+      "route": "Muse Code / Muse Spark 1.3 / max (bug-triager implementer)"
+    },
+    {
+      "at": "2026-10-12T13:40:24Z",
+      "kind": "review_record",
+      "unit": "S45T+S45",
+      "candidate": "df7a7e8f44165ee196e6112518814ac5cdc17aa9",
+      "verdict": "REPAIR_REQUIRED",
+      "findings": [
+        "S45-R1 P2 hygiene regex leaks colon-shaped content lines",
+        "S45-R2 P2 installer suite incompatible with new hygiene exit/shape"
+      ],
+      "route": "Codex CLI / GPT-6 Astra / high (bug-triager reviewer)",
+      "result": "packets/S45-review-result.md"
+    },
+    {
+      "at": "2026-10-12T13:40:24Z",
+      "kind": "triage_record",
+      "skill": "bug-hunter-triage",
+      "items": {
+        "B1": {
+          "route": "valid-actionable",
+          "class": "product/security",
+          "where": "1wgrumph/amazon-fantasy-companion main tools/ci/gate.sh since 17b40b4",
+          "origin": "R2 fix filtered all diff --check lines instead of headers only",
+          "escape": "R2 regression used a non-colon payload; S09 one-round review budget spent before S45 review found the shape"
+        }
+      }
+    },
+    {
+      "at": "2026-10-12T13:40:24Z",
+      "kind": "dispatch_record",
+      "lease_id": "S45T-r1",
+      "slice": "S45T",
+      "repair_round": 1,
+      "repository": "alphazede/Alphazedehq",
+      "worktree": "$HOME/alphazede/worktrees/alphazedehq-afc-s45",
+      "branch": "afc/s45-gate-template-bugs",
+      "base": "df7a7e8f44165ee196e6112518814ac5cdc17aa9",
+      "base_sha": "df7a7e8f44165ee196e6112518814ac5cdc17aa9",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S45/r1/",
+      "route": "Claude Code / Claude Opus 5.5 / medium (bug-triager test_implementer)"
+    },
+    {
+      "at": "2026-10-12T13:40:24Z",
+      "kind": "dispatch_record",
+      "lease_id": "B1T-g1",
+      "slice": "B1T",
+      "generation": 1,
+      "repository": "1wgrumph/amazon-fantasy-companion",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-b1",
+      "branch": "afc/b1-hygiene-colon-leak",
+      "base": "17b40b4bdf8214b300bee05d594e13100d5d0d93",
+      "base_sha": "17b40b4bdf8214b300bee05d594e13100d5d0d93",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/B1/",
+      "route": "Claude Code / Claude Opus 5.5 / medium (bug-triager test_implementer)"
+    },
+    {
+      "at": "2026-10-12T13:41:29Z",
+      "kind": "landing_record",
+      "unit": "S43 (Alphazedehq #316)",
+      "outcome": "MERGED",
+      "merge_head": "8f5c4c2a28da984b267611b62d0801666ab2d70f",
+      "verification": "repair S43-r1 one line; local-gates PASS on 136e300"
+    },
+    {
+      "at": "2026-10-12T13:41:29Z",
+      "kind": "dispatch_record",
+      "lease_id": "ST-4-g4",
+      "slice": "ST-4",
+      "generation": 4,
+      "repository": "1wgrumph/amazon-fantasy-companion",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-st4",
+      "branch": "afc/st4-spec",
+      "base": "771c28958f78e611048528aedbd9ed4490f308e1",
+      "base_sha": "771c28958f78e611048528aedbd9ed4490f308e1",
+      "evidence_dir": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/ST-4/g4/",
+      "authority": "DEC-AFC-APPROVAL-ST5 conditions ST5-F1, ST5-F2; DEC-AFC-SD-038",
+      "route": "Codex CLI / GPT-6 Astra / medium (tech-writing implementer)"
+    },
+    {
+      "at": "2026-10-12T13:42:31Z",
+      "kind": "dispatch_record",
+      "lease_id": "S45-r1",
+      "repository": "alphazede/Alphazedehq",
+      "worktree": "$HOME/alphazede/worktrees/alphazedehq-afc-s45",
+      "branch": "afc/s45-gate-template-bugs",
+      "base": "e7662f872a1d741071de4cf4697d048791d6058a",
+      "base_sha": "e7662f872a1d741071de4cf4697d048791d6058a",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S45-r1/",
+      "route": "Muse Code / Muse Spark 1.3 / max (bug-triager implementer)"
+    },
+    {
+      "at": "2026-10-12T13:42:31Z",
+      "kind": "dispatch_record",
+      "lease_id": "B1-g1",
+      "repository": "1wgrumph/amazon-fantasy-companion",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-b1",
+      "branch": "afc/b1-hygiene-colon-leak",
+      "base": "41fa6e3aed774f0822b1555f994c9138f1a1fc0c",
+      "base_sha": "41fa6e3aed774f0822b1555f994c9138f1a1fc0c",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/B1-g1/",
+      "route": "Muse Code / Muse Spark 1.3 / max (bug-triager implementer)"
+    },
+    {
+      "at": "2026-10-12T13:46:54Z",
+      "kind": "landing_record",
+      "unit": "S45T+S45 (Alphazedehq #317)",
+      "outcome": "MERGED",
+      "verification": "Orchestrator re-ran test_gate_template 3/3, test-install-hooks.sh 0, local-gates PASS at 655abd2; CHANGELOG entry added",
+      "repair_rounds": 1
+    },
+    {
+      "at": "2026-10-12T13:47:22Z",
+      "kind": "return_record",
+      "lease_id": "B1-g1",
+      "outcome": "PASS",
+      "head": "a22dab4a07cf4b26fecf9244e278c05d70003349",
+      "pr": "1wgrumph/amazon-fantasy-companion#12"
+    },
+    {
+      "at": "2026-10-12T13:50:18Z",
+      "kind": "return_record",
+      "lease_id": "ST-4-g4",
+      "outcome": "REPAIRABLE_FAILURE (uncommitted work kept in worktree)",
+      "failures": [
+        "ST4-G4-F1 builder Appendix A unlinked sections (shared skill)",
+        "ST4-G4-F2 AFC gate_support.copy_repo excludes docs/plans",
+        "ST4-G4-F3 AFC spec gate compares build to HEAD not index"
+      ],
+      "receipt": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/ST-4/g4/receipt.json (st4 worktree)"
+    },
+    {
+      "at": "2026-10-12T13:50:18Z",
+      "kind": "triage_record",
+      "skill": "bug-hunter-triage",
+      "items": {
+        "B3 (F1)": {
+          "route": "valid-actionable",
+          "class": "product (shared builder)",
+          "origin": "PR #316 link rule covered sources not generated content",
+          "escape": "lint checks sources only"
+        },
+        "B2a (F2)": {
+          "route": "valid-actionable",
+          "class": "test-only",
+          "origin": "S09T gate_support.copy_repo excludes docs/plans",
+          "escape": "no spec linked to repo documents before"
+        },
+        "B2b (F3)": {
+          "route": "valid-actionable",
+          "class": "product (AFC gate spec area)",
+          "origin": "S09 spec area compares build to HEAD",
+          "escape": "pre-commit with staged generated output never exercised"
+        },
+        "serialization": "B2 waits for B1 (PR #12) because both touch tools/ci/gate.sh and test_gate.py"
+      }
+    },
+    {
+      "at": "2026-10-12T13:50:18Z",
+      "kind": "dispatch_record",
+      "lease_id": "B3T-g1",
+      "repository": "alphazede/Alphazedehq",
+      "worktree": "$HOME/alphazede/worktrees/alphazedehq-afc-b3",
+      "branch": "afc/b3-appendix-links",
+      "base": "c323c56f556cf708b7104838d2f2977af015fe67",
+      "base_sha": "c323c56f556cf708b7104838d2f2977af015fe67",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/B3/",
+      "route": "Claude Code / Claude Opus 5.5 / medium (bug-triager test_implementer)"
+    },
+    {
+      "at": "2026-10-12T13:52:16Z",
+      "kind": "return_record",
+      "lease_id": "B3T-g1",
+      "outcome": "PASS (red)",
+      "head": "9b0ca5e2d3d64b9898148f051057da0b3ad959e0"
+    },
+    {
+      "at": "2026-10-12T13:52:16Z",
+      "kind": "dispatch_record",
+      "lease_id": "B3-g1",
+      "repository": "alphazede/Alphazedehq",
+      "worktree": "$HOME/alphazede/worktrees/alphazedehq-afc-b3",
+      "branch": "afc/b3-appendix-links",
+      "base": "9b0ca5e2d3d64b9898148f051057da0b3ad959e0",
+      "base_sha": "9b0ca5e2d3d64b9898148f051057da0b3ad959e0",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/B3/",
+      "route": "Muse Code / Muse Spark 1.3 / max (bug-triager implementer)"
+    },
+    {
+      "at": "2026-10-12T13:57:40Z",
+      "kind": "return_record",
+      "lease_id": "S44-g1",
+      "outcome": "4 PASS, azedge REPAIRABLE (allowlist)",
+      "prs": {
+        "requirements-system": 540,
+        "azedge": 304,
+        "betbot": 69,
+        "odi-graph": 19,
+        "maestro": 96
+      }
+    },
+    {
+      "at": "2026-10-12T13:57:40Z",
+      "kind": "landing_record",
+      "unit": "S44 docs-only (COE-ELSD-030 deterministic self-review)",
+      "merged": [
+        "1wgrumph/betbot#69",
+        "alphazede/odi-graph#19",
+        "alphazede/maestro#96"
+      ],
+      "note": "maestro gate failed 3x under load: 'unpacker error' pushing to /tmp scratch repos; /tmp tmpfs has usrquota and is filled by other sessions' azedge temp dirs; PASS 10/10 with TMPDIR=/var/tmp/az. Classified environment (BUG_ROUTE not-a-bug); bottleneck candidate for an enhancement issue."
+    },
+    {
+      "at": "2026-10-12T13:57:40Z",
+      "kind": "dispatch_record",
+      "lease_id": "S44-azedge-r1",
+      "repository": "alphazede/azedge",
+      "worktree": "$HOME/alphazede/worktrees/azedge-afc-s44",
+      "branch": "afc/s44-revision-record",
+      "base": "45c3fa92",
+      "base_sha": "45c3fa92",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S44/azedge/",
+      "route": "Muse Code / Muse Spark 1.3 / max (light_implementer)"
+    },
+    {
+      "at": "2026-10-12T13:58:38Z",
+      "kind": "return_record",
+      "lease_id": "B3-g1",
+      "outcome": "PASS",
+      "head": "2b46eae6e855629ef161075ba32bf76d9c7cc0c1",
+      "pr": "alphazede/Alphazedehq#320"
+    },
+    {
+      "at": "2026-10-12T13:58:38Z",
+      "kind": "review_record",
+      "unit": "B1 (AFC #12)",
+      "candidate": "a22dab4a07cf4b26fecf9244e278c05d70003349",
+      "verdict": "REPAIR_REQUIRED",
+      "findings": [
+        "B1-R1 P3 gate.sh:43 '+'-prefixed filename loses location header"
+      ],
+      "route": "Codex CLI / GPT-6 Astra / high",
+      "result": "packets/B1-review-result.md",
+      "also_affects": "Alphazedehq skills/setup-pre-commit/templates/gate.sh (merged c323c56) -> defect B4"
+    },
+    {
+      "at": "2026-10-12T13:58:38Z",
+      "kind": "dispatch_record",
+      "lease_id": "B3-review",
+      "route": "Codex CLI / GPT-6 Astra / high (bug-triager reviewer)",
+      "candidate": "2b46eae6e855629ef161075ba32bf76d9c7cc0c1"
+    },
+    {
+      "at": "2026-10-12T13:58:38Z",
+      "kind": "dispatch_record",
+      "lease_id": "B1T-r1",
+      "targets": {
+        "1wgrumph/amazon-fantasy-companion": {
+          "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-b1",
+          "branch": "afc/b1-hygiene-colon-leak",
+          "base_sha": "a22dab4a07cf4b26fecf9244e278c05d70003349"
+        },
+        "alphazede/Alphazedehq": {
+          "worktree": "$HOME/alphazede/worktrees/alphazedehq-afc-b4",
+          "branch": "afc/b4-plus-filename-location",
+          "base_sha": "c323c56f556cf708b7104838d2f2977af015fe67"
+        }
+      },
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/B1/r1/, evidence/B4/",
+      "route": "Claude Code / Claude Opus 5.5 / medium (bug-triager test_implementer)"
+    },
+    {
+      "at": "2026-10-12T14:01:50Z",
+      "kind": "return_record",
+      "lease_id": "B1T-r1",
+      "outcome": "PASS (red in both)",
+      "heads": {
+        "afc": "dee825ca1f3620ad26cc782500c904ae954067c0",
+        "alphazedehq": "afd348c7173f03675f3b44815f34583cecb961a7"
+      },
+      "note": "AFC red push used --no-verify (pre-push gate runs the intended red test); accepted"
+    },
+    {
+      "at": "2026-10-12T14:01:50Z",
+      "kind": "dispatch_record",
+      "lease_id": "B1-r1",
+      "targets": {
+        "1wgrumph/amazon-fantasy-companion": {
+          "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-b1",
+          "branch": "afc/b1-hygiene-colon-leak",
+          "base_sha": "dee825ca1f3620ad26cc782500c904ae954067c0"
+        },
+        "alphazede/Alphazedehq": {
+          "worktree": "$HOME/alphazede/worktrees/alphazedehq-afc-b4",
+          "branch": "afc/b4-plus-filename-location",
+          "base_sha": "afd348c7173f03675f3b44815f34583cecb961a7"
+        }
+      },
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/B1/r1/, evidence/B4/",
+      "route": "Muse Code / Muse Spark 1.3 / max (bug-triager implementer)"
+    },
+    {
+      "at": "2026-10-12T14:05:52Z",
+      "kind": "review_record",
+      "unit": "B3 (Alphazedehq #320)",
+      "candidate": "2b46eae6e855629ef161075ba32bf76d9c7cc0c1",
+      "verdict": "REPAIR_REQUIRED",
+      "findings": [
+        "B3-R1 P2 duplicate headings link to last occurrence",
+        "B3-R2 P2 slug collisions wrong targets"
+      ],
+      "route": "Codex CLI / GPT-6 Astra / high",
+      "result": "packets/B3-review-result.md"
+    },
+    {
+      "at": "2026-10-12T14:05:52Z",
+      "kind": "dispatch_record",
+      "lease_id": "B3T-r1",
+      "repository": "alphazede/Alphazedehq",
+      "worktree": "$HOME/alphazede/worktrees/alphazedehq-afc-b3",
+      "branch": "afc/b3-appendix-links",
+      "base": "2b46eae6e855629ef161075ba32bf76d9c7cc0c1",
+      "base_sha": "2b46eae6e855629ef161075ba32bf76d9c7cc0c1",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/B3/r1/",
+      "route": "Claude Code / Claude Opus 5.5 / medium (bug-triager test_implementer)"
+    },
+    {
+      "at": "2026-10-12T14:07:59Z",
+      "kind": "return_record",
+      "lease_id": "B3T-r1",
+      "outcome": "PASS (red)",
+      "head": "f19f44a57d13c5cd6dfebfd3dce429c7a70ceb4b"
+    },
+    {
+      "at": "2026-10-12T14:07:59Z",
+      "kind": "return_record",
+      "lease_id": "B1-r1",
+      "outcome": "PASS both",
+      "heads": {
+        "afc": "4573351d9638d947a83a6b4a0109042808d641bb",
+        "alphazedehq": "66d3276061e6561dac5982b36f383b56a265d3b1"
+      },
+      "prs": [
+        "1wgrumph/amazon-fantasy-companion#12",
+        "alphazede/Alphazedehq#322"
+      ]
+    },
+    {
+      "at": "2026-10-12T14:07:59Z",
+      "kind": "dispatch_record",
+      "lease_id": "B3-r1",
+      "repository": "alphazede/Alphazedehq",
+      "worktree": "$HOME/alphazede/worktrees/alphazedehq-afc-b3",
+      "branch": "afc/b3-appendix-links",
+      "base": "f19f44a57d13c5cd6dfebfd3dce429c7a70ceb4b",
+      "base_sha": "f19f44a57d13c5cd6dfebfd3dce429c7a70ceb4b",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/B3/r1/",
+      "route": "Muse Code / Muse Spark 1.3 / max (bug-triager implementer)"
+    },
+    {
+      "at": "2026-10-12T14:09:02Z",
+      "kind": "landing_record",
+      "units": [
+        "B1 (AFC #12)",
+        "B4 (Alphazedehq #322)"
+      ],
+      "outcome": "MERGED",
+      "verification": "one review (B1) + one repair round; Orchestrator re-ran AFC 36 tests + gate PASS, hosted checks pass; template 4 tests + installer suite + local-gates PASS; B4 is the identical parser in the shared template (repair of the same reviewed finding)"
+    },
+    {
+      "at": "2026-10-12T14:09:35Z",
+      "kind": "dispatch_record",
+      "lease_id": "B2T-g1",
+      "repository": "1wgrumph/amazon-fantasy-companion",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-b2",
+      "branch": "afc/b2-gate-spec-staged",
+      "base": "423496ee642982841d1748d102abd05a7d93edcc",
+      "base_sha": "423496ee642982841d1748d102abd05a7d93edcc",
+      "evidence_dir": "docs/plans/2026-10-11-amazon-fantasy-companion/evidence/B2/",
+      "route": "Claude Code / Claude Opus 5.5 / medium (bug-triager test_implementer)"
+    },
+    {
+      "at": "2026-10-12T15:51:51Z",
+      "kind": "return_record",
+      "lease_id": "B3-r1",
+      "outcome": "PASS (agent-reported)",
+      "head": "1eadf6e",
+      "pr": "alphazede/Alphazedehq#320"
+    },
+    {
+      "at": "2026-10-12T15:51:51Z",
+      "kind": "return_record",
+      "lease_id": "S44-azedge-r1",
+      "outcome": "PASS (agent-reported)",
+      "head": "b8604b5d",
+      "pr": "alphazede/azedge#304",
+      "note": "agent-reported pre-existing flaky test provider_reads_once_per_admitted_attempt (BrokenPipe ~1/3 parallel runs)"
+    },
+    {
+      "at": "2026-10-12T15:51:51Z",
+      "kind": "return_record",
+      "lease_id": "B2T-g1",
+      "outcome": "ENVIRONMENT_FAILURE (Claude session limit; nothing committed)"
+    },
+    {
+      "at": "2026-10-12T15:51:51Z",
+      "kind": "return_record",
+      "lease_id": "PD-phase2",
+      "outcome": "ENVIRONMENT_FAILURE (Claude session limit; partial artifacts in phase2-plan worktree)"
+    },
+    {
+      "at": "2026-10-12T15:51:51Z",
+      "kind": "landing_record",
+      "unit": "S44 requirements-system #540",
+      "outcome": "MERGED",
+      "merge_head": "a79f46594f17dfafd93f11ab1973f9a6b1ec83d5",
+      "via": "merge-queue.sh land 540"
+    },
+    {
+      "at": "2026-10-12T15:51:51Z",
+      "kind": "handoff",
+      "path": "$HOME/.claude/state/handoff-5cfe4230-d897-4ac4-b3d0-f27628781c70.md"
+    },
+    {
+      "at": "2026-10-13T03:31:42Z",
+      "kind": "dispatch_record",
+      "lease_id": "B2T-g2",
+      "role": "test_implementer",
+      "route": "Claude Code / Claude Opus 5.5 / medium",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-b2",
+      "branch": "afc/b2-gate-spec-staged",
+      "base_sha": "423496ee642982841d1748d102abd05a7d93edcc",
+      "packet": "packets/B2T-g2.md",
+      "review": {
+        "coverage_assist": {
+          "enabled": true,
+          "required": true,
+          "backend": "ocr delegation"
+        }
+      },
+      "deterministic_verification": {
+        "reverify": {
+          "enabled": true,
+          "applicability": "binary claims only"
+        }
+      }
+    },
+    {
+      "at": "2026-10-13T03:31:42Z",
+      "kind": "dispatch_record",
+      "lease_id": "pd-phase2-resume",
+      "role": "planning_and_design",
+      "route": "Claude Code / Claude Opus 5.5 / high",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-phase2-plan",
+      "branch": "plan/2026-10-12-afc-phase-2",
+      "base_sha": "771c28958f78e611048528aedbd9ed4490f308e1",
+      "packet": "specialists/pd-phase2-resume.md",
+      "review": {
+        "coverage_assist": {
+          "enabled": true,
+          "required": true,
+          "backend": "ocr delegation"
+        }
+      },
+      "deterministic_verification": {
+        "reverify": {
+          "enabled": true,
+          "applicability": "binary claims only"
+        }
+      }
+    },
+    {
+      "at": "2026-10-13T03:33:11Z",
+      "kind": "return_record",
+      "lease_id": "B2T-g2",
+      "outcome": "ENVIRONMENT_FAILURE",
+      "reason": "Claude weekly usage limit; reported reset 2am America/Chicago",
+      "evidence": "packets/B2T-g2-run.log"
+    },
+    {
+      "at": "2026-10-13T03:33:11Z",
+      "kind": "return_record",
+      "lease_id": "pd-phase2-resume",
+      "outcome": "ENVIRONMENT_FAILURE",
+      "reason": "Claude weekly usage limit; reported reset 2am America/Chicago",
+      "evidence": "specialists/pd-phase2-resume-run.log"
+    },
+    {
+      "at": "2026-10-13T03:33:11Z",
+      "kind": "dispatch_record",
+      "lease_id": "B2T-g2-codex",
+      "role": "test_implementer",
+      "route": "Codex CLI / GPT-6.1 Sol / high",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-b2",
+      "branch": "afc/b2-gate-spec-staged",
+      "base_sha": "423496ee642982841d1748d102abd05a7d93edcc",
+      "packet": "packets/B2T-g2-codex.md",
+      "review": {
+        "coverage_assist": {
+          "enabled": true,
+          "required": true,
+          "backend": "ocr delegation"
+        }
+      },
+      "deterministic_verification": {
+        "reverify": {
+          "enabled": true,
+          "applicability": "binary claims only"
+        }
+      },
+      "fallback_evidence": "packets/B2T-g2-run.log"
+    },
+    {
+      "at": "2026-10-13T03:34:40Z",
+      "kind": "dispatch_record",
+      "lease_id": "B3-integrate",
+      "route": "Muse Code / Muse Spark 1.3 / max (light_implementer)",
+      "base_sha": "1eadf6e634533e842639324ec461088fa257d09d",
+      "main_sha": "fb2a015b6a7e25c03afe6f1ada3c6ebedc100308",
+      "packet": "packets/B3-integrate.md",
+      "review": {
+        "coverage_assist": {
+          "enabled": true,
+          "required": true
+        }
+      },
+      "deterministic_verification": {
+        "reverify": {
+          "enabled": true
+        }
+      }
+    },
+    {
+      "at": "2026-10-13T03:35:38Z",
+      "kind": "dispatch_record",
+      "lease_id": "S44-azedge-review",
+      "route": "Muse Code / Muse Spark 1.3 / max (tech-writing reviewer)",
+      "base_sha": "a82244bfbd2688dac740c231fc2550a327d008f7",
+      "candidate": "b8604b5db6448b72b2cc2068ebe69383b3d1a00b",
+      "packet": "packets/S44-azedge-review.md",
+      "review": {
+        "coverage_assist": {
+          "enabled": true,
+          "required": true,
+          "backend": "ocr delegation"
+        }
+      },
+      "deterministic_verification": {
+        "reverify": {
+          "enabled": true,
+          "applicability": "not applicable; shell/docs only"
+        }
+      }
+    },
+    {
+      "at": "2026-10-13T03:36:09Z",
+      "kind": "dispatch_record",
+      "lease_id": "TE-p2-codex",
+      "role": "test_engineer.planning",
+      "route": "Codex CLI / GPT-6 Astra / xhigh",
+      "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-phase2-plan",
+      "packet": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/specialists/te-p2-codex-prompt.md",
+      "fallback_evidence": "specialists/pd-phase2-resume-run.log",
+      "base_sha": "771c28958f78e611048528aedbd9ed4490f308e1",
+      "review": {
+        "coverage_assist": {
+          "enabled": true,
+          "required": true
+        }
+      },
+      "deterministic_verification": {
+        "reverify": {
+          "enabled": true
+        }
+      }
+    },
+    {
+      "at": "2026-10-13T03:37:43Z",
+      "kind": "dispatch_record",
+      "lease_id": "SCR-codex-resume",
+      "route": "Muse Code / Muse Spark 1.3 / max (scribe)",
+      "packet": "packets/SCR-codex-resume.md",
+      "write_set": [
+        "journey.json history",
+        "docs/developer-feedback/**"
+      ]
+    },
+    {
+      "at": "2026-10-13T03:40:57Z",
+      "kind": "return_record",
+      "lease_id": "B2T-g2-codex",
+      "outcome": "PASS expected red",
+      "head": "46f662dd6e1da7c89f9e3fc41fc97690efee729f",
+      "root_verification": "39 tests, exactly positive staged-output test fails; root rerun exit 1 expected"
+    },
+    {
+      "at": "2026-10-13T03:40:57Z",
+      "kind": "landing_record",
+      "unit": "B3",
+      "pr": "alphazede/Alphazedehq#320",
+      "outcome": "MERGED",
+      "merge_head": "04678835350b529b44ab69ee5f805ca21cab5e76",
+      "candidate": "995ffcd600723ee27e000e0acbbf24860f655830",
+      "verification": "81 tests; root merge gate PASS; code/test bytes unchanged from independently reviewed repair",
+      "merge_method": "merge commit; GitHub rejected rebase as not rebasable",
+      "cleanup": "worktree/local/remote branch removed; ancestor and clean state verified"
+    },
+    {
+      "at": "2026-10-13T03:40:57Z",
+      "kind": "return_record",
+      "lease_id": "SCR-codex-resume",
+      "outcome": "READY",
+      "evidence": "docs/developer-feedback/scribe-2026-10-13-g1-resume.md"
+    },
+    {
+      "at": "2026-10-13T03:40:57Z",
+      "kind": "dispatch_record",
+      "lease_id": "B2-g2",
+      "route": "Muse Code / Muse Spark 1.3 / max (bug-triager implementer)",
+      "base_sha": "46f662dd6e1da7c89f9e3fc41fc97690efee729f",
+      "packet": "packets/B2-g2.md",
+      "review": {
+        "coverage_assist": {
+          "enabled": true,
+          "required": true,
+          "backend": "ocr delegation"
+        }
+      },
+      "deterministic_verification": {
+        "reverify": {
+          "enabled": true
+        }
+      }
+    },
+    {
+      "at": "2026-10-13T03:49:00Z",
+      "kind": "return_record",
+      "lease_id": "B2-g2",
+      "outcome": "CANDIDATE_READY",
+      "head": "9752ef28d69c2a6a7a5aa3c835920bc95dce2b27",
+      "pr": "1wgrumph/amazon-fantasy-companion#14",
+      "tests": "39/39; hosted checks 4/4"
+    },
+    {
+      "at": "2026-10-13T03:49:00Z",
+      "kind": "dispatch_record",
+      "lease_id": "B2-review",
+      "route": "Codex CLI / GPT-6 Astra / high",
+      "base_sha": "3be60fca776f61ce620a83ea3c18f29bc9ee4472",
+      "candidate": "9752ef28d69c2a6a7a5aa3c835920bc95dce2b27",
+      "packet": "packets/B2-review.md",
+      "review": {
+        "coverage_assist": {
+          "enabled": true,
+          "required": true,
+          "backend": "ocr delegation"
+        }
+      },
+      "deterministic_verification": {
+        "reverify": {
+          "enabled": true,
+          "applicability": "not applicable; source only"
+        }
+      }
+    },
+    {
+      "at": "2026-10-13T03:55:05Z",
+      "kind": "review_record",
+      "unit": "B2",
+      "candidate": "9752ef28d69c2a6a7a5aa3c835920bc95dce2b27",
+      "verdict": "PASS",
+      "evidence": "packets/B2-review-result.md",
+      "review_rounds": 1,
+      "repair_rounds": 0
+    },
+    {
+      "at": "2026-10-13T03:55:05Z",
+      "kind": "landing_record",
+      "unit": "B2",
+      "pr": "1wgrumph/amazon-fantasy-companion#14",
+      "outcome": "MERGED",
+      "merge_head": "c2468c9e7850745f1245bf4cfc81e55047e3fb55",
+      "verification": "root gate exit0; reviewer39/39 plus independent red/green and OCR; hosted4/4"
+    },
+    {
+      "at": "2026-10-13T03:55:05Z",
+      "kind": "dispatch_record",
+      "lease_id": "ST-4-g5",
+      "role": "implementer",
+      "route": "Codex CLI / GPT-6 Astra / medium (tech-writing)",
+      "base_sha": "8f46cb5280146073c4de088d31a1fe0279131f2c",
+      "packet": "packets/ST-4-g5.md",
+      "dependencies": [
+        "B2 #14 merged c2468c9",
+        "B3 #320 merged 0467883"
+      ],
+      "review": {
+        "coverage_assist": {
+          "enabled": true,
+          "required": true,
+          "backend": "ocr delegation"
+        }
+      },
+      "deterministic_verification": {
+        "reverify": {
+          "enabled": true
+        }
+      }
+    },
+    {
+      "at": "2026-10-13T03:58:52Z",
+      "kind": "landing_record",
+      "unit": "S44 azedge",
+      "pr": "alphazede/azedge#304",
+      "outcome": "MERGED",
+      "merge_head": "5ac113e343df448b23cff28cab6e3938ec64a2de",
+      "candidate": "b8604b5db6448b72b2cc2068ebe69383b3d1a00b",
+      "verification": "independent OCR + foundation16PASS + local fast gates29PASS12SKIP; root verified exact file hashes and remote identity; qualified gate reused per workspace rule22",
+      "cleanup": "worktree and local branch already removed by automatic cleanup; remote absence verified",
+      "remaining_observation": "prior provider_reads_once_per_admitted_attempt flake not reproduced by scoped fast gate; no claim it was fixed"
+    },
+    {
+      "at": "2026-10-13T04:04:44Z",
+      "kind": "return_record",
+      "lease_id": "ST-4-g5",
+      "outcome": "CANDIDATE_READY",
+      "head": "2090e2dc3f804c983e0ddc25cc506f9f98922824",
+      "product_head": "531eea3b5487c52fd83602ef510cdd702af0b632",
+      "pr": "1wgrumph/amazon-fantasy-companion#10"
+    },
+    {
+      "at": "2026-10-13T04:04:44Z",
+      "kind": "dispatch_record",
+      "lease_id": "ST-4-g5-review",
+      "route": "Muse Code / Muse Spark 1.3 / max (tech-writing reviewer)",
+      "base_sha": "771c28958f78e611048528aedbd9ed4490f308e1",
+      "candidate": "2090e2dc3f804c983e0ddc25cc506f9f98922824",
+      "packet": "packets/ST-4-g5-review.md",
+      "review": {
+        "coverage_assist": {
+          "enabled": true,
+          "required": true,
+          "backend": "ocr delegation"
+        }
+      },
+      "deterministic_verification": {
+        "reverify": {
+          "enabled": true,
+          "applicability": "not applicable; source only"
+        }
+      }
+    },
+    {
+      "at": "2026-10-13T04:13:22Z",
+      "kind": "return_record",
+      "lease_id": "TE-p2-codex",
+      "outcome": "PASS planning authorship;9 reconciliation findings",
+      "counts": {
+        "proof_cases": 100,
+        "active_product": 63,
+        "local": 37,
+        "commands": 64,
+        "slices": 52,
+        "integration_steps": 44
+      }
+    },
+    {
+      "at": "2026-10-13T04:13:22Z",
+      "kind": "planning_correction",
+      "unit": "P2 author completion",
+      "authority": "DEC-AFC-SD-039 + current requested issues/milestones + routine write-set corrections",
+      "evidence": "Phase2 evidence/P2-6/codex-lead/",
+      "scope": "no new product requirements; retain all63activeUIDs and52sliceidentities"
+    },
+    {
+      "at": "2026-10-13T04:13:22Z",
+      "kind": "closeout_record",
+      "unit": "PR11 redundant",
+      "outcome": "CLOSED, branchdeleted",
+      "evidence": "git cherry origin/main origin/afc/s42-revendor-prose returned -579b951; main d259c169 exactpatch and c24e4a3 vendor pin verified"
+    },
+    {
+      "at": "2026-10-13T04:13:22Z",
+      "kind": "dispatch_record",
+      "lease_id": "IE-p2-codex-delta",
+      "role": "integration_engineer.planning",
+      "route": "Codex CLI / GPT-6.1 Sol / xhigh",
+      "fallback_evidence": "specialists/pd-phase2-resume-run.log",
+      "packet": "Phase2 specialists/ie-p2-codex-delta-prompt.md",
+      "base_sha": "771c28958f78e611048528aedbd9ed4490f308e1",
+      "review": {
+        "coverage_assist": {
+          "enabled": true,
+          "required": true
+        }
+      },
+      "deterministic_verification": {
+        "reverify": {
+          "enabled": true
+        }
+      }
+    },
+    {
+      "at": "2026-10-13T04:20:58Z",
+      "kind": "review_record",
+      "unit": "ST5-F1/F2 amendment",
+      "lease_id": "ST-4-g5-review",
+      "candidate": "2090e2dc3f804c983e0ddc25cc506f9f98922824",
+      "verdict": "PASS",
+      "evidence": "packets/ST-4-g5-review-result.md",
+      "review_rounds": 1,
+      "repair_rounds": 0
+    },
+    {
+      "at": "2026-10-13T04:20:58Z",
+      "kind": "landing_record",
+      "unit": "ST-4 / ST5 conditions",
+      "pr": "1wgrumph/amazon-fantasy-companion#10",
+      "outcome": "MERGED",
+      "merge_head": "92f3ed1a0d178d2704c0efdc073ad332dc67b79f",
+      "verification": "independent749links/anchors,66UIDs,byteidenticalbuild,approvedprosepreserved,39tests,hosted4/4; root exacthead/hashreadback",
+      "cleanup": "untracked g4/g5-review evidence copied and byte-verified to evidence/ST-4/preserved; mergedworktree/local/remote branch removed",
+      "publication": "No release/tag/public visibility change; deferred owner authority remains separate"
+    },
+    {
+      "at": "2026-10-13T04:42:23Z",
+      "kind": "return_record",
+      "lease_id": "IE-p2-codex-delta",
+      "outcome": "READY author delta",
+      "evidence": "Phase2 specialists/ie-p2-codex-delta-receipt.md",
+      "counts": {
+        "steps": 44,
+        "slices": 52,
+        "groups": 39,
+        "changed_fields": 60
+      },
+      "correction_round": 2
+    },
+    {
+      "at": "2026-10-13T04:42:23Z",
+      "kind": "planning_correction",
+      "unit": "IE exact source closure + planning base sync",
+      "evidence": "Phase2 evidence/P2-6/codex-lead/exact-source-closure.json",
+      "head": "7f000aff70e435b0cac923931fd818c69111f07d",
+      "gate": "merge commit gate PASS39tests",
+      "no_budget_reset": true
+    },
+    {
+      "at": "2026-10-13T04:42:23Z",
+      "kind": "dispatch_record",
+      "lease_id": "PI-p2-codex",
+      "role": "plan_integrator",
+      "route": "Muse Code / Muse Spark 1.3 / max",
+      "base_sha": "7f000aff70e435b0cac923931fd818c69111f07d",
+      "packet": "Phase2 specialists/pi-p2-codex-prompt.md",
+      "review": {
+        "coverage_assist": {
+          "enabled": true,
+          "required": true
+        }
+      },
+      "deterministic_verification": {
+        "reverify": {
+          "enabled": true
+        }
+      },
+      "next": "Existing Planning TE finalizes after this reconciliation; independent planning review remains unspent"
+    },
+    {
+      "at": "2026-10-13T04:44:36Z",
+      "kind": "dispatch_record",
+      "lease_id": "SCR-planning-progress",
+      "role": "scribe",
+      "route": "Muse Code / Muse Spark 1.3 / max",
+      "packet": "packets/SCR-planning-progress.md"
+    },
+    {
+      "at": "2026-10-13T05:03:19Z",
+      "kind": "return_record",
+      "lease_id": "SCR-planning-progress",
+      "outcome": "READY",
+      "history": "append6to14",
+      "evidence": "docs/developer-feedback/scribe-2026-10-13-g2-progress.md"
+    },
+    {
+      "at": "2026-10-13T05:03:19Z",
+      "kind": "return_record",
+      "lease_id": "PI-p2-codex",
+      "outcome": "RECONCILED_FOR_TE; required-view selection must be restored",
+      "evidence": "Phase2 specialists/pi-p2-codex-receipt.md",
+      "counts": {
+        "slices": 52,
+        "proof_cases": 100,
+        "issue_groups": 39
+      },
+      "correction": "Parent rejects disabling required SysML views to bypass renderer; exact SVG packaging correction precedes TE finalization"
+    },
+    {
+      "at": "2026-10-13T05:03:19Z",
+      "kind": "dispatch_record",
+      "lease_id": "SVG-prolog",
+      "role": "light_implementer",
+      "route": "Muse Code / Muse Spark 1.3 / max (primary)",
+      "base_sha": "7f000aff70e435b0cac923931fd818c69111f07d",
+      "packet": "Phase2 specialists/svg-prolog-prompt.md",
+      "write_set": [
+        "models/view-data.svg",
+        "models/view-interfaces.svg",
+        "models/view-states.svg",
+        "models/view-structure.svg",
+        "evidence/svg-prolog/receipt.json"
+      ]
+    },
+    {
+      "at": "2026-10-13T05:07:30Z",
+      "kind": "return_record",
+      "lease_id": "SVG-prolog",
+      "outcome": "ASSET_READY",
+      "evidence": "Phase2 evidence/svg-prolog/receipt.json",
+      "verification": "4exactprefix removals; identical remainingbytes/XML trees; all4sysml hashesunchanged"
+    },
+    {
+      "at": "2026-10-13T05:07:30Z",
+      "kind": "dispatch_record",
+      "lease_id": "TE-p2-finalize",
+      "role": "test_engineer.planning",
+      "route": "Codex CLI / GPT-6 Astra / xhigh (same resumed planning session)",
+      "fallback_evidence": "specialists/pd-phase2-resume-run.log",
+      "base_sha": "7f000aff70e435b0cac923931fd818c69111f07d",
+      "packet": "Phase2 specialists/te-p2-finalize-prompt.md",
+      "review": {
+        "coverage_assist": {
+          "enabled": true,
+          "required": true
+        }
+      },
+      "deterministic_verification": {
+        "reverify": {
+          "enabled": true
+        }
+      },
+      "purpose": "Owning-role finalization after PI; not independent assurance or a new review round"
+    },
+    {
+      "at": "2026-10-13T05:35:44Z",
+      "kind": "return_record",
+      "lease_id": "TE-p2-finalize",
+      "outcome": "PASS planning-only finalization",
+      "evidence": "Phase2 specialists/te-p2-finalize-receipt.md",
+      "remaining": "Actual repository filing scope binding requires bounded correction; all runtime gaps retained"
+    },
+    {
+      "at": "2026-10-13T05:35:44Z",
+      "kind": "policy_resolution",
+      "unit": "Personal repository issue filing",
+      "classification": "Scope nonmatch; not product defect or permission bypass",
+      "evidence": "Phase2 specialists/filing-scope-resolution.md",
+      "remote_writes": 0
+    },
+    {
+      "at": "2026-10-13T05:35:44Z",
+      "kind": "dispatch_record",
+      "lease_id": "TE-p2-filing-binding",
+      "role": "test_engineer.planning",
+      "route": "Codex CLI / GPT-6 Astra / xhigh (same resumed session)",
+      "base_sha": "7f000aff70e435b0cac923931fd818c69111f07d",
+      "packet": "Phase2 specialists/te-p2-filing-binding-prompt.md",
+      "scope": "Tracking command binding and current source hashes only; 100 proofs/70 command IDs unchanged"
+    },
+    {
+      "at": "2026-10-13T05:54:52Z",
+      "kind": "return_record",
+      "lease_id": "TE-p2-filing-binding",
+      "outcome": "PASS planning-only",
+      "evidence": "Phase2 specialists/te-p2-filing-binding-receipt.md",
+      "proofs": 100,
+      "commands": 70,
+      "remote_writes": 0
+    },
+    {
+      "at": "2026-10-13T05:54:52Z",
+      "kind": "planning_payload_selection",
+      "authority": "Current P&D lead DEC-AFC-SD-039",
+      "path": "Phase2 evidence/github-work-items/github-work-items.json",
+      "sha256": "95caddfe2b85067e2a22a3c1e7d46180193f3c67c59aa91b34d552d9116b8c4b",
+      "status": "REVIEW_PAYLOAD not approved/submitted",
+      "evidence": "Phase2 evidence/github-work-items/payload-supersession.json"
+    },
+    {
+      "at": "2026-10-13T05:54:52Z",
+      "kind": "dispatch_record",
+      "lease_id": "PI-p2-final-refresh",
+      "role": "plan_integrator",
+      "route": "Muse Code / Muse Spark 1.3 / max (same frozen primary)",
+      "base_sha": "7f000aff70e435b0cac923931fd818c69111f07d",
+      "packet": "Phase2 specialists/pi-p2-final-refresh-prompt.md",
+      "review": {
+        "coverage_assist": {
+          "enabled": true,
+          "required": true
+        }
+      },
+      "deterministic_verification": {
+        "reverify": {
+          "enabled": true
+        }
+      },
+      "scope": "Mechanical projection/render/payload binding; one independent planning review remains"
+    },
+    {
+      "at": "2026-10-13T06:14:22Z",
+      "kind": "return_record",
+      "lease_id": "PI-p2-final-refresh",
+      "outcome": "Author PLAN_REVIEW_READY; parent native freeze rejected missing task routes",
+      "evidence": "Phase2 specialists/pi-p2-final-refresh-receipt.md",
+      "digest": "02c41e2cc4553126bd0a5aeaa554104b488e68177eba4cb650694af2d4c16226"
+    },
+    {
+      "at": "2026-10-13T06:14:22Z",
+      "kind": "verification_gap",
+      "unit": "Parent freeze check",
+      "finding": "52 manifest task rows lack route; old .claude helper passes while .codex native helper rejects",
+      "classification": "Planning projection completion; no product/harness bug assertion or policy/tool change"
+    },
+    {
+      "at": "2026-10-13T06:14:22Z",
+      "kind": "dispatch_record",
+      "lease_id": "TASK-route-projection",
+      "role": "light_implementer",
+      "route": "Muse Code / Muse Spark 1.3 / max",
+      "base_sha": "7f000aff70e435b0cac923931fd818c69111f07d",
+      "packet": "Phase2 specialists/task-route-projection-prompt.md",
+      "scope": "Copy existing route tuples and dependency lists; check both helpers"
+    },
+    {
+      "at": "2026-10-13T06:24:20Z",
+      "kind": "return_record",
+      "lease_id": "TASK-route-projection",
+      "outcome": "CANDIDATE_READY",
+      "evidence": "Phase2 evidence/task-route-projection/receipt.json",
+      "verification": "52route tuples and dependencies copied; both native/frozen helpers PASS same02c41e2c digest;7views embedded; no source/SEIT change"
+    },
+    {
+      "at": "2026-10-13T07:06:43Z",
+      "kind": "dispatch_record",
+      "lease_id": "P2-planning-review",
+      "role": "reviewer",
+      "route": "Muse Code / Muse Spark 1.3 / max",
+      "candidate": "de6db1e3e125f827aa079a6333ba453ec322d34b",
+      "candidate_digest": "02c41e2cc4553126bd0a5aeaa554104b488e68177eba4cb650694af2d4c16226",
+      "base_sha": "92f3ed1a0d178d2704c0efdc073ad332dc67b79f",
+      "packet": "packets/P2-planning-review.md",
+      "review": {
+        "coverage_assist": {
+          "enabled": true,
+          "required": true,
+          "backend": "ocr delegation"
+        }
+      },
+      "deterministic_verification": {
+        "reverify": {
+          "enabled": true,
+          "applicability": "not applicable; no compiled binary"
+        }
+      }
+    },
+    {
+      "at": "2026-10-13T07:44:19Z",
+      "kind": "review_aggregation_record",
+      "lease_id": "P2-planning-review",
+      "reviewed_revision": "de6db1e3e125f827aa079a6333ba453ec322d34b",
+      "reviewed_digest": "02c41e2cc4553126bd0a5aeaa554104b488e68177eba4cb650694af2d4c16226",
+      "verdict": "ACCEPT",
+      "completed_rounds": 1,
+      "aggregated_repairs": 1,
+      "advisories_resolved": [
+        "ADV-P2R-001",
+        "ADV-P2R-002"
+      ],
+      "repaired_digest": "67ac7a9071859e8d4ef05b863c3e6e4d4931d2451a162abb5bb8115eeb1b7d46",
+      "deterministic_gate": "PASS",
+      "evidence": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-review-repair",
+      "owner_approval": "pending",
+      "product_execution": "held"
+    },
+    {
+      "at": "2026-10-13T07:47:39Z",
+      "kind": "planning_publication_record",
+      "candidate_revision": "51bc730a880105c9b21d37a7a2dc5da79ada875f",
+      "pr": "https://github.com/1wgrumph/amazon-fantasy-companion/pull/15",
+      "state": "draft; awaiting integrated owner approval",
+      "local_gate": "PASS spec/docs/hygiene39tests",
+      "staged_hygiene": "PASS22files;gitleaks0;privatehome0;rawagentlogs0",
+      "hosted_ci": {
+        "run_id": 38364783041,
+        "head_sha": "51bc730a880105c9b21d37a7a2dc5da79ada875f",
+        "conclusion": "success",
+        "docs": "PASS",
+        "hygiene": "PASS",
+        "spec": "SKIP path filter;localfullspecPASS"
+      },
+      "worktree": "clean",
+      "issues_created": 0,
+      "milestones_created": 0,
+      "note": "This closing readback is appended to control after publication; sync with next authorized record publication. Do not push retired control branch."
+    },
+    {
+      "at": "2026-10-13T12:51:31Z",
+      "kind": "dispatch_record",
+      "lease_id": "P2-chronology-opus-review",
+      "role": "owner-requested planning chronology reviewer",
+      "route": "Claude Code / Claude Opus 5.5 / high",
+      "candidate": "51bc730a880105c9b21d37a7a2dc5da79ada875f",
+      "packet": "packets/P2-chronology-opus-review.md",
+      "authority": "DEC-AFC-SD-040",
+      "review": {
+        "coverage_assist": {
+          "enabled": true,
+          "required": true,
+          "backend": "ocr delegation"
+        }
+      },
+      "deterministic_verification": {
+        "reverify": {
+          "enabled": true,
+          "applicability": "not applicable; planning sources no binary"
+        }
+      }
+    },
+    {
+      "at": "2026-10-13T13:43:31Z",
+      "kind": "return_record",
+      "lease_id": "P2-chronology-opus-review",
+      "route": "Claude Code / Claude Opus 5.5 / high",
+      "outcome": "PASS",
+      "scope": "Proposal only; not integrated artifact acceptance",
+      "process_exit": 0,
+      "evidence": "Phase2 specialists/chronology-opus-review.md; evidence/chronology-opus-review/{proposal.json,checks.md}",
+      "result": "13milestones with3,2,3,4,3,3,3,3,2,2,4,4,3 issues;39issues52slices;5waves/releases preserved;20/20 agent-reported proposalchecks",
+      "limitations": "Parent did not rerun all20checks; milestone revision/profile migration not applied; timing risk remains",
+      "child_state": "COMPLETED; do not relaunch review"
+    },
+    {
+      "at": "2026-10-13T14:33:12Z",
+      "kind": "planning_delta_return",
+      "lease_id": "RE-CHR-041",
+      "role": "Requirements Engineer",
+      "route": "Cursor Agent / Grok4.7 / high",
+      "outcome": "REPAIRABLE_FAILURE",
+      "process_exit": 0,
+      "evidence": "Phase2 specialists/re-chronology-041-receipt.md",
+      "authority": "DEC-AFC-SD-040/041",
+      "independent_review": false,
+      "no_fallback": true
+    },
+    {
+      "at": "2026-10-13T14:33:12Z",
+      "kind": "planning_delta_return",
+      "lease_id": "IE-CHR-041",
+      "role": "Integration Engineer planning",
+      "route": "Claude Code / Claude Opus5.5 / high",
+      "outcome": "CANDIDATE_READY",
+      "process_exit": 0,
+      "evidence": "Phase2 specialists/ie-chronology-041-receipt.md",
+      "authority": "DEC-AFC-SD-040/041",
+      "independent_review": false,
+      "no_fallback": true
+    },
+    {
+      "at": "2026-10-13T14:53:32Z",
+      "kind": "planning_delta_return",
+      "lease_id": "RE-CHR-041-R2",
+      "role": "Requirements Engineer re-gate",
+      "route": "Cursor Agent / Grok 4.7 / high",
+      "outcome": "PASS",
+      "process_exit": 0,
+      "evidence": "Phase2 specialists/re-chronology-041-regate-receipt.md",
+      "authority": "DEC-AFC-SD-040/041",
+      "independent_review": false,
+      "no_fallback": true
+    },
+    {
+      "at": "2026-10-13T14:53:32Z",
+      "kind": "planning_delta_return",
+      "lease_id": "TE-CHR-041",
+      "role": "Planning Test Engineer",
+      "route": "Claude Code / Claude Opus 5.5 / high",
+      "outcome": "PASS",
+      "process_exit": 0,
+      "evidence": "Phase2 specialists/te-chronology-041-receipt.md",
+      "authority": "DEC-AFC-SD-040/041",
+      "independent_review": false,
+      "no_fallback": true
+    },
+    {
+      "at": "2026-10-13T15:27:30Z",
+      "kind": "planning_delta_return",
+      "lease_id": "PI-CHR-041",
+      "route": "Muse Code / Muse Spark 1.3 / max; --contributor-mode on",
+      "outcome": "PLAN_REVIEW_READY author-only",
+      "process_exits": [
+        0,
+        0
+      ],
+      "evidence": "Phase2 specialists/pi-chronology-041-final-receipt.md",
+      "parent_conservation_checks": 267,
+      "independent_review": false,
+      "no_fallback": true
+    },
+    {
+      "at": "2026-10-13T16:34:55Z",
+      "kind": "dispatch_record",
+      "lease_id": "P2-L01-g1",
+      "route": "Muse Code / Muse Spark 1.3 / xhigh",
+      "required_cli_args": [
+        "--contributor-mode",
+        "on"
+      ],
+      "authority": "DEC-AFC-P2-APPROVAL-001",
+      "scope": "tracking only; product held",
+      "packet": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-L01/packet.md",
+      "baseline": "88db101edb61a08dedea8037e4e9207d262a7e0f"
+    },
+    {
+      "at": "2026-10-13T17:01:57.215865+00:00",
+      "kind": "tracking_readback",
+      "lease_id": "P2-L01-g1",
+      "outcome": "CANDIDATE_READY",
+      "authority": "DEC-AFC-P2-APPROVAL-001",
+      "counts": {
+        "milestones": 13,
+        "issues": 39,
+        "slices": 52,
+        "tdd_pairs": 13
+      },
+      "slice_to_issue": {
+        "P2-L01": {
+          "number": 16,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/16"
+        },
+        "P2-X01": {
+          "number": 19,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/19"
+        },
+        "P2-X05": {
+          "number": 27,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/27"
+        },
+        "P2-D01": {
+          "number": 17,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/17"
+        },
+        "P2-G01T": {
+          "number": 18,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/18"
+        },
+        "P2-G01": {
+          "number": 18,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/18"
+        },
+        "P2-A01T": {
+          "number": 22,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/22"
+        },
+        "P2-A01": {
+          "number": 22,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/22"
+        },
+        "P2-B01T": {
+          "number": 20,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/20"
+        },
+        "P2-B01": {
+          "number": 20,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/20"
+        },
+        "P2-R1": {
+          "number": 23,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/23"
+        },
+        "P2-X04": {
+          "number": 21,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/21"
+        },
+        "P2-X02": {
+          "number": 24,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/24"
+        },
+        "P2-X03": {
+          "number": 25,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/25"
+        },
+        "P2-X07": {
+          "number": 26,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/26"
+        },
+        "P2-X06": {
+          "number": 32,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/32"
+        },
+        "P2-B02T": {
+          "number": 30,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/30"
+        },
+        "P2-B02": {
+          "number": 30,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/30"
+        },
+        "P2-B03T": {
+          "number": 28,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/28"
+        },
+        "P2-B03": {
+          "number": 28,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/28"
+        },
+        "P2-A02T": {
+          "number": 31,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/31"
+        },
+        "P2-A02": {
+          "number": 31,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/31"
+        },
+        "P2-L02": {
+          "number": 29,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/29"
+        },
+        "P2-R2": {
+          "number": 33,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/33"
+        },
+        "P2-B04T": {
+          "number": 34,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/34"
+        },
+        "P2-B04": {
+          "number": 34,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/34"
+        },
+        "P2-B05T": {
+          "number": 35,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/35"
+        },
+        "P2-B05": {
+          "number": 35,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/35"
+        },
+        "P2-B06T": {
+          "number": 37,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/37"
+        },
+        "P2-B06": {
+          "number": 37,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/37"
+        },
+        "P2-B07T": {
+          "number": 36,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/36"
+        },
+        "P2-B07": {
+          "number": 36,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/36"
+        },
+        "P2-A03T": {
+          "number": 38,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/38"
+        },
+        "P2-A03": {
+          "number": 38,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/38"
+        },
+        "P2-A04T": {
+          "number": 39,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/39"
+        },
+        "P2-A04": {
+          "number": 39,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/39"
+        },
+        "P2-A05T": {
+          "number": 40,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/40"
+        },
+        "P2-A05": {
+          "number": 40,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/40"
+        },
+        "P2-L03": {
+          "number": 41,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/41"
+        },
+        "P2-X09": {
+          "number": 42,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/42"
+        },
+        "P2-R3": {
+          "number": 43,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/43"
+        },
+        "P2-X10": {
+          "number": 44,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/44"
+        },
+        "P2-D02": {
+          "number": 46,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/46"
+        },
+        "P2-X11": {
+          "number": 45,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/45"
+        },
+        "P2-R4": {
+          "number": 47,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/47"
+        },
+        "P2-D03": {
+          "number": 48,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/48"
+        },
+        "P2-D04": {
+          "number": 49,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/49"
+        },
+        "P2-D05": {
+          "number": 50,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/50"
+        },
+        "P2-X12": {
+          "number": 54,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/54"
+        },
+        "P2-SCR1": {
+          "number": 51,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/51"
+        },
+        "P2-L05": {
+          "number": 53,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/53"
+        },
+        "P2-R5": {
+          "number": 52,
+          "url": "https://github.com/1wgrumph/amazon-fantasy-companion/issues/52"
+        }
+      },
+      "evidence": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-L01/readback.json",
+      "creation": "Light Implementer created all 13 milestones and 39 issues, linked dependencies, then stopped on date mismatch; worker-stop causal claim superseded by date-triage.json",
+      "repair": "BUG-AFC-L01-DATE-001: real dependency red reproduced; only due_on of milestones 4/5/6 corrected; strict full readback PASS independently rerun by parent",
+      "review": "pending independent frozen bug-triager reviewer; no planning budget reset",
+      "product_execution": "held"
+    },
+    {
+      "at": "2026-10-13T17:04:27.857661+00:00",
+      "kind": "dispatch_record",
+      "lease_id": "P2-L01-review",
+      "route": "Codex CLI / GPT-6 Astra / high",
+      "review_round": 1,
+      "candidate": "1d70627",
+      "scope": "one tracking-closeout execution step; prior planning budgets unchanged",
+      "coverage_assist": "OCR delegation required",
+      "reverify": "enabled; not applicable no compiled binary"
+    },
+    {
+      "at": "2026-10-13T18:39:48.397549+00:00",
+      "kind": "review_aggregation_record",
+      "lease_id": "P2-L01-review",
+      "verdict": "ACCEPT",
+      "reviewed_revision": "1d706270ea05f1c658df2ff8eef32762c900928b",
+      "rounds": 1,
+      "repairs": 0,
+      "process_exit": 124,
+      "process_disposition": "Complete frozen ACCEPT receipt and all verification outputs persisted before timeout. Parent verified every candidate hash, parsed every review JSON, matched both gate log hashes and all OCR preview/rule hashes, and inspected exit0 gate/readback outputs. No role switch or duplicate review.",
+      "evidence": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-L01/closeout-receipt.json",
+      "product_execution": "held"
+    },
+    {
+      "at": "2026-10-13T18:42:35.780064+00:00",
+      "kind": "tracking_landing_closeout",
+      "outcome": "COMPLETE",
+      "pr": 55,
+      "url": "https://github.com/1wgrumph/amazon-fantasy-companion/pull/55",
+      "merge_commit": "4994aad44ace64f3c9434f73461f3fe2d12f694b",
+      "merged_at": "2026-10-13T18:42:08Z",
+      "head": "3751600be984567b10b69f57953ae314d8d4f69a",
+      "readback": {
+        "milestones_open": 13,
+        "work_issues_total": 39,
+        "setup_issue_16": "closed completed",
+        "remaining_work_issues_open": 38,
+        "owner_issue_1": "open",
+        "titles_bodies_labels_assignments_dates_unchanged": true
+      },
+      "review": "ACCEPT;1round0repairs;complete receipt before process timeout validated",
+      "hosted_gate_run": 38448670037,
+      "hosted_checks": "docs/hygiene/detect PASS;spec path-filter skip, localfullspecPASS",
+      "product_execution": "held",
+      "planning_browser": "NOT_RUN accepted gap retained",
+      "cleanup": "COMPLETE: merged temporary worktree/local branch/remote branch removed; retired dirty control preserved",
+      "cleanup_retry": {
+        "classification": "BUG_ROUTE: not-a-bug controller cleanup sequencing error; no candidate defect",
+        "evidence": "Controller removed clean merged worktree while remote-deletion pre-push gate was still running; missing checkout caused gate exit1, prevented remote deletion. Merged PR and issue metadata unaffected.",
+        "recovery": "Recreated detached checkout at merged4994aad, reran ordinary remote deletion with hooks; wait for process completion before removing checkout.",
+        "prevention": "Dependent cleanup steps must await exit_code, not a yielded session ID."
+      }
     }
   ],
   "planning_review": {
@@ -2544,5 +3613,364 @@
     "approved_candidate": "173e005",
     "approved_manifest_digest": "4128aa9cdacd1fca06edfb68652258730db107eb6213f6dca3faf9e9cca55e84",
     "approved_at": "2026-10-12T02:17:01Z"
+  },
+  "history": [
+    {
+      "at": "2026-10-13T03:31:42Z",
+      "kind": "session_resume",
+      "generation": 1,
+      "orchestrator": "Codex CLI Orchestrator",
+      "owner_direction": "Owner said 'begin' after clarifying immediate scope: finish spec/blockers and program planning, present the integrated package, then create planned issues and milestones only after approval. Product implementation is outside this stage.",
+      "note": "No change to frozen role routes or review budgets. The verbatim owner statement time was not recorded; 'at' is the verified lease resume marker, not the statement time.",
+      "evidence": "checkout_lease.resumed_at, HANDOFF.md"
+    },
+    {
+      "at": "2026-10-13T03:33:11Z",
+      "kind": "observation",
+      "tool": "Claude Code",
+      "task": "Resume existing work: B2T-g2 (B2 red tests) and pd-phase2-resume (Phase 2 Planning and Design)",
+      "classification": "Verified account usage exhaustion; not a product bug",
+      "observation": "Both runs exited 1 with 'You've hit your weekly limit; resets 2am (America/Chicago)'. Result: blocked, no new artifacts from these runs.",
+      "evidence": "packets/B2T-g2-run.log, specialists/pd-phase2-resume-run.log, return_records at this timestamp",
+      "impact": "B2 test work and Phase 2 planning-lead work could not proceed on their primary Claude routes",
+      "workaround": "Frozen ordered fallbacks for B2 Test Implementer and TE; owner route question for the planning lead (no configured P&D fallback)",
+      "uncertainty": "Run durations unknown; reset time is the vendor-reported 2am America/Chicago, not independently verified"
+    },
+    {
+      "kind": "owner_question_pending",
+      "record_note": "Event form without typed question timestamps: the actual asked UTC time is unavailable and is not fabricated, per packet authorization. Not an owner_stop record.",
+      "question": "For the planning lead (no configured P&D fallback): run on Codex CLI / GPT-6.1 Sol / high, or wait for the Claude reset?",
+      "asked_at": null,
+      "answered_at": null,
+      "status": "answer pending"
+    },
+    {
+      "at": "2026-10-13T03:34:40Z",
+      "kind": "observation",
+      "tool": "Deterministic gates (pytest, local-gates.sh) run by root",
+      "task": "B3 verification of reviewed repair head 1eadf6e",
+      "classification": "Verification receipt; not a defect or review round",
+      "observation": "81 tests PASS; local-gates exit 0 with 2 applicable PASS and 15 N/A. Only CHANGELOG.md conflicts with newer main (shown by git merge-tree); B3-integrate dispatched for mechanical preserve-both resolution.",
+      "evidence": "evidence/B3/codex-verify/ (pytest.txt, local-gates.txt), dispatch_record B3-integrate",
+      "impact": "B3 proceeds to mechanical integration; no new review or product repair",
+      "workaround": "None needed",
+      "uncertainty": "Verification ran before the B3-integrate dispatch; its exact run time was not recorded"
+    },
+    {
+      "at": "2026-10-13T03:36:09Z",
+      "kind": "observation",
+      "tool": "Codex CLI (frozen first fallbacks)",
+      "task": "B2 test specialist (B2T-g2-codex, dispatched 2026-10-13T03:33:11Z) and TE planning (TE-p2-codex, dispatched 2026-10-13T03:36:09Z)",
+      "classification": "Fallback activation receipts (Class B); work in flight, not complete",
+      "observation": "Both roles run on their frozen first fallbacks. Completeness is not claimed.",
+      "evidence": "dispatch_records B2T-g2-codex (route Codex CLI / GPT-6.1 Sol / high) and TE-p2-codex (route Codex CLI / GPT-6 Astra / xhigh) in execution_receipts",
+      "impact": "Blocked B2/TE work resumes on approved routes pending the owner's planning-lead route answer",
+      "workaround": "None; this is the workaround",
+      "uncertainty": "Return outcomes unknown at transcription time"
+    },
+    {
+      "at": "2026-10-13T03:37:43Z",
+      "kind": "observation",
+      "tool": "BRAN",
+      "task": "Scribe repository context for AFC transcription",
+      "classification": "Capability unavailable for this repository (no native policy); not a failure",
+      "observation": "BRAN unavailable for AFC. Direct repository reads used instead. Existing configured BRAN continues for HQ/azedge where applicable.",
+      "evidence": "SCR-codex-resume dispatch packet",
+      "impact": "None on this transcription; reads completed directly",
+      "workaround": "Direct repository reads",
+      "uncertainty": "Whether a native AFC BRAN policy will be configured later is unknown"
+    },
+    {
+      "at": "2026-10-13T03:40:57Z",
+      "kind": "observation",
+      "tool": "Alphazedehq PR pipeline + deterministic gates",
+      "task": "B3 landing (Alphazedehq#320, merge 0467883)",
+      "classification": "Landing receipt; not a defect or review round",
+      "observation": "MERGED 04678835350b529b44ab69ee5f805ca21cab5e76. 81 tests; root merge gate PASS; code/test bytes unchanged from the independently reviewed repair; CHANGELOG-only conflict with newer main resolved preserve-both (merge commit; GitHub rejected rebase as not rebasable). Worktree/local/remote branch removed; ancestor and clean state verified.",
+      "evidence": "landing_record B3; dispatch B3-integrate",
+      "impact": "B3 closed; ST-4 g5 later re-vendors to this pin",
+      "uncertainty": "B3-integrate run duration unknown"
+    },
+    {
+      "at": "2026-10-13T03:55:05Z",
+      "kind": "owner_decision_recorded",
+      "decision": "DEC-AFC-SD-039",
+      "observation": "Owner asked why a lead-route question was raised despite profiles, then stated 'You are the planning lead now'. The current Codex session is the Planning and Design lead; the pending lead-route question is closed, not a specialist-profile amendment. Root continues configured roles/fallbacks. User task remains planning plus approved tracking setup; no product execution.",
+      "evidence": "decisions DEC-AFC-SD-039",
+      "classification": "Orchestration friction; not a vendor bug",
+      "note": "Owner question/statement timestamps unknown, not fabricated. Supersedes the pending owner_question_pending history record.",
+      "impact": "Planning-lead route settled; TE/IE proceed on frozen fallbacks"
+    },
+    {
+      "at": "2026-10-13T03:55:05Z",
+      "kind": "observation",
+      "tool": "Reviewer gates + hosted CI",
+      "task": "B2 landing (amazon-fantasy-companion#14, merge c2468c9)",
+      "classification": "Landing receipt; not a defect or review round",
+      "observation": "MERGED c2468c9e7850745f1245bf4cfc81e55047e3fb55 after one independent review PASS (zero findings, zero repairs). Reviewer 39/39 plus independent six-case red/green reproduction and OCR rules for all four files; hosted checks 4/4.",
+      "evidence": "review_record B2 (packets/B2-review-result.md); landing_record B2",
+      "impact": "B2 closed; B2T-g2-codex red work and B2-g2 repair both landed",
+      "uncertainty": "Landing-run duration unknown"
+    },
+    {
+      "at": "2026-10-13T03:58:52Z",
+      "kind": "observation",
+      "tool": "Reviewer gates (foundation-contracts, local-gates --fast)",
+      "task": "S44 landing (azedge#304, merge 5ac113e)",
+      "classification": "Landing receipt with explicit non-claims; not a defect or review round",
+      "observation": "MERGED 5ac113e343df448b23cff28cab6e3938ec64a2de. Independent OCR + foundation 16 PASS + local fast gates 29 PASS / 12 SKIP; root verified exact file hashes and remote identity. No claim the 12 skipped suites (incl. workspace-tests) ran; prior provider_reads_once_per_admitted_attempt flake not reproduced, not claimed fixed. Remote absence verified after automatic worktree cleanup.",
+      "evidence": "landing_record S44 azedge; packets/S44-azedge-review-result.md",
+      "impact": "S44 closed; workspace rule #21 live in azedge",
+      "uncertainty": "None added beyond the receipt"
+    },
+    {
+      "at": "2026-10-13T04:13:22Z",
+      "kind": "observation",
+      "tool": "git cherry + patch comparison",
+      "task": "PR11 redundant closeout",
+      "classification": "Closeout receipt; correctly never merged",
+      "observation": "PR11 CLOSED and branch deleted: patch 579b951 equivalent to already-main d259c169 (git cherry returned -); c24e4a3 vendor pin verified. Not falsely marked merged; correctly absent from CHANGELOG history.",
+      "evidence": "closeout_record PR11 redundant; packets/ST-4-g5-review-result.md PR11 section",
+      "impact": "No duplicate re-vendor in history",
+      "uncertainty": "None"
+    },
+    {
+      "at": "2026-10-13T04:13:22Z",
+      "kind": "observation",
+      "tool": "Codex CLI (TE planning, frozen first fallback)",
+      "task": "TE initial planning authorship PASS + root source corrections",
+      "classification": "Planning authorship PASS with nine reconciliation findings; not review, runtime, or acceptance",
+      "observation": "TE-p2-codex PASS: 100 proof cases (63 active product + 37 lifecycle-local), 64 commands, 52 slices, 44 integration steps; findings TE-P2-F01..F09. Root applied source corrections (P2 author completion; no new product requirements; all 63 active UIDs and 52 slice identities retained) and dispatched IE-p2-codex-delta.",
+      "evidence": "return_record TE-p2-codex; planning_correction P2 author completion; Phase2 specialists/te-p2-codex-receipt.md",
+      "impact": "Planning proceeds to IE correction 2; findings bound for Plan Integrator",
+      "uncertainty": "TE run duration unknown"
+    },
+    {
+      "at": "2026-10-13T04:20:58Z",
+      "kind": "observation",
+      "tool": "Independent review + hosted CI",
+      "task": "ST-4 / ST5-conditions landing (amazon-fantasy-companion#10, merge 92f3ed1)",
+      "classification": "Landing receipt; not a defect or review round",
+      "observation": "MERGED 92f3ed1a0d178d2704c0efdc073ad332dc67b79f after one independent review PASS (zero findings, zero repairs). Independent 749 links/anchors, 66/66 UIDs, byte-identical rebuild, approved prose preserved, 39 tests, hosted 4/4; root exact head/hash readback. Untracked g4/g5-review evidence byte-preserved; g5 author evidence on main at Phase 2 canonical relative paths. Merged worktree/local/remote removed. No release/tag/visibility change (deferred owner authority).",
+      "evidence": "review_record ST-4-g5-review (packets/ST-4-g5-review-result.md); landing_record ST-4; main evidence/ST-4/g5/receipt.json",
+      "impact": "ST5-F1/F2 conditions satisfied; spec amendment live on main",
+      "uncertainty": "Landing-run duration unknown"
+    },
+    {
+      "at": "2026-10-13T04:42:23Z",
+      "kind": "observation",
+      "tool": "Codex CLI (IE planning continuation, frozen first fallback)",
+      "task": "IE correction 2 READY + Plan Integrator running",
+      "classification": "Author delta READY for parent reconciliation; not integrated readiness, review, assurance, or acceptance",
+      "observation": "IE-p2-codex-delta READY: 44 steps, 52 slices, 39 logical issue groups (13 TDD pairs share issues), 60 changed fields; D02 waits for every required final verdict. Root synced planning base (head 7f000af, merge gate PASS 39 tests). Plan Integrator PI-p2-codex dispatched and running; TE finalization and independent planning review remain; no new independent planning review yet. Q10/S8 engineering-methods ledger is external, outside this write set, not restored.",
+      "evidence": "return_record IE-p2-codex-delta; planning_correction IE exact source closure; dispatch_record PI-p2-codex; Phase2 specialists/ie-p2-codex-delta-receipt.md",
+      "impact": "Planning proceeds to integration; typed gaps (source reconciliation, Reverify capability, owner evidence) stay visible",
+      "uncertainty": "IE run duration unknown; reconciliation outcome pending"
+    }
+  ],
+  "planning_review_phase2": {
+    "candidate_ref": "plan/2026-10-12-afc-phase-2",
+    "candidate_revision": "de6db1e3e125f827aa079a6333ba453ec322d34b",
+    "candidate_digest": "02c41e2cc4553126bd0a5aeaa554104b488e68177eba4cb650694af2d4c16226",
+    "authoring_base_revision": "7f000aff70e435b0cac923931fd818c69111f07d",
+    "reviewer_slots": [
+      {
+        "slot_id": "planning-review",
+        "primary_route_ref": "Muse Code / Muse Spark 1.3 / max",
+        "fallback_route_refs": [
+          "Codex CLI / GPT-6 Astra / high",
+          "Claude Code / Fable / high"
+        ]
+      }
+    ],
+    "round_number": 1,
+    "completed_rounds": 1,
+    "aggregated_repairs": 1,
+    "artifacts": {
+      "amazon-fantasy-companion-phase-2-technical-plan.md": "6a2520ea8e235b1c21210b801bb2570803678ec013123935b7d9ea8e752a5464",
+      "design.md": "7fe2a5ca0cabd66846ff00ac2294547296cc18cc2af1bbc26a279cf5ddc94dfa",
+      "seit.json": "ba2868264e752eed27679ea514b54c79a8741119616eca77d424b367ec465135",
+      "implementation.json": "cf46c7588e66133f73b86785918e1a84a2e57c6a23536005d4c6c5cd8575998b",
+      "amazon-fantasy-companion-phase-2-dod-manifest.html": "fc39124fc09bf26b70b6cbb0f3abb5bd5083d6db5a78c1158288cf5dfbd1502b",
+      "authority.json": "d90a47e99672100dde8484059869a59e4f9a1477834b2c2c4213dd49db78f5dd",
+      "evidence/github-work-items/github-work-items.json": "95caddfe2b85067e2a22a3c1e7d46180193f3c67c59aa91b34d552d9116b8c4b"
+    },
+    "capabilities": {
+      "coverage_assist": {
+        "enabled": true,
+        "required": true
+      }
+    },
+    "deterministic_verification": {
+      "reverify": {
+        "enabled": true
+      }
+    },
+    "publication_note": "Embedded7f000af revision records the authoring base. This dispatch freezes the complete published Git snapshot above plus source/SEIT digest and full artifact hashes; review this commit, not the bare authoring-base tree.",
+    "verdict": "ACCEPT",
+    "review_receipt": "evidence/P2-review/reviewer/receipt.json",
+    "aggregation_complete": true,
+    "deterministic_gate": "PASS",
+    "repaired_candidate_digest": "67ac7a9071859e8d4ef05b863c3e6e4d4931d2451a162abb5bb8115eeb1b7d46",
+    "repaired_artifacts": {
+      "amazon-fantasy-companion-phase-2-technical-plan.md": "6a2520ea8e235b1c21210b801bb2570803678ec013123935b7d9ea8e752a5464",
+      "design.md": "7fe2a5ca0cabd66846ff00ac2294547296cc18cc2af1bbc26a279cf5ddc94dfa",
+      "seit.json": "5d52c1aefaa105404dde3acd51f90a2ee78b54604b51dede56429b81074e6f1d",
+      "implementation.json": "1b15dca951356cd881e666c8abff41520ccf69db5c4a59d52f1378e7bb87c7f1",
+      "amazon-fantasy-companion-phase-2-dod-manifest.html": "e71cc51a2e71d6d1499d01d7d4682566408d0dbfade0c21d27b1c4ffc69a9ba2",
+      "authority.json": "d90a47e99672100dde8484059869a59e4f9a1477834b2c2c4213dd49db78f5dd",
+      "evidence/github-work-items/github-work-items.json": "f485d8f62f72bf09c1e90c57493e03a178ec93ba7e9fc155cd776a32f736f5e9"
+    },
+    "repair_evidence": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-review-repair",
+    "presentation_gate": {
+      "outcome": "PASS",
+      "reason": "repair_gate_passed"
+    },
+    "note": "Review tuple above remains the exact original reviewed commit. One bounded advisory repair deterministically verified; no automatic second review."
+  },
+  "integrated_review_phase2": {
+    "round": 1,
+    "status": "APPROVED",
+    "candidate_digest": "e02871029b86f8d0f2fdef6617feb989413883cc6bdb70e5dec3a47e64c86da8",
+    "tracking_payload_sha256": "f0b8d5bf26d3959948e65960fc2b06525a96f964ab3454633eb6c1aaeab9acdb",
+    "milestones": 13,
+    "issues": 39,
+    "approval_scope": "Planning package plus P2-L01 GitHub tracking after PR landing only; product execution held pending subsequent owner instruction",
+    "owner_decisions": [
+      "DEC-AFC-SD-040",
+      "DEC-AFC-SD-041"
+    ],
+    "authoring_baseline_revision": "14120d1d24e71c95e50cbc7a2e4edec1a5d7f5a7",
+    "pr": "https://github.com/1wgrumph/amazon-fantasy-companion/pull/15",
+    "prepared_at": "2026-10-13T15:27:30Z",
+    "evidence_ref": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/chronology-profile-delta/parent-final-verification.json",
+    "browser_gap": "Accepted by owner for planning approval; browser check remains NOT_RUN.",
+    "approved_at": "2026-10-13T16:21:37Z",
+    "approval_decision_id": "DEC-AFC-P2-APPROVAL-001",
+    "approved_candidate_revision": "a7a16570c376222635f48a6702cd0e3eca694493",
+    "planning_pr_merged": {
+      "pr": 15,
+      "merge_commit": "88db101edb61a08dedea8037e4e9207d262a7e0f",
+      "approved_head": "a7a16570c376222635f48a6702cd0e3eca694493"
+    }
+  },
+  "profile_migration_pending": {
+    "authority": "DEC-AFC-SD-041",
+    "selected_name": "opensource-hackathon",
+    "observed_catalog_name": "opensource-hackathon",
+    "observation_ref": "Phase2 evidence/fresh-session-handoff/profile-observation.json",
+    "activated": true,
+    "next": "Activated; planning approved and PR15 merged. Tracking created/read back; receipt review and landing pending. Product execution held.",
+    "activated_at": "2026-10-13T13:54:42Z",
+    "full_profile_sha256": "7d501eb8c103831a38c50d237b5d1e2e015a564b9ade8aef09a32dfc39b26ab1",
+    "evidence_ref": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/profile-migration-041",
+    "projections": "complete"
+  },
+  "planning_resume_041": {
+    "outcome": "APPROVED_TRACKING_CREATED",
+    "at": "2026-10-13T14:00:48Z",
+    "session_started_at": "2026-10-13T13:49:00Z",
+    "stop_new_work_at": "2026-10-13T19:44:00Z",
+    "profile_binding": "activated; all canonical projections reconciled",
+    "full_profile_sha256": "7d501eb8c103831a38c50d237b5d1e2e015a564b9ade8aef09a32dfc39b26ab1",
+    "chronology": "applied and mechanically verified; browser visual gap remains",
+    "evidence": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/profile-migration-041/contract-gap.json",
+    "dispatches": [],
+    "planning_review_spent": 1,
+    "aggregate_repair_spent": 1,
+    "additional_opus_review": "completed before session; not repeated",
+    "pr15": "merged 88db101edb61a08dedea8037e4e9207d262a7e0f",
+    "product_execution": "held",
+    "next_action": "Land independently reviewed tracking receipts; product execution held.",
+    "continuation": {
+      "at": "2026-10-13T14:16:01Z",
+      "owner_instruction": "ok lets continue",
+      "precheck_resolution": "Documented pure checkRegister with lossless in-memory Markdown projection; no SDoc persisted, no plugin change; 63 active checked, 3 withdrawn retained; register-precheck PASS.",
+      "library_lint": "exit0 with no output on Markdown; zero SDoc nodes, NOT semantic lint PASS; separate RE semantic gate required.",
+      "evidence": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/chronology-profile-delta",
+      "budget_reset": false,
+      "re_correction": {
+        "scope": "owner chronology delta",
+        "correction_rounds": 2,
+        "reserved_by": "evidence/chronology-profile-delta/re-correction-result.json",
+        "regate_uids": [
+          "AC-AFC-P2-MS-01"
+        ],
+        "closed_uids": [
+          "AC-AFC-P2-REL-02",
+          "RISK-AFC-P2-13",
+          "AC-AFC-P2-DX-02"
+        ],
+        "note": "Native returned count persisted once; no planning-review or aggregate-repair budget reset."
+      },
+      "ie_outcome": "CANDIDATE_READY;32/32 parent-rerun checksPASS",
+      "re_outcome": "PASS all4affected rows closed; correction_rounds2 unchanged",
+      "te_outcome": "PASS22/22 parent-rerun checks",
+      "pi_outcome": "PLAN_REVIEW_READY author-only; both calls exit0 on same frozen route; parent267conservation checks and3negative casesPASS",
+      "browser_gap": "cua.createBrowserTab iab unavailable; cua.listBrowsers returned []; user input requested while integration continues.",
+      "active_children": [],
+      "parent_final_verification": {
+        "conservation_checks": 268,
+        "negative_cases_rejected": 3,
+        "repository_gate": "PASS39tests;spec/docs/hygiene",
+        "evidence": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/chronology-profile-delta/parent-final-verification.json",
+        "literal_label_completion": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/chronology-profile-delta/release-condition-label-receipt.json",
+        "browser_visual": "NOT_RUN; no available browser; owner acceptance not recorded"
+      }
+    }
+  },
+  "integrated_review_phase2_history": [
+    {
+      "round": 1,
+      "status": "CHANGE_REQUESTED",
+      "candidate_digest": "67ac7a9071859e8d4ef05b863c3e6e4d4931d2451a162abb5bb8115eeb1b7d46",
+      "tracking_payload_sha256": "f485d8f62f72bf09c1e90c57493e03a178ec93ba7e9fc155cd776a32f736f5e9",
+      "milestones": 5,
+      "issues": 39,
+      "approval_scope": "Planning package plus P2-L01 GitHub tracking after PR landing only; product execution held pending subsequent owner instruction",
+      "owner_decision": "DEC-AFC-SD-040",
+      "candidate_revision": "51bc730a880105c9b21d37a7a2dc5da79ada875f",
+      "pr": "https://github.com/1wgrumph/amazon-fantasy-companion/pull/15",
+      "presented_at": "2026-10-13T07:47:39Z"
+    }
+  ],
+  "tracking_closeout": {
+    "status": "COMPLETE",
+    "worktree": "$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-tracking",
+    "branch": "afc/p2-l01-tracking",
+    "review_budget": {
+      "maximum": 1,
+      "spent": 1,
+      "repair_maximum": 1,
+      "repair_spent": 0
+    },
+    "bug_route_binding": "6ca3ffccea9bae0e26f960b075e7a7fe2ffc01048474f1c8a70c31d8e748138b",
+    "reviewer": "Codex CLI / GPT-6 Astra / high",
+    "product_execution": "held",
+    "review_candidate": "1d706270ea05f1c658df2ff8eef32762c900928b",
+    "review_verdict": "ACCEPT",
+    "review_receipt": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-L01/review/receipt.json",
+    "receipt_pr": 55,
+    "setup_issue": 16,
+    "counts": {
+      "milestones": 13,
+      "issues": 39,
+      "slices": 52,
+      "tdd_pairs": 13
+    },
+    "merge_commit": "4994aad44ace64f3c9434f73461f3fe2d12f694b",
+    "setup_issue_status": "closed",
+    "remaining_work_issues_open": 38,
+    "next_action": "Await separate owner product-execution instruction",
+    "cleanup": "complete"
+  },
+  "cleanup_handoff": {
+    "at": "2026-10-13T18:51:38.738585+00:00",
+    "owner_instruction": "ok so just clean up so I can get some agents to start the implementation and get this workstarted",
+    "handoff": "$HOME/alphazede/worktrees/amazon-fantasy-companion-IMPLEMENTATION-HANDOFF.md",
+    "clean_checkout": "$HOME/alphazede/worktrees/amazon-fantasy-companion-implementation",
+    "baseline": "4994aad44ace64f3c9434f73461f3fe2d12f694b",
+    "agents_started": 0,
+    "legacy_worktrees": "Preserved non-ancestor commits and dirty control evidence; no destructive cleanup"
   }
 }

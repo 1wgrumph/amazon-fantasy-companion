@@ -1,0 +1,100 @@
+{
+  "outcome": "PASS",
+  "lease_id": "B2T-g2-codex",
+  "lifecycle": "AFC-2026-10-11",
+  "role": "test_implementer",
+  "route": "Codex CLI / GPT-6.1 Sol / high",
+  "branch": "afc/b2-gate-spec-staged",
+  "base": "423496ee642982841d1748d102abd05a7d93edcc",
+  "head": "46f662dd6e1da7c89f9e3fc41fc97690efee729f",
+  "changed_paths": [
+    "tools/ci/tests/gate_support.py",
+    "tools/ci/tests/test_gate.py"
+  ],
+  "claim": "Assigned test packet complete: B2a repaired; B2b positive regression intentionally RED. Author evidence only; no independent review or product realization claim.",
+  "method": "test",
+  "pass_fail_rule": "Full discovery has exactly one assertion failure: B2b staged-source-and-rebuilt-output positive. B2a linked-document proof and B2b stale-index negative pass.",
+  "baseline": {
+    "tests": 3,
+    "failures": 2,
+    "errors": 0,
+    "exit": 1,
+    "B2a": "DOC-LINK assertion failure",
+    "B2b_positive": "AssertionError: 1 != 0; rebuilt output differs from HEAD",
+    "B2b_negative": "PASS"
+  },
+  "verification": {
+    "command": "env -u GIT_INDEX_FILE -u GIT_DIR python3 -m unittest discover -s tools/ci/tests -v",
+    "tests": 39,
+    "failures": 1,
+    "errors": 0,
+    "exit": 1,
+    "expected_red_test": "test_gate.AC_AFC_CI_04_Spec.test_staged_source_and_rebuilt_output_pass_before_commit",
+    "B2a": "PASS",
+    "B2b_negative": "PASS",
+    "hook_environment_isolation": "PASS",
+    "diff_check": "PASS"
+  },
+  "origin_and_escape": {
+    "B2a": "S09T fixture excluded docs/plans; no prior spec source linked repository planning documents. Real linked-document fixture now exercises copier and docs gate.",
+    "B2b": "S09 spec gate compared rebuilt output to HEAD; prior tests committed source edits, omitting correctly regenerated staged pre-commit case. Both staged positive and negative now exercise real Git, uv and pinned builder."
+  },
+  "dependencies": "Existing vendored template, spec builder, linter, diagram tool, Git, uv, dot, Python unittest and PyYAML; no new dependencies or fake gate/tool output.",
+  "preparation": {
+    "launcher": "Real tools/ci/gate.sh executable copied from pinned checkout",
+    "fixtures": "Fresh owned temporary Git repos, tracked documents and vendored template",
+    "resources": "none: Git and Python/uv CLI subprocesses; no server, driver, browser or long-running engine",
+    "gate_time": "Baseline 36 tests 4.617s; candidate 39 tests 7.523s, observed increase 2.906s (single runs, not a performance guarantee)."
+  },
+  "sha256s": {
+    "tools/ci/tests/gate_support.py": "99daec008b39c95eeee2c32b23fc7c5de69c3b5fddd65061205cbc0b869e135b",
+    "tools/ci/tests/test_gate.py": "6be06adbbefbca033c0fe77c8c9ab9c66979e23292ec0b5f052c22c5ed6bab7f",
+    "tools/ci/gate.sh": "38598ce9402f65ddb34b66a5aa371c993af711e5b55b564f6800ef2dcb955cda"
+  },
+  "receipts": [
+    "B2T-g2-codex-baseline.txt",
+    "B2T-g2-codex-verification.txt",
+    "B2T-g2-codex-receipt.json",
+    "B2T-g2-codex-sha256s.txt"
+  ],
+  "capabilities": {
+    "frozen_profile": "bug-triager",
+    "configuration_digest_sha256": "6ca3ffccea9bae0e26f960b075e7a7fe2ffc01048474f1c8a70c31d8e748138b",
+    "review.coverage_assist": {
+      "enabled": true,
+      "required": true,
+      "backend": "ocr delegation",
+      "execution": "not_run: assigned Test Implementer; independent reviewer must run OCR delegation; no passing review evidence",
+      "availability": "not probed in author session"
+    },
+    "deterministic_verification.reverify": {
+      "enabled": true,
+      "applicability": "binary claims only",
+      "execution": "not_applicable: Python and shell source behavior; no compiled binary claim"
+    }
+  },
+  "developer_feedback": {
+    "observations": "no new observations",
+    "tools": [
+      "Git",
+      "Python unittest",
+      "uv",
+      "dot",
+      "vendored spec tools",
+      "apply_patch"
+    ]
+  },
+  "limitations": [
+    "BRAN unavailable: no native policy.",
+    "B2b product repair remains for Product Implementer; gate.sh untouched.",
+    "No nested agents, Git config writes, PR, merge or issue mutation.",
+    "Hooks bypassed only for expressly authorized red-state commit/push."
+  ],
+  "push": {
+    "state": "PASS",
+    "command": "git push --no-verify -u origin afc/b2-gate-spec-staged",
+    "exit": 0,
+    "remote_head": "46f662dd6e1da7c89f9e3fc41fc97690efee729f",
+    "upstream": "origin/afc/b2-gate-spec-staged"
+  }
+}

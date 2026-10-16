@@ -1,0 +1,25 @@
+[
+  {
+    "classification": "environment",
+    "command": "git commit --no-verify in throwaway clone",
+    "exit_code": 128,
+    "error": "Committer identity unknown; fatal: unable to auto-detect email address",
+    "hypothesis": "Author identity is present in environment; committer identity is absent",
+    "resolution": "Set GIT_COMMITTER_NAME and GIT_COMMITTER_EMAIL from GIT_AUTHOR_NAME and GIT_AUTHOR_EMAIL in subprocess environment; clone simulation retried",
+    "status": "resolved"
+  },
+  {
+    "classification": "plan-command",
+    "command": "CMD-COVERAGE-CI --exclude tools/ci/check_workflows.py",
+    "status": "known; unchanged; stricter coverage includes vendored checker and passes at 92%"
+  },
+  {
+    "classification": "harness",
+    "command": "verify-hooks.py clone log assertion",
+    "exit_code": 1,
+    "error": "AssertionError: legitimate S09T g4 commit subject contains the word fixture",
+    "hypothesis": "The safety check must detect unintended fixture commit subjects, not the word fixture in a legitimate description",
+    "resolution": "Match the unintended subject exactly; explicit hooks and clone push then pass",
+    "status": "resolved"
+  }
+]

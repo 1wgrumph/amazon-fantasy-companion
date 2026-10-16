@@ -1,0 +1,16 @@
+diff --git a/tools/ci/gate.sh b/tools/ci/gate.sh
+index 21069d1..c074c83 100755
+--- a/tools/ci/gate.sh
++++ b/tools/ci/gate.sh
+@@ -1,6 +1,11 @@
+ #!/usr/bin/env bash
+ set -u
+ 
++# Hooks export repository locations that must not redirect this gate or its fixtures.
++unset GIT_DIR GIT_WORK_TREE GIT_INDEX_FILE GIT_PREFIX GIT_COMMON_DIR \
++    GIT_OBJECT_DIRECTORY GIT_ALTERNATE_OBJECT_DIRECTORIES GIT_IMPLICIT_WORK_TREE \
++    GIT_GRAFT_FILE GIT_SHALLOW_FILE GIT_INTERNAL_SUPER_PREFIX
++
+ # Extend these three definitions together from the repository's check inventory.
+ areas=(spec docs hygiene)
+ area_matches() {

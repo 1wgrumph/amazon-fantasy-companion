@@ -1,0 +1,30 @@
+F....................................................................... [ 93%]
+.....                                                                    [100%]
+=================================== FAILURES ===================================
+________ test_b3_appendix_a_section_references_link_to_section_anchors _________
+
+tmp_path = PosixPath('/tmp/pytest-of-spectre/pytest-328/test_b3_appendix_a_section_ref0')
+
+    def test_b3_appendix_a_section_references_link_to_section_anchors(tmp_path):
+        text = built(tmp_path)
+        anchors = heading_anchors(text)
+        rows = appendix_rows(text)
+    
+        assert set(rows) == set(TRACE)
+        for requirement, sections in TRACE.items():
+            cell = rows[requirement]
+            links = SECTION_LINK.findall(cell)
+>           assert [label for label, _ in links] == sections, (
+                f"{requirement}: Appendix A sections are not links: {cell!r}"
+            )
+E           AssertionError: AC-EX-DATA-01: Appendix A sections are not links: 'Overview'
+E           assert [] == ['Overview']
+E             
+E             Right contains one more item: 'Overview'
+E             Use -v to get more diff
+
+skills/spec-authoring/tests/test_appendix_links.py:85: AssertionError
+=========================== short test summary info ============================
+FAILED skills/spec-authoring/tests/test_appendix_links.py::test_b3_appendix_a_section_references_link_to_section_anchors
+1 failed, 76 passed, 1 deselected in 2.60s
+exit=1

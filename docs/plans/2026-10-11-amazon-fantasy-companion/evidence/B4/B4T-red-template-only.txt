@@ -1,0 +1,18 @@
+..F.
+======================================================================
+FAIL: test_hygiene_keeps_location_for_plus_leading_filename (skills.setup-pre-commit.tests.test_gate_template.GateTemplateTests.test_hygiene_keeps_location_for_plus_leading_filename)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "$HOME/alphazede/worktrees/alphazedehq-afc-b4/skills/setup-pre-commit/tests/test_gate_template.py", line 118, in test_hygiene_keeps_location_for_plus_leading_filename
+    self.assertTrue("+plus.txt:1:WS-CHECK" in out.splitlines(),
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                    "hygiene finding lost its +plus.txt location:\n" + shown)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False is not true : hygiene finding lost its +plus.txt location:
+gate: hygiene: FAIL check exit 1
+
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.178s
+
+FAILED (failures=1)

@@ -68,7 +68,7 @@
     },
     {
       "id": "CMD-CI-VENDOR-PIN",
-      "command": "git -C /home/spectre/alphazede/Alphazedehq show 120dee00207425201aa77d1f42f3756ee6bc406e:skills/setup-a-repo/scripts/check-workflows.py | diff - tools/ci/check_workflows.py && grep -qF 448d40c3dbb6fd9dceb66d575c66ee89fb45f6e4 tools/ci/VENDORED.md && grep -qF 120dee00207425201aa77d1f42f3756ee6bc406e tools/ci/VENDORED.md; rc=$?; echo \"exit=$rc\"; (exit $rc)",
+      "command": "git -C $HOME/alphazede/Alphazedehq show 120dee00207425201aa77d1f42f3756ee6bc406e:skills/setup-a-repo/scripts/check-workflows.py | diff - tools/ci/check_workflows.py && grep -qF 448d40c3dbb6fd9dceb66d575c66ee89fb45f6e4 tools/ci/VENDORED.md && grep -qF 120dee00207425201aa77d1f42f3756ee6bc406e tools/ci/VENDORED.md; rc=$?; echo \"exit=$rc\"; (exit $rc)",
       "exit_code": 0,
       "output_tail": "exit=0\n",
       "candidate_sha": "7f12bca11e61cfdd1f5d98725e6580fb5c33ab14",
@@ -77,9 +77,9 @@
     },
     {
       "id": "CMD-COVERAGE-CI",
-      "command": "uv run --no-project --with 'coverage>=7,<8' --with 'diff-cover>=9,<10' sh -c 'coverage run --branch --source=tools/ci -m unittest discover -s tools/ci/tests && coverage xml -o /home/spectre/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S09/g3/coverage-ci.xml && diff-cover /home/spectre/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S09/g3/coverage-ci.xml --compare-branch=origin/main --include \"tools/ci/*.py\" --exclude tools/ci/check_workflows.py --fail-under=90'; rc=$?; echo \"exit=$rc\"; (exit $rc)",
+      "command": "uv run --no-project --with 'coverage>=7,<8' --with 'diff-cover>=9,<10' sh -c 'coverage run --branch --source=tools/ci -m unittest discover -s tools/ci/tests && coverage xml -o $HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S09/g3/coverage-ci.xml && diff-cover $HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S09/g3/coverage-ci.xml --compare-branch=origin/main --include \"tools/ci/*.py\" --exclude tools/ci/check_workflows.py --fail-under=90'; rc=$?; echo \"exit=$rc\"; (exit $rc)",
       "exit_code": 1,
-      "output_tail": "-------------\nDiff Coverage\nDiff: origin/main...HEAD, staged and unstaged changes\n-------------\ntools/ci/check_docs.py (83.7%): Missing lines 22-23,48-50,54-55\ntools/ci/check_paths.py (81.6%): Missing lines 36,39,50-52,56-57\ntools/ci/check_workflows.py (88.0%): Missing lines 24,48,67,89,94,110,133,142,156-157,168-169,172-173\n-------------\nTotal:   198 lines\nMissing: 28 lines\nCoverage: 85%\n-------------\n\nexit=1\nInstalled 7 packages in 5ms\n.........................\n----------------------------------------------------------------------\nRan 25 tests in 9.170s\n\nOK\nCombined 9 files, skipped 9\nWrote XML report to /home/spectre/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S09/g3/coverage-ci.xml\nFailure. Coverage is below 90%.\n",
+      "output_tail": "-------------\nDiff Coverage\nDiff: origin/main...HEAD, staged and unstaged changes\n-------------\ntools/ci/check_docs.py (83.7%): Missing lines 22-23,48-50,54-55\ntools/ci/check_paths.py (81.6%): Missing lines 36,39,50-52,56-57\ntools/ci/check_workflows.py (88.0%): Missing lines 24,48,67,89,94,110,133,142,156-157,168-169,172-173\n-------------\nTotal:   198 lines\nMissing: 28 lines\nCoverage: 85%\n-------------\n\nexit=1\nInstalled 7 packages in 5ms\n.........................\n----------------------------------------------------------------------\nRan 25 tests in 9.170s\n\nOK\nCombined 9 files, skipped 9\nWrote XML report to $HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S09/g3/coverage-ci.xml\nFailure. Coverage is below 90%.\n",
       "candidate_sha": "7f12bca11e61cfdd1f5d98725e6580fb5c33ab14",
       "at": "2026-10-12T11:57:41.285017+00:00",
       "environment": {
@@ -88,7 +88,7 @@
         "UV_FIND_LINKS": "/tmp/afc-s09-g3-metrics-wheels-4onmfgui",
         "UV_PYTHON": "/usr/bin/python3",
         "PYTHONPATH": "/tmp/afc-s09-g3-metrics-wheels-4onmfgui/host-yaml",
-        "COVERAGE_RCFILE": "/home/spectre/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S09/g3/coverage.rc"
+        "COVERAGE_RCFILE": "$HOME/alphazede/worktrees/amazon-fantasy-companion-planning/docs/plans/2026-10-11-amazon-fantasy-companion/evidence/S09/g3/coverage.rc"
       }
     }
   ],
