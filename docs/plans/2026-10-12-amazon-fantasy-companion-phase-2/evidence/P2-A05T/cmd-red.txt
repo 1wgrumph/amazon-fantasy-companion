@@ -1,0 +1,305 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.7.0/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preDebugBuild UP-TO-DATE
+> Task :app:generateDebugBuildConfig UP-TO-DATE
+> Task :app:generateDebugResources UP-TO-DATE
+> Task :app:packageDebugResources UP-TO-DATE
+> Task :app:processDebugNavigationResources UP-TO-DATE
+> Task :app:parseDebugLocalResources UP-TO-DATE
+> Task :app:generateDebugRFile UP-TO-DATE
+> Task :app:compileDebugKotlin UP-TO-DATE
+> Task :app:javaPreCompileDebug UP-TO-DATE
+> Task :app:compileDebugJavaWithJavac UP-TO-DATE
+> Task :app:checkDebugAarMetadata UP-TO-DATE
+> Task :app:mapDebugSourceSetPaths UP-TO-DATE
+> Task :app:compileDebugNavigationResources UP-TO-DATE
+> Task :app:mergeDebugResources UP-TO-DATE
+> Task :app:createDebugCompatibleScreenManifests UP-TO-DATE
+> Task :app:extractDeepLinksDebug UP-TO-DATE
+> Task :app:processDebugMainManifest UP-TO-DATE
+> Task :app:processDebugManifest UP-TO-DATE
+> Task :app:processDebugManifestForPackage UP-TO-DATE
+> Task :app:processDebugResources UP-TO-DATE
+> Task :app:bundleDebugClassesToRuntimeJar UP-TO-DATE
+> Task :app:bundleDebugClassesToCompileJar UP-TO-DATE
+> Task :app:preDebugUnitTestBuild UP-TO-DATE
+> Task :app:javaPreCompileDebugUnitTest UP-TO-DATE
+> Task :app:processDebugJavaRes UP-TO-DATE
+> Task :app:compileDebugUnitTestKotlin
+> Task :app:compileDebugUnitTestJavaWithJavac NO-SOURCE
+> Task :app:processDebugUnitTestJavaRes UP-TO-DATE
+
+> Task :app:testDebugUnitTest FAILED
+
+PanelControllerTest > firstSnapshotReportsEveryRow FAILED
+    java.lang.AssertionError: Missing behavior: a new panel fetches immediately
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at com.afc.companion.panel.PanelControllerTest.firstSnapshotReportsEveryRow(PanelControllerTest.kt:151)
+
+PanelControllerTest > onlyChangedRowsAreReported FAILED
+    java.lang.AssertionError: Missing behavior: a visible panel fetches
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at com.afc.companion.panel.PanelControllerTest.loaded(PanelControllerTest.kt:34)
+        at com.afc.companion.panel.PanelControllerTest.loaded$default(PanelControllerTest.kt:33)
+        at com.afc.companion.panel.PanelControllerTest.onlyChangedRowsAreReported(PanelControllerTest.kt:141)
+
+PanelControllerTest > hiddenPanelLeavesNavigationKeysToTheShell FAILED
+    java.lang.AssertionError: Missing behavior: a visible panel fetches
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at com.afc.companion.panel.PanelControllerTest.loaded(PanelControllerTest.kt:34)
+        at com.afc.companion.panel.PanelControllerTest.loaded$default(PanelControllerTest.kt:33)
+        at com.afc.companion.panel.PanelControllerTest.hiddenPanelLeavesNavigationKeysToTheShell(PanelControllerTest.kt:110)
+
+PanelControllerTest > identicalOrOlderRevisionChangesNothing FAILED
+    java.lang.AssertionError: Missing behavior: a visible panel fetches
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at com.afc.companion.panel.PanelControllerTest.loaded(PanelControllerTest.kt:34)
+        at com.afc.companion.panel.PanelControllerTest.loaded$default(PanelControllerTest.kt:33)
+        at com.afc.companion.panel.PanelControllerTest.identicalOrOlderRevisionChangesNothing(PanelControllerTest.kt:166)
+
+PanelControllerTest > everyElementIsFocusableAndReachableByDpad FAILED
+    java.lang.AssertionError: Missing behavior: a visible panel fetches
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at com.afc.companion.panel.PanelControllerTest.loaded(PanelControllerTest.kt:34)
+        at com.afc.companion.panel.PanelControllerTest.loaded$default(PanelControllerTest.kt:33)
+        at com.afc.companion.panel.PanelControllerTest.everyElementIsFocusableAndReachableByDpad(PanelControllerTest.kt:85)
+
+PanelControllerTest > burstOfUpdatesHoldsOneSnapshotAndReportsOnlyTheChangedRow FAILED
+    java.lang.AssertionError: Missing behavior: a visible panel fetches
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at com.afc.companion.panel.PanelControllerTest.loaded(PanelControllerTest.kt:34)
+        at com.afc.companion.panel.PanelControllerTest.loaded$default(PanelControllerTest.kt:33)
+        at com.afc.companion.panel.PanelControllerTest.burstOfUpdatesHoldsOneSnapshotAndReportsOnlyTheChangedRow(PanelControllerTest.kt:173)
+
+PanelControllerTest > lateResponseForTheOldTeamIsDiscarded FAILED
+    java.lang.AssertionError: Missing behavior: a visible panel fetches
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at com.afc.companion.panel.PanelControllerTest.loaded(PanelControllerTest.kt:34)
+        at com.afc.companion.panel.PanelControllerTest.loaded$default(PanelControllerTest.kt:33)
+        at com.afc.companion.panel.PanelControllerTest.lateResponseForTheOldTeamIsDiscarded(PanelControllerTest.kt:75)
+
+PanelControllerTest > refreshesOnShowAndEveryThirtySecondsWhileVisible FAILED
+    java.lang.AssertionError: Missing behavior: a visible panel fetches
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at com.afc.companion.panel.PanelControllerTest.loaded(PanelControllerTest.kt:34)
+        at com.afc.companion.panel.PanelControllerTest.loaded$default(PanelControllerTest.kt:33)
+        at com.afc.companion.panel.PanelControllerTest.refreshesOnShowAndEveryThirtySecondsWhileVisible(PanelControllerTest.kt:117)
+
+PanelControllerTest > starterChangeReportsAddedAndRemovedRowsOnly FAILED
+    java.lang.AssertionError: Missing behavior: a visible panel fetches
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at com.afc.companion.panel.PanelControllerTest.loaded(PanelControllerTest.kt:34)
+        at com.afc.companion.panel.PanelControllerTest.loaded$default(PanelControllerTest.kt:33)
+        at com.afc.companion.panel.PanelControllerTest.starterChangeReportsAddedAndRemovedRowsOnly(PanelControllerTest.kt:158)
+
+PanelControllerTest > remoteSwitchesTeamLeagueAndCyclesBack FAILED
+    java.lang.AssertionError: Missing behavior: a visible panel fetches
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at com.afc.companion.panel.PanelControllerTest.loaded(PanelControllerTest.kt:34)
+        at com.afc.companion.panel.PanelControllerTest.loaded$default(PanelControllerTest.kt:33)
+        at com.afc.companion.panel.PanelControllerTest.remoteSwitchesTeamLeagueAndCyclesBack(PanelControllerTest.kt:65)
+
+PanelControllerTest > hiddenPanelSuspendsUpdatesAndRefreshesOnShow FAILED
+    java.lang.AssertionError: Missing behavior: a visible panel fetches
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at com.afc.companion.panel.PanelControllerTest.loaded(PanelControllerTest.kt:34)
+        at com.afc.companion.panel.PanelControllerTest.loaded$default(PanelControllerTest.kt:33)
+        at com.afc.companion.panel.PanelControllerTest.hiddenPanelSuspendsUpdatesAndRefreshesOnShow(PanelControllerTest.kt:129)
+
+PanelControllerTest > focusMovesOffARemovedRow FAILED
+    java.lang.AssertionError: Missing behavior: a visible panel fetches
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at com.afc.companion.panel.PanelControllerTest.loaded(PanelControllerTest.kt:34)
+        at com.afc.companion.panel.PanelControllerTest.loaded$default(PanelControllerTest.kt:33)
+        at com.afc.companion.panel.PanelControllerTest.focusMovesOffARemovedRow(PanelControllerTest.kt:101)
+
+PanelControllerTest > remoteTogglesVisibility FAILED
+    java.lang.AssertionError: Missing behavior: ToggleVisibility is bound to a remote key
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at org.junit.Assert.assertNotNull(Assert.java:713)
+        at com.afc.companion.panel.PanelControllerTest.keyFor(PanelControllerTest.kt:29)
+        at com.afc.companion.panel.PanelControllerTest.remoteTogglesVisibility(PanelControllerTest.kt:57)
+
+PanelControllerTest > everyPanelOperationIsBoundToAFireTvRemoteKey FAILED
+    java.lang.AssertionError: Missing behavior: ToggleVisibility is bound to a remote key
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at org.junit.Assert.assertNotNull(Assert.java:713)
+        at com.afc.companion.panel.PanelControllerTest.keyFor(PanelControllerTest.kt:29)
+        at com.afc.companion.panel.PanelControllerTest.everyPanelOperationIsBoundToAFireTvRemoteKey(PanelControllerTest.kt:50)
+
+PanelControllerTest > initialStateReflectsTheProfileSettings FAILED
+    java.lang.AssertionError: visible per panel prefs
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at com.afc.companion.panel.PanelControllerTest.initialStateReflectsTheProfileSettings(PanelControllerTest.kt:42)
+
+PanelDecodeTest > eachScoringBasisDecodes FAILED
+    java.lang.AssertionError: yahooLeague expected:<YahooLeague> but was:<null>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at com.afc.companion.panel.PanelDecodeTest.eachScoringBasisDecodes(PanelDecodeTest.kt:38)
+
+PanelDecodeTest > panelFeedDecodesOverTheApiClientForTheSelectedTeamLeague FAILED
+    java.lang.AssertionError: Missing behavior: the fetched PanelState decodes
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at org.junit.Assert.assertNotNull(Assert.java:713)
+        at com.afc.companion.panel.PanelDecodeTest$panelFeedDecodesOverTheApiClientForTheSelectedTeamLeague$1.invokeSuspend(PanelDecodeTest.kt:91)
+        at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+        at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+        at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+        at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+        at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+        at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+        at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+        at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source)
+        at com.afc.companion.panel.PanelDecodeTest.panelFeedDecodesOverTheApiClientForTheSelectedTeamLeague(PanelDecodeTest.kt:85)
+
+PanelDecodeTest > nullPointsKeepTheirReasonAndAreNotZero FAILED
+    java.lang.AssertionError: Missing behavior: PanelState data decodes
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at org.junit.Assert.assertNotNull(Assert.java:713)
+        at com.afc.companion.panel.PanelDecodeTest.decoded(PanelDecodeTest.kt:16)
+        at com.afc.companion.panel.PanelDecodeTest.decoded$default(PanelDecodeTest.kt:14)
+        at com.afc.companion.panel.PanelDecodeTest.nullPointsKeepTheirReasonAndAreNotZero(PanelDecodeTest.kt:42)
+
+PanelDecodeTest > malformedRowsRejectTheState FAILED
+    java.lang.AssertionError: Missing behavior: a well-formed state decodes
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at org.junit.Assert.assertNotNull(Assert.java:713)
+        at com.afc.companion.panel.PanelDecodeTest.malformedRowsRejectTheState(PanelDecodeTest.kt:69)
+
+PanelDecodeTest > rowCountIsBoundedByTheDeclaredLimit FAILED
+    java.lang.AssertionError: PANEL_ROWS_MAX declares room for a full lineup and stays small: 0
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at com.afc.companion.panel.PanelDecodeTest.rowCountIsBoundedByTheDeclaredLimit(PanelDecodeTest.kt:78)
+
+PanelDecodeTest > missingOrUnknownBasisRejectsTheWholeState FAILED
+    java.lang.AssertionError: Missing behavior: a known basis decodes
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at org.junit.Assert.assertNotNull(Assert.java:713)
+        at com.afc.companion.panel.PanelDecodeTest.missingOrUnknownBasisRejectsTheWholeState(PanelDecodeTest.kt:65)
+
+PanelDecodeTest > malformedValueBecomesUnavailableNotZero FAILED
+    java.lang.AssertionError: Missing behavior: PanelState data decodes
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at org.junit.Assert.assertNotNull(Assert.java:713)
+        at com.afc.companion.panel.PanelDecodeTest.decoded(PanelDecodeTest.kt:16)
+        at com.afc.companion.panel.PanelDecodeTest.malformedValueBecomesUnavailableNotZero(PanelDecodeTest.kt:53)
+
+PanelDecodeTest > rowsTotalProgressAndBasisDecode FAILED
+    java.lang.AssertionError: Missing behavior: PanelState data decodes
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at org.junit.Assert.assertNotNull(Assert.java:713)
+        at com.afc.companion.panel.PanelDecodeTest.decoded(PanelDecodeTest.kt:16)
+        at com.afc.companion.panel.PanelDecodeTest.decoded$default(PanelDecodeTest.kt:14)
+        at com.afc.companion.panel.PanelDecodeTest.rowsTotalProgressAndBasisDecode(PanelDecodeTest.kt:21)
+
+PanelModeTest > modeBPutsThePanelRightAndFitsTheVideoLeftAtItsAspect FAILED
+    java.lang.AssertionError: Missing behavior: modeB reserves a video area
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at org.junit.Assert.assertNotNull(Assert.java:713)
+        at com.afc.companion.panel.PanelModeTest.modeBPutsThePanelRightAndFitsTheVideoLeftAtItsAspect(PanelModeTest.kt:28)
+
+PanelModeTest > onlyAModeBVerdictSelectsModeB FAILED
+    java.lang.AssertionError: expected:<ModeB> but was:<FullScreen>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at org.junit.Assert.assertEquals(Assert.java:146)
+        at com.afc.companion.panel.PanelModeTest.onlyAModeBVerdictSelectsModeB(PanelModeTest.kt:13)
+
+PanelModeTest > fullScreenHostsThePanelAloneWithNoStandInVideo FAILED
+    java.lang.AssertionError: expected:<Box(left=0, top=0, width=1920, height=1080)> but was:<Box(left=0, top=0, width=0, height=0)>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at org.junit.Assert.assertEquals(Assert.java:146)
+        at com.afc.companion.panel.PanelModeTest.fullScreenHostsThePanelAloneWithNoStandInVideo(PanelModeTest.kt:21)
+
+PanelTextTest > unknownGameStatusIsLabeledUnavailable FAILED
+    org.junit.ComparisonFailure: expected:<[Q2 08:14]> but was:<[]>
+        at app//org.junit.Assert.assertEquals(Assert.java:117)
+        at app//org.junit.Assert.assertEquals(Assert.java:146)
+        at app//com.afc.companion.panel.PanelTextTest.unknownGameStatusIsLabeledUnavailable(PanelTextTest.kt:50)
+
+PanelTextTest > valueWithoutTimestampIsNeverShownAsFresh FAILED
+    java.lang.AssertionError: an undated value is labeled: ''
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at com.afc.companion.panel.PanelTextTest.valueWithoutTimestampIsNeverShownAsFresh(PanelTextTest.kt:46)
+
+PanelTextTest > freshValueShowsTheNumberWithoutLabels FAILED
+    java.lang.AssertionError: fresh value shows its points: ''
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at com.afc.companion.panel.PanelTextTest.freshValueShowsTheNumberWithoutLabels(PanelTextTest.kt:18)
+
+PanelTextTest > realZeroIsShownAsZero FAILED
+    java.lang.AssertionError: a real zero is a value: ''
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at com.afc.companion.panel.PanelTextTest.realZeroIsShownAsZero(PanelTextTest.kt:40)
+
+PanelTextTest > valueAtSixtySecondsIsLabeledStaleWithItsAge FAILED
+    java.lang.AssertionError: stale_after is 60 s: ''
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at com.afc.companion.panel.PanelTextTest.valueAtSixtySecondsIsLabeledStaleWithItsAge(PanelTextTest.kt:25)
+
+PanelTextTest > eachScoringBasisHasItsLabel FAILED
+    org.junit.ComparisonFailure: expected:<[Yahoo league scoring]> but was:<[]>
+        at app//org.junit.Assert.assertEquals(Assert.java:117)
+        at app//org.junit.Assert.assertEquals(Assert.java:146)
+        at app//com.afc.companion.panel.PanelTextTest.eachScoringBasisHasItsLabel(PanelTextTest.kt:55)
+
+PanelTextTest > textSizesMeetTheCouchFloor FAILED
+    java.lang.AssertionError: body text >= 24 px at 1080p: 0.0 sp
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at com.afc.companion.panel.PanelTextTest.textSizesMeetTheCouchFloor(PanelTextTest.kt:62)
+
+PanelTextTest > unknownValueIsLabeledUnavailableAndNeverZero FAILED
+    java.lang.AssertionError: null with reason is labeled: ''
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at com.afc.companion.panel.PanelTextTest.unknownValueIsLabeledUnavailableAndNeverZero(PanelTextTest.kt:34)
+
+34 tests completed, 34 failed
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:testDebugUnitTest'.
+> There were failing tests. See the report at: file://$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-a05t/tv-app/app/build/reports/tests/testDebugUnitTest/index.html
+
+* Try:
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+
+BUILD FAILED in 15s
+26 actionable tasks: 2 executed, 24 up-to-date

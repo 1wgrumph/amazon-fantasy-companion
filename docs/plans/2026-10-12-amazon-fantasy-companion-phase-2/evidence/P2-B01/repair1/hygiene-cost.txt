@@ -1,0 +1,26 @@
+# P2-B01 repair1: hygiene CI cost (R01)
+
+The hygiene job now installs `tools/ci/requirements-hygiene.txt` (23
+hash-pinned packages: mutmut, diff-cover, coverage, pytest, pyyaml + closure)
+with `pip --require-hashes` before `gate.sh hygiene`, plus setup-python 3.12.
+setup-uv and the graphviz apt install are retained (spec-area gate tests need
+uv/dot); the python3-yaml/python3-pytest apt packages are superseded by the
+pip closure.
+
+Measured on the repair host (2026-10-14, PyPI reachable):
+
+- fresh `python3.12 -m venv` + `pip install --require-hashes`: 4 s warm, 3 s
+  cold (--no-cache-dir); both exit 0.
+- native regression tests in that venv only
+  (PATH=venv:/usr/bin:/bin): 4 passed, 3 s.
+- full `python3 -m unittest discover -s tools/ci/tests` with CI-faithful PATH
+  (venv + uv + /usr/bin:/bin): 61 tests OK, 38 s.
+
+Expected CI delta on ubuntu-latest: setup-python (~15 s) + pip install
+(~10-30 s cold runner network). The apt/uv steps are unchanged.
+
+Supply: every pin and hash is copied verbatim from the PASS-verdict
+P2/evidence/BUG-AFC-B01-TOOL-001 closures (mutmut-backend-requirements.txt);
+no new package versions admitted. `pip --require-hashes` verifies each wheel
+hash at install. Verdict for this admission: PASS (reuse).
+CREDENTIAL FINDINGS: none (pins and hashes only).

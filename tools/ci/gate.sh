@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 set -u
 
+# Local tools are installed in the user bin; CI supplies its own toolchain.
+if [[ "${CI:-false}" != true && "${GITHUB_ACTIONS:-false}" != true ]]; then
+    export PATH="$PATH:$HOME/.local/bin"
+fi
+
 # Hooks export repository locations that must not redirect this gate or its fixtures.
 unset GIT_DIR GIT_WORK_TREE GIT_INDEX_FILE GIT_PREFIX GIT_COMMON_DIR \
     GIT_OBJECT_DIRECTORY GIT_ALTERNATE_OBJECT_DIRECTORIES GIT_IMPLICIT_WORK_TREE \
@@ -42,7 +47,39 @@ run_area() {
     case "$1" in
         hygiene)
             python3 -c 'import yaml' || return 3
-            ws_out=$(git diff --check HEAD -- 2>&1)
+            local ws_base=$base
+            if [[ -z "$ws_base" && "${GITHUB_ACTIONS:-false}" == true ]]; then
+                # Checkout is clean in CI: check the event's whole change.
+                ws_base=$(python3 - <<'PYBASE'
+import json
+import os
+import re
+import sys
+try:
+    with open(os.environ['GITHUB_EVENT_PATH'], encoding='utf-8') as source:
+        event = json.load(source)
+    base = event.get('pull_request', {}).get('base', {}).get('sha') or event.get('before')
+    if not isinstance(base, str) or not re.fullmatch(r'[0-9a-f]{40}', base):
+        raise ValueError
+    print(base)
+except (KeyError, OSError, ValueError, TypeError, AttributeError):
+    sys.exit('WS-CHECK: missing or invalid CI base')
+PYBASE
+                ) || return 1
+                if [[ "$ws_base" == 0000000000000000000000000000000000000000 ]]; then
+                    ws_base=$(git hash-object -t tree --stdin < /dev/null) || return 1
+                elif ! git cat-file -e "$ws_base^{commit}" 2>/dev/null; then
+                    git fetch --no-tags --depth=1 origin "$ws_base" >/dev/null 2>&1 \
+                        || { printf 'WS-CHECK: CI base unavailable\n'; return 1; }
+                fi
+            fi
+            if [[ -z "$ws_base" ]]; then
+                ws_base=$(git merge-base HEAD origin/main 2>/dev/null) || {
+                    printf 'WS-CHECK: no origin/main; checking uncommitted changes only\n'
+                    ws_base=HEAD
+                }
+            fi
+            ws_out=$(git diff --check "$ws_base" -- 2>&1)
             ws_rc=$?
             if (( ws_rc != 0 )); then
                 # Report file:line:rule-id only; never echo matched line text.
@@ -59,6 +96,20 @@ run_area() {
             python3 -m unittest discover -s tools/ci/tests ;;
         docs) python3 tools/ci/check_docs.py ;;
         tvapp)
+            if [[ "${CI:-false}" != true && "${GITHUB_ACTIONS:-false}" != true ]]; then
+                if [[ -z "${JAVA_HOME:-}" ]]; then
+                    local jdk jdks=()
+                    for jdk in "$HOME"/.local/share/afc-tools/jdk-17*; do
+                        [[ -d "$jdk" && -x "$jdk/bin/java" ]] && jdks+=("$jdk")
+                    done
+                    if ((${#jdks[@]} == 1)); then
+                        export JAVA_HOME="${jdks[0]}"
+                    fi
+                fi
+                if [[ -z "${ANDROID_HOME:-${ANDROID_SDK_ROOT:-}}" ]]; then
+                    export ANDROID_HOME="$HOME/.local/share/afc-tools/android-sdk"
+                fi
+            fi
             if [[ -n "${JAVA_HOME:-}" ]]; then
                 [[ -x "$JAVA_HOME/bin/java" ]] || { printf 'required tool missing: java (JAVA_HOME)\n'; return 3; }
             else
@@ -71,6 +122,18 @@ run_area() {
             # Subcheck exits are normalized so a tool's own exit 3 never reads as GAP.
             ./tv-app/gradlew -p tv-app testDebugUnitTest lintDebug assembleDebug || return 1 ;;
         backend)
+            if [[ "${CI:-false}" != true && "${GITHUB_ACTIONS:-false}" != true ]]; then
+                # Location documented in evidence/BUG-AFC-L02-DEPLOYED-PIN-001/receipt.md.
+                local backend_venv="$HOME/.local/share/afc-tools/backend-tests"
+                if [[ ! -x "$backend_venv/bin/python3.12" ]] \
+                    || ! "$backend_venv/bin/python3.12" -c 'import pytest, moto, boto3, yaml' >/dev/null 2>&1; then
+                    printf 'required backend test environment missing or incomplete: %s\n' "$backend_venv"
+                    printf 'Provision: python3.12 -m venv %q && %q -m pip install --require-hashes -r backend/requirements-dev.txt\n' \
+                        "$backend_venv" "$backend_venv/bin/python3.12"
+                    return 3
+                fi
+                export PATH="$backend_venv/bin:$PATH"
+            fi
             need python3.12 || return "$?"
             need cfn-lint || return "$?"
             python3.12 -m pytest --version >/dev/null 2>&1 \

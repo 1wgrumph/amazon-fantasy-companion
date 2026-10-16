@@ -1,0 +1,66 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.2, pluggy-1.6.0 -- $HOME/.local/share/afc-tools/backend-tests/bin/python3.12
+cachedir: .pytest_cache
+rootdir: <checkout>/backend
+configfile: pyproject.toml
+plugins: cov-7.1.0, anyio-4.13.0, asyncio-1.3.0, mock-3.15.1, typeguard-4.4.4
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 36 items
+
+backend/tests/unit/test_unknown_route_envelope.py::test_unknown_paths_return_the_error_envelope_without_a_session[GET-/v1/unknown-path] PASSED [  2%]
+backend/tests/unit/test_unknown_route_envelope.py::test_unknown_paths_return_the_error_envelope_without_a_session[POST-/v1/unknown-path] PASSED [  5%]
+backend/tests/unit/test_unknown_route_envelope.py::test_unknown_paths_return_the_error_envelope_without_a_session[GET-/missing/nested] PASSED [  8%]
+backend/tests/unit/test_unknown_route_envelope.py::test_unknown_paths_return_the_error_envelope_without_a_session[GET-/] PASSED [ 11%]
+backend/tests/unit/test_unknown_route_envelope.py::test_unknown_paths_return_the_error_envelope_without_a_session[OPTIONS-/missing] PASSED [ 13%]
+backend/tests/unit/test_router.py::test_unknown_route_is_a_structured_404 PASSED [ 16%]
+backend/tests/unit/test_device_auth.py::test_issue_has_8_character_unambiguous_base32_code_and_600_second_expiry PASSED [ 19%]
+backend/tests/unit/test_device_auth.py::test_pending_poll_cannot_authorize_the_device PASSED [ 22%]
+backend/tests/unit/test_device_auth.py::test_tv_code_alone_confirms_once_and_returns_256_bit_session PASSED [ 25%]
+backend/tests/unit/test_device_auth.py::test_wrong_code_rejects_confirmation_and_leaves_code_pending PASSED [ 27%]
+backend/tests/unit/test_device_auth.py::test_missing_code_cannot_confirm PASSED [ 30%]
+backend/tests/unit/test_device_auth.py::test_expired_code_rejects_confirm_and_reports_expired_poll PASSED [ 33%]
+backend/tests/unit/test_device_auth.py::test_completed_code_cannot_be_replayed_or_rebound_to_another_profile PASSED [ 36%]
+backend/tests/unit/test_device_auth.py::test_every_protected_route_requires_a_session[GET-/v1/profile] PASSED [ 38%]
+backend/tests/unit/test_device_auth.py::test_every_protected_route_requires_a_session[PUT-/v1/profile] PASSED [ 41%]
+backend/tests/unit/test_device_auth.py::test_every_protected_route_requires_a_session[GET-/v1/alerts] PASSED [ 44%]
+backend/tests/unit/test_device_auth.py::test_every_protected_route_requires_a_session[GET-/v1/panel] PASSED [ 47%]
+backend/tests/unit/test_device_auth.py::test_every_protected_route_requires_a_session[GET-/v1/providers] PASSED [ 50%]
+backend/tests/unit/test_device_auth.py::test_every_protected_route_requires_a_session[POST-/v1/routing-outcome] PASSED [ 52%]
+backend/tests/unit/test_device_auth.py::test_every_protected_route_requires_a_session[POST-/v1/installed-apps] PASSED [ 55%]
+backend/tests/unit/test_device_auth.py::test_every_protected_route_rejects_an_unknown_session[GET-/v1/profile] PASSED [ 58%]
+backend/tests/unit/test_device_auth.py::test_every_protected_route_rejects_an_unknown_session[PUT-/v1/profile] PASSED [ 61%]
+backend/tests/unit/test_device_auth.py::test_every_protected_route_rejects_an_unknown_session[GET-/v1/alerts] PASSED [ 63%]
+backend/tests/unit/test_device_auth.py::test_every_protected_route_rejects_an_unknown_session[GET-/v1/panel] PASSED [ 66%]
+backend/tests/unit/test_device_auth.py::test_every_protected_route_rejects_an_unknown_session[GET-/v1/providers] PASSED [ 69%]
+backend/tests/unit/test_device_auth.py::test_every_protected_route_rejects_an_unknown_session[POST-/v1/routing-outcome] PASSED [ 72%]
+backend/tests/unit/test_device_auth.py::test_every_protected_route_rejects_an_unknown_session[POST-/v1/installed-apps] PASSED [ 75%]
+backend/tests/unit/test_device_auth.py::test_every_protected_route_rejects_a_foreign_profile[GET-/v1/profile] PASSED [ 77%]
+backend/tests/unit/test_device_auth.py::test_every_protected_route_rejects_a_foreign_profile[PUT-/v1/profile] PASSED [ 80%]
+backend/tests/unit/test_device_auth.py::test_every_protected_route_rejects_a_foreign_profile[GET-/v1/alerts] PASSED [ 83%]
+backend/tests/unit/test_device_auth.py::test_every_protected_route_rejects_a_foreign_profile[GET-/v1/panel] PASSED [ 86%]
+backend/tests/unit/test_device_auth.py::test_every_protected_route_rejects_a_foreign_profile[GET-/v1/providers] PASSED [ 88%]
+backend/tests/unit/test_device_auth.py::test_every_protected_route_rejects_a_foreign_profile[POST-/v1/routing-outcome] PASSED [ 91%]
+backend/tests/unit/test_device_auth.py::test_every_protected_route_rejects_a_foreign_profile[POST-/v1/installed-apps] PASSED [ 94%]
+backend/tests/unit/test_device_auth.py::test_known_session_can_reach_its_own_profile PASSED [ 97%]
+backend/tests/unit/test_device_auth.py::test_repeated_link_issues_do_not_reuse_codes_or_handles PASSED [100%]
+
+=============================== warnings summary ===============================
+tests/unit/test_unknown_route_envelope.py: 30 warnings
+tests/unit/test_router.py: 6 warnings
+tests/unit/test_device_auth.py: 281 warnings
+  $HOME/.local/lib/python3.12/site-packages/botocore/auth.py:424: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    datetime_now = datetime.datetime.utcnow()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+============================= slowest 10 durations =============================
+0.74s setup    tests/unit/test_device_auth.py::test_completed_code_cannot_be_replayed_or_rebound_to_another_profile
+0.72s setup    tests/unit/test_device_auth.py::test_pending_poll_cannot_authorize_the_device
+0.42s setup    tests/unit/test_device_auth.py::test_every_protected_route_requires_a_session[PUT-/v1/profile]
+0.41s setup    tests/unit/test_device_auth.py::test_every_protected_route_rejects_an_unknown_session[POST-/v1/routing-outcome]
+0.39s setup    tests/unit/test_device_auth.py::test_every_protected_route_rejects_a_foreign_profile[POST-/v1/installed-apps]
+0.38s setup    tests/unit/test_device_auth.py::test_every_protected_route_rejects_an_unknown_session[GET-/v1/panel]
+0.38s setup    tests/unit/test_device_auth.py::test_every_protected_route_requires_a_session[GET-/v1/alerts]
+0.38s setup    tests/unit/test_unknown_route_envelope.py::test_unknown_paths_return_the_error_envelope_without_a_session[GET-/v1/unknown-path]
+0.37s setup    tests/unit/test_device_auth.py::test_every_protected_route_requires_a_session[POST-/v1/routing-outcome]
+0.36s setup    tests/unit/test_device_auth.py::test_every_protected_route_rejects_a_foreign_profile[GET-/v1/alerts]
+====================== 36 passed, 317 warnings in 12.12s =======================

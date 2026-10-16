@@ -1,0 +1,242 @@
+{
+  "key": "tvapp_mutation_bounded_loops_sd057",
+  "outcome": "PASS",
+  "candidate_status": "CANDIDATE_READY: author packet criteria 1-4 met; independent review remains with parent",
+  "role": "Bug-triager Implementer",
+  "profile": "bug-triager",
+  "route": "Codex CLI / GPT-6.1 Sol / high",
+  "packet_baseline": "c46cbf483a0ffb73c17db04f40f1e5d007e8289f",
+  "candidate_revision": "93f09d2848792523cf20bde8e6eb516ea0ebbaae",
+  "branch": "afc/p2-a01",
+  "generation": 2,
+  "mutation_base": "75afca0",
+  "scope_decision": "DEC-AFC-SD-057",
+  "authority": "Current owner packet; new host tests, default-preserving ApiClient seams, P2-A01 evidence only. No frozen tests, tools, backend, CI, CHANGELOG, branch changes, push or PR.",
+  "implementation": {
+    "new_tests": "tv-app/app/src/test/java/com/afc/companion/net/ApiClientLoopMutationTest.kt",
+    "seams": [
+      "ioDispatcher constructor parameter defaults to Dispatchers.IO; request uses it in withContext",
+      "existing readBounded implementation unchanged; visibility private -> internal for direct bounded unit probe"
+    ],
+    "runtime_defaults": "Unchanged; existing off-UI-thread, retry, byte-limit and default-backoff tests pass.",
+    "pit_priority": "Pinned PIT maps exact <mutated class>Test names to a 1000 ms direct-test priority. Assertion bodies preserved during mechanical class/package binding, documented in packet.json.",
+    "known_limit": "Compiler-generated test class names must be refreshed if the pinned Kotlin compiler changes the generated state-machine identity."
+  },
+  "origin_and_escape": {
+    "classification": "host-test progress/termination evidence gap, not a reproduced unmutated runtime defect",
+    "origin": "Frozen tests recorded backoff values and checked final outcomes; they did not fail at extra attempts or repeated zero-byte reads. Synchronous backoffs did not exercise actual coroutine suspension.",
+    "escape": "Native PIT first exposed infinite mutated paths. PIT timing-based ordering could reach an older unbounded HTTP case before the new bounded test, producing nondeterministic GAPs.",
+    "requirements": "CONTRACT-AFC-P2-API retry maximum 3, 1/2/4 second backoff and 64 KiB body limit; DEC-AFC-SD-057 scope unchanged.",
+    "prevention": "Inline continuation driver asserts suspended state, exact waits and attempt cap; guarded byte stream rejects non-progressing reads; exact PIT class binding prioritizes these guards before frozen HTTP cases.",
+    "red_evidence": "Existing pit-scope-057/native/mutations.xml.gz: four scoped TIMED_OUT mutants. Unmutated code is expected to pass; no unmutated product red/green claim is made."
+  },
+  "mutants": [
+    {
+      "original_id": "com.afc.companion.net.ApiClient$request$2:42:org.pitest.mutationtest.engine.gregor.mutators.NegateConditionalsMutator",
+      "method": "invokeSuspend",
+      "index": "158",
+      "original_line": 42,
+      "candidate_line": 44,
+      "original_status": "TIMED_OUT",
+      "candidate_status": "KILLED",
+      "killing_test": "com.afc.companion.net.ApiClient$request$2Test.transientRetriesStopAtTheAttemptCapAfterSuspendedBackoffs(com.afc.companion.net.ApiClient$request$2Test)"
+    },
+    {
+      "original_id": "com.afc.companion.net.ApiClient$request$2:43:org.pitest.mutationtest.engine.gregor.mutators.NegateConditionalsMutator",
+      "method": "invokeSuspend",
+      "index": "191",
+      "original_line": 43,
+      "candidate_line": 45,
+      "original_status": "TIMED_OUT",
+      "candidate_status": "KILLED",
+      "killing_test": "com.afc.companion.net.ApiClient$request$2Test.transientRetriesStopAtTheAttemptCapAfterSuspendedBackoffs(com.afc.companion.net.ApiClient$request$2Test)"
+    },
+    {
+      "original_id": "com.afc.companion.net.ApiClient$request$2:44:org.pitest.mutationtest.engine.gregor.mutators.IncrementsMutator",
+      "method": "invokeSuspend",
+      "index": "223",
+      "original_line": 44,
+      "candidate_line": 46,
+      "original_status": "TIMED_OUT",
+      "candidate_status": "KILLED",
+      "killing_test": "com.afc.companion.net.ApiClient$request$2Test.transientRetriesStopAtTheAttemptCapAfterSuspendedBackoffs(com.afc.companion.net.ApiClient$request$2Test)"
+    },
+    {
+      "original_id": "com.afc.companion.net.ApiClient$Companion:122:org.pitest.mutationtest.engine.gregor.mutators.ConditionalsBoundaryMutator",
+      "method": "readNBytesCompat",
+      "index": "18",
+      "original_line": 122,
+      "candidate_line": 124,
+      "original_status": "TIMED_OUT",
+      "candidate_status": "KILLED",
+      "killing_test": "com.afc.companion.net.ApiClient$CompanionTest.oversizedResponseStopsReadingAtTheByteCap(com.afc.companion.net.ApiClient$CompanionTest)"
+    }
+  ],
+  "commands": [
+    {
+      "command": "bash tools/ci/mutation/tvapp.sh 75afca0 <E>/native",
+      "exit": 0,
+      "verdict": "PASS mutation score 82.50% (threshold 70%)",
+      "evidence": "mutation-wrapper.txt"
+    },
+    {
+      "command": "bash tools/ci/coverage/tvapp.sh 75afca0 <E>/coverage",
+      "exit": 0,
+      "verdict": "PASS changed-line coverage 70% (threshold 70%)",
+      "evidence": "coverage-wrapper.txt"
+    },
+    {
+      "command": "python3.12 -m pytest -q -p no:cacheprovider tools",
+      "exit": 0,
+      "verdict": "117 passed",
+      "evidence": "pytest-tools-final-priority.txt"
+    },
+    {
+      "command": "PATH=$HOME/.local/share/afc-tools/backend-tests/bin:$PATH bash tools/ci/gate.sh",
+      "exit": 0,
+      "verdict": "all five areas PASS; 158 backend tests",
+      "evidence": "gate-final.txt"
+    },
+    {
+      "command": "testDebugUnitTest (coverage wrapper and commit hook)",
+      "exit": 0,
+      "verdict": "84 tests, 0 failures, 0 errors",
+      "evidence": "unit-summary.json"
+    },
+    {
+      "command": "JUnitCore final two classes repeated 5 times, plus two concurrent copies",
+      "exit": 0,
+      "verdict": "10/10 repeated, 2/2 each concurrent copy",
+      "evidence": [
+        "repeat-five-priority.txt",
+        "concurrent-one-priority.txt",
+        "concurrent-two-priority.txt"
+      ]
+    }
+  ],
+  "evidence_dir": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A01/pit-bounded-loops",
+  "mutation": {
+    "score": 0.825,
+    "counts": {
+      "KILLED": 231,
+      "SURVIVED": 39,
+      "NO_COVERAGE": 10
+    },
+    "scored_mutants": 280,
+    "unresolved_scoped": 0,
+    "timeout_rule": "TIMED_OUT is unresolved (GAP), never counted as killed",
+    "full_report_sha256": "f0743b6ad359ffc748edb6bb72689d7f05d0461b45f00a4f8077e134e8404d53",
+    "full_report_mutants": 953,
+    "full_report_excluded_timeouts": [
+      {
+        "class": "com.afc.companion.link.LinkFlow",
+        "line": "58",
+        "reason": "device-only (DEC-AFC-SD-057)"
+      }
+    ],
+    "scored_files": [
+      "tv-app/app/src/main/java/com/afc/companion/Shell.kt",
+      "tv-app/app/src/main/java/com/afc/companion/net/ApiClient.kt",
+      "tv-app/app/src/main/java/com/afc/companion/net/Dto.kt"
+    ]
+  },
+  "frozen_hashes": "7/7 MATCH against P2-A01T/receipt.json; frozen-hashes.json",
+  "input_sha256": {
+    "tv-app/app/src/main/java/com/afc/companion/net/ApiClient.kt": "e872783fd0720f1333d86f57e4ab6220f38ce8c1fe8063da667bd1fceee24cf2",
+    "tv-app/app/src/test/java/com/afc/companion/net/ApiClientLoopMutationTest.kt": "ce36b569bccd3395c047bcc6d8a8d2c1bbb2daf422a9f60613f056e7eea576fd",
+    "tools/ci/mutation/tvapp_scope.json": "4bbc399f1d72032dcfd66af686d69c141ffd4ccca65c2babeaed5db36814a7b6",
+    "tools/ci/mutation/tvapp.sh": "58397ff68eeb5ab3d51412be7f7bd2daaeb47f9eeb11d4456721b4a5ef8d614e",
+    "tools/ci/mutation/tvapp-pitest.gradle": "eccd093503d9034e9b8bb2a48134f16ceb4112f5bf9797f04d5ccfc53e51e284"
+  },
+  "coverage": {
+    "status": "PASS",
+    "detail": "changed-line coverage 70% (threshold 70%)",
+    "threshold": 70.0,
+    "candidate": "93f09d2848792523cf20bde8e6eb516ea0ebbaae",
+    "base": "75afca0",
+    "changed": [
+      "tv-app/app/src/main/java/com/afc/companion/MainActivity.kt",
+      "tv-app/app/src/main/java/com/afc/companion/Shell.kt",
+      "tv-app/app/src/main/java/com/afc/companion/alerts/AlertNotifier.kt",
+      "tv-app/app/src/main/java/com/afc/companion/alerts/AlertService.kt",
+      "tv-app/app/src/main/java/com/afc/companion/detect/AppDetector.kt",
+      "tv-app/app/src/main/java/com/afc/companion/link/LinkScreen.kt",
+      "tv-app/app/src/main/java/com/afc/companion/net/ApiClient.kt",
+      "tv-app/app/src/main/java/com/afc/companion/net/Dto.kt",
+      "tv-app/app/src/main/java/com/afc/companion/net/SessionStore.kt",
+      "tv-app/app/src/main/java/com/afc/companion/panel/LineupPanel.kt",
+      "tv-app/app/src/main/java/com/afc/companion/profile/ProfileSettingsScreen.kt",
+      "tv-app/app/src/main/java/com/afc/companion/ui/theme/Theme.kt",
+      "tv-app/app/src/main/java/com/afc/companion/watch/WatchActivity.kt",
+      "tv-app/app/src/main/java/com/afc/companion/watch/WatchLauncher.kt"
+    ],
+    "total_num_lines": 334,
+    "percent": 70,
+    "nothing_to_cover": []
+  },
+  "acceptance": {
+    "1_four_original_timeouts_killed": "PASS",
+    "2_all_A01_units_frozen_hashes_and_coverage": "PASS",
+    "3_tools_and_full_gate": "PASS",
+    "4_new_receipt_key": "PASS",
+    "allowed_write_set": "PASS"
+  },
+  "review": {
+    "coverage_assist": {
+      "enabled": true,
+      "required": true,
+      "backend": "OpenCodeReview delegation",
+      "availability": "ocr executable installed",
+      "status": "not_run: independent parent reviewer responsibility; no author substitution"
+    }
+  },
+  "deterministic_verification": {
+    "reverify": {
+      "enabled": true,
+      "backend": "installed reverify auto, pure-python parser",
+      "availability": "executable available; JVM class parsing unsupported by this result",
+      "exit": 0,
+      "status": "GAP",
+      "error": "JVM cafebabe class was classified as Mach-O; parse_error: Mach-O needs lief: pip install lief",
+      "evidence": "reverify-class.json",
+      "interpretation": "Not passing binary assurance; native parser result is not applicable JVM behavior proof. No substitution with ordinary host test reruns."
+    }
+  },
+  "toolchain": {
+    "JAVA_HOME": "$HOME/.local/share/afc-tools/jdk-17.0.20.1+1",
+    "ANDROID_HOME": "$HOME/.local/share/afc-tools/android-sdk",
+    "GRADLE_USER_HOME": "$HOME/.gradle/afc-p2-a01t",
+    "AFC_GRADLE_ARGS": "--offline --no-daemon --max-workers=2",
+    "PIT": "1.19.5",
+    "timeoutFactor": 10,
+    "new_installs": []
+  },
+  "hygiene": {
+    "removed_untracked_cache_dirs": [
+      "tools/spec/__pycache__",
+      "tools/ci/__pycache__",
+      "tools/spec/azdiagram/__pycache__",
+      "tools/ci/mutation/__pycache__",
+      "tools/ci/tests/__pycache__",
+      "tools/ci/coverage/__pycache__",
+      "tools/ci/tests/mutation/__pycache__",
+      "tools/ci/tests/coverage/__pycache__",
+      "backend/tests/__pycache__",
+      "backend/tests/unit/__pycache__",
+      "backend/tests/contract/__pycache__",
+      "backend/src/pipeline/__pycache__",
+      "backend/src/lineup/__pycache__",
+      "backend/src/store/__pycache__",
+      "backend/src/api/__pycache__",
+      "backend/src/feed_ingest/__pycache__",
+      "backend/src/device_auth/__pycache__",
+      "backend/src/alert_policy/__pycache__",
+      "backend/src/provider_resolver/__pycache__",
+      "backend/src/matcher/__pycache__",
+      "backend/src/panel/__pycache__"
+    ],
+    "postcommit_action": "Remove caches regenerated by required commit hook; verify clean status and range write set.",
+    "evidence_normalization": "Text whitespace trimmed; private home prefixes normalized to $HOME; original native XML bytes preserved in gzip."
+  },
+  "next_action": "Return committed author candidate and receipt to parent for configured independent review/assurance. No push or PR by this worker."
+}

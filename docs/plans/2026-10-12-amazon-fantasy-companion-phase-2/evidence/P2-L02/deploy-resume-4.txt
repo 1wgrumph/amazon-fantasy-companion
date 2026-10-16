@@ -1,0 +1,211 @@
+
+	Managed S3 bucket: aws-sam-cli-managed-default-samclisourcebucket-kpyrjq2yreuk
+	Auto resolution of buckets can be turned off by setting resolve_s3=False
+	To use a specific S3 bucket, set --s3-bucket=<bucket_name>
+	Above settings can be stored in samconfig.toml
+
+	File with same data already exists at e71e62ca9cf3c8f837e309d4eb9a6277, skipping upload
+
+	File with same data already exists at e71e62ca9cf3c8f837e309d4eb9a6277, skipping upload
+
+	File with same data already exists at e71e62ca9cf3c8f837e309d4eb9a6277, skipping upload
+
+	Deploying with following values
+	===============================
+	Stack name                   : afc-dev
+	Region                       : us-east-2
+	Confirm changeset            : True
+	Disable rollback             : False
+	Deployment s3 bucket         : aws-sam-cli-managed-default-samclisourcebucket-kpyrjq2yreuk
+	Capabilities                 : ["CAPABILITY_IAM"]
+	Parameter overrides          : {}
+	Signing Profiles             : {}
+
+Initiating deployment
+=====================
+
+
+	File with same data already exists at 8bb6fd5e357158ea252e6fecfc0ba636.template, skipping upload
+
+
+Waiting for changeset to be created..
+
+CloudFormation stack changeset
+-------------------------------------------------------------------------------------------------
+Operation                LogicalResourceId        ResourceType             Replacement
+-------------------------------------------------------------------------------------------------
++ Add                    ApiFunctionDefaultRout   AWS::Lambda::Permissio   N/A
+                         ePermission              n
+* Modify                 AlertsTable              AWS::DynamoDB::Table     False
+* Modify                 ApiFunctionRole          AWS::IAM::Role           False
+* Modify                 ApiFunction              AWS::Lambda::Function    False
+* Modify                 ApiLogGroup              AWS::Logs::LogGroup      False
+* Modify                 EventsTable              AWS::DynamoDB::Table     False
+* Modify                 HttpApiApiGatewayDefau   AWS::ApiGatewayV2::Sta   False
+                         ltStage                  ge
+* Modify                 HttpApi                  AWS::ApiGatewayV2::Api   False
+* Modify                 IngestFunctionRole       AWS::IAM::Role           False
+* Modify                 IngestFunction           AWS::Lambda::Function    False
+* Modify                 IngestLogGroup           AWS::Logs::LogGroup      False
+* Modify                 IngestScheduleRole       AWS::IAM::Role           False
+* Modify                 IngestSchedule           AWS::Scheduler::Schedu   False
+                                                  le
+* Modify                 LineupsTable             AWS::DynamoDB::Table     False
+* Modify                 LinksTable               AWS::DynamoDB::Table     False
+* Modify                 PanelsTable              AWS::DynamoDB::Table     False
+* Modify                 PolicyFunctionEventStr   AWS::Lambda::EventSour   Conditional
+                         eam                      ceMapping
+* Modify                 PolicyFunctionRole       AWS::IAM::Role           False
+* Modify                 PolicyFunction           AWS::Lambda::Function    False
+* Modify                 PolicyLogGroup           AWS::Logs::LogGroup      False
+* Modify                 ProfilesTable            AWS::DynamoDB::Table     False
+- Delete                 ApiFunctionAlertsPermi   AWS::Lambda::Permissio   N/A
+                         ssion                    n
+- Delete                 ApiFunctionInstalledAp   AWS::Lambda::Permissio   N/A
+                         psPermission             n
+- Delete                 ApiFunctionLinkConfirm   AWS::Lambda::Permissio   N/A
+                         Permission               n
+- Delete                 ApiFunctionLinkIssuePe   AWS::Lambda::Permissio   N/A
+                         rmission                 n
+- Delete                 ApiFunctionLinkPagePer   AWS::Lambda::Permissio   N/A
+                         mission                  n
+- Delete                 ApiFunctionLinkPollPer   AWS::Lambda::Permissio   N/A
+                         mission                  n
+- Delete                 ApiFunctionPanelPermis   AWS::Lambda::Permissio   N/A
+                         sion                     n
+- Delete                 ApiFunctionProfileGetP   AWS::Lambda::Permissio   N/A
+                         ermission                n
+- Delete                 ApiFunctionProfilePutP   AWS::Lambda::Permissio   N/A
+                         ermission                n
+- Delete                 ApiFunctionProvidersPe   AWS::Lambda::Permissio   N/A
+                         rmission                 n
+- Delete                 ApiFunctionRoutingOutc   AWS::Lambda::Permissio   N/A
+                         omePermission            n
+-------------------------------------------------------------------------------------------------
+
+
+Changeset created successfully. arn:aws:cloudformation:us-east-2:<acct>:changeSet/samcli-deploy1792026572/bece2932-de0e-4547-954c-786ef7de5f37
+
+
+Previewing CloudFormation changeset before deployment
+======================================================
+Deploy this changeset? [y/N]:
+2026-10-14 20:10:30 - Waiting for stack create/update to complete
+
+CloudFormation events from stack operations (refresh every 5.0 seconds)
+-------------------------------------------------------------------------------------------------
+ResourceStatus           ResourceType             LogicalResourceId        ResourceStatusReason
+-------------------------------------------------------------------------------------------------
+UPDATE_IN_PROGRESS       AWS::CloudFormation::S   afc-dev                  User Initiated
+                         tack
+UPDATE_IN_PROGRESS       AWS::DynamoDB::Table     EventsTable              -
+UPDATE_IN_PROGRESS       AWS::DynamoDB::Table     PanelsTable              -
+UPDATE_IN_PROGRESS       AWS::DynamoDB::Table     ProfilesTable            -
+UPDATE_IN_PROGRESS       AWS::DynamoDB::Table     LinksTable               -
+UPDATE_IN_PROGRESS       AWS::DynamoDB::Table     AlertsTable              -
+UPDATE_IN_PROGRESS       AWS::DynamoDB::Table     LineupsTable             -
+UPDATE_COMPLETE          AWS::DynamoDB::Table     LineupsTable             -
+UPDATE_COMPLETE          AWS::DynamoDB::Table     AlertsTable              -
+UPDATE_COMPLETE          AWS::DynamoDB::Table     ProfilesTable            -
+UPDATE_COMPLETE          AWS::DynamoDB::Table     PanelsTable              -
+UPDATE_COMPLETE          AWS::DynamoDB::Table     LinksTable               -
+UPDATE_COMPLETE          AWS::DynamoDB::Table     EventsTable              -
+UPDATE_IN_PROGRESS       AWS::IAM::Role           IngestFunctionRole       -
+UPDATE_IN_PROGRESS       AWS::IAM::Role           PolicyFunctionRole       -
+UPDATE_IN_PROGRESS       AWS::IAM::Role           ApiFunctionRole          -
+UPDATE_COMPLETE          AWS::IAM::Role           IngestFunctionRole       -
+UPDATE_COMPLETE          AWS::IAM::Role           PolicyFunctionRole       -
+UPDATE_COMPLETE          AWS::IAM::Role           ApiFunctionRole          -
+UPDATE_IN_PROGRESS       AWS::Lambda::Function    IngestFunction           -
+UPDATE_IN_PROGRESS       AWS::Lambda::Function    PolicyFunction           -
+UPDATE_IN_PROGRESS       AWS::Lambda::Function    ApiFunction              -
+UPDATE_COMPLETE          AWS::Lambda::Function    IngestFunction           -
+UPDATE_IN_PROGRESS       AWS::Logs::LogGroup      IngestLogGroup           -
+UPDATE_IN_PROGRESS       AWS::IAM::Role           IngestScheduleRole       -
+UPDATE_COMPLETE          AWS::Lambda::Function    PolicyFunction           -
+UPDATE_COMPLETE          AWS::Lambda::Function    ApiFunction              -
+UPDATE_IN_PROGRESS       AWS::Logs::LogGroup      PolicyLogGroup           -
+UPDATE_IN_PROGRESS       AWS::Logs::LogGroup      ApiLogGroup              -
+UPDATE_IN_PROGRESS       AWS::ApiGatewayV2::Api   HttpApi                  -
+UPDATE_COMPLETE          AWS::Logs::LogGroup      IngestLogGroup           -
+UPDATE_IN_PROGRESS       AWS::Lambda::EventSour   PolicyFunctionEventStr   -
+                         ceMapping                eam
+UPDATE_COMPLETE          AWS::Logs::LogGroup      ApiLogGroup              -
+UPDATE_COMPLETE          AWS::Logs::LogGroup      PolicyLogGroup           -
+UPDATE_COMPLETE          AWS::Lambda::EventSour   PolicyFunctionEventStr   -
+                         ceMapping                eam
+UPDATE_COMPLETE          AWS::ApiGatewayV2::Api   HttpApi                  -
+CREATE_IN_PROGRESS       AWS::Lambda::Permissio   ApiFunctionDefaultRout   -
+                         n                        ePermission
+UPDATE_IN_PROGRESS       AWS::ApiGatewayV2::Sta   HttpApiApiGatewayDefau   -
+                         ge                       ltStage
+CREATE_IN_PROGRESS       AWS::Lambda::Permissio   ApiFunctionDefaultRout   Resource creation
+                         n                        ePermission              Initiated
+CREATE_COMPLETE          AWS::Lambda::Permissio   ApiFunctionDefaultRout   -
+                         n                        ePermission
+UPDATE_COMPLETE          AWS::ApiGatewayV2::Sta   HttpApiApiGatewayDefau   -
+                         ge                       ltStage
+UPDATE_COMPLETE          AWS::IAM::Role           IngestScheduleRole       -
+UPDATE_COMPLETE_CLEANU   AWS::CloudFormation::S   afc-dev                  -
+P_IN_PROGRESS            tack
+DELETE_IN_PROGRESS       AWS::Lambda::Permissio   ApiFunctionProfilePutP   -
+                         n                        ermission
+DELETE_IN_PROGRESS       AWS::Lambda::Permissio   ApiFunctionLinkPagePer   -
+                         n                        mission
+DELETE_IN_PROGRESS       AWS::Lambda::Permissio   ApiFunctionLinkPollPer   -
+                         n                        mission
+DELETE_IN_PROGRESS       AWS::Lambda::Permissio   ApiFunctionAlertsPermi   -
+                         n                        ssion
+DELETE_IN_PROGRESS       AWS::Lambda::Permissio   ApiFunctionLinkConfirm   -
+                         n                        Permission
+DELETE_IN_PROGRESS       AWS::Lambda::Permissio   ApiFunctionLinkIssuePe   -
+                         n                        rmission
+DELETE_IN_PROGRESS       AWS::Lambda::Permissio   ApiFunctionRoutingOutc   -
+                         n                        omePermission
+DELETE_IN_PROGRESS       AWS::Lambda::Permissio   ApiFunctionInstalledAp   -
+                         n                        psPermission
+DELETE_IN_PROGRESS       AWS::Lambda::Permissio   ApiFunctionProfileGetP   -
+                         n                        ermission
+DELETE_IN_PROGRESS       AWS::Lambda::Permissio   ApiFunctionPanelPermis   -
+                         n                        sion
+DELETE_IN_PROGRESS       AWS::Lambda::Permissio   ApiFunctionProvidersPe   -
+                         n                        rmission
+DELETE_COMPLETE          AWS::Lambda::Permissio   ApiFunctionLinkPagePer   -
+                         n                        mission
+DELETE_COMPLETE          AWS::Lambda::Permissio   ApiFunctionPanelPermis   -
+                         n                        sion
+DELETE_COMPLETE          AWS::Lambda::Permissio   ApiFunctionLinkPollPer   -
+                         n                        mission
+DELETE_COMPLETE          AWS::Lambda::Permissio   ApiFunctionLinkIssuePe   -
+                         n                        rmission
+DELETE_COMPLETE          AWS::Lambda::Permissio   ApiFunctionLinkConfirm   -
+                         n                        Permission
+DELETE_COMPLETE          AWS::Lambda::Permissio   ApiFunctionRoutingOutc   -
+                         n                        omePermission
+DELETE_COMPLETE          AWS::Lambda::Permissio   ApiFunctionAlertsPermi   -
+                         n                        ssion
+DELETE_COMPLETE          AWS::Lambda::Permissio   ApiFunctionProfilePutP   -
+                         n                        ermission
+DELETE_COMPLETE          AWS::Lambda::Permissio   ApiFunctionProfileGetP   -
+                         n                        ermission
+DELETE_COMPLETE          AWS::Lambda::Permissio   ApiFunctionInstalledAp   -
+                         n                        psPermission
+DELETE_COMPLETE          AWS::Lambda::Permissio   ApiFunctionProvidersPe   -
+                         n                        rmission
+UPDATE_COMPLETE          AWS::CloudFormation::S   afc-dev                  -
+                         tack
+-------------------------------------------------------------------------------------------------
+
+CloudFormation outputs from deployed stack
+-------------------------------------------------------------------------------------------------
+Outputs
+-------------------------------------------------------------------------------------------------
+Key                 ApiUrl
+Description         HTTP API base URL for the TV app and the /link page.
+Value               https://le3r79003f.execute-api.us-east-2.amazonaws.com
+-------------------------------------------------------------------------------------------------
+
+
+Successfully created/updated stack - afc-dev in us-east-2
+
+EXIT_CODE=0

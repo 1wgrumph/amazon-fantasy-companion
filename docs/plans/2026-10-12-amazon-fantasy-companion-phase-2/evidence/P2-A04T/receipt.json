@@ -1,0 +1,215 @@
+{
+ "slice": "P2-A04T",
+ "role": "Test Implementer",
+ "route": "Claude Code / Claude Opus 5.5 / high (packet-assigned)",
+ "base_commit": "1518e573b0acb5b24db24164b26057e250974e66",
+ "depends_on_receipts": {
+  "P2-A03T": {
+   "branch": "afc/p2-a03t",
+   "commit": "455e87c",
+   "receipt_sha256": "624d80483c401dc1346d6a2cfb7440edca4a227e7b56d8c31bddd26247570be8",
+   "note": "sibling worktree receipt exists; its files are not in this tree"
+  },
+  "P2-X03": {
+   "status": "absent",
+   "note": "no stick verdict; registry.json on main has no providers; tests use synthetic CONTRACT-AFC-P2-PROVIDER-REGISTRY fixtures in the B06 route wire shape"
+  }
+ },
+ "command_id": "CMD-RED",
+ "command": "./tv-app/gradlew -p tv-app --no-daemon --max-workers=2 testDebugUnitTest --tests 'com.afc.companion.watch.*'",
+ "exit_code": 1,
+ "log": "cmd-red.txt",
+ "log_sha256": "73632b3db145ace2ada260e36477da0b15b8d2ea19df1a7457c533618081c095",
+ "counts": {
+  "tests": 17,
+  "failed": 16,
+  "passed": 1,
+  "errors": 0,
+  "compile_errors": 0
+ },
+ "failure_types": [
+  "java.lang.AssertionError"
+ ],
+ "classification": "behavioral red: every failure is a java.lang.AssertionError against AFC-STUB returns (no launch, no report, alexaTuningOffered=false); 0 compile, collection or tool errors",
+ "passing_at_red": {
+  "note": "negative case that holds against the stub by construction; it guards the green implementation",
+  "ids": [
+   "com.afc.companion.watch.WatchLauncherTest#alexaTuningHiddenWithoutVerifiedRoute"
+  ]
+ },
+ "satisfiability_check": {
+  "note": "a throwaway minimal implementation made all 17 tests pass (exit 0) and was discarded; WatchLauncher.kt restored byte-identical (sha below). Not committed, not green evidence for P2-A04."
+ },
+ "cases": [
+  {
+   "id": "com.afc.companion.watch.WatchLauncherTest#executesOnlyTheFireOsRegistryLaunch",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: expected:<[(test.beta.firetv, intent, test.beta.firetv.WATCH?event=evt-401)]> but was:<[]>"
+  },
+  {
+   "id": "com.afc.companion.watch.WatchLauncherTest#noRelaunchAfterUncertainOutcome",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: launched once, never again after an uncertain outcome expected:<1> but was:<0>"
+  },
+  {
+   "id": "com.afc.companion.watch.WatchLauncherTest#confirmedSwitchLaunchesAfterConfirmation",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: expected:<[confirm, start]> but was:<[]>"
+  },
+  {
+   "id": "com.afc.companion.watch.WatchLauncherTest#priorGameOpenedPlusUnconfirmedCurrentAppIsAccessUnknown",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: the launch was made expected:<1> but was:<0>"
+  },
+  {
+   "id": "com.afc.companion.watch.WatchLauncherTest#ownPlatformGapLaunchesNothingAndReportsAccessUnknown",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: exactly one RoutingOutcome reported for the attempt expected:<1> but was:<0>"
+  },
+  {
+   "id": "com.afc.companion.watch.WatchLauncherTest#eachAttemptReportsExactlyOneOutcome",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: expected:<[appAbsent, playbackDenied, accessUnknown]> but was:<[]>"
+  },
+  {
+   "id": "com.afc.companion.watch.WatchLauncherTest#alexaTuningOfferedOverEnabledVerifiedRoute",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: expected:<true> but was:<false>"
+  },
+  {
+   "id": "com.afc.companion.watch.WatchLauncherTest#historicalVerifiedOutcomeIsNeverTheCurrentOutcome",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: launched for verified_outcome=gameOpened expected:<1> but was:<0>"
+  },
+  {
+   "id": "com.afc.companion.watch.WatchLauncherTest#missingPackageReportsAppAbsent",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: exactly one RoutingOutcome reported for the attempt expected:<1> but was:<0>"
+  },
+  {
+   "id": "com.afc.companion.watch.WatchLauncherTest#confirmationOffNeverAsks",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: expected:<1> but was:<0>"
+  },
+  {
+   "id": "com.afc.companion.watch.WatchLauncherTest#alexaTuningHiddenWithoutVerifiedRoute",
+   "result": "PASSED",
+   "failure_type": null,
+   "message": null
+  },
+  {
+   "id": "com.afc.companion.watch.WatchLauncherTest#refusedLaunchReportsPlaybackDenied",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: expected:<1> but was:<0>"
+  },
+  {
+   "id": "com.afc.companion.watch.WatchLauncherTest#switchingConfirmationBlocksTheSwitchUntilConfirmed",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: confirmation asked expected:<1> but was:<0>"
+  },
+  {
+   "id": "com.afc.companion.watch.WatchLauncherTest#channelPlaceholderIsFilledFromTheResolvedChannel",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: expected:<[(test.beta.firetv, uri, test-beta-fire://channel/ESPN)]> but was:<[]>"
+  },
+  {
+   "id": "com.afc.companion.watch.WatchLauncherTest#fullScreenFailedLaunchStaysToShowTheOutcome",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: exactly one RoutingOutcome reported for the attempt expected:<1> but was:<0>"
+  },
+  {
+   "id": "com.afc.companion.watch.WatchLauncherTest#fullScreenWatchLeavesTheCompanionApp",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: provider launched, then the companion app leaves expected:<[start, leave]> but was:<[]>"
+  },
+  {
+   "id": "com.afc.companion.watch.WatchLauncherTest#unverifiedOrMalformedEntryIsNeverLaunched",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: exactly one RoutingOutcome reported for the attempt expected:<1> but was:<0>"
+  }
+ ],
+ "frozen_tests": {
+  "tv-app/app/src/test/java/com/afc/companion/watch/WatchFixtures.kt": "c9ae38d9ed4450bd0cdc018af1fecb80c82b55f2ab64745f5dc36bb08b4f114f",
+  "tv-app/app/src/test/java/com/afc/companion/watch/WatchLauncherTest.kt": "00a9a1cb4f2a6a3a5a2960ae69af96e54f12ccdea3f19a7b52a5d94c25e068bb"
+ },
+ "bootstrap_scaffolding": {
+  "note": "AFC-STUB final signatures only: LaunchPlatform seam, WatchLauncher(platform) with the existing Context constructor kept, watch(...) returning AccessUnknown with no launch and no report, launch(route) AFC-STUB unchanged, alexaTuningOffered returning false; no tested green behavior",
+  "files": {
+   "tv-app/app/src/main/java/com/afc/companion/watch/WatchLauncher.kt": "576fc9b771bc3041388af3b1355b79e1cfb84dd19cd439000ff1780e54c7e1d5"
+  }
+ },
+ "signature_decisions_for_P2-A04": [
+  "watch(eventId, route, client, switchingConfirm, mode, confirm): RoutingOutcome? executes only route.platform_routes.fire_os with status verified, and reports exactly one RoutingOutcome via POST /v1/routing-outcome",
+  "declined switching confirmation returns null: no launch and no routing-outcome report (not an attempt)",
+  "own-platform REGISTRY_ROUTE_GAP, unverified or malformed entry (package regex, launch type not intent|uri): no launch, one accessUnknown report",
+  "PanelMode.FullScreen: leaveApp() after a started launch; stays on appAbsent to show the outcome",
+  "no supported current-attempt observation exists yet (currentAttemptObservation none): a started launch reports accessUnknown whatever verified_outcome or currentApp() say"
+ ],
+ "gate": {
+  "command": "bash tools/ci/gate.sh",
+  "exit_code": 1,
+  "log": "gate.txt",
+  "log_sha256": "18b385c8a6803b516d35ed31310979c44b7b6ca618024f182591449358c62232",
+  "areas": {
+   "spec": "PASS",
+   "docs": "PASS",
+   "hygiene": "PASS (before evidence files; rerun after evidence recorded in result)",
+   "tvapp": "FAIL check exit 1: 132 tests, 16 failed, all 16 are the intended WatchLauncherTest red cases; 116 passed (incl. StubContractTest)",
+   "backend": "PASS (604 passed)"
+  },
+  "lint_assemble": "./tv-app/gradlew -p tv-app --no-daemon --max-workers=2 lintDebug assembleDebug -> BUILD SUCCESSFUL (gate stops at testDebugUnitTest)"
+ },
+ "typed_gaps": [
+  {
+   "id": "DEVICE_INSTALL_PENDING",
+   "scope": "androidTest watch instrumented cases (real PackageManager presence, startActivity to a provider app, foreground leaves companion app under fullScreen, on-stick outcome per provider)",
+   "reason": "no Fire TV stick; fire-tv-stick lease not taken; no instrumented test authored or run, never a pass"
+  },
+  {
+   "id": "X03_VERDICT_PENDING",
+   "scope": "provider packages, launch values and any current-attempt observation mechanism",
+   "reason": "P2-X03 verdict absent; no on-stick launch pass claimed; fixtures are synthetic"
+  },
+  {
+   "id": "X11_VERDICT_PENDING",
+   "scope": "Alexa-assisted tuning route",
+   "reason": "tests bind only the gate alexaTuningOffered(voiceEnabled, routeVerified)"
+  }
+ ],
+ "acceptance": {
+  "AFC-PR-030": "#executesOnlyTheFireOsRegistryLaunch, #channelPlaceholderIsFilledFromTheResolvedChannel, #ownPlatformGapLaunchesNothingAndReportsAccessUnknown, #unverifiedOrMalformedEntryIsNeverLaunched (on-stick game arrival: DEVICE_INSTALL_PENDING)",
+  "AFC-PR-031": "#eachAttemptReportsExactlyOneOutcome, #missingPackageReportsAppAbsent, #refusedLaunchReportsPlaybackDenied, #noRelaunchAfterUncertainOutcome, #historicalVerifiedOutcomeIsNeverTheCurrentOutcome, #priorGameOpenedPlusUnconfirmedCurrentAppIsAccessUnknown",
+  "AFC-PR-035": "#switchingConfirmationBlocksTheSwitchUntilConfirmed, #confirmedSwitchLaunchesAfterConfirmation, #confirmationOffNeverAsks",
+  "AFC-PR-036": "#alexaTuningHiddenWithoutVerifiedRoute, #alexaTuningOfferedOverEnabledVerifiedRoute",
+  "AFC-PR-048": "#fullScreenWatchLeavesTheCompanionApp, #fullScreenFailedLaunchStaysToShowTheOutcome",
+  "RISK-AFC-P2-10": "#priorGameOpenedPlusUnconfirmedCurrentAppIsAccessUnknown (negative check: never gameOpened)"
+ },
+ "developer_feedback": [
+  {
+   "id": "DX-P2-A04T-01",
+   "observation": "ProviderRoute carries no eventId, so launch(route) cannot fill {event} or report POST /v1/routing-outcome; the test seam adds watch(eventId, ...) beside the kept launch(route) stub.",
+   "evidence": "net/Dto.kt ProviderRoute and RoutingOutcomeReport(eventId, ...)"
+  },
+  {
+   "id": "DX-P2-A04T-02",
+   "observation": "StubContractTest (outside this write set) pins WatchLauncher(ContextWrapper(null)).launch(route)==AccessUnknown; P2-A04 must retire or update it when launch() becomes real.",
+   "evidence": "tv-app/app/src/test/java/com/afc/companion/StubContractTest.kt:13-16"
+  }
+ ]
+}

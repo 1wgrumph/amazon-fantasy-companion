@@ -1,0 +1,82 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.2, pluggy-1.6.0
+rootdir: $HOME/alphazede/worktrees/amazon-fantasy-companion-p2-b06t/backend
+configfile: pyproject.toml
+plugins: cov-7.1.0, anyio-4.13.0, asyncio-1.3.0, mock-3.15.1, typeguard-4.4.4
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 422 items
+
+backend/tests/unit/lineup/test_active_lineup.py ...........              [  2%]
+backend/tests/unit/lineup/test_lineup_rejections.py .................... [  7%]
+........................                                                 [ 13%]
+backend/tests/unit/lineup/test_manual_source.py ..................       [ 17%]
+backend/tests/unit/lineup/test_presets.py .............................. [ 24%]
+                                                                         [ 24%]
+backend/tests/unit/lineup/test_review_regressions.py ................... [ 28%]
+.                                                                        [ 29%]
+backend/tests/unit/lineup/test_yahoo_client.py ..................        [ 33%]
+backend/tests/unit/provider_resolver/test_resolver_access_basis.py ..... [ 34%]
+....                                                                     [ 35%]
+backend/tests/unit/provider_resolver/test_resolver_local_broadcast.py .. [ 36%]
+....                                                                     [ 36%]
+backend/tests/unit/provider_resolver/test_resolver_overrides.py ....     [ 37%]
+backend/tests/unit/provider_resolver/test_resolver_platform_routes.py .. [ 38%]
+...                                                                      [ 39%]
+backend/tests/unit/provider_resolver/test_resolver_records.py .......... [ 41%]
+....                                                                     [ 42%]
+backend/tests/unit/provider_resolver/test_resolver_selection.py ........ [ 44%]
+.                                                                        [ 44%]
+backend/tests/unit/test_bug_auth002.py ..                                [ 45%]
+backend/tests/unit/test_deployed_guard.py .............................. [ 52%]
+...........................................                              [ 62%]
+backend/tests/unit/test_device_auth.py ..............................    [ 69%]
+backend/tests/unit/test_device_auth_units.py ..........                  [ 71%]
+backend/tests/unit/test_link_patterns.py .                               [ 72%]
+backend/tests/unit/test_pipeline_and_stubs.py .........                  [ 74%]
+backend/tests/unit/test_router.py ...................................... [ 83%]
+....................                                                     [ 87%]
+backend/tests/unit/test_security_auth_link.py ..                         [ 88%]
+backend/tests/unit/test_store.py .......                                 [ 90%]
+backend/tests/unit/test_unknown_route_envelope.py .....                  [ 91%]
+backend/tests/contract/test_api_contract.py .......................      [ 96%]
+backend/tests/contract/test_backend_template.py ..........               [ 99%]
+backend/tests/contract/test_security_auth_iam.py .                       [ 99%]
+backend/tests/contract/test_template_iam.py ...                          [100%]
+
+=============================== warnings summary ===============================
+tests/unit/lineup/test_active_lineup.py: 106 warnings
+tests/unit/lineup/test_lineup_rejections.py: 18 warnings
+tests/unit/lineup/test_review_regressions.py: 16 warnings
+tests/unit/provider_resolver/test_resolver_access_basis.py: 93 warnings
+tests/unit/provider_resolver/test_resolver_local_broadcast.py: 60 warnings
+tests/unit/provider_resolver/test_resolver_overrides.py: 37 warnings
+tests/unit/provider_resolver/test_resolver_platform_routes.py: 50 warnings
+tests/unit/provider_resolver/test_resolver_records.py: 104 warnings
+tests/unit/provider_resolver/test_resolver_selection.py: 89 warnings
+tests/unit/test_bug_auth002.py: 38 warnings
+tests/unit/test_device_auth.py: 281 warnings
+tests/unit/test_device_auth_units.py: 115 warnings
+tests/unit/test_pipeline_and_stubs.py: 51 warnings
+tests/unit/test_router.py: 771 warnings
+tests/unit/test_security_auth_link.py: 21 warnings
+tests/unit/test_store.py: 85 warnings
+tests/unit/test_unknown_route_envelope.py: 30 warnings
+tests/contract/test_api_contract.py: 86 warnings
+  $HOME/.local/lib/python3.12/site-packages/botocore/auth.py:424: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    datetime_now = datetime.datetime.utcnow()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+============================= slowest 10 durations =============================
+0.35s setup    tests/unit/test_store.py::test_link_codes_confirm_once_complete_once_and_respect_expiry
+0.34s setup    tests/unit/test_router.py::test_every_settings_attribute_is_accepted[gameDayPeriods]
+0.33s setup    tests/unit/test_router.py::test_profile_envelope_exactly_at_64kib_is_stored
+0.31s setup    tests/unit/test_router.py::test_a_profile_may_set_every_settings_attribute_at_once
+0.31s setup    tests/unit/test_router.py::test_every_settings_attribute_is_accepted[quietHours]
+0.31s setup    tests/unit/test_router.py::test_valid_routing_outcomes_reach_the_resolver[gameOpened]
+0.31s setup    tests/unit/test_router.py::test_non_string_profile_selectors_are_rejected_without_mutation[1]
+0.30s setup    tests/unit/test_router.py::test_link_page_is_framed_by_strict_headers
+0.30s setup    tests/unit/test_router.py::test_valid_routing_outcomes_reach_the_resolver[accessUnknown]
+0.29s setup    tests/unit/test_device_auth_units.py::test_failed_session_write_leaves_the_link_recoverable
+===================== 422 passed, 2051 warnings in 40.82s ======================
+Wrote XML report to /tmp/b06-cov/coverage.xml
+PASS changed-line coverage 100% (threshold 90%)

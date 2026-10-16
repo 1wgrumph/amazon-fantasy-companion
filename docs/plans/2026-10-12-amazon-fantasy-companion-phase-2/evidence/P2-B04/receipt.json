@@ -1,0 +1,83 @@
+{
+  "outcome": "PASS",
+  "outcome_note": "Product PASS ready for independent review. Author gate-chain receipts are diagnostic, not assurance. Deployed matcher tests stay NOT_RUN without a stack.",
+  "slice_id": "P2-B04",
+  "issue": 34,
+  "milestone": "M07",
+  "wave": "Wave 3",
+  "phase": 2,
+  "lifecycle": "AFC-2026-10-11",
+  "authority_id": "AUTH-AFC-2026-10-12-P2-001",
+  "branch": "afc/p2-b04t",
+  "baseline": "1518e573b0acb5b24db24164b26057e250974e66",
+  "red_commit": "36b54caa02da8fc091cfacaff61c5c8998f2a6c5",
+  "candidate_binding": "Committed receipt is bound to its containing commit on afc/p2-b04t (product + evidence in one commit; see git log).",
+  "route": "Muse Code / muse-wonder-full-1.0 / high",
+  "bug_route": "not-a-bug: the 24 failures were the intended P2-B04T red suite",
+  "profile": {"name": "opensource-hackathon", "decision": "DEC-AFC-SD-065", "live_catalog_read": false},
+  "review_capabilities": {
+    "coverage_assist": {"enabled": true, "required": true, "backend": "OCR OpenCodeReview delegate mode", "status": "not_run; allocated to independent review, never claimed PASS"},
+    "reverify": {"enabled": true, "status": "not_applicable", "reason": "no compiled-binary claim"}
+  },
+  "method": "SEIT supporting TDD method=test; registered proof methods/environments unchanged",
+  "red_then_green": {
+    "baseline": "P2-B04T CMD-RED exit 1: 24 AssertionError failures, 0 errors, 2 NOT_RUN skips over the frozen test ids (evidence/P2-B04T/CMD-RED.xml); reconfirmed in this worktree before editing",
+    "candidate": "CMD-GREEN exit 0 over the same frozen ids: 24 passed, 2 skipped NOT_RUN (no AFC_DEPLOYED_API_URL; closes at P2-L03/P2-X10)",
+    "output": "CMD-GREEN.txt",
+    "junit": "CMD-GREEN.xml"
+  },
+  "commands": [
+    {"id": "CMD-GREEN", "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 $HOME/.local/share/afc-tools/backend-tests/bin/python3.12 -m pytest backend/tests/unit/matcher backend/tests/deployed/matcher -v -p no:cacheprovider --tb=short --junitxml=evidence/P2-B04/CMD-GREEN.xml", "exit_code": 0, "result": "24 passed, 2 skipped NOT_RUN deployed without AFC_DEPLOYED_API_URL", "output": "CMD-GREEN.txt", "junit": "CMD-GREEN.xml"},
+    {"id": "CMD-GATE", "command": "bash tools/ci/gate.sh", "exit_code": 0, "result": "spec, docs, hygiene, tvapp, backend PASS (gate's own coverage adapter 100% and mutation adapter 100% over its changed scope)", "output": "gate.txt"},
+    {"id": "verify_receipt", "command": "python3.12 docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B04T/verify_receipt.py docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B04T/receipt.json", "exit_code": 0, "result": "{\"outcome\": \"PASS\", \"failed_cases\": 24, \"errors\": 0, \"skipped\": 2, \"frozen_files\": 5}", "output": "frozen-hash-check.txt"},
+    {"id": "negative-check", "command": "pytest backend/tests/unit/matcher -k 'stale or redelivery'", "exit_code": 0, "result": "3 passed: stored revision >= event revision yields no match", "output": "negative-check.txt"},
+    {"id": "path-check", "command": "PYTHONDONTWRITEBYTECODE=1 python3.12 tools/ci/check_paths.py", "exit_code": 0, "output": "path-check.txt"}
+  ],
+  "acceptance_to_evidence": [
+    {"acceptance": "All 24 frozen B04T unit tests pass; 2 deployed remain NOT_RUN skips", "evidence": "CMD-GREEN.txt/.xml exit 0 (24 passed, 2 skipped)"},
+    {"acceptance": "Frozen B04T test files byte-identical (verify_receipt.py PASS)", "evidence": "frozen-hash-check.txt 5/5 MATCH; verify_receipt.py PASS exit 0"},
+    {"acceptance": "bash tools/ci/gate.sh exit 0", "evidence": "gate.txt exit 0, all five areas PASS"},
+    {"acceptance": "Stored revision >= event revision produces no match", "evidence": "negative-check.txt (3 passed) and dedup/corrections cases in CMD-GREEN"},
+    {"acceptance": "CHANGELOG.md [Unreleased] Added entry ending (PR #TBD)", "evidence": "CHANGELOG.md in candidate commit"},
+    {"acceptance": "No /home/<user> in committed evidence", "evidence": "path-check.txt exit 0; evidence sanitized to $HOME, trailing whitespace stripped, git diff --check clean"},
+    {"acceptance": "Matcher STUBS row removed from test_pipeline_and_stubs.py", "evidence": "candidate diff; test_pipeline_and_stubs.py passes in gate backend run"}
+  ],
+  "changed_paths": [
+    "CHANGELOG.md",
+    "backend/src/matcher/__init__.py",
+    "backend/src/matcher/player_map.json",
+    "backend/tests/contract/test_backend_template.py",
+    "backend/tests/unit/test_pipeline_and_stubs.py",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B04/"
+  ],
+  "authority_deviation": {
+    "paths_outside_packet_write_set": ["backend/tests/contract/test_backend_template.py"],
+    "reason": "Its future-modules parametrize asserts matcher remains an AFC-STUB/NotImplementedError interface, so gate exit 0 is impossible once matcher is implemented (first gate run: 1 failed, 626 passed). Minimum retirement: matcher removed from that one parametrize list, the same edit P2-B06 recorded for provider_resolver and P2-B02/B03 made for feed_ingest/lineup. No frozen B04T file was touched.",
+    "coordinator_action": "Accept as B02/B03/B06 precedent, or reject and re-scope; flagged here rather than hidden."
+  },
+  "iam_note": "No template.yaml change: unit green does not require it (Moto does not enforce IAM). Deployed gap remains: resolve Scans the Lineups table to enumerate profiles, so PolicyFunction needs dynamodb:Scan on LineupsTable (Alerts lookup already uses the granted Query; no other new action). Adding that grant also requires updating the exact-grant pin in backend/tests/contract/test_template_iam.py EXPECTED, which is outside this packet's write set, so both changes are left for a coordinator-authorized follow-up before any deploy (P2-L03). Within the packet stop rule: minimum Scan on Lineups only.",
+  "design_notes": [
+    "Profiles are enumerated by a paged Lineups scan (profileId, source, starters in one row); store.monitoring_profiles() drops profileId and source, so it cannot serve the matcher contract.",
+    "The landed player_map.json starts empty ({schemaVersion: 1, players: []}): no verified Yahoo-to-ESPN entries exist yet, and an unmapped Yahoo starter stays unmatched rather than guessed. Populating it is data work for a later slice.",
+    "A profile holding a lower-revision alert matches even when no starter is concerned (starters=[]), so panel/policy can revise the stale alert; lineups are never deleted, so every alert holder appears in the Lineups scan."
+  ],
+  "proof_rows": [
+    {"id": "SEIT-AFC-PR-024", "registered_method": "test", "green_support": "test_matcher_identity.py green in CMD-GREEN", "formal_row_status": "not_closed_by_product_slice", "closing_slice": "P2-L03"},
+    {"id": "SEIT-AFC-PR-025", "registered_method": "test", "green_support": "test_matcher_dedup.py green in CMD-GREEN", "formal_row_status": "not_closed_by_product_slice", "closing_slice": "P2-X10"},
+    {"id": "SEIT-AFC-PR-026", "registered_method": "test", "green_support": "test_matcher_corrections.py green in CMD-GREEN", "formal_row_status": "not_closed_by_product_slice", "closing_slice": "P2-X10"}
+  ],
+  "deferred": [
+    "PolicyFunction dynamodb:Scan on LineupsTable + test_template_iam EXPECTED update (see iam_note) before deploy",
+    "Populating player_map.json with verified Yahoo-to-ESPN entries",
+    "Deployed proof closeout P2-L03/P2-X10 (deployed tests NOT_RUN here)",
+    "Independent OCR review; PR and merge are the coordinator's, per packet"
+  ],
+  "resource_group": "host-pytest; fresh per-test Moto state; sockets blocked; no engine/server/AWS/device",
+  "developer_feedback": {
+    "observations": [
+      {"id": "P2B04-DX-001", "tool": "backend/tests/contract/test_backend_template.py", "observation": "The future-modules stub pin is not named in the B04 packet write set, yet gate exit 0 requires retiring matcher from it; same surprise B06 recorded. Future green packets should list both stub-pin files (test_pipeline_and_stubs.py and test_backend_template.py) as authorized one-line retirements.", "evidence": "first gate run: 1 failed (future-modules[matcher]), 626 passed"},
+      {"id": "P2B04-DX-002", "tool": "backend/src/store monitoring_profiles", "observation": "monitoring_profiles() returns settings+starters without profileId or lineup source, so the matcher scans Lineups directly; a store accessor returning profileId+source+starters would serve both feed_ingest and matcher and localize the Scan IAM grant.", "evidence": "backend/src/store/__init__.py monitoring_profiles"},
+      {"id": "P2B04-DX-003", "tool": "backend/template.yaml + test_template_iam.py", "observation": "The exact-grant IAM pin means any new table operation needs a paired template+contract-test change; neither B04T's IAM heads-up nor the B04 packet write set covered the contract test, so the Scan grant is deferred (see iam_note).", "evidence": "backend/tests/contract/test_template_iam.py EXPECTED PolicyFunction"}
+    ]
+  }
+}

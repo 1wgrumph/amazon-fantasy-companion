@@ -1,0 +1,84 @@
+plugins { id 'java-gradle-plugin' } // Core Gradle plugin only: registers JVM compatibility rules.
+repositories { google(); mavenCentral(); gradlePluginPortal() }
+configurations {
+    closure {
+        attributes {
+            attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage, Usage.JAVA_RUNTIME))
+            attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category, Category.LIBRARY))
+            attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling, Bundling.EXTERNAL))
+            attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, 17)
+            attribute(org.gradle.api.attributes.plugin.GradlePluginApiVersion.GRADLE_PLUGIN_API_VERSION_ATTRIBUTE,
+                objects.named(org.gradle.api.attributes.plugin.GradlePluginApiVersion, '9.7.0'))
+        }
+    }
+}
+
+configurations.all {
+    resolutionStrategy.eachDependency {
+        if (requested.group == 'org.bouncycastle' && requested.name ==~ /bc(prov|pkix|util)-.*/) useVersion '1.85'
+        if (requested.group == 'org.bitbucket.b_c' && requested.name == 'jose4j') useVersion '0.9.6'
+        if (requested.group == 'org.jdom' && requested.name == 'jdom2') useVersion '2.0.6.1'
+    }
+}
+
+configurations {
+    scriptClosure {
+        attributes {
+            attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage, Usage.JAVA_RUNTIME))
+            attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category, Category.LIBRARY))
+            attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, 17)
+        }
+    }
+}
+configurations {
+    annotationClosure
+    compilerClosure {
+        attributes {
+            attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage, Usage.JAVA_RUNTIME))
+            attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category, Category.LIBRARY))
+            attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, 17)
+        }
+    }
+    lintClosure {
+        attributes {
+            attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage, Usage.JAVA_RUNTIME))
+            attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category, Category.LIBRARY))
+            attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, 17)
+        }
+    }
+}
+dependencies {
+    annotationClosure 'org.jetbrains:annotations:13.0'
+    compilerClosure 'org.jetbrains.kotlin:kotlin-build-tools-compat:2.4.21'
+    compilerClosure 'org.jetbrains.kotlin:kotlin-build-tools-impl:2.4.21'
+    lintClosure 'com.android.tools.lint:lint-gradle:32.3.1'
+    scriptClosure 'org.jetbrains.kotlin:kotlin-reflect:2.4.0'
+    scriptClosure 'org.jetbrains.kotlin:kotlin-stdlib:2.4.0'
+    scriptClosure 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0'
+    scriptClosure 'org.jetbrains:annotations:13.0'
+
+    closure 'com.android.application:com.android.application.gradle.plugin:9.3.1'
+    closure 'org.jetbrains.kotlin:kotlin-gradle-plugin:2.4.21'
+    closure 'org.jetbrains.kotlin:kotlin-compiler-embeddable:2.4.21'
+    closure 'org.jetbrains.kotlin:kotlin-stdlib:2.4.21'
+    closure 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0'
+    closure 'org.json:json:20260814'
+    closure 'junit:junit:4.13.2'
+    closure 'org.yaml:snakeyaml:2.7'
+    closure 'com.android.tools.lint:lint-gradle:32.3.1'
+    closure 'com.android.tools.build:aapt2:9.3.1-15703166:linux'
+}
+tasks.register('resolveClosure', Copy) {
+    from configurations.closure
+    from configurations.scriptClosure
+    from configurations.annotationClosure
+    from configurations.compilerClosure
+    from configurations.lintClosure
+    into layout.buildDirectory.dir('closure')
+    doLast {
+        def artifacts = configurations.closure.resolvedConfiguration.resolvedArtifacts + configurations.scriptClosure.resolvedConfiguration.resolvedArtifacts + configurations.annotationClosure.resolvedConfiguration.resolvedArtifacts + configurations.compilerClosure.resolvedConfiguration.resolvedArtifacts + configurations.lintClosure.resolvedConfiguration.resolvedArtifacts
+        file('build/artifacts.tsv').text = artifacts.collect {
+            "${it.moduleVersion.id}\t${it.file.name}"
+        }.sort().join('\n') + '\n'
+    }
+}

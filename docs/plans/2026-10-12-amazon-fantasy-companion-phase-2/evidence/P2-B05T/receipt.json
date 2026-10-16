@@ -1,0 +1,374 @@
+{
+ "outcome": "PASS",
+ "scope": "Behavioral red suite for P2-B05 (alert policy) frozen and committed on afc/p2-b05t; backend gate red is the expected TDD signal",
+ "lifecycle": "AFC-2026-10-11",
+ "phase": 2,
+ "wave": "Wave 3",
+ "milestone": "M07",
+ "issue": 35,
+ "slice_id": "P2-B05T",
+ "authority_id": "AUTH-AFC-2026-10-12-P2-001",
+ "branch": "afc/p2-b05t",
+ "baseline": "36b54ca (P2-B04T red suite) on origin/main 1518e573b0acb5b24db24164b26057e250974e66",
+ "candidate_binding": "Red delta on afc/p2-b05t; committed receipt is bound to its containing commit",
+ "route": "Claude Code / Claude Opus 5.5 / high",
+ "route_basis": "Dispatch packet names binding opensource-hackathon-sd065.json and DEC-AFC-SD-065 for this route; implementation.json still lists Codex CLI / GPT-6.1 Sol / high as the frozen test_implementer primary",
+ "bug_route": "BUG_ROUTE: not-a-bug planned TDD slice P2-B05T",
+ "profile": {
+  "name": "opensource-hackathon",
+  "decision": "DEC-AFC-SD-065",
+  "live_catalog_read": false
+ },
+ "review_capabilities": {
+  "coverage_assist": {
+   "enabled": true,
+   "required": true,
+   "backend": "OCR OpenCodeReview delegate mode",
+   "status": "not_run; allocated to independent review at IE-P2-22, never claimed PASS"
+  },
+  "reverify": {
+   "enabled": true,
+   "status": "not_applicable",
+   "reason": "red tests and receipts, no compiled-binary claim"
+  }
+ },
+ "method": "SEIT supporting TDD method=test; registered proof methods/environments unchanged",
+ "frozen_test_sha256": {
+  "backend/tests/unit/alert_policy/policy_support.py": "03258befa81055b9867b215762a6d174af386769f61e804add9a260328f8bfdf",
+  "backend/tests/unit/alert_policy/test_policy_alert_types.py": "bdb0f4853c34d7bde1afa2a1be9989c7a0a49c85ac401f6d6d6490e098ca7069",
+  "backend/tests/unit/alert_policy/test_policy_commentary.py": "25c567541f088eb548d4970fe88ea7cd0ae9d6d6586fee0caa499e8a76bdb94e",
+  "backend/tests/unit/alert_policy/test_policy_delivery.py": "99d8eede827f79ad5158a0ba75a20389648d054408a178e03fc77a25c1af4e07",
+  "backend/tests/unit/alert_policy/test_policy_gates.py": "2662051b55a7adfc0823c1e0ef869a4641b393ada853c831b5e3f4f72fe37d95",
+  "backend/tests/deployed/alert_policy/test_alert_policy_deployed.py": "87e8ff4ed00edc0ed954ccd6a331b72c3067ae938bb3e2dc980d81ff1bf8b2f3"
+ },
+ "red": {
+  "command_id": "CMD-RED",
+  "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 $HOME/.local/share/afc-tools/backend-tests/bin/python3.12 -m pytest backend/tests/unit/alert_policy backend/tests/deployed/alert_policy -v -p no:cacheprovider --tb=short --junitxml=docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B05T/CMD-RED.xml",
+  "exit_code": 1,
+  "output": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B05T/CMD-RED.txt",
+  "junit": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B05T/CMD-RED.xml",
+  "failed": 70,
+  "passed": 0,
+  "errors": 0,
+  "skipped": 3,
+  "classification": "69 failures are AFC-STUB NotImplementedError converted to AssertionError by policy_support.attempt; 1 (GET /v1/alerts through the landed router) is an AssertionError on the router's not_implemented error body. Skips are the 3 deployed cases, NOT_RUN without AFC_DEPLOYED_API_URL (skip message only). Collection: 73 collected, 0 errors (collect.txt).",
+  "test_ids": [
+   "tests/unit/alert_policy/test_policy_alert_types.py::test_afc_pr_014_red_zone_is_strictly_inside_the_20[19-inside]",
+   "tests/unit/alert_policy/test_policy_alert_types.py::test_afc_pr_014_red_zone_is_strictly_inside_the_20[20-boundary]",
+   "tests/unit/alert_policy/test_policy_alert_types.py::test_afc_pr_014_red_zone_is_strictly_inside_the_20[21-outside]",
+   "tests/unit/alert_policy/test_policy_alert_types.py::test_afc_pr_014_twenty_yards_is_not_inside_the_20",
+   "tests/unit/alert_policy/test_policy_alert_types.py::test_afc_pr_014_red_zone_needs_the_starters_team_in_possession",
+   "tests/unit/alert_policy/test_policy_alert_types.py::test_afc_pr_014_player_score_fires_for_a_scoring_play_with_the_starter",
+   "tests/unit/alert_policy/test_policy_alert_types.py::test_afc_pr_014_non_scoring_play_is_not_a_player_score",
+   "tests/unit/alert_policy/test_policy_alert_types.py::test_afc_pr_014_close_game_is_within_8_in_q4_or_ot[q4-margin-8]",
+   "tests/unit/alert_policy/test_policy_alert_types.py::test_afc_pr_014_close_game_is_within_8_in_q4_or_ot[q4-margin-9]",
+   "tests/unit/alert_policy/test_policy_alert_types.py::test_afc_pr_014_close_game_is_within_8_in_q4_or_ot[q3-margin-1]",
+   "tests/unit/alert_policy/test_policy_alert_types.py::test_afc_pr_014_close_game_is_within_8_in_q4_or_ot[ot-tied]",
+   "tests/unit/alert_policy/test_policy_alert_types.py::test_afc_pr_014_close_game_is_within_8_in_q4_or_ot[ot2-margin-8]",
+   "tests/unit/alert_policy/test_policy_alert_types.py::test_afc_pr_014_close_game_fires_once_per_entry_into_the_state",
+   "tests/unit/alert_policy/test_policy_alert_types.py::test_afc_pr_014_simultaneous_matching_types_are_one_alert",
+   "tests/unit/alert_policy/test_policy_alert_types.py::test_afc_pr_014_simultaneous_types_keep_only_enabled_ones",
+   "tests/unit/alert_policy/test_policy_alert_types.py::test_afc_pr_027_alert_carries_its_verified_trigger_context[RedZone-fields0]",
+   "tests/unit/alert_policy/test_policy_alert_types.py::test_afc_pr_027_alert_carries_its_verified_trigger_context[PlayerScore-fields1]",
+   "tests/unit/alert_policy/test_policy_alert_types.py::test_afc_pr_027_alert_carries_its_verified_trigger_context[CloseGame-fields2]",
+   "tests/unit/alert_policy/test_policy_alert_types.py::test_afc_pr_028_red_zone_text_makes_only_team_level_claims[Mild]",
+   "tests/unit/alert_policy/test_policy_alert_types.py::test_afc_pr_028_red_zone_text_makes_only_team_level_claims[Hype]",
+   "tests/unit/alert_policy/test_policy_commentary.py::test_afc_pr_023_off_attaches_no_commentary[red-zone]",
+   "tests/unit/alert_policy/test_policy_commentary.py::test_afc_pr_023_off_attaches_no_commentary[player-score]",
+   "tests/unit/alert_policy/test_policy_commentary.py::test_afc_pr_023_off_attaches_no_commentary[close-game]",
+   "tests/unit/alert_policy/test_policy_commentary.py::test_afc_pr_023_off_attaches_no_commentary[all-three]",
+   "tests/unit/alert_policy/test_policy_commentary.py::test_afc_pr_023_level_change_alters_commentary[red-zone]",
+   "tests/unit/alert_policy/test_policy_commentary.py::test_afc_pr_023_level_change_alters_commentary[player-score]",
+   "tests/unit/alert_policy/test_policy_commentary.py::test_afc_pr_023_level_change_alters_commentary[close-game]",
+   "tests/unit/alert_policy/test_policy_commentary.py::test_afc_pr_023_level_change_alters_commentary[all-three]",
+   "tests/unit/alert_policy/test_policy_commentary.py::test_afc_pr_023_commentary_never_decides_the_alert[red-zone]",
+   "tests/unit/alert_policy/test_policy_commentary.py::test_afc_pr_023_commentary_never_decides_the_alert[player-score]",
+   "tests/unit/alert_policy/test_policy_commentary.py::test_afc_pr_023_commentary_never_decides_the_alert[close-game]",
+   "tests/unit/alert_policy/test_policy_commentary.py::test_afc_pr_023_commentary_never_decides_the_alert[all-three]",
+   "tests/unit/alert_policy/test_policy_commentary.py::test_afc_pr_023_every_number_is_grounded_in_the_event[red-zone]",
+   "tests/unit/alert_policy/test_policy_commentary.py::test_afc_pr_023_every_number_is_grounded_in_the_event[player-score]",
+   "tests/unit/alert_policy/test_policy_commentary.py::test_afc_pr_023_every_number_is_grounded_in_the_event[close-game]",
+   "tests/unit/alert_policy/test_policy_commentary.py::test_afc_pr_023_every_number_is_grounded_in_the_event[all-three]",
+   "tests/unit/alert_policy/test_policy_commentary.py::test_afc_pr_023_names_only_trigger_entities[red-zone]",
+   "tests/unit/alert_policy/test_policy_commentary.py::test_afc_pr_023_names_only_trigger_entities[player-score]",
+   "tests/unit/alert_policy/test_policy_commentary.py::test_afc_pr_023_names_only_trigger_entities[close-game]",
+   "tests/unit/alert_policy/test_policy_commentary.py::test_afc_pr_023_names_only_trigger_entities[all-three]",
+   "tests/unit/alert_policy/test_policy_commentary.py::test_afc_pr_023_named_player_follows_the_trigger",
+   "tests/unit/alert_policy/test_policy_commentary.py::test_afc_pr_023_templates_are_fixed",
+   "tests/unit/alert_policy/test_policy_delivery.py::test_afc_pr_060_only_matched_profiles_receive_alerts",
+   "tests/unit/alert_policy/test_policy_delivery.py::test_afc_pr_060_no_match_emits_nothing",
+   "tests/unit/alert_policy/test_policy_delivery.py::test_afc_pr_011_every_alert_carries_exactly_one_basis_label",
+   "tests/unit/alert_policy/test_policy_delivery.py::test_afc_pr_037_opted_out_profile_never_gets_a_detection_basis",
+   "tests/unit/alert_policy/test_policy_delivery.py::test_afc_pr_026_correction_revises_the_existing_alert",
+   "tests/unit/alert_policy/test_policy_delivery.py::test_afc_pr_060_pending_serves_only_the_callers_alerts_in_order",
+   "tests/unit/alert_policy/test_policy_delivery.py::test_afc_pr_060_pending_resumes_after_the_cursor",
+   "tests/unit/alert_policy/test_policy_delivery.py::test_afc_pr_020_pending_holds_an_alert_until_its_release",
+   "tests/unit/alert_policy/test_policy_delivery.py::test_afc_pr_027_pending_envelope_carries_the_alert",
+   "tests/unit/alert_policy/test_policy_delivery.py::test_afc_pr_060_alerts_api_serves_only_the_linked_profile",
+   "tests/unit/alert_policy/test_policy_gates.py::test_afc_pr_016_no_enabled_types_emit_nothing[red-zone]",
+   "tests/unit/alert_policy/test_policy_gates.py::test_afc_pr_016_no_enabled_types_emit_nothing[player-score]",
+   "tests/unit/alert_policy/test_policy_gates.py::test_afc_pr_016_no_enabled_types_emit_nothing[close-game]",
+   "tests/unit/alert_policy/test_policy_gates.py::test_afc_pr_016_only_the_enabled_type_fires",
+   "tests/unit/alert_policy/test_policy_gates.py::test_afc_pr_019_outside_game_day_periods_emits_nothing",
+   "tests/unit/alert_policy/test_policy_gates.py::test_afc_pr_019_inside_game_day_period_emits",
+   "tests/unit/alert_policy/test_policy_gates.py::test_afc_pr_018_quiet_hours_suppress_inside_game_day",
+   "tests/unit/alert_policy/test_policy_gates.py::test_afc_pr_018_quiet_hours_wrap_past_midnight",
+   "tests/unit/alert_policy/test_policy_gates.py::test_afc_pr_017_min_gap_suppresses_a_second_alert_in_the_same_game",
+   "tests/unit/alert_policy/test_policy_gates.py::test_afc_pr_017_shorter_gap_releases_the_second_alert",
+   "tests/unit/alert_policy/test_policy_gates.py::test_afc_pr_017_min_gap_is_per_game",
+   "tests/unit/alert_policy/test_policy_gates.py::test_afc_pr_017_restrictive_setting_yields_fewer_alerts",
+   "tests/unit/alert_policy/test_policy_gates.py::test_afc_pr_020_release_is_at_least_the_spoiler_delay[0]",
+   "tests/unit/alert_policy/test_policy_gates.py::test_afc_pr_020_release_is_at_least_the_spoiler_delay[45]",
+   "tests/unit/alert_policy/test_policy_gates.py::test_afc_pr_020_release_is_at_least_the_spoiler_delay[120]",
+   "tests/unit/alert_policy/test_policy_gates.py::test_gate_order_disabled_type_does_not_consume_the_min_gap",
+   "tests/unit/alert_policy/test_policy_gates.py::test_gate_order_quiet_hours_do_not_consume_the_min_gap",
+   "tests/unit/alert_policy/test_policy_gates.py::test_gate_order_game_day_does_not_consume_the_min_gap",
+   "tests/deployed/alert_policy/test_alert_policy_deployed.py::test_served_alerts_have_registered_types_and_context",
+   "tests/deployed/alert_policy/test_alert_policy_deployed.py::test_served_alerts_are_released",
+   "tests/deployed/alert_policy/test_alert_policy_deployed.py::test_served_red_zone_text_is_team_level"
+  ]
+ },
+ "boundary_proof": {
+  "registered_semantics": "red_zone_yards = 20, exclusive: 19 qualifies; 20 and 21 do not (technical plan lifecycle quantities; AFC-PR-014 'inside the 20-yard line'; DES-AFC-P2-POLICY 'strictly inside')",
+  "tests": [
+   "tests/unit/alert_policy/test_policy_alert_types.py::test_afc_pr_014_red_zone_is_strictly_inside_the_20[19-inside]",
+   "tests/unit/alert_policy/test_policy_alert_types.py::test_afc_pr_014_red_zone_is_strictly_inside_the_20[20-boundary]",
+   "tests/unit/alert_policy/test_policy_alert_types.py::test_afc_pr_014_red_zone_is_strictly_inside_the_20[21-outside]",
+   "tests/unit/alert_policy/test_policy_alert_types.py::test_afc_pr_014_twenty_yards_is_not_inside_the_20"
+  ],
+  "mutant_evidence": "an inclusive-20 scratch mutant fails exactly the 20-boundary and twenty_yards tests"
+ },
+ "satisfiability_check": {
+  "method": "Scratch reference alert_policy and four mutants in a scratch copy of backend/ (never committed)",
+  "honest": "70 passed",
+  "inclusive20_mutant": "2 failed (20-boundary, twenty_yards_is_not_inside_the_20)",
+  "count_suppressed_mutant": "3 failed (all three gate-order tests)",
+  "overclaim_mutant": "1 failed (red-zone Hype wording)",
+  "early_delivery_mutant": "1 failed (pending holds an alert until its release)"
+ },
+ "gate": {
+  "command": "bash tools/ci/gate.sh",
+  "exit_code": 1,
+  "output": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B05T/gate.txt",
+  "areas": {
+   "spec": "PASS",
+   "docs": "PASS",
+   "hygiene": "PASS",
+   "tvapp": "PASS",
+   "backend": "FAIL (expected red): 94 failed = 70 new alert_policy red tests + 24 inherited P2-B04T matcher red tests; 604 passed; 0 errors; cfn-lint not reached after pytest exit"
+  }
+ },
+ "hygiene": {
+  "path_scan": "PYTHONDONTWRITEBYTECODE=1 python3.12 tools/ci/check_paths.py",
+  "path_scan_exit_code": 0,
+  "path_scan_output": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B05T/path-check.txt",
+  "whitespace": "git diff --check origin/afc/p2-b04t...HEAD clean",
+  "credential_shapes": "No credentials; synthetic athlete ids 9000001/9000005/9000077 and fictional names only; evidence paths redacted to $HOME and $WORKTREE"
+ },
+ "proof_rows": [
+  {
+   "id": "SEIT-AFC-PR-014",
+   "registered_method": "test",
+   "red_support": "test_policy_alert_types.py: 19/20/21-yard red zone, possession by the starter's team, player score, close game within 8 in Q4/OT incl. OT and margin 9 negative, once per entry, simultaneous types as one alert with only enabled types",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-L03"
+  },
+  {
+   "id": "SEIT-AFC-PR-016",
+   "registered_method": "test",
+   "red_support": "test_policy_gates.py: all types off emits nothing; only the enabled type fires",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-L03"
+  },
+  {
+   "id": "SEIT-AFC-PR-017",
+   "registered_method": "test",
+   "red_support": "test_policy_gates.py: alert_min_gap per game, shorter gap releases, restrictive < permissive with no two released alerts closer than the setting",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-L03"
+  },
+  {
+   "id": "SEIT-AFC-PR-018",
+   "registered_method": "test",
+   "red_support": "test_policy_gates.py: quiet hours suppress inside a game-day period; wrap past midnight",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-L03"
+  },
+  {
+   "id": "SEIT-AFC-PR-019",
+   "registered_method": "test",
+   "red_support": "test_policy_gates.py: outside game-day period nothing, inside emits",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-L03"
+  },
+  {
+   "id": "SEIT-AFC-PR-020",
+   "registered_method": "test",
+   "red_support": "test_policy_gates.py: emittedAt - eventTime >= spoiler delay (0/45/120); test_policy_delivery.py: pending never serves a held alert and its cursor never passes it",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-L03"
+  },
+  {
+   "id": "SEIT-AFC-PR-023",
+   "registered_method": "test",
+   "red_support": "test_policy_commentary.py: Off attaches nothing; Mild != Hype; commentary never changes type/context/revision; numbers grounded; no outside names; names follow the trigger; fixed templates",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-L03"
+  },
+  {
+   "id": "SEIT-AFC-PR-027",
+   "registered_method": "test",
+   "red_support": "test_policy_alert_types.py: triggerContext gameId/eventId/source/score/starters for each type; test_policy_delivery.py: envelope carries type, context, route, replay label",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-L03"
+  },
+  {
+   "id": "SEIT-AFC-PR-028",
+   "registered_method": "test",
+   "red_support": "test_policy_alert_types.py: red-zone Mild/Hype text and context free of on-field or will-score claims",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-L03"
+  },
+  {
+   "id": "SEIT-AFC-PR-008",
+   "registered_method": "test",
+   "red_support": "policy half only: matched-profile relevance and quiet-hours silence; monitoring decisions are landed in feed_ingest/monitoring.py",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-L03"
+  },
+  {
+   "id": "SEIT-AFC-PR-011",
+   "registered_method": "test",
+   "red_support": "policy half only: every alert carries exactly one basis label",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-L03"
+  },
+  {
+   "id": "SEIT-AFC-PR-037",
+   "registered_method": "test",
+   "red_support": "opted-out profile never gets an observed-playback basis",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-L03"
+  },
+  {
+   "id": "SEIT-AFC-PR-060",
+   "registered_method": "test",
+   "red_support": "evaluate emits only for matched profiles; pending and GET /v1/alerts serve only the caller's alerts",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-L03"
+  },
+  {
+   "id": "SEIT-RISK-AFC-P2-10",
+   "registered_method": "inspection",
+   "red_support": "route recorded in this receipt (route, route_basis)",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-6"
+  },
+  {
+   "id": "SEIT-AFC-P2-DX-01",
+   "registered_method": "inspection",
+   "red_support": "developer_feedback below",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-6"
+  },
+  {
+   "id": "SEIT-AFC-P2-PATH-01",
+   "registered_method": "inspection",
+   "red_support": "check_paths.py exit 0; evidence paths redacted to $HOME and $WORKTREE",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-6"
+  },
+  {
+   "id": "SEIT-AFC-P2-LAND-01",
+   "registered_method": "inspection",
+   "red_support": "none: no push or PR per packet",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "IE-P2-22"
+  },
+  {
+   "id": "SEIT-AFC-P2-REL-01",
+   "registered_method": "inspection",
+   "red_support": "none in red slice (CHANGELOG prohibited by packet)",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "IE-P2-22"
+  },
+  {
+   "id": "SEIT-AFC-P2-REV-01",
+   "registered_method": "inspection",
+   "red_support": "none in red slice (review allocated to IE-P2-22)",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "IE-P2-22"
+  }
+ ],
+ "handoff_contract_choices": [
+  "alert_policy.evaluate(game_event, matches) returns Alert items in the store.put_alert shape (providerRoute added by the pipeline), at most one per (profileId, eventId), only for profiles in matches; it reads Settings via store.get_profile and earlier alerts via store.list_alerts. Matches are the P2-B04T shape {profileId, eventId, revision, starters, cursor}; inputs are fixtures, the stub matcher is never called.",
+  "GameEvent gap: the Phase 2 data model (store.put_event, normalize_summary) has no quarter or scoring flag, yet close game needs Q4/OT and player score needs a scoring play. Tests pass two ESPN play fields on the event: period (int; 4 = Q4, >=5 = OT) and scoringPlay (bool). P2-B05's write set (backend/src/alert_policy/) cannot add them to feed_ingest/store; see remaining risks.",
+  "Settings follow the landed TV ProfileCodec wire shape: alertTypes in {RedZone, PlayerScore, CloseGame}; frequency = alert_min_gap seconds; quietHours [{startMinute, endMinute}] (may wrap midnight); gameDayPeriods {enabled, periods}; spoilerDelay seconds; excitement Off|Mild|Hype; detectionOptIn bool. Minutes of day are read in UTC from eventTime (Settings carry no time zone). Window end-minute boundaries are avoided; start minutes are inclusive. gameDayPeriods.enabled false is not relied on.",
+  "Red zone: fieldPosition (ESPN yardsToEndzone) strictly below 20 and possession equal to a matched starter's team. Player score: scoringPlay with a matched starter in playerIds. Close game: period >= 4 and |home - away| <= 8, once per game while the state lasts (re-entry not tested).",
+  "Simultaneous types: one alert; alertType is one of the matching enabled types; triggerContext.alertTypes lists every matching enabled type.",
+  "triggerContext carries gameId, eventId, source, score, starters (with athlete_id), alertTypes and basis (observed-playback | profile-assumption); opted-out profiles are always profile-assumption. Whether an opted-out profile still receives alerts is not decided here.",
+  "emittedAt is the release time (>= eventTime + spoilerDelay); alert_min_gap compares release times of released alerts of the same game; suppressed events never consume the gap (the observable form of the gate order).",
+  "commentary: None/absent at Off; fixed template strings at Mild/Hype, different from each other, identical for identical inputs; every digit run is a score, the margin, the field position, the period or 20; no lineup name or team outside the trigger. Red-zone text must not match the on-field/will-score pattern in policy_support.OVERCLAIM.",
+  "A match with a cursor revises that alert: the returned alert keeps the cursor and carries the new revision.",
+  "alert_policy.pending(profile_id, cursor) returns {alerts, cursor: str}: only this profile's alerts after cursor with emittedAt not in the future, in cursor order; the cursor never passes a held alert. Envelope: schemaVersion 1, id = cursor, revision, source = triggerContext.source, updatedAt = emittedAt, data {alertType, triggerContext, commentary, route = stored providerRoute}.",
+  "Alert type vocabulary follows the TV enum (RedZone/PlayerScore/CloseGame); P2-B04T's seed rows use 'playerScore' only as an opaque stored value."
+ ],
+ "scope_reconciliation": [
+  "backend/src/alert_policy/__init__.py and backend/src/matcher/__init__.py are still AFC-STUBs; the suite consumes matches only as fixtures in the B04T shape.",
+  "AFC-PR-008/-011 monitoring decisions are landed product in feed_ingest/monitoring.py; this suite binds only their policy half.",
+  "RISK-AFC-P2-10 is an inspection row satisfied by the route record in this receipt.",
+  "Red commit uses --no-verify per packet; the backend gate FAIL is the expected TDD red."
+ ],
+ "deferred": [
+  "P2-B05 green on unchanged frozen tests (same IDs/hashes) via CMD-GATE-BACKEND",
+  "P2-B05 retires the alert_policy rows of STUBS in backend/tests/unit/test_pipeline_and_stubs.py, as B02/B03/B06 did",
+  "GameEvent period/scoringPlay producer change in feed_ingest/store (outside P2-B05's write set) needs an orchestrator decision",
+  "Independent OCR review at IE-P2-22",
+  "Deployed proof closeout P2-L03 (CMD-DEPLOYED-TESTS)"
+ ],
+ "resource_group": "host-pytest; fresh per-test Moto state; sockets blocked; no engine/server/AWS/device; ~10 s",
+ "changed_paths": [
+  "backend/tests/deployed/alert_policy/test_alert_policy_deployed.py",
+  "backend/tests/unit/alert_policy/policy_support.py",
+  "backend/tests/unit/alert_policy/test_policy_alert_types.py",
+  "backend/tests/unit/alert_policy/test_policy_commentary.py",
+  "backend/tests/unit/alert_policy/test_policy_delivery.py",
+  "backend/tests/unit/alert_policy/test_policy_gates.py",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B05T/CMD-RED.txt",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B05T/CMD-RED.xml",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B05T/collect.txt",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B05T/commands.json",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B05T/gate.txt",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B05T/path-check.txt",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B05T/receipt.json",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B05T/verify_receipt.py"
+ ],
+ "developer_feedback": {
+  "observations": [
+   {
+    "id": "P2B05T-DX-001",
+    "tool": "pytest/Moto",
+    "observation": "70 all-assertion red cases plus 3 NOT_RUN deployed skips run offline in ~10 s; shared api/offline fixtures needed no change.",
+    "evidence": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B05T/CMD-RED.xml"
+   },
+   {
+    "id": "P2B05T-DX-002",
+    "tool": "pytest conftest",
+    "observation": "Running unit and deployed dirs in one pytest call caches tests/deployed/conftest.py as module 'conftest', so 'from conftest import link_device' in a unit test is a collection error; the suite links devices through api.request in policy_support instead.",
+    "evidence": "backend/tests/unit/alert_policy/policy_support.py link_device"
+   },
+   {
+    "id": "P2B05T-DX-003",
+    "tool": "Phase 2 data model",
+    "observation": "GameEvent (AFC-Data.sysml, store.put_event, normalize_summary) carries no quarter or scoring-play flag, so close game in Q4/OT and player score cannot be decided from the stored event; a planning gap for P2-B05.",
+    "evidence": "backend/src/store/__init__.py put_event; backend/src/feed_ingest/normalize.py _facts"
+   },
+   {
+    "id": "P2B05T-DX-004",
+    "tool": "tools/ci/gate.sh",
+    "observation": "The backend area prints ~17k warnings (mostly datetime/Moto deprecations), so gate.txt is ~320 KB of mostly warnings.",
+    "evidence": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B05T/gate.txt"
+   }
+  ]
+ }
+}

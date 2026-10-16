@@ -1,0 +1,54 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.2, pluggy-1.6.0 -- <home>/.local/share/afc-tools/backend-tests/bin/python3.12
+cachedir: .pytest_cache
+rootdir: <home>/alphazede/worktrees/amazon-fantasy-companion-p2-l02/backend
+configfile: pyproject.toml
+plugins: cov-7.1.0, anyio-4.13.0, asyncio-1.3.0, mock-3.15.1, typeguard-4.4.4
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 11 items
+
+backend/tests/deployed/api/test_profile.py::test_profile_roundtrip_preserves_revision PASSED [  9%]
+backend/tests/deployed/api/test_profile.py::test_foreign_profile_is_forbidden PASSED [ 18%]
+backend/tests/deployed/api/test_profile.py::test_malformed_body_is_a_structured_400 PASSED [ 27%]
+backend/tests/deployed/api/test_profile.py::test_unknown_route_is_a_structured_404 FAILED [ 36%]
+backend/tests/deployed/device_auth/test_link_flow.py::test_issue_returns_a_pending_code PASSED [ 45%]
+backend/tests/deployed/device_auth/test_link_flow.py::test_pending_poll_cannot_authorize_the_device PASSED [ 54%]
+backend/tests/deployed/device_auth/test_link_flow.py::test_confirmed_device_polls_a_usable_session PASSED [ 63%]
+backend/tests/deployed/device_auth/test_link_flow.py::test_unknown_session_is_rejected_on_protected_routes PASSED [ 72%]
+backend/tests/deployed/lineup/test_source_labels.py::test_panel_reports_exactly_one_lineup_source FAILED [ 81%]
+backend/tests/deployed/lineup/test_source_labels.py::test_panel_source_is_stable_across_reads FAILED [ 90%]
+backend/tests/deployed/lineup/test_source_labels.py::test_preset_selection_roundtrip PASSED [100%]
+
+=================================== FAILURES ===================================
+____________________ test_unknown_route_is_a_structured_404 ____________________
+backend/tests/deployed/api/test_profile.py:30: in test_unknown_route_is_a_structured_404
+    assert_error(status, body, 404)
+backend/tests/deployed/deployed_helpers.py:26: in assert_error
+    assert isinstance(body["error"]["code"], str) and body["error"]["code"]
+                      ^^^^^^^^^^^^^
+E   KeyError: 'error'
+_________________ test_panel_reports_exactly_one_lineup_source _________________
+backend/tests/deployed/lineup/test_source_labels.py:13: in test_panel_reports_exactly_one_lineup_source
+    assert status == 200, body
+E   AssertionError: {'error': {'code': 'not_implemented', 'message': 'This feature is not available yet.'}}
+E   assert 503 == 200
+___________________ test_panel_source_is_stable_across_reads ___________________
+backend/tests/deployed/lineup/test_source_labels.py:20: in test_panel_source_is_stable_across_reads
+    assert first.get("source") in ("yahoo", "manual"), (first, second)
+E   AssertionError: ({'error': {'code': 'not_implemented', 'message': 'This feature is not available yet.'}}, {'error': {'code': 'not_implemented', 'message': 'This feature is not available yet.'}})
+E   assert None in ('yahoo', 'manual')
+E    +  where None = <built-in method get of dict object at 0x7f5355a79100>('source')
+E    +    where <built-in method get of dict object at 0x7f5355a79100> = {'error': {'code': 'not_implemented', 'message': 'This feature is not available yet.'}}.get
+============================= slowest 10 durations =============================
+2.24s setup    tests/deployed/api/test_profile.py::test_profile_roundtrip_preserves_revision
+0.82s call     tests/deployed/lineup/test_source_labels.py::test_preset_selection_roundtrip
+0.50s call     tests/deployed/api/test_profile.py::test_profile_roundtrip_preserves_revision
+0.40s call     tests/deployed/device_auth/test_link_flow.py::test_unknown_session_is_rejected_on_protected_routes
+0.29s call     tests/deployed/device_auth/test_link_flow.py::test_issue_returns_a_pending_code
+0.28s call     tests/deployed/lineup/test_source_labels.py::test_panel_source_is_stable_across_reads
+0.27s call     tests/deployed/device_auth/test_link_flow.py::test_pending_poll_cannot_authorize_the_device
+0.18s call     tests/deployed/device_auth/test_link_flow.py::test_confirmed_device_polls_a_usable_session
+0.14s call     tests/deployed/api/test_profile.py::test_foreign_profile_is_forbidden
+0.14s call     tests/deployed/api/test_profile.py::test_malformed_body_is_a_structured_400
+========================= 3 failed, 8 passed in 5.56s ==========================
+EXIT_CODE=1

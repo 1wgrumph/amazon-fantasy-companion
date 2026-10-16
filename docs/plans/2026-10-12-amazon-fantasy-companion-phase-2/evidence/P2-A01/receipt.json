@@ -1,0 +1,458 @@
+{
+  "schema_version": "1",
+  "slice": "P2-A01",
+  "part": "A (host-side; no device)",
+  "role": "product_implementer",
+  "issue": 22,
+  "milestone": "M03",
+  "outcome": "PASS (part A); device steps pending, see PENDING-DEVICE.txt",
+  "route": "Claude Code / Claude Opus 5.5 / medium (frozen slice route)",
+  "authority": "AUTH-AFC-2026-10-12-P2-001; SD-041/SD-042 toolchain decisions",
+  "branch": "afc/p2-a01",
+  "base_revision": "75afca022f967945a70bf715beb2a7c98e65ed9d",
+  "red_revision": "463a73f",
+  "candidate_ref": "The containing commit on afc/p2-a01.",
+  "starter": {
+    "repo": "AmazonAppDev/hello-world-fire-tv",
+    "commit": "50108f4fc4a9dc054be86d851286355df027524a",
+    "scan": "P2-X01 scan-verdicts row 7 PASS (ClamAV 0 infected, gitleaks no leaks)",
+    "used": "launcher icons, adaptive icon, launcher background colour, Compose for TV theme (adapted, MIT-0 header kept); package renamed com.amazonappstore.helloworldtv -> com.afc.companion",
+    "license": "MIT-0, added to THIRD_PARTY_NOTICES.md"
+  },
+  "deliverables": {
+    "net": "ApiClient.kt (10 typed operations + request/envelope; 64 KiB both ways; 10 s / 25 s timeouts; 3 retries 1/2/4 s for GET and PUT on 429/503; https-only base URL except loopback; bearer only on non-link paths) and Dto.kt (Envelope, DeviceCode, LinkState, LinkConfirm, Settings incl. scoringPreset, Profile, ProfileUpdate, AccessBasis, ProviderRoute, Alert with route and access basis, AlertsPage, PanelState, RoutingOutcome six values, RoutingOutcomeReport, InstalledApps, ApiError, ApiResult)",
+    "session": "net/SessionStore.kt: device session token in app-private SharedPreferences; allowBackup=false plus data_extraction_rules excluding it",
+    "shell": "MainActivity.kt routes Link, Profile/Settings, Panel; Shell.kt holds destinations, start and the Backend-not-configured decision",
+    "link": "link/LinkScreen.kt: LinkScreen presentation, LinkFlow (issue code, poll every 5 s, store token on linked), LinkView with network-error and retry",
+    "stubs_AFC_STUB": [
+      "profile/ProfileSettingsScreen(client, modifier)",
+      "detect/AppDetector(packageManager).detect(candidates): InstalledApps",
+      "alerts/AlertService : Service",
+      "alerts/AlertNotifier(context).show(alert)",
+      "watch/WatchLauncher(context).launch(route: ProviderRoute): RoutingOutcome",
+      "watch/WatchActivity (Watch PendingIntent target)",
+      "panel/LineupPanel(client, mode: PanelMode, modifier)"
+    ],
+    "manifest": "INTERNET, FOREGROUND_SERVICE, FOREGROUND_SERVICE_DATA_SYNC, POST_NOTIFICATIONS; MainActivity (LAUNCHER + LEANBACK_LAUNCHER), WatchActivity (not exported), AlertService (dataSync, not exported); <queries> for LEANBACK_LAUNCHER apps; usesCleartextTraffic=false",
+    "gradle": "gradle/libs.versions.toml declares every runtime and test dependency (Compose BOM 2024.12.01, tv-material 1.0.0, activity-compose 1.9.3, core-ktx 1.13.1, coroutines-android 1.11.0; junit, org.json, snakeyaml; androidx.test runner 1.6.2, ext-junit 1.2.1, uiautomator 2.3.0, compose ui-test-junit4/manifest); compose compiler plugin 2.4.21; BuildConfig.AFC_API_BASE_URL from -PafcApiBaseUrl (empty default); release signed with host debug key (OA-11 absent); :app:afcCoverageReport JacocoReport bound to debug classes/sources/exec with XML",
+    "gitignore": "tv-app/.gitignore unchanged from A01T: local.properties, .gradle/, build/ (bootstrap hash b7c3f9c1...)"
+  },
+  "commands": [
+    {
+      "id": "CMD-RED (green run)",
+      "command": "JAVA_HOME=$HOME/.local/share/afc-tools/jdk-17.0.20.1+1 ANDROID_HOME=$HOME/.local/share/afc-tools/android-sdk GRADLE_USER_HOME=$HOME/.gradle/afc-p2-a01t ./tv-app/gradlew -p tv-app --no-daemon --max-workers=2 --offline testDebugUnitTest --tests 'com.afc.companion.*'",
+      "exit": 0,
+      "counts": {
+        "tests": 79,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "frozen_a01t": 60,
+        "new_p2_a01": 19
+      },
+      "evidence": "cmd-green.txt"
+    },
+    {
+      "id": "FROZEN-HASHES",
+      "command": "sha256sum of the 7 frozen A01T test files vs P2-A01T receipt",
+      "exit": 0,
+      "result": "7/7 MATCH"
+    },
+    {
+      "id": "REPOSITORY-GATE",
+      "command": "PATH=$HOME/.local/share/afc-tools/backend-tests/bin:$PATH JAVA_HOME=$HOME/.local/share/afc-tools/jdk-17.0.20.1+1 ANDROID_HOME=$HOME/.local/share/afc-tools/android-sdk GRADLE_USER_HOME=$HOME/.gradle/afc-p2-a01t bash tools/ci/gate.sh",
+      "exit": 0,
+      "areas": {
+        "spec": "PASS",
+        "docs": "PASS",
+        "hygiene": "PASS",
+        "tvapp": "PASS",
+        "backend": "PASS"
+      },
+      "evidence": "gate-full.txt"
+    },
+    {
+      "id": "CMD-GATE-TVAPP",
+      "command": "JAVA_HOME=$HOME/.local/share/afc-tools/jdk-17.0.20.1+1 ANDROID_HOME=$HOME/.local/share/afc-tools/android-sdk GRADLE_USER_HOME=$HOME/.gradle/afc-p2-a01t bash tools/ci/gate.sh tvapp",
+      "exit": 0,
+      "result": "gate: tvapp: PASS checks completed",
+      "evidence": "gate-tvapp.txt"
+    },
+    {
+      "id": "CMD-COVERAGE-TVAPP",
+      "command": "bash tools/ci/coverage/tvapp.sh 75afca0 <evidence_dir>",
+      "exit": 127,
+      "result": "GAP ANDROID_COVERAGE_COMPATIBILITY_GAP: bash: tools/ci/coverage/tvapp.sh: No such file or directory (G01-owned wrapper absent; tools/ is outside this write set)",
+      "evidence": "coverage-tvapp-wrapper.txt",
+      "supporting_native": {
+        "commands": [
+          "./tv-app/gradlew -p tv-app testDebugUnitTest :app:afcCoverageReport (exit 0)",
+          "diff-cover <afcCoverageReport.xml> --diff-file=<git diff --cached 75afca0 -- tv-app/app/src/main> --src-roots tv-app/app/src/main/java tv-app/app/src/main/kotlin --fail-under=90 (exit 1)"
+        ],
+        "result": "69% of 333 changed lines (below the 90% proposal). net/ApiClient.kt 98.8%, net/Dto.kt 99.1%, Shell.kt 100%, LinkScreen.kt 57.9% (LinkView composable); Compose UI, Android components and AFC-STUB files 0% because JVM unit tests cannot run them; that share needs instrumented coverage on the stick. Not a PASS; reported, threshold not weakened.",
+        "evidence": [
+          "coverage-native-jacoco.xml",
+          "coverage-native-diffcover.txt"
+        ]
+      }
+    },
+    {
+      "id": "CMD-MUTATION-TVAPP",
+      "command": "bash tools/ci/mutation/tvapp.sh 75afca0 <evidence_dir>",
+      "exit": 127,
+      "result": "GAP ANDROID_MUTATION_COMPATIBILITY_GAP: bash: tools/ci/mutation/tvapp.sh: No such file or directory (G01-owned wrapper absent). The PIT Android fork was not acquired: its compatibility qualification on AGP 9.3.1/KGP 2.4.21 belongs to the wrapper's owner and no pin is admitted.",
+      "evidence": "mutation-tvapp-wrapper.txt"
+    },
+    {
+      "id": "PROC-GATE-TOOL-QUALIFY",
+      "command": "PATH=$HOME/.local/share/afc-tools/backend-tests/bin:$PATH python3 -m unittest discover -s tools/ci/tests/coverage -v && python3 -m unittest discover -s tools/ci/tests/mutation -v",
+      "exit": 0,
+      "counts": {
+        "coverage": 12,
+        "mutation": 13
+      },
+      "scope": "Generic/backend adapters only; Android adapters remain absent and unqualified",
+      "evidence": "tool-qualify.txt"
+    },
+    {
+      "id": "CMD-SUPPLY-SCAN",
+      "command": "scan-software-supply-chain workflow as in P2-A01T: inert resolve (no acquired plugin applied), published-checksum match, trivy 0.71.0 offline rootfs + native CycloneDX BOM, ClamAV 1.5.4",
+      "exit": 0,
+      "result": "see scan_table"
+    },
+    {
+      "id": "STRICT-OFFLINE-BUILD",
+      "command": "JAVA_HOME=$HOME/.local/share/afc-tools/jdk-17.0.20.1+1 ANDROID_HOME=$HOME/.local/share/afc-tools/android-sdk GRADLE_USER_HOME=$HOME/.gradle/afc-p2-a01t ./tv-app/gradlew -p tv-app --no-daemon --max-workers=2 --offline clean testDebugUnitTest lintDebug assembleDebug assembleRelease assembleDebugAndroidTest :app:afcCoverageReport",
+      "exit": 0,
+      "evidence": "build-strict-offline.txt"
+    },
+    {
+      "id": "CI-ONLINE-STRICT-EMULATION",
+      "command": "fresh GRADLE_USER_HOME module cache, online, strict verification: ./tv-app/gradlew -p tv-app --no-daemon --max-workers=2 testDebugUnitTest lintDebug assembleDebug assembleRelease :app:afcCoverageReport",
+      "exit": 0,
+      "result": "Rounds 1-2 exposed 2 POMs (plus 4 in an earlier pass) that only an online resolution reads; each matched its published checksum and was added; round 3 exit 0 with 79 tests passing. The earlier pass also showed A01T metadata alone fails online in CI (guava-parent 33.4.0-jre, junit-bom 5.10.2/5.11.0-M2, kotlinx-coroutines-bom 1.8.0).",
+      "evidence": [
+        "ci-online-strict-loop.txt",
+        "ci-online-strict-round1.txt",
+        "ci-online-strict-round2.txt",
+        "ci-online-strict-round3.txt",
+        "online-metadata-delta.tsv"
+      ]
+    },
+    {
+      "id": "APK-INSPECT",
+      "command": "apkanalyzer manifest application-id|min-sdk|target-sdk|version-name|debuggable|print; java -jar build-tools/36.0.0/lib/apksigner.jar verify --verbose --print-certs",
+      "exit": 0,
+      "debug": {
+        "sha256": "4716dc155942931bccdcf885a372643e4a60d4f763ffc2a182e9b84ac9faba87",
+        "package": "com.afc.companion",
+        "minSdk": 25,
+        "targetSdk": 34,
+        "versionName": "0.1.0",
+        "debuggable": true,
+        "bytes": 7692282
+      },
+      "release": {
+        "sha256": "ddd4e8c7143b46ee62ac272e84d96d91b3157924585846dcec113975777dcc70",
+        "package": "com.afc.companion",
+        "minSdk": 25,
+        "targetSdk": 34,
+        "debuggable": false,
+        "bytes": 5491452
+      },
+      "permissions": [
+        "android.permission.INTERNET",
+        "android.permission.FOREGROUND_SERVICE",
+        "android.permission.FOREGROUND_SERVICE_DATA_SYNC",
+        "android.permission.POST_NOTIFICATIONS",
+        "com.afc.companion.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION (androidx.core, signature)"
+      ],
+      "components": [
+        "MainActivity exported (launcher)",
+        "watch.WatchActivity not exported",
+        "alerts.AlertService not exported, dataSync",
+        "androidx.startup.InitializationProvider not exported",
+        "androidx.profileinstaller.ProfileInstallReceiver exported, guarded by android.permission.DUMP",
+        "debug only: androidx.activity.ComponentActivity exported (compose ui-test-manifest host)"
+      ],
+      "signing": "Both verify (v2); one signer CN=Android Debug, cert SHA-256 11d7d0832f66aa2d77dfcbe12823477578e7c16474e5c94ff6d20adce17a8364 (host debug key; OA-11 keystore absent). apksigner launcher script lacks +x, so the jar was run with the qualified JDK.",
+      "note": "APKs stay under tv-app/app/build (ignored); none committed.",
+      "evidence": [
+        "apk-debug-manifest.txt",
+        "apk-debug-apksigner.txt",
+        "apk-release-apksigner.txt"
+      ]
+    }
+  ],
+  "negative_checks": {
+    "wrong_schemaVersion": "EnvelopeTest.rejectsUnknownSchemaVersion PASS (frozen)",
+    "oversize_response": "ApiPolicyTest.rejectsResponseOverContract64KiB PASS (frozen); exact 64 KiB accepted: ClientBoundaryTest.acceptsResponseAtExactly64KiBAndEmptyBodyAsNull PASS",
+    "oversize_request": "ApiPolicyTest.rejectsRequestOverContract64KiBBeforeSending PASS (frozen)",
+    "non_https_base": "ClientBoundaryTest.acceptsHttpsAndLoopbackOnly PASS",
+    "token_not_displayed": "LinkScreenTest.linkedStateContinuesWithoutDisplayingSessionToken PASS (frozen); TypedOperationsTest redaction PASS"
+  },
+  "frozen_test_sha256s": {
+    "tv-app/app/src/test/java/com/afc/companion/ApiOperationsTest.kt": "a68cb4a5bc8bf7f6bea4c2408a36bf4eceb6f74e396b3c6657c3f1871beb0500",
+    "tv-app/app/src/test/java/com/afc/companion/ApiPolicyTest.kt": "d4adb23485c1c411a2a97deb293041b98f7c4087703c9799ce72961534379294",
+    "tv-app/app/src/test/java/com/afc/companion/ContractFixtures.kt": "ac07254ff8686d1f57838fa4d22ce65936576588c041bc3dd7410e6bdf6a16d8",
+    "tv-app/app/src/test/java/com/afc/companion/EnvelopeTest.kt": "23c6338311fdf3316e339b19232912035bff151c55e1271162e5bef00b170fed",
+    "tv-app/app/src/test/java/com/afc/companion/FixtureCalibrationTest.kt": "50a3a2cde3ef443b5ef236340b28b02856b47fc5709c3949826aa39e998787fe",
+    "tv-app/app/src/test/java/com/afc/companion/LinkScreenTest.kt": "630935586874beb653068c8d07a4b9c8d0ada05fd6368244784cc54bccd24382",
+    "tv-app/app/src/test/java/com/afc/companion/ShellContractTest.kt": "6937824801454d13249aa503c25399ede3d212b8541f22baa70dd1794b994d6f"
+  },
+  "scan_table": [
+    {
+      "set": "Compose compiler Gradle/Kotlin plugin delta (inert resolve, nothing applied)",
+      "count": 4,
+      "artifacts": "compose-compiler-gradle-plugin, kotlin-compose-compiler-plugin(-embeddable) 2.4.21, error_prone_annotations 2.27.0",
+      "integrity": "4/4 published checksum MATCH",
+      "trivy": "0 findings",
+      "clamav": "4 files, 0 infected",
+      "verdict": "PASS",
+      "evidence": [
+        "inert-resolver-compose-plugin.gradle",
+        "compose-plugin-resolved.tsv",
+        "compose-plugin-integrity.json",
+        "compose-plugin-trivy.json",
+        "compose-plugin-clam.txt"
+      ]
+    },
+    {
+      "set": "App, test, lint and coverage closure delta resolved after the plugin admission",
+      "count": 523,
+      "artifacts": "523 files (60 aar, 156 jar, 142 module, 165 pom), 307 components; AndroidX/Compose/tv-material/activity/core, androidx.test, JaCoCo 0.8.14, lint and UTP tooling",
+      "integrity": "523/523 published checksum MATCH (19 AARs matched via the repository file their Gradle module metadata names)",
+      "trivy": "81 findings in the delta (native BOM and rootfs agree). 79 are netty/guava in the Android Unified Test Platform host closure (connected tests only): NOT admitted, 103 UTP-only components pruned from verification-metadata.xml, so strict verification refuses them. 2 admitted: guava 28.1-android CVE-2023-2976 MEDIUM, CVE-2020-8908 LOW (androidx.test lint-check classpath, build host only, not packaged). 0 admitted HIGH/CRITICAL.",
+      "clamav": "216 binaries, 0 infected",
+      "verdict": "PASS (no new admitted HIGH/CRITICAL)",
+      "evidence": [
+        "app-closure-delta.tsv",
+        "app-closure-integrity.json",
+        "app-closure-native-bom.json",
+        "app-closure-trivy-findings.json",
+        "app-closure-clam.txt",
+        "pruned-utp-only.txt"
+      ]
+    },
+    {
+      "set": "Online-only metadata files (POM/module, not executable)",
+      "count": 6,
+      "integrity": "6/6 published checksum MATCH",
+      "verdict": "PASS",
+      "evidence": "online-metadata-delta.tsv"
+    }
+  ],
+  "installs": "None. No tool installed; existing qualified JDK 17.0.20.1+1, Android SDK (platform 34, build-tools 36.0.0), Gradle 9.7.0 wrapper, trivy 0.71.0, ClamAV 1.5.4 and diff-cover 10.6.0 reused. Downloaded Maven artifacts live in $HOME/.gradle/afc-p2-a01t (and the CI-emulation cache $HOME/.gradle/afc-p2-a01-ciemul).",
+  "findings": [
+    "CI: A01T verification metadata alone fails online strict resolution (4 POM/module files read only when downloading). Fixed in tv-app/gradle/verification-metadata.xml; no .github change needed. CI also relies on the runner's preinstalled ANDROID_HOME having platforms;android-34 and build-tools;36.0.0 (not verified here).",
+    "P2-A03/A04/A05 connectedDebugAndroidTest needs the AGP UTP closure, whose netty 4.1.93/4.1.110 carries HIGH/CRITICAL findings (e.g. CVE-2026-75595 CRITICAL). It is pruned from the admitted metadata, so the first instrumented run fails verification until that closure gets an owner decision (accept, or force a fixed netty as SD-042 did for BC/jose4j/jdom).",
+    "Changed-line coverage for Compose UI and Android components cannot reach 90% with JVM unit tests; it needs instrumented coverage on the stick (plan allows same-candidate instrumentation data under the stick lock).",
+    "Alert and PanelState data schemas are not in openapi.yaml; Dto.kt reads data.route as a ProviderRoute for alerts (absent means access unknown) and keeps panel data opaque for P2-A05/P2-B05/P2-B07 to fix."
+  ],
+  "device_pending": "PENDING-DEVICE.txt",
+  "tvapp_wrappers": {
+    "appended": "2026-10-14 by the tv-app wrapper packet (G01-deferred CMD-COVERAGE-TVAPP / CMD-MUTATION-TVAPP); earlier receipt content unchanged",
+    "route": "Claude Code / Claude Opus 5.5 / medium",
+    "wrapper_commit": "a1d31ef6535e039c535badb061b5f1d0c1f58660",
+    "candidate_tv_app": "tv-app/ unchanged from 90e7654",
+    "env": "JAVA_HOME=$HOME/.local/share/afc-tools/jdk-17.0.20.1+1 ANDROID_HOME=$HOME/.local/share/afc-tools/android-sdk GRADLE_USER_HOME=$HOME/.gradle/afc-p2-a01t AFC_GRADLE_ARGS='--offline --no-daemon --max-workers=2'",
+    "commands": [
+      {
+        "id": "CMD-COVERAGE-TVAPP",
+        "command": "bash tools/ci/coverage/tvapp.sh 75afca0 <evidence_dir>",
+        "exit": 1,
+        "result": "FAIL changed-line coverage 69% (threshold 90%); 333 changed executable lines, 102 missed",
+        "classification": "threshold; host JVM unit tests cannot execute Compose UI, Android components or AFC-STUB files",
+        "missed_lines": {
+          "MainActivity.kt": "32,34-42,45,49-53,57-75 (35)",
+          "link/LinkScreen.kt": "80-90,92-103,105 (24, LinkView composable)",
+          "ui/theme/Theme.kt": "17-20,23-24,28-32 (11)",
+          "panel/LineupPanel.kt": "14,18-22 (6)",
+          "profile/ProfileSettingsScreen.kt": "15-19 (5)",
+          "net/SessionStore.kt": "7-8,10,12,14 (5)",
+          "alerts/AlertService.kt": "8-9,12-13 (4)",
+          "watch/WatchActivity.kt": "7,9-11 (4)",
+          "alerts/AlertNotifier.kt": "7-8 (2)",
+          "detect/AppDetector.kt": "7-8 (2)",
+          "watch/WatchLauncher.kt": "8-9 (2)",
+          "net/ApiClient.kt": "61 (1)",
+          "net/Dto.kt": "114 (1)"
+        },
+        "host_ceiling": "Covering ApiClient.kt:61 and Dto.kt:114 host-side gives 233/333 = 70%; 90% needs on-device instrumented coverage (CMD-TVAPP-INSTRUMENTED, no Fire TV stick available)",
+        "evidence": [
+          "coverage-tvapp-wrapper.txt",
+          "coverage-tvapp-result.json",
+          "coverage-tvapp-diffcover.json"
+        ]
+      },
+      {
+        "id": "CMD-MUTATION-TVAPP",
+        "command": "bash tools/ci/mutation/tvapp.sh 75afca0 <evidence_dir>",
+        "exit": 3,
+        "result": "GAP ANDROID_MUTATION_COMPATIBILITY_GAP: PIT run exit 1 (task 'pitestDebug' not found in project ':app')",
+        "classification": "tool; no PIT plugin applied in tv-app and no Android PIT fork pin admitted",
+        "evidence": [
+          "mutation-tvapp-wrapper.txt",
+          "mutation-tvapp-result.json",
+          "mutation-tvapp-pitest-run.txt"
+        ]
+      },
+      {
+        "id": "NEGATIVE-MISSING-JACOCO",
+        "command": "python3 tools/ci/coverage/evaluate.py 75afca0 <copy>/jacoco.xml <copy> --profile=tvapp (jacoco.xml renamed)",
+        "exit": 3,
+        "result": "GAP REPORT_INCOMPLETE: coverage XML absent: jacoco.xml"
+      },
+      {
+        "id": "TOOLS-PYTEST",
+        "command": "python3.12 -m pytest -q -p no:cacheprovider tools",
+        "exit": 0,
+        "result": "107 passed (21 new tvapp adapter controls)"
+      },
+      {
+        "id": "REPOSITORY-GATE",
+        "command": "bash tools/ci/gate.sh",
+        "exit": 0,
+        "result": "spec, docs, hygiene, tvapp, backend PASS"
+      }
+    ],
+    "wiring": "Not wired into gate.sh or .github/workflows: neither the SEIT commands table nor the G01 receipt places coverage/mutation in a gate area, and the backend wrappers are likewise invoked only by slice and assurance gate-chains."
+  },
+  "tvapp_gates_pit_admission": {
+    "date": "2026-10-14",
+    "route": "Claude Code / Claude Opus 5.5 / medium",
+    "role": "product_implementer",
+    "outcome": "OWNER_DECISION_REQUIRED (coverage PASS at 70%; PIT admitted and runs offline; CMD-MUTATION-TVAPP GAP, and its 70% bar is unreachable host-side under the current scope)",
+    "owner_decisions": [
+      "DEC-AFC-SD-052 tv-app changed-line coverage threshold 70%, backend 90%",
+      "DEC-AFC-SD-053 admit pl.droidsonroids.pitest under rule #23",
+      "tv-app mutation threshold 70%"
+    ],
+    "candidate": "f50dd5a",
+    "base": "75afca0",
+    "changes": {
+      "coverage_threshold": "tools/ci/coverage/evaluate.py: TVAPP profile threshold 70.0; backend THRESHOLD 90.0 unchanged; verdict JSON records the threshold applied",
+      "pit_plugin": "tv-app/build.gradle.kts buildscript classpath libs.pitest.gradle.plugin, Plugin Portal via exclusiveContent for group pl.droidsonroids.gradle only; libs.versions.toml pitestPlugin 0.2.27, pitest 1.19.5",
+      "pit_apply": "tv-app/app/build.gradle.kts applies pl.droidsonroids.pitest only when -Pandroid.newDsl=false: plugin 0.2.27 reads android.applicationVariants (legacy variant API). Default AGP 9.3.1 build error: \"Could not get unknown property 'applicationVariants' for object of type com.android.build.gradle.internal.dsl.ApplicationExtensionImpl$AgpDecorated.\" With newDsl=false alone: \"Configuration with name 'releaseUnitTestRuntimeClasspath' not found.\", so the wrapper also passes -Pandroid.onlyEnableUnitTestForTheTestedBuildType=false. Normal builds and the gate keep the AGP 9 DSL and never apply the plugin. sourceDirs set to src/main/{java,kotlin} (plugin reads empty java.srcDirs); jvmArgs -Dafc.repoRoot; excludeMockableAndroidJar=true; addJUnitPlatformLauncher=false; StubContractTest excluded from PIT (needs android.jar)",
+      "mutation_wrapper": "tools/ci/mutation/tvapp.sh passes the two AGP flags and archives backend/src/api/openapi.yaml (host fixtures read it) when HEAD has it",
+      "tests": "tv-app DefaultArgumentsTest (ApiClient.kt:61 getPanel() defaults, Dto.kt:114 Profile.from() defaults), StubContractTest (WatchLauncher stub reports AccessUnknown); tools/ci/tests/coverage/test_tvapp_threshold.py (75% PASS at 70, 66.7% FAIL, backend 90 unchanged; red with tvapp threshold 90: 3 failed)"
+    },
+    "commands": [
+      {
+        "id": "CMD-COVERAGE-TVAPP",
+        "command": "JAVA_HOME=$HOME/.local/share/afc-tools/jdk-17.0.20.1+1 ANDROID_HOME=$HOME/.local/share/afc-tools/android-sdk GRADLE_USER_HOME=$HOME/.gradle/afc-p2-a01t AFC_GRADLE_ARGS=\"--offline --no-daemon --max-workers=2\" bash tools/ci/coverage/tvapp.sh 75afca0 <dir>",
+        "exit": 0,
+        "result": "PASS changed-line coverage 70% (threshold 70%); 234/333 changed lines (was 230, 69%)",
+        "evidence": [
+          "coverage-tvapp-70-wrapper.txt",
+          "coverage-tvapp-70-result.json",
+          "coverage-tvapp-70-diffcover.json"
+        ]
+      },
+      {
+        "id": "CMD-MUTATION-TVAPP",
+        "command": "JAVA_HOME=$HOME/.local/share/afc-tools/jdk-17.0.20.1+1 ANDROID_HOME=$HOME/.local/share/afc-tools/android-sdk GRADLE_USER_HOME=$HOME/.gradle/afc-p2-a01t AFC_GRADLE_ARGS=\"--offline --no-daemon --max-workers=2\" bash tools/ci/mutation/tvapp.sh 75afca0 <dir>",
+        "exit": 3,
+        "result": "GAP REPORT_INCOMPLETE: not a complete PIT mutations report. :app:pitestDebug itself ran offline and green (953 mutants, 276 killed overall).",
+        "evidence": [
+          "mutation-tvapp-pit-wrapper.txt",
+          "mutation-tvapp-pit-result.json",
+          "mutation-tvapp-pit-run.txt",
+          "mutation-tvapp-pit-mutations.xml.gz",
+          "mutation-tvapp-pit-analysis.json"
+        ]
+      },
+      {
+        "id": "TOOLS-PYTEST",
+        "command": "PATH=$HOME/.local/share/afc-tools/backend-tests/bin:$PATH python3.12 -m pytest -q -p no:cacheprovider tools",
+        "exit": 0,
+        "result": "110 passed",
+        "evidence": "pytest-tools-pit.txt"
+      },
+      {
+        "id": "REPOSITORY-GATE",
+        "command": "PATH=$HOME/.local/share/afc-tools/backend-tests/bin:$PATH JAVA_HOME=$HOME/.local/share/afc-tools/jdk-17.0.20.1+1 ANDROID_HOME=$HOME/.local/share/afc-tools/android-sdk GRADLE_USER_HOME=$HOME/.gradle/afc-p2-a01t bash tools/ci/gate.sh",
+        "exit": 0,
+        "areas": {
+          "spec": "PASS",
+          "docs": "PASS",
+          "hygiene": "PASS",
+          "tvapp": "PASS",
+          "backend": "PASS"
+        },
+        "evidence": "gate-full-pit.txt"
+      },
+      {
+        "id": "FROZEN-HASHES",
+        "result": "A01T 7/7 MATCH; the 10 G01T test files are byte-identical to caa93d0 (3 of them, test_native_coverage.py, gate_support.py, test_native_mutation.py, already differed from the G01T receipt at caa93d0; not touched here)"
+      }
+    ],
+    "mutation_gap_analysis": {
+      "why_gap": [
+        "PIT 1.19.5 writes <mutations partial=\"true\"> whenever reportCoverage is on (XMLReportFactory passes ReportOptions.shouldReportCoverage(), default true, not settable from the CLI). tvapp_evaluate.py reads partial=true as an incomplete report, and tools/ci/tests/mutation/test_mutation_tvapp_adapter.py::test_partial_or_unparseable_report_is_gap pins that reading. That test file is outside this write set, so the evaluator was not changed.",
+        "AlertNotifier.kt, AppDetector.kt and WatchLauncher.kt (AFC-STUB) yield zero mutants, which the evaluator reports as REPORT_INCOMPLETE.",
+        "Changed lines carry 5 TIMED_OUT mutants (ApiClient retry/backoff paths), which the evaluator reports as UNRESOLVED."
+      ],
+      "score_if_report_were_read": {
+        "all_changed_files": "244 killed / 597 scored = 40.9%; upper bound with every covered mutant killed 49.7% (300 NO_COVERAGE in Compose UI, MainActivity, Android components)",
+        "net_and_shell_only": "227 / 276 = 82.3%"
+      },
+      "decision_needed": "Choose one: (a) score CMD-MUTATION-TVAPP over host-reachable classes (net/ except SessionStore, Shell) and leave the remainder to device evidence; (b) lower the all-changed-lines bar below the ~50% host bound; (c) admit a JVM Android runtime (e.g. Robolectric) for Compose/Android classes. Any of them also needs the evaluator to accept PIT 1.19.5 partial=\"true\" (with its test updated), a disposition for zero-mutant stub files, and a TIMED_OUT policy or a larger timeoutConst."
+    },
+    "scan_table": [
+      {
+        "set": "PIT Android plugin and PIT engine closure (inert resolve, nothing applied)",
+        "count": 18,
+        "artifacts": "gradle-pitest-plugin 0.2.27, semver4j 3.1.0, pitest/pitest-entry/pitest-command-line/pitest-html-report 1.19.5, asm* 9.7.1, commons-lang3 3.14.0, commons-text 1.12.0, jopt-simple 4.9, stringtemplate 3.2.1, antlr 2.7.7; plus mockable-jar deps org.json 20080701 and opengl-api gl1.1-android-2.1_r1 (scanned, NOT admitted)",
+        "integrity": "18/18 published checksum MATCH (plugin jar sha256 6cee215b12cf17ca5aa923bdce51ba458003001bf1deadea0d8efa567d6cb478 also matches its Gradle module metadata)",
+        "static": "bounded strings on the plugin jar: no network, process or credential APIs; default PIT 1.19.5; only declared deps",
+        "trivy": "3 findings: org.json 20080701 CVE-2022-45688 HIGH and CVE-2023-5072 HIGH (not admitted: excludeMockableAndroidJar=true, not in verification-metadata.xml, so strict verification refuses them); commons-lang3 3.14.0 CVE-2025-48924 MEDIUM (admitted; PIT build-host classpath only, not packaged). 0 admitted HIGH/CRITICAL.",
+        "clamav": "ClamAV 1.5.4, 18 files, 0 infected",
+        "verdict": "PASS (no admitted HIGH/CRITICAL)",
+        "evidence": [
+          "inert-resolver-pit-plugin.gradle",
+          "pit-plugin-resolved.tsv",
+          "pit-plugin-integrity.json",
+          "pit-plugin-trivy.json",
+          "pit-plugin-clam.txt"
+        ]
+      },
+      {
+        "set": "verification-metadata.xml delta",
+        "count": 36,
+        "components": 19,
+        "integrity": "36/36 jar/pom/module files (incl. parents apache 30, commons-parent 64, pitest-parent 1.19.5, junit-bom 5.10.0) published sha1 MATCH before entry",
+        "evidence": "pit-metadata-delta.tsv"
+      }
+    ],
+    "installs": [
+      {
+        "tool": "pl.droidsonroids.gradle:gradle-pitest-plugin",
+        "version": "0.2.27",
+        "sha256": "6cee215b12cf17ca5aa923bdce51ba458003001bf1deadea0d8efa567d6cb478",
+        "location": "Gradle module cache $HOME/.gradle/afc-p2-a01t (scratch inert cache for the scan)",
+        "scan": "PASS"
+      },
+      {
+        "tool": "org.pitest:pitest-command-line (+pitest, pitest-entry, pitest-html-report)",
+        "version": "1.19.5",
+        "sha256": "see pit-metadata-delta.tsv",
+        "location": "Gradle module cache $HOME/.gradle/afc-p2-a01t",
+        "scan": "PASS"
+      }
+    ],
+    "findings": [
+      "F-PIT-PARTIAL: tvapp_evaluate.py treats PIT 1.19.5 partial=\"true\" (coverage-reporting flag) as an incomplete report; candidate tool bug for bug-triager, blocked here by the write set (existing test pins it).",
+      "pitestDebug exits 0 when PIT prints usage and writes no report (seen with empty sourceDirs); the wrapper still fails closed because it requires exactly one mutations.xml from a fresh workspace."
+    ]
+  },
+  "tvapp_mutation_sd057_bugfix": {
+    "outcome": "CONTRACT_FAILURE",
+    "receipt": "pit-scope-057/receipt.json",
+    "mutation_verdict": "GAP UNRESOLVED: 4 mutants",
+    "scope_decision": "DEC-AFC-SD-057",
+    "tools_exit": 0,
+    "gate_exit": 0,
+    "blocker": "tv-app test writes needed to resolve four persistent ApiClient timeouts; outside packet authority."
+  }
+}

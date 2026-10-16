@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "currentAttemptObservation": "none",
+  "providers": [
+    {
+      "id": "alpha_stream",
+      "name": "Alpha Stream",
+      "channels_carried": ["ESPN"],
+      "platform_routes": {
+        "fire_os": {
+          "package": "test.alpha.firetv",
+          "launch": {"type": "intent", "value": "test.alpha.firetv.WATCH?event={event}"},
+          "doc_source": "test fixture, not a provider document",
+          "verified_outcome": "searchOpened",
+          "verified_at": "2026-10-14T18:00:00Z",
+          "currentAttemptObservation": "none"
+        },
+        "vega": {
+          "package": "test.alpha.vega",
+          "launch": {"type": "uri", "value": "test-alpha://watch/{event}"},
+          "doc_source": "test fixture, not a provider document",
+          "verified_outcome": "appHomeOpened",
+          "verified_at": "2026-10-14T18:30:00Z",
+          "currentAttemptObservation": "none"
+        }
+      }
+    },
+    {
+      "id": "beta_tv",
+      "name": "Beta TV",
+      "channels_carried": ["ESPN", "CBS"],
+      "platform_routes": {
+        "fire_os": {
+          "package": "test.beta.firetv",
+          "launch": {"type": "intent", "value": "test.beta.firetv.CHANNEL?channel={channel}"},
+          "doc_source": "test fixture, not a provider document",
+          "verified_outcome": "gameOpened",
+          "verified_at": "2026-10-14T19:00:00Z",
+          "currentAttemptObservation": "none"
+        }
+      }
+    },
+    {
+      "id": "gamma_live",
+      "name": "Gamma Live",
+      "channels_carried": ["ESPN"],
+      "platform_routes": {
+        "fire_os": {
+          "package": "test.gamma.firetv",
+          "launch": {"type": "intent", "value": "test.gamma.firetv.HOME"},
+          "doc_source": "test fixture, not a provider document",
+          "currentAttemptObservation": "none"
+        },
+        "vega": {
+          "package": "test.gamma.vega",
+          "launch": {"type": "uri", "value": "test-gamma://channel/{channel}"},
+          "doc_source": "test fixture, not a provider document",
+          "verified_outcome": "appHomeOpened",
+          "verified_at": "2026-10-14T20:00:00Z",
+          "currentAttemptObservation": "none"
+        }
+      }
+    }
+  ]
+}

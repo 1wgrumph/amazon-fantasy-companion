@@ -123,6 +123,8 @@ Columns: ID | lane / role / work class | GitHub milestone, wave | goal and stop 
 | P2-SCR1 | Scribe side lane / Scribe / judgement | M12, W5 | Assemble product feedback, feature requests and sanitized friction log from the observation log for every tool used; stop at PROC-SCRIBE-ASSEMBLY pass. | — | AC-AFC-P2-DX-01, -DX-02 | — | DES-AFC-P2-DX | `docs/developer-feedback/` | PROC-SCRIBE-ASSEMBLY, CMD-GATE-HYGIENE | — | W4 exit | scribe |
 | P2-L05 | tv-app-ui / Light Implementer / light | M13, W5 | Build the release APK at the W5 candidate commit, signed with the development host's Android debug signing configuration (no new credential; README states sideload-only) unless the owner supplies a release keystore (OA-11); record sha256 and the signer certificate SHA-256 (CMD-APK-CERT); run Reverify on that APK for minSdk, package, permissions and services; stop at the receipt (Reverify failure is a typed gap). | 053 | AC-AFC-P2-APK-01, -REV-01 | 4.4, 5 | DES-AFC-P2-REVREC | `docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-L05/` | CMD-APK-BUILD-RELEASE, CMD-APK-SHA256, CMD-REVERIFY-APK, CMD-APK-CERT | — | P2-R5 merged | light |
 | P2-R5 | spec-and-docs / Light Implementer / light | M13, W5 | Prepare release v1.0.0 via release-process: move [Unreleased] under 1.0.0 and bump versionName/versionCode; its merge commit is the W5 candidate; after P2-L05, put the APK sha256 in the draft release notes (no further commit); tag v1.0.0 names the candidate commit at publication; stop at draft; publish only on OA-8. | — | AC-AFC-P2-REL-02 | — | DES-AFC-P2-REVREC | `CHANGELOG.md`, `tv-app/app/build.gradle.kts` | CMD-RELEASE-PREP, CMD-CHANGELOG-CHECK | tv-app-gradle, main-landing (held from branch cut until its merge; no other pull request merges in between) | P2-D03, P2-D04, P2-D05, P2-SCR1 merged; P2-R4 | light, release-process |
+| P2-V01T | tv-app-ui / Test Implementer / judgement | M14, Wave V (M14 side lane) | Red Jest tests under `vega-app/`, derived one-to-one from the landed A01T..A05T behaviors (ApiClient envelope, timeouts and retry rules; link states; every profile control and the detector report; alert polling, queue, presentation and text rules; Watch outcome rules; panel rows, labels, focus, text floor, mode and changed-row updates) plus token-store and no-logging cases; parity table A0xT to V01T; stop at CMD-RED-VEGA, harness and empty scaffolding only, hashes frozen. | 002, 003, 005, 009, 010, 015..023, 027, 028, 030..048, 057, 061..063, 066 | AC-AFC-P2-VEGA-01, -VEGA-04, -DX-01, -LAND-01, -PATH-01, -REL-01, -REV-01; RISK-AFC-P2-10 | 4.1.10, 4.2.3, 4.4, 6 | DES-AFC-P2-VEGA, CONTRACT-AFC-P2-API, CONTRACT-AFC-P2-ENVELOPE | `vega-app/__tests__/`, `vega-app/package.json`, `vega-app/package-lock.json`, `vega-app/jest.config.js`, `vega-app/babel.config.js`, `vega-app/tsconfig.json`, `vega-app/manifest.toml`, `vega-app/.gitignore`, `vega-app/src/`, `tools/ci/tests/test_gate_vegaapp.py`, `docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-V01T/` | CMD-RED-VEGA, PROC-VEGA-PREPARE, PROC-VEGA-PARITY, PROC-GATE-TOOL-QUALIFY | vega-app-config | P2-A01..P2-A05 merged | implementer, write-tests, test-engineering, supply-chain |
+| P2-V01 | tv-app-ui / Product Implementer / judgement | M14, Wave V (M14 side lane) | Complete the `vega-app/` harness that P2-V01T created, taking remaining template files (index.js, metro.config.js, app.json, assets/) from the scanned template of the pinned SDK without changing frozen test files; port Link, Profile/Settings with detection, Alerts, Watch and Lineup Panel against the unchanged API contract; tokenStore; gate area `vegaapp` and CI job; build the x86_64 `.vpkg`, run it on the VVD against aws-afc-dev, visual review of every state under `evidence/visual/P2-V01/`, per-feature verdict table; optional Vega OS stick after OA-12; stop when green, reviewed and verdicts recorded, never touching tv-app/, backend/ or the APK path. | as P2-V01T | AC-AFC-P2-VEGA-01..06, -SUPPLY-01, -VIS-01, -DX-01, -LAND-01, -PATH-01, -REL-01, -REV-01; RISK-AFC-P2-10, -14, -15 | 4.1.10, 4.2.3, 4.4, 6 | DES-AFC-P2-VEGA, DES-AFC-P2-VISUAL, CONTRACT-AFC-P2-API, CONTRACT-AFC-P2-ENVELOPE, CONTRACT-AFC-P2-GATE-AREAS | `vega-app/`, `tools/ci/gate.sh`, `tools/ci/tests/test_gate_vegaapp.py`, `.github/workflows/ci.yml`, `docs/vnv/vega-app/AGENTS.md`, `docs/vnv/AGENTS.md`, `THIRD_PARTY_NOTICES.md`, `evidence/visual/P2-V01/`, `docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-V01/` | CMD-GATE-VEGAAPP, CMD-VEGA-UNIT, CMD-VEGA-BUILD, CMD-VVD-START, CMD-VVD-INSTALL, CMD-VVD-INPUT, CMD-VVD-SCREENCAP, PROC-VISUAL-REVIEW, PROC-VEGA-FEATURE-VERDICT, PROC-VEGA-PARITY, CMD-VEGA-DEVICE-INSTALL, CMD-REVERIFY-VPKG, CMD-SUPPLY-SCAN, PROC-VEGA-PREPARE, PROC-GATE-TOOL-QUALIFY, CMD-COVERAGE-VEGAAPP, CMD-MUTATION-VEGAAPP, CMD-TREE-EQUAL, CMD-CONTRACT-FROZEN | vega-virtual-device, vega-app-config, aws-afc-dev (API use), vega-tv-stick (conditional) | P2-V01T; P2-A01..P2-A05 merged; P2-L03 | implementer, write-tests, visual-review, supply-chain |
 
 ## Dependencies (arrows)
 
@@ -211,6 +213,9 @@ Each arrow `A --> B` means B waits for A; the condition column narrows what B wa
 | `P2-B01 --> P2-X05` | PR 1 landing only (IE-P2-F02) |
 | `P2-B01 --> P2-A01` | landing (ApiClient builds against openapi.yaml) |
 | `P2-X04 --> P2-A01` | on-device review step only (stick priority, IE-P2-F07) |
+| `P2-A01..P2-A05 --> P2-V01T` | Merged on main; V01T derives its Vega tests from the landed T-pair test IDs (PROC-VEGA-PARITY) |
+| `P2-V01T --> P2-V01` | Red receipt with frozen test hashes (CMD-RED-VEGA); a missing install, import or collection is a preparation gap, not valid red |
+| `P2-L03 --> P2-V01` | aws-afc-dev redeployed at the Wave 3 backend head; VVD system runs use that ApiUrl; no backend change by V01 |
 
 Release slices P2-R1..R4 also wait for every other slice of their technical wave (Wave 1..4, merged); this release prerequisite derives from the wave column, never from the 13 GitHub milestone groups. P2-X05 meets its Wave 1 obligation to P2-R1 through the PR 1 checkpoint CP-X05-HIST (arrow above), not through closure of its M04 issue. P2-X11 waits for W3 exit and OD-AFC-03 = yes. The P2-X06 arrow carries only the deployed lineup-source configuration: P2-B03T/B03 build both sources from recorded responses, start at P2-B01 and land when green; P2-L03 applies the P2-X06 verdict as deploy configuration. The Yahoo path of P2-X06 runs through the deployed role (P2-B01 auth and P2-B03 client deployed by P2-L02 or a redeploy); the agent never reads the SSM secret.
 
@@ -242,3 +247,37 @@ verified red-receipt completion in the shared pair worktree, never a separate
 red-only PR merge. Existing product-to-product dependencies still require
 landing. The Plan Integrator consumes exact command IDs/costs from the final
 SEIT and Integration Engineer delta. No review/repair budget is reset.
+
+
+## Vega-primary conditional projection (2026-10-14)
+
+Selected 2026-10-14 by DEC-AFC-SD-049: Vega OS primary, Fire OS secondary.
+The projection below is the active plan. A01–A05/T are not inactive: they
+keep their original rows and edges as the Fire OS secondary target, and no
+primary slice, integration step or release checkpoint depends on them.
+Critical path: X01 → V01T → X04 → X02 → X03 → X07 → L03 → V01 → X09 → X10 →
+R4 → D04 → R5 → L05 → X12. Milestone stages (F-VP-02): 1 readiness M01/M02;
+2 start M14 (V01T, then V01); 3 primary prerequisites inside M03–M09, with
+A0x/T as Fire OS secondary work in M03, M06, M08 and M09; 4 close M14, then
+R1/R2 close M03/M06; 5 M10–M13. Edges and slice IDs are unchanged. X03 and
+B06 bind to `platform_routes.vega` and `platform_routes.fire_os` (F-VP-01). F1 is closed by DEC-AFC-SD-050: D04 closes
+RISK-AFC-P2-14 with V01 supporting.
+
+Existing rows/edges remain the Fire OS/side-lane baseline. The owner-requested
+primary alternative is specified in each affected implementation slice's
+`vega_primary_contingency`, with the same house fields and inherited routes.
+No additional slice IDs. See the technical-plan disposition and dated
+critical path, and evidence/P2-VEGA-PRIMARY-plan/effective-graph.json.
+
+On activation only: X01 → V01T → V01 (start); X01 → X04 → X02 → X03 → X07;
+B01 → X03; X03 → B06T → B06; backend chain → L03; X02/X03/X04/X07/L03 →
+V01 (close); V01/L03 → X09 → X10; R5 → L05 → X12. A01–A05/T are inactive
+primary work, preserved as source. R1–R5 dependencies are projected with
+A0x edges replaced by V01; checkpoint dates move as the technical plan says.
+No gate treats an inactive slice as passed. X04's timed fullScreen fallback
+is preserved, not a weakened acceptance criterion.
+
+All reviewer/repair counts and frozen model/harness routes are inherited.
+OCR delegation remains required; Reverify applies to .vpkg package claims
+and unavailability is a typed gap. New proposal does not reset prior F1 or
+spent planning review budgets.

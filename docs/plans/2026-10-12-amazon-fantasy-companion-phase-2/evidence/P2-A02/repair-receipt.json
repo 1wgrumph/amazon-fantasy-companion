@@ -1,0 +1,62 @@
+{
+ "slice": "P2-A02",
+ "round": "repair-1 (parent-accepted REPAIR_REQUIRED)",
+ "role": "Product Implementer",
+ "route": "Muse Code / muse-wonder-full-1.0 / high",
+ "base_candidate": "2ca71d6aa8f6e52350d7f5cd1e5f99bbeb03494b",
+ "findings": ["A02-R-F01", "A02-R-F02", "A02-R-F03"],
+ "commands": [
+  {
+   "id": "REPRODUCER-F01",
+   "command": "python3 docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A02/review/reproduce-ui-contract.py",
+   "exit_code": 0,
+   "log": "repair-reproducers.txt"
+  },
+  {
+   "id": "REPRODUCER-F02",
+   "command": "java -cp \"<review/classes>:<runtime-classpath.txt contents>\" ReviewBehaviorReproducer detection tv-app/app/src/main/java/com/afc/companion/profile/ProfileSettingsScreen.kt",
+   "exit_code": 0,
+   "log": "repair-reproducers.txt"
+  },
+  {
+   "id": "REPRODUCER-F03",
+   "command": "java -cp \"<review/classes>:<runtime-classpath.txt contents>\" ReviewBehaviorReproducer save-race",
+   "exit_code": 0,
+   "log": "repair-reproducers.txt",
+   "observed": "excitement stays Mild; server PUT count=2; saved excitement=Mild"
+  },
+  {
+   "id": "CMD-TESTS",
+   "command": "./tv-app/gradlew -p tv-app --no-daemon --max-workers=2 testDebugUnitTest --tests 'com.afc.companion.profile.*' --tests 'com.afc.companion.detect.*'",
+   "exit_code": 0,
+   "counts": {"tests": 31, "passed": 31, "failed": 0, "note": "26 frozen A02T + 5 new ProfileRepairTest"}
+  },
+  {
+   "id": "CMD-GATE",
+   "command": "bash tools/ci/gate.sh",
+   "exit_code": 0,
+   "log": "repair-gate.txt",
+   "log_sha256": "aff853b83f91dbfa509ceff2e7194388151f77fb7697d0290f9be9fa0dc16089",
+   "log_note": "home directory path prefix replaced with $HOME for the repository hygiene rule, matching gate-full.txt",
+   "areas": {"spec": "PASS", "docs": "PASS", "hygiene": "PASS", "tvapp": "PASS (115 unit tests)", "backend": "PASS (380 passed)"}
+  }
+ ],
+ "reproducers_sha256": "d95bbfdbf78fc56322f470549546a7e3cc28e1daa4d0ecaef3bb3d13ab7dc84c",
+ "frozen_tests_unchanged": {
+  "tv-app/app/src/test/java/com/afc/companion/detect/AppDetectorTest.kt": "26d5f81eab35fb790db8e08cdf89ebef83a444f667bd354f5fb22bed0e1cb863",
+  "tv-app/app/src/test/java/com/afc/companion/profile/ProfileCodecTest.kt": "711966a5993e2a9fc3b551d7cb3b10983f35252e72c9ee78f3504ea17c994310",
+  "tv-app/app/src/test/java/com/afc/companion/profile/ProfileControlsTest.kt": "92c3d36c6e5faaffd0f75fe91e93a4189e4cf39ee5bd148c5b0a272bf5ba712d",
+  "tv-app/app/src/test/java/com/afc/companion/profile/ProfileFixtures.kt": "dced25d6665a4e7ca69b63de7bf4e3b102b17b1fbc87b66bdb9f5e4627d58b26",
+  "tv-app/app/src/test/java/com/afc/companion/profile/ProfilePersistenceTest.kt": "415de83facebf2022b33e396f4172f0d6846720abe6e1e52f8109f28df0bfad9"
+ },
+ "changed_paths": [
+  "tv-app/app/src/main/java/com/afc/companion/profile/ProfileSettingsScreen.kt",
+  "tv-app/app/src/main/java/com/afc/companion/profile/ProfileEdits.kt",
+  "tv-app/app/src/test/java/com/afc/companion/profile/ProfileRepairTest.kt",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A02/repair-notes.md",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A02/repair-receipt.json",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A02/repair-reproducers.txt",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-A02/repair-gate.txt"
+ ],
+ "typed_gaps": ["DEVICE_INSTALL_PENDING", "VISUAL_EMULATOR_UNAVAILABLE", "X07_VERDICT_PENDING", "REVERIFY_CAPABILITY_GAP"]
+}

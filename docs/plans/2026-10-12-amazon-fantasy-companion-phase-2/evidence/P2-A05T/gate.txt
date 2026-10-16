@@ -1,0 +1,620 @@
+Installed 1 package in 4ms
+Installed 1 package in 4ms
+Installed 1 package in 2ms
+gate: spec: PASS checks completed
+gate: docs: PASS checks completed
+.github/workflows/ci.yml: PASS
+...............fatal: not a git repository (or any of the parent directories): .git
+........fatal: not a git repository (or any of the parent directories): .git
+...........................................
+----------------------------------------------------------------------
+Ran 66 tests in 101.631s
+
+OK
+mutation adapter exit=3: ['GAP REPORT_INCOMPLETE: mutmut stats absent']
+mutation adapter exit=0: ['PASS mutation score 100.00% (threshold 70%)']
+coverage adapter exit=0: ['PASS changed-line coverage 100% (threshold 90%)']
+coverage adapter exit=3: ['GAP REPORT_INCOMPLETE: unmapped changed files: backend/src/control.py']
+gate: hygiene: PASS checks completed
+Starting a Gradle Daemon (subsequent builds will be faster)
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preDebugBuild UP-TO-DATE
+> Task :app:generateDebugBuildConfig UP-TO-DATE
+> Task :app:generateDebugResources UP-TO-DATE
+> Task :app:packageDebugResources UP-TO-DATE
+> Task :app:processDebugNavigationResources UP-TO-DATE
+> Task :app:parseDebugLocalResources UP-TO-DATE
+> Task :app:generateDebugRFile UP-TO-DATE
+> Task :app:compileDebugKotlin UP-TO-DATE
+> Task :app:javaPreCompileDebug UP-TO-DATE
+> Task :app:compileDebugJavaWithJavac UP-TO-DATE
+> Task :app:checkDebugAarMetadata UP-TO-DATE
+> Task :app:mapDebugSourceSetPaths UP-TO-DATE
+> Task :app:compileDebugNavigationResources UP-TO-DATE
+> Task :app:mergeDebugResources UP-TO-DATE
+> Task :app:createDebugCompatibleScreenManifests UP-TO-DATE
+> Task :app:extractDeepLinksDebug UP-TO-DATE
+> Task :app:processDebugMainManifest UP-TO-DATE
+> Task :app:processDebugManifest UP-TO-DATE
+> Task :app:processDebugManifestForPackage UP-TO-DATE
+> Task :app:processDebugResources UP-TO-DATE
+> Task :app:bundleDebugClassesToRuntimeJar UP-TO-DATE
+> Task :app:bundleDebugClassesToCompileJar UP-TO-DATE
+> Task :app:preDebugUnitTestBuild UP-TO-DATE
+> Task :app:compileDebugUnitTestKotlin UP-TO-DATE
+> Task :app:javaPreCompileDebugUnitTest UP-TO-DATE
+> Task :app:compileDebugUnitTestJavaWithJavac NO-SOURCE
+> Task :app:processDebugJavaRes UP-TO-DATE
+> Task :app:processDebugUnitTestJavaRes UP-TO-DATE
+
+> Task :app:testDebugUnitTest
+
+PanelControllerTest > firstSnapshotReportsEveryRow FAILED
+    java.lang.AssertionError: Missing behavior: a new panel fetches immediately
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at com.afc.companion.panel.PanelControllerTest.firstSnapshotReportsEveryRow(PanelControllerTest.kt:151)
+
+PanelControllerTest > onlyChangedRowsAreReported FAILED
+    java.lang.AssertionError: Missing behavior: a visible panel fetches
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at com.afc.companion.panel.PanelControllerTest.loaded(PanelControllerTest.kt:34)
+        at com.afc.companion.panel.PanelControllerTest.loaded$default(PanelControllerTest.kt:33)
+        at com.afc.companion.panel.PanelControllerTest.onlyChangedRowsAreReported(PanelControllerTest.kt:141)
+
+PanelControllerTest > hiddenPanelLeavesNavigationKeysToTheShell FAILED
+    java.lang.AssertionError: Missing behavior: a visible panel fetches
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at com.afc.companion.panel.PanelControllerTest.loaded(PanelControllerTest.kt:34)
+        at com.afc.companion.panel.PanelControllerTest.loaded$default(PanelControllerTest.kt:33)
+        at com.afc.companion.panel.PanelControllerTest.hiddenPanelLeavesNavigationKeysToTheShell(PanelControllerTest.kt:110)
+
+PanelControllerTest > identicalOrOlderRevisionChangesNothing FAILED
+    java.lang.AssertionError: Missing behavior: a visible panel fetches
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at com.afc.companion.panel.PanelControllerTest.loaded(PanelControllerTest.kt:34)
+        at com.afc.companion.panel.PanelControllerTest.loaded$default(PanelControllerTest.kt:33)
+        at com.afc.companion.panel.PanelControllerTest.identicalOrOlderRevisionChangesNothing(PanelControllerTest.kt:166)
+
+PanelControllerTest > everyElementIsFocusableAndReachableByDpad FAILED
+    java.lang.AssertionError: Missing behavior: a visible panel fetches
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at com.afc.companion.panel.PanelControllerTest.loaded(PanelControllerTest.kt:34)
+        at com.afc.companion.panel.PanelControllerTest.loaded$default(PanelControllerTest.kt:33)
+        at com.afc.companion.panel.PanelControllerTest.everyElementIsFocusableAndReachableByDpad(PanelControllerTest.kt:85)
+
+PanelControllerTest > burstOfUpdatesHoldsOneSnapshotAndReportsOnlyTheChangedRow FAILED
+    java.lang.AssertionError: Missing behavior: a visible panel fetches
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at com.afc.companion.panel.PanelControllerTest.loaded(PanelControllerTest.kt:34)
+        at com.afc.companion.panel.PanelControllerTest.loaded$default(PanelControllerTest.kt:33)
+        at com.afc.companion.panel.PanelControllerTest.burstOfUpdatesHoldsOneSnapshotAndReportsOnlyTheChangedRow(PanelControllerTest.kt:173)
+
+PanelControllerTest > lateResponseForTheOldTeamIsDiscarded FAILED
+    java.lang.AssertionError: Missing behavior: a visible panel fetches
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at com.afc.companion.panel.PanelControllerTest.loaded(PanelControllerTest.kt:34)
+        at com.afc.companion.panel.PanelControllerTest.loaded$default(PanelControllerTest.kt:33)
+        at com.afc.companion.panel.PanelControllerTest.lateResponseForTheOldTeamIsDiscarded(PanelControllerTest.kt:75)
+
+PanelControllerTest > refreshesOnShowAndEveryThirtySecondsWhileVisible FAILED
+    java.lang.AssertionError: Missing behavior: a visible panel fetches
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at com.afc.companion.panel.PanelControllerTest.loaded(PanelControllerTest.kt:34)
+        at com.afc.companion.panel.PanelControllerTest.loaded$default(PanelControllerTest.kt:33)
+        at com.afc.companion.panel.PanelControllerTest.refreshesOnShowAndEveryThirtySecondsWhileVisible(PanelControllerTest.kt:117)
+
+PanelControllerTest > starterChangeReportsAddedAndRemovedRowsOnly FAILED
+    java.lang.AssertionError: Missing behavior: a visible panel fetches
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at com.afc.companion.panel.PanelControllerTest.loaded(PanelControllerTest.kt:34)
+        at com.afc.companion.panel.PanelControllerTest.loaded$default(PanelControllerTest.kt:33)
+        at com.afc.companion.panel.PanelControllerTest.starterChangeReportsAddedAndRemovedRowsOnly(PanelControllerTest.kt:158)
+
+PanelControllerTest > remoteSwitchesTeamLeagueAndCyclesBack FAILED
+    java.lang.AssertionError: Missing behavior: a visible panel fetches
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at com.afc.companion.panel.PanelControllerTest.loaded(PanelControllerTest.kt:34)
+        at com.afc.companion.panel.PanelControllerTest.loaded$default(PanelControllerTest.kt:33)
+        at com.afc.companion.panel.PanelControllerTest.remoteSwitchesTeamLeagueAndCyclesBack(PanelControllerTest.kt:65)
+
+PanelControllerTest > hiddenPanelSuspendsUpdatesAndRefreshesOnShow FAILED
+    java.lang.AssertionError: Missing behavior: a visible panel fetches
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at com.afc.companion.panel.PanelControllerTest.loaded(PanelControllerTest.kt:34)
+        at com.afc.companion.panel.PanelControllerTest.loaded$default(PanelControllerTest.kt:33)
+        at com.afc.companion.panel.PanelControllerTest.hiddenPanelSuspendsUpdatesAndRefreshesOnShow(PanelControllerTest.kt:129)
+
+PanelControllerTest > focusMovesOffARemovedRow FAILED
+    java.lang.AssertionError: Missing behavior: a visible panel fetches
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at com.afc.companion.panel.PanelControllerTest.loaded(PanelControllerTest.kt:34)
+        at com.afc.companion.panel.PanelControllerTest.loaded$default(PanelControllerTest.kt:33)
+        at com.afc.companion.panel.PanelControllerTest.focusMovesOffARemovedRow(PanelControllerTest.kt:101)
+
+PanelControllerTest > remoteTogglesVisibility FAILED
+    java.lang.AssertionError: Missing behavior: ToggleVisibility is bound to a remote key
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at org.junit.Assert.assertNotNull(Assert.java:713)
+        at com.afc.companion.panel.PanelControllerTest.keyFor(PanelControllerTest.kt:29)
+        at com.afc.companion.panel.PanelControllerTest.remoteTogglesVisibility(PanelControllerTest.kt:57)
+
+PanelControllerTest > everyPanelOperationIsBoundToAFireTvRemoteKey FAILED
+    java.lang.AssertionError: Missing behavior: ToggleVisibility is bound to a remote key
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at org.junit.Assert.assertNotNull(Assert.java:713)
+        at com.afc.companion.panel.PanelControllerTest.keyFor(PanelControllerTest.kt:29)
+        at com.afc.companion.panel.PanelControllerTest.everyPanelOperationIsBoundToAFireTvRemoteKey(PanelControllerTest.kt:50)
+
+PanelControllerTest > initialStateReflectsTheProfileSettings FAILED
+    java.lang.AssertionError: visible per panel prefs
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at com.afc.companion.panel.PanelControllerTest.initialStateReflectsTheProfileSettings(PanelControllerTest.kt:42)
+
+PanelDecodeTest > eachScoringBasisDecodes FAILED
+    java.lang.AssertionError: yahooLeague expected:<YahooLeague> but was:<null>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at com.afc.companion.panel.PanelDecodeTest.eachScoringBasisDecodes(PanelDecodeTest.kt:38)
+
+PanelDecodeTest > panelFeedDecodesOverTheApiClientForTheSelectedTeamLeague FAILED
+    java.lang.AssertionError: Missing behavior: the fetched PanelState decodes
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at org.junit.Assert.assertNotNull(Assert.java:713)
+        at com.afc.companion.panel.PanelDecodeTest$panelFeedDecodesOverTheApiClientForTheSelectedTeamLeague$1.invokeSuspend(PanelDecodeTest.kt:91)
+        at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+        at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+        at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+        at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+        at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+        at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+        at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+        at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source)
+        at com.afc.companion.panel.PanelDecodeTest.panelFeedDecodesOverTheApiClientForTheSelectedTeamLeague(PanelDecodeTest.kt:85)
+
+PanelDecodeTest > nullPointsKeepTheirReasonAndAreNotZero FAILED
+    java.lang.AssertionError: Missing behavior: PanelState data decodes
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at org.junit.Assert.assertNotNull(Assert.java:713)
+        at com.afc.companion.panel.PanelDecodeTest.decoded(PanelDecodeTest.kt:16)
+        at com.afc.companion.panel.PanelDecodeTest.decoded$default(PanelDecodeTest.kt:14)
+        at com.afc.companion.panel.PanelDecodeTest.nullPointsKeepTheirReasonAndAreNotZero(PanelDecodeTest.kt:42)
+
+PanelDecodeTest > malformedRowsRejectTheState FAILED
+    java.lang.AssertionError: Missing behavior: a well-formed state decodes
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at org.junit.Assert.assertNotNull(Assert.java:713)
+        at com.afc.companion.panel.PanelDecodeTest.malformedRowsRejectTheState(PanelDecodeTest.kt:69)
+
+PanelDecodeTest > rowCountIsBoundedByTheDeclaredLimit FAILED
+    java.lang.AssertionError: PANEL_ROWS_MAX declares room for a full lineup and stays small: 0
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at com.afc.companion.panel.PanelDecodeTest.rowCountIsBoundedByTheDeclaredLimit(PanelDecodeTest.kt:78)
+
+PanelDecodeTest > missingOrUnknownBasisRejectsTheWholeState FAILED
+    java.lang.AssertionError: Missing behavior: a known basis decodes
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at org.junit.Assert.assertNotNull(Assert.java:713)
+        at com.afc.companion.panel.PanelDecodeTest.missingOrUnknownBasisRejectsTheWholeState(PanelDecodeTest.kt:65)
+
+PanelDecodeTest > malformedValueBecomesUnavailableNotZero FAILED
+    java.lang.AssertionError: Missing behavior: PanelState data decodes
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at org.junit.Assert.assertNotNull(Assert.java:713)
+        at com.afc.companion.panel.PanelDecodeTest.decoded(PanelDecodeTest.kt:16)
+        at com.afc.companion.panel.PanelDecodeTest.malformedValueBecomesUnavailableNotZero(PanelDecodeTest.kt:53)
+
+PanelDecodeTest > rowsTotalProgressAndBasisDecode FAILED
+    java.lang.AssertionError: Missing behavior: PanelState data decodes
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at org.junit.Assert.assertNotNull(Assert.java:713)
+        at com.afc.companion.panel.PanelDecodeTest.decoded(PanelDecodeTest.kt:16)
+        at com.afc.companion.panel.PanelDecodeTest.decoded$default(PanelDecodeTest.kt:14)
+        at com.afc.companion.panel.PanelDecodeTest.rowsTotalProgressAndBasisDecode(PanelDecodeTest.kt:21)
+
+PanelModeTest > modeBPutsThePanelRightAndFitsTheVideoLeftAtItsAspect FAILED
+    java.lang.AssertionError: Missing behavior: modeB reserves a video area
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at org.junit.Assert.assertNotNull(Assert.java:713)
+        at com.afc.companion.panel.PanelModeTest.modeBPutsThePanelRightAndFitsTheVideoLeftAtItsAspect(PanelModeTest.kt:28)
+
+PanelModeTest > onlyAModeBVerdictSelectsModeB FAILED
+    java.lang.AssertionError: expected:<ModeB> but was:<FullScreen>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at org.junit.Assert.assertEquals(Assert.java:146)
+        at com.afc.companion.panel.PanelModeTest.onlyAModeBVerdictSelectsModeB(PanelModeTest.kt:13)
+
+PanelModeTest > fullScreenHostsThePanelAloneWithNoStandInVideo FAILED
+    java.lang.AssertionError: expected:<Box(left=0, top=0, width=1920, height=1080)> but was:<Box(left=0, top=0, width=0, height=0)>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at org.junit.Assert.assertEquals(Assert.java:146)
+        at com.afc.companion.panel.PanelModeTest.fullScreenHostsThePanelAloneWithNoStandInVideo(PanelModeTest.kt:21)
+
+PanelTextTest > unknownGameStatusIsLabeledUnavailable FAILED
+    org.junit.ComparisonFailure: expected:<[Q2 08:14]> but was:<[]>
+        at app//org.junit.Assert.assertEquals(Assert.java:117)
+        at app//org.junit.Assert.assertEquals(Assert.java:146)
+        at app//com.afc.companion.panel.PanelTextTest.unknownGameStatusIsLabeledUnavailable(PanelTextTest.kt:50)
+
+PanelTextTest > valueWithoutTimestampIsNeverShownAsFresh FAILED
+    java.lang.AssertionError: an undated value is labeled: ''
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at com.afc.companion.panel.PanelTextTest.valueWithoutTimestampIsNeverShownAsFresh(PanelTextTest.kt:46)
+
+PanelTextTest > freshValueShowsTheNumberWithoutLabels FAILED
+    java.lang.AssertionError: fresh value shows its points: ''
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at com.afc.companion.panel.PanelTextTest.freshValueShowsTheNumberWithoutLabels(PanelTextTest.kt:18)
+
+PanelTextTest > realZeroIsShownAsZero FAILED
+    java.lang.AssertionError: a real zero is a value: ''
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at com.afc.companion.panel.PanelTextTest.realZeroIsShownAsZero(PanelTextTest.kt:40)
+
+PanelTextTest > valueAtSixtySecondsIsLabeledStaleWithItsAge FAILED
+    java.lang.AssertionError: stale_after is 60 s: ''
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at com.afc.companion.panel.PanelTextTest.valueAtSixtySecondsIsLabeledStaleWithItsAge(PanelTextTest.kt:25)
+
+PanelTextTest > eachScoringBasisHasItsLabel FAILED
+    org.junit.ComparisonFailure: expected:<[Yahoo league scoring]> but was:<[]>
+        at app//org.junit.Assert.assertEquals(Assert.java:117)
+        at app//org.junit.Assert.assertEquals(Assert.java:146)
+        at app//com.afc.companion.panel.PanelTextTest.eachScoringBasisHasItsLabel(PanelTextTest.kt:55)
+
+PanelTextTest > textSizesMeetTheCouchFloor FAILED
+    java.lang.AssertionError: body text >= 24 px at 1080p: 0.0 sp
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at com.afc.companion.panel.PanelTextTest.textSizesMeetTheCouchFloor(PanelTextTest.kt:62)
+
+PanelTextTest > unknownValueIsLabeledUnavailableAndNeverZero FAILED
+    java.lang.AssertionError: null with reason is labeled: ''
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at com.afc.companion.panel.PanelTextTest.unknownValueIsLabeledUnavailableAndNeverZero(PanelTextTest.kt:34)
+
+ApiNoRetryTest > [POST /v1/link 503] > returnsPermanentOrNonIdempotentErrorWithoutRetry[POST /v1/link 503] PASSED
+
+ApiNoRetryTest > [POST /v1/link/confirm 503] > returnsPermanentOrNonIdempotentErrorWithoutRetry[POST /v1/link/confirm 503] PASSED
+
+ApiNoRetryTest > [POST /v1/routing-outcome 503] > returnsPermanentOrNonIdempotentErrorWithoutRetry[POST /v1/routing-outcome 503] PASSED
+
+ApiNoRetryTest > [POST /v1/installed-apps 503] > returnsPermanentOrNonIdempotentErrorWithoutRetry[POST /v1/installed-apps 503] PASSED
+
+ApiNoRetryTest > [GET /v1/link?handle=fixture 400] > returnsPermanentOrNonIdempotentErrorWithoutRetry[GET /v1/link?handle=fixture 400] PASSED
+
+ApiNoRetryTest > [GET /v1/profile 401] > returnsPermanentOrNonIdempotentErrorWithoutRetry[GET /v1/profile 401] PASSED
+
+ApiNoRetryTest > [GET /v1/profile 403] > returnsPermanentOrNonIdempotentErrorWithoutRetry[GET /v1/profile 403] PASSED
+
+ApiNoRetryTest > [PUT /v1/profile 409] > returnsPermanentOrNonIdempotentErrorWithoutRetry[PUT /v1/profile 409] PASSED
+
+ApiNoRetryTest > [POST /v1/link/confirm 410] > returnsPermanentOrNonIdempotentErrorWithoutRetry[POST /v1/link/confirm 410] PASSED
+
+ApiOperationsTest > [POST /v1/link] > sendsFrozenOperationAndDecodesJson[POST /v1/link] PASSED
+
+ApiOperationsTest > [GET /v1/link?handle=fixture] > sendsFrozenOperationAndDecodesJson[GET /v1/link?handle=fixture] PASSED
+
+ApiOperationsTest > [POST /v1/link/confirm] > sendsFrozenOperationAndDecodesJson[POST /v1/link/confirm] PASSED
+
+ApiOperationsTest > [GET /v1/profile] > sendsFrozenOperationAndDecodesJson[GET /v1/profile] PASSED
+
+ApiOperationsTest > [PUT /v1/profile] > sendsFrozenOperationAndDecodesJson[PUT /v1/profile] PASSED
+
+ApiOperationsTest > [GET /v1/alerts?cursor=fixture] > sendsFrozenOperationAndDecodesJson[GET /v1/alerts?cursor=fixture] PASSED
+
+ApiOperationsTest > [GET /v1/panel] > sendsFrozenOperationAndDecodesJson[GET /v1/panel] PASSED
+
+ApiOperationsTest > [GET /v1/providers] > sendsFrozenOperationAndDecodesJson[GET /v1/providers] PASSED
+
+ApiOperationsTest > [POST /v1/routing-outcome] > sendsFrozenOperationAndDecodesJson[POST /v1/routing-outcome] PASSED
+
+ApiOperationsTest > [POST /v1/installed-apps] > sendsFrozenOperationAndDecodesJson[POST /v1/installed-apps] PASSED
+
+ApiPolicyTest > setsLongPollReadTimeoutAboveServerWait PASSED
+
+ApiPolicyTest > rejectsMalformedJsonResponse PASSED
+
+ApiPolicyTest > rejectsRequestOverContract64KiBBeforeSending PASSED
+
+ApiPolicyTest > retriesPutWithTheSameRevisionAndBody PASSED
+
+ApiPolicyTest > defaultBackoffWaitsAtLeastThePrescribedOneSecond PASSED
+
+ApiPolicyTest > setsNormalTimeoutsOnRealConnection PASSED
+
+ApiPolicyTest > rejectsResponseOverContract64KiB PASSED
+
+ApiPolicyTest > opensAndReadsNetworkOffCallingUiThread PASSED
+
+ApiRetryTest > [transient 429] > retriesIdempotentGetWithBoundedExponentialBackoff[transient 429] PASSED
+
+ApiRetryTest > [transient 429] > stopsAfterThreeRetriesAndKeepsStructuredError[transient 429] PASSED
+
+ApiRetryTest > [transient 503] > retriesIdempotentGetWithBoundedExponentialBackoff[transient 503] PASSED
+
+ApiRetryTest > [transient 503] > stopsAfterThreeRetriesAndKeepsStructuredError[transient 503] PASSED
+
+ClientBoundaryTest > shellStartsAtLinkUntilASessionExistsAndRequiresAConfiguredBackend PASSED
+
+ClientBoundaryTest > linkFlowShowsCodeKeepsPollingAndStoresTokenOnce PASSED
+
+ClientBoundaryTest > linkFlowStopsOnExpiryErrorAndTokenlessLink PASSED
+
+ClientBoundaryTest > rejectsArrayResponseAndContractMismatch PASSED
+
+ClientBoundaryTest > linkScreenRejectsInvalidResponses PASSED
+
+ClientBoundaryTest > acceptsResponseAtExactly64KiBAndEmptyBodyAsNull PASSED
+
+ClientBoundaryTest > rejectsUnsupportedMethodOrPathBeforeSending PASSED
+
+ClientBoundaryTest > validatesOutgoingDtos PASSED
+
+ClientBoundaryTest > acceptsHttpsAndLoopbackOnly PASSED
+
+DefaultArgumentsTest > profileFromWithoutHeldRevisionDecodesAndRejectsBadEnvelope PASSED
+
+DefaultArgumentsTest > panelWithoutTeamOrRevisionHitsBarePathAndAcceptsAnyRevision PASSED
+
+EnvelopeRequiredFieldTest > [missing schemaVersion] > rejectsIncompleteEnvelopeWithoutPartialUpdate[missing schemaVersion] PASSED
+
+EnvelopeRequiredFieldTest > [missing id] > rejectsIncompleteEnvelopeWithoutPartialUpdate[missing id] PASSED
+
+EnvelopeRequiredFieldTest > [missing revision] > rejectsIncompleteEnvelopeWithoutPartialUpdate[missing revision] PASSED
+
+EnvelopeRequiredFieldTest > [missing source] > rejectsIncompleteEnvelopeWithoutPartialUpdate[missing source] PASSED
+
+EnvelopeRequiredFieldTest > [missing updatedAt] > rejectsIncompleteEnvelopeWithoutPartialUpdate[missing updatedAt] PASSED
+
+EnvelopeRequiredFieldTest > [missing data] > rejectsIncompleteEnvelopeWithoutPartialUpdate[missing data] PASSED
+
+EnvelopeSourceTest > [source live] > preservesEveryOpenApiProvenanceSource[source live] PASSED
+
+EnvelopeSourceTest > [source replay] > preservesEveryOpenApiProvenanceSource[source replay] PASSED
+
+EnvelopeSourceTest > [source yahoo] > preservesEveryOpenApiProvenanceSource[source yahoo] PASSED
+
+EnvelopeSourceTest > [source manual] > preservesEveryOpenApiProvenanceSource[source manual] PASSED
+
+EnvelopeTest > rejectsUnknownSource PASSED
+
+EnvelopeTest > rejectsUnknownSchemaVersion PASSED
+
+EnvelopeTest > rejectsNegativeRevision PASSED
+
+EnvelopeTest > rejectsInvalidFreshnessTimestamp PASSED
+
+EnvelopeTest > rejectsWrongFieldTypes PASSED
+
+EnvelopeTest > acceptsEqualRevisionWithoutChangingIdentity PASSED
+
+EnvelopeTest > decodesAllRequiredFieldsWithoutLosingProvenance PASSED
+
+EnvelopeTest > acceptsNewerRevision PASSED
+
+EnvelopeTest > rejectsOlderRevision PASSED
+
+FixtureCalibrationTest > realHttpPeerProducesOpenApiEnvelopeAndStructuredError PASSED
+
+LinkScreenTest > pendingPollKeepsLinkFlowOpen PASSED
+
+LinkScreenTest > codeShownWithItsExpiry PASSED
+
+LinkScreenTest > expiredCodeShowsExpiryAndCannotContinueToProfile PASSED
+
+LinkScreenTest > linkedStateContinuesWithoutDisplayingSessionToken PASSED
+
+LinkScreenTest > unlinkedStateRequiresCodeIssuance PASSED
+
+ShellContractTest > buildDeclaresMinSdk25 PASSED
+
+ShellContractTest > exposesOnlyLinkProfileAndPanelNavigation PASSED
+
+ShellContractTest > noMessagingEndpointsInFrozenContract PASSED
+
+ShellContractTest > committedTestTokensDoNotMatchCredentialShapes PASSED
+
+StubContractTest > watchLauncherStubReportsAccessUnknown PASSED
+
+TypedOperationsTest > panelAndProviderDecode PASSED
+
+TypedOperationsTest > confirmSendsAllFieldsOnceAndHidesPassphrase PASSED
+
+TypedOperationsTest > profileReadAndWriteCarryScoringPresetAndRevision PASSED
+
+TypedOperationsTest > enumsMatchTheFrozenContract PASSED
+
+TypedOperationsTest > oneInvalidAlertRejectsTheWholePage PASSED
+
+TypedOperationsTest > alertsCarryRouteAndAccessBasisAndUnknownWhenAbsent PASSED
+
+TypedOperationsTest > reportsOutcomeAndInstalledApps PASSED
+
+TypedOperationsTest > defaultsScoringPresetToHalfPprAndRejectsUnknownSettings PASSED
+
+TypedOperationsTest > issuesAndPollsLinkWithoutBearerAndRedactsToken PASSED
+
+TypedOperationsTest > contractErrorsKeepStatusAndStructuredError PASSED
+
+AppDetectorTest > malformedCandidatesAreSkipped PASSED
+
+AppDetectorTest > optedOutSendsNoReport PASSED
+
+AppDetectorTest > optedOutPerformsNoReads PASSED
+
+AppDetectorTest > reportIsBoundedByTheContractCap PASSED
+
+AppDetectorTest > reportsEachInstalledCandidateAndNoAbsentOne PASSED
+
+AppDetectorTest > detectorReportPostsInstalledApps PASSED
+
+ApiClient$CompanionTest > oversizedResponseStopsReadingAtTheByteCap PASSED
+
+ApiClient$request$2Test > transientRetriesStopAtTheAttemptCapAfterSuspendedBackoffs PASSED
+
+ProfileCodecTest > wrongTypedControlIsRejected PASSED
+
+ProfileCodecTest > emptySettingsDecodeToDocumentedDefaults PASSED
+
+ProfileCodecTest > eachExcitementLevelRoundTrips PASSED
+
+ProfileCodecTest > eachScoringPresetRoundTripsWithFrozenWire PASSED
+
+ProfileCodecTest > eachPresentationRoundTrips PASSED
+
+ProfileCodecTest > outOfRangeValuesCannotBeEncoded PASSED
+
+ProfileCodecTest > eachControlWritesOnlyItsOwnSettingsField PASSED
+
+ProfileCodecTest > overridesAndLocalMarketRoundTrip PASSED
+
+ProfileCodecTest > everyControlRoundTrips PASSED
+
+ProfileControlsTest > customerOverrideWinsOverDetection PASSED
+
+ProfileControlsTest > unsupportedDetectionHidesItsControlWithStatedLimit PASSED
+
+ProfileControlsTest > unverifiedVoiceRouteHidesVoiceWithStatedLimit PASSED
+
+ProfileControlsTest > voiceGateNeedsBothEnablementAndVerifiedRoute PASSED
+
+ProfileControlsTest > everyControlIsOfferedWhenRoutesAreSupported PASSED
+
+ProfilePersistenceTest > pprSelectionPersistsAndHalfPprReturnsAfterSwitchBack PASSED
+
+ProfilePersistenceTest > staleSaveDoesNotOverwriteNewerProfile PASSED
+
+ProfilePersistenceTest > everySelectionAndControlPersistsAcrossRestart PASSED
+
+ProfilePersistenceTest > firstLoadOfEmptyProfileIsHalfPpr PASSED
+
+ProfilePersistenceTest > invalidStoredProfileIsNotApplied PASSED
+
+ProfilePersistenceTest > overrideSurvivesRestartAndDetectionRefresh PASSED
+
+ProfileRepairTest > screenBindsDetectionUnsupportedUntilX07AndWritesEveryEditedField PASSED
+
+ProfileRepairTest > failedSavePreservesNewerDraft PASSED
+
+ProfileRepairTest > editorOperationsRejectBlankInputAndCycleOverrides PASSED
+
+ProfileRepairTest > editorOperationsChangeEveryFieldAndSurviveSaveReload PASSED
+
+ProfileRepairTest > saveInFlightEditIsResavedNotOverwritten PASSED
+
+149 tests completed, 34 failed
+
+> Task :app:testDebugUnitTest FAILED
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:testDebugUnitTest'.
+> There were failing tests. See the report at: file://$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-a05t/tv-app/app/build/reports/tests/testDebugUnitTest/index.html
+
+* Try:
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+
+BUILD FAILED in 14s
+26 actionable tasks: 1 executed, 25 up-to-date
+gate: tvapp: FAIL check exit 1
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.2, pluggy-1.6.0
+rootdir: $HOME/alphazede/worktrees/amazon-fantasy-companion-p2-a05t/backend
+configfile: pyproject.toml
+plugins: cov-7.1.0, anyio-4.13.0, asyncio-1.3.0, mock-3.15.1, typeguard-4.4.4
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 380 items
+
+backend/tests/unit/lineup/test_active_lineup.py ...........              [  2%]
+backend/tests/unit/lineup/test_lineup_rejections.py .................... [  8%]
+........................                                                 [ 14%]
+backend/tests/unit/lineup/test_manual_source.py ..................       [ 19%]
+backend/tests/unit/lineup/test_presets.py .............................. [ 27%]
+                                                                         [ 27%]
+backend/tests/unit/lineup/test_review_regressions.py ................... [ 32%]
+.                                                                        [ 32%]
+backend/tests/unit/lineup/test_yahoo_client.py ..................        [ 37%]
+backend/tests/unit/test_bug_auth002.py ..                                [ 37%]
+backend/tests/unit/test_deployed_guard.py .............................. [ 45%]
+...........................................                              [ 56%]
+backend/tests/unit/test_device_auth.py ..............................    [ 64%]
+backend/tests/unit/test_device_auth_units.py ..........                  [ 67%]
+backend/tests/unit/test_link_patterns.py .                               [ 67%]
+backend/tests/unit/test_pipeline_and_stubs.py ............               [ 70%]
+backend/tests/unit/test_router.py ...................................... [ 80%]
+....................                                                     [ 86%]
+backend/tests/unit/test_security_auth_link.py ..                         [ 86%]
+backend/tests/unit/test_store.py .......                                 [ 88%]
+backend/tests/unit/test_unknown_route_envelope.py .....                  [ 89%]
+backend/tests/contract/test_api_contract.py ........................     [ 96%]
+backend/tests/contract/test_backend_template.py ...........              [ 98%]
+backend/tests/contract/test_security_auth_iam.py .                       [ 99%]
+backend/tests/contract/test_template_iam.py ...                          [100%]
+
+=============================== warnings summary ===============================
+tests/unit/lineup/test_active_lineup.py: 106 warnings
+tests/unit/lineup/test_lineup_rejections.py: 18 warnings
+tests/unit/lineup/test_review_regressions.py: 16 warnings
+tests/unit/test_bug_auth002.py: 38 warnings
+tests/unit/test_device_auth.py: 281 warnings
+tests/unit/test_device_auth_units.py: 115 warnings
+tests/unit/test_pipeline_and_stubs.py: 69 warnings
+tests/unit/test_router.py: 762 warnings
+tests/unit/test_security_auth_link.py: 21 warnings
+tests/unit/test_store.py: 85 warnings
+tests/unit/test_unknown_route_envelope.py: 30 warnings
+tests/contract/test_api_contract.py: 99 warnings
+  $HOME/.local/lib/python3.12/site-packages/botocore/auth.py:424: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    datetime_now = datetime.datetime.utcnow()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+============================= slowest 10 durations =============================
+0.40s setup    tests/unit/test_router.py::test_invalid_profile_updates_change_nothing[body1]
+0.36s setup    tests/unit/test_device_auth_units.py::test_dropped_linked_poll_response_is_recoverable_by_retry
+0.34s setup    tests/unit/test_router.py::test_unexpected_failures_return_a_safe_503
+0.34s call     tests/unit/test_deployed_guard.py::test_guard_precedes_session_link_flow
+0.33s setup    tests/unit/test_router.py::test_timestamps_are_utc_now
+0.32s setup    tests/unit/test_router.py::test_valid_routing_outcomes_reach_the_resolver_stub[playbackDenied]
+0.32s setup    tests/unit/test_router.py::test_valid_routing_outcomes_reach_the_resolver_stub[gameOpened]
+0.31s setup    tests/unit/test_router.py::test_every_settings_attribute_is_accepted[spoilerDelay]
+0.31s setup    tests/unit/test_router.py::test_every_settings_attribute_is_accepted[detectionOptIn]
+0.30s setup    tests/unit/test_router.py::test_non_string_profile_selectors_are_rejected_without_mutation[1]
+===================== 380 passed, 1640 warnings in 25.27s ======================
+gate: backend: PASS checks completed
+exit=1

@@ -1,0 +1,5 @@
+allprojects {
+    tasks.withType(Test).configureEach {
+        doFirst { file(System.getenv('AFC_TEST_CLASSPATH_OUT')).text = classpath.asPath }
+    }
+}

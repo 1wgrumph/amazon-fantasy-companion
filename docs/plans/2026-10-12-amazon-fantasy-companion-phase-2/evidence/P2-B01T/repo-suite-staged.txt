@@ -1,0 +1,138 @@
+...........................................................FFF.F...F.... [ 96%]
+...                                                                      [100%]
+=================================== FAILURES ===================================
+__ D1_HookEnvironmentIsolation.test_hook_git_env_does_not_reach_sentinel_repo __
+
+self = <test_gate_isolation.D1_HookEnvironmentIsolation testMethod=test_hook_git_env_does_not_reach_sentinel_repo>
+
+    def test_hook_git_env_does_not_reach_sentinel_repo(self):
+        # The sentinel has the same files, so the gate's own read-only checks still resolve.
+        sentinel = copy_repo(self.tmp / 'sentinel')
+        git(sentinel, 'update-ref', 'refs/remotes/origin/main', 'HEAD')
+        repo = copy_repo(self.tmp / 'repo')
+        # --changed resolves its base from origin/main in the repo it runs in.
+        git(repo, 'update-ref', 'refs/remotes/origin/main', 'HEAD')
+        write(repo, {str(TESTS / 'gate_support.py'): (REPO / TESTS / 'gate_support.py').read_text(encoding='utf-8'),
+                     str(TESTS / 'test_fixture_commit.py'): FIXTURE_TEST})
+        before = snapshot(sentinel / '.git')
+        env = dict(os.environ, GIT_DIR=str(sentinel / '.git'), GIT_INDEX_FILE=str(sentinel / '.git' / 'index'))
+        rc, out = run_gate(self, repo, '--changed', env=env)
+        log = subprocess.run(['git', 'log', '--oneline', '--all'], cwd=sentinel, check=True,
+                             capture_output=True, text=True).stdout
+        self.assertEqual(snapshot(sentinel / '.git'), before,
+                         f'gate.sh --changed wrote to the repository named by hook GIT_DIR/GIT_INDEX_FILE\n'
+                         f'sentinel log:\n{log}\ngate output:\n{out}')
+        self.assertEqual(len(log.splitlines()), 1, log)
+>       self.assertEqual(rc, 0, out)
+E       AssertionError: 1 != 0 : gate: spec: PASS checks completed
+E       gate: docs: PASS checks completed
+E       .github/workflows/ci.yml: PASS
+E       gate: hygiene: PASS checks completed
+E       gate: tvapp: PASS no tv-app/ tree
+E       gate: backend: FAIL check exit 1
+E       Installed 1 package in 2ms
+E       Installed 1 package in 1ms
+E       Installed 1 package in 1ms
+E       ..
+E       ----------------------------------------------------------------------
+E       Ran 2 tests in 0.007s
+E
+E       OK
+E       ImportError while loading conftest '/tmp/tmpur76lgv0/repo/backend/tests/conftest.py'.
+E       backend/tests/conftest.py:22: in <module>
+E           from moto import mock_aws
+E       E   ModuleNotFoundError: No module named 'moto'
+
+tools/ci/tests/test_gate_isolation.py:63: AssertionError
+________ ProductGate.test_absent_tree_passes_with_exact_no_tree_detail _________
+
+self = <test_product_gate.ProductGate testMethod=test_absent_tree_passes_with_exact_no_tree_detail>
+
+    def test_absent_tree_passes_with_exact_no_tree_detail(self):
+        for area, tree in TREES.items():
+            with self.subTest(area=area):
+                repo = self.repo(area)
+>               self.assertFalse((repo / tree).exists())
+E               AssertionError: True is not false
+
+tools/ci/tests/test_product_gate.py:62: AssertionError
+_ ProductGate.test_changed_selection_matches_product_paths_and_shared_gate_paths _
+
+self = <test_product_gate.ProductGate testMethod=test_changed_selection_matches_product_paths_and_shared_gate_paths>
+
+    def test_changed_selection_matches_product_paths_and_shared_gate_paths(self):
+        cases = [('tv-app/marker.txt', {'tvapp'}), ('backend/marker.txt', {'backend'}),
+                 ('tools/ci/marker.txt', set(TREES)), ('.githooks/marker.txt', set(TREES)),
+                 ('.github/workflows/marker.txt', set(TREES)), ('unrelated.txt', set())]
+        for index, (path, selected) in enumerate(cases):
+            with self.subTest(path=path):
+                repo = self.repo(str(index))
+                env = self.protocol(repo)
+                commit_all(repo)
+                write(repo, {path: 'changed selection fixture\n'})
+                rc, out = run_gate(self, repo, '--changed=HEAD', 'tvapp', 'backend', env=env)
+>               self.assertEqual(rc, 0, out)
+E               AssertionError: 1 != 0 : .github/workflows/ci.yml: PASS
+E               gate: hygiene: PASS checks completed
+E               gate: backend: FAIL check exit 1
+E               .
+E               ----------------------------------------------------------------------
+E               Ran 1 test in 0.000s
+E
+E               OK
+E               ImportError while loading conftest '/tmp/tmp08m6kp6q/1/backend/tests/conftest.py'.
+E               backend/tests/conftest.py:22: in <module>
+E                   from moto import mock_aws
+E               E   ModuleNotFoundError: No module named 'moto'
+
+tools/ci/tests/test_product_gate.py:140: AssertionError
+__________ ProductGate.test_empty_tree_never_claims_no_tree_or_passes __________
+
+self = <test_product_gate.ProductGate testMethod=test_empty_tree_never_claims_no_tree_or_passes>
+
+    def test_empty_tree_never_claims_no_tree_or_passes(self):
+        for area, tree in TREES.items():
+            with self.subTest(area=area):
+                repo = self.repo(area)
+>               (repo / tree).mkdir()
+
+tools/ci/tests/test_product_gate.py:71:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = PosixPath('/tmp/tmpj5iyrq0u/backend/backend'), mode = 511
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileExistsError: [Errno 17] File exists: '/tmp/tmpj5iyrq0u/backend/backend'
+
+/usr/lib/python3.12/pathlib.py:1313: FileExistsError
+__ ProductGate.test_successful_subchecks_pass_and_receive_contract_arguments ___
+
+self = <test_product_gate.ProductGate testMethod=test_successful_subchecks_pass_and_receive_contract_arguments>
+
+    def test_successful_subchecks_pass_and_receive_contract_arguments(self):
+        for area in TREES:
+            with self.subTest(area=area):
+                repo = self.repo(area)
+                env = self.protocol(repo)
+                rc, out = run_gate(self, repo, area, env=env)
+>               self.assertEqual(rc, 0, out)
+E               AssertionError: 1 != 0 : gate: backend: FAIL check exit 1
+E               ImportError while loading conftest '/tmp/tmpukqsqu6j/backend/backend/tests/conftest.py'.
+E               backend/tests/conftest.py:22: in <module>
+E                   from moto import mock_aws
+E               E   ModuleNotFoundError: No module named 'moto'
+
+tools/ci/tests/test_product_gate.py:107: AssertionError
+=========================== short test summary info ============================
+FAILED tools/ci/tests/test_gate_isolation.py::D1_HookEnvironmentIsolation::test_hook_git_env_does_not_reach_sentinel_repo
+FAILED tools/ci/tests/test_product_gate.py::ProductGate::test_absent_tree_passes_with_exact_no_tree_detail
+FAILED tools/ci/tests/test_product_gate.py::ProductGate::test_changed_selection_matches_product_paths_and_shared_gate_paths
+FAILED tools/ci/tests/test_product_gate.py::ProductGate::test_empty_tree_never_claims_no_tree_or_passes
+FAILED tools/ci/tests/test_product_gate.py::ProductGate::test_successful_subchecks_pass_and_receive_contract_arguments
+5 failed, 70 passed in 40.15s

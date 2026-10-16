@@ -1,0 +1,87 @@
+{
+  "artifacts": [
+    {
+      "name": "moto",
+      "version": "5.2.4",
+      "filename": "moto-5.2.4-py3-none-any.whl",
+      "sha256": "b75cf0a0063315bab6a4c3606f475ee118f3c329c8d5477a2447e699bdf13155",
+      "origin": "https://files.pythonhosted.org/packages/6d/00/5729790afc2ee0ac52567c2388452918dfabb383d3afbf613f9136ee5ee2/moto-5.2.4-py3-none-any.whl",
+      "metadata_url": "https://pypi.org/pypi/moto/5.2.4/json",
+      "artifact": "$HOME/.local/share/afc-tools/afc-backend-wheels-cbj2daa1/moto-5.2.4-py3-none-any.whl"
+    },
+    {
+      "name": "responses",
+      "version": "0.26.3",
+      "filename": "responses-0.26.3-py3-none-any.whl",
+      "sha256": "74474f799334ac4f37d93b6437ecc3bb1bb5c77a8d31780a338643be2dce0af8",
+      "origin": "https://files.pythonhosted.org/packages/6d/86/ca7958de70cb0752350575e98229368a3a2f746a2942034b3364e17312bb/responses-0.26.3-py3-none-any.whl",
+      "metadata_url": "https://pypi.org/pypi/responses/0.26.3/json",
+      "artifact": "$HOME/.local/share/afc-tools/afc-backend-wheels-cbj2daa1/responses-0.26.3-py3-none-any.whl"
+    },
+    {
+      "name": "Werkzeug",
+      "version": "3.1.9",
+      "filename": "werkzeug-3.1.9-py3-none-any.whl",
+      "sha256": "6392e50c78460ba618e5b21f08a71f59c99ce99cdc6cf6e3dd7e6ccca8754fab",
+      "origin": "https://files.pythonhosted.org/packages/a1/38/df03f564f43cec2684823f3cccae1a652ee7face1cbaa76fb223096e64d7/werkzeug-3.1.9-py3-none-any.whl",
+      "metadata_url": "https://pypi.org/pypi/Werkzeug/3.1.9/json",
+      "artifact": "$HOME/.local/share/afc-tools/afc-backend-wheels-cbj2daa1/werkzeug-3.1.9-py3-none-any.whl"
+    }
+  ],
+  "download_root": "$HOME/.local/share/afc-tools/afc-backend-wheels-cbj2daa1",
+  "verdict": "PASS",
+  "scope": "Three newly acquired pure-Python wheels; existing unchanged tools reused. Offline in-process DynamoDB/SSM only; no proxy/debug/server mode.",
+  "integrity": "All wheel sha256s match official PyPI version metadata. Zip members checked for absolute/traversal names before extraction.",
+  "checks": [
+    {
+      "command": "clamscan --no-summary <three wheels>",
+      "exit_code": 0,
+      "result": "all OK; installed local signature database"
+    },
+    {
+      "command": "gitleaks dir <wheel-root> --redact=100 --report-format json",
+      "exit_code": 1,
+      "result": "8 reviewed false positives: six synthetic identifiers/verification constants; two documented Moto proxy test keys, unused in in-process mode; no live vendor credential"
+    },
+    {
+      "command": "python3.12 -m pip_audit --no-deps --disable-pip --progress-spinner off -r <three exact pins> --format json",
+      "exit_code": 0,
+      "result": "no known vulnerabilities; package names/versions only sent to advisory service"
+    },
+    {
+      "command": "python3.12 -m bandit -r <Moto core/ssm/dynamodb, responses, Werkzeug> -ll -ii -f json -o <local report>",
+      "exit_code": 1,
+      "result": "8 reviewed findings: unused Werkzeug debugger/serving, generated trusted routing code, nonsecurity ETag hashing, XML parser only consumes fixture-generated data; no reachable blocker in offline scope"
+    }
+  ],
+  "unavailable_checks": [
+    {
+      "tool": "pip-audit bare launcher",
+      "error": "ModuleNotFoundError: No module named pip_audit",
+      "resolution": "installed module invoked with python3.12"
+    },
+    {
+      "tool": "bandit bare launcher",
+      "error": "launcher Python path mismatch; no JSON report",
+      "resolution": "python3.12 -m bandit with -o JSON output; stdout progress is not a JSON report"
+    }
+  ],
+  "credential_findings": {
+    "live_credentials": 0,
+    "false_positives": 8,
+    "disposition": "discard synthetic identifiers and shipped proxy test keys; proxy mode never used"
+  },
+  "residual_risk": "Moto simulates service behavior; no real AWS, IAM, race/TTL deletion or deployment proof.",
+  "installation": {
+    "location": "$HOME/.local/share/afc-tools/backend-tests",
+    "python": "3.12",
+    "system_site_packages": true,
+    "new_packages": [
+      "moto==5.2.4",
+      "responses==0.26.3",
+      "Werkzeug==3.1.9"
+    ],
+    "command": "python3.12 -m venv --system-site-packages <location>; <location>/bin/python3.12 -m pip install --no-deps --no-index --find-links <verified-wheel-root> --require-hashes -r <admitted-hash-pins>",
+    "exit_code": 0
+  }
+}

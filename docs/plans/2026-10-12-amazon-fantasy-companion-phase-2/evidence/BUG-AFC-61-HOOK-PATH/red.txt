@@ -1,0 +1,141 @@
+test_both_hooks_find_environment_with_minimal_path (test_hook_path.HookPath.test_both_hooks_find_environment_with_minimal_path) ...
+  test_both_hooks_find_environment_with_minimal_path (test_hook_path.HookPath.test_both_hooks_find_environment_with_minimal_path) (hook='pre-commit') ... FAIL
+  test_both_hooks_find_environment_with_minimal_path (test_hook_path.HookPath.test_both_hooks_find_environment_with_minimal_path) (hook='pre-push') ... FAIL
+test_ci_uses_ambient_environment_without_local_venv (test_hook_path.HookPath.test_ci_uses_ambient_environment_without_local_venv) ... ok
+test_local_backend_failure_still_blocks_gate (test_hook_path.HookPath.test_local_backend_failure_still_blocks_gate) ... FAIL
+test_local_backend_finds_environment_with_minimal_path (test_hook_path.HookPath.test_local_backend_finds_environment_with_minimal_path) ... FAIL
+test_missing_or_incomplete_environment_is_named_provisioning_gap (test_hook_path.HookPath.test_missing_or_incomplete_environment_is_named_provisioning_gap) ...
+  test_missing_or_incomplete_environment_is_named_provisioning_gap (test_hook_path.HookPath.test_missing_or_incomplete_environment_is_named_provisioning_gap) (state='absent') ... FAIL
+  test_missing_or_incomplete_environment_is_named_provisioning_gap (test_hook_path.HookPath.test_missing_or_incomplete_environment_is_named_provisioning_gap) (state='incomplete') ... FAIL
+
+======================================================================
+FAIL: test_both_hooks_find_environment_with_minimal_path (test_hook_path.HookPath.test_both_hooks_find_environment_with_minimal_path) (hook='pre-commit')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "$REPO/tools/ci/tests/test_hook_path.py", line 57, in test_both_hooks_find_environment_with_minimal_path
+    self.assert_local_result(result.returncode, out)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "$REPO/tools/ci/tests/test_hook_path.py", line 42, in assert_local_result
+    self.assertEqual(rc, 0, out)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: 3 != 0 : .github/workflows/ci.yml: PASS
+gate: hygiene: PASS checks completed
+required tool missing: cfn-lint
+gate: backend: GAP required tool missing
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+OK
+
+
+======================================================================
+FAIL: test_both_hooks_find_environment_with_minimal_path (test_hook_path.HookPath.test_both_hooks_find_environment_with_minimal_path) (hook='pre-push')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "$REPO/tools/ci/tests/test_hook_path.py", line 57, in test_both_hooks_find_environment_with_minimal_path
+    self.assert_local_result(result.returncode, out)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "$REPO/tools/ci/tests/test_hook_path.py", line 42, in assert_local_result
+    self.assertEqual(rc, 0, out)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: 3 != 0 : .github/workflows/ci.yml: PASS
+gate: hygiene: PASS checks completed
+required tool missing: cfn-lint
+gate: backend: GAP required tool missing
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+OK
+
+
+======================================================================
+FAIL: test_local_backend_failure_still_blocks_gate (test_hook_path.HookPath.test_local_backend_failure_still_blocks_gate)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "$REPO/tools/ci/tests/test_hook_path.py", line 84, in test_local_backend_failure_still_blocks_gate
+    self.assertEqual(rc, 1, out)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: 3 != 1 : required tool missing: cfn-lint
+gate: backend: GAP required tool missing
+
+
+======================================================================
+FAIL: test_local_backend_finds_environment_with_minimal_path (test_hook_path.HookPath.test_local_backend_finds_environment_with_minimal_path)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "$REPO/tools/ci/tests/test_hook_path.py", line 48, in test_local_backend_finds_environment_with_minimal_path
+    self.assert_local_result(rc, out)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "$REPO/tools/ci/tests/test_hook_path.py", line 42, in assert_local_result
+    self.assertEqual(rc, 0, out)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: 3 != 0 : required tool missing: cfn-lint
+gate: backend: GAP required tool missing
+
+
+======================================================================
+FAIL: test_missing_or_incomplete_environment_is_named_provisioning_gap (test_hook_path.HookPath.test_missing_or_incomplete_environment_is_named_provisioning_gap) (state='absent')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "$REPO/tools/ci/tests/test_hook_path.py", line 69, in test_missing_or_incomplete_environment_is_named_provisioning_gap
+    self.assertEqual(rc, 3, out)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: 1 != 3 : ============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-9.0.2, pluggy-1.6.0
+rootdir: /tmp/tmps_9ogon6/repo
+collected 1 item / 1 error
+
+==================================== ERRORS ====================================
+_____________ ERROR collecting backend/tests/unit/test_imports.py ______________
+ImportError while importing test module '/tmp/tmps_9ogon6/repo/backend/tests/unit/test_imports.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/test_imports.py:1: in <module>
+    import boto3
+E   ModuleNotFoundError: No module named 'boto3'
+=========================== short test summary info ============================
+ERROR backend/tests/unit/test_imports.py
+!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+=============================== 1 error in 0.04s ===============================
+gate: backend: FAIL check exit 1
+
+
+======================================================================
+FAIL: test_missing_or_incomplete_environment_is_named_provisioning_gap (test_hook_path.HookPath.test_missing_or_incomplete_environment_is_named_provisioning_gap) (state='incomplete')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "$REPO/tools/ci/tests/test_hook_path.py", line 69, in test_missing_or_incomplete_environment_is_named_provisioning_gap
+    self.assertEqual(rc, 3, out)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: 1 != 3 : ============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-9.0.2, pluggy-1.6.0
+rootdir: /tmp/tmps_9ogon6/repo
+collected 1 item / 1 error
+
+==================================== ERRORS ====================================
+_____________ ERROR collecting backend/tests/unit/test_imports.py ______________
+ImportError while importing test module '/tmp/tmps_9ogon6/repo/backend/tests/unit/test_imports.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend/tests/unit/test_imports.py:1: in <module>
+    import boto3
+E   ModuleNotFoundError: No module named 'boto3'
+=========================== short test summary info ============================
+ERROR backend/tests/unit/test_imports.py
+!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+=============================== 1 error in 0.05s ===============================
+gate: backend: FAIL check exit 1
+
+
+----------------------------------------------------------------------
+Ran 5 tests in 4.982s
+
+FAILED (failures=6)

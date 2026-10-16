@@ -1,0 +1,183 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.7.0/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preDebugBuild UP-TO-DATE
+> Task :app:generateDebugBuildConfig UP-TO-DATE
+> Task :app:generateDebugResources UP-TO-DATE
+> Task :app:packageDebugResources UP-TO-DATE
+> Task :app:processDebugNavigationResources UP-TO-DATE
+> Task :app:parseDebugLocalResources UP-TO-DATE
+> Task :app:generateDebugRFile UP-TO-DATE
+> Task :app:javaPreCompileDebug UP-TO-DATE
+> Task :app:checkDebugAarMetadata UP-TO-DATE
+> Task :app:mapDebugSourceSetPaths UP-TO-DATE
+> Task :app:compileDebugNavigationResources UP-TO-DATE
+> Task :app:mergeDebugResources UP-TO-DATE
+> Task :app:createDebugCompatibleScreenManifests UP-TO-DATE
+> Task :app:extractDeepLinksDebug UP-TO-DATE
+> Task :app:processDebugMainManifest UP-TO-DATE
+> Task :app:processDebugManifest UP-TO-DATE
+> Task :app:processDebugManifestForPackage UP-TO-DATE
+> Task :app:processDebugResources UP-TO-DATE
+> Task :app:preDebugUnitTestBuild UP-TO-DATE
+> Task :app:javaPreCompileDebugUnitTest UP-TO-DATE
+> Task :app:compileDebugKotlin
+> Task :app:compileDebugJavaWithJavac UP-TO-DATE
+> Task :app:bundleDebugClassesToCompileJar
+> Task :app:bundleDebugClassesToRuntimeJar
+> Task :app:processDebugJavaRes UP-TO-DATE
+> Task :app:compileDebugUnitTestKotlin
+> Task :app:compileDebugUnitTestJavaWithJavac NO-SOURCE
+> Task :app:processDebugUnitTestJavaRes UP-TO-DATE
+
+> Task :app:testDebugUnitTest FAILED
+
+WatchLauncherTest > executesOnlyTheFireOsRegistryLaunch FAILED
+    java.lang.AssertionError: expected:<[(test.beta.firetv, intent, test.beta.firetv.WATCH?event=evt-401)]> but was:<[]>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at org.junit.Assert.assertEquals(Assert.java:146)
+        at com.afc.companion.watch.WatchLauncherTest.executesOnlyTheFireOsRegistryLaunch(WatchLauncherTest.kt:52)
+
+WatchLauncherTest > noRelaunchAfterUncertainOutcome FAILED
+    java.lang.AssertionError: launched once, never again after an uncertain outcome expected:<1> but was:<0>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at com.afc.companion.watch.WatchLauncherTest.noRelaunchAfterUncertainOutcome(WatchLauncherTest.kt:130)
+
+WatchLauncherTest > confirmedSwitchLaunchesAfterConfirmation FAILED
+    java.lang.AssertionError: expected:<[confirm, start]> but was:<[]>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at org.junit.Assert.assertEquals(Assert.java:146)
+        at com.afc.companion.watch.WatchLauncherTest.confirmedSwitchLaunchesAfterConfirmation(WatchLauncherTest.kt:146)
+
+WatchLauncherTest > priorGameOpenedPlusUnconfirmedCurrentAppIsAccessUnknown FAILED
+    java.lang.AssertionError: the launch was made expected:<1> but was:<0>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at com.afc.companion.watch.WatchLauncherTest.priorGameOpenedPlusUnconfirmedCurrentAppIsAccessUnknown(WatchLauncherTest.kt:102)
+
+WatchLauncherTest > ownPlatformGapLaunchesNothingAndReportsAccessUnknown FAILED
+    java.lang.AssertionError: exactly one RoutingOutcome reported for the attempt expected:<1> but was:<0>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at com.afc.companion.watch.WatchLauncherTest.assertSingleReport(WatchLauncherTest.kt:43)
+        at com.afc.companion.watch.WatchLauncherTest.ownPlatformGapLaunchesNothingAndReportsAccessUnknown(WatchLauncherTest.kt:66)
+
+WatchLauncherTest > eachAttemptReportsExactlyOneOutcome FAILED
+    java.lang.AssertionError: expected:<[appAbsent, playbackDenied, accessUnknown]> but was:<[]>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at org.junit.Assert.assertEquals(Assert.java:146)
+        at com.afc.companion.watch.WatchLauncherTest$eachAttemptReportsExactlyOneOutcome$1.invokeSuspend(WatchLauncherTest.kt:122)
+        at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+        at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+        at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+        at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+        at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+        at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+        at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source)
+        at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+        at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source)
+        at com.afc.companion.watch.WatchLauncherTest.eachAttemptReportsExactlyOneOutcome(WatchLauncherTest.kt:116)
+
+WatchLauncherTest > alexaTuningOfferedOverEnabledVerifiedRoute FAILED
+    java.lang.AssertionError: expected:<true> but was:<false>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at org.junit.Assert.assertEquals(Assert.java:146)
+        at com.afc.companion.watch.WatchLauncherTest.alexaTuningOfferedOverEnabledVerifiedRoute(WatchLauncherTest.kt:178)
+
+WatchLauncherTest > historicalVerifiedOutcomeIsNeverTheCurrentOutcome FAILED
+    java.lang.AssertionError: launched for verified_outcome=gameOpened expected:<1> but was:<0>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at com.afc.companion.watch.WatchLauncherTest.historicalVerifiedOutcomeIsNeverTheCurrentOutcome(WatchLauncherTest.kt:111)
+
+WatchLauncherTest > missingPackageReportsAppAbsent FAILED
+    java.lang.AssertionError: exactly one RoutingOutcome reported for the attempt expected:<1> but was:<0>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at com.afc.companion.watch.WatchLauncherTest.assertSingleReport(WatchLauncherTest.kt:43)
+        at com.afc.companion.watch.WatchLauncherTest.missingPackageReportsAppAbsent(WatchLauncherTest.kt:88)
+
+WatchLauncherTest > confirmationOffNeverAsks FAILED
+    java.lang.AssertionError: expected:<1> but was:<0>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at org.junit.Assert.assertEquals(Assert.java:146)
+        at com.afc.companion.watch.WatchLauncherTest.confirmationOffNeverAsks(WatchLauncherTest.kt:154)
+
+WatchLauncherTest > alexaTuningHiddenWithoutVerifiedRoute PASSED
+
+WatchLauncherTest > refusedLaunchReportsPlaybackDenied FAILED
+    java.lang.AssertionError: expected:<1> but was:<0>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at org.junit.Assert.assertEquals(Assert.java:146)
+        at com.afc.companion.watch.WatchLauncherTest.refusedLaunchReportsPlaybackDenied(WatchLauncherTest.kt:94)
+
+WatchLauncherTest > switchingConfirmationBlocksTheSwitchUntilConfirmed FAILED
+    java.lang.AssertionError: confirmation asked expected:<1> but was:<0>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at com.afc.companion.watch.WatchLauncherTest.switchingConfirmationBlocksTheSwitchUntilConfirmed(WatchLauncherTest.kt:137)
+
+WatchLauncherTest > channelPlaceholderIsFilledFromTheResolvedChannel FAILED
+    java.lang.AssertionError: expected:<[(test.beta.firetv, uri, test-beta-fire://channel/ESPN)]> but was:<[]>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at org.junit.Assert.assertEquals(Assert.java:146)
+        at com.afc.companion.watch.WatchLauncherTest.channelPlaceholderIsFilledFromTheResolvedChannel(WatchLauncherTest.kt:59)
+
+WatchLauncherTest > fullScreenFailedLaunchStaysToShowTheOutcome FAILED
+    java.lang.AssertionError: exactly one RoutingOutcome reported for the attempt expected:<1> but was:<0>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at com.afc.companion.watch.WatchLauncherTest.assertSingleReport(WatchLauncherTest.kt:43)
+        at com.afc.companion.watch.WatchLauncherTest.fullScreenFailedLaunchStaysToShowTheOutcome(WatchLauncherTest.kt:168)
+
+WatchLauncherTest > fullScreenWatchLeavesTheCompanionApp FAILED
+    java.lang.AssertionError: provider launched, then the companion app leaves expected:<[start, leave]> but was:<[]>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at com.afc.companion.watch.WatchLauncherTest.fullScreenWatchLeavesTheCompanionApp(WatchLauncherTest.kt:160)
+
+WatchLauncherTest > unverifiedOrMalformedEntryIsNeverLaunched FAILED
+    java.lang.AssertionError: exactly one RoutingOutcome reported for the attempt expected:<1> but was:<0>
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.failNotEquals(Assert.java:835)
+        at org.junit.Assert.assertEquals(Assert.java:120)
+        at com.afc.companion.watch.WatchLauncherTest.assertSingleReport(WatchLauncherTest.kt:43)
+        at com.afc.companion.watch.WatchLauncherTest.unverifiedOrMalformedEntryIsNeverLaunched(WatchLauncherTest.kt:80)
+
+17 tests completed, 16 failed
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:testDebugUnitTest'.
+> There were failing tests. See the report at: file://<worktree>/tv-app/app/build/reports/tests/testDebugUnitTest/index.html
+
+* Try:
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+
+BUILD FAILED in 19s
+26 actionable tasks: 5 executed, 21 up-to-date

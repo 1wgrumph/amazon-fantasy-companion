@@ -1,0 +1,21 @@
+--- backend/tests/unit/test_pipeline_and_stubs.py	2026-10-14 09:39:48.030308711 -0500
++++ backend/tests/unit/test_pipeline_and_stubs.py	2026-10-14 10:18:55.494651364 -0500
+@@ -51,7 +51,6 @@
+ 
+ STUBS = [
+     ("feed_ingest", "lambda_handler", 2, "P2-B02"),
+-    ("lineup", "active_lineup", 1, "P2-B03"),
+     ("matcher", "resolve", 1, "P2-B04"),
+     ("alert_policy", "evaluate", 2, "P2-B05"),
+     ("alert_policy", "pending", 2, "P2-B05"),
+--- backend/tests/contract/test_backend_template.py	2026-10-14 09:39:48.028835002 -0500
++++ backend/tests/contract/test_backend_template.py	2026-10-14 10:18:55.495634954 -0500
+@@ -85,7 +85,7 @@
+     assert "secretsmanager" not in json.dumps(template).lower()
+ 
+ 
+-@pytest.mark.parametrize("module", ["feed_ingest", "lineup", "matcher", "alert_policy",
++@pytest.mark.parametrize("module", ["feed_ingest", "matcher", "alert_policy",
+                                      "provider_resolver", "panel"])
+ def test_future_backend_modules_have_explicit_unimplemented_public_interfaces(module):
+     files = list((BACKEND / "src" / module).rglob("*.py"))

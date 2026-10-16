@@ -7,6 +7,7 @@ error, so the S09T red run is a valid red (SEIT tdd red_expectation).
 import contextlib
 import importlib.util
 import io
+import json
 import os
 import runpy
 import shutil
@@ -85,11 +86,14 @@ def copy_repo(root):
 
     tools/ci/tests is replaced by one passing stub test so a hygiene run in the
     copy does not recurse into these tests; linked repository documents are kept.
+    Real product trees (backend/, tv-app/) are excluded; tests needing one
+    create their own fixture.
     """
     listed = subprocess.run(['git', 'ls-files', '-z'],
                             cwd=REPO, check=True, capture_output=True).stdout.decode()
     for rel in filter(None, listed.split('\0')):
-        if rel.startswith(str(TESTS) + '/') or not (REPO / rel).is_file():
+        if (rel.startswith(str(TESTS) + '/') or rel.startswith('backend/')
+                or rel.startswith('tv-app/') or not (REPO / rel).is_file()):
             continue
         target = Path(root) / rel
         target.parent.mkdir(parents=True, exist_ok=True)
@@ -104,6 +108,15 @@ def run_gate(case, cwd, *args, env=None):
     gate = Path(cwd) / 'tools' / 'ci' / 'gate.sh'
     case.assertTrue(gate.is_file(), 'tools/ci/gate.sh is missing')
     case.assertTrue(os.access(gate, os.X_OK), 'tools/ci/gate.sh is not executable')
+    env = dict(os.environ if env is None else env)
+    # Fixture repositories have their own history and must not use the host CI event.
+    if (Path(cwd) != REPO and os.environ.get('GITHUB_EVENT_PATH')
+            and env.get('GITHUB_EVENT_PATH') == os.environ['GITHUB_EVENT_PATH']):
+        fixture_base = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=cwd,
+                                               text=True).strip()
+        fixture_event = Path(cwd) / '.git' / 'gate-event.json'
+        fixture_event.write_text(json.dumps({'before': fixture_base}), encoding='utf-8')
+        env['GITHUB_EVENT_PATH'] = str(fixture_event)
     result = subprocess.run(['tools/ci/gate.sh', *args], cwd=cwd, env=env,
                             capture_output=True, text=True, timeout=900)
     return result.returncode, result.stdout + result.stderr

@@ -47,8 +47,109 @@ class ProductGate(unittest.TestCase):
         sdk.mkdir()
         env = dict(os.environ, PATH=str(bin_dir) + os.pathsep + os.environ['PATH'],
                    ANDROID_HOME=str(sdk), ANDROID_SDK_ROOT=str(sdk),
-                   AFC_COMMAND_LOG=str(repo / 'commands.log'), PYTEST_DISABLE_PLUGIN_AUTOLOAD='1')
+                   AFC_COMMAND_LOG=str(repo / 'commands.log'), PYTEST_DISABLE_PLUGIN_AUTOLOAD='1',
+                   CI='true')
         return env
+
+    def local_toolchain(self, repo):
+        env = self.protocol(repo)
+        for key in ('JAVA_HOME', 'ANDROID_HOME', 'ANDROID_SDK_ROOT', 'CI', 'GITHUB_ACTIONS'):
+            env.pop(key, None)
+        home = repo / 'user home'
+        tools = home / '.local/share/afc-tools'
+        write(tools, {'jdk-17.fixture/bin/java': '#!/bin/sh\nexit 0\n'})
+        (tools / 'jdk-17.fixture/bin/java').chmod(0o755)
+        (tools / 'android-sdk').mkdir()
+        env['HOME'] = str(home)
+        write(repo, {'tv-app/gradlew': '#!/bin/bash\n'
+                    'printf "%s\\n" "$JAVA_HOME" "$ANDROID_HOME" "$ANDROID_SDK_ROOT" '
+                    '> "$AFC_COMMAND_LOG"\n'})
+        return env, tools
+
+    def test_local_tvapp_discovers_user_toolchain_without_env(self):
+        repo = self.repo('local-toolchain')
+        env, tools = self.local_toolchain(repo)
+        rc, out = run_gate(self, repo, 'tvapp', env=env)
+        self.assertEqual(rc, 0, out)
+        self.assertIn('gate: tvapp: PASS', out)
+        self.assertEqual((repo / 'commands.log').read_text().splitlines(),
+                         [str(tools / 'jdk-17.fixture'), str(tools / 'android-sdk'), ''])
+
+    def test_local_tvapp_uses_path_java_without_user_jdk(self):
+        repo = self.repo('local-path-java')
+        env, tools = self.local_toolchain(repo)
+        java = tools / 'jdk-17.fixture/bin/java'
+        java.rename(repo / 'fixture-bin/java')
+        shutil.rmtree(java.parents[1])
+        env['PATH'] = str(repo / 'fixture-bin') + os.pathsep + path_without(
+            'java', self.tmp / 'no-host-java')
+        rc, out = run_gate(self, repo, 'tvapp', env=env)
+        self.assertEqual(rc, 0, out)
+        self.assertIn('gate: tvapp: PASS', out)
+        self.assertEqual((repo / 'commands.log').read_text().splitlines(),
+                         ['', str(tools / 'android-sdk'), ''])
+
+    def test_local_tvapp_explicit_toolchain_wins(self):
+        for sdk_var in ('ANDROID_HOME', 'ANDROID_SDK_ROOT'):
+            with self.subTest(sdk_var=sdk_var):
+                repo = self.repo('explicit-' + sdk_var)
+                env, tools = self.local_toolchain(repo)
+                write(repo, {'explicit-jdk/bin/java': '#!/bin/sh\nexit 0\n'})
+                (repo / 'explicit-jdk/bin/java').chmod(0o755)
+                (repo / 'explicit-sdk').mkdir()
+                env.update(JAVA_HOME=str(repo / 'explicit-jdk'))
+                env[sdk_var] = str(repo / 'explicit-sdk')
+                rc, out = run_gate(self, repo, 'tvapp', env=env)
+                self.assertEqual(rc, 0, out)
+                self.assertEqual((repo / 'commands.log').read_text().splitlines(),
+                                 [env['JAVA_HOME'], env.get('ANDROID_HOME', ''),
+                                  env.get('ANDROID_SDK_ROOT', '')])
+
+    def test_local_tvapp_missing_or_ambiguous_jdk_is_gap(self):
+        for case in ('absent', 'nonexecutable', 'wrong-version', 'ambiguous'):
+            with self.subTest(case=case):
+                repo = self.repo(case)
+                env, tools = self.local_toolchain(repo)
+                env['PATH'] = path_without('java', self.tmp / ('no-java-' + case))
+                java = tools / 'jdk-17.fixture/bin/java'
+                if case == 'absent':
+                    shutil.rmtree(java.parents[1])
+                elif case == 'nonexecutable':
+                    java.chmod(0o644)
+                else:
+                    shutil.copytree(java.parents[1], tools / 'jdk-17.second')
+                    if case == 'wrong-version':
+                        shutil.rmtree(java.parents[1])
+                        (tools / 'jdk-17.second').rename(tools / 'jdk-21.fixture')
+                rc, out = run_gate(self, repo, 'tvapp', env=env)
+                self.assertEqual(rc, 3, out)
+                self.assertIn('required tool missing: java', out)
+                self.assertFalse((repo / 'commands.log').exists())
+
+    def test_local_tvapp_missing_sdk_is_gap(self):
+        repo = self.repo('local-missing-sdk')
+        env, tools = self.local_toolchain(repo)
+        (tools / 'android-sdk').rmdir()
+        rc, out = run_gate(self, repo, 'tvapp', env=env)
+        self.assertEqual(rc, 3, out)
+        self.assertIn('required tool missing: Android SDK', out)
+        self.assertFalse((repo / 'commands.log').exists())
+
+    def test_ci_tvapp_ignores_user_toolchain(self):
+        for ci_var in ('CI', 'GITHUB_ACTIONS'):
+            with self.subTest(ci_var=ci_var):
+                repo = self.repo('ci-' + ci_var)
+                env, tools = self.local_toolchain(repo)
+                env[ci_var] = 'true'
+                env['PATH'] = path_without('java', self.tmp / ('no-java-' + ci_var))
+                rc, out = run_gate(self, repo, 'tvapp', env=env)
+                self.assertEqual(rc, 3, out)
+                self.assertIn('required tool missing: java', out)
+                env['JAVA_HOME'] = str(tools / 'jdk-17.fixture')
+                rc, out = run_gate(self, repo, 'tvapp', env=env)
+                self.assertEqual(rc, 3, out)
+                self.assertIn('required tool missing: Android SDK', out)
+                self.assertFalse((repo / 'commands.log').exists())
 
     def test_list_includes_exact_product_and_legacy_areas(self):
         rc, out = run_gate(self, REPO, '--list')

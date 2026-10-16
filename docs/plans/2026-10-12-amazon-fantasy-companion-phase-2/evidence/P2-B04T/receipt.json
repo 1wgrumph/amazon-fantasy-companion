@@ -1,0 +1,230 @@
+{
+ "outcome": "PASS",
+ "scope": "Behavioral red suite for P2-B04 frozen and committed on afc/p2-b04t; backend gate red is the expected TDD signal",
+ "lifecycle": "AFC-2026-10-11",
+ "phase": 2,
+ "wave": "Wave 3",
+ "milestone": "M07",
+ "issue": 34,
+ "slice_id": "P2-B04T",
+ "authority_id": "AUTH-AFC-2026-10-12-P2-001",
+ "branch": "afc/p2-b04t",
+ "baseline": "1518e573b0acb5b24db24164b26057e250974e66",
+ "candidate_binding": "Red delta on afc/p2-b04t; committed receipt is bound to its containing commit",
+ "route": "Claude Code / Claude Opus 5.5 / high",
+ "route_basis": "Dispatch packet names DEC-AFC-SD-065 for this route; implementation.json still lists Codex CLI / GPT-6.1 Sol / high as the frozen test_implementer primary",
+ "profile": {
+  "name": "opensource-hackathon",
+  "decision": "DEC-AFC-SD-065",
+  "live_catalog_read": false
+ },
+ "review_capabilities": {
+  "coverage_assist": {
+   "enabled": true,
+   "required": true,
+   "backend": "OCR OpenCodeReview delegate mode",
+   "status": "not_run; allocated to independent review at IE-P2-21, never claimed PASS"
+  },
+  "reverify": {
+   "enabled": true,
+   "status": "not_applicable",
+   "reason": "red tests and receipts, no compiled-binary claim"
+  }
+ },
+ "method": "SEIT supporting TDD method=test; registered proof methods/environments unchanged",
+ "frozen_test_sha256": {
+  "backend/tests/deployed/matcher/test_matcher_deployed.py": "4d8d83ca7d4fe42675759fc7b210444cdf5e5e66a1d8d81f0ac2c33e11667b0c",
+  "backend/tests/unit/matcher/matcher_support.py": "8c15c9ac3c449aa8b719fc1d64314dd8fd59d0dc3cc99daa0d10bc975dc35e78",
+  "backend/tests/unit/matcher/test_matcher_corrections.py": "0a2c69c007f6de87e4c7cb696585cd987b2c785c50691501c49cbe74e21e84cf",
+  "backend/tests/unit/matcher/test_matcher_dedup.py": "c804cc978b9d06b80eac229d1820eb799d87e3008191264d09f92668edf3c5ac",
+  "backend/tests/unit/matcher/test_matcher_identity.py": "d52605fe86487ff8064120d8f0ceffc886e4eafaefdccdb9555227a80f819e8b"
+ },
+ "red": {
+  "command_id": "CMD-RED",
+  "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 $HOME/.local/share/afc-tools/backend-tests/bin/python3.12 -m pytest backend/tests/unit/matcher backend/tests/deployed/matcher -v -p no:cacheprovider --tb=short --junitxml=docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B04T/CMD-RED.xml",
+  "exit_code": 1,
+  "output": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B04T/CMD-RED.txt",
+  "junit": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B04T/CMD-RED.xml",
+  "failed": 24,
+  "passed": 0,
+  "errors": 0,
+  "skipped": 2,
+  "classification": "23 failures are AFC-STUB NotImplementedError converted to AssertionError by matcher_support.attempt; 1 is the missing matcher.PLAYER_MAP_PATH seam. Skips are the 2 deployed cases, NOT_RUN without AFC_DEPLOYED_API_URL (skip message only, no traceback). Collection: 26 collected, 0 errors (collect.txt).",
+  "test_ids": [
+   "tests/unit/matcher/test_matcher_corrections.py::test_correction_revises_the_existing_alert",
+   "tests/unit/matcher/test_matcher_corrections.py::test_correction_does_not_allocate_a_new_alert_id",
+   "tests/unit/matcher/test_matcher_corrections.py::test_correction_reassigning_the_play_still_revises_the_alert",
+   "tests/unit/matcher/test_matcher_corrections.py::test_correction_revises_every_concerned_profile_in_place",
+   "tests/unit/matcher/test_matcher_corrections.py::test_stale_revision_after_correction_yields_nothing",
+   "tests/unit/matcher/test_matcher_corrections.py::test_correction_redelivery_yields_nothing",
+   "tests/unit/matcher/test_matcher_dedup.py::test_first_delivery_yields_one_new_match",
+   "tests/unit/matcher/test_matcher_dedup.py::test_redelivery_after_alert_yields_nothing",
+   "tests/unit/matcher/test_matcher_dedup.py::test_repeated_retries_yield_one_match_per_resolved_event",
+   "tests/unit/matcher/test_matcher_dedup.py::test_two_starters_in_one_event_are_one_match",
+   "tests/unit/matcher/test_matcher_dedup.py::test_event_matching_multiple_alert_types_is_one_match",
+   "tests/unit/matcher/test_matcher_dedup.py::test_each_concerned_profile_matches_once",
+   "tests/unit/matcher/test_matcher_dedup.py::test_distinct_event_for_same_starter_is_not_deduplicated",
+   "tests/unit/matcher/test_matcher_dedup.py::test_matcher_creates_no_alert_records",
+   "tests/unit/matcher/test_matcher_identity.py::test_manual_starter_resolves_by_espn_athlete_id",
+   "tests/unit/matcher/test_matcher_identity.py::test_yahoo_starter_resolves_to_its_espn_athlete_id",
+   "tests/unit/matcher/test_matcher_identity.py::test_same_player_across_providers_is_one_identity",
+   "tests/unit/matcher/test_matcher_identity.py::test_same_name_on_another_team_is_a_distinct_player",
+   "tests/unit/matcher/test_matcher_identity.py::test_position_mismatch_is_not_matched",
+   "tests/unit/matcher/test_matcher_identity.py::test_ambiguous_mapping_is_unmatched_not_guessed",
+   "tests/unit/matcher/test_matcher_identity.py::test_unmapped_yahoo_starter_is_unmatched",
+   "tests/unit/matcher/test_matcher_identity.py::test_event_without_starters_matches_no_profile",
+   "tests/unit/matcher/test_matcher_identity.py::test_only_concerned_profiles_match",
+   "tests/unit/matcher/test_matcher_identity.py::test_landed_player_map_is_the_default_table",
+   "tests/deployed/matcher/test_matcher_deployed.py::test_alert_ids_are_unique_per_profile",
+   "tests/deployed/matcher/test_matcher_deployed.py::test_alert_revision_never_moves_backwards"
+  ]
+ },
+ "satisfiability_check": {
+  "method": "Scratch reference matcher and three mutants in a scratch copy of backend/ (never committed)",
+  "honest": "24 passed",
+  "new_id_mutant": "4 failed (correction tests incl. test_correction_does_not_allocate_a_new_alert_id)",
+  "no_dedup_mutant": "8 failed (redelivery, retry, stale and correction tests)",
+  "name_only_mutant": "3 failed (distinct team, position mismatch, ambiguous mapping)"
+ },
+ "gate": {
+  "command": "bash tools/ci/gate.sh spec docs hygiene backend",
+  "exit_code": 1,
+  "output": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B04T/gate.txt",
+  "areas": {
+   "spec": "PASS",
+   "docs": "PASS",
+   "hygiene": "PASS",
+   "tvapp": "not_run: excluded by packet (no Android SDK/JDK in scope)",
+   "backend": "FAIL (expected red): 24 failed are exactly the new matcher red tests; 604 pre-existing tests passed; 0 errors; cfn-lint not reached after pytest exit"
+  }
+ },
+ "hygiene": {
+  "path_scan": "PYTHONDONTWRITEBYTECODE=1 python3.12 tools/ci/check_paths.py",
+  "path_scan_exit_code": 0,
+  "path_scan_output": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B04T/path-check.txt",
+  "whitespace": "git diff --check origin/main...HEAD clean",
+  "credential_shapes": "No credentials; synthetic athlete ids 9000001..9000099 and fictional names only"
+ },
+ "proof_rows": [
+  {
+   "id": "SEIT-AFC-PR-024",
+   "registered_method": "test",
+   "red_support": "test_matcher_identity.py: manual and Yahoo starters resolve to one ESPN id; same name other team, position mismatch, ambiguous and unmapped entries stay unmatched",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-L03"
+  },
+  {
+   "id": "SEIT-AFC-PR-025",
+   "registered_method": "test",
+   "red_support": "test_matcher_dedup.py: redelivery and retries after the alert exists yield nothing; multi-starter and multi-alert-type event is one match; matcher writes no alerts",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-X10"
+  },
+  {
+   "id": "SEIT-AFC-PR-026",
+   "registered_method": "test",
+   "red_support": "test_matcher_corrections.py: correction revises the existing alert cursor, allocates no new alert id, still revises after the play is reassigned; stale and redelivered revisions yield nothing",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-X10"
+  },
+  {
+   "id": "SEIT-RISK-AFC-P2-10",
+   "registered_method": "inspection",
+   "red_support": "route recorded in this receipt (route, route_basis)",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-6"
+  },
+  {
+   "id": "SEIT-AFC-P2-DX-01",
+   "registered_method": "inspection",
+   "red_support": "developer_feedback below",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-6"
+  },
+  {
+   "id": "SEIT-AFC-P2-PATH-01",
+   "registered_method": "inspection",
+   "red_support": "check_paths.py exit 0; evidence paths redacted to $HOME and $WORKTREE",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "P2-6"
+  },
+  {
+   "id": "SEIT-AFC-P2-LAND-01",
+   "registered_method": "inspection",
+   "red_support": "branch pushed; no PR per packet",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "IE-P2-21"
+  },
+  {
+   "id": "SEIT-AFC-P2-REL-01",
+   "registered_method": "inspection",
+   "red_support": "none in red slice (CHANGELOG prohibited by packet)",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "IE-P2-21"
+  },
+  {
+   "id": "SEIT-AFC-P2-REV-01",
+   "registered_method": "inspection",
+   "red_support": "none in red slice (review allocated to IE-P2-21)",
+   "formal_row_status": "not_closed_by_red_slice",
+   "closing_slice": "IE-P2-21"
+  }
+ ],
+ "handoff_contract_choices": [
+  "matcher.resolve(game_event) takes a stored GameEvent (store.put_event shape) and returns a list of matches, at most one per (profileId, eventId); each match carries profileId, eventId, revision, starters (each with athlete_id = ESPN athlete id) and cursor.",
+  "cursor: the existing Alerts row cursor (alert id) for this profile and eventId when the stored alert revision is lower (correction revises in place); None when no alert exists; no match when the stored alert revision is equal or higher.",
+  "A correction yields a match for every profile holding an alert for the event, even when the corrected play no longer credits that profile's starter.",
+  "matcher.PLAYER_MAP_PATH: module-level path read at call time, default backend/src/matcher/player_map.json, document {schemaVersion: 1, players: [{espn_athlete_id, name, team, position, confidence}]}. A Yahoo starter maps on exact name + team + a position in its positions list; zero or several entries leave it unmatched.",
+  "resolve never writes the Alerts table."
+ ],
+ "scope_reconciliation": [
+  "backend/src/feed_ingest (ingest.py, replay.py, normalize.py) and backend/src/lineup are landed product; backend/src/matcher/__init__.py is still the AFC-STUB raising NotImplementedError.",
+  "Panel propagation (AFC-PR-026/-046 panel half) belongs to P2-B07 panel.project(game_event, matches); this suite binds only the matcher half: the correction match carries the corrected revision and the profile to revise.",
+  "Local afc/p2-b04t is checked out in another worktree; the red commit was made on this session's worktree branch and pushed to origin afc/p2-b04t (no git switch).",
+  "Red commit uses --no-verify per packet; the backend gate FAIL is the expected TDD red."
+ ],
+ "deferred": [
+  "P2-B04 green on unchanged frozen tests (same IDs/hashes) via CMD-GATE-BACKEND",
+  "P2-B04 retires the matcher row of STUBS in backend/tests/unit/test_pipeline_and_stubs.py, as B02/B03/B06 did",
+  "Independent OCR review at IE-P2-21",
+  "Deployed proof closeout P2-L03/P2-X10 (CMD-DEPLOYED-TESTS)"
+ ],
+ "resource_group": "host-pytest; fresh per-test Moto state; sockets blocked; no engine/server/AWS/device",
+ "changed_paths": [
+  "backend/tests/deployed/matcher/test_matcher_deployed.py",
+  "backend/tests/unit/matcher/matcher_support.py",
+  "backend/tests/unit/matcher/test_matcher_corrections.py",
+  "backend/tests/unit/matcher/test_matcher_dedup.py",
+  "backend/tests/unit/matcher/test_matcher_identity.py",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B04T/CMD-RED.txt",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B04T/CMD-RED.xml",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B04T/collect.txt",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B04T/commands.json",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B04T/gate.txt",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B04T/path-check.txt",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B04T/receipt.json",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B04T/verify_receipt.py"
+ ],
+ "developer_feedback": {
+  "observations": [
+   {
+    "id": "P2B04T-DX-001",
+    "tool": "pytest/Moto",
+    "observation": "24 all-assertion red cases plus 2 NOT_RUN deployed skips run offline in ~3 s; shared api/offline fixtures needed no change.",
+    "evidence": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B04T/CMD-RED.xml"
+   },
+   {
+    "id": "P2B04T-DX-002",
+    "tool": "backend/template.yaml",
+    "observation": "PolicyFunction IAM grants Profiles GetItem and Lineups GetItem/PutItem only; enumerating profiles concerned by an event needs Scan (or a new index), a backend-template lease change for P2-B04. Moto does not enforce IAM, so the unit suite cannot catch this.",
+    "evidence": "backend/template.yaml PolicyFunction Policies"
+   },
+   {
+    "id": "P2B04T-DX-003",
+    "tool": "Claude Code worktree guard",
+    "observation": "The isolated-worktree guard refuses compound shell commands with loops or variables; scratch runs needed a separate script file.",
+    "evidence": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B04T/commands.json"
+   }
+  ]
+ }
+}

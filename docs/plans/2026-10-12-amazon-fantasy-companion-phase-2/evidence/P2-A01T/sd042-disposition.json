@@ -1,0 +1,117 @@
+{
+  "decision": "SD-042",
+  "date": "2026-10-14",
+  "patches": [
+    {
+      "coordinate": "org.bitbucket.b_c:jose4j:0.9.6",
+      "file": "jose4j-0.9.6.jar",
+      "sha256": "7314af50cde9c99e8eaf43eee617a23edcc6bb43036221064355094999d837ef",
+      "official_checksum_url": "https://repo.maven.apache.org/maven2/org/bitbucket/b_c/jose4j/0.9.6/jose4j-0.9.6.jar.sha1",
+      "official_checksum": "357a3836bb5da16f314f3a1e954518e5468cd915",
+      "integrity": "MATCH",
+      "archive_inventory": "SAFE"
+    },
+    {
+      "coordinate": "org.bouncycastle:bcpkix-jdk18on:1.85",
+      "file": "bcpkix-jdk18on-1.85.jar",
+      "sha256": "c9f82b2d4e99c4bbdfccf684e52cc06ea06a0b567bfd0d08f9c5a3f417055996",
+      "official_checksum_url": "https://repo.maven.apache.org/maven2/org/bouncycastle/bcpkix-jdk18on/1.85/bcpkix-jdk18on-1.85.jar.sha256",
+      "official_checksum": "c9f82b2d4e99c4bbdfccf684e52cc06ea06a0b567bfd0d08f9c5a3f417055996",
+      "integrity": "MATCH",
+      "archive_inventory": "SAFE"
+    },
+    {
+      "coordinate": "org.bouncycastle:bcprov-jdk18on:1.85",
+      "file": "bcprov-jdk18on-1.85.jar",
+      "sha256": "20af26bf6060bb8005cc2389916812c1e0e998dc48d2ced7131b89461b54cff7",
+      "official_checksum_url": "https://repo.maven.apache.org/maven2/org/bouncycastle/bcprov-jdk18on/1.85/bcprov-jdk18on-1.85.jar.sha256",
+      "official_checksum": "20af26bf6060bb8005cc2389916812c1e0e998dc48d2ced7131b89461b54cff7",
+      "integrity": "MATCH",
+      "archive_inventory": "SAFE"
+    },
+    {
+      "coordinate": "org.bouncycastle:bcutil-jdk18on:1.85",
+      "file": "bcutil-jdk18on-1.85.jar",
+      "sha256": "590f55ed5d68529239898a4a5c4f730b6e37f45d1cfa3fbe51f8485abe32c42d",
+      "official_checksum_url": "https://repo.maven.apache.org/maven2/org/bouncycastle/bcutil-jdk18on/1.85/bcutil-jdk18on-1.85.jar.sha256",
+      "official_checksum": "590f55ed5d68529239898a4a5c4f730b6e37f45d1cfa3fbe51f8485abe32c42d",
+      "integrity": "MATCH",
+      "archive_inventory": "SAFE"
+    },
+    {
+      "coordinate": "org.jdom:jdom2:2.0.6.1",
+      "file": "jdom2-2.0.6.1.jar",
+      "sha256": "0b20f45e3a0fd8f0d12cdc5316b06776e902b1365db00118876f9175c60f302c",
+      "official_checksum_url": "https://repo.maven.apache.org/maven2/org/jdom/jdom2/2.0.6.1/jdom2-2.0.6.1.jar.sha256",
+      "official_checksum": "0b20f45e3a0fd8f0d12cdc5316b06776e902b1365db00118876f9175c60f302c",
+      "integrity": "MATCH",
+      "archive_inventory": "SAFE"
+    }
+  ],
+  "accepted_findings": [
+    {
+      "id": "CVE-2021-22569",
+      "package": "com.google.protobuf:protobuf-java",
+      "version": "2.6.1",
+      "severity": "HIGH",
+      "artifact": "kotlin-compiler-32.3.1.jar",
+      "status": "ACCEPTED_BUILD_HOST_RESIDUAL",
+      "decision": "SD-042",
+      "reachability_rationale": "Bundled protobuf parser is build-host Kotlin/lint tooling operating on the checked-out sources and admitted dependencies, not runtime API payloads. Host builds are offline and noninteractive. A malicious source/dependency can still reach parser paths; no fixed compiler release removes these classes. Owner accepts that residual exposure, not a false-positive determination."
+    },
+    {
+      "id": "CVE-2024-7254",
+      "package": "com.google.protobuf:protobuf-java",
+      "version": "2.6.1",
+      "severity": "HIGH",
+      "artifact": "kotlin-compiler-32.3.1.jar",
+      "status": "ACCEPTED_BUILD_HOST_RESIDUAL",
+      "decision": "SD-042",
+      "reachability_rationale": "Bundled protobuf parser is build-host Kotlin/lint tooling operating on the checked-out sources and admitted dependencies, not runtime API payloads. Host builds are offline and noninteractive. A malicious source/dependency can still reach parser paths; no fixed compiler release removes these classes. Owner accepts that residual exposure, not a false-positive determination."
+    },
+    {
+      "id": "CVE-2026-77422",
+      "package": "org.jline:jline-builtins",
+      "version": "3.24.1",
+      "severity": "HIGH",
+      "artifact": "kotlin-compiler-32.3.1.jar",
+      "status": "ACCEPTED_BUILD_HOST_RESIDUAL",
+      "decision": "SD-042",
+      "reachability_rationale": "Bundled JLine console grep/Telnet modules are build-host tooling. This harness starts noninteractive offline Gradle/Kotlin builds, does not start a JLine Telnet server or execute user-supplied console grep regex, and never packages this compiler in the app runtime. A different build-host invocation could expose the vulnerable features; accepted by the owner, not proven unreachable universally."
+    },
+    {
+      "id": "CVE-2026-56740",
+      "package": "org.jline:jline-remote-telnet",
+      "version": "3.24.1",
+      "severity": "HIGH",
+      "artifact": "kotlin-compiler-32.3.1.jar",
+      "status": "ACCEPTED_BUILD_HOST_RESIDUAL",
+      "decision": "SD-042",
+      "reachability_rationale": "Bundled JLine console grep/Telnet modules are build-host tooling. This harness starts noninteractive offline Gradle/Kotlin builds, does not start a JLine Telnet server or execute user-supplied console grep regex, and never packages this compiler in the app runtime. A different build-host invocation could expose the vulnerable features; accepted by the owner, not proven unreachable universally."
+    },
+    {
+      "id": "CVE-2026-56741",
+      "package": "org.jline:jline-remote-telnet",
+      "version": "3.24.1",
+      "severity": "HIGH",
+      "artifact": "kotlin-compiler-32.3.1.jar",
+      "status": "ACCEPTED_BUILD_HOST_RESIDUAL",
+      "decision": "SD-042",
+      "reachability_rationale": "Bundled JLine console grep/Telnet modules are build-host tooling. This harness starts noninteractive offline Gradle/Kotlin builds, does not start a JLine Telnet server or execute user-supplied console grep regex, and never packages this compiler in the app runtime. A different build-host invocation could expose the vulnerable features; accepted by the owner, not proven unreachable universally."
+    }
+  ],
+  "unreviewed_high_critical": 0,
+  "admission": "PASS with SD-042 accepted residuals: original 124 artifacts malware scan plus hash-bound deltas 3+1+7 (135 files total), all completed exit 0 / zero infected; full final archive and native-coordinate scans complete with exactly five accepted HIGH and zero unreviewed HIGH/CRITICAL.",
+  "java_index_gap": "Stale archive identity index supplemented by 135 native Gradle artifact coordinates across independent classpath, compiler and lint configurations; no unreviewed HIGH/CRITICAL in either completed scan.",
+  "resolved_artifacts": 135,
+  "final_evidence": [
+    "final-closure-trivy.json",
+    "final-native-trivy.json",
+    "final-resolved-artifacts.tsv",
+    "final-artifact-sha256s.txt",
+    "patched-closure-clam.txt",
+    "script-delta-clam.txt",
+    "annotations-delta-clam.txt",
+    "compiler-delta-clam.txt"
+  ]
+}

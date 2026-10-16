@@ -1,0 +1,246 @@
+{
+ "slice": "P2-A02T",
+ "role": "Test Implementer",
+ "route": "Claude Code / Claude Opus 5.5 / high (packet-assigned)",
+ "base_commit": "da706eb189cc114911f2a7cc3b22dba172fb1035",
+ "command_id": "CMD-RED",
+ "command": "./tv-app/gradlew -p tv-app --no-daemon --max-workers=2 testDebugUnitTest --tests 'com.afc.companion.profile.*' --tests 'com.afc.companion.detect.*'",
+ "exit_code": 1,
+ "log": "cmd-red.txt",
+ "log_sha256": "d95edd6afb5b3e3ee218d0ad7f78276b434de486a6a31d62b4749ad46b3095b1",
+ "counts": {
+  "tests": 26,
+  "failed": 22,
+  "passed": 4,
+  "errors": 0,
+  "compile_errors": 0
+ },
+ "failure_types": [
+  "java.lang.AssertionError",
+  "org.junit.ComparisonFailure"
+ ],
+ "classification": "behavioral red: every failure is an AssertionError (ComparisonFailure is its subclass) against AFC-STUB returns; 0 compile, collection or tool errors",
+ "passing_at_red": {
+  "note": "negative cases that hold against the stub by construction; they guard the green implementation",
+  "ids": [
+   "com.afc.companion.detect.AppDetectorTest#optedOutSendsNoReport",
+   "com.afc.companion.detect.AppDetectorTest#optedOutPerformsNoReads",
+   "com.afc.companion.profile.ProfileCodecTest#wrongTypedControlIsRejected",
+   "com.afc.companion.profile.ProfilePersistenceTest#invalidStoredProfileIsNotApplied"
+  ]
+ },
+ "cases": [
+  {
+   "id": "com.afc.companion.detect.AppDetectorTest#malformedCandidatesAreSkipped",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: expected:<[com.example.provider.a]> but was:<[]>"
+  },
+  {
+   "id": "com.afc.companion.detect.AppDetectorTest#optedOutSendsNoReport",
+   "result": "PASSED",
+   "failure_type": null,
+   "message": null
+  },
+  {
+   "id": "com.afc.companion.detect.AppDetectorTest#optedOutPerformsNoReads",
+   "result": "PASSED",
+   "failure_type": null,
+   "message": null
+  },
+  {
+   "id": "com.afc.companion.detect.AppDetectorTest#reportIsBoundedByTheContractCap",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: expected:<500> but was:<0>"
+  },
+  {
+   "id": "com.afc.companion.detect.AppDetectorTest#reportsEachInstalledCandidateAndNoAbsentOne",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: each supported installed app reported expected:<[com.example.provider.a, com.example.provider.c]> but was:<[]>"
+  },
+  {
+   "id": "com.afc.companion.detect.AppDetectorTest#detectorReportPostsInstalledApps",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: Missing behavior: detector report sent"
+  },
+  {
+   "id": "com.afc.companion.profile.ProfileCodecTest#wrongTypedControlIsRejected",
+   "result": "PASSED",
+   "failure_type": null,
+   "message": null
+  },
+  {
+   "id": "com.afc.companion.profile.ProfileCodecTest#emptySettingsDecodeToDocumentedDefaults",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: Missing behavior: empty persisted settings decode to defaults"
+  },
+  {
+   "id": "com.afc.companion.profile.ProfileCodecTest#eachExcitementLevelRoundTrips",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: expected:<Off> but was:<null>"
+  },
+  {
+   "id": "com.afc.companion.profile.ProfileCodecTest#eachScoringPresetRoundTripsWithFrozenWire",
+   "result": "FAILED",
+   "failure_type": "org.junit.ComparisonFailure",
+   "message": "org.junit.ComparisonFailure: expected:<[p]pr> but was:<[halfP]pr>"
+  },
+  {
+   "id": "com.afc.companion.profile.ProfileCodecTest#eachPresentationRoundTrips",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: expected:<HeadsUp> but was:<null>"
+  },
+  {
+   "id": "com.afc.companion.profile.ProfileCodecTest#outOfRangeValuesCannotBeEncoded",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: alert_min_gap above 600 s: expected java.lang.IllegalArgumentException to be thrown, but nothing was thrown"
+  },
+  {
+   "id": "com.afc.companion.profile.ProfileCodecTest#eachControlWritesOnlyItsOwnSettingsField",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: changing fantasySelections rewrites only fantasySelections expected:<[fantasySelections]> but was:<[]>"
+  },
+  {
+   "id": "com.afc.companion.profile.ProfileCodecTest#overridesAndLocalMarketRoundTrip",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: expected:<{com.example.provider.a=false, com.example.provider.c=true}> but was:<null>"
+  },
+  {
+   "id": "com.afc.companion.profile.ProfileCodecTest#everyControlRoundTrips",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: Missing behavior: encoded settings decode"
+  },
+  {
+   "id": "com.afc.companion.profile.ProfileControlsTest#customerOverrideWinsOverDetection",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: expected:<[com.example.provider.b, com.example.provider.c]> but was:<[]>"
+  },
+  {
+   "id": "com.afc.companion.profile.ProfileControlsTest#unsupportedDetectionHidesItsControlWithStatedLimit",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: stated limit for hidden detection"
+  },
+  {
+   "id": "com.afc.companion.profile.ProfileControlsTest#unverifiedVoiceRouteHidesVoiceWithStatedLimit",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: stated limit for hidden voice"
+  },
+  {
+   "id": "com.afc.companion.profile.ProfileControlsTest#voiceGateNeedsBothEnablementAndVerifiedRoute",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: enabled over a verified route speaks"
+  },
+  {
+   "id": "com.afc.companion.profile.ProfileControlsTest#everyControlIsOfferedWhenRoutesAreSupported",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: expected:<[Selections, TeamLeague, AlertTypes, Frequency, QuietHours, GameDay, SpoilerDelay, Presentation, Voice, Excitement, ProviderPreference, SwitchingConfirmation, Detec"
+  },
+  {
+   "id": "com.afc.companion.profile.ProfilePersistenceTest#pprSelectionPersistsAndHalfPprReturnsAfterSwitchBack",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError"
+  },
+  {
+   "id": "com.afc.companion.profile.ProfilePersistenceTest#staleSaveDoesNotOverwriteNewerProfile",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError"
+  },
+  {
+   "id": "com.afc.companion.profile.ProfilePersistenceTest#everySelectionAndControlPersistsAcrossRestart",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError"
+  },
+  {
+   "id": "com.afc.companion.profile.ProfilePersistenceTest#firstLoadOfEmptyProfileIsHalfPpr",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError: Missing behavior: load decodes GET /v1/profile"
+  },
+  {
+   "id": "com.afc.companion.profile.ProfilePersistenceTest#invalidStoredProfileIsNotApplied",
+   "result": "PASSED",
+   "failure_type": null,
+   "message": null
+  },
+  {
+   "id": "com.afc.companion.profile.ProfilePersistenceTest#overrideSurvivesRestartAndDetectionRefresh",
+   "result": "FAILED",
+   "failure_type": "java.lang.AssertionError",
+   "message": "java.lang.AssertionError"
+  }
+ ],
+ "frozen_tests": {
+  "tv-app/app/src/test/java/com/afc/companion/detect/AppDetectorTest.kt": "26d5f81eab35fb790db8e08cdf89ebef83a444f667bd354f5fb22bed0e1cb863",
+  "tv-app/app/src/test/java/com/afc/companion/profile/ProfileCodecTest.kt": "711966a5993e2a9fc3b551d7cb3b10983f35252e72c9ee78f3504ea17c994310",
+  "tv-app/app/src/test/java/com/afc/companion/profile/ProfileControlsTest.kt": "92c3d36c6e5faaffd0f75fe91e93a4189e4cf39ee5bd148c5b0a272bf5ba712d",
+  "tv-app/app/src/test/java/com/afc/companion/profile/ProfileFixtures.kt": "dced25d6665a4e7ca69b63de7bf4e3b102b17b1fbc87b66bdb9f5e4627d58b26",
+  "tv-app/app/src/test/java/com/afc/companion/profile/ProfilePersistenceTest.kt": "415de83facebf2022b33e396f4172f0d6846720abe6e1e52f8109f28df0bfad9"
+ },
+ "bootstrap_scaffolding": {
+  "note": "AFC-STUB final signatures only; every function returns a neutral value (null/empty/false/default Settings()); no tested green behavior",
+  "files": {
+   "tv-app/app/src/main/java/com/afc/companion/profile/ProfileModel.kt": "8e8c67f48e8118b4b9ce27e0d3be04e560410035c59cc42c2fff358b0eb1ba33",
+   "tv-app/app/src/main/java/com/afc/companion/detect/AppDetector.kt": "2be840cc445ed0926c6103a55b8fb8c50fc468bc3d107ec67a890c007830e248"
+  }
+ },
+ "gate": {
+  "command": "bash tools/ci/gate.sh",
+  "exit_code": 1,
+  "areas": {
+   "spec": "PASS",
+   "docs": "PASS",
+   "hygiene": "PASS",
+   "backend": "PASS (380 passed)",
+   "tvapp": "FAIL check exit 1: 110 tests, 22 failed, all 22 are the intended red cases above; 88 passed"
+  },
+  "lint_assemble": "./tv-app/gradlew -p tv-app --no-daemon --max-workers=2 lintDebug assembleDebug -> BUILD SUCCESSFUL (gate stops at testDebugUnitTest)"
+ },
+ "typed_gaps": [
+  {
+   "id": "DEVICE_INSTALL_PENDING",
+   "scope": "androidTest profile/detect instrumented cases (restart on the stick, D-pad control reachability, real PackageManager detection)",
+   "reason": "no Fire TV stick; fire-tv-stick lease not taken; no instrumented test authored or run, never a pass"
+  },
+  {
+   "id": "X07_VERDICT_PENDING",
+   "scope": "which installed-app and viewing-context facts the platform permits",
+   "reason": "P2-X07 verdict absent; tests bind the hidden-with-stated-limit rule and an injected InstalledAppQuery seam, not a specific PackageManager API"
+  }
+ ],
+ "acceptance": {
+  "AFC-PR-002": "ProfilePersistenceTest#everySelectionAndControlPersistsAcrossRestart",
+  "AFC-PR-003": "AppDetectorTest#reportsEachInstalledCandidateAndNoAbsentOne, #detectorReportPostsInstalledApps",
+  "AFC-PR-005": "ProfilePersistenceTest#overrideSurvivesRestartAndDetectionRefresh, ProfileControlsTest#customerOverrideWinsOverDetection, ProfileCodecTest#overridesAndLocalMarketRoundTrip",
+  "AFC-PR-009/-018/-019": "gameDay and quietHours in persistence and codec field tests",
+  "AFC-PR-010/-037": "AppDetectorTest#optedOutPerformsNoReads, #optedOutSendsNoReport; ProfileControlsTest#unsupportedDetectionHidesItsControlWithStatedLimit; default opt-in false",
+  "AFC-PR-016/-017/-020/-021/-034/-035/-042/-044": "ProfileCodecTest#eachControlWritesOnlyItsOwnSettingsField, #everyControlRoundTrips, persistence test",
+  "AFC-PR-022": "ProfileControlsTest#voiceGateNeedsBothEnablementAndVerifiedRoute, #unverifiedVoiceRouteHidesVoiceWithStatedLimit",
+  "AFC-PR-023": "ProfileCodecTest#eachExcitementLevelRoundTrips (Off/Mild/Hype exactly)",
+  "AFC-PR-066": "ProfileCodecTest#emptySettingsDecodeToDocumentedDefaults (Half-PPR), #eachScoringPresetRoundTripsWithFrozenWire; ProfilePersistenceTest#firstLoadOfEmptyProfileIsHalfPpr, #pprSelectionPersistsAndHalfPprReturnsAfterSwitchBack, #invalidStoredProfileIsNotApplied (no third preset)"
+ },
+ "developer_feedback": [
+  {
+   "id": "DX-P2-A02T-01",
+   "observation": "Host unit tests compile against android.jar's org.json, which lacks JSONObject.keySet(); use keys().",
+   "evidence": "first CMD-RED compile error, fixed before freeze"
+  }
+ ]
+}
