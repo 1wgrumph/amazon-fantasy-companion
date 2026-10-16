@@ -148,3 +148,38 @@ def test_module_constants_keep_their_values():
     assert presets.DEFAULT_PRESET in presets.TABLES
     assert manual.T_YAHOO == "2026-10-16T19:00:00Z" and manual.MAX_ENTRIES == 200
     assert yahoo.MAX_ITEMS == 200
+
+
+def _big_roster(n):
+    return [{"athlete_id": f"espn.{i}", "name": f"Sample {i}", "team": "SYN"} for i in range(n)]
+
+
+def test_manual_32_starters_accepted_33_rejected():
+    roster = _big_roster(33)
+    entries = lambda n: [{"athlete_id": p["athlete_id"], "slot": "WR"} for p in roster[:n]]  # noqa: E731
+    assert len(manual.build(roster, entries(32), "PPR")["starters"]) == 32
+    with pytest.raises(ValueError):
+        manual.build(roster, entries(33), "PPR")
+    with pytest.raises(ValueError):
+        manual.build([{"athlete_id": "   ", "name": "Blank", "team": "SYN"}],
+                     [{"athlete_id": "   ", "slot": "WR"}], "PPR")
+
+
+@pytest.mark.parametrize("players", [
+    [dict(PLAYER, player_key="")],
+    [dict(PLAYER, player_key="  ")],
+    [PLAYER, PLAYER],
+    [dict(PLAYER, player_key=f"nfl.p.{i}") for i in range(33)],
+])
+def test_yahoo_blank_duplicate_or_oversize_starters_are_rejected(players):
+    with pytest.raises(ValueError):
+        yahoo.get_roster(Fixed({"team_key": TEAM_KEY, "week": 5, "players": players}),
+                         "tok", TEAM_KEY, 5)
+
+
+def test_yahoo_32_starters_plus_bench_is_accepted():
+    players = ([dict(PLAYER, player_key=f"nfl.p.{i}") for i in range(32)]
+               + [dict(PLAYER, player_key="nfl.p.99", slot="BN")])
+    roster = yahoo.get_roster(Fixed({"team_key": TEAM_KEY, "week": 5, "players": players}),
+                              "tok", TEAM_KEY, 5)
+    assert len(roster["starters"]) == 32 and len(roster["bench"]) == 1

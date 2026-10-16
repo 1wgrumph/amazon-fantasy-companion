@@ -80,7 +80,7 @@ def test_alerts_page_by_cursor_per_profile(store):
 
 def test_lineups_and_panels_keep_their_shapes(store):
     lineup = {"profileId": "owner", "source": "manual", "team": "T", "league": "L",
-              "starters": ["1"], "scoring": "halfPpr", "updatedAt": "u"}
+              "starters": [{"athlete_id": "1"}], "scoring": "halfPpr", "updatedAt": "u"}
     store.put_lineup(lineup)
     assert store.get_lineup("owner") == lineup
     assert store.get_lineup("other") is None

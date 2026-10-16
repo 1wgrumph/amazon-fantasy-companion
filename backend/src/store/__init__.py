@@ -44,8 +44,9 @@ def _written(write, **request):
 
 # Profiles: profile, Settings, revision.
 def get_profile(profile_id):
+    # Strongly consistent: profile.revision feeds the panel revision, which never decreases.
     return _table("PROFILES_TABLE").get_item(
-        Key={"profileId": profile_id}).get("Item")
+        Key={"profileId": profile_id}, ConsistentRead=True).get("Item")
 
 
 def monitoring_profiles():
@@ -167,14 +168,82 @@ def list_alerts(profile_id, after, limit, include_after=False):
 
 
 # Lineups: profile, source, starters, scoring basis.
+# lineupVersion is a store-allocated monotonic content version: it advances
+# on every content change (including a change back and an empty/removal
+# row, which is the retained tombstone) and is preserved on an identical
+# rewrite. get_lineup hides it so the stored Lineup shape is unchanged;
+# panel reads it through get_lineup_version.
+_LINEUP_FIELDS = {"profileId", "source", "team", "league", "starters", "scoring",
+                  "updatedAt"}
+_LINEUP_CONTENT = ("source", "team", "league", "starters", "scoring")
+
+
+def _lineup_row(profile_id):
+    # Strongly consistent: a lagging replica would serve a lower lineupVersion.
+    return _table("LINEUPS_TABLE").get_item(
+        Key={"profileId": profile_id}, ConsistentRead=True).get("Item")
+
+
+MAX_STARTERS = 32  # frozen panel row bound the TV decoder enforces
+
+
+def _check_starters(item):
+    """Reject rows the panel cannot serve: over 32 starters, blank or repeated ids."""
+    if "starters" not in item:
+        return
+    starters = item["starters"]
+    if not isinstance(starters, list) or len(starters) > MAX_STARTERS:
+        raise ValueError(f"Lineup starters must be a list of at most {MAX_STARTERS}")
+    key = "player_key" if item.get("source") == "yahoo" else "athlete_id"
+    ids = [starter.get(key) if isinstance(starter, dict) else None for starter in starters]
+    if any(not isinstance(i, str) or not i.strip() for i in ids):
+        raise ValueError(f"Every lineup starter needs a non-blank {key}")
+    if len(set(ids)) != len(ids):
+        raise ValueError(f"Lineup starters repeat a {key}")
+
+
 def put_lineup(lineup):
-    _table("LINEUPS_TABLE").put_item(Item=_shaped(lineup, {
-        "profileId", "source", "team", "league", "starters", "scoring", "updatedAt"}))
+    item = _shaped(dict(lineup), _LINEUP_FIELDS | {"lineupVersion"})
+    item.pop("lineupVersion", None)  # allocated here, never caller-supplied
+    _check_starters(item)
+    table = _table("LINEUPS_TABLE")
+    for _attempt in range(3):
+        current = _lineup_row(item["profileId"])
+        version = int(current.get("lineupVersion", 0)) if current else 0
+        unchanged = (current is not None and "lineupVersion" in current and all(
+            current.get(field) == item.get(field) for field in _LINEUP_CONTENT))
+        item["lineupVersion"] = version if unchanged else version + 1
+        if current is None:
+            condition = Attr("profileId").not_exists()
+        elif "lineupVersion" in current:
+            condition = Attr("lineupVersion").eq(version)
+        else:
+            condition = Attr("lineupVersion").not_exists()
+        if _written(table.put_item, Item=item, ConditionExpression=condition):
+            return
+    raise RuntimeError(f"lineup write for {item['profileId']} kept losing races")
+
+
+def _without_version(row):
+    if row is None or not (set(row) - {"profileId", "lineupVersion", "updatedAt"}):
+        return None
+    return {key: value for key, value in row.items() if key != "lineupVersion"}
 
 
 def get_lineup(profile_id):
-    return _table("LINEUPS_TABLE").get_item(
-        Key={"profileId": profile_id}).get("Item")
+    return _without_version(_lineup_row(profile_id))
+
+
+def get_lineup_version(profile_id):
+    """Monotonic lineup content version; 0 for no row or a legacy row."""
+    row = _lineup_row(profile_id)
+    return int(row.get("lineupVersion", 0)) if row else 0
+
+
+def get_lineup_with_version(profile_id):
+    """Single-read (lineup or None, monotonic lineupVersion) so snapshot never tears."""
+    row = _lineup_row(profile_id)
+    return _without_version(row), (int(row.get("lineupVersion", 0)) if row else 0)
 
 
 # Panels: profile, team/league, PanelState.
@@ -204,8 +273,9 @@ def put_panel_conditional(panel, expected_counter):
 
 
 def get_panel(profile_id, team_league):
+    # Strongly consistent: freshness.counter feeds the panel revision, which never decreases.
     return _table("PANELS_TABLE").get_item(
-        Key={"profileId": profile_id, "teamLeague": team_league}).get("Item")
+        Key={"profileId": profile_id, "teamLeague": team_league}, ConsistentRead=True).get("Item")
 
 
 # Player statistics: latest stored boxscore per ESPN athlete (panel seam).

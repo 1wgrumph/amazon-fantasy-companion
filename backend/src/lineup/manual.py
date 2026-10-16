@@ -19,6 +19,10 @@ def _max_entries():
     return 200
 
 
+def _max_starters():
+    return 32  # frozen panel row bound the TV decoder enforces
+
+
 def __getattr__(name):
     if name == "T_YAHOO":
         return _t_yahoo()
@@ -52,14 +56,14 @@ def build(espn_roster, entries, preset):
     players = {}
     for player in espn_roster:
         if not (isinstance(player, dict) and isinstance(player.get("athlete_id"), str)
-                and player["athlete_id"] and isinstance(player.get("name"), str)):
+                and player["athlete_id"].strip() and isinstance(player.get("name"), str)):
             raise ValueError("ESPN roster entry needs an athlete_id and name")
         team = player.get("team")
         if not isinstance(team, str) or not re.fullmatch(r"[A-Z0-9]{2,4}", team):
             raise ValueError("ESPN roster entry needs a team of 2-4 uppercase letters/digits")
         players[player["athlete_id"]] = player
-    if not isinstance(entries, list) or len(entries) > _max_entries():
-        raise ValueError("Lineup entries must be a bounded list")
+    if not isinstance(entries, list) or len(entries) > _max_starters():
+        raise ValueError("Lineup entries must be a list of at most 32 starters")
     starters = []
     for entry in entries:
         if (not isinstance(entry, dict) or not isinstance(entry.get("athlete_id"), str)
