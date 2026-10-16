@@ -27,7 +27,7 @@ EXPANDED = {
                            "dynamodb:BatchGetItem", "dynamodb:DescribeTable"},
 }
 EXPECTED = {
-    "ApiFunction": {"ProfilesTable": {"GetItem", "PutItem"},
+    "ApiFunction": {"ProfilesTable": {"GetItem", "PutItem", "UpdateItem"},
                     "LinksTable": {"GetItem", "PutItem", "UpdateItem", "Query", "DeleteItem"},
                     "AlertsTable": {"Query"},
                     "LineupsTable": {"GetItem", "PutItem"},
@@ -123,6 +123,40 @@ def test_policy_grants_matcher_operations_on_exact_table_arns():
                 assert all(resource in table_arns for resource in statement["Resource"])
     actions, _ = grants(policy["Policies"])
     assert actions == expected, f"PolicyFunction must grant matcher calls: {expected}; got {actions}"
+
+
+def test_api_grants_provider_resolver_operations_on_profiles_table():
+    template = document("template.yaml")
+    api = ast.parse((BACKEND / "src/api/handler.py").read_text())
+    called = {node.func.attr for node in ast.walk(api)
+              if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute)
+              and isinstance(node.func.value, ast.Name)
+              and node.func.value.id == "provider_resolver"}
+    assert {"record_outcome", "record_installed_apps"} <= called
+    resolver = ast.parse((BACKEND / "src/provider_resolver/__init__.py").read_text())
+    required = set()
+    for function in resolver.body:
+        if not isinstance(function, ast.FunctionDef) or function.name not in called:
+            continue
+        for node in ast.walk(function):
+            if (isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute)
+                    and isinstance(node.func.value, ast.Call)
+                    and isinstance(node.func.value.func, ast.Name)
+                    and node.func.value.func.id == "_state_table"):
+                required.add("".join(part.title() for part in node.func.attr.split("_")))
+    assert required, "No provider-resolver state operations found"
+    state_table = next(node for node in resolver.body
+                       if isinstance(node, ast.FunctionDef) and node.name == "_state_table")
+    [table_call] = [node for node in ast.walk(state_table)
+                    if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute)
+                    and node.func.attr == "Table"]
+    variable = ast.literal_eval(table_call.args[0].slice)
+    environment = template["Globals"]["Function"]["Environment"]["Variables"]
+    assert environment[variable] == {"Ref": "ProfilesTable"}
+    policies = template["Resources"]["ApiFunction"]["Properties"]["Policies"]
+    actions, resources = grants(policies)
+    assert actions["ProfilesTable"] == {"GetItem", "PutItem"} | required
+    assert resources["ProfilesTable"] == {"table"}
 
 
 def test_api_never_writes_alerts_and_only_supersedes_link_sessions():
