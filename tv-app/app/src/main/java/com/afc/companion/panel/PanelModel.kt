@@ -26,6 +26,8 @@ data class PanelSnapshot(
     val rows: List<PanelRow>,
     val teamTotal: PanelValue,
     val progress: PanelValue,
+    /** Envelope lineup source (manual/yahoo), kept separate from per-value live/replay source. */
+    val source: String = "live",
 )
 
 /** Declared bound on rows accepted from one PanelState (AFC-PR-062). */
@@ -71,6 +73,7 @@ fun decodePanel(state: PanelState): PanelSnapshot? {
         rows = rows,
         teamTotal = panelValue(data.opt("teamTotal") as? JSONObject),
         progress = progress,
+        source = state.envelope.source,
     )
 }
 
@@ -119,9 +122,26 @@ object PanelText {
     fun value(value: PanelValue, nowMs: Long): String {
         val number = value.value ?: return "Unavailable"
         val text = number.toString()
-        val asOf = value.asOfMs ?: return "$text (stale)"
-        val ageMs = nowMs - asOf
-        return if (ageMs >= STALE_AFTER_MS) "$text (stale ${ageMs / 1_000}s)" else text
+        val provenance = when (value.source) {
+            "live" -> "live"
+            "replay" -> "replay"
+            else -> null
+        }
+        val stale = when {
+            value.asOfMs == null -> "stale"
+            nowMs - value.asOfMs >= STALE_AFTER_MS -> "stale ${(nowMs - value.asOfMs) / 1_000}s"
+            else -> null
+        }
+        val labels = listOfNotNull(provenance, stale)
+        return if (labels.isEmpty()) text else "$text (${labels.joinToString(", ")})"
+    }
+
+    fun lineupSource(source: String): String = when (source) {
+        "manual" -> "Manual lineup"
+        "yahoo" -> "Yahoo lineup"
+        "live" -> "Live"
+        "replay" -> "Replay"
+        else -> "Source unavailable"
     }
 
     fun basis(basis: ScoringBasis): String = when (basis) {
@@ -264,7 +284,7 @@ class PanelController(teamLeagues: List<String>, selected: String?, visible: Boo
             val changed = snapshot.rows.filter { previousById[it.playerId] != it }.map { it.playerId }.toSet()
             val removed = previousById.keys - snapshot.rows.map { it.playerId }.toSet()
             val totalsChanged = previous.teamTotal != snapshot.teamTotal ||
-                previous.progress != snapshot.progress || previous.basis != snapshot.basis
+                previous.progress != snapshot.progress || previous.basis != snapshot.basis || previous.source != snapshot.source
             PanelDelta(changed, removed, totalsChanged)
         }
         val oldTargets = focusTargets()

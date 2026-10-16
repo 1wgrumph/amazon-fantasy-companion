@@ -181,7 +181,7 @@ private fun PanelContent(
             return@Column
         }
         Text(
-            PanelText.basis(snapshot.basis),
+            "${PanelText.basis(snapshot.basis)} · ${PanelText.lineupSource(snapshot.source)}",
             style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = Color.White),
         )
         LazyColumn(

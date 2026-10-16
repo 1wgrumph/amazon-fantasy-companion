@@ -13,6 +13,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import com.afc.companion.net.Alert
 import com.afc.companion.watch.WatchActivity
+import org.json.JSONObject
 import java.net.URLEncoder
 import java.security.MessageDigest
 
@@ -38,7 +39,7 @@ class AlertNotifier(private val context: Context) {
         val watch = Intent(context, WatchActivity::class.java)
             .setData(Uri.parse(actionData(alertId, "watch")))
             .putExtra(EXTRA_ALERT_ID, alertId)
-            .putExtra(EXTRA_EVENT_ID, alert.envelope.data.opt("eventId") as? String)
+            .putExtra(EXTRA_EVENT_ID, watchEventId(alert))
         val dismiss = Intent(context, AlertService::class.java)
             .setAction(AlertService.ACTION_DISMISS)
             .setData(Uri.parse(actionData(alertId, "dismiss")))
@@ -74,6 +75,11 @@ class AlertNotifier(private val context: Context) {
         const val CHANNEL_ID = "afc-alerts"
         const val EXTRA_ALERT_ID = "com.afc.companion.alerts.ALERT_ID"
         const val EXTRA_EVENT_ID = "com.afc.companion.alerts.EVENT_ID"
+
+        /** The server carries the event ID in triggerContext; the data-level key is a legacy fallback. */
+        internal fun watchEventId(alert: Alert): String? =
+            (alert.envelope.data.opt("triggerContext") as? JSONObject)?.opt("eventId") as? String
+                ?: alert.envelope.data.opt("eventId") as? String
 
         internal fun notificationTag(alertId: String): String = "alert:$alertId"
 
