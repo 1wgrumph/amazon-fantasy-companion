@@ -13,7 +13,8 @@ fingerprint, so a starter change outruns the last projected revision.
 The revision also carries the store-allocated lineupVersion, which
 advances on every lineup content change (including a change back and an
 empty/removal row), so distinct content never reuses a revision and a
-served revision never goes backwards for one profile/pair.
+served revision never goes backwards for one profile/pair (every revision
+input is read strongly consistent, so no lagging replica serves an older one).
 Projections write conditionally on the stored counter and re-read and
 merge on a lost race, so overlapping games never erase each other.
 
@@ -188,6 +189,9 @@ def snapshot(profile_id, team_league):
     games, counter, projected = _stored(profile_id, team_league)
     rows, states, source_ids = [], [], []
     if lineup and _pair(lineup) == team_league:
+        if len(lineup.get("starters") or []) > MAX_ROWS:
+            raise InvalidLineupError(
+                "stored lineup violates the panel row contract (count, blank or duplicate id)")
         source_key = "player_key" if lineup.get("source") == "yahoo" else "athlete_id"
         for starter in lineup.get("starters") or []:
             raw_id = starter.get(source_key) if isinstance(starter, dict) else None

@@ -42,8 +42,9 @@ def _written(write, **request):
 
 # Profiles: profile, Settings, revision.
 def get_profile(profile_id):
+    # Strongly consistent: profile.revision feeds the panel revision, which never decreases.
     return _table("PROFILES_TABLE").get_item(
-        Key={"profileId": profile_id}).get("Item")
+        Key={"profileId": profile_id}, ConsistentRead=True).get("Item")
 
 
 def monitoring_profiles():
@@ -176,13 +177,33 @@ _LINEUP_CONTENT = ("source", "team", "league", "starters", "scoring")
 
 
 def _lineup_row(profile_id):
+    # Strongly consistent: a lagging replica would serve a lower lineupVersion.
     return _table("LINEUPS_TABLE").get_item(
-        Key={"profileId": profile_id}).get("Item")
+        Key={"profileId": profile_id}, ConsistentRead=True).get("Item")
+
+
+MAX_STARTERS = 32  # frozen panel row bound the TV decoder enforces
+
+
+def _check_starters(item):
+    """Reject rows the panel cannot serve: over 32 starters, blank or repeated ids."""
+    if "starters" not in item:
+        return
+    starters = item["starters"]
+    if not isinstance(starters, list) or len(starters) > MAX_STARTERS:
+        raise ValueError(f"Lineup starters must be a list of at most {MAX_STARTERS}")
+    key = "player_key" if item.get("source") == "yahoo" else "athlete_id"
+    ids = [starter.get(key) if isinstance(starter, dict) else None for starter in starters]
+    if any(not isinstance(i, str) or not i.strip() for i in ids):
+        raise ValueError(f"Every lineup starter needs a non-blank {key}")
+    if len(set(ids)) != len(ids):
+        raise ValueError(f"Lineup starters repeat a {key}")
 
 
 def put_lineup(lineup):
     item = _shaped(dict(lineup), _LINEUP_FIELDS | {"lineupVersion"})
     item.pop("lineupVersion", None)  # allocated here, never caller-supplied
+    _check_starters(item)
     table = _table("LINEUPS_TABLE")
     for _attempt in range(3):
         current = _lineup_row(item["profileId"])
@@ -250,8 +271,9 @@ def put_panel_conditional(panel, expected_counter):
 
 
 def get_panel(profile_id, team_league):
+    # Strongly consistent: freshness.counter feeds the panel revision, which never decreases.
     return _table("PANELS_TABLE").get_item(
-        Key={"profileId": profile_id, "teamLeague": team_league}).get("Item")
+        Key={"profileId": profile_id, "teamLeague": team_league}, ConsistentRead=True).get("Item")
 
 
 # Player statistics: latest stored boxscore per ESPN athlete (panel seam).

@@ -123,6 +123,8 @@ def validate(doc, schema, value, where="panel"):
         validate(doc, part, value, where)
     if value is None:
         assert schema.get("nullable"), f"{where} must not be null"
+        # OpenAPI 3.0: nullable does not add null to an enum.
+        assert "enum" not in schema or None in schema["enum"], f"{where}=None not in enum"
         return
     kind = schema.get("type")
     if kind == "object":
@@ -171,7 +173,9 @@ def test_openapi_panel_response_schema_is_concrete():
     value_props, value_required = properties(doc, schemas["PanelValue"])
     assert {"value", "reason", "source", "asOf", "stale"} <= value_required
     assert dereference(doc, value_props["value"]).get("nullable") is True
-    assert set(dereference(doc, value_props["source"])["enum"]) == {"live", "replay"}
+    assert set(dereference(doc, value_props["source"])["enum"]) == {"live", "replay", None}
+    game = dereference(doc, data_props["games"])["additionalProperties"]["properties"]
+    assert set(dereference(doc, game["source"])["enum"]) == {"live", "replay", None}
     assert set(dereference(doc, data_props["scoringBasis"])["enum"]) == {
         "yahooLeague", "ppr", "halfPpr"}
 

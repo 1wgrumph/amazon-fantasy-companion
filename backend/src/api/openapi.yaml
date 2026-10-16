@@ -309,7 +309,7 @@ components:
               eventId: {type: string}
               revision: {type: integer}
               score: {type: object}
-              source: {type: string, nullable: true, enum: [live, replay]}
+              source: {type: string, nullable: true, enum: [live, replay, null]}
     PanelRow:
       type: object
       required: [playerId, name, points, gameStatus]
@@ -324,7 +324,7 @@ components:
       properties:
         value: {type: number, nullable: true}
         reason: {type: string, nullable: true}
-        source: {type: string, nullable: true, enum: [live, replay]}
+        source: {type: string, nullable: true, enum: [live, replay, null]}
         asOf: {type: string, format: date-time, nullable: true}
         stale: {type: boolean}
     Settings:
