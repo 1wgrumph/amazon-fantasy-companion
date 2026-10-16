@@ -8,12 +8,11 @@ that builds a fixture repo through gate_support, as the real gate tests do.
 
 import os
 import shutil
-import subprocess
 import tempfile
 import unittest
 from pathlib import Path
 
-from gate_support import REPO, TESTS, copy_repo, git, run_gate, write
+from gate_support import REPO, TESTS, copy_repo, git, git_output, run_gate, write
 
 FIXTURE_TEST = '''import tempfile
 import unittest
@@ -54,8 +53,7 @@ class D1_HookEnvironmentIsolation(unittest.TestCase):
         before = snapshot(sentinel / '.git')
         env = dict(os.environ, GIT_DIR=str(sentinel / '.git'), GIT_INDEX_FILE=str(sentinel / '.git' / 'index'))
         rc, out = run_gate(self, repo, '--changed', env=env)
-        log = subprocess.run(['git', 'log', '--oneline', '--all'], cwd=sentinel, check=True,
-                             capture_output=True, text=True).stdout
+        log = git_output(sentinel, 'log', '--oneline', '--all')
         self.assertEqual(snapshot(sentinel / '.git'), before,
                          f'gate.sh --changed wrote to the repository named by hook GIT_DIR/GIT_INDEX_FILE\n'
                          f'sentinel log:\n{log}\ngate output:\n{out}')

@@ -64,8 +64,7 @@ _GIT_ENV_DROP = ('GIT_DIR', 'GIT_WORK_TREE', 'GIT_INDEX_FILE', 'GIT_PREFIX', 'GI
 
 def git(cwd, *args):
     env = {k: v for k, v in os.environ.items() if k not in _GIT_ENV_DROP}
-    # Rule 22A: never discover a repository above cwd (a temp root on /tmp otherwise
-    # ascends to the mount point: "Stopping at filesystem boundary", exit 128).
+    # Rule 22A: never discover a repository above cwd.
     env['GIT_CEILING_DIRECTORIES'] = str(Path(cwd).resolve().parent)
     result = subprocess.run(['git', '-c', 'user.name=Gate Test', '-c', 'user.email=gate-test@example.invalid',
                              '-c', 'commit.gpgsign=false', *args],
@@ -73,6 +72,11 @@ def git(cwd, *args):
     if result.returncode:
         raise RuntimeError(f'git {" ".join(args)} failed ({result.returncode}) in {cwd}: '
                            f'{result.stderr.strip() or result.stdout.strip()}')
+    return result.stdout
+
+
+def git_output(cwd, *args):
+    return git(cwd, *args).rstrip('\r\n')
 
 
 def write(root, files):
@@ -125,8 +129,7 @@ def run_gate(case, cwd, *args, env=None):
     # Fixture repositories have their own history and must not use the host CI event.
     if (Path(cwd) != REPO and os.environ.get('GITHUB_EVENT_PATH')
             and env.get('GITHUB_EVENT_PATH') == os.environ['GITHUB_EVENT_PATH']):
-        fixture_base = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=cwd,
-                                               text=True).strip()
+        fixture_base = git_output(cwd, 'rev-parse', 'HEAD')
         fixture_event = Path(cwd) / '.git' / 'gate-event.json'
         fixture_event.write_text(json.dumps({'before': fixture_base}), encoding='utf-8')
         env['GITHUB_EVENT_PATH'] = str(fixture_event)

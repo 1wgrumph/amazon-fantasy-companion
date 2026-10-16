@@ -17,7 +17,8 @@ from pathlib import Path
 
 import yaml
 
-REPO = Path(__file__).resolve().parents[3]
+from gate_support import REPO, git, git_output, write
+
 CONTROL = 'def verdict(ok):\n    if ok:\n        return "covered"\n    return "uncovered"\n'
 BOTH = ('from control import verdict\n\n\ndef test_verdict():\n'
         '    assert verdict(True) == "covered"\n    assert verdict(False) == "uncovered"\n')
@@ -34,19 +35,6 @@ exit 1
 """
 
 
-def git(cwd, *args):
-    return subprocess.run(['git', '-c', 'user.name=Gate Test', '-c', 'user.email=gate-test@example.invalid',
-                           '-c', 'commit.gpgsign=false', *args], cwd=cwd, check=True,
-                          capture_output=True, text=True).stdout.strip()
-
-
-def write(root, files):
-    for rel, text in files.items():
-        path = root / rel
-        path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(text, encoding='utf-8')
-
-
 class MutationEnv(unittest.TestCase):
     def setUp(self):
         self.tmp = Path(tempfile.mkdtemp())
@@ -59,7 +47,7 @@ class MutationEnv(unittest.TestCase):
         git(self.repo, 'init', '-q', '-b', 'main')
         git(self.repo, 'add', '-A')
         git(self.repo, 'commit', '-q', '--no-verify', '-m', 'fixture')
-        self.base = git(self.repo, 'rev-parse', 'HEAD')
+        self.base = git_output(self.repo, 'rev-parse', 'HEAD')
 
     def commit(self):
         git(self.repo, 'add', '-A')

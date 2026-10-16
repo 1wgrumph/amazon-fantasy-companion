@@ -10,11 +10,14 @@ import json
 import os
 import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[4]
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from gate_support import git, git_output  # noqa: E402
 SRC = 'tv-app/app/src/main/java/com/afc/companion/Shell.kt'
 DEVICE = SRC.replace('Shell.kt', 'MainActivity.kt')
 STUB = SRC.replace('Shell.kt', 'detect/AppDetector.kt')
@@ -39,12 +42,6 @@ def pit(mutants, partial='false'):
     return f'<?xml version="1.0" encoding="UTF-8"?><mutations partial="{partial}">{body}</mutations>'
 
 
-def git(cwd, *args):
-    return subprocess.run(['git', '-c', 'user.name=Gate Test', '-c', 'user.email=gate-test@example.invalid',
-                           '-c', 'commit.gpgsign=false', *args], cwd=cwd, check=True,
-                          capture_output=True, text=True).stdout.strip()
-
-
 class TvappMutationAdapter(unittest.TestCase):
     def setUp(self):
         self.tmp = Path(tempfile.mkdtemp())
@@ -60,7 +57,7 @@ class TvappMutationAdapter(unittest.TestCase):
         git(self.repo, 'init', '-q', '-b', 'main')
         git(self.repo, 'add', '-A')
         git(self.repo, 'commit', '-q', '--no-verify', '-m', 'base')
-        self.base = git(self.repo, 'rev-parse', 'HEAD')
+        self.base = git_output(self.repo, 'rev-parse', 'HEAD')
         java = self.tmp / 'jdk/bin/java'
         java.parent.mkdir(parents=True)
         java.write_text('#!/bin/sh\n')
@@ -110,7 +107,7 @@ class TvappMutationAdapter(unittest.TestCase):
 
     def test_mutants_off_changed_lines_are_not_scored(self):
         self.candidate()
-        base = git(self.repo, 'rev-parse', 'HEAD')
+        base = git_output(self.repo, 'rev-parse', 'HEAD')
         self.candidate({SRC: CONTROL.replace('"uncovered"', '"missed"')})
         self.base = base
         rc, out = self.run_adapter(pit([(4, 'SURVIVED'), (5, 'KILLED')]))

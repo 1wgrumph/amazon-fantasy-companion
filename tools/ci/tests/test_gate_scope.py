@@ -14,7 +14,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from gate_support import commit_all, copy_repo, git, run_gate, write
+from gate_support import commit_all, copy_repo, git, git_output, run_gate, write
 
 
 def run_hook(case, repo, hook, stdin='', env_extra=None):
@@ -27,7 +27,7 @@ def run_hook(case, repo, hook, stdin='', env_extra=None):
 
 
 def head(repo):
-    return subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=repo, text=True).strip()
+    return git_output(repo, 'rev-parse', 'HEAD')
 
 
 def run_staged(case, repo, env_extra=None):
