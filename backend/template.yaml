@@ -68,7 +68,7 @@ Resources:
       Policies:
         - Statement:
             - Effect: Allow
-              Action: [dynamodb:GetItem, dynamodb:PutItem]
+              Action: [dynamodb:GetItem, dynamodb:PutItem, dynamodb:UpdateItem]
               Resource: [!GetAtt ProfilesTable.Arn]
             - Effect: Allow
               Action: [dynamodb:GetItem, dynamodb:PutItem, dynamodb:UpdateItem, dynamodb:Query, dynamodb:DeleteItem]
@@ -134,7 +134,7 @@ Resources:
               Action: [dynamodb:PutItem, dynamodb:Query]
               Resource: [!GetAtt AlertsTable.Arn]
             - Effect: Allow
-              Action: [dynamodb:GetItem, dynamodb:PutItem]
+              Action: [dynamodb:GetItem, dynamodb:PutItem, dynamodb:Scan]
               Resource: [!GetAtt LineupsTable.Arn]
             - Effect: Allow
               Action: [dynamodb:GetItem, dynamodb:PutItem]
