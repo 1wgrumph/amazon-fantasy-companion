@@ -1,0 +1,53 @@
+{
+  "source": "ESPN public NFL summary API (anonymous GET, no credentials)",
+  "purpose": "Provenance for the registry channel value \"Prime Video\" and the TNF schedule claims in VERDICT.md (RX03-02). Only the event, date and broadcast fields are retained; full response bodies are not committed.",
+  "retrieved_at": "2026-10-16T20:59:23Z",
+  "responses": [
+    {
+      "endpoint": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401873010",
+      "http_status": 200,
+      "body_sha256": "be007dd71bdcc4de5628c59de8c5b73d5f9db1343ae8ed748fc69660e62fbe0d",
+      "body_bytes": 102783,
+      "header.id": "401873010",
+      "header.competitions[0].date": "2026-10-23T00:15Z",
+      "header.competitions[0].status.type.name": "STATUS_SCHEDULED",
+      "header.competitions[0].competitors": [
+        {"team.displayName": "Chicago Bears", "homeAway": "home"},
+        {"team.displayName": "New England Patriots", "homeAway": "away"}
+      ],
+      "header.competitions[0].broadcasts": [
+        {
+          "type": {"id": "4", "shortName": "Streaming"},
+          "market": {"id": "1", "type": "National"},
+          "media": {"shortName": "Prime Video"},
+          "lang": "en",
+          "region": "us",
+          "isNational": true
+        }
+      ]
+    },
+    {
+      "endpoint": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401872995",
+      "http_status": 200,
+      "body_sha256": "0751dea84a0958e668cb590f3cdcbc728ce1b7e799b5f42931f59612dbd1c90e",
+      "body_bytes": 647165,
+      "header.id": "401872995",
+      "header.competitions[0].date": "2026-10-16T00:15Z",
+      "header.competitions[0].status.type.name": "STATUS_FINAL",
+      "header.competitions[0].competitors": [
+        {"team.displayName": "Denver Broncos", "homeAway": "home"},
+        {"team.displayName": "Seattle Seahawks", "homeAway": "away"}
+      ],
+      "header.competitions[0].broadcasts": [
+        {
+          "type": {"id": "4", "shortName": "Streaming"},
+          "market": {"id": "1", "type": "National"},
+          "media": {"shortName": "Prime Video"},
+          "lang": "en",
+          "region": "us",
+          "isNational": true
+        }
+      ]
+    }
+  ]
+}
