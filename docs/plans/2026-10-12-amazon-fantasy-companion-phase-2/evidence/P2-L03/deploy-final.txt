@@ -1,0 +1,67 @@
+
+	Managed S3 bucket: aws-sam-cli-managed-default-samclisourcebucket-kpyrjq2yreuk
+	Auto resolution of buckets can be turned off by setting resolve_s3=False
+	To use a specific S3 bucket, set --s3-bucket=<bucket_name>
+	Above settings can be stored in samconfig.toml
+
+	Uploading to 1f424684155b0198b1ce70e7bc1aaabe  1048576 / 1576054  (66.53%)
+	Uploading to 1f424684155b0198b1ce70e7bc1aaabe  1576054 / 1576054  (100.00%)
+
+	File with same data already exists at 1f424684155b0198b1ce70e7bc1aaabe, skipping upload
+
+	File with same data already exists at 1f424684155b0198b1ce70e7bc1aaabe, skipping upload
+
+	Deploying with following values
+	===============================
+	Stack name                   : afc-dev
+	Region                       : us-east-2
+	Confirm changeset            : True
+	Disable rollback             : False
+	Deployment s3 bucket         : aws-sam-cli-managed-default-samclisourcebucket-kpyrjq2yreuk
+	Capabilities                 : ["CAPABILITY_IAM"]
+	Parameter overrides          : {}
+	Signing Profiles             : {}
+
+Initiating deployment
+=====================
+
+
+	Uploading to 612e9cceb8d7ae35d02effadb6de32f0.template  13936 / 13936  (100.00%)
+
+
+Waiting for changeset to be created..
+
+CloudFormation stack changeset
+-------------------------------------------------------------------------------------------------
+Operation                LogicalResourceId        ResourceType             Replacement
+-------------------------------------------------------------------------------------------------
++ Add                    PlayerStatsTable         AWS::DynamoDB::Table     N/A
+* Modify                 AlertsTable              AWS::DynamoDB::Table     False
+* Modify                 ApiFunctionDefaultRout   AWS::Lambda::Permissio   False
+                         ePermission              n
+* Modify                 ApiFunctionRole          AWS::IAM::Role           False
+* Modify                 ApiFunction              AWS::Lambda::Function    False
+* Modify                 ApiLogGroup              AWS::Logs::LogGroup      False
+* Modify                 EventsTable              AWS::DynamoDB::Table     False
+* Modify                 HttpApiApiGatewayDefau   AWS::ApiGatewayV2::Sta   False
+                         ltStage                  ge
+* Modify                 HttpApi                  AWS::ApiGatewayV2::Api   False
+* Modify                 IngestFunctionRole       AWS::IAM::Role           False
+* Modify                 IngestFunction           AWS::Lambda::Function    False
+* Modify                 IngestLogGroup           AWS::Logs::LogGroup      False
+* Modify                 IngestScheduleRole       AWS::IAM::Role           False
+* Modify                 IngestSchedule           AWS::Scheduler::Schedu   False
+                                                  le
+* Modify                 LineupsTable             AWS::DynamoDB::Table     False
+* Modify                 LinksTable               AWS::DynamoDB::Table     False
+* Modify                 PanelsTable              AWS::DynamoDB::Table     False
+* Modify                 PolicyFunctionEventStr   AWS::Lambda::EventSour   Conditional
+                         eam                      ceMapping
+* Modify                 PolicyFunctionRole       AWS::IAM::Role           False
+* Modify                 PolicyFunction           AWS::Lambda::Function    False
+* Modify                 PolicyLogGroup           AWS::Logs::LogGroup      False
+* Modify                 ProfilesTable            AWS::DynamoDB::Table     False
+-------------------------------------------------------------------------------------------------
+
+
+Changeset created successfully. arn:aws:cloudformation:us-east-2:<acct>:changeSet/samcli-deploy1792165669/12eeae6f-c706-404b-8ca6-27b4ef3f0855
