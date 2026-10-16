@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Document the dev AWS CLI sign-in, the Yahoo app settings and the Yahoo SSM parameters in docs/operations/aws-and-yahoo-setup.md (PR TBD).
 - Record the Phase 1 plan evidence, packets and handoff that were left uncommitted in the planning worktree ([#90](https://github.com/1wgrumph/amazon-fantasy-companion/pull/90)).
 - Add the backend panel service: GET /v1/panel serves the followed team/league PanelState with one row per starter, points scored under the selected PPR/Half-PPR preset or the Yahoo league stat modifiers, game status, team total and progress, the scoring basis on every panel, unavailable values as null with a reason (never zero), stale values labeled at 60 s, and game facts that agree with the alert record across scoring corrections ([#88](https://github.com/1wgrumph/amazon-fantasy-companion/pull/88)).
 - Add the backend alert policy: red-zone (strictly inside the 20 by a matched starter's team), player-score and close-game (margin within 8 in Q4 or overtime, once per entry) alerts gated by enabled types, game-day periods, quiet hours, per-game minimum gap and spoiler delay; fixed-template Mild/Hype commentary that makes no on-field claim; and GET /v1/alerts serving only the linked profile's released alerts ([#85](https://github.com/1wgrumph/amazon-fantasy-companion/pull/85)).
