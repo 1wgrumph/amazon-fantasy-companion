@@ -9,9 +9,9 @@ from pathlib import Path
 from urllib import parse, request
 
 import store
-from feed_ingest.ingest import ingest_summary, store_events
+from feed_ingest.ingest import ingest_summary, store_events, store_player_statistics
 from feed_ingest.monitoring import monitored_decisions
-from feed_ingest.replay import load_events
+from feed_ingest.replay import load_events, load_statistics
 from feed_ingest.validation import validate_scoreboard
 
 
@@ -93,6 +93,7 @@ def _fallback(game_id, failures, result):
         return
     try:
         events = store_events(load_events(game_id, _fixtures()))
+        store_player_statistics(load_statistics(game_id, _fixtures()))
     except (ValueError, OSError):
         result.setdefault("stale", []).append(game_id)
         return

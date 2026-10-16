@@ -12,7 +12,7 @@ import pytest
 from conftest import BACKEND, document
 
 pytestmark = pytest.mark.contract
-TABLES = {"Profiles", "Links", "Events", "Alerts", "Lineups", "Panels"}
+TABLES = {"Profiles", "Links", "Events", "Alerts", "Lineups", "Panels", "PlayerStats"}
 FUNCTIONS = {"ApiFunction", "IngestFunction", "PolicyFunction"}
 ALLOWED_RESOURCES = {
     "AWS::Serverless::Function", "AWS::Serverless::HttpApi", "AWS::DynamoDB::Table",
