@@ -1,0 +1,74 @@
+command: AFC_DEPLOYED_API_URL=https://le3r79003f.execute-api.us-east-2.amazonaws.com python3.12 -m pytest backend/tests/deployed -k link -v -rs --tb=short --junitxml=docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-L03/deployed-smoke-final.xml
+PATH_prepend: $HOME/.local/share/afc-tools/backend-tests/bin
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.2, pluggy-1.6.0 -- <home>/.local/share/afc-tools/backend-tests/bin/python3.12
+cachedir: .pytest_cache
+rootdir: <home>/alphazede/worktrees/amazon-fantasy-companion-p2-l03/backend
+configfile: pyproject.toml
+plugins: cov-7.1.0, anyio-4.13.0, asyncio-1.3.0, mock-3.15.1, typeguard-4.4.4
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 26 items / 22 deselected / 4 selected
+
+backend/tests/deployed/device_auth/test_link_flow.py::test_issue_returns_a_pending_code PASSED [ 25%]
+backend/tests/deployed/device_auth/test_link_flow.py::test_pending_poll_cannot_authorize_the_device PASSED [ 50%]
+backend/tests/deployed/device_auth/test_link_flow.py::test_confirmed_device_polls_a_usable_session PASSED [ 75%]
+backend/tests/deployed/device_auth/test_link_flow.py::test_unknown_session_is_rejected_on_protected_routes PASSED [100%]
+
+- generated xml file: <home>/alphazede/worktrees/amazon-fantasy-companion-p2-l03/docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-L03/deployed-smoke-final.xml -
+============================= slowest 10 durations =============================
+2.20s call     tests/deployed/device_auth/test_link_flow.py::test_issue_returns_a_pending_code
+0.50s setup    tests/deployed/device_auth/test_link_flow.py::test_confirmed_device_polls_a_usable_session
+0.40s call     tests/deployed/device_auth/test_link_flow.py::test_unknown_session_is_rejected_on_protected_routes
+0.29s call     tests/deployed/device_auth/test_link_flow.py::test_pending_poll_cannot_authorize_the_device
+0.16s call     tests/deployed/device_auth/test_link_flow.py::test_confirmed_device_polls_a_usable_session
+0.01s setup    tests/deployed/device_auth/test_link_flow.py::test_issue_returns_a_pending_code
+
+(4 durations < 0.005s hidden.  Use -vv to show these durations.)
+======================= 4 passed, 22 deselected in 3.62s =======================
+exit=0
+deselected cases (22), each with its reason. Listed from pytest --collect-only -q versus -k link in this run. None is a smoke pass.
+
+tests/deployed/alert_policy/test_alert_policy_deployed.py::test_served_alerts_have_registered_types_and_context
+  reason: deselected by -k link: the node id does not match keyword link. Not counted as a smoke pass. CMD-DEPLOYED-TESTS ran this case.
+tests/deployed/alert_policy/test_alert_policy_deployed.py::test_served_alerts_are_released
+  reason: deselected by -k link: the node id does not match keyword link. Not counted as a smoke pass. CMD-DEPLOYED-TESTS ran this case.
+tests/deployed/alert_policy/test_alert_policy_deployed.py::test_served_red_zone_text_is_team_level
+  reason: deselected by -k link: the node id does not match keyword link. Not counted as a smoke pass. CMD-DEPLOYED-TESTS ran this case.
+tests/deployed/api/test_profile.py::test_profile_roundtrip_preserves_revision
+  reason: deselected by -k link: the node id does not match keyword link. Not counted as a smoke pass. CMD-DEPLOYED-TESTS ran this case.
+tests/deployed/api/test_profile.py::test_foreign_profile_is_forbidden
+  reason: deselected by -k link: the node id does not match keyword link. Not counted as a smoke pass. CMD-DEPLOYED-TESTS ran this case.
+tests/deployed/api/test_profile.py::test_malformed_body_is_a_structured_400
+  reason: deselected by -k link: the node id does not match keyword link. Not counted as a smoke pass. CMD-DEPLOYED-TESTS ran this case.
+tests/deployed/api/test_profile.py::test_unknown_route_is_a_structured_404
+  reason: deselected by -k link: the node id does not match keyword link. Not counted as a smoke pass. CMD-DEPLOYED-TESTS ran this case.
+tests/deployed/feed_ingest/test_feed_labels.py::test_panel_values_carry_a_source_label
+  reason: deselected by -k link: the node id does not match keyword link. Not counted as a smoke pass. CMD-DEPLOYED-TESTS ran this case.
+tests/deployed/feed_ingest/test_feed_labels.py::test_panel_revision_never_moves_backwards
+  reason: deselected by -k link: the node id does not match keyword link. Not counted as a smoke pass. CMD-DEPLOYED-TESTS ran this case.
+tests/deployed/feed_ingest/test_feed_labels.py::test_alerts_carry_the_envelope
+  reason: deselected by -k link: the node id does not match keyword link. Not counted as a smoke pass. CMD-DEPLOYED-TESTS ran this case.
+tests/deployed/lineup/test_source_labels.py::test_panel_reports_exactly_one_lineup_source
+  reason: deselected by -k link: the node id does not match keyword link. Not counted as a smoke pass. CMD-DEPLOYED-TESTS ran this case.
+tests/deployed/lineup/test_source_labels.py::test_panel_source_is_stable_across_reads
+  reason: deselected by -k link: the node id does not match keyword link. Not counted as a smoke pass. CMD-DEPLOYED-TESTS ran this case.
+tests/deployed/lineup/test_source_labels.py::test_preset_selection_roundtrip
+  reason: deselected by -k link: the node id does not match keyword link. Not counted as a smoke pass. CMD-DEPLOYED-TESTS ran this case.
+tests/deployed/matcher/test_matcher_deployed.py::test_alert_ids_are_unique_per_profile
+  reason: deselected by -k link: the node id does not match keyword link. Not counted as a smoke pass. CMD-DEPLOYED-TESTS ran this case.
+tests/deployed/matcher/test_matcher_deployed.py::test_alert_revision_never_moves_backwards
+  reason: deselected by -k link: the node id does not match keyword link. Not counted as a smoke pass. CMD-DEPLOYED-TESTS ran this case.
+tests/deployed/panel/test_panel_deployed.py::test_panel_data_carries_basis_rows_and_value_objects
+  reason: deselected by -k link: the node id does not match keyword link. Not counted as a smoke pass. CMD-DEPLOYED-TESTS ran this case.
+tests/deployed/panel/test_panel_deployed.py::test_panel_rereads_keep_id_and_never_lower_revision
+  reason: deselected by -k link: the node id does not match keyword link. Not counted as a smoke pass. CMD-DEPLOYED-TESTS ran this case.
+tests/deployed/panel/test_panel_deployed.py::test_preset_change_reaches_the_panel
+  reason: deselected by -k link: the node id does not match keyword link. Not counted as a smoke pass. CMD-DEPLOYED-TESTS ran this case.
+tests/deployed/panel/test_panel_deployed.py::test_panel_game_facts_agree_with_alerts
+  reason: deselected by -k link: the node id does not match keyword link. Not counted as a smoke pass. CMD-DEPLOYED-TESTS ran this case.
+tests/deployed/provider_resolver/test_providers_deployed.py::test_installed_report_is_accepted
+  reason: deselected by -k link: the node id does not match keyword link. Not counted as a smoke pass. CMD-DEPLOYED-TESTS ran this case.
+tests/deployed/provider_resolver/test_providers_deployed.py::test_providers_reads_an_access_basis_never_verified_from_install
+  reason: deselected by -k link: the node id does not match keyword link. Not counted as a smoke pass. CMD-DEPLOYED-TESTS ran this case.
+tests/deployed/provider_resolver/test_providers_deployed.py::test_invented_routing_outcome_is_rejected
+  reason: deselected by -k link: the node id does not match keyword link. Not counted as a smoke pass. CMD-DEPLOYED-TESTS ran this case.

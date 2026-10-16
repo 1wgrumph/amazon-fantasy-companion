@@ -1,5 +1,5 @@
-"""Hook scope: pre-commit checks the staged change only (correct during a
-merge) and pre-push checks the pushed range only.
+"""Hook scope: `gate.sh --changed --staged` checks the staged change only
+(correct during a merge) and pre-push checks the pushed range only.
 
 Regression: --changed selected areas and WS-CHECK from merge-base..worktree
 plus every untracked file, so a merge commit failed on the merged-in side's
@@ -30,7 +30,12 @@ def head(repo):
     return subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=repo, text=True).strip()
 
 
-class PreCommitScope(unittest.TestCase):
+def run_staged(case, repo, env_extra=None):
+    env = dict(os.environ, CI='', GITHUB_ACTIONS='', **(env_extra or {}))
+    return run_gate(case, repo, '--changed', '--staged', env=env)
+
+
+class StagedScope(unittest.TestCase):
     def setUp(self):
         self.tmp = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.tmp, ignore_errors=True)
@@ -46,7 +51,7 @@ class PreCommitScope(unittest.TestCase):
         write(repo, {'main-side.txt': 'clean main change\n'})
         commit_all(repo, 'main change')
         git(repo, 'merge', '--no-ff', '--no-commit', 'side')
-        rc, out = run_hook(self, repo, 'pre-commit')
+        rc, out = run_staged(self, repo)
         self.assertEqual(rc, 0, out)
         self.assertIn('gate: hygiene: PASS', out)
         self.assertNotIn('merged-in.txt:1:WS-CHECK', out.splitlines())
@@ -63,7 +68,7 @@ class PreCommitScope(unittest.TestCase):
         # An edit made by the merge itself (in neither parent) is this commit's own change.
         write(repo, {'merged-in.txt': 'side content edited by merge \n'})
         git(repo, 'add', 'merged-in.txt')
-        rc, out = run_hook(self, repo, 'pre-commit')
+        rc, out = run_staged(self, repo)
         self.assertEqual(rc, 1, out)
         self.assertIn('merged-in.txt:1:WS-CHECK', out.splitlines())
 
@@ -89,7 +94,7 @@ class PreCommitScope(unittest.TestCase):
                f'exec {real_git} "$@"\n'})
         (fakebin / 'git').chmod(0o755)
         env = {'PATH': str(fakebin) + os.pathsep + os.environ['PATH']}
-        rc, out = run_hook(self, repo, 'pre-commit', env_extra=env)
+        rc, out = run_staged(self, repo, env_extra=env)
         self.assertEqual(rc, 1, out)
         self.assertNotIn('gate: hygiene: PASS', out)
 
@@ -104,7 +109,7 @@ class PreCommitScope(unittest.TestCase):
         write(repo, {'backend/marker.txt': 'unstaged backend edit\n',
                      'tv-app/untracked.txt': 'untracked tv file\n',
                      'tools/ci/__pycache__/probe.pyc': 'untracked cache\n'})
-        rc, out = run_hook(self, repo, 'pre-commit')
+        rc, out = run_staged(self, repo)
         self.assertEqual(rc, 0, out)
         self.assertNotIn('gate: backend:', out)
         self.assertNotIn('gate: tvapp:', out)
@@ -113,7 +118,7 @@ class PreCommitScope(unittest.TestCase):
         repo = self.repo
         write(repo, {'notes.txt': 'staged trailing space \n'})
         git(repo, 'add', 'notes.txt')
-        rc, out = run_hook(self, repo, 'pre-commit')
+        rc, out = run_staged(self, repo)
         self.assertEqual(rc, 1, out)
         self.assertIn('notes.txt:1:WS-CHECK', out.splitlines())
         self.assertNotIn('staged trailing space', out.replace('notes.txt:1:WS-CHECK', ''))

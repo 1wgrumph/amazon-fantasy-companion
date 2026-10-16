@@ -1,0 +1,33 @@
+changeset: samcli-deploy1792162052
+status: CREATE_COMPLETE
+execution: AVAILABLE
+stack tag in changeset: GitCommit=c194deefe0273f76d4a1e430de94a4c7a163aad2
+resource actions: Add 0, Modify 21, Remove 0
+decision: n
+deploy executed: no
+
+Risky entry (stop):
+- ApiFunctionRole AWS::IAM::Role Modify Replacement=False
+  Path /Properties/Policies/1 AttributeChangeType=Remove
+  Removed policy name in the before value: ApiFunctionRolePolicy1
+  Removed action: ssm:GetParameter
+  Removed resources: the YahooClientSecretParameter and YahooTokenParameter ARNs
+  Live stack template already has ssm:GetParameter on both ApiFunctionRole and PolicyFunctionRole.
+  Changeset template keeps the PolicyFunctionRole grant and does not list a change to it.
+  Net of this entry: ApiFunctionRole loses ssm:GetParameter. That is an IAM permission removal.
+
+Checked and not a stop:
+- Six DynamoDB tables (Alerts, Events, Lineups, Links, Panels, Profiles): Modify, Replacement=False, scope Tags only.
+- No SSM parameter resource is in the changeset.
+- No resource Action Remove.
+- No Replacement=True.
+- PolicyFunctionEventStream: the SAM summary table printed Replacement Conditional. describe-change-set with property values says Replacement=False, scope Tags, RequiresRecreation Never, GitCommit tag value only.
+- IAM additions only, inside existing policy documents:
+  ApiFunctionRole ProfilesTable gains dynamodb:UpdateItem.
+  IngestFunctionRole ProfilesTable gains dynamodb:Scan.
+  PolicyFunctionRole LineupsTable gains dynamodb:Scan.
+- ApiFunction, IngestFunction, PolicyFunction: Code S3 key change, Replacement=False, plus the GitCommit tag.
+- Remaining resources: GitCommit tag only.
+
+Stack after the decline stayed UPDATE_COMPLETE, GitCommit 2d973bd66182364a69b5a3088286e88c08f1107d, LastUpdated 2026-10-15T01:10:30.108000+00:00.
+The changeset was left CREATE_COMPLETE / AVAILABLE. It was not executed and must not be executed.

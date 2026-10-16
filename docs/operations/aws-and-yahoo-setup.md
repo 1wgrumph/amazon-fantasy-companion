@@ -14,7 +14,7 @@ project, as set up on 2026-10-16. No secret values belong in this file.
   ```
 
   The command opens the AWS sign-in page and waits for the browser to call back
-  to `127.0.0.1:<port>`. Check it worked with
+  to `localhost:<port>`. Check it worked with
   `aws sts get-caller-identity --profile afc-dev`.
 - Known failure (2026-10-16): choosing **Continue with an active session** on
   the sign-in page ends on `signin.aws.amazon.com/oauth?...iam_user=true` with
@@ -88,3 +88,34 @@ python3 spikes/sp6-yahoo/yahoo_oauth.py setup
 The plan intended the Yahoo read to run under the deployed backend role; the
 P2-X06 spike runs it locally as the `afc-dev` user (recorded in its verdict).
 Token stored 2026-10-16T14:18Z.
+
+## Yahoo 403: API access approval
+
+OAuth can succeed and the Fantasy API can still refuse the call. Since July
+2026, Yahoo gates Fantasy API access, including public endpoints, behind its
+API access program. An app that is not approved gets HTTP 403
+`This application is not authorized` while token refresh still returns 200.
+
+Seen on this app on 2026-10-16: token refresh HTTP 200, then Fantasy API
+HTTP 403 `This application is not authorized to perform this action.`, both
+with no scope and with `fspt-r`
+([attempts.json](../../spikes/sp6-yahoo/evidence/attempts.json) lines 8-12
+and 17-23). Same report, including public endpoints:
+[yfpy issue #84](https://github.com/uberfastman/yfpy/issues/84) (since
+2026-07-22) and the
+[yahoo-fantasy-mcp README](https://github.com/krger/yahoo-fantasy-mcp).
+Request access at <https://sports.yahoo.com/developer/access/>.
+
+The owner submitted that application on 2026-10-16 for App ID `AyogcOTv`.
+Approval could not arrive before T_yahoo `2026-10-16T19:00:00Z`, so
+[the SP-6 verdict](../../spikes/sp6-yahoo/VERDICT.md) is FAILS and the lineup
+source stays manual (`backend/src/lineup/manual.py`).
+
+Once Yahoo approves App ID `AyogcOTv`:
+
+1. Keep this app. Do not create another.
+2. In a normal terminal, run `python3 spikes/sp6-yahoo/yahoo_oauth.py read`.
+   A Fantasy API HTTP 200 means the gate is open. If the refresh fails, run
+   `capture` again.
+3. Leave the lineup source manual until a later change selects yahoo. This
+   verdict does not switch it.

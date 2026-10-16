@@ -15,7 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Record the P2-L03 deploys of the integrated backend to afc-dev: interim c194dee, then final af0e0ac with the new PlayerStatsTable; deployed smoke and suite results, and lineup source manual ([#96](https://github.com/1wgrumph/amazon-fantasy-companion/pull/96)).
+- Record Phase 2 execution state through wave 4 in implementation.json (planning delta P2-W4-EXECUTION-STATE) and regenerate the DoD Manifest ([#98](https://github.com/1wgrumph/amazon-fantasy-companion/pull/98)).
 - Document the dev AWS CLI sign-in, the Yahoo app settings and the Yahoo SSM parameters in docs/operations/aws-and-yahoo-setup.md ([#91](https://github.com/1wgrumph/amazon-fantasy-companion/pull/91)).
+- Record the SP-6 Yahoo verdict: the Yahoo route FAILS because unapproved apps receive 403 from the Fantasy API while OAuth succeeds, and the selected lineup source is manual ([PR #100](https://github.com/1wgrumph/amazon-fantasy-companion/pull/100)).
 - Record the Phase 1 plan evidence, packets and handoff that were left uncommitted in the planning worktree ([#90](https://github.com/1wgrumph/amazon-fantasy-companion/pull/90)).
 - Record the P2-X01 device baseline on the Fire TV stick: Fire OS 8.1.8.5 / API 30, the pinned starter installed and launched, spike verdict WORKS ([#89](https://github.com/1wgrumph/amazon-fantasy-companion/pull/89)).
 - Add the backend panel service: GET /v1/panel serves the followed team/league PanelState with one row per starter, points scored under the selected PPR/Half-PPR preset or the Yahoo league stat modifiers, game status, team total and progress, the scoring basis on every panel, unavailable values as null with a reason (never zero), stale values labeled at 60 s, and game facts that agree with the alert record across scoring corrections ([#88](https://github.com/1wgrumph/amazon-fantasy-companion/pull/88)).
@@ -67,6 +70,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Keep only the pre-push hook; commits no longer run the gate locally (CI and pre-push still do) ([PR #97](https://github.com/1wgrumph/amazon-fantasy-companion/pull/97)).
 - Select Vega OS as the primary TV target with Fire OS remaining the secondary target, and rebind the Phase 2 plan package (DEC-AFC-SD-048 through DEC-AFC-SD-054) ([#72](https://github.com/1wgrumph/amazon-fantasy-companion/pull/72)).
 - Link a TV with its device code alone (DEC-AFC-SD-048): drop the link
   passphrase from the `/link` page, the confirm API and its OpenAPI
@@ -87,8 +91,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Make GET /v1/panel honor the TV panel wire contract: lineups over 32 starters or with blank or duplicate player identity are rejected at the manual/Yahoo write boundary and legacy stored rows fail closed with a structured `panel_invalid` error instead of an unusable 200; a store-allocated monotonic lineup version makes every lineup change, return, removal and re-add serve a strictly higher panel revision; mixed dated/undated aggregates are never served as fresh; and OpenAPI now defines concrete PanelEnvelope/PanelData/PanelValue/PanelRow schemas (PR #TBD).
-- Scope the git-hook gate to the change being committed or pushed: pre-commit checks the staged diff only (during a merge, only what the merge itself introduces), and pre-push checks the pushed commit range, so merged-in already-landed whitespace no longer blocks a merge commit and unrelated unstaged or untracked files no longer select the tvapp/backend areas for a docs-only commit (PR TBD).
+- Scope the git-hook gate to the change being committed or pushed: pre-commit checks the staged diff only (during a merge, only what the merge itself introduces), and pre-push checks the pushed commit range, so merged-in already-landed whitespace no longer blocks a merge commit and unrelated unstaged or untracked files no longer select the tvapp/backend areas for a docs-only commit ([PR #93](https://github.com/1wgrumph/amazon-fantasy-companion/pull/93)).
 - Store per-player ESPN boxscore statistics at ingest and read them through the panel's statistics seam, so the deployed panel shows real fantasy points instead of "statistics unavailable" for every starter ([PR #95](https://github.com/1wgrumph/amazon-fantasy-companion/pull/95)).
+- Make the TV app present server-generated alerts (canonical B05 alert types, bounded starter-derived context without a fabricated matchup, Watch event ID from triggerContext) and show panel source provenance (manual/yahoo lineup source, replay values labeled) ([PR #99](https://github.com/1wgrumph/amazon-fantasy-companion/pull/99)).
 - Correct the Yahoo setup notes: one app with redirect `https://localhost:8443/link`, the one-command `setup` token flow, and the errors seen on 2026-10-16 ([#92](https://github.com/1wgrumph/amazon-fantasy-companion/pull/92)).
 - Grant the policy function table-scoped Lineups Scan access used by the matcher
   and the API function Profiles UpdateItem access for provider routing outcomes
