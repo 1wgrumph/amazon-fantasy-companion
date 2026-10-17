@@ -15,6 +15,8 @@ never touches the profile's Settings/providerPref.
 import functools
 import json
 import os
+import re
+from datetime import datetime
 from pathlib import Path
 
 import boto3
@@ -26,6 +28,7 @@ OUTCOMES = ("gameOpened", "searchOpened", "appHomeOpened", "appAbsent",
             "accessUnknown", "playbackDenied")
 PLATFORMS = ("fire_os", "vega")
 GAP = "REGISTRY_ROUTE_GAP"
+CANONICAL_UTC = re.compile(r"[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z")
 
 
 def event_channel(event_id):
@@ -56,11 +59,24 @@ def _installed_packages(profile_id):
     return list(item.get("installedPackages") or [])
 
 
+def _utc_timestamp(value):
+    # Match the canonical form first: fromisoformat leniency differs by version.
+    if not isinstance(value, str) or not CANONICAL_UTC.fullmatch(value):
+        return False
+    try:
+        datetime.strptime(value, "%Y-%m-%dT%H:%M:%SZ")
+    except ValueError:
+        return False
+    return True
+
+
 def _route(provider):
     routes = {}
     for platform in PLATFORMS:
         entry = (provider.get("platform_routes") or {}).get(platform) or {}
-        if entry.get("verified_outcome") and entry.get("verified_at"):
+        outcome = entry.get("verified_outcome")
+        if (isinstance(outcome, str) and outcome in OUTCOMES
+                and _utc_timestamp(entry.get("verified_at"))):
             routes[platform] = dict(entry, status="verified")
         else:
             # A missing or unverified entry is a gap; never fill it, and
