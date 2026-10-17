@@ -13,7 +13,7 @@ from feed_support import (GAME, attempt, boxscore_athlete_ids,
 
 EVENT_FIELDS = {"gameId", "eventId", "revision", "source", "score",
                 "fieldPosition", "possession", "playerIds", "eventTime",
-                "correctionOf", "period", "scoringPlay", "matchup"}
+                "correctionOf", "period", "scoringPlay", "matchup", "channel"}
 
 
 def normalize_module():

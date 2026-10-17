@@ -31,14 +31,24 @@ GAP = "REGISTRY_ROUTE_GAP"
 CANONICAL_UTC = re.compile(r"[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z")
 
 
+ESPN_PLAY_ID = re.compile(r"([0-9]{9})[0-9]{1,23}")
+CHANNEL = re.compile(r"[A-Za-z0-9](?:[A-Za-z0-9 .&'+/-]{0,30}[A-Za-z0-9+])?")
+
+
 def event_channel(event_id):
     """The event's ESPN broadcast channel short name, or None.
 
-    shortcut: the stored GameEvent shape has no broadcast field and no
-    source is readable inside this write set (P2B06T-DX-001), so production
-    reads unknown until a slice stores the broadcast; tests replace this seam.
+    Read from the channel stored on the GameEvent at ingest. Callers hold only
+    the play eventId, and the API may only GetItem Events, so the gameId key is
+    the play id's prefix: every recorded ESPN play id is its game id plus a sequence.
+    shortcut: assumes 9-digit ESPN game ids, revisit if ESPN widens its event ids.
     """
-    return None
+    match = ESPN_PLAY_ID.fullmatch(event_id) if isinstance(event_id, str) else None
+    if match is None:
+        return None
+    item = store.get_event(match.group(1), event_id) or {}
+    channel = item.get("channel")
+    return channel if isinstance(channel, str) and CHANNEL.fullmatch(channel) else None
 
 
 @functools.cache

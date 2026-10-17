@@ -64,6 +64,28 @@ def _matchup(payload):
     return label if len(label) <= MAX_MATCHUP_LENGTH else None
 
 
+MAX_CHANNEL_LENGTH = 32
+_CHANNEL = re.compile(
+    rf"[A-Za-z0-9](?:[A-Za-z0-9 .&'+/-]{{0,{MAX_CHANNEL_LENGTH - 2}}}[A-Za-z0-9+])?")
+
+
+def _channel(payload):
+    """First valid broadcast media.shortName in ESPN's listed order, or None.
+
+    Display-only: a malformed or oversize entry is skipped, never rejecting the game.
+    """
+    try:
+        entries = payload["header"]["competitions"][0].get("broadcasts")
+    except (KeyError, IndexError, TypeError, AttributeError):
+        return None
+    for entry in entries if isinstance(entries, list) else []:
+        media = entry.get("media") if isinstance(entry, dict) else None
+        name = media.get("shortName") if isinstance(media, dict) else None
+        if isinstance(name, str) and _CHANNEL.fullmatch(name):
+            return name
+    return None
+
+
 def _offense(play):
     return next((team["id"] for team in play.get("teamParticipants", [])
                  if team.get("type") == "offense"), None)
@@ -90,6 +112,7 @@ def normalize_summary(payload, game_id, source="live", prior=None):
     prior = prior or {}
     known = _athletes(payload)
     matchup = _matchup(payload)
+    channel = _channel(payload)
     events = []
     for play in _plays(payload):
         facts = _facts(play, known, source)
@@ -105,6 +128,8 @@ def normalize_summary(payload, game_id, source="live", prior=None):
                  "correctionOf": correction_of, **facts}
         if matchup is not None:
             event["matchup"] = matchup
+        if channel is not None:
+            event["channel"] = channel
         events.append(event)
     return events
 
