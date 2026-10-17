@@ -33,15 +33,11 @@
                 }
               },
               "broadcasts": {
-                "type": "array",
+                "maxItems": 64,
                 "items": {
-                  "type": "object",
-                  "required": ["media"],
                   "properties": {
                     "media": {
-                      "type": "object",
-                      "required": ["shortName"],
-                      "properties": {"shortName": {"type": "string"}}
+                      "properties": {"shortName": {"maxLength": 256}}
                     }
                   }
                 }

@@ -25,8 +25,8 @@ def test_override_on_counts_without_detector_report(resolver):
 
 
 def test_production_channel_seam_stays_unknown(api):
-    # No stored broadcast field exists yet (P2B06T-DX-001): the real seam
-    # reads None and resolve fails closed to channel/provider/route null.
+    # An event with no stored broadcast channel (P2B06T-DX-001): the real
+    # seam reads None and resolve fails closed to channel/provider/route null.
     from resolver_support import require_module
     module = require_module("provider_resolver")
     assert attempt(module.event_channel, EVENT) is None
