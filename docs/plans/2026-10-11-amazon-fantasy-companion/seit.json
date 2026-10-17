@@ -3359,5 +3359,41 @@
       "needed": "Reviewer packets name the boundary the owner selects; no SEIT change for A or B",
       "owner_decision": true
     }
-  ]
+  ],
+  "proposed_command_amendments": {
+    "id": "SEIT-AMD-P1-2026-10-16",
+    "status": "proposed_owner_review",
+    "live_commands_changed": false,
+    "proposed_on": "2026-10-16",
+    "proposed_by": "Planning and Design (Bearing Lite planning-and-design), planning-delta session; owner-named Claude Code cloud session / Claude Opus 5.5 / high; scoped owner amendment of 2026-10-16 over the frozen Muse route for this one delta",
+    "recorded_by_delta": "P1-DELTA-OD-AFC-01-B",
+    "note": "PROPOSED ONLY. Until the owner accepts this block, procedures_and_commands[] remains the live contract and these entries authorize nothing. Each entry comes from a failed first attempt observed while executing S41 or S11 on 2026-10-16.",
+    "amendments": [
+      {
+        "command_id": "CMD-SKILL-TRIGGER",
+        "observed": "the evaluator launches `claude -p` without --model or --effort, so the frozen-route guard refuses it; S41 ran it with the bound implementer flags added",
+        "proposed_change": "add `--model <bound_model> --effort <bound_effort>` to the `claude -p` invocation, both bound from the slice's dispatch-record route (the frozen implementer route of the executing profile)",
+        "proposed_command_fragment": "claude -p '<evaluator prompt unchanged>' --model <bound_model> --effort <bound_effort> --output-format json --max-turns 5 --allowedTools Read --disallowedTools Bash,Write,Edit,WebFetch,WebSearch",
+        "pass_criterion_change": "none"
+      },
+      {
+        "command_id": "CMD-SKILL-SIZE",
+        "observed": "<alphazedehq_checkout>/tools/bran/runtime/bran is gitignored, so it is absent in a fresh slice worktree; S41 ran with the main checkout's binary, whose sha256 matched the pin",
+        "proposed_change": "introduce <bran_runtime> = <alphazedehq_main_checkout>/tools/bran/runtime/bran for the binary and its hash check; keep reading bran-release-pin.json from the slice worktree and running `bran check . bran-strict` in the slice worktree. A missing <bran_runtime> is typed gap TOOL_MISSING, never PASS",
+        "pass_criterion_change": "none (the binary's sha256 must still equal the pin)"
+      },
+      {
+        "command_id": "CMD-COVERAGE-HOOK",
+        "observed": "under uv the wrapper writes a uv cache into the tests' temporary HOME, which breaks the write-nothing assertions; S11 ran with UV_CACHE_DIR set to the real cache",
+        "proposed_change": "prefix the command with `export UV_CACHE_DIR=\"${UV_CACHE_DIR:-$(uv cache dir)}\";` evaluated before the tests replace HOME, so uv never writes inside the test HOME",
+        "pass_criterion_change": "none"
+      },
+      {
+        "command_id": "CMD-D4-AGNOSTIC",
+        "observed": "the scan selects changed files by the slice diff but greps their whole committed content, so a pre-existing reference in a file the slice edits fails the slice; this conflicts with DEC-AFC-SD-029 ('pre-existing references outside the slice's diff are out of scope'). Resolved for S11 by the owner's separate README scrub (OA-AFC-P1-2026-10-16-02, PR #363)",
+        "proposed_change": "scan only lines the slice adds: `git diff -U0 --diff-filter=ACMR <base>..HEAD -- $f | grep -E '^\\+' | grep -vE '^\\+\\+\\+' | grep -niE '<same pattern>'` with exit 1 (no match) as PASS; keep the scanned-file list, the empty-list FAIL and the typed-gap rule for any other non-zero exit",
+        "pass_criterion_change": "narrower: pre-existing references inside edited files no longer fail the slice; owner to confirm this matches SD-029's intent"
+      }
+    ]
+  }
 }
