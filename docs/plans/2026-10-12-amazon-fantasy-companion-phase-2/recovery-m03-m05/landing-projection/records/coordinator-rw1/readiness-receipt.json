@@ -1,0 +1,74 @@
+{
+  "wave": "RW1",
+  "role": "coordinator",
+  "task_outcome": "NEEDS_MORE_EVIDENCE",
+  "status": "READY_FOR_PARENT_CANDIDATE_FREEZE_AND_REVIEW",
+  "recorded_at": "2026-10-19T14:37:07Z",
+  "cursor_conversation_id": "b0e3f941-8287-4407-a5bd-5ec78479f06f",
+  "lifecycle": "AFC-2026-10-11",
+  "lease": {
+    "branch": "afc/m03-m05-recovery",
+    "candidate_revision": "7da6187b5a57ee80887ef84301ff99a3592bacb6",
+    "generation": 1,
+    "state": "active",
+    "verified": true
+  },
+  "binding_sha256": "e8d0b5a02cd9f445644a0caa18185af60a46f2316769b527ccc9e046796b0608",
+  "route": "fallback:0",
+  "independent_acceptance": false,
+  "review_dispatched": false,
+  "consumed_once": {
+    "native_exec_session": 14974,
+    "terminal_exit": 0,
+    "receipt": "evidence/device-1/wonder-readiness-addendum/receipt.json",
+    "receipt_sha256": "52347a3e5738fc2cfb10d015701db39dde1018948c883f78a856e98b01061d5e",
+    "author_verdict": "PASS / CANDIDATE_READY author-only",
+    "foreground_at": "2026-10-19T14:31:06Z",
+    "foreground_activity": "com.amazon.firebat/com.amazon.pyrocore.IgnitionActivity",
+    "bound_apk": "ad9b04355e79c44bb2fcddca539c226b12606c5a9a2a3a101c0d2320060ea880",
+    "private_metadata_sha256": "00901838275815b8230a27204e9ff8baa474cb4a90dae4eb4bdcb2336f267a3c",
+    "controller_foreground_provenance": "evidence/device-1/wonder-readiness-addendum/controller-foreground-provenance.json",
+    "verdict_md_sha256": "ed943ead9f055b6ca29b15e0c462187415b348fea883ee9eff29c17b7ed0f4ea",
+    "controller_installed": "PASS exact ad9; probe and fixture packages absent",
+    "controller_cleanup": "PASS 4 own alerts absent; orig_lineup restored",
+    "prior_0bab_unchanged": true,
+    "active_device_author": false
+  },
+  "watch_limit": "metadata-only search-route foreground after seq4 double-confirm on exact ad9; no provider screenshot/history; no playback/gameOpened/entitlement. Prior missing-ad9-metadata gap is closed by 52347. Supported probe is not product activation.",
+  "rw1_slice_states": {
+    "R-T-EVIDENCE-RECONCILE": "EVIDENCE_READY",
+    "R-T-HOST-TV-PREP": "EVIDENCE_READY",
+    "R-T-BACKEND-PREP": "EVIDENCE_READY",
+    "R-T-LIVE-PREP": "EVIDENCE_READY",
+    "R-T-DEPLOY-1": "EVIDENCE_READY",
+    "R-T-DEVICE-1": "EVIDENCE_READY (author outcome only)"
+  },
+  "r_t_release_draft": "dependency-ready for draft preparation after this integration; RW3 Coordinator owns that packet; this Coordinator does not write or launch it. Full R1 acceptance still blocked by source/Vega prerequisites and wave review.",
+  "reviewer_packet": {
+    "path": "coordinator-rw1/reviewer-packet.md",
+    "state": "DRAFT_NOT_DISPATCHED",
+    "mandatory_before_dispatch": "R/rw1-candidate-freeze.json (parent will create; SHA not invented here)"
+  },
+  "preserved_budgets": {
+    "RW1_review_used": 0,
+    "RW1_review_limit": 1,
+    "RW1_repair_used": 0,
+    "RW1_repair_limit": 1,
+    "planning_review_used": 1,
+    "ocr": "required own_engine ChatGPT/GPT-6.1 Sol/high --max-tokens 320000 --max-tokens-budget 0 SHA 295885a332227f8e32caf4b3c17c5b91a243ed1e6b74dd10fedf613f8ac7d19f; not run",
+    "reverify": "enabled per rw1-reverify-applicability.json; APK/DEX gap OPEN; PR053 out-of-scope closure; no test substitute; never blanket N/A or pass-unavailable"
+  },
+  "changed_paths": [
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/coordinator-rw1/readiness-receipt.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/coordinator-rw1/reviewer-packet.md",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/execution-state.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/execution.md"
+  ],
+  "self_checks": [
+    "addendum sha256 52347a3e5738fc2cfb10d015701db39dde1018948c883f78a856e98b01061d5e",
+    "0bab and VERDICT hashes match named proofs; HEAD 7da6187 generation 1",
+    "rw1-candidate-freeze.json absent; no review launched; no RW3 directory write"
+  ],
+  "next_action": "Parent writes rw1-candidate-freeze.json, validates HEAD/tree/proof, then launches one RW1 review using the draft packet plus that freeze prefix.",
+  "blocker": "Final candidate freeze file not created; RW1 review unused"
+}

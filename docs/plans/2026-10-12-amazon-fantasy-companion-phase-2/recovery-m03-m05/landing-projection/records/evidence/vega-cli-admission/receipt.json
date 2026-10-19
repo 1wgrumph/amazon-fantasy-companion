@@ -1,0 +1,742 @@
+{
+  "schema_version": "afc.vega-cli-admission/v1",
+  "recorded_at": "2026-10-19T12:25:46.458469+00:00",
+  "packet": "afc-vega-cli-admission-sol.md",
+  "role": "Product Implementer Codex CLI / GPT-6.1 Sol / high",
+  "outcome": "STATIC_BOUND_COMPLETED_WITH_CONCRETE_GAPS",
+  "roleverdict": "PARTIAL",
+  "safety_verdict": "INDETERMINATE",
+  "reason": "No demonstrated reachable HIGH is established. Forty scanner findings excluded for the pinned runtime; one vendored normalization HIGH, telemetry helper/opt-out behavior and update side effects remain unresolved. Fail closed; no admission.",
+  "authority": "AUTH-AFC-M0305-EXEC-20261019; this bounded packet only",
+  "candidate": {
+    "lease": {
+      "journey": "AFC-2026-10-11",
+      "controller": "Current Codex Orchestrator",
+      "repository": "github:1wgrumph/amazon-fantasy-companion",
+      "checkout": "worktrees/amazon-fantasy-companion-m03-m05-recovery",
+      "branch": "afc/m03-m05-recovery",
+      "candidate_revision": "7da6187b5a57ee80887ef84301ff99a3592bacb6",
+      "generation": 1,
+      "state": "active"
+    },
+    "candidate_ref": "afc/m03-m05-recovery@7da6187b5a57ee80887ef84301ff99a3592bacb6",
+    "pins": [
+      {
+        "name": "CLI tarball 1.4.5",
+        "sha256_before": "a1801cb19a9974cf5aa8846cb2e42228b7c06b6a914fe71c8f3ce76b23a321e6",
+        "sha256_after": "a1801cb19a9974cf5aa8846cb2e42228b7c06b6a914fe71c8f3ce76b23a321e6"
+      },
+      {
+        "name": "extracted ELF",
+        "sha256_before": "0486f79d0c83cafa1db7b75ed85aef512b95b7420672a66820fca2e08923d6b6",
+        "sha256_after": "0486f79d0c83cafa1db7b75ed85aef512b95b7420672a66820fca2e08923d6b6"
+      }
+    ]
+  },
+  "provenance": {
+    "cli_version": "1.4.5",
+    "origin": "Official HTTPS KPM metadata and content-addressed tarball, consumed from prior staging receipt",
+    "identity_proven": true,
+    "identity_does_not_establish_safety": true
+  },
+  "credential_findings": {
+    "status": "EMPTY",
+    "basis": "Consumed prior clean/redacted checks; no new secret scan hit. Known public OAuth client ID is not a secret and is omitted. No credentials, accounts or user configuration read."
+  },
+  "frozen_binding": {
+    "path": "profile-binding-vega-cli-runtime-fallback.json",
+    "sha256": "07736698e31d2f7d20edd20b55e91404bd585d32f83971c995262007aacae24c",
+    "original_binding_unchanged_sha256": "e8d0b5a02cd9f445644a0caa18185af60a46f2316769b527ccc9e046796b0608",
+    "selected_route": "Original implementer fallback:1; task-amended fallback:0 Codex CLI/GPT-6.1 Sol/high",
+    "failure_chain": [
+      "Muse native23899 terminated143/no receipt; partial nm work preserved",
+      "AGY native82839 exit3 RESOURCE_EXHAUSTED429 individual quota, zero model tokens; failure evidence consumed from controller record"
+    ],
+    "coverage_assist": {
+      "enabled": true,
+      "required": true
+    },
+    "ocr_execution_mode": "own_engine",
+    "reverify": {
+      "enabled": true
+    },
+    "ocr_parameters_retained_for_authorized_review": "ChatGPT/GPT-6.1 Sol/high --max-tokens320000 --max-tokens-budget0",
+    "ocr_this_packet": "NOT_RUN_NOT_AUTHORIZED",
+    "reverify_this_packet": "NOT_RUN_NOT_AUTHORIZED",
+    "no_capability_pass_claimed": true,
+    "review_repair_budgets_unchanged": true
+  },
+  "prior_gate_consumed": {
+    "final_candidate_gate": "exit0 /91 tests",
+    "planning_freeze": "PASS exit0",
+    "rerun": false,
+    "author_work_is_not_independent_assurance": true
+  },
+  "consumed_records": [
+    {
+      "path": "journey.json",
+      "sha256": "fafd6522d70405474cc79c243e440fc57280fa7b25800733b907afaa6f4acebe"
+    },
+    {
+      "path": "execution-authority.json",
+      "sha256": "abdd62860743373331502d24c027c38dfc5c9c2d2903f6ce6baf6724b26a8e62"
+    },
+    {
+      "path": "vega-preflight-consumption.json",
+      "sha256": "1c0a3ec220f4f6eef342186ed4cc335e0d8dba8ec2d8d293321d232b31cd74e1"
+    },
+    {
+      "path": "vega-staging-consumption.json",
+      "sha256": "e6a50a5bed5681e33eeef49df19373896542236bd722e0394c8f645a7703c4a5"
+    },
+    {
+      "path": "evidence/vega-staging-continuation/receipt.json",
+      "sha256": "753c39721c1209c5d96654caedca7e8d5dff92048614ce78d0320c63b76a8f5a"
+    },
+    {
+      "path": "vega-fresh-scan-consumption.json",
+      "sha256": "5823c8a0e80c1974cd79fc522143015f3141ed6cb3506dade4afa301dbc2d4f8"
+    },
+    {
+      "path": "av-refresh-materialization.json",
+      "sha256": "f694fda04988879e57c619d086a913b45db7bd7beeaf1b8e1f348e1e6b900492"
+    },
+    {
+      "path": "vega-cli-admission-fallback.json",
+      "sha256": "e1cdc482733390d8ebd209999825ca2f04b37f91f89812d9eb2236a02725ddd5"
+    },
+    {
+      "path": "planning-gate-receipt.json",
+      "sha256": "346c6473f3e8331beecd9323622f2b73750ae232d9d31003610b946b0f69ea0f"
+    },
+    {
+      "path": "final-planning-freeze.json",
+      "sha256": "9d612dc0072069e41627bbc64172b6cb4db01b7025b39913abbc2a000f26b1f6"
+    }
+  ],
+  "scope_preservation": {
+    "license": "CLOSED DEC-AFC-M0305-VEGA-PML-20261019",
+    "host": "Ubuntu26.04.1 selected attempt preserved; unsupported-host limitation remains, no new decision requested",
+    "V01T_entry": "Selected override X01 host/VVD readiness plus G01/B01; no historical mergedA01..A05 requirement",
+    "installer": "Unqualified as written and never executed",
+    "bran": "UNAVAILABLE; ordinary discovery used; no native policy"
+  },
+  "malware_scan_consumed": {
+    "outcome": "NEGATIVE_CURRENT_OFFICIAL_MAIN_AND_DAILY",
+    "main_version": 63,
+    "daily_version": 28158,
+    "signatures": 3628089,
+    "files": 3,
+    "infected": 0,
+    "native_exit": 0,
+    "signature_validation_and_selftests": "Controller confirms both current official signed DBs validated/self-tested",
+    "database_mutations_this_packet": false,
+    "not_passing_evidence": "Earlier stale-main-age command scanned0 files; never used as clean. Daily-only scan is not substituted for complete scan."
+  },
+  "finding_mapping": {
+    "path": "evidence/vega-cli-admission/finding-map.json",
+    "total": 41,
+    "severity_counts": {
+      "HIGH": 20,
+      "MEDIUM": 18,
+      "UNKNOWN": 3
+    },
+    "module_counts": {
+      "golang.org/x/crypto": 20,
+      "golang.org/x/mod": 2,
+      "golang.org/x/net": 15,
+      "golang.org/x/sys": 1,
+      "golang.org/x/text": 2,
+      "google.golang.org/protobuf": 1
+    },
+    "excluded_for_pinned_runtime": 40,
+    "unresolved": 1,
+    "unresolved_ids": [
+      "CVE-2026-56852",
+      "GO-2026-5970"
+    ],
+    "demonstrated_reachable_high": 0,
+    "primary_documents_verified": 41,
+    "sha256": "aeb28dafa9b929ea3bb4e8b3c347df79aca480b01e4594bbca328d55ede8d1aa"
+  },
+  "stdlib_visibility": {
+    "original_SBOM_stdlib_component": false,
+    "runtime_version": "go1.27.2",
+    "evidence": "ELF .go.buildinfo and DWARF Go cmd/compile producer",
+    "analyst_enriched_offline_scan": {
+      "packages": 1,
+      "findings": 0,
+      "native_exit": 0,
+      "database_updated": "2026-10-16"
+    },
+    "known_scanner_advisories_checked_against_stdlib": [
+      {
+        "scanner_id": "CVE-2026-33814",
+        "go_id": "GO-2026-4918",
+        "runtime": "go1.27.2",
+        "official_ranges": [
+          [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "fixed": "1.25.10"
+                },
+                {
+                  "introduced": "1.26.0-0"
+                },
+                {
+                  "fixed": "1.26.3"
+                }
+              ]
+            }
+          ]
+        ],
+        "disposition": "OUTSIDE_OFFICIAL_AFFECTED_STDLIB_RANGES",
+        "basis": "Official 1.27 branch fixed at 1.27.2 or 1.27.0-rc.3; GO-2026-4918 affected branches end before 1.27.0. Compiler version is self-reported ELF metadata, corroborated by DWARF producer."
+      },
+      {
+        "scanner_id": "CVE-2026-39821",
+        "go_id": "GO-2026-5026",
+        "runtime": "go1.27.2",
+        "official_ranges": [
+          [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "fixed": "1.25.13"
+                },
+                {
+                  "introduced": "1.26.0-0"
+                },
+                {
+                  "fixed": "1.26.6"
+                },
+                {
+                  "introduced": "1.27.0-0"
+                },
+                {
+                  "fixed": "1.27.0-rc.3"
+                }
+              ]
+            }
+          ]
+        ],
+        "disposition": "OUTSIDE_OFFICIAL_AFFECTED_STDLIB_RANGES",
+        "basis": "Official 1.27 branch fixed at 1.27.2 or 1.27.0-rc.3; GO-2026-4918 affected branches end before 1.27.0. Compiler version is self-reported ELF metadata, corroborated by DWARF producer."
+      },
+      {
+        "scanner_id": "CVE-2026-46600",
+        "go_id": "GO-2026-5942",
+        "runtime": "go1.27.2",
+        "official_ranges": [
+          [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "1.26.0-0"
+                },
+                {
+                  "fixed": "1.26.6"
+                },
+                {
+                  "introduced": "1.27.0-0"
+                },
+                {
+                  "fixed": "1.27.0-rc.3"
+                }
+              ]
+            }
+          ]
+        ],
+        "disposition": "OUTSIDE_OFFICIAL_AFFECTED_STDLIB_RANGES",
+        "basis": "Official 1.27 branch fixed at 1.27.2 or 1.27.0-rc.3; GO-2026-4918 affected branches end before 1.27.0. Compiler version is self-reported ELF metadata, corroborated by DWARF producer."
+      },
+      {
+        "scanner_id": "CVE-2026-78669",
+        "go_id": "GO-2026-6611",
+        "runtime": "go1.27.2",
+        "official_ranges": [
+          [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "fixed": "1.26.9"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "1.27.0-0"
+                },
+                {
+                  "fixed": "1.27.2"
+                }
+              ]
+            }
+          ]
+        ],
+        "disposition": "OUTSIDE_OFFICIAL_AFFECTED_STDLIB_RANGES",
+        "basis": "Official 1.27 branch fixed at 1.27.2 or 1.27.0-rc.3; GO-2026-4918 affected branches end before 1.27.0. Compiler version is self-reported ELF metadata, corroborated by DWARF producer."
+      },
+      {
+        "scanner_id": "CVE-2026-78659",
+        "go_id": "GO-2026-6603",
+        "runtime": "go1.27.2",
+        "official_ranges": [
+          [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "fixed": "1.26.9"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "1.27.0-0"
+                },
+                {
+                  "fixed": "1.27.2"
+                }
+              ]
+            }
+          ]
+        ],
+        "disposition": "OUTSIDE_OFFICIAL_AFFECTED_STDLIB_RANGES",
+        "basis": "Official 1.27 branch fixed at 1.27.2 or 1.27.0-rc.3; GO-2026-4918 affected branches end before 1.27.0. Compiler version is self-reported ELF metadata, corroborated by DWARF producer."
+      },
+      {
+        "scanner_id": "CVE-2026-78660",
+        "go_id": "GO-2026-6610",
+        "runtime": "go1.27.2",
+        "official_ranges": [
+          [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "fixed": "1.26.9"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "1.27.0-0"
+                },
+                {
+                  "fixed": "1.27.2"
+                }
+              ]
+            }
+          ]
+        ],
+        "disposition": "OUTSIDE_OFFICIAL_AFFECTED_STDLIB_RANGES",
+        "basis": "Official 1.27 branch fixed at 1.27.2 or 1.27.0-rc.3; GO-2026-4918 affected branches end before 1.27.0. Compiler version is self-reported ELF metadata, corroborated by DWARF producer."
+      },
+      {
+        "scanner_id": "CVE-2026-78663",
+        "go_id": "GO-2026-6612",
+        "runtime": "go1.27.2",
+        "official_ranges": [
+          [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "fixed": "1.26.9"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "1.27.0-0"
+                },
+                {
+                  "fixed": "1.27.2"
+                }
+              ]
+            }
+          ]
+        ],
+        "disposition": "OUTSIDE_OFFICIAL_AFFECTED_STDLIB_RANGES",
+        "basis": "Official 1.27 branch fixed at 1.27.2 or 1.27.0-rc.3; GO-2026-4918 affected branches end before 1.27.0. Compiler version is self-reported ELF metadata, corroborated by DWARF producer."
+      },
+      {
+        "scanner_id": "CVE-2026-97032",
+        "go_id": "GO-2026-6617",
+        "runtime": "go1.27.2",
+        "official_ranges": [
+          [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "fixed": "1.26.9"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "1.27.0-0"
+                },
+                {
+                  "fixed": "1.27.2"
+                }
+              ]
+            }
+          ]
+        ],
+        "disposition": "OUTSIDE_OFFICIAL_AFFECTED_STDLIB_RANGES",
+        "basis": "Official 1.27 branch fixed at 1.27.2 or 1.27.0-rc.3; GO-2026-4918 affected branches end before 1.27.0. Compiler version is self-reported ELF metadata, corroborated by DWARF producer."
+      }
+    ],
+    "complete_visibility_caveat": "Original36-package SBOM omitted stdlib/toolchain. Analyst-added runtime version covers DB-known stdlib advisories, not a complete compiler/linker supply-chain audit or exact revision proof for every vendored copy. External-module versions do not identify the compiler-vendored copies; unlisted/native proprietary code and dynamic system libraries are not exhaustively covered."
+  },
+  "compiled_network_crypto": {
+    "present": [
+      "net/http and net/http/internal/http2",
+      "crypto/tls and crypto/x509",
+      "vendor/golang.org/x/net/idna and dns/dnsmessage and http2/hpack",
+      "vendor/golang.org/x/text/unicode/norm",
+      "external x/crypto/sha3"
+    ],
+    "direct_edges": [
+      "KPM Client.doRequest -> net/http.(*Client).do",
+      "Resty Client.execute -> net/http.(*Client).do",
+      "component.downloadFile -> net/http.(*Client).do"
+    ],
+    "limits": "Compiled certificate verification is evidence of code presence, not proof that all callers enforce certificate/hostname/redirect policy. Build metadata enables CGO and retains tlssha1=1/cryptocustomrand=1 defaults; no claim that obsolete algorithms are actually negotiated. Native dependencies/hardening are consumed from prior readelf receipt, not executing ldd. No complete call graph through interfaces or plugin dispatch."
+  },
+  "telemetry_qualification": {
+    "verdict": "INDETERMINATE",
+    "official_source": {
+      "url": "https://developer.amazon.com/docs/vega/0.24/telemetry.html",
+      "sha256": "85ae92868192647baef5834e241db9c054b28a4d8872ec356acd055c21bb493a"
+    },
+    "documented": "Telemetry is default-on; documented post-install opt-out is HOME/vega/telemetry/config.json optIn:false. That document does not establish first-run preseed behavior.",
+    "binary_evidence": [
+      {
+        "function": "TelemetryServiceHandler.readOptInFromConfigFile",
+        "address": "0x923d00",
+        "observation": "Joins config.json, os.ReadFile, JSON unmarshal and returns opt-in bool."
+      },
+      {
+        "function": "servicehandler.CreateDefaultTelemetryConfig",
+        "address": "0x921e40",
+        "observation": "Checks config existence; missing-file branch creates optIn:true. Existing-file branch returns without writing; this supports but does not qualify preseed globally."
+      },
+      {
+        "function": "TelemetryServiceHandler.GetOptIn.func1",
+        "address": "0x9250a0",
+        "observation": "Builds telemetry helper path and args -baseDir, -getOptIn, -sendLogsToFile; invokes CombinedOutput via execCommandContext before config fallback. Fallback at0x9253ab is gated by helper output containing unsupported -getOptIn flag, not a universal file-first path."
+      },
+      {
+        "function": "sdk.runListRemoteVersionsWithDeps",
+        "observation": "Direct call to internal/telemetry.GetClient exists; enumeration cannot be assumed telemetry-free."
+      }
+    ],
+    "controls_not_verified": [
+      "Preseed honored across command callbacks, errors and absent-helper cases",
+      "No telemetry subprocess or persistence/network before consent",
+      "No host fallback paths outside isolated HOME"
+    ],
+    "no_runtime_configuration_changed": true
+  },
+  "self_update_qualification": {
+    "verdict": "INDETERMINATE",
+    "binary_evidence": [
+      "VvmUpdate.Update at0x95e660 calls downloadVvm then validateVvmBinary at0x95fac0 before later replacement operations.",
+      "validateVvmBinary prepares a child command with version/json arguments and parses its output; downloaded bytes may execute during validation. This branch is unsafe to permit without separate payload admission.",
+      "RealUpdateManager has StartUpdateChecks, HandleUpdateChecks and UpdateComponents; telemetry component has its own update/download/install path."
+    ],
+    "limits": "Presence does not prove automatic startup replacement, nor does the lack of a resolved direct startup path prove absence. Interfaces, callbacks and dependency injection remain unresolved.",
+    "required_containment_for_any_later_authorized_probe": "Deny target network, writes/replacement of admitted binary, plugins and unadmitted child execution; log attempted operations. Do not run installer or vega update."
+  },
+  "minimum_remaining_blockers": [
+    {
+      "id": "VENDOR-NORM-REVISION",
+      "type": "CAPABILITY_PROVENANCE_GAP",
+      "ids": [
+        "CVE-2026-56852",
+        "GO-2026-5970"
+      ],
+      "needed": "Establish exact Go-vendored normalization revision or compare compiled affected implementation against official fix; module0.29.0 and compiler1.27.2 alone do not settle it."
+    },
+    {
+      "id": "BEHAVIOR-CONTROL",
+      "type": "STATIC_BEHAVIOR_INDETERMINATE",
+      "needed": "Resolve callback/interface startup telemetry, helper execution and update effects; prove opt-out/no-update controls or qualify a separately authorized, contained diagnostic probe after static vulnerability closure."
+    }
+  ],
+  "exact_proposed_next_bounded_packet": {
+    "title": "Vega CLI1.4.5 remaining static closure and inert probe specification",
+    "role": "Same approved Product Implementer route under a separately materialized invocation; no reviewer",
+    "input": "This receipt, exact ELF/tar pins, source document hashes, preserved symbol/DWARF/disassembly evidence",
+    "write_set": "A new bounded evidence directory only; no product, plan/profile or journey edits",
+    "actions": [
+      "Admit read-only public official Go1.27.2 vendor revision metadata and the GO-2026-5970 fix diff as inert evidence. Compare relevant norm implementation with pinned ELF; preserve INDETERMINATE if exact code identity/fix cannot be established.",
+      "Trace telemetry/update interface slots and Cobra command callbacks for sdk list-remote --json from existing DWARF/ELF, including default/missing-helper error paths. Do not assert preseed or no-update behavior merely from strings.",
+      "Return static closure if possible; otherwise specify one disposable no-network diagnostic probe using the pinned ELF, read-only inputs, empty HOME/env allowlist, optIn:false preseed, no repository/host homes, no sockets/credentials/cloud metadata, deny unadmitted subprocesses and binary replacement, process/filesystem/attempted-network logging. This packet authors that probe only; execution requires separate explicit authority and qualified static vulnerability disposition."
+    ],
+    "stop": "Concrete remaining code/provenance or behavior gap, or bounded static closure. Never execute target/install/download a tool/module/DB; no credentials, accounts, review or publication.",
+    "credentials_needed": false,
+    "why_no_credentials": "Remaining CLI safety questions concern local binary/vendor code and public security material. Prior catalog401 is an independent later SDK staging obligation, not needed for admission analysis."
+  },
+  "later_prerequisites_outside_this_packet": [
+    "Exact SDK/RN/OS pins and transitive SDK/VVD artifact staging/admission",
+    "Watchman pin/admission",
+    "Selected Ubuntu host/VVD runtime qualification",
+    "Physical Vega target and authorized V01T entry evidence",
+    "Approved later review must retain required OCR own_engine and applicable binary Reverify; none performed here"
+  ],
+  "commands_and_exits": [
+    {
+      "command": "git rev-parse HEAD; git branch --show-current; parse journey lease and frozen binding",
+      "exit": 0,
+      "result": "Exact branch/HEAD/generation1 active; binding SHA matches. Revalidated immediately before evidence write."
+    },
+    {
+      "command": "sha256sum pinned tarball and ELF, before and after static inspection",
+      "exit": 0,
+      "result": "Both exact pins match; ELF remains non-executable."
+    },
+    {
+      "command": "go version -m <pinned ELF>",
+      "exit": 127,
+      "classification": "ENVIRONMENT_TOOL_UNAVAILABLE",
+      "result": "Go not on PATH; expected standard Go locations also absent. Target never executed; no tool acquisition. Replaced with existing readelf .go.buildinfo + DWARF."
+    },
+    {
+      "command": "readelf -SW <pinned ELF>",
+      "exit": 0,
+      "result": "39 sections, including symtab, Go build metadata and compressed DWARF."
+    },
+    {
+      "command": "readelf -p .go.buildinfo <pinned ELF>",
+      "exit": 0,
+      "result": "go1.27.2, GOOS=linux, GOARCH=amd64, CGO_ENABLED=1; external module pins agree with SBOM."
+    },
+    {
+      "command": "readelf --debug-dump=info <pinned ELF>",
+      "exit": 0,
+      "result": "All debug info decoded; stderr empty; 296 CUs, 20684 subprogram names, including 5469 marked inline."
+    },
+    {
+      "command": "readelf -Ws <pinned ELF>",
+      "exit": 0,
+      "result": "Full symbol table decoded; stderr empty; 21622 unique named entries. Preserved prior nm inventory reused (21737 names); no invented previous command exit."
+    },
+    {
+      "command": "python3 fetch_advisories.py",
+      "exit": 0,
+      "result": "41 unique known advisory JSON documents from official HTTPS vuln.go.dev; HTTP200, exact IDs/aliases validated, no withdrawn entries, SHA256 saved; parser positive and rejection self-checks passed."
+    },
+    {
+      "command": "python3 static_inventory.py",
+      "exit": 0,
+      "result": "41 findings mapped; exact package-namespace absence supported by ELF symbol table, nm and DWARF; inline-name and namespace self-checks passed."
+    },
+    {
+      "command": "python3 disassembly.py (objdump -d --no-show-raw-insn)",
+      "exit": 0,
+      "result": "17016 function labels, static direct-call graph and selected behavior disassembly. Parsing/call self-checks passed. No direct main-to-telemetry paths resolved through Cobra indirect callbacks; this is a limitation, not unreachability."
+    },
+    {
+      "command": "Initial analyst stdlib-only CycloneDX construction then trivy invocation",
+      "exit": 1,
+      "classification": "INVOCATION_METADATA_DECODE",
+      "result": "Strict UTF8 decoding of readelf binary-bearing text failed; SBOM absent, scan failed. No clean claim. Corrected by byte-level ASCII-version check against already-decoded DWARF."
+    },
+    {
+      "command": "Corrected analyst stdlib-only CycloneDX construction",
+      "exit": 0,
+      "result": "One explicitly analyst-added stdlib@v1.27.2 component; source metadata provenance retained, never represented as original Syft output."
+    },
+    {
+      "command": "trivy sbom --offline-scan --skip-db-update --skip-java-db-update --scanners vuln --format json --output stdlib-vulnerabilities.json stdlib-only.cdx.json",
+      "exit": 0,
+      "result": "Trivy0.71.0 recognized gobinary/stdlib@v1.27.2, one package scanned, zero findings using existing 2026-10-16 DB. Third-party SBOM accuracy warning retained. No database/network update."
+    },
+    {
+      "command": "HTTPS GET official Go release history (inert report only)",
+      "exit": 0,
+      "result": "HTTP200; Go1.27.2 release/security-fix report dated2026-10-08, hash saved. No source/module/tool download."
+    },
+    {
+      "command": "python3 build_receipt.py assertions",
+      "exit": 0,
+      "result": "Lease, original/amended bindings, scan-consumption hashes, pins, advisory aliases/hashes, exact41 mapping, dispositions40+1, stdlib1/zero findings, and existing nm preservation checked before writes."
+    }
+  ],
+  "private_evidence_manifest": [
+    {
+      "name": "nm.txt",
+      "sha256": "67b1dd940b60c9820d8551be4cadb4e80aa81dcb551961875f92ff4452ed17c3",
+      "bytes": 1357908
+    },
+    {
+      "name": "nm.err",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "name": "elf-sections.txt",
+      "sha256": "20dedc11ae35571dbfc6b7997a9585c4a941b84e688fa49dfda4f47560a04ff1",
+      "bytes": 3911
+    },
+    {
+      "name": "elf-buildinfo.txt",
+      "sha256": "2f4483053b726ddaf41d346214ba12a869b29abe7d739774bc88553f21fba737",
+      "bytes": 5005
+    },
+    {
+      "name": "elf-symbols.txt",
+      "sha256": "5a9da2fc4e1585c767fb6a176706f14ed70002f13e90e235c954717e8eb245f3",
+      "bytes": 2235122
+    },
+    {
+      "name": "elf-symbols.err",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "name": "dwarf-info.txt",
+      "sha256": "4d4b413ba037e6c9d93b9d4de4ac65fb9ba6f24485d769319ca4edc9e765f61b",
+      "bytes": 66418196
+    },
+    {
+      "name": "dwarf-info.err",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "name": "static-inventory.json",
+      "sha256": "f0cf7b0288ba6d71a05f54604cdb21dae38d7778f70751cdcd8df3c169ff280a",
+      "bytes": 458216
+    },
+    {
+      "name": "disassembly-all.txt",
+      "sha256": "91303d68d72d2ef89f7c41af8a8635afb5ba6870a7ae7a612e7f75244d0ee22e",
+      "bytes": 65171238
+    },
+    {
+      "name": "disassembly.err",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "name": "behavior-selected.asm",
+      "sha256": "812d59823abceb7f8a6bc022826631c68f94d095872ce5658a24ba4f570d5168",
+      "bytes": 534959
+    },
+    {
+      "name": "direct-call-graph.json",
+      "sha256": "1e9bad3ebec115095921a195946f91343a7e2ee346d5f46cb755eeeb0285a118",
+      "bytes": 3150752
+    },
+    {
+      "name": "startup-direct-paths.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "bytes": 3
+    },
+    {
+      "name": "primary-sources.json",
+      "sha256": "9f22ef47ee3a8135825ed78c20f0b38e1dc4c94381fa2f50d109f016a66339e2",
+      "bytes": 8779
+    },
+    {
+      "name": "go-release-history.html",
+      "sha256": "b78db54843bd88dd2d4a1412abcb369e8031ed5f1e3508ffadebbb7020107d8e",
+      "bytes": 148677
+    },
+    {
+      "name": "stdlib-only.cdx.json",
+      "sha256": "53d530a64dc02e1ade91d7fb920a7eb9ac67ac14592a3ac3ea3aec67c744e391",
+      "bytes": 1089
+    },
+    {
+      "name": "stdlib-vulnerabilities.json",
+      "sha256": "71e0626514707fe8b6fd4be420047f3521a2b55d018ab26d318002e5875743ba",
+      "bytes": 700
+    },
+    {
+      "name": "stdlib-trivy.stderr",
+      "sha256": "d412dac5133dfae4c13cea26fd02df7a07310283f0534252c9a79bc1cbc000c4",
+      "bytes": 456
+    },
+    {
+      "name": "fetch_advisories.py",
+      "sha256": "3c80ef5633c521c02227f5c6cb4d1c9d961da2dd2ec4ecac1276f287c7764423",
+      "bytes": 2390
+    },
+    {
+      "name": "static_inventory.py",
+      "sha256": "12cdbfed6cef3263061e494926133ddc4fa0a75ff47bd4bd9acf3003a5a861ca",
+      "bytes": 5726
+    },
+    {
+      "name": "disassembly.py",
+      "sha256": "066f814b01cf002a6fb393d684c8978d103e108e389e33b9e82bf0a0d1879983",
+      "bytes": 3264
+    }
+  ],
+  "public_export_projection": "NOT_CREATED; no raw logs, private paths, vendor build paths or OAuth identifier exported",
+  "changed_paths": [
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/vega-cli-admission/finding-map.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/vega-cli-admission/receipt.json"
+  ],
+  "prohibited_actions_taken": [],
+  "not_claimed": [
+    "CLI admission PASS",
+    "independent review/assurance",
+    "lifecycle or V01T acceptance",
+    "runtime behavior qualification"
+  ],
+  "developer_feedback": "Reuse the qualified controller AV/SBOM evidence and preserved nm inventory. The original scan over-reports external module packages while under-reporting stdlib. Keep external, compiler-vendored and stdlib namespaces distinct. Preseed is a hypothesis: the compiled getter first tries a helper. No credential access or owner re-decision of license/host is necessary for the remaining safety work."
+}

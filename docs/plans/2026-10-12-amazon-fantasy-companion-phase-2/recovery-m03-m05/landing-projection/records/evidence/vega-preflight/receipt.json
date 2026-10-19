@@ -1,0 +1,167 @@
+{
+  "schema_version": "afc.vega-preflight/v1",
+  "packet": "Vega primary-target prerequisite discovery (static qualification only; no install, no execution, no terms acceptance)",
+  "role": "Product Implementer, Muse Code / muse-wonder-full-1.0-contributor / high (frozen implementer primary, profile-binding.json)",
+  "outcome": "OWNER_DECISION_REQUIRED",
+  "outcome_reasons": [
+    "OA-13 license boundary: installer header (get_vvm.sh lines 5-12) licenses all files as Program Materials under https://developer.amazon.com/support/legal/pml and states 'If you do not agree to the above terms and conditions, you may not use any file in this package.' No interactive accept prompt exists in the script; running it (including NONINTERACTIVE=true) is use under those terms. Acceptance is owner-only and was not performed.",
+    "Unsupported host: official 0.24 install docs list Ubuntu 20.04, 22.04, or 24.04 x86_64 as supported. This host is Ubuntu 26.04.1 LTS. PROC-VEGA-PREPARE pass criteria route an unsupported-host result to OWNER_DECISION_REQUIRED (OA-13, RISK-AFC-P2-15).",
+    "SUPPLY_CHAIN_STAGING_GAP for the installer as written (see staging section): it downloads and executes the Vega CLI, then runs 'vega sdk install', in one run, without verifying the CLI checksum it fetched. Transitive SDK/VVD artifacts cannot be staged and scanned before first execution through this script."
+  ],
+  "supply_chain_verdict": "INDETERMINATE",
+  "supply_chain_verdict_reason": "No independent expected digest or signature exists for get_vvm.sh (mutable S3/CloudFront endpoint, Last-Modified 2026-10-19T11:02:33Z, i.e. same-day). CLI tarball digest matches same-origin KPM metadata (identity, not safety). ClamAV database is stale (>7 days; daily.cld dated 2026-10-11) and database download was prohibited. SDK/VVD component artifacts were not stageable statically. Per scan-software-supply-chain, missing provenance/stale scanner data caps the verdict at INDETERMINATE; INDETERMINATE is fail-closed, never PASS/ALLOW.",
+  "credential_findings": "EMPTY. gitleaks (redacted) on get_vvm.sh: no leaks found. Named-prefix grep (AKIA/ASIA/ghp_/sk-proj-/GOCSPX-/PRIVATE KEY) on installer text: 0 matches. No credential contents in any log. The extracted CLI binary contains an embedded public OAuth client identifier string (amzn1.application-oa2-client.*) visible in strings output; it is a client ID, not a secret, and is not recorded here in full.",
+  "candidate_lease": {
+    "journey": "AFC-2026-10-11",
+    "branch": "afc/m03-m05-recovery",
+    "head": "7da6187b5a57ee80887ef84301ff99a3592bacb6",
+    "generation": 1,
+    "state": "active",
+    "profile_binding_sha256_observed": "e8d0b5a02cd9f445644a0caa18185af60a46f2316769b527ccc9e046796b0608",
+    "lease_verified": true,
+    "note": "git rev-parse HEAD and branch match journey.json checkout_lease. Pre-existing dirty/untracked entries (authority.json, mutation test, recovery dir, spikes) were present at session start and were not modified by this packet."
+  },
+  "repository_gate_consumed": {
+    "final_planning_freeze": "final-planning-freeze.json outcome PASS, exit_code 0, manifest_digest 0808ec169952e6ef6c224fc990ca4742f5ccba88688f228503082c067196ec0f (semantic planning readiness only)",
+    "planning_gate_receipt_final_candidate_gate": "exit_code 0, test_count 91, command 'bash tools/ci/gate.sh docs hygiene' (author verification, not independent review)",
+    "host_prep_consumption": "status EVIDENCE_READY; remaining gaps recorded there (APK/DEX Reverify unavailable etc.)",
+    "final_candidate_gate_json_file": "absent (ls exit 2); the referenced final gate above was consumed instead. No redundant unrelated tests were run."
+  },
+  "changed_paths": [
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/vega-preflight/receipt.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/vega-preflight/summary.md"
+  ],
+  "outside_repo_staging": "[PRIVATE-TMP]/afc-vega-preflight/ (inert downloads and scan outputs; installer never executed, exec bit removed)",
+  "host_facts": {
+    "uname": "Linux spectre-dev 7.0.0-38-generic x86_64 GNU/Linux",
+    "os": "Ubuntu 26.04.1 LTS (Resolute Raccoon) — NOT in the docs-supported set {20.04, 22.04, 24.04}",
+    "kvm": "/dev/kvm readable+writable by current user via ACL (user:spectre:rw-); user is not in the kvm group",
+    "free_disk_root": "176G available of 915G (docs require >=20GB: satisfied)",
+    "node": "v22.23.3 (docs require >=18: satisfied)",
+    "npm": "11.15.0",
+    "curl": "8.18.0 at /usr/bin/curl (native, non-snap: satisfied)",
+    "lz4": "v1.10.0 at /usr/bin/lz4 (present)",
+    "watchman": "MISSING (PROC step 3-5 prerequisite; not installed by this packet)",
+    "vega_cli": "MISSING (no vega/vvd binary on PATH; ~/vega absent)",
+    "vscode": "present at /usr/bin/code (installer would modify extensions if run)",
+    "python": "3.14.4; no python3.8 / libpython3.8-dev (DEC-AFC-SD-051: skipped by design, native-debugging limitation only)",
+    "scan_tools_present": "clamscan 1.5.4, yara, syft, trivy, gitleaks, semgrep, shellcheck 0.11.0, readelf/objdump/strings"
+  },
+  "version_compatibility_facts": {
+    "docs_line": "0.24 is the current documented SDK line at developer.amazon.com/docs/vega/0.24/ (install page and vega-release-notes page fetched 2026-10-19).",
+    "exact_sdk_build": "NOT PINNABLE STATICALLY. The plan's example 0.24.9311 is explicitly an example, not a pin. The authoritative SDK version list is only exposed by running the CLI ('vega sdk list-remote'), which this packet prohibits. No exact 0.24.x build is claimed.",
+    "cli_latest_from_official_metadata": "KeplerVersionManager 1.4.5 for linux-x86_64 is the newest of 10 versions in KPM metadata fetched read-only (see artifacts). The installer always resolves 'latest' at runtime (sort_by created_at, get_vvm.sh line 1006); the CLI itself is not pinned by VEGA_SDK_VERSION.",
+    "react_native": "0.24 release-notes text: 'React Native 0.83 for Vega is now available' and 'React Native 0.72 remains supported'. Both pairings exist in 0.24; the plan's RN 0.72 target remains a supported pairing, but the exact RN/SDK/OS/package pin must still be selected after the notification-documentation reconciliation required by the vega_primary_contingency. No RN 0.83 parity is assumed."
+  },
+  "license_terms": {
+    "finding": "Terms apply by use, with no accept prompt to stop at. Header lines 5-12 of get_vvm.sh impose the Program Materials License Agreement. is_interactive()/NONINTERACTIVE (lines 53-68, 1549-1568, 1651-1660) only suppresses install prompts; it does not present terms. Therefore NONINTERACTIVE execution cannot be shown to avoid terms acceptance.",
+    "classification": "license / OA-13 boundary — OWNER_DECISION_REQUIRED before any execution",
+    "terms_url": "https://developer.amazon.com/support/legal/pml"
+  },
+  "staging": {
+    "finding": "SUPPLY_CHAIN_STAGING_GAP for PROC-VEGA-PREPARE steps as written.",
+    "evidence_lines": [
+      "get_vvm.sh:1006 resolves latest CLI version+sha_checksum from KPM metadata at runtime",
+      "get_vvm.sh:1406-1408 reads 'version checksum' then '# todo: checksum if ssl utilities found.' — the fetched checksum is never verified (corroborated by shellcheck SC2034 'checksum appears unused' at line 1406)",
+      "get_vvm.sh:~705-745 downloads vega.tar.gz to a temp dir; ~790-840 extracts to ~/vega/bin and chmod +x (line 833)",
+      "get_vvm.sh:937-952 executes the just-downloaded CLI; 1556/1593 run 'vega sdk install <target>' which downloads further SDK/VVD components inside the same run",
+      "get_vvm.sh:231-232 KPM_BASE_URL/KPM_REPO are environment-overridable, so artifact origin is not fixed by the script",
+      "No download-only mode exists in the installer (SKIP_SDK_INSTALL only skips the SDK step after the CLI has already been downloaded, installed, and made executable)"
+    ],
+    "mitigation_proven_for_cli_only": "The CLI tarball itself CAN be staged without the installer: KPM metadata (read-only GET) gives version 1.4.5 + sha_checksum; the download-link endpoint returns a content-addressed HTTPS URL embedding that sha; the staged tarball's sha256 matches. This proves a scan-before-execution path for the CLI artifact only. SDK/VVD component staging depends on CLI behavior (strings show SHA256 verification and a local-tarball install mode inside the CLI) and cannot be qualified without executing it.",
+    "other_installer_behavior": [
+      "Telemetry: notice at lines 1384-1386 — SDK/tools collect telemetry by default, opt-out documented at https://developer.amazon.com/docs/vega/latest/telemetry.html; CLI binary strings confirm a telemetry service component and self-update ('vega update', 'failed to override current binary')",
+      "Persistence: appends 'source \"~/vega/env\"' to existing ~/.bashrc/.zshrc/.bash_profile/.zprofile/.profile (lines 1827-1845)",
+      "VS Code: uninstalls legacy Kepler extensions and force-installs amazon-devices.kepler-studio from the marketplace (lines 591-613, 1629-1713); in NONINTERACTIVE mode with VS Code present it proceeds without prompting",
+      "Privilege: refuses root interactively but only warns when root+NONINTERACTIVE (lines 1341-1352); no sudo/system-package use found; user-scope (~/vega) as documented",
+      "Snap curl: detects and rejects /snap/bin/curl with apt instructions (lines 1315-1320); host curl is native"
+    ]
+  },
+  "artifacts": [
+    {
+      "name": "get_vvm.sh (Vega SDK installer script)",
+      "origin_url": "https://sdk-installer.vega.labcollab.net/get_vvm.sh",
+      "final_url": "https://sdk-installer.vega.labcollab.net/get_vvm.sh (HTTP 200, no redirect; server AmazonS3 via CloudFront; Last-Modified 2026-10-19T11:02:33Z; ETag 096d9b4904ae05fb0d3a9026a4bd5418 is an MD5-style S3 ETag, not an independent signed digest)",
+      "size_bytes": 58010,
+      "sha256": "0e5386581e5cf518202687213dd26d1b35e70242d1bd190cdea7096a99476ae0",
+      "expected_independent_integrity": "NONE FOUND — no official published digest/signature for the installer was located on the 0.24 install/release-notes pages. Provenance gap: mutable unpinned endpoint.",
+      "file_type": "Bourne-Again shell script, UTF-8 text, 1927 lines",
+      "executed": false
+    },
+    {
+      "name": "KPM metadata for KeplerVersionManager (linux-x86_64)",
+      "origin_url": "https://k-artifactory-external.labcollab.net/artifactory/api/kpm/kpm-default-prod-local/metadata/KeplerVersionManager?platform=linux-x86_64",
+      "size_bytes": 3738,
+      "sha256": "3996899e7e847a9b158be6c9e737d75e0cd20be62dfc52856a38fbb424b57b05",
+      "content": "10 versions; newest 1.4.5 sha_checksum a1801cb19a9974cf5aa8846cb2e42228b7c06b6a914fe71c8f3ce76b23a321e6, file_size_bytes 11709170",
+      "expected_independent_integrity": "Same-origin metadata (not independent of the artifact host)"
+    },
+    {
+      "name": "vega-cli-1.4.5-linux-x86_64.tar.gz (KeplerVersionManager CLI tarball)",
+      "origin_url": "https://kepler-static-artifacts.kepler.labcollab.net/a1/a1801cb19a9974cf5aa8846cb2e42228b7c06b6a914fe71c8f3ce76b23a321e6 (content-addressed; returned by the KPM download-link endpoint for version=1.4.5)",
+      "size_bytes": 11709170,
+      "sha256": "a1801cb19a9974cf5aa8846cb2e42228b7c06b6a914fe71c8f3ce76b23a321e6",
+      "digest_match": "MATCHES KPM metadata sha_checksum (identity proven; safety not proven)",
+      "archive_listing": "single entry 'vega' (22286240 bytes, -rwxr-xr-x p4admin/amazon); no traversal/absolute paths/device nodes",
+      "extracted_binary": "ELF 64-bit x86-64 Go executable, dynamically linked (libc/libpthread/libresolv only), not stripped; sha256 0486f79d0c83cafa1db7b75ed85aef512b95b7420672a66820fca2e08923d6b6; inspected with readelf/strings only, never executed, exec bit removed in staging"
+    }
+  ],
+  "commands_and_exits": [
+    {"command": "git rev-parse HEAD; git branch --show-current", "exit": 0, "result": "7da6187b5a57ee80887ef84301ff99a3592bacb6 on afc/m03-m05-recovery (lease match)"},
+    {"command": "uname -a; cat /etc/os-release; test -r/-w /dev/kvm; df -h; command -v node/curl/lz4/watchman/vega/...", "exit": 0, "result": "host facts above; watchman/vega/vvd missing"},
+    {"command": "curl -fsSL --proto '=https' -o [PRIVATE-TMP]/afc-vega-preflight/get_vvm.sh https://sdk-installer.vega.labcollab.net/get_vvm.sh (inert, chmod a-x after)", "exit": 0, "result": "HTTP 200, 58010 bytes"},
+    {"command": "file/stat/sha256sum on staged artifacts", "exit": 0, "result": "digests in artifacts section"},
+    {"command": "curl read-only GET KPM metadata + download-link endpoints (HTTPS, official labcollab.net origins taken from installer text)", "exit": 0, "result": "CLI 1.4.5 inventory + content-addressed URL"},
+    {"command": "curl -fsS --proto '=https' CLI tarball; sha256sum; tar -tvzf (list only)", "exit": 0, "result": "digest matches metadata; single-file archive"},
+    {"command": "readelf -h/-d, strings -n 8 on extracted CLI binary (no execution, no ldd)", "exit": 0, "result": "Go ELF; telemetry/self-update/KPM strings noted"},
+    {"command": "shellcheck -S warning get_vvm.sh", "exit": 1, "result": "4 warnings only (SC2155 x2, SC2034 x2 incl. unused checksum at line 1406); no errors"},
+    {"command": "clamscan --no-summary get_vvm.sh vega-cli-1.4.5-linux-x86_64.tar.gz", "exit": 0, "result": "both OK, but database stale (>7 days warning; daily.cld 2026-10-11) — weakened evidence"},
+    {"command": "gitleaks detect --no-git --redact -s get_vvm.sh", "exit": 0, "result": "no leaks found (58010 bytes scanned)"},
+    {"command": "curl official docs HTML (install 0.24, vega-release-notes 0.24) as inert text", "exit": 0, "result": "supported-Ubuntu set and RN 0.72/0.83 facts extracted"}
+  ],
+  "readiness_criteria": [
+    {"criterion": "Checkout lease/HEAD valid", "status": "PASS", "evidence": "HEAD+branch match journey.json lease; profile-binding sha256 matches frozen value"},
+    {"criterion": "Repository gate consumed", "status": "PASS (consumed, not re-run)", "evidence": "final-planning-freeze PASS exit 0; planning gate 91 tests exit 0"},
+    {"criterion": "Host OS supported", "status": "FAIL — environment", "evidence": "Ubuntu 26.04.1 vs docs-supported 20.04/22.04/24.04"},
+    {"criterion": "KVM, disk >=20GB, node >=18, native curl, lz4", "status": "PASS", "evidence": "host facts section"},
+    {"criterion": "Watchman present/pinned/scanned", "status": "GAP — not_run", "evidence": "watchman missing; PROC steps 3-5 not executed (no install authorized)"},
+    {"criterion": "Exact SDK 0.24.x pin established", "status": "GAP — unavailable evidence", "evidence": "only enumerable via running the CLI; example 0.24.9311 is not a pin; nothing invented"},
+    {"criterion": "RN compatibility pairing", "status": "PARTIAL", "evidence": "0.24 supports RN 0.72 (remains supported) and newly offers RN 0.83; exact pairing still requires the contingency's notification-doc reconciliation"},
+    {"criterion": "Installer provenance/integrity (independent digest/signature)", "status": "FAIL — provenance", "evidence": "no official digest/signature found; mutable same-day-modified endpoint"},
+    {"criterion": "Transitive artifacts stageable+scannable before execution", "status": "FAIL — staging (SUPPLY_CHAIN_STAGING_GAP)", "evidence": "staging section with installer line refs; CLI-only staging path proven as mitigation input"},
+    {"criterion": "License/terms handling known and not silently accepted", "status": "BLOCKED — license (OA-13)", "evidence": "PML terms apply by use; no accept prompt; NONINTERACTIVE cannot be shown to avoid acceptance"},
+    {"criterion": "Supply-chain scan verdict ALLOW/PASS", "status": "INDETERMINATE (fail-closed)", "evidence": "shellcheck warnings only; clamscan OK on stale DB; gitleaks clean; provenance+staging gaps remain. Not PASS."},
+    {"criterion": "SDK/VVD/physical device qualified", "status": "not_run — explicitly not claimed", "evidence": "nothing was installed or executed"}
+  ],
+  "failure_classification": {
+    "environment": "Ubuntu 26.04 outside supported set; watchman absent",
+    "contract": "exact SDK build + RN pairing unpinnable without execution",
+    "provenance": "no independent installer digest/signature; same-origin metadata only",
+    "license": "OA-13 PML terms-by-use boundary",
+    "staging": "SUPPLY_CHAIN_STAGING_GAP in installer download/execute ordering",
+    "unavailable_evidence": "SDK version list, VVD artifacts, screencap route — all require execution"
+  },
+  "source_urls": [
+    "https://developer.amazon.com/docs/vega/0.24/install-vega-sdk.html",
+    "https://developer.amazon.com/docs/vega/0.24/vega-release-notes.html",
+    "https://developer.amazon.com/docs/vega/latest/telemetry.html (referenced by installer; not separately fetched)",
+    "https://developer.amazon.com/support/legal/pml",
+    "https://sdk-installer.vega.labcollab.net/get_vvm.sh",
+    "https://k-artifactory-external.labcollab.net/artifactory/api/kpm/kpm-default-prod-local/metadata/KeplerVersionManager?platform=linux-x86_64"
+  ],
+  "next_packet_inputs": [
+    "Owner OA-13 decision on the Program Materials License Agreement (https://developer.amazon.com/support/legal/pml) before any installer/CLI execution; record whether telemetry default-on is accepted or the documented opt-out is applied first.",
+    "Owner supported-host choice: Ubuntu 26.04 attempt knowingly unsupported vs a 20.04/22.04/24.04 host (RISK-AFC-P2-15). This host otherwise meets KVM/disk/node/curl/lz4 prerequisites.",
+    "A staging-first install packet that does NOT run get_vvm.sh as written: pin CLI KeplerVersionManager 1.4.5 (sha256 a1801cb19a9974cf5aa8846cb2e42228b7c06b6a914fe71c8f3ce76b23a321e6, already staged+digest-verified in [PRIVATE-TMP]/afc-vega-preflight/), complete its supply-chain scan to ALLOW/PASS with a fresh AV database (database update needs its own authorization), then decide how SDK/VVD components are staged (CLI strings indicate internal SHA256 verification and a local-tarball install mode — verify from official docs before relying on either).",
+    "Watchman pin: select an exact official facebook/watchman release tag, stage+scan per PROC steps 3-4 before any SDK step (DEC-AFC-SD-051).",
+    "Isolation inputs: installer/CLI must not edit the owner's real shell rc files or VS Code extensions by default — next packet should use an isolated HOME/user-scope environment and record any rc/VSCode diff explicitly.",
+    "After (and only after) a scanned CLI exists: enumerate 'vega sdk list-remote' to pin the exact 0.24.x SDK build and confirm the RN 0.72 pairing; that pin is the missing input that unblocks V01T materialization. V01T also still needs its own planning-review/merged-A0x prerequisites per the parent plan — this receipt is not Fire OS or VVD completion evidence."
+  ],
+  "remaining_risks": [
+    "Installer endpoint is mutable (modified the same day it was fetched); the recorded sha256 0e538658... identifies only the bytes staged at fetch time — re-hash before any future use.",
+    "CLI self-update and telemetry-service behavior are inferred from binary strings (static evidence), not observed execution.",
+    "ClamAV result rests on a stale database; treat as weak negative evidence only.",
+    "KPM origin can be redirected by environment variables in the installer; any future run must pin/echo KPM_BASE_URL and KPM_REPO."
+  ],
+  "prohibited_actions_confirmed_not_taken": "No installer/CLI execution (including --help/--version), no installation, no terms acceptance, no source/test/config/plan edits, no commits, no device/ADB/AWS/DB actions, no new tool installs or database downloads, no reviewer dispatch. Session-start git status is unchanged apart from the authorized evidence directory."
+}

@@ -1,0 +1,80 @@
+{
+  "slice_id": "R-T-DEVICE-1",
+  "continuation_authority": "AUTH-AFC-M0305-DEVICE-TIMEOUT-CONTINUE-20261019 (same slice/route/generation; prior AGY 30m idle termination, not a completed trial)",
+  "task_outcome": "PASS",
+  "role_verdict": "CANDIDATE_READY",
+  "recorded_at": "2026-10-19T14:20:00Z",
+  "route": {"harness": "Muse Code", "model": "muse-wonder-1.0-contributor", "contributor_mode": "on", "effort": "medium", "binding": "profile-binding-wonder-existing-five.json", "binding_sha256": "746baae2781553f9ae18e1edd3ed25d3d1bf78ebf5337069b9179b5898115e79"},
+  "candidate": {"apk_sha256": "ad9b04355e79c44bb2fcddca539c226b12606c5a9a2a3a101c0d2320060ea880", "bytes": 7708199, "signer_sha256": "24ba72469642c32f76d0e1ac293817117e6466835b5e75ebe33e38f53eba2d77", "source": "afc/m03-m05-g5-integration@f8b57f05d3354cb3a3c25c71a01e0b0fa734a2ef tree 2146175ed34f3bc0cd026e28bb9b57f9a3281209", "installed_pull_verified_at_start_and_after_variant_restore": "ad9b04355e79c44bb2fcddca539c226b12606c5a9a2a3a101c0d2320060ea880"},
+  "repository_gates_consumed_no_rerun": [
+    {"log_sha256": "15de59a96364a10012c9b160cfca08cabcf38f52e9077128b63a246761b42e31", "result": "TV262 tests 0 failures/errors/skips, lint/build PASS"},
+    {"log_sha256": "16eb0e2515ba55a3bea1270b3e77deecf5c1f8fe87f11b5da80e8bbf7c15cb73", "result": "repo hygiene 91 PASS"},
+    {"ref": "g5-test-fixture-integration.json", "result": "exact-byte test fixture integration 31 PASS, app source tree unchanged"}
+  ],
+  "selected_capabilities": {
+    "coverage_assist": "enabled/required own_engine ChatGPT/GPT-6.1Sol/high preserved for scheduled RW1 reviewer; NOT run by author; RW1 review 0/1 repair 0/1 unchanged",
+    "reverify": "enabled; REVERIFY_CAPABILITY_GAP OPEN for APK/DEX semantic claims per rw1-reverify-applicability.json; no binary-attribute closure or diagnostic-to-assurance promotion claimed"
+  },
+  "prior_receipts_preserved": {
+    "evidence/device-1/receipt.json_sha256": "d1d170f2c347571a5367eadee5a984d5d72d5c42a2c746b61aed7d6d4dbca2df",
+    "evidence/device-1/wonder-continuation/receipt.json_sha256": "75d05f962c3cf006363121a90460bc5f6a02cdd07cb84eb208275543c383db71",
+    "evidence/device-alert-continuation/receipt.json_sha256": "f6415783342c6979f3756ecc09ca116ae9a5b2627be21127b1dcf8d30dd08f4a"
+  },
+  "fixture": {
+    "helper_sha256": "a445b4c53e2cd6157dfedfb56c8b3107e91aacc50ef42cc180bc8a464710c101",
+    "dir": "reused existing [PRIVATE-TMP]/afc-wonder-device-completion-fixture/ per recovery authority (no new directory, no overwrite of prior captures; new unique filenames appended)",
+    "selfcheck": "PASS exact profile/table allowlist",
+    "ownership_reestablished": "state.json alerts=[afc-device1-cont-20261019T134023Z-01] matched live own-profile query [same] before writes; orig_lineup=null captured before synthetic lineup",
+    "alerts_used": ["afc-device1-cont-20261019T134023Z-01 (prior worker, rows1-4)", "afc-device1-cont-20261019T134023Z-02 (row5 ON, inserted 13:52:30Z this continuation)", "afc-device1-cont-20261019T134023Z-03 (row6 OFF, inserted 13:56:54Z this continuation)"],
+    "cleanup": "fixture cleanup exit0: alerts deleted=3 remaining=[]; exact-key verify-alert -01 absent; own list []; lineup restored match=True (orig absent)"
+  },
+  "commands": [
+    {"id": "installed-pull/start+post-variant-restore", "exit": 0, "result": "7708199 bytes ad9b0435...a880 both times"},
+    {"id": "fixture-alert-02/03 + screencap/dump", "exit": 0, "result": "row5 revealed under ON after 35s; row6 stayed hidden under OFF after 35s, Menu manual reopen showed card"},
+    {"id": "gradle-variant-unconfigured", "command": "flock host-gradle ./gradlew :app:assembleDebug -PafcApiBaseUrl= --offline (G5 tv-app)", "exit": 0, "result": "BUILD SUCCESSFUL; APK 860efe8a87b3623b97406c40224d5655e5702b94c0b75505bc8538fe2e597f0f signer 24ba7246...; install -r Success; Backend not configured screen"},
+    {"id": "gradle-variant-loopback", "command": "flock host-gradle ./gradlew :app:assembleDebug -PafcApiBaseUrl=https://127.0.0.1:9 --offline", "exit": 0, "result": "BUILD SUCCESSFUL; APK 3b4bd340895b269b0fd6bcd766709a1530ae16e37af08e9366d294a9283be3eb; install -r Success; Link Network error screen"},
+    {"id": "restore-configured", "command": "adb install -r [PRIVATE-TMP]/afc-wonder-device-completion/installed-base.apk (preserved exact ad9 bytes, sha verified before use)", "exit": 0, "result": "Success; pulled base.apk ad9b0435...; Profile loaded, session preserved"},
+    {"id": "ProbeSelfCheck-host", "exit": 0, "result": "PASS (8 checks): OFF zero queries, allowlist, arbitrary rejected before query, error/null UNKNOWN, self-disable own-only guard"},
+    {"id": "x07-fixture-self-disable", "exit": 0, "result": "com.afc.sp7fixture (APK c0fbfdfe0c044f992328e9b9c71bdd4e5314e0bf6a33de0fa4c0dc97ca00e840) self-disable call returned; dumpsys enabled=2; pm list -d shows it; logcat Sp7Fixture recorded"},
+    {"id": "x07-probe-ondevice", "exit": 0, "result": "OFF all NOT_QUERIED; ON firebat/netflix INSTALLED_ENABLED, absent ABSENT, sp7fixture INSTALLED_DISABLED (logcat Sp7Probe + capture)"},
+    {"id": "x07-cleanup", "exit": 0, "result": "probe+fixture uninstalled Success; pm path empty for both"}
+  ],
+  "acceptance_to_evidence": [
+    {"row": "G5-1 populated lineup", "state": "OBSERVED", "evidence": "row1-lineup.png 4ceccebfbdd563300157a7ab88e24fd199479f6dbc9e9c9fe3b12a434ec83535: Red League Alpha/Red Testers, Half-PPR Manual, Sample Receiver, Unavailable stats (inspected this continuation; captured 13:40Z on ad9 by prior worker)"},
+    {"row": "G5-2 alert card Watch/Dismiss", "state": "OBSERVED", "evidence": "row2-alert.png 42f09ff0ece9dbd3d1e95ca116e92b8e968a5d3ea3af0e8724207d53dc96abd4 (inspected)"},
+    {"row": "G5-3 Watch double-confirm + Prime search-route foreground metadata-only + uncertain outcome", "state": "OBSERVED", "evidence": "row3-confirm.png 0a885fda910acd1444be3190a06a1c47cdd6056ab03c2008b4e51bab42611cb3 'Press OK again to switch apps'; row4-dismissed.png top line 'Watch: could not confirm the game is playing.' No provider screenshot/history, no gameOpened claim. Foreground log was prior worker's step; not re-logged here.", "limitation": "metadata-only route claim rests on prior worker flow + outcome text on returned AFC screen"},
+    {"row": "G5-4 exact card dismissal", "state": "OBSERVED", "evidence": "row4-dismissed.png 8a49594d81c3e1dc8c6952f94e1fa8ef4373ea6fe17a4a62b3862e6202b6a144: card gone, lineup remains (inspected)"},
+    {"row": "G5-5 hidden panel re-shows new alert setting ON", "state": "OBSERVED_THIS_CONTINUATION", "evidence": "row5-hidden.png 7ca1af7512a6f12f1520c40d0d2cc74ae3aacb51460bd80b9b555419034cbdc4 -> fresh alert -02 -> row5-revealed.png 3e4c5d0df3a82afc59cdc4ee38e00d16d995f091fe8e40b62c528335a61497b6 card shown. Within-Panel hidden-content re-show only; no cross-destination reveal claim."},
+    {"row": "G5-6 distinct new alert stays hidden OFF, manual reopen, restore ON", "state": "OBSERVED_THIS_CONTINUATION", "evidence": "row6-setting-off.png 8afebf0b7be7ed35ac5c5324ac7ec27487df3e584f4ca5072caeb01e73516370; fresh alert -03 -> row6-still-hidden.png (same hash as hidden frame); Menu -> row6-manual-reopen.png 3e4c5d0df3a82afc59cdc4ee38e00d16d995f091fe8e40b62c528335a61497b6; row6-setting-restored-on.png 7709e6da086eda406efdc8be8527474656861f4b52db67fa2d17c91a69cfeaa8"},
+    {"row": "A01 unconfigured (new candidate source)", "state": "OBSERVED", "evidence": "variant-unconfigured.png 7b2e904f558b32afbf0817b2bad7cf18bf69df8ae27d845d57c8b9d034b82407 Backend not configured (inspected)"},
+    {"row": "A01 network-error (loopback)", "state": "OBSERVED", "evidence": "variant-loopback-link.png daf9886a4777c72ed20ad133a61365b85eaa77310e1da5fb5b0ba386d9e6b73f 'Network error. Check the connection, then select Get code.' (inspected)"},
+    {"row": "L02 code-shown", "state": "OBSERVED_PRIVATE_CAPTURE", "evidence": "private /tmp l02-code-shown-private.png sha256 119be675bc759ce07d50c952dbdac15d3653c2d709ea644df9918058fc659c7f (prior worker, expiry 13:53:40Z) and l02-code2-private.png sha256 1c20a11bd10671cb8a81342205e8c4b8acd704d0e0a4afc3a3618ed34834830c (this continuation, expiry 14:09:21Z); both author-inspected privately; code values never copied to repo/receipt"},
+    {"row": "L02 expiry rejection", "state": "OBSERVED", "evidence": "l02-expired.png ed9aac146b83e7cb1f3ed7ee37404ad31440c76e2989df3704093ada3d639e33 'The code expired. Select Get code for a new one.' after real TTL wait past 14:09:21Z (inspected, public-safe)"},
+    {"row": "L02 linked", "state": "OBSERVED", "evidence": "l02-linked-profile.png e111bfcec1fc17b5d96b5122e6c09270f261bc5ffc1361511a868691587a2f81 Profile loaded, synthetic session preserved across install -r and variant cycle; no owner session read/cleared, no re-confirm performed in this continuation"},
+    {"row": "X07 OFF/allowlist/unknown", "state": "OBSERVED", "evidence": "ProbeSelfCheck PASS 8 checks + x07-off2.png 4f85412ffcbd07b79dc3705f26772e30a0da70e9c07e7435d764d71543905d29 all NOT_QUERIED"},
+    {"row": "X07 installed/absent in-app", "state": "OBSERVED", "evidence": "x07-on-disabled.png b3eb40c742318f6a7d7d425cd19275082ad439da9994879bf79b732cd0156797: firebat/netflix INSTALLED_ENABLED, absent control ABSENT"},
+    {"row": "X07 disabled (own fixture)", "state": "OBSERVED", "evidence": "x07-on-disabled.png same capture: com.afc.sp7fixture INSTALLED_DISABLED after own-package self-disable (enabled=2); no provider package disabled/mutated; both temp packages removed verified absent"},
+    {"row": "SEIT/REL/REV/SUPPLY assurance rows", "state": "TYPED_GAP_NOT_AUTHOR_PASS", "evidence": "REVERIFY_CAPABILITY_GAP open (APK/DEX semantics); RW1 independent review not run (0/1); author proof does not satisfy assurance"}
+  ],
+  "changed_paths": [
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/device-1/wonder-completion/ (receipt.json + 18 inspected safe PNGs)",
+    "spikes/sp7-detection/fixture/ (new disposable own-package fixture src + build.sh; build/ generated)",
+    "evidence/visual/sp7-detection/x07-off-completion.png",
+    "evidence/visual/sp7-detection/x07-on-disabled-completion.png"
+  ],
+  "cleanup_final_state": {
+    "companion": "installed exact ad9b0435..., Profile loaded, Show panel ON restored, Leagues/Teams none/none (final-configured-check.png e5fe1313b95583e37dfb5de3abbd867a76be35c34674676aa81cc1ad8d275b11)",
+    "alerts_lineup": "all 3 own alerts absent, lineup restored to orig absent (match=True)",
+    "temp_packages": "com.afc.sp7probe and com.afc.sp7fixture absent (pm path empty)",
+    "providers": "no provider app disabled/launched/cleared by this continuation",
+    "source": "ROOT HEAD 7da6187b5a57ee80887ef84301ff99a3592bacb6 unchanged; G5 tv-app git status clean (only generated build outputs); no tracked source/Gradle config change; no commit"
+  },
+  "findings": [
+    {"id": "COMP-1", "kind": "observation", "detail": "Deterministic AFC screens render byte-identical across old/new candidates (several hashes match old-candidate captures); recorded as new observations on exact ad9/variant hashes, not transferred proof."},
+    {"id": "COMP-2", "kind": "observation", "detail": "Own-package setApplicationEnabledSetting succeeded where shell pm disable failed with SecurityException; disabled-state detection is therefore supported via own fixture, unsupported via shell."},
+    {"id": "COMP-3", "kind": "correction_in_run", "detail": "One tap+CENTER sequence re-toggled Show panel OFF->ON; detected via dump text and re-driven to the intended state with D-pad LEFT/RIGHT+CENTER and verified by text before each stimulus."}
+  ],
+  "remaining_risks": ["RW1 independent review unspent and required separately", "REVERIFY_CAPABILITY_GAP remains open for APK/DEX semantic claims", "Watch claim is metadata-only search-route with uncertain outcome by design; no entitlement/gameOpened asserted"],
+  "blocker": null,
+  "developer_feedback": "Panel polling ~35s after insert sufficed for both ON/OFF observations. Tap does not reliably click TV buttons; D-pad focus color (white pill) plus uiautomator text is the reliable oracle. Screensaver after ~10min idle requires WAKEUP+CENTER before relaunch dump is meaningful."
+}

@@ -1,0 +1,58 @@
+{
+ "role": "integration_engineer.planning",
+ "correction": "named planning-author correction 1/1 (requires_regate round used 1/1; schema + readiness classification only, no new intent, no SEIT authored)",
+ "verdict": "CANDIDATE_READY",
+ "normalized_verdict": "PASS (planning-input completeness only; future execution completion remains conditional per execution_readiness — no issue/runtime/plan-approval completion claimed)",
+ "candidate_ref": "7da6187b5a57ee80887ef84301ff99a3592bacb6",
+ "changed_paths": [
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/integration-inputs.json",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/integration-inputs.md",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/integration-receipt.json"
+ ],
+ "input_sha256": {
+  "integration-inputs.json (pre-correction)": "7aa6057adfcd40d9f41d27a06133cfcc8ead60e2e8dded3ef77a9a174a0abb8b",
+  "integration-inputs.md (pre-correction)": "a6498b14f65278b156ff118474cdb353d5f6d973b9952341e6e50984961a3335",
+  "integration-receipt.json (pre-correction)": "67f9b0470bff4a93f3aec58fbedcf46fd032c4ee6d97583c450457d19a77802e"
+ },
+ "file_sha256": {
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/integration-inputs.json": "a1da1a1bfeb93e9a94c0dcc11b2ac3d684be6a81cbb5a2f1bb1067e6d2b78f09",
+  "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/integration-inputs.md": "2681b18be9b4404a1c2fb88efddcc7b4a5b8b57487902f20bfcad687219fef70"
+ },
+ "binding_sha256": "e8d0b5a02cd9f445644a0caa18185af60a46f2316769b527ccc9e046796b0608",
+ "corrections_applied": [
+  "1. All 9 flow failure_recovery strings -> single-entry nonempty text arrays, text verbatim (asserted byte-equal). BF-DETECT evidence='proposed' with basis preserved in evidence_note (probe not yet run; no verdict on baseline; not observed runtime proof).",
+  "2. TB-DELEGATION seit_rows=['SEIT-AFC-P2-PLAN-01'] (parent seit.json proof_cases; verified resolving). Binding note limits its coverage to the AC-AFC-P2-PLAN-01 plan-gate duties and names the precise delegation-exclusion inspection proof for the assigned Planning TE via the parent; no requirement or SEIT row invented, no SEIT authored here.",
+  "3. boundary_contract.gaps emptied with gap_classification_note: interfaces fully specified, no unresolved design gap. Five pending items moved verbatim (former GAP-* ids kept) to execution_readiness ER-VEGA/ER-OCR-OWN-ENGINE-RUN/ER-REVERIFY-BINARY/ER-GATE-DURATIONS/ER-LIVE-WINDOW, each status=pending_future_verification with owner/trigger/exact blocks; EXT-OCR-OWN-ENGINE-RUN and EXT-REVERIFY-BINARY added to external_prerequisites. OCR backend = own_engine (frozen binding); delegate packet text historical superseded, never imported; no own-engine run/PASS claimed. Planning Reverify N/A (source-only); future APK/VPKG typed gates preserved. GAP-REPO-GATE-SANDBOX classified environment/configuration (root + author gate exit 0). Null added_gate_seconds unchanged (qualified fields).",
+  "4. Verdict GAPS -> CANDIDATE_READY with verdict_note distinguishing planning-input completeness (ready for the one requested review) from future execution completion (issues/runtime/approval not complete). Source wave counts/graph/tasks/coverage untouched."
+ ],
+ "checks": [
+  {
+   "command": "mkdir -p .uv-cache-tmp && UV_CACHE_DIR=\"$PWD/.uv-cache-tmp\" bash tools/ci/gate.sh docs hygiene (cache removed after; run first, before edits)",
+   "exit_code": 0,
+   "summary": "Author-run gate PASS: 91 tests OK (153.283s), hygiene PASS; mutation/coverage GAP strings are expected-negative fixtures. Corroborates root planning-gate-receipt.json (exit 0, 91 tests, 171.522s). Prior read-only-cache failure was environment/configuration."
+  },
+  {
+   "command": "node -e checkBoundaryContract(integration-inputs.json, P2/seit.json) from [PRIVATE-HOME]/.codex/plugins/cache/bearing-lite/bearing-lite/2.0.1/hooks/plan-package.cjs",
+   "exit_code": 0,
+   "summary": "Pre-correction reproduction: 17 findings (6 boundary_gap_unresolved, 9 boundary_flow_failure_missing, 1 boundary_flow_evidence_invalid BF-DETECT, 1 boundary_unverified TB-DELEGATION). Post-correction: findings [] (0). No format or unresolved-interface findings."
+  },
+  {
+   "command": "python3 [PRIVATE-TMP]/check_correction.py (session-local assertion script)",
+   "exit_code": 0,
+   "summary": "SELF-CHECK OK: failure_recovery verbatim x9; every boundary seit ref resolves in parent proof_cases; coverage 10 issues; 10 tasks / 13 slices; waves cover tasks exactly once; added_gate_seconds null x3; execution_readiness 5 entries with former ids/owners/blocks. Negative checks re-applied (Fire OS!=Vega, searchOpened!=gameOpened, historical!=live, excluded!=delegated) — all still rejected by TB-PLATFORM-TRUTH/SM-ROUTE/SM-VERDICT/TB-DELEGATION. Note: RISK-AFC-P2-16/SEIT-RISK-AFC-P2-16 from the override union are not literal strings in this file (pre-existing, unchanged by this correction; package-level closure is in source-reference-check.json and TE binding)."
+  }
+ ],
+ "acceptance_to_evidence": [
+  {"acceptance": "C1 flow failure_recovery arrays + BF-DETECT evidence/evidence_note", "evidence": "checkBoundaryContract [] + verbatim assertion in self-check"},
+  {"acceptance": "C2 TB-DELEGATION seit_rows via parent TE coordination, no invented requirement", "evidence": "TB-DELEGATION.seit_rows + seit_binding_note (PLAN-01 scope limit + named TE proof); hook boundary_unverified cleared"},
+  {"acceptance": "C3 design gaps separated from execution prerequisites; every Vega/live/session/binary/tool/gate gap visible with owner/task/trigger; OCR own_engine; Reverify N/A planning", "evidence": "gaps=[] + gap_classification_note; execution_readiness ER-* x5 (pending_future_verification, none relabeled resolved); external_prerequisites 11 incl. EXT-OCR-OWN-ENGINE-RUN/EXT-REVERIFY-BINARY; waves null"},
+  {"acceptance": "C4 verdict explains planning completeness vs execution completion; counts/graph preserved", "evidence": "verdict=CANDIDATE_READY + verdict_note; self-check 10/13/10-tasks/waves-once; original packet acceptances 1-4 unchanged from initial receipt"}
+ ],
+ "boundaries": "Writes limited to the three allowed paths. No commit/push/PR/issue edits, no product/test/register/model/SEIT edits, no device/AWS/credential/Yahoo/publication actions, no nested agents or review. Concurrent authors' files untouched; only own write set verified.",
+ "blockers": [
+  "Execution (not planning-input) blockers, each blocking only its dependents: EXT-VEGA/ER-VEGA, EXT-LIVE-TNF+EXT-PROVIDER-APPS+EXT-AWS-SESSION/ER-LIVE-WINDOW, EXT-OCR-OWN-ENGINE-RUN, EXT-REVERIFY-BINARY, EXT-GATE-QUAL/ER-GATE-DURATIONS",
+  "Planning TE (via parent): author/bind the delegation-exclusion inspection proof named in TB-DELEGATION.seit_binding_note; PLAN-01 covers plan-gate duties only",
+  "EXT-PLANNING-REVIEW then EXT-PLAN-APPROVAL gate all dispatch"
+ ],
+ "next_action": "Parent routes the named TB-DELEGATION proof need to the assigned Planning TE; controller assembles the package with these inputs, dispatches the one requested planning review, presents the Manifest for owner approval, then dispatches RW1 prep lanes and books EXT-LIVE-TNF. No second correction round is authorized; any new design gap returns as owner-decision evidence."
+}

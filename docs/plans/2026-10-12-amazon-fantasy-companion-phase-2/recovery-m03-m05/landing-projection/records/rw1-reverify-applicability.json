@@ -1,0 +1,36 @@
+{
+  "recorded_at": "2026-10-19T13:36:54.793593+00:00",
+  "observer": "Orchestrator contract/applicability inspection, not independent engineering review",
+  "binding": "profile-binding.json",
+  "binding_sha256": "e8d0b5a02cd9f445644a0caa18185af60a46f2316769b527ccc9e046796b0608",
+  "reverify_enabled": true,
+  "selected_backend": "reverify",
+  "seit_sha256": "8a2d18ad8bb1bcef13bc5c86b8608184c95d031ad90b9f9ed75e72676c7f4ab3",
+  "authority_refs": [
+    "seit.json#/procedures_and_commands/41 (PROC-RCV-REVERIFY-DISPOSITION)",
+    "seit.json#/proof_cases/62 (SEIT-RCV-REVIEW-WAVE)",
+    "seit.json#/proof_cases/id=SEIT-AFC-PR-053"
+  ],
+  "contract_rule": "Run only when a review subject is a compiled binary claim (APK/.vpkg) not already proven by signature check and native runs on its pinned hash. APK/VPKG semantic claims without a grounded adapter = REVERIFY_CAPABILITY_GAP, never PASS. Planning: Reverify: not applicable \u2014 source-only candidate, no binary subject.",
+  "reviewer_instruction": "Inventory exact review claims against the stable final candidate. State N/A only for claims already covered by signature check and native runs on their exact pinned hash. Run the selected Reverify backend for any remaining applicable compiled-binary claim; preserve APK/DEX unsupported as a typed gap. No ordinary test rerun substitutes.",
+  "existing_capability_gap": {
+    "status": "OPEN",
+    "type": "REVERIFY_CAPABILITY_GAP",
+    "scope": "APK/DEX semantic claims unsupported by installed backend; no new backend run or PASS claimed"
+  },
+  "PR053": {
+    "recovery_class": "supporting_contribution_only",
+    "in_scope_closure": false,
+    "closing_slice": "P2-L05",
+    "disposition": "Preserve unresolved compiled-attribute closure outside M03-M05; do not mark PR053 PASS from this recovery contribution"
+  },
+  "current_candidate_evidence": [
+    "g5-integration-materialization.json",
+    "evidence/device-1/wonder-continuation/receipt.json"
+  ],
+  "gate_disposition": "PENDING_FINAL_CLAIM_INVENTORY_AND_SCHEDULED_RW1_REVIEW",
+  "changes_to_frozen_package": false,
+  "review_budget_changed": false,
+  "trial_slice_count_changed": false,
+  "limitation": "This note clarifies the existing approved applicability condition; it neither waives a required claim nor accepts worker evidence or a wave."
+}

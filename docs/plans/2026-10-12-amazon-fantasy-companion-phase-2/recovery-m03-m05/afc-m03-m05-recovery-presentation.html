@@ -1,0 +1,2269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src data:; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <!-- dod-manifest-template 1.0.1 -->
+  <title>AFC M03-M05 recovery — planning candidate</title>
+  <style>
+    :root {
+      --paper: #e7edf1;
+      --panel: #f4f7f9;
+      --panel-strong: #fbfcfd;
+      --ink: #1a2836;
+      --ink-muted: #3d4c5b;
+      --rule: #8a99a8;
+      --rule-strong: #5d6d7c;
+      --accent: #0e5c66;
+      --accent-wash: #d4e4e6;
+      --spine: #0e5c66;
+      --focus: #0e5c66;
+      --pass-ink: #154b36;
+      --pass-fill: #d7ebe2;
+      --pass-rule: #1b5e45;
+      --gap-ink: #6b2a22;
+      --gap-fill: #f3e2dc;
+      --gap-rule: #8b3a30;
+      --hold-ink: #5a4718;
+      --hold-fill: #f0e8d4;
+      --hold-rule: #8a6d28;
+      --na-ink: #3a4550;
+      --na-fill: #e2e6ea;
+      --na-rule: #6a7580;
+      --plan-ink: #1a2836;
+      --plan-fill: #e8eef2;
+      --plan-rule: #5d6d7c;
+      --font-display: Palatino, "Palatino Linotype", "Book Antiqua", "URW Palladio L", "TeX Gyre Pagella", Georgia, serif;
+      --font-body: "Segoe UI", "Liberation Sans", "Nimbus Sans L", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      --space-1: 0.25rem;
+      --space-2: 0.5rem;
+      --space-3: 0.75rem;
+      --space-4: 1rem;
+      --space-5: 1.5rem;
+      --space-6: 2rem;
+      --space-7: 3rem;
+      --measure: 68ch;
+      --content: 74rem;
+      --radius: 2px;
+      --table-min: 46rem;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: var(--font-body);
+      font-size: 1rem;
+      line-height: 1.55;
+      min-height: 100%;
+    }
+
+    :focus { outline: none; }
+    :focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 3px;
+    }
+
+    .skip {
+      position: absolute;
+      left: var(--space-4);
+      top: -3rem;
+      z-index: 20;
+      padding: var(--space-2) var(--space-4);
+      background: var(--panel-strong);
+      color: var(--ink);
+      border: 2px solid var(--accent);
+      text-decoration: underline;
+    }
+    .skip:focus, .skip:focus-visible {
+      top: var(--space-4);
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: underline;
+      text-underline-offset: 0.15em;
+    }
+    a:hover { text-decoration-thickness: 2px; }
+
+    code {
+      font-family: ui-monospace, "Cascadia Mono", "Liberation Mono", Menlo, Consolas, monospace;
+      font-size: 0.92em;
+      white-space: nowrap;
+    }
+
+    .page {
+      max-width: var(--content);
+      margin: 0 auto;
+      padding: var(--space-5) var(--space-5) var(--space-7);
+      border-left: 8px solid var(--spine);
+      min-height: 100vh;
+      background:
+        linear-gradient(180deg, rgba(14, 92, 102, 0.06), rgba(14, 92, 102, 0) 11rem),
+        var(--paper);
+    }
+
+    header.mast {
+      position: relative;
+      padding-bottom: var(--space-5);
+      margin-bottom: var(--space-5);
+      border-bottom: 2px solid var(--ink);
+    }
+
+    .mast-wave {
+      display: block;
+      width: 100%;
+      height: 3.25rem;
+      margin: 0 0 var(--space-4);
+      overflow: visible;
+    }
+
+    .kicker {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+      margin: 0 0 var(--space-4);
+    }
+
+    .stamp {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: 0.2rem 0.55rem;
+      border: 2px solid var(--accent);
+      color: var(--accent);
+      background: var(--panel);
+      font-size: 0.8125rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      line-height: 1.3;
+    }
+    .stamp-warn {
+      border-color: var(--gap-rule);
+      color: var(--gap-ink);
+      background: var(--gap-fill);
+    }
+    .stamp-state {
+      border-style: solid;
+      border-width: 2px 2px 2px 8px;
+    }
+
+    h1 {
+      margin: 0 0 var(--space-3);
+      font-family: var(--font-display);
+      font-size: clamp(1.75rem, 3vw, 2.5rem);
+      font-weight: 700;
+      line-height: 1.15;
+      color: var(--ink);
+      max-width: 28ch;
+    }
+
+    .lede {
+      margin: 0;
+      max-width: var(--measure);
+      color: var(--ink-muted);
+      font-size: 1.0625rem;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 15.5rem minmax(0, 1fr);
+      gap: var(--space-6);
+      align-items: start;
+    }
+
+    nav.toc {
+      position: sticky;
+      top: var(--space-4);
+      padding: var(--space-4);
+      background: var(--panel);
+      border: 1px solid var(--rule);
+      border-left: 4px solid var(--accent);
+    }
+    nav.toc .toc-title {
+      margin: 0 0 var(--space-3);
+      font-family: var(--font-body);
+      font-size: 0.9375rem;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+    nav.toc ol {
+      margin: 0;
+      padding: 0 0 0 1.25rem;
+    }
+    nav.toc li {
+      margin: 0 0 var(--space-2);
+      font-size: 0.875rem;
+      line-height: 1.35;
+    }
+    nav.toc a { color: var(--ink); }
+
+    main { min-width: 0; }
+
+    section.block {
+      margin: 0 0 var(--space-7);
+      scroll-margin-top: var(--space-5);
+    }
+
+    h2 {
+      margin: 0 0 var(--space-4);
+      padding-bottom: var(--space-2);
+      border-bottom: 1px solid var(--rule-strong);
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 700;
+      line-height: 1.25;
+    }
+    h2 .secno {
+      display: inline-block;
+      min-width: 2.1rem;
+      margin-right: var(--space-2);
+      color: var(--accent);
+      font-family: var(--font-body);
+      font-size: 1rem;
+      font-weight: 700;
+      vertical-align: middle;
+    }
+
+    h3 {
+      margin: var(--space-5) 0 var(--space-3);
+      font-family: var(--font-body);
+      font-size: 1.0625rem;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    p { margin: 0 0 var(--space-4); max-width: var(--measure); }
+    p.wide, .note { max-width: none; }
+
+    .bluf {
+      padding: var(--space-5);
+      background: var(--panel);
+      border: 1px solid var(--rule);
+      border-top: 6px solid var(--accent);
+    }
+    .bluf p:last-child { margin-bottom: 0; }
+    .bluf strong { font-weight: 700; }
+
+    .banner {
+      margin: 0 0 var(--space-4);
+      padding: var(--space-3) var(--space-4);
+      background: var(--gap-fill);
+      border: 2px solid var(--gap-rule);
+      color: var(--gap-ink);
+      max-width: none;
+    }
+
+    dl.meta {
+      display: grid;
+      grid-template-columns: minmax(9rem, 14rem) minmax(0, 1fr);
+      gap: var(--space-2) var(--space-4);
+      margin: 0 0 var(--space-4);
+      padding: var(--space-4);
+      background: var(--panel);
+      border: 1px solid var(--rule);
+    }
+    dl.meta dt {
+      margin: 0;
+      font-weight: 700;
+      color: var(--ink);
+    }
+    dl.meta dd {
+      margin: 0;
+      color: var(--ink);
+      overflow-wrap: break-word;
+    }
+
+    .table-hint {
+      display: none;
+      margin: 0 0 var(--space-2);
+      color: var(--ink-muted);
+      font-size: 0.8125rem;
+    }
+
+    .table-scroll {
+      margin: 0 0 var(--space-4);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border: 1px solid var(--rule-strong);
+      background: var(--panel-strong);
+    }
+    .table-scroll:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    table {
+      width: 100%;
+      min-width: var(--table-min);
+      border-collapse: collapse;
+      font-size: 0.875rem;
+      line-height: 1.4;
+    }
+    caption {
+      caption-side: top;
+      text-align: left;
+      padding: var(--space-3) var(--space-3) var(--space-2);
+      font-weight: 700;
+      color: var(--ink);
+      background: var(--panel);
+      border-bottom: 1px solid var(--rule);
+    }
+    th, td {
+      padding: 0.55rem 0.7rem;
+      text-align: left;
+      vertical-align: top;
+      border-bottom: 1px solid var(--rule);
+      overflow-wrap: break-word;
+      hyphens: manual;
+    }
+    thead th {
+      background: var(--accent-wash);
+      color: var(--ink);
+      font-weight: 700;
+      border-bottom: 2px solid var(--ink);
+    }
+    tbody th {
+      background: transparent;
+      font-weight: 700;
+    }
+    tbody tr:last-child th,
+    tbody tr:last-child td { border-bottom: 0; }
+    th.id, td.id {
+      font-weight: 700;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
+    .cell-digest {
+      font-family: ui-monospace, "Liberation Mono", Menlo, Consolas, monospace;
+      font-size: 0.8125rem;
+      overflow-wrap: anywhere;
+    }
+
+    .row-pass { border-left: 6px solid var(--pass-rule); background: var(--pass-fill); }
+    .row-gap { border-left: 6px double var(--gap-rule); background: var(--gap-fill); }
+    .row-hold { border-left: 6px dashed var(--hold-rule); background: var(--hold-fill); }
+    .row-na {
+      border-left: 6px dashed var(--na-rule);
+      background: repeating-linear-gradient(
+        -45deg,
+        var(--na-fill),
+        var(--na-fill) 6px,
+        #eef1f4 6px,
+        #eef1f4 12px
+      );
+    }
+    .row-plan { border-left: 6px solid var(--plan-rule); background: var(--panel-strong); }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.1rem 0.45rem 0.1rem 0.3rem;
+      border: 1.5px solid currentColor;
+      border-radius: var(--radius);
+      font-weight: 700;
+      line-height: 1.25;
+      white-space: nowrap;
+    }
+    .status .mark {
+      display: inline-block;
+      width: 0.7rem;
+      height: 0.7rem;
+      flex: 0 0 0.7rem;
+      background: currentColor;
+    }
+    .status-pass { color: var(--pass-ink); background: var(--panel-strong); }
+    .status-pass .mark { clip-path: none; }
+    .status-gap { color: var(--gap-ink); background: var(--panel-strong); }
+    .status-gap .mark {
+      width: 0.72rem;
+      height: 0.72rem;
+      background: transparent;
+      border: 2px solid currentColor;
+      transform: rotate(45deg);
+    }
+    .status-hold { color: var(--hold-ink); background: var(--panel-strong); }
+    .status-hold .mark {
+      border-radius: 50%;
+      background: transparent;
+      border: 2px solid currentColor;
+    }
+    .status-na { color: var(--na-ink); background: var(--panel-strong); }
+    .status-na .mark {
+      height: 0.18rem;
+      width: 0.75rem;
+      align-self: center;
+    }
+    .status-plan { color: var(--plan-ink); background: var(--panel-strong); }
+    .status-plan .mark {
+      background: transparent;
+      border: 2px solid currentColor;
+    }
+
+    .reason {
+      display: block;
+      margin-top: var(--space-1);
+      color: var(--ink-muted);
+      font-weight: 400;
+      white-space: normal;
+    }
+
+    figure.model {
+      margin: 0 0 var(--space-5);
+      padding: var(--space-4);
+      background: var(--panel-strong);
+      border: 1px solid var(--rule-strong);
+    }
+    .model-scroll {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border: 1px solid var(--rule);
+      background: var(--panel);
+    }
+    .model-scroll:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+    }
+    figure.model img {
+      display: block;
+      width: 100%;
+      min-width: 48rem;
+      max-width: none;
+      height: auto;
+      background: var(--panel);
+    }
+    figure.model svg {
+      display: block;
+      width: 100%;
+      min-width: 48rem;
+      max-width: none;
+      height: auto;
+      background: var(--panel);
+    }
+    figcaption {
+      margin-top: var(--space-3);
+      font-size: 0.875rem;
+      line-height: 1.45;
+    }
+    figcaption dl {
+      display: grid;
+      grid-template-columns: minmax(8rem, 11rem) minmax(0, 1fr);
+      gap: var(--space-1) var(--space-3);
+      margin: var(--space-2) 0 0;
+    }
+    figcaption dt { font-weight: 700; }
+    figcaption dd { margin: 0; overflow-wrap: break-word; }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-3) var(--space-5);
+      margin: 0 0 var(--space-4);
+      padding: 0;
+      list-style: none;
+      font-size: 0.875rem;
+    }
+    .legend li { display: flex; align-items: center; gap: var(--space-2); }
+    .swatch {
+      display: inline-block;
+      width: 1.1rem;
+      height: 0.7rem;
+      border: 2px solid var(--ink);
+      background: var(--panel);
+      flex: 0 0 1.1rem;
+    }
+    .swatch-ext { border-style: dashed; }
+    .swatch-flow {
+      height: 0;
+      border-width: 0 0 2px 0;
+      background: transparent;
+      width: 1.4rem;
+    }
+
+    .status-key {
+      margin: var(--space-4) 0 0;
+      padding: var(--space-3) 0 0;
+      border-top: 1px solid var(--rule);
+    }
+    .status-key .legend { margin: 0; }
+
+    ul.plain, ol.plain { margin: 0 0 var(--space-4); max-width: var(--measure); }
+    li { margin-bottom: var(--space-1); }
+
+    footer.colophon {
+      margin-top: var(--space-6);
+      padding-top: var(--space-4);
+      border-top: 2px solid var(--ink);
+      font-size: 0.875rem;
+      color: var(--ink-muted);
+    }
+    footer.colophon p { max-width: none; }
+
+    @media screen and (max-width: 64rem) {
+      .layout {
+        grid-template-columns: 1fr;
+        gap: var(--space-5);
+      }
+      nav.toc { position: static; }
+      nav.toc ol {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+        gap: var(--space-1) var(--space-4);
+        padding-left: 1.25rem;
+      }
+      h1 { max-width: none; }
+    }
+
+    @media screen and (max-width: 52rem) {
+      .table-hint { display: block; }
+    }
+
+    @media screen and (max-width: 40rem) {
+      .page {
+        padding: var(--space-4) var(--space-3) var(--space-6);
+        border-left-width: 6px;
+      }
+      dl.meta,
+      figcaption dl {
+        grid-template-columns: 1fr;
+        gap: 0.15rem 0;
+      }
+      dl.meta dt { margin-top: var(--space-2); }
+      dl.meta dt:first-child { margin-top: 0; }
+    }
+
+    @media print {
+      :root {
+        --paper: #ffffff;
+        --panel: #ffffff;
+        --panel-strong: #ffffff;
+        --accent-wash: #e6ecee;
+      }
+      body { background: #ffffff; color: #000; }
+      .page {
+        max-width: none;
+        padding: 0;
+        border-left: 0;
+        background: #ffffff;
+        min-height: 0;
+      }
+      .skip { display: none; }
+      .mast-wave { height: 1.6rem; margin-bottom: var(--space-3); }
+      header.mast {
+        break-after: avoid;
+        border-bottom-color: #000;
+      }
+      nav.toc {
+        position: static;
+        background: #fff;
+        border: 1px solid #000;
+        break-inside: avoid;
+        padding: 0.6rem 0.8rem;
+        margin: 0 0 1rem;
+      }
+      nav.toc ol {
+        display: block;
+        columns: 2;
+        column-gap: 1.5rem;
+        padding-left: 1.2rem;
+      }
+      nav.toc li { break-inside: avoid; margin-bottom: 0.35rem; }
+      .layout { display: block; }
+      section.block { break-inside: auto; margin-bottom: 1.4rem; }
+      h2 { break-after: avoid; border-bottom-color: #000; }
+      h3 { break-after: avoid; }
+      .banner, dl.meta {
+        background: #fff;
+        break-inside: avoid;
+      }
+      .bluf { background: #fff; }
+      .table-hint { display: none; }
+      .table-scroll {
+        overflow: visible;
+        border-color: #000;
+        break-inside: auto;
+      }
+      table {
+        min-width: 0;
+        font-size: 8.5pt;
+      }
+      thead { display: table-header-group; }
+      tr { break-inside: avoid; }
+      thead th { background: #eee; color: #000; border-bottom-color: #000; }
+      tbody th { background: transparent; }
+      a { color: #000; }
+      .stamp { background: #fff; }
+      .row-pass, .row-gap, .row-hold, .row-na, .row-plan {
+        background: #fff;
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+      }
+      .row-na {
+        background: repeating-linear-gradient(
+          -45deg,
+          #fff,
+          #fff 5px,
+          #ececec 5px,
+          #ececec 10px
+        );
+      }
+      .model-scroll {
+        overflow: visible;
+        border: 0;
+        background: #fff;
+      }
+      figure.model {
+        background: #fff;
+        break-inside: avoid;
+      }
+      figure.model svg,
+      figure.model img {
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+        background: #fff;
+      }
+      footer.colophon { break-before: avoid; color: #000; border-top-color: #000; }
+      @page {
+        size: A4;
+        margin: 12mm 10mm 14mm;
+      }
+    }
+      /* Wrap definition-list values without changing approved content. */
+    dl dd { min-width: 0; overflow-wrap: anywhere; }
+    dl code { white-space: normal; overflow-wrap: anywhere; }
+</style>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <div class="page">
+    <header class="mast">
+      <div class="kicker">
+        <span class="stamp stamp-state">State: planning</span>
+        <span class="stamp">Template 1.0.1</span>
+        <span class="stamp stamp-warn">Not authority</span>
+      </div>
+      <h1>AFC M03-M05 recovery — planning candidate</h1>
+      <p class="lede">Full remaining scope; accepted work reused; physical, live, Vega and protected-action prerequisites stay visible.</p>
+    </header>
+    <div class="layout">
+      <nav class="toc" aria-label="Manifest sections">
+        <p class="toc-title" id="toc-title">On this page</p>
+        <ol>
+          <li><a href="#s1">BLUF and Lifecycle state</a></li>
+          <li><a href="#s2">Source, baseline, candidate, and template identity</a></li>
+          <li><a href="#s3">Outcome, scope, exclusions, and Definition of Done</a></li>
+          <li><a href="#s4">Requirements, architecture, design, interfaces, model inventory, and embedded model views</a></li>
+          <li><a href="#s5">Development strategy, task graph, roles, dependencies, and write sets</a></li>
+          <li><a href="#s6">V&amp;V cases, assurance cadence, evidence, and status</a></li>
+          <li><a href="#s7">Documentation impact and completion</a></li>
+          <li><a href="#s8">Risks, gaps, exceptions, anomaly handling, rollback, and recovery</a></li>
+          <li><a href="#s9">Authority, owner decisions, approvals, and closeout status</a></li>
+        </ol>
+      </nav>
+      <main id="main">
+        <section class="block" id="s1" aria-labelledby="h-s1">
+          <h2 id="h-s1"><span class="secno">1</span>BLUF and Lifecycle state</h2>
+          <div class="bluf">
+            <p><strong>Start three independent preparation lanes immediately after approval; release live preparation at its evidence checkpoint. One backend deploy and one serialized TV pass unblock device evidence. Prepare release draft before final live closure where its actual prerequisites permit; overall completion still requires every criterion.</strong></p>
+            <p><strong>Lifecycle state.</strong> <span class="status status-plan"><span class="mark" aria-hidden="true"></span>planning</span></p>
+            <p>This manifest compares authorized intent with planned work, evidence, and gaps. It does not grant execution, acceptance, release, or deployment.</p>
+          <ul class="legend status-key" aria-label="Status key">
+            <li><span class="status status-plan"><span class="mark" aria-hidden="true"></span>Planned</span> not yet evidenced</li>
+            <li><span class="status status-pass"><span class="mark" aria-hidden="true"></span>Confirmed</span> or embedded</li>
+            <li><span class="status status-hold"><span class="mark" aria-hidden="true"></span>Hold</span> waiting on owner or candidate</li>
+            <li><span class="status status-gap"><span class="mark" aria-hidden="true"></span>Gap</span> selected content missing</li>
+            <li><span class="status status-na"><span class="mark" aria-hidden="true"></span>Not applicable</span> with a visible reason</li>
+          </ul>
+          </div>
+        </section>
+
+        <section class="block" id="s2" aria-labelledby="h-s2">
+          <h2 id="h-s2"><span class="secno">2</span>Source, baseline, candidate, and template identity</h2>
+          <dl class="meta">
+            <dt>Lifecycle</dt>
+            <dd><code>AFC-2026-10-11</code></dd>
+            <dt>Repository</dt>
+            <dd><code>1wgrumph/amazon-fantasy-companion</code></dd>
+            <dt>Baseline</dt>
+            <dd><code>7da6187b5a57ee80887ef84301ff99a3592bacb6</code></dd>
+            <dt>Branch</dt>
+            <dd><code>afc/m03-m05-recovery</code></dd>
+            <dt>Candidate digest</dt>
+            <dd><code>0808ec169952e6ef6c224fc990ca4742f5ccba88688f228503082c067196ec0f</code></dd>
+            <dt>Profile binding SHA256</dt>
+            <dd><code>e8d0b5a02cd9f445644a0caa18185af60a46f2316769b527ccc9e046796b0608</code></dd>
+            <dt>OCR tool binding SHA256</dt>
+            <dd><code>295885a332227f8e32caf4b3c17c5b91a243ed1e6b74dd10fedf613f8ac7d19f</code></dd>
+            <dt>Authority</dt>
+            <dd><code>Planning authorized; final reviewed Manifest/execution approval pending</code></dd>
+            <dt>Register</dt>
+            <dd><code>Parent authoritative Markdown; DEC-AFC-SD-027</code></dd>
+            <dt>Manifest file</dt>
+            <dd><code>afc-m03-m05-recovery-dod-manifest.html</code></dd>
+            <dt>Template</dt>
+            <dd><code>dod-manifest-v1 1.0.1</code></dd>
+            <dt>Source artifact</dt>
+            <dd><code>implementation.json.dod_manifest</code></dd>
+          </dl>
+        </section>
+
+        <section class="block" id="s3" aria-labelledby="h-s3">
+          <h2 id="h-s3"><span class="secno">3</span>Outcome, scope, exclusions, and Definition of Done</h2>
+          <h3>Planned outcome</h3>
+          <p>Complete every remaining acceptance criterion in issues #21-30 without redoing accepted B02/B03 or expired X04/X02 spikes. Retain selected Vega-primary dependencies and both platform evidence obligations; no live/customer activation or publication is inferred.</p>
+          <h3>Scope</h3>
+          <ul class="plain">
+            <li>M03: #21 panel spike/fallback, #22 TV/linking states, #23 v0.1.0 draft preparation.</li>
+            <li>M04: #24 notification fallback, #25 provider/live route, #26 detection, #27 live feed timing/correction.</li>
+            <li>M05: #28 accepted lineup/scoring reused, #29 current backend deploy/link/profile/panel proof, #30 accepted ingest/replay reused; new live fixture cases classified.</li>
+            <li>All 13 source slices, 46 requirement/proof IDs, 24 source/override commands and 8 selected Vega overrides conserved.</li>
+          </ul>
+          <h3>Exclusions</h3>
+          <ul class="plain">
+            <li>No omitted milestone obligations; incomplete acceptance remains open.</li>
+            <li>Publication/export/release, credential access, production DB mutation, destructive git and new customer-facing activation need their protected authority.</li>
+            <li>No new requirements or platform choice; no duplicate G5 review/repair.</li>
+          </ul>
+          <p class="table-hint">Tables scroll horizontally on a narrow screen.</p>
+          <div class="table-scroll" role="region" tabindex="0" aria-labelledby="cap-dod">
+            <table>
+              <caption id="cap-dod">Definition of Done criteria</caption>
+              <thead>
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Criterion</th>
+                  <th scope="col">Evidence</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="row-plan">
+                  <th scope="row" class="id">DOD-RCV-1</th>
+                  <td>Each issue criterion maps to landed candidate-bound evidence or an explicitly open unmet dependency; close only fully accepted issues.</td>
+                  <td>seit.json acceptance_to_evidence and task receipts</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">DOD-RCV-2</th>
+                  <td>One planning review, one per implementation wave, at most one repair per unit, deterministic green closure; required own-engine OCR and applicable Reverify accounted for.</td>
+                  <td>Named exact-candidate review/capability receipts; missing or partial is a typed gap.</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="block" id="s4" aria-labelledby="h-s4">
+          <h2 id="h-s4"><span class="secno">4</span>Requirements, architecture, design, interfaces, model inventory, and embedded model views</h2>
+          <h3>Requirements and acceptance</h3>
+          <p class="table-hint">Tables scroll horizontally on a narrow screen.</p>
+          <div class="table-scroll" role="region" tabindex="0" aria-labelledby="cap-req">
+            <table>
+              <caption id="cap-req">Requirements and acceptance</caption>
+              <thead>
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Statement</th>
+                  <th scope="col">Source</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="row-hold">
+                  <th scope="row" class="id">AFC-PR-001</th>
+                  <td>The backend shall retrieve the customer&#39;s leagues, teams, rosters by week, and league scoring settings through a read-only Yahoo Fantasy OAuth connection.</td>
+                  <td>register reference — VCASE-AFC-PR-001</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>See authored SEIT disposition; acceptance pending</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">AFC-PR-003</th>
+                  <td>The TV app shall report each supported installed viewing app as installed through platform-permitted detection.</td>
+                  <td>register reference — VCASE-AFC-PR-003</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>See authored SEIT disposition; acceptance pending</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">AFC-PR-006</th>
+                  <td>When Yahoo approval is absent at T_yahoo (2026-10-16T19:00:00Z), the backend shall accept labeled manual lineup entry built from ESPN rosters as the active lineup source.</td>
+                  <td>register reference — VCASE-AFC-PR-006</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>See authored SEIT disposition; acceptance pending</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">AFC-PR-007</th>
+                  <td>The backend shall hold exactly one active lineup source from the Yahoo read-only connection or labeled manual entry.</td>
+                  <td>register reference — VCASE-AFC-PR-007</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>See authored SEIT disposition; acceptance pending</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">AFC-PR-008</th>
+                  <td>The backend shall monitor live NFL game events only for profile-relevant games during customer-enabled viewing periods.</td>
+                  <td>register reference — VCASE-AFC-PR-008</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>See authored SEIT disposition; acceptance pending</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">AFC-PR-010</th>
+                  <td>The TV app shall apply current-viewing-context detection only through supported mechanisms while the customer enables that detection.</td>
+                  <td>register reference — VCASE-AFC-PR-010</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>See authored SEIT disposition; acceptance pending</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">AFC-PR-011</th>
+                  <td>The backend shall label each monitoring decision with its observed-playback or profile-assumption basis.</td>
+                  <td>register reference — VCASE-AFC-PR-011</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>See authored SEIT disposition; acceptance pending</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">AFC-PR-012</th>
+                  <td>The backend shall ingest scores, field position, possession, involved player identifiers, timestamps, and scoring corrections from ESPN&#39;s unofficial public JSON.</td>
+                  <td>register reference — VCASE-AFC-PR-012</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>See authored SEIT disposition; acceptance pending</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">AFC-PR-013</th>
+                  <td>When the ESPN endpoint is unavailable or its contract changes, the backend shall substitute labeled replay fixtures for live events on every affected value.</td>
+                  <td>register reference — VCASE-AFC-PR-013</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>See authored SEIT disposition; acceptance pending</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">AFC-PR-015</th>
+                  <td>While heads-up presentation is selected, the TV app shall present each alert as a heads-up notification with Watch and Dismiss actions during third-party viewing-app playback.</td>
+                  <td>register reference — VCASE-AFC-PR-015</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>See authored SEIT disposition; acceptance pending</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">AFC-PR-021</th>
+                  <td>The TV app shall render each alert in the customer&#39;s chosen notification presentation.</td>
+                  <td>register reference — VCASE-AFC-PR-021</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>See authored SEIT disposition; acceptance pending</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">AFC-PR-029</th>
+                  <td>The backend shall resolve each alerted event to an available provider and channel from the customer&#39;s installed apps, verified subscriptions, local market, and provider preference.</td>
+                  <td>register reference — VCASE-AFC-PR-029</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>See authored SEIT disposition; acceptance pending</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">AFC-PR-030</th>
+                  <td>The TV app shall open the resolved game or channel through a supported provider launch URI or intent upon the customer&#39;s Watch action.</td>
+                  <td>register reference — VCASE-AFC-PR-030</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>See authored SEIT disposition; acceptance pending</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">AFC-PR-031</th>
+                  <td>The TV app shall report each routing outcome as exactly one of game opened, search or details opened, app home opened, app absent, access unknown, or playback denied.</td>
+                  <td>register reference — VCASE-AFC-PR-031</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>See authored SEIT disposition; acceptance pending</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">AFC-PR-038</th>
+                  <td>The backend shall link the TV app to the customer account through a device code the customer completes on a phone or browser.</td>
+                  <td>register reference — VCASE-AFC-PR-038</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>See authored SEIT disposition; acceptance pending</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">AFC-PR-041</th>
+                  <td>The TV app shall fit the broadcast video into the screen area remaining beside the right-side lineup panel while preserving broadcast aspect ratio.</td>
+                  <td>register reference — VCASE-AFC-PR-041</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>See authored SEIT disposition; acceptance pending</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">AFC-PR-047</th>
+                  <td>When the panel-beside-provider-video spike fails or exceeds 24 hours from first app install, the TV app shall present the lineup panel as a full screen in the companion app.</td>
+                  <td>register reference — VCASE-AFC-PR-047</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>See authored SEIT disposition; acceptance pending</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">AFC-PR-048</th>
+                  <td>While the lineup panel is shown full-screen in the companion app, the TV app shall route alerts and Watch actions to the real provider apps.</td>
+                  <td>register reference — VCASE-AFC-PR-048</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>See authored SEIT disposition; acceptance pending</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">AFC-PR-052</th>
+                  <td>The TV app shall run on the 2018 Fire TV stick target on Fire OS.</td>
+                  <td>register reference — VCASE-AFC-PR-052</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>See authored SEIT disposition; acceptance pending</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">AFC-PR-053</th>
+                  <td>The TV app build shall declare minSdk 25.</td>
+                  <td>register reference — VCASE-AFC-PR-053</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>See authored SEIT disposition; acceptance pending</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">AFC-PR-054</th>
+                  <td>The backend shall run on AWS serverless services within the Free tier declared in template.yaml.</td>
+                  <td>register reference — VCASE-AFC-PR-054</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>See authored SEIT disposition; acceptance pending</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">AFC-PR-057</th>
+                  <td>The system shall exclude messenger, message board, community room, shared chat, and watch-party social features.</td>
+                  <td>register reference — VCASE-AFC-PR-057</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>See authored SEIT disposition; acceptance pending</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">AFC-PR-063</th>
+                  <td>The TV app&#39;s alert, panel, and detector components shall keep network work, parsing, and computation off the rendering thread.</td>
+                  <td>register reference — VCASE-AFC-PR-063</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>See authored SEIT disposition; acceptance pending</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">AFC-PR-064</th>
+                  <td>The backend shall reject a schema-invalid ESPN response without changing stored events.</td>
+                  <td>register reference — VCASE-AFC-PR-064</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>See authored SEIT disposition; acceptance pending</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">AFC-PR-065</th>
+                  <td>The backend shall score manual lineups under the customer&#39;s selected preset from exactly two presets, PPR and Half-PPR, with Default preset Half-PPR, and shall score Yahoo leagues under Yahoo&#39;s own league scoring.</td>
+                  <td>register reference — VCASE-AFC-PR-065</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>See authored SEIT disposition; acceptance pending</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">AC-AFC-P2-SPIKE-01</th>
+                  <td>Before any product slice depends on a device, provider, feed, lineup or voice route, the program shall run the spike for that route on the real target and land `spikes/&lt;sp&gt;/VERDICT.md` stating the verdict, the exact route tried, the observed result with evidence paths, the conditional it triggers (C1, C2, C5, C6, C8) and the register UIDs it unblocks.</td>
+                  <td>#1 §Development integration obligation, §Development setup; SD-001; spec §2.1</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>See authored SEIT disposition; acceptance pending</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">AC-AFC-P2-SPIKE-02</th>
+                  <td>The panel-beside-provider-video spike shall return its verdict within spike_panel_max of the first app install on the stick (recorded by P2-X01), and the verdict shall select `PanelMode.modeB` only with on-device evidence of simultaneous provider video and panel with no overlap or crop; otherwise it shall select `PanelMode.fullScreen` (AFC-PR-047).</td>
+                  <td>SD-006, DEC-AFC-SD-035 Q4, C5, AFC-PR-041, -047</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>See authored SEIT disposition; acceptance pending</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">AC-AFC-P2-SPIKE-03</th>
+                  <td>The provider-link spike shall try Prime Video (TNF), ESPN app, DirecTV Stream app and YouTube TV in that order plus local-broadcast channel display, and shall record for each provider the package identity, the supported launch URI or intent with its documentation source, the observed routing outcome from the six-value vocabulary, and whether game arrival was observed; it shall invent no URI format.</td>
+                  <td>DEC-AFC-SD-035 Q5, AFC-PR-029..031, spec §4.1.8</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>See authored SEIT disposition; acceptance pending</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">AC-AFC-P2-LAND-01</th>
+                  <td>The program shall land each Phase 2 slice on `main` through a pull request merged by rebase or merge commit after one Reviewer review at its integration step, at most one repair round and a green gate run, with no squash merge, force-push or commit on local `main`.</td>
+                  <td>Cross-repo rules 4 and 9; DEC-AFC-APPROVAL-001 (OA-AFC-A3 = A)</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>See authored SEIT disposition; acceptance pending</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">AC-AFC-P2-REV-01</th>
+                  <td>Every Reviewer packet shall carry OCR in delegation mode (`ocr delegate preview --from &lt;base&gt; --to &lt;head&gt;`, `ocr delegate rule &lt;files&gt;`) and either a Reverify run for any claim about a built APK or `Reverify: not applicable — &lt;reason&gt;`; an OCR or Reverify run that cannot complete shall be recorded as a typed gap with its exact error.</td>
+                  <td>Cross-repo rule 15; frozen `review.coverage_assist`, `deterministic_verification.reverify`; owner amendment DEC-AFC-M0305-OCR-BACKEND-20261018 selects own_engine</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>Historical delegate wording superseded by owner-selected own_engine; review pending</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">AC-AFC-P2-VIS-01</th>
+                  <td>Every slice that changes rendered TV UI shall be reviewed on the real stick before merge: each changed screen and state captured with `adb exec-out screencap -p` at the device&#39;s output resolution under `evidence/visual/&lt;slice&gt;/`, judged against the spec and AFC-PR-043/-045, with no account or customer data in captures.</td>
+                  <td>Cross-repo rule 16; DEC-AFC-SD-024; AFC-PR-045</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>See authored SEIT disposition; acceptance pending</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">AC-AFC-P2-PATH-01</th>
+                  <td>The program shall commit no file containing an absolute local home path; plan artifacts and evidence use repository-relative paths or `$HOME` / `&lt;PHASE2_PLAN_WORKTREE&gt;` placeholders.</td>
+                  <td>Cross-repo rule 12; SD-010; C7; AFC-PR-056</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>See authored SEIT disposition; acceptance pending</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">AC-AFC-P2-SUPPLY-01</th>
+                  <td>The program shall obtain a scan-software-supply-chain receipt before first use of each external acquisition (Android SDK command-line tools and platform-tools, the starter repository at its pinned commit, Gradle wrapper and plugin versions, AWS SAM CLI, cfn-lint, Python test dependencies, each pinned GitHub Action) and refuse use on BLOCK or INDETERMINATE.</td>
+                  <td>Cross-repo rule 10</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>See authored SEIT disposition; acceptance pending</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">AC-AFC-P2-REL-01</th>
+                  <td>Every Phase 2 pull request that lands shall add one `CHANGELOG.md` `## [Unreleased]` entry (Keep a Changelog section Added, Changed, Fixed or Removed) naming the change and linking the pull request; the first Phase 2 landing seeds `CHANGELOG.md` when it is absent.</td>
+                  <td>DEC-AFC-SD-038; cross-repo rule 21</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>See authored SEIT disposition; acceptance pending</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">AC-AFC-P2-REL-02</th>
+                  <td>At each technical-wave release checkpoint W1..W5 the program shall prepare a release through the `release-process` skill: version, tag name and release notes drawn from the changelog, with the `[Unreleased]` entries moved under the version heading; it shall publish the release only after the owner authorizes that publication.</td>
+                  <td>DEC-AFC-SD-038; cross-repo rules 4 and 21</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>See authored SEIT disposition; acceptance pending</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">AC-AFC-P2-DX-01</th>
+                  <td>Every Phase 2 dispatch packet and return shall carry a `developer_feedback` section listing observations with IDs and evidence, or &quot;no new observations&quot; naming the tools exercised.</td>
+                  <td>#1 §Scribe contract</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>See authored SEIT disposition; acceptance pending</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">RISK-AFC-P2-02</th>
+                  <td>If P2-X02 shows no supported heads-up notification over provider playback, then the verdict shall name the exact limitation and the program shall raise a class C owner stop before AFC-PR-015 product code; it shall not substitute a phone screen or a companion-app-only alert silently.</td>
+                  <td>#1 §Source review (Fire OS notifications); AFC-PR-015</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>See authored SEIT disposition; acceptance pending</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">RISK-AFC-P2-03</th>
+                  <td>If no supported provider game or channel link exists for a provider, then the resolver and launcher shall report the strongest observed outcome (`searchOpened`, `appHomeOpened`, `appAbsent`, `accessUnknown`, `playbackDenied`) honestly and the verdict shall record the missing interface as an integration gap; no outcome is relabeled `gameOpened`.</td>
+                  <td>DEC-AFC-SD-035 Q5; AFC-PR-030, -031</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>See authored SEIT disposition; acceptance pending</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">RISK-AFC-P2-04</th>
+                  <td>If the panel spike fails or reaches spike_panel_max, then the panel shall be built as `PanelMode.fullScreen` (AFC-PR-047) with alerts and Watch still routed to the real provider apps (AFC-PR-048).</td>
+                  <td>C5; DEC-AFC-SD-035 Q4</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>See authored SEIT disposition; acceptance pending</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">RISK-AFC-P2-05</th>
+                  <td>If the ESPN endpoint is unavailable or its contract changes, then ingest shall serve labeled replay fixtures for every affected value (AFC-PR-013) and reject schema-invalid responses without mutation (AFC-PR-064); the ESPN terms question shall be presented to the owner before submission (C3).</td>
+                  <td>C2, C3</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>See authored SEIT disposition; acceptance pending</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">RISK-AFC-P2-06</th>
+                  <td>If Yahoo approval is absent at T_yahoo, then P2-X06 shall record a FAILS verdict for the Yahoo route selecting labeled manual entry, and the backend shall use labeled manual entry as the single active source (AFC-PR-006, -007).</td>
+                  <td>C6; SD-007</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>See authored SEIT disposition; acceptance pending</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">RISK-AFC-P2-07</th>
+                  <td>If any AWS action would require a Paid plan, a paid service or a payment method change, then the slice shall stop and raise a class F owner stop; no agent upgrades the account.</td>
+                  <td>C4; SD-005; AFC-PR-054</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>See authored SEIT disposition; acceptance pending</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">RISK-AFC-P2-08</th>
+                  <td>If a live window is missed or a game produces no qualifying event, then the slice shall use labeled replay of captured fixtures for repeatability and schedule the live check in the next live window; replay never stands in for live notification or provider behavior evidence.</td>
+                  <td>#1 §Judging alignment; C2</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>See authored SEIT disposition; acceptance pending</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">RISK-AFC-P2-09</th>
+                  <td>If `adb` screencap or screenrecord returns black or blank frames for protected provider video, then the visual evidence shall combine the companion UI capture with window geometry from `dumpsys` and, if OD-AFC-P2-02 = A, an owner camera capture of the screen (OA-9); the demo plan shall mark any owner-filmed shots as owner-filmed and, if OD-AFC-P2-02 = B, shall use companion UI captures only for those shots.</td>
+                  <td>Rule 16; AFC-PR-041; issue #1 demo</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>See authored SEIT disposition; acceptance pending</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">RISK-AFC-P2-10</th>
+                  <td>If a selected route reaches a confirmed usage or rate limit, then the Orchestrator shall record the evidence and activate only the next approved fallback of the frozen profile with a class B receipt preserving coverage-assist and Reverify settings, or queue the slice; other errors shall not trigger a route switch.</td>
+                  <td>Frozen profiles; owner-stops class B</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>See authored SEIT disposition; acceptance pending</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">RISK-AFC-P2-16</th>
+                  <td>A missing physical Vega device, unverified background alert route, SDK compatibility conflict or missed primary checkpoint shall remain a blocking primary-acceptance gap unless the owner explicitly amends the named requirement or target.</td>
+                  <td>Objective 5</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>See authored SEIT disposition; acceptance pending</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <h3>Architecture, design, and interfaces</h3>
+          <p class="table-hint">Tables scroll horizontally on a narrow screen.</p>
+          <div class="table-scroll" role="region" tabindex="0" aria-labelledby="cap-des">
+            <table>
+              <caption id="cap-des">Architecture, design, and interfaces</caption>
+              <thead>
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Decision</th>
+                  <th scope="col">Interfaces</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="row-plan">
+                  <th scope="row" class="id">DES-AFC-P2-SPIKES</th>
+                  <td>Spikes are evidence-only (OD-AFC-04): probes under `spikes/&lt;sp&gt;/`, verdict in `spikes/&lt;sp&gt;/VERDICT.md` (CONTRACT-AFC-P2-VERDICT). Product slices that depend on a route wait for its verdict to land.</td>
+                  <td>CONTRACT-AFC-P2-VERDICT</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>inherited design; recovery dispositions in design.md and seit.json</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">DES-AFC-P2-TV</th>
+                  <td>- Kotlin, Jetpack Compose for TV as in the starter; minSdk 25 (AFC-PR-053); single-activity shell (`MainActivity`) with screens Link, Profile/Settings and Panel; `AlertService` is a foreground service that long-polls alerts while monitoring is enabled (AFC-PR-009). - Threading: all network, JSON parsing and scoring display computation run on `Dispatchers.IO`/`Default` coroutines; the UI thread only applies state (AFC-PR-063). - Bounded state: alert queue and history ≤ alert_queue_max; panel holds one PanelState snapshot plus changed-row deltas; no images beyond provider icons decoded at display size; subscriptions cancelled when a screen leaves composition (AFC-PR-061, -062). - The TV holds no Yahoo or AWS credential; it stores only its device session token in app-private storage (AFC-PR-055). - `ApiClient` implements CONTRACT-AFC-P2-API: api_timeout, api_retry_max with exponential backoff for idempotent calls only, no automatic retry of link confirmation or Watch. - Manifest and Gradle files are created complete by P2-A01; later edits take the `tv-app-manifest` / `tv-app-gradle` lease. - The API base URL comes from Gradle property afcApiBaseUrl into BuildConfig.AFC_API_BASE_URL; empty shows &quot;Backend not configured&quot;; on-device and release builds pass -PafcApiBaseUrl=&lt;afc-dev stack output ApiUrl&gt;; the APK carries no secret. - P2-A01 creates `net/ApiClient.kt` and `net/Dto.kt` for every API operation and the stub screens and components with final signatures (AFC-STUB marker), so A02..A05 replace stubs without editing shared files; only P2-A05 edits `MainActivity.kt`.</td>
+                  <td>—</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>inherited design; recovery dispositions in design.md and seit.json</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">DES-AFC-P2-ALERTPATH</th>
+                  <td>`AlertService` (foreground, low-priority ongoing notification as Fire OS requires) calls `GET /v1/alerts?cursor=` with alert_poll_wait. Each new alert record goes to `AlertNotifier`, which renders the customer&#39;s presentation (AFC-PR-021): heads-up notification on a high-importance channel with Watch and Dismiss actions (AFC-PR-015) via the route P2-X02 verifies, or panel-only. Watch is a `PendingIntent` into `WatchLauncher`; Dismiss acknowledges locally. Alert text carries the verified player and matchup context (AFC-PR-027), never claims a player is on the field or will score from a red-zone entry (AFC-PR-028), and shows unknown access as unknown (AFC-PR-032, -033). Voice announcement is offered only if P2-X11 verifies a route (AFC-PR-022).</td>
+                  <td>—</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>inherited design; recovery dispositions in design.md and seit.json</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">DES-AFC-P2-WATCH</th>
+                  <td>The backend resolver (DES-AFC-P2-RESOLVE) returns a route; `WatchLauncher` only executes it. It honors switching confirmation (AFC-PR-035): when confirmation is on, a confirm dialog precedes launch. Launch uses only the intent or URI in the registry entry for its own platform, `platform_routes.fire_os` or `platform_routes.vega` (CONTRACT-AFC-P2-PROVIDER-REGISTRY); an absent package yields `appAbsent`; a refused launch or provider denial yields `playbackDenied` with the provider&#39;s reason; otherwise a supported provider response for this attempt determines the outcome. A successful launch call and the registry&#39;s historical `verified_outcome` alone never establish `gameOpened`. When the current destination/playback cannot be verified, report `accessUnknown` with that reason; do not invent provider callbacks or an extra enum. P2-X03 records any supported outcome-observation mechanism and its limits. Each attempt reports exactly one RoutingOutcome back through the API (AFC-PR-031) and shows it to the customer. Alexa-assisted tuning is offered only if P2-X11 verifies it (AFC-PR-036). Under PanelMode.fullScreen, Watch leaves our app for the provider app (AFC-PR-048).</td>
+                  <td>CONTRACT-AFC-P2-PROVIDER-REGISTRY, DES-AFC-P2-RESOLVE</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>inherited design; recovery dispositions in design.md and seit.json</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">DES-AFC-P2-BACKEND</th>
+                  <td>- AWS SAM `backend/template.yaml`, Python 3.12 Lambdas, HTTP API, DynamoDB on-demand, EventBridge Scheduler, SSM SecureString. No paid-only service; any refusal or upgrade prompt stops the slice (RISK-AFC-P2-07, AFC-PR-054). - Functions: `ApiFunction` (router for every `/v1/*` route and the `/link` page), `IngestFunction` (scheduled each minute only while a profile-relevant game is in progress, polling each such game every feed_poll_interval inside the invocation), `PolicyFunction` (stream consumer of the event table: matcher → policy → alert records → panel projections). - Tables: `Profiles` (profile, settings, revision), `Links` (device code, session token hash, state), `Events` (game, event id, revision, source), `Alerts` (profile, cursor, alert), `Lineups` (profile, source, starters, scoring basis), `Panels` (profile, team/league, PanelState). - P2-B01 writes the complete template (all functions, routes, tables, schedules, parameters, stack `afc-dev` in `samconfig.toml`), the `src/store/` accessors per table, the `src/pipeline/handler.py` chain (matcher.resolve → alert_policy.evaluate → provider_resolver.resolve → panel.project) and module stubs with final signatures, so B02..B07 change only their `src/&lt;module&gt;/` and tests; any later change to those shared files takes the `backend-template` lease. Deploys tag the stack with the deployed commit (`GitCommit=&lt;sha&gt;`). - Heavy work stays on the backend (AFC-PR-059); the TV receives only profile-relevant updates (AFC-PR-060).</td>
+                  <td>—</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>inherited design; recovery dispositions in design.md and seit.json</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">DES-AFC-P2-FEED</th>
+                  <td>ESPN scoreboard and summary JSON (endpoints recorded by P2-X05) are fetched by `IngestFunction`, validated against a pinned JSON Schema in `src/feed_ingest/schema/` before any store write (AFC-PR-064), normalized to GameEvent (period &gt;= 1, scoringPlay boolean per DEC-AFC-SD-067, score, field position, possession, player ids, event time, correctionOf) with a monotonic revision, and stored (AFC-PR-012). When the endpoint fails feed_fail_limit times or the schema check fails on a contract change, `replay.py` serves captured fixtures with `source: replay` on every affected value (AFC-PR-013). Monitoring covers only profile-relevant games during enabled periods, each decision labeled with its observed-playback or profile-assumption basis (AFC-PR-008, -011).</td>
+                  <td>—</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>inherited design; recovery dispositions in design.md and seit.json</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">DES-AFC-P2-LINEUP</th>
+                  <td>One active source per profile (AFC-PR-007): Yahoo read-only OAuth (AFC-PR-001: leagues, teams, roster by week, settings) or, when Yahoo is not approved at T_yahoo, labeled manual entry from ESPN rosters (AFC-PR-006). Manual lineups score under the selected preset (CONTRACT-AFC-P2-PRESETS; default Half-PPR); Yahoo leagues use Yahoo league scoring (AFC-PR-065). The preset selection persists in Settings (AFC-PR-066).</td>
+                  <td>CONTRACT-AFC-P2-PRESETS</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>inherited design; recovery dispositions in design.md and seit.json</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">DES-AFC-P2-VISUAL</th>
+                  <td>For each changed screen and state: install the slice&#39;s debug APK on the stick (`fire-tv-stick` lease), drive it with `adb shell input keyevent` (D-pad, select, back), capture `adb exec-out screencap -p &gt; evidence/visual/&lt;slice&gt;/&lt;state&gt;.png`, record `adb shell dumpsys window` geometry for panel/video layout, and measure text heights in pixels for AFC-PR-045. Captures use sanitized fixture profiles; no account names. Where provider video is protected, the capture shows black; the geometry record plus an owner camera capture (OD-AFC-P2-02) evidence composition. The stick has no phone width; the 1080p output is the only viewport. Text evidence (adb, dumpsys, run logs) uses the .txt suffix; the root .gitignore ignores *.log.</td>
+                  <td>—</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>inherited design; recovery dispositions in design.md and seit.json</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">DES-AFC-P2-REVREC</th>
+                  <td>Landing (ship-pull-request) adds one `CHANGELOG.md` `## [Unreleased]` line under Added / Changed / Fixed / Removed, naming the change and linking the pull request, after the PR number exists and before merge, under the `main-landing` lease (no implementer edits `CHANGELOG.md`). The first Phase 2 landing creates the file if absent with a Keep a Changelog header. At each technical-wave release checkpoint W1..W5, P2-R&lt;n&gt; runs `release-process`: moves `[Unreleased]` under `## [&lt;version&gt;] - &lt;date&gt;`, bumps `versionName`/`versionCode` in `tv-app/app/build.gradle.kts` (`tv-app-gradle` lease), drafts release notes and the tag; publication waits for the owner (OA-8; OD-AFC-P2-03).</td>
+                  <td>—</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>inherited design; recovery dispositions in design.md and seit.json</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">CONTRACT-AFC-P2-API</th>
+                  <td>The operations of spec §4.2.3 (`POST/GET /v1/link`, `POST /v1/link/confirm`, `GET/PUT /v1/profile`, `GET /v1/alerts`, `GET /v1/panel`, `GET /v1/providers`) plus `POST /v1/routing-outcome` (records each Watch attempt&#39;s RoutingOutcome, AFC-PR-031) and `POST /v1/installed-apps` (TV detector report, AFC-PR-003). Status codes 400/401/403/409/410/429/503 and the structured `error` {code, message} as spec §4.2.3. Quantities: alert_poll_wait, api_timeout, api_retry_max, device_code_ttl. Request and response bodies ≤ 64 KiB. OpenAPI document `backend/src/api/openapi.yaml` is the frozen artifact (written in P2-B01, changed only under its own review). Amendment for DEC-AFC-SD-049: every route the API returns carries the provider&#39;s whole `platform_routes` map with both entries, each marked verified or REGISTRY_ROUTE_GAP. The backend does not select by client platform: the existing `GET /v1/providers` caller passes only the profile and `eventId`, and it stays unchanged. Each client executes only its own entry: the Vega client `vega`, the Fire OS client `fire_os`. A client never executes the other platform&#39;s launch data, and a gap in its own entry means no launch for that provider plus the reported gap. P2-B06 owns this route-schema change in `openapi.yaml` under CMD-CONTRACT-FROZEN review; V01 makes no backend edit.</td>
+                  <td>—</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>inherited design; recovery dispositions in design.md and seit.json</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">CONTRACT-AFC-P2-ENVELOPE</th>
+                  <td>Every event, alert, profile and panel response: `schemaVersion`, opaque `id`, monotonic per-entity `revision`, `source` (`live`, `replay`, `yahoo`, `manual`), `eventTime` where applicable, `updatedAt` (RFC 3339 UTC), `data`. Retries keep id and revision. Clients reject a revision older than the one they hold.</td>
+                  <td>—</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>inherited design; recovery dispositions in design.md and seit.json</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">CONTRACT-AFC-P2-VERDICT</th>
+                  <td>`spikes/&lt;sp&gt;/VERDICT.md` front matter: `spike`, `slice`, `verdict` (`WORKS` / `PARTIAL` / `FAILS` / `TIMEBOX`), `device` (model, Fire OS, API level), `started_at`, `ended_at`, `first_install_at` (SP-1 and SP-4), `unblocks` (register UIDs), `conditional` (C1..C9 or `none`). Body: routes tried (each with documentation source), observed result, evidence paths, limits, developer_feedback IDs. No credential or account data.</td>
+                  <td>—</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>inherited design; recovery dispositions in design.md and seit.json</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">CONTRACT-AFC-P2-PROVIDER-REGISTRY</th>
+                  <td>`backend/src/provider_resolver/registry.json`, written from the P2-X03 verdict: per provider `id`, `name`, `channels_carried` (for local broadcast) and `platform_routes` with two entries, `fire_os` and `vega` (amended 2026-10-14 for DEC-AFC-SD-049, both targets built). Each entry carries its own `package` (Android package or Vega component id), `launch` (`type`: `intent` | `uri`; `value` template with `{channel}` / `{event}` placeholders only where documented), `doc_source`, `verified_outcome` (one RoutingOutcome value observed on that platform&#39;s device), `verified_at` and the documented current-attempt observation mechanism or explicitly none. `verified_outcome` describes the spike observation only, not a current launch result. X03&#39;s primary scope writes `vega`; its Fire OS secondary scope writes `fire_os`. A missing or unverified entry is REGISTRY_ROUTE_GAP for that platform: it blocks that platform&#39;s Watch acceptance, is never filled from the other platform, and is never turned into a client limitation without an owner amendment. Order of entries is the spike order; selection order is the customer&#39;s preference.</td>
+                  <td>—</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>inherited design; recovery dispositions in design.md and seit.json</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">CONTRACT-AFC-P2-FIXTURE</th>
+                  <td>`backend/fixtures/replay/&lt;game-id&gt;/&lt;seq&gt;-&lt;scoreboard|summary&gt;.json`: the raw ESPN response body as captured, plus `&lt;game-id&gt;/index.json` with capture UTC times, endpoint, HTTP status and sha256 per file. Fixtures are never edited; corrections are captured as later sequence files.</td>
+                  <td>—</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>inherited design; recovery dispositions in design.md and seit.json</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">CONTRACT-AFC-P2-PRESETS</th>
+                  <td>`backend/src/lineup/presets.py`, exactly two tables (AFC-PR-065): PPR — reception 1.0; Half-PPR — reception 0.5; both — rushing and receiving yards 0.1 per yard (1 per 10), rushing or receiving TD 6, passing yards 0.04 per yard (1 per 25), passing TD 4, interception thrown −1, fumble lost −2. Default Half-PPR.</td>
+                  <td>—</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>inherited design; recovery dispositions in design.md and seit.json</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <h3>Model inventory</h3>
+          <p class="table-hint">Tables scroll horizontally on a narrow screen.</p>
+          <div class="table-scroll" role="region" tabindex="0" aria-labelledby="cap-model">
+            <table>
+              <caption id="cap-model">System-model inventory. Systems Modeler owns semantics; this page only projects prepared views.</caption>
+              <thead>
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Mode</th>
+                  <th scope="col">Source</th>
+                  <th scope="col">Digest</th>
+                  <th scope="col">Viewpoint</th>
+                  <th scope="col">Trace</th>
+                  <th scope="col">Limitation</th>
+                  <th scope="col">Render</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="row-pass">
+                  <th scope="row" class="id">MODEL-AFC-P2-STRUCTURE</th>
+                  <td>sysml-v2</td>
+                  <td>../models/AFC-Structure.sysml</td>
+                  <td class="cell-digest">sha256:d6c53107c4aa1fdf8dc9976933918f50a6be312e48102594c1b62e138586ff2b</td>
+                  <td>Structure / boundary</td>
+                  <td>tvApp, backend, stores parts; allocation.md Tables 1–2 (63 active UIDs)</td>
+                  <td>SysON bundled textual engine parse, not independent OMG-conformance proof; P2-D02 aligns spec §4.7 text. Reused parent model, not new Vega physical acceptance or new modeling validation.</td>
+                  <td><span class="status status-pass"><span class="mark" aria-hidden="true"></span>READY</span></td>
+                </tr>
+                <tr class="row-pass">
+                  <th scope="row" class="id">MODEL-AFC-P2-INTERFACES</th>
+                  <td>sysml-v2</td>
+                  <td>../models/AFC-Interfaces.sysml</td>
+                  <td class="cell-digest">sha256:e60fdae3777d721ee96d042dfb0c1a17a07d3630f94d22c71f4fc42bc5fc3312</td>
+                  <td>Interfaces</td>
+                  <td>API/provider interface ends; allocation.md Tables 1–2</td>
+                  <td>SysON bundled textual engine parse, not independent OMG-conformance proof. Reused parent model, not new Vega physical acceptance or new modeling validation.</td>
+                  <td><span class="status status-pass"><span class="mark" aria-hidden="true"></span>READY</span></td>
+                </tr>
+                <tr class="row-pass">
+                  <th scope="row" class="id">MODEL-AFC-P2-STATES</th>
+                  <td>sysml-v2</td>
+                  <td>../models/AFC-States.sysml</td>
+                  <td class="cell-digest">sha256:fd42d255e7f87796a4d6086a6d13096ddcee2fab47f9c7e0594434aa6d0d278e</td>
+                  <td>States / lifecycle</td>
+                  <td>PanelMode.fullScreen, alert lifecycle; allocation.md Tables 1–2</td>
+                  <td>SysON bundled textual engine parse, not independent OMG-conformance proof. Reused parent model, not new Vega physical acceptance or new modeling validation.</td>
+                  <td><span class="status status-pass"><span class="mark" aria-hidden="true"></span>READY</span></td>
+                </tr>
+                <tr class="row-pass">
+                  <th scope="row" class="id">MODEL-AFC-P2-DATA</th>
+                  <td>sysml-v2</td>
+                  <td>../models/AFC-Data.sysml</td>
+                  <td class="cell-digest">sha256:95736a5395946bdbdb96f50547a273c12dab82ddd9ee6882591d13ef04998918</td>
+                  <td>Data</td>
+                  <td>GameEvent, Alert, PanelState, ScoringPreset; allocation.md Tables 1–2</td>
+                  <td>SysON bundled textual engine parse, not independent OMG-conformance proof. Reused parent model, not new Vega physical acceptance or new modeling validation.</td>
+                  <td><span class="status status-pass"><span class="mark" aria-hidden="true"></span>READY</span></td>
+                </tr>
+                <tr class="row-pass">
+                  <th scope="row" class="id">MODEL-AFC-P2-V1</th>
+                  <td>diagram-assisted</td>
+                  <td>../views/p2-use-cases.svg (Mermaid use cases in design.md)</td>
+                  <td class="cell-digest">sha256:c594550a491597cb15b6bdc9adc940fd0861f2a31d6f069197fa8b9e68fa8d9f</td>
+                  <td>Use cases / outcome</td>
+                  <td>Link, lineup/controls, alert, Watch, panel, owner approval</td>
+                  <td>Projects the models for owner review; adds no element. Reused parent model, not new Vega physical acceptance or new modeling validation.</td>
+                  <td><span class="status status-pass"><span class="mark" aria-hidden="true"></span>READY</span></td>
+                </tr>
+                <tr class="row-pass">
+                  <th scope="row" class="id">MODEL-AFC-P2-V2</th>
+                  <td>diagram-assisted</td>
+                  <td>../views/p2-alert-watch-flow.svg (sequence in design.md)</td>
+                  <td class="cell-digest">sha256:e13134e8b27d5a33f729801d7e3686b1b9f68483f1764f32559f8c48960d73e5</td>
+                  <td>Operational flow</td>
+                  <td>ESPN poll → ingest → matcher/policy → alert → Watch → routing outcome</td>
+                  <td>Projects the models for owner review; adds no element. Reused parent model, not new Vega physical acceptance or new modeling validation.</td>
+                  <td><span class="status status-pass"><span class="mark" aria-hidden="true"></span>READY</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <h3>Embedded model views</h3>
+          <figure class="model" id="view-model-afc-p2-structure">
+            <div class="model-scroll" role="region" tabindex="0" aria-label="Structure / boundary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="960" height="640" viewBox="0 0 960 640" font-family="monospace">
+  <desc>Derived projection of AFCStructure (AFC-Structure.sysml). Model revision digest 8f5798823b3a9463f8963c7c6fa2cf94d018189edd0ca6160123362d48a075ff. Native source is the .sysml file; this SVG replaces nothing.</desc>
+  <rect x="0" y="0" width="960" height="640" fill="#ffffff" />
+  <text x="20" y="28" font-size="18" font-weight="bold">AFC structure: parts and ports (derived view)</text>
+  <text x="20" y="48" font-size="11" fill="#444">Source AFCStructure d16b0e3d0badb… — see models/views.md for full digest</text>
+
+  <rect x="20" y="60" width="450" height="262" fill="#f4f8ff" stroke="#333" stroke-width="2" />
+  <text x="34" y="86" font-size="14" font-weight="bold">tvApp (Fire TV app)</text>
+  <text x="34" y="106" font-size="12">parts: shell, build, manifest,</text>
+  <text x="34" y="122" font-size="12">profileUI, detector, alertSvc,</text>
+  <text x="34" y="138" font-size="12">notifier, launcher, panel</text>
+  <text x="34" y="162" font-size="12">ports: apiPort, notifyPort,</text>
+  <text x="34" y="178" font-size="12">launchPort, alexaPort</text>
+  <text x="34" y="206" font-size="11" fill="#444">PR-002..003, 005, 009..010, 015..016,</text>
+  <text x="34" y="220" font-size="11" fill="#444">021..022, 030..031, 035..036, 039..045,</text>
+  <text x="34" y="234" font-size="11" fill="#444">047..048, 052..053, 056..057, 061..063, 066</text>
+  <text x="34" y="262" font-size="11" fill="#444">panel: full-screen fallback (C5)</text>
+  <text x="34" y="278" font-size="11" fill="#444">build: minSdk 25</text>
+
+  <rect x="490" y="60" width="450" height="262" fill="#f4fff4" stroke="#333" stroke-width="2" />
+  <text x="504" y="86" font-size="14" font-weight="bold">backend (AWS serverless)</text>
+  <text x="504" y="106" font-size="12">parts: auth, api, ingest, replay,</text>
+  <text x="504" y="122" font-size="12">lineup, matcher, policy, resolver,</text>
+  <text x="504" y="138" font-size="12">panelSvc, iac</text>
+  <text x="504" y="162" font-size="12">ports: apiPort, espnPort,</text>
+  <text x="504" y="178" font-size="12">yahooPort, linkPort</text>
+  <text x="504" y="206" font-size="11" fill="#444">PR-001..002, 004, 006..009, 011..014,</text>
+  <text x="504" y="220" font-size="11" fill="#444">016..020, 023..029, 032..034, 037..040,</text>
+  <text x="504" y="234" font-size="11" fill="#444">044, 046, 054..060, 064..065</text>
+  <text x="504" y="262" font-size="11" fill="#444">iac: Free-tier services only (C4)</text>
+  <text x="504" y="278" font-size="11" fill="#444">replay: labeled fixtures (C2)</text>
+
+  <rect x="20" y="340" width="450" height="220" fill="#fff8f0" stroke="#333" stroke-width="2" />
+  <text x="34" y="366" font-size="14" font-weight="bold">stores (backend-owned)</text>
+  <text x="34" y="390" font-size="12">profileStore (DynamoDB)</text>
+  <text x="34" y="408" font-size="12">eventStore (DynamoDB cache + dedup)</text>
+  <text x="34" y="426" font-size="12">secrets (SSM SecureString, owner-set)</text>
+  <text x="34" y="444" font-size="12">fixtures (replay/)</text>
+  <text x="34" y="472" font-size="11" fill="#444">PR-002, 005, 012..013, 025, 055, 064</text>
+  <text x="34" y="500" font-size="11" fill="#444">No secret value in APK or repo (C9)</text>
+
+  <rect x="490" y="340" width="450" height="220" fill="#f8f4ff" stroke="#333" stroke-width="2" />
+  <text x="504" y="366" font-size="14" font-weight="bold">externals (endpoints only)</text>
+  <text x="504" y="390" font-size="12">espn, yahoo, manualEntry (C6),</text>
+  <text x="504" y="408" font-size="12">providerApps, fireOSNotify,</text>
+  <text x="504" y="426" font-size="12">alexaRoute (conditional, C8),</text>
+  <text x="504" y="444" font-size="12">linkConsumer (phone/browser)</text>
+  <text x="504" y="472" font-size="11" fill="#444">PR-001, 006..007, 012..013, 015,</text>
+  <text x="504" y="486" font-size="11" fill="#444">022, 029..031, 036, 038, 052, 064</text>
+
+  <text x="20" y="590" font-size="11" fill="#444">Derived projection — native source AFC-Structure.sysml. Allocation: models/allocation.md.</text>
+  <text x="20" y="606" font-size="11" fill="#444">Ports bind to interfaces: api→TvBackendApi, notify→TvFireOSNotify, launch→TvProviderLaunch,</text>
+  <text x="20" y="622" font-size="11" fill="#444">alexa→TvAlexa, espn→BackendEspn, yahoo→BackendYahoo, link→BackendDeviceLink.</text>
+</svg>
+            </div>
+            <figcaption>
+              <strong>MODEL-AFC-P2-STRUCTURE.</strong> SysON bundled textual engine parse, not independent OMG-conformance proof; P2-D02 aligns spec §4.7 text. Reused parent model, not new Vega physical acceptance or new modeling validation.
+              <dl>
+                <dt>Mode</dt>
+                <dd>sysml-v2</dd>
+                <dt>Source</dt>
+                <dd>../models/AFC-Structure.sysml</dd>
+                <dt>Digest</dt>
+                <dd class="cell-digest">sha256:d6c53107c4aa1fdf8dc9976933918f50a6be312e48102594c1b62e138586ff2b</dd>
+                <dt>Viewpoint</dt>
+                <dd>Structure / boundary</dd>
+                <dt>Trace links</dt>
+                <dd>tvApp, backend, stores parts; allocation.md Tables 1–2 (63 active UIDs)</dd>
+                <dt>Limitation</dt>
+                <dd>SysON bundled textual engine parse, not independent OMG-conformance proof; P2-D02 aligns spec §4.7 text. Reused parent model, not new Vega physical acceptance or new modeling validation.</dd>
+              </dl>
+            </figcaption>
+          </figure>
+          <figure class="model" id="view-model-afc-p2-interfaces">
+            <div class="model-scroll" role="region" tabindex="0" aria-label="Interfaces">
+            <svg xmlns="http://www.w3.org/2000/svg" width="960" height="680" viewBox="0 0 960 680" font-family="monospace">
+  <desc>Derived projection of AFCInterfaces (AFC-Interfaces.sysml). Model revision digest 8f5798823b3a9463f8963c7c6fa2cf94d018189edd0ca6160123362d48a075ff. Native source is the .sysml file; this SVG replaces nothing.</desc>
+  <defs>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6" fill="none" stroke="#333" stroke-width="1.5" />
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="960" height="680" fill="#ffffff" />
+  <text x="20" y="28" font-size="18" font-weight="bold">AFC interfaces (derived view)</text>
+  <text x="20" y="48" font-size="11" fill="#444">Source AFCInterfaces d16b0e3d0badb… — see models/views.md for full digest</text>
+
+  <rect x="20" y="280" width="180" height="80" fill="#f4f8ff" stroke="#333" stroke-width="2" />
+  <text x="34" y="312" font-size="14" font-weight="bold">tvApp</text>
+  <text x="34" y="332" font-size="11">api/notify/</text>
+  <text x="34" y="346" font-size="11">launch/alexa</text>
+
+  <rect x="390" y="280" width="180" height="80" fill="#f4fff4" stroke="#333" stroke-width="2" />
+  <text x="404" y="312" font-size="14" font-weight="bold">backend</text>
+  <text x="404" y="332" font-size="11">api/espn/</text>
+  <text x="404" y="346" font-size="11">yahoo/link</text>
+
+  <rect x="730" y="70" width="210" height="52" fill="#f8f4ff" stroke="#333" />
+  <text x="742" y="92" font-size="12" font-weight="bold">espn</text>
+  <text x="742" y="108" font-size="11">live events + fixes</text>
+
+  <rect x="730" y="134" width="210" height="52" fill="#f8f4ff" stroke="#333" />
+  <text x="742" y="156" font-size="12" font-weight="bold">yahoo</text>
+  <text x="742" y="172" font-size="11">lineup, read-only</text>
+
+  <rect x="730" y="198" width="210" height="52" fill="#f8f4ff" stroke="#333" />
+  <text x="742" y="220" font-size="12" font-weight="bold">providerApps</text>
+  <text x="742" y="236" font-size="11">launch destinations</text>
+
+  <rect x="730" y="262" width="210" height="52" fill="#f8f4ff" stroke="#333" />
+  <text x="742" y="284" font-size="12" font-weight="bold">fireOSNotify</text>
+  <text x="742" y="300" font-size="11">heads-up delivery</text>
+
+  <rect x="730" y="326" width="210" height="52" fill="#f8f4ff" stroke="#333" />
+  <text x="742" y="348" font-size="12" font-weight="bold">alexaRoute (C8)</text>
+  <text x="742" y="364" font-size="11">voice, conditional</text>
+
+  <rect x="730" y="390" width="210" height="52" fill="#f8f4ff" stroke="#333" />
+  <text x="742" y="412" font-size="12" font-weight="bold">linkConsumer</text>
+  <text x="742" y="428" font-size="11">phone/browser</text>
+
+  <rect x="730" y="454" width="210" height="52" fill="#f8f4ff" stroke="#333" />
+  <text x="742" y="476" font-size="12" font-weight="bold">manualEntry (C6)</text>
+  <text x="742" y="492" font-size="11">fallback at T_yahoo</text>
+
+  <line x1="200" y1="310" x2="390" y2="310" stroke="#333" stroke-width="2" marker-end="url(#arr)" />
+  <text x="212" y="300" font-size="11">TvBackendApi: link/profile/alerts/panel/providers</text>
+
+  <line x1="570" y1="290" x2="730" y2="100" stroke="#333" stroke-width="1.5" marker-end="url(#arr)" />
+  <text x="578" y="200" font-size="11">BackendEspn</text>
+
+  <line x1="570" y1="300" x2="730" y2="160" stroke="#333" stroke-width="1.5" marker-end="url(#arr)" />
+  <text x="578" y="256" font-size="11">BackendYahoo</text>
+
+  <line x1="200" y1="330" x2="730" y2="224" stroke="#333" stroke-width="1.5" marker-end="url(#arr)" />
+  <text x="330" y="272" font-size="11">TvProviderLaunch (6 outcomes)</text>
+
+  <line x1="200" y1="344" x2="730" y2="288" stroke="#333" stroke-width="1.5" marker-end="url(#arr)" />
+  <text x="330" y="330" font-size="11">TvFireOSNotify</text>
+
+  <line x1="200" y1="356" x2="730" y2="352" stroke="#333" stroke-width="1.5" stroke-dasharray="5,4" marker-end="url(#arr)" />
+  <text x="330" y="366" font-size="11">TvAlexa (conditional)</text>
+
+  <line x1="570" y1="340" x2="730" y2="416" stroke="#333" stroke-width="1.5" marker-end="url(#arr)" />
+  <text x="578" y="392" font-size="11">BackendDeviceLink</text>
+
+  <path d="M 420 280 C 420 230, 540 230, 540 280" fill="none" stroke="#333" stroke-width="1.5" marker-end="url(#arr)" />
+  <text x="392" y="248" font-size="11">IngestMatcherPolicy (internal)</text>
+
+  <text x="20" y="540" font-size="11" fill="#444">Ends bind structure ports to external endpoints; see AFC-Interfaces.sysml doc comments.</text>
+  <text x="20" y="556" font-size="11" fill="#444">TvProviderLaunch outcomes: gameOpened, searchOpened, appHomeOpened, appAbsent,</text>
+  <text x="20" y="572" font-size="11" fill="#444">accessUnknown, playbackDenied (AFCData::RoutingOutcome, PR-031).</text>
+  <text x="20" y="600" font-size="11" fill="#444">UID coverage: TvBackendApi 002/038/057/058/060; BackendEspn 012/013/064;</text>
+  <text x="20" y="616" font-size="11" fill="#444">BackendYahoo 001/006/007/055; TvProviderLaunch 029..033/048; TvFireOSNotify</text>
+  <text x="20" y="632" font-size="11" fill="#444">015/048/052; TvAlexa 022/036; BackendDeviceLink 038; IngestMatcherPolicy 024..026/059.</text>
+  <text x="20" y="660" font-size="11" fill="#444">Derived projection — native source AFC-Interfaces.sysml. Allocation: models/allocation.md.</text>
+</svg>
+            </div>
+            <figcaption>
+              <strong>MODEL-AFC-P2-INTERFACES.</strong> SysON bundled textual engine parse, not independent OMG-conformance proof. Reused parent model, not new Vega physical acceptance or new modeling validation.
+              <dl>
+                <dt>Mode</dt>
+                <dd>sysml-v2</dd>
+                <dt>Source</dt>
+                <dd>../models/AFC-Interfaces.sysml</dd>
+                <dt>Digest</dt>
+                <dd class="cell-digest">sha256:e60fdae3777d721ee96d042dfb0c1a17a07d3630f94d22c71f4fc42bc5fc3312</dd>
+                <dt>Viewpoint</dt>
+                <dd>Interfaces</dd>
+                <dt>Trace links</dt>
+                <dd>API/provider interface ends; allocation.md Tables 1–2</dd>
+                <dt>Limitation</dt>
+                <dd>SysON bundled textual engine parse, not independent OMG-conformance proof. Reused parent model, not new Vega physical acceptance or new modeling validation.</dd>
+              </dl>
+            </figcaption>
+          </figure>
+          <figure class="model" id="view-model-afc-p2-states">
+            <div class="model-scroll" role="region" tabindex="0" aria-label="States / lifecycle">
+            <svg xmlns="http://www.w3.org/2000/svg" width="960" height="700" viewBox="0 0 960 700" font-family="monospace">
+  <desc>Derived projection of AFCStates (AFC-States.sysml). Model revision digest 8f5798823b3a9463f8963c7c6fa2cf94d018189edd0ca6160123362d48a075ff. Native source is the .sysml file; this SVG replaces nothing.</desc>
+  <defs>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6" fill="none" stroke="#333" stroke-width="1.5" />
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="960" height="700" fill="#ffffff" />
+  <text x="20" y="28" font-size="18" font-weight="bold">AFC states (derived view)</text>
+  <text x="20" y="48" font-size="11" fill="#444">Source AFCStates d16b0e3d0badb… — see models/views.md for full digest</text>
+
+  <text x="20" y="76" font-size="14" font-weight="bold">AlertLifecycle (backend.policy + backend.matcher)</text>
+  <rect x="20" y="90" width="110" height="44" rx="20" fill="#f4f8ff" stroke="#333" stroke-width="2" />
+  <text x="40" y="116" font-size="12">detected</text>
+  <rect x="150" y="90" width="110" height="44" rx="20" fill="#f4f8ff" stroke="#333" stroke-width="2" />
+  <text x="172" y="116" font-size="12">matched</text>
+  <rect x="280" y="90" width="110" height="44" rx="20" fill="#f4f8ff" stroke="#333" stroke-width="2" />
+  <text x="308" y="116" font-size="12">gated</text>
+  <rect x="410" y="90" width="110" height="44" rx="20" fill="#f4f8ff" stroke="#333" stroke-width="2" />
+  <text x="434" y="116" font-size="12">emitted</text>
+  <rect x="540" y="90" width="110" height="44" rx="20" fill="#f4f8ff" stroke="#333" stroke-width="2" />
+  <text x="558" y="116" font-size="12">delivered</text>
+  <rect x="280" y="160" width="110" height="44" rx="20" fill="#fff0f0" stroke="#333" stroke-width="2" />
+  <text x="294" y="186" font-size="12">suppressed</text>
+  <rect x="540" y="160" width="110" height="44" rx="20" fill="#fffff0" stroke="#333" stroke-width="2" />
+  <text x="556" y="186" font-size="12">corrected</text>
+  <line x1="130" y1="112" x2="150" y2="112" stroke="#333" stroke-width="1.5" marker-end="url(#arr)" />
+  <text x="112" y="104" font-size="9">identify</text>
+  <line x1="260" y1="112" x2="280" y2="112" stroke="#333" stroke-width="1.5" marker-end="url(#arr)" />
+  <text x="238" y="104" font-size="9">pass</text>
+  <line x1="390" y1="112" x2="410" y2="112" stroke="#333" stroke-width="1.5" marker-end="url(#arr)" />
+  <text x="368" y="104" font-size="9">delay</text>
+  <line x1="520" y1="112" x2="540" y2="112" stroke="#333" stroke-width="1.5" marker-end="url(#arr)" />
+  <text x="500" y="104" font-size="9">present</text>
+  <line x1="205" y1="134" x2="300" y2="160" stroke="#333" stroke-width="1.5" marker-end="url(#arr)" />
+  <text x="212" y="156" font-size="9">blockFilters</text>
+  <line x1="595" y1="134" x2="595" y2="160" stroke="#333" stroke-width="1.5" marker-end="url(#arr)" />
+  <text x="601" y="152" font-size="9">correct</text>
+  <line x1="520" y1="120" x2="540" y2="168" stroke="#333" stroke-width="1.5" marker-end="url(#arr)" />
+  <text x="480" y="152" font-size="9">correct</text>
+  <text x="680" y="110" font-size="11" fill="#444">entry: detected</text>
+  <text x="680" y="126" font-size="11" fill="#444">emitted: at most one</text>
+  <text x="680" y="142" font-size="11" fill="#444">per event (PR-025)</text>
+  <text x="680" y="174" font-size="11" fill="#444">red-zone claims stay</text>
+  <text x="680" y="190" font-size="11" fill="#444">team-level (PR-028)</text>
+
+  <text x="20" y="250" font-size="14" font-weight="bold">PanelMode (tvApp.panel)</text>
+  <rect x="20" y="264" width="150" height="44" rx="20" fill="#f4f8ff" stroke="#333" stroke-width="2" />
+  <text x="60" y="290" font-size="12">modeB</text>
+  <rect x="240" y="264" width="150" height="44" rx="20" fill="#fffff0" stroke="#333" stroke-width="2" />
+  <text x="272" y="290" font-size="12">fullScreen</text>
+  <line x1="170" y1="286" x2="240" y2="286" stroke="#333" stroke-width="1.5" marker-end="url(#arr)" />
+  <text x="176" y="278" font-size="9">spikeFailed (C5)</text>
+  <text x="420" y="282" font-size="11" fill="#444">entry: modeB. No return transition (C5 names fallback only).</text>
+  <text x="420" y="298" font-size="11" fill="#444">fullScreen: alerts + Watch still reach real providers (PR-048).</text>
+
+  <text x="20" y="356" font-size="14" font-weight="bold">DeviceLink (backend.auth + backend.api)</text>
+  <rect x="20" y="370" width="130" height="44" rx="20" fill="#f4f8ff" stroke="#333" stroke-width="2" />
+  <text x="44" y="396" font-size="12">unlinked</text>
+  <rect x="220" y="370" width="130" height="44" rx="20" fill="#f4f8ff" stroke="#333" stroke-width="2" />
+  <text x="230" y="396" font-size="12">codePending</text>
+  <rect x="420" y="370" width="130" height="44" rx="20" fill="#f4fff4" stroke="#333" stroke-width="2" />
+  <text x="452" y="396" font-size="12">linked</text>
+  <rect x="220" y="450" width="130" height="44" rx="20" fill="#fff0f0" stroke="#333" stroke-width="2" />
+  <text x="248" y="476" font-size="12">expired</text>
+  <line x1="150" y1="392" x2="220" y2="392" stroke="#333" stroke-width="1.5" marker-end="url(#arr)" />
+  <text x="152" y="384" font-size="9">requestCode</text>
+  <line x1="350" y1="392" x2="420" y2="392" stroke="#333" stroke-width="1.5" marker-end="url(#arr)" />
+  <text x="352" y="384" font-size="9">userConfirm</text>
+  <line x1="285" y1="414" x2="285" y2="450" stroke="#333" stroke-width="1.5" marker-end="url(#arr)" />
+  <text x="291" y="436" font-size="9">codeTimeout</text>
+  <path d="M 220 472 C 150 472, 150 392, 180 392" fill="none" stroke="#333" stroke-width="1.5" marker-end="url(#arr)" />
+  <text x="60" y="452" font-size="9">requestCode</text>
+  <text x="580" y="390" font-size="11" fill="#444">entry: unlinked. No link completes</text>
+  <text x="580" y="406" font-size="11" fill="#444">without the customer code action (PR-038).</text>
+
+  <text x="20" y="540" font-size="11" fill="#444">UID coverage: AlertLifecycle 014/016..021/023..028; PanelMode 041/047/048; DeviceLink 038.</text>
+  <text x="20" y="556" font-size="11" fill="#444">Gated holds emission for the spoiler delay (PR-020); suppressed covers type, frequency,</text>
+  <text x="20" y="572" font-size="11" fill="#444">quiet-hours and game-day blocks (PR-016..019); corrected propagates scoring fixes (PR-026).</text>
+  <text x="20" y="600" font-size="11" fill="#444">Derived projection — native source AFC-States.sysml. Allocation: models/allocation.md.</text>
+</svg>
+            </div>
+            <figcaption>
+              <strong>MODEL-AFC-P2-STATES.</strong> SysON bundled textual engine parse, not independent OMG-conformance proof. Reused parent model, not new Vega physical acceptance or new modeling validation.
+              <dl>
+                <dt>Mode</dt>
+                <dd>sysml-v2</dd>
+                <dt>Source</dt>
+                <dd>../models/AFC-States.sysml</dd>
+                <dt>Digest</dt>
+                <dd class="cell-digest">sha256:fd42d255e7f87796a4d6086a6d13096ddcee2fab47f9c7e0594434aa6d0d278e</dd>
+                <dt>Viewpoint</dt>
+                <dd>States / lifecycle</dd>
+                <dt>Trace links</dt>
+                <dd>PanelMode.fullScreen, alert lifecycle; allocation.md Tables 1–2</dd>
+                <dt>Limitation</dt>
+                <dd>SysON bundled textual engine parse, not independent OMG-conformance proof. Reused parent model, not new Vega physical acceptance or new modeling validation.</dd>
+              </dl>
+            </figcaption>
+          </figure>
+          <figure class="model" id="view-model-afc-p2-data">
+            <div class="model-scroll" role="region" tabindex="0" aria-label="Data">
+            <svg xmlns="http://www.w3.org/2000/svg" width="960" height="660" viewBox="0 0 960 660" font-family="monospace">
+  <desc>Derived projection of AFCData (AFC-Data.sysml). Model revision digest 8f5798823b3a9463f8963c7c6fa2cf94d018189edd0ca6160123362d48a075ff. Native source is the .sysml file; this SVG replaces nothing.</desc>
+  <rect x="0" y="0" width="960" height="660" fill="#ffffff" />
+  <text x="20" y="28" font-size="18" font-weight="bold">AFC data (derived view)</text>
+  <text x="20" y="48" font-size="11" fill="#444">Source AFCData d16b0e3d0badb… — see models/views.md for full digest</text>
+
+  <rect x="20" y="60" width="290" height="220" fill="#f4f8ff" stroke="#333" stroke-width="2" />
+  <text x="34" y="86" font-size="14" font-weight="bold">GameEvent</text>
+  <text x="34" y="108" font-size="12">score, fieldPosition,</text>
+  <text x="34" y="124" font-size="12">possession, playerIds,</text>
+  <text x="34" y="140" font-size="12">eventTime, correctionOf</text>
+  <text x="34" y="168" font-size="11" fill="#444">PR-008, 012, 013, 064</text>
+  <text x="34" y="196" font-size="11" fill="#444">ingest → matcher → policy;</text>
+  <text x="34" y="210" font-size="11" fill="#444">replay-labeled when substituted</text>
+
+  <rect x="335" y="60" width="290" height="220" fill="#f4fff4" stroke="#333" stroke-width="2" />
+  <text x="349" y="86" font-size="14" font-weight="bold">Alert</text>
+  <text x="349" y="108" font-size="12">alertType, triggerContext,</text>
+  <text x="349" y="124" font-size="12">providerRoute, commentary,</text>
+  <text x="349" y="140" font-size="12">emittedAt</text>
+  <text x="349" y="168" font-size="11" fill="#444">PR-014, 015, 023, 025..027, 029</text>
+  <text x="349" y="196" font-size="11" fill="#444">one per resolved event;</text>
+  <text x="349" y="210" font-size="11" fill="#444">commentary grounded in event</text>
+
+  <rect x="650" y="60" width="290" height="220" fill="#fff8f0" stroke="#333" stroke-width="2" />
+  <text x="664" y="86" font-size="14" font-weight="bold">Lineup</text>
+  <text x="664" y="108" font-size="12">source, team, league,</text>
+  <text x="664" y="124" font-size="12">starters, scoring</text>
+  <text x="664" y="152" font-size="11" fill="#444">PR-001, 006, 007, 039, 065</text>
+  <text x="664" y="180" font-size="11" fill="#444">exactly one active source:</text>
+  <text x="664" y="194" font-size="11" fill="#444">Yahoo read-only or manual</text>
+
+  <rect x="20" y="300" width="290" height="200" fill="#f8f4ff" stroke="#333" stroke-width="2" />
+  <text x="34" y="326" font-size="14" font-weight="bold">PanelState</text>
+  <text x="34" y="348" font-size="12">visible, teamTotal,</text>
+  <text x="34" y="364" font-size="12">progress, freshness</text>
+  <text x="34" y="392" font-size="11" fill="#444">PR-026, 039, 040, 044, 046, 061, 065</text>
+  <text x="34" y="420" font-size="11" fill="#444">consistent with alerts (PR-046);</text>
+  <text x="34" y="434" font-size="11" fill="#444">stale/unavailable labeled</text>
+
+  <rect x="335" y="300" width="290" height="200" fill="#fffff0" stroke="#333" stroke-width="2" />
+  <text x="349" y="326" font-size="14" font-weight="bold">Settings</text>
+  <text x="349" y="348" font-size="12">fantasySelections, teamLeague,</text>
+  <text x="349" y="364" font-size="12">alertTypes, frequency, quietHours,</text>
+  <text x="349" y="380" font-size="12">gameDayPeriods, spoilerDelay,</text>
+  <text x="349" y="396" font-size="12">presentation, voice, excitement,</text>
+  <text x="349" y="412" font-size="12">providerPref, switchingConfirm,</text>
+  <text x="349" y="428" font-size="12">panelPrefs, detectionOptIn,</text>
+  <text x="349" y="442" font-size="12">scoringPreset</text>
+  <text x="349" y="464" font-size="11" fill="#444">PR-002, 005, 009, 010, 016..023,</text>
+  <text x="349" y="478" font-size="11" fill="#444">034, 035, 037, 042, 044, 066</text>
+
+  <rect x="650" y="300" width="290" height="200" fill="#f0f8f8" stroke="#333" stroke-width="2" />
+  <text x="664" y="326" font-size="14" font-weight="bold">RoutingOutcome (enum)</text>
+  <text x="664" y="348" font-size="12">gameOpened, searchOpened,</text>
+  <text x="664" y="364" font-size="12">appHomeOpened, appAbsent,</text>
+  <text x="664" y="380" font-size="12">accessUnknown, playbackDenied</text>
+  <text x="664" y="408" font-size="11" fill="#444">PR-031, 032, 033</text>
+  <text x="664" y="436" font-size="14" font-weight="bold">DeviceCode</text>
+  <text x="664" y="458" font-size="12">code, expires</text>
+  <text x="664" y="476" font-size="11" fill="#444">PR-038</text>
+
+  <rect x="20" y="508" width="920" height="26" fill="#f0f8f8" stroke="#333" stroke-width="1" />
+  <text x="34" y="526" font-size="12">ScoringPreset (enum): ppr, halfPpr (default) — PR-065, 066; Settings.scoringPreset selects it</text>
+
+  <text x="20" y="556" font-size="11" fill="#444">Flows: GameEvent (ingest) → Alert (policy) → notifier/panel; Lineup + Settings drive</text>
+  <text x="20" y="572" font-size="11" fill="#444">matching and gating; PanelState renders Lineup + feed under Settings; DeviceCode links.</text>
+  <text x="20" y="602" font-size="11" fill="#444">Derived projection — native source AFC-Data.sysml. Allocation: models/allocation.md.</text>
+</svg>
+            </div>
+            <figcaption>
+              <strong>MODEL-AFC-P2-DATA.</strong> SysON bundled textual engine parse, not independent OMG-conformance proof. Reused parent model, not new Vega physical acceptance or new modeling validation.
+              <dl>
+                <dt>Mode</dt>
+                <dd>sysml-v2</dd>
+                <dt>Source</dt>
+                <dd>../models/AFC-Data.sysml</dd>
+                <dt>Digest</dt>
+                <dd class="cell-digest">sha256:95736a5395946bdbdb96f50547a273c12dab82ddd9ee6882591d13ef04998918</dd>
+                <dt>Viewpoint</dt>
+                <dd>Data</dd>
+                <dt>Trace links</dt>
+                <dd>GameEvent, Alert, PanelState, ScoringPreset; allocation.md Tables 1–2</dd>
+                <dt>Limitation</dt>
+                <dd>SysON bundled textual engine parse, not independent OMG-conformance proof. Reused parent model, not new Vega physical acceptance or new modeling validation.</dd>
+              </dl>
+            </figcaption>
+          </figure>
+          <figure class="model" id="view-model-afc-p2-v1">
+            <div class="model-scroll" role="region" tabindex="0" aria-label="Use cases / outcome">
+            <svg xmlns="http://www.w3.org/2000/svg" width="600" height="390" viewBox="0 0 600 390" role="img" aria-label="Phase 2 use cases (outcome view)">
+<title>Phase 2 use cases (outcome view)</title>
+<defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#333" /></marker></defs>
+<rect x="0" y="0" width="600" height="390" fill="#ffffff" />
+<rect x="20" y="120" width="110" height="40" rx="6" fill="#fdf3e1" stroke="#335" stroke-width="1" /><text x="75.0" y="145.0" text-anchor="middle" font-size="12" font-family="sans-serif">Customer</text>
+<rect x="20" y="330" width="110" height="40" rx="6" fill="#fdf3e1" stroke="#335" stroke-width="1" /><text x="75.0" y="355.0" text-anchor="middle" font-size="12" font-family="sans-serif">Owner</text>
+<rect x="260" y="20" width="300" height="40" rx="6" fill="#eef3fb" stroke="#335" stroke-width="1" /><text x="410.0" y="45.0" text-anchor="middle" font-size="12" font-family="sans-serif">Link TV by device code</text>
+<line x1="130" y1="140" x2="260" y2="40" stroke="#333" stroke-width="1.2" marker-end="url(#a)" />
+<rect x="260" y="80" width="300" height="40" rx="6" fill="#eef3fb" stroke="#335" stroke-width="1" /><text x="410.0" y="105.0" text-anchor="middle" font-size="12" font-family="sans-serif">Set lineup source, preset, controls</text>
+<line x1="130" y1="140" x2="260" y2="100" stroke="#333" stroke-width="1.2" marker-end="url(#a)" />
+<rect x="260" y="140" width="300" height="40" rx="6" fill="#eef3fb" stroke="#335" stroke-width="1" /><text x="410.0" y="165.0" text-anchor="middle" font-size="12" font-family="sans-serif">Receive alert over provider playback</text>
+<line x1="130" y1="140" x2="260" y2="160" stroke="#333" stroke-width="1.2" marker-end="url(#a)" />
+<rect x="260" y="200" width="300" height="40" rx="6" fill="#eef3fb" stroke="#335" stroke-width="1" /><text x="410.0" y="225.0" text-anchor="middle" font-size="12" font-family="sans-serif">Watch: open provider game or channel</text>
+<line x1="130" y1="140" x2="260" y2="220" stroke="#333" stroke-width="1.2" marker-end="url(#a)" />
+<rect x="260" y="260" width="300" height="40" rx="6" fill="#eef3fb" stroke="#335" stroke-width="1" /><text x="410.0" y="285.0" text-anchor="middle" font-size="12" font-family="sans-serif">Follow lineup panel</text>
+<line x1="130" y1="140" x2="260" y2="280" stroke="#333" stroke-width="1.2" marker-end="url(#a)" />
+<rect x="260" y="330" width="300" height="40" rx="6" fill="#eef3fb" stroke="#335" stroke-width="1" /><text x="410.0" y="355.0" text-anchor="middle" font-size="12" font-family="sans-serif">Approve, publish, submit</text>
+<line x1="130" y1="350" x2="260" y2="350" stroke="#333" stroke-width="1.2" marker-end="url(#a)" />
+<line x1="410" y1="160" x2="410" y2="200" stroke="#333" stroke-width="1.2" marker-end="url(#a)" /><text x="410.0" y="176.0" text-anchor="middle" font-size="10" font-family="sans-serif">then</text>
+</svg>
+            </div>
+            <figcaption>
+              <strong>MODEL-AFC-P2-V1.</strong> Projects the models for owner review; adds no element. Reused parent model, not new Vega physical acceptance or new modeling validation.
+              <dl>
+                <dt>Mode</dt>
+                <dd>diagram-assisted</dd>
+                <dt>Source</dt>
+                <dd>../views/p2-use-cases.svg (Mermaid use cases in design.md)</dd>
+                <dt>Digest</dt>
+                <dd class="cell-digest">sha256:c594550a491597cb15b6bdc9adc940fd0861f2a31d6f069197fa8b9e68fa8d9f</dd>
+                <dt>Viewpoint</dt>
+                <dd>Use cases / outcome</dd>
+                <dt>Trace links</dt>
+                <dd>Link, lineup/controls, alert, Watch, panel, owner approval</dd>
+                <dt>Limitation</dt>
+                <dd>Projects the models for owner review; adds no element. Reused parent model, not new Vega physical acceptance or new modeling validation.</dd>
+              </dl>
+            </figcaption>
+          </figure>
+          <figure class="model" id="view-model-afc-p2-v2">
+            <div class="model-scroll" role="region" tabindex="0" aria-label="Operational flow">
+            <svg xmlns="http://www.w3.org/2000/svg" width="970" height="480" viewBox="0 0 970 480" role="img" aria-label="Phase 2 operational flow: alert to Watch">
+<title>Phase 2 operational flow: alert to Watch</title>
+<defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#333" /></marker></defs>
+<rect x="0" y="0" width="970" height="480" fill="#ffffff" />
+<rect x="10" y="10" width="110" height="34" rx="6" fill="#eef3fb" stroke="#335" stroke-width="1" /><text x="65.0" y="32.0" text-anchor="middle" font-size="12" font-family="sans-serif">ESPN JSON</text>
+<line x1="65.0" y1="44" x2="65.0" y2="470" stroke="#999" stroke-dasharray="4,3" />
+<rect x="130" y="10" width="110" height="34" rx="6" fill="#eef3fb" stroke="#335" stroke-width="1" /><text x="185.0" y="32.0" text-anchor="middle" font-size="12" font-family="sans-serif">backend.ingest</text>
+<line x1="185.0" y1="44" x2="185.0" y2="470" stroke="#999" stroke-dasharray="4,3" />
+<rect x="250" y="10" width="110" height="34" rx="6" fill="#eef3fb" stroke="#335" stroke-width="1" /><text x="305.0" y="32.0" text-anchor="middle" font-size="12" font-family="sans-serif">matcher+policy</text>
+<line x1="305.0" y1="44" x2="305.0" y2="470" stroke="#999" stroke-dasharray="4,3" />
+<rect x="370" y="10" width="110" height="34" rx="6" fill="#eef3fb" stroke="#335" stroke-width="1" /><text x="425.0" y="32.0" text-anchor="middle" font-size="12" font-family="sans-serif">backend.api</text>
+<line x1="425.0" y1="44" x2="425.0" y2="470" stroke="#999" stroke-dasharray="4,3" />
+<rect x="490" y="10" width="110" height="34" rx="6" fill="#eef3fb" stroke="#335" stroke-width="1" /><text x="545.0" y="32.0" text-anchor="middle" font-size="12" font-family="sans-serif">tvApp.alertSvc</text>
+<line x1="545.0" y1="44" x2="545.0" y2="470" stroke="#999" stroke-dasharray="4,3" />
+<rect x="610" y="10" width="110" height="34" rx="6" fill="#eef3fb" stroke="#335" stroke-width="1" /><text x="665.0" y="32.0" text-anchor="middle" font-size="12" font-family="sans-serif">tvApp.notifier</text>
+<line x1="665.0" y1="44" x2="665.0" y2="470" stroke="#999" stroke-dasharray="4,3" />
+<rect x="730" y="10" width="110" height="34" rx="6" fill="#eef3fb" stroke="#335" stroke-width="1" /><text x="785.0" y="32.0" text-anchor="middle" font-size="12" font-family="sans-serif">tvApp.launcher</text>
+<line x1="785.0" y1="44" x2="785.0" y2="470" stroke="#999" stroke-dasharray="4,3" />
+<rect x="850" y="10" width="110" height="34" rx="6" fill="#eef3fb" stroke="#335" stroke-width="1" /><text x="905.0" y="32.0" text-anchor="middle" font-size="12" font-family="sans-serif">Provider app</text>
+<line x1="905.0" y1="44" x2="905.0" y2="470" stroke="#999" stroke-dasharray="4,3" />
+<line x1="185.0" y1="70" x2="65.0" y2="70" stroke="#333" stroke-width="1.2" marker-end="url(#a)" /><text x="125.0" y="66.0" text-anchor="middle" font-size="10" font-family="sans-serif">poll (feed_poll_interval)</text>
+<line x1="65.0" y1="103" x2="185.0" y2="103" stroke="#333" stroke-width="1.2" marker-end="url(#a)" /><text x="125.0" y="99.0" text-anchor="middle" font-size="10" font-family="sans-serif">summary JSON</text>
+<text x="191.0" y="136" font-size="10" font-family="sans-serif">schema check, store revision</text>
+<line x1="185.0" y1="169" x2="305.0" y2="169" stroke="#333" stroke-width="1.2" marker-end="url(#a)" /><text x="245.0" y="165.0" text-anchor="middle" font-size="10" font-family="sans-serif">GameEvent</text>
+<text x="311.0" y="202" font-size="10" font-family="sans-serif">relevance, types, periods, quiet, frequency, spoiler</text>
+<line x1="305.0" y1="235" x2="425.0" y2="235" stroke="#333" stroke-width="1.2" marker-end="url(#a)" /><text x="365.0" y="231.0" text-anchor="middle" font-size="10" font-family="sans-serif">Alert + route + access basis</text>
+<line x1="545.0" y1="268" x2="425.0" y2="268" stroke="#333" stroke-width="1.2" marker-end="url(#a)" /><text x="485.0" y="264.0" text-anchor="middle" font-size="10" font-family="sans-serif">GET /v1/alerts (long poll)</text>
+<line x1="425.0" y1="301" x2="545.0" y2="301" stroke="#333" stroke-width="1.2" marker-end="url(#a)" /><text x="485.0" y="297.0" text-anchor="middle" font-size="10" font-family="sans-serif">Alert</text>
+<line x1="545.0" y1="334" x2="665.0" y2="334" stroke="#333" stroke-width="1.2" marker-end="url(#a)" /><text x="605.0" y="330.0" text-anchor="middle" font-size="10" font-family="sans-serif">present (heads-up or panel-only)</text>
+<line x1="665.0" y1="367" x2="785.0" y2="367" stroke="#333" stroke-width="1.2" marker-end="url(#a)" /><text x="725.0" y="363.0" text-anchor="middle" font-size="10" font-family="sans-serif">Watch</text>
+<line x1="785.0" y1="400" x2="905.0" y2="400" stroke="#333" stroke-width="1.2" marker-end="url(#a)" /><text x="845.0" y="396.0" text-anchor="middle" font-size="10" font-family="sans-serif">registry intent/URI (after confirmation)</text>
+<line x1="785.0" y1="433" x2="425.0" y2="433" stroke="#333" stroke-width="1.2" marker-end="url(#a)" /><text x="605.0" y="429.0" text-anchor="middle" font-size="10" font-family="sans-serif">POST /v1/routing-outcome</text>
+</svg>
+            </div>
+            <figcaption>
+              <strong>MODEL-AFC-P2-V2.</strong> Projects the models for owner review; adds no element. Reused parent model, not new Vega physical acceptance or new modeling validation.
+              <dl>
+                <dt>Mode</dt>
+                <dd>diagram-assisted</dd>
+                <dt>Source</dt>
+                <dd>../views/p2-alert-watch-flow.svg (sequence in design.md)</dd>
+                <dt>Digest</dt>
+                <dd class="cell-digest">sha256:e13134e8b27d5a33f729801d7e3686b1b9f68483f1764f32559f8c48960d73e5</dd>
+                <dt>Viewpoint</dt>
+                <dd>Operational flow</dd>
+                <dt>Trace links</dt>
+                <dd>ESPN poll → ingest → matcher/policy → alert → Watch → routing outcome</dd>
+                <dt>Limitation</dt>
+                <dd>Projects the models for owner review; adds no element. Reused parent model, not new Vega physical acceptance or new modeling validation.</dd>
+              </dl>
+            </figcaption>
+          </figure>
+        </section>
+
+        <section class="block" id="s5" aria-labelledby="h-s5">
+          <h2 id="h-s5"><span class="secno">5</span>Development strategy, task graph, roles, dependencies, and write sets</h2>
+          <dl class="meta">
+            <dt>Development strategy</dt>
+            <dd><code>tdd</code></dd>
+            <dt>Concurrency</dt>
+            <dd>Dispatch every dependency-ready, proven-independent task within host and resource limits.</dd>
+          </dl>
+          <h3>Task graph</h3>
+          <p class="table-hint">Tables scroll horizontally on a narrow screen.</p>
+          <div class="table-scroll" role="region" tabindex="0" aria-labelledby="cap-task">
+            <table>
+              <caption id="cap-task">Implementation tasks, roles, dependencies, and exact write sets</caption>
+              <thead>
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Role</th>
+                  <th scope="col">Depends on</th>
+                  <th scope="col">Write set</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="row-hold">
+                  <th scope="row" class="id">R-T-EVIDENCE-RECONCILE</th>
+                  <td>Light Implementer</td>
+                  <td></td>
+                  <td>docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/evidence-reconcile/</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>awaiting-reviewed-plan-approval</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">R-T-HOST-TV-PREP</th>
+                  <td>Product Implementer</td>
+                  <td></td>
+                  <td>docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/host-tv-prep/</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>awaiting-reviewed-plan-approval</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">R-T-BACKEND-PREP</th>
+                  <td>Light Implementer</td>
+                  <td></td>
+                  <td>docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/backend-prep/</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>awaiting-reviewed-plan-approval</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">R-T-LIVE-PREP</th>
+                  <td>Product Implementer</td>
+                  <td>R-T-EVIDENCE-RECONCILE</td>
+                  <td>docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/live-prep/, backend/fixtures/replay/</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>awaiting-reviewed-plan-approval</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">R-T-DEPLOY-1</th>
+                  <td>Light Implementer</td>
+                  <td>R-T-BACKEND-PREP</td>
+                  <td>docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-L02/recovery-2026-10-18/</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>awaiting-reviewed-plan-approval</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">R-T-DEVICE-1</th>
+                  <td>Product Implementer</td>
+                  <td>R-T-DEPLOY-1, R-T-HOST-TV-PREP</td>
+                  <td>evidence/visual/P2-A01/recovery-2026-10-18/, spikes/sp7-detection/, evidence/visual/sp7-detection/, docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/device-1/</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>awaiting-reviewed-plan-approval</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">R-T-LIVE-CAPTURE</th>
+                  <td>Product Implementer</td>
+                  <td>R-T-LIVE-PREP</td>
+                  <td>backend/fixtures/replay/, spikes/sp3-provider-links/live-2026-10-22/, evidence/visual/sp3-provider-links/live-2026-10-22/</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>awaiting-reviewed-plan-approval</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">R-T-LIVE-CLOSE</th>
+                  <td>Product Implementer</td>
+                  <td>R-T-LIVE-CAPTURE</td>
+                  <td>spikes/sp5-espn-feed/VERDICT.md, spikes/sp3-provider-links/VERDICT.md, backend/src/provider_resolver/registry.json, docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/live-close/</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>awaiting-reviewed-plan-approval</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">R-T-RELEASE-DRAFT</th>
+                  <td>Light Implementer</td>
+                  <td>R-T-EVIDENCE-RECONCILE, R-T-DEVICE-1</td>
+                  <td>CHANGELOG.md, tv-app/app/build.gradle.kts, docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/release-draft/</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>awaiting-reviewed-plan-approval</span></td>
+                </tr>
+                <tr class="row-hold">
+                  <th scope="row" class="id">R-T-CLOSEOUT</th>
+                  <td>Product Implementer</td>
+                  <td>R-T-RELEASE-DRAFT, R-T-LIVE-CLOSE</td>
+                  <td>docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/acceptance/</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>awaiting-reviewed-plan-approval</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <h3>Roles and routes</h3>
+          <p class="table-hint">Tables scroll horizontally on a narrow screen.</p>
+          <div class="table-scroll" role="region" tabindex="0" aria-labelledby="cap-lineup">
+            <table>
+              <caption id="cap-lineup">Role and session routing</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Role</th>
+                  <th scope="col">Session</th>
+                  <th scope="col">Configured primary</th>
+                  <th scope="col">Effective route</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="row-plan">
+                  <th scope="row" class="id">Product Implementer</th>
+                  <td>Frozen recovery binding</td>
+                  <td>Muse Code / Muse WonderFull Contributor / high</td>
+                  <td>Muse Code / Muse WonderFull Contributor / high</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">Test Implementer</th>
+                  <td>Frozen recovery binding</td>
+                  <td>Claude Code / Claude Opus 5.5 / high</td>
+                  <td>Claude Code / Claude Opus 5.5 / high</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">Light Implementer</th>
+                  <td>Frozen recovery binding</td>
+                  <td>Claude Code / Claude Sonnet 5.5 / medium</td>
+                  <td>Claude Code / Claude Sonnet 5.5 / medium</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">Coordinator</th>
+                  <td>Frozen recovery binding</td>
+                  <td>AGY / Gemini 3.8 Flash / medium</td>
+                  <td>AGY / Gemini 3.8 Flash / medium</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">Reviewer</th>
+                  <td>Frozen recovery binding</td>
+                  <td>Codex CLI / GPT-6.1 Sol / high</td>
+                  <td>Codex CLI / GPT-6.1 Sol / high</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">Scribe</th>
+                  <td>Frozen recovery binding</td>
+                  <td>Claude Code / Claude Sonnet 5.5 / medium</td>
+                  <td>Claude Code / Claude Sonnet 5.5 / medium</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="block" id="s6" aria-labelledby="h-s6">
+          <h2 id="h-s6"><span class="secno">6</span>V&amp;V cases, assurance cadence, evidence, and pass/fail status</h2>
+          <dl class="meta">
+            <dt>Test Engineer assurance</dt>
+            <dd><code>lifecycle</code></dd>
+            <dt>Reviewer</dt>
+            <dd><code>phase</code></dd>
+            <dt>Integration Engineer execution</dt>
+            <dd><code>lifecycle</code></dd>
+          </dl>
+          <h3>Review rounds per declared unit</h3>
+          <p class="table-hint">Tables scroll horizontally on a narrow screen.</p>
+          <div class="table-scroll" role="region" tabindex="0" aria-labelledby="cap-review-rounds">
+            <table>
+              <caption id="cap-review-rounds">One Reviewer round, at most one aggregated repair, deterministic closure</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Unit</th>
+                  <th scope="col">Kind</th>
+                  <th scope="col">Reviewer rounds</th>
+                  <th scope="col">Repairs (max)</th>
+                  <th scope="col">Closure</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="row-plan">
+                  <th scope="row" class="id">planning</th>
+                  <td>planning</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>deterministic_PASS</td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">RW1</th>
+                  <td>wave</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>deterministic_PASS</td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">RW2</th>
+                  <td>wave</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>deterministic_PASS</td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">RW3</th>
+                  <td>wave</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>deterministic_PASS</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="table-hint">Tables scroll horizontally on a narrow screen.</p>
+          <div class="table-scroll" role="region" tabindex="0" aria-labelledby="cap-seit">
+            <table>
+              <caption id="cap-seit">SEIT cases and projected evidence</caption>
+              <thead>
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Method</th>
+                  <th scope="col">Cadence</th>
+                  <th scope="col">Evidence</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="row-plan">
+                  <th scope="row" class="id">RW1</th>
+                  <td>Authored SEIT cases and command pass/fail rules; current proof status is not runtime acceptance.</td>
+                  <td>One integrated wave review; no automatic extra assurance sessions.</td>
+                  <td>docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/seit.json and exact task receipts</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">RW2</th>
+                  <td>Authored SEIT cases and command pass/fail rules; current proof status is not runtime acceptance.</td>
+                  <td>One integrated wave review; no automatic extra assurance sessions.</td>
+                  <td>docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/seit.json and exact task receipts</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">RW3</th>
+                  <td>Authored SEIT cases and command pass/fail rules; current proof status is not runtime acceptance.</td>
+                  <td>One integrated wave review; no automatic extra assurance sessions.</td>
+                  <td>docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/seit.json and exact task receipts</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="block" id="s7" aria-labelledby="h-s7">
+          <h2 id="h-s7"><span class="secno">7</span>Documentation impact and completion</h2>
+          <p class="table-hint">Tables scroll horizontally on a narrow screen.</p>
+          <div class="table-scroll" role="region" tabindex="0" aria-labelledby="cap-doc">
+            <table>
+              <caption id="cap-doc">Documentation impact, timing, and verification</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Surface</th>
+                  <th scope="col">Impact</th>
+                  <th scope="col">Owner</th>
+                  <th scope="col">Timing</th>
+                  <th scope="col">Verification</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="row-plan">
+                  <th scope="row" class="id">docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05</th>
+                  <td>Recovery plan/design/SEIT/graph/Manifest and traceable acceptance evidence</td>
+                  <td>Planning Orchestrator and assigned authors</td>
+                  <td>planning and bounded wave closeout</td>
+                  <td>Native schema/package/register/render checks plus requested planning review</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planning</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">CHANGELOG.md</th>
+                  <td>One linked PR entry per landing; draft-only v0.1.0 prep</td>
+                  <td>Landing controller under main-landing</td>
+                  <td>each PR</td>
+                  <td>—</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="block" id="s8" aria-labelledby="h-s8">
+          <h2 id="h-s8"><span class="secno">8</span>Risks, gaps, exceptions, anomaly handling, rollback, and recovery</h2>
+          <p class="table-hint">Tables scroll horizontally on a narrow screen.</p>
+          <div class="table-scroll" role="region" tabindex="0" aria-labelledby="cap-risk">
+            <table>
+              <caption id="cap-risk">Risks, gaps, exceptions, anomaly handling, rollback, and recovery</caption>
+              <thead>
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Risk</th>
+                  <th scope="col">Control</th>
+                  <th scope="col">Recovery</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Current mitigation</th>
+                  <th scope="col">Current evidence</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="row-plan">
+                  <th scope="row" class="id">RISK-AFC-P2-02</th>
+                  <td>Fire OS notification behavior over third-party playback is documented only for 2020.</td>
+                  <td>If P2-X02 shows no supported heads-up notification over provider playback, then the verdict shall name the exact limitation and the program shall raise a class C owner stop before AFC-PR-015 product code; it shall not substitute a phone screen or a companion-app-only alert silently.</td>
+                  <td>Owner decides scope; the rest continues.</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                  <td>—</td>
+                  <td>—</td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">RISK-AFC-P2-03</th>
+                  <td>Provider deep-link contracts may be private.</td>
+                  <td>If no supported provider game or channel link exists for a provider, then the resolver and launcher shall report the strongest observed outcome (`searchOpened`, `appHomeOpened`, `appAbsent`, `accessUnknown`, `playbackDenied`) honestly and the verdict shall record the missing interface as an integration gap; no outcome is relabeled `gameOpened`.</td>
+                  <td>Honest outcome; integration gap documented for the write-up.</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                  <td>—</td>
+                  <td>—</td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">RISK-AFC-P2-04</th>
+                  <td>Third-party video composition is not a documented public capability.</td>
+                  <td>If the panel spike fails or reaches spike_panel_max, then the panel shall be built as `PanelMode.fullScreen` (AFC-PR-047) with alerts and Watch still routed to the real provider apps (AFC-PR-048).</td>
+                  <td>Full-screen panel; limitation stated.</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                  <td>—</td>
+                  <td>—</td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">RISK-AFC-P2-05</th>
+                  <td>Unofficial JSON can change without notice.</td>
+                  <td>If the ESPN endpoint is unavailable or its contract changes, then ingest shall serve labeled replay fixtures for every affected value (AFC-PR-013) and reject schema-invalid responses without mutation (AFC-PR-064); the ESPN terms question shall be presented to the owner before submission (C3).</td>
+                  <td>Labeled replay; owner reviews terms.</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                  <td>—</td>
+                  <td>—</td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">RISK-AFC-P2-06</th>
+                  <td>Yahoo approval timing is external. Historical Q7 status is not a current approval claim; execution must establish current owner session facts.</td>
+                  <td>If Yahoo approval is absent at T_yahoo, then P2-X06 shall record a FAILS verdict for the Yahoo route selecting labeled manual entry, and the backend shall use labeled manual entry as the single active source (AFC-PR-006, -007).</td>
+                  <td>Manual lineup with presets.</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                  <td>—</td>
+                  <td>—</td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">RISK-AFC-P2-07</th>
+                  <td>The Free plan may refuse a service or quota.</td>
+                  <td>If any AWS action would require a Paid plan, a paid service or a payment method change, then the slice shall stop and raise a class F owner stop; no agent upgrades the account.</td>
+                  <td>Owner decides.</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                  <td>—</td>
+                  <td>—</td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">RISK-AFC-P2-08</th>
+                  <td>Live evidence depends on a qualifying external game window. As of 2026-10-18, next selected TNF window is 2026-10-22; dispatch must reconfirm the schedule and session prerequisites.</td>
+                  <td>If a live window is missed or a game produces no qualifying event, then the slice shall use labeled replay of captured fixtures for repeatability and schedule the live check in the next live window; replay never stands in for live notification or provider behavior evidence.</td>
+                  <td>Replay for logic; live windows reserved for device evidence.</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                  <td>—</td>
+                  <td>—</td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">RISK-AFC-P2-09</th>
+                  <td>Provider apps commonly use secure surfaces that screen capture cannot read.</td>
+                  <td>If `adb` screencap or screenrecord returns black or blank frames for protected provider video, then the visual evidence shall combine the companion UI capture with window geometry from `dumpsys` and, if OD-AFC-P2-02 = A, an owner camera capture of the screen (OA-9); the demo plan shall mark any owner-filmed shots as owner-filmed and, if OD-AFC-P2-02 = B, shall use companion UI captures only for those shots.</td>
+                  <td>Geometry plus owner camera capture under A, companion UI only under B (OD-AFC-P2-02).</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                  <td>—</td>
+                  <td>—</td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">RISK-AFC-P2-10</th>
+                  <td>Muse quota exhaustion occurred on 2026-10-11.</td>
+                  <td>If a selected route reaches a confirmed usage or rate limit, then the Orchestrator shall record the evidence and activate only the next approved fallback of the frozen profile with a class B receipt preserving coverage-assist and Reverify settings, or queue the slice; other errors shall not trigger a route switch.</td>
+                  <td>Next approved fallback or queue.</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>planned</span></td>
+                  <td>—</td>
+                  <td>—</td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">RISK-AFC-P2-16</th>
+                  <td>A missing physical Vega device, unverified background alert route, SDK compatibility conflict or missed primary checkpoint shall remain a blocking primary-acceptance gap unless the owner explicitly amends the named requirement or target.</td>
+                  <td>No sudo/system install, no implicit license acceptance, no unscanned execution. Missing Watchman/SDK/provenance or .vpkg semantics is typed gap. Missed primary checkpoint or physical failure returns owner scope/target decision; no in-progress side-lane claim used as primary acceptance.</td>
+                  <td>Retain typed gap and return only the affected owner decision; no silent feature or proof reduction.</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>proposed</span></td>
+                  <td>—</td>
+                  <td>—</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="block" id="s9" aria-labelledby="h-s9">
+          <h2 id="h-s9"><span class="secno">9</span>Authority, owner decisions, approvals, and closeout status</h2>
+          <p>Closeout is append-only over the owner-approved planning projection. Changing planning content requires an explicit owner-approved plan amendment. This page does not grant execution, acceptance, release, or deployment.</p>
+          <p class="table-hint">Tables scroll horizontally on a narrow screen.</p>
+          <div class="table-scroll" role="region" tabindex="0" aria-labelledby="cap-auth">
+            <table>
+              <caption id="cap-auth">Authority, decisions, and approvals</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Event</th>
+                  <th scope="col">Owner</th>
+                  <th scope="col">Evidence</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="row-pass">
+                  <th scope="row" class="id">DEC-AFC-M0305-SCOPE-20261018</th>
+                  <td>William Rumph</td>
+                  <td>Full remaining scope retained; one recovery continuation, dependency-ready parallel work.</td>
+                  <td><span class="status status-pass"><span class="mark" aria-hidden="true"></span>confirmed</span></td>
+                </tr>
+                <tr class="row-pass">
+                  <th scope="row" class="id">DEC-AFC-M0305-PROFILE-20261018</th>
+                  <td>William Rumph</td>
+                  <td>Freeze current named selection; preserve roles, capabilities, holds and historical review budgets.</td>
+                  <td><span class="status status-pass"><span class="mark" aria-hidden="true"></span>confirmed</span></td>
+                </tr>
+                <tr class="row-pass">
+                  <th scope="row" class="id">DEC-AFC-M0305-REVIEW-20261018</th>
+                  <td>William Rumph</td>
+                  <td>One planning review before owner Manifest; one per implementation wave; no extra end review.</td>
+                  <td><span class="status status-pass"><span class="mark" aria-hidden="true"></span>confirmed</span></td>
+                </tr>
+                <tr class="row-pass">
+                  <th scope="row" class="id">DEC-AFC-M0305-DELEGATION-20261018</th>
+                  <td>William Rumph</td>
+                  <td>Enable routine scheduling, task sequencing and bounded plan corrections through M03-M05 completion with exclusions in authority.json.</td>
+                  <td><span class="status status-pass"><span class="mark" aria-hidden="true"></span>confirmed</span></td>
+                </tr>
+                <tr class="row-pass">
+                  <th scope="row" class="id">DEC-AFC-M0305-R1-SEQUENCE-20261018</th>
+                  <td>Planning Orchestrator under AUTH-AFC-M0305-DELEGATION-20261018</td>
+                  <td>R1 preparation waits its actual source prerequisites and historical X05 checkpoint, not a new X03/X05 final-live dependency. Overall closeout waits release preparation AND final live evidence; Vega V01 release dependencies remain unchanged.</td>
+                  <td><span class="status status-pass"><span class="mark" aria-hidden="true"></span>confirmed</span></td>
+                </tr>
+                <tr class="row-pass">
+                  <th scope="row" class="id">DEC-AFC-M0305-OCR-BACKEND-20261018</th>
+                  <td>William Rumph</td>
+                  <td>Resolve previously unspecified required OCR own-engine backend to ChatGPT / GPT-6.1 Sol / high. Frozen own_engine setting and selected Reviewer route preserved.</td>
+                  <td><span class="status status-pass"><span class="mark" aria-hidden="true"></span>confirmed</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">DEC-AFC-M0305-OCR-BUDGET-20261018</th>
+                  <td>Planning Orchestrator under bounded routine configuration authority</td>
+                  <td>Use --max-tokens-budget 100000 per authorized OCR review invocation; unchanged per-group default. Budget is checked between rounds and may overshoot; partial coverage is a typed gap.</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>superseded; retained historical decision</span></td>
+                </tr>
+                <tr class="row-pass">
+                  <th scope="row" class="id">DEC-AFC-M0305-OCR-UNLIMITED-20261018</th>
+                  <td>William Rumph</td>
+                  <td>Remove aggregate OCR token cap (--max-tokens-budget 0), retain existing native OCR automatic context compression. Full review coverage must be verified; no compaction or coverage claim inferred from configuration. Supersedes provisional budget decision, without changing selected backend/model/own_engine route.</td>
+                  <td><span class="status status-pass"><span class="mark" aria-hidden="true"></span>confirmed</span></td>
+                </tr>
+                <tr class="row-plan">
+                  <th scope="row" class="id">DEC-AFC-M0305-OCR-COMPACTION-20261018</th>
+                  <td>William Rumph</td>
+                  <td>Pin OCR --max-tokens 200000 so native compression thresholds remain 120000 background / 160000 synchronous, both below owner 272000 ceiling. Aggregate budget remains unlimited (--max-tokens-budget 0). Thresholds are triggers, not a hard upper bound on tokens appended by one tool result.</td>
+                  <td><span class="status status-plan"><span class="mark" aria-hidden="true"></span>superseded; retained historical decision</span></td>
+                </tr>
+                <tr class="row-pass">
+                  <th scope="row" class="id">DEC-AFC-M0305-OCR-COMPACTION-HIGHER-20261018</th>
+                  <td>William Rumph</td>
+                  <td>Use --max-tokens 320000: background compression at 192000 and synchronous at 256000, both below 272000. Aggregate budget remains unlimited (--max-tokens-budget 0). ChatGPT / GPT-6.1 Sol / high own_engine retained; Codex configuration unchanged.</td>
+                  <td><span class="status status-pass"><span class="mark" aria-hidden="true"></span>confirmed</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <h3>Closeout actuals</h3>
+          <p class="table-hint">Tables scroll horizontally on a narrow screen.</p>
+          <div class="table-scroll" role="region" tabindex="0" aria-labelledby="cap-close">
+            <table>
+              <caption id="cap-close">Append-only closeout</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Candidate</th>
+                  <th scope="col">Changed paths</th>
+                  <th scope="col">Evidence</th>
+                  <th scope="col">Open gaps</th>
+                  <th scope="col">Owner acceptance</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="row-hold">
+                  <th scope="row" class="id"><span class="status status-plan"><span class="mark" aria-hidden="true"></span>Planning candidate 0808ec169952e6ef6c224fc990ca4742f5ccba88688f228503082c067196ec0f</span></th>
+                  <td>pending</td>
+                  <td>pending</td>
+                  <td>ER-VEGA: EXT-VEGA: no Vega device/SDK/V01 evidence exists; blocks overall closure branches and the R1 Vega target, blocks no RW1/RW2 Fire OS/backend/host task. Resolution owner: controller materialization + owner gate after planning review. No intent decided here. Owner: controller materialization + owner gate after planning review., ER-OCR-OWN-ENGINE-RUN: Selected backend is own_engine (review.coverage_assist enabled+required, ocr_execution_mode=own_engine in the frozen binding). Parent seit packet text naming OCR delegate mode (CMD-OCR-DELEGATE) is a historical superseded selection and is never imported or silently substituted. No current own-engine run or PASS is claimed (tool-and-window-qualification.json: no own-engine review run/PASS; prose unsupported_ext follows the docs checklist, disclosed). Unavailable/not_run stays a typed gap, never PASS. Owner: requested planning/wave reviewer (not this author)., ER-REVERIFY-BINARY: Source-only planning candidate: Reverify is N/A here (no binary subject). Future APK/VPKG claims stay applicable typed gates under the frozen deterministic_verification.reverify setting (REVERIFY_CAPABILITY_GAP: APK semantic grounding unproven; .vpkg support unproven for the Vega branch). Ordinary test reruns never substitute for Reverify; each binary task records the Reverify result or the exact gap line. Owner: binary task author + wave reviewer., ER-GATE-DURATIONS: EXT-GATE-QUAL: added_gate_seconds is null for every recovery wave until PROC-RELIABILITY qualification records actual durations. Source 720s/900s figures are forecasts (baseline not measured) and are cited only as forecast provenance in wave notes. Owner: first qualified gate run per wave (PROC-RELIABILITY)., ER-LIVE-WINDOW: EXT-LIVE-TNF + EXT-PROVIDER-APPS + EXT-AWS-SESSION: schedule and sign-in/profile state must be re-confirmed in the dispatch session. A non-TNF substitution for X05 is an owner amendment (OWNER_DECISION branch preserved, not taken); absent that amendment the TNF obligation stands and RW2 simply waits while RW1/RW3-prep advance. Owner: dispatch session (schedule re-confirmation) + owner session facts OA-3/OA-4/OA-10.</td>
+                  <td><span class="status status-hold"><span class="mark" aria-hidden="true"></span>pending: final reviewed Manifest approval</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <dl class="meta">
+            <dt>Completion status</dt>
+            <dd>Planning only; no milestone completion or runtime proof claimed</dd>
+            <dt>execution</dt>
+            <dd>not_authorized_until_exact_reviewed_manifest_approval</dd>
+            <dt>planning_review</dt>
+            <dd>pending</dd>
+            <dt>state</dt>
+            <dd>not_started</dd>
+          </dl>
+
+          <h3>Owner-approved amendments</h3>
+          <p class="table-hint">Tables scroll horizontally on a narrow screen.</p>
+          <div class="table-scroll" role="region" tabindex="0" aria-labelledby="cap-amend">
+            <table>
+              <caption id="cap-amend">Append-only owner amendments</caption>
+              <thead>
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Decision</th>
+                  <th scope="col">Evidence</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="row-pass">
+                  <th scope="row" class="id">CLOSEOUT-AFC-M0305-PLANNING</th>
+                  <td>—</td>
+                  <td>—</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="banner"><strong>Non-authoritative projection.</strong> Source artifacts remain the authority. State: planning.</p>
+        </section>
+      </main>
+    </div>
+    <footer class="colophon">
+      <p>AFC M03-M05 recovery — planning candidate. State: planning. Template 1.0.1. Self-contained HTML and CSS with no script, no external font, no CDN, and no network image.</p>
+    </footer>
+  </div>
+</body>
+</html>

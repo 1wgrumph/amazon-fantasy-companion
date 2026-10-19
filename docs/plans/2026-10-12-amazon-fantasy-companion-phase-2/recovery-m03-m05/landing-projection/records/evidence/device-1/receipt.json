@@ -1,0 +1,98 @@
+{
+  "task_id": "R-T-DEVICE-1",
+  "bug_route": "not-a-bug",
+  "task_outcome": "NEEDS_MORE_EVIDENCE",
+  "role_verdict": "PARTIAL",
+  "recorded_at": "2026-10-19T11:30:00Z",
+  "role": "Product Implementer",
+  "route": {"harness": "Muse Code", "model": "Muse WonderFull Contributor", "reasoning": "high", "profile": "opensource-hackathon/implementer", "binding_sha256_verified": "e8d0b5a02cd9f445644a0caa18185af60a46f2316769b527ccc9e046796b0608", "live_profiles_read": false},
+  "selected_capabilities": {
+    "coverage_assist": "own_engine required for RW1 Reviewer (ocr-engine-binding.json sha256 295885a332227f8e32caf4b3c17c5b91a243ed1e6b74dd10fedf613f8ac7d19f, ChatGPT/GPT-6.1Sol/high, --max-tokens320000 --max-tokens-budget0); preserved, NOT run by author",
+    "reverify": "REVERIFY_CAPABILITY_GAP: enabled in binding; known installed Reverify identifies APK as unknown 0-bit with no DEX semantics, so no APK semantic result exists for any variant; unsupported parse not repeated to claim a pass"
+  },
+  "lease_check": {
+    "root_branch": "afc/m03-m05-recovery",
+    "root_head_before_after": "7da6187b5a57ee80887ef84301ff99a3592bacb6",
+    "journey_generation": 1,
+    "journey_state": "active"
+  },
+  "candidate_refs": {
+    "root": "afc/m03-m05-recovery@7da6187b5a57ee80887ef84301ff99a3592bacb6",
+    "g5_source_readonly": "afc/g5-tv-wiring@c6b15e46d4a356402b02778ecd60eec67423ef09",
+    "g5_tv_tree_before_after": "a31c2b1d0adf72c1ec5c84eeea027af262a6ab36",
+    "g5_tv_ls_files_sha256_before_after": "bc142a3c141e4e4de20fd0fba5ca0f87f4f62dff67e54b45411567b95241d1f1",
+    "g5_tv_status_clean_before_after": true
+  },
+  "apk_variants": [
+    {"variant": "unconfigured", "afcApiBaseUrl": "", "sha256": "862a9f6e4cee34630ee3fe05f7715672f967fc62b0cbb84f121ff9102659c220", "bytes": 7708199, "signer_dn": "C=US, O=Android, CN=Android Debug", "signer_sha256": "24ba72469642c32f76d0e1ac293817117e6466835b5e75ebe33e38f53eba2d77", "gate_log": "gate-unconfigured.log", "gate_log_sha256": "2fb1fb42c38b208daec9e10b9affb390a1f22a765c6128152b63a493d8899cb3", "gate_note": "tasks mostly UP-TO-DATE from prior G5 build; test-results XML totals 262 tests 0 failures/errors/skipped consumed as-is"},
+    {"variant": "configured", "afcApiBaseUrl": "https://le3r79003f.execute-api.us-east-2.amazonaws.com", "sha256": "0941aa8bfa8d49bf30ff8744465ee53db23504274e82081a8260786eb8b7b041", "bytes": 7731215, "signer_dn": "C=US, O=Android, CN=Android Debug", "signer_sha256": "24ba72469642c32f76d0e1ac293817117e6466835b5e75ebe33e38f53eba2d77", "gate_log": "gate-configured.log", "gate_log_sha256": "b809d7de9f74ca57db5306f25e8b162e951e3dfa745ff7eb04e112744d435a29", "gate_note": "18 tasks executed incl. fresh testDebugUnitTest: 262 tests, 0 failures/errors/skipped; lintDebug + assembleDebug PASS; dev URL verified present in DEX"},
+    {"variant": "loopback-network-error", "afcApiBaseUrl": "https://127.0.0.1:9", "sha256": "6ff23cded985c13ee860ac651ed90986fa5f9b22e3c2ccabb522f3865046b967", "bytes": 7731180, "signer_dn": "C=US, O=Android, CN=Android Debug", "signer_sha256": "24ba72469642c32f76d0e1ac293817117e6466835b5e75ebe33e38f53eba2d77", "gate_log": "gate-loopback.log", "gate_log_sha256": "b8b4aa1250106440a7b7397a4366001d67b7fa33eae49f810c592d1b5b2d0b92", "gate_note": "gate PASS"}
+  ],
+  "host_supply_consumed": "evidence/host-tv-prep/receipt.json (existing admitted receipts; no new acquisition, no new test source)",
+  "device": {
+    "model": "AFTKM",
+    "display": "physical 3840x2160, override 1920x1080 (wm size)",
+    "address_serial_logged": false,
+    "prior_afc_package": "absent (pm path exit 1) - fresh install, no prior data/signer/rollback artifact existed",
+    "locking": "every adb client call under flock --close [PRIVATE-TMP]/afc-m03-m05-fire-tv.lock; daemon started outside lock",
+    "installed_final": {"package": "com.afc.companion", "versionName": "0.1.0", "versionCode": 1, "firstInstallTime": "2026-10-19 11:07:47", "lastUpdateTime": "2026-10-19 11:11:47", "pulled_base_apk_sha256": "0941aa8bfa8d49bf30ff8744465ee53db23504274e82081a8260786eb8b7b041", "matches_configured_variant": true},
+    "session": "synthetic dev profile afc-device1-synthetic linked via POST /v1/link/confirm HTTP 200 {state:linked}; code never printed or persisted in repo; no existing owner session existed or was read",
+    "provider_state_restoration": "com.netflix.ninja enabled=0 before probes, enabled=0 after pm default-state restore (verified)"
+  },
+  "commands": [
+    {"id": "CMD-GATE-TVAPP/g5-unconfigured", "command": "flock [PRIVATE-TMP]/afc-m03-m05-host-gradle.lock bash tools/ci/gate.sh tvapp (in G5)", "exit": 0, "result": "gate: tvapp: PASS checks completed"},
+    {"id": "CMD-GATE-TVAPP/g5-configured", "command": "ORG_GRADLE_PROJECT_afcApiBaseUrl=<allowlisted dev URL> flock [PRIVATE-TMP]/afc-m03-m05-host-gradle.lock bash tools/ci/gate.sh tvapp (in G5)", "exit": 0, "result": "PASS; 262 unit tests fresh, 0 failures"},
+    {"id": "CMD-GATE-TVAPP/g5-loopback", "command": "ORG_GRADLE_PROJECT_afcApiBaseUrl=https://127.0.0.1:9 flock [PRIVATE-TMP]/afc-m03-m05-host-gradle.lock bash tools/ci/gate.sh tvapp (in G5)", "exit": 0, "result": "PASS"},
+    {"id": "CMD-ADB-INSTALL x3", "command": "adb install -r <variant.apk> (flock --close)", "exit": 0, "result": "Success for unconfigured (fresh), loopback (-r same signer), configured (-r same signer, data preserved)"},
+    {"id": "CMD-ADB-SCREENCAP/PROC-VISUAL-REVIEW", "command": "adb exec-out screencap -p + D-pad keyevents + uiautomator dump (private /tmp only)", "exit": 0, "result": "9 numbered observations in observations.md; every committed PNG image-inspected by author harness"},
+    {"id": "dev-link-confirm", "command": "POST /v1/link/confirm {code:<redacted>, profileId:afc-device1-synthetic}", "exit": 200, "result": "{\"state\": \"linked\"}"},
+    {"id": "CMD-VERDICT-CHECK/x07", "command": "pm path / resolve-activity / pm disable+enable+default-state probes", "exit": 0, "result": "spikes/sp7-detection/VERDICT.md verdict PARTIAL with honest supported/unsupported labels"}
+  ],
+  "acceptance_to_evidence": [
+    {"row": "A01 shell", "state": "OBSERVED", "evidence": "evidence/visual/P2-A01/recovery-2026-10-18/a01-shell-network-error.png sha256 daf9886a4777c72ed20ad133a61365b85eaa77310e1da5fb5b0ba386d9e6b73f (Link/ProfileSettings/Panel, Link focused)"},
+    {"row": "A01 unconfigured", "state": "OBSERVED", "evidence": "a01-unconfigured.png sha256 7b2e904f558b32afbf0817b2bad7cf18bf69df8ae27d845d57c8b9d034b82407"},
+    {"row": "A01 network-error", "state": "OBSERVED", "evidence": "a01-shell-network-error.png (loopback variant) - 'Network error. Check the connection, then select Get code.'"},
+    {"row": "L02 code-shown", "state": "OBSERVED_PRIVATE_CAPTURE", "evidence": "SANITIZATION_REQUIRED: /tmp-only captures sha256 6f1e34461d8890e62bf6ab36057865adad38fe004558d92a1c7e8c4011efc5bf and 51185257b221835b874f69fd0a50a96761c2da588d43c61ee879a36f764475fc contain the synthetic code; kept out of repo, require approved sanitization"},
+    {"row": "L02 expired", "state": "OBSERVED", "evidence": "l02-expired.png sha256 ed9aac146b83e7cb1f3ed7ee37404ad31440c76e2989df3704093ada3d639e33 (real TTL expiry, 2026-10-19T11:21:52Z)"},
+    {"row": "L02 linked", "state": "OBSERVED", "evidence": "l02-linked-profile-settings.png sha256 e5fe1313b95583e37dfb5de3abbd867a76be35c34674676aa81cc1ad8d275b11 + confirm HTTP 200"},
+    {"row": "G5 FullScreen/panel-only", "state": "OBSERVED_EMPTY_STATE", "evidence": "g5-panel-fullscreen-empty.png sha256 469e13e6951c1b2b3ff00cc1e3da432b8c8ecd034028755644bacf620f8f4e19; populated lineup NOT observed (no team/league, no live game)"},
+    {"row": "G5 Watch Prime", "state": "GAP_ALERT_STIMULUS_GAP", "evidence": "Watch renders only on alert cards; no controlled synthetic alert stimulus in packet; no event faked"},
+    {"row": "G5 Show panel on new alert default ON", "state": "OBSERVED", "evidence": "l02-linked-profile-settings.png first-view label 'on'"},
+    {"row": "G5 Show panel ON/OFF toggle", "state": "OBSERVED_SETTING_ONLY", "evidence": "g5-show-panel-off.png sha256 8afebf0b7be7ed35ac5c5324ac7ec27487df3e584f4ca5072caeb01e73516370; g5-show-panel-on.png sha256 7709e6da086eda406efdc8be8527474656861f4b52db67fa2d17c91a69cfeaa8 (restored ON); reveal-on-arrival behavior = ALERT_STIMULUS_GAP"},
+    {"row": "X07 installed/absent", "state": "OBSERVED", "evidence": "spikes/sp7-detection/VERDICT.md (PARTIAL) + evidence/visual/sp7-detection/commands.txt"},
+    {"row": "X07 disabled", "state": "GAP_DISABLED_PROBE_UNSUPPORTED", "evidence": "pm disable SecurityException from shell on this Fire OS; no state changed; original enabled=0 restored/verified"},
+    {"row": "X07 in-app visibility/viewing context", "state": "GAP_NOT_EXERCISED", "evidence": "no probe app authorized; product keeps detection hidden (detectionSupported=false); URI resolution not treated as entitlement/launch"}
+  ],
+  "findings": [
+    {"id": "OBS-DEVICE1-1", "kind": "observation", "detail": "After link success auto-navigation to Profile/Settings, D-pad focus highlight remained on the Link nav button (visible in l02-linked capture). Recorded for controller; no source change in this packet."},
+    {"id": "OBS-DEVICE1-2", "kind": "observation", "detail": "G5-worktree debug signer (24ba7246...) differs from ROOT host-prep APK signer (11d7d083...) in host-tv-prep receipt; same 'Android Debug' DN, different keystore instance. Device had no prior AFC install, so no signer conflict arose; future cross-worktree reinstalls would need signer care."},
+    {"id": "OBS-DEVICE1-3", "kind": "observation", "detail": "First screencap after launch was a black frame until KEYCODE_WAKEUP; subsequent captures valid. Black frame not used as evidence."}
+  ],
+  "gaps": [
+    "ALERT_STIMULUS_GAP: Watch Prime action, populated panel/alert cards, heads-up, and show-panel-on-arrival ON/OFF behavior need an approved controlled synthetic event stimulus/fixture not in this packet",
+    "SANITIZATION_REQUIRED: code-shown captures stay in /tmp with hashes above; an approved sanitization step is required before any repo copy",
+    "DISABLED_PROBE_UNSUPPORTED: shell cannot disable packages on this Fire OS build (SecurityException)",
+    "REVERIFY_CAPABILITY_GAP: no APK DEX semantic result available from installed Reverify for any variant",
+    "No live game/provider playback claimed; no camera evidence; geometry not used as arrival proof"
+  ],
+  "changed_paths": [
+    "evidence/visual/P2-A01/recovery-2026-10-18/a01-unconfigured.png",
+    "evidence/visual/P2-A01/recovery-2026-10-18/a01-shell-network-error.png",
+    "evidence/visual/P2-A01/recovery-2026-10-18/l02-expired.png",
+    "evidence/visual/P2-A01/recovery-2026-10-18/l02-linked-profile-settings.png",
+    "evidence/visual/P2-A01/recovery-2026-10-18/g5-show-panel-off.png",
+    "evidence/visual/P2-A01/recovery-2026-10-18/g5-show-panel-on.png",
+    "evidence/visual/P2-A01/recovery-2026-10-18/g5-panel-fullscreen-empty.png",
+    "evidence/visual/P2-A01/recovery-2026-10-18/observations.md",
+    "spikes/sp7-detection/VERDICT.md",
+    "evidence/visual/sp7-detection/commands.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/device-1/gate-unconfigured.log",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/device-1/gate-configured.log",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/device-1/gate-loopback.log",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/device-1/receipt.json"
+  ],
+  "non_changes_verified": "No product/test/source edits in ROOT or G5 (git status tv-app clean in G5 before/after; ROOT diff for tv-app/backend empty). Preexisting unrelated G5 docs edits and ROOT dirty files preserved untouched. No commit/PR/push.",
+  "review_budget": "Historical G5 review/repair spent and not rerun; RW1 review 0/1 preserved; no reviewer dispatched by author",
+  "blocker": "Remaining rows need (a) approved controlled synthetic alert-event stimulus for Watch/panel-arrival behavior, (b) approved sanitization for the code-shown capture, (c) a future in-app X07 probe packet. WAITING_ON controller for those materializations.",
+  "developer_feedback": "flock --close around every adb client call with daemon started outside the lock worked with zero hangs. uiautomator dump text + focused-bounds made D-pad navigation deterministic without screenshots of private surfaces. Real TTL wait (~10 min) was needed for an honest expired state; a shorter dev TTL fixture would speed future passes but was outside this packet."
+}

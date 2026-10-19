@@ -20,7 +20,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from gate_support import git, git_output  # noqa: E402
 SRC = 'tv-app/app/src/main/java/com/afc/companion/Shell.kt'
 DEVICE = SRC.replace('Shell.kt', 'MainActivity.kt')
-STUB = SRC.replace('Shell.kt', 'detect/AppDetector.kt')
+STUB = SRC.replace('Shell.kt', 'MutationStub.kt')
 CONTROL = ('package com.afc.companion\n\nfun verdict(ok: Boolean): String {\n'
            '    if (ok) return "covered"\n    return "uncovered"\n}\n')
 GRADLEW = '''#!/usr/bin/env bash
@@ -137,12 +137,15 @@ class TvappMutationAdapter(unittest.TestCase):
         self.assertEqual(self.result()['scored_files'], [SRC])
 
     def test_zero_mutant_stub_is_listed_and_excluded(self):
-        self.candidate({SRC: CONTROL, STUB: (REPO / STUB).read_text()})
+        self.candidate({SRC: CONTROL, STUB: '// AFC-STUB: zero-mutant adapter control\n'
+                                          'package com.afc.companion\n'})
         rc, out = self.run_adapter(pit([(4, 'KILLED')]))
         self.assertEqual(rc, 0, out)
         self.assertEqual(self.result()['excluded'], [
             {'path': STUB, 'reason': 'stub (AFC-STUB; zero mutants)'}])
         self.assertIn('zero mutants', self.result()['stub_rule'])
+        self.assertEqual(self.result()['scored_files'], [SRC])
+        self.assertEqual(self.result()['scored_mutants'], 1)
 
     def test_stub_with_mutants_is_scored(self):
         self.candidate({SRC: '// AFC-STUB: test implementation\n' + CONTROL})
