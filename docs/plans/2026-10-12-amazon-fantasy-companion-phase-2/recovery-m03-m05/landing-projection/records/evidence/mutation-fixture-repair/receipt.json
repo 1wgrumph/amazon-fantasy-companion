@@ -1,0 +1,267 @@
+{
+  "task_outcome": "PASS",
+  "author_verdict": "CANDIDATE_READY",
+  "verification_kind": "author verification only; existing RW1 review remains outstanding and unspent by this task",
+  "recorded_at": "2026-10-19T10:54:32.477640+00:00",
+  "baseline_candidate": {
+    "ref": "afc/m03-m05-recovery",
+    "revision": "7da6187b5a57ee80887ef84301ff99a3592bacb6",
+    "test_sha256": "78ff3153d6da0955aaa69bdd4c3d21d3c039d7bd209237b7f7d5afbb39d24359"
+  },
+  "final_candidate": {
+    "ref": "afc/m03-m05-recovery",
+    "revision": "7da6187b5a57ee80887ef84301ff99a3592bacb6",
+    "uncommitted": true,
+    "test_sha256": "c77c4e4ffb8ab7b45b6afc040fb8a417b6ecddc15aa129572d165e2d62ce9db9",
+    "source_diff_sha256": "b46bc41a26722e78d9d8aedc0a65abbb6d16cfbde2da3651a35416ba6561380b"
+  },
+  "changed_paths": [
+    "tools/ci/tests/mutation/test_mutation_tvapp_adapter.py",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/mutation-fixture-repair/baseline-input-hashes.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/mutation-fixture-repair/boundary-check.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/mutation-fixture-repair/cause-source.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/mutation-fixture-repair/focused-green.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/mutation-fixture-repair/focused-green.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/mutation-fixture-repair/focused-red.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/mutation-fixture-repair/focused-red.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/mutation-fixture-repair/hygiene-before.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/mutation-fixture-repair/hygiene-before.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/mutation-fixture-repair/lease-start.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/mutation-fixture-repair/mutation-suite-green.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/mutation-fixture-repair/mutation-suite-green.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/mutation-fixture-repair/prevention-check.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/mutation-fixture-repair/prevention-check.py",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/mutation-fixture-repair/prevention-check.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/mutation-fixture-repair/source-diff.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/mutation-fixture-repair/receipt.json"
+  ],
+  "route": {
+    "role": "test_implementer",
+    "profile": "opensource-hackathon",
+    "harness": "Codex CLI",
+    "model": "GPT-6.1 Sol",
+    "reasoning": "high",
+    "binding": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/profile-binding-test-sol.json",
+    "binding_sha256": "4ef38bea60a4cb849d7385f354bfc16bc51b44e9842746ae308213a7817977ab",
+    "owner_amendment": "DEC-AFC-M0305-FALLBACK-CONTINUITY-20261019",
+    "fallback_provenance": "Parent packet reports Claude native exit 1 quota until Nov 1 and missing Pi executable; no author work by primary. Selected owner-amended Sol route used; no new fallback attempted."
+  },
+  "capabilities": {
+    "review.coverage_assist": {
+      "enabled": true,
+      "required": true,
+      "execution_mode": "own_engine",
+      "backend": "chatgpt / gpt-6.1-sol / high",
+      "binding": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/ocr-engine-binding.json",
+      "binding_sha256": "295885a332227f8e32caf4b3c17c5b91a243ed1e6b74dd10fedf613f8ac7d19f",
+      "outcome": "not_run",
+      "reason": "No independent review authorized in this Test Implementer packet; assigned to existing RW1 review. Availability not re-probed; not passing coverage."
+    },
+    "deterministic_verification.reverify": {
+      "enabled": true,
+      "outcome": "not_run",
+      "reason": "Preserved for existing review; this fixture repair makes no binary assurance claim."
+    }
+  },
+  "red_green": {
+    "test_id": "test_mutation_tvapp_adapter.TvappMutationAdapter.test_zero_mutant_stub_is_listed_and_excluded",
+    "baseline_exit": 1,
+    "candidate_exit": 0,
+    "same_test_id": true,
+    "red_classification": "test-only stale product-coupled fixture; not product, harness or environment failure",
+    "red_log": {
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tools/ci/tests/mutation",
+        "-p",
+        "test_mutation_tvapp_adapter.py",
+        "-k",
+        "zero_mutant_stub",
+        "-v"
+      ],
+      "exit": 1,
+      "duration_seconds": 0.19,
+      "log": "focused-red.txt",
+      "sha256": "6895aa4d396bedf0e0080f8db489ae4853177cf0673690d738a46e369fe7985c"
+    },
+    "green_log": {
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tools/ci/tests/mutation",
+        "-p",
+        "test_mutation_tvapp_adapter.py",
+        "-k",
+        "zero_mutant_stub",
+        "-v"
+      ],
+      "exit": 0,
+      "duration_seconds": 0.176,
+      "log": "focused-green.txt",
+      "sha256": "2e4c6a9ca6ff4148ad50ebab603d6c60ae046be41d23029602cda6301c91e366"
+    }
+  },
+  "commands": [
+    {
+      "command": [
+        "bash",
+        "tools/ci/gate.sh",
+        "hygiene"
+      ],
+      "exit": 0,
+      "duration_seconds": 155.488,
+      "log": "hygiene-before.txt",
+      "sha256": "32c62b7a2d726f5f459a00a6a1d647ccc9211cfb08b6dca17e11e3e44e52f751"
+    },
+    {
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tools/ci/tests/mutation",
+        "-p",
+        "test_mutation_tvapp_adapter.py",
+        "-k",
+        "zero_mutant_stub",
+        "-v"
+      ],
+      "exit": 1,
+      "duration_seconds": 0.19,
+      "log": "focused-red.txt",
+      "sha256": "6895aa4d396bedf0e0080f8db489ae4853177cf0673690d738a46e369fe7985c"
+    },
+    {
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tools/ci/tests/mutation",
+        "-p",
+        "test_mutation_tvapp_adapter.py",
+        "-k",
+        "zero_mutant_stub",
+        "-v"
+      ],
+      "exit": 0,
+      "duration_seconds": 0.176,
+      "log": "focused-green.txt",
+      "sha256": "2e4c6a9ca6ff4148ad50ebab603d6c60ae046be41d23029602cda6301c91e366"
+    },
+    {
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tools/ci/tests/mutation",
+        "-v"
+      ],
+      "exit": 0,
+      "duration_seconds": 14.26,
+      "log": "mutation-suite-green.txt",
+      "sha256": "3707dae98d9613d4b4dd6c1e4a212569ffaa7c0af0766258dea28e03d5447b58"
+    },
+    {
+      "command": [
+        "python3",
+        "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/mutation-fixture-repair/prevention-check.py"
+      ],
+      "exit": 0,
+      "duration_seconds": 0.373,
+      "log": "prevention-check.txt",
+      "sha256": "b4486b0fdf4609e50281803bfddd8ac46e357ff24dc50518527935a708420960"
+    }
+  ],
+  "test_ids": [
+    "test_mutation_backend_adapter.BackendMutationAdapter.test_changed_module_level_without_mutants_is_nonfunction_gap.test_changed_module_level_without_mutants_is_nonfunction_gap",
+    "test_mutation_backend_adapter.BackendMutationAdapter.test_deliberate_survivor_fails_and_is_listed.test_deliberate_survivor_fails_and_is_listed",
+    "test_mutation_backend_adapter.BackendMutationAdapter.test_known_mutants_killed_pass.test_known_mutants_killed_pass",
+    "test_mutation_backend_adapter.BackendMutationAdapter.test_mixed_module_level_change_is_nonfunction_gap.test_mixed_module_level_change_is_nonfunction_gap",
+    "test_mutation_backend_adapter.BackendMutationAdapter.test_mutant_outside_changed_behavior_is_scope_gap.test_mutant_outside_changed_behavior_is_scope_gap",
+    "test_mutation_backend_adapter.BackendMutationAdapter.test_no_changed_source_is_empty_inventory_gap.test_no_changed_source_is_empty_inventory_gap",
+    "test_mutation_backend_adapter.BackendMutationAdapter.test_owned_workspace_is_removed.test_owned_workspace_is_removed",
+    "test_mutation_backend_adapter.BackendMutationAdapter.test_stale_cached_results_are_not_reused.test_stale_cached_results_are_not_reused",
+    "test_mutation_backend_adapter.BackendMutationAdapter.test_timeout_or_error_is_unresolved_never_killed.test_timeout_or_error_is_unresolved_never_killed",
+    "test_mutation_backend_adapter.BackendMutationAdapter.test_truncated_inventory_rejects.test_truncated_inventory_rejects",
+    "test_mutation_backend_adapter.BackendMutationAdapter.test_unchanged_functions_do_not_dilute_changed_score.test_unchanged_functions_do_not_dilute_changed_score",
+    "test_mutation_tvapp_adapter.TvappMutationAdapter.test_changed_file_without_mutants_is_gap.test_changed_file_without_mutants_is_gap",
+    "test_mutation_tvapp_adapter.TvappMutationAdapter.test_device_file_is_listed_and_excluded_from_score.test_device_file_is_listed_and_excluded_from_score",
+    "test_mutation_tvapp_adapter.TvappMutationAdapter.test_killed_changed_mutants_pass.test_killed_changed_mutants_pass",
+    "test_mutation_tvapp_adapter.TvappMutationAdapter.test_missing_report_is_gap.test_missing_report_is_gap",
+    "test_mutation_tvapp_adapter.TvappMutationAdapter.test_mutants_off_changed_lines_are_not_scored.test_mutants_off_changed_lines_are_not_scored",
+    "test_mutation_tvapp_adapter.TvappMutationAdapter.test_mutation_missing_required_data_is_gap.test_mutation_missing_required_data_is_gap",
+    "test_mutation_tvapp_adapter.TvappMutationAdapter.test_no_changed_source_is_empty_inventory_gap.test_no_changed_source_is_empty_inventory_gap",
+    "test_mutation_tvapp_adapter.TvappMutationAdapter.test_partial_true_with_complete_data_is_accepted.test_partial_true_with_complete_data_is_accepted",
+    "test_mutation_tvapp_adapter.TvappMutationAdapter.test_pit_run_failure_is_compatibility_gap.test_pit_run_failure_is_compatibility_gap",
+    "test_mutation_tvapp_adapter.TvappMutationAdapter.test_real_pit_partial_report_is_accepted.test_real_pit_partial_report_is_accepted",
+    "test_mutation_tvapp_adapter.TvappMutationAdapter.test_stub_with_mutants_is_scored.test_stub_with_mutants_is_scored",
+    "test_mutation_tvapp_adapter.TvappMutationAdapter.test_survivor_and_no_coverage_fail_threshold.test_survivor_and_no_coverage_fail_threshold",
+    "test_mutation_tvapp_adapter.TvappMutationAdapter.test_truncated_or_unparseable_report_is_gap.test_truncated_or_unparseable_report_is_gap",
+    "test_mutation_tvapp_adapter.TvappMutationAdapter.test_unclassified_changed_file_is_scope_gap.test_unclassified_changed_file_is_scope_gap",
+    "test_mutation_tvapp_adapter.TvappMutationAdapter.test_unknown_status_is_gap.test_unknown_status_is_gap",
+    "test_mutation_tvapp_adapter.TvappMutationAdapter.test_unresolved_mutant_is_gap.test_unresolved_mutant_is_gap",
+    "test_mutation_tvapp_adapter.TvappMutationAdapter.test_zero_mutant_stub_is_listed_and_excluded.test_zero_mutant_stub_is_listed_and_excluded",
+    "test_mutation_tvapp_adapter.TvappMutationAdapter.test_zero_scored_mutants_is_gap.test_zero_scored_mutants_is_gap",
+    "test_native_mutation.NativeMutation.test_mutmut_binding_is_available.test_mutmut_binding_is_available",
+    "test_native_mutation.NativeMutation.test_probe_executable_matches_adapter.test_probe_executable_matches_adapter"
+  ],
+  "cause_escape": {
+    "cause": "Zero-mutant AFC-STUB control read live AppDetector source. Implementation commit 2ca71d6 removed the old stub behavior; current DEC-AFC-SD-057 correctly classifies AppDetector as device_only.",
+    "origin_evidence": "cause-source.txt plus baseline-input-hashes.json",
+    "escape": "Hygiene runs 91 top-level CI tests, not the nested mutation qualification suite. Parent packet reports existing docs/TV gates also did not execute this adapter control.",
+    "repair": "Synthetic MutationStub.kt path and literal AFC-STUB content owned by the test; original exclusion reason retained, scored file and mutant assertions added. No scope or adapter changes."
+  },
+  "acceptance": {
+    "1": "focused-red.json/.txt: pinned unchanged test failed with exact old-stub/device-only reason mismatch",
+    "2": "source-diff.txt; focused-green; full-suite survivor and stub-with-mutants controls pass without weakened thresholds",
+    "3": "hygiene-before exit 0 (91 tests); focused-green exit 0; mutation-suite-green exit 0 (31 tests); boundary-check product/adapter/scope unchanged",
+    "4": "prevention-check.py/.txt: focused test passes while all actual product source reads are forbidden; synthetic path outside real scope; actual implemented AppDetector still excluded as DEC-057 device-only"
+  },
+  "prevention": {
+    "method": "test",
+    "resource_group": "host-python-report-fixtures",
+    "engine_network_device": false,
+    "evidence": "prevention-check.txt",
+    "positive": "AFC-STUB zero-mutant exclusion plus retained scored Shell mutant",
+    "negative": "Scored stub survivor fails threshold; missing report yields GAP; device-only excludes without diluting score",
+    "existing_negative_controls_preserved": true
+  },
+  "boundary_evidence": "boundary-check.json",
+  "evidence_sha256": {
+    "focused-green.json": "4d7cac1dda217e4a3ee66b806402bd73375a984c28f056d74bb836546e375ae1",
+    "source-diff.txt": "b46bc41a26722e78d9d8aedc0a65abbb6d16cfbde2da3651a35416ba6561380b",
+    "lease-start.json": "8894a8250b561dcb7852fc3251406e3f2d63a3c5626e225e50d0eb4ff99c463c",
+    "mutation-suite-green.txt": "3707dae98d9613d4b4dd6c1e4a212569ffaa7c0af0766258dea28e03d5447b58",
+    "mutation-suite-green.json": "042df3ee451cc67aeb8dda9a2c9664c6f2622c794946875ada74aafc9f49f374",
+    "baseline-input-hashes.json": "596ed3ff1cadb58c19ac87a8da1880e9957c9969c2eed0e16dc5278adb9bcab7",
+    "focused-red.json": "8bf64dc4411843e5cbd855fe831c656feeeb356dd8d06ced1364fbb7a2e3d1ba",
+    "prevention-check.json": "8010ddbd394fb1f4f2e06472473648c724e813fb2a9f01283ac89499d726decf",
+    "prevention-check.py": "ad4da488accfe492ae752d1298b7e0468d4f7a16a82c26b4b364394048ec9874",
+    "hygiene-before.json": "3da48107d27f8c6276cf830e376e3eb3b20c89f6401c5a6c4294572c4304d6d8",
+    "hygiene-before.txt": "32c62b7a2d726f5f459a00a6a1d647ccc9211cfb08b6dca17e11e3e44e52f751",
+    "cause-source.txt": "933571327231c1a5e035acdd5c3dd8294adde5ef739dd5741ef6d2677afd55f1",
+    "focused-green.txt": "2e4c6a9ca6ff4148ad50ebab603d6c60ae046be41d23029602cda6301c91e366",
+    "focused-red.txt": "6895aa4d396bedf0e0080f8db489ae4853177cf0673690d738a46e369fe7985c",
+    "prevention-check.txt": "b4486b0fdf4609e50281803bfddd8ac46e357ff24dc50518527935a708420960",
+    "boundary-check.json": "4644a861fac5d905333c870acf532a976e31596b9801ef96ddd0c2249490ee10"
+  },
+  "remaining_risks": [
+    "Author verification is not independent RW1 acceptance.",
+    "Hygiene was run before repair as packet requires; final changed fixture exercised by focused/full mutation suite and diff check. No full Android/backend product gates or device/live runs were required or run."
+  ],
+  "blocker": null,
+  "review_budget_consumed": 0,
+  "committed": false
+}

@@ -1,0 +1,54 @@
+{
+  "recorded_at": "2026-10-19T12:04:53.377968+00:00",
+  "authority": "AUTH-AFC-M0305-EXEC-20261019 routine integration preparation",
+  "old_branch": "afc/g5-tv-wiring",
+  "old_revision": "c6b15e46d4a356402b02778ecd60eec67423ef09",
+  "base_revision": "7da6187b5a57ee80887ef84301ff99a3592bacb6",
+  "new_branch": "afc/m03-m05-g5-integration",
+  "new_revision": "f8b57f05d3354cb3a3c25c71a01e0b0fa734a2ef",
+  "app_src_tree": "2146175ed34f3bc0cd026e28bb9b57f9a3281209",
+  "app_src_identical": true,
+  "conflicts": [
+    "CHANGELOG.md only, preserving both main Phase1 PR108 entry and G5 entry/PR113 link"
+  ],
+  "source_mutations": "No new source/test logic; existing three logical G5 commits replayed on current main. Main backend and Gradle memory fixes preserved.",
+  "gate_status": "PASS author/controller deterministic check, no independent review",
+  "physical_binding": "Existing physical evidence remains bound to c6b15e4/0941aa8 APK, no automatic new APK equivalence claim. Fresh gate/APK identity required.",
+  "landing": "No push/PR/merge performed; original branch/PR113/live device worktree unchanged.",
+  "review_budget_unchanged": true,
+  "gate_native_exit": 0,
+  "gate_log_sha256": "15de59a96364a10012c9b160cfca08cabcf38f52e9077128b63a246761b42e31",
+  "unit_test_counts": {
+    "tests": 262,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "apk_sha256": "ad9b04355e79c44bb2fcddca539c226b12606c5a9a2a3a101c0d2320060ea880",
+  "apk_bytes": 7708199,
+  "apk_signer_sha256": "24ba72469642c32f76d0e1ac293817117e6466835b5e75ebe33e38f53eba2d77",
+  "signature_exit": 0,
+  "signature_log_sha256": "a77426584016963aecf4da4c3540950e3efd0e82dea817baaf01d215a01830a0",
+  "signer_matches_old_candidate": true,
+  "native_binding": "New APK bytes ad9b0435 differ from installed0941aa8; not installed, source identity alone not native run.",
+  "repository_gates": {
+    "command": "bash tools/ci/gate.sh hygiene docs",
+    "exit": 0,
+    "hygiene_tests": 91,
+    "docs": "PASS",
+    "hygiene": "PASS",
+    "output_sha256": "16eb0e2515ba55a3bea1270b3e77deecf5c1f8fe87f11b5da80e8bbf7c15cb73",
+    "negative_test_output": "Intentional non-git fixtures and GAP controls printed by passing91-test harness, not new failures."
+  },
+  "apk_malware_scan": {
+    "exit": 0,
+    "current_official_databases": [
+      "main63",
+      "daily28158"
+    ],
+    "infected": 0,
+    "files": 1,
+    "scan_log_sha256": "d45866681aaf5bbbf0da70e227c58e1559c4c9129f3273f1e15a75f089d5b5d5",
+    "limitation": "Malware check only; source/native/review requirements remain. Existing external dependency pins and owner-accepted build-only residual reused, no new external dependency acquisition."
+  }
+}

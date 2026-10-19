@@ -1,0 +1,71 @@
+{
+  "schema_version": "afc.wonder-trial-vega-static/v1",
+  "packet": "WM-5-VEGA-STATIC-CLOSURE",
+  "role": "Product Implementer",
+  "harness": "Muse Code",
+  "model": "Muse Wonder Contributor",
+  "model_id": "muse-wonder-1.0-contributor",
+  "contributor_mode": "on",
+  "effort": "medium",
+  "binding": {"path": "profile-binding-wonder-medium-trial.json", "sha256": "ed6379b5957c311a6ea97be05a5c7a8816c094b82263c4222276dcc32718a147"},
+  "candidate": {"journey": "AFC-2026-10-11", "branch": "afc/m03-m05-recovery", "revision": "7da6187b5a57ee80887ef84301ff99a3592bacb6", "generation": 1, "lease_state": "active"},
+  "outcome": "REPAIRABLE_FAILURE",
+  "role_verdict": "PARTIAL",
+  "safety_verdict": "INDETERMINATE",
+  "admission": "NOT_ADMITTED_FAIL_CLOSED",
+  "credential_findings": "EMPTY (no secret scan of new material; prior Sol receipt EMPTY consumed; fetched public Go text only, no credentials read)",
+  "summary": "Static closure completed: pinned ELF vendored norm is the AFFECTED pre-fix implementation, not fixed and not unreachable. Vulnerability cannot be closed for CLI 1.4.5. Safety remains INDETERMINATE fail-closed; no admission PASS.",
+  "repo_gate_first": {"file": "[PRIVATE-TMP]/afc-g5-integration-repo-gate.txt", "sha256": "16eb0e2515ba55a3bea1270b3e77deecf5c1f8fe87f11b5da80e8bbf7c15cb73", "exit": 0, "consumed": "91 repo checks PASS per prior G5 receipt; not rerun, source unchanged for this packet", "sol_prior_gate": "exit0/91 tests consumed from vega-cli-admission receipt"},
+  "pins_verified_before_after": {
+    "elf": {"path": "[PRIVATE-TMP]/afc-vega-preflight/cli-extract/vega", "sha256_before": "0486f79d0c83cafa1db7b75ed85aef512b95b7420672a66820fca2e08923d6b6", "sha256_after": "0486f79d0c83cafa1db7b75ed85aef512b95b7420672a66820fca2e08923d6b6", "mode": "644 non-executable, unchanged"},
+    "tar": {"sha256_before": "a1801cb19a9974cf5aa8846cb2e42228b7c06b6a914fe71c8f3ce76b23a321e6", "sha256_after": "a1801cb19a9974cf5aa8846cb2e42228b7c06b6a914fe71c8f3ce76b23a321e6"}
+  },
+  "finding": {
+    "go_id": "GO-2026-5970", "cve": "CVE-2026-56852", "severity": "HIGH",
+    "summary": "Infinite loop on invalid input in golang.org/x/text (norm.Iter on invalid UTF-8)",
+    "prior_disposition": "INDETERMINATE_VENDOR_NORMALIZATION_COPY (1 of 41; other 40 preserved UNREACHABLE_AFFECTED_MODULE_PACKAGES_NOT_LINKED, finding-map sha256 aeb28dafa9b929ea3bb4e8b3c347df79aca480b01e4594bbca328d55ede8d1aa, not rescanned)",
+    "new_disposition": "AFFECTED_CODE_PRESENT_LINKED_VIA_IDNA_INPUT_PATH_NOT_RUNTIME_DEMONSTRATED",
+    "closed": false,
+    "evidence": [
+      "Official advisory GO-2026-5970 sha256 67ada3c81c785215b93c9ea718755b8204b322f95f45f4a4594e2f8b52c7aead: x/text fixed 0.39.0, FIX https://go.dev/cl/794100 (inert patch sha256 b790922e2d2b5e9d3f33cd3e490532b5302ae4dae69a8409d9b3ee404996ff14). Fix: compInfo returns Properties{flags:0x80,size:1} when sz==0, adds Properties.isInvalid(), replaces size==0 checks.",
+      "Go 1.27.2 src/vendor/modules.txt sha256 b382247257983ed466aa7c5002c756f2b27f65b7947a9b8c02831858f379beee pins vendored golang.org/x/text v0.37.0 (< fixed 0.39.0).",
+      "Source identity (byte-identical): go1.27.2 vendored iter.go/forminfo.go/normalize.go == x/text v0.37.0 affected, != v0.39.0 fixed. Hashes in compare-output.json (iter 16a40d32..., forminfo fceb28be..., normalize b9e7aeff...).",
+      "Compiled identity: ELF DWARF compInfo DW_AT_decl_line 249 == affected forminfo.go:249 (fixed:253); no Properties.isInvalid in DWARF/nm; compInfo disassembly (0x746d00) first tests v (test %ax,%ax), v==0 path stores sz verbatim as size (mov %bl,0x1(%rsp)) with zeroed flags, and contains no $0x80 immediate - the fixed early sz==0 return is absent.",
+      "Namespace distinction: external golang.org/x/text/unicode/norm symbols 0, vendor/golang.org/x/text/unicode/norm symbols 45 in nm. Absence of external namespace was NOT used as proof; vendored presence governed.",
+      "Link reachability: direct-call-graph shows vendor/golang.org/x/net/idna.validateAndMap -> vendor norm Form.Bytes/Form.String, and lookupInfoNFC/NFKC -> compInfo, nextComposed present at 0x748fc0. Affected code is linked and reachable via IDNA hostname processing; a specific CLI command supplying invalid UTF-8 to that path was NOT runtime-demonstrated (target execution prohibited), so reachable-HIGH input demonstration remains unproven."
+    ]
+  },
+  "criterion_table": [
+    {"criterion": "Current artifact: GO-2026-5970 vendored norm fixed/unreachable?", "result": "FAIL - affected pre-fix code present in pinned ELF (see finding.evidence)", "scope": "current pinned CLI 1.4.5 only"},
+    {"criterion": "Current artifact: prior 40 findings preserved", "result": "PASS - consumed finding-map unchanged, no rescan", "scope": "current artifact"},
+    {"criterion": "Current artifact: pins/permissions unchanged, no target execution", "result": "PASS - ELF/tar SHA before==after, mode 644, only readelf/nm/objdump/python/curl-text used", "scope": "current artifact"},
+    {"criterion": "BEHAVIOR-CONTROL telemetry/helper/update (Sol receipt)", "result": "UNRESOLVED - retained separate gap, not solved here", "scope": "current artifact future admission"},
+    {"criterion": "Future SDK/Vega/VVD/Watchman/host/target obligations", "result": "NOT_EVALUATED - outside this packet, not admission criteria satisfied by this receipt", "scope": "future"},
+    {"criterion": "CLI admission PASS", "result": "NOT_GRANTED - affected HIGH present + BEHAVIOR-CONTROL unresolved", "scope": "admission"}
+  ],
+  "commands": [
+    {"command": "sha256sum ELF+tar (before/after), stat mode", "exit": 0, "result": "exact pins match, 644 unchanged"},
+    {"command": "curl -sL vuln.go.dev/ID/GO-2026-5970.json (inert)", "exit": 0, "result": "sha256 67ada3c8... matches prior finding-map primary source"},
+    {"command": "curl -sL go-review.googlesource.com/changes/794100/revisions/current/patch (base64 inert text, decoded locally)", "exit": 0, "result": "patch sha256 b790922e..."},
+    {"command": "curl -sL raw.githubusercontent.com golang/go go1.27.2 vendor modules.txt + norm iter/forminfo/normalize; golang/text v0.29.0/v0.37.0/v0.39.0 norm files (inert text only)", "exit": 0, "result": "vendored v0.37.0; go vendored files byte-identical to affected, differ from fixed"},
+    {"command": "grep DWARF/nm/disassembly in preserved [PRIVATE-TMP]/afc-vega-cli-admission/ (note: receipt manifest dir is [PRIVATE-TMP]/afc-vega-cli-admission, not -sol)", "exit": 0, "result": "compInfo decl_line 249, no isInvalid, idna->norm callers"},
+    {"command": "python3 compare_norm.py (first run)", "exit": 1, "result": "INVOCATION defect in own script: $0x80 substring matched cmp $0x8000; fixed with regex \\$0x80(?![0-9a-f]) and reran - not a product defect"},
+    {"command": "python3 compare_norm.py (rerun)", "exit": 0, "result": "SELF_CHECKS_PASS; compare-output.json sha256 b432b9f65c84e615060d4732039d98112753c0aefae271630642ff6d2a820708"}
+  ],
+  "changed_paths": [
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/wonder-trial-vega-static/receipt.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/wonder-trial-vega-static/compare_norm.py",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/wonder-trial-vega-static/compare-output.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/wonder-trial-vega-static/cl794100.patch"
+  ],
+  "output_hashes": {"compare_norm.py": "9dc0d5f7ccd232488ce9b0af7c7f55a93102dfce710127a169b8596b4810cabb", "compare-output.json": "b432b9f65c84e615060d4732039d98112753c0aefae271630642ff6d2a820708", "cl794100.patch": "b790922e2d2b5e9d3f33cd3e490532b5302ae4dae69a8409d9b3ee404996ff14"},
+  "remaining_blocker": "Pinned Vega CLI 1.4.5 (Go 1.27.2, vendored x/text v0.37.0) contains the GO-2026-5970 affected norm implementation. Next safe step (no execution of this ELF): obtain/admit a CLI build whose vendored x/text includes CL 794100 (external x/text >=0.39.0 equivalent or Go release vendoring it) and re-run this same static comparison on its exact pins; separately resolve BEHAVIOR-CONTROL telemetry/helper/update before any admission. Do not execute, probe, or update with the current pinned ELF.",
+  "behavior_control_next_step": "Retain Sol BEHAVIOR-CONTROL INDETERMINATE: trace Cobra/interface callbacks for telemetry helper (-getOptIn) and update paths statically, or author (not execute) a contained no-network probe spec; execution needs separate authority after a fixed CLI is admitted.",
+  "capabilities": {"review.coverage_assist": "enabled/required preserved for required wave review, own_engine ChatGPT/GPT-6.1 Sol/high --max-tokens320000 --max-tokens-budget0 - NOT_RUN in this author packet, not a pass", "deterministic_verification.reverify": "enabled preserved for wave review; source-bound binary Reverify explicitly not_run in this packet, APK/DEX semantic gap retained", "review_budgets": "RW1 review 0/1 unchanged, no reviewer dispatched"},
+  "findings": ["GO-2026-5970 affected code confirmed in pinned ELF (was INDETERMINATE, now AFFECTED_PRESENT_LINKED_VIA_IDNA)", "Go 1.27.2 compiler version alone was insufficient - vendored x/text is v0.37.0 pre-fix, proven by modules.txt + byte-identical sources + DWARF/disassembly"],
+  "corrections": ["Own compare script $0x80 substring false-positive fixed via bounded regex; rerun PASS"],
+  "remaining_risks": ["Invalid-UTF8 input path to vendored norm via IDNA not runtime-demonstrated (execution prohibited) - treated fail-closed, not as unreachable", "BEHAVIOR-CONTROL telemetry/update unresolved", "No independent assurance: author self-checks only"],
+  "unmet_criteria": ["Vulnerability closure for pinned CLI 1.4.5 (impossible without a fixed rebuild)", "BEHAVIOR-CONTROL resolution", "CLI admission PASS, Reverify, OCR review"],
+  "prohibited_actions_taken": [],
+  "developer_feedback": "Do not re-litigate namespace absence: vendored norm is the affected copy. Fix is upstream CL 794100 in compInfo/isInvalid, discriminated in compiled code by decl_line 249 and absent $0x80 early-return. Reuse compare_norm.py on any replacement CLI pins."
+}

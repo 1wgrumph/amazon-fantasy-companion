@@ -1,0 +1,69 @@
+{
+  "task": "R-T-LIVE-PREP",
+  "task_outcome": "PASS",
+  "role_verdict": "CANDIDATE_READY",
+  "provenance": "historical-replay",
+  "live_closure": false,
+  "candidate_ref": "afc/m03-m05-recovery",
+  "candidate_revision": "7da6187b5a57ee80887ef84301ff99a3592bacb6",
+  "branch": "afc/m03-m05-recovery",
+  "lease_generation": 1,
+  "lifecycle": "AFC-2026-10-11",
+  "checkpoint": "CP-X05-HIST (verified inline; explicitly not live closure)",
+  "gate_first_reused": {
+    "receipt": "evidence/evidence-reconcile/receipt.json",
+    "receipt_sha256": "aa36e357669a1519d54bc92cefcc4c5a2e1e3ac2740f2ca2f786a05f86104f56",
+    "CMD-GATE-DOCS_exit": 0,
+    "CMD-GATE-DOCS_output_sha256": "90c0d852e38f6fbcde26a9be99f715044d75f1ff9d4f465e8ad63fd546b43678",
+    "note": "Reused original docs-gate run on exact candidate; not claimed as a new run."
+  },
+  "commands": [
+    {"id": "help", "cmd": "python3 spikes/sp5-espn-feed/capture.py --help && capture.py capture --help && capture.py verify --help", "exit": 0, "output_sha256": "ec32374152f6467908dc13a688eddd0ae3967072647d57573008170858628111"},
+    {"id": "CMD-ESPN-CAPTURE/tool-tests", "cmd": "flock [PRIVATE-TMP]/afc-m03-m05-host-pytest.lock (cd spikes/sp5-espn-feed && python3 -m unittest -v test_capture)", "exit": 0, "output_sha256": "4980e36effe37f3c8fb0371c3e1af1c685c07eabd1cd42a4f86b4292da47cd12", "extra": "21 tests OK; offline negative controls pass: malformed JSON, oversize, non-200/wrong-shape, wrong-host/refused-before-request, wrong-event/header-id shape, unsafe-id, append-only, tamper detection"},
+    {"id": "capture-1", "cmd": "python3 spikes/sp5-espn-feed/capture.py capture --date 20261011 --event 401872986 --provenance historical --out docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/live-prep/historical-qualification", "exit": 0, "output_sha256": "1fd83f260b0b997b6cdf7eef951fd37522744fe8c09262dc50532a84350e45ce"},
+    {"id": "capture-2-append", "cmd": "same capture args (2nd run, next sequence)", "exit": 0, "output_sha256": "1fd83f260b0b997b6cdf7eef951fd37522744fe8c09262dc50532a84350e45ce", "extra": "seq1 hashes identical before/after (hashes-after-1.txt vs hashes-after-2.txt); 4 unauthenticated GETs total, 1s interval and 4MiB cap are tool defaults in capture.py"},
+    {"id": "verify", "cmd": "python3 spikes/sp5-espn-feed/capture.py verify --out <same folder>", "exit": 0, "output_sha256": "d1ba2f6a325e022adb3ec05ebb9c41f79a9ccdef57205249ce7fced6347d82b0"}
+  ],
+  "acceptance_to_evidence": {
+    "tool runs on completed game/date": "capture-1.txt/capture-2.txt: captured 401872986 (STATUS_FINAL) on 20261011",
+    "append-only next sequence preserves original bytes": "hashes-after-1.txt == seq1 hashes in hashes-after-2.txt; inventory.json seq1_preserved_after_capture2=true",
+    "all metadata historical-replay/STATUS_FINAL": "historical-qualification/401872986/index.json (4 entries)",
+    "existing offline negative controls": "test-capture.txt (21 tests OK)",
+    "canonical fixture + registry identities preserved": "inventory.json inline_checkpoint_hashes; git status empty for backend/spikes/tv-app",
+    "X03 amendment frozen to Prime Video entry + verdict": "procedure-scope-note.md",
+    "future live args require requalification, not executed": "procedure-scope-note.md (seit recovery_binding: --date 20261022 --event 401873010 --provenance live)"
+  },
+  "changed_paths": [
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/live-prep/receipt.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/live-prep/inventory.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/live-prep/procedure-scope-note.md",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/live-prep/test-capture.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/live-prep/capture-help.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/live-prep/capture-1.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/live-prep/capture-2.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/live-prep/verify.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/live-prep/hashes-after-1.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/live-prep/hashes-after-2.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/live-prep/historical-qualification/401872986/"
+  ],
+  "negative_trust_boundary": {
+    "product_test_registry_spike_verdict_writes": 0,
+    "backend_fixtures_replay_writes": 0,
+    "live_device_watch_vega_claimed": false,
+    "git_status_backend_spikes_tvapp": "empty"
+  },
+  "route": "Muse Code / Muse WonderFull Contributor / high (original frozen binding e8d0b5a02cd9f445644a0caa18185af60a46f2316769b527ccc9e046796b0608)",
+  "capabilities": {
+    "coverage_assist": "own_engine ChatGPT/GPT-6.1 Sol/high preserved (ocr-engine-binding.json 295885a332227f8e32caf4b3c17c5b91a243ed1e6b74dd10fedf613f8ac7d19f); not run by implementer",
+    "reverify": "enabled; N/A here — no binary subject, source/JSON only",
+    "review_dispatched": false,
+    "RW1_budget": "unspent"
+  },
+  "remaining_risks": [
+    "Live update timing/correction behavior unproven until R-T-LIVE-CAPTURE in the live window",
+    "ESPN historical bodies drift over time (post-game edits); qualification hashes will not match future re-captures byte-for-byte",
+    "Registry vega/fire_os route gaps unchanged (from reconciliation inventory)"
+  ],
+  "blocker": null,
+  "developer_feedback": "Exercised capture.py --help/capture/verify, unittest under flock, sha256sum. Observation: seq1/seq2 bodies have equal byte lengths but different hashes minutes apart, confirming upstream ESPN body variation even for STATUS_FINAL games; append-only preservation is about prior files, not body stability. No tool defect found; no source change needed."
+}

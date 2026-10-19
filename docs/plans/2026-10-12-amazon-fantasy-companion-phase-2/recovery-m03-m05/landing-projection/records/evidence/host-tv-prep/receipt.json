@@ -1,0 +1,58 @@
+{
+  "task_id": "R-T-HOST-TV-PREP",
+  "task_outcome": "NEEDS_MORE_EVIDENCE",
+  "role_verdict": "PARTIAL",
+  "candidate_ref": "afc/m03-m05-recovery@7da6187b5a57ee80887ef84301ff99a3592bacb6",
+  "candidate_revision": "7da6187b5a57ee80887ef84301ff99a3592bacb6",
+  "candidate_tree": "2699c90047cf32b0fe8b68241285800bebfd419f",
+  "lease_check": {
+    "journey_generation": 1,
+    "state": "active",
+    "branch": "afc/m03-m05-recovery",
+    "binding_sha256_verified": "e8d0b5a02cd9f445644a0caa18185af60a46f2316769b527ccc9e046796b0608"
+  },
+  "route": {"harness": "Muse Code", "model": "Muse WonderFull Contributor", "reasoning": "high", "profile": "opensource-hackathon/implementer"},
+  "selected_capabilities": {"coverage_assist": "own_engine (enabled, required; preserved, not dispatched by author packet)", "reverify": "enabled (see REVERIFY_CAPABILITY_GAP)"},
+  "changed_paths": ["docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/host-tv-prep/receipt.json"],
+  "incidental_ignored_outputs": ["tv-app/app/build/", "tv-app/build/", "tv-app/.gradle (via gate)", "Gradle user cache"],
+  "apk": {
+    "path": "tv-app/app/build/outputs/apk/debug/app-debug.apk",
+    "sha256": "2a4ff350d349b819b5ccd9728436273a6240835f980d3b0229e6242bc6602e9a",
+    "bytes": 7675431,
+    "signer_dn": "C=US, O=Android, CN=Android Debug",
+    "signer_sha256": "11d7d0832f66aa2d77dfcbe12823477578e7c16474e5c94ff6d20adce17a8364",
+    "note": "Debug signer only; no keystore credentials read. No release APK assembled by gate."
+  },
+  "commands": [
+    {"id": "CMD-GATE-TVAPP", "command": "flock [PRIVATE-TMP]/afc-m03-m05-host-gradle.lock bash tools/ci/gate.sh tvapp", "exit": 0, "result": "gate: tvapp: PASS checks completed; 225 unit tests PASSED, 0 FAILED; lint+assembleDebug BUILD SUCCESSFUL", "output_sha256": "82b7091ba5fe1bdd35f20dccc718e98b138e45834d4040b1516ad51642eb0873"},
+    {"id": "PROC-GATE-TOOL-QUALIFY/coverage", "command": "python3 -m unittest discover -s tools/ci/tests/coverage -v", "exit": 0, "result": "Fixture adapter controls pass (incl. 66% FAIL / 75% PASS threshold controls). Fixture qualification only; not native Kotlin/Android proof.", "output_sha256": "0546a139e1494c95f5e25359db6fb3c648949fa4140c2727ada2264b58be37ab"},
+    {"id": "PROC-GATE-TOOL-QUALIFY/mutation", "command": "python3 -m unittest discover -s tools/ci/tests/mutation -v", "exit": 1, "result": "31 tests, 1 FAIL: test_zero_mutant_stub_is_listed_and_excluded expects exclusion reason 'stub (AFC-STUB; zero mutants)', adapter returns 'device-only (DEC-AFC-SD-057)' for AppDetector.kt. Harness/test drift on exact HEAD; classified harness failure, not product failure. Fix needs separately materialized packet (source edits prohibited here).", "output_sha256": "4a03e9852d5063fe4b1f4a77c96c27fa62db17f1f5104764ee855e12da475bad"},
+    {"id": "CMD-COVERAGE-TVAPP", "command": "not run", "exit": null, "result": "GAP: zero changed TV source lines in this packet (git diff HEAD -- tv-app/app/src/main = 0 lines); changed-line denominator empty. Per SEIT, empty denominator is a typed gap, never PASS. No denominator invented."},
+    {"id": "CMD-MUTATION-TVAPP", "command": "not run", "exit": null, "result": "GAP: ANDROID_MUTATION_COMPATIBILITY_GAP preserved; no changed targets, and qualify harness has 1 failing control. Broad mutation against unchanged code not run per packet instruction."},
+    {"id": "CMD-SUPPLY-SCAN", "command": "no new acquisition", "exit": 0, "result": "Consumed existing scanned pins: spikes/sp1-device/toolchain-pins.txt + scan-verdicts.txt (rows 1-7 PASS; row 9 INDETERMINATE accepted by owner 2026-10-16, build-host classpath only, not a PASS). No downloads performed, so no new scan required."},
+    {"id": "REVERIFY", "command": "reverify backends; reverify parse <apk>", "exit": 0, "result": "REVERIFY_CAPABILITY_GAP: reverify present at ~/.local/bin/reverify, backends full fidelity (capstone 5.0.7, unicorn 2.1.4, lief 1.0.0, z3 4.13.0, angr 9.3.4), but parse reports APK as 'raw (unknown, 0-bit)' with no sections/imports — PE/ELF/Mach-O only, no APK/DEX semantic claim verification. Not substituted by ordinary tests."}
+  ],
+  "acceptance_to_evidence": [
+    {"item": "Exact candidate identity: build commit, APK sha256 + signer, scanned dependency pins, host gate output", "status": "SATISFIED", "evidence": "commit 7da6187/tree 2699c900; APK sha256 2a4ff350… signer 11d7d083…; P2-X01 pins+scan verdicts consumed; gate exit 0 PASS (log sha256 82b7091b…)"},
+    {"item": "Reverify on exact APK per frozen binding, or typed REVERIFY_CAPABILITY_GAP", "status": "GAP_RECORDED", "evidence": "REVERIFY_CAPABILITY_GAP line in commands[REVERIFY]; tool cannot parse APK/DEX semantics"}
+  ],
+  "prerequisites": {
+    "P2-X01": "spikes/sp1-device/VERDICT.md verdict WORKS with toolchain-pins.txt/scan-verdicts.txt present",
+    "PR73": "MERGED 2026-10-15 (TV baseline 0c273e5); its red/green reused as historical evidence only, no fresh red claimed",
+    "PR113": "OPEN/unmerged G5 UI candidate (c6b15e4); explicitly NOT covered by this build"
+  },
+  "negative_trust_boundary_check": {
+    "result": "PASS",
+    "evidence": "git status --porcelain -- tv-app/ tools/ci/ backend/ empty before and after (own __pycache__ removed); tree 2699c900 unchanged. Receipt makes no device/live/Vega/deployed/binary-semantic PASS claim."
+  },
+  "findings_gaps": [
+    "REVERIFY_CAPABILITY_GAP (APK/DEX unsupported by installed reverify)",
+    "MUTATION_QUALIFY_HARNESS_FAILURE: 1/31 controls fail on exclusion-reason string drift",
+    "COVERAGE_CHANGED_LINE_GAP: empty denominator (no changed TV source in packet)",
+    "ANDROID_MUTATION_COMPATIBILITY_GAP preserved from SEIT readiness"
+  ],
+  "remaining_risks": ["Debug-signed APK only; release signing (OA-11 keystore) untouched", "Row-9 build-host classpath CVEs remain owner-accepted residual risk, not PASS", "No device install performed; R-T-DEVICE-1 must re-identify APK hash/signer before use"],
+  "blocker": null,
+  "developer_feedback": "Gate rerun tip: capture exit without PIPESTATUS under sh (Bad substitution masks real exit). Mutation qualify exclusion-reason drift (DEC-AFC-SD-057 vs AFC-STUB) needs test/adapter alignment in a materialized packet. Exercised tools: gate.sh tvapp, unittest coverage/mutation adapters, apksigner 34.0.0, reverify.",
+  "no_claims": ["no stick/device use", "no backend or live Yahoo calls", "no Vega claim", "no independent review/assurance (author checks only)"]
+}

@@ -1,0 +1,90 @@
+{
+  "task_id": "R-T-DEVICE-1",
+  "substep": "synthetic-alert-continuation",
+  "bug_route": "frozen-lifecycle-profile AFC-2026-10-11 approved evidence-only R-T-DEVICE-1 continuation; no product repair assigned",
+  "outcome": "CANDIDATE_READY",
+  "scope_only_verdict": "All six assigned G5 synthetic physical rows OBSERVED on the existing dev-configured candidate. This is scope-only evidence for this continuation, NOT whole R-T-DEVICE-1 acceptance and not independent review.",
+  "recorded_at": "2026-10-19T12:48:32Z",
+  "role": "Product Implementer",
+  "route": {"harness": "Muse Code", "model": "Muse WonderFull Contributor", "reasoning": "high", "binding_sha256_verified": "e8d0b5a02cd9f445644a0caa18185af60a46f2316769b527ccc9e046796b0608", "live_profiles_read": false, "invocation": "new bounded invocation authorized by controller under execution-authority.json routine prerequisite materialization; prior run59595 PARTIAL not resumed; same task/lease/route/generation/budgets"},
+  "selected_capabilities": {
+    "coverage_assist": "own_engine required, belongs to RW1 Reviewer, NOT run by author; ocr-engine-binding.json sha256 295885a332227f8e32caf4b3c17c5b91a243ed1e6b74dd10fedf613f8ac7d19f preserved (ChatGPT/GPT-6.1Sol/high, max-tokens 320000 budget 0)",
+    "reverify": "REVERIFY_CAPABILITY_GAP preserved: enabled, known APK/DEX unsupported parse not rerun, author tests not substituted"
+  },
+  "lease_check": {"root_branch": "afc/m03-m05-recovery", "root_head_before_after": "7da6187b5a57ee80887ef84301ff99a3592bacb6", "generation": 1, "state": "active"},
+  "candidates": {
+    "root": "afc/m03-m05-recovery@7da6187b5a57ee80887ef84301ff99a3592bacb6",
+    "g5_source_readonly": "afc/g5-tv-wiring@c6b15e46d4a356402b02778ecd60eec67423ef09",
+    "g5_tv_tree_before_after": "a31c2b1d0adf72c1ec5c84eeea027af262a6ab36",
+    "g5_tv_backend_status_clean_before_after": true,
+    "prior_gate_consumed": "evidence/device-1/gate-configured.log sha256 b809d7de9f74ca57db5306f25e8b162e951e3dfa745ff7eb04e112744d435a29 exit 0; JUnit XML re-summed this run: 262 tests, 0 failures/errors/skipped; no rebuild/install/rerun",
+    "installed_apk": {"package": "com.afc.companion", "versionName": "0.1.0", "versionCode": 1, "pulled_base_apk_sha256": "0941aa8bfa8d49bf30ff8744465ee53db23504274e82081a8260786eb8b7b041", "bytes": 7731215, "signer_sha256": "24ba72469642c32f76d0e1ac293817117e6466835b5e75ebe33e38f53eba2d77", "matches_device1_configured_variant": true},
+    "session": "existing synthetic link to afc-device1-synthetic still valid at start (Panel/Profile loaded); no relinking performed; no owner session read"
+  },
+  "fixture": {
+    "guard_selfcheck": "PASS: exact profile afc-device1-synthetic and afc-dev Alerts/Lineups physical-table allowlist enforced; negative assertions for other-profile/other-table rejected before any write",
+    "aws_metadata": "sts user afc-dev; CloudFormation afc-dev AlertsTable=afc-dev-AlertsTable-6N1HPFI0OCXJ LineupsTable=afc-dev-LineupsTable-1F4C3N1F9JTEP (DescribeStackResources only); all fixture ops under flock --close [PRIVATE-TMP]/afc-m03-m05-aws.lock through the normal aws CLI login session; no Lambda env/config/secret or credential file inspected; no scans; exact-key get/query on own profile only",
+    "helper": "private /tmp fixture.py sha256 a445b4c53e2cd6157dfedfb56c8b3107e91aacc50ef42cc180bc8a464710c101; lineup writes replicate store.put_lineup monotonic-version conditional semantics because local boto3 1.35 cannot resolve aws-login credentials (documented in helper header); alert items use store.put_alert/seed_alert shape, source replay, conditional not-exists insert",
+    "lineup": "original absent; put manual Red Testers / Red League Alpha, starters [9000001 Sample Receiver], scoring halfPpr, version 1; restored by tombstone put, get_lineup None (content match verified)",
+    "alerts_inserted_sequentially": [
+      {"cursor": "afc-device1-cont-20261019T122656Z-01", "eventId": "afc-device1-cont-evt-20261019T122656Z-01", "emittedAt": "2026-10-19T12:26:54Z"},
+      {"cursor": "afc-device1-cont-20261019T122656Z-02", "eventId": "afc-device1-cont-evt-20261019T122656Z-02", "emittedAt": "2026-10-19T12:31:46Z"},
+      {"cursor": "afc-device1-cont-20261019T122656Z-03", "eventId": "afc-device1-cont-evt-20261019T122656Z-03", "emittedAt": "2026-10-19T12:35:03Z"}
+    ],
+    "route": "providerRoute = provider_resolver.resolve shape: provider prime_video, channel Prime Video, accessBasis unknown, fire_os registry entry (package com.amazon.firebat, uri https://watch.amazon.com/search, verified_outcome searchOpened 2026-10-16) with status verified, vega REGISTRY_ROUTE_GAP; no game route invented",
+    "cleanup": "exit 0: alerts deleted=3 remaining=[]; own-profile query [] after; verify-alert -01 absent; lineup restored match=True",
+    "own_profile_residue_expected_from_normal_app_use": "profile revision advanced by two TV profile saves (final saved state = starting state: no team/league, no alert types); one providerState routing-outcome record accessUnknown for synthetic event -01 from the normal Watch report; panel derived state may exist from API reads. No direct writes outside Alerts/Lineups.",
+    "profile_setup_method": "team/league + PlayerScore set and later restored exclusively through the TV Profile/Settings UI (normal PUT /v1/profile by the app); starting state observed on screen first (none/none) and restored to it; final Panel frame byte-identical to the run's first Panel frame"
+  },
+  "commands": [
+    {"id": "gate-consumption", "exit": 0, "result": "gate-configured.log hash matches pinned b809d7de...; 262/0/0/0; G5 head/tree match"},
+    {"id": "installed-apk-verify", "exit": 0, "result": "pm path + pull + sha256 = 0941aa8b...b041; apksigner signer = 24ba7246..."},
+    {"id": "aws-metadata", "exit": 0, "result": "afc-dev user; exact two physical table names from stack resources"},
+    {"id": "fixture-selfcheck+orig+list", "exit": 0, "result": "guard PASS; orig lineup absent; own cursors []"},
+    {"id": "fixture-lineup", "exit": 0, "result": "put ok version=1; read-back starter 9000001"},
+    {"id": "fixture-alert-1-first-attempt", "exit": 1, "result": "DynamoDB reserved keyword 'cursor' in ConditionExpression; own helper corrected with ExpressionAttributeNames"},
+    {"id": "fixture-alert-1/2/3", "exit": 0, "result": "three sequential conditional inserts at 12:26:54Z/12:31:46Z/12:35:03Z"},
+    {"id": "adb-drive+CMD-ADB-SCREENCAP", "exit": 0, "result": "real D-pad/OK/Menu keyevents under flock --close; every repo PNG image-inspected at 1920x1080"},
+    {"id": "watch-foreground-metadata", "exit": 0, "result": "dumpsys mResumedActivity com.amazon.firebat/com.amazon.pyrocore.IgnitionActivity after confirmed Watch; no provider screenshot; AFC relaunched immediately"},
+    {"id": "fixture-cleanup+verify", "exit": 0, "result": "deleted=3 remaining=[]; lineup restored match=True; -01 absent"},
+    {"id": "final-lease-check", "exit": 0, "result": "ROOT head/branch unchanged generation 1; G5 head/tree unchanged, tv-app/backend clean; ROOT tv-app/backend diff empty"}
+  ],
+  "acceptance_to_evidence": [
+    {"row": 1, "criterion": "Populated lineup panel with synthetic starter/unknown stats shown honestly", "state": "OBSERVED", "evidence": "row1-lineup-populated.png sha256 4ceccebfbdd563300157a7ab88e24fd199479f6dbc9e9c9fe3b12a434ec83535: Half-PPR Manual lineup, Sample Receiver, status+points Unavailable, totals Unavailable"},
+    {"row": 2, "criterion": "Delivered synthetic alert card with Watch and Dismiss", "state": "OBSERVED", "evidence": "row2-alert-card-watch-dismiss.png sha256 42f09ff0ece9dbd3d1e95ca116e92b8e968a5d3ea3af0e8724207d53dc96abd4: Score update, Sample Receiver, Access unknown, synthetic commentary, Watch, Dismiss"},
+    {"row": 3, "criterion": "D-pad Watch switching confirmation, one verified Prime search-route launch (package metadata only), return and truthful uncertain outcome", "state": "OBSERVED", "evidence": "row3-switch-confirmation.png sha256 0a885fda910acd1444be3190a06a1c47cdd6056ab03c2008b4e51bab42611cb3 ('Press OK again to switch apps'); dumpsys mResumedActivity com.amazon.firebat (commands.txt, no provider capture); row3-watch-outcome-uncertain.png sha256 1e83e9c3e28597eb46f8063159775b594e576af03d3aecf4720dbb27e33c9f30 ('Watch: could not confirm the game is playing.')"},
+    {"row": 4, "criterion": "Dismiss removes the exact card locally", "state": "OBSERVED", "evidence": "row4-card-dismissed.png sha256 8a49594d81c3e1dc8c6952f94e1fa8ef4373ea6fe17a4a62b3862e6202b6a144: alert -01 card gone, lineup remains"},
+    {"row": 5, "criterion": "New distinct alert reveals dismissed (hidden) panel when setting ON", "state": "OBSERVED", "evidence": "row5-panel-hidden.png sha256 7ca1af7512a6f12f1520c40d0d2cc74ae3aacb51460bd80b9b555419034cbdc4 then row5-revealed-setting-on.png sha256 b35dcc0b6cdbf2e90f1678b58f820e7f28fbf966f4f5d257a25dab3e60f6bb20 with alert -02 card", "limitation": "Reveal is the implemented within-Panel hidden-content re-show (PanelController) while already on the Panel destination; whole-app navigation to Panel from another destination is not implemented and not claimed"},
+    {"row": 6, "criterion": "New distinct alert does not reveal hidden panel when setting OFF; manual reopen still shows alert; restore ON", "state": "OBSERVED", "evidence": "row6-setting-off.png sha256 8afebf0b7be7ed35ac5c5324ac7ec27487df3e584f4ca5072caeb01e73516370; row6-still-hidden-setting-off.png sha256 7ca1af7512a6f12f1520c40d0d2cc74ae3aacb51460bd80b9b555419034cbdc4 (byte-identical hidden frame 30 s after alert -03); row6-manual-reopen.png sha256 3e4c5d0df3a82afc59cdc4ee38e00d16d995f091fe8e40b62c528335a61497b6 (alert -03 card after Menu); setting-restored-on.png sha256 7709e6da086eda406efdc8be8527474656861f4b52db67fa2d17c91a69cfeaa8"}
+  ],
+  "screenshots": "evidence/visual/P2-A01/recovery-2026-10-18/alert-continuation/ (11 PNGs, hashes in acceptance_to_evidence plus row5-panel-hidden and setting-restored-on; all 1920x1080 AFC-only; two private Link-code captures from nav miscounts withheld in /tmp, never copied; no provider/live/customer UI captured)",
+  "changed_paths": [
+    "evidence/visual/P2-A01/recovery-2026-10-18/alert-continuation/row1-lineup-populated.png",
+    "evidence/visual/P2-A01/recovery-2026-10-18/alert-continuation/row2-alert-card-watch-dismiss.png",
+    "evidence/visual/P2-A01/recovery-2026-10-18/alert-continuation/row3-switch-confirmation.png",
+    "evidence/visual/P2-A01/recovery-2026-10-18/alert-continuation/row3-watch-outcome-uncertain.png",
+    "evidence/visual/P2-A01/recovery-2026-10-18/alert-continuation/row4-card-dismissed.png",
+    "evidence/visual/P2-A01/recovery-2026-10-18/alert-continuation/row5-panel-hidden.png",
+    "evidence/visual/P2-A01/recovery-2026-10-18/alert-continuation/row5-revealed-setting-on.png",
+    "evidence/visual/P2-A01/recovery-2026-10-18/alert-continuation/row6-setting-off.png",
+    "evidence/visual/P2-A01/recovery-2026-10-18/alert-continuation/row6-still-hidden-setting-off.png",
+    "evidence/visual/P2-A01/recovery-2026-10-18/alert-continuation/row6-manual-reopen.png",
+    "evidence/visual/P2-A01/recovery-2026-10-18/alert-continuation/setting-restored-on.png",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/device-alert-continuation/observations.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/device-alert-continuation/commands.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/device-alert-continuation/receipt.json"
+  ],
+  "non_changes_verified": "No product/test/spike/G5 source edits (ROOT tv-app/backend diff empty; G5 tv-app/backend status clean, head/tree unchanged). Prior receipts and unrelated dirty files preserved. No commit/push/merge/PR/issue/publication. FullScreen/panel-only labeling kept accurate; no heads-up, live game, Vega, entitlement, or gameOpened claim.",
+  "gaps": [
+    "REVEAL_SCOPE_LIMITATION: show-panel-on-new-alert only re-shows hidden content within the Panel destination (source behavior); cross-destination reveal is not implemented - tested as specified, reported not forced",
+    "REVERIFY_CAPABILITY_GAP: preserved from binding; no APK semantic Reverify result exists",
+    "X07 in-app disabled probe remains separate future work (not assigned here); SANITIZATION_REQUIRED code-shown captures from device-1 unchanged",
+    "Whole R-T-DEVICE-1 acceptance still requires its remaining rows/controller decision; this receipt is scope-only"
+  ],
+  "risks": [
+    "Profile text fields trap D-pad focus (multiline fields, keyboard Next no-op; only IME Previous + geometric button traversal escapes) - recorded as author observation for controller test-first flow; no source change made in this evidence-only packet",
+    "Watch outcome is accessUnknown by design on this candidate (no current-attempt observation); searchOpened is historical registry evidence, not this attempt's outcome"
+  ],
+  "review_budget": "Historical G5 review/repair spent and not renewed; RW1 review 0/1 unchanged; no reviewer dispatched by author",
+  "developer_feedback": "Sequential single-alert inserts with 25-30 s waits gave independent observations every time. The Amazon keyboard Previous (IME_ACTION_PREVIOUS) is the only reliable exit from the profile multiline text fields; Next is a no-op for these fields, and touch/mouse taps do not click tv-material buttons - D-pad focus+CENTER only. A future packet should budget for this or fix the fields (singleLine + ImeAction.Next) through the normal test-first route. Local boto3 cannot use aws-login credentials; going through the aws CLI kept credentials inside the normal session."
+}

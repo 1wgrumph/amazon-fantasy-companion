@@ -1,0 +1,74 @@
+{
+  "slice_id": "R-T-DEVICE-1",
+  "continuation_of": "evidence/device-1/receipt.json (old APK 0941aa8b proof preserved, sha256 d1d170f2c347571a5367eadee5a984d5d72d5c42a2c746b61aed7d6d4dbca2df, not rewritten)",
+  "task_outcome": "NEEDS_MORE_EVIDENCE",
+  "role_verdict": "PARTIAL",
+  "recorded_at": "2026-10-19T13:03:41Z",
+  "route": {"harness": "Muse Code", "model": "muse-wonder-1.0-contributor", "contributor_mode": "on", "effort": "medium", "binding": "profile-binding-wonder-existing-five.json", "binding_sha256": "746baae2781553f9ae18e1edd3ed25d3d1bf78ebf5337069b9179b5898115e79", "decision": "DEC-AFC-M0305-WONDER-EXISTING-FIVE-20261019"},
+  "dispatch_precondition": "execution-state.json R-T-DEVICE-1 native_completed=true, state_reason records native session 28826 exit0, six synthetic G5 rows observed on old APK, controller exact-key verification: three owned alerts absent and logical lineup restored. Consumed once; no new trial slice.",
+  "selected_capabilities": {
+    "coverage_assist": "enabled/required preserved per ocr-engine-binding.json sha256 295885a332227f8e32caf4b3c17c5b91a243ed1e6b74dd10fedf613f8ac7d19f (ChatGPT/GPT-6.1 Sol/high); NOT run by author, reserved for scheduled RW1 reviewer (review 0/1, repair 0/1 unchanged, none dispatched)",
+    "reverify": "REVERIFY_CAPABILITY_GAP: enabled; known APK/DEX semantic gap explicit, not passing, not replaced by ordinary tests"
+  },
+  "lease_candidate": {
+    "root": "afc/m03-m05-recovery@7da6187b5a57ee80887ef84301ff99a3592bacb6 generation1 active",
+    "integrated": "afc/m03-m05-g5-integration@f8b57f05d3354cb3a3c25c71a01e0b0fa734a2ef",
+    "app_src_tree": "2146175ed34f3bc0cd026e28bb9b57f9a3281209 (HEAD:tv-app/app/src, verified)",
+    "apk_sha256": "ad9b04355e79c44bb2fcddca539c226b12606c5a9a2a3a101c0d2320060ea880",
+    "apk_bytes": 7708199,
+    "signer_sha256": "24ba72469642c32f76d0e1ac293817117e6466835b5e75ebe33e38f53eba2d77 (apksigner verify v2 true, Android Debug DN; matches old candidate signer)",
+    "candidate_ref": "integrated APK ad9b0435 / source f8b57f05 / tree 2146175e"
+  },
+  "repository_gates_consumed_no_rerun": [
+    {"log": "[PRIVATE-TMP]/afc-g5-integration-tvapp-gate.txt", "sha256": "15de59a96364a10012c9b160cfca08cabcf38f52e9077128b63a246761b42e31", "result": "exit0, 262 tests, 0 failures/errors/skips, lint/build PASS (verified tail)"},
+    {"log": "[PRIVATE-TMP]/afc-g5-integration-repo-gate.txt", "sha256": "16eb0e2515ba55a3bea1270b3e77deecf5c1f8fe87f11b5da80e8bbf7c15cb73", "result": "exit0, docs/hygiene 91 PASS (verified tail)"}
+  ],
+  "device": {"model": "AFTKM", "display": "physical 3840x2160, override 1920x1080", "address_serial_logged": false, "locking": "every adb client call under flock --close [PRIVATE-TMP]/afc-m03-m05-fire-tv.lock; daemon started outside lock", "host_device_time": "2026-10-19T12:59:28Z both, in sync"},
+  "commands": [
+    {"id": "CMD-ADB-INSTALL/companion", "command": "adb install -r integrated app-debug.apk (flock --close)", "exit": 0, "result": "Success; firstInstallTime preserved 2026-10-19 11:07:47, lastUpdateTime 12:59:39, data preserved, no clear/uninstall"},
+    {"id": "pull-verify/pre", "command": "adb pull installed base.apk (private /tmp)", "exit": 0, "result": "pre-install 0941aa8bfa8d49bf30ff8744465ee53db23504274e82081a8260786eb8b7b041 (old candidate confirmed)"},
+    {"id": "pull-verify/post+final", "command": "adb pull installed base.apk (private /tmp)", "exit": 0, "result": "ad9b04355e79c44bb2fcddca539c226b12606c5a9a2a3a101c0d2320060ea880, 7708199 bytes, exact candidate bytes (checked twice)"},
+    {"id": "CMD-ADB-SCREENCAP/PROC-VISUAL-REVIEW", "command": "adb exec-out screencap -p + D-pad keyevents + uiautomator dump (private /tmp, safe copies below)", "exit": 0, "result": "author image-inspected profile/panel/probe captures listed in evidence table"},
+    {"id": "CMD-ADB-INSTALL/probe", "command": "adb install -r spikes/sp7-detection/probe/build/sp7probe.apk sha256 f73ca802063fc179085b7b1e1696823655504efa4d1fd41a4a6f9112e0af4850 (same debug signer)", "exit": 0, "result": "Success; uninstalled after run, pm path exit1 verified absent"},
+    {"id": "CMD-VERDICT-CHECK/x07-offline", "command": "javac/java ProbeSelfCheck on host JDK17 against existing probe classes", "exit": 0, "result": "ProbeSelfCheck PASS (8 checks): OFF zero queries, allowlist statuses, arbitrary rejected before query, error/null UNKNOWN, self-disable guard"},
+    {"id": "CMD-VERDICT-CHECK/x07-ondevice", "command": "probe UI: OFF run, opt-in ON run, logcat -s Sp7Probe", "exit": 0, "result": "OFF all NOT_QUERIED; ON com.amazon.firebat INSTALLED_ENABLED, com.netflix.ninja INSTALLED_ENABLED, absent controls ABSENT"}
+  ],
+  "evidence_files": [
+    {"file": "profile-settings-loaded.png", "sha256": "8d5d246e7b6781f521d193d9089c5dec16a773ae648a70c5f0ced6ab7f2b6f45"},
+    {"file": "panel-empty.png", "sha256": "469e13e6951c1b2b3ff00cc1e3da432b8c8ecd034028755644bacf620f8f4e19"},
+    {"file": "show-panel-off.png", "sha256": "8afebf0b7be7ed35ac5c5324ac7ec27487df3e584f4ca5072caeb01e73516370"},
+    {"file": "show-panel-on-restored.png", "sha256": "7709e6da086eda406efdc8be8527474656861f4b52db67fa2d17c91a69cfeaa8"},
+    {"file": "x07-probe-off.png", "sha256": "e2d385d13033bec8f3f764410c9329c928999596942cda45dd9ec9f4528146a2"},
+    {"file": "x07-probe-on.png", "sha256": "5cd256b5ce2273fe311db4926fe008a592975d76280ccc61d47b88259ccdcb15"}
+  ],
+  "acceptance_to_evidence": [
+    {"row": "G5/A01 shell (Link/Profile/Panel)", "state": "OBSERVED_NEW_CANDIDATE", "evidence": "profile-settings-loaded.png: three nav buttons, Profile/Settings focused, legible 1080p"},
+    {"row": "A01 unconfigured", "state": "GAP_NEW_CANDIDATE", "evidence": "integrated APK is a single configured-payload build (ZIP entries identical to configured old APK per g5-apk-entry-comparison.json); unconfigured variant is a different APK, not installed in this continuation. Old-APK proof only."},
+    {"row": "A01 network-error", "state": "GAP_NEW_CANDIDATE", "evidence": "loopback variant is a different APK, not installed; not faked. Old-APK proof only."},
+    {"row": "L02 code-shown/expired/linked", "state": "GAP_NEW_CANDIDATE_NOT_CAPTURED", "evidence": "Link page was opened on new candidate during navigation and rendered a code view (value never recorded/captured/committed per prohibition); linked Profile loaded state observed (profile-settings-loaded.png). Expiry not re-waited. Old-APK proof retained at its scope."},
+    {"row": "G5 panel FullScreen empty", "state": "OBSERVED_NEW_CANDIDATE", "evidence": "panel-empty.png hash identical to old-APK empty-panel capture (deterministic empty state): Team/league Unavailable"},
+    {"row": "G5 Show panel default ON + ON/OFF toggle", "state": "OBSERVED_NEW_CANDIDATE_SETTING_ONLY", "evidence": "show-panel-off.png / show-panel-on-restored.png (hashes identical to old captures); restored ON verified in final dump"},
+    {"row": "G5 Watch / alert arrival / populated panel", "state": "GAP_NEW_CANDIDATE_NOT_EXERCISED", "evidence": "no backend fixture mutation performed in this continuation (safe ownership/restoration for a fresh stimulus not re-established); prior worker six-row synthetic proof remains bound to old APK 0941aa8 only, controller-verified cleanup. Not transferred."},
+    {"row": "X07 in-app installed/absent", "state": "OBSERVED_NEW", "evidence": "x07-probe-on.png + Sp7Probe logcat: firebat/netflix INSTALLED_ENABLED, absent+fixture ABSENT. Shell visibility was not used as app proof; this is in-app PackageManager under <queries> leanback intent."},
+    {"row": "X07 opt-in OFF / allowlist / unknown", "state": "OBSERVED", "evidence": "x07-probe-off.png all NOT_QUERIED; offline ProbeSelfCheck PASS proves zero-query counting, arbitrary-package rejection before query, error/null UNKNOWN (never entitlement)"},
+    {"row": "X07 disabled", "state": "GAP_DISABLED_PROBE_UNSUPPORTED", "evidence": "prior shell pm disable SecurityException on this Fire OS preserved; no provider app disabled, no own fixture APK existed to disable. Not claimed."},
+    {"row": "SEIT rows (18 slice rows)", "state": "PARTIAL", "evidence": "visual/DX/path rows above; REL/REV/SUPPLY rows remain gated by REVERIFY_CAPABILITY_GAP and absent independent RW1 review (0/1 unspent, author checks are not review)"}
+  ],
+  "cleanup": {
+    "probe": "com.afc.sp7probe uninstalled, pm path exit1",
+    "settings": "Show panel restored ON (final dump verified); wm size untouched (1920x1080 override pre-existing)",
+    "provider": "com.netflix.ninja enabled=0 (default) verified unchanged; no provider app launched/disabled/cleared",
+    "fixtures": "no backend rows created/mutated/deleted by this continuation; no alert stimulus consumed",
+    "companion": "left installed at exact candidate ad9b0435 with preserved data and synthetic profile loaded"
+  },
+  "non_changes_verified": "ROOT git status tv-app/backend clean (spikes/evidence untracked pre-existing probe only, untouched); G5 tv-app status clean, HEAD/tree reverified; original device-1 receipt and alert-continuation evidence preserved unread-modified. No product/test source change, no commit/push/PR.",
+  "findings": [
+    {"id": "WONDER-1", "kind": "gap", "detail": "Alert-arrival/Watch/populated-panel behavior still has no new-candidate native proof; payload identity (equal ZIP entries) was not treated as equivalence."},
+    {"id": "WONDER-2", "kind": "gap", "detail": "X07 disabled-state detection remains unexercised: shell cannot disable on this build and no disposable own fixture APK exists."},
+    {"id": "WONDER-3", "kind": "observation", "detail": "Panel-empty and show-panel toggle captures are byte-identical between old and integrated APKs, consistent with identical payload entries; still recorded as new-candidate observations, not transferred proof."}
+  ],
+  "corrections": "Initial device-address parse picked the Fire OS version string; corrected to the LAN address from the local inventory before any device mutation (no wrong-device contact resulted in a mutation; first connect attempt was read-only).",
+  "remaining_risks": ["RW1 independent review not run (budget preserved)", "REVERIFY_CAPABILITY_GAP open", "L02 TTL/link flows and alert stimulus need a further authorized pass on the integrated APK if controller requires full closure"],
+  "blocker": "NEEDS_MORE_EVIDENCE: alert-arrival, L02, unconfigured/network-error variant rows, and X07-disabled remain named gaps above. WAITING_ON controller decision whether to authorize a fresh synthetic stimulus pass on the integrated candidate.",
+  "developer_feedback": "Same-signer install -r over the old candidate preserved the synthetic session; the app resumed directly to Profile loaded. D-pad focus order in the nav is non-linear (LEFT/UP cycling), uiautomator text dump remained the deterministic navigation signal. Probe checkbox+RUN flow worked entirely via D-pad with logcat Sp7Probe as a text oracle."
+}

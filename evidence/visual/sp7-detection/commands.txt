@@ -1,0 +1,31 @@
+SP-7 / P2-X07 detection probes, 2026-10-19, leased Fire TV (AFTKM, Fire OS 8.1.8.5).
+All adb client calls under flock --close [PRIVATE-TMP]/afc-m03-m05-fire-tv.lock; device address/serial omitted.
+
+adb shell wm size
+  Physical size: 3840x2160 / Override size: 1920x1080   (exit 0)
+adb shell pm path <pkg> for provider candidates          (exit 0 = path printed, 1 = absent)
+  com.amazon.firebat INSTALLED
+  com.netflix.ninja INSTALLED
+  com.afc.companion INSTALLED (after CMD-ADB-INSTALL)
+  com.amazon.avod.thirdpartyclient absent
+  com.google.android.youtube.tv absent
+  com.espn.score_center absent
+  com.disney.disneyplus absent
+  tv.sling.airtv absent
+  com.hulu.livingroomplus absent
+  com.cbs.ott absent
+  com.foxsports.videogo absent
+  com.nfl.android.tv absent
+  com.example.absent.afcprobe absent (control)
+adb shell cmd package resolve-activity --brief -a MAIN -c LEANBACK_LAUNCHER com.amazon.firebat
+  resolved com.amazon.firebat/com.amazon.pyrocore.IgnitionActivity   (exit 0)
+adb shell pm disable com.netflix.ninja
+  SecurityException: Shell cannot change component state for com.netflix.ninja/null to 2   (FAILED, no change)
+adb shell pm list packages -d   -> (empty)
+adb shell pm enable com.netflix.ninja          -> new state: enabled (explicit)
+adb shell pm default-state com.netflix.ninja   -> new state: default
+adb shell dumpsys package com.netflix.ninja | User 0 line
+  before: enabled=0 installed=true notLaunched=true
+  after restore: enabled=0 installed=true notLaunched=true   (original state restored)
+Foreground during probes: com.amazon.tmm.tutorial/.TutorialActivity (no live viewing).
+No provider app launched, uninstalled, or cleared.

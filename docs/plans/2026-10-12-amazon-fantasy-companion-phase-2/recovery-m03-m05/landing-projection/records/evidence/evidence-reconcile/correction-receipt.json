@@ -1,0 +1,55 @@
+{
+  "task": "R-T-EVIDENCE-RECONCILE",
+  "correction_of": "receipt.json (immutable, not modified)",
+  "task_outcome": "PASS",
+  "role_verdict": "CANDIDATE_READY",
+  "candidate_ref": "7da6187b5a57ee80887ef84301ff99a3592bacb6",
+  "branch": "afc/m03-m05-recovery",
+  "lease_generation": 1,
+  "changed_paths": [
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/evidence-reconcile/correction-receipt.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/evidence-reconcile/accepted-reuse-correction.json",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/evidence-reconcile/resolver-suite-correction.txt",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/evidence-reconcile/resolver-suite-correction.exit"
+  ],
+  "commands": [
+    {
+      "id": "CMD-REGISTRY-CHECK/pytest (correction)",
+      "cmd": "flock [PRIVATE-TMP]/afc-m03-m05-host-pytest.lock [PRIVATE-HOME]/.local/share/afc-tools/backend-tests/bin/python3.12 -m pytest backend/tests/unit/provider_resolver -v",
+      "exit": 0,
+      "result": "94 passed",
+      "output_sha256": "3c7695ec22c5416b35a956fae1d82a5aa6c14bc184385cb125f7fad3d551c7a5",
+      "output_path": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/evidence-reconcile/resolver-suite-correction.txt"
+    }
+  ],
+  "reused_from_original_after_identity_check": [
+    "CMD-GATE-DOCS",
+    "CMD-VERDICT-CHECK",
+    "CMD-REGISTRY-CHECK/json.tool",
+    "CMD-FIXTURE-INDEX-CHECK",
+    "CMD-CONTRACT-DIGEST"
+  ],
+  "preserved_original_failure_rows": [
+    "CMD-REGISTRY-CHECK/pytest exit 4 moto missing (env, superseded by correction run)"
+  ],
+  "accepted_reuse": "accepted-reuse-correction.json: 10/10 sha256 match; #28/B03 CLOSED PR65 MERGED; #30/B02 CLOSED PR76 MERGED; GAP-INPUT resolved",
+  "findings_gaps": [
+    "Platform-route gap retained: registry.json lists only fire_os routes key; no vega route exists and none invented; resolver suite passing is contract acceptance only, not device/live/Vega/deployed acceptance"
+  ],
+  "negative_trust_boundary": {
+    "tracked_backend_spikes_hash_before": "8badb08fad787824f2ee4e6f7f94ec86dfd1967c0412bae06ee5c26d41868d3b",
+    "after": "8badb08fad787824f2ee4e6f7f94ec86dfd1967c0412bae06ee5c26d41868d3b",
+    "product_writes": 0,
+    "device_live_vega_deployed_pass_claimed": false
+  },
+  "remaining_risks": [
+    "Registry platform routes (vega) unverified; historical evidence reuse only"
+  ],
+  "blocker": null,
+  "route": "light-implementer, same lease/RW1 budget, no install",
+  "capabilities": [
+    "coverage_assist own_engine",
+    "Reverify preserved, not dispatched"
+  ],
+  "note": "CANDIDATE_READY means reconciliation package ready, not new platform acceptance. Own author checks, not independent assurance."
+}

@@ -1,0 +1,1112 @@
+{
+  "lifecycle": "AFC-2026-10-11",
+  "candidate_revision": "7da6187b5a57ee80887ef84301ff99a3592bacb6",
+  "generation": 1,
+  "authority": "AUTH-AFC-M0305-EXEC-20261019",
+  "planning_candidate_digest": "0808ec169952e6ef6c224fc990ca4742f5ccba88688f228503082c067196ec0f",
+  "planning_review_used": 1,
+  "planning_review_repairs_used": 0,
+  "implementation_wave_review": {
+    "RW1": {
+      "used": 0,
+      "limit": 1,
+      "repairs_used": 0,
+      "repair_limit": 1
+    },
+    "RW2": {
+      "used": 0,
+      "limit": 1,
+      "repairs_used": 0,
+      "repair_limit": 1
+    },
+    "RW3": {
+      "used": 0,
+      "limit": 1,
+      "repairs_used": 0,
+      "repair_limit": 1
+    }
+  },
+  "tasks": {
+    "R-T-EVIDENCE-RECONCILE": {
+      "state": "EVIDENCE_READY",
+      "depends_on": [],
+      "write_set": [
+        "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/evidence-reconcile/"
+      ],
+      "route": {
+        "snapshot_profile": "opensource-hackathon",
+        "snapshot_role": "light_implementer",
+        "binding": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/profile-binding.json",
+        "binding_sha256": "e8d0b5a02cd9f445644a0caa18185af60a46f2316769b527ccc9e046796b0608",
+        "harness": "Claude Code",
+        "model": "Claude Sonnet 5.5",
+        "reasoning": "medium",
+        "ordered_fallbacks": [
+          {
+            "condition": "Verified usage/rate-limit exhaustion of the primary route.",
+            "harness": "AGY",
+            "model": "Claude Sonnet 5.5",
+            "reasoning": "medium"
+          },
+          {
+            "condition": "Verified usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+            "harness": "Cursor Agent",
+            "model": "Grok 4.7",
+            "reasoning": "medium"
+          },
+          {
+            "condition": "Verified usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+            "harness": "Muse Code",
+            "model": "Muse Spark 1.3 Contributor",
+            "reasoning": "xhigh"
+          }
+        ]
+      },
+      "receipt": "evidence/evidence-reconcile/receipt.json",
+      "route_selection": "fallback:0",
+      "native_exec_session": 21696,
+      "route_reason": "Confirmed same-role primary usage quota, preserved native exit1 receipt",
+      "native_completed": true,
+      "state_reason": "Correction author PASS; 94 resolver tests, 10 historical evidence hashes; reused input identities reverified by controller. Platform gaps retained; RW1 review still required.",
+      "state_events": [
+        {
+          "at": "2026-10-19T02:53:54.830797+00:00",
+          "from": "IN_PROGRESS",
+          "to": "CORRECTION_REQUIRED",
+          "evidence": "evidence/evidence-reconcile/receipt.json"
+        },
+        {
+          "at": "2026-10-19T02:55:25.413947+00:00",
+          "from": "CORRECTION_REQUIRED",
+          "to": "READY",
+          "evidence": "Existing gate-selected Python environment and exact accepted-reuse inputs supplied."
+        },
+        {
+          "at": "2026-10-19T02:55:25.413947+00:00",
+          "from": "READY",
+          "to": "IN_PROGRESS",
+          "native_exec_session": 21696
+        }
+      ],
+      "correction_receipt": "evidence/evidence-reconcile/correction-receipt.json",
+      "controller_identity_verification": "controller-author-evidence-verification.json"
+    },
+    "R-T-HOST-TV-PREP": {
+      "state": "EVIDENCE_READY",
+      "depends_on": [],
+      "write_set": [
+        "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/host-tv-prep/"
+      ],
+      "route": {
+        "snapshot_profile": "opensource-hackathon",
+        "snapshot_role": "implementer",
+        "binding": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/profile-binding.json",
+        "binding_sha256": "e8d0b5a02cd9f445644a0caa18185af60a46f2316769b527ccc9e046796b0608",
+        "harness": "Muse Code",
+        "model": "Muse WonderFull Contributor",
+        "reasoning": "high",
+        "ordered_fallbacks": [
+          {
+            "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+            "harness": "AGY",
+            "model": "Gemini 4 Argon",
+            "reasoning": "medium"
+          },
+          {
+            "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+            "harness": "Codex CLI",
+            "model": "GPT-6.1 Sol",
+            "reasoning": "high"
+          },
+          {
+            "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+            "harness": "Claude Code",
+            "model": "Claude Opus 5.5",
+            "reasoning": "medium"
+          },
+          {
+            "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+            "harness": "Pi CLI",
+            "model": "Claude Opus 5.5",
+            "reasoning": "medium"
+          }
+        ]
+      },
+      "receipt": "evidence/host-tv-prep/receipt.json",
+      "native_exec_session": 57314,
+      "route_selection": "primary",
+      "native_completed": true,
+      "state_reason": "Test-only fixture repaired on Sol/high: focused red\u2192green, mutation31/31, hygiene91/91, evidence hashes and final test bytes verified. Original TV build unchanged; APK/DEX capability gap explicit; RW1 review unspent.",
+      "state_events": [
+        {
+          "at": "2026-10-19T02:53:54.830797+00:00",
+          "from": "IN_PROGRESS",
+          "to": "CORRECTION_REQUIRED",
+          "evidence": "evidence/host-tv-prep/receipt.json"
+        },
+        {
+          "at": "2026-10-19T10:53:35.534922+00:00",
+          "from": "OWNER_DECISION_REQUIRED",
+          "to": "READY",
+          "authority": "DEC-AFC-M0305-FALLBACK-CONTINUITY-20261019"
+        },
+        {
+          "at": "2026-10-19T10:53:35.534922+00:00",
+          "from": "READY",
+          "to": "IN_PROGRESS",
+          "native_exec_session": 57314
+        }
+      ],
+      "repair_binding": "profile-binding-test-sol.json",
+      "repair_binding_sha256": "4ef38bea60a4cb849d7385f354bfc16bc51b44e9842746ae308213a7817977ab",
+      "repair_receipt": "evidence/mutation-fixture-repair/receipt.json",
+      "consumption_receipt": "host-prep-consumption.json"
+    },
+    "R-T-BACKEND-PREP": {
+      "state": "EVIDENCE_READY",
+      "depends_on": [],
+      "write_set": [
+        "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/backend-prep/"
+      ],
+      "route": {
+        "snapshot_profile": "opensource-hackathon",
+        "snapshot_role": "light_implementer",
+        "binding": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/profile-binding.json",
+        "binding_sha256": "e8d0b5a02cd9f445644a0caa18185af60a46f2316769b527ccc9e046796b0608",
+        "harness": "Claude Code",
+        "model": "Claude Sonnet 5.5",
+        "reasoning": "medium",
+        "ordered_fallbacks": [
+          {
+            "condition": "Verified usage/rate-limit exhaustion of the primary route.",
+            "harness": "AGY",
+            "model": "Claude Sonnet 5.5",
+            "reasoning": "medium"
+          },
+          {
+            "condition": "Verified usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+            "harness": "Cursor Agent",
+            "model": "Grok 4.7",
+            "reasoning": "medium"
+          },
+          {
+            "condition": "Verified usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+            "harness": "Muse Code",
+            "model": "Muse Spark 1.3 Contributor",
+            "reasoning": "xhigh"
+          }
+        ]
+      },
+      "receipt": "evidence/backend-prep/receipt.json",
+      "native_exec_session": 25028,
+      "route_selection": "fallback:0",
+      "route_reason": "Confirmed same-role primary usage quota, preserved native exit1 receipt",
+      "native_completed": true,
+      "state_reason": "Author PASS; required RW1 independent review remains unspent.",
+      "state_events": [
+        {
+          "at": "2026-10-19T02:53:54.830797+00:00",
+          "from": "IN_PROGRESS",
+          "to": "EVIDENCE_READY",
+          "evidence": "evidence/backend-prep/receipt.json"
+        }
+      ]
+    },
+    "R-T-LIVE-PREP": {
+      "state": "EVIDENCE_READY",
+      "depends_on": [
+        "R-T-EVIDENCE-RECONCILE"
+      ],
+      "write_set": [
+        "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/live-prep/",
+        "backend/fixtures/replay/"
+      ],
+      "route": {
+        "snapshot_profile": "opensource-hackathon",
+        "snapshot_role": "implementer",
+        "binding": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/profile-binding.json",
+        "binding_sha256": "e8d0b5a02cd9f445644a0caa18185af60a46f2316769b527ccc9e046796b0608",
+        "harness": "Muse Code",
+        "model": "Muse WonderFull Contributor",
+        "reasoning": "high",
+        "ordered_fallbacks": [
+          {
+            "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+            "harness": "AGY",
+            "model": "Gemini 4 Argon",
+            "reasoning": "medium"
+          },
+          {
+            "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+            "harness": "Codex CLI",
+            "model": "GPT-6.1 Sol",
+            "reasoning": "high"
+          },
+          {
+            "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+            "harness": "Claude Code",
+            "model": "Claude Opus 5.5",
+            "reasoning": "medium"
+          },
+          {
+            "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+            "harness": "Pi CLI",
+            "model": "Claude Opus 5.5",
+            "reasoning": "medium"
+          }
+        ]
+      },
+      "receipt": "evidence/live-prep/receipt.json",
+      "state_events": [
+        {
+          "at": "2026-10-19T02:55:25.413947+00:00",
+          "from": "WAITING_ON",
+          "to": "READY",
+          "evidence": "Approved entry criterion CP-X05-HIST permits verified-inline checkpoint; no need to wait for unrelated reconciliation correction."
+        },
+        {
+          "at": "2026-10-19T02:55:25.413947+00:00",
+          "from": "READY",
+          "to": "IN_PROGRESS",
+          "native_exec_session": 20150
+        }
+      ],
+      "native_exec_session": 20150,
+      "native_completed": true,
+      "state_reason": "Author PASS; 21 tests and two historical captures, four raw/index hashes verified by controller. No live closure; RW1 review remains unspent."
+    },
+    "R-T-DEPLOY-1": {
+      "state": "EVIDENCE_READY",
+      "depends_on": [
+        "R-T-BACKEND-PREP"
+      ],
+      "write_set": [
+        "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-L02/recovery-2026-10-18/"
+      ],
+      "route": {
+        "snapshot_profile": "opensource-hackathon",
+        "snapshot_role": "light_implementer",
+        "binding": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/profile-binding.json",
+        "binding_sha256": "e8d0b5a02cd9f445644a0caa18185af60a46f2316769b527ccc9e046796b0608",
+        "harness": "Claude Code",
+        "model": "Claude Sonnet 5.5",
+        "reasoning": "medium",
+        "ordered_fallbacks": [
+          {
+            "condition": "Verified usage/rate-limit exhaustion of the primary route.",
+            "harness": "AGY",
+            "model": "Claude Sonnet 5.5",
+            "reasoning": "medium"
+          },
+          {
+            "condition": "Verified usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+            "harness": "Cursor Agent",
+            "model": "Grok 4.7",
+            "reasoning": "medium"
+          },
+          {
+            "condition": "Verified usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+            "harness": "Muse Code",
+            "model": "Muse Spark 1.3 Contributor",
+            "reasoning": "xhigh"
+          }
+        ]
+      },
+      "receipt": "../evidence/P2-L02/recovery-2026-10-18/deploy-execution-receipt.json",
+      "state_reason": "Dev stack UPDATE_COMPLETE; link smoke4/4 and full deployed26/26 with no skipped/failing tests; evidence hashes consumed. Physical/live/Vega acceptance and RW1 review remain outstanding.",
+      "state_events": [
+        {
+          "at": "2026-10-19T10:47:43.468011+00:00",
+          "from": "WAITING_ON",
+          "to": "READY",
+          "evidence": "Owner AWS login exit0; controller STS exit0; latest scoreboard no in-progress game, worker rechecks live preflight."
+        },
+        {
+          "at": "2026-10-19T10:47:43.468011+00:00",
+          "from": "READY",
+          "to": "IN_PROGRESS",
+          "substep": "nonexecuted change-set staging only",
+          "native_exec_session": 60145
+        },
+        {
+          "at": "2026-10-19T11:00:07.010993+00:00",
+          "from": "IN_PROGRESS",
+          "to": "EVIDENCE_READY",
+          "evidence": "deployment-consumption.json"
+        }
+      ],
+      "native_exec_session": 6917,
+      "native_completed": true,
+      "stage_receipt": "../evidence/P2-L02/recovery-2026-10-18/deploy-stage-receipt.json",
+      "consumption_receipt": "deployment-consumption.json"
+    },
+    "R-T-DEVICE-1": {
+      "state": "EVIDENCE_READY",
+      "depends_on": [
+        "R-T-DEPLOY-1",
+        "R-T-HOST-TV-PREP"
+      ],
+      "write_set": [
+        "evidence/visual/P2-A01/recovery-2026-10-18/",
+        "spikes/sp7-detection/",
+        "evidence/visual/sp7-detection/",
+        "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/device-1/"
+      ],
+      "route": {
+        "snapshot_profile": "opensource-hackathon",
+        "snapshot_role": "implementer",
+        "binding": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/profile-binding.json",
+        "binding_sha256": "e8d0b5a02cd9f445644a0caa18185af60a46f2316769b527ccc9e046796b0608",
+        "harness": "Muse Code",
+        "model": "Muse WonderFull Contributor",
+        "reasoning": "high",
+        "ordered_fallbacks": [
+          {
+            "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+            "harness": "AGY",
+            "model": "Gemini 4 Argon",
+            "reasoning": "medium"
+          },
+          {
+            "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+            "harness": "Codex CLI",
+            "model": "GPT-6.1 Sol",
+            "reasoning": "high"
+          },
+          {
+            "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+            "harness": "Claude Code",
+            "model": "Claude Opus 5.5",
+            "reasoning": "medium"
+          },
+          {
+            "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+            "harness": "Pi CLI",
+            "model": "Claude Opus 5.5",
+            "reasoning": "medium"
+          }
+        ]
+      },
+      "receipt": "evidence/device-1/receipt.json",
+      "state_reason": "Author EVIDENCE_READY only. Native32925 completion SHA 0bab5002 plus native14974 addendum SHA 52347a3e PASS/CANDIDATE_READY author-only. Seq4 Watch metadata at 14:31:06Z bound to exact ad9; VERDICT.md ed943ead reconciles in-app own-disabled; controller installed/cleanup PASS. Not independently accepted. RW1 review 0/1 unspent. Parent must create rw1-candidate-freeze.json then launch review.",
+      "native_exec_session": 14974,
+      "native_completed": true,
+      "native_owner": "Orchestrator parent; no active device author",
+      "muse_session_id": "094e0779-68d0-4145-9c9e-c754e81ea9ff",
+      "materialization": "device-materialization.json",
+      "state_events": [
+        {
+          "at": "2026-10-19T11:03:42.990103+00:00",
+          "from": "WAITING_ON",
+          "to": "READY",
+          "evidence": "deployment-consumption.json + device-materialization.json"
+        },
+        {
+          "at": "2026-10-19T11:03:42.990103+00:00",
+          "from": "READY",
+          "to": "IN_PROGRESS",
+          "native_exec_session": 59595
+        },
+        {
+          "at": "2026-10-19T11:36:13.274118+00:00",
+          "from": "IN_PROGRESS",
+          "to": "WAITING_ON",
+          "evidence": "evidence/device-1/receipt.json"
+        },
+        {
+          "at": "2026-10-19T11:37:25.964178+00:00",
+          "from": "WAITING_ON",
+          "to": "IN_PROGRESS",
+          "native_exec_session": 28826,
+          "evidence": "device-alert-materialization.json"
+        },
+        {
+          "at": "2026-10-19T12:57:36.000000+00:00",
+          "from": "HANDOFF_READY",
+          "to": "IN_PROGRESS",
+          "native_exec_session": "task-65",
+          "route": "muse-wonder-1.0-contributor"
+        },
+        {
+          "at": "2026-10-19T13:04:19.000000+00:00",
+          "from": "IN_PROGRESS",
+          "to": "NEEDS_MORE_EVIDENCE",
+          "evidence": "evidence/device-1/wonder-continuation/receipt.json"
+        },
+        {
+          "at": "2026-10-19T13:52:21Z",
+          "from": "NEEDS_MORE_EVIDENCE",
+          "to": "IN_PROGRESS",
+          "native_exec_session": 32925,
+          "authority": "AUTH-AFC-M0305-DEVICE-TIMEOUT-CONTINUE-20261019",
+          "evidence": "coordinator-rw1/fallback-receipt.json; parent already running Muse session 094e0779-68d0-4145-9c9e-c754e81ea9ff; Coordinator did not launch the child"
+        },
+        {
+          "at": "2026-10-19T14:24:19Z",
+          "from": "IN_PROGRESS",
+          "to": "IN_PROGRESS",
+          "native_exec_session": 32925,
+          "native_exit": 0,
+          "authority": "AUTH-AFC-M0305-DEVICE-READINESS-ADDENDUM-20261019",
+          "evidence": "coordinator-rw1/author-return-integration.json; wonder-completion receipt SHA 0bab5002; addendum packet prepared; parent launches"
+        },
+        {
+          "at": "2026-10-19T14:37:07Z",
+          "from": "IN_PROGRESS",
+          "to": "EVIDENCE_READY",
+          "native_exec_session": 14974,
+          "native_exit": 0,
+          "evidence": "coordinator-rw1/readiness-receipt.json; addendum SHA 52347a3e; author-only not independently accepted"
+        }
+      ],
+      "continuation_materialization": "device-alert-materialization.json",
+      "next_assignment": {
+        "slice_id": "R-T-DEVICE-1",
+        "original_role": "Product Implementer",
+        "wave": "RW1",
+        "binding": "profile-binding-wonder-existing-five.json",
+        "binding_sha256": "746baae2781553f9ae18e1edd3ed25d3d1bf78ebf5337069b9179b5898115e79",
+        "bearing_role": "implementer",
+        "route": {
+          "harness": "Muse Code",
+          "model": "Muse Wonder Contributor",
+          "reasoning": "medium"
+        },
+        "model_id": "muse-wonder-1.0-contributor",
+        "contributor_mode": "on",
+        "state": "EVIDENCE_READY",
+        "dispatch_condition": "No further device author. Parent creates rw1-candidate-freeze.json then launches one RW1 review. Coordinator does not dispatch review.",
+        "depends_on": [
+          "R-T-DEPLOY-1",
+          "R-T-HOST-TV-PREP"
+        ],
+        "write_set": [
+          "evidence/visual/P2-A01/recovery-2026-10-18/",
+          "spikes/sp7-detection/",
+          "evidence/visual/sp7-detection/",
+          "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/device-1/"
+        ],
+        "entry_criteria": [
+          "R-T-DEPLOY-1 green (linked proof needs the deployed API; SD-048 code-only linking)",
+          "R-T-HOST-TV-PREP exact APK identity (host-built only, no CI APK on stick)",
+          "EXT-PROVIDER-APPS (OA-4; OA-9 camera fallback if screencap black); OA-10 confirm available for linked captures",
+          "X03 desk part already landed and stick released (source P2-X07 dependency, satisfied on baseline)"
+        ],
+        "review_path": {
+          "review_unit": "RW1",
+          "reviewer_route": {
+            "snapshot_profile": "opensource-hackathon",
+            "snapshot_role": "reviewer",
+            "binding": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/profile-binding.json",
+            "binding_sha256": "e8d0b5a02cd9f445644a0caa18185af60a46f2316769b527ccc9e046796b0608",
+            "harness": "Codex CLI",
+            "model": "GPT-6.1 Sol",
+            "reasoning": "high",
+            "ordered_fallbacks": [
+              {
+                "condition": "Verified usage/rate-limit exhaustion of the primary route.",
+                "harness": "Claude Code",
+                "model": "Claude Opus 5.5",
+                "reasoning": "high"
+              },
+              {
+                "condition": "Verified usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                "harness": "Muse Code",
+                "model": "Muse WonderFull Contributor",
+                "reasoning": "high"
+              },
+              {
+                "condition": "Verified usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                "harness": "AGY",
+                "model": "Gemini 4 Argon",
+                "reasoning": "medium"
+              },
+              {
+                "condition": "Verified usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                "harness": "Pi CLI",
+                "model": "Claude Opus 5.5",
+                "reasoning": "high"
+              }
+            ]
+          },
+          "coverage_assist": {
+            "coverage_assist": {
+              "enabled": true,
+              "required": true
+            },
+            "ocr_execution_mode": "own_engine"
+          },
+          "ocr_engine_binding": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/ocr-engine-binding.json",
+          "ocr_engine_binding_sha256": "295885a332227f8e32caf4b3c17c5b91a243ed1e6b74dd10fedf613f8ac7d19f",
+          "reverify": {
+            "enabled": true
+          },
+          "cardinality": {
+            "n": 1,
+            "k": 1,
+            "c": 0
+          },
+          "scope": "One integrated review per recovery wave; historical G5 review/repair is consumed, not repeated."
+        }
+      },
+      "native_exit": 0,
+      "prior_wonder_task65_native_exit": 0,
+      "continuation_receipt": "evidence/device-alert-continuation/receipt.json",
+      "cleanup_verification": "evidence/device-alert-continuation/controller-cleanup-verification.json",
+      "wonder_continuation_receipt": "evidence/device-1/wonder-continuation/receipt.json",
+      "wonder_completion_receipt": "evidence/device-1/wonder-completion/receipt.json",
+      "wonder_completion_receipt_sha256": "0bab5002e5c8fd491951427b1e095ce9885b15b979daaa1ed842f780acf29950",
+      "device_completion_consumption": "device-completion-consumption.json",
+      "readiness_addendum_authority": "coordinator-rw1/device-readiness-addendum-authority.json",
+      "readiness_author_packet": "coordinator-rw1/device-readiness-author-packet.md",
+      "coordinator_rw1_receipt": "coordinator-rw1/receipt.json",
+      "coordinator_rw1_fallback_receipt": "coordinator-rw1/fallback-receipt.json",
+      "coordinator_rw1_author_return_integration": "coordinator-rw1/author-return-integration.json",
+      "wonder_readiness_addendum_receipt": "evidence/device-1/wonder-readiness-addendum/receipt.json",
+      "wonder_readiness_addendum_receipt_sha256": "52347a3e5738fc2cfb10d015701db39dde1018948c883f78a856e98b01061d5e",
+      "addendum_native_exec_session": 14974,
+      "coordinator_rw1_readiness_receipt": "coordinator-rw1/readiness-receipt.json"
+    },
+    "R-T-LIVE-CAPTURE": {
+      "state": "WAITING_ON",
+      "depends_on": [
+        "R-T-LIVE-PREP"
+      ],
+      "write_set": [
+        "backend/fixtures/replay/",
+        "spikes/sp3-provider-links/live-2026-10-22/",
+        "evidence/visual/sp3-provider-links/live-2026-10-22/"
+      ],
+      "route": {
+        "snapshot_profile": "opensource-hackathon",
+        "snapshot_role": "implementer",
+        "binding": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/profile-binding.json",
+        "binding_sha256": "e8d0b5a02cd9f445644a0caa18185af60a46f2316769b527ccc9e046796b0608",
+        "harness": "Muse Code",
+        "model": "Muse WonderFull Contributor",
+        "reasoning": "high",
+        "ordered_fallbacks": [
+          {
+            "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+            "harness": "AGY",
+            "model": "Gemini 4 Argon",
+            "reasoning": "medium"
+          },
+          {
+            "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+            "harness": "Codex CLI",
+            "model": "GPT-6.1 Sol",
+            "reasoning": "high"
+          },
+          {
+            "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+            "harness": "Claude Code",
+            "model": "Claude Opus 5.5",
+            "reasoning": "medium"
+          },
+          {
+            "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+            "harness": "Pi CLI",
+            "model": "Claude Opus 5.5",
+            "reasoning": "medium"
+          }
+        ]
+      },
+      "receipt": null,
+      "next_assignment": {
+        "slice_id": "R-T-LIVE-CAPTURE",
+        "original_role": "Product Implementer",
+        "wave": "RW2",
+        "binding": "profile-binding-wonder-existing-five.json",
+        "binding_sha256": "746baae2781553f9ae18e1edd3ed25d3d1bf78ebf5337069b9179b5898115e79",
+        "bearing_role": "implementer",
+        "route": {
+          "harness": "Muse Code",
+          "model": "Muse Wonder Contributor",
+          "reasoning": "medium"
+        },
+        "model_id": "muse-wonder-1.0-contributor",
+        "contributor_mode": "on",
+        "state": "ASSIGNED_WAITING_ON_PREREQUISITES",
+        "dispatch_condition": "Actual live TNF window must be open and schedule reconfirmed; no historical substitution or idle model waiting.",
+        "depends_on": [
+          "R-T-LIVE-PREP"
+        ],
+        "write_set": [
+          "backend/fixtures/replay/",
+          "spikes/sp3-provider-links/live-2026-10-22/",
+          "evidence/visual/sp3-provider-links/live-2026-10-22/"
+        ],
+        "entry_criteria": [
+          "EXT-LIVE-TNF window open and schedule re-confirmed; lease semantics honored (one planned slot, two evidence streams)",
+          "R-T-LIVE-PREP qualification receipt",
+          "X03 arm also requires the fire-tv-stick lease for the game window only + EXT-PROVIDER-APPS",
+          "No backend deployment during the game"
+        ],
+        "review_path": {
+          "review_unit": "RW2",
+          "reviewer_route": {
+            "snapshot_profile": "opensource-hackathon",
+            "snapshot_role": "reviewer",
+            "binding": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/profile-binding.json",
+            "binding_sha256": "e8d0b5a02cd9f445644a0caa18185af60a46f2316769b527ccc9e046796b0608",
+            "harness": "Codex CLI",
+            "model": "GPT-6.1 Sol",
+            "reasoning": "high",
+            "ordered_fallbacks": [
+              {
+                "condition": "Verified usage/rate-limit exhaustion of the primary route.",
+                "harness": "Claude Code",
+                "model": "Claude Opus 5.5",
+                "reasoning": "high"
+              },
+              {
+                "condition": "Verified usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                "harness": "Muse Code",
+                "model": "Muse WonderFull Contributor",
+                "reasoning": "high"
+              },
+              {
+                "condition": "Verified usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                "harness": "AGY",
+                "model": "Gemini 4 Argon",
+                "reasoning": "medium"
+              },
+              {
+                "condition": "Verified usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                "harness": "Pi CLI",
+                "model": "Claude Opus 5.5",
+                "reasoning": "high"
+              }
+            ]
+          },
+          "coverage_assist": {
+            "coverage_assist": {
+              "enabled": true,
+              "required": true
+            },
+            "ocr_execution_mode": "own_engine"
+          },
+          "ocr_engine_binding": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/ocr-engine-binding.json",
+          "ocr_engine_binding_sha256": "295885a332227f8e32caf4b3c17c5b91a243ed1e6b74dd10fedf613f8ac7d19f",
+          "reverify": {
+            "enabled": true
+          },
+          "cardinality": {
+            "n": 1,
+            "k": 1,
+            "c": 0
+          },
+          "scope": "One integrated review per recovery wave; historical G5 review/repair is consumed, not repeated."
+        }
+      }
+    },
+    "R-T-LIVE-CLOSE": {
+      "state": "WAITING_ON",
+      "depends_on": [
+        "R-T-LIVE-CAPTURE"
+      ],
+      "write_set": [
+        "spikes/sp5-espn-feed/VERDICT.md",
+        "spikes/sp3-provider-links/VERDICT.md",
+        "backend/src/provider_resolver/registry.json",
+        "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/live-close/"
+      ],
+      "route": {
+        "snapshot_profile": "opensource-hackathon",
+        "snapshot_role": "implementer",
+        "binding": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/profile-binding.json",
+        "binding_sha256": "e8d0b5a02cd9f445644a0caa18185af60a46f2316769b527ccc9e046796b0608",
+        "harness": "Muse Code",
+        "model": "Muse WonderFull Contributor",
+        "reasoning": "high",
+        "ordered_fallbacks": [
+          {
+            "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+            "harness": "AGY",
+            "model": "Gemini 4 Argon",
+            "reasoning": "medium"
+          },
+          {
+            "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+            "harness": "Codex CLI",
+            "model": "GPT-6.1 Sol",
+            "reasoning": "high"
+          },
+          {
+            "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+            "harness": "Claude Code",
+            "model": "Claude Opus 5.5",
+            "reasoning": "medium"
+          },
+          {
+            "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+            "harness": "Pi CLI",
+            "model": "Claude Opus 5.5",
+            "reasoning": "medium"
+          }
+        ]
+      },
+      "receipt": null,
+      "next_assignment": {
+        "slice_id": "R-T-LIVE-CLOSE",
+        "original_role": "Product Implementer",
+        "wave": "RW2",
+        "binding": "profile-binding-wonder-existing-five.json",
+        "binding_sha256": "746baae2781553f9ae18e1edd3ed25d3d1bf78ebf5337069b9179b5898115e79",
+        "bearing_role": "implementer",
+        "route": {
+          "harness": "Muse Code",
+          "model": "Muse Wonder Contributor",
+          "reasoning": "medium"
+        },
+        "model_id": "muse-wonder-1.0-contributor",
+        "contributor_mode": "on",
+        "state": "ASSIGNED_WAITING_ON_PREREQUISITES",
+        "dispatch_condition": "Wait for actual R-T-LIVE-CAPTURE receipts.",
+        "depends_on": [
+          "R-T-LIVE-CAPTURE"
+        ],
+        "write_set": [
+          "spikes/sp5-espn-feed/VERDICT.md",
+          "spikes/sp3-provider-links/VERDICT.md",
+          "backend/src/provider_resolver/registry.json",
+          "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/live-close/"
+        ],
+        "entry_criteria": [
+          "R-T-LIVE-CAPTURE receipts ingested; fixtures append-only verified by CMD-FIXTURE-INDEX-CHECK"
+        ],
+        "review_path": {
+          "review_unit": "RW2",
+          "reviewer_route": {
+            "snapshot_profile": "opensource-hackathon",
+            "snapshot_role": "reviewer",
+            "binding": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/profile-binding.json",
+            "binding_sha256": "e8d0b5a02cd9f445644a0caa18185af60a46f2316769b527ccc9e046796b0608",
+            "harness": "Codex CLI",
+            "model": "GPT-6.1 Sol",
+            "reasoning": "high",
+            "ordered_fallbacks": [
+              {
+                "condition": "Verified usage/rate-limit exhaustion of the primary route.",
+                "harness": "Claude Code",
+                "model": "Claude Opus 5.5",
+                "reasoning": "high"
+              },
+              {
+                "condition": "Verified usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                "harness": "Muse Code",
+                "model": "Muse WonderFull Contributor",
+                "reasoning": "high"
+              },
+              {
+                "condition": "Verified usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                "harness": "AGY",
+                "model": "Gemini 4 Argon",
+                "reasoning": "medium"
+              },
+              {
+                "condition": "Verified usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                "harness": "Pi CLI",
+                "model": "Claude Opus 5.5",
+                "reasoning": "high"
+              }
+            ]
+          },
+          "coverage_assist": {
+            "coverage_assist": {
+              "enabled": true,
+              "required": true
+            },
+            "ocr_execution_mode": "own_engine"
+          },
+          "ocr_engine_binding": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/ocr-engine-binding.json",
+          "ocr_engine_binding_sha256": "295885a332227f8e32caf4b3c17c5b91a243ed1e6b74dd10fedf613f8ac7d19f",
+          "reverify": {
+            "enabled": true
+          },
+          "cardinality": {
+            "n": 1,
+            "k": 1,
+            "c": 0
+          },
+          "scope": "One integrated review per recovery wave; historical G5 review/repair is consumed, not repeated."
+        }
+      }
+    },
+    "R-T-RELEASE-DRAFT": {
+      "state": "READY",
+      "depends_on": [
+        "R-T-EVIDENCE-RECONCILE",
+        "R-T-DEVICE-1"
+      ],
+      "write_set": [
+        "CHANGELOG.md",
+        "tv-app/app/build.gradle.kts",
+        "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/release-draft/"
+      ],
+      "route": {
+        "snapshot_profile": "opensource-hackathon",
+        "snapshot_role": "light_implementer",
+        "binding": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/profile-binding.json",
+        "binding_sha256": "e8d0b5a02cd9f445644a0caa18185af60a46f2316769b527ccc9e046796b0608",
+        "harness": "Claude Code",
+        "model": "Claude Sonnet 5.5",
+        "reasoning": "medium",
+        "ordered_fallbacks": [
+          {
+            "condition": "Verified usage/rate-limit exhaustion of the primary route.",
+            "harness": "AGY",
+            "model": "Claude Sonnet 5.5",
+            "reasoning": "medium"
+          },
+          {
+            "condition": "Verified usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+            "harness": "Cursor Agent",
+            "model": "Grok 4.7",
+            "reasoning": "medium"
+          },
+          {
+            "condition": "Verified usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+            "harness": "Muse Code",
+            "model": "Muse Spark 1.3 Contributor",
+            "reasoning": "xhigh"
+          }
+        ]
+      },
+      "receipt": null,
+      "early_preparation": {
+        "state": "EVIDENCE_READY",
+        "native_exec_session": 89745,
+        "packet_kind": "Mechanical11-row prerequisite/source inventory only; full R1 acceptance still blocked",
+        "input_sha256": "1a7c3ba1917fa9c2377c87fb84c5ea3480c73f944332d1fbb911a1b4ca676d6f",
+        "write_set": "evidence/release-draft/early-preflight/",
+        "route": "light_implementer fallback:0 AGY/Sonnet5.5/medium",
+        "native_completed": true,
+        "consumption_receipt": "release-preflight-consumption.json"
+      },
+      "state_reason": "Device author evidence recorded; draft preparation is dependency-ready. RW3 Coordinator owns the bounded packet and launch. This RW1 Coordinator does not write RW3 files or launch. Full R1 acceptance still blocked by source/Vega prerequisites and wave review; no tag/publication.",
+      "next_assignment": {
+        "slice_id": "R-T-RELEASE-DRAFT",
+        "original_role": "Light Implementer",
+        "wave": "RW3",
+        "binding": "profile-binding-wonder-existing-five.json",
+        "binding_sha256": "746baae2781553f9ae18e1edd3ed25d3d1bf78ebf5337069b9179b5898115e79",
+        "bearing_role": "light_implementer",
+        "route": {
+          "harness": "Muse Code",
+          "model": "Muse Wonder Contributor",
+          "reasoning": "medium"
+        },
+        "model_id": "muse-wonder-1.0-contributor",
+        "contributor_mode": "on",
+        "state": "READY_FOR_DRAFT_PREPARATION",
+        "dispatch_condition": "Early mechanical preflight already exists; do not redo it. Device author evidence is recorded so draft preparation may start with blocked Vega/source entries visible. RW3 Coordinator launches; RW1 Coordinator does not. Full draft acceptance still waits selected Vega and wave review. Preserve Light Implementer role.",
+        "depends_on": [
+          "R-T-EVIDENCE-RECONCILE",
+          "R-T-DEVICE-1"
+        ],
+        "write_set": [
+          "CHANGELOG.md",
+          "tv-app/app/build.gradle.kts",
+          "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/release-draft/"
+        ],
+        "entry_criteria": [
+          "For R1 acceptance, record every original W1 source prerequisite and historical checkpoint CP-X05-HIST as satisfied. Checklist/draft preparation may start earlier with blocked entries visible; final X03/X05 live closure is not an R1 prerequisite.",
+          "EXT-VEGA state read explicitly: if P2-V01 is still unmaterialized, the selected Vega release target branch stays blocked and the draft says so"
+        ],
+        "review_path": {
+          "review_unit": "RW3",
+          "reviewer_route": {
+            "snapshot_profile": "opensource-hackathon",
+            "snapshot_role": "reviewer",
+            "binding": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/profile-binding.json",
+            "binding_sha256": "e8d0b5a02cd9f445644a0caa18185af60a46f2316769b527ccc9e046796b0608",
+            "harness": "Codex CLI",
+            "model": "GPT-6.1 Sol",
+            "reasoning": "high",
+            "ordered_fallbacks": [
+              {
+                "condition": "Verified usage/rate-limit exhaustion of the primary route.",
+                "harness": "Claude Code",
+                "model": "Claude Opus 5.5",
+                "reasoning": "high"
+              },
+              {
+                "condition": "Verified usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                "harness": "Muse Code",
+                "model": "Muse WonderFull Contributor",
+                "reasoning": "high"
+              },
+              {
+                "condition": "Verified usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                "harness": "AGY",
+                "model": "Gemini 4 Argon",
+                "reasoning": "medium"
+              },
+              {
+                "condition": "Verified usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                "harness": "Pi CLI",
+                "model": "Claude Opus 5.5",
+                "reasoning": "high"
+              }
+            ]
+          },
+          "coverage_assist": {
+            "coverage_assist": {
+              "enabled": true,
+              "required": true
+            },
+            "ocr_execution_mode": "own_engine"
+          },
+          "ocr_engine_binding": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/ocr-engine-binding.json",
+          "ocr_engine_binding_sha256": "295885a332227f8e32caf4b3c17c5b91a243ed1e6b74dd10fedf613f8ac7d19f",
+          "reverify": {
+            "enabled": true
+          },
+          "cardinality": {
+            "n": 1,
+            "k": 1,
+            "c": 0
+          },
+          "scope": "One integrated review per recovery wave; historical G5 review/repair is consumed, not repeated."
+        }
+      }
+    },
+    "R-T-CLOSEOUT": {
+      "state": "WAITING_ON",
+      "depends_on": [
+        "R-T-RELEASE-DRAFT",
+        "R-T-LIVE-CLOSE"
+      ],
+      "write_set": [
+        "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/acceptance/"
+      ],
+      "route": {
+        "snapshot_profile": "opensource-hackathon",
+        "snapshot_role": "implementer",
+        "binding": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/profile-binding.json",
+        "binding_sha256": "e8d0b5a02cd9f445644a0caa18185af60a46f2316769b527ccc9e046796b0608",
+        "harness": "Muse Code",
+        "model": "Muse WonderFull Contributor",
+        "reasoning": "high",
+        "ordered_fallbacks": [
+          {
+            "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary route.",
+            "harness": "AGY",
+            "model": "Gemini 4 Argon",
+            "reasoning": "medium"
+          },
+          {
+            "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+            "harness": "Codex CLI",
+            "model": "GPT-6.1 Sol",
+            "reasoning": "high"
+          },
+          {
+            "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+            "harness": "Claude Code",
+            "model": "Claude Opus 5.5",
+            "reasoning": "medium"
+          },
+          {
+            "condition": "Verified unavailability or usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+            "harness": "Pi CLI",
+            "model": "Claude Opus 5.5",
+            "reasoning": "medium"
+          }
+        ]
+      },
+      "receipt": null,
+      "next_assignment": {
+        "slice_id": "R-T-CLOSEOUT",
+        "original_role": "Product Implementer",
+        "wave": "RW3",
+        "binding": "profile-binding-wonder-existing-five.json",
+        "binding_sha256": "746baae2781553f9ae18e1edd3ed25d3d1bf78ebf5337069b9179b5898115e79",
+        "bearing_role": "implementer",
+        "route": {
+          "harness": "Muse Code",
+          "model": "Muse Wonder Contributor",
+          "reasoning": "medium"
+        },
+        "model_id": "muse-wonder-1.0-contributor",
+        "contributor_mode": "on",
+        "state": "ASSIGNED_WAITING_ON_PREREQUISITES",
+        "dispatch_condition": "Wait for release draft, live closure, required wave reviews and criterion evidence; no partial issue closure.",
+        "depends_on": [
+          "R-T-RELEASE-DRAFT",
+          "R-T-LIVE-CLOSE"
+        ],
+        "write_set": [
+          "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/evidence/acceptance/"
+        ],
+        "entry_criteria": [
+          "RW1/RW2 receipts and R-T-RELEASE-DRAFT checklist available",
+          "The one requested review for the implementation wave consumed by the controller (author checks here are not that review)"
+        ],
+        "review_path": {
+          "review_unit": "RW3",
+          "reviewer_route": {
+            "snapshot_profile": "opensource-hackathon",
+            "snapshot_role": "reviewer",
+            "binding": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/profile-binding.json",
+            "binding_sha256": "e8d0b5a02cd9f445644a0caa18185af60a46f2316769b527ccc9e046796b0608",
+            "harness": "Codex CLI",
+            "model": "GPT-6.1 Sol",
+            "reasoning": "high",
+            "ordered_fallbacks": [
+              {
+                "condition": "Verified usage/rate-limit exhaustion of the primary route.",
+                "harness": "Claude Code",
+                "model": "Claude Opus 5.5",
+                "reasoning": "high"
+              },
+              {
+                "condition": "Verified usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                "harness": "Muse Code",
+                "model": "Muse WonderFull Contributor",
+                "reasoning": "high"
+              },
+              {
+                "condition": "Verified usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                "harness": "AGY",
+                "model": "Gemini 4 Argon",
+                "reasoning": "medium"
+              },
+              {
+                "condition": "Verified usage/rate-limit exhaustion of the primary and all preceding approved fallbacks.",
+                "harness": "Pi CLI",
+                "model": "Claude Opus 5.5",
+                "reasoning": "high"
+              }
+            ]
+          },
+          "coverage_assist": {
+            "coverage_assist": {
+              "enabled": true,
+              "required": true
+            },
+            "ocr_execution_mode": "own_engine"
+          },
+          "ocr_engine_binding": "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/recovery-m03-m05/ocr-engine-binding.json",
+          "ocr_engine_binding_sha256": "295885a332227f8e32caf4b3c17c5b91a243ed1e6b74dd10fedf613f8ac7d19f",
+          "reverify": {
+            "enabled": true
+          },
+          "cardinality": {
+            "n": 1,
+            "k": 1,
+            "c": 0
+          },
+          "scope": "One integrated review per recovery wave; historical G5 review/repair is consumed, not repeated."
+        }
+      }
+    }
+  },
+  "resource_lock_protocol": {
+    "host-pytest": "[PRIVATE-TMP]/afc-m03-m05-host-pytest.lock",
+    "host-gradle": "[PRIVATE-TMP]/afc-m03-m05-host-gradle.lock"
+  },
+  "note": "Visible materialization projection of execution.md; reviewed implementation.json remains immutable."
+}

@@ -1,0 +1,28 @@
+{
+  "recorded_at": "2026-10-19T13:16:14.560673+00:00",
+  "authority": "Orchestrator routine presentation-only correction for existing MANIFEST-VISUAL hold; no new trial or review",
+  "source": "afc-m03-m05-recovery-dod-manifest.html",
+  "source_sha256": "938c11bd0887c11baa60d273e1909b78006a5bf8a58497bdfe1fb8484e19b804",
+  "presentation": "evidence/wonder-trial-manifest/manifest-presentation.html",
+  "presentation_sha256": "f579d88a9d4a1f25fcdabcb7f47814d3f2ca22efa1f64d57e2949b44cb54e2bb",
+  "css_block": "    /* Wrap definition-list values without changing approved content. */\n    dl dd { min-width: 0; overflow-wrap: anywhere; }\n    dl code { white-space: normal; overflow-wrap: anywhere; }\n",
+  "reused_generator": "evidence/wonder-trial-manifest/make_candidate.py",
+  "reused_generator_sha256": "ebdb8ed841dce7a24b76e006af58bbadab5a196bd853566fda59e437860468d9",
+  "change_from_prior_candidate": "Apply the same wrapping rule to every definition-list code value, including closing completion-status metadata.",
+  "checks": {
+    "exact_source_plus_css_only": true,
+    "source_restored_byte_for_byte_by_removing_block": true,
+    "dom_text_attributes_ids_links_unchanged": true,
+    "all_frozen_and_prior_candidate_files_unchanged": true
+  },
+  "browser_verification": "TARGETED_PRESENTATION_CHECKS_PASS",
+  "hold": "VISUAL_PROOF_RECORDED_PRESENTATION_DERIVATIVE_AWAITING_LANDING_CANDIDATE_REVIEW",
+  "review_budget_changed": false,
+  "trial_slice_count_changed": false,
+  "controller_correction": {
+    "before_sha256": "0e41cae248f7c43af9a1ab08ad69dd6789dba9d14dc1e89157df5d1d106634e5",
+    "reason": "Closing definition-list values are plain text; wrapping code alone leaves unbreakable completion state overflowing. Added min-width0 and anywhere wrapping to dd.",
+    "proof": "Source restored byte-for-byte on removing CSS; DOM/text/attributes/links unchanged"
+  },
+  "browser_receipt": "evidence/manifest-presentation/receipt.json"
+}
