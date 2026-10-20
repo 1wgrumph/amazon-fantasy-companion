@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add the hackathon submission write-up (`docs/submission/writeup.md`): Fire TV and AWS Builder integrations from landed evidence (spike verdicts WORKS/FAILS/PARTIAL with limits, `afc-dev` deployed smoke only where recorded), the YouTube TV Fantasy View differentiation, the DEC-AFC-SD-036 future direction marked external context with public citations, an honest-limits section covering every FAILS/PARTIAL verdict plus the paused Vega stretch, and X09/X10, X03 PR 2, X05 PR 2, and X11 marked PENDING with no result asserted; the combined `PROC-SUBMISSION-CHECK` completes when D05 lands ([#49](https://github.com/1wgrumph/amazon-fantasy-companion/issues/49)).
+
 ### Security
 
 - Bound ESPN boxscore statistics ingest against denial-of-service inputs: validate numeric `athleteId` keys (`1..20` ASCII digits) before any DynamoDB write, cap boxscore athletes per payload (`MAX_BOXSCORE_ATHLETES = 200`) and stats per athlete (`MAX_ATHLETE_STATS = 64`) with deterministic truncation, reject oversize (`MAX_STAT_VALUE_LENGTH = 16`) and subnormal stat strings before `Decimal` conversion, and isolate single-record `PlayerStats` write failures so valid records, `GameEvent`s, and alerts keep ingesting. Review repair: cap play `id` and `wallclock` at 64 characters in the summary schema and treat a DynamoDB `ValidationException` on any feed write as a failure of that game only; skip only payload-rejected `PlayerStats` writes (`ValidationException`, `decimal` signals) so access, table, throttling and endpoint failures surface; aggregate hostile-input warnings into one length-bounded line per payload and batch; reject positive-exponent stat values such as `0E+999`; expose the bounds as plain module constants; and check recorded-fixture statistics against a frozen pre-fix snapshot ([PR #103](https://github.com/1wgrumph/amazon-fantasy-companion/pull/103)).
