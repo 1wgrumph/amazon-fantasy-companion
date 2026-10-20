@@ -28,6 +28,7 @@ the per-athlete boxscore records feed_ingest stores at ingest.
 
 import hashlib
 import json
+import os
 from datetime import datetime, timezone
 from decimal import Decimal
 from pathlib import Path
@@ -77,6 +78,11 @@ def _basis(lineup, settings):
         modifiers = (lineup.get("scoring") or {}).get("stat_modifiers") or {}
         return "yahooLeague", {k: float(v) for k, v in modifiers.items()}
     preset = settings.get("scoringPreset") or "halfPpr"
+    if (preset == "nbaPoints"
+            and os.environ.get("AFC_ENABLE_NBA", "").lower() in ("1", "true", "yes")):
+        from nba.scoring import NBA_POINTS_TABLE
+
+        return "nbaPoints", dict(NBA_POINTS_TABLE)
     if preset not in _PRESETS:
         raise ValueError(f"Unknown scoring preset: {preset!r}")
     return preset, presets.TABLES[_PRESETS[preset]]

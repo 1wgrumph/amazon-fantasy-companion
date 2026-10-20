@@ -42,6 +42,10 @@ _REQUEST_SECONDS = 10  # _get_json timeout; deadline guards reserve it per reque
 _FAILURES = {}
 
 
+def _nba_enabled():
+    return os.environ.get("AFC_ENABLE_NBA", "").lower() in ("1", "true", "yes")
+
+
 def _fixtures():
     # Packaged under CodeUri src/ (template Globals); never walk above it.
     return Path(__file__).resolve().parent / "replay_data"
@@ -165,6 +169,12 @@ def poll(failures=None, remaining=None):
             continue
         failures[game_id] = 0
         result["stored"] += len(events)
+    if _nba_enabled():  # AFC_ENABLE_NBA stretch spike; inert when the flag is off
+        import nba
+
+        nba_result = nba.poll(_get_json)
+        result["stored"] += nba_result["stored"]
+        result["failed"].extend(nba_result["failed"])
     return result
 
 
