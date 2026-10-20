@@ -1,0 +1,58 @@
+{
+  "task_id": "R-T-DEPLOY-1-STAGE",
+  "outcome": "PASS",
+  "role_verdict": "CANDIDATE_READY",
+  "note": "Stage preview only; R-T-DEPLOY-1 incomplete. Change set NOT executed.",
+  "candidate_ref": "7da6187b5a57ee80887ef84301ff99a3592bacb6",
+  "backend_tree": "55a50ca1f1d9dff7c9a952ed4c5be7b0203f842d",
+  "template_sha256": "0531bf9d381a71cc88c9677185c4235257d408101e8e839e91544d0e7bbba80b",
+  "build_inventory": {"files": 616, "inventory_sha256": "6c5b08040590b881afdd3611ffaf7c0d228d65ce226c2e9174e93836d31b9b08", "verified_all_ok": true, "build_dir_file_count": 616},
+  "changed_paths": [
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-L02/recovery-2026-10-18/"
+  ],
+  "ignored_outputs": ["backend/.aws-sam (packaging)"],
+  "preflight": {
+    "head_matches": true,
+    "sts": "exit 0, user afc-dev, account redacted",
+    "stack": {"name": "afc-dev", "region": "us-east-2", "status": "UPDATE_COMPLETE", "ApiUrl": "https://le3r79003f.execute-api.us-east-2.amazonaws.com", "GitCommit": null},
+    "no_game": {
+      "captured_utc": "2026-10-19T10:47:50Z",
+      "2026-10-19": [{"id": "401873008", "state": "pre", "completed": false}],
+      "2026-10-18": "12 games, all state=post completed=true (401872996-401873007)",
+      "any_in_progress": false
+    }
+  },
+  "commands": [
+    {"id": "CMD-SAM-DEPLOY-NOEXEC", "exit": 0, "cmd": "sam deploy --config-env default --profile afc-dev --region us-east-2 --tags GitCommit=7da6187b... --no-execute-changeset (under flock /tmp/afc-m03-m05-aws-afc-dev.lock)", "log": "deploy-stage-output.txt", "log_sha256": "1b31290cd0e4841c9756bc819668fe37102635af7ef31e4ee33482198269807c"},
+    {"id": "CMD-DESCRIBE-CHANGESET", "exit": 0, "log": "change-set-describe.json", "log_sha256": "4681f76527d2c02c963023f6c01bb2c0413e83c0cc1ee347e194299eff10eeca"}
+  ],
+  "change_set": {
+    "name": "samcli-deploy1792406877",
+    "id": "arn:aws:cloudformation:us-east-2:<ACCT>:changeSet/samcli-deploy1792406877/84c670b1-56f5-40b3-a8d1-b1381a7d9fcd",
+    "status": "CREATE_COMPLETE",
+    "execution_status": "AVAILABLE",
+    "executed": false
+  },
+  "delta": {
+    "summary": "22 Modify, 0 Add, 0 Remove, 0 replacement (Replacement=False for all; PolicyFunctionEventStream shows Conditional in SAM table, details RequiresRecreation=Never)",
+    "property_changes": "Properties/Code on ApiFunction, IngestFunction, PolicyFunction (new build artifact)",
+    "tag_changes": "Tags (GitCommit stack tag) on all 22 resources",
+    "iam_policy_changes": "None at property level (IAM roles show Tags only)",
+    "schedule_changes": "IngestSchedule/IngestScheduleRole: Tags only; no schedule property change",
+    "detail": "change-set-describe.json"
+  },
+  "route_capabilities": {
+    "role": "light_implementer", "harness": "AGY", "model": "Claude Sonnet 5.5", "reasoning": "medium", "fallback_index": 0,
+    "coverage_assist": "own_engine (unchanged)", "reverify": "enabled; N/A no binary subject",
+    "review": "not run by author; RW1 budget unspent"
+  },
+  "negative_boundary": {"execute_change_set_called": false, "product_changes": false, "credentials_read": false, "deploy_live_device_acceptance_claimed": false},
+  "acceptance_mapping": {"nonexecuted exact-candidate change set with property delta": "CMD-SAM-DEPLOY-NOEXEC + CMD-DESCRIBE-CHANGESET"},
+  "risks": [
+    "Stack GitCommit output is null; stack tag now to be GitCommit=7da6187.. after execution.",
+    "Change set created in the account and remains AVAILABLE until executed or deleted.",
+    "Scheduled ingest may fire between stage and execution; recheck no in-progress game before execute."
+  ],
+  "blocker": null,
+  "developer_feedback": "No new observations. Raw output redacted for account IDs and home paths; not committed."
+}
