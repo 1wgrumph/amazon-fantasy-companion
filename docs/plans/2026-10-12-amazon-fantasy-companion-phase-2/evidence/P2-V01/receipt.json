@@ -14,7 +14,7 @@
   ],
   "branch": "afc/p2-v01",
   "environment": {
-    "sandbox": "/home/spectre/.local/share/afc-tools/vega-sandbox.sh (every npm/node/vega/VVD command)",
+    "sandbox": "$HOME/.local/share/afc-tools/vega-sandbox.sh (every npm/node/vega/VVD command)",
     "vega_sdk": "0.24.12112",
     "vega_cli": "1.4.5 (per P2-V01T receipt; sandbox kepler fallback reports 0.200.0)",
     "react_native": "0.83.0",
@@ -37,7 +37,7 @@
     {"id": "CMD-VVD-START", "command": "vega virtual-device start (attempts in vvd-run.sh, vvd-run2.sh, vvd-run3.sh, one sandbox invocation each)", "exit": "start reports rc=0 with 'Deadline reached but virtual device unresponsive'; status running:false", "result": "ENVIRONMENT_FAILURE: emulator exits with \"A snapshot operation for '<build>' is pending and timeout has expired\" (virtual_device.err.txt). The c16 preparation lifecycle booted running:true twice at 10:53/10:56 UTC; instance files changed 11:09-11:10 UTC during parallel screen-capture work. Repair requires writing under the SDK instance directory, outside this slice's write set.", "evidence": "vvd-run.txt, vvd-run2.txt, vvd-run3.txt, virtual_device.err.txt"},
     {"id": "CMD-VVD-INSTALL", "command": "vega device install-app / launch-app", "exit": 2, "result": "not run to effect: 'Device not found: Cannot find an instance of Vega Virtual Device' in all attempts", "evidence": "vvd-run3.txt"},
     {"id": "CMD-VVD-INPUT", "command": "vega device run-cmd inputd-cli button_press KEY_DOWN/KEY_ENTER", "exit": 2, "result": "blocked by CMD-VVD-START; the SDK provides run-cmd (shell takes no command args in --help)", "evidence": "vvd-run3.txt"},
-    {"id": "CMD-VVD-SCREENCAP", "command": "vega device run-cmd gwsi-tool-screenshooter + copy-from; /home/spectre/.local/share/afc-tools/vvd-screencap.sh", "exit": "2 (no device); helper 78", "result": "NEEDS_MORE_EVIDENCE: helper reports capture not qualified (c17: QMP uniform black frames, SDK screencap lookup failed); c16 recorded VDA exit 139. No captures under evidence/visual/P2-V01/ (README.md records the gap).", "evidence": "vvd-run2.txt, evidence/visual/P2-V01/README.md"},
+    {"id": "CMD-VVD-SCREENCAP", "command": "vega device run-cmd gwsi-tool-screenshooter + copy-from; $HOME/.local/share/afc-tools/vvd-screencap.sh", "exit": "2 (no device); helper 78", "result": "NEEDS_MORE_EVIDENCE: helper reports capture not qualified (c17: QMP uniform black frames, SDK screencap lookup failed); c16 recorded VDA exit 139. No captures under evidence/visual/P2-V01/ (README.md records the gap).", "evidence": "vvd-run2.txt, evidence/visual/P2-V01/README.md"},
     {"id": "PROC-VISUAL-REVIEW", "command": null, "exit": null, "result": "not performed: no bootable VVD and no qualified capture. Typed evidence gap, never PASS.", "evidence": "evidence/visual/P2-V01/README.md"},
     {"id": "PROC-VEGA-FEATURE-VERDICT", "command": "feature-verdicts.md", "exit": 0, "result": "5 rows, all 'unknown' with named limits (works requires observed VVD evidence); physical column NOT_APPLICABLE (AC-AFC-P2-VEGA-05)", "evidence": "feature-verdicts.md"},
     {"id": "CMD-REVERIFY-VPKG / CMD-OCR-DELEGATE", "command": null, "exit": null, "result": "not_run in this implementer slice: both belong to the IE-P2-V01 independent review (coverage_assist required, VEGA_REVERIFY_CAPABILITY_GAP expected). Not claimed.", "evidence": null}
@@ -56,7 +56,7 @@
     "CI vegaapp job uses the GitHub runner image's Node/npm (no SHA-pinnable setup action was available without inventing a digest); the gate GAPs by name if they are absent and engines require node >=20.",
     "Linked-state screens need the owner to confirm a TV code on a phone/browser (DEC-AFC-SD-048) once the VVD boots."
   ],
-  "blocker": "ENVIRONMENT_FAILURE (VVD): emulator exits on a pending snapshot operation in the shared SDK instance at /home/spectre/.local/share/afc-tools/vega-home/vega/sdk/vega-sdk/main/0.24.12112/vvd/instances/4915776e-97ff-4b5c-84ad-351d1d7651f3, outside this slice's write set. Next step: repair/reset that instance under the vega-virtual-device lease, then rerun vvd-run3.sh.",
+  "blocker": "ENVIRONMENT_FAILURE (VVD): emulator exits on a pending snapshot operation in the shared SDK instance at $HOME/.local/share/afc-tools/vega-home/vega/sdk/vega-sdk/main/0.24.12112/vvd/instances/4915776e-97ff-4b5c-84ad-351d1d7651f3, outside this slice's write set. Next step: repair/reset that instance under the vega-virtual-device lease, then rerun vvd-run3.sh.",
   "developer_feedback": {
     "requirement_id": "AC-AFC-P2-DX-01",
     "tools_exercised": ["Vega SDK 0.24.12112 react-native build-vega", "Vega CLI virtual-device/device subcommands", "Vega Virtual Device (QEMU)", "Jest 29.7.0 via react-native-kepler preset", "vega-sandbox.sh wrapper"],

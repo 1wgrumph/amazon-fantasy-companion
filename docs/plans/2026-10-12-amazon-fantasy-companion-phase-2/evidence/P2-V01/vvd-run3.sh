@@ -2,7 +2,7 @@
 # P2-V01 VVD qualification, attempt 3: exact c16 lifecycle shape (cwd in the
 # preparation worktree, --gl-accel) which booted running:true twice at
 # 10:53/10:56 UTC, plus install/launch/input/capture for this slice.
-W=/home/spectre/alphazede/worktrees/amazon-fantasy-companion-p2-v01
+W=$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-v01
 EV=$W/docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-V01
 VIS=$W/evidence/visual/P2-V01
 VPKG=$W/vega-app/build/x86_64-release/afc-companion_x86_64.vpkg

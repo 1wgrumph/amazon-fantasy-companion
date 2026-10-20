@@ -21,7 +21,7 @@ sleep 15
 step IS-RUNNING vega device is-app-running --device VirtualDevice --appName "$APP"
 step CMD-VVD-SCREENCAP-LINK vega device run-cmd -d VirtualDevice --command 'gwsi-tool-screenshooter /tmp/link.png'
 step SCREENCAP-COPY-LINK vega device copy-from -d VirtualDevice --source /tmp/link.png --destination "$VIS/link.png"
-step HOST-SCREENCAP-HELPER /home/spectre/.local/share/afc-tools/vvd-screencap.sh
+step HOST-SCREENCAP-HELPER $HOME/.local/share/afc-tools/vvd-screencap.sh
 step CMD-VVD-INPUT-DOWN vega device run-cmd -d VirtualDevice --command 'inputd-cli button_press KEY_DOWN'
 sleep 2
 step CMD-VVD-INPUT-ENTER vega device run-cmd -d VirtualDevice --command 'inputd-cli button_press KEY_ENTER'
