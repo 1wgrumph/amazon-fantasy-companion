@@ -92,6 +92,21 @@ repository.
   (`ANDROID_HOME` or `ANDROID_SDK_ROOT`) for the TV app.
 - `cfn-lint` for the backend gate (installed with the backend test
   environment below).
+- For the hygiene gate: the `python3` that runs `tools/ci/gate.sh`
+  must import PyYAML (`python3 -c 'import yaml'`). Installing the
+  backend dependencies into the backend virtual environment does
+  not satisfy this unless that environment is activated (so its
+  `python3` is first on `PATH`). To provision the hygiene
+  environment, install the pinned hygiene closure into the
+  `python3` you will run the gate with:
+
+  ```bash
+  python3 -m pip install --require-hashes -r tools/ci/requirements-hygiene.txt
+  python3 -c 'import yaml'
+  ```
+
+  (CI installs the same file with `python3.12`; use the
+  interpreter that your `python3` resolves to.)
 - For deployment only: the AWS CLI and SAM CLI, an AWS account, and
   a named CLI profile. This project uses profile `afc-dev` in region
   `us-east-2` and stack `afc-dev` (see `backend/samconfig.toml`).
@@ -173,33 +188,51 @@ The stick address is owner-supplied. Accept the RSA prompt on the TV
 after matching the host key fingerprint, and confirm the stick shows
 as `device` in `adb devices` before installing.
 
-### First run: link the TV and enter a lineup
+### First run: link the TV (lineup entry unavailable)
 
 1. Launch the app on the stick. It shows a short-lived device code.
 2. On a phone or browser, open the deployed `<ApiUrl>/link` page and
    confirm the code shown on your own TV. Codes expire quickly and
    each code links one session only; confirm only a code on your
    own TV.
-3. Enter the lineup manually (the selected source; see SP-6). Pick
-   the scoring preset (PPR or Half-PPR; Half-PPR is the default),
-   the alert types, quiet hours, and spoiler delay in
-   Profile/Settings.
+3. In Profile/Settings, pick the scoring preset (PPR or Half-PPR;
+   Half-PPR is the default), the alert types, quiet hours, and
+   spoiler delay, then save the profile. These controls update
+   profile selections only.
 4. Optionally enable "Show panel on new alert" (default on) so a new
    alert re-shows a hidden panel.
 
+UNAVAILABLE in this revision — entering a lineup: the TV shell
+offers Link, Profile/Settings, and Panel, and none of them enters
+starters; the backend API likewise has no lineup-write route.
+There is therefore no supported first-run procedure that
+populates a lineup from a fresh install, and the panel and alerts
+have no starters to follow until a lineup-write route is built.
+SP-6 selected manual entry as the lineup source, but that source
+is not yet enterable through the product. Do not work around this
+by hand-editing stored data; no such procedure is supported or
+documented here.
+
 ## Judge access
 
-Judge access is kept through T_judge_access (2026-11-20). Without
-the owner's Fire TV stick, a judge can:
+PENDING — submission/demo access: no live Devpost submission or
+demo link exists in this revision. The owner supplies that access
+by publishing the Devpost submission, uploading/linking the demo
+there, and setting this repository's judge access route; until
+then there is no demo link to follow. Once supplied, the owner
+keeps judge access available through T_judge_access (2026-11-20).
+
+Without the owner's Fire TV stick, a judge can:
 
 - Read this repository: source (`tv-app/`, `backend/`), the spike
   verdicts under `spikes/`, the architecture and plans under
   `docs/plans/`, and the change history in `CHANGELOG.md`.
 - Run every host check from a clean checkout with the commands in
   this README (backend gate, TV gate, docs and hygiene gates).
-- Watch the demo video linked from the Devpost submission (owner
-  upload; shots of protected provider video may be owner-filmed and
-  are marked as such in the demo plan).
+- PENDING — watch the demo video from the Devpost submission once
+  the owner publishes it (owner upload; shots of protected
+  provider video may be owner-filmed and are marked as such in
+  the demo plan).
 
 Real limits, stated plainly:
 
@@ -212,11 +245,13 @@ Real limits, stated plainly:
   the X09 end-to-end run) can only be observed during a live game
   window; outside one, the recorded verdicts and replay fixtures are
   the evidence.
-- Yahoo Fantasy lineups are not live (SP-6, FAILS); judges see the
-  manual lineup source.
+- Yahoo Fantasy lineups are not live (SP-6, FAILS), and lineup
+  entry is unavailable in this revision (see First run above).
 - Publication of this repository (visibility change) is an owner
-  action. Until the owner authorizes it, judge access runs through
-  the access route named in the Devpost submission.
+  action. PENDING — until the owner publishes the Devpost
+  submission and authorizes the repository access route named
+  there, no submission-based judge access route exists; once
+  supplied, it is kept through 2026-11-20.
 
 ## Verification
 
@@ -231,6 +266,19 @@ bash tools/ci/gate.sh hygiene
 
 Each gate prints `PASS`, `FAIL`, or `GAP` (a required tool is
 missing). A `GAP` is not a pass. The same gates run in CI.
+
+GAP PROC_README_FRESH_SETUP_NOT_RUN — the clean-checkout
+walkthrough required for this README has not been executed as a
+fresh setup. Inspection-only (read from source, not run from a
+clean environment): the TV build/install, the backend
+deployment, device linking on a stick, and fresh-environment
+provisioning of the backend and hygiene environments. Only the
+host-executable docs and hygiene gates were run for this
+revision. Owner input that unblocks the walkthrough: an
+authenticated AWS session with the deployed `ApiUrl`, a Fire TV
+stick reachable over ADB, and a fresh host with JDK 17 and the
+Android SDK. Do not treat the setup above as walkthrough-proven
+until that run happens.
 
 ## Repository layout
 
