@@ -1,25 +1,26 @@
+note: $HOME replaces the operator home directory to satisfy the repository path rule; this redaction does not change the command or its result.
 SP-8 Alexa route probe — commands and exit codes
 started: 2026-10-20T12:52:49Z
 note: device address/serial/account data deliberately omitted
 
-### /home/spectre/.local/share/afc-tools/android-sdk/platform-tools/adb shell getprop ro.product.model
+### $HOME/.local/share/afc-tools/android-sdk/platform-tools/adb shell getprop ro.product.model
 AFTKM
 [exit=0]
 
-### /home/spectre/.local/share/afc-tools/android-sdk/platform-tools/adb shell getprop ro.build.version.release
+### $HOME/.local/share/afc-tools/android-sdk/platform-tools/adb shell getprop ro.build.version.release
 11
 [exit=0]
 
-### /home/spectre/.local/share/afc-tools/android-sdk/platform-tools/adb shell getprop ro.build.version.sdk
+### $HOME/.local/share/afc-tools/android-sdk/platform-tools/adb shell getprop ro.build.version.sdk
 30
 [exit=0]
 
-### /home/spectre/.local/share/afc-tools/android-sdk/platform-tools/adb shell getprop ro.build.description
+### $HOME/.local/share/afc-tools/android-sdk/platform-tools/adb shell getprop ro.build.description
 karat-user 11 RS8185.3891N 0033018557184 amz-p,release-keys
 [exit=0]
 
 --- voice/alexa-related packages (pm list packages | grep) ---
-### /home/spectre/.local/share/afc-tools/android-sdk/platform-tools/adb shell pm list packages | grep -iE 'alexa|voice|tts|speech|vui|avs'
+### $HOME/.local/share/afc-tools/android-sdk/platform-tools/adb shell pm list packages | grep -iE 'alexa|voice|tts|speech|vui|avs'
 package:com.amazon.alexamediaplayer.runtime.ftv
 package:com.amazon.alexa.datastore.app
 package:com.amazon.avsyncslider
@@ -32,7 +33,7 @@ package:com.amazon.alexa.externalmediaplayer.fireos
 [exit=0]
 
 --- TTS engines / speech services ---
-### /home/spectre/.local/share/afc-tools/android-sdk/platform-tools/adb shell cmd package query-services -a android.intent.action.TTS_SERVICE
+### $HOME/.local/share/afc-tools/android-sdk/platform-tools/adb shell cmd package query-services -a android.intent.action.TTS_SERVICE
 2 services found:
   Service #0:
     priority=0 preferredOrder=0 match=0x108000 specificIndex=-1 isDefault=true
@@ -97,23 +98,23 @@ package:com.amazon.alexa.externalmediaplayer.fireos
         allowsPlaybackCapture=true
 [exit=0]
 
-### /home/spectre/.local/share/afc-tools/android-sdk/platform-tools/adb shell cmd package query-services -a android.speech.RecognitionService
+### $HOME/.local/share/afc-tools/android-sdk/platform-tools/adb shell cmd package query-services -a android.speech.RecognitionService
 No services found
 [exit=0]
 
-### /home/spectre/.local/share/afc-tools/android-sdk/platform-tools/adb shell settings get secure tts_default_synth
+### $HOME/.local/share/afc-tools/android-sdk/platform-tools/adb shell settings get secure tts_default_synth
 null
 [exit=0]
 
-### /home/spectre/.local/share/afc-tools/android-sdk/platform-tools/adb shell settings get secure voice_interaction_service
+### $HOME/.local/share/afc-tools/android-sdk/platform-tools/adb shell settings get secure voice_interaction_service
 
 [exit=0]
 
-### /home/spectre/.local/share/afc-tools/android-sdk/platform-tools/adb shell settings get secure voice_recognition_service
+### $HOME/.local/share/afc-tools/android-sdk/platform-tools/adb shell settings get secure voice_recognition_service
 
 [exit=0]
 
-### /home/spectre/.local/share/afc-tools/android-sdk/platform-tools/adb shell dumpsys voiceinteraction
+### $HOME/.local/share/afc-tools/android-sdk/platform-tools/adb shell dumpsys voiceinteraction
 VOICE INTERACTION MANAGER (dumpsys voiceinteraction)
   mEnableService: true
   mTemporarilyDisabled: false
@@ -133,7 +134,7 @@ Model Stats:
 [exit=0]
 
 --- assist / voice interaction resolution ---
-### /home/spectre/.local/share/afc-tools/android-sdk/platform-tools/adb shell cmd package resolve-activity -a android.intent.action.ASSIST
+### $HOME/.local/share/afc-tools/android-sdk/platform-tools/adb shell cmd package resolve-activity -a android.intent.action.ASSIST
 priority=0 preferredOrder=0 match=0x108000 specificIndex=-1 isDefault=true
 ActivityInfo:
   name=com.amazon.vizzini.voiceservice.VoiceAssistantActivity
@@ -170,12 +171,12 @@ ActivityInfo:
     allowsPlaybackCapture=false
 [exit=0]
 
-### /home/spectre/.local/share/afc-tools/android-sdk/platform-tools/adb shell cmd package query-services -a android.service.voice.VoiceInteractionService
+### $HOME/.local/share/afc-tools/android-sdk/platform-tools/adb shell cmd package query-services -a android.service.voice.VoiceInteractionService
 No services found
 [exit=0]
 
 --- media session / audio ---
-### /home/spectre/.local/share/afc-tools/android-sdk/platform-tools/adb shell dumpsys media_session
+### $HOME/.local/share/afc-tools/android-sdk/platform-tools/adb shell dumpsys media_session
 MEDIA SESSION SERVICE (dumpsys media_session)
 
 7 sessions listeners.
@@ -183,9 +184,9 @@ Global priority session is null
 User Records:
 Record for full_user=0
   Volume key long-press listener: null
-  Volume key long-press listener package: 
+  Volume key long-press listener package:
   Media key listener: null
-  Media key listener package: 
+  Media key listener package:
   OnMediaKeyEventDispatchedListener: added 0 listener(s)
   OnMediaKeyEventSessionChangedListener: added 1 listener(s)
     from com.android.bluetooth
@@ -235,11 +236,11 @@ Record for full_user=0
       metadata: null
       queueTitle=null, size=0
 Audio playback (lastly played comes first)
-  uid=10191 packages=com.amazon.tv.launcher 
-  uid=10144 packages=com.amazon.firebat 
+  uid=10191 packages=com.amazon.tv.launcher
+  uid=10144 packages=com.amazon.firebat
 [exit=0]
 
-### /home/spectre/.local/share/afc-tools/android-sdk/platform-tools/adb shell dumpsys audio | head -n 40
+### $HOME/.local/share/afc-tools/android-sdk/platform-tools/adb shell dumpsys audio | head -n 40
 
 Message handler (watch for unhandled messages):
   Handler (com.android.server.audio.AudioService$AudioHandler) {efd4b84} @ 348047503
@@ -284,7 +285,7 @@ Failed to write while dumping service audio: Broken pipe
 [exit=0]
 
 --- notification policy (announcement-adjacent) ---
-### /home/spectre/.local/share/afc-tools/android-sdk/platform-tools/adb shell dumpsys notification --noredact | head -n 60
+### $HOME/.local/share/afc-tools/android-sdk/platform-tools/adb shell dumpsys notification --noredact | head -n 60
 Current Notification Manager state:
   Notification List:
     NotificationRecord(0x0a1b48f4: pkg=com.amazon.tahoe user=UserHandle{0} id=2147483647 tag=ranker_group importance=3 key=0|com.amazon.tahoe|2147483647|ranker_group|10176|ranker_group: Notification(channel=AKChannelID shortcut=null contentView=null vibrate=null sound=null defaults=0x0 flags=0x700 color=0x00000000 groupKey=ranker_group vis=PRIVATE))
@@ -349,7 +350,7 @@ Failed to write while dumping service notification: Broken pipe
 [exit=0]
 
 --- companion app voice state (no-offer check) ---
-### /home/spectre/.local/share/afc-tools/android-sdk/platform-tools/adb shell pm path com.afc.companion
+### $HOME/.local/share/afc-tools/android-sdk/platform-tools/adb shell pm path com.afc.companion
 package:/data/app/~~qNjIOQ8W-apytPbVAa4syA==/com.afc.companion-ETQkMPRrum7BccFNNuSvKA==/base.apk
 [exit=0]
 
