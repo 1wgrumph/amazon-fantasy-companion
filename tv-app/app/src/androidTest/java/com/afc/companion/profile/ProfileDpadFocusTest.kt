@@ -26,6 +26,7 @@ import java.io.OutputStream
 import java.net.HttpURLConnection
 import java.net.URL
 import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
@@ -38,8 +39,15 @@ import org.junit.Test
 class ProfileDpadFocusTest {
     @get:Rule val rule = createAndroidComposeRule<ComponentActivity>()
 
-    @Test fun dpadDownLeavesLeagueFieldAndUpReturns() {
+    @Before fun loadProfileFixture() {
         rule.setContent { AfcTheme { ProfileSettingsScreen(fakeClient()) } }
+        rule.waitUntil(timeoutMillis = 5_000) {
+            rule.onAllNodes(hasText("LeagueOne")).fetchSemanticsNodes().size == 1 &&
+                rule.onAllNodes(hasText("TeamOne")).fetchSemanticsNodes().size == 1
+        }
+    }
+
+    @Test fun dpadDownLeavesLeagueFieldAndUpReturns() {
         val league = rule.onNode(hasText("LeagueOne"))
         val team = rule.onNode(hasText("TeamOne"))
         val beforeLeague = rule.onNode(hasClickAction() and hasAnyDescendant(hasText("Add to FavoriteTeams")), useUnmergedTree = true)
@@ -56,7 +64,6 @@ class ProfileDpadFocusTest {
     }
 
     @Test fun imeNextMovesForwardAndPreservesEditedText() {
-        rule.setContent { AfcTheme { ProfileSettingsScreen(fakeClient()) } }
         val league = rule.onNode(hasText("LeagueOne"))
         league.performScrollTo()
         league.requestFocus()
@@ -68,7 +75,6 @@ class ProfileDpadFocusTest {
     }
 
     @Test fun keyboardNavigationWorksDuringEditingAndBackRestoresFormNavigation() {
-        rule.setContent { AfcTheme { ProfileSettingsScreen(fakeClient()) } }
         val league = rule.onNode(hasText("LeagueOne"))
         league.performScrollTo()
         league.performSemanticsAction(SemanticsActions.OnClick) { it() }
