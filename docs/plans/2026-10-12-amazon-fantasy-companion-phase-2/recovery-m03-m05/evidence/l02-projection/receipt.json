@@ -1,0 +1,138 @@
+{
+ "packet": "issue #29 P2-L02 2026-10-18 projection",
+ "actor": "claude-code/claude-sonnet-5-5/medium (Light Implementer)",
+ "expected_head": "03eed0d95f36d578a90250c758e0c276214512c1",
+ "commit": "baa8503c10c51c6b4772a0876917f36facce2e70",
+ "push": "03eed0d..baa8503 afc/m03-m05-rw3-release-draft, normal push, exit 0",
+ "files": {
+  "change-set-describe.json": {
+   "source_sha256": "4681f76527d2c02c963023f6c01bb2c0413e83c0cc1ee347e194299eff10eeca",
+   "projected_sha256": "4681f76527d2c02c963023f6c01bb2c0413e83c0cc1ee347e194299eff10eeca",
+   "repo": 0,
+   "tools": 0,
+   "home": 0,
+   "acct": 0,
+   "rule5_lines": 0
+  },
+  "deploy-execute-output.txt": {
+   "source_sha256": "294b535d4b6686d2740a344a059be894346d1c8bf9bcb82b459221c932efb595",
+   "projected_sha256": "294b535d4b6686d2740a344a059be894346d1c8bf9bcb82b459221c932efb595",
+   "repo": 0,
+   "tools": 0,
+   "home": 0,
+   "acct": 0,
+   "rule5_lines": 0
+  },
+  "deploy-execution-receipt.json": {
+   "source_sha256": "ba9ae1974c56518afa344d55a97764f32329dda097838fcc2ca5be5d0e99b6e8",
+   "projected_sha256": "ba9ae1974c56518afa344d55a97764f32329dda097838fcc2ca5be5d0e99b6e8",
+   "repo": 0,
+   "tools": 0,
+   "home": 0,
+   "acct": 0,
+   "rule5_lines": 0
+  },
+  "deploy-stage-output.txt": {
+   "source_sha256": "1b31290cd0e4841c9756bc819668fe37102635af7ef31e4ee33482198269807c",
+   "projected_sha256": "804345d93967c20de1ef96c56d870726d607baf8abb80a5c7b96180698ad18b0",
+   "repo": 0,
+   "tools": 0,
+   "home": 0,
+   "acct": 0,
+   "rule5_lines": 27
+  },
+  "deploy-stage-receipt.json": {
+   "source_sha256": "32e47536529e8f9575c23b87897da1eeb79b2def1602ea73935bc8cb4d1e2031",
+   "projected_sha256": "32e47536529e8f9575c23b87897da1eeb79b2def1602ea73935bc8cb4d1e2031",
+   "repo": 0,
+   "tools": 0,
+   "home": 0,
+   "acct": 0,
+   "rule5_lines": 0
+  },
+  "deploy.last_green.json": {
+   "source_sha256": "ceb47f3d486f822f2195c7946f5a54391e1f8ef008ae9b68fcd8944d1675ba83",
+   "projected_sha256": "ceb47f3d486f822f2195c7946f5a54391e1f8ef008ae9b68fcd8944d1675ba83",
+   "repo": 0,
+   "tools": 0,
+   "home": 0,
+   "acct": 0,
+   "rule5_lines": 0
+  },
+  "deployed-output.txt": {
+   "source_sha256": "e60d8c83302c7f142a19c82fa1a9d7ca4e895fd13adf37fe647d01c4f539ff3d",
+   "projected_sha256": "afe18c0987e2703104304d3142786528894f523e224f07827b057eb31a9216a9",
+   "repo": 2,
+   "tools": 1,
+   "home": 0,
+   "acct": 0,
+   "rule5_lines": 0
+  },
+  "deployed-smoke-output.txt": {
+   "source_sha256": "92dcccb70e4a4676707ace3ac7d19b8d98fc10441bc7d8f3efc8d951084f4302",
+   "projected_sha256": "40329692ad78737956dcacba8a70bb6e6c95a97135ec26b618a810edc90d07d3",
+   "repo": 2,
+   "tools": 1,
+   "home": 0,
+   "acct": 0,
+   "rule5_lines": 0
+  },
+  "deployed-smoke.xml": {
+   "source_sha256": "5eeada08a3ab4272b8e1de1061e7c7ea3bc8edda8311f1d7e2bfac523d6b3244",
+   "projected_sha256": "5eeada08a3ab4272b8e1de1061e7c7ea3bc8edda8311f1d7e2bfac523d6b3244",
+   "repo": 0,
+   "tools": 0,
+   "home": 0,
+   "acct": 0,
+   "rule5_lines": 0
+  },
+  "deployed.xml": {
+   "source_sha256": "cee9f523c386be4b86c6becb151ed48704114577887604abcaf7126d48fb0a4b",
+   "projected_sha256": "cee9f523c386be4b86c6becb151ed48704114577887604abcaf7126d48fb0a4b",
+   "repo": 0,
+   "tools": 0,
+   "home": 0,
+   "acct": 0,
+   "rule5_lines": 0
+  }
+ },
+ "rule5_note": "27 trailing-whitespace lines stripped in deploy-stage-output.txt, plus trailing blank line at EOF reduced to single newline (hygiene gate; extension beyond the orchestrator's stated rule 5, recorded in PROJECTION.md)",
+ "commands": [
+  {
+   "cmd": "json.tool x4",
+   "exit": 0
+  },
+  {
+   "cmd": "xml.dom.minidom x2",
+   "exit": 0
+  },
+  {
+   "cmd": "git diff --check",
+   "exit": 0
+  },
+  {
+   "cmd": "flock gate.sh docs",
+   "exit": 0
+  },
+  {
+   "cmd": "flock gate.sh hygiene",
+   "exit": 0,
+   "note": "coverage adapter exit=3 GAP REPORT_INCOMPLETE unmapped backend/src/control.py is an existing adapter gap, gate PASS"
+  },
+  {
+   "cmd": "git commit",
+   "exit": 0
+  },
+  {
+   "cmd": "git push",
+   "exit": 0
+  }
+ ],
+ "leak_check": "grep over the 10 projected files: no hits (xargs rc 123 = grep rc 1 no match)",
+ "non_claims": [
+  "not an independent review",
+  "PR #116 not marked ready, not merged; no tag, comment or issue closure",
+  "PROJECTION.md and receipt.json are author evidence only",
+  "receipt.json not committed (records the commit sha)"
+ ]
+}
