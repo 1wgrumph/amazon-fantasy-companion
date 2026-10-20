@@ -123,10 +123,12 @@ inputs (PR #103; `spikes/sp5-espn-feed/VERDICT.md`).
 > current page: https://support.google.com/youtubetv/answer/15583839).
 
 Roster scores beside the game there; tune-in alerts and cross-provider Watch
-here. YouTube TV links an NFL.com or Yahoo league and shows roster scores
-beside the game. This companion instead raises personalized tune-in alerts
-while the viewer is in their viewing apps (panel-only presentation; the
-heads-up route failed — see Honest limits) and offers a cross-provider Watch
+here. YouTube TV links an ESPN or Yahoo league and shows roster scores
+beside the game. This companion instead collects personalized tune-in
+alerts in the background and presents them in its own full-screen panel
+(panel-only presentation; no reachable notification during provider
+playback — the heads-up route failed, see Honest limits) and offers a
+cross-provider Watch
 handoff resolved from the event's channel and the viewer's installed apps,
 subscriptions, local market, and preference. No tune-in-alert or
 cross-provider Watch claim is made for Fantasy View; the comparison claims
@@ -146,8 +148,9 @@ only what the cited sources say.
 
 Prime Video already ships an analytics viewing layer over Thursday Night
 Football (Prime Vision with Next Gen Stats and AI features, per the first
-source), and Amazon holds NBA and WNBA rights on Prime Video (11-year deal
-beginning 2025–26, per the second and third sources). If this product grew
+source), and Amazon holds NBA and WNBA rights on Prime Video (11-year deal:
+NBA beginning with the 2025–26 season and WNBA beginning in 2026, per the
+second and third sources). If this product grew
 in that direction, the sport-agnostic parts — alert policy, Watch handoff,
 and panel — would carry over; the NFL-specific parts — the ESPN feed adapter
 and the PPR / Half-PPR scoring presets — would need sport-specific
