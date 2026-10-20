@@ -18,7 +18,7 @@ Notes summarize only entries already in `CHANGELOG.md` [Unreleased]; no product 
 
 ## Known blocked items
 
-- P2-V01 (primary target Vega): BLOCKED. Vega CLI 1.4.5 safety INDETERMINATE and NOT_ADMITTED; SDK/RN/OS pins unmaterialized; no physical Vega target. Final R1 acceptance is blocked.
+- P2-V01 (Vega compatibility evidence, VVD; non-gating): reported with the release, not a release gate. Vega CLI 1.4.5 safety INDETERMINATE and NOT_ADMITTED; SDK/RN/OS pins unmaterialized; no physical Vega target (NOT_APPLICABLE, not PASS). R1 ships the Fire OS APK.
 - P2-A01 physical observation: BLOCKED pending independent evidence.
 - Independent review (RW1 running, RW3 0/1 unused) and exact release artifact/hash/signer are pending.
 - Publication is excluded; no owner release authorization requested or inferred.
