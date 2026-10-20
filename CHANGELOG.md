@@ -19,6 +19,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   users to confirm only a code on their own TV; preserve code-only linking,
   short code expiry and one-time confirmation ([#68](https://github.com/1wgrumph/amazon-fantasy-companion/pull/68)).
 
+### Changed
+
+- Publish specification revision 0.4 (P2-D02): record landed SP-1 to SP-8 verdicts and close the provider, panel, notification and lineup contract constants; Fire OS primary with Vega paused stretch; pending live checks stay pending ([#46](https://github.com/1wgrumph/amazon-fantasy-companion/issues/46), [PR #124](https://github.com/1wgrumph/amazon-fantasy-companion/pull/124)).
+
 ### Added
 
 - Prepare the P2-X10 hardening run (preparation unit, no live claim): scenario run book (corrections, starter changes, duplicate suppression, stale/unavailable, Sunday defect re-check), run-record template with `live_claim: false`, preparation-time preflight with typed pending rows, and the visual capture index under `evidence/e2e/2026-10-19/` and `evidence/visual/e2e-2026-10-19/`; every live scenario stays PENDING-LIVE for the post-P2-X09 window ([#44](https://github.com/1wgrumph/amazon-fantasy-companion/issues/44)).
