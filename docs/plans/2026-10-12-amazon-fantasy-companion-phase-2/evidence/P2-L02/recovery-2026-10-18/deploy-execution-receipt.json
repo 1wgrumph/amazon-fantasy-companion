@@ -1,0 +1,63 @@
+{
+  "task_id": "R-T-DEPLOY-1",
+  "outcome": "PASS",
+  "role_verdict": "CANDIDATE_READY",
+  "note": "Closes deployment packet only; no device/live/Vega/phase acceptance. Smoke tests passing on empty alerts are supporting API smoke only.",
+  "change_set": "samcli-deploy1792406877",
+  "preflight": "live projection equal to E/change-set-describe.json (22 Modify, no replacement, Never recreation, 3 Code/S3Key 7c2f5fee829d70b79b08012f7e5aa2c1); stack UPDATE_COMPLETE; no in-progress game on current/prior Chicago date",
+  "commands": [
+    {
+      "id": "execute-change-set",
+      "exit": 0,
+      "window_utc": "2026-10-19T10:52:53Z/10:54:25Z"
+    },
+    {
+      "id": "wait stack-update-complete",
+      "exit": 0
+    },
+    {
+      "id": "CMD-DEPLOYED-SMOKE",
+      "exit": 0,
+      "collected_selected": "26/4",
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "deselected": 22
+    },
+    {
+      "id": "CMD-DEPLOYED-TESTS",
+      "exit": 0,
+      "collected": 26,
+      "passed": 26,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "deployed": {
+    "stack_status": "UPDATE_COMPLETE",
+    "git_commit_tag": "7da6187b5a57ee80887ef84301ff99a3592bacb6",
+    "backend_tree": "55a50ca1f1d9dff7c9a952ed4c5be7b0203f842d",
+    "template_sha256": "0531bf9d381a71cc88c9677185c4235257d408101e8e839e91544d0e7bbba80b",
+    "build_inventory_sha256": "6c5b08040590b881afdd3611ffaf7c0d228d65ce226c2e9174e93836d31b9b08",
+    "api_url": "https://le3r79003f.execute-api.us-east-2.amazonaws.com",
+    "profile": "recovery-m0305-20261019"
+  },
+  "digests": {
+    "deploy-execute-output.txt": "294b535d4b6686d2740a344a059be894346d1c8bf9bcb82b459221c932efb595",
+    "deployed-smoke.xml": "5eeada08a3ab4272b8e1de1061e7c7ea3bc8edda8311f1d7e2bfac523d6b3244",
+    "deployed.xml": "cee9f523c386be4b86c6becb151ed48704114577887604abcaf7126d48fb0a4b",
+    "deployed-smoke-output.txt": "92dcccb70e4a4676707ace3ac7d19b8d98fc10441bc7d8f3efc8d951084f4302",
+    "deployed-output.txt": "e60d8c83302c7f142a19c82fa1a9d7ca4e895fd13adf37fe647d01c4f539ff3d"
+  },
+  "changed_paths": [
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-L02/recovery-2026-10-18/"
+  ],
+  "route": "light_implementer fallback:0 AGY / Claude Sonnet 5.5 medium",
+  "review": "RW1 unspent; OCR/Reverify not run by this author",
+  "risks": [
+    "Lambda code hash/S3Key not read post-deploy; binding by tag, stack identity and change-set S3Key",
+    "empty-alert tests not live-ingest proof"
+  ],
+  "blocker": null,
+  "developer_feedback": null
+}

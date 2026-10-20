@@ -1,0 +1,118 @@
+SP-8 probe 2 — intent filters and TTS check
+started: 2026-10-20T12:53:24Z
+### adb shell dumpsys package com.amazon.tv.alexanotifications
+Receiver Resolver Table:
+  Non-Data Actions:
+      com.amazon.speech.CONNECTIVITY_ACTION:
+        e9e3c8d com.amazon.tv.alexanotifications/.cloudadapter.SimBroadcastReceiver filter 1e0ee42
+          Action: "com.amazon.speech.NotificationIndicator_Notify"
+          Action: "com.amazon.speech.CONNECTIVITY_ACTION"
+      com.amazon.speech.NotificationIndicator_Notify:
+        e9e3c8d com.amazon.tv.alexanotifications/.cloudadapter.SimBroadcastReceiver filter 1e0ee42
+          Action: "com.amazon.speech.NotificationIndicator_Notify"
+          Action: "com.amazon.speech.CONNECTIVITY_ACTION"
+      android.intent.action.LOCALE_CHANGED:
+        10cfdb7 com.amazon.tv.alexanotifications/.LocaleChangedReceiver filter a5ff924
+          Action: "android.intent.action.LOCALE_CHANGED"
+      com.amazon.speech.Alexa.DoNotDisturb_SetDoNotDisturb:
+        e69be53 com.amazon.tv.alexanotifications/.DNDStatusChangeReceiver filter 2358390
+          Action: "com.amazon.speech.Alexa.DoNotDisturb_SetDoNotDisturb"
+
+Registered ContentProviders:
+  com.amazon.tv.alexanotifications/.database.NotificationContentProvider:
+    Provider{c2a13f3 com.amazon.tv.alexanotifications/.database.NotificationContentProvider}
+
+ContentProvider Authorities:
+  [com.amazon.tv.alexanotifications.notificationcontentprovider]:
+    Provider{c2a13f3 com.amazon.tv.alexanotifications/.database.NotificationContentProvider}
+      applicationInfo=ApplicationInfo{aa6ba09 com.amazon.tv.alexanotifications}
+
+Key Set Manager:
+  [com.amazon.tv.alexanotifications]
+      Signing KeySets: 7
+
+Packages:
+  Package [com.amazon.tv.alexanotifications] (6e47329):
+    userId=10178
+    pkg=Package{511b6ae com.amazon.tv.alexanotifications}
+    codePath=/system/system_ext/priv-app/com.amazon.tv.alexanotifications
+    resourcePath=/system/system_ext/priv-app/com.amazon.tv.alexanotifications
+    legacyNativeLibraryDir=/system/system_ext/priv-app/com.amazon.tv.alexanotifications/lib
+    primaryCpuAbi=null
+    secondaryCpuAbi=null
+    versionCode=2009710 minSdk=22 targetSdk=28
+    versionName=1.0.200386.0-com.amazon.tv.alexanotifications_2009710
+    splits=[base]
+    apkSigningVersion=1
+    applicationInfo=ApplicationInfo{511b6ae com.amazon.tv.alexanotifications}
+    flags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION PRIVATE_FLAG_REQUEST_LEGACY_EXTERNAL_STORAGE PRIVILEGED SYSTEM_EXT PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    queriesPackages=[]
+    dataDir=/data/user/0/com.amazon.tv.alexanotifications
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+[exit=0]
+
+### adb shell cmd package query-activities -a android.speech.tts.engine.CHECK_TTS_DATA
+2 activities found:
+  Activity #0:
+    priority=0 preferredOrder=0 match=0x108000 specificIndex=-1 isDefault=true
+    ActivityInfo:
+      name=com.ivona.ttslib.CheckVoiceData
+      packageName=com.ivona.tts.oem
+      labelRes=0x7f020000 nonLocalizedLabel=null icon=0x0 banner=0x0
+      enabled=true exported=true directBootAware=true
+      taskAffinity=com.ivona.tts.oem targetActivity=null persistableMode=PERSIST_ROOT_ONLY
+      launchMode=0 flags=0x200 privateFlags=0x0 theme=0x1030010
+      screenOrientation=-1 configChanges=0x3 softInputMode=0x0
+      lockTaskLaunchMode=LOCK_TASK_LAUNCH_MODE_DEFAULT
+      resizeMode=RESIZE_MODE_RESIZEABLE
+      ApplicationInfo:
+        name=com.ivona.tts.VoiceApp
+        packageName=com.ivona.tts.oem
+        labelRes=0x7f020000 nonLocalizedLabel=null icon=0x7f010000 banner=0x0
+        className=com.ivona.tts.VoiceApp
+        processName=com.ivona.tts.oem
+        taskAffinity=com.ivona.tts.oem
+        uid=1000 flags=0x2088be45 privateFlags=0x8c700468 fosAppFlags=0x0 theme=0x0
+        requiresSmallestWidthDp=0 compatibleWidthLimitDp=0 largestWidthLimitDp=0
+        sourceDir=/system/system_ext/priv-app/IvonaTTS/IvonaTTS.apk
+        seinfo=platform:privapp:targetSdkVersion=28
+        seinfoUser=:complete
+        dataDir=/data/user_de/0/com.ivona.tts.oem
+        deviceProtectedDataDir=/data/user_de/0/com.ivona.tts.oem
+        credentialProtectedDataDir=/data/user/0/com.ivona.tts.oem
+        sharedLibraryFiles=[/system_ext/priv-app/MetricsApi/MetricsApi.apk, /system_ext/framework/webviewext.jar]
+        enabled=true minSdkVersion=30 targetSdkVersion=30 versionCode=30 targetSandboxVersion=1
+        supportsRtl=false
+        fullBackupContent=true
+        crossProfile=false
+        HiddenApiEnforcementPolicy=0
+        usesNonSdkApi=true
+        allowsPlaybackCapture=true
+  Activity #1:
+    priority=0 preferredOrder=0 match=0x108000 specificIndex=-1 isDefault=true
+    ActivityInfo:
+      name=com.svox.pico.CheckVoiceData
+      packageName=com.svox.pico
+      labelRes=0x7f020000 nonLocalizedLabel=null icon=0x0 banner=0x0
+      enabled=true exported=true directBootAware=false
+      taskAffinity=com.svox.pico targetActivity=null persistableMode=PERSIST_ROOT_ONLY
+      launchMode=0 flags=0x200 privateFlags=0x0 theme=0x1030010
+      screenOrientation=-1 configChanges=0x3 softInputMode=0x0
+      lockTaskLaunchMode=LOCK_TASK_LAUNCH_MODE_DEFAULT
+      resizeMode=RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION
+      ApplicationInfo:
+        packageName=com.svox.pico
+[exit=0]
+
+### adb shell settings get global assistant
+null
+[exit=0]
+
+### adb shell settings get secure default_input_method
+com.amazon.tv.ime/.FireTVIME
+[exit=0]
+
+ended: 2026-10-20T12:53:24Z
+cleanup: no probe APK was installed by SP-8 (read-only probes only); nothing to uninstall.

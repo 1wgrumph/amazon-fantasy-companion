@@ -1,0 +1,357 @@
+note: $HOME replaces the operator home directory to satisfy the repository path rule; this redaction does not change the command or its result.
+SP-8 Alexa route probe — commands and exit codes
+started: 2026-10-20T12:52:49Z
+note: device address/serial/account data deliberately omitted
+
+### $HOME/.local/share/afc-tools/android-sdk/platform-tools/adb shell getprop ro.product.model
+AFTKM
+[exit=0]
+
+### $HOME/.local/share/afc-tools/android-sdk/platform-tools/adb shell getprop ro.build.version.release
+11
+[exit=0]
+
+### $HOME/.local/share/afc-tools/android-sdk/platform-tools/adb shell getprop ro.build.version.sdk
+30
+[exit=0]
+
+### $HOME/.local/share/afc-tools/android-sdk/platform-tools/adb shell getprop ro.build.description
+karat-user 11 RS8185.3891N 0033018557184 amz-p,release-keys
+[exit=0]
+
+--- voice/alexa-related packages (pm list packages | grep) ---
+### $HOME/.local/share/afc-tools/android-sdk/platform-tools/adb shell pm list packages | grep -iE 'alexa|voice|tts|speech|vui|avs'
+package:com.amazon.alexamediaplayer.runtime.ftv
+package:com.amazon.alexa.datastore.app
+package:com.amazon.avsyncslider
+package:com.amazon.alexadirectivebrokerservice
+package:com.amazon.tv.ottssocompanionapp
+package:com.amazon.tv.alexanotifications
+package:com.amazon.tv.alexaalerts
+package:com.ivona.tts.oem
+package:com.amazon.alexa.externalmediaplayer.fireos
+[exit=0]
+
+--- TTS engines / speech services ---
+### $HOME/.local/share/afc-tools/android-sdk/platform-tools/adb shell cmd package query-services -a android.intent.action.TTS_SERVICE
+2 services found:
+  Service #0:
+    priority=0 preferredOrder=0 match=0x108000 specificIndex=-1 isDefault=true
+    ServiceInfo:
+      name=com.ivona.ttslib.ics.IVONATextToSpeechService
+      packageName=com.ivona.tts.oem
+      labelRes=0x7f020000 nonLocalizedLabel=null icon=0x0 banner=0x0
+      enabled=true exported=true directBootAware=true
+      permission=null
+      flags=0x0
+      ApplicationInfo:
+        name=com.ivona.tts.VoiceApp
+        packageName=com.ivona.tts.oem
+        labelRes=0x7f020000 nonLocalizedLabel=null icon=0x7f010000 banner=0x0
+        className=com.ivona.tts.VoiceApp
+        processName=com.ivona.tts.oem
+        taskAffinity=com.ivona.tts.oem
+        uid=1000 flags=0x2088be45 privateFlags=0x8c700468 fosAppFlags=0x0 theme=0x0
+        requiresSmallestWidthDp=0 compatibleWidthLimitDp=0 largestWidthLimitDp=0
+        sourceDir=/system/system_ext/priv-app/IvonaTTS/IvonaTTS.apk
+        seinfo=platform:privapp:targetSdkVersion=28
+        seinfoUser=:complete
+        dataDir=/data/user_de/0/com.ivona.tts.oem
+        deviceProtectedDataDir=/data/user_de/0/com.ivona.tts.oem
+        credentialProtectedDataDir=/data/user/0/com.ivona.tts.oem
+        sharedLibraryFiles=[/system_ext/priv-app/MetricsApi/MetricsApi.apk, /system_ext/framework/webviewext.jar]
+        enabled=true minSdkVersion=30 targetSdkVersion=30 versionCode=30 targetSandboxVersion=1
+        supportsRtl=false
+        fullBackupContent=true
+        crossProfile=false
+        HiddenApiEnforcementPolicy=0
+        usesNonSdkApi=true
+        allowsPlaybackCapture=true
+  Service #1:
+    priority=0 preferredOrder=0 match=0x108000 specificIndex=-1 isDefault=true
+    ServiceInfo:
+      name=com.svox.pico.PicoService
+      packageName=com.svox.pico
+      labelRes=0x7f020000 nonLocalizedLabel=null icon=0x0 banner=0x0
+      enabled=true exported=true directBootAware=false
+      permission=null
+      flags=0x0
+      ApplicationInfo:
+        packageName=com.svox.pico
+        labelRes=0x7f020000 nonLocalizedLabel=null icon=0x0 banner=0x0
+        processName=com.svox.pico
+        taskAffinity=com.svox.pico
+        uid=10215 flags=0x2088be45 privateFlags=0x8c601000 fosAppFlags=0x0 theme=0x0
+        requiresSmallestWidthDp=0 compatibleWidthLimitDp=0 largestWidthLimitDp=0
+        sourceDir=/system/system_ext/app/PicoTts/PicoTts.apk
+        seinfo=default:targetSdkVersion=30
+        seinfoUser=:complete
+        dataDir=/data/user/0/com.svox.pico
+        deviceProtectedDataDir=/data/user_de/0/com.svox.pico
+        credentialProtectedDataDir=/data/user/0/com.svox.pico
+        enabled=true minSdkVersion=30 targetSdkVersion=30 versionCode=1 targetSandboxVersion=1
+        supportsRtl=false
+        fullBackupContent=true
+        crossProfile=false
+        HiddenApiEnforcementPolicy=0
+        usesNonSdkApi=true
+        allowsPlaybackCapture=true
+[exit=0]
+
+### $HOME/.local/share/afc-tools/android-sdk/platform-tools/adb shell cmd package query-services -a android.speech.RecognitionService
+No services found
+[exit=0]
+
+### $HOME/.local/share/afc-tools/android-sdk/platform-tools/adb shell settings get secure tts_default_synth
+null
+[exit=0]
+
+### $HOME/.local/share/afc-tools/android-sdk/platform-tools/adb shell settings get secure voice_interaction_service
+
+[exit=0]
+
+### $HOME/.local/share/afc-tools/android-sdk/platform-tools/adb shell settings get secure voice_recognition_service
+
+[exit=0]
+
+### $HOME/.local/share/afc-tools/android-sdk/platform-tools/adb shell dumpsys voiceinteraction
+VOICE INTERACTION MANAGER (dumpsys voiceinteraction)
+  mEnableService: true
+  mTemporarilyDisabled: false
+  mCurUser: 0
+  mCurUserUnlocked: false
+  mCurUserSupported: true
+  1 supported user: [0]
+  Enrolled KeyphraseSoundModels:
+  (No active implementation)
+  module properties=null
+  call active=false
+  power save mode active=false
+  service disabled=false
+ST Event log: SoundTrigger activity
+  Enrolled GenericSoundModels:
+Model Stats:
+[exit=0]
+
+--- assist / voice interaction resolution ---
+### $HOME/.local/share/afc-tools/android-sdk/platform-tools/adb shell cmd package resolve-activity -a android.intent.action.ASSIST
+priority=0 preferredOrder=0 match=0x108000 specificIndex=-1 isDefault=true
+ActivityInfo:
+  name=com.amazon.vizzini.voiceservice.VoiceAssistantActivity
+  packageName=com.amazon.vizzini
+  enabled=true exported=true directBootAware=false
+  taskAffinity=com.amazon.vizzini targetActivity=null persistableMode=PERSIST_ROOT_ONLY
+  launchMode=0 flags=0x200 privateFlags=0x0 theme=0x0
+  screenOrientation=-1 configChanges=0x3 softInputMode=0x0
+  lockTaskLaunchMode=LOCK_TASK_LAUNCH_MODE_DEFAULT
+  resizeMode=RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION
+  ApplicationInfo:
+    name=com.amazon.vizzini.SimApplication
+    packageName=com.amazon.vizzini
+    labelRes=0x7f0f0046 nonLocalizedLabel=null icon=0x7f080088 banner=0x0
+    className=com.amazon.vizzini.SimApplication
+    processName=com.amazon.vizzini
+    taskAffinity=com.amazon.vizzini
+    uid=10202 flags=0x28c83e4d privateFlags=0xa4201008 fosAppFlags=0x0 theme=0x7f100006
+    requiresSmallestWidthDp=0 compatibleWidthLimitDp=0 largestWidthLimitDp=0
+    sourceDir=/system/system_ext/priv-app/com.amazon.vizzini/com.amazon.vizzini.apk
+    resourceDirs=[]
+    seinfo=amazonapp:privapp:targetSdkVersion=28
+    seinfoUser=:complete
+    dataDir=/data/user/0/com.amazon.vizzini
+    deviceProtectedDataDir=/data/user_de/0/com.amazon.vizzini
+    credentialProtectedDataDir=/data/user/0/com.amazon.vizzini
+    sharedLibraryFiles=[/system/framework/android.test.base.jar, /system/framework/android.hidl.manager-V1.0-java.jar, /system/framework/android.hidl.base-V1.0-java.jar, /system_ext/framework/webviewext.jar, /system_ext/priv-app/MinervaApi/MinervaApi.apk, /system_ext/framework/com.amazon.ceviche.sdk.jar, /system_ext/priv-app/MetricsApi/MetricsApi.apk, /system_ext/framework/FireTvSysappsLib.jar, /system_ext/framework/FireOSPhoenixSDKNeoJavaServiceApi.jar, /system_ext/framework/com.amazon.tv.ftvkarmalibrary.jar, /system/system_ext/priv-app/DeviceSoftwareOTAContracts/DeviceSoftwareOTAContracts.apk, /system/system_ext/priv-app/DeviceClientPlatformContractsFramework/DeviceClientPlatformContractsFramework.apk, /system/system_ext/priv-app/com.amazon.dp.logger/com.amazon.dp.logger.apk, /system_ext/framework/com.amazon.ftvcapabilitylibrary.jar]
+    enabled=true minSdkVersion=25 targetSdkVersion=28 versionCode=662166410 targetSandboxVersion=1
+    supportsRtl=true
+    fullBackupContent=true
+    crossProfile=false
+    HiddenApiEnforcementPolicy=2
+    usesNonSdkApi=false
+    allowsPlaybackCapture=false
+[exit=0]
+
+### $HOME/.local/share/afc-tools/android-sdk/platform-tools/adb shell cmd package query-services -a android.service.voice.VoiceInteractionService
+No services found
+[exit=0]
+
+--- media session / audio ---
+### $HOME/.local/share/afc-tools/android-sdk/platform-tools/adb shell dumpsys media_session
+MEDIA SESSION SERVICE (dumpsys media_session)
+
+7 sessions listeners.
+Global priority session is null
+User Records:
+Record for full_user=0
+  Volume key long-press listener: null
+  Volume key long-press listener package:
+  Media key listener: null
+  Media key listener package:
+  OnMediaKeyEventDispatchedListener: added 0 listener(s)
+  OnMediaKeyEventSessionChangedListener: added 1 listener(s)
+    from com.android.bluetooth
+  Last MediaButtonReceiver: null
+  Media button session is com.amazon.firebat/com.amazon.firebat (userId=0)
+  Sessions Stack - have 3 sessions:
+    TtsPlayerServer com.amazon.vizzini/TtsPlayerServer (userId=0)
+      ownerPid=2140, ownerUid=10202, userId=0
+      package=com.amazon.vizzini
+      launchIntent=null
+      mediaButtonReceiver=null
+      active=false
+      flags=0
+      rating type=0
+      controllers: 0
+      state=null
+      audioAttrs=AudioAttributes: usage=USAGE_MEDIA content=CONTENT_TYPE_UNKNOWN flags=0x800 tags= bundle=null
+      volumeType=1, controlType=2, max=0, current=0
+      metadata: size=1, description=null, null, null
+      queueTitle=null, size=0
+    AlexaMediaPlayerRuntime com.amazon.alexamediaplayer.runtime.ftv/AlexaMediaPlayerRuntime (userId=0)
+      ownerPid=21376, ownerUid=10116, userId=0
+      package=com.amazon.alexamediaplayer.runtime.ftv
+      launchIntent=null
+      mediaButtonReceiver=MBR {pi=PendingIntent{10cc049: PendingIntentRecord{67a4d4e com.amazon.alexamediaplayer.runtime.ftv broadcastIntent}}, type=1}
+      active=false
+      flags=3
+      rating type=0
+      controllers: 1
+      state=PlaybackState {state=0, position=0, buffered position=0, speed=0.0, updated=0, actions=6, custom actions=[], active item id=-1, error=null}
+      audioAttrs=AudioAttributes: usage=USAGE_MEDIA content=CONTENT_TYPE_UNKNOWN flags=0x800 tags= bundle=null
+      volumeType=1, controlType=2, max=0, current=0
+      metadata: size=1, description=null, null, null
+      queueTitle=null, size=0
+    com.amazon.firebat com.amazon.firebat/com.amazon.firebat (userId=0)
+      ownerPid=25635, ownerUid=10144, userId=0
+      package=com.amazon.firebat
+      launchIntent=null
+      mediaButtonReceiver=null
+      active=false
+      flags=3
+      rating type=0
+      controllers: 1
+      state=PlaybackState {state=0, position=0, buffered position=0, speed=1.0, updated=260209827, actions=1049455, custom actions=[], active item id=-1, error=null}
+      audioAttrs=AudioAttributes: usage=USAGE_MEDIA content=CONTENT_TYPE_UNKNOWN flags=0x800 tags= bundle=null
+      volumeType=1, controlType=2, max=0, current=0
+      metadata: null
+      queueTitle=null, size=0
+Audio playback (lastly played comes first)
+  uid=10191 packages=com.amazon.tv.launcher
+  uid=10144 packages=com.amazon.firebat
+[exit=0]
+
+### $HOME/.local/share/afc-tools/android-sdk/platform-tools/adb shell dumpsys audio | head -n 40
+
+Message handler (watch for unhandled messages):
+  Handler (com.android.server.audio.AudioService$AudioHandler) {efd4b84} @ 348047503
+    Looper (AudioService, tid 99) {af38f6d}
+      (Total messages: 0, polling=true, quitting=false)
+
+MediaFocusControl dump time: 12:52:50 PM
+
+Audio Focus stack entries (last is top of stack):
+
+
+No external focus policy
+
+
+
+ Notify on duck:  true
+
+ In ring or call: false
+
+
+
+Audio event log: focus commands as seen by MediaFocusControl
+10-16 14:14:25:473 requestAudioFocus() from uid/pid 10144/21267 clientId=com.amazon.media.AmazonAudioManager@57ca17acom.amazon.livingroom.mediapipelinebackend.AudioFocusManager@c7097b2 callingPack=com.amazon.firebat req=1 flags=0x2 sdk=35
+10-16 14:14:49:676 abandonAudioFocus() from uid/pid 10144/21267 clientId=com.amazon.media.AmazonAudioManager@57ca17acom.amazon.livingroom.mediapipelinebackend.AudioFocusManager@c7097b2
+10-16 14:14:52:054 requestAudioFocus() from uid/pid 10144/21267 clientId=com.amazon.media.AmazonAudioManager@57ca17acom.amazon.livingroom.mediapipelinebackend.AudioFocusManager@c7097b2 callingPack=com.amazon.firebat req=1 flags=0x2 sdk=35
+10-16 14:16:33:855 abandonAudioFocus() from uid/pid 10144/21267 clientId=com.amazon.media.AmazonAudioManager@57ca17acom.amazon.livingroom.mediapipelinebackend.AudioFocusManager@c7097b2
+10-16 14:17:03:888 requestAudioFocus() from uid/pid 10144/21267 clientId=com.amazon.media.AmazonAudioManager@57ca17acom.amazon.livingroom.mediapipelinebackend.AudioFocusManager@c7097b2 callingPack=com.amazon.firebat req=1 flags=0x2 sdk=35
+10-16 14:17:08:691 abandonAudioFocus() from uid/pid 10144/21267 clientId=com.amazon.media.AmazonAudioManager@57ca17acom.amazon.livingroom.mediapipelinebackend.AudioFocusManager@c7097b2
+10-16 14:17:28:348 requestAudioFocus() from uid/pid 10144/21267 clientId=com.amazon.media.AmazonAudioManager@57ca17acom.amazon.livingroom.mediapipelinebackend.AudioFocusManager@c7097b2 callingPack=com.amazon.firebat req=1 flags=0x2 sdk=35
+10-16 14:17:43:415 abandonAudioFocus() from uid/pid 10144/21267 clientId=com.amazon.media.AmazonAudioManager@57ca17acom.amazon.livingroom.mediapipelinebackend.AudioFocusManager@c7097b2
+10-16 14:17:46:814 requestAudioFocus() from uid/pid 10144/21267 clientId=com.amazon.media.AmazonAudioManager@57ca17acom.amazon.livingroom.mediapipelinebackend.AudioFocusManager@c7097b2 callingPack=com.amazon.firebat req=1 flags=0x2 sdk=35
+10-16 14:18:01:816 abandonAudioFocus() from uid/pid 10144/21267 clientId=com.amazon.media.AmazonAudioManager@57ca17acom.amazon.livingroom.mediapipelinebackend.AudioFocusManager@c7097b2
+10-16 14:18:34:581 requestAudioFocus() from uid/pid 10144/21267 clientId=com.amazon.media.AmazonAudioManager@57ca17acom.amazon.livingroom.mediapipelinebackend.AudioFocusManager@c7097b2 callingPack=com.amazon.firebat req=1 flags=0x2 sdk=35
+10-16 14:19:46:417 abandonAudioFocus() from uid/pid 10144/21267 clientId=com.amazon.media.AmazonAudioManager@57ca17acom.amazon.livingroom.mediapipelinebackend.AudioFocusManager@c7097b2
+10-16 14:19:48:632 requestAudioFocus() from uid/pid 10144/21267 clientId=com.amazon.media.AmazonAudioManager@57ca17acom.amazon.livingroom.mediapipelinebackend.AudioFocusManager@c7097b2 callingPack=com.amazon.firebat req=1 flags=0x2 sdk=35
+10-16 14:21:11:726 abandonAudioFocus() from uid/pid 10144/21267 clientId=com.amazon.media.AmazonAudioManager@57ca17acom.amazon.livingroom.mediapipelinebackend.AudioFocusManager@c7097b2
+10-16 14:21:31:395 requestAudioFocus() from uid/pid 10144/21267 clientId=com.amazon.media.AmazonAudioManager@57ca17acom.amazon.livingroom.mediapipelinebackend.AudioFocusManager@c7097b2 callingPack=com.amazon.firebat req=1 flags=0x2 sdk=35
+10-16 14:21:46:323 abandonAudioFocus() from uid/pid 10144/21267 clientId=com.amazon.media.AmazonAudioManager@57ca17acom.amazon.livingroom.mediapipelinebackend.AudioFocusManager@c7097b2
+10-16 14:22:08:783 requestAudioFocus() from uid/pid 10144/21267 clientId=com.amazon.media.AmazonAudioManager@57ca17acom.amazon.livingroom.mediapipelinebackend.AudioFocusManager@c7097b2 callingPack=com.amazon.firebat req=1 flags=0x2 sdk=35
+10-16 14:23:57:892 abandonAudioFocus() from uid/pid 10144/21267 clientId=com.amazon.media.AmazonAudioManager@57ca17acom.amazon.livingroom.mediapipelinebackend.AudioFocusManager@c7097b2
+Failed to write while dumping service audio: Broken pipe
+[exit=0]
+
+--- notification policy (announcement-adjacent) ---
+### $HOME/.local/share/afc-tools/android-sdk/platform-tools/adb shell dumpsys notification --noredact | head -n 60
+Current Notification Manager state:
+  Notification List:
+    NotificationRecord(0x0a1b48f4: pkg=com.amazon.tahoe user=UserHandle{0} id=2147483647 tag=ranker_group importance=3 key=0|com.amazon.tahoe|2147483647|ranker_group|10176|ranker_group: Notification(channel=AKChannelID shortcut=null contentView=null vibrate=null sound=null defaults=0x0 flags=0x700 color=0x00000000 groupKey=ranker_group vis=PRIVATE))
+      uid=10176 userId=0
+      opPkg=com.amazon.tahoe
+      icon=Icon(typ=RESOURCE pkg=com.amazon.tahoe id=0x0108003f)
+      flags=0x700
+      pri=0
+      key=0|com.amazon.tahoe|2147483647|ranker_group|10176|ranker_group
+      seen=false
+      groupKey=0|com.amazon.tahoe|g:ranker_group
+      fullscreenIntent=null
+      contentIntent=PendingIntent{9ab8467: PendingIntentRecord{557ca92 android startActivity}}
+      deleteIntent=null
+      number=0
+      groupAlertBehavior=2
+      when=1792156703500
+      tickerText=null
+      contentView=null
+      bigContentView=null
+      headsUpContentView=null
+      color=0x00000000      timeout=unknown
+      extras={
+          android.reduced.images=Boolean (true)
+          android.appInfo=ApplicationInfo (ApplicationInfo{f08f214 com.amazon.tahoe})
+      }
+      stats=SingleNotificationStats{posttimeElapsedMs=3980304, posttimeToFirstClickMs=-1, posttimeToDismissMs=-1, airtimeCount=0, airtimeMs=0, currentAirtimeStartElapsedMs=-1, airtimeExpandedMs=0, posttimeToFirstVisibleExpansionMs=-1, currentAirtimeExpandedStartElapsedMs=-1, requestedImportance=3, naturalImportance=3, isNoisy=false}
+      mContactAffinity=0.0
+      mRecentlyIntrusive=false
+      mPackagePriority=0
+      mPackageVisibility=-1000
+      mSystemImportance=UNSPECIFIED
+      mAsstImportance=UNSPECIFIED
+      mImportance=DEFAULT
+      mImportanceExplanation=app
+      mIsAppImportanceLocked=false
+      mIntercept=false
+      mHidden==false
+      mGlobalSortKey=crtcl=0x0002:intrsv=1:grnk=0x0000:gsmry=0:nsk:rnk=0x0010
+      mRankingTimeMs=1792156703500
+      mCreationTimeMs=1792156703500
+      mVisibleSinceMs=0
+      mUpdateTimeMs=1792156703500
+      mInterruptionTimeMs=1792156703500
+      mSuppressedVisualEffects= 0
+      mSound= null
+      mVibration= null
+      mAttributes= AudioAttributes: usage=USAGE_NOTIFICATION content=CONTENT_TYPE_SONIFICATION flags=0x800 tags= bundle=null
+      mLight= null
+      mShowBadge=true
+      mColorized=false
+      mAllowBubble=false
+      isBubble=false
+      mIsInterruptive=false
+      effectiveNotificationChannel=NotificationChannel{mId='AKChannelID', mName=Amazon Kids Channel, mDescription=hasDescription , mImportance=3, mBypassDnd=false, mLockscreenVisibility=-1000, mSound=content://settings/system/notification_sound, mLights=false, mLightColor=0, mVibration=null, mUserLockedFields=0, mFgServiceShown=false, mVibrationEnabled=false, mShowBadge=true, mDeleted=false, mGroup='null', mAudioAttributes=AudioAttributes: usage=USAGE_NOTIFICATION content=CONTENT_TYPE_SONIFICATION flags=0x800 tags= bundle=null, mBlockableSystem=false, mAllowBubbles=-1, mImportanceLockedByOEM=false, mImportanceLockedDefaultApp=false, mOriginalImp=3, mParent=null, mConversationId=null, mDemoted=false, mImportantConvo=false}
+      mAdjustments=[]
+      shortcut=null found valid? false
+    NotificationRecord(0x0219cf8f: pkg=com.amazon.tahoe user=UserHandle{0} id=0 tag=pmr importance=3 key=0|com.amazon.tahoe|0|pmr|10176: Notification(channel=AKChannelID shortcut=null contentView=null vibrate=null sound=null defaults=0x0 flags=0x0 color=0x00000000 category=recommendation vis=PRIVATE))
+      uid=10176 userId=0
+      opPkg=com.amazon.tahoe
+Failed to write while dumping service notification: Broken pipe
+[exit=0]
+
+--- companion app voice state (no-offer check) ---
+### $HOME/.local/share/afc-tools/android-sdk/platform-tools/adb shell pm path com.afc.companion
+package:/data/app/~~qNjIOQ8W-apytPbVAa4syA==/com.afc.companion-ETQkMPRrum7BccFNNuSvKA==/base.apk
+[exit=0]
+
+ended: 2026-10-20T12:52:50Z
