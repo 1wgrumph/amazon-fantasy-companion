@@ -254,6 +254,46 @@ credentials, local paths) are replaced by `<owner-account>`, `<device>` and
 - **Actionable suggestion:** none for the products; keep push output visible.
 - **Time cost:** not observed in available evidence.
 
+### F-026 — OpenCodeReview skips test files by default (2026-10-20)
+- **Tool/version:** OpenCodeReview 1.13.x.
+- **Task attempted:** OCR-assisted independent review of Kotlin and Python changes.
+- **Steps taken:** compared `ocr delegate preview` selections with and without a project rule file.
+- **Expected vs actual:** expected every changed code file reviewed; actual: the built-in default path filter excluded all test files (`src/test/**/*.kt`, `test_*.py`, `*.test.ts` and similar, reason `default_path`), 7 of 16 code files on one commit.
+- **Severity:** Major for a test-first lifecycle: test code was silently unreviewed.
+- **Workaround:** `.opencodereview/rule.json` with an `include` list ([#127](https://github.com/1wgrumph/amazon-fantasy-companion/pull/127)). The next review's first actionable OCR finding was in a test file.
+- **Actionable suggestion:** report default-path exclusions prominently in the preview summary, or default to including tests.
+- **Time cost:** not observed in available evidence.
+
+### F-027 — Subscription quota exhaustion cascades through fallbacks (2026-10-20)
+- **Tool/version:** Muse Code CLI, AGY CLI, Codex CLI.
+- **Task attempted:** one bug-fix dispatch on its frozen route.
+- **Steps taken:** the primary stopped mid-run on HTTP 429 with partial uncommitted work; the first fallback returned 429 with an 84-hour reset; the second fallback finished.
+- **Expected vs actual:** expected the primary to finish; actual: three launches and two quota receipts for one fix. The route guard accepts only the literal signatures `quota` or `rate-limit`, so a receipt carrying the raw error text was refused until rewritten.
+- **Severity:** Moderate: about 30 minutes lost; a scheduled unattended driver had the same receipt defect and was fixed before its run.
+- **Workaround:** write receipts with the literal labels and keep the raw text in a separate field.
+- **Actionable suggestion:** expose remaining quota before dispatch, and document the receipt schema next to the guard error.
+- **Time cost:** about 30 minutes.
+
+### F-028 — Bug-route escape honored only for one harness (2026-10-20)
+- **Tool/version:** workspace dispatch hook.
+- **Task attempted:** launch a bug-fix packet inline on the Codex CLI.
+- **Steps taken:** probed the hook with the same packet across harness forms.
+- **Expected vs actual:** expected the `BUG_ROUTE:` line accepted for every harness; actual: accepted for AGY only, refused for Codex, Claude and Muse inline prompts; accepted when read from a file.
+- **Severity:** Minor: blocked dispatch until the packet was passed on stdin.
+- **Workaround:** `codex exec ... - < packet.md`.
+- **Actionable suggestion:** tracked in the workspace repository as issue 404.
+- **Time cost:** about 15 minutes.
+
+### F-029 — CHANGELOG conflicts under parallel landing (2026-10-20)
+- **Tool/version:** git, GitHub pull requests, Keep a Changelog `[Unreleased]` section.
+- **Task attempted:** land an evidence PR while a coordinator merged seven PRs.
+- **Steps taken:** merged `origin/main` into the branch three times, resolving the same `[Unreleased]` conflict each time; each push reran the 5-minute hygiene gate.
+- **Expected vs actual:** expected one merge; actual: three merges and about 20 minutes before auto-merge landed it.
+- **Severity:** Minor, recurring on every parallel landing.
+- **Workaround:** keep both sides; enable auto-merge right after the last re-sync.
+- **Actionable suggestion:** a `merge=union` attribute for `CHANGELOG.md` or per-PR changelog fragments.
+- **Time cost:** about 20 minutes.
+
 ## Paused experiment
 
 ### F-025 — Vega SDK and Virtual Device (OBS-110 to OBS-113) — PAUSED by owner 2026-10-20
