@@ -24,6 +24,49 @@ CLOSURE open pending ST-5 owner review. VERIFICATION_CASE VCASE-AFC-PR-NNN per r
 Assumptions and constraints per row are carried in the verification criteria or the
 rationale column context; full assumption/constraint text remains in the ST-2 receipt.
 
+## Amendment note — Fire OS primary, Vega compatible (2026-10-20)
+
+Owner decision DEC-AFC-M0305-FIREOS-PRIMARY-VEGA-COMPATIBLE-20261019 (recorded
+2026-10-20), superseding in detail DEC-AFC-SD-049 (Vega OS primary, Fire OS
+secondary) for this register. Fire OS on the owner's only physical device, a
+Fire TV Stick 4K 2nd Gen (2023), model AFTKM, Fire OS 8.1.8.5 / API 30, is the
+primary target, and every physical-device acceptance criterion is judged on
+that Fire OS device. In every VCASE below, "real stick (SD-001)" and "target
+device" mean that Fire OS device. Vega OS is a compatibility target only:
+"Vega compatible" means the React Native for Vega build (Kepler SDK 0.24 line)
+builds, installs and runs on the Vega Virtual Device (VVD) emulator, with a
+per-feature verdict of works, limited by simulator, not supported or unknown;
+unknown never becomes PASS. No physical Vega device exists or will be
+purchased, so every physical-Vega check (OA-12 and similar) is
+NOT_APPLICABLE by this owner decision, never PASS. Provider-app, DRM and
+entitlement behavior is proven on the Fire OS device only; on the VVD it is
+not supported or unknown by simulator limitation. The eight previously
+selected Vega overrides (`vega_primary_contingency.overrides`) are re-scoped
+from primary-target acceptance to VVD compatibility acceptance; none is
+deleted. R1/v0.1.0 ships the Fire OS app; the VVD compatibility verdicts are
+reported with the release and do not gate it. No register UID is added,
+removed or renumbered by this amendment, and no new verification case is
+added: the existing SEIT-AFC-P2-VEGA-03 verdict case, referenced in the Vega
+OS port mapping below, is the VVD compatibility verdict case, re-scoped by
+this note.
+
+| Changed ID | Before (one line) | After (one line) |
+|---|---|---|
+| AFC-PR-015 | Heads-up alert over third-party playback could be closed by physical Vega evidence under DEC-AFC-SD-049. | Verification target is the Fire OS device (AFTKM); on the VVD the verdict is limited by simulator or unknown and never closes this requirement. |
+| AFC-PR-030 | Watch provider handoff could be closed by physical Vega evidence under DEC-AFC-SD-049. | Verification target is the Fire OS device (AFTKM); on the VVD provider launch is not supported or unknown and never closes this requirement. |
+| AFC-PR-041 | Panel-beside-video geometry could be proven on a physical Vega target. | Verification target is the Fire OS device (AFTKM); modeB beside provider video is not supported on the VVD. |
+| AFC-PR-047 | Full-screen panel fallback could be selected from a physical Vega spike. | Verification target is the Fire OS device (AFTKM); on the VVD the full-screen panel is the terminal Vega compatibility outcome. |
+| AFC-PR-048 | Alerts and Watch from the full-screen panel could be routed to real providers on a physical Vega target. | Verification target is the Fire OS device (AFTKM) with real provider apps; on the VVD the provider route is not supported or unknown. |
+| AFC-PR-052 | The TV app shall run on the 2018 Fire TV stick target on Fire OS. | The TV app shall run on the owner's Fire TV Stick 4K 2nd Gen (2023), model AFTKM, on Fire OS 8.1.8.5 / API 30. |
+| AFC-PR-053 | The minSdk 25 criterion would be replaced by a recorded Vega manifest compatibility allocation for the primary target. | Statement unchanged (minSdk 25, verified by source inspection); it stands for the primary Fire OS build and has no Vega replacement. |
+| Vega-mirrored UIDs in the Vega OS port mapping | Their Vega realization could close the primary acceptance obligation, with Fire OS as the secondary scope. | Their Fire OS VCASE on the Fire OS device (AFTKM) is the primary acceptance; the VVD result is a compatibility verdict only and never closes the Fire OS VCASE. |
+| AC-AFC-P2-VEGA-05, OA-12 | Optional physical Vega device verification, applicable if a replacement stick ran Vega OS. | NOT_APPLICABLE by this owner decision (no Vega hardware exists or will be purchased); never PASS. |
+| AC-AFC-P2-VPRIMARY-01, -02, -03, -04 | Vega-primary acceptance criteria; only physical Vega evidence could close playback and provider claims. | Re-scoped, none deleted, to Vega compatibility acceptance on the VVD; they no longer close the primary obligation or gate Fire OS acceptance. |
+| RISK-AFC-P2-16 | A missing physical Vega device remained a blocking primary-acceptance gap. | No longer blocks primary (Fire OS) acceptance; a Vega SDK or VVD failure is a recorded compatibility gap. |
+| RISK-AFC-P2-14 | Vega submission inclusion followed the Vega-primary ordering of DEC-AFC-SD-049. | Unchanged inclusion rule, read under Fire OS primary ordering: the Fire OS release proceeds and reports the VVD verdicts with their limits. |
+| C1 | Platform target assumption: device model unconfirmed. | Platform target confirmed: AFTKM on Fire OS 8.1.8.5 / API 30 (see AFC-PR-052). |
+| Q6 | Open: stick found; model/OS still unrecorded. | Closed by DEC-AFC-M0305-FIREOS-PRIMARY-VEGA-COMPATIBLE-20261019: AFTKM, Fire OS 8.1.8.5 / API 30, the owner's only device; no Vega hardware. |
+
 ## Coverage — issue #1 retained items and panel
 
 | Source | UIDs |
@@ -52,7 +95,7 @@ rationale column context; full assumption/constraint text remains in the ST-2 re
 
 | ID | Type / honoring |
 |---|---|
-| C1 enforced_rule | 052 platform target; assumptions (model unconfirmed); owner-return in constraints |
+| C1 enforced_rule | 052 platform target; model confirmed AFTKM, Fire OS 8.1.8.5 / API 30 (DEC-AFC-M0305-FIREOS-PRIMARY-VEGA-COMPATIBLE-20261019); owner-return in constraints |
 | C2 expected_outcome | 013 replay substitution; 012 ingest; evidence note |
 | C3 enforced_rule | 012 constraints (owner terms flag at submission) |
 | C4 enforced_rule | 054 Free-tier-only hosting |
@@ -92,7 +135,7 @@ receives ≥1 UID. Withdrawn UIDs 049..051 carry no live allocation (historical 
 | AFC-PR-012 | The backend shall ingest scores, field position, possession, involved player identifiers, timestamps, and scoring corrections from ESPN's unofficial public JSON. | Owner-selected live feed; corrections and timestamps ground freshness and panel truth. | Test, backend, AWS deployment. Positive: each listed field lands in the event cache. Negative: schema-invalid response handled per PR-064, never partially stored. VCASE-AFC-PR-012. | INGEST | #1 item 2; #1 feed requirements; SD-004 |
 | AFC-PR-013 | When the ESPN endpoint is unavailable or its contract changes, the backend shall substitute labeled replay fixtures for live events on every affected value. | Repeatability and outage survival without ever faking live access. | Test, backend, AWS deployment with fixtures. Positive: outage run marks every affected value replay. Negative: no substituted value presented as live. VCASE-AFC-PR-013. | REPLAY, INGEST | #1 judging alignment (label replays); C2 |
 | AFC-PR-014 | The backend shall emit alerts for red-zone opportunities, player scores, and close games matching the customer's fantasy selections and alert-type settings. | The core personalized value: this event matters to this customer. | Test, backend, AWS deployment. Positive: each of the three types fires for a matching selection. Negative: non-matching event, or matching event of a disabled type, emits nothing; red zone means inside the 20-yard line; close_game_margin (DEC-AFC-SD-035, P1) is within 8 points in the 4th quarter or overtime. VCASE-AFC-PR-014. Alert text claims no player-level inference per PR-028. | POLICY, MATCHER | #1 item 3; SD-035 (P1) |
-| AFC-PR-015 | While heads-up presentation is selected, the TV app shall present each alert as a heads-up notification with Watch and Dismiss actions during third-party viewing-app playback. | The standout moment: brief alert over playback with a direct Watch path. | Demonstration, system, real stick (SD-001); evidence under evidence/visual/ (SD-024). Positive: provider playback continues while the alert shows Watch/Dismiss. Negative: no companion-app foregrounding, and no heads-up while panel-only presentation is selected. VCASE-AFC-PR-015. | NOTIFIER, ALERTSVC, MANIFEST | #1 item 3; SD-001 |
+| AFC-PR-015 | While heads-up presentation is selected, the TV app shall present each alert as a heads-up notification with Watch and Dismiss actions during third-party viewing-app playback. | The standout moment: brief alert over playback with a direct Watch path. | Demonstration, system, owner's Fire OS device (AFTKM, Fire OS 8.1.8.5 / API 30; SD-001); evidence under evidence/visual/ (SD-024). Positive: provider playback continues while the alert shows Watch/Dismiss. Negative: no companion-app foregrounding, and no heads-up while panel-only presentation is selected. Provider playback is proven on the Fire OS device only; on the VVD this feature's verdict is limited by simulator or unknown and never closes this case. VCASE-AFC-PR-015. | NOTIFIER, ALERTSVC, MANIFEST | #1 item 3; SD-001 |
 | AFC-PR-016 | The backend shall emit alerts only for customer-enabled alert types. | Per-type control is the primary noise control. | Test, system, backend + settings UI. Positive: enabled type fires on matching event. Negative: disabled type fires on nothing. VCASE-AFC-PR-016. | PROFILE, POLICY | #1 items 3, 6 (alert types) |
 | AFC-PR-017 | The backend shall emit no more alerts than the customer's frequency setting permits. | Frequency caps keep the companion welcome during simultaneous Sunday games. | Test, system, backend + settings UI. Positive: restrictive setting yields fewer alerts than permissive for an identical event stream. Negative: no alert beyond the setting on any run. VCASE-AFC-PR-017. | PROFILE, POLICY | #1 items 3, 6 (frequency) |
 | AFC-PR-018 | The backend shall suppress alerts during the customer's quiet hours. | Silence when the customer demands silence. | Test, system, backend + settings UI. Positive: triggering event inside quiet hours emits nothing. Negative: no quiet-hours alert on any run. VCASE-AFC-PR-018. | PROFILE, POLICY | #1 items 3, 6 (quiet hours/game-day periods) |
@@ -107,7 +150,7 @@ receives ≥1 UID. Withdrawn UIDs 049..051 carry no live allocation (historical 
 | AFC-PR-027 | Each alert shall carry the verified player and matchup context that triggered it. | The customer must see why this event matters to them. | Demonstration, system, real stick (SD-001) + backend. Positive: alert shows the triggering player and matchup from lineup and feed data. Negative: no alert without its triggering context. VCASE-AFC-PR-027. | POLICY, MATCHER | #1 item 3 (verified context) |
 | AFC-PR-028 | The system shall withhold any claim that a team red-zone entry proves a particular player is on the field or will score. | The precise over-claim the owner forbade. | Test, system, backend + TV surfaces. Positive: red-zone alert text makes only team-level claims. Negative: any player-on-field or will-score claim from a red-zone entry fails. VCASE-AFC-PR-028. | POLICY | #1 item 3 (red zone is not proof) |
 | AFC-PR-029 | The backend shall resolve each alerted event to an available provider and channel from the customer's installed apps, verified subscriptions, local market, and provider preference. | Correct game/channel routing is the handoff half of the standout moment. Phase 2 link-contract spike order per SD-035 (Q5): Prime Video (TNF), ESPN app, DirecTV Stream app, YouTube TV. | Test, backend, AWS deployment. Positive: resolution output names provider and channel with inputs recorded; local-broadcast games (CBS/FOX/NBC) resolve to the channel plus a carrying provider app when one is available. Negative: no resolution from installed-app fact alone; no deep link when no carrying app is available. VCASE-AFC-PR-029. | RESOLVER | #1 item 4; SD-035 (Q5) |
-| AFC-PR-030 | The TV app shall open the resolved game or channel through a supported provider launch URI or intent upon the customer's Watch action. | Watch must reach the game, not merely the provider home screen. | Demonstration, system, real stick (SD-001); evidence under evidence/visual/ (SD-024). Positive: correct game/channel opens. Negative: app-home landing does not satisfy; app launch alone does not satisfy. VCASE-AFC-PR-030. | LAUNCHER | #1 item 4 (notification action/deep link) |
+| AFC-PR-030 | The TV app shall open the resolved game or channel through a supported provider launch URI or intent upon the customer's Watch action. | Watch must reach the game, not merely the provider home screen. | Demonstration, system, owner's Fire OS device (AFTKM, Fire OS 8.1.8.5 / API 30; SD-001); evidence under evidence/visual/ (SD-024). Positive: correct game/channel opens. Negative: app-home landing does not satisfy; app launch alone does not satisfy. Provider launch is proven on the Fire OS device only; on the VVD it is not supported or unknown and never closes this case. VCASE-AFC-PR-030. | LAUNCHER | #1 item 4 (notification action/deep link) |
 | AFC-PR-031 | The TV app shall report each routing outcome as exactly one of game opened, search or details opened, app home opened, app absent, access unknown, or playback denied. | Explicit outcomes make partial success visible instead of silently degraded. | Demonstration, tv-app, real stick (SD-001). Positive: each attempted route reports exactly one enum value. Negative: no silent outcome, no invented value. VCASE-AFC-PR-031. | LAUNCHER | #1 app-launch research (explicit outcomes) |
 | AFC-PR-032 | The system shall mark game access it cannot verify as unknown. | The explicit unknown-access behavior: doubt is displayed, never smoothed over. | Test, system, backend + TV surfaces. Positive: unverifiable access reads unknown on alerts, Watch routing, and panel. Negative: no unverified access reads verified or included. VCASE-AFC-PR-032. | RESOLVER, LAUNCHER | #1 item 4 (unknown stays unknown) |
 | AFC-PR-033 | The system shall withhold any promise that a game is included merely because the provider app is installed. | The companion must never sell access it cannot confirm. | Test, system, backend + TV surfaces. Positive: installed-without-verified-subscription reads unknown per PR-032. Negative: any inclusion promise from install fact alone fails. VCASE-AFC-PR-033. | RESOLVER, LAUNCHER | #1 items 1, 4 (installed is not subscribed) |
@@ -118,18 +161,18 @@ receives ≥1 UID. Withdrawn UIDs 049..051 carry no live allocation (historical 
 | AFC-PR-038 | The backend shall link the TV app to the customer account through a device code the customer completes on a phone or browser. | TV-friendly linking without typing credentials on the stick. | Demonstration, system, real stick + phone/browser page. Positive: code entry on phone/browser links the TV app. Negative: no link completes without the customer's code action. VCASE-AFC-PR-038. | AUTH, API | #1 item 6 (device-code linking sufficient) |
 | AFC-PR-039 | The TV app shall display the selected fantasy team's lineup with each player's fantasy points and game status and the team total and progress under the league's scoring context. | The panel's core content: my players, my points, my progress. | Demonstration, system, real stick (SD-001) + backend; evidence under evidence/visual/ (SD-024). Positive: lineup, points, statuses, and total match the Yahoo league context (or PR-065 selected preset table for manual). Negative: no value shown without its scoring basis. VCASE-AFC-PR-039. | PANEL, PANELSVC | #1 right-side panel (required experience) |
 | AFC-PR-040 | The TV app shall label each unavailable or stale panel value as unavailable or stale. | The explicit stale-data behavior: age and absence are visible. | Demonstration, tv-app, real stick (SD-001). Positive: withheld feed and missing value produce stale and unavailable labels. Negative: no silently old or silently missing value; stale_after is 60 seconds (DEC-AFC-SD-035, P3). VCASE-AFC-PR-040. | PANEL, PANELSVC | #1 right-side panel (stale/unavailable marks); SD-035 (P3) |
-| AFC-PR-041 | The TV app shall fit the broadcast video into the screen area remaining beside the right-side lineup panel while preserving broadcast aspect ratio. | The panel supplements viewing; it must never cover or crop the broadcast. | Demonstration, tv-app, real stick (SD-001); evidence under evidence/visual/ (SD-024). Positive: simultaneous panel and video with no overlap and preserved aspect (dimension-compared capture). Negative: any overlap or crop fails. VCASE-AFC-PR-041. | PANEL, SHELL | #1 right-side panel (unobscured video); SD-006 |
+| AFC-PR-041 | The TV app shall fit the broadcast video into the screen area remaining beside the right-side lineup panel while preserving broadcast aspect ratio. | The panel supplements viewing; it must never cover or crop the broadcast. | Demonstration, tv-app, owner's Fire OS device (AFTKM, Fire OS 8.1.8.5 / API 30; SD-001); evidence under evidence/visual/ (SD-024). Positive: simultaneous panel and video with no overlap and preserved aspect (dimension-compared capture). Negative: any overlap or crop fails. ModeB beside provider video is not supported on the VVD, so no VVD result closes this case. VCASE-AFC-PR-041. | PANEL, SHELL | #1 right-side panel (unobscured video); SD-006 |
 | AFC-PR-042 | The TV app shall switch panel visibility and the followed team and league from TV remote input. | Core panel controls operable from the couch. | Demonstration, tv-app, real stick (SD-001); evidence under evidence/visual/ (SD-024). Positive: remote toggles visibility and changes team/league. Negative: no panel control requires another input device. VCASE-AFC-PR-042. | PANEL, PROFILE | #1 right-side panel (show/hide, team/league) |
 | AFC-PR-043 | The lineup panel shall accept all panel operations from TV remote input. | Full panel use without leaving the couch. | Demonstration, tv-app, real stick (SD-001); evidence under evidence/visual/ (SD-024). Positive: every focusable element reachable with a visible focus indicator. Negative: no remote-dead operation. VCASE-AFC-PR-043. | PANEL | #1 right-side panel (remote navigable) |
 | AFC-PR-044 | The lineup panel shall reflect the customer's team, league, and display settings. | The panel is a view of the customer's settings, not a second configuration. | Test, system, backend + TV panel. Positive: settings change appears on the panel. Negative: no panel content contradicts recorded settings. VCASE-AFC-PR-044. | PANEL, PANELSVC | #1 right-side panel (consistent with settings) |
 | AFC-PR-045 | The lineup panel shall present lineup text the owner accepts as legible from the couch on the target device, with body text at least 24 px and scores at least 32 px at 1080p. | Couch legibility is judged by the owner on the real target, with a numeric floor per SD-035 (Q3). | Demonstration, tv-app, real stick (SD-001). Positive: owner accepts lineup text as couch-legible in the demonstration and body text measures at least 24 px with scores at least 32 px at 1080p. Negative: owner rejection or under-size text fails the case. VCASE-AFC-PR-045. | PANEL | #1 right-side panel (legible from the couch); SD-035 (Q3) |
 | AFC-PR-046 | The system shall hold lineup panel state consistent with alerts across starter changes and scoring corrections. | Panel and alerts are two views of one truth. | Test, system, AWS deployment. Positive: starter change and correction reach both surfaces with identical corrected facts. Negative: no fact present in one surface and contradicted in the other (suppressed alerts do not break fact agreement; hidden panel refreshes on show). VCASE-AFC-PR-046. | PANELSVC, POLICY | #1 right-side panel (consistency rule) |
-| AFC-PR-047 | When the panel-beside-provider-video spike fails or exceeds 24 hours from first app install, the TV app shall present the lineup panel as a full screen in the companion app. | No Mode A footage per owner decision (SD-035, Q4): the product is alerts + Watch, and the panel fallback is a full screen in our own app. | Demonstration, tv-app, real stick (SD-001); evidence under evidence/visual/ (SD-024). Positive: full-screen lineup panel in the companion app. Negative: no stand-in video, no provider video claimed, and no silent substitution of phone screen, app-switch dashboard, or covering panel. VCASE-AFC-PR-047. | PANEL, SHELL | #1 panel integration obligation; SD-006; SD-035 (Q4); C5 |
-| AFC-PR-048 | While the lineup panel is shown full-screen in the companion app, the TV app shall route alerts and Watch actions to the real provider apps. | Full-screen panel degrades only the panel video route, never alerting or handoff. | Demonstration, system, real stick (SD-001). Positive: full-screen-panel alert Watch opens the real provider route. Negative: no alert or Watch trapped in the companion app. VCASE-AFC-PR-048. | NOTIFIER, LAUNCHER | SD-006; SD-035 (Q4) (alerts and Watch still go to real providers) |
+| AFC-PR-047 | When the panel-beside-provider-video spike fails or exceeds 24 hours from first app install, the TV app shall present the lineup panel as a full screen in the companion app. | No Mode A footage per owner decision (SD-035, Q4): the product is alerts + Watch, and the panel fallback is a full screen in our own app. | Demonstration, tv-app, owner's Fire OS device (AFTKM, Fire OS 8.1.8.5 / API 30; SD-001); evidence under evidence/visual/ (SD-024). Positive: full-screen lineup panel in the companion app. Negative: no stand-in video, no provider video claimed, and no silent substitution of phone screen, app-switch dashboard, or covering panel. On the VVD the full-screen panel is the terminal Vega compatibility outcome and does not alter this Fire OS fallback trigger. VCASE-AFC-PR-047. | PANEL, SHELL | #1 panel integration obligation; SD-006; SD-035 (Q4); C5 |
+| AFC-PR-048 | While the lineup panel is shown full-screen in the companion app, the TV app shall route alerts and Watch actions to the real provider apps. | Full-screen panel degrades only the panel video route, never alerting or handoff. | Demonstration, system, owner's Fire OS device (AFTKM, Fire OS 8.1.8.5 / API 30; SD-001). Positive: full-screen-panel alert Watch opens the real provider route. Negative: no alert or Watch trapped in the companion app. Real provider routing is proven on the Fire OS device only; on the VVD it is not supported or unknown. VCASE-AFC-PR-048. | NOTIFIER, LAUNCHER | SD-006; SD-035 (Q4) (alerts and Watch still go to real providers) |
 | AFC-PR-049 | WITHDRAWN by DEC-AFC-SD-035 (2026-10-12). Original: Mode A sample footage shall carry a CC-BY or CC0 license with credit. | Withdrawal rationale: owner answered NO Mode A sample footage (Q4); the product is alerts + Watch with a full-screen panel fallback per PR-047. UID retained, never renumbered. | Withdrawn — no verification (VCASE-AFC-PR-049 retired). | PLAYER | SD-006a (footage licensing); SD-035 (Q4 withdrawal) |
 | AFC-PR-050 | WITHDRAWN by DEC-AFC-SD-035 (2026-10-12). Original: Mode A playback shall display the label 'Sample footage — not a live broadcast'. | Withdrawal rationale: owner answered NO Mode A sample footage (Q4); no label needed without the footage. UID retained, never renumbered. | Withdrawn — no verification (VCASE-AFC-PR-050 retired). | PLAYER | SD-006a (footage labeling); SD-035 (Q4 withdrawal) |
 | AFC-PR-051 | WITHDRAWN by DEC-AFC-SD-035 (2026-10-12). Original: Mode A sample footage shall exclude NFL footage. | Withdrawal rationale: owner answered NO Mode A sample footage (Q4); the exclusion is moot without the footage. UID retained, never renumbered. | Withdrawn — no verification (VCASE-AFC-PR-051 retired). | PLAYER | SD-006a (no NFL footage); SD-035 (Q4 withdrawal) |
-| AFC-PR-052 | The TV app shall run on the 2018 Fire TV stick target on Fire OS. | The owner's device is the target; no purchase, no silent platform switch. | Demonstration, tv-app, real 2018 stick (SD-001). Positive: install, launch, and operate on the target. Negative: no target-only failure waived without a C1 owner return. VCASE-AFC-PR-052. | SHELL, MANIFEST | SD-003; SD-002 context; C1 |
+| AFC-PR-052 | The TV app shall run on the owner's Fire TV Stick 4K 2nd Gen (2023), model AFTKM, on Fire OS 8.1.8.5 / API 30. | The owner's only device is the primary target; no purchase, no silent platform switch. Vega is a VVD compatibility target only (DEC-AFC-M0305-FIREOS-PRIMARY-VEGA-COMPATIBLE-20261019). | Demonstration, tv-app, owner's Fire OS device (AFTKM, Fire OS 8.1.8.5 / API 30; SD-001). Positive: install, launch, and operate on that device. Negative: no target-only failure waived without a C1 owner return, and no VVD result substitutes for this device demonstration. VCASE-AFC-PR-052. | SHELL, MANIFEST | SD-003; SD-002 context; C1; DEC-AFC-M0305-FIREOS-PRIMARY-VEGA-COMPATIBLE-20261019 |
 | AFC-PR-053 | The TV app build shall declare minSdk 25. | Pins the provisional floor the target assumes. | Inspection, tv-app, source review of build.gradle.kts. Positive: declaration reads 25. Negative: any other value fails. VCASE-AFC-PR-053. | BUILD | SD-003 |
 | AFC-PR-054 | The backend shall run on AWS serverless services within the Free tier declared in template.yaml. | Owner-created Free-plan account bounds cost; serverless matches the workload. | Inspection, backend, template.yaml review + deployment record. Positive: only Free-tier services (Lambda, HTTP API, DynamoDB on-demand, Scheduler, SSM) declared and deployed. Negative: any paid service or undeleted paid resource fails. VCASE-AFC-PR-054. | IAC | SD-005; SD-008 (AWS Builder services); C4 |
 | AFC-PR-055 | The backend shall hold Yahoo OAuth client secrets and tokens only in SSM SecureString parameters. | Secrets stay server-side and owner-handled, never in the APK or repo. | Inspection, backend, source + APK + parameter review. Positive: parameters exist and code reads only them. Negative: any secret value in APK or repo fails. VCASE-AFC-PR-055. | SECRET, IAC | SD-007; C9 |
@@ -154,7 +197,7 @@ receives ≥1 UID. Withdrawn UIDs 049..051 carry no live allocation (historical 
 | Q3 | Couch legibility numeric minimum (PR-045) | Closed by SD-035: owner acceptance plus body text >= 24 px, scores >= 32 px at 1080p |
 | Q4 | Mode A footage (F12) | Closed by SD-035: NO Mode A footage; alerts + Watch product; full-screen panel fallback (PR-047/048); PR-049..051 withdrawn |
 | Q5 | First provider link contract in Phase 2 spike | Closed by SD-035: Prime Video (TNF), ESPN app, DirecTV Stream app, YouTube TV; local broadcast (CBS/FOX/NBC): show channel, offer carrying app, else no deep link (PR-029) |
-| Q6 | Stick located, model/OS confirmed? | Open: stick found; model/OS still unrecorded |
+| Q6 | Stick located, model/OS confirmed? | Closed by DEC-AFC-M0305-FIREOS-PRIMARY-VEGA-COMPATIBLE-20261019: Fire TV Stick 4K 2nd Gen (2023), AFTKM, Fire OS 8.1.8.5 / API 30; the owner's only device; no Vega hardware |
 | Q7 | Yahoo application submitted? | Open: not applied |
 | Q8 | AWS Free-plan account created? | Open: not created |
 | Q9 | License choice | Closed by SD-035: Apache-2.0 |
@@ -166,13 +209,21 @@ receives ≥1 UID. Withdrawn UIDs 049..051 carry no live allocation (historical 
 
 ## Vega OS port mapping (P2-V01, M14; planning delta 2026-10-14)
 
-The Vega build (issue #59, owner SD-040) mirrors the Fire OS TV app. Each
-Vega feature reuses the register UIDs below by reference, unchanged. Their
-Fire OS VCASE allocations stay as they are; the Vega evidence for them is
-SEIT-AFC-P2-VEGA-01 and -03. Vega-specific items (packaging, VVD limits and
-verdicts, token storage, optional physical device, Fire OS isolation) are
+The Vega build (issue #59, owner SD-040) mirrors the Fire OS TV app as a
+compatibility build only (DEC-AFC-M0305-FIREOS-PRIMARY-VEGA-COMPATIBLE-20261019).
+Each Vega feature reuses the register UIDs below by reference, unchanged.
+Their Fire OS VCASE allocations stay as they are and remain the primary
+acceptance, judged on the owner's Fire OS device (AFTKM); the Vega evidence
+for them is SEIT-AFC-P2-VEGA-01 and -03 on the Vega Virtual Device (VVD)
+only, with per-feature verdicts works, limited by simulator, not supported
+or unknown, and unknown never becomes PASS. Vega-specific items (packaging,
+VVD limits and verdicts, token storage, Fire OS isolation) are
 Lifecycle-local criteria AC-AFC-P2-VEGA-01..06 and RISK-AFC-P2-14/15 in the
-technical plan §M14 Vega OS port. No new register UID is added.
+technical plan §M14 Vega OS port; AC-AFC-P2-VEGA-05 (physical Vega device,
+OA-12) is NOT_APPLICABLE by DEC-AFC-M0305-FIREOS-PRIMARY-VEGA-COMPATIBLE-20261019,
+never PASS. Provider-app, DRM and entitlement behavior for the mirrored
+UIDs is proven on the Fire OS device only; on the VVD it is not supported or
+unknown. No new register UID is added.
 
 | Vega feature | Fire OS slices mirrored | Register UIDs reused |
 |---|---|---|
@@ -182,27 +233,40 @@ technical plan §M14 Vega OS port. No new register UID is added.
 | Watch | P2-A04T, P2-A04 | AFC-PR-030, -031, -035, -036, -048 |
 | Lineup panel | P2-A05T, P2-A05 | AFC-PR-039, -040, -041, -042, -043, -044, -045, -046, -047, -061, -062 |
 
-Not mirrored: AFC-PR-052 (Fire OS on the 2018 stick) and AFC-PR-053 (minSdk 25) have no Vega equivalent.
-The Vega packaging rule is AC-AFC-P2-VEGA-02.
+Not mirrored: AFC-PR-052 (Fire OS on the owner's AFTKM device) and AFC-PR-053 (minSdk 25) have no Vega equivalent.
+The Vega packaging rule is AC-AFC-P2-VEGA-02, verified for the VVD compatibility build.
 
 
-## Vega-primary conditional allocation (2026-10-14, selected by DEC-AFC-SD-049)
+## Fire OS primary, Vega compatible allocation (DEC-AFC-M0305-FIREOS-PRIMARY-VEGA-COMPATIBLE-20261019)
 
-Selected 2026-10-14: Vega OS primary, Fire OS secondary; both targets are
-built and no UID allocation to the Fire OS slices is removed.
+Superseded 2026-10-20: the earlier heading of this section, "Vega-primary
+conditional allocation (2026-10-14, selected by DEC-AFC-SD-049)", no longer
+states the allocation. Fire OS on the owner's only device (AFTKM, Fire OS
+8.1.8.5 / API 30) is the primary target; Vega is a compatibility target
+proven on the Vega Virtual Device (VVD) emulator only. Both builds remain
+in scope and no UID allocation to the Fire OS slices is removed.
 
-The register statements above are preserved. The five-feature Vega mapping
-above remains the source inventory, with all listed UIDs retained. The
-primary alternative changes realization and proof environment only after
-VP-OD-01; it does not manufacture passed VCASEs. Lifecycle-local
-AC-AFC-P2-VPRIMARY-01..04 and RISK-AFC-P2-16/17 belong to the technical plan.
+The register statements above are preserved, with only the changes listed
+in the amendment note. The five-feature Vega mapping above remains the
+source inventory, with all listed UIDs retained; it does not manufacture
+passed VCASEs. The eight previously selected Vega overrides and
+Lifecycle-local AC-AFC-P2-VPRIMARY-01..04 are re-scoped, none deleted, from
+primary-target acceptance to VVD compatibility acceptance; they no longer
+close the primary obligation or gate Fire OS acceptance. RISK-AFC-P2-16 no
+longer blocks primary acceptance for a missing physical Vega device;
+RISK-AFC-P2-17 is unchanged. AC-AFC-P2-VEGA-05, OA-12 and every other
+physical-Vega check are NOT_APPLICABLE by this owner decision, never PASS.
+R1/v0.1.0 ships the Fire OS app; the VVD compatibility verdict table
+(works, limited by simulator, not supported or unknown, with unknown never
+PASS, under the existing SEIT-AFC-P2-VEGA-03 case) is reported with the
+release and does not gate it.
 
-| Coverage set | Proposed primary realization / proof | Status |
+| Coverage set | Primary realization / proof (Fire OS) and VVD compatibility basis | Status |
 |---|---|---|
-| Every UID mirrored by the five rows in Vega OS port mapping | Same V01T/V01 IDs; requirement/VCASE source replaces nonexistent A02T–A05T test source. Available A01 tests remain reference evidence. Physical X02/X03/X04/X07/X09 prove provider-dependent claims. | Proposed; every application observation not_run |
-| AFC-PR-015, 030, 048 | Physical alert/action/playback and real provider game/channel handoff | Blocking physical evidence, no simulator substitute |
-| AFC-PR-041, 047 | Physical geometry proof for modeB, or existing timed fullScreen fallback | No new video route or silent waiver |
-| AFC-PR-052, 053 | P2-D02 must record an owner-approved Vega target/model/OS and manifest compatibility allocation instead of Fire OS 2018/minSdk 25 | Decided DEC-AFC-SD-049: P2-D02 records the Vega primary target; Fire OS 2018 stick and minSdk 25 stay for the Fire OS secondary build |
+| Every UID mirrored by the five rows in Vega OS port mapping | Fire OS VCASE on the owner's Fire OS device (AFTKM) is the primary acceptance. Same V01T/V01 IDs give the VVD compatibility verdict only; available A01 tests remain reference evidence. Provider-dependent claims are proven on the Fire OS device only. | Every application observation not_run until executed on its named target |
+| AFC-PR-015, 030, 048 | Physical alert/action/playback and real provider game/channel handoff on the Fire OS device (AFTKM); on the VVD, limited by simulator, not supported or unknown | Blocking Fire OS physical evidence, no simulator substitute |
+| AFC-PR-041, 047 | Physical geometry proof for modeB on the Fire OS device (AFTKM), or existing timed fullScreen fallback; on the VVD, modeB is not supported and fullScreen is the terminal compatibility outcome | No new video route or silent waiver |
+| AFC-PR-052, 053 | AFC-PR-052 names the primary Fire OS device (AFTKM, Fire OS 8.1.8.5 / API 30); AFC-PR-053 minSdk 25 stands for the Fire OS build, verified by source inspection. Neither has a Vega replacement. | Decided DEC-AFC-M0305-FIREOS-PRIMARY-VEGA-COMPATIBLE-20261019; supersedes the DEC-AFC-SD-049 Vega-target recording for these UIDs |
 | AFC-PR-038, 054, 055, 058, 059, 063 | Shared API/session/security/compute controls; SD-048 code-only confirmation reconciled in backend before integrated proof | SD-048 settled; implementation verification pending |
-| All other backend, submission, feedback and lifecycle UIDs | Original allocations retained; downstream slices target the selected artifact and truthful evidence | Not removed by TV contingency |
-| RISK-AFC-P2-14 | P2-D04 closes it, P2-V01 supplies the verdict evidence. The Vega build is in the submission only if P2-V01 verification passed before the documents are finalized; otherwise it is reported as in progress with its limits | Decided DEC-AFC-SD-050; F1 closed |
+| All other backend, submission, feedback and lifecycle UIDs | Original allocations retained; downstream slices target the Fire OS artifact as primary, report VVD verdicts alongside, and keep evidence truthful | Not removed by this amendment |
+| RISK-AFC-P2-14 | P2-D04 closes it, P2-V01 supplies the VVD verdict evidence. The Vega build is in the submission only if P2-V01 verification passed before the documents are finalized; otherwise it is reported as in progress with its limits. The Fire OS release is not gated by the VVD verdicts. | Decided DEC-AFC-SD-050; F1 closed; read under DEC-AFC-M0305-FIREOS-PRIMARY-VEGA-COMPATIBLE-20261019 ordering |

@@ -598,7 +598,28 @@ stateDiagram-v2
 ```
 
 
+## Fire OS primary, Vega compatible (DEC-AFC-M0305-FIREOS-PRIMARY-VEGA-COMPATIBLE-20261019)
+
+Owner, 2026-10-19. This supersedes DES-AFC-P2-VPRIMARY's selection of Vega
+as the primary target. The design stays the same: one backend, one API
+contract, the Kotlin Fire OS app and the React Native for Vega app. What
+changes is the role of each target:
+
+- The Fire OS app (DES-AFC-P2-TV through DES-AFC-P2-PANEL) is the primary
+  client. It runs on the owner's only device, an AFTKM on Fire OS 8.1.8.5 /
+  API 30, which carries all physical, provider, DRM and entitlement
+  evidence.
+- The Vega app (DES-AFC-P2-VEGA) is a compatibility client. It is verified
+  only on the Vega Virtual Device (VVD), with per-feature verdicts. No
+  physical Vega path exists. CONTRACT-AFC-P2-PROVIDER-REGISTRY keeps its
+  `vega` scope as VVD-observed data, and the Fire OS scope is the primary
+  record.
+- modeB composition on Vega is not supported. The full-screen panel
+  fallback (AFC-PR-047) is the terminal Vega outcome.
+
 ## Vega-primary design amendment (proposed)
+
+> **Superseded 2026-10-19** by the section above; kept for history.
 
 ### DES-AFC-P2-VPRIMARY — Same contracts, conditional primary target
 
