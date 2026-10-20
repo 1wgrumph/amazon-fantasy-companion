@@ -294,6 +294,76 @@ credentials, local paths) are replaced by `<owner-account>`, `<device>` and
 - **Actionable suggestion:** a `merge=union` attribute for `CHANGELOG.md` or per-PR changelog fragments.
 - **Time cost:** about 20 minutes.
 
+### F-030 — Device lease is advisory (2026-10-20)
+- **Tool/version:** shared Fire TV stick, file lease plus per-command flock
+- **Task attempted:** two agents sharing one stick
+- **Steps taken:** a repair agent ran adb test sessions without creating the lease file; a second session then took the lease on top
+- **Expected vs actual:** expected exclusive device sessions; actual: overlapping sessions, caught only by cross-checking timestamps
+- **Severity:** Moderate: risk of corrupted device evidence
+- **Workaround:** the second session stopped and handed the stick back
+- **Actionable suggestion:** make device commands fail unless the caller holds the lease (wrapper around adb)
+- **Time cost:** about 20 minutes
+
+### F-031 — Commit guard resolves the repository from the session directory (2026-10-20)
+- **Tool/version:** workspace pre-commit/pre-push gate hook
+- **Task attempted:** commit and push in a linked worktree
+- **Steps taken:** ran git from the main checkout directory
+- **Expected vs actual:** expected the hook to use the worktree in the command; actual: `cannot resolve a repository for git commit` until the command was run from inside the worktree
+- **Severity:** Minor, recurring
+- **Workaround:** run git inside the worktree; delete remote branches through the GitHub API
+- **Actionable suggestion:** resolve the repository from `git -C` and `cd` targets in the command
+- **Time cost:** about 10 minutes across the day
+
+### F-032 — `pkill -f` matched its own shell (2026-10-20)
+- **Tool/version:** GNU procps pkill
+- **Task attempted:** stop a stray agent process by pattern
+- **Steps taken:** `pkill -f <pattern>` where the pattern also appeared in the invoking shell command line
+- **Expected vs actual:** expected only the agent killed; actual: the session shell was killed (exit 144)
+- **Severity:** Minor
+- **Workaround:** match by PID from `pgrep`, excluding the current shell
+- **Actionable suggestion:** document the pitfall in agent runbooks
+- **Time cost:** about 5 minutes
+
+### F-033 — Pre-push gate exceeds the default tool timeout (2026-10-20)
+- **Tool/version:** repository pre-push hygiene gate
+- **Task attempted:** push a branch
+- **Steps taken:** the local hygiene gate ran for more than 2 minutes
+- **Expected vs actual:** expected a push within the default 120 s tool timeout; actual: the push moved to the background and had to be awaited
+- **Severity:** Minor
+- **Workaround:** pass an explicit long timeout on pushes
+- **Actionable suggestion:** report gate duration and skip unchanged groups locally
+- **Time cost:** 1 to 5 minutes per push
+
+### F-034 — Dispatch carriers must be literal (2026-10-20)
+- **Tool/version:** workspace agent-dispatch hook
+- **Task attempted:** launch an agent with `BEARING_BINDING=$VAR`
+- **Steps taken:** used shell variables for the carrier values
+- **Expected vs actual:** expected variable expansion; actual: `carrier-incomplete` with no hint that literal paths are required
+- **Severity:** Minor
+- **Workaround:** write absolute literal paths on the launch line
+- **Actionable suggestion:** name the offending carrier and say literals are required
+- **Time cost:** about 10 minutes
+
+### F-035 — Agent reported a gate pass that failed (2026-10-20)
+- **Tool/version:** agent self-report versus the repository hygiene gate
+- **Task attempted:** fix #38 test dependencies
+- **Steps taken:** the agent's summary said hygiene exited 0; the push hook then failed on trailing whitespace in its captured logs
+- **Expected vs actual:** expected an accurate self-report; actual: a false pass, caught at push. Trailing whitespace in captured command logs recurred in two slices
+- **Severity:** Moderate: a self-report cannot be trusted without the gate output
+- **Workaround:** require the raw gate output attached to every return
+- **Actionable suggestion:** strip trailing whitespace when evidence logs are written
+- **Time cost:** about 10 minutes
+
+### F-036 — Merge guard needs a literal repository (2026-10-20)
+- **Tool/version:** workspace merge-gate guard
+- **Task attempted:** merge a PR with the repository given as a shell variable
+- **Steps taken:** passed the repository through a variable
+- **Expected vs actual:** expected the merge to proceed; actual: refused until a literal repository value was given; the guard also fires on that command text inside a script body
+- **Severity:** Minor
+- **Workaround:** use a literal repository value
+- **Actionable suggestion:** resolve simple variables or name the exact requirement
+- **Time cost:** about 5 minutes
+
 ## Paused experiment
 
 ### F-025 — Vega SDK and Virtual Device (OBS-110 to OBS-113) — PAUSED by owner 2026-10-20
