@@ -24,9 +24,15 @@ area_tree() {
 area_matches() {
     case "$1" in
         hygiene) return 0 ;;
-        spec|docs|tvapp|backend|vegaapp)
+        spec|docs|tvapp|backend)
             case "$2" in
                 tools/ci/*|.github/workflows/*|.githooks/*) return 0 ;;
+            esac ;;
+        # The vegaapp check is defined by gate.sh alone; Python gate-test
+        # changes are covered by hygiene and must not select the Jest run.
+        vegaapp)
+            case "$2" in
+                tools/ci/gate.sh|.github/workflows/*|.githooks/*) return 0 ;;
             esac ;;
     esac
     case "$1:$2" in
