@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- P2-L05 dry-run evidence rehearsing the final-APK build and inspection on `fb6ab2f` (debug-signed release APK, sha256 and signer certificate recorded, manifest and permissions inspected, Reverify capability gap and empty-ApiUrl gap carried to the real run; nothing released) ([#53](https://github.com/1wgrumph/amazon-fantasy-companion/issues/53)).
+
 - Device evidence for the A03–A05 steps that waited on an AWS session (alert card, Watch confirm and outcome, stale-labeled panel value), the P2-A02 D-pad focus recapture on the #129 fix, and the P2-D03 README fresh-setup walkthrough (14 PASS, 1 limited, 4 owner steps); README now uses `adb install -r` and records what the walkthrough did not prove ([PR #132](https://github.com/1wgrumph/amazon-fantasy-companion/pull/132)).
 - Friction log entries F-026 to F-029 for 2026-10-20: OCR test-file exclusion, quota cascade across fallbacks, bug-route escape harness gap, CHANGELOG conflicts under parallel landing.
 - Add the hackathon submission write-up (`docs/submission/writeup.md`): Fire TV and AWS Builder integrations from landed evidence (spike verdicts WORKS/FAILS/PARTIAL with limits, `afc-dev` deployed smoke only where recorded), the YouTube TV Fantasy View differentiation, the DEC-AFC-SD-036 future direction marked external context with public citations, an honest-limits section covering every FAILS/PARTIAL verdict plus the paused Vega stretch, and X09/X10, X03 PR 2, X05 PR 2, and X11 marked PENDING with no result asserted; the combined `PROC-SUBMISSION-CHECK` completes when D05 lands ([#49](https://github.com/1wgrumph/amazon-fantasy-companion/issues/49)).
