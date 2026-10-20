@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Friction log entries F-030 to F-036 for 2026-10-20: advisory device lease, commit-guard directory resolution, pkill self-match, pre-push gate duration, literal dispatch carriers, a false gate-pass self-report, and literal merge repository.
 - P2-D03 closeout: README judge access is now this public repository plus the README setup (owner decision 2026-10-20, demo video still pending), and fresh-host evidence proves both hash-pinned installs download into new venvs with empty pip caches (42 and 23 downloads) ([#48](https://github.com/1wgrumph/amazon-fantasy-companion/issues/48)).
 - P2-L05 dry-run evidence rehearsing the final-APK build and inspection on `fb6ab2f` (debug-signed release APK, sha256 and signer certificate recorded, manifest and permissions inspected, Reverify capability gap and empty-ApiUrl gap carried to the real run; nothing released) ([#53](https://github.com/1wgrumph/amazon-fantasy-companion/issues/53)).
 
