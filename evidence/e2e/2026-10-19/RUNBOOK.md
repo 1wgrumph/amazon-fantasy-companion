@@ -7,8 +7,8 @@ for repeatability; stop at the run record.
 
 This file is preparation only. No scenario in this unit was executed.
 Every live scenario stays `PENDING-LIVE`. No live timing, correction,
-or starter result is claimed here. Replay results, when produced by
-the live unit, are logic evidence only and never stand in for live
+or starter result is claimed here. Labeled replay is unbound
+(`GAP PROCEDURE_UNBOUND` below) and never stands in for live
 notification or provider behavior (RISK-AFC-P2-08).
 
 Bindings: `implementation.json` slice P2-X10 (depends on P2-X09;
@@ -35,9 +35,10 @@ Fire OS is primary; Vega is paused — no Vega work or claim
   It cannot exercise pre-game or pre-snap live timing, in-game alert
   latency, or live provider handoff timing. Record any such limit in
   the run record; do not backfill it with replay.
-- If no qualifying live event remains, run the labeled-replay
-  procedure below for logic repeatability and keep every live row
-  `PENDING-LIVE` for the next live window (RISK-AFC-P2-08).
+- If no qualifying live event remains, keep every live row
+  `PENDING-LIVE` for the next live window. Labeled replay is not a
+  fallback: it is currently unbound (`GAP PROCEDURE_UNBOUND`, see
+  below) and promises no repeatability (RISK-AFC-P2-08).
 
 ## Preflight checklist (exact commands)
 
@@ -54,8 +55,8 @@ never a pass.
 | PF-5 | AWS session state | `aws sts get-caller-identity --profile afc-dev` — on expiry record OWNER_DECISION_REQUIRED `aws login` and continue; never deploy from this run book |
 | PF-6 | Deployed endpoint + commit (CMD-STACK-OUTPUTS, CMD-DEPLOYED-COMMIT) | `aws cloudformation describe-stacks --stack-name afc-dev --profile afc-dev --query 'Stacks[0].Outputs[?OutputKey==\`ApiUrl\`].[OutputKey,OutputValue]' --output json` then the CMD-DEPLOYED-COMMIT tag/tree check from `seit.json` |
 | PF-7 | App identity on stick (only after lease release) | `adb -s <stick_serial> shell dumpsys package com.afc.companion \| grep -E 'versionCode\|versionName'` and record APK sha256 from the build that produced it; serial comes from the operator's private note, never committed |
-| PF-8 | Event re-check 401873010 | `python3 spikes/sp5-espn-feed/capture.py capture --date 20261022 --event 401873010 --provenance live` then `python3 spikes/sp5-espn-feed/capture.py verify` (the frozen CMD-ESPN-CAPTURE recovery binding); record status/state from the summary header before any scenario |
-| PF-9 | Replay fixture integrity | `python3.12 spikes/sp5-espn-feed/capture.py verify` (exit 0 required before replay) |
+| PF-8 | Event re-check 401873010 | `python3 spikes/sp5-espn-feed/capture.py capture --date 20261022 --event 401873010 --provenance live --out evidence/e2e/2026-10-19/capture-401873010` then `python3 spikes/sp5-espn-feed/capture.py verify --out evidence/e2e/2026-10-19/capture-401873010` (CMD-ESPN-CAPTURE bound inside the X10 evidence write set; never the default fixture path, so the historical fixture corpus stays untouched); record status/state from the summary header before any scenario |
+| PF-9 | PF-8 capture integrity | `python3.12 spikes/sp5-espn-feed/capture.py verify --out evidence/e2e/2026-10-19/capture-401873010` (exit 0 required before any scenario reads the PF-8 capture; verifies only the evidence-directory capture) |
 | PF-10 | Gates | `bash tools/ci/gate.sh hygiene` and `bash tools/ci/gate.sh docs` |
 
 ## Scenario matrix
@@ -63,7 +64,7 @@ never a pass.
 Common preconditions for S1–S5: preflight PF-1..PF-10 recorded; stick
 linked (manual mode; OA-10 confirmation by the owner if re-link is
 needed); followed team/league set with at least one starter in event
-401873010 or the named replay game; alert types enabled; panel in
+401873010; alert types enabled; panel in
 `PanelMode.fullScreen` (P2-X04 verdict). Each scenario fills one
 run-record entry from `run-record.template.json`.
 
@@ -73,9 +74,9 @@ run-record entry from `run-record.template.json`.
   VCASE-AFC-PR-046; SEIT-AFC-PR-026, SEIT-AFC-PR-046.
 - Preconditions: a scoring fact already emitted as an alert and shown
   on the panel; a later ESPN summary revision that corrects it
-  (live post-game edit, or replay game with a `modified` play).
+  (live post-game edit only; replay is `GAP PROCEDURE_UNBOUND` below).
 - Steps: (1) capture baseline `GET /v1/alerts` and `GET /v1/panel`;
-  (2) ingest the corrected summary (live poll or replay load);
+  (2) ingest the corrected summary (live poll);
   (3) re-read both surfaces; (4) screencap the panel.
 - Expected observable: the existing alert record is revised in place
   (no new alert id) and the panel value carries the same corrected
@@ -89,23 +90,36 @@ run-record entry from `run-record.template.json`.
 - Exercises: AFC-PR-046; VCASE-AFC-PR-046; SEIT-AFC-PR-046.
 - Preconditions: manual lineup with two eligible players at one slot;
   panel visible; alert cursor at head.
-- Steps: (1) record panel rows and team total; (2) swap the starter
-  in the manual lineup; (3) refresh panel (30 s cycle or re-show);
-  (4) confirm the next qualifying event alerts for the new starter
-  only; (5) screencap before/after.
-- Expected observable: panel row, total, and progress reflect the new
-  starter; no alert fact references the benched player after the
-  swap; both surfaces agree (hidden panel refreshes on show).
-- Failure behavior: panel/alert disagreement is a defect; a missing
-  qualifying event in the window leaves the live half PENDING-LIVE
-  (replay may cover the logic half only).
+- Steps: (1) with the panel visible, record panel rows, team total,
+  and the `GET /v1/panel` revision/fact (`R1`); (2) swap the starter
+  in the manual lineup; (3) hide the panel and confirm it is hidden;
+  (4) while it stays hidden, wait at least one 30 s refresh cycle and
+  let a later update arrive — confirm via `GET /v1/panel` that the
+  revision/fact advanced to `R2` (`R2 != R1`, new-starter fact);
+  (5) show the panel again; (6) compare the shown row, total, and
+  revision/fact against `R2`; (7) confirm the next qualifying event
+  alerts for the new starter only; (8) screencap before-hide and
+  on-show. Waiting for a refresh while the panel stays visible does
+  not satisfy this scenario.
+- Expected observable: on show, the panel row, total, progress, and
+  revision/fact equal `R2` (the update that arrived while hidden),
+  not stale `R1`; no alert fact references the benched player after
+  the swap; both surfaces agree (VCASE-AFC-PR-046: hidden panel
+  refreshes on show).
+- Failure behavior: a shown panel carrying `R1`, the benched player,
+  or a revision/fact that differs from `GET /v1/panel` is a defect →
+  `PROC-BUG-TRIAGE` with both payloads and screencaps. If no later
+  update arrives while hidden (`R2` never observed), or hide/show
+  was not performed, the scenario is `PENDING-LIVE`/`not_run`, never
+  a pass. A missing qualifying alert event likewise leaves that half
+  PENDING-LIVE.
 
 ### S3 — Duplicate suppression
 
 - Exercises: AFC-PR-025; VCASE-AFC-PR-025; SEIT-AFC-PR-025.
 - Preconditions: one resolved event that already emitted an alert.
 - Steps: (1) record alert count/cursor; (2) re-poll the unchanged
-  event twice (live poll cycle or repeated replay load);
+  event twice (live poll cycle);
   (3) re-read `GET /v1/alerts`; (4) restart AlertService on the stick
   and confirm history does not replay.
 - Expected observable: at most one alert per resolved event; repeated
@@ -128,8 +142,8 @@ run-record entry from `run-record.template.json`.
   or silently missing value (`backend/tests/unit/panel/test_panel_freshness.py`).
 - Failure behavior: an unlabeled old value or a zero-for-unknown is a
   defect; if the feed cannot be withheld safely in the live window,
-  run the backend half on replay and keep the on-stick half
-  PENDING-LIVE.
+  keep the scenario PENDING-LIVE (replay is `GAP PROCEDURE_UNBOUND`,
+  not a substitute).
 
 ### S5 — Sunday defect re-check
 
@@ -147,26 +161,30 @@ run-record entry from `run-record.template.json`.
   evidence attached; no silent fix inside this slice (defects route
   through bug-triager).
 
-## Labeled-replay procedure (repeatability without a live window)
+## Labeled replay — `GAP PROCEDURE_UNBOUND`
 
-1. Verify fixtures: PF-9 must exit 0. Fixtures live under
-   `backend/fixtures/replay/` (14 completed games, `STATUS_FINAL`,
-   each `index.json` entry `provenance: historical-replay` with
-   sha256). This unit does not write there.
-2. Pick per scenario: S1 any game whose summary carries `modified`
-   plays (89% per `spikes/sp5-espn-feed/VERDICT.md`); S2/S3 any game
-   with a scoring play for a manual-lineup starter; S4 replay with
-   ingest paused after first load. Record game id + index sha256 in
-   the run record.
-3. Load via `backend/src/feed_ingest/replay.py`
-   (`load_events` / `load_statistics`, `source: replay` on every
-   value) or the deployed replay filter:
-   `python3.12 -m pytest backend/tests/deployed -k replay -v --junitxml=evidence/e2e/2026-10-19/replay.xml`
-   (CMD-E2E-REPLAY).
-4. Label every artifact `provenance: historical-replay` and
-   `live_claim: false`. Replay proves matcher/policy/panel logic
-   repeatably; it never proves live notification timing, provider
-   handoff, or on-stick presentation during a game (RISK-AFC-P2-08).
+Labeled replay is not currently executable as a repeatability
+procedure for S1–S4, and no repeatability is promised from it.
+Static inspection at this revision found:
+
+- `backend/src/feed_ingest/replay.py` loaders return only the latest
+  captured summary, normalized; nothing ingests or selects a
+  baseline-to-correction sequence, so S1's before/after cannot be
+  driven from them as written.
+- The deployed suite (`backend/tests/deployed`, 26 test functions)
+  has zero node names matching a replay filter and no replay
+  markers, so a deployed replay-filter command selects nothing —
+  an empty selection is a gap, never a pass.
+
+Binding an executable sequence (baseline ingest, correction ingest,
+named nodes) is future work outside this slice's write set. Until
+then: record `GAP PROCEDURE_UNBOUND` wherever a scenario would have
+used replay, keep every live row `PENDING-LIVE`, and label nothing
+`historical-replay` from this run book. The historical fixture
+corpus stays untouched (PF-8/PF-9 write and verify only inside
+`evidence/e2e/2026-10-19/capture-401873010/`). Even once bound,
+replay could never prove live notification timing, provider
+handoff, or on-stick presentation during a game (RISK-AFC-P2-08).
 
 ## Acceptance-to-evidence map
 
@@ -174,7 +192,7 @@ run-record entry from `run-record.template.json`.
 |---|---|---|
 | All | `evidence/e2e/2026-10-19/run-record.json` (from `run-record.template.json`) | operator-filled during the run; one entry per scenario |
 | All | `evidence/e2e/2026-10-19/deployed.xml` | PF-4 (CMD-DEPLOYED-TESTS) |
-| Replay | `evidence/e2e/2026-10-19/replay.xml` | CMD-E2E-REPLAY above |
+| Replay | none (`GAP PROCEDURE_UNBOUND`) | no bound command; do not fabricate a replay artifact |
 | S1 | `evidence/e2e/2026-10-19/s1-alerts-before.json`, `s1-alerts-after.json`, `s1-panel-before.json`, `s1-panel-after.json` (sanitized API reads, no credentials) | `GET /v1/alerts`, `GET /v1/panel` via the deployed helpers |
 | S1, S2, S4 | `evidence/visual/e2e-2026-10-19/s1-panel-corrected.png`, `s2-panel-before.png`, `s2-panel-after.png`, `s4-panel-stale.png`, `s4-panel-unavailable.png` | `adb -s <stick_serial> exec-out screencap -p > <file>` (CMD-ADB-SCREENCAP / PROC-E2E-LIVE) |
 | S1–S5 | `evidence/visual/e2e-2026-10-19/<scenario>-window.txt`, `<scenario>-display.txt` | CMD-ADB-GEOMETRY (`dumpsys window`, `wm size`) via a private capture dir, sanitized copy only |

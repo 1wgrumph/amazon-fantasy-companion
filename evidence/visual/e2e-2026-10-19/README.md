@@ -15,7 +15,7 @@ path in the repository).
 | Scenario | Capture | Shows |
 |---|---|---|
 | S1 | `s1-panel-corrected.png`, `s1-window.txt`, `s1-display.txt` | corrected panel value after ingest |
-| S2 | `s2-panel-before.png`, `s2-panel-after.png`, `s2-window.txt`, `s2-display.txt` | starter swap reflected on the panel |
+| S2 | `s2-panel-before.png`, `s2-panel-after.png`, `s2-window.txt`, `s2-display.txt` | panel before hide and on show after an update arrived while hidden (revision/fact must match) |
 | S3 | `s3-window.txt`, `s3-display.txt` (screencap only if a duplicate appears) | geometry baseline; duplicate card if the defect fires |
 | S4 | `s4-panel-stale.png`, `s4-panel-unavailable.png`, `s4-window.txt`, `s4-display.txt` | stale (past 60 s) and unavailable labels, never zero-for-unknown |
 | S5 | `s5-<defect-id>.png` + geometry where the P2-X09 record had them | same state as the original defect evidence |

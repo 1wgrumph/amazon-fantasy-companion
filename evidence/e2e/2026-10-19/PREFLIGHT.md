@@ -30,3 +30,22 @@ mutation, no live scenario executed. `live_claim: false` throughout.
   2026-10-22T23:30Z to 2026-10-23T03:30Z) plus missing `adb` on PATH.
 - PENDING-LIVE (PF-8, S1–S5): live window opens for X10 at or after
   2026-10-23T03:30Z; depends on P2-X09 completing first.
+
+## Review-repair verification (PR #126 repair round)
+
+Preparation-time rows above are unchanged historical observations.
+Repair round on `afc/p2-x10-e2e` from `86b8254`:
+
+- `bash tools/ci/gate.sh hygiene` — exit 0 (91 tests OK; gate-internal
+  adapter GAP lines observed in its own test fixtures:
+  `GAP REPORT_INCOMPLETE: mutmut stats absent`,
+  `GAP REPORT_INCOMPLETE: unmapped changed files: backend/src/control.py`).
+- `bash tools/ci/gate.sh docs` — exit 0.
+- `python3 -m json.tool evidence/e2e/2026-10-19/run-record.template.json`
+  — exit 0 (parses; `live_claim: false`).
+- RUNBOOK scan: no `capture.py` invocation without
+  `--out evidence/e2e/2026-10-19/capture-401873010`; no default
+  fixture path remains.
+- Typed gap recorded: `GAP PROCEDURE_UNBOUND` (labeled replay not
+  executable as a repeatability procedure). No live claim added;
+  S1–S5 stay `PENDING-LIVE`.
