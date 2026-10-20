@@ -1,0 +1,145 @@
+FFFF.                                                                    [100%]
+=================================== FAILURES ===================================
+___________________ test_expiration_advances_panel_revision ____________________
+
+api = namespace(request=<function api.<locals>.request at 0x72a6d9641c60>, table=<function api.<locals>.table at 0x72a6d9641...sTable'), 'PlayerStatsTable': dynamodb.Table(name='PlayerStatsTable')}, ttls={'LinksTable': 'expiresAt'}, ssm_reads=[])
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x72a6ddb03410>
+
+    def test_expiration_advances_panel_revision(api, monkeypatch):
+        # #94 F1: the TV consumer discards a snapshot whose revision is not
+        # greater than the one it holds, so read-time expiration must advance
+        # the revision; stable rereads must not churn it.
+        import panel
+        seed(api)
+        ingest_summary(fresh_summary(), GAME, source="replay")
+        _pin_now(panel, monkeypatch, "2026-10-12T05:13:41Z")  # exactly 12h after asOf
+        before = panel.snapshot("owner", "league-a/team-7")
+        assert before["data"]["rows"][0]["points"]["value"] == 13.0
+        assert panel.snapshot("owner", "league-a/team-7")["revision"] == before["revision"]
+        _pin_now(panel, monkeypatch, "2026-10-12T05:13:42Z")  # 12h + 1s: expired
+        after = panel.snapshot("owner", "league-a/team-7")
+        assert after["data"]["rows"][0]["points"]["value"] is None
+>       assert after["revision"] > before["revision"], "consumer ignores equal/older revisions"
+E       AssertionError: consumer ignores equal/older revisions
+E       assert 5 > 5
+
+tests/unit/test_panel_player_stats.py:294: AssertionError
+_______________ test_undatable_final_not_served_as_current[None] _______________
+
+api = namespace(request=<function api.<locals>.request at 0x72a6d86fde40>, table=<function api.<locals>.table at 0x72a6d86fd...sTable'), 'PlayerStatsTable': dynamodb.Table(name='PlayerStatsTable')}, ttls={'LinksTable': 'expiresAt'}, ssm_reads=[])
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x72a6d8d040b0>
+wallclock = None
+
+    @pytest.mark.parametrize("wallclock", [None, "not-a-date", "2026-10-11T17:13:41"])
+    def test_undatable_final_not_served_as_current(api, monkeypatch, wallclock):
+        # #94 F2: a final whose asOf is missing, unparseable or timezone-naive
+        # cannot be shown to be current; it must fail closed, never crash.
+        import panel
+        seed(api)
+        ingest_summary(_summary_with_wallclock(wallclock), GAME, source="replay")
+        _pin_now(panel, monkeypatch, "2026-10-20T05:13:41Z")
+        data = panel.snapshot("owner", "league-a/team-7")["data"]
+        row = data["rows"][0]
+>       assert row["points"]["value"] is None
+E       assert 13.0 is None
+
+tests/unit/test_panel_player_stats.py:316: AssertionError
+____________ test_undatable_final_not_served_as_current[not-a-date] ____________
+
+api = namespace(request=<function api.<locals>.request at 0x72a6d7f4cf40>, table=<function api.<locals>.table at 0x72a6d7f4c...sTable'), 'PlayerStatsTable': dynamodb.Table(name='PlayerStatsTable')}, ttls={'LinksTable': 'expiresAt'}, ssm_reads=[])
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x72a6d841f290>
+wallclock = 'not-a-date'
+
+    @pytest.mark.parametrize("wallclock", [None, "not-a-date", "2026-10-11T17:13:41"])
+    def test_undatable_final_not_served_as_current(api, monkeypatch, wallclock):
+        # #94 F2: a final whose asOf is missing, unparseable or timezone-naive
+        # cannot be shown to be current; it must fail closed, never crash.
+        import panel
+        seed(api)
+        ingest_summary(_summary_with_wallclock(wallclock), GAME, source="replay")
+        _pin_now(panel, monkeypatch, "2026-10-20T05:13:41Z")
+>       data = panel.snapshot("owner", "league-a/team-7")["data"]
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_panel_player_stats.py:314: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/panel/__init__.py:232: in snapshot
+    value = _value(None if wrong_game else record, table)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/panel/__init__.py:104: in _value
+    stale = as_of is None or (_parse(now()) - _parse(as_of)).total_seconds() >= STALE_AFTER
+                                              ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+stamp = 'not-a-date'
+
+    def _parse(stamp):
+>       return datetime.fromisoformat(stamp.replace("Z", "+00:00"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ValueError: Invalid isoformat string: 'not-a-date'
+
+src/panel/__init__.py:60: ValueError
+_______ test_undatable_final_not_served_as_current[2026-10-11T17:13:41] ________
+
+api = namespace(request=<function api.<locals>.request at 0x72a6d8e73b00>, table=<function api.<locals>.table at 0x72a6d8e73...sTable'), 'PlayerStatsTable': dynamodb.Table(name='PlayerStatsTable')}, ttls={'LinksTable': 'expiresAt'}, ssm_reads=[])
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x72a6d7c3f710>
+wallclock = '2026-10-11T17:13:41'
+
+    @pytest.mark.parametrize("wallclock", [None, "not-a-date", "2026-10-11T17:13:41"])
+    def test_undatable_final_not_served_as_current(api, monkeypatch, wallclock):
+        # #94 F2: a final whose asOf is missing, unparseable or timezone-naive
+        # cannot be shown to be current; it must fail closed, never crash.
+        import panel
+        seed(api)
+        ingest_summary(_summary_with_wallclock(wallclock), GAME, source="replay")
+        _pin_now(panel, monkeypatch, "2026-10-20T05:13:41Z")
+>       data = panel.snapshot("owner", "league-a/team-7")["data"]
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_panel_player_stats.py:314: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/panel/__init__.py:232: in snapshot
+    value = _value(None if wrong_game else record, table)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+record = {'asOf': '2026-10-11T17:13:41', 'gameId': '401872981', 'gameState': 'post', 'gameStatus': 'Final', ...}
+table = {'fumbles_lost': -2, 'interceptions_thrown': -1, 'passing_touchdowns': 4, 'passing_yards': 0.04, ...}
+
+    def _value(record, table):
+        """One points value object from a statistics record (or unknown)."""
+        if record is None:
+            return {"value": None, "reason": "statistics unavailable", "source": None,
+                    "asOf": None, "stale": True}
+        points = sum(table[s] * float(v) for s, v in (record.get("stats") or {}).items()
+                     if s in table)
+        as_of = record.get("asOf")
+>       stale = as_of is None or (_parse(now()) - _parse(as_of)).total_seconds() >= STALE_AFTER
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: can't subtract offset-naive and offset-aware datetimes
+
+src/panel/__init__.py:104: TypeError
+=============================== warnings summary ===============================
+tests/unit/test_panel_player_stats.py: 2173 warnings
+  <home>/.local/share/afc-tools/backend-tests/lib/python3.12/site-packages/botocore/auth.py:424: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    datetime_now = datetime.datetime.utcnow()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+============================= slowest 10 durations =============================
+0.53s call     tests/unit/test_panel_player_stats.py::test_expiration_advances_panel_revision
+0.50s call     tests/unit/test_panel_player_stats.py::test_aware_offset_final_inside_window_still_served
+0.50s call     tests/unit/test_panel_player_stats.py::test_undatable_final_not_served_as_current[2026-10-11T17:13:41]
+0.49s call     tests/unit/test_panel_player_stats.py::test_undatable_final_not_served_as_current[not-a-date]
+0.49s call     tests/unit/test_panel_player_stats.py::test_undatable_final_not_served_as_current[None]
+0.15s setup    tests/unit/test_panel_player_stats.py::test_expiration_advances_panel_revision
+0.12s setup    tests/unit/test_panel_player_stats.py::test_aware_offset_final_inside_window_still_served
+0.12s setup    tests/unit/test_panel_player_stats.py::test_undatable_final_not_served_as_current[2026-10-11T17:13:41]
+0.11s setup    tests/unit/test_panel_player_stats.py::test_undatable_final_not_served_as_current[not-a-date]
+0.10s setup    tests/unit/test_panel_player_stats.py::test_undatable_final_not_served_as_current[None]
+=========================== short test summary info ============================
+FAILED tests/unit/test_panel_player_stats.py::test_expiration_advances_panel_revision
+FAILED tests/unit/test_panel_player_stats.py::test_undatable_final_not_served_as_current[None]
+FAILED tests/unit/test_panel_player_stats.py::test_undatable_final_not_served_as_current[not-a-date]
+FAILED tests/unit/test_panel_player_stats.py::test_undatable_final_not_served_as_current[2026-10-11T17:13:41]
+4 failed, 1 passed, 13 deselected, 2173 warnings in 3.19s
+exit=1 (4 failed, 1 passed)
