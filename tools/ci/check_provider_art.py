@@ -6,12 +6,17 @@ third-party site. Two of them share the basename prime-video-search.png and
 are distinguished by directory and content sha256. A tracked path fails when
 any component is one of those basenames, or when the file's sha256 is one of
 those content hashes. Any other tracked text file fails when it contains a
-basename or a content hash. The manifest, this check, and the red run may
-record the names and hashes; that allowlist does not cover a re-added file.
+basename or a content hash. A screenshot inventory also fails when it cites
+one of those images by its extensionless stem. Geometry and logcat names keep
+that stem as a filename prefix, and their state lines are not inventories, so
+only a paragraph that says "screenshot" is checked for the bare stem. The
+manifest, this check, and the red run may record the names and hashes; that
+allowlist does not cover a re-added file.
 """
 
 import hashlib
 import os
+import re
 import subprocess
 from pathlib import Path
 
@@ -61,6 +66,7 @@ RECORDS = (
 
 BASENAMES = frozenset(path.rsplit('/', 1)[-1] for path, _digest in RECORDS)
 HASHES = frozenset(digest for _path, digest in RECORDS)
+STEMS = frozenset(name.rsplit('.', 1)[0] for name in BASENAMES)
 TEXT_ALLOW = frozenset({
     'tools/ci/check_provider_art.py',
     'evidence/visual/PRIVATE-EVIDENCE.md',
@@ -78,6 +84,35 @@ def git_env():
     env = {key: value for key, value in os.environ.items() if key not in _GIT_DROP}
     env['GIT_CEILING_DIRECTORIES'] = str(Path.cwd().resolve().parent)
     return env
+
+
+def _bare_stem(stem, line):
+    return re.search(
+        '(?<![A-Za-z0-9_-])' + re.escape(stem) + '(?![A-Za-z0-9_.-])',
+        line,
+    ) is not None
+
+
+def screenshot_inventory_findings(name, lines):
+    findings = []
+    paragraph = []
+
+    def flush():
+        if not paragraph:
+            return
+        if any('screenshot' in line.lower() for _number, line in paragraph):
+            for number, line in paragraph:
+                if any(_bare_stem(stem, line) for stem in STEMS):
+                    findings.append(f'{name}:{number}:PROVIDER-ART-TEXT')
+        paragraph.clear()
+
+    for number, line in enumerate(lines, 1):
+        if line.strip():
+            paragraph.append((number, line))
+        else:
+            flush()
+    flush()
+    return findings
 
 
 def main(argv):
@@ -103,9 +138,11 @@ def main(argv):
                 findings.append(f'{name}:PROVIDER-ART-HASH')
             if name in TEXT_ALLOW or b'\0' in data:
                 continue
-            for number, line in enumerate(data.decode('utf-8', errors='replace').splitlines(), 1):
+            lines = data.decode('utf-8', errors='replace').splitlines()
+            for number, line in enumerate(lines, 1):
                 if any(base in line for base in BASENAMES) or any(digest in line for digest in HASHES):
                     findings.append(f'{name}:{number}:PROVIDER-ART-TEXT')
+            findings.extend(screenshot_inventory_findings(name, lines))
     except (OSError, UnicodeError):
         print('check_provider_art: unreadable input or git failure')
         return 1

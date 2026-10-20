@@ -122,3 +122,32 @@ class CheckProviderArt(unittest.TestCase):
         rc, out = call_main(self.tool, [], self.tmp)
         self.assertEqual(rc, 1, out)
         self.assertIn('check_provider_art: unreadable input or git failure', out)
+
+    def test_extensionless_screenshot_inventory_stem_fails(self):
+        base = sorted(self.tool.BASENAMES)[0]
+        stem = base.rsplit('.', 1)[0]
+        root = self.repo('inventory', {
+            'notes/inventory.md': (
+                'All under `evidence/visual/sp4-panel-video/`: `commands.txt` (every attempt\n'
+                'with exit codes), and per attempt a screenshot plus `-geometry.txt` and\n'
+                f'`-logcat.txt`: `r0-playback`, {stem},\n'
+                '`r2b-spike-pip-over-player`.\n'
+            ),
+        })
+        rc, out = call_main(self.tool, [], root)
+        self.assertEqual(rc, 1, out)
+        self.assertIn('notes/inventory.md:3:PROVIDER-ART-TEXT', out.splitlines())
+        self.assertNotIn(stem, out)
+
+    def test_geometry_prefix_and_state_line_stay_allowed(self):
+        base = sorted(self.tool.BASENAMES)[0]
+        stem = base.rsplit('.', 1)[0]
+        root = self.repo('kept', {
+            'notes/geometry.md': (
+                'per attempt a screenshot plus geometry:\n'
+                f'`{stem}-geometry.txt` and `{stem}-logcat.txt`.\n'
+            ),
+            'notes/state.txt': f'state: {stem}\n',
+        })
+        rc, out = call_main(self.tool, [], root)
+        self.assertEqual(rc, 0, out)
