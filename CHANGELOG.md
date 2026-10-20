@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Record v0.1.0 in the changelog ([PR #139](https://github.com/1wgrumph/amazon-fantasy-companion/pull/139)).
+
 ## [0.1.0] - 2026-10-20
 
 ### Fixed
