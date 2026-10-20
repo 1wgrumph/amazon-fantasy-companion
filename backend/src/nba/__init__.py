@@ -18,8 +18,10 @@ def enabled():
 def poll(get_json, store_records=None):
     """Fetch the NBA scoreboard and store each game's boxscore statistics.
 
-    `get_json` is feed_ingest's allowlisted ESPN getter. One game's failure
-    never blocks the others, mirroring feed_ingest.poll.
+    `get_json` is feed_ingest's allowlisted ESPN getter. A scoreboard
+    failure is logged and returns the empty result, so it cannot discard
+    an NFL result already stored by feed_ingest.poll. One game's failure
+    never blocks the others.
     """
     result = {"stored": 0, "failed": []}
     if not enabled():
@@ -30,7 +32,7 @@ def poll(get_json, store_records=None):
         from feed_ingest.ingest import store_player_statistics as store_records
     try:
         games = scoreboard_games(get_json(FEED + "scoreboard"))
-    except OSError:
+    except (ValueError, OSError):
         logging.getLogger(__name__).warning("NBA scoreboard unavailable")
         return result
     for game in games:

@@ -175,6 +175,35 @@ def test_poll_isolates_a_failed_summary(monkeypatch):
         "stored": 0, "failed": [GAME]}
 
 
+def _scoreboard_fault(monkeypatch, caplog, error):
+    """Scoreboard `get_json` raises; poll must log once and return empty."""
+    import nba
+
+    monkeypatch.setenv("AFC_ENABLE_NBA", "true")
+    urls = []
+
+    def get_json(url):
+        urls.append(url)
+        raise error
+
+    def store_records(records):
+        raise AssertionError("scoreboard failure stored records")
+
+    with caplog.at_level("WARNING", logger="nba"):
+        result = nba.poll(get_json, store_records=store_records)
+    assert result == {"stored": 0, "failed": []}
+    assert urls == [nba.FEED + "scoreboard"]
+    assert [record.getMessage() for record in caplog.records] == ["NBA scoreboard unavailable"]
+
+
+def test_poll_scoreboard_value_error_returns_empty(monkeypatch, caplog):
+    _scoreboard_fault(monkeypatch, caplog, ValueError("ESPN response exceeds the size bound"))
+
+
+def test_poll_scoreboard_json_decode_error_returns_empty(monkeypatch, caplog):
+    _scoreboard_fault(monkeypatch, caplog, json.JSONDecodeError("Expecting value", "", 0))
+
+
 def test_ingest_summary_scores_each_athlete():
     import nba
     from nba.normalize import boxscore_statistics_nba
@@ -215,6 +244,64 @@ def test_feed_hook_runs_nba_poll_with_flag_on(monkeypatch, nfl_poll):
     result = feed_ingest.poll({})
     assert len(calls) == 1
     assert result["stored"] == 2 and result["failed"] == []
+
+
+NFL_FEED = "https://site.api.espn.com/apis/site/v2/sports/football/nfl/"
+NFL_GAME = "401872981"
+REPLAY = Path(__file__).resolve().parents[3] / "fixtures" / "replay"
+
+
+def _nfl_capture():
+    """In-progress capture for one monitored NFL game, plus its play count."""
+    board = json.loads((REPLAY / NFL_GAME / "001-scoreboard.json").read_text())
+    summary = json.loads((REPLAY / NFL_GAME / "001-summary.json").read_text())
+    for event in board["events"]:
+        event["status"]["type"]["state"] = "in" if event["id"] == NFL_GAME else "post"
+    plays = [play for drive in summary["drives"]["previous"] for play in drive.get("plays") or []]
+    return board, summary, len(plays)
+
+
+def _poll_nfl_with_nba_scoreboard(monkeypatch, api, fault):
+    """Real NFL poll, then the real NBA poll. `fault` is raised or returned."""
+    import feed_ingest
+    import nba
+
+    board, summary, stored = _nfl_capture()
+    api.table("Profiles").put_item(Item={"profileId": "owner", "settings": {
+        "fantasySelections": {"favoriteTeamIds": ["30"]}}})
+
+    def get_json(url):
+        if url == nba.FEED + "scoreboard":
+            if isinstance(fault, BaseException):
+                raise fault
+            return fault
+        if url == NFL_FEED + "scoreboard":
+            return board
+        if url == NFL_FEED + "summary?event=" + NFL_GAME:
+            return summary
+        raise AssertionError(url)
+
+    monkeypatch.setattr(feed_ingest, "_get_json", get_json)
+    return feed_ingest, stored
+
+
+def test_feed_poll_returns_nfl_result_when_nba_scoreboard_raises(api, monkeypatch):
+    monkeypatch.setenv("AFC_ENABLE_NBA", "true")
+    feed_ingest, stored = _poll_nfl_with_nba_scoreboard(
+        monkeypatch, api, ValueError("ESPN response exceeds the size bound"))
+    assert feed_ingest.poll({}) == {"stored": stored, "failed": []}
+
+
+@pytest.mark.parametrize("fault", [
+    pytest.param(ValueError("ESPN response exceeds the size bound"), id="value-error"),
+    pytest.param(json.JSONDecodeError("Expecting value", "", 0), id="json-decode-error"),
+    pytest.param(OSError("scoreboard unavailable"), id="os-error"),
+    pytest.param({"events": [{"id": "not-numeric"}]}, id="validation"),
+])
+def test_feed_poll_never_raises_for_injected_nba_scoreboard_errors(api, monkeypatch, fault):
+    monkeypatch.setenv("AFC_ENABLE_NBA", "true")
+    feed_ingest, stored = _poll_nfl_with_nba_scoreboard(monkeypatch, api, fault)
+    assert feed_ingest.poll({}) == {"stored": stored, "failed": []}
 
 
 # -- panel rows ---------------------------------------------------------------
