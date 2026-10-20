@@ -67,7 +67,7 @@ recorded; no screenshot shows an account name or email.
    are immutable once created). `dumpsys` confirms `vibrate=default
    sound=default defaults=0x3 importance=4 actions=2`. Still no banner over
    playback at 1 s or 3 s (`attempt5-headsup-1s.png`, `-3s.png`), and
-   DPAD_UP reaches nothing (`attempt5-dpad-up.png`). (`headsUpContentView=null`
+   DPAD_UP reaches nothing (`evidence/visual/PRIVATE-EVIDENCE.md` (Prime Video player after DPAD_UP, withheld)). (`headsUpContentView=null`
    in the dump is not used as evidence: since Android N that field can be
    null while SystemUI builds a heads-up view from Builder inputs; the
    screenshots are the absence evidence.)
@@ -109,7 +109,7 @@ recorded; no screenshot shows an account name or email.
    0:15 → 0:12) and the spike is not foregrounded (`ResumedActivity`
    stays `com.amazon.firebat`, media `state=3`; DPAD_UP afterwards
    reaches only Prime Video's own player controls,
-   `repair9-fsi-dpad-up.png`). Negative result recorded as observed.
+   `evidence/visual/PRIVATE-EVIDENCE.md` (Prime Video player controls after DPAD_UP, withheld)). Negative result recorded as observed.
    Outcome: **fails (neither heads-up nor full-screen branch taken)**.
 5. **Fire OS notification center** (attempts 2, 6, 7; repair attempt 10).
    Documented behavior: standard notifications are reachable in the
@@ -119,8 +119,8 @@ recorded; no screenshot shows an account name or email.
    Procedure tested: first the Android shade shortcuts — `cmd statusbar
    expand-notifications` opens nothing on this leanback SystemUI
    (`attempt2-notif-center.png`), `KEYCODE_NOTIFICATION` on Home changes
-   nothing (`attempt6-notif-key.png`), and a fresh post while Home is
-   foreground does not peek (`attempt7-home-headsup.png`). Then the
+   nothing (`evidence/visual/PRIVATE-EVIDENCE.md` (Fire TV home after KEYCODE_NOTIFICATION, withheld)), and a fresh post while Home is
+   foreground does not peek (`evidence/visual/PRIVATE-EVIDENCE.md` (Fire TV home during a heads-up post, withheld)). Then the
    documented path itself, read-only: Settings grid → Notifications tile
    (badge "2", `repair10-notifications-tile.png`) →
    `com.amazon.tv.notificationcenter/.NotificationCenterActivity`.
