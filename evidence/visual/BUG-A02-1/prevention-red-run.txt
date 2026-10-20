@@ -1,0 +1,47 @@
+Unfixed baseline: ProfileSettingsScreen.kt from 30850b7; final regression test.
+Command: adb shell am instrument -w -e class com.afc.companion.profile.ProfileDpadFocusTest#dpadDownLeavesLeagueFieldAndUpReturns com.afc.companion.test/androidx.test.runner.AndroidJUnitRunner
+ADB shell exit: 0 (read instrumentation verdict).
+com.afc.companion.profile.ProfileDpadFocusTest:
+Error in dpadDownLeavesLeagueFieldAndUpReturns(com.afc.companion.profile.ProfileDpadFocusTest):
+java.lang.AssertionError: Failed to assert the following: (Focused = 'true')
+Semantics of the node:
+Node #62 at (l=96.0, t=465.0, r=296.0, b=498.0)px
+EditableText = 'TeamOne'
+TextSelectionRange = 'TextRange(0, 0)'
+IsEditable = 'true'
+ImeAction = 'Default'
+Focused = 'false'
+Actions = [GetTextLayoutResult, SetText, InsertTextAtCursor, SetSelection, PerformImeAction, OnClick, OnLongClick, PasteText, RequestFocus]
+MergeDescendants = 'true'
+Has 51 siblings
+Selector used: (Text + EditableText contains 'TeamOne' (ignoreCase: false))
+
+	at androidx.compose.ui.test.AssertionsKt.assert(Assertions.kt:265)
+	at androidx.compose.ui.test.AssertionsKt.assert$default(Assertions.kt:255)
+	at androidx.compose.ui.test.AssertionsKt.assertIsFocused(Assertions.kt:116)
+	at com.afc.companion.profile.ProfileDpadFocusTest.dpadDownLeavesLeagueFieldAndUpReturns(ProfileDpadFocusTest.kt:53)
+
+
+Time: 5.806
+There was 1 failure:
+1) dpadDownLeavesLeagueFieldAndUpReturns(com.afc.companion.profile.ProfileDpadFocusTest)
+java.lang.AssertionError: Failed to assert the following: (Focused = 'true')
+Semantics of the node:
+Node #62 at (l=96.0, t=465.0, r=296.0, b=498.0)px
+EditableText = 'TeamOne'
+TextSelectionRange = 'TextRange(0, 0)'
+IsEditable = 'true'
+ImeAction = 'Default'
+Focused = 'false'
+Actions = [GetTextLayoutResult, SetText, InsertTextAtCursor, SetSelection, PerformImeAction, OnClick, OnLongClick, PasteText, RequestFocus]
+MergeDescendants = 'true'
+Has 51 siblings
+Selector used: (Text + EditableText contains 'TeamOne' (ignoreCase: false))
+
+	at androidx.compose.ui.test.AssertionsKt.assert(Assertions.kt:265)
+	at androidx.compose.ui.test.AssertionsKt.assert$default(Assertions.kt:255)
+	at androidx.compose.ui.test.AssertionsKt.assertIsFocused(Assertions.kt:116)
+	at com.afc.companion.profile.ProfileDpadFocusTest.dpadDownLeavesLeagueFieldAndUpReturns(ProfileDpadFocusTest.kt:53)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
