@@ -79,6 +79,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Make Fire OS the primary target again and Vega a compatibility target proven on the Vega Virtual Device, because the only TV device is a Fire OS stick (owner amendment 2026-10-19, superseding Vega primary); physical-Vega checks become not applicable, the eight Vega overrides are re-scoped to VVD compatibility and R1 ships the Fire OS APK ([PR #117](https://github.com/1wgrumph/amazon-fantasy-companion/pull/117)).
 - Keep only the pre-push hook; commits no longer run the gate locally (CI and pre-push still do) ([PR #97](https://github.com/1wgrumph/amazon-fantasy-companion/pull/97)).
 - Select Vega OS as the primary TV target with Fire OS remaining the secondary target, and rebind the Phase 2 plan package (DEC-AFC-SD-048 through DEC-AFC-SD-054) ([#72](https://github.com/1wgrumph/amazon-fantasy-companion/pull/72)).
 - Link a TV with its device code alone (DEC-AFC-SD-048): drop the link
