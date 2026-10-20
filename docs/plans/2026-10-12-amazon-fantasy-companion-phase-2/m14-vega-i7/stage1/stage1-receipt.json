@@ -1,0 +1,215 @@
+{
+  "verdict": "GO",
+  "lifecycle": "AFC-2026-10-11",
+  "milestone": "M14",
+  "issue": "59",
+  "gate": "P2-V01",
+  "bug_route": "not-a-bug environment qualification gate (Stage 1)",
+  "amendment": "DEC-AFC-M14-I7-SANDBOX-20261020",
+  "host": "<i7>",
+  "os": "Ubuntu 24.04.4",
+  "sdk": "0.24.12112",
+  "cli": "1.4.5",
+  "cli_admission": "NOT_ADMITTED",
+  "cli_sha256": "0486f79d0c83cafa1db7b75ed85aef512b95b7420672a66820fca2e08923d6b6",
+  "node_version": "v22.23.3",
+  "node_sha256": "fde6a4bf8d0562f7751d1a2d6cb9b417c4cfe107bbcb0aa3e9a24e125e348f48",
+  "wall_time": {
+    "start_utc": "2026-10-20T22:18:24Z",
+    "successful_run_end_utc": "2026-10-20T23:13:10Z",
+    "evidence_written_utc": "2026-10-20T23:18:56Z"
+  },
+  "launch_flags_that_worked": {
+    "command": "vega virtual-device start --timeout 600",
+    "gui": "default on",
+    "gl_accel": "default on",
+    "environment": [
+      "LIBGL_ALWAYS_SOFTWARE=1",
+      "GALLIUM_DRIVER=llvmpipe",
+      "MESA_LOADER_DRIVER_OVERRIDE=llvmpipe"
+    ],
+    "display": "Xvfb :91 -nolisten tcp",
+    "input": [
+      "vega device run-cmd -d VirtualDevice --command inputd-cli button_press KEY_RIGHT",
+      "vega device run-cmd -d VirtualDevice --command inputd-cli button_press KEY_ENTER"
+    ],
+    "settle_seconds_before_input": 12,
+    "emulator_log": "library_mode host gpu mode host"
+  },
+  "success_criteria": {
+    "running_true": {
+      "met": true,
+      "status": {"running": true, "process_ids": {"qemu": 74}}
+    },
+    "guest_png_non_black": {
+      "met": true,
+      "file": "guest-before.png",
+      "shows": "guest ready UI with planet icon and the text Vega Virtual Device is ready"
+    },
+    "input_changes_guest": {
+      "met": true,
+      "key_right_exit": 0,
+      "key_right_guest_pixels_changed": 1040,
+      "key_right_bbox": {"x0": 891, "y0": 21, "x1": 926, "y1": 56},
+      "key_enter_exit": 0,
+      "key_enter_guest_pixels_changed": 18798,
+      "key_enter_bbox": {"x0": 43, "y0": 21, "x1": 926, "y1": 415},
+      "skin_pixels_changed": 0,
+      "after_shows": "Settings / Account Settings"
+    },
+    "stop_recorded": {
+      "met": true,
+      "stop_exit": 0,
+      "status_after": {"running": false, "process_ids": {"qemu": -1}},
+      "clean_without_sigsegv": false,
+      "shutdown_sigsegv_recorded": true,
+      "note": "CLI stop exited 0 and status went to running false. The emulator process group died with SIGSEGV during shutdown. crashpad logged ptrace Operation not permitted."
+    }
+  },
+  "hypotheses": [
+    {
+      "id": "a",
+      "attempt": 1,
+      "run_id": "run-20261020T223128-e159a24b",
+      "command": "vega virtual-device start --timeout 600",
+      "result": "FAIL",
+      "start_exit": 0,
+      "status": {"running": false, "process_ids": {"qemu": -1}},
+      "stop_exit": 1,
+      "cause": "Stale hardware-qemu.ini.lock carried a pid. Inside the fresh pid namespace the emulator treated it as another live instance and exited."
+    },
+    {
+      "id": "a",
+      "attempt": 2,
+      "run_id": "run-20261020T224811-917b3737",
+      "command": "vega virtual-device start --timeout 600",
+      "result": "FAIL",
+      "start_exit": 0,
+      "status": {"running": false, "process_ids": {"qemu": -1}},
+      "stop_exit": 1,
+      "cause": "Locks removed. Emulator SIGSEGV. Log: could not find a GLES 2.x config. library_mode host, gpu mode host. The sandbox had GLVND and no Mesa driver closure. No third attempt: the same flags repeat this crash."
+    },
+    {
+      "id": "b",
+      "attempt": 1,
+      "run_id": "run-20261020T230304-f8306bff",
+      "command": "vega virtual-device start --timeout 600 --no-gl-accel",
+      "result": "FAIL",
+      "start_exit": 0,
+      "status": {"running": true, "process_ids": {"qemu": 74}},
+      "input_exit": 0,
+      "stop_exit": 0,
+      "screenshot_sha256": "16a4840edfff84d49774c8297ded3ec048c45a0b3f4a327a67f77609321e2092",
+      "screenshot_bytes": 19024,
+      "cause": "running true on swiftshader_indirect. Guest area stayed black. Before and after screenshots were identical and showed only the emulator skin. Input exited 0 and changed 0 pixels."
+    },
+    {
+      "id": "b",
+      "attempt": 2,
+      "run_id": "run-20261020T230834-7d0979e9",
+      "command": "vega virtual-device start --timeout 600",
+      "environment": ["LIBGL_ALWAYS_SOFTWARE=1", "GALLIUM_DRIVER=llvmpipe", "MESA_LOADER_DRIVER_OVERRIDE=llvmpipe"],
+      "result": "FAIL",
+      "start_exit": 0,
+      "status": {"running": true, "process_ids": {"qemu": 73}},
+      "input_exit": 253,
+      "input2_exit": 2,
+      "stop_exit": 0,
+      "splash_png_sha256": "7b6975beee7365603d6b7a0e50d4f1f8ff870798c5c37e60fa725e2ff6a22041",
+      "ready_png_sha256": "0f3da07feeac392ed254dd808e86835d02c24aeae6fa0ca18f5523b26abcbe1e",
+      "cause": "Guest rendered (splash, then the ready screen). Input ran during the splash: Cannot read properties of undefined (reading trim), exit 253. The next command reported device not found."
+    },
+    {
+      "id": "b",
+      "attempt": 3,
+      "run_id": "run-20261020T231237-9b8e52ee",
+      "command": "vega virtual-device start --timeout 600",
+      "environment": ["LIBGL_ALWAYS_SOFTWARE=1", "GALLIUM_DRIVER=llvmpipe", "MESA_LOADER_DRIVER_OVERRIDE=llvmpipe"],
+      "result": "GO",
+      "start_exit": 0,
+      "status_exit": 0,
+      "input_exit": 0,
+      "input2_exit": 0,
+      "stop_exit": 0,
+      "settle_seconds": 12,
+      "full_strace_sha256": "384f9f0b79c309fc308cd9213aa51a53b99496cda6bb643cab089b8596a970f5"
+    },
+    {
+      "id": "c",
+      "attempt": 0,
+      "result": "NOT_RUN",
+      "cause": "Hypothesis (b) attempt 3 met all four criteria. DRM passthrough was not required. The sandbox account is not in the video or render groups."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "guest-before.png",
+      "sha256": "0f3da07feeac392ed254dd808e86835d02c24aeae6fa0ca18f5523b26abcbe1e",
+      "bytes": 314864,
+      "role": "settled guest ready screen, before input"
+    },
+    {
+      "path": "guest-after-key-right.png",
+      "sha256": "4046d7c75269ea406c40cda66e5c1d4a6dfb25f539e2024aeae3a9f63fbdf809",
+      "bytes": 314865,
+      "role": "after KEY_RIGHT, gear pixels changed"
+    },
+    {
+      "path": "guest-after-key-enter.png",
+      "sha256": "a5770d69721b1286b9e1ce319f2b2417acdf1aa719625b796b48c2f606ba65b4",
+      "bytes": 306373,
+      "role": "after KEY_ENTER, Settings / Account Settings"
+    },
+    {
+      "path": "vvd-status.txt",
+      "sha256": "2f149bad6f33648cf67d815648f1aa32a8d9b82dc204d8329e6982c8b598f8aa",
+      "bytes": 349
+    },
+    {
+      "path": "console-excerpt.txt",
+      "sha256": "37873a9f4f01a9d86a011743b30afd9edf6f451e85ee1d1d964d7edd72e54a77",
+      "bytes": 814
+    },
+    {
+      "path": "stage1-summary.md",
+      "sha256": "78d78516028e2849e43ff0de9aab967306ce03f5a810ffd21ecf7d143995875f",
+      "bytes": 6762
+    }
+  ],
+  "private_evidence": "<workstation-tools>/private-evidence/m14-vega-i7/stage1/",
+  "raw_runs_on_host": "<vegabox-home>/afc-tools/vega-runs/",
+  "containment": {
+    "proofs_exit_0": ["devnull", "noexec", "permitted_exec_mounts", "network", "inventory", "kvm_and_home_isolation"],
+    "allowlist": [
+      "k-artifactory-external.labcollab.net",
+      "kepler-static-artifacts.kepler.labcollab.net",
+      "registry.npmjs.org"
+    ],
+    "successful_run_connects": {
+      "k-artifactory-external.labcollab.net": {"status": "ALLOWED", "count": 8},
+      "kepler-static-artifacts.kepler.labcollab.net": {"status": "ALLOWED", "count": 1},
+      "canary": {"status": "DENIED", "count": 1},
+      "incomplete_connect": {"status": "ERROR", "count": 1, "upstream_bytes": 0, "downstream_bytes": 0}
+    },
+    "non_loopback_connects_succeeded": 0,
+    "telemetry_exec": {"count": 28, "result": "EACCES", "opt_in": false},
+    "crashpad": {
+      "exec_result": 0,
+      "url": "https://clients2.google.com/cr/report",
+      "connects": 0
+    }
+  },
+  "sandbox_changes": {
+    "files": [
+      "<vegabox-home>/afc-tools/vega-runs/runtime/config.json",
+      "<vegabox-home>/afc-tools/vega-runs/runtime/run.py",
+      "<vegabox-home>/afc-tools/vega-runs/runtime/outer.py",
+      "<vegabox-home>/afc-tools/work/stage1/lifecycle.sh"
+    ],
+    "summary": "Host home and in-sandbox home are separate. The staged tree is bound at the original path inside the namespace. allowed_worktree points at a work directory under <vegabox-home>. Quarantine is /tmp/<account>-afc-quarantine. runtime_mounts rebuilt for 24.04 and extended with the host Mesa llvmpipe closure. Mount count 315. Node mounted at /usr/bin/node. Outer unshare, single inner bwrap, noexec writable mounts, allowlisting proxy, strace, and containment proofs kept.",
+    "mount_count": 315,
+    "userns_apparmor_profile": "lxc-usernsexec",
+    "telemetry_opt_in": false
+  },
+  "bran": "unavailable — no native policy file in this worktree"
+}
