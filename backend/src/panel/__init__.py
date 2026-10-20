@@ -8,8 +8,10 @@ points, total and progress at read time from the stored Lineup, the profile
 Settings and the statistics seam, so a settings or starter change shows on
 the next read with a higher revision and no panel write on the read path.
 project() records a fingerprint of the lineup it projected; snapshot()
-spends the revision's low bit when the current lineup differs from that
-fingerprint, so a starter change outruns the last projected revision.
+spends a low revision field when the current lineup differs from that
+fingerprint, so a starter change outruns the last projected revision,
+and another low field counts finals expired at read time, so expiration
+also outruns the revision a consumer already holds.
 The revision also carries the store-allocated lineupVersion, which
 advances on every lineup content change (including a change back and an
 empty/removal row), so distinct content never reuses a revision and a
@@ -35,6 +37,7 @@ import store
 from lineup import presets
 
 STALE_AFTER = 60
+FINAL_RECORD_WINDOW = 12 * 60 * 60  # a final record older than this is a previous game's
 MAX_ROWS = 32  # frozen panel row bound the TV decoder enforces
 _PRESETS = {"ppr": "PPR", "halfPpr": "Half-PPR"}
 
@@ -92,6 +95,20 @@ def _espn_id(starter):
     return str(entries[0]["espn_athlete_id"]) if len(entries) == 1 else None
 
 
+def _age_seconds(as_of):
+    """Seconds since an asOf stamp, or None when it is missing, unparseable
+    or timezone-naive, so a malformed date never reaches an uncaught parser."""
+    if not isinstance(as_of, str):
+        return None
+    try:
+        parsed = _parse(as_of)
+    except ValueError:
+        return None
+    if parsed.utcoffset() is None:
+        return None
+    return (_parse(now()) - parsed).total_seconds()
+
+
 def _value(record, table):
     """One points value object from a statistics record (or unknown)."""
     if record is None:
@@ -100,9 +117,20 @@ def _value(record, table):
     points = sum(table[s] * float(v) for s, v in (record.get("stats") or {}).items()
                  if s in table)
     as_of = record.get("asOf")
-    stale = as_of is None or (_parse(now()) - _parse(as_of)).total_seconds() >= STALE_AFTER
+    age = _age_seconds(as_of)
+    stale = age is None or age >= STALE_AFTER
     return {"value": round(points, 2), "reason": None, "source": record.get("source"),
             "asOf": as_of, "stale": stale}
+
+
+def _stale_final(record):
+    """A final record older than the window belongs to a previous game (#94):
+    no schedule source names the starter's next game before an event does.
+    A final with no usable asOf cannot be shown to be current: fail closed."""
+    if record.get("gameState") != "post" and not str(record.get("gameStatus") or "").startswith("Final"):
+        return False
+    age = _age_seconds(record.get("asOf"))
+    return age is None or age > FINAL_RECORD_WINDOW
 
 
 def _oldest(points):
@@ -188,6 +216,7 @@ def snapshot(profile_id, team_league):
     basis, table = _basis(lineup, settings)
     games, counter, projected = _stored(profile_id, team_league)
     rows, states, source_ids = [], [], []
+    expired_finals = 0
     if lineup and _pair(lineup) == team_league:
         if len(lineup.get("starters") or []) > MAX_ROWS:
             raise InvalidLineupError(
@@ -212,6 +241,9 @@ def snapshot(profile_id, team_league):
                             if mine else None)
             wrong_game = bool(record and current_game
                               and record.get("gameId") != current_game)
+            if record and not wrong_game and _stale_final(record):
+                wrong_game = True
+                expired_finals += 1
             value = _value(None if wrong_game else record, table)
             if wrong_game:
                 record, value = None, dict(value, reason="no statistics for current game")
@@ -250,12 +282,14 @@ def snapshot(profile_id, team_league):
                     "asOf": None, "stale": True}
     # lineupVersion (allocated by store.put_lineup at the write boundary)
     # makes every lineup content change strictly advance this sum, so the
-    # low fingerprint bit can never reuse or regress a revision. The x2
-    # keeps every bump strictly above a spent low bit.
+    # low fields can never reuse or regress a revision. The x128 keeps
+    # every bump strictly above the fingerprint field (64) plus the
+    # expired-final count (at most MAX_ROWS), so read-time expiration
+    # advances the revision the TV consumes and stable rereads do not.
     current = _fingerprint(lineup) if lineup and _pair(lineup) == team_league else ""
-    revision = (2 * ((counter or 0) + int(profile.get("revision", 0))
-                     + lineup_version)
-                + (current != projected))
+    revision = (128 * ((counter or 0) + int(profile.get("revision", 0))
+                       + lineup_version)
+                + 64 * (current != projected) + expired_finals)
     return {"schemaVersion": 1, "id": f"panel/{profile_id}/{team_league}",
             "revision": revision,
             "source": lineup.get("source", "manual") if lineup else "manual",
