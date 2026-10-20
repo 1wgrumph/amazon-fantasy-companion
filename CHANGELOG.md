@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Publish specification revision 0.4 (P2-D02): record landed SP-1 to SP-8 verdicts and close the provider, panel, notification and lineup contract constants; Fire OS primary with Vega paused stretch; pending live checks stay pending ([#46](https://github.com/1wgrumph/amazon-fantasy-companion/issues/46)).
+- Publish specification revision 0.4 (P2-D02): record landed SP-1 to SP-8 verdicts and close the provider, panel, notification and lineup contract constants; Fire OS primary with Vega paused stretch; pending live checks stay pending ([#46](https://github.com/1wgrumph/amazon-fantasy-companion/issues/46), [PR #124](https://github.com/1wgrumph/amazon-fantasy-companion/pull/124)).
 
 ### Added
 
