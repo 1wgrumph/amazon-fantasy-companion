@@ -1,0 +1,7 @@
+BUG-A02-1 RED (before product fix), Fire TV stick via am instrument
+Command: adb shell am instrument -w -e class com.afc.companion.profile.ProfileDpadFocusTest com.afc.companion.test/androidx.test.runner.AndroidJUnitRunner
+(APKs: :app:assembleDebug + :app:assembleDebugAndroidTest, adb install -r; connectedDebugAndroidTest unavailable: UTP deps absent from gradle/verification-metadata.xml)
+Result: Tests run: 1, Failures: 1
+Failing assertion: ProfileDpadFocusTest.kt:46 team.assertIsFocused() after DPAD_DOWN from League
+  AssertionError: Failed to assert (Focused = 'true') on TeamOne field, Focused='false' -- focus stayed in League (trap reproduced).
+Preceding steps passed: focus on "Add to FavoriteTeams", DPAD_DOWN entered League.
