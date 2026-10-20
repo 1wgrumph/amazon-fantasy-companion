@@ -92,3 +92,18 @@ gates PASS. Two corrections to the table above:
   `git archive` extraction it exits 2 (`fatal: not a git
   repository`). A `git clone` checkout is unaffected; the
   archive scratch needed `git init` before any gate ran.
+
+## Closeout addendum (2026-10-20, P2-D03 closeout)
+
+Two typed items above close here; the earlier rows stay as
+recorded. (1) Row 19 / judge access: owner decision 2026-10-20
+("Repo public is enough.") makes this public repository plus the
+README setup the judge-access route, kept through 2026-11-20;
+the demo video remains a pending owner upload. `README.md`
+`## Judge access` now states that route. (2) Rows 2–3 /
+`FRESH_HOST_DOWNLOAD_NOT_PROVEN`: `fresh-host-download.md` and
+`.json` in this directory record both README hash-pinned installs
+downloading into brand-new venvs with empty pip caches
+(`backend/requirements-dev.txt`: install exit 0, 42 `Downloading`
+lines; `tools/ci/requirements-hygiene.txt`: install exit 0, 23
+`Downloading` lines, `import yaml` OK).
