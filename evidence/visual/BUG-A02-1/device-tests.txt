@@ -1,0 +1,9 @@
+Run on the leased, awake Fire TV after installing matching debug and androidTest APKs.
+Profile regression (3 tests):
+adb shell am instrument -w -e class com.afc.companion.profile.ProfileDpadFocusTest com.afc.companion.test/androidx.test.runner.AndroidJUnitRunner
+
+Combined notification/profile device selection for future P2-A03 runs:
+adb shell am instrument -w -e class com.afc.companion.alerts.AlertNotifierDeviceTest,com.afc.companion.profile.ProfileDpadFocusTest com.afc.companion.test/androidx.test.runner.AndroidJUnitRunner
+
+No existing repository am-instrument selection list was found in tools, operations docs or P2-A03 evidence; the old P2-A03 pending-device instructions select only AlertNotifierDeviceTest via connectedDebugAndroidTest. This additive selection includes the new regression without changing frozen historical evidence. The combined selection was not run for this fix.
+The D-pad test writes cache/profile-team-focus.png in the target app after Team is asserted focused. Retrieve with adb exec-out run-as com.afc.companion cat cache/profile-team-focus.png.
