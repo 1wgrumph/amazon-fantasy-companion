@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Admit the Unified Test Platform artifacts (201 files, each checksum-verified against its official repository and supply-chain scanned) into `tv-app/gradle/verification-metadata.xml` so `./gradlew -p tv-app :app:connectedDebugAndroidTest` passes on the Fire TV stick under STRICT dependency verification, replacing the `adb install` + `am instrument` workaround (BUG-38-UTP, evidence `BUG-38-UTP/`).
+
 ### Added
 
 - Device evidence for the A03–A05 steps that waited on an AWS session (alert card, Watch confirm and outcome, stale-labeled panel value), the P2-A02 D-pad focus recapture on the #129 fix, and the P2-D03 README fresh-setup walkthrough (14 PASS, 1 limited, 4 owner steps); README now uses `adb install -r` and records what the walkthrough did not prove ([PR #132](https://github.com/1wgrumph/amazon-fantasy-companion/pull/132)).
