@@ -173,9 +173,9 @@ def list_alerts(profile_id, after, limit, include_after=False):
 # row, which is the retained tombstone) and is preserved on an identical
 # rewrite. get_lineup hides it so the stored Lineup shape is unchanged;
 # panel reads it through get_lineup_version.
-_LINEUP_FIELDS = {"profileId", "source", "team", "league", "starters", "scoring",
+_LINEUP_FIELDS = {"profileId", "source", "sport", "team", "league", "starters", "scoring",
                   "updatedAt"}
-_LINEUP_CONTENT = ("source", "team", "league", "starters", "scoring")
+_LINEUP_CONTENT = ("source", "sport", "team", "league", "starters", "scoring")
 
 
 def _lineup_row(profile_id):

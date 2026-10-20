@@ -72,17 +72,38 @@ def _settings(profile_id):
     return profile, profile.get("settings") or {}
 
 
+def _nba_enabled():
+    """AFC_ENABLE_NBA is the only switch; off is the shipped default."""
+    return os.environ.get("AFC_ENABLE_NBA", "").lower() in ("1", "true", "yes")
+
+
+def _nba_lineup(lineup):
+    return bool(lineup) and lineup.get("sport") == "nba" and _nba_enabled()
+
+
+def _nba_table():
+    from nba.scoring import NBA_POINTS_TABLE
+
+    return "nbaPoints", dict(NBA_POINTS_TABLE)
+
+
 def _basis(lineup, settings):
-    """(wire basis, scoring table); an unknown stored preset is refused."""
+    """(wire basis, scoring table); an unknown stored preset is refused.
+
+    An NBA lineup (sport nba, flag on) uses its Yahoo league table when that
+    table mapped, and nbaPoints for a manual lineup or a category league.
+    NFL lineups keep the preset or yahooLeague path they had before.
+    """
     if lineup and lineup.get("source") == "yahoo":
         modifiers = (lineup.get("scoring") or {}).get("stat_modifiers") or {}
-        return "yahooLeague", {k: float(v) for k, v in modifiers.items()}
+        if modifiers or not _nba_lineup(lineup):
+            return "yahooLeague", {k: float(v) for k, v in modifiers.items()}
+        return _nba_table()
+    if _nba_lineup(lineup):
+        return _nba_table()
     preset = settings.get("scoringPreset") or "halfPpr"
-    if (preset == "nbaPoints"
-            and os.environ.get("AFC_ENABLE_NBA", "").lower() in ("1", "true", "yes")):
-        from nba.scoring import NBA_POINTS_TABLE
-
-        return "nbaPoints", dict(NBA_POINTS_TABLE)
+    if preset == "nbaPoints" and _nba_enabled():
+        return _nba_table()
     if preset not in _PRESETS:
         raise ValueError(f"Unknown scoring preset: {preset!r}")
     return preset, presets.TABLES[_PRESETS[preset]]
@@ -154,6 +175,9 @@ def _fingerprint(lineup):
         return ""
     content = {"source": lineup.get("source"), "starters": lineup.get("starters") or [],
                "scoring": lineup.get("scoring")}
+    # Absent on every NFL lineup, so those fingerprints stay what they were.
+    if lineup.get("sport") is not None:
+        content["sport"] = lineup.get("sport")
     return hashlib.sha256(json.dumps(content, sort_keys=True, default=str).encode()).hexdigest()
 
 
@@ -296,13 +320,16 @@ def snapshot(profile_id, team_league):
     revision = (128 * ((counter or 0) + int(profile.get("revision", 0))
                        + lineup_version)
                 + 64 * (current != projected) + expired_finals)
+    data = {"teamLeague": team_league, "scoringBasis": basis,
+            "visible": bool((settings.get("panelPrefs") or {}).get("visible", True)),
+            "rows": rows, "teamTotal": total, "progress": progress,
+            "games": {gid: {"eventId": f["eventId"], "revision": f["revision"],
+                             "score": f["score"], "source": f["source"]}
+                      for gid, f in games.items()}}
+    if _nba_lineup(lineup):
+        data["sport"] = "nba"
     return {"schemaVersion": 1, "id": f"panel/{profile_id}/{team_league}",
             "revision": revision,
             "source": lineup.get("source", "manual") if lineup else "manual",
             "updatedAt": now(),
-            "data": {"teamLeague": team_league, "scoringBasis": basis,
-                     "visible": bool((settings.get("panelPrefs") or {}).get("visible", True)),
-                     "rows": rows, "teamTotal": total, "progress": progress,
-                     "games": {gid: {"eventId": f["eventId"], "revision": f["revision"],
-                                      "score": f["score"], "source": f["source"]}
-                               for gid, f in games.items()}}}
+            "data": data}
