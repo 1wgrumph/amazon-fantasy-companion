@@ -52,3 +52,14 @@ FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
 COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+## Vega app template (vega-app/)
+
+The app harness files (`index.js`, `metro.config.js`, `app.json`,
+`manifest.toml` shape) come from the React Native 0.83 helloWorld template of
+the pinned Vega SDK 0.24.12112 (scanned in P2-V01T preparation), renamed to
+`com.afc.companion`. The template and the `@amazon-devices/*` packages are
+Amazon software used under the Vega SDK license terms that accompany the SDK;
+React, React Native and the remaining npm dependencies keep their own
+licenses as recorded in `vega-app/package-lock.json` (React Native itself is
+MIT, Copyright (c) Meta Platforms, Inc. and affiliates).

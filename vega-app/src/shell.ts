@@ -1,4 +1,6 @@
-// Interface scaffolding for P2-V01T (red). Behavior lands in P2-V01.
+// SHELL: Link, Profile/Settings and Panel only; no social or messaging surfaces (AFC-PR-057).
+import {isUsableBaseUrl} from './net/apiClient';
+
 export type Destination = 'Link' | 'ProfileSettings' | 'BackendNotConfigured';
 
 export interface ShellStart {
@@ -7,10 +9,13 @@ export interface ShellStart {
 }
 
 export function shellDestinations(): ReadonlySet<string> {
-  return new Set();
+  return new Set(['Link', 'Profile/Settings', 'Panel']);
 }
 
 /** Start screen for a build-time AFC_API_BASE_URL and whether a session token exists. */
-export function shellStart(_baseUrl: string, _hasSession: boolean): ShellStart {
-  return {destination: null, message: null};
+export function shellStart(baseUrl: string, hasSession: boolean): ShellStart {
+  if (!isUsableBaseUrl(baseUrl)) {
+    return {destination: 'BackendNotConfigured', message: 'Backend not configured'};
+  }
+  return {destination: hasSession ? 'ProfileSettings' : 'Link', message: null};
 }

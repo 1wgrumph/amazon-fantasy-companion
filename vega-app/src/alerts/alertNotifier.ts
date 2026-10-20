@@ -1,5 +1,7 @@
-// Interface scaffolding for P2-V01T (red). Behavior lands in P2-V01.
+// NOTIFIER: one alert as a heads-up notification on a high-importance channel, with Watch and
+// Dismiss actions. The text comes from the presenter; an alert without triggering context posts nothing.
 import type {Alert} from '../net/dto';
+import {alertText} from './alertPresenter';
 
 export interface PostedNotification {
   id: string;
@@ -15,7 +17,19 @@ export interface NotificationPort {
 }
 
 export class AlertNotifier {
-  constructor(_port: NotificationPort) {}
+  constructor(private readonly port: NotificationPort) {}
 
-  show(_alert: Alert): void {}
+  show(alert: Alert): void {
+    const text = alertText(alert);
+    if (text === null) return;
+    this.port.post({
+      id: alert.envelope.id,
+      title: text.headline,
+      body: [text.context === '' ? null : text.context, text.access, text.commentary]
+        .filter((line): line is string => line !== null)
+        .join('\n'),
+      actions: ['Watch', 'Dismiss'],
+      importance: 'high',
+    });
+  }
 }
