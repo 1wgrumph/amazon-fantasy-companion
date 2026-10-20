@@ -1,0 +1,21 @@
+{
+ "slice": "P2-A04",
+ "kind": "device-receipt",
+ "executed_at": "2026-10-20",
+ "role": "Product Implementer",
+ "route": "Muse Code / muse-wonder-full-1.0-contributor / high",
+ "base": "origin/main 350ef51 (branch afc/m06-m09-device-visual)",
+ "binding_sha256_verified": "e8d0b5a02cd9f445644a0caa18185af60a46f2316769b527ccc9e046796b0608",
+ "device": {"model": "AFTKM", "fire_os": "Fire OS 8.1.8.5 (RS8185/3891)", "android_release": "11", "api_level": 30, "display": "physical 3840x2160, override 1920x1080, density 320", "serial": "<stick_serial>"},
+ "apk": {"variant": "configured (afc-dev ApiUrl)", "sha256": "ad9b04355e79c44bb2fcddca539c226b12606c5a9a2a3a101c0d2320060ea880"},
+ "x03_verdict_applied": "spikes/sp3-provider-links/VERDICT.md PARTIAL (PR 1): Prime Video fire_os route registered as uri https://watch.amazon.com/search with verified_outcome searchOpened; espn, directv_stream, youtube_tv and local_broadcast have no platform_routes (REGISTRY_ROUTE_GAP); currentAttemptObservation none, so a started launch can only ever report accessUnknown.",
+ "steps": [
+  {"id": "CMD-ADB-INSTALL", "result": "PASS", "evidence": "Same install as P2-A02 (exit 0, Success)."},
+  {"id": "On-stick Watch attempt per provider through the app (AFC-PR-030/-031)", "result": "GAP FIXTURE_AWS_SESSION_EXPIRED", "evidence": "A Watch attempt starts from an alert card (panel) or the notification Watch action; both need a synthetic dev alert. AWS CLI session expired, aws login is owner-only; WatchActivity is not exported and cannot be started over ADB. No RoutingOutcome was produced or claimed."},
+  {"id": "Prime Video registered route re-probe (intent level)", "result": "PASS (searchOpened re-verified)", "evidence": "am start VIEW https://watch.amazon.com/search -p com.amazon.firebat exit 0; mResumedActivity com.amazon.firebat/com.amazon.pyrocore.IgnitionActivity; evidence/visual/P2-A04/prime-video-search.png shows the Prime Video search screen (empty query; no account data). First capture was a black loading frame, recorded as observed in device-run.md. gameOpened is not claimed: GAP X03_PR2_PENDING (live TNF check is the unlanded X03 PR 2)."},
+  {"id": "ESPN / DirecTV Stream / YouTube TV / local broadcast routes", "result": "GAP REGISTRY_ROUTE_GAP", "evidence": "pm path exit 1 (absent) for com.espn.score_center, com.google.android.youtube.tv, com.att.tv on this stick; registry carries no platform_routes for espn, directv_stream, youtube_tv, local_broadcast (backend/src/provider_resolver/registry.json). No app was installed or uninstalled; the uninstall-one-provider appAbsent check was not run because no provider app beyond Prime Video (system app) is installed and uninstalling a system app is out of authority."},
+  {"id": "PROC-VISUAL-REVIEW/confirm-switch, outcome-shown, fullscreen-leaves", "result": "GAP FIXTURE_AWS_SESSION_EXPIRED", "evidence": "All three states need an alert card; see above. The profile value behind confirm-switch was verified on device: 'Confirm before switching: on' (P2-A02 captures)."},
+  {"id": "PROC-VISUAL-REVIEW/alexa-hidden", "result": "PASS", "evidence": "No Alexa control appears in any captured screen; alexaTuningOffered requires a P2-X11-verified route (none on main: GAP X11_VERDICT_PENDING for the route itself)."},
+  {"id": "Real startActivity path / intent query suffix (step 3)", "result": "GAP X03_PR2_PENDING", "evidence": "Only the registered Prime Video uri route exists; it carries no query suffix and X03 PR 1 verified query parameters are ignored by Prime Video search. The WatchLauncher intent-query shortcut remains unexercised because no registry intent route exists."}
+ ]
+}
