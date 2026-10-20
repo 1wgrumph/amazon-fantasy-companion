@@ -219,12 +219,12 @@ documented here.
 
 ## Judge access
 
-PENDING — submission/demo access: no live Devpost submission or
-demo link exists in this revision. The owner supplies that access
-by publishing the Devpost submission, uploading/linking the demo
-there, and setting this repository's judge access route; until
-then there is no demo link to follow. Once supplied, the owner
-keeps judge access available through T_judge_access (2026-11-20).
+Judge access route (owner decision, 2026-10-20 — "Repo public is
+enough."): this public repository,
+<https://github.com/1wgrumph/amazon-fantasy-companion>, plus the
+setup in this README. No separate submission access is needed to
+read the source or run the host checks. The owner keeps this
+route available through T_judge_access (2026-11-20).
 
 Without the owner's Fire TV stick, a judge can:
 
@@ -251,11 +251,10 @@ Real limits, stated plainly:
   the evidence.
 - Yahoo Fantasy lineups are not live (SP-6, FAILS), and lineup
   entry is unavailable in this revision (see First run above).
-- Publication of this repository (visibility change) is an owner
-  action. PENDING — until the owner publishes the Devpost
-  submission and authorizes the repository access route named
-  there, no submission-based judge access route exists; once
-  supplied, it is kept through 2026-11-20.
+- The demo video is still PENDING: it is an owner upload linked
+  from the Devpost submission once the owner publishes it. That
+  pending item does not change the judge-access route above,
+  which is this public repository, kept through 2026-11-20.
 
 ## Verification
 
@@ -284,7 +283,7 @@ fresh-host download of the pinned backend dependencies (the
 documented virtual environment already existed on the walkthrough
 host, so the hash-pinned install resolved as already satisfied),
 and the owner-only steps (`aws login`, SSM parameter writes,
-Yahoo app creation, judge-access publication). The per-step
+Yahoo app creation). The per-step
 record is in
 `docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-D03/fresh-setup-walkthrough.md`.
 
