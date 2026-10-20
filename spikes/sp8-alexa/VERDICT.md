@@ -11,15 +11,19 @@ started_at: 2026-10-20T12:51:00Z
 ended_at: 2026-10-20T13:05:00Z
 first_install_at: not applicable (no probe APK installed; read-only probes)
 unblocks: []
-conditional: C8 (OD-AFC-03 stretch; terminal no-offer disposition recorded)
+conditional: C8
 ---
 
 # SP-8 Alexa announcement / tuning route verdict
 
-**Verdict: FAILS** for a supported Alexa route. No documented or
-on-device surface lets a third-party Fire OS TV app (a) speak an in-app
-alert through Alexa (AFC-PR-022 as an Alexa announcement) or (b) invoke
-Alexa-assisted tuning to a resolved game/channel (AFC-PR-036).
+**Verdict: FAILS** for a supported Alexa route. Among the documented
+routes and on-device surfaces inspected below, none established support
+for a third-party Fire OS TV app to (a) speak an in-app alert through
+Alexa (AFC-PR-022 as an Alexa announcement) or (b) invoke Alexa-assisted
+tuning to a resolved game/channel (AFC-PR-036); where inspection did not
+establish support or its absence, the outcome below is `unknown`.
+Conditional C8 is the OD-AFC-03 stretch; its terminal no-offer
+disposition is recorded here.
 **OD-AFC-03 terminal disposition: no-offer.** Both UIDs pass by not
 offering voice, per their own condition (an implemented and verified
 route). No Alexa offer, toggle, or product code follows from this spike;
@@ -39,12 +43,17 @@ enabled, disabled, or cleared. Full commands with exit codes:
    In-App Voice Scrolling and Selection; none speaks app-generated text
    (https://developer.amazon.com/docs/fire-tv/voice-enable-your-app-and-content.html).
    "Alexa Announcements" is a user-initiated intercom between a customer's
-   own Alexa devices, not an app API. On-device, the Alexa packages
-   (`com.amazon.tv.alexanotifications`, `com.amazon.tv.alexaalerts`,
-   `com.amazon.alexadirectivebrokerservice`,
-   `com.amazon.alexamediaplayer.runtime.ftv`) are system packages; no
-   exported third-party "speak this text" service or intent was found
-   (`evidence/probe-commands.txt`, `evidence/probe2-commands.txt`).
+   own Alexa devices, not an app API. On-device, `pm list packages`
+   listed Alexa packages including
+   `com.amazon.tv.alexanotifications`, `com.amazon.tv.alexaalerts`,
+   `com.amazon.alexadirectivebrokerservice`, and
+   `com.amazon.alexamediaplayer.runtime.ftv`
+   (`evidence/probe-commands.txt`). Package details were inspected
+   only for `com.amazon.tv.alexanotifications`, whose `dumpsys package`
+   output showed system/priv-app receivers and a content provider but
+   no exported third-party "speak this text" service or intent
+   (`evidence/probe2-commands.txt`). The other listed packages were
+   not inspected for exported components: `unknown`.
    Does not unblock AFC-PR-022.
 2. **Alexa Proactive Events API (skill-side notification)** — `unknown`
    as a product route, `not_supported` as a TV-app route. Proactive
@@ -71,8 +80,10 @@ enabled, disabled, or cleared. Full commands with exit codes:
    app-invoked tuning. VSK is the reverse direction: the customer asks
    Alexa, and Alexa sends directives (search, launch, transport,
    channel-change within the app's own catalog-integrated content) to
-   the app via Lambda + Alexa Client Library + ADM, with catalog
-   integration required
+   the app via the cloud-side implementation (Lambda + Alexa Client
+   Library + ADM), with catalog integration required; the same cited
+   VSK overview also documents an app-only VSK Agent/broadcast-intent
+   implementation, which is likewise Alexa-to-app in direction
    (https://developer.amazon.com/docs/video-skills-fire-tv-apps/introduction.html).
    No documented API lets the app ask Alexa to tune to another
    provider's game/channel. Does not unblock AFC-PR-036.
@@ -81,13 +92,20 @@ enabled, disabled, or cleared. Full commands with exit codes:
    the app's own media session after adding an Alexa manifest permission
    (https://developer.amazon.com/docs/fire-tv/mediasession-api-integration.html).
    It neither announces alerts nor tunes. Unblocks neither UID.
-6. **VoiceInteractionService / ASSIST** — `not_supported`.
+6. **VoiceInteractionService / ASSIST** — `not_supported` as an active
+   standard voice-interaction service; `unknown` for third-party use of
+   the exported ASSIST activity. The standard Android surface is
+   `VoiceInteractionService`
+   (https://developer.android.com/reference/android/service/voice/VoiceInteractionService).
    `cmd package query-services -a android.service.voice.VoiceInteractionService`
    returns "No services found"; `dumpsys voiceinteraction` shows
    "(No active implementation)"; `android.intent.action.ASSIST` resolves
-   to the system priv-app `com.amazon.vizzini`
-   (`evidence/probe-commands.txt`). A third-party app cannot register as
-   or invoke this surface as a tuning/announcement API.
+   to an exported (`exported=true`) activity in the system priv-app
+   `com.amazon.vizzini` (`evidence/probe-commands.txt`). These
+   observations establish no active standard service and an exported
+   ASSIST activity only; whether a third-party app may invoke that
+   activity as a tuning/announcement API was not exercised and no
+   documented prohibition was established: `unknown`.
 7. **In-app voice scrolling and selection** — `limited`. Alexa phrases
    map to D-pad events, and Amazon manually activates the feature per
    app on the back end
@@ -97,16 +115,20 @@ enabled, disabled, or cleared. Full commands with exit codes:
 
 ## Observed result and limits
 
-- Strongest honest outcomes: Alexa announcement `not_supported`;
-  Alexa-assisted tuning `not_supported`; non-Alexa TTS `limited`
+- Strongest honest outcomes: Alexa announcement `not_supported` on
+  the documented/inspected surfaces (uninspected Alexa packages and
+  ASSIST-activity use `unknown`, routes 1 and 6); Alexa-assisted tuning
+  `not_supported` on the documented routes; non-Alexa TTS `limited`
   (engine present, speech unverified); Proactive Events `unknown`
   (skill-side, unimplemented).
 - `unblocks` is empty: AFC-PR-022 and AFC-PR-036 remain satisfied by
   the no-offer branch. The companion app already keeps voice off
   without a verified route; this spike changes no product code.
 - Absence of an owner Alexa skill/entitlement was not treated as the
-  blocker: routes 1, 4, and 6 fail on documented platform shape and
-  on-device surface, not on account state.
+  blocker: routes 1 and 4 rest on the documented platform shape cited
+  there, and route 6 on the probed absence of an active standard
+  service (`evidence/probe-commands.txt`), not on account state; the
+  `unknown` items in routes 1 and 6 were not resolved either way.
 - Vega: paused by owner; no Vega work was done and no Vega claim is
   made (RISK-AFC-P2-14). No live X09/X10 flow is claimed.
 - Developer feedback: DX-SP8-01 — Amazon's Fire TV "Voice" docs index
