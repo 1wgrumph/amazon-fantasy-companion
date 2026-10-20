@@ -1,0 +1,28 @@
+........................................................................ [ 63%]
+..........................................                               [100%]
+=============================== warnings summary ===============================
+tests/unit/test_panel_player_stats.py: 8863 warnings
+tests/unit/panel/test_panel_consistency.py: 327 warnings
+tests/unit/panel/test_panel_contract_g3.py: 178 warnings
+tests/unit/panel/test_panel_freshness.py: 343 warnings
+tests/unit/panel/test_panel_repair_b07.py: 139 warnings
+tests/unit/panel/test_panel_rows.py: 256 warnings
+tests/unit/panel/test_panel_scoring_basis.py: 574 warnings
+tests/unit/panel/test_panel_settings.py: 260 warnings
+  <home>/.local/share/afc-tools/backend-tests/lib/python3.12/site-packages/botocore/auth.py:424: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    datetime_now = datetime.datetime.utcnow()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+============================= slowest 10 durations =============================
+1.20s call     tests/unit/test_panel_player_stats.py::test_older_statistics_do_not_replace_newer
+1.08s call     tests/unit/test_panel_player_stats.py::test_prior_game_record_not_served_for_current_game
+0.95s call     tests/unit/test_panel_player_stats.py::test_later_summary_replaces_stats
+0.59s call     tests/unit/test_panel_player_stats.py::test_live_record_survives_replay_fallback
+0.57s call     tests/unit/test_panel_player_stats.py::test_no_floats_stored
+0.56s call     tests/unit/test_panel_player_stats.py::test_ingested_record_matches_seam_contract
+0.56s call     tests/unit/test_panel_player_stats.py::test_aware_offset_final_inside_window_still_served
+0.56s call     tests/unit/test_panel_player_stats.py::test_expiration_advances_panel_revision
+0.56s call     tests/unit/test_panel_player_stats.py::test_snapshot_half_ppr_points
+0.54s call     tests/unit/test_panel_player_stats.py::test_final_record_inside_window_still_served
+114 passed, 10940 warnings in 26.43s
+exit=0

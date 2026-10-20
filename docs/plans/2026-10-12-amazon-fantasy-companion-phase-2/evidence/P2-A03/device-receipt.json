@@ -1,0 +1,18 @@
+{
+ "slice": "P2-A03",
+ "kind": "device-receipt",
+ "executed_at": "2026-10-20",
+ "role": "Product Implementer",
+ "route": "Muse Code / muse-wonder-full-1.0-contributor / high",
+ "base": "origin/main 350ef51 (branch afc/m06-m09-device-visual)",
+ "binding_sha256_verified": "e8d0b5a02cd9f445644a0caa18185af60a46f2316769b527ccc9e046796b0608",
+ "device": {"model": "AFTKM", "fire_os": "Fire OS 8.1.8.5 (RS8185/3891)", "android_release": "11", "api_level": 30, "display": "physical 3840x2160, override 1920x1080, density 320", "serial": "<stick_serial>"},
+ "apk": {"variant": "configured (afc-dev ApiUrl)", "sha256": "ad9b04355e79c44bb2fcddca539c226b12606c5a9a2a3a101c0d2320060ea880", "android_test_apk_sha256": "a0c8aeb7371916cd21ce4507d8eeee0a2d8d29e56fb5314b5e1c58bc65564dc4"},
+ "x02_verdict_applied": "spikes/sp2-notify/VERDICT.md FAILS: no heads-up banner is ever presented on this Fire OS build; panel-only presentation is the selected fallback. No heads-up-over-playback claim is made.",
+ "steps": [
+  {"id": "CMD-TVAPP-INSTRUMENTED (AlertNotifierDeviceTest)", "result": "PASS", "evidence": "am instrument: 'OK (1 test)' in 0.263 s on the stick; one notification on IMPORTANCE_HIGH channel with Watch and Dismiss actions. The gradle connectedDebugAndroidTest path itself failed before execution: GAP GRADLE_UTP_VERIFICATION_GAP (dependency verification failed for :app:unified-test-platform-android-test-plugin-host-additional-test-output; build files are outside this packet's write set)."},
+  {"id": "PROC-VISUAL-REVIEW/heads-up over playback (steps 3-4 as written)", "result": "GAP X02_HEADSUP_ROUTE_FAILS", "evidence": "Superseded by the P2-X02 FAILS verdict on main: the platform never peeks the banner, so D-pad Watch/Dismiss over playback cannot be shown. Panel-only surface captured instead: evidence/visual/P2-A03/panel-only-surface.png."},
+  {"id": "PROC-VISUAL-REVIEW/panel-only alert card, Watch, Dismiss (steps 4-5 fallback)", "result": "GAP FIXTURE_AWS_SESSION_EXPIRED", "evidence": "Needs a synthetic alert row in the dev Alerts table; the aws-afc-dev CLI session is expired ('Your session has expired. Please reauthenticate using aws login') and aws login is an owner-only action. No alert was injected; /v1/alerts stayed empty. Never a pass."},
+  {"id": "PROC-VISUAL-REVIEW/voice silent (step 6)", "result": "PASS (static on-device state)", "evidence": "Voice control hidden with stated limit (P2-A02 voice-hidden capture, same build); no voice setting can be enabled, so nothing can be spoken. Alert-triggered half of the step shares FIXTURE_AWS_SESSION_EXPIRED."}
+ ]
+}

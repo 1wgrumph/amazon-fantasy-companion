@@ -1,0 +1,132 @@
+{
+  "schema": "afc.e2e-run-record.v1",
+  "slice_id": "P2-X10",
+  "issue": 44,
+  "live_claim": false,
+  "source_revision": "<git sha at run start>",
+  "branch": "<branch>",
+  "event_id": "401873010",
+  "app_identity": {
+    "package": "com.afc.companion",
+    "version_code": null,
+    "version_name": null,
+    "apk_sha256": null
+  },
+  "deployed_commit": null,
+  "scenarios": [
+    {
+      "scenario_id": "S1",
+      "title": "Correction applied across alerts and panel",
+      "requirement_ids": ["AFC-PR-026", "AFC-PR-046"],
+      "vcase_ids": ["VCASE-AFC-PR-026", "VCASE-AFC-PR-046"],
+      "provenance": "live | historical-replay | not_run",
+      "replay_game_id": null,
+      "replay_index_sha256": null,
+      "started_at": null,
+      "ended_at": null,
+      "steps": [
+        {"step": "baseline alerts+panel captured", "observed": null},
+        {"step": "corrected summary ingested", "observed": null},
+        {"step": "both surfaces re-read", "observed": null},
+        {"step": "panel screencapped", "observed": null}
+      ],
+      "outcome": "PENDING-LIVE | PASS | FAIL | GAP",
+      "evidence_paths": [],
+      "notes": null
+    },
+    {
+      "scenario_id": "S2",
+      "title": "Starter change across alerts and panel",
+      "requirement_ids": ["AFC-PR-046"],
+      "vcase_ids": ["VCASE-AFC-PR-046"],
+      "provenance": "live | historical-replay | not_run",
+      "replay_game_id": null,
+      "replay_index_sha256": null,
+      "started_at": null,
+      "ended_at": null,
+      "steps": [
+        {"step": "visible panel rows/total and revision/fact R1 recorded", "observed": null},
+        {"step": "starter swapped in manual lineup", "observed": null},
+        {"step": "panel hidden and confirmed hidden", "observed": null},
+        {"step": "later update arrived while hidden (revision/fact R2 != R1 via GET /v1/panel)", "observed": null},
+        {"step": "panel shown again", "observed": null},
+        {"step": "shown row/total/revision compared against R2", "observed": null},
+        {"step": "next qualifying event checked (new starter only)", "observed": null},
+        {"step": "screencaps before-hide and on-show", "observed": null}
+      ],
+      "observations": {
+        "panel_revision_before_hide": null,
+        "panel_fact_before_hide": null,
+        "panel_hidden_at": null,
+        "panel_revision_while_hidden": null,
+        "panel_fact_while_hidden": null,
+        "panel_shown_at": null,
+        "panel_revision_on_show": null,
+        "panel_fact_on_show": null,
+        "revision_fact_match_on_show": null
+      },
+      "outcome": "PENDING-LIVE | PASS | FAIL | GAP",
+      "evidence_paths": [],
+      "notes": null
+    },
+    {
+      "scenario_id": "S3",
+      "title": "Duplicate suppression",
+      "requirement_ids": ["AFC-PR-025"],
+      "vcase_ids": ["VCASE-AFC-PR-025"],
+      "provenance": "live | historical-replay | not_run",
+      "replay_game_id": null,
+      "replay_index_sha256": null,
+      "started_at": null,
+      "ended_at": null,
+      "steps": [
+        {"step": "alert count/cursor recorded", "observed": null},
+        {"step": "unchanged event re-polled twice", "observed": null},
+        {"step": "alerts re-read", "observed": null},
+        {"step": "AlertService restart checked", "observed": null}
+      ],
+      "outcome": "PENDING-LIVE | PASS | FAIL | GAP",
+      "evidence_paths": [],
+      "notes": null
+    },
+    {
+      "scenario_id": "S4",
+      "title": "Stale/unavailable behavior",
+      "requirement_ids": ["AFC-PR-040"],
+      "vcase_ids": ["VCASE-AFC-PR-040"],
+      "provenance": "live | historical-replay | not_run",
+      "replay_game_id": null,
+      "replay_index_sha256": null,
+      "started_at": null,
+      "ended_at": null,
+      "steps": [
+        {"step": "fresh panel captured", "observed": null},
+        {"step": "feed withheld past 60 s", "observed": null},
+        {"step": "stale labels screencapped", "observed": null},
+        {"step": "unavailable value shown", "observed": null},
+        {"step": "feed restored, values fresh", "observed": null}
+      ],
+      "outcome": "PENDING-LIVE | PASS | FAIL | GAP",
+      "evidence_paths": [],
+      "notes": null
+    },
+    {
+      "scenario_id": "S5",
+      "title": "Sunday defect re-check",
+      "requirement_ids": ["per P2-X09 defect"],
+      "vcase_ids": ["per P2-X09 defect"],
+      "provenance": "live | historical-replay | not_run",
+      "replay_game_id": null,
+      "replay_index_sha256": null,
+      "started_at": null,
+      "ended_at": null,
+      "steps": [
+        {"step": "P2-X09 repro replayed verbatim", "observed": null},
+        {"step": "observed vs original compared", "observed": null}
+      ],
+      "outcome": "PENDING-LIVE | PASS | FAIL | GAP",
+      "evidence_paths": [],
+      "notes": null
+    }
+  ]
+}

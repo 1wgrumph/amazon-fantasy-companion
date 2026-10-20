@@ -1,0 +1,9 @@
+Author self-check for A02-R1/A02-R2 (single authorized repair)
+A02-R1 baseline: BUG-A02-1 entry lacks required PR link; candidate links #129 exactly.
+A02-R2 origin/escape: synthetic response still loads on real Dispatchers.IO; Compose idle alone does not register completion. Prior green native runs did not qualify readiness under delayed IO.
+Scope: CHANGELOG.md and ProfileDpadFocusTest.kt only, plus repair evidence. No product/caller/config/export/fixture-contract changes.
+One @Before setup; bounded waitUntil(5000 ms) requires exactly one LeagueOne and one TeamOne node before tests interact.
+All seven original focus assertions, original text-equality assertion and screenshot assertion retained byte-for-byte.
+Qualification: temporarily delayed fake getInputStream by 1000 ms; removed wait reproduces missing LeagueOne at performScrollTo. Same delay with wait passes all three existing tests. Temporary delay removed before final build.
+Final five consecutive native runs: each OK (3 tests), no failures. Shell am instrument returns 0 even on the qualification red; verdict checked separately.
+BRAN_UNAVAILABLE: no native policy; ordinary repository discovery used.

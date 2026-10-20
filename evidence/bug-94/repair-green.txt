@@ -1,0 +1,85 @@
+........................................................................ [  6%]
+........................................................................ [ 13%]
+........................................................................ [ 20%]
+........................................................................ [ 27%]
+........................................................................ [ 34%]
+........................................................................ [ 41%]
+........................................................................ [ 48%]
+........................................................................ [ 55%]
+........................................................................ [ 62%]
+........................................................................ [ 69%]
+........................................................................ [ 76%]
+........................................................................ [ 83%]
+..............................s......................................... [ 90%]
+.....................................................................s.. [ 96%]
+..............s.................                                         [100%]
+=============================== warnings summary ===============================
+tests/unit/alert_policy/test_policy_alert_types.py: 236 warnings
+tests/unit/alert_policy/test_policy_commentary.py: 471 warnings
+tests/unit/alert_policy/test_policy_contract_g4.py: 162 warnings
+tests/unit/alert_policy/test_policy_delivery.py: 124 warnings
+tests/unit/alert_policy/test_policy_gates.py: 257 warnings
+tests/unit/alert_policy/test_policy_repair_b05.py: 240 warnings
+tests/unit/feed_ingest/test_boxscore_dos.py: 7000 warnings
+tests/unit/feed_ingest/test_event_channel.py: 9837 warnings
+tests/unit/feed_ingest/test_event_period_scoring.py: 12225 warnings
+tests/unit/feed_ingest/test_feed_edges.py: 446 warnings
+tests/unit/feed_ingest/test_normalization.py: 2562 warnings
+tests/unit/feed_ingest/test_outage_repairs.py: 3829 warnings
+tests/unit/feed_ingest/test_replay_labels.py: 427 warnings
+tests/unit/feed_ingest/test_review_repairs.py: 7346 warnings
+tests/unit/feed_ingest/test_revisions.py: 1295 warnings
+tests/unit/feed_ingest/test_validation.py: 834 warnings
+tests/unit/lineup/test_active_lineup.py: 129 warnings
+tests/unit/lineup/test_lineup_rejections.py: 22 warnings
+tests/unit/lineup/test_review_regressions.py: 20 warnings
+tests/unit/matcher/test_matcher_consistency.py: 26 warnings
+tests/unit/matcher/test_matcher_corrections.py: 102 warnings
+tests/unit/matcher/test_matcher_dedup.py: 148 warnings
+tests/unit/matcher/test_matcher_identity.py: 159 warnings
+tests/unit/panel/test_panel_consistency.py: 327 warnings
+tests/unit/panel/test_panel_contract_g3.py: 178 warnings
+tests/unit/panel/test_panel_freshness.py: 343 warnings
+tests/unit/panel/test_panel_repair_b07.py: 139 warnings
+tests/unit/panel/test_panel_rows.py: 256 warnings
+tests/unit/panel/test_panel_scoring_basis.py: 574 warnings
+tests/unit/panel/test_panel_settings.py: 260 warnings
+tests/unit/provider_resolver/test_resolver_access_basis.py: 102 warnings
+tests/unit/provider_resolver/test_resolver_local_broadcast.py: 66 warnings
+tests/unit/provider_resolver/test_resolver_overrides.py: 41 warnings
+tests/unit/provider_resolver/test_resolver_platform_routes.py: 55 warnings
+tests/unit/provider_resolver/test_resolver_preference_shapes.py: 239 warnings
+tests/unit/provider_resolver/test_resolver_records.py: 118 warnings
+tests/unit/provider_resolver/test_resolver_selection.py: 98 warnings
+tests/unit/provider_resolver/test_resolver_verification_fields.py: 253 warnings
+tests/unit/store/test_lineup_version.py: 38 warnings
+tests/unit/store/test_lineup_write_boundary.py: 179 warnings
+tests/unit/store/test_player_statistics.py: 90 warnings
+tests/unit/test_bug_auth002.py: 40 warnings
+tests/unit/test_device_auth.py: 312 warnings
+tests/unit/test_device_auth_units.py: 125 warnings
+tests/unit/test_panel_player_stats.py: 8863 warnings
+tests/unit/test_pipeline_and_stubs.py: 17 warnings
+tests/unit/test_router.py: 862 warnings
+tests/unit/test_security_auth_link.py: 23 warnings
+tests/unit/test_store.py: 93 warnings
+tests/unit/test_store_event_period_scoring.py: 9 warnings
+tests/unit/test_unknown_route_envelope.py: 35 warnings
+tests/contract/test_api_contract.py: 253 warnings
+  <home>/.local/share/afc-tools/backend-tests/lib/python3.12/site-packages/botocore/auth.py:424: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    datetime_now = datetime.datetime.utcnow()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+============================= slowest 10 durations =============================
+2.58s call     tests/unit/feed_ingest/test_review_repairs.py::test_f3_success_resets_consecutive_failures
+2.04s call     tests/unit/feed_ingest/test_outage_repairs.py::test_r3_failures_persist_across_invocations_until_threshold
+1.94s call     tests/unit/feed_ingest/test_review_repairs.py::test_f3_three_failures_replace_live_with_labeled_replay[failure1]
+1.81s call     tests/unit/feed_ingest/test_review_repairs.py::test_f3_three_failures_replace_live_with_labeled_replay[failure0]
+1.75s call     tests/unit/feed_ingest/test_outage_repairs.py::test_r2_scoreboard_outage_reaches_labeled_replay
+1.73s call     tests/unit/feed_ingest/test_review_repairs.py::test_f3_repeated_fallback_keeps_revisions_stable
+1.43s call     tests/unit/feed_ingest/test_event_period_scoring.py::test_changed_play_fact_revises_once_in_normalizer_and_store[scoringPlay]
+1.42s call     tests/unit/feed_ingest/test_event_period_scoring.py::test_changed_play_fact_revises_once_in_normalizer_and_store[period]
+1.40s call     tests/unit/feed_ingest/test_event_period_scoring.py::test_legacy_missing_facts_only_revise_on_known_fact_changes[ingest-score-correction-missing0]
+1.35s call     tests/unit/feed_ingest/test_review_repairs.py::test_f5_irrelevant_in_progress_game_is_never_fetched
+1037 passed, 3 skipped, 61885 warnings in 184.02s (0:03:04)
+exit=0

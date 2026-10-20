@@ -1,0 +1,32 @@
+{
+ "slice": "P2-A03",
+ "kind": "device-receipt-fixture-rerun",
+ "executed_at": "2026-10-20",
+ "role": "Product Implementer",
+ "route": "Muse Code / muse-wonder-full-1.0-contributor / medium",
+ "base": "origin/main 20def00 (branch afc/m06-m12-fixture-walkthrough); fixture steps on found APK, see apk",
+ "binding_sha256_claimed": "72ebe994e8713ce98b614e46a7dec37bc537ef36a3aa9eae82cb58e47060f784",
+ "device": {
+  "model": "AFTKM",
+  "fire_os": "Fire OS 8.1.8.5 (RS8185/3891)",
+  "android_release": "11",
+  "api_level": 30,
+  "display": "physical 3840x2160, override 1920x1080, density 320",
+  "serial": "<stick_serial>"
+ },
+ "steps": [
+  {
+   "id": "PROC-VISUAL-REVIEW/panel-only alert card, Watch, Dismiss (steps 4-5 fallback)",
+   "index": 2,
+   "prior_result": "GAP FIXTURE_AWS_SESSION_EXPIRED",
+   "result": "PASS",
+   "evidence": "Guarded fixture (own synthetic profile only; helper sha256 5a1ed101b35d744637f543b285dbeb2d0e72d035e3be05b680029a0044e6162e in private /tmp) put the manual lineup (Sample Receiver 9000001, version 7) and one PlayerScore alert afc-fixrerun-20261020T163802Z-01 (emittedAt 2026-10-20T16:38:00Z). Panel then showed the delivered card in-app (panel-only per X02 FAILS): evidence/visual/P2-A03/fixture-rerun-alert-card.png sha256 42f09ff0ece9dbd3d1e95ca116e92b8e968a5d3ea3af0e8724207d53dc96abd4 (Score update, Sample Receiver, Access: unknown, Watch, Dismiss). D-pad UP focused Watch (fixture-rerun-watch-focused.png); Watch exercised under P2-A04. D-pad Dismiss removed exactly that card, lineup rows remained (fixture-rerun-dismissed.png sha256 8a49594d81c3e1dc8c6952f94e1fa8ef4373ea6fe17a4a62b3862e6202b6a144). No heads-up claim. Whether a notification was additionally posted while the panel was visible was not separately distinguished (dumpsys notification grep is inconclusive); not claimed either way."
+  }
+ ],
+ "device_state_before": "com.afc.companion 0.1.0 (versionCode 1) sha256 1d80c6822182399794bbe4cec27198a0a31da58e3533ebcb9acf431a2729b988 (BUG-A02-1 session build, its evidence/visual/BUG-A02-1/native-apk-sha256.txt value); foreground screensaver over AFC; Prime Video (com.amazon.firebat) process running (pidof exit 0), as the orchestrator pre-check found; no test packages; Panel: no team/league selected; Profile: no team/league, PlayerScore alerts on, Show panel on new alert on, Panel visible on, Confirm before switching on; own alerts []; own lineup absent; stats athlete 9000001 absent",
+ "device_state_after": "found APK reinstalled, pulled base.apk sha256 identical (1d80c6822182399794bbe4cec27198a0a31da58e3533ebcb9acf431a2729b988); Panel frame byte-identical to the before capture (sha256 469e13e6951c1b2b3ff00cc1e3da432b8c8ecd034028755644bacf620f8f4e19 both); profile saved with no team/league (PlayerScore on as found); panel ON; own alert deleted (cursors []), lineup tombstone restored (get_lineup None, match=True), stats 9000001 deleted (restored match=True); only com.afc.companion installed; /sdcard/afc_dump.xml removed; Prime Video force-stopped last (pidof exit 1 at final check; it had self-respawned once mid-restore, matching the pre-check observation). Residue from normal app use only: profile revision advanced by the two TV saves, one routing-outcome record (accessUnknown) from the Watch attempt, a new link session for the same synthetic profile from the D03 relink, panel derived state from reads",
+ "apk": {
+  "variant": "configured (afc-dev ApiUrl), as found on the stick",
+  "sha256": "1d80c6822182399794bbe4cec27198a0a31da58e3533ebcb9acf431a2729b988"
+ }
+}

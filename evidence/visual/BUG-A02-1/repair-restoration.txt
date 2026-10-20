@@ -1,0 +1,95 @@
+
+$ flock /tmp/afc-m03-m05-fire-tv.lock <local-path> -s <stick> shell am force-stop com.afc.companion
+
+exit_code=0
+
+$ flock /tmp/afc-m03-m05-fire-tv.lock <local-path> -s <stick> install -r /tmp/a02-repair-original.apk
+Performing Streamed Install
+Success
+
+exit_code=0
+
+$ flock /tmp/afc-m03-m05-fire-tv.lock <local-path> -s <stick> uninstall com.afc.companion.test
+Success
+
+exit_code=0
+
+$ flock /tmp/afc-m03-m05-fire-tv.lock <local-path> -s <stick> shell run-as com.afc.companion rm -f cache/profile-team-focus.png
+
+exit_code=0
+
+$ flock /tmp/afc-m03-m05-fire-tv.lock <local-path> -s <stick> shell am start -n com.afc.companion/.MainActivity
+Starting: Intent { cmp=com.afc.companion/.MainActivity }
+
+exit_code=0
+Initial visible status: ['Profile/Settings', 'Profile/Settings', 'Show panel on new alert: on (this TV only)']
+
+$ flock /tmp/afc-m03-m05-fire-tv.lock <local-path> -s <stick> shell input swipe 1500 850 1500 300 350
+
+exit_code=0
+PASS profile: Team/league: none selected (persisted configured app)
+PASS local panel setting: ON (default true if absent)
+
+$ flock /tmp/afc-m03-m05-fire-tv.lock <local-path> -s <stick> shell input tap 132 328
+
+exit_code=0
+
+$ flock /tmp/afc-m03-m05-fire-tv.lock <local-path> -s <stick> shell input keyevent 21
+
+exit_code=0
+
+$ flock /tmp/afc-m03-m05-fire-tv.lock <local-path> -s <stick> shell input keyevent 21
+
+exit_code=0
+
+$ flock /tmp/afc-m03-m05-fire-tv.lock <local-path> -s <stick> shell input keyevent 19
+
+exit_code=0
+
+$ flock /tmp/afc-m03-m05-fire-tv.lock <local-path> -s <stick> shell input keyevent 19
+
+exit_code=0
+
+$ flock /tmp/afc-m03-m05-fire-tv.lock <local-path> -s <stick> shell input keyevent 19
+
+exit_code=0
+
+$ flock /tmp/afc-m03-m05-fire-tv.lock <local-path> -s <stick> shell uiautomator dump /data/local/tmp/a02-repair-ui.xml
+UI hierchary dumped to: /data/local/tmp/a02-repair-ui.xml
+
+exit_code=0
+
+$ flock /tmp/afc-m03-m05-fire-tv.lock <local-path> -s <stick> shell input keyevent 20
+
+exit_code=0
+
+$ flock /tmp/afc-m03-m05-fire-tv.lock <local-path> -s <stick> shell input keyevent 20
+
+exit_code=0
+
+$ flock /tmp/afc-m03-m05-fire-tv.lock <local-path> -s <stick> shell input keyevent 23
+
+exit_code=0
+Restoration UI qualification: touch tap did not activate the Fire TV sidebar; used real D-pad focus to Link, Down twice, Select. No product change.
+PASS panel: visible, no team selected; no lineup rows. Backend lineup untouched by synthetic fixture tests; no direct backend lineup-null readback.
+
+$ flock /tmp/afc-m03-m05-fire-tv.lock <local-path> -s <stick> shell am force-stop com.afc.companion
+
+exit_code=0
+
+$ flock /tmp/afc-m03-m05-fire-tv.lock <local-path> -s <stick> shell am force-stop com.amazon.avod
+
+exit_code=0
+
+$ flock /tmp/afc-m03-m05-fire-tv.lock <local-path> -s <stick> shell pidof com.afc.companion
+
+exit_code=1
+
+$ flock /tmp/afc-m03-m05-fire-tv.lock <local-path> -s <stick> shell pidof com.amazon.avod
+
+exit_code=1
+PASS AFC notifications absent; app and Prime Video stopped; test package and instrumentation removed.
+Lease released 2026-10-20T15:57:00.032186+00:00
+
+Subsequent read-only backend verification closes the earlier lineup readback gap: repair-backend-readback.txt proves all rows are metadata-only tombstones, hence lineup=null. No DB mutation.
+Stick restored: yes; all required local checks and backend lineup=null verified.

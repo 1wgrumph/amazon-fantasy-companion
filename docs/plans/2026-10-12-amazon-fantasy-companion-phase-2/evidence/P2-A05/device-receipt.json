@@ -1,0 +1,21 @@
+{
+ "slice": "P2-A05",
+ "kind": "device-receipt",
+ "executed_at": "2026-10-20",
+ "role": "Product Implementer",
+ "route": "Muse Code / muse-wonder-full-1.0-contributor / high",
+ "base": "origin/main 350ef51 (branch afc/m06-m09-device-visual)",
+ "binding_sha256_verified": "e8d0b5a02cd9f445644a0caa18185af60a46f2316769b527ccc9e046796b0608",
+ "device": {"model": "AFTKM", "fire_os": "Fire OS 8.1.8.5 (RS8185/3891)", "android_release": "11", "api_level": 30, "display": "physical 3840x2160, override 1920x1080, density 320", "serial": "<stick_serial>"},
+ "apk": {"variant": "configured (afc-dev ApiUrl)", "sha256": "ad9b04355e79c44bb2fcddca539c226b12606c5a9a2a3a101c0d2320060ea880"},
+ "x04_verdict_applied": "spikes/sp4-panel-video/VERDICT.md FAILS on main: modeB not selectable; MainActivity panelModeFor(null) -> FullScreen is the verdict fallback. FullScreen reviewed; no modeB geometry is claimed, so X04_VERDICT_PENDING does not apply (verdict present on main).",
+ "steps": [
+  {"id": "DEVICE_INSTALL_PENDING / CMD-TVAPP-INSTRUMENTED (panel)", "result": "PASS (install)", "evidence": "Same install as P2-A02 (exit 0). No panel instrumented cases exist (none authored in P2-A05T); the only androidTest class is AlertNotifierDeviceTest, run under P2-A03."},
+  {"id": "PROC-VISUAL-REVIEW/panel fresh + unavailable labels", "result": "PASS", "evidence": "evidence/visual/P2-A05/panel-fresh-unavailable.png: freshly fetched panel for the selected team/league with empty lineup; Team total and Progress render 'Unavailable', never zero. Geometry: evidence/visual/P2-A05/mainactivity-window.txt (1920x1080 full-screen window)."},
+  {"id": "PROC-VISUAL-REVIEW/stale labeled", "result": "GAP FIXTURE_AWS_SESSION_EXPIRED", "evidence": "A stale-labeled value needs a stored lineup/statistics fixture with an old asOf; dev-table writes were blocked (AWS session expired, aws login owner-only). The stale-to-Unavailable rendering of unknown values is covered by the fresh capture, but the '(stale)' labeled state itself was not produced. Never a pass."},
+  {"id": "PROC-VISUAL-REVIEW/hidden hint + Menu toggle", "result": "PASS", "evidence": "evidence/visual/P2-A05/panel-hidden-hint.png ('Panel hidden. Press Menu to show it.'); second Menu press restored the panel byte-identically."},
+  {"id": "PROC-VISUAL-REVIEW/focus up/down + fast-forward switch", "result": "PASS", "evidence": "evidence/visual/P2-A05/panel-focus-total.png: DPAD_DOWN moved the white focus border from Team/league switch row to Team total. MEDIA_FAST_FORWARD with a single selected team/league is a no-op (frame unchanged), matching PanelController."},
+  {"id": "CMD-TEXT-SIZE-MEASURE", "result": "PASS (pixel floors) + GAP OWNER_EVIDENCE_PENDING (couch decision)", "evidence": "evidence/visual/P2-A05/legibility.png at 1920x1080, density 320 (factor 2.0). Source sizes: body 24 sp -> 48 px, score 32 sp -> 64 px (PanelTextSizes). Measured on the capture: uiautomator text boxes body h=57 px, score h=75 px; glyph ink spans body 46-47 px, score 49 px. Floors 24 px body / 32 px scores met. Owner couch-legibility observation was not taken (no owner at the stick): OWNER_EVIDENCE_PENDING per the SEIT pass text."},
+  {"id": "X04 mode feed + side-by-side geometry", "result": "PASS (FullScreen fallback)", "evidence": "X04 verdict present on main (FAILS); panelModeFor(null) selects FullScreen, reviewed in the captures above. modeB side-by-side geometry is not applicable."}
+ ]
+}
