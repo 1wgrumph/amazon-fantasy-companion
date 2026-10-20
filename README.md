@@ -106,7 +106,11 @@ repository.
   ```
 
   (CI installs the same file with `python3.12`; use the
-  interpreter that your `python3` resolves to.)
+  interpreter that your `python3` resolves to. On an
+  externally-managed system Python (PEP 668) that install is
+  refused; run the hygiene gate with the backend virtual
+  environment below activated instead — its pinned dependencies
+  already include PyYAML.)
 - For deployment only: the AWS CLI and SAM CLI, an AWS account, and
   a named CLI profile. This project uses profile `afc-dev` in region
   `us-east-2` and stack `afc-dev` (see `backend/samconfig.toml`).
@@ -181,7 +185,7 @@ app show "Backend not configured":
 ```bash
 ./tv-app/gradlew -p tv-app assembleDebug -PafcApiBaseUrl=<ApiUrl>
 adb connect <stick-address>
-adb install tv-app/app/build/outputs/apk/debug/app-debug.apk
+adb install -r tv-app/app/build/outputs/apk/debug/app-debug.apk
 ```
 
 The stick address is owner-supplied. Accept the RSA prompt on the TV
@@ -267,18 +271,22 @@ bash tools/ci/gate.sh hygiene
 Each gate prints `PASS`, `FAIL`, or `GAP` (a required tool is
 missing). A `GAP` is not a pass. The same gates run in CI.
 
-GAP PROC_README_FRESH_SETUP_NOT_RUN — the clean-checkout
-walkthrough required for this README has not been executed as a
-fresh setup. Inspection-only (read from source, not run from a
-clean environment): the TV build/install, the backend
-deployment, device linking on a stick, and fresh-environment
-provisioning of the backend and hygiene environments. Only the
-host-executable docs and hygiene gates were run for this
-revision. Owner input that unblocks the walkthrough: an
-authenticated AWS session with the deployed `ApiUrl`, a Fire TV
-stick reachable over ADB, and a fresh host with JDK 17 and the
-Android SDK. Do not treat the setup above as walkthrough-proven
-until that run happens.
+Fresh-setup walkthrough (PROC-README-FRESH-SETUP) executed
+2026-10-20 from a clean `git archive` checkout of `origin/main`
+(`44a7e06`): docs, hygiene, backend and TV gates passed; the
+configured TV APK installed on the Fire TV stick; the first-run
+device-code link completed against the already-deployed `afc-dev`
+backend; and the lineup-entry limitation above was re-verified
+(no lineup-write route exists). Not re-run in that walkthrough,
+and therefore not walkthrough-proven: the `sam deploy` step
+itself (verified read-only against the existing stack instead),
+fresh-host download of the pinned backend dependencies (the
+documented virtual environment already existed on the walkthrough
+host, so the hash-pinned install resolved as already satisfied),
+and the owner-only steps (`aws login`, SSM parameter writes,
+Yahoo app creation, judge-access publication). The per-step
+record is in
+`docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-D03/fresh-setup-walkthrough.md`.
 
 ## Repository layout
 

@@ -1,0 +1,32 @@
+{
+ "slice": "P2-A02",
+ "kind": "device-receipt-dpad-recapture",
+ "executed_at": "2026-10-20",
+ "role": "Product Implementer",
+ "route": "Muse Code / muse-wonder-full-1.0-contributor / medium",
+ "base": "origin/main 20def00 (branch afc/m06-m12-fixture-walkthrough); fixture steps on found APK, see apk",
+ "binding_sha256_claimed": "72ebe994e8713ce98b614e46a7dec37bc537ef36a3aa9eae82cb58e47060f784",
+ "device": {
+  "model": "AFTKM",
+  "fire_os": "Fire OS 8.1.8.5 (RS8185/3891)",
+  "android_release": "11",
+  "api_level": 30,
+  "display": "physical 3840x2160, override 1920x1080, density 320",
+  "serial": "<stick_serial>"
+ },
+ "steps": [
+  {
+   "id": "PROC-VISUAL-REVIEW/profile-field D-pad traversal (CANDIDATE-BUG-A02-1 recapture)",
+   "prior_result": "CANDIDATE-BUG-A02-1 (text-field D-pad focus trap)",
+   "result": "PASS",
+   "evidence": "PR #129 MERGED (mergeCommit 44a7e0695441034b7749d9d32c5f58121e071f91). Debug APK built from that merge commit in a scratch git archive export (assembleDebug with the afc-dev ApiUrl, Gradle under the host-gradle flock), sha256 01cc1be16d5353bd43eb871fc6855a9d31d9757b2bf723c72dc7162c42ad71d3, installed -r Success. Exact bug reproduction rerun: Profile/Settings, RIGHT into the form, DOWN to the League field (evidence/visual/P2-A02/dpad-recapture-league-focus.png), plain DOWN moved focus to the Team field (dpad-recapture-team-focus.png), plain DOWN again to Set team/league (dpad-recapture-set-focus.png). No keyboard trap, no Previous/geometric escape needed. The APK found at start was reinstalled afterwards."
+  }
+ ],
+ "device_state_before": "com.afc.companion 0.1.0 (versionCode 1) sha256 1d80c6822182399794bbe4cec27198a0a31da58e3533ebcb9acf431a2729b988 (BUG-A02-1 session build, its evidence/visual/BUG-A02-1/native-apk-sha256.txt value); foreground screensaver over AFC; Prime Video (com.amazon.firebat) process running (pidof exit 0), as the orchestrator pre-check found; no test packages; Panel: no team/league selected; Profile: no team/league, PlayerScore alerts on, Show panel on new alert on, Panel visible on, Confirm before switching on; own alerts []; own lineup absent; stats athlete 9000001 absent",
+ "device_state_after": "found APK reinstalled, pulled base.apk sha256 identical (1d80c6822182399794bbe4cec27198a0a31da58e3533ebcb9acf431a2729b988); Panel frame byte-identical to the before capture (sha256 469e13e6951c1b2b3ff00cc1e3da432b8c8ecd034028755644bacf620f8f4e19 both); profile saved with no team/league (PlayerScore on as found); panel ON; own alert deleted (cursors []), lineup tombstone restored (get_lineup None, match=True), stats 9000001 deleted (restored match=True); only com.afc.companion installed; /sdcard/afc_dump.xml removed; Prime Video force-stopped last (pidof exit 1 at final check; it had self-respawned once mid-restore, matching the pre-check observation). Residue from normal app use only: profile revision advanced by the two TV saves, one routing-outcome record (accessUnknown) from the Watch attempt, a new link session for the same synthetic profile from the D03 relink, panel derived state from reads",
+ "apk": {
+  "variant": "configured (afc-dev ApiUrl) built from PR #129 merge commit 44a7e06",
+  "sha256": "01cc1be16d5353bd43eb871fc6855a9d31d9757b2bf723c72dc7162c42ad71d3",
+  "found_apk_sha256_reinstalled_after": "1d80c6822182399794bbe4cec27198a0a31da58e3533ebcb9acf431a2729b988"
+ }
+}
