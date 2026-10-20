@@ -1,0 +1,32 @@
+{
+ "slice": "P2-A05",
+ "kind": "device-receipt-fixture-rerun",
+ "executed_at": "2026-10-20",
+ "role": "Product Implementer",
+ "route": "Muse Code / muse-wonder-full-1.0-contributor / medium",
+ "base": "origin/main 20def00 (branch afc/m06-m12-fixture-walkthrough); fixture steps on found APK, see apk",
+ "binding_sha256_claimed": "72ebe994e8713ce98b614e46a7dec37bc537ef36a3aa9eae82cb58e47060f784",
+ "device": {
+  "model": "AFTKM",
+  "fire_os": "Fire OS 8.1.8.5 (RS8185/3891)",
+  "android_release": "11",
+  "api_level": 30,
+  "display": "physical 3840x2160, override 1920x1080, density 320",
+  "serial": "<stick_serial>"
+ },
+ "steps": [
+  {
+   "id": "PROC-VISUAL-REVIEW/stale labeled",
+   "index": 2,
+   "prior_result": "GAP FIXTURE_AWS_SESSION_EXPIRED",
+   "result": "PASS",
+   "evidence": "Guarded fixture put a statistics record for synthetic athlete 9000001 (gameState post, gameStatus Final, source replay, stats receptions 4 / receiving_yards 50 / receiving_touchdowns 1) with asOf one hour old (2026-10-20T15:40:55Z). After force-stop/relaunch and Panel re-entry the panel rendered Sample Receiver 'Final  13.0 (replay, stale 3725s)', Team total and Progress with the same stale label: evidence/visual/P2-A05/fixture-rerun-stale-labeled.png sha256 15cbe1a5b1f8bd05da6e82051e2dd677acb807ac936c8cdb966e399eda6def62. 13.0 = Half-PPR 4x0.5 + 50x0.1 + 1x6; Progress 1.0 (post). A 35 s in-place wait did not refresh the already-displayed panel; the stale value appeared on the next fetch after relaunch. Mechanism not further diagnosed in this evidence packet. Fixture record deleted at cleanup (restored match=True)."
+  }
+ ],
+ "device_state_before": "com.afc.companion 0.1.0 (versionCode 1) sha256 1d80c6822182399794bbe4cec27198a0a31da58e3533ebcb9acf431a2729b988 (BUG-A02-1 session build, its evidence/visual/BUG-A02-1/native-apk-sha256.txt value); foreground screensaver over AFC; Prime Video (com.amazon.firebat) process running (pidof exit 0), as the orchestrator pre-check found; no test packages; Panel: no team/league selected; Profile: no team/league, PlayerScore alerts on, Show panel on new alert on, Panel visible on, Confirm before switching on; own alerts []; own lineup absent; stats athlete 9000001 absent",
+ "device_state_after": "found APK reinstalled, pulled base.apk sha256 identical (1d80c6822182399794bbe4cec27198a0a31da58e3533ebcb9acf431a2729b988); Panel frame byte-identical to the before capture (sha256 469e13e6951c1b2b3ff00cc1e3da432b8c8ecd034028755644bacf620f8f4e19 both); profile saved with no team/league (PlayerScore on as found); panel ON; own alert deleted (cursors []), lineup tombstone restored (get_lineup None, match=True), stats 9000001 deleted (restored match=True); only com.afc.companion installed; /sdcard/afc_dump.xml removed; Prime Video force-stopped last (pidof exit 1 at final check; it had self-respawned once mid-restore, matching the pre-check observation). Residue from normal app use only: profile revision advanced by the two TV saves, one routing-outcome record (accessUnknown) from the Watch attempt, a new link session for the same synthetic profile from the D03 relink, panel derived state from reads",
+ "apk": {
+  "variant": "configured (afc-dev ApiUrl), as found on the stick",
+  "sha256": "1d80c6822182399794bbe4cec27198a0a31da58e3533ebcb9acf431a2729b988"
+ }
+}

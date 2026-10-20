@@ -23,3 +23,19 @@ uninstall-a-provider `appAbsent` check was not run: the only installed
 provider app is the Prime Video system app. `gameOpened` stays with the
 unlanded X03 PR 2 live-TNF window (`X03_PR2_PENDING`); Alexa tuning stays
 hidden (`X11_VERDICT_PENDING` for the route).
+
+## 2026-10-20 fixture rerun
+
+AWS session valid again. Only the former
+`FIXTURE_AWS_SESSION_EXPIRED` steps (indexes 1 and 4) were rerun;
+`REGISTRY_ROUTE_GAP`, `X03_PR2_PENDING` and `X11_VERDICT_PENDING`
+stand. APK as found, sha256 `1d80c6822182399794bbe4cec27198a0a31da58e3533ebcb9acf431a2729b988`. From the fixture
+alert card: Watch first armed the switching confirmation
+(`evidence/visual/P2-A04/fixture-rerun-confirm-switch.png`), the
+second OK left AFC fullscreen for Prime Video (dumpsys foreground
+metadata only, no provider capture), and on return the panel
+reported `Watch: could not confirm the game is playing.`
+(`fixture-rerun-watch-outcome.png`), i.e. one truthful
+`accessUnknown` outcome: **PASS** for both steps (Prime Video
+route only; no `gameOpened` claim). Receipt:
+`device-receipt-fixture-rerun.json`.

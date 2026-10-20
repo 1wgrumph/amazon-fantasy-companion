@@ -26,3 +26,15 @@ Evidence: `evidence/visual/P2-A02/focus-trap-keyboard.png`. Logcat tail at
 capture time held no app lines (buffer had rotated). Same behavior was
 noted by the earlier device session; routing is the orchestrator's call.
 No product source was changed in this packet.
+
+## 2026-10-20 D-pad fix recapture
+
+PR #129 merged (`44a7e06`). The CANDIDATE-BUG-A02-1 reproduction
+was rerun on a debug APK built from that merge commit (sha256
+`01cc1be16d5353bd43eb871fc6855a9d31d9757b2bf723c72dc7162c42ad71d3`):
+plain DOWN traverses League field -> Team field -> Set
+team/league with no keyboard trap
+(`evidence/visual/P2-A02/dpad-recapture-league-focus.png`,
+`dpad-recapture-team-focus.png`, `dpad-recapture-set-focus.png`):
+**PASS**. Receipt: `device-receipt-dpad-recapture.json`. The APK
+found at the start of the day was reinstalled afterwards.
