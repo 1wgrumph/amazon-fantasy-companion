@@ -1,0 +1,22 @@
+{
+ "slice": "P2-A02",
+ "kind": "device-receipt",
+ "executed_at": "2026-10-20",
+ "role": "Product Implementer",
+ "route": "Muse Code / muse-wonder-full-1.0-contributor / high",
+ "base": "origin/main 350ef51 (branch afc/m06-m09-device-visual)",
+ "binding_sha256_verified": "e8d0b5a02cd9f445644a0caa18185af60a46f2316769b527ccc9e046796b0608",
+ "device": {"model": "AFTKM", "fire_os": "Fire OS 8.1.8.5 (RS8185/3891)", "android_release": "11", "api_level": 30, "display": "physical 3840x2160, override 1920x1080, density 320", "serial": "<stick_serial>"},
+ "apk": {"variant": "configured (afc-dev ApiUrl)", "sha256": "ad9b04355e79c44bb2fcddca539c226b12606c5a9a2a3a101c0d2320060ea880", "loopback_variant_sha256": "3b4bd340895b269b0fd6bcd766709a1530ae16e37af08e9366d294a9283be3eb"},
+ "steps": [
+  {"id": "CMD-ADB-INSTALL", "result": "PASS", "evidence": "adb install -r exit 0 (Success); MainActivity resumed; versionName 0.1.0 versionCode 1"},
+  {"id": "PROC-VISUAL-REVIEW/profile-loaded", "result": "PASS", "evidence": "evidence/visual/P2-A02/profile-loaded.png; every supported control shown with persisted value; D-pad focus reaches controls and Save profile (see candidate bug for text-field traversal)"},
+  {"id": "PROC-VISUAL-REVIEW/voice-hidden", "result": "PASS", "evidence": "evidence/visual/P2-A02/voice-hidden.png shows 'Voice: No verified voice route is available on this device, so voice alerts cannot be enabled here.' as text, not a focusable control"},
+  {"id": "PROC-VISUAL-REVIEW/preset-switch", "result": "PASS", "evidence": "evidence/visual/P2-A02/preset-switch-ppr.png (halfPpr->ppr, Save), API readback revision 4 scoringPreset=ppr, evidence/visual/P2-A02/preset-after-relaunch.png after force-stop+relaunch shows ppr with other controls unchanged; preset restored to halfPpr afterwards (revision 5)"},
+  {"id": "PROC-VISUAL-REVIEW/detection-optin", "result": "GAP X07_DETECTION_NOT_ACTIVATED", "evidence": "DetectionOptIn row shows stated limit text only (preset-after-relaunch.png); product keeps detectionSupported=false per P2-X07 PARTIAL verdict, so enable/save/relaunch cannot be executed on device. Never a pass."},
+  {"id": "PROC-VISUAL-REVIEW/profile-unavailable", "result": "PASS", "evidence": "evidence/visual/P2-A02/profile-unavailable.png (loopback variant): 'Profile is unavailable. Check the connection and try again.' and no stale profile values; on-device panel toggle still offered"},
+  {"id": "PackageManager detection (shell level)", "result": "PASS (shell evidence only)", "evidence": "pm path exit 0 for com.amazon.firebat, com.netflix.ninja, com.afc.companion; exit 1 for com.espn.score_center, com.google.android.youtube.tv, com.att.tv; leanback resolve-activity resolves com.amazon.firebat IgnitionActivity. In-app detector not activated (X07_DETECTION_NOT_ACTIVATED); customer-override survival not exercised."}
+ ],
+ "text_size": "Profile body text measured on P2-A05 panel captures (same build): body glyph ink 46-47 px, floor 24 px. See P2-A05 device-receipt.",
+ "candidate_bugs": ["device-run.md CANDIDATE-BUG-A02-1 (text-field D-pad focus trap)"]
+}
