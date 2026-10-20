@@ -157,6 +157,9 @@ PYBASE
             [[ -n "$sdk" && -d "$sdk" ]] || { printf 'required tool missing: Android SDK (ANDROID_HOME or ANDROID_SDK_ROOT)\n'; return 3; }
             [[ -x tv-app/gradlew ]] || { printf 'tv-app/gradlew missing or not executable\n'; return 1; }
             # Subcheck exits are normalized so a tool's own exit 3 never reads as GAP.
+            # #38: resolving the UTP configurations fails under STRICT verification
+            # when verification-metadata.xml lacks a UTP entry; run it first (fail fast).
+            ./tv-app/gradlew -p tv-app -I "$root/tools/ci/resolve-utp.init.gradle.kts" :app:resolveUtpConfigurations || return 1
             ./tv-app/gradlew -p tv-app testDebugUnitTest lintDebug assembleDebug || return 1 ;;
         backend)
             if [[ "${CI:-false}" != true && "${GITHUB_ACTIONS:-false}" != true ]]; then

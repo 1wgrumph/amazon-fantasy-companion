@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Admit the Unified Test Platform artifacts (201 files, each checksum-verified against its official repository and supply-chain scanned) into `tv-app/gradle/verification-metadata.xml` so `./gradlew -p tv-app :app:connectedDebugAndroidTest` passes on the Fire TV stick under STRICT dependency verification, replacing the `adb install` + `am instrument` workaround (BUG-38-UTP, evidence `BUG-38-UTP/`, [#134](https://github.com/1wgrumph/amazon-fantasy-companion/pull/134)).
+
 ### Added
 
 - P2-L05 dry-run evidence rehearsing the final-APK build and inspection on `fb6ab2f` (debug-signed release APK, sha256 and signer certificate recorded, manifest and permissions inspected, Reverify capability gap and empty-ApiUrl gap carried to the real run; nothing released) ([#53](https://github.com/1wgrumph/amazon-fantasy-companion/issues/53)).
