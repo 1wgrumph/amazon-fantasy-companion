@@ -167,6 +167,11 @@ capability.
   panel is full-screen in the companion app. Protected provider video also
   captures black, so playback evidence is player chrome plus media-session
   state (RISK-AFC-P2-09).
+- Demo capture follows option B (DEC-AFC-OD-P2-02-B-20261020): companion-UI
+  captures only, and the P2-X12 capture steps are on-stick AFC UI captures
+  only. Where a shot would show provider video, it is a title card or a
+  described hand-off. OA-9 does not apply. Provider video is not shown in
+  the demo, to respect copyright.
 - Provider `gameOpened` is unproven for every provider (SP-3 PARTIAL). The
   one registered Prime Video route lands on search, not the game; ESPN,
   DirecTV Stream, YouTube TV, local broadcast, and all `vega` routes are
