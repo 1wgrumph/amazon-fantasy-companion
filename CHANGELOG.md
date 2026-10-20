@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Friction log entries F-026 to F-029 for 2026-10-20: OCR test-file exclusion, quota cascade across fallbacks, bug-route escape harness gap, CHANGELOG conflicts under parallel landing.
 - Add the hackathon submission write-up (`docs/submission/writeup.md`): Fire TV and AWS Builder integrations from landed evidence (spike verdicts WORKS/FAILS/PARTIAL with limits, `afc-dev` deployed smoke only where recorded), the YouTube TV Fantasy View differentiation, the DEC-AFC-SD-036 future direction marked external context with public citations, an honest-limits section covering every FAILS/PARTIAL verdict plus the paused Vega stretch, and X09/X10, X03 PR 2, X05 PR 2, and X11 marked PENDING with no result asserted; the combined `PROC-SUBMISSION-CHECK` completes when D05 lands ([#49](https://github.com/1wgrumph/amazon-fantasy-companion/issues/49)).
 - Correct the submission write-up in review repair: current YouTube TV Fantasy View platforms are ESPN or Yahoo, tune-in alerts are collected in the background and presented in the companion's full-screen panel (no reachable notification during provider playback), and the Prime Video deal starts with the NBA 2025–26 season and WNBA in 2026 ([#49](https://github.com/1wgrumph/amazon-fantasy-companion/issues/49), [PR #122](https://github.com/1wgrumph/amazon-fantasy-companion/pull/122)).
 
