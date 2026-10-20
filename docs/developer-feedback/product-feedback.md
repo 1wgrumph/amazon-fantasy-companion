@@ -45,7 +45,10 @@ on live evidence that does not exist yet.
 - **Worked well:** pytest + Moto ran red suites in about 2 to 27 s offline with reusable fixtures [OBS-040]; mutation reached 99.49% on the foundation slice after timeout calibration [OBS-045]; the gate's expected-failure convention for red commits held [OBS-048].
 - **Needs work:** JUnit output omits failure type [OBS-041]; conftest shadowing across unit and deployed dirs [OBS-042]; Moto does not enforce IAM [OBS-044]; mutmut copy, trampoline and timeout behavior, and a GAP that makes a mutation PASS unreachable [OBS-045]; diff-cover drops files without executable lines [OBS-046]; the gate is noisy and slow in places and lacks tools in the cloud container [OBS-048, OBS-049].
 - **Onboarding:** not observed as a single time; the backend foundation was a red suite then green over the B01 slices [OBS-040]. Zero-to-hello-world time: not observed in available evidence.
-- **Build again:** Yes for pytest + Moto; Yes with caveats for mutmut on a shared loaded host.
+- **Build again:**
+  - pytest + Moto: Yes, because red suites ran offline in seconds with reusable fixtures [OBS-040].
+  - mutmut: Yes with caveats, because it reached 99.49% on the foundation slice but needed copy-path and timeout workarounds on a loaded host [OBS-045].
+  - diff-cover and coverage: Yes with caveats, because files without executable lines were dropped as REPORT_INCOMPLETE [OBS-046].
 - **AWS services:** DynamoDB is stubbed by Moto in tests only.
 
 ## AWS CLI, SAM, CloudFormation, Lambda, API Gateway, DynamoDB, SSM, IAM (profile and stack `afc-dev`, us-east-2)
@@ -75,6 +78,28 @@ on live evidence that does not exist yet.
 - **Build again:** No, until access is approved; the manual-entry fallback is a deliberate design, not a preference.
 - **AWS services:** SSM Parameter Store held the Yahoo credentials [OBS-067].
 
+## Security and quality scanners (ClamAV, gitleaks, pip-audit, Bandit)
+
+Sources: `docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-B01T/receipt.json` (`tools_exercised`, line 316) and `.../P2-B01/receipt.json` (`tools_exercised`, line 342).
+
+- **Used for:** listed as exercised in the P2-B01T and P2-B01 slices (the Bandit observation concerns a scan of the backend packet); the receipts do not state each scan's subject, so per-tool purpose beyond the tool class (malware scan, secret scan, dependency audit, static analysis) is not observed in available evidence. Per-tool versions: pip-audit 2.10.0 (P2-B01 receipt); ClamAV, gitleaks and Bandit versions not observed in available evidence.
+- **Worked well:** not observed in available evidence for ClamAV, gitleaks and pip-audit (the receipts list them as exercised without a stated observation). Bandit: see Needs work.
+- **Needs work:** Bare scanner launchers bound a different Python environment than the backend one; explicit `python3.12 -m` binding worked, and Bandit stdout progress text is not JSON, so `-o` is needed for machine-readable output [P2B01T-DX-001]. Nothing stated for ClamAV, gitleaks or pip-audit: not observed in available evidence.
+- **Onboarding:** not observed in available evidence.
+- **Build again:** ClamAV, gitleaks, pip-audit: not observed in available evidence (no stated verdict); Bandit: Yes with caveats, because it ran but needs explicit interpreter binding and `-o` for JSON [P2B01T-DX-001].
+- **AWS services:** none.
+
+## PyYAML and cfn-lint
+
+Sources: the same two receipts (`tools_exercised`, P2-B01T line 316, P2-B01 line 342); cfn-lint output in `.../P2-B01/cfn-lint.txt`.
+
+- **Used for:** PyYAML is listed in the P2-B01T `tools_exercised`; its use is not observed in available evidence. cfn-lint 1.57.2 output is recorded with exit 0 for the P2-B01 slice; the lint subject is not stated in that file.
+- **Worked well:** cfn-lint 1.57.2 exited 0 on the template [P2-B01/cfn-lint.txt]. PyYAML: not observed in available evidence.
+- **Needs work:** not observed in available evidence for either tool.
+- **Onboarding:** not observed in available evidence.
+- **Build again:** cfn-lint: Yes, because it exited 0 in the recorded run (no friction stated). PyYAML: not observed in available evidence.
+- **AWS services:** cfn-lint targets CloudFormation (see the AWS section); PyYAML none.
+
 ## Alexa / voice route
 
 - PENDING: X11 disposition. No Alexa observation exists in available evidence.
@@ -85,7 +110,12 @@ on live evidence that does not exist yet.
 - **Worked well:** Codex planning/author/review routes passed their checkers without route switches [OBS-094]; Muse Code headless contributor mode exited 0 with clean device restoration and native completion notification [OBS-093].
 - **Needs work:** subscription usage limits ended runs before any work (Claude Code, Cursor Agent) with no machine-readable signal [OBS-090, OBS-091]; a Muse profile display name differs from its CLI model id and `muse exec` has no `--prompt` flag [OBS-092]; the Claude Code worktree guard rejects compound shell commands [OBS-095]. Deep Code: used only as a coordinator route; no usable observation in available evidence.
 - **Onboarding:** not observed in available evidence.
-- **Build again:** Yes for all, with an owner-approved fallback order for limits.
+- **Build again (per tool):**
+  - Codex CLI: Yes, because its planning, author and review routes passed their checkers without route switches [OBS-094].
+  - Muse Code: Yes, because headless contributor mode exited 0 with clean device restoration [OBS-093]; the display-name versus model-id mismatch needs care [OBS-092].
+  - Claude Code: Yes with caveats, because a subscription usage limit ended one run before any work and the worktree guard rejects compound shell commands [OBS-090, OBS-095].
+  - Cursor Agent: not assessed; the only observation is a usage limit that ended a run before any work [OBS-091].
+  - Deep Code: not observed in available evidence.
 - **AWS services:** none.
 
 ## OpenCodeReview (OCR) 1.13.0 and Reverify 0.11.0
@@ -103,7 +133,7 @@ on live evidence that does not exist yet.
 - **Worked well:** readbacks, hosted-check queries and merge-tree scoping behaved as documented [coverage ledger in `scribe-2026-10-13-g2-progress.md`].
 - **Needs work:** unsupported `gh` field; silent push failure when output is discarded; hooks that need a venv on PATH; the issue-label hook refused this repository; milestone `due_on` stored as midnight UTC [OBS-105].
 - **Onboarding:** not observed in available evidence.
-- **Build again:** Yes.
+- **Build again:** Yes, because readbacks, hosted-check queries and merge-tree scoping behaved as documented; the silent push failure is avoided by keeping push output visible [OBS-105].
 - **AWS services:** none.
 
 ## Planning and agent tooling (Bearing Lite, spec-authoring, Requirements System, SysON, BRAN)
@@ -159,8 +189,15 @@ Enumeration of every tool, API and device found across the sources:
 | 30 | Vega SDK / CLI / Virtual Device | above | paused; limits observed |
 | 31 | Alexa / voice | above | PENDING (X11) |
 | 32 | Prime Video app as a provider target | folded into the Fire TV section | observed |
+| 33 | ClamAV | scanners section | exercised; no observation stated in available evidence |
+| 34 | gitleaks | scanners section | exercised; no observation stated in available evidence |
+| 35 | pip-audit 2.10.0 | scanners section | exercised; no observation stated in available evidence |
+| 36 | Bandit | scanners section | observed (P2B01T-DX-001) |
+| 37 | PyYAML | PyYAML and cfn-lint section | exercised; no observation stated in available evidence |
+| 38 | cfn-lint 1.57.2 | PyYAML and cfn-lint section | observed (exit 0 only) |
 
-Total enumerated: 32. Observed with usable observations: 27; not observed in
-available evidence: 1 (Deep Code); declared but behavior not observed: 2
-(EventBridge Scheduler, CloudWatch Logs); PENDING: 1 (Alexa); paused: 1 (Vega,
-limits observed). 27 + 1 + 2 + 1 + 1 = 32.
+Total enumerated: 38. Observed with usable observations: 29 (the earlier 27, Bandit
+and cfn-lint); exercised with no stated observation: 4 (ClamAV, gitleaks,
+pip-audit, PyYAML); not observed in available evidence: 1 (Deep Code); declared
+but behavior not observed: 2 (EventBridge Scheduler, CloudWatch Logs); PENDING: 1
+(Alexa); paused: 1 (Vega, limits observed). 29 + 4 + 1 + 2 + 1 + 1 = 38.

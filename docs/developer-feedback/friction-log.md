@@ -241,7 +241,7 @@ credentials, local paths) are replaced by `<owner-account>`, `<device>` and
 - **Expected vs actual:** expected the write allowed, upload to accept the project id and spec-form `map`, and the default interpreter to build; actual: write refused outside managed roots, upload needed the editing-context id and a string-form `map`, and the default Python lacked a cached wheel.
 - **Severity:** Minor (the draft was preserved in the receipt; the others had workarounds).
 - **Workaround:** none for the refused write (preserved in the receipt); editing-context id; `UV_PYTHON=3.12`.
-- **Actionable suggestion:** reconcile the guard's managed roots with the owner-approved draft path; better upload errors (FR-003, FR-002).
+- **Actionable suggestion:** reconcile the guard's managed roots with the owner-approved draft path; better upload errors (no feature request filed for this).
 - **Time cost:** not observed in available evidence.
 
 ### F-024 — git, GitHub CLI and hooks (OBS-105)
