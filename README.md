@@ -106,7 +106,11 @@ repository.
   ```
 
   (CI installs the same file with `python3.12`; use the
-  interpreter that your `python3` resolves to.)
+  interpreter that your `python3` resolves to. On an
+  externally-managed system Python (PEP 668) that install is
+  refused; run the hygiene gate with the backend virtual
+  environment below activated instead — its pinned dependencies
+  already include PyYAML.)
 - For deployment only: the AWS CLI and SAM CLI, an AWS account, and
   a named CLI profile. This project uses profile `afc-dev` in region
   `us-east-2` and stack `afc-dev` (see `backend/samconfig.toml`).

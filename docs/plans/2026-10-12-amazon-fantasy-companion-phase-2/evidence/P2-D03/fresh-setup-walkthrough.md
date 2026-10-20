@@ -67,3 +67,28 @@ one-character install fix). Remaining typed items, never a pass:
 `OWNER_STEP` rows 5–7 and 19, and fresh-host dependency
 *download* (rows 2–3), which this pre-provisioned host cannot
 prove.
+
+## Independent verification addendum (2026-10-20, second run)
+
+A second clean-checkout run (same `git archive` method) reproduced
+rows 1, 4, 8, 9 and 17: backend gate PASS (1029 passed, 3
+skipped), TV gate PASS, configured APK built, docs and hygiene
+gates PASS. Two corrections to the table above:
+
+- Row 2 as a provisioning *command* FAILS on this host:
+  `python3 -m pip install --require-hashes -r
+  tools/ci/requirements-hygiene.txt` exits 1 with
+  `error: externally-managed-environment` (PEP 668; the host
+  `python3` is the system interpreter). PyYAML was already
+  importable, so the gate itself ran; the documented install
+  command did not. README now records the activated-backend-venv
+  route for PEP 668 hosts. Classify row 2: command FAIL
+  (doc defect, fixed), gate outcome PASS.
+- Row 3 fresh download: in the second run the hash-pinned
+  backend install did download and install (pip exit 0, full
+  package list), so fresh backend-venv provisioning is proven;
+  only the hygiene-closure download remains unproven.
+- `gate.sh` requires a git work tree: run inside a bare
+  `git archive` extraction it exits 2 (`fatal: not a git
+  repository`). A `git clone` checkout is unaffected; the
+  archive scratch needed `git init` before any gate ran.
