@@ -1,0 +1,27 @@
+
+> Task :app:resolveUtpConfigurations FAILED
+UTP-RESOLVE unified-test-platform-android-device-provider-ddmlib: 31 artifacts verified
+UTP-RESOLVE unified-test-platform-android-driver-instrumentation: 25 artifacts verified
+UTP-RESOLVE unified-test-platform-android-test-plugin: 20 artifacts verified
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:resolveUtpConfigurations' (registered in initialization script '../tools/ci/resolve-utp.init.gradle.kts').
+> Dependency verification failed for configuration ':app:unified-test-platform-android-test-plugin-host-additional-test-output'
+  2 artifacts failed verification:
+    - android-test-plugin-host-additional-test-output-32.3.1.jar (com.android.tools.utp:android-test-plugin-host-additional-test-output:32.3.1) from repository Google
+    - android-test-plugin-host-additional-test-output-32.3.1.module (com.android.tools.utp:android-test-plugin-host-additional-test-output:32.3.1) from repository Google
+  If the artifacts are trustworthy, you will need to update the gradle/verification-metadata.xml file. For more on how to do this, please refer to https://docs.gradle.org/9.7.0/userguide/dependency_verification.html#sec:troubleshooting-verification in the Gradle documentation.
+
+  Open this report for more details: file:///tmp/afc-bug38-neg/tv-app/build/reports/dependency-verification/at-1792523076853/dependency-verification-report.html
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 773ms
+1 actionable task: 1 executed
+gate: tvapp: FAIL check exit 1

@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Admit the Unified Test Platform artifacts (201 files, each checksum-verified against its official repository and supply-chain scanned) into `tv-app/gradle/verification-metadata.xml` so `./gradlew -p tv-app :app:connectedDebugAndroidTest` passes on the Fire TV stick under STRICT dependency verification, replacing the `adb install` + `am instrument` workaround (BUG-38-UTP, evidence `BUG-38-UTP/`).
+- Admit the Unified Test Platform artifacts (201 files, each checksum-verified against its official repository and supply-chain scanned) into `tv-app/gradle/verification-metadata.xml` so `./gradlew -p tv-app :app:connectedDebugAndroidTest` passes on the Fire TV stick under STRICT dependency verification, replacing the `adb install` + `am instrument` workaround (BUG-38-UTP, evidence `BUG-38-UTP/`, [#134](https://github.com/1wgrumph/amazon-fantasy-companion/pull/134)).
 
 ### Added
 
