@@ -43,8 +43,10 @@ Probes (full sanitized record: `evidence/visual/sp7-detection/commands.txt`):
   explicit enabled, and `pm default-state` restored the original
   `enabled=0` (default) setting, verified by `dumpsys package`.
 
-Viewing context: foreground was a system tutorial activity, not live
-viewing; no provider app was launched, uninstalled, or cleared.
+Viewing context (2026-10-19 probes): foreground was a system tutorial
+activity, not live viewing; no provider app was launched, uninstalled,
+or cleared. The bounded current-viewing-context read below
+(2026-10-20) closes that open question.
 
 Later in-app proof (R-T-DEVICE-1 completion, exact APK
 `ad9b04355e79c44bb2fcddca539c226b12606c5a9a2a3a101c0d2320060ea880`):
@@ -62,3 +64,46 @@ manifest `<queries>` leanback intent **exercised** by that later proof.
 The companion UI correctly keeps the detection control hidden
 (`detectionSupported = false`) with its stated limit; no product
 activation is claimed.
+
+Current-viewing-context read (2026-10-20, issue #26 remaining proof;
+full sanitized record:
+`evidence/visual/sp7-detection/viewing-context.txt`): Prime Video
+(`com.amazon.firebat`) was foregrounded to its home screen on the same
+stick (explicit component launch; `monkey` and the leanback-intent
+launch did not foreground it) and returned to home afterward. No
+playback was started and no account, provider, or profile state
+changed. **No supported app-callable API exposes current viewing
+context (what title, channel, or game is being watched) to the
+companion on this build; viewing context stays unsupported/unknown
+and `detectionSupported = false` is unchanged.** Per API checked:
+
+| API | App-callable by the companion? | Result |
+|-----|-------------------------------|--------|
+| `dumpsys activity` ResumedActivity (shell) | No — shell diagnosis only | Foreground package/activity visible (`firebat/IgnitionActivity`); no viewing title or game. |
+| `ActivityManager.getRunningTasks` | No — own tasks only since API 21 | Cannot report another app's foreground task; not a viewing-context route. |
+| `dumpsys media_session` (shell) | No — shell diagnosis only | `firebat` session `active=true`, `state=0` (STATE_NONE), `metadata: null` on the Prime Video home; no title/channel/event. |
+| `MediaSessionManager.getActiveSessions` | No — needs an enabled NotificationListenerService or `MEDIA_CONTENT_CONTROL` | `enabled_notification_listeners` is `null`; the companion has no such grant. |
+| `dumpsys usagestats` (shell) | No — shell diagnosis only | `ACTIVITY_RESUMED` events give package/class/time only; no title/game/channel. |
+| `UsageStatsManager` (`PACKAGE_USAGE_STATS`) | No — usage-access app-op not granted | `cmd appops get com.afc.companion android:get_usage_stats` returned no operations, default mode. Even granted, it reports foreground package/class, not what is being watched. |
+
+Shell `dumpsys` visibility is a diagnosis route, not product support:
+nothing above lets the shipped app learn the current viewing context,
+so no detection or viewing-context activation follows.
+
+## developer_feedback
+
+- DX-SP7-01: The ADB shell cannot create a disabled package state on
+  this Fire OS build: `pm disable com.netflix.ninja` fails with
+  `SecurityException: Shell cannot change component state` (finding
+  COMP-2), so disabled-state detection cannot be exercised from the
+  shell; the in-app own-package self-disable route above is the
+  workaround. Tools: `adb shell pm disable/enable/default-state`,
+  `dumpsys package`. Evidence:
+  `evidence/visual/sp7-detection/commands.txt`.
+- DX-SP7-02: Foregrounding Prime Video from the shell needs the
+  explicit component (`am start -n
+  com.amazon.firebat/com.amazon.pyrocore.IgnitionActivity`);
+  `monkey -p … -c LEANBACK_LAUNCHER` exited 251 and the MAIN +
+  LEANBACK_LAUNCHER intent did not resolve, both leaving the launcher
+  foreground. Tools: `adb shell am/monkey`, `dumpsys activity`.
+  Evidence: `evidence/visual/sp7-detection/viewing-context.txt`.

@@ -1,0 +1,57 @@
+SP-7 / P2-X07 current-viewing-context read, 2026-10-20, leased Fire TV
+(AFTKM, Fire OS 8.1.8.5, Android 11 / API 30). Device address/serial
+omitted (<device>). Bounded read only: Prime Video foregrounded to its
+home screen; no sign-in, purchase, protected playback, install, or
+account/provider/profile change. A foreground screenshot was taken to
+confirm the Prime Video home and deleted without retention because it
+shows the account name; the command log below is the retained evidence.
+
+Before state:
+  adb shell getprop ro.product.model            -> AFTKM (exit 0)
+  adb shell getprop ro.build.version.sdk        -> 30 (exit 0)
+  ResumedActivity: com.amazon.tv.launcher/.ui.HomeActivity_vNext (exit 0)
+  pm path com.amazon.firebat                    -> package path (exit 0)
+  pm path com.afc.companion                     -> package path (exit 0)
+  pm path com.afc.sp7probe / com.afc.sp7fixture -> absent (exit 1 each)
+
+Launch attempts (classified):
+  monkey -p com.amazon.firebat -c LEANBACK_LAUNCHER 1
+    -> exit 251, foreground unchanged (launcher). Class: launch route failed.
+  am start -a MAIN -c LEANBACK_LAUNCHER -p com.amazon.firebat
+    -> "unable to resolve Intent", foreground unchanged. Class: intent
+       does not resolve for this package from shell.
+  am start -n com.amazon.firebat/com.amazon.pyrocore.IgnitionActivity
+    -> exit 0; ResumedActivity becomes
+       com.amazon.firebat/com.amazon.pyrocore.IgnitionActivity.
+       Prime Video home confirmed; no playback started.
+
+API checks with Prime Video foreground (shell diagnosis unless noted):
+  dumpsys activity activities | ResumedActivity
+    -> com.amazon.firebat/com.amazon.pyrocore.IgnitionActivity t85.
+       Package/activity only. Shell-only (dumpsys); no equivalent
+       supported app API (ActivityManager.getRunningTasks has returned
+       only the caller's own tasks since API 21).
+  dumpsys media_session, record package=com.amazon.firebat
+    -> active=true, flags=3, state=PlaybackState {state=0 (STATE_NONE),
+       position=0, ...}, metadata: null. No title, channel, or event
+       context on the Prime Video home. Shell dumpsys is diagnosis;
+       the app route MediaSessionManager.getActiveSessions requires an
+       enabled NotificationListenerService or MEDIA_CONTENT_CONTROL.
+  settings get secure enabled_notification_listeners -> null (exit 0)
+    -> no listener enabled; the companion has no MediaSession read route.
+  dumpsys usagestats
+    -> ACTIVITY_RESUMED package=com.amazon.firebat
+       class=com.amazon.pyrocore.IgnitionActivity recorded with time.
+       Package/class/time only; no title/game/channel. Shell dumpsys is
+       diagnosis; the app route UsageStatsManager requires the
+       PACKAGE_USAGE_STATS app-op grant (Settings usage access).
+  cmd appops get com.afc.companion android:get_usage_stats
+    -> "No operations. Default mode: default" (exit 0): not granted.
+
+Restore / after state:
+  input keyevent 3 (HOME) -> exit 0
+  ResumedActivity: com.amazon.tv.launcher/.ui.HomeActivity_vNext (exit 0)
+  pm path com.afc.sp7probe / com.afc.sp7fixture -> absent (exit 1 each)
+  pm path com.afc.companion -> package path (exit 0, untouched)
+  No package installed or removed by this read; companion data, alerts,
+  lineup, profile, and panel state were not read or changed.
