@@ -114,9 +114,17 @@ class SportToggleTest {
     }
 
     @Test fun defaultSettingsDecodeFollowsTheBuildFlag() {
-        assertFalse(BuildConfig.AFC_ENABLE_NBA)
+        val gradle = File(System.getProperty("afc.repoRoot"), "tv-app/app/build.gradle.kts").readText()
+        assertTrue(
+            "AFC_ENABLE_NBA defaults on unless -PafcEnableNba=false",
+            gradle.contains("providers.gradleProperty(\"afcEnableNba\").getOrElse(\"true\")"),
+        )
         val withSports = ProfileCodec.encode(customized()).toJson().put("sports", JSONObject().put("nba", false))
-        assertNull("the default Settings.from follows AFC_ENABLE_NBA", Settings.from(withSports))
+        if (BuildConfig.AFC_ENABLE_NBA) {
+            assertNotNull("the default Settings.from follows AFC_ENABLE_NBA", Settings.from(withSports))
+        } else {
+            assertNull("the kill switch makes the default Settings.from reject sports", Settings.from(withSports))
+        }
         assertNotNull(Settings.from(withSports, nbaEnabled = true))
     }
 

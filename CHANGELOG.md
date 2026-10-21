@@ -7,10 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add ESPN NBA ingest and scoring ([PR #138](https://github.com/1wgrumph/amazon-fantasy-companion/pull/138)).
+- Add NBA panel rows and the sport label on TV ([PR #138](https://github.com/1wgrumph/amazon-fantasy-companion/pull/138)).
+- Add Yahoo NBA lineup import ([PR #138](https://github.com/1wgrumph/amazon-fantasy-companion/pull/138)).
+- Add manual NBA lineups ([PR #138](https://github.com/1wgrumph/amazon-fantasy-companion/pull/138)).
+- Add a per-sport NFL/NBA notification toggle ([PR #138](https://github.com/1wgrumph/amazon-fantasy-companion/pull/138)).
+- Turn NBA on by default in the shipped TV build and the deployed backend, and keep AFC_ENABLE_NBA as a kill switch ([PR #138](https://github.com/1wgrumph/amazon-fantasy-companion/pull/138)).
+
 ### Changed
 
 - Record v0.1.0 in the changelog ([PR #139](https://github.com/1wgrumph/amazon-fantasy-companion/pull/139)).
 - Record the v0.1.0 merge commit in the release receipt ([PR #142](https://github.com/1wgrumph/amazon-fantasy-companion/pull/142)).
+
+### Fixed
+
+- An NBA feed failure can no longer discard or delay the NFL poll: NBA ingest runs in its own scheduled function with bounded requests and writes ([PR #138](https://github.com/1wgrumph/amazon-fantasy-companion/pull/138)).
 
 ## [0.1.0] - 2026-10-20
 

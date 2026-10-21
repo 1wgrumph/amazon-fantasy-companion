@@ -36,6 +36,13 @@ Parameters:
     Default: DISABLED
     AllowedValues: [ENABLED, DISABLED]
     Description: Independent NBA ingest schedule; the handler also requires AFC_ENABLE_NBA.
+  EnableNba:
+    Type: String
+    Default: "true"
+    AllowedValues: ["true", "false"]
+    Description: >-
+      AFC_ENABLE_NBA kill switch. The deployed default is on.
+      Pass false to disable NBA.
 
 Globals:
   Function:
@@ -57,6 +64,7 @@ Globals:
         YAHOO_TOKEN_PARAMETER: !Ref YahooTokenParameter
         DEVICE_CODE_TTL_SECONDS: !Ref DeviceCodeTtlSeconds
         FEED_POLL_INTERVAL_SECONDS: !Ref FeedPollIntervalSeconds
+        AFC_ENABLE_NBA: !Ref EnableNba
 
 Resources:
   HttpApi:

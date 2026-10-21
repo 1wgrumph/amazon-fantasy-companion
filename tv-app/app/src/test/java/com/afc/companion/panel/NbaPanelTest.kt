@@ -1,6 +1,7 @@
 package com.afc.companion.panel
 
 import com.afc.companion.BuildConfig
+import java.io.File
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -26,11 +27,21 @@ class NbaPanelTest {
         return snapshot!!
     }
 
-    // Item 1: the build flag defaults off and the default decode follows it.
+    // Item 1: the shipped default is on. -PafcEnableNba=false is the kill switch, and the
+    // default decode follows the flag this build compiled.
 
-    @Test fun flagDefaultsOffAndTheDefaultDecodeRejectsNba() {
-        assertFalse("AFC_ENABLE_NBA is off unless -PafcEnableNba=true", BuildConfig.AFC_ENABLE_NBA)
-        assertNull("the default decode follows the build flag", decodePanel(state(nbaData())))
+    @Test fun flagDefaultsOnAndTheDefaultDecodeFollowsTheBuildFlag() {
+        val gradle = File(System.getProperty("afc.repoRoot"), "tv-app/app/build.gradle.kts").readText()
+        assertTrue(
+            "AFC_ENABLE_NBA defaults on unless -PafcEnableNba=false",
+            gradle.contains("providers.gradleProperty(\"afcEnableNba\").getOrElse(\"true\")"),
+        )
+        val nba = decodePanel(state(nbaData()))
+        if (BuildConfig.AFC_ENABLE_NBA) {
+            assertNotNull("the default decode follows the build flag", nba)
+        } else {
+            assertNull("the kill switch makes the default decode reject NBA", nba)
+        }
         assertNotNull("NFL still decodes with the default flag", decodePanel(state()))
     }
 
