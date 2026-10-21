@@ -1,0 +1,67 @@
+# i7 sandbox runtime change for Stage 2c (paths shown relative to the runtime directory)
+# outer.py sha256 before 710a50796c032d6a0bd30e4eb91fd40eb1726bf8bc35e7c2c93ea96e72380edc after 9f7d44c46e72cc318d0e65659e12019631c402c78d362ca51311540f6f006b43
+# config.json sha256 before c0e1b60bf677aab360851d5c806a613800a46fa7d7501fafd1679db69fc8d61a after b105500587b53917195d3c8bf8e0db364be48115ba256d1c120c0394357fb0f9
+--- runtime-before/outer.py	2026-10-20 21:50:49.077986416 -0500
++++ runtime-after/outer.py	2026-10-20 21:51:07.352445663 -0500
+@@ -99,6 +99,50 @@
+  check=['/usr/bin/bash','-c','test -r /dev/kvm && test -w /dev/kvm && test ! -e ~/.ssh && test ! -e ~/.aws && test ! -e ~/.config && test ! -e ~/.codex && test ! -e ~/.claude && test -r /etc/ssl/certs/ca-certificates.crt']
+  p=subprocess.run(inner(False,check),stdin=subprocess.DEVNULL,capture_output=True,text=True,timeout=10);proofs.append({'name':'kvm_and_home_isolation','argv':check,'exit':p.returncode,'stdout':p.stdout,'stderr':p.stderr});assert p.returncode==0
+  (run/'containment-proof.json').write_text(json.dumps({'proofs':proofs,'environment':env,'layout':'unshare outer + one bwrap, isolated network, HOME noexec with SDK and .local/opt exec submounts; exact host files read-only; real home absent; proof helper absent at run'},indent=2)+'\n');report('proofs',status='COMPLETE')
++ # Stage 2c: the VVD guest reaches the network through emulator slirp, which ignores HTTP_PROXY. Started only after the proofs.
++ # DNS on 127.0.0.1:53 answers A for the one allowlisted guest_forward host with the d0 address and NXDOMAIN for every other name;
++ # d0:443 then sends each connection to the allowlisting proxy as CONNECT <that host>:443. No route or interface is added.
++ gf=cfg.get('guest_forward')
++ if gf:
++  GH,GA=gf['host'],gf['address'];assert GH in cfg['allowlist'] and GA=='10.254.0.1'
++  def glog(name,row):
++   with (run/name).open('a') as f:f.write(json.dumps({'UTC':utc(),**row})+'\n')
++  def dns_loop(s):
++   while True:
++    q,peer=s.recvfrom(512)
++    try:
++     i,labels=12,[]
++     while q[i]:labels.append(q[i+1:i+1+q[i]].decode('ascii').lower());i+=1+q[i]
++     qtype=struct.unpack('!H',q[i+1:i+3])[0];name='.'.join(labels);qd=q[12:i+5];hit=name==GH
++     ans=struct.pack('!HHHLH',0xc00c,1,1,60,4)+socket.inet_aton(GA) if hit and qtype==1 else b''
++     s.sendto(q[:2]+struct.pack('!HHHHH',0x8180 if hit else 0x8183,1,1 if ans else 0,0,0)+qd+ans,peer)
++     glog('guest-dns.jsonl',{'name':name,'qtype':qtype,'answer':GA if ans else ('NOERROR-empty' if hit else 'NXDOMAIN')})
++    except Exception as error:glog('guest-dns.jsonl',{'error':type(error).__name__,'bytes':len(q)})
++  def guest_forward(client):
++   up=socket.socket(socket.AF_UNIX,socket.SOCK_STREAM);row={'host':GH,'up':0,'down':0}
++   try:
++    up.connect(SOCKET_PATH);up.sendall(('CONNECT '+GH+':443 HTTP/1.1\r\nHost: '+GH+':443\r\n\r\n').encode());head=b''
++    while b'\r\n\r\n' not in head and len(head)<4096:
++     b=up.recv(1)
++     if not b:break
++     head+=b
++    row['proxy_status']=head.split(b'\r\n',1)[0].decode('ascii','replace')
++    if not head.startswith(b'HTTP/1.1 200'):return
++    while True:
++     ready,_,_=select.select([client,up],[],[],120)
++     if not ready:return
++     for src in ready:
++      data=src.recv(65536)
++      if not data:return
++      (up if src is client else client).sendall(data);row['up' if src is client else 'down']+=len(data)
++   except Exception as error:row['error']=type(error).__name__
++   finally:client.close();up.close();glog('guest-forward.jsonl',row)
++  def gf_accept(listener):
++   while True:
++    client,_=listener.accept();threading.Thread(target=guest_forward,args=(client,),daemon=True).start()
++  dns=socket.socket(socket.AF_INET,socket.SOCK_DGRAM);dns.bind(('127.0.0.1',53));threading.Thread(target=dns_loop,args=(dns,),daemon=True).start()
++  gl=socket.socket();gl.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1);gl.bind((GA,443));gl.listen(32);threading.Thread(target=gf_accept,args=(gl,),daemon=True).start()
++  report('guest_forward',host=GH,address=GA,dns='127.0.0.1:53')
+  if command==['__containment_proof__']:report('run',argv=command,exit=0,UTC_start=utc(),UTC_end=utc());sys.exit(0)
+  argv=inner(False,command);start=utc();began=time.monotonic();abort=None
+  with (run/'stdout.txt').open('wb') as out,(run/'stderr.txt').open('wb') as err:
+# config.json (JSON-normalized diff)
+1278c1278,1279
+<         "~/afc-tools/work/stage1/lifecycle.sh"
+---
+>         "~/afc-tools/work/stage1/lifecycle.sh",
+>         "~/afc-tools/work/stage2c/drive-vvd.sh"
+1283a1285,1288
+>     },
+>     "guest_forward": {
+>         "host": "le3r79003f.execute-api.us-east-2.amazonaws.com",
+>         "address": "10.254.0.1"

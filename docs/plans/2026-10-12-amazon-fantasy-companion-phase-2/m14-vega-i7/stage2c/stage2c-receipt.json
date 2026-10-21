@@ -1,0 +1,127 @@
+{
+  "outcome": "REPAIRABLE_FAILURE",
+  "failure_class": "app defect (session token not persisted)",
+  "lifecycle": "AFC-2026-10-11",
+  "milestone": "M14",
+  "issue": "59",
+  "gate": "P2-V01",
+  "owner_amendment": "DEC-AFC-M14-STAGE2-WRITES-20261021",
+  "bug_route": "not-a-bug planned verification slice of P2-V01",
+  "role": "test_implementer",
+  "host": "<i7>",
+  "sdk": "0.24.12112",
+  "vpkg_x86_64_sha256": "7093fd5842dfa13af24aabb2aad871dbc89cc71a37c9143718af2f530af33044",
+  "routing": {
+    "method": "hypothesis 2: namespace resolver for the afc-dev host only + d0:443 forwarder that sends CONNECT <host>:443 to the allowlist proxy",
+    "hypothesis_1": "rejected statically: emulator proxy connector sends CONNECT with the destination IP, which the host-name allowlist denies (run abort)",
+    "outer_py_sha256": {
+      "before": "710a50796c032d6a0bd30e4eb91fd40eb1726bf8bc35e7c2c93ea96e72380edc",
+      "after": "9f7d44c46e72cc318d0e65659e12019631c402c78d362ca51311540f6f006b43"
+    },
+    "config_json_sha256": {
+      "before": "c0e1b60bf677aab360851d5c806a613800a46fa7d7501fafd1679db69fc8d61a",
+      "after": "b105500587b53917195d3c8bf8e0db364be48115ba256d1c120c0394357fb0f9"
+    },
+    "default_route_added": false,
+    "allowlist_widened": false,
+    "left_in_place": true
+  },
+  "runs": [
+    {
+      "id": "smoke",
+      "command": "sandboxed SDK node smoke.js (read-only GET /link)",
+      "utc_start": "2026-10-21T02:51:39Z",
+      "exit": 0,
+      "abort": null
+    },
+    {
+      "id": "C1",
+      "script": "drive-vvd.sh",
+      "utc_start": "2026-10-21T02:52:41Z",
+      "utc_end": "2026-10-21T03:00:18Z",
+      "exit": 0,
+      "abort": null,
+      "steps": 138,
+      "failed_steps": 0
+    }
+  ],
+  "checks": {
+    "verify-link-online.py": {
+      "exit": 1,
+      "pass": 4,
+      "fail": [
+        "the linked TV opens Profile/Settings after an app relaunch"
+      ]
+    }
+  },
+  "synthetic": {
+    "profile_id": "afc-vega-vvd-synthetic",
+    "owner_name": "AFC Vega VVD synthetic",
+    "link_codes": [
+      "P8UL6AUP",
+      "B7BUDVMF"
+    ],
+    "sessions_minted": 2,
+    "tokens_recorded": false
+  },
+  "afc_dev_writes": {
+    "POST /v1/link": 2,
+    "POST /v1/link/confirm": 2,
+    "PUT /v1/profile": 1,
+    "POST /v1/installed-apps": 0,
+    "POST /v1/routing-outcome": 0
+  },
+  "workstation_requests": [
+    {
+      "utc": "2026-10-21T02:53:36Z",
+      "request": "POST /v1/link/confirm",
+      "status": 200,
+      "write": true
+    },
+    {
+      "utc": "2026-10-21T02:59:18Z",
+      "request": "POST /v1/link/confirm",
+      "status": 200,
+      "write": true
+    }
+  ],
+  "verdicts": {
+    "device_linking": "PASS online link; FAIL token persistence (app defect)",
+    "profile_settings": "PASS load/change/save/reload; detection not exercised",
+    "alerts": "limited (backend/data)",
+    "watch": "limited (backend/data)",
+    "lineup_panel": "NEEDS_MORE_EVIDENCE (Panel unavailable); rows limited (backend/data)"
+  },
+  "checks_sha256": {
+    "vega-app/vvd-checks/drive-vvd.sh": "6c480d69e5e8c1ff92717f31da1006d4a809f56fdb7cee15fd32530a80465660",
+    "vega-app/vvd-checks/confirm-link.sh": "af86391e74d9a14ed0f61ed1698ca8336f9616ef79bb51ee58e7908e71804432",
+    "vega-app/vvd-checks/verify-link-online.py": "d2948e28bc811110f25ea771d50d4e7486f826465c90efaf8bc5d603b6c5c614",
+    "vega-app/vvd-checks/lib.sh": "bebc0a97369bbb90e243b8419b0aa12a34ee3fdddd88c567f7e2b208ee370190"
+  },
+  "evidence_sha256": {
+    "01-link-code.png": "5b766d1048682cf40b628e8ea2294d9b4073469deb5fee3301aab0a7c3e64388",
+    "04-main-loaded.png": "35e0d198e6d8b77118a7b6a366d6c4196e068be76398eb4795ac58778f90199f",
+    "05-redzone-on.png": "250fdaf54c064c99b83edd39b3ba22e678c29d38755b8988c2bce89a47324759",
+    "05a-redzone-off.png": "c75ca53d10bb2ee0ed21f781827df182f0bf26a10a52a828519b54444e9dc4d0",
+    "05b-save-focused.png": "2b6f31e4e000075749e895d533f0436fb2619ab10bd7bdfb555d81716064fca5",
+    "07-panel-section.png": "6f2c4e9d6bb6796b5a4bbd5df0105787cc0cd96d8df1c6efa1cb61703fb7382e",
+    "08-top-after-save.png": "4fc670da5a40f4498318cbc78e38aa9de5e71084ad49761070e2f5a64afa4d46",
+    "09-reload-top.png": "5277edd5561f0a6e3ced39d638f7da2169824a3975698731127e3f1774b43b7a",
+    "11-relinked-top.png": "35e0d198e6d8b77118a7b6a366d6c4196e068be76398eb4795ac58778f90199f",
+    "12-relinked-redzone.png": "250fdaf54c064c99b83edd39b3ba22e678c29d38755b8988c2bce89a47324759",
+    "app-log-excerpt.txt": "08c9a338d35b434ddbaa0328d0018ff5fcad1e1b76ebcfc22c56eea67bc60c8f",
+    "check-drive-vvd-steps.txt": "d03d5e3a97954c9d9991b67878c6322971ec714e6a50889e93dfa990f73d6df8",
+    "confirm-results.txt": "f9246a122c6b73eecfe44feed99d92aeb5c9743508752f74cc9fd250c53973d5",
+    "containment-proofs.txt": "b3b5f44a997ce0022f86ee43ffb5141320f603b65ece1a92a8d8edd9c61da5da",
+    "drive-commands.txt": "c0444aa38f90c2c3b8b9c1140947b68ac0161e41206f48949ce89e973fa9c512",
+    "guest-dns.txt": "63c52ffaefc4b989d39118c27f4a2993de094405dca76a5bd8cb3ac6f8ccb57d",
+    "guest-forward.txt": "cf9821cd4d3753ba7521cd31f3a17ecaf13523257268170c17b1167964263c22",
+    "proxy-connects.txt": "68b4b401c7fc107b265e84b29d52bd2ee567954d3053062e13a14f2dfd719bd5",
+    "run-c1.txt": "319968292dec1330a463c402d9f28877bcd1bdff769c720623d0974c6e7aedbd",
+    "runtime-change.diff": "98841c7f1f14d5eae23961f2fed25143b1b09d4bf7d188433ffd06651a123e7d",
+    "stage2c-summary.md": "8813fee3b2b363314c6f03380bf217a78b91535453bab800a52d1b76c002c458",
+    "strace-connects.txt": "fbf4fc02526407ff148d4177220a8892fa70a424a52cd39d70244b9716646720",
+    "verify-link-online.txt": "f458d613deace5528121bfdac6e3bc984667a30a92df23185678485957cc6cba",
+    "vvd-status.txt": "dfc36df86b3976f3797e24bf608f2eb2b1943d0e3c44c5737e3cc32c877f9016"
+  }
+}
