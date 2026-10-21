@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Describe NBA support in the README and submission writeup ([PR #146](https://github.com/1wgrumph/amazon-fantasy-companion/pull/146)).
+- Restyle the TV screens with a charcoal and cool-blue palette, shared five-percent safe zone, readable type, and consistent focus rings and scale. Preserve existing D-pad navigation and app behavior. ([PR #143](https://github.com/1wgrumph/amazon-fantasy-companion/pull/143))
 - Record the Yahoo Fantasy API approval history and the app in use (`md4Tp1VN`) in the AWS and Yahoo setup guide, replacing the outdated "keep the original app" instruction ([PR #145](https://github.com/1wgrumph/amazon-fantasy-companion/pull/145)).
 - Record v0.1.0 in the changelog ([PR #139](https://github.com/1wgrumph/amazon-fantasy-companion/pull/139)).
 - Record the v0.1.0 merge commit in the release receipt ([PR #142](https://github.com/1wgrumph/amazon-fantasy-companion/pull/142)).
