@@ -97,14 +97,22 @@ def test_landed_registry_routes_resolve_as_before():
     providers = json.loads(LANDED_REGISTRY.read_text())["providers"]
     resolved = {p["id"]: module._route(p)["platform_routes"] for p in providers}
     prime_fire_os = providers[0]["platform_routes"]["fire_os"]
+    youtube_tv = next(p for p in providers if p["id"] == "youtube_tv")
+    youtube_fire_os = youtube_tv["platform_routes"]["fire_os"]
     assert resolved == {
         "prime_video": {"fire_os": dict(prime_fire_os, status="verified"),
                         "vega": {"status": GAP}},
         "espn": {"fire_os": {"status": GAP}, "vega": {"status": GAP}},
         "directv_stream": {"fire_os": {"status": GAP}, "vega": {"status": GAP}},
-        "youtube_tv": {"fire_os": {"status": GAP}, "vega": {"status": GAP}},
+        "youtube_tv": {"fire_os": dict(youtube_fire_os, status="verified"),
+                       "vega": {"status": GAP}},
         "local_broadcast": {"fire_os": {"status": GAP}, "vega": {"status": GAP}},
     }
     assert resolved["prime_video"]["fire_os"]["package"] == "com.amazon.firebat"
     assert resolved["prime_video"]["fire_os"]["verified_outcome"] == "searchOpened"
     assert resolved["prime_video"]["fire_os"]["verified_at"] == "2026-10-16T20:10:00Z"
+    assert resolved["youtube_tv"]["fire_os"]["package"] == "com.amazon.firetv.youtube.tv"
+    assert resolved["youtube_tv"]["fire_os"]["verified_outcome"] == "appHomeOpened"
+    assert resolved["youtube_tv"]["fire_os"]["verified_at"] == "2026-10-21T13:30:07Z"
+    assert resolved["youtube_tv"]["fire_os"]["launch"]["value"] == "https://tv.youtube.com/"
+    assert youtube_tv["channels_carried"] == ["ESPN"]

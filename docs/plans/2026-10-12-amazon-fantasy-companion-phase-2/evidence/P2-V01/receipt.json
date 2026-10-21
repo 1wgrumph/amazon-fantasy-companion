@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "slice": "P2-V01",
+  "role": "Product Implementer",
+  "route": "Muse Code / Muse WonderFull Contributor / high (frozen fallback route, contributor mode on)",
+  "bug_route": "not-a-bug (planned slice, TDD green phase)",
+  "typed_outcome": "NEEDS_MORE_EVIDENCE",
+  "outcome_detail": "Product, gate and build are green. VVD qualification (install, launch, input, capture) is blocked by an environment failure outside the write set: the VVD emulator exits on a pending snapshot operation in the shared SDK instance. Per packet instruction this returns NEEDS_MORE_EVIDENCE; nothing on-VVD is claimed as PASS.",
+  "base": "62896ac (afc/p2-v01t, P2-V01T red suite)",
+  "commits": [
+    "8c1e4b43db51dc344451fdf9721f521be876110b feat(vega-app): P2-V01 Vega port",
+    "edf6e68 fix(ci): select vegaapp on gate.sh changes only",
+    "evidence commit follows this receipt"
+  ],
+  "branch": "afc/p2-v01",
+  "environment": {
+    "sandbox": "$HOME/.local/share/afc-tools/vega-sandbox.sh (every npm/node/vega/VVD command)",
+    "vega_sdk": "0.24.12112",
+    "vega_cli": "1.4.5 (per P2-V01T receipt; sandbox kepler fallback reports 0.200.0)",
+    "react_native": "0.83.0",
+    "react_native_kepler": "4.0.1+rn0.83.0",
+    "jest": "29.7.0",
+    "node": "v22.23.3",
+    "npm": "11.15.0",
+    "api_base_url": "https://<development-api-host> (aws-afc-dev ApiUrl from evidence/P2-L02/receipt-resume-2.md; non-secret stack output)"
+  },
+  "verification": [
+    {"id": "CMD-VEGA-UNIT", "command": "npm --prefix vega-app test -- --ci (via vega-sandbox.sh)", "exit": 0, "result": "19 suites, 162 passed, 0 failed (red baseline was 139 red of 162)", "evidence": "cmd-vega-unit.txt"},
+    {"id": "frozen-hashes", "command": "sha256 of every P2-V01T test_files entry vs frozen-hashes.json", "exit": 0, "result": "25 checked, 0 mismatches; tools/ci/tests/test_gate_vegaapp.py committed unchanged at 6990c68ecc08083ab2ecbc671b590766ad1766f7aaf85062160a7d2e16b5fc01", "evidence": "frozen-hashes-check.txt"},
+    {"id": "tsc", "command": "npm --prefix vega-app run typecheck", "exit": 0, "result": "no errors", "evidence": "tsc.txt"},
+    {"id": "CMD-COVERAGE-VEGAAPP", "command": "npm --prefix vega-app test -- --ci --coverage", "exit": 0, "result": "lines: shell/detect 100%, panel 97.7%, profile 96.4%, watch 93.8%, link 93.6%, net dto 97.6% apiClient 90%, alerts feed 97.9% presenter 62.8% (starters path untested by frozen suite), tokenStore 66.7% (AsyncStorage factory device-only), App.tsx 0% (UI wiring; VVD qualification blocked)", "evidence": "coverage.txt"},
+    {"id": "CMD-MUTATION-VEGAAPP", "command": null, "exit": null, "result": "not_run: no JS mutation tool exists in the pinned dependency set; typed gap, never PASS", "evidence": null},
+    {"id": "CMD-GATE-VEGAAPP", "command": "bash tools/ci/gate.sh vegaapp (npm/node shimmed through vega-sandbox.sh; the sandbox itself has no git)", "exit": 0, "result": "gate: vegaapp: PASS checks completed", "evidence": "cmd-gate-vegaapp.txt"},
+    {"id": "gate-docs-hygiene", "command": "bash tools/ci/gate.sh docs hygiene", "exit": 0, "result": "docs PASS, hygiene PASS (full tools/ci unittest discover incl. test_gate_vegaapp 8 tests and test_product_gate 17 tests)", "evidence": "cmd-gate-docs-hygiene.txt"},
+    {"id": "CMD-TREE-EQUAL", "command": "git diff --name-only 62896ac..HEAD", "exit": 0, "result": "no tv-app/ or backend/ path changed; OpenAPI contract untouched", "evidence": "changed-paths.txt"},
+    {"id": "CMD-VEGA-BUILD", "command": "AFC_API_BASE_URL=<ApiUrl> npm --prefix vega-app run build:app", "exit": 0, "result": "vega-app/build/x86_64-release/afc-companion_x86_64.vpkg sha256 7093fd5842dfa13af24aabb2aad871dbc89cc71a37c9143718af2f530af33044 built from 8c1e4b4; ApiUrl present in the bundled JS; no token or credential in the package. build-vega also emitted armv7/aarch64 artifacts as default multi-arch byproducts; they were not installed or used (physical path NOT_APPLICABLE).", "evidence": "cmd-vega-build.txt, vpkg-sha256.txt"},
+    {"id": "CMD-VVD-START", "command": "vega virtual-device start (attempts in vvd-run.sh, vvd-run2.sh, vvd-run3.sh, one sandbox invocation each)", "exit": "start reports rc=0 with 'Deadline reached but virtual device unresponsive'; status running:false", "result": "ENVIRONMENT_FAILURE: emulator exits with \"A snapshot operation for '<build>' is pending and timeout has expired\" (virtual_device.err.txt). The c16 preparation lifecycle booted running:true twice at 10:53/10:56 UTC; instance files changed 11:09-11:10 UTC during parallel screen-capture work. Repair requires writing under the SDK instance directory, outside this slice's write set.", "evidence": "vvd-run.txt, vvd-run2.txt, vvd-run3.txt, virtual_device.err.txt"},
+    {"id": "CMD-VVD-INSTALL", "command": "vega device install-app / launch-app", "exit": 2, "result": "not run to effect: 'Device not found: Cannot find an instance of Vega Virtual Device' in all attempts", "evidence": "vvd-run3.txt"},
+    {"id": "CMD-VVD-INPUT", "command": "vega device run-cmd inputd-cli button_press KEY_DOWN/KEY_ENTER", "exit": 2, "result": "blocked by CMD-VVD-START; the SDK provides run-cmd (shell takes no command args in --help)", "evidence": "vvd-run3.txt"},
+    {"id": "CMD-VVD-SCREENCAP", "command": "vega device run-cmd gwsi-tool-screenshooter + copy-from; $HOME/.local/share/afc-tools/vvd-screencap.sh", "exit": "2 (no device); helper 78", "result": "NEEDS_MORE_EVIDENCE: helper reports capture not qualified (c17: QMP uniform black frames, SDK screencap lookup failed); c16 recorded VDA exit 139. No captures under evidence/visual/P2-V01/ (README.md records the gap).", "evidence": "vvd-run2.txt, evidence/visual/P2-V01/README.md"},
+    {"id": "PROC-VISUAL-REVIEW", "command": null, "exit": null, "result": "not performed: no bootable VVD and no qualified capture. Typed evidence gap, never PASS.", "evidence": "evidence/visual/P2-V01/README.md"},
+    {"id": "PROC-VEGA-FEATURE-VERDICT", "command": "feature-verdicts.md", "exit": 0, "result": "5 rows, all 'unknown' with named limits (works requires observed VVD evidence); physical column NOT_APPLICABLE (AC-AFC-P2-VEGA-05)", "evidence": "feature-verdicts.md"},
+    {"id": "CMD-REVERIFY-VPKG / CMD-OCR-DELEGATE", "command": null, "exit": null, "result": "not_run in this implementer slice: both belong to the IE-P2-V01 independent review (coverage_assist required, VEGA_REVERIFY_CAPABILITY_GAP expected). Not claimed.", "evidence": null}
+  ],
+  "changed_paths": "changed-paths.txt (27 product/gate/docs files in 8c1e4b4, tools/ci/gate.sh in edf6e68, plus this evidence tree)",
+  "security": {
+    "yahoo": "No Yahoo account linked; no live Yahoo API data, tokens or responses loaded, logged or captured. Manual lineup source only.",
+    "session_token": "Only src/auth/tokenStore.ts touches persistent storage (Kepler AsyncStorage, required lazily); token sent only as Bearer credential, never logged (frozen TokenStoreTest).",
+    "package": "The .vpkg carries only the build-time ApiUrl; committed config.generated.json default is empty (Backend not configured)."
+  },
+  "remaining_risks": [
+    "VVD instance snapshot state must be repaired (owner of the vega-virtual-device lease / parallel screencap work) before install, launch, input, capture and any 'works' verdict can be recorded.",
+    "Screen capture on the VVD is unqualified (c17); AFC-PR-045 pixel measurement and PROC-VISUAL-REVIEW remain open even after boot is repaired.",
+    "App.tsx UI wiring has no unit coverage; it is exercised only by the VVD path.",
+    "AlertPresenter starters/bounded-names path mirrors the Fire OS code but the frozen suite covers only the legacy player/matchup shape (62.8% line coverage).",
+    "CI vegaapp job uses the GitHub runner image's Node/npm (no SHA-pinnable setup action was available without inventing a digest); the gate GAPs by name if they are absent and engines require node >=20.",
+    "Linked-state screens need the owner to confirm a TV code on a phone/browser (DEC-AFC-SD-048) once the VVD boots."
+  ],
+  "blocker": "ENVIRONMENT_FAILURE (VVD): emulator exits on a pending snapshot operation in the shared SDK instance at $HOME/.local/share/afc-tools/vega-home/vega/sdk/vega-sdk/main/0.24.12112/vvd/instances/4915776e-97ff-4b5c-84ad-351d1d7651f3, outside this slice's write set. Next step: repair/reset that instance under the vega-virtual-device lease, then rerun vvd-run3.sh.",
+  "developer_feedback": {
+    "requirement_id": "AC-AFC-P2-DX-01",
+    "tools_exercised": ["Vega SDK 0.24.12112 react-native build-vega", "Vega CLI virtual-device/device subcommands", "Vega Virtual Device (QEMU)", "Jest 29.7.0 via react-native-kepler preset", "vega-sandbox.sh wrapper"],
+    "observations": [
+      {"id": "DF-V01-01", "tool": "Vega CLI", "observation": "vega virtual-device start prints 'Deadline reached but virtual device unresponsive' yet exits 0; callers must check virtual-device status, not the exit code.", "evidence": "vvd-run2.txt CMD-VVD-START rc=0 with running:false"},
+      {"id": "DF-V01-02", "tool": "Vega Virtual Device", "observation": "A start killed without virtual-device stop leaves 'A snapshot operation for <build> is pending' and every later boot exits immediately; no CLI reset/repair command exists (only start/status/stop).", "evidence": "virtual_device.err.txt; vega virtual-device --help"},
+      {"id": "DF-V01-03", "tool": "vega-sandbox.sh", "observation": "Each wrapper call is a fresh bwrap (--die-with-parent, per-run /tmp, 300s wall limit): a VVD started in one call is dead in the next, so start/install/launch/input/capture/stop must be one invocation (vvd-run3.sh).", "evidence": "vvd-run.txt WALL_CLOCK_LIMIT abort in run.json"},
+      {"id": "DF-V01-04", "tool": "Vega SDK build", "observation": "react-native build-vega builds x86_64, aarch64 and armv7 together with no arch selector in --help, adds a keplerscript needs.module to manifest.toml in place, and writes buildinfo.json at the project root (not in the template .gitignore).", "evidence": "cmd-vega-build.txt; git diff of manifest.toml in 8c1e4b4"},
+      {"id": "DF-V01-05", "tool": "Vega CLI device shell", "observation": "vega device shell --help takes no command argument; scripted device commands and input need vega device run-cmd --command, and file retrieval is copy-from (its --help swaps host/device wording for source/destination).", "evidence": "vega device shell/run-cmd/copy-from --help during this slice"},
+      {"id": "DF-V01-06", "tool": "Vega SDK screencap", "observation": "gwsi-tool-screenshooter is documented but unqualified here: VDA exit 139 (c16) and QMP uniform black frames (c17 helper exits 78). No supported capture path on the Ubuntu VVD was found.", "evidence": "vvd-run2.txt HOST-SCREENCAP-HELPER rc=78; c16 lifecycle-summary.json in the m03-m05 recovery evidence"}
+    ]
+  },
+  "review_repair_provenance": {
+    "round": "R-1 through R-6",
+    "note": "Published artifact/source/check digest tables refer to the repaired public files. executed_* fields preserve the source/check hashes used by the historical run. Runtime results and vpkg hashes are historical; no new device build/run is claimed.",
+    "evidence_redacted": true,
+    "originals": "Exact original evidence retained privately; public endpoint regions and environment identifiers redacted."
+  }
+}

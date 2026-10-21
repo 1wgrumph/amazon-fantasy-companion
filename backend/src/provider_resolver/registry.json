@@ -32,8 +32,17 @@
     {
       "id": "youtube_tv",
       "name": "YouTube TV",
-      "channels_carried": [],
-      "platform_routes": {}
+      "channels_carried": ["ESPN"],
+      "platform_routes": {
+        "fire_os": {
+          "package": "com.amazon.firetv.youtube.tv",
+          "launch": {"type": "uri", "value": "https://tv.youtube.com/"},
+          "doc_source": "Device intent filters for com.amazon.firetv.youtube.tv (dumpsys package, AFTKM Fire OS 8.1.8.5, 2026-10-21): VIEW http/https host tv.youtube.com path GLOB .*, activity dev.cobalt.app.MainActivity; evidence/nba/ytv-route/device-log.txt. ESPN is named in the YouTube TV membership channel list (https://tv.youtube.com/learn/faq/, retrieved 2026-10-21).",
+          "verified_outcome": "appHomeOpened",
+          "verified_at": "2026-10-21T13:30:07Z",
+          "currentAttemptObservation": "none"
+        }
+      }
     },
     {
       "id": "local_broadcast",

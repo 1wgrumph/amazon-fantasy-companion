@@ -10,11 +10,13 @@ repository-relative scope owns a path:
 2. [Specifications](spec/AGENTS.md): section sources and vendored spec tools.
 3. [Developer feedback](developer-feedback/AGENTS.md): the observation log.
 4. [TV app](tv-app/AGENTS.md): the Fire TV app under `tv-app/`.
-5. [Backend](backend/AGENTS.md): the SAM backend under `backend/`.
-6. [Device integration](device-integration/AGENTS.md): spikes, on-device
+5. [Vega app](vega-app/AGENTS.md): the Vega OS compatibility client under
+   `vega-app/`.
+6. [Backend](backend/AGENTS.md): the SAM backend under `backend/`.
+7. [Device integration](device-integration/AGENTS.md): spikes, on-device
    captures, live run records and the demo manifest.
 
-The CI/CD scope excludes the paths owned by the other five areas. Report
+The CI/CD scope excludes the paths owned by the other six areas. Report
 unmatched paths as `(unmapped)` rather than inventing coverage.
 
 ## Tools

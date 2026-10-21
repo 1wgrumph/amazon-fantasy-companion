@@ -9,11 +9,22 @@ marked PENDING in place; no pending result is asserted.
 
 The companion watches live NFL games for the viewer's fantasy starters and
 raises tune-in alerts — red-zone entry, player score, and close game — with a
-Watch action that hands off to the provider app carrying that game. A lineup
-panel shows each starter's points, the team total, and progress. The backend
-holds the profile, ingests the live feed, matches events to starters, applies
-the alert policy, and serves the panel; the Fire TV app polls for alerts and
-panel state, presents them, and executes Watch.
+Watch action that hands off to the provider app carrying that game. NFL is
+the primary story. NBA is included beside it (owner decision, 2026-10-21;
+CHANGELOG, PR #138). Amazon carries both NFL and NBA on Prime Video, so the
+submission shows both (rights sources in Future direction below, accessed
+2026-10-20). A separate scheduled function, `NbaIngestFunction`
+(`nba.lambda_handler`), ingests the ESPN NBA scoreboard and each game
+summary and stores player statistics. The panel scores those statistics
+on the NBA points table and can show the rows with the sport label "NBA"
+and the basis "Points" (`nbaPoints`). The NFL ingest path
+(`IngestFunction`, `feed_ingest.lambda_handler`) is unchanged.
+Game-event alerts are NFL-only.
+NBA alerts are not generated. A lineup panel shows each starter's points,
+the team total, and progress. The backend holds the profile, ingests the
+live feed, matches events to starters, applies the alert policy, and serves
+the panel; the Fire TV app polls for alerts and panel state, presents them,
+and executes Watch.
 
 ## Fire TV integration (from evidence)
 
@@ -50,7 +61,22 @@ panel state, presents them, and executes Watch.
   with the cursor and dismissals persisted on the device (CHANGELOG,
   PRs #80, #85, #115 — the G5 wiring entry). A device-local switch,
   "Show panel on new alert" (default on), re-shows a hidden full-screen
-  panel when a new alert arrives.
+  panel when a new alert arrives. Those alerts are NFL game events.
+  NBA game-event alerts are not generated (PR #138).
+- **NBA panel and sport toggles — repository evidence, PR #138. No
+  device-spike verdict and no device observer.** With `AFC_ENABLE_NBA`
+  on (the deployed template default and the TV build default), the
+  panel accepts NBA rows, shows the sport label "NBA", and shows the
+  basis "Points" for `nbaPoints`. A mapped Yahoo NBA scoring table
+  uses the basis "Yahoo league scoring" with the same "NBA" label;
+  that Yahoo path is synthetic-test only, described below. Profile
+  settings show "NFL alerts: on" or "NFL alerts: off", and the same
+  pair for NBA. Turning a sport off suppresses that sport's alerts
+  and clears that sport's panel rows. Both sports default on. Manual
+  NBA lineups are built by `nba.manual.build` (source manual, sport
+  `nba`). Yahoo NBA import is `nba.yahoo.import_lineup`. Live Yahoo
+  Fantasy API access is pending Yahoo's approval and is expected on
+  or after 2026-10-23. No live Yahoo NBA data is used.
 - **Provider routing — SP-3 verdict PARTIAL.** Desk evidence on the same
   stick (`spikes/sp3-provider-links/VERDICT.md`, PR #110;
   `backend/src/provider_resolver/registry.json`): Prime Video's
@@ -87,17 +113,29 @@ CloudFormation stack `afc-dev` in `us-east-2`
 - **API Gateway (HTTP API)** — the `/v1` routes (`/v1/link`, `/v1/profile`,
   `/v1/alerts`, `/v1/panel`, `/v1/providers`, `/v1/routing-outcome`,
   `/v1/installed-apps`) plus the `/link` confirmation page, with throttling.
-- **Lambda (python3.12)** — three functions: the API router
-  (`api.handler.lambda_handler`), the ESPN ingest
-  (`feed_ingest.lambda_handler`), and the DynamoDB Streams pipeline consumer
-  (matcher, alert policy, provider route, panel). Each carries
-  least-privilege per-function DynamoDB grants; the public API function's
-  unused Yahoo SSM read access was removed (CHANGELOG, PRs #60, #68).
+- **Lambda (python3.12)** — four functions: the API router
+  (`api.handler.lambda_handler`), the NFL ESPN ingest
+  (`feed_ingest.lambda_handler` on `IngestFunction`), the NBA ESPN
+  statistics ingest (`nba.lambda_handler` on `NbaIngestFunction`), and
+  the DynamoDB Streams pipeline consumer (matcher, alert policy,
+  provider route, panel). The NFL ingest path is unchanged.
+  `NbaIngestFunction` reads the NBA scoreboard and game summaries and
+  stores player statistics. It does not write game events or alerts
+  (CHANGELOG, PR #138). Each function carries least-privilege
+  per-function DynamoDB grants; the public API function's unused Yahoo
+  SSM read access was removed (CHANGELOG, PRs #60, #68).
 - **DynamoDB (on-demand)** — Profiles, Links, Events (with a NEW_IMAGE
   stream), Alerts, Lineups, Panels, and PlayerStats tables.
-- **EventBridge Scheduler** — `rate(1 minute)` ingest trigger, disabled by
-  default (`IngestScheduleState`); it runs only while a profile-relevant game
-  is in progress.
+- **EventBridge Scheduler** — `rate(1 minute)` NFL ingest trigger, disabled
+  by default (`IngestScheduleState`); it runs only while a profile-relevant
+  game is in progress. A second schedule (`NbaIngestScheduleState`) targets
+  `NbaIngestFunction`, also `rate(1 minute)` and also disabled by default
+  (PR #138). The NBA handler fetches only when `AFC_ENABLE_NBA` is on.
+  That variable is set from the template parameter `EnableNba`, whose
+  deployed default is on; `EnableNba=false` is the backend kill switch.
+  The TV kill switch is the Gradle property `afcEnableNba` (default on;
+  `-PafcEnableNba=false` turns NBA off). A disabled schedule is not a
+  measured live poll.
 - **SSM Parameter Store** — Yahoo client secret and OAuth refresh credential
   as `SecureString`; no secret value is in the repository.
 - **CloudWatch Logs** — per-function log groups.
@@ -108,7 +146,7 @@ deselected by the link filter) and suite 26 passed for the recorded commits
 (PRs #104, #107); the earlier P2-L02 deploy answered eleven known routes
 with nine deployed smoke tests passed and two panel tests deferred (PR #70),
 and the P2-L03 deploys recorded the new PlayerStats table with lineup source
-manual (PR #96). The ingest path validates ESPN payloads against a pinned
+manual (PR #96). The NFL ingest path validates ESPN payloads against a pinned
 schema before any store write, replays labeled historical fixtures (14
 completed games, PR #63), and bounds boxscore ingest against denial-of-service
 inputs (PR #103; `spikes/sp5-espn-feed/VERDICT.md`).
@@ -150,12 +188,10 @@ Prime Video already ships an analytics viewing layer over Thursday Night
 Football (Prime Vision with Next Gen Stats and AI features, per the first
 source), and Amazon holds NBA and WNBA rights on Prime Video (11-year deal:
 NBA beginning with the 2025–26 season and WNBA beginning in 2026, per the
-second and third sources). If this product grew
-in that direction, the sport-agnostic parts — alert policy, Watch handoff,
-and panel — would carry over; the NFL-specific parts — the ESPN feed adapter
-and the PPR / Half-PPR scoring presets — would need sport-specific
-replacement. None of this is built, scheduled, or claimed as product
-capability.
+second and third sources). Prime Vision and WNBA support are not built,
+scheduled, or claimed. NBA support that this product does ship is
+described in the product sections above (PR #138), and it does not
+include NBA alerts. This section adds no further NBA or WNBA claim.
 
 ## Honest limits
 
@@ -181,8 +217,22 @@ capability.
   rather than reusing a historical outcome.
 - Yahoo Fantasy is blocked for the unapproved app (SP-6 FAILS,
   `spikes/sp6-yahoo/VERDICT.md`, PR #100): OAuth succeeds, the Fantasy API
-  returns HTTP 403 `This application is not authorized`. The selected lineup
-  source is manual. No live Yahoo API data is used.
+  returns HTTP 403 `This application is not authorized`. The selected live
+  lineup source is manual. No live Yahoo API data is used. Yahoo NBA
+  lineup import is built and tested on synthetic fixtures only (PR #138).
+  Live Yahoo Fantasy API access is pending Yahoo's approval and expected
+  on or after 2026-10-23. That pending approval does not change the SP-6
+  verdict.
+- NBA game-event alerts are not generated (PR #138). `NbaIngestFunction`
+  stores player statistics for panel rows. Red-zone, player-score, and
+  close-game alerts remain the NFL ingest path only. The per-sport
+  toggle can suppress alerts and panel rows for NFL or NBA; with no NBA
+  alerts produced, the NBA switch's present effect is the panel rows.
+- The NBA ingest schedule (`NbaIngestScheduleState`) defaults to
+  disabled. `AFC_ENABLE_NBA` defaults on in the deployed template
+  (`EnableNba`) and in the TV build (`afcEnableNba`). Either value set
+  to false is a kill switch. The default-on flag is not evidence that a
+  live NBA poll has been measured.
 - Live feed timing is unmeasured (SP-5 PARTIAL): capture and historical
   replay fixtures prove parsing and validation only; the 15 s
   `feed_poll_interval` check and live correction behaviour wait for a live
@@ -211,6 +261,12 @@ capability.
   (live feed timing and correction sequence): both verdicts remain PARTIAL
   until those live checks land.
 - PENDING — X11 Alexa disposition: no Alexa offer is made until it lands.
+- PENDING — live Yahoo Fantasy API access for the NBA import. Actor:
+  Yahoo. Approval is expected on or after 2026-10-23. No live result is
+  claimed. The synthetic tests are the evidence for the import code.
+- PENDING — on-stick NBA panel capture for the 2026-10-21 ESPN games.
+  Actor: William. AFC UI only; see the [demo plan](demo-plan.md). Not
+  filmed in this write-up; no capture result is claimed.
 - PENDING (owner) — submission-rule confirmations that issue #1 and the
   technical plan do not settle: final track/mini-challenge selection beyond
   Fire TV, and the ESPN-terms question for public submission (OA-6/C3, still
@@ -228,8 +284,14 @@ capability.
   `spikes/sp4-panel-video/VERDICT.md` (FAILS), `spikes/sp7-detection/VERDICT.md`
   (PARTIAL); PRs #89, #106, #109, #110, #114, #115.
 - Feed: `spikes/sp5-espn-feed/VERDICT.md` (PARTIAL); PR #63, PR #103.
-- Lineup source: `spikes/sp6-yahoo/VERDICT.md` (FAILS, manual selected);
-  PR #100.
+- Lineup source: `spikes/sp6-yahoo/VERDICT.md` (FAILS, manual selected
+  for live access); PR #100. Yahoo NBA import is synthetic-only
+  repository evidence, PR #138, with no live observer.
+- NBA (repository evidence, PR #138; no device observer and no spike
+  verdict): `backend/src/nba/`, `NbaIngestFunction` in
+  `backend/template.yaml`, and the TV panel decode in
+  `tv-app/app/src/main/java/com/afc/companion/panel/PanelModel.kt`.
+  NBA alerts are not part of this evidence.
 - Backend, deployment, TV app: `backend/template.yaml`, `backend/src/`,
   `tv-app/app/src/main/java/com/afc/companion/`, `CHANGELOG.md`, and
   `docs/operations/aws-and-yahoo-setup.md` (stack `afc-dev`, `us-east-2`, SSM

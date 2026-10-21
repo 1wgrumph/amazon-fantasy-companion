@@ -12,8 +12,11 @@ through `T_judge_access` 2026-11-20.
 Filmable-today shot list: 12 + 22 + 28 + 30 + 32 + 18 + 14 = **156 s**
 (2 min 36 s). That is 14 s under the 170 s (2 min 50 s) plan limit and
 24 s under the under-3-minute public-video rule. PENDING swap-ins below
-reuse the duration of the shot they replace, so the total stays at 156 s
-whichever version is filmed. No shot is added beyond this list.
+reuse the duration of the shot they replace, so those versions stay at
+156 s. One further segment is planned, not filmed today: an on-stick NBA
+panel capture for the 2026-10-21 ESPN games, at most 14 s, AFC UI only.
+Including it reaches at most 170 s and stays under 3 minutes. No other
+shot is added.
 
 ## Rules for every shot
 
@@ -23,8 +26,9 @@ whichever version is filmed. No shot is added beyond this list.
 - No shot claims behavior with no passing evidence. Where the target
   behavior failed its spike, the shot shows the honest fallback and the
   narration states the limit.
-- No live Yahoo API data is shown or implied; the lineup source is manual
-  entry, labeled manual (SP-6 FAILS).
+- No live Yahoo API data is shown or implied; the lineup source on screen
+  is manual entry, labeled manual (SP-6 FAILS). The planned NBA panel
+  segment follows the same rule.
 - No account details, credentials, or device addresses appear on screen.
 - Fire OS on the owner's stick (AFTKM, Fire OS 8.1.8.5 / API 30) is the
   primary target. Vega is a paused stretch compatibility target only
@@ -72,6 +76,32 @@ Required-moment coverage (issue #1 §Judging alignment):
 (a) alert → Watch → correct game or channel is S3 + S4, filmed only up to
 the proven `searchOpened` outcome; (b) the lineup panel moment is S5,
 filmed as the proven full-screen panel.
+
+## NBA panel segment — planned 2026-10-21 (not filmed)
+
+William films this only for the 2026-10-21 ESPN NBA games, and only as
+an on-stick capture of the companion UI. It is not required moment (a)
+or (b). NFL stays the primary story. Duration is at most 14 s, which is
+the margin under the 170 s plan limit. Until this capture happens, the
+156 s list above is what is shot. No footage of this segment exists,
+and none is claimed.
+
+What is shown: the companion's full-screen panel with NBA rows, the
+sport label "NBA", and the scoring basis "Points". Narration states
+that this is the NBA panel, that game-event alerts remain NFL-only, and
+that the lineup on screen is manual.
+
+- Source: on-device capture of the AFC UI. No provider video, no
+  provider app screen, and no broadcast picture.
+- No NBA alert is shown or described as existing. NBA ingest stores
+  player statistics for panel rows. Game-event alerts are NFL-only
+  (PR #138).
+- No live Yahoo data. A lineup on screen is labeled manual. The Yahoo
+  NBA import is synthetic-test only. Live Yahoo Fantasy API access is
+  pending Yahoo's approval and expected on or after 2026-10-23.
+- Evidence for the panel behavior is the repository implementation
+  (PR #138). There is no device observer and no spike verdict for this
+  segment. It does not claim a live-timing result.
 
 ## PENDING swap-ins — not filmable today
 

@@ -1,0 +1,61 @@
+
+> @amazon-devices/afc-companion@0.0.1 test
+> jest --runInBand __tests__/auth/appTokenStore.test.ts
+
+FAIL __tests__/auth/appTokenStore.test.ts
+  AppTokenStoreTest
+    ✕ bindsTheSessionTokenToTheSupportedAppPrivateStoreNotLegacyAsyncStorage (7 ms)
+    ✕ tokenWrittenBeforeRelaunchIsReadAfterRelaunch (1 ms)
+
+  ● AppTokenStoreTest › bindsTheSessionTokenToTheSupportedAppPrivateStoreNotLegacyAsyncStorage
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 2
+    + Received  + 2
+
+      Object {
+    -   "legacyCalls": 0,
+    -   "supportedWrites": 1,
+    +   "legacyCalls": 3,
+    +   "supportedWrites": 0,
+      }
+
+      49 |     await store.clear();
+      50 |     const legacyCalls = [mockLegacy.getItem, mockLegacy.setItem, mockLegacy.removeItem].reduce((n, fn) => n + fn.mock.calls.length, 0);
+    > 51 |     expect({legacyCalls, supportedWrites: mockSupported.setItem.mock.calls.length}).toEqual({legacyCalls: 0, supportedWrites: 1});
+         |                                                                                     ^
+      52 |   });
+      53 |
+      54 |   test('tokenWrittenBeforeRelaunchIsReadAfterRelaunch', async () => {
+
+      at Object.toEqual (__tests__/auth/appTokenStore.test.ts:51:85)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+  ● AppTokenStoreTest › tokenWrittenBeforeRelaunchIsReadAfterRelaunch
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "<test-value>"
+    Received: null
+
+      54 |   test('tokenWrittenBeforeRelaunchIsReadAfterRelaunch', async () => {
+      55 |     await launch().write('<test-value>');
+    > 56 |     expect(await launch().read()).toBe('<test-value>');
+         |                                   ^
+      57 |   });
+      58 | });
+      59 |
+
+      at Object.toBe (__tests__/auth/appTokenStore.test.ts:56:35)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+Test Suites: 1 failed, 1 total
+Tests:       2 failed, 2 total
+Snapshots:   0 total
+Time:        0.174 s, estimated 1 s
+Ran all test suites matching /__tests__\/auth\/appTokenStore.test.ts/i.
+
+exit=1

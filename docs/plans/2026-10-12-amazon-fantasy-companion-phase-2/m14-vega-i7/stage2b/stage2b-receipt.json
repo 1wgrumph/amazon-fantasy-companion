@@ -1,0 +1,100 @@
+{
+  "outcome": "OWNER_DECISION_REQUIRED",
+  "failure_class": "environment/sandbox",
+  "lifecycle": "AFC-2026-10-11",
+  "milestone": "M14",
+  "issue": "59",
+  "gate": "P2-V01",
+  "owner_amendment": "DEC-AFC-M14-STAGE2-WRITES-20261021",
+  "bug_route": "not-a-bug planned verification slice of P2-V01",
+  "role": "test_implementer",
+  "host": "<i7>",
+  "sdk": "0.24.12112",
+  "vpkg_x86_64_sha256": "7093fd5842dfa13af24aabb2aad871dbc89cc71a37c9143718af2f530af33044",
+  "proxy_allowlist_change": {
+    "added": "<development-api-host>",
+    "before_sha256": "0b475662771d2ff1ab26478d274c27a52deb47b9c2aa0ee10a4b92d304e67f2e",
+    "after_sha256": "c0e1b60bf677aab360851d5c806a613800a46fa7d7501fafd1679db69fc8d61a",
+    "left_in_place": true
+  },
+  "runs": [
+    {
+      "id": "N1",
+      "script": "probe-guest-network.sh",
+      "utc_start": "2026-10-21T02:35:16Z",
+      "utc_end": "2026-10-21T02:36:16Z",
+      "exit": 0,
+      "abort": null,
+      "failed_steps": {
+        "guest-getent_hosts": 1,
+        "guest-ip_route": 1
+      },
+      "note": "getent and ip are absent in the guest; all app and VVD steps exit 0"
+    }
+  ],
+  "workstation_requests": [
+    {
+      "utc": "2026-10-21T02:37:06Z",
+      "request": "GET /link",
+      "status": 200,
+      "write": false
+    }
+  ],
+  "backend_writes": [],
+  "synthetic_profiles_created": [],
+  "devices_linked": [],
+  "verdicts": {
+    "device_linking": {
+      "verdict": "NOT_RUN online; offline path observed",
+      "reason": "guest network does not reach the allowlist proxy (QEMU slirp, no proxy option); 0 afc-dev CONNECTs"
+    },
+    "profile_settings_detection": {
+      "verdict": "NOT_RUN",
+      "reason": "needs a linked session; same network limit"
+    },
+    "alerts": {
+      "verdict": "limited (backend/data) + NOT_RUN",
+      "reason": "network limit; and no public API writes a lineup, so a synthetic profile cannot receive an alert"
+    },
+    "watch": {
+      "verdict": "limited (backend/data) + NOT_RUN",
+      "reason": "reached only from an alert banner; no alert possible for a synthetic profile"
+    },
+    "lineup_panel": {
+      "verdict": "NOT_RUN; rows limited (backend/data)",
+      "reason": "network limit; once linked only the empty-lineup state is reachable"
+    }
+  },
+  "app_defects": [],
+  "containment": {
+    "proxy_allowed_hosts": {
+      "k-artifactory-external.labcollab.net": 20,
+      "kepler-static-artifacts.kepler.labcollab.net": 1
+    },
+    "denied": [
+      "example.com (canary)"
+    ],
+    "afc_dev_connects": 0,
+    "non_loopback_connects": "2, both sandbox network proofs, ENETUNREACH",
+    "containment_proofs_exit": 0
+  },
+  "files": {
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/stage2b/01-link-network-error-allowlisted.png": "5a6ba0e55de47ea16eaa5676b6aa39a66e44be558c0418f66c61448e0c5b57f3",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/stage2b/allowlist-diff.txt": "38706c5da00b615a3af412273b1142a86059c770f6fd1b291eb53c19a568284b",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/stage2b/check-probe-guest-network-steps.txt": "bf5fcc228b82ea432de25c46f944d96c01c6044291c6468d23b29ffe0dd2ae2f",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/stage2b/guest-network.txt": "abed51b6ad84785513dccc432c85ea237d8e0aab60c5c64d8037aa4fec51cf48",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/stage2b/proxy-connects.txt": "f96824fd556c8c9fd892c2faa8ea80b8f294d50251f3fd1fe8fe5887cb0ef8f2",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/stage2b/stage2b-summary.md": "2c6c3bac0df2ab57ba8c640d9841d863da4e03357b750bc8bf3e95910a59c1b7",
+    "vega-app/vvd-checks/lib.sh": "bebc0a97369bbb90e243b8419b0aa12a34ee3fdddd88c567f7e2b208ee370190",
+    "vega-app/vvd-checks/probe-guest-network.sh": "3a7a38c6414d6224a7838a65e99c5aebdbe1a4ecb5810f4c54818c32363431e1"
+  },
+  "executed_changed_check_sha256": {
+    "vega-app/vvd-checks/probe-guest-network.sh": "2c978573269178dd58b13bb760a781fa9b093713c1512b869ef8228f56af52ae"
+  },
+  "review_repair_provenance": {
+    "round": "R-1 through R-6",
+    "note": "Published artifact/source/check digest tables refer to the repaired public files. executed_* fields preserve the source/check hashes used by the historical run. Runtime results and vpkg hashes are historical; no new device build/run is claimed.",
+    "evidence_redacted": true,
+    "originals": "Exact original evidence retained privately; public endpoint regions and environment identifiers redacted."
+  }
+}

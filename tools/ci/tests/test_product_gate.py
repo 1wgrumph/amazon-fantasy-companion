@@ -16,7 +16,7 @@ import yaml
 
 from gate_support import REPO, commit_all, copy_repo, path_without, run_gate, write
 
-AREAS = {'spec', 'docs', 'hygiene', 'tvapp', 'backend'}
+AREAS = {'spec', 'docs', 'hygiene', 'tvapp', 'backend', 'vegaapp'}
 TREES = {'tvapp': 'tv-app', 'backend': 'backend'}
 
 
