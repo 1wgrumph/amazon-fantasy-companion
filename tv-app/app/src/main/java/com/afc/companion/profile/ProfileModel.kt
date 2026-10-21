@@ -10,6 +10,7 @@ import org.json.JSONObject
 enum class AlertType { RedZone, PlayerScore, CloseGame }
 enum class Presentation { HeadsUp, PanelOnly }
 enum class Excitement { Off, Mild, Hype }
+enum class Sport(val wire: String, val label: String) { Nfl("nfl", "NFL"), Nba("nba", "NBA") }
 
 /** Minutes of the local day, 0..1439; a window may wrap past midnight. */
 data class TimeWindow(val startMinute: Int, val endMinute: Int)
@@ -43,7 +44,10 @@ data class ProfileState(
     val panel: PanelPrefs,
     val detectionOptIn: Boolean,
     val scoringPreset: ScoringPreset,
-)
+    val sports: Map<Sport, Boolean>? = null,
+) {
+    fun sportEnabled(sport: Sport): Boolean = sports?.get(sport) ?: true
+}
 
 /**
  * One control per frozen Settings field. Persisted settings are untrusted:
@@ -92,9 +96,16 @@ object ProfileCodec {
             ((v as? JSONObject)?.opt("visible") as? Boolean)?.let(::PanelPrefs)
         } ?: return null
         val detection = field(c, "detectionOptIn", false) { it as? Boolean } ?: return null
+        val sports = if (!c.has("sports")) null else {
+            val o = c.opt("sports") as? JSONObject ?: return null
+            if (o.keys().asSequence().any { key -> Sport.entries.none { it.wire == key } }) return null
+            Sport.entries.associateWith { sport ->
+                if (o.has(sport.wire)) o.opt(sport.wire) as? Boolean ?: return null else true
+            }
+        }
         return ProfileState(
             selections, teamLeague, alertTypes, minGap, quiet, gameDay, spoiler, presentation, voice,
-            excitement, providerPref, switching, panel, detection, settings.scoringPreset,
+            excitement, providerPref, switching, panel, detection, settings.scoringPreset, sports,
         )
     }
 
@@ -127,7 +138,12 @@ object ProfileCodec {
             .put("switchingConfirm", state.switchingConfirm)
             .put("panelPrefs", JSONObject().put("visible", state.panel.visible))
             .put("detectionOptIn", state.detectionOptIn)
-        return Settings(state.scoringPreset, c)
+        if (state.sports != null) {
+            c.put("sports", JSONObject().apply {
+                Sport.entries.forEach { put(it.wire, state.sportEnabled(it)) }
+            })
+        }
+        return Settings(state.scoringPreset, c, nbaEnabled = state.sports != null)
     }
 
     private val SELECTION_KEYS = setOf("leagues", "teams", "players", "favoriteTeams")

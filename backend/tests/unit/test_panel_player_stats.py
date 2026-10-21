@@ -10,6 +10,8 @@ panel.snapshot — no seam injection.
 import json
 from pathlib import Path
 
+import pytest
+
 from feed_ingest.ingest import ingest_summary
 
 GAME = "401872981"
@@ -55,10 +57,11 @@ def test_ingested_record_matches_seam_contract(api):
                      "rushing_touchdowns": 0, "fumbles_lost": 0}
 
 
-def test_snapshot_half_ppr_points(api):
+def test_snapshot_half_ppr_points(api, monkeypatch):
     import panel
     seed(api)
     ingest_summary(fresh_summary(), GAME, source="replay")
+    _pin_now(panel, monkeypatch, "2026-10-11T18:13:41Z")
     data = panel.snapshot("owner", "league-a/team-7")["data"]
     [row] = data["rows"]
     # 220*0.04 + 1*4 + 0*(-1) + 2*0.1 + 0*6 + 0*(-2) = 13.0
@@ -70,8 +73,9 @@ def test_snapshot_half_ppr_points(api):
     assert data["progress"]["value"] == 1.0
 
 
-def test_later_summary_replaces_stats(api):
+def test_later_summary_replaces_stats(api, monkeypatch):
     import panel
+    _pin_now(panel, monkeypatch, "2026-10-11T18:13:41Z")
     seed(api)
     ingest_summary(fresh_summary(), GAME, source="replay")
     corrected = fresh_summary()
@@ -109,6 +113,7 @@ def test_yahoo_modifiers_score_from_boxscore(api, monkeypatch, tmp_path):
     seed(api, source="yahoo", starters=[{"player_key": "nfl.p.1", "name": "Darius Cooper",
                                           "team": "PHI", "positions": ["WR"], "slot": "WR"}])
     ingest_summary(fresh_summary(), GAME, source="replay")
+    _pin_now(panel, monkeypatch, "2026-10-11T18:13:41Z")
     data = panel.snapshot("owner", "league-a/team-7")["data"]
     # 2*1.5 + 71*0.2 + 1*4 = 21.2
     assert data["rows"][0]["points"]["value"] == 21.2
@@ -221,6 +226,110 @@ def test_older_statistics_do_not_replace_newer(api):
     record = panel.player_statistics(HURTS)
     assert record["asOf"] == "2026-10-11T18:00:00Z"
     assert float(record["stats"]["passing_yards"]) == 220
+
+
+def _pin_now(panel, monkeypatch, stamp):
+    monkeypatch.setattr(panel, "now", lambda: stamp)
+
+
+def test_stale_final_record_not_served_as_current(api, monkeypatch):
+    # #94: only stored record is a Final from 13h ago (asOf 2026-10-11T17:13:41Z);
+    # no new-game event mentions the starter, so the panel must start unknown.
+    import panel
+    seed(api)
+    ingest_summary(fresh_summary(), GAME, source="replay")
+    _pin_now(panel, monkeypatch, "2026-10-12T06:13:42Z")
+    data = panel.snapshot("owner", "league-a/team-7")["data"]
+    row = data["rows"][0]
+    assert row["points"]["value"] is None
+    assert row["points"]["reason"] == "no statistics for current game"
+    assert row["gameStatus"] is None
+    assert data["teamTotal"]["value"] is None
+    assert data["progress"]["value"] is None
+
+
+def test_final_record_inside_window_still_served(api, monkeypatch):
+    # #94: a Final inside the 12h window is still current.
+    import panel
+    seed(api)
+    ingest_summary(fresh_summary(), GAME, source="replay")
+    _pin_now(panel, monkeypatch, "2026-10-12T05:13:41Z")  # exactly 12h after asOf
+    data = panel.snapshot("owner", "league-a/team-7")["data"]
+    row = data["rows"][0]
+    assert row["points"]["value"] == 13.0
+    assert row["gameStatus"] == "Final"
+    assert data["progress"]["value"] == 1.0
+
+
+def test_live_record_outside_window_still_served(api, monkeypatch):
+    # #94: the window only retires finals; a live game is still served.
+    import panel
+    seed(api)
+    live = fresh_summary()
+    status = live["header"]["competitions"][0]["status"]["type"]
+    status.update({"state": "in", "shortDetail": "Q3 04:12", "detail": "Q3 04:12"})
+    ingest_summary(live, GAME, source="live")
+    _pin_now(panel, monkeypatch, "2026-10-12T06:13:42Z")
+    data = panel.snapshot("owner", "league-a/team-7")["data"]
+    row = data["rows"][0]
+    assert row["points"]["value"] == 13.0
+    assert row["gameStatus"] == "Q3 04:12"
+    assert data["progress"]["value"] == 0.5
+
+
+def test_expiration_advances_panel_revision(api, monkeypatch):
+    # #94 F1: the TV consumer discards a snapshot whose revision is not
+    # greater than the one it holds, so read-time expiration must advance
+    # the revision; stable rereads must not churn it.
+    import panel
+    seed(api)
+    ingest_summary(fresh_summary(), GAME, source="replay")
+    _pin_now(panel, monkeypatch, "2026-10-12T05:13:41Z")  # exactly 12h after asOf
+    before = panel.snapshot("owner", "league-a/team-7")
+    assert before["data"]["rows"][0]["points"]["value"] == 13.0
+    assert panel.snapshot("owner", "league-a/team-7")["revision"] == before["revision"]
+    _pin_now(panel, monkeypatch, "2026-10-12T05:13:42Z")  # 12h + 1s: expired
+    after = panel.snapshot("owner", "league-a/team-7")
+    assert after["data"]["rows"][0]["points"]["value"] is None
+    assert after["revision"] > before["revision"], "consumer ignores equal/older revisions"
+    assert panel.snapshot("owner", "league-a/team-7")["revision"] == after["revision"]
+
+
+def _summary_with_wallclock(wallclock):
+    payload = fresh_summary()
+    for drive in payload["drives"]["previous"]:
+        for play in drive.get("plays", []):
+            play["wallclock"] = wallclock
+    return payload
+
+
+@pytest.mark.parametrize("wallclock", [None, "not-a-date", "2026-10-11T17:13:41"])
+def test_undatable_final_not_served_as_current(api, monkeypatch, wallclock):
+    # #94 F2: a final whose asOf is missing, unparseable or timezone-naive
+    # cannot be shown to be current; it must fail closed, never crash.
+    import panel
+    seed(api)
+    ingest_summary(_summary_with_wallclock(wallclock), GAME, source="replay")
+    _pin_now(panel, monkeypatch, "2026-10-20T05:13:41Z")
+    data = panel.snapshot("owner", "league-a/team-7")["data"]
+    row = data["rows"][0]
+    assert row["points"]["value"] is None
+    assert row["points"]["reason"] == "no statistics for current game"
+    assert row["gameStatus"] is None
+    assert data["teamTotal"]["value"] is None
+    assert data["progress"]["value"] is None
+
+
+def test_aware_offset_final_inside_window_still_served(api, monkeypatch):
+    # #94 F2: an aware non-UTC asOf is usable: 12:13:41-05:00 is 17:13:41Z,
+    # so exactly 12h later in UTC the final is still inside the window.
+    import panel
+    seed(api)
+    ingest_summary(_summary_with_wallclock("2026-10-11T12:13:41-05:00"), GAME, source="replay")
+    _pin_now(panel, monkeypatch, "2026-10-12T05:13:41Z")
+    data = panel.snapshot("owner", "league-a/team-7")["data"]
+    assert data["rows"][0]["points"]["value"] == 13.0
+    assert data["rows"][0]["gameStatus"] == "Final"
 
 
 def test_no_floats_stored(api):

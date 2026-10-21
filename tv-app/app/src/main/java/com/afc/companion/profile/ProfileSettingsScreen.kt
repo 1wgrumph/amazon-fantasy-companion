@@ -1,11 +1,14 @@
 package com.afc.companion.profile
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -15,13 +18,30 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onPreInterceptKeyBeforeSoftKeyboard
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.semantics.onClick
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.Button
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
+import com.afc.companion.BuildConfig
 import com.afc.companion.net.ApiClient
 import com.afc.companion.net.ScoringPreset
 import kotlinx.coroutines.launch
@@ -119,6 +139,7 @@ fun ProfileSettingsScreen(client: ApiClient, modifier: Modifier = Modifier) {
                 }
             }
         }
+        SportTogglesEditor(current, stateHolder)
         Button(onClick = {
             scope.launch {
                 var saved = store.save(current)
@@ -141,6 +162,13 @@ fun ProfileSettingsScreen(client: ApiClient, modifier: Modifier = Modifier) {
     }
 }
 
+@Composable
+private fun SportTogglesEditor(current: ProfileState, state: MutableState<ProfileState?>) {
+    for ((sport, label) in sportToggles(current, nbaEnabled = BuildConfig.AFC_ENABLE_NBA)) {
+        Button(onClick = { state.value = current.toggledSport(sport) }) { Text(label) }
+    }
+}
+
 /** Stored on this TV and applied at once, so it is offered even when the server profile is unavailable. */
 @Composable
 private fun DeviceSettingsControls() {
@@ -155,6 +183,59 @@ private fun DeviceSettingsControls() {
 
 private fun onOff(value: Boolean): String = if (value) "on" else "off"
 
+// Select edits a field; otherwise vertical D-pad input belongs to form navigation.
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+private fun ProfileTextField(value: String, onValueChange: (String) -> Unit) {
+    val focusManager = LocalFocusManager.current
+    val focusRequester = remember { FocusRequester() }
+    val keyboard = LocalSoftwareKeyboardController.current
+    var editing by remember { mutableStateOf(false) }
+    var focused by remember { mutableStateOf(false) }
+    LaunchedEffect(editing) { if (editing) keyboard?.show() }
+    BasicTextField(
+        value = value,
+        onValueChange = onValueChange,
+        readOnly = !editing,
+        modifier = Modifier.focusRequester(focusRequester)
+            .semantics { onClick { focusRequester.requestFocus(); editing = true; true } }
+            .onFocusChanged {
+                focused = it.isFocused
+                if (!it.isFocused) editing = false
+            }
+            .border(2.dp, if (focused) MaterialTheme.colorScheme.onSurface else Color.Transparent)
+            .onPreInterceptKeyBeforeSoftKeyboard { event ->
+                if (event.type != KeyEventType.KeyDown) {
+                    false
+                } else if (editing) {
+                    if (event.key == Key.Back) {
+                        editing = false
+                        keyboard?.hide()
+                        true
+                    } else false
+                } else when (event.key) {
+                    Key.DirectionCenter, Key.Enter -> {
+                        editing = true
+                        true
+                    }
+                    Key.DirectionDown -> focusManager.moveFocus(FocusDirection.Down)
+                    Key.DirectionUp -> focusManager.moveFocus(FocusDirection.Up)
+                    else -> false
+                }
+        },
+        textStyle = TextStyle(color = MaterialTheme.colorScheme.onSurface),
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+        keyboardActions = KeyboardActions(
+            onNext = {
+                editing = false
+                keyboard?.hide()
+                focusManager.moveFocus(FocusDirection.Next)
+            },
+            onDone = { editing = false; defaultKeyboardAction(ImeAction.Done) },
+        ),
+    )
+}
+
 private fun minuteOfDay(minute: Int): String = "${(minute / 60).toString().padStart(2, '0')}:${(minute % 60).toString().padStart(2, '0')}"
 
 /** One remote-editable name list: type a name and add it, or remove an entry. */
@@ -167,11 +248,7 @@ private fun NameListEditor(label: String, values: List<String>, onToggle: (Strin
             Button(onClick = { onToggle(value) }) { Text("Remove $value from $label") }
         }
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            BasicTextField(
-                value = draft,
-                onValueChange = { draft = it },
-                textStyle = TextStyle(color = MaterialTheme.colorScheme.onSurface),
-            )
+            ProfileTextField(value = draft, onValueChange = { draft = it })
             Button(onClick = {
                 onToggle(draft)
                 draft = ""
@@ -216,9 +293,9 @@ private fun TeamLeagueEditor(current: ProfileState, state: MutableState<ProfileS
     var team by remember(current.teamLeague) { mutableStateOf(current.teamLeague?.team ?: "") }
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Text("League", style = MaterialTheme.typography.bodyLarge)
-        BasicTextField(value = league, onValueChange = { league = it }, textStyle = TextStyle(color = MaterialTheme.colorScheme.onSurface))
+        ProfileTextField(value = league, onValueChange = { league = it })
         Text("Team", style = MaterialTheme.typography.bodyLarge)
-        BasicTextField(value = team, onValueChange = { team = it }, textStyle = TextStyle(color = MaterialTheme.colorScheme.onSurface))
+        ProfileTextField(value = team, onValueChange = { team = it })
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             Button(onClick = {
                 teamLeagueOf(league, team)?.let { state.value = current.copy(teamLeague = it) }
@@ -280,7 +357,7 @@ private fun ProviderPreferenceEditor(current: ProfileState, state: MutableState<
             }
         }
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            BasicTextField(value = overrideDraft, onValueChange = { overrideDraft = it }, textStyle = TextStyle(color = MaterialTheme.colorScheme.onSurface))
+            ProfileTextField(value = overrideDraft, onValueChange = { overrideDraft = it })
             Button(onClick = {
                 update(pref.cycleAppOverride(overrideDraft))
                 overrideDraft = ""
@@ -288,7 +365,7 @@ private fun ProviderPreferenceEditor(current: ProfileState, state: MutableState<
         }
         Text("Local market", style = MaterialTheme.typography.bodyLarge)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            BasicTextField(value = market, onValueChange = { market = it }, textStyle = TextStyle(color = MaterialTheme.colorScheme.onSurface))
+            ProfileTextField(value = market, onValueChange = { market = it })
             Button(onClick = { update(pref.withLocalMarket(market)) }) { Text("Set market") }
             Button(onClick = { update(pref.withLocalMarket(null)) }) { Text("Clear market") }
         }

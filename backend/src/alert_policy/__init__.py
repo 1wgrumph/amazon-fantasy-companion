@@ -1,7 +1,9 @@
 """DES-AFC-P2-POLICY alert gates and commentary (P2-B05).
 
-Gate order: relevance (matches) -> enabled types -> game-day periods ->
-quiet hours -> alert_min_gap per game -> spoiler delay -> emit. Red zone is
+Gate order: relevance (matches) -> enabled types -> sport toggle
+(AFC_ENABLE_NBA only; the event sport defaults to nfl and a missing key
+stays on; revisions still bypass) -> game-day periods -> quiet hours ->
+alert_min_gap per game -> spoiler delay -> emit. Red zone is
 possession strictly inside 20 yards by a matched starter's team; player
 score is a scoring play listing a matched starter; close game is margin
 <= 8 in period 4 (Q4) or >= 5 (OT), once per game while the state lasts.
@@ -11,6 +13,7 @@ event, and names no player or team, so it cannot claim on-field position.
 
 import hashlib
 import json
+import os
 import re
 from datetime import datetime, timedelta, timezone
 
@@ -102,6 +105,25 @@ def _commentary(level, alert_type, game_event):
     return text[alert_type]
 
 
+def _nba_enabled():
+    """AFC_ENABLE_NBA is the only switch; off is the shipped default."""
+    return os.environ.get("AFC_ENABLE_NBA", "").lower() in ("1", "true", "yes")
+
+
+def _sport_suppressed(game_event, settings):
+    """True when the flag is on and this profile set the event's sport to False.
+
+    Flag off ignores a stored sports value, so today's alerts stay unchanged.
+    """
+    if not _nba_enabled():
+        return False
+    sport = game_event.get("sport") or "nfl"
+    sports = settings.get("sports")
+    if type(sports) is not dict:
+        return False
+    return sports.get(sport) is False
+
+
 def evaluate(game_event, matches):
     """Alert items (store.put_alert shape) the policy gates admit for the matched profiles."""
     event_time = _parse(game_event["eventTime"])
@@ -148,6 +170,8 @@ def evaluate(game_event, matches):
             release = event_time + timedelta(seconds=_int(settings.get("spoilerDelay")))
             alerts.append(_alert(profile_id, match, game_event, settings, starters,
                                  enabled, score, release))
+            continue
+        if _sport_suppressed(game_event, settings):
             continue
         game_day = settings.get("gameDayPeriods") or {}
         periods = game_day.get("periods") or []

@@ -1,0 +1,33 @@
+
+$ flock /tmp/afc-m03-m05-fire-tv.lock <local-path> -s <stick> shell am instrument -w -e class com.afc.companion.profile.ProfileDpadFocusTest#dpadDownLeavesLeagueFieldAndUpReturns com.afc.companion.test/androidx.test.runner.AndroidJUnitRunner
+
+com.afc.companion.profile.ProfileDpadFocusTest:
+Error in dpadDownLeavesLeagueFieldAndUpReturns(com.afc.companion.profile.ProfileDpadFocusTest):
+java.lang.AssertionError: Action performScrollTo() failed.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (Text + EditableText contains 'LeagueOne' (ignoreCase: false))
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.ActionsKt.performScrollTo(Actions.kt:76)
+	at com.afc.companion.profile.ProfileDpadFocusTest.dpadDownLeavesLeagueFieldAndUpReturns(ProfileDpadFocusTest.kt:50)
+
+
+Time: 2.419
+There was 1 failure:
+1) dpadDownLeavesLeagueFieldAndUpReturns(com.afc.companion.profile.ProfileDpadFocusTest)
+java.lang.AssertionError: Action performScrollTo() failed.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (Text + EditableText contains 'LeagueOne' (ignoreCase: false))
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.ActionsKt.performScrollTo(Actions.kt:76)
+	at com.afc.companion.profile.ProfileDpadFocusTest.dpadDownLeavesLeagueFieldAndUpReturns(ProfileDpadFocusTest.kt:50)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+
+
+exit_code=0

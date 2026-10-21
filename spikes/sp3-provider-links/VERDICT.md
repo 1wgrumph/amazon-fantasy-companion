@@ -55,14 +55,14 @@ filters was invented.
 - Cold `MAIN`+`LAUNCHER` launch after `am force-stop`: exit 0, foreground
   `IgnitionActivity`, Prime Video home with a Continue watching row
   (signed in). Outcome `appHomeOpened`.
-  Evidence: `evidence/visual/sp3-provider-links/prime-video-home.png`.
+  Evidence: `evidence/visual/PRIVATE-EVIDENCE.md` (Prime Video home screen, provider UI, withheld).
 - `VIEW https://watch.amazon.com/search` with package
   `com.amazon.firebat`: exit 0, foreground `IgnitionActivity`, Prime Video
   search screen. Outcome `searchOpened`. This exact URI is the registered
   `fire_os` launch. Query parameters (`?query=…`, `?k=…`) were also tried
   and are ignored: the keyboard opens empty, so no `{channel}` or `{event}`
   placeholder is registered — none is documented.
-  Evidence: `evidence/visual/sp3-provider-links/prime-video-search.png`.
+  Evidence: `evidence/visual/PRIVATE-EVIDENCE.md` (Prime Video search screen, provider UI, withheld).
 - `VIEW amzn://avod` and action `com.amazon.firebat.action.YAC_LAUNCH`
   (package set, the exact form the TV Watch launcher builds for an
   `intent` launch): both exit 0, Prime Video home (`appHomeOpened`).
@@ -88,7 +88,7 @@ filters was invented.
   reaches the title page. It is not registered: the launch needs a Prime
   title GTI, and no documented mapping from an ESPN event to a GTI exists.
   Evidence: `device-log.txt` (repair probe section),
-  `evidence/visual/sp3-provider-links/prime-video-detail-cold.png`.
+  `evidence/visual/PRIVATE-EVIDENCE.md` (Prime Video title detail screen, provider UI, withheld).
 
 ### 2. ESPN — `appAbsent`
 
@@ -119,7 +119,7 @@ foreground on the public marketing page (generic SIGN IN button, no
 account data). Nothing was signed in or purchased.
 Registry: `youtube_tv` with no `platform_routes` entries
 (`REGISTRY_ROUTE_GAP`); `channels_carried` empty as unverified.
-Evidence: `evidence/visual/sp3-provider-links/youtube-tv-view-browser.png`.
+Evidence: `evidence/visual/PRIVATE-EVIDENCE.md` (YouTube TV site in the browser, provider UI, withheld).
 
 ### 5. Local broadcast (CBS / Fox / NBC) — channel only, no deep link
 
@@ -131,7 +131,7 @@ No installed app carries CBS, Fox or NBC, so per AFC-PR-029 the result is
 the channel with no deep link. Registry: `local_broadcast` with
 `channels_carried: [CBS, Fox, NBC]` (ESPN feed `media.shortName` casing)
 and no `platform_routes` entries.
-Evidence: `evidence/visual/sp3-provider-links/local-broadcast-home.png`.
+Evidence: `evidence/visual/PRIVATE-EVIDENCE.md` (Fire TV home after the local-broadcast launch attempt, provider UI, withheld).
 
 ## Observed result
 
@@ -165,14 +165,14 @@ directory, retrieved 2026-10-16T20:59:23Z).
 
 - `device-log.txt` — every command, exit code and foreground activity
   (sanitized: no stick IP, serial or account data).
-- `evidence/visual/sp3-provider-links/prime-video-home.png` (1920x1080).
-- `evidence/visual/sp3-provider-links/prime-video-search.png`.
+- `evidence/visual/PRIVATE-EVIDENCE.md` (Prime Video home screen, provider UI, withheld) (1920x1080).
+- `evidence/visual/PRIVATE-EVIDENCE.md` (Prime Video search screen, provider UI, withheld).
 - `evidence/visual/sp3-provider-links/prime-video-ondemand-play.png`.
 - `evidence/visual/sp3-provider-links/espn-view-browser.png`.
 - `evidence/visual/sp3-provider-links/directv-stream-view-browser.png`.
-- `evidence/visual/sp3-provider-links/youtube-tv-view-browser.png`.
-- `evidence/visual/sp3-provider-links/local-broadcast-home.png`.
-- `evidence/visual/sp3-provider-links/prime-video-detail-cold.png` — the
+- `evidence/visual/PRIVATE-EVIDENCE.md` (YouTube TV site in the browser, provider UI, withheld).
+- `evidence/visual/PRIVATE-EVIDENCE.md` (Fire TV home after the local-broadcast launch attempt, provider UI, withheld).
+- `evidence/visual/PRIVATE-EVIDENCE.md` (Prime Video title detail screen, provider UI, withheld) — the
   `/detail?gti=` investigation probe.
 - `probe.sh` — the probe harness used (serial supplied by environment).
 - `espn-summary-receipt.json` — sanitized ESPN summary receipt for

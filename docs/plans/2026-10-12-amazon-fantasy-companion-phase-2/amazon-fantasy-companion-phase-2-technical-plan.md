@@ -5,7 +5,7 @@ lifecycle: AFC-2026-10-11
 phase: 2
 title: "Amazon Fantasy Companion Phase 2: implementation plan, program plan and milestones"
 plan_dir: docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/
-revision_note: "Phase 2 Planning and Design (P2-6, DEC-AFC-SD-023) from the approved specification (DEC-AFC-APPROVAL-ST5, candidate 771c28958f78e611048528aedbd9ed4490f308e1). First Phase 2 package."
+revision_note: "2026-10-19 owner amendment: Fire OS primary, Vega compatible on VVD (DEC-AFC-M0305-FIREOS-PRIMARY-VEGA-COMPATIBLE-20261019). Phase 2 Planning and Design (P2-6, DEC-AFC-SD-023) from the approved specification (DEC-AFC-APPROVAL-ST5, candidate 771c28958f78e611048528aedbd9ed4490f308e1). First Phase 2 package."
 ---
 
 # Amazon Fantasy Companion — Technical Plan (Phase 2)
@@ -691,7 +691,51 @@ P2-V01 is verified before the M12 documents are finalized. Otherwise the
 submission reports it as in progress, with its limits stated.
 
 
+## Selected plan (current): Fire OS primary, Vega compatible (DEC-AFC-M0305-FIREOS-PRIMARY-VEGA-COMPATIBLE-20261019)
+
+Owner, 2026-10-19: "Fire OS primary", then "we only have a fire os device
+but we can have it vega compatible". This supersedes DEC-AFC-SD-049 (Vega
+primary, Fire OS secondary) and resolves the conflict between SD-003 and the
+Vega-primary overrides in favour of SD-003.
+
+- **Primary target: Fire OS.** The owner's only TV device is a Fire TV Stick
+  4K (2nd Gen, 2023; model AFTKM; Fire OS 8.1.8.5, API 30). Every
+  physical-device criterion, including third-party playback, provider
+  handoff, DRM and entitlement, is judged on that device. P2-A01..P2-A05 and
+  the X-spikes' original Fire OS fields are the primary scope again.
+- **Vega: compatibility target, not a primary or physical target.** "Vega
+  compatible" means the React Native for Vega build (Vega SDK 0.24 line)
+  builds as a `.vpkg`, installs and runs on the Vega Virtual Device (VVD) on
+  the development host, against the same API contract, with a per-feature
+  verdict of works, limited by simulator, not supported or unknown. Unknown
+  never becomes PASS.
+- **No Vega hardware.** No physical Vega device exists and none will be
+  bought. AC-AFC-P2-VEGA-05, OA-12, VP-OD-04 and every "physical Vega" step
+  below are NOT_APPLICABLE by this owner decision. They are not PASS.
+- **Overrides re-scoped, none deleted.** Every
+  `vega_primary_contingency.overrides` entry and AC-AFC-P2-VPRIMARY-01..04
+  now define Vega compatibility evidence on the VVD. They no longer close the
+  primary obligation or gate Fire OS acceptance. Provider, DRM and
+  entitlement claims are not supported or unknown on the VVD by simulator
+  limitation, and are proven on Fire OS only.
+- **RISK-AFC-P2-16** no longer blocks primary acceptance for a missing
+  physical Vega device. A Vega SDK or VVD failure is a recorded
+  compatibility gap, not a primary-acceptance stop.
+- **Release.** R1 (v0.1.0) ships the Fire OS APK. The VVD compatibility
+  verdict table is reported with the release and does not gate it.
+  Publication remains owner-authorized.
+- **Unchanged.** RISK-AFC-P2-17 (pinned, scanned SDK before execution; the
+  owner's 2026-10-19 residual-risk acceptance for the sealed CLI run and for
+  hash-matched SDK/VVD execution is recorded in the M03–M05 recovery
+  authority), AC-AFC-P2-VEGA-01..04 and 06 (now VVD-scoped), and all
+  review bounds.
+
+Where any later section of this plan says "Vega primary", "Fire OS
+secondary" or "off the Vega critical path", read it through this section.
+
 ## Selected plan: Vega OS primary, Fire OS secondary (DEC-AFC-SD-049, 2026-10-14)
+
+> **Superseded 2026-10-19** by DEC-AFC-M0305-FIREOS-PRIMARY-VEGA-COMPATIBLE-20261019 (section above). Kept for history.
 
 Owner, 2026-10-14: "why not both? but maybe vega primary to be safe". Both
 TV targets are built. Vega OS is the primary target and owns the critical
@@ -744,6 +788,8 @@ and VP-OD-04 (replacement device identity and arrival, Amazon developer and
 provider logins).
 
 ## Vega-primary contingency — P2-VEGA-PRIMARY-plan (2026-10-14)
+
+> **Superseded 2026-10-19**: Fire OS is primary; this contingency now describes Vega compatibility on the VVD only (DEC-AFC-M0305-FIREOS-PRIMARY-VEGA-COMPATIBLE-20261019).
 
 **Selected 2026-10-14 by DEC-AFC-SD-049** (see the section above). The text
 below was written as a proposal; where it says "proposed", "if Vega is

@@ -1,0 +1,206 @@
+{
+  "record": "P2-L05 dry run (not the final-APK run; P2-R5 not done, issue #53 stays open, nothing released)",
+  "date": "2026-10-20",
+  "candidate": {
+    "commit": "fb6ab2f394bceb7437bc31fdeff84bfe0ce21bfb",
+    "base": "origin/main at fb6ab2f",
+    "branch": "afc/p2-l05-dryrun",
+    "tagged": false
+  },
+  "build": {
+    "command_id": "CMD-APK-BUILD-RELEASE",
+    "command": "flock --close /tmp/afc-m03-m05-host-gradle.lock ./tv-app/gradlew -p tv-app assembleRelease -PafcApiBaseUrl=",
+    "exit_code": 0,
+    "result": "BUILD SUCCESSFUL in 15s; 50 actionable tasks executed",
+    "environment": {
+      "java": "Temurin OpenJDK 17.0.20.1+1 (JAVA_HOME under ~/.local/share/afc-tools/jdk-17.0.20.1+1)",
+      "android_sdk": "~/.local/share/afc-tools/android-sdk",
+      "build_tools_version_declared": "36.0.0",
+      "compile_sdk": 34
+    },
+    "api_url": "empty (no ApiUrl bound in this dry run; the final run passes the deployed ApiUrl)",
+    "apk_path": "tv-app/app/build/outputs/apk/release/app-release.apk",
+    "apk_size_bytes": 5589756,
+    "apk_sha256": "d585bc38900e100a2a35129b14315f8bbb58f0548fea7ca1225202b22851cd5c",
+    "sha256_command_id": "CMD-APK-SHA256",
+    "sha256_exit_code": 0
+  },
+  "signing": {
+    "state": "signed with the host Android debug signing configuration (release build type sets signingConfig to the debug config in tv-app/app/build.gradle.kts); not unsigned; no release keystore used or created (OA-11 not supplied)",
+    "command_id": "CMD-APK-CERT",
+    "command": "apksigner verify --print-certs <apk> (build-tools 36.0.0, run via bash; see tool note)",
+    "exit_code": 0,
+    "verifies": true,
+    "schemes": {
+      "v1": false,
+      "v2": true,
+      "v3": false,
+      "v3.1": false,
+      "v4": false
+    },
+    "signers": 1,
+    "signer_dn": "C=US, O=Android, CN=Android Debug",
+    "signer_certificate_sha256": "11d7d0832f66aa2d77dfcbe12823477578e7c16474e5c94ff6d20adce17a8364",
+    "signer_certificate_sha1": "049e12414089e44db8b0bd6a3fe2eacfe74e263c",
+    "key": "RSA 2048"
+  },
+  "manifest": {
+    "source": [
+      "apkanalyzer manifest print",
+      "aapt2 dump badging",
+      "aapt2 dump permissions"
+    ],
+    "package": "com.afc.companion",
+    "version_code": 1,
+    "version_name": "0.1.0",
+    "min_sdk": 25,
+    "target_sdk": 34,
+    "compile_sdk": 34,
+    "application_label": "Amazon Fantasy Companion",
+    "allow_backup": false,
+    "uses_cleartext_traffic": false,
+    "uses_feature": [
+      {
+        "name": "android.software.leanback",
+        "required": true
+      },
+      {
+        "name": "android.hardware.touchscreen",
+        "required": false
+      }
+    ],
+    "permissions": [
+      "android.permission.INTERNET",
+      "android.permission.FOREGROUND_SERVICE",
+      "android.permission.FOREGROUND_SERVICE_DATA_SYNC",
+      "android.permission.POST_NOTIFICATIONS",
+      "com.afc.companion.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION (uses-permission; also declared as a signature-level permission by a merged library)"
+    ],
+    "components": [
+      {
+        "type": "activity",
+        "name": "com.afc.companion.MainActivity",
+        "exported": true,
+        "intent_filter": {
+          "actions": [
+            "android.intent.action.MAIN"
+          ],
+          "categories": [
+            "android.intent.category.LAUNCHER",
+            "android.intent.category.LEANBACK_LAUNCHER"
+          ]
+        }
+      },
+      {
+        "type": "activity",
+        "name": "com.afc.companion.watch.WatchActivity",
+        "exported": false
+      },
+      {
+        "type": "service",
+        "name": "com.afc.companion.alerts.AlertService",
+        "exported": false,
+        "foreground_service_type": "dataSync (0x1)"
+      },
+      {
+        "type": "provider",
+        "name": "androidx.startup.InitializationProvider",
+        "exported": false,
+        "authorities": "com.afc.companion.androidx-startup",
+        "origin": "merged library manifest"
+      },
+      {
+        "type": "receiver",
+        "name": "androidx.profileinstaller.ProfileInstallReceiver",
+        "exported": true,
+        "permission": "android.permission.DUMP",
+        "origin": "merged library manifest"
+      }
+    ],
+    "source_manifest_match": "built components, permissions and features match tv-app/app/src/main/AndroidManifest.xml plus the two merged AndroidX library components above; source minSdk/targetSdk/version in tv-app/app/build.gradle.kts match the built values",
+    "native_code_abis": [
+      "arm64-v8a",
+      "armeabi-v7a",
+      "x86",
+      "x86_64"
+    ],
+    "apk_file_inventory": "apkanalyzer files list exit 0, 172 entries (resources, 2 dex, kotlin builtins, one AndroidX graphics-path native library per ABI, baseline profiles); no credential or keystore file names observed"
+  },
+  "reverify": {
+    "command_id": "CMD-REVERIFY-APK",
+    "command_run": "reverify auto <apk> --json (private capture)",
+    "exit_code": 0,
+    "observed": "auto reports only ZIP magic (504b0304), size and top strings; no APK manifest semantics. No claim mapping for minSdk/package/permissions/services could be grounded, so no verify claims file was invented.",
+    "raw_capture_sha256": "ad36b7a427474134c4732de42c90e18540d3566ed7f9071f2b283c53bcb4c219",
+    "verdict": "REVERIFY_CAPABILITY_GAP (typed gap, never PASS)"
+  },
+  "tool_note": "build-tools 36.0.0 aapt2/apksigner files lacked the execute bit (exit 126, Permission denied; classified environment/tool). Workaround without changing the shared SDK: aapt2 36.0.0 copied to a private temp dir and chmod +x there (reports 2.20-13193326); apksigner 36.0.0 run via bash. build-tools 34.0.0 copies are executable. apkanalyzer (cmdline-tools) ran directly. The final run should fix the SDK file modes or reuse this workaround.",
+  "seit": [
+    {
+      "id": "SEIT-AFC-P2-APK-01",
+      "criterion": "submitted APK built from a tagged commit on main, sha256 recorded, Reverify grounded for minSdk/package/permissions/services",
+      "dry_run_status": "GAP",
+      "evidence": "hash bound to untagged fb6ab2f in this record; no tag, no submission (prohibited here); P2-R5 dependency not done; Reverify capability gap above"
+    },
+    {
+      "id": "SEIT-AFC-PR-053",
+      "criterion": "VCASE-AFC-PR-053: TV app build declares minSdk 25 (source and built manifest)",
+      "dry_run_status": "GAP",
+      "evidence": "inspection criterion itself observed: build.gradle.kts minSdk=25, apkanalyzer manifest min-sdk=25, aapt2 minSdkVersion 25. SEIT closure still requires grounded CMD-REVERIFY-APK evidence, which is a capability gap, so the row is not PASS"
+    },
+    {
+      "id": "SEIT-AFC-PR-055",
+      "criterion": "VCASE-AFC-PR-055: Yahoo OAuth secrets/tokens only in SSM SecureString parameters; none in APK or repo",
+      "dry_run_status": "GAP",
+      "evidence": "source trace only: backend/template.yaml passes the two SSM parameter names (not values) as Lambda environment and scopes ssm:GetParameter to exactly those parameters; APK file inventory shows no credential files. SSM parameter existence/type was not inspected (no AWS access in this packet) and whole-content absence in the APK is not provable by string/ZIP checks, so the row stays GAP per PROC-SECRET-CONTAINMENT"
+    }
+  ],
+  "procedure_checks": [
+    {
+      "check": "CMD-APK-BUILD-RELEASE exits 0 and produces the release APK",
+      "status": "PASS"
+    },
+    {
+      "check": "APK is signed (unsigned would fail CMD-APK-BUILD-RELEASE pass rule)",
+      "status": "PASS",
+      "note": "debug signer per P2-A01 configuration; OA-11 release keystore absent by design"
+    },
+    {
+      "check": "CMD-APK-SHA256 digest recorded and re-verified against the built file",
+      "status": "PASS"
+    },
+    {
+      "check": "CMD-APK-CERT signer certificate SHA-256 recorded",
+      "status": "PASS"
+    },
+    {
+      "check": "manifest package/version/min/target/leanback/touchscreen/exported components recorded",
+      "status": "PASS"
+    },
+    {
+      "check": "permission list recorded",
+      "status": "PASS"
+    },
+    {
+      "check": "real ApiUrl baked into the APK (-PafcApiBaseUrl=<ApiUrl>)",
+      "status": "GAP",
+      "note": "dry run built with an empty value; the app shows its backend-not-configured state. Final run must pass the deployed ApiUrl"
+    },
+    {
+      "check": "CMD-REVERIFY-APK grounded claims",
+      "status": "GAP",
+      "note": "REVERIFY_CAPABILITY_GAP"
+    },
+    {
+      "check": "tagged-main / submission identity",
+      "status": "GAP",
+      "note": "out of scope for a dry run; no tag or release created"
+    }
+  ],
+  "not_done": [
+    "no device install (adb prohibited in this packet)",
+    "no tag, release, upload or publication",
+    "no keystore created or requested",
+    "no product or build-file edits"
+  ]
+}

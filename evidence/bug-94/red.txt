@@ -1,0 +1,38 @@
+F..                                                                      [100%]
+=================================== FAILURES ===================================
+________________ test_stale_final_record_not_served_as_current _________________
+
+api = namespace(request=<function api.<locals>.request at 0x7d5e12b14680>, table=<function api.<locals>.table at 0x7d5e12b14...sTable'), 'PlayerStatsTable': dynamodb.Table(name='PlayerStatsTable')}, ttls={'LinksTable': 'expiresAt'}, ssm_reads=[])
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7d5e14da87d0>
+
+    def test_stale_final_record_not_served_as_current(api, monkeypatch):
+        # #94: only stored record is a Final from 13h ago (asOf 2026-10-11T17:13:41Z);
+        # no new-game event mentions the starter, so the panel must start unknown.
+        import panel
+        seed(api)
+        ingest_summary(fresh_summary(), GAME, source="replay")
+        _pin_now(panel, monkeypatch, "2026-10-12T06:13:42Z")
+        data = panel.snapshot("owner", "league-a/team-7")["data"]
+        row = data["rows"][0]
+>       assert row["points"]["value"] is None
+E       assert 13.0 is None
+
+tests/unit/test_panel_player_stats.py:239: AssertionError
+=============================== warnings summary ===============================
+tests/unit/test_panel_player_stats.py: 1299 warnings
+  <site-packages>:424: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    datetime_now = datetime.datetime.utcnow()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+============================= slowest 10 durations =============================
+0.56s call     tests/unit/test_panel_player_stats.py::test_stale_final_record_not_served_as_current
+0.52s call     tests/unit/test_panel_player_stats.py::test_final_record_inside_window_still_served
+0.51s call     tests/unit/test_panel_player_stats.py::test_live_record_outside_window_still_served
+0.16s setup    tests/unit/test_panel_player_stats.py::test_stale_final_record_not_served_as_current
+0.11s setup    tests/unit/test_panel_player_stats.py::test_final_record_inside_window_still_served
+0.11s setup    tests/unit/test_panel_player_stats.py::test_live_record_outside_window_still_served
+
+(3 durations < 0.005s hidden.  Use -vv to show these durations.)
+=========================== short test summary info ============================
+FAILED tests/unit/test_panel_player_stats.py::test_stale_final_record_not_served_as_current
+1 failed, 2 passed, 10 deselected, 1299 warnings in 2.06s
