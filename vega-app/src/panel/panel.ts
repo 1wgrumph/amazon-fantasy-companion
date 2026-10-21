@@ -267,6 +267,7 @@ export class PanelController {
 
   onFetched(snapshot: PanelSnapshot, nowMs: number): PanelDelta {
     if (!this.visible) return PANEL_DELTA_NONE;
+    if (this.teamLeague === '') this.teamLeague = snapshot.teamLeague;
     if (snapshot.teamLeague !== this.teamLeague) return PANEL_DELTA_NONE;
     this.lastFetchMs = nowMs;
     this.needsFetch = false;

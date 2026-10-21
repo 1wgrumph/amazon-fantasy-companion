@@ -1,0 +1,107 @@
+{
+  "bug": "AFC-M14-PANEL-DEFAULT",
+  "status": "PASS",
+  "evidence_level": "implementer verification; independent review not performed",
+  "observer": "Codex implementer",
+  "observed_at_utc": "2026-10-21T04:30:50.636454+00:00",
+  "base_head": "d408a06a389c5a22d127af9280d440cc88721d52",
+  "commands": {
+    "red": "npm test -- --runInBand __tests__/panel/panelServerDefault.test.ts",
+    "green": "npm test -- --runInBand",
+    "typecheck": "npx --no-install tsc --noEmit",
+    "build": "sandbox run.py <authorized-work-copy> -- /usr/bin/bash -c \"cd vega-app && export AFC_API_BASE_URL=<existing-allowlisted-dev-endpoint> && npm run build:app\"",
+    "device": "sandbox run.py <authorized-work-copy> -- /usr/bin/bash vega-app/vvd-checks/drive-vvd.sh <authorized-run-dir>",
+    "panel": "python3 vega-app/vvd-checks/verify-panel-default.py <private-run-dir>"
+  },
+  "results": {
+    "red_jest": {
+      "exit": 1,
+      "passed": 1,
+      "failed": 1
+    },
+    "green_jest": {
+      "exit": 0,
+      "suites": 21,
+      "passed": 166,
+      "failed": 0
+    },
+    "tsc_exit": 0,
+    "build_exit": 0,
+    "baseline_driver_exit": 0,
+    "baseline_steps_passed": 47,
+    "candidate_driver_exit": 0,
+    "candidate_steps_passed": 47,
+    "panel_verifier_exits": {
+      "red": 1,
+      "green": 0
+    },
+    "held_captures_identical": true,
+    "vvd_stopped": true,
+    "refresh_cadence": "unchanged production-controller regression: suppressed at 1000 and 29999 ms, eligible at 30000 ms; no independent on-device HTTP counter"
+  },
+  "vpkg": {
+    "file": "afc-companion_x86_64.vpkg",
+    "sha256": "877e6546620094c793f22c0b1df6cf91b875a89f9e00db95ae2134ac6c1dcbd0",
+    "sdk": "0.24.12112",
+    "vega_cli": "1.4.5, confined to sandbox",
+    "native_install_exit": 0
+  },
+  "source_and_check_sha256": {
+    "vega-app/src/panel/panel.ts": "c48a1092212ac285d9ca8bc585882b89505b8c05495aced47ad4076f64c6acbc",
+    "vega-app/src/App.tsx": "9d44037ce573d5362edddd22128284487781593655e1f199d42f94f566b42c5b",
+    "vega-app/vvd-checks/drive-vvd.sh": "d92051a7590644a94377abcc57812cf51708005e0a5805a1112254aff9e7d984",
+    "vega-app/vvd-checks/lib.sh": "bebc0a97369bbb90e243b8419b0aa12a34ee3fdddd88c567f7e2b208ee370190",
+    "vega-app/vvd-checks/verify-panel-default.py": "cbf68652f70d1fcd90b9b8f6e872b2a08b9bb87fef237682bc3586da291df72f",
+    "vega-app/vvd-checks/panel-default.png": "dc1192bec602617e25cc90194f78fcb4a7b08c33a70aaaf61d5929f11162bf0a",
+    "vega-app/__tests__/panel/panelServerDefault.test.ts": "60f1da7467e378c5514bf1b90ffd459d4a804197fe967ed7cadfedde542ba6e9",
+    "vega-app/__tests__/fixtures/panel-no-teamleague.json": "2966a712d1725c7a014ce0e2040a570216b8e6bfeb04dfbe3c18cf0172b2fb5b",
+    "vega-app/package.json": "cd708947598d7c29f98118679448529de4e29b1b584ea430c3965882965c65de",
+    "vega-app/package-lock.json": "b3239b851dfdd5d1333ed58a310983008814a30a5bf52820ebb5544f0dfbb579"
+  },
+  "sandbox_build_source_comparison": {
+    "matching_source_and_package_files": 16,
+    "expected_generated_difference": "src/config.generated.json",
+    "generated_endpoint_matches_existing_allowlist": true,
+    "raw_comparison_receipt_sha256": "42240107128e692d65fe07c982b63b84ab4dd18266bd076d3a6ccf5422c8378e"
+  },
+  "private_raw_sha256": {
+    "afc-companion_x86_64.vpkg": "877e6546620094c793f22c0b1df6cf91b875a89f9e00db95ae2134ac6c1dcbd0",
+    "build.stdout": "adabc0d462a444b5314ac33f0a226950027a96de1d3638779ee11390a2788e1d",
+    "build.stderr": "ea1bcb66f9a0a7b3ce5668e8a9877bf08127ea307b3857c7432b04070ce69bd2",
+    "after/log-panel-default.stdout": "30b53b1a5894f33ce14df9025cc5403fd19f959fd0dc560ba7101c2e6989b3ec",
+    "after/panel-default.xwd": "f89a94aa558733e056624ee49df26cdbdbde401ccd92c5bcc3c392a65c2c3c09",
+    "after/panel-default-held.xwd": "2be980834118d5f6e17f5398d27da12df9a076a70f06595db6c1d81d2775a86c",
+    "before2/log-before-panel.stdout": "d0f2200cf50ddf7aec036c82a1d704644ef7d0a6e70a74977c083d80061c4483",
+    "before2/before-panel.xwd": "b7be335467a6f5491945ddd2fc63d511fec4f873c52cc17c6fe4323768f9d15e"
+  },
+  "artifacts_sha256": {
+    "before-panel.png": "0b037cea61559ffafb4fe453fdb1a053026a49dd68acf3441c365ecd3714e2d1",
+    "panel-default-held.png": "dc1192bec602617e25cc90194f78fcb4a7b08c33a70aaaf61d5929f11162bf0a",
+    "summary.md": "4cb5ed70d1436c1d8cd317b0e5a757a65ce7fb205813ad2225ef35e83ce3e093",
+    "green-jest.txt": "a5175487138bce91393422d3c2cf2f20dac521487273e205a1738eb190061884",
+    "credential-findings.json": "e3a4836db54c0a36670f82b726ec0363af55383c4a80635c7296034a292964a3",
+    "runtime-summary.json": "5a89fa9543e0302c37cd6ba3d75ab6f1f85dfe900b29662ab85971c741fd3e16",
+    "package-integrity.json": "d5856c62f384f2a64627544def0142c50777b6871e1f378c29bb7acd0bae1b22",
+    "tsc.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "red-panel-check.txt": "183157b8ed4c6947f9a43b6c69bdcca39b238dd3b363f5fd03e4fa3c6fa73921",
+    "panel-default.png": "dc1192bec602617e25cc90194f78fcb4a7b08c33a70aaaf61d5929f11162bf0a",
+    "build.txt": "306211e0a9451d0334c1416542e9bb98405811bf94efbba6bde1a9790fa051ca",
+    "green-panel-check.txt": "b2161463d2ce373fd539766b36d40039d1fb32524ac6705c9bd6d7411d24b483",
+    "build-stderr.txt": "830cf08b7c9d327645104d2d2c9bbbf7c2ffb0ae857706534dfc3ef79aaa83fb",
+    "app-log-excerpt.txt": "05a76ae8e61a7b3ac6112538acdde836307295f5a4d299f2d24e71d3e7194f4e",
+    "steps.txt": "1827c1920a1191c773612be4ad7f29b449494ad9cdfe0726a82cecf67ae7b959",
+    "vvd-status.txt": "a6314aafdda0175d51c8d65b9ca68aff8cf8b7fa90109ab864b89816d6747109",
+    "before-steps.txt": "954657923c1187eede5533654ac66a1019ea71ff39ba257cd746e70ac145090a",
+    "log-checks.json": "6f63e6477e7bc3f33976d2968f685efdadb6ceb0e1aaf18f3badf2c98b323788",
+    "driver.txt": "1827c1920a1191c773612be4ad7f29b449494ad9cdfe0726a82cecf67ae7b959",
+    "red-jest.txt": "82a298f4cf69f25d4509963149aa17273e8ed287540f4644b412c0fdffff26ff",
+    "commands.txt": "29a928e6ae3a4a6a6c2eab25eadb21fd3160cc970c7abbe85350ff29a237ae27"
+  },
+  "limits": [
+    "No independent review or full Stage 2c link/settings rerun.",
+    "No on-device HTTP request timing telemetry; cadence proof is the regression plus pinned-source adoption.",
+    "Native application-data-root errors persist.",
+    "Screenshot reference requires the same synthetic profile and VVD capture setup."
+  ],
+  "bran": "unavailable; ordinary discovery used"
+}
