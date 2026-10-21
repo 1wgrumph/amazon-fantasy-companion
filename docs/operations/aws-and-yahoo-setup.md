@@ -42,10 +42,14 @@ aws ssm put-parameter --profile afc-dev --type SecureString \
 
 ## Yahoo app
 
-- Use exactly one app: **Amazon Fantasy Companion**, created 2026-10-13
-  ("...alongside live games. Read-only."), homepage
-  `https://github.com/1wgrumph/amazon-fantasy-companion`. A duplicate app created
-  on 2026-10-16 was deleted; do not create another.
+- The app in use is **Amazon Fantasy Companion**, App ID `md4Tp1VN`, created
+  by the owner after Yahoo's 2026-10-16 approval (see "Yahoo 403: API access
+  approval" below). Homepage `https://github.com/1wgrumph/amazon-fantasy-companion`.
+  Do not create another app and do not submit the confirmation form again.
+- Two other apps exist and stay unused: the original `AyogcOTv` (2026-10-13,
+  created before approval) and `TZRCt46p` "Amazon Fantasy Companion 2026"
+  (created and submitted by an agent on 2026-10-20 by mistake). Owner decision
+  2026-10-21: keep both, do not delete.
 - OAuth client type: Confidential. API permission: **Fantasy Sports - Read**.
 - Redirect URI: `https://localhost:8443/link`. Yahoo rejects `oob` and requires
   `https`. Add the deployed `<ApiUrl>/link` later if the backend takes over the
@@ -111,11 +115,22 @@ Approval could not arrive before T_yahoo `2026-10-16T19:00:00Z`, so
 [the SP-6 verdict](../../spikes/sp6-yahoo/VERDICT.md) is FAILS and the lineup
 source stays manual (`backend/src/lineup/manual.py`).
 
-Once Yahoo approves App ID `AyogcOTv`:
+Approval history (owner records, 2026-10-16 to 2026-10-21):
 
-1. Keep this app. Do not create another.
-2. In a normal terminal, run `python3 spikes/sp6-yahoo/yahoo_oauth.py read`.
-   A Fantasy API HTTP 200 means the gate is open. If the refresh fails, run
-   `capture` again.
+| Date (CDT) | Event |
+|---|---|
+| 2026-10-16 10:05 | Yahoo acknowledged the access request for `AyogcOTv`. |
+| 2026-10-16 17:59 | Yahoo approved access. Its instructions: sign the API Access and Use Agreement, create a **new** app with Fantasy Sports - Read (existing apps do not pick up the permission), and submit the new app's Client ID on the confirmation form. |
+| 2026-10-16/17 | The owner created app `md4Tp1VN`, submitted its Client ID, and signed the agreement (Personal Use, read-only, effective 2026-10-23). This was not recorded in the repository at the time. |
+| 2026-10-20 | An agent, unaware of `md4Tp1VN`, created `TZRCt46p` and submitted its Client ID. Yahoo replied with a second "Access Request Received". |
+| 2026-10-20 20:55 | At the owner's direction, an email to Yahoo's Fantasy API applications contact named `md4Tp1VN` as the intended Client ID and asked Yahoo to disregard `TZRCt46p`. |
+| 2026-10-21 | Owner decisions: point `/afc/dev/yahoo-client-id` and `/afc/dev/yahoo-client-secret` at `md4Tp1VN` now; keep `TZRCt46p` unused. |
+
+Once Yahoo confirms access for `md4Tp1VN`:
+
+1. Confirm the SSM client parameters hold `md4Tp1VN`'s Client ID and Secret.
+2. In a normal terminal, run `python3 spikes/sp6-yahoo/yahoo_oauth.py setup`
+   to get a token for that app, then `read`. A Fantasy API HTTP 200 means the
+   gate is open.
 3. Leave the lineup source manual until a later change selects yahoo. This
    verdict does not switch it.

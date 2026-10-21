@@ -28,6 +28,7 @@ the per-athlete boxscore records feed_ingest stores at ingest.
 
 import hashlib
 import json
+import os
 from datetime import datetime, timezone
 from decimal import Decimal
 from pathlib import Path
@@ -71,12 +72,53 @@ def _settings(profile_id):
     return profile, profile.get("settings") or {}
 
 
+def _nba_enabled():
+    """AFC_ENABLE_NBA is the only switch; off is the shipped default."""
+    return os.environ.get("AFC_ENABLE_NBA", "").lower() in ("1", "true", "yes")
+
+
+def _nba_lineup(lineup):
+    return bool(lineup) and lineup.get("sport") == "nba" and _nba_enabled()
+
+
+def _sport_off(lineup, settings):
+    """Flag on: this lineup's sport was set False, so snapshot serves no rows.
+
+    The lineup sport defaults to nfl. A missing sports field or key stays on.
+    Flag off ignores a stored sports value.
+    """
+    if not lineup or not _nba_enabled():
+        return False
+    sport = lineup.get("sport") or "nfl"
+    sports = settings.get("sports")
+    if type(sports) is not dict:
+        return False
+    return sports.get(sport) is False
+
+
+def _nba_table():
+    from nba.scoring import NBA_POINTS_TABLE
+
+    return "nbaPoints", dict(NBA_POINTS_TABLE)
+
+
 def _basis(lineup, settings):
-    """(wire basis, scoring table); an unknown stored preset is refused."""
+    """(wire basis, scoring table); an unknown stored preset is refused.
+
+    An NBA lineup (sport nba, flag on) uses its Yahoo league table when that
+    table mapped, and nbaPoints for a manual lineup or a category league.
+    NFL lineups keep the preset or yahooLeague path they had before.
+    """
     if lineup and lineup.get("source") == "yahoo":
         modifiers = (lineup.get("scoring") or {}).get("stat_modifiers") or {}
-        return "yahooLeague", {k: float(v) for k, v in modifiers.items()}
+        if modifiers or not _nba_lineup(lineup):
+            return "yahooLeague", {k: float(v) for k, v in modifiers.items()}
+        return _nba_table()
+    if _nba_lineup(lineup):
+        return _nba_table()
     preset = settings.get("scoringPreset") or "halfPpr"
+    if preset == "nbaPoints" and _nba_enabled():
+        return _nba_table()
     if preset not in _PRESETS:
         raise ValueError(f"Unknown scoring preset: {preset!r}")
     return preset, presets.TABLES[_PRESETS[preset]]
@@ -148,6 +190,9 @@ def _fingerprint(lineup):
         return ""
     content = {"source": lineup.get("source"), "starters": lineup.get("starters") or [],
                "scoring": lineup.get("scoring")}
+    # Absent on every NFL lineup, so those fingerprints stay what they were.
+    if lineup.get("sport") is not None:
+        content["sport"] = lineup.get("sport")
     return hashlib.sha256(json.dumps(content, sort_keys=True, default=str).encode()).hexdigest()
 
 
@@ -259,6 +304,10 @@ def snapshot(profile_id, team_league):
             or len(set(ids)) != len(ids)):
         raise InvalidLineupError(
             "stored lineup violates the panel row contract (count, blank or duplicate id)")
+    # Hide after the row contract check so a bad lineup still fails closed.
+    # Empty rows make the team total unknown; the profile revision still rises.
+    if _sport_off(lineup, settings):
+        rows, states = [], []
     known = [r["points"] for r in rows if r["points"]["value"] is not None]
     if rows and len(known) == len(rows):
         source, as_of = _oldest(known)
@@ -290,13 +339,16 @@ def snapshot(profile_id, team_league):
     revision = (128 * ((counter or 0) + int(profile.get("revision", 0))
                        + lineup_version)
                 + 64 * (current != projected) + expired_finals)
+    data = {"teamLeague": team_league, "scoringBasis": basis,
+            "visible": bool((settings.get("panelPrefs") or {}).get("visible", True)),
+            "rows": rows, "teamTotal": total, "progress": progress,
+            "games": {gid: {"eventId": f["eventId"], "revision": f["revision"],
+                             "score": f["score"], "source": f["source"]}
+                      for gid, f in games.items()}}
+    if _nba_lineup(lineup):
+        data["sport"] = "nba"
     return {"schemaVersion": 1, "id": f"panel/{profile_id}/{team_league}",
             "revision": revision,
             "source": lineup.get("source", "manual") if lineup else "manual",
             "updatedAt": now(),
-            "data": {"teamLeague": team_league, "scoringBasis": basis,
-                     "visible": bool((settings.get("panelPrefs") or {}).get("visible", True)),
-                     "rows": rows, "teamTotal": total, "progress": progress,
-                     "games": {gid: {"eventId": f["eventId"], "revision": f["revision"],
-                                      "score": f["score"], "source": f["source"]}
-                               for gid, f in games.items()}}}
+            "data": data}

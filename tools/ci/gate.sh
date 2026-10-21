@@ -136,6 +136,7 @@ PYBASE
                 fi
             fi
             python3 tools/ci/check_paths.py || return "$?"
+            python3 tools/ci/check_provider_art.py || return "$?"
             python3 tools/ci/check_workflows.py .github/workflows/ || return "$?"
             python3 -m unittest discover -s tools/ci/tests ;;
         docs) python3 tools/ci/check_docs.py ;;

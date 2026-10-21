@@ -118,10 +118,22 @@ projection; raw dumps stayed off-repo.
 
 All under `evidence/visual/sp4-panel-video/`: `commands.txt` (every attempt
 with exit codes), and per attempt a screenshot plus `-geometry.txt` and
-`-logcat.txt`: `r0-playback`, `r1-provider-pip-home`, `r1b-return-prime`
-(screenshot only), `r2-spike-pip-entered`, `r2-spike-pip-over-prime`,
-`r2b-spike-pip-over-player`, `r3-overlay-no-grant`,
-`r4-split-windowingmode`, `r5-freeform-windowingmode`, `r6-final-prime`.
+`-logcat.txt`: `r0-playback`, `r1-provider-pip-home-geometry.txt` and
+`r1-provider-pip-home-logcat.txt` (screenshot withheld (provider content):
+`evidence/visual/PRIVATE-EVIDENCE.md` (Fire TV home after the provider
+picture-in-picture attempt)), screenshot only (withheld (provider content):
+`evidence/visual/PRIVATE-EVIDENCE.md` (Prime Video home screen with team
+logos)), `r2-spike-pip-entered-geometry.txt` and
+`r2-spike-pip-entered-logcat.txt` (screenshot withheld (provider content):
+`evidence/visual/PRIVATE-EVIDENCE.md` (Fire TV home with the spike panel
+over it)), `r2-spike-pip-over-prime-geometry.txt` and
+`r2-spike-pip-over-prime-logcat.txt` (screenshot withheld (provider content):
+`evidence/visual/PRIVATE-EVIDENCE.md` (Prime Video title screen with the
+spike panel over it)), `r2b-spike-pip-over-player`, `r3-overlay-no-grant`,
+`r4-split-windowingmode`, `r5-freeform-windowingmode`,
+`r6-final-prime-geometry.txt` (screenshot withheld (provider content):
+`evidence/visual/PRIVATE-EVIDENCE.md` (Prime Video title screen at the end
+of the panel sweep)).
 The spike source is this directory (`app/`); `.gitignore` excludes
 `local.properties`, `.gradle/`, and `build/`.
 

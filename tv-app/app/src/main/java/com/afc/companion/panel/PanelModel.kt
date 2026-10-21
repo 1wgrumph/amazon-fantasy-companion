@@ -1,6 +1,7 @@
 package com.afc.companion.panel
 
 import android.view.KeyEvent
+import com.afc.companion.BuildConfig
 import com.afc.companion.alerts.AlertNotifier
 import com.afc.companion.alerts.AlertPresenter
 import com.afc.companion.alerts.AlertText
@@ -17,7 +18,7 @@ import org.json.JSONObject
 // individual value becomes unavailable (null with a reason), never zero.
 
 /** Scoring context shown with every value (AFC-PR-039: no value without its basis). */
-enum class ScoringBasis { YahooLeague, Ppr, HalfPpr }
+enum class ScoringBasis { YahooLeague, Ppr, HalfPpr, NbaPoints }
 
 /** One displayed number from the untrusted PanelState: unknown is a null value with a reason, never zero. */
 data class PanelValue(val value: Double?, val reason: String?, val source: String?, val asOfMs: Long?)
@@ -33,6 +34,7 @@ data class PanelSnapshot(
     val progress: PanelValue,
     /** Envelope lineup source (manual/yahoo), kept separate from per-value live/replay source. */
     val source: String = "live",
+    val sport: String? = null,
 )
 
 /** Declared bound on rows accepted from one PanelState (AFC-PR-062). */
@@ -45,14 +47,29 @@ private const val STALE_AFTER_MS = 60_000L
 private const val REFRESH_MS = 30_000L
 
 /** Decodes GET /v1/panel data; null when malformed, oversized or missing its scoring basis. */
-fun decodePanel(state: PanelState): PanelSnapshot? {
+fun decodePanel(state: PanelState, nbaEnabled: Boolean = BuildConfig.AFC_ENABLE_NBA): PanelSnapshot? {
     val data = state.envelope.data
     val teamLeague = (data.opt("teamLeague") as? String)?.takeIf { it.isNotBlank() } ?: return null
     val basis = when (data.opt("scoringBasis") as? String) {
         "yahooLeague" -> ScoringBasis.YahooLeague
         "ppr" -> ScoringBasis.Ppr
         "halfPpr" -> ScoringBasis.HalfPpr
+        "nbaPoints" -> if (nbaEnabled) ScoringBasis.NbaPoints else return null
         else -> return null
+    }
+    val sport = if (!nbaEnabled) {
+        null
+    } else {
+        val tagged = if (!data.has("sport")) null else when (data.opt("sport")) {
+            "nba" -> "NBA"
+            "nfl" -> "NFL"
+            else -> return null
+        }
+        when {
+            basis == ScoringBasis.NbaPoints && tagged == "NFL" -> return null
+            basis == ScoringBasis.NbaPoints -> "NBA"
+            else -> tagged
+        }
     }
     val rawRows = data.opt("rows") as? JSONArray ?: return null
     if (rawRows.length() > PANEL_ROWS_MAX) return null
@@ -79,6 +96,7 @@ fun decodePanel(state: PanelState): PanelSnapshot? {
         teamTotal = panelValue(data.opt("teamTotal") as? JSONObject),
         progress = progress,
         source = state.envelope.source,
+        sport = sport,
     )
 }
 
@@ -150,12 +168,16 @@ object PanelText {
         ScoringBasis.YahooLeague -> "Yahoo league scoring"
         ScoringBasis.Ppr -> "PPR"
         ScoringBasis.HalfPpr -> "Half-PPR"
+        ScoringBasis.NbaPoints -> "Points"
     }
 
     fun gameStatus(status: String?): String = status?.takeIf { it.isNotBlank() } ?: "Unavailable"
 
     /** The panel header: scoring basis beside lineup source (AFC-PR-039). */
-    fun header(snapshot: PanelSnapshot): String = "${basis(snapshot.basis)} · ${lineupSource(snapshot.source)}"
+    fun header(snapshot: PanelSnapshot): String {
+        val base = "${basis(snapshot.basis)} · ${lineupSource(snapshot.source)}"
+        return snapshot.sport?.let { "$it · $base" } ?: base
+    }
 
     /** The reported outcome of the last Watch attempt, shown to the customer (AFC-PR-031). */
     fun watchOutcome(outcome: RoutingOutcome): String = when (outcome) {

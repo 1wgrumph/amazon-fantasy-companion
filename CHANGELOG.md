@@ -9,12 +9,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add ESPN NBA ingest and scoring ([PR #138](https://github.com/1wgrumph/amazon-fantasy-companion/pull/138)).
+- Add NBA panel rows and the sport label on TV ([PR #138](https://github.com/1wgrumph/amazon-fantasy-companion/pull/138)).
+- Add Yahoo NBA lineup import ([PR #138](https://github.com/1wgrumph/amazon-fantasy-companion/pull/138)).
+- Add manual NBA lineups ([PR #138](https://github.com/1wgrumph/amazon-fantasy-companion/pull/138)).
+- Add a per-sport NFL/NBA notification toggle ([PR #138](https://github.com/1wgrumph/amazon-fantasy-companion/pull/138)).
+- Turn NBA on by default in the shipped TV build and the deployed backend, and keep AFC_ENABLE_NBA as a kill switch ([PR #138](https://github.com/1wgrumph/amazon-fantasy-companion/pull/138)).
+- Add a deterministic ffmpeg demo-cut pipeline under `tools/demo/` that builds the main demo, a 30 s teaser, alerts/Watch/panel/linking feature clips, and trimmed labelled raw clips from the S1–S7 shot list, with silent audio and on-screen captions ([PR #144](https://github.com/1wgrumph/amazon-fantasy-companion/pull/144)).
 - The Vega port was verified on the Vega Virtual Device on a supported host (Kepler SDK 0.24.12112). This change includes the token-persistence fix, the panel fix that shows the server's default state for a profile with no selection, and the on-device check scripts. Virtual-device frictions from that run are F-037 through F-058 ([PR #118](https://github.com/1wgrumph/amazon-fantasy-companion/pull/118)).
 
 ### Changed
 
+- Record the Yahoo Fantasy API approval history and the app in use (`md4Tp1VN`) in the AWS and Yahoo setup guide, replacing the outdated "keep the original app" instruction ([PR #145](https://github.com/1wgrumph/amazon-fantasy-companion/pull/145)).
 - Record v0.1.0 in the changelog ([PR #139](https://github.com/1wgrumph/amazon-fantasy-companion/pull/139)).
 - Record the v0.1.0 merge commit in the release receipt ([PR #142](https://github.com/1wgrumph/amazon-fantasy-companion/pull/142)).
+
+### Fixed
+
+- An NBA feed failure can no longer discard or delay the NFL poll: NBA ingest runs in its own scheduled function with bounded requests and writes ([PR #138](https://github.com/1wgrumph/amazon-fantasy-companion/pull/138)).
 
 ## [0.1.0] - 2026-10-20
 
@@ -35,6 +47,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+- Remove twenty provider-screen captures from the public tree and record only their hashes, capture times and descriptions in `evidence/visual/PRIVATE-EVIDENCE.md`. The hygiene check rejects those basenames and content hashes if they are committed again (BUG-PROVIDER-ART, [PR #141](https://github.com/1wgrumph/amazon-fantasy-companion/pull/141)).
 - Bound ESPN boxscore statistics ingest against denial-of-service inputs: validate numeric `athleteId` keys (`1..20` ASCII digits) before any DynamoDB write, cap boxscore athletes per payload (`MAX_BOXSCORE_ATHLETES = 200`) and stats per athlete (`MAX_ATHLETE_STATS = 64`) with deterministic truncation, reject oversize (`MAX_STAT_VALUE_LENGTH = 16`) and subnormal stat strings before `Decimal` conversion, and isolate single-record `PlayerStats` write failures so valid records, `GameEvent`s, and alerts keep ingesting. Review repair: cap play `id` and `wallclock` at 64 characters in the summary schema and treat a DynamoDB `ValidationException` on any feed write as a failure of that game only; skip only payload-rejected `PlayerStats` writes (`ValidationException`, `decimal` signals) so access, table, throttling and endpoint failures surface; aggregate hostile-input warnings into one length-bounded line per payload and batch; reject positive-exponent stat values such as `0E+999`; expose the bounds as plain module constants; and check recorded-fixture statistics against a frozen pre-fix snapshot ([PR #103](https://github.com/1wgrumph/amazon-fantasy-companion/pull/103)).
 - Remove unused Yahoo SSM read access from the public API function and warn
   users to confirm only a code on their own TV; preserve code-only linking,
