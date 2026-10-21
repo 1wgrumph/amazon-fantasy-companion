@@ -726,7 +726,9 @@ function PanelSection({controller, snapshot}: {controller: PanelController | nul
         <Text style={styles.body}>Panel unavailable</Text>
       ) : (
         <>
-          <Text style={styles.body}>{PanelText.basis(snapshot.basis)}</Text>
+          <Text style={styles.body}>
+            {snapshot.sport != null ? `${snapshot.sport} · ${PanelText.basis(snapshot.basis)}` : PanelText.basis(snapshot.basis)}
+          </Text>
           {snapshot.rows.map(row => (
             <Text
               key={row.playerId}
