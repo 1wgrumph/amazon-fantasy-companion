@@ -3,7 +3,6 @@ package com.afc.companion
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,6 +33,7 @@ import com.afc.companion.profile.ProfileSettingsScreen
 import com.afc.companion.profile.ProfileStore
 import com.afc.companion.ui.theme.AfcTheme
 import com.afc.companion.ui.theme.LocalTvSafeZoneApplied
+import com.afc.companion.ui.theme.afcBackground
 import com.afc.companion.ui.theme.TvButton as Button
 import com.afc.companion.ui.theme.tvSafeZonePadding
 
@@ -46,7 +46,7 @@ class MainActivity : ComponentActivity() {
         val client = shell.client(BuildConfig.AFC_API_BASE_URL, sessions::token)
         setContent {
             AfcTheme {
-                Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
+                Box(Modifier.fillMaxSize().afcBackground()) {
                     if (client == null) NotConfigured() else AppShell(shell, client, sessions)
                 }
             }

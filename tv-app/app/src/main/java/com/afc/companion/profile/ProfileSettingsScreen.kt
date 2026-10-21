@@ -1,10 +1,16 @@
 package com.afc.companion.profile
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -20,6 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
@@ -40,7 +47,9 @@ import androidx.tv.material3.Text
 import com.afc.companion.BuildConfig
 import com.afc.companion.net.ApiClient
 import com.afc.companion.net.ScoringPreset
+import com.afc.companion.ui.theme.AfcLoadingIndicator
 import com.afc.companion.ui.theme.TvButton as Button
+import com.afc.companion.ui.theme.TvPalette
 import com.afc.companion.ui.theme.tvFocusStyle
 import com.afc.companion.ui.theme.tvSafeZonePadding
 import kotlinx.coroutines.launch
@@ -55,7 +64,8 @@ fun ProfileSettingsScreen(client: ApiClient, modifier: Modifier = Modifier) {
     val store = remember(client) { ProfileStore(client) }
     val stateHolder = remember { mutableStateOf<ProfileState?>(null) }
     var state by stateHolder
-    var message by remember { mutableStateOf("Loading profile…") }
+    // Null until the first load finishes; the existing state holder keeps the save callbacks' shape.
+    var message by remember { mutableStateOf<String?>(null) }
     val scope = rememberCoroutineScope()
     // No verified voice route exists in this build, so Voice stays hidden with its stated limit (AFC-PR-022).
     // X07_VERDICT_PENDING: no verified installed-app detection route exists yet, so detection
@@ -66,13 +76,15 @@ fun ProfileSettingsScreen(client: ApiClient, modifier: Modifier = Modifier) {
         state = store.load()
         message = if (state == null) "Profile is unavailable. Check the connection and try again." else "Profile loaded."
     }
-
-    Column(
+    val shown = message
+    if (shown == null) {
+        AfcLoadingIndicator("Loading profile…", modifier.tvSafeZonePadding())
+    } else Column(
         modifier.tvSafeZonePadding().padding(8.dp).verticalScroll(rememberScrollState()).padding(8.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         Text("Profile/Settings", style = MaterialTheme.typography.headlineMedium)
-        Text(message, style = MaterialTheme.typography.bodyLarge)
+        Text(shown, style = MaterialTheme.typography.bodyLarge)
         DeviceSettingsControls()
         val current = state ?: return@Column
         for (control in ProfileControl.entries) {
@@ -164,7 +176,11 @@ fun ProfileSettingsScreen(client: ApiClient, modifier: Modifier = Modifier) {
 @Composable
 private fun SportTogglesEditor(current: ProfileState, state: MutableState<ProfileState?>) {
     for ((sport, label) in sportToggles(current, nbaEnabled = BuildConfig.AFC_ENABLE_NBA)) {
-        Button(onClick = { state.value = current.toggledSport(sport) }) { Text(label) }
+        Button(onClick = { state.value = current.toggledSport(sport) }) {
+            Box(Modifier.size(16.dp).background(Color(TvPalette.sportAccentArgb(sport)), CircleShape))
+            Spacer(Modifier.width(12.dp))
+            Text(label)
+        }
     }
 }
 

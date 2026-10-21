@@ -10,12 +10,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.relocation.BringIntoViewRequester
 import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -27,6 +29,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.key.KeyEventType
@@ -35,6 +41,7 @@ import androidx.compose.ui.input.key.type
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.tv.material3.MaterialTheme
@@ -45,6 +52,10 @@ import com.afc.companion.net.ApiClient
 import com.afc.companion.profile.DeviceSettings
 import com.afc.companion.profile.ProfileState
 import com.afc.companion.profile.ProfileStore
+import com.afc.companion.profile.Sport
+import com.afc.companion.ui.theme.AfcLoadingIndicator
+import com.afc.companion.ui.theme.TvFocusStyle
+import com.afc.companion.ui.theme.TvPalette
 import com.afc.companion.ui.theme.tvFocusStyle
 import com.afc.companion.ui.theme.tvSafeZonePadding
 import com.afc.companion.watch.WatchLauncher
@@ -75,7 +86,7 @@ fun LineupPanel(client: ApiClient, mode: PanelMode, modifier: Modifier = Modifie
         profileLoaded = true
     }
     if (!profileLoaded) {
-        PanelMessage("Loading profile…", modifier)
+        PanelMessage(modifier) { AfcLoadingIndicator("Loading profile…") }
         return
     }
     val current = profile
@@ -186,7 +197,7 @@ fun LineupPanel(client: ApiClient, mode: PanelMode, modifier: Modifier = Modifie
                     width = with(density) { layout.panel.width.toDp() },
                     height = with(density) { layout.panel.height.toDp() },
                 )
-                .background(MaterialTheme.colorScheme.background)
+                .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.72f), RoundedCornerShape(16.dp))
                 .padding(8.dp),
         ) {
             if (!controller.visible) {
@@ -247,16 +258,17 @@ private fun PanelContent(
             return@Column
         }
         if (snapshot == null) {
-            Text(
-                if (fetchAttempted) "Panel data unavailable." else "Loading panel…",
-                style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = MaterialTheme.colorScheme.onSurface),
-            )
+            if (fetchAttempted) {
+                Text(
+                    "Panel data unavailable.",
+                    style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = MaterialTheme.colorScheme.onSurface),
+                )
+            } else {
+                AfcLoadingIndicator("Loading panel…", Modifier.heightIn(min = 240.dp))
+            }
             return@Column
         }
-        Text(
-            PanelText.header(snapshot),
-            style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = MaterialTheme.colorScheme.onSurface),
-        )
+        PanelHeader(snapshot)
         snapshot.rows.forEach { row ->
             key(row.playerId) {
                 FocusableRow(focused == FocusTarget.Row(row.playerId)) {
@@ -300,8 +312,15 @@ private fun PanelContent(
 private fun AlertCard(alert: PanelAlert, armed: Boolean, focused: FocusTarget?) {
     // Focus on Watch or Dismiss reveals the whole card, so the customer sees the alert being acted on.
     val cardFocused = focused == FocusTarget.AlertWatch(alert.id) || focused == FocusTarget.AlertDismiss(alert.id)
+    val flare = MaterialTheme.colorScheme.tertiary
     Column(
-        Modifier.fillMaxWidth().bringIntoViewWhen(cardFocused).tvFocusStyle(cardFocused).padding(16.dp),
+        Modifier.fillMaxWidth().bringIntoViewWhen(cardFocused).tvFocusStyle(cardFocused)
+            // Alert flare: a stripe on the card's leading edge, inside the focus outline.
+            .drawBehind {
+                val inset = TvFocusStyle.borderWidthDp.dp.toPx()
+                drawRect(flare, topLeft = Offset(inset, inset), size = Size(8.dp.toPx(), size.height - 2 * inset))
+            }
+            .padding(start = 28.dp, top = 16.dp, end = 16.dp, bottom = 16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         val body = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = MaterialTheme.colorScheme.onSurface)
@@ -337,10 +356,28 @@ private fun Modifier.bringIntoViewWhen(focused: Boolean): Modifier {
     return bringIntoViewRequester(requester)
 }
 
+/** Scoring basis and lineup source; a tagged sport gets its accent as a chip. */
 @Composable
-private fun PanelMessage(text: String, modifier: Modifier = Modifier) {
+private fun PanelHeader(snapshot: PanelSnapshot) {
+    val sport = Sport.entries.find { it.label == snapshot.sport }
+    val modifier = if (sport == null) Modifier else {
+        Modifier.background(Color(TvPalette.sportAccentArgb(sport)), RoundedCornerShape(50)).padding(horizontal = 20.dp, vertical = 6.dp)
+    }
+    Text(
+        PanelText.header(snapshot),
+        modifier = modifier,
+        style = TextStyle(
+            fontSize = PanelTextSizes.bodySp.sp,
+            fontWeight = FontWeight.Medium,
+            color = sport?.let { Color(TvPalette.onSportAccentArgb(it)) } ?: MaterialTheme.colorScheme.onSurface,
+        ),
+    )
+}
+
+@Composable
+private fun PanelMessage(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
     Column(modifier.tvSafeZonePadding().padding(8.dp), verticalArrangement = Arrangement.spacedBy(24.dp)) {
         Text("Panel", style = MaterialTheme.typography.headlineMedium)
-        Text(text, style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = MaterialTheme.colorScheme.onSurface))
+        content()
     }
 }
