@@ -12,13 +12,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.tv.material3.Button
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import com.afc.companion.net.ApiClient
 import com.afc.companion.net.DeviceCode
 import com.afc.companion.net.LinkState
 import com.afc.companion.net.LinkStatus
+import com.afc.companion.ui.theme.TvButton as Button
+import com.afc.companion.ui.theme.tvSafeZonePadding
 import java.io.IOException
 import kotlinx.coroutines.delay
 import org.json.JSONObject
@@ -90,14 +91,14 @@ fun LinkView(client: ApiClient, onLinked: (String) -> Unit, modifier: Modifier =
             shown = LinkPresentation("error", null, "The backend sent an unexpected response.", false)
         }
     }
-    Column(modifier.padding(48.dp), verticalArrangement = Arrangement.spacedBy(24.dp)) {
+    Column(modifier.tvSafeZonePadding().padding(8.dp), verticalArrangement = Arrangement.spacedBy(24.dp)) {
         Text("Link this TV", style = MaterialTheme.typography.headlineMedium)
         val current = shown
         if (current == null) {
             Text("Requesting a code…", style = MaterialTheme.typography.bodyLarge)
         } else {
-            current.code?.let { Text(it, style = MaterialTheme.typography.displayMedium) }
-            Text(current.message, style = MaterialTheme.typography.bodyLarge)
+            current.code?.let { Text(it, color = MaterialTheme.colorScheme.primary, style = MaterialTheme.typography.displayMedium) }
+            Text(current.message, color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.bodyLarge)
             if (current.state != LinkStatus.CodePending.wire && !current.showProfile) {
                 Button(onClick = { attempt++ }) { Text("Get code") }
             }

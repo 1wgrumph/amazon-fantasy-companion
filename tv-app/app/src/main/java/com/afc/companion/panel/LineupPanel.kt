@@ -2,7 +2,6 @@ package com.afc.companion.panel
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -30,7 +29,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
@@ -47,6 +45,8 @@ import com.afc.companion.net.ApiClient
 import com.afc.companion.profile.DeviceSettings
 import com.afc.companion.profile.ProfileState
 import com.afc.companion.profile.ProfileStore
+import com.afc.companion.ui.theme.tvFocusStyle
+import com.afc.companion.ui.theme.tvSafeZonePadding
 import com.afc.companion.watch.WatchLauncher
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
@@ -155,6 +155,7 @@ fun LineupPanel(client: ApiClient, mode: PanelMode, modifier: Modifier = Modifie
     BoxWithConstraints(
         modifier
             .fillMaxSize()
+            .tvSafeZonePadding()
             .focusRequester(focusRequester)
             .focusable()
             .onPreviewKeyEvent { event ->
@@ -186,12 +187,12 @@ fun LineupPanel(client: ApiClient, mode: PanelMode, modifier: Modifier = Modifie
                     height = with(density) { layout.panel.height.toDp() },
                 )
                 .background(MaterialTheme.colorScheme.background)
-                .padding(32.dp),
+                .padding(8.dp),
         ) {
             if (!controller.visible) {
                 Text(
                     "Panel hidden. Press Menu to show it.",
-                    style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = Color.White),
+                    style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = MaterialTheme.colorScheme.onSurface),
                 )
             } else {
                 // Pass changed immutable state, not the controller: equal parameters
@@ -225,36 +226,36 @@ private fun PanelContent(
     // One scrolling column: up to three alert cards are taller than the panel, so the focused
     // target is brought into view instead of being laid out below the window.
     Column(
-        Modifier.fillMaxSize().verticalScroll(rememberScrollState()),
+        Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(8.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         watchOutcome?.let {
-            Text(it, style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = Color.White))
+            Text(it, style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = MaterialTheme.colorScheme.onSurface))
         }
         alerts.forEach { alert -> AlertCard(alert, armedWatch == alert.id, focused) }
         FocusableRow(focused == FocusTarget.TeamLeagueSwitch) {
             Text(
                 "Team/league: ${teamLeague ?: "Unavailable"}",
-                style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = Color.White),
+                style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = MaterialTheme.colorScheme.onSurface),
             )
         }
         if (teamLeague == null) {
             Text(
                 "Panel unavailable: no team/league is selected in Profile/Settings.",
-                style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = Color.White),
+                style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = MaterialTheme.colorScheme.onSurface),
             )
             return@Column
         }
         if (snapshot == null) {
             Text(
                 if (fetchAttempted) "Panel data unavailable." else "Loading panel…",
-                style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = Color.White),
+                style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = MaterialTheme.colorScheme.onSurface),
             )
             return@Column
         }
         Text(
             PanelText.header(snapshot),
-            style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = Color.White),
+            style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = MaterialTheme.colorScheme.onSurface),
         )
         snapshot.rows.forEach { row ->
             key(row.playerId) {
@@ -266,15 +267,15 @@ private fun PanelContent(
                         Text(
                             row.name,
                             modifier = Modifier.weight(1f),
-                            style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = Color.White),
+                            style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = MaterialTheme.colorScheme.onSurface),
                         )
                         Text(
                             PanelText.gameStatus(row.gameStatus),
-                            style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = Color.White),
+                            style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = MaterialTheme.colorScheme.onSurface),
                         )
                         Text(
                             PanelText.value(row.points, nowMs),
-                            style = TextStyle(fontSize = PanelTextSizes.scoreSp.sp, color = Color.White),
+                            style = TextStyle(fontSize = PanelTextSizes.scoreSp.sp, color = MaterialTheme.colorScheme.onSurface),
                         )
                     }
                 }
@@ -284,11 +285,11 @@ private fun PanelContent(
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(
                     "Team total: ${PanelText.value(snapshot.teamTotal, nowMs)}",
-                    style = TextStyle(fontSize = PanelTextSizes.scoreSp.sp, color = Color.White),
+                    style = TextStyle(fontSize = PanelTextSizes.scoreSp.sp, color = MaterialTheme.colorScheme.onSurface),
                 )
                 Text(
                     "Progress: ${PanelText.value(snapshot.progress, nowMs)}",
-                    style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = Color.White),
+                    style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = MaterialTheme.colorScheme.onSurface),
                 )
             }
         }
@@ -300,11 +301,11 @@ private fun AlertCard(alert: PanelAlert, armed: Boolean, focused: FocusTarget?) 
     // Focus on Watch or Dismiss reveals the whole card, so the customer sees the alert being acted on.
     val cardFocused = focused == FocusTarget.AlertWatch(alert.id) || focused == FocusTarget.AlertDismiss(alert.id)
     Column(
-        Modifier.fillMaxWidth().bringIntoViewWhen(cardFocused).border(1.dp, Color.White).padding(12.dp),
+        Modifier.fillMaxWidth().bringIntoViewWhen(cardFocused).tvFocusStyle(cardFocused).padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        val body = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = Color.White)
-        Text(alert.text.headline, style = TextStyle(fontSize = PanelTextSizes.scoreSp.sp, color = Color.White))
+        val body = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = MaterialTheme.colorScheme.onSurface)
+        Text(alert.text.headline, style = TextStyle(fontSize = PanelTextSizes.scoreSp.sp, color = MaterialTheme.colorScheme.onSurface))
         listOfNotNull(alert.text.context.ifEmpty { null }, alert.text.access, alert.text.commentary).forEach { Text(it, style = body) }
         // Stacked, matching the UP/DOWN focus order.
         if (alert.watchable) {
@@ -322,7 +323,7 @@ private fun FocusableRow(focused: Boolean, content: @Composable () -> Unit) {
         Modifier
             .fillMaxWidth()
             .bringIntoViewWhen(focused)
-            .border(3.dp, if (focused) Color.White else Color.Transparent)
+            .tvFocusStyle(focused)
             .padding(12.dp),
     ) { content() }
 }
@@ -338,8 +339,8 @@ private fun Modifier.bringIntoViewWhen(focused: Boolean): Modifier {
 
 @Composable
 private fun PanelMessage(text: String, modifier: Modifier = Modifier) {
-    Column(modifier.padding(48.dp), verticalArrangement = Arrangement.spacedBy(24.dp)) {
+    Column(modifier.tvSafeZonePadding().padding(8.dp), verticalArrangement = Arrangement.spacedBy(24.dp)) {
         Text("Panel", style = MaterialTheme.typography.headlineMedium)
-        Text(text, style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = Color.White))
+        Text(text, style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = MaterialTheme.colorScheme.onSurface))
     }
 }
