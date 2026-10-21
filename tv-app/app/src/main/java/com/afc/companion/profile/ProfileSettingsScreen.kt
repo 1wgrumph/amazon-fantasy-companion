@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -77,9 +78,7 @@ fun ProfileSettingsScreen(client: ApiClient, modifier: Modifier = Modifier) {
         message = if (state == null) "Profile is unavailable. Check the connection and try again." else "Profile loaded."
     }
     val shown = message
-    if (shown == null) {
-        AfcLoadingIndicator("Loading profile…", modifier.tvSafeZonePadding())
-    } else Column(
+    if (shown != null) Column(
         modifier.tvSafeZonePadding().padding(8.dp).verticalScroll(rememberScrollState()).padding(8.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
@@ -170,6 +169,15 @@ fun ProfileSettingsScreen(client: ApiClient, modifier: Modifier = Modifier) {
                 }
             }
         }) { Text("Save profile") }
+    }
+    if (shown == null) {
+        Box(modifier.fillMaxSize().tvSafeZonePadding()) {
+            AfcLoadingIndicator("Loading profile…")
+            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                Text("Profile/Settings", style = MaterialTheme.typography.headlineMedium)
+                DeviceSettingsControls()
+            }
+        }
     }
 }
 

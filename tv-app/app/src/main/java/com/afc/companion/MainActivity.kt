@@ -73,7 +73,7 @@ private fun AppShell(shell: Shell, client: ApiClient, sessions: SessionStore) {
         shell.syncMonitoring(hasSession, if (hasSession) ProfileStore(client).load() else null, monitor)
     }
     Row(Modifier.fillMaxSize().tvSafeZonePadding()) {
-        Column(Modifier.padding(8.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        Column(Modifier.padding(horizontal = 12.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
             Destination.entries.forEach { target ->
                 Button(onClick = { destination = target }) { Text(target.label) }
             }

@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -234,87 +234,93 @@ private fun PanelContent(
     fetchAttempted: Boolean,
     nowMs: Long,
 ) {
-    // One scrolling column: up to three alert cards are taller than the panel, so the focused
-    // target is brought into view instead of being laid out below the window.
-    Column(
-        Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(8.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-    ) {
-        watchOutcome?.let {
-            Text(it, style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = MaterialTheme.colorScheme.onSurface))
-        }
-        alerts.forEach { alert -> AlertCard(alert, armedWatch == alert.id, focused) }
-        FocusableRow(focused == FocusTarget.TeamLeagueSwitch) {
-            Text(
-                "Team/league: ${teamLeague ?: "Unavailable"}",
-                style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = MaterialTheme.colorScheme.onSurface),
-            )
-        }
-        if (teamLeague == null) {
-            Text(
-                "Panel unavailable: no team/league is selected in Profile/Settings.",
-                style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = MaterialTheme.colorScheme.onSurface),
-            )
-            return@Column
-        }
+    val loading = snapshot == null && teamLeague != null && !fetchAttempted
+    Box(Modifier.fillMaxSize()) {
         if (snapshot == null) {
-            if (fetchAttempted) {
+            if (loading) AfcLoadingIndicator("Loading panel…")
+        }
+        // One scrolling column: up to three alert cards are taller than the panel, so the focused
+        // target is brought into view instead of being laid out below the window.
+        Column(
+            // Pending-data controls scroll above the centred loading layer, without covering it.
+            Modifier.fillMaxHeight(if (loading) 0.25f else 1f).fillMaxWidth()
+                .verticalScroll(rememberScrollState()).padding(8.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+        ) {
+            watchOutcome?.let {
+                Text(it, style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = MaterialTheme.colorScheme.onSurface))
+            }
+            alerts.forEach { alert -> AlertCard(alert, armedWatch == alert.id, focused, revealWholeCard = !loading) }
+            FocusableRow(focused == FocusTarget.TeamLeagueSwitch) {
                 Text(
-                    "Panel data unavailable.",
+                    "Team/league: ${teamLeague ?: "Unavailable"}",
                     style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = MaterialTheme.colorScheme.onSurface),
                 )
-            } else {
-                AfcLoadingIndicator("Loading panel…", Modifier.heightIn(min = 240.dp))
             }
-            return@Column
-        }
-        PanelHeader(snapshot)
-        snapshot.rows.forEach { row ->
-            key(row.playerId) {
-                FocusableRow(focused == FocusTarget.Row(row.playerId)) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(24.dp),
-                    ) {
-                        Text(
-                            row.name,
-                            modifier = Modifier.weight(1f),
-                            style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = MaterialTheme.colorScheme.onSurface),
-                        )
-                        Text(
-                            PanelText.gameStatus(row.gameStatus),
-                            style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = MaterialTheme.colorScheme.onSurface),
-                        )
-                        Text(
-                            PanelText.value(row.points, nowMs),
-                            style = TextStyle(fontSize = PanelTextSizes.scoreSp.sp, color = MaterialTheme.colorScheme.onSurface),
-                        )
+            if (teamLeague == null) {
+                Text(
+                    "Panel unavailable: no team/league is selected in Profile/Settings.",
+                    style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = MaterialTheme.colorScheme.onSurface),
+                )
+                return@Column
+            }
+            if (snapshot == null) {
+                if (fetchAttempted) {
+                    Text(
+                        "Panel data unavailable.",
+                        style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = MaterialTheme.colorScheme.onSurface),
+                    )
+                }
+                return@Column
+            }
+            PanelHeader(snapshot)
+            snapshot.rows.forEach { row ->
+                key(row.playerId) {
+                    FocusableRow(focused == FocusTarget.Row(row.playerId)) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(24.dp),
+                        ) {
+                            Text(
+                                row.name,
+                                modifier = Modifier.weight(1f),
+                                style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = MaterialTheme.colorScheme.onSurface),
+                            )
+                            Text(
+                                PanelText.gameStatus(row.gameStatus),
+                                style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = MaterialTheme.colorScheme.onSurface),
+                            )
+                            Text(
+                                PanelText.value(row.points, nowMs),
+                                style = TextStyle(fontSize = PanelTextSizes.scoreSp.sp, color = MaterialTheme.colorScheme.onSurface),
+                            )
+                        }
                     }
                 }
             }
-        }
-        FocusableRow(focused == FocusTarget.Total) {
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text(
-                    "Team total: ${PanelText.value(snapshot.teamTotal, nowMs)}",
-                    style = TextStyle(fontSize = PanelTextSizes.scoreSp.sp, color = MaterialTheme.colorScheme.onSurface),
-                )
-                Text(
-                    "Progress: ${PanelText.value(snapshot.progress, nowMs)}",
-                    style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = MaterialTheme.colorScheme.onSurface),
-                )
+            FocusableRow(focused == FocusTarget.Total) {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(
+                        "Team total: ${PanelText.value(snapshot.teamTotal, nowMs)}",
+                        style = TextStyle(fontSize = PanelTextSizes.scoreSp.sp, color = MaterialTheme.colorScheme.onSurface),
+                    )
+                    Text(
+                        "Progress: ${PanelText.value(snapshot.progress, nowMs)}",
+                        style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = MaterialTheme.colorScheme.onSurface),
+                    )
+                }
             }
         }
     }
 }
 
 @Composable
-private fun AlertCard(alert: PanelAlert, armed: Boolean, focused: FocusTarget?) {
-    // Focus on Watch or Dismiss reveals the whole card, so the customer sees the alert being acted on.
+private fun AlertCard(alert: PanelAlert, armed: Boolean, focused: FocusTarget?, revealWholeCard: Boolean) {
+    // Reveal the whole card when it fits; loading leaves the focused action to scroll into view.
     val cardFocused = focused == FocusTarget.AlertWatch(alert.id) || focused == FocusTarget.AlertDismiss(alert.id)
     val flare = MaterialTheme.colorScheme.tertiary
     Column(
-        Modifier.fillMaxWidth().bringIntoViewWhen(cardFocused).tvFocusStyle(cardFocused)
+        Modifier.fillMaxWidth().bringIntoViewWhen(cardFocused && revealWholeCard).tvFocusStyle(cardFocused)
             // Alert flare: a stripe on the card's leading edge, inside the focus outline.
             .drawBehind {
                 val inset = TvFocusStyle.borderWidthDp.dp.toPx()
@@ -376,7 +382,7 @@ private fun PanelHeader(snapshot: PanelSnapshot) {
 
 @Composable
 private fun PanelMessage(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
-    Column(modifier.tvSafeZonePadding().padding(8.dp), verticalArrangement = Arrangement.spacedBy(24.dp)) {
+    Box(modifier.fillMaxSize().tvSafeZonePadding().padding(8.dp)) {
         Text("Panel", style = MaterialTheme.typography.headlineMedium)
         content()
     }
