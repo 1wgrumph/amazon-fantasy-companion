@@ -1,0 +1,284 @@
+{
+  "packet": "BUG AFC-M14-TOKEN-PERSIST",
+  "result": "PASS",
+  "observer": "Codex implementer",
+  "recorded_utc": "2026-10-21T03:40:29.597168+00:00",
+  "base_commit": "36b154d",
+  "changed_product_paths": [
+    "vega-app/src/auth/tokenStore.ts",
+    "vega-app/package.json",
+    "vega-app/package-lock.json"
+  ],
+  "regression_assertions_modified": false,
+  "commands": {
+    "red": "npm test -- --runInBand __tests__/auth/appTokenStore.test.ts",
+    "green": "npm test -- --runInBand",
+    "typecheck": "npx --no-install tsc --noEmit",
+    "build": "sandbox run.py <authorized-work-copy> -- bash -c \"cd vega-app && export AFC_API_BASE_URL=<existing-allowlisted-dev-endpoint> && npm run build:app\"",
+    "device": "sandbox run.py <authorized-work-copy> -- bash vega-app/vvd-checks/drive-vvd.sh <authorized-run-dir>",
+    "confirm": "bash vega-app/vvd-checks/confirm-link.sh <existing-dev-endpoint> <displayed-code> afc-vega-vvd-synthetic <private-confirm-dir>",
+    "online": "python3 vega-app/vvd-checks/verify-link-online.py <private-run-dir>"
+  },
+  "verification": {
+    "red_tests_failed": 2,
+    "green_tests_passed": 164,
+    "green_tests_total": 164,
+    "green_exit": 0,
+    "tsc_exit": 0,
+    "build_exit": 0,
+    "device_driver_exit": 0,
+    "device_steps_passed": 74,
+    "online_checks_passed": 5,
+    "online_exit": 0,
+    "confirm_http": 200,
+    "new_code_after_relaunch": false,
+    "vvd_stopped": true,
+    "all_captured_legacy_warning_counts": 0
+  },
+  "source_sha256": [
+    {
+      "path": "vega-app/src/auth/tokenStore.ts",
+      "sha256": "652af7066e9239069deae448ab8a20a8e88adc565f353bf093927952fa9858d1"
+    },
+    {
+      "path": "vega-app/package.json",
+      "sha256": "cd708947598d7c29f98118679448529de4e29b1b584ea430c3965882965c65de"
+    },
+    {
+      "path": "vega-app/package-lock.json",
+      "sha256": "b3239b851dfdd5d1333ed58a310983008814a30a5bf52820ebb5544f0dfbb579"
+    },
+    {
+      "path": "vega-app/__tests__/auth/appTokenStore.test.ts",
+      "sha256": "f7d31135613879bc53d3f3b3fa86cfa1b83fbd8e91e50ca55e35ec1a6a81e40d"
+    },
+    {
+      "path": "vega-app/vvd-checks/drive-vvd.sh",
+      "sha256": "6c480d69e5e8c1ff92717f31da1006d4a809f56fdb7cee15fd32530a80465660"
+    },
+    {
+      "path": "vega-app/vvd-checks/lib.sh",
+      "sha256": "bebc0a97369bbb90e243b8419b0aa12a34ee3fdddd88c567f7e2b208ee370190"
+    },
+    {
+      "path": "vega-app/vvd-checks/confirm-link.sh",
+      "sha256": "af86391e74d9a14ed0f61ed1698ca8336f9616ef79bb51ee58e7908e71804432"
+    },
+    {
+      "path": "vega-app/vvd-checks/verify-link-online.py",
+      "sha256": "d2948e28bc811110f25ea771d50d4e7486f826465c90efaf8bc5d603b6c5c614"
+    }
+  ],
+  "artifacts_sha256": [
+    {
+      "path": "04-main-loaded.png",
+      "sha256": "35e0d198e6d8b77118a7b6a366d6c4196e068be76398eb4795ac58778f90199f"
+    },
+    {
+      "path": "05-redzone-on.png",
+      "sha256": "250fdaf54c064c99b83edd39b3ba22e678c29d38755b8988c2bce89a47324759"
+    },
+    {
+      "path": "05a-redzone-off.png",
+      "sha256": "c75ca53d10bb2ee0ed21f781827df182f0bf26a10a52a828519b54444e9dc4d0"
+    },
+    {
+      "path": "09-reload-top.png",
+      "sha256": "35e0d198e6d8b77118a7b6a366d6c4196e068be76398eb4795ac58778f90199f"
+    },
+    {
+      "path": "11-relinked-top.png",
+      "sha256": "35e0d198e6d8b77118a7b6a366d6c4196e068be76398eb4795ac58778f90199f"
+    },
+    {
+      "path": "12-relinked-redzone.png",
+      "sha256": "250fdaf54c064c99b83edd39b3ba22e678c29d38755b8988c2bce89a47324759"
+    },
+    {
+      "path": "all-clamav.txt",
+      "sha256": "c9f1f3ab4c7d9ae78d68a3ae3c2934953fe247482abf43f96660810f172b3ec2"
+    },
+    {
+      "path": "all-gitleaks.txt",
+      "sha256": "71f63c8eb7dcc518e9182203c873cf914e73571d0339087311bb54146e2324e8"
+    },
+    {
+      "path": "app-log-excerpt.txt",
+      "sha256": "2eb3efa432f929d361f82440457438bf054af5970d073d18f546f5911ad0ec92"
+    },
+    {
+      "path": "build-attempt1.txt",
+      "sha256": "d4209b4a9fd81590d0aa30f699211d764312153466e66bd967632614b8eb431d"
+    },
+    {
+      "path": "build-stderr.txt",
+      "sha256": "e6b254034a35c3b0623462228becdfc883c1085a0ffd6c7f49fed14d7e85f254"
+    },
+    {
+      "path": "build.txt",
+      "sha256": "f2a21b09506360f1ae1869eeb877896c59be57a50c603208d18360336ae27247"
+    },
+    {
+      "path": "commands.txt",
+      "sha256": "1f5b90c5ef66f3dd02ada7ab6e726a01d8935b5b98fb0d6aa6e0ef19edd43b29"
+    },
+    {
+      "path": "confirm-results.txt",
+      "sha256": "81c74ee1c4c9d76139bca79ac721896a47376e87ef8c24cb1a7ad407286aba95"
+    },
+    {
+      "path": "credential-findings.json",
+      "sha256": "a71547e171f045321e90dfdde0f9f3264aad5e98cc37f42e48ce0eb14baa05cc"
+    },
+    {
+      "path": "driver.txt",
+      "sha256": "ed45642059213351caee8e8f34234b91af5b0487ee0d2d3ae6dcae2d981c25de"
+    },
+    {
+      "path": "evidence-scrub.txt",
+      "sha256": "9b0d39d33eed6cea2cd301c97ea1fa4c275d9b61788e3141760e49c835c2643c"
+    },
+    {
+      "path": "green-jest.txt",
+      "sha256": "9f0f7de7617310c738de83ecb3896a7a935e0e665483d2d0f9c05357680565e9"
+    },
+    {
+      "path": "install.json",
+      "sha256": "a7cd559e01cd52d86def55c96c058bd2b08cab68c4ae6e4cc53e1db3570fae0a"
+    },
+    {
+      "path": "log-checks.json",
+      "sha256": "6b07529a3a7c0c88ba0b6843363c3440bdd78eca3bf7ba2ceb7006ea4ba3fef6"
+    },
+    {
+      "path": "red-jest.txt",
+      "sha256": "0f2e0a95129af4e1a7a3a20203547cdea4228d860ce8085308b924c30e230d8c"
+    },
+    {
+      "path": "runtime-summary.json",
+      "sha256": "0ee0589ae53fda74f5cc9d9478f814f483d1fb735fb3999d4b7e4f46be11dd7f"
+    },
+    {
+      "path": "save-focused.png",
+      "sha256": "2b6f31e4e000075749e895d533f0436fb2619ab10bd7bdfb555d81716064fca5"
+    },
+    {
+      "path": "saved.png",
+      "sha256": "c45f8ddc75b65348d3b26a439270fcaf988db1dd6c08a7932ed070815bb8050f"
+    },
+    {
+      "path": "steps.txt",
+      "sha256": "d4a15abd176621941662775f4c0fa907225b06e59270b5d082685eae4310298e"
+    },
+    {
+      "path": "summary.md",
+      "sha256": "cd0c1e5016911c5963b6ce7eced70f709d3a382eb5a7fe5be589552759abc7c8"
+    },
+    {
+      "path": "supply-chain-artifacts.json",
+      "sha256": "bb8d54497454a43ca03ea5c9492b3e9175dc541eca61f7ba26ec803d8b5048c2"
+    },
+    {
+      "path": "supply-chain.json",
+      "sha256": "2066dab3655702920a4d16a7d31446adb32eae658a0a3330b1e9df48fcef3fb9"
+    },
+    {
+      "path": "tsc.txt",
+      "sha256": "19eaf43821a7660ec323a87c8457bf74823beb296c39f5e01aa8a683aa50f061"
+    },
+    {
+      "path": "verify-link-online.txt",
+      "sha256": "ecace9a6cfe40b270d41afa408839f0e360c8e53a7005cd98a956fbe22a39845"
+    },
+    {
+      "path": "vpkg-scan-attempt1.json",
+      "sha256": "077195728c658bf06f9d9b65b1b418456c43e6b943554ffab57cb01916c66c35"
+    },
+    {
+      "path": "vpkg-scan.json",
+      "sha256": "2a0ee11965ed1204d7c79ddff97a2117abb5fdbd9640007588419aa076272166"
+    },
+    {
+      "path": "vvd-status.txt",
+      "sha256": "118efdb384700aa18d9e50a1fbbaf1a7becb1cf9ba55cecc38babb7ddc4ed07f"
+    }
+  ],
+  "private_raw_sha256": [
+    {
+      "path": "afc-companion-online_x86_64.vpkg",
+      "sha256": "ff609f31ce07d4eaa1e2d735f02a5081ebbef8b6b1355e1418b596115d8a8c2c"
+    },
+    {
+      "path": "afc-companion_x86_64.vpkg",
+      "sha256": "85edb928a969c11055ada00fdae208504d457a5beec7c443233fa69516a7c1d5"
+    },
+    {
+      "path": "scan/async-storage.tgz",
+      "sha256": "35d6f686f74bf3c5eb3015fc392731e8e53ca56b3525544278324befdd85346b"
+    },
+    {
+      "path": "scan/audit.json",
+      "sha256": "753d7e62cca98cfdd743685b935048bd881240ed9ce5d895183f9bc5f4b9248e"
+    },
+    {
+      "path": "scan/archive-modes.json",
+      "sha256": "8de23e3fe9d789e8b83b3362bc6947a330de3db3ddb48aa24e3e5b2a9700d9fb"
+    },
+    {
+      "path": "device/run2/01-link-code.png",
+      "sha256": "0d9eb7c0db3a46ed87ab9f2f593bf28b9064099e7284e8a2280c1a2632914f73"
+    },
+    {
+      "path": "device/run2/confirm1/confirm.status",
+      "sha256": "c11e3f4837efde2441e23a7b9da02131f53bf59fddeb7147c4ab81afe400460f"
+    },
+    {
+      "path": "device/run2/confirm1/confirm.body",
+      "sha256": "6edce3e5260b0ddb0c22c0f8e4680d37dc49e1d62ee6e954b959889d814aa1c5"
+    },
+    {
+      "path": "device/run2/04-main-loaded.xwd",
+      "sha256": "d2281c936788edd7ad39c86775e36a923eb50cd7a7a6a375bf76cf43ed81e83c"
+    },
+    {
+      "path": "device/run2/09-reload-top.xwd",
+      "sha256": "3e17711b260f43755fc801ee4acd35c6c6350fe7a83e61afd44ef0c3c8643318"
+    },
+    {
+      "path": "device/run2/log-linked.stdout",
+      "sha256": "aa49d34d6125c55dc45858fd155f522296ae5cf96e59053b56ebf1ffb27f7e73"
+    },
+    {
+      "path": "device/run2/log-after-save.stdout",
+      "sha256": "5d10889f994b406f4cc2e868ea0e922ddf0e24ed2d0305e4d277f30d40b23349"
+    },
+    {
+      "path": "device/run2/log-after-reload.stdout",
+      "sha256": "9a2b54ca8c72f8f3bef2d97d86fc74b842d0bc23d35e20336f939be41d58b6bd"
+    },
+    {
+      "path": "device/run2/log-final.stdout",
+      "sha256": "7a4ac86cbd1d54abf200d0a73c30647696ca322f1cb747287cf1f0c92004c545"
+    }
+  ],
+  "receipt_excludes_itself": true,
+  "install": {
+    "tool": "npm",
+    "tool_version": "11.15.0",
+    "command": "npm install --ignore-scripts --save-exact --no-audit --no-fund @amazon-devices/react-native-async-storage__async-storage@2.1.9000000001",
+    "version": "2.1.9000000001",
+    "location": "vega-app/node_modules/@amazon-devices/react-native-async-storage__async-storage",
+    "sha256": "35d6f686f74bf3c5eb3015fc392731e8e53ca56b3525544278324befdd85346b",
+    "scan_verdict": "PASS",
+    "exit": 0,
+    "added_lock_entries": 81,
+    "existing_versions_changed": 0,
+    "resolution_matches_scanned_lock": true
+  },
+  "remaining_risks": [
+    "Native data-root messages remain despite passing persistence and authenticated reload. Their origin is unresolved.",
+    "Inherited dependency audit findings are recorded with runtime reachability analysis.",
+    "Independent review and acceptance are the orchestrator responsibility; no commit/push/PR changes authorized."
+  ],
+  "prevention": "Retain production-factory binding regression and VVD terminate/launch persistence check; fake-storage tests alone do not cover the native adapter."
+}

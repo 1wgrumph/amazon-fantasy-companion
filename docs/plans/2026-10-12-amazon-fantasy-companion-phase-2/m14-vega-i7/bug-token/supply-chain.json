@@ -1,0 +1,46 @@
+{
+  "verdict": "PASS",
+  "credential_findings": [],
+  "name": "@amazon-devices/react-native-async-storage__async-storage",
+  "version": "2.1.9000000001",
+  "archive_manifest_version": "2.1.9000000001+1.23.1",
+  "origin": "https://registry.npmjs.org",
+  "sha256": "35d6f686f74bf3c5eb3015fc392731e8e53ca56b3525544278324befdd85346b",
+  "integrity": "sha512-uMXS2o77o7HytYYP18jlAXEYGCm4qUIKrx56tmFk+WVcJfkuP6Is6tJAY7OFiQa4B7Q/qNniCokYUN79jjY76w==",
+  "tools": {
+    "node": "22.23.3",
+    "npm": "11.15.0",
+    "python": "3.14",
+    "clamav": "1.5.4; database 28159, 2026-10-20",
+    "gitleaks": "8.30.1"
+  },
+  "checks": {
+    "registry_integrity": "75 unique added archives: all matched lockfile digest and official registry HTTPS origin",
+    "archive_safety": "All members inspected before extraction; only relative regular files/directories, no links or special files",
+    "malware": "clamscan --recursive --infected: exit 0, 1242 files, 0 infected",
+    "secrets": "gitleaks dir --redact: exit 0, no leaks",
+    "install_scripts": "No preinstall/install/postinstall hooks; prepare in ast-types/recast is build-only and install uses --ignore-scripts",
+    "dependency_audit": "npm audit --json: exit 1; existing graph has 69 advisories. New inherited high flags on async-storage -> turbomodule-api -> jscodeshift -> existing micromatch/braces. Reachability traced: storage runtime imports TurboModuleRegistry and invariant only, not codegen/jscodeshift. No untrusted glob-pattern input or codegen in this integration. No critical or reachable new high identified.",
+    "static_review": "Inspected native app-private SQLite path, JS get/set/remove, native registry lookup, module config and package hooks; no unexplained outbound, credential access, or installer persistence",
+    "compatibility": "Peers react/react-native/Kepler are *. SDK 0.24.12112 bundled compat files select Kepler ~4.0.0+rn0.83.0 on OS 1.2; no standalone async-storage entry. Package kepler-compatibility maps exact 2.1.9000000001 to IAsyncStorage__AsyncStorage_1. Build and device will verify native binding. Native build validates the AsyncStorage_1 module need and selects its system bundle on OS 1.2.",
+    "archive_modes": "75 archives: zero setid files, zero world-writable regular files; 8 executable source/CLI files identified"
+  },
+  "exclusions": [
+    "Unchanged pre-existing dependency bytes not rescanned",
+    "No dynamic analysis required for package admission",
+    "Registry signature not independently verified; registry SHA-512 verified"
+  ],
+  "residual_risks": [
+    "Existing dependency audit findings remain outside packet; no automatic audit fix or dependency upgrades",
+    "Device compatibility and persistence pending build/native verification"
+  ],
+  "scope": "New storage package and 75 unique archive payloads required by its dependency graph, acquired as inert data before use",
+  "post_admission_verification": {
+    "native_build_exit": 0,
+    "vvd_install_exit": 0,
+    "online_check_passed": 5,
+    "online_check_exit": 0,
+    "relaunch_profile_screenshot_matches": true,
+    "note": "Compatibility and persistence pending at admission are now proven on the VVD; residual native data-root messages are recorded in summary.md."
+  }
+}
