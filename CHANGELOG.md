@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- A stored lineup without a league or team no longer crashes the panel; it serves the existing no-lineup state (PR TBD).
 - An NBA feed failure can no longer discard or delay the NFL poll: NBA ingest runs in its own scheduled function with bounded requests and writes ([PR #138](https://github.com/1wgrumph/amazon-fantasy-companion/pull/138)).
 
 ## [0.1.0] - 2026-10-20
