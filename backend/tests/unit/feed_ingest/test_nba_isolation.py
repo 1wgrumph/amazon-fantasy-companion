@@ -1,257 +1,247 @@
-"""NBA work behind AFC_ENABLE_NBA must not change the NFL poll result or schedule.
+"""Issue #137: NFL scheduling isolation and bounded NBA I/O, offline only.
 
-The hook runs after NFL work. These tests compare one scenario with the flag
-on against the same scenario with the flag off. Clocks are fake: nothing here
-sleeps.
+Committed ESPN fixtures; socketpair/HTTPResponse exercises actual read semantics.
+Fault delays model the socket trickle and slow writes reproduced in review.
 """
 
 import builtins
 import io
 import json
-import sys
+import signal
+import socket
+import threading
+import time
+from http.client import HTTPResponse
+from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
 
-import feed_ingest
 from feed_support import fresh_scoreboard
 
-NFL = "https://site.api.espn.com/apis/site/v2/sports/football/nfl/"
-NBA = "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/"
-BUDGET_SECONDS = 15  # the per-poll cap the NFL window can spare under a 60s Lambda
-GAMES = 6
+FIXTURES = Path(__file__).resolve().parents[2] / "fixtures" / "nba"
 
 
-def _pregame_board():
+def _board():
     board = fresh_scoreboard()
     for event in board["events"]:
         event["status"]["type"]["state"] = "pre"
     return board
 
 
-def _nba_board(count=GAMES):
-    board = fresh_scoreboard()
-    event = board["events"][0]
-    clones = []
-    for offset in range(count):
-        clone = json.loads(json.dumps(event))
-        clone["id"] = str(800000000 + offset)
-        clone["status"]["type"]["state"] = "in"
-        clones.append(clone)
-    board["events"] = clones
-    return board
+def _load(name):
+    return json.loads((FIXTURES / name).read_text())
 
 
-def _silence_profiles(monkeypatch):
+def _entry(nba):
+    import feed_ingest
+
+    # Run the same behavioral regression on the original inline-hook candidate.
+    return getattr(nba, "lambda_handler", feed_ingest.lambda_handler)
+
+
+def test_f1_variable_nfl_cost_keeps_poll_starts_identical(monkeypatch):
+    import feed_ingest
+
     monkeypatch.setattr(feed_ingest.store, "monitoring_profiles", lambda: [])
-
-
-def _view(result):
-    """NFL fields the hook is not allowed to change. Missing stale stays missing."""
-    view = {"stored": result["stored"], "failed": list(result["failed"])}
-    if "stale" in result:
-        view["stale"] = list(result["stale"])
-    return view
-
-
-class _Clock:
-    """Callable remaining() plus the Lambda millis view. `left` is seconds."""
-
-    def __init__(self, seconds):
-        self.left = seconds
-        self.mono = 0.0
-        self.sleeps = []
-
-    def remaining(self):
-        return self.left
-
-    def get_remaining_time_in_millis(self):
-        return self.left * 1000
-
-    def sleep(self, seconds):
-        self.sleeps.append(seconds)
-        self.left -= seconds
-
-    def monotonic(self):
-        return self.mono
-
-    def advance(self, seconds):
-        self.left -= seconds
-        self.mono += seconds
-
-
-def _install_clock(monkeypatch, clock):
-    monkeypatch.setattr(feed_ingest.time, "sleep", clock.sleep)
-    monkeypatch.setattr(feed_ingest.time, "monotonic", clock.monotonic)
-
-
-@pytest.mark.parametrize("error", [KeyError("nba-scoreboard"), RuntimeError("nba down")])
-def test_nba_non_oserror_leaves_the_nfl_result_unchanged(monkeypatch, caplog, error):
-    _silence_profiles(monkeypatch)
-    board = _pregame_board()
-    seen = []
-
-    def get_json(url):
-        seen.append(url)
-        if url.startswith(NBA):
-            raise error
-        return board
-
-    monkeypatch.setattr(feed_ingest, "_get_json", get_json)
-    # Room for one NBA request, so the getter must actually attempt the fetch.
-    clock = _Clock(51)
-    _install_clock(monkeypatch, clock)
-
-    monkeypatch.delenv("AFC_ENABLE_NBA", raising=False)
-    off = feed_ingest.poll({}, clock.remaining)
-    monkeypatch.setenv("AFC_ENABLE_NBA", "1")
-    with caplog.at_level("WARNING", logger="feed_ingest"):
-        on = feed_ingest.poll({}, clock.remaining)
-
-    assert _view(on) == _view(off)
-    assert on == off
-    assert any(url.startswith(NBA) for url in seen)
-    assert any("NBA poll failed" in record.getMessage() for record in caplog.records)
-
-
-def test_nba_hang_stops_within_budget_and_leaves_the_nfl_result(monkeypatch):
-    _silence_profiles(monkeypatch)
-    nfl_board = _pregame_board()
-    nba_board = _nba_board()
-    clock = _Clock(51)
-    _install_clock(monkeypatch, clock)
-    nba_calls = []
-
-    def get_json(url):
-        if url.startswith(NBA):
-            # A hung urlopen runs until its timeout, then the next game would start.
-            clock.advance(feed_ingest._REQUEST_SECONDS)
-            nba_calls.append(url)
-            return nba_board if url.endswith("scoreboard") else {"not": "a summary"}
-        return nfl_board
-
-    monkeypatch.setattr(feed_ingest, "_get_json", get_json)
-    monkeypatch.delenv("AFC_ENABLE_NBA", raising=False)
-    started = clock.mono
-    off = feed_ingest.poll({}, clock.remaining)
-    flag_off_added = clock.mono - started
-
-    monkeypatch.setenv("AFC_ENABLE_NBA", "1")
-    started = clock.mono
-    on = feed_ingest.poll({}, clock.remaining)
-    added = clock.mono - started
-
-    assert flag_off_added == 0
-    assert 0 < added <= BUDGET_SECONDS
-    assert len(nba_calls) < 1 + GAMES
-    assert _view(on) == _view(off)
-    assert on == off
-
-
-def test_nba_request_timeout_stays_the_shared_urlopen_bound(monkeypatch):
-    """One in-flight NBA request cannot outlive _REQUEST_SECONDS: that is the timeout."""
-    _silence_profiles(monkeypatch)
-    board = _pregame_board()
-    timeouts = []
-
-    def open_url(url, timeout):
-        timeouts.append((url, timeout))
-        if url.startswith(NBA):
-            raise OSError("nba unavailable")
-        return io.BytesIO(json.dumps(board).encode())
-
-    monkeypatch.setattr(feed_ingest, "_opener", lambda: SimpleNamespace(open=open_url))
-    monkeypatch.setenv("AFC_ENABLE_NBA", "1")
-    feed_ingest.poll({})
-    nba_timeouts = [timeout for url, timeout in timeouts if url.startswith(NBA)]
-    assert nba_timeouts == [feed_ingest._REQUEST_SECONDS]
-    assert feed_ingest._REQUEST_SECONDS == 10
-
-
-@pytest.mark.parametrize("kind", ["scoreboard-shape", "summary-shape", "malformed-json"])
-def test_malformed_nba_payload_leaves_the_nfl_result_unchanged(monkeypatch, kind):
-    _silence_profiles(monkeypatch)
-    nfl_board = _pregame_board()
-    nba_board = _nba_board(1)
-    order = []
-
-    def get_json(url):
-        order.append("nba" if url.startswith(NBA) else "nfl")
-        if not url.startswith(NBA):
-            return nfl_board
-        if kind == "malformed-json":
-            raise json.JSONDecodeError("Expecting value", "doc", 0)
-        if kind == "scoreboard-shape" or url.endswith("scoreboard"):
-            return {"events": [{"id": "not-numeric"}]} if kind == "scoreboard-shape" else nba_board
-        return {"boxscore": "nope"}
-
-    monkeypatch.setattr(feed_ingest, "_get_json", get_json)
-    clock = _Clock(51)
-    _install_clock(monkeypatch, clock)
-    monkeypatch.delenv("AFC_ENABLE_NBA", raising=False)
-    off = feed_ingest.poll({}, clock.remaining)
-    monkeypatch.setenv("AFC_ENABLE_NBA", "1")
-    on = feed_ingest.poll({}, clock.remaining)
-
-    assert order[0] == "nfl"
-    assert "nba" in order
-    assert _view(on) == _view(off)
-    assert on == off
-
-
-def test_slow_nba_does_not_reduce_the_number_of_nfl_polls(monkeypatch):
-    _silence_profiles(monkeypatch)
-    nfl_board = _pregame_board()
-    nba_board = _nba_board()
     monkeypatch.setenv("FEED_POLL_INTERVAL_SECONDS", "15")
-
-    def run(flag):
-        clock = _Clock(51)
-        _install_clock(monkeypatch, clock)
-        feed_ingest._FAILURES.clear()
-        nfl_polls = []
-
-        def get_json(url):
-            if url.startswith(NBA):
-                clock.advance(feed_ingest._REQUEST_SECONDS)
-                return nba_board if url.endswith("scoreboard") else {"not": "a summary"}
-            if url.endswith("scoreboard"):
-                nfl_polls.append(url)
-            return nfl_board
-
-        monkeypatch.setattr(feed_ingest, "_get_json", get_json)
-        if flag:
-            monkeypatch.setenv("AFC_ENABLE_NBA", "1")
-        else:
-            monkeypatch.delenv("AFC_ENABLE_NBA", raising=False)
-        result = feed_ingest.lambda_handler({}, clock)
-        return nfl_polls, result
-
-    off_polls, off = run(False)
-    on_polls, on = run(True)
-    assert len(off_polls) == 3
-    assert len(on_polls) == len(off_polls)
-    assert _view(on) == _view(off)
-
-
-def test_flag_off_poll_does_not_import_nba(monkeypatch):
-    _silence_profiles(monkeypatch)
-    monkeypatch.delenv("AFC_ENABLE_NBA", raising=False)
-    monkeypatch.setattr(feed_ingest, "_get_json", lambda url: _pregame_board())
-    saved = {name: sys.modules.pop(name) for name in list(sys.modules)
-             if name == "nba" or name.startswith("nba.")}
-    imported = []
+    imports = []
     real_import = builtins.__import__
 
     def spy(name, *args, **kwargs):
         if name == "nba" or name.startswith("nba."):
-            imported.append(name)
+            imports.append(name)
         return real_import(name, *args, **kwargs)
 
     monkeypatch.setattr(builtins, "__import__", spy)
+
+    def run(flag):
+        clock = SimpleNamespace(left=51, elapsed=0)
+        starts = []
+
+        def advance(seconds):
+            clock.left -= seconds
+            clock.elapsed += seconds
+
+        def get_json(url):
+            if "/basketball/" in url:
+                advance(10)
+                raise OSError("NBA request timeout")
+            starts.append(round(clock.elapsed, 1))
+            advance(.1 if len(starts) == 1 else 1)
+            return _board()
+
+        monkeypatch.setenv("AFC_ENABLE_NBA", str(int(flag)))
+        monkeypatch.setattr(feed_ingest, "_get_json", get_json)
+        monkeypatch.setattr(feed_ingest.time, "monotonic", lambda: clock.elapsed)
+        monkeypatch.setattr(feed_ingest.time, "sleep", advance)
+        context = SimpleNamespace(get_remaining_time_in_millis=lambda: clock.left * 1000)
+        return feed_ingest.lambda_handler({}, context), starts
+
+    off, off_starts = run(False)
+    on, on_starts = run(True)
+    assert off_starts == [0, 15.1, 31.1]
+    assert on_starts == off_starts
+    assert on == off == {"stored": 0, "failed": []}
+    assert imports == [], "NFL ingest must never import NBA, even with its flag on"
+
+
+def test_f2_trickling_response_has_absolute_deadline(monkeypatch, caplog):
+    import feed_ingest
+    import nba
+
+    monkeypatch.setenv("AFC_ENABLE_NBA", "1")
+    monkeypatch.setattr(nba, "_REQUEST_SECONDS", .15, raising=False)
+    monkeypatch.setattr(feed_ingest.store, "monitoring_profiles", lambda: [])
+    reader, writer = socket.socketpair()
+    reader.settimeout(10)
+    body = b" " * 20 + b"null"
+    writer.sendall(f"HTTP/1.1 200 OK\r\nContent-Length: {len(body)}\r\n\r\n".encode())
+    response = HTTPResponse(reader)
+    response.begin()
+    stop = threading.Event()
+
+    def trickle():
+        try:
+            for byte in body:
+                if stop.wait(.04):
+                    break
+                writer.sendall(bytes([byte]))
+        except OSError:
+            pass  # The deadline closes this test's reader while the writer is active.
+        finally:
+            writer.close()
+
+    thread = threading.Thread(target=trickle)
+    thread.start()
+
+    def open_url(url, timeout):
+        if "/basketball/" in url:
+            return response
+        return io.BytesIO(json.dumps(_board()).encode())
+
+    monkeypatch.setattr(feed_ingest, "_opener", lambda: SimpleNamespace(open=open_url))
+    old_handler = signal.getsignal(signal.SIGALRM)
     try:
-        feed_ingest.poll({})
-        assert imported == []
-        assert "nba" not in sys.modules
+        started = time.monotonic()
+        result = _entry(nba)({}, None)
+        elapsed = time.monotonic() - started
+        assert elapsed < .6, f"trickling NBA read exceeded its absolute deadline: {elapsed:.3f}s"
+        assert result == {"stored": 0, "failed": []}
+        assert "deadline" in caplog.text.lower()
+        assert signal.getsignal(signal.SIGALRM) == old_handler
+        assert signal.getitimer(signal.ITIMER_REAL) == (0, 0)
     finally:
-        sys.modules.update(saved)
+        stop.set()
+        response.close()
+        reader.close()
+        thread.join(timeout=2)
+    assert not thread.is_alive()
+
+
+@pytest.mark.parametrize("run_seconds,write_seconds", [(1, .15), (.15, 1)])
+def test_f3_slow_write_is_interrupted_by_deadline(monkeypatch, caplog, run_seconds, write_seconds):
+    import feed_ingest
+    import nba
+
+    monkeypatch.setenv("AFC_ENABLE_NBA", "1")
+    monkeypatch.setattr(nba, "_RUN_SECONDS", run_seconds, raising=False)
+    monkeypatch.setattr(nba, "_WRITE_SECONDS", write_seconds, raising=False)
+    monkeypatch.setattr(feed_ingest.store, "monitoring_profiles", lambda: [])
+    writes = []
+
+    def get_json(url):
+        if "/basketball/" not in url:
+            return _board()
+        return _load("scoreboard.json" if url.endswith("scoreboard") else "summary.json")
+
+    def slow_write(record, **kwargs):
+        writes.append(record["athleteId"])
+        threading.Event().wait(.6)
+
+    monkeypatch.setattr(feed_ingest, "_get_json", get_json)
+    monkeypatch.setattr(feed_ingest.store, "put_player_statistics", slow_write)
+    started = time.monotonic()
+    result = _entry(nba)({}, None)
+    elapsed = time.monotonic() - started
+    assert elapsed < .5, f"NBA persistence exceeded its deadline: {elapsed:.3f}s"
+    assert len(writes) == 1, "No later write may start after the deadline"
+    assert result == {"stored": 0, "failed": []}
+    assert "deadline" in caplog.text.lower()
+    assert signal.getitimer(signal.ITIMER_REAL) == (0, 0)
+
+
+def test_nba_handler_flag_off_does_no_io(monkeypatch):
+    import feed_ingest
+    import nba
+
+    monkeypatch.delenv("AFC_ENABLE_NBA", raising=False)
+
+    def forbidden(*args, **kwargs):
+        raise AssertionError("Disabled NBA handler attempted I/O")
+
+    monkeypatch.setattr(feed_ingest, "_get_json", forbidden)
+    monkeypatch.setattr(feed_ingest.store, "put_player_statistics", forbidden)
+    assert nba.lambda_handler({}, None) == {"stored": 0, "failed": []}
+
+
+@pytest.mark.parametrize("error", [KeyError("nba-scoreboard"), RuntimeError("nba down"),
+                                   ValueError("ESPN response exceeds the size bound"),
+                                   json.JSONDecodeError("Expecting value", "doc", 0)])
+def test_nba_handler_contains_and_logs_errors(monkeypatch, caplog, error):
+    import feed_ingest
+    import nba
+
+    monkeypatch.setenv("AFC_ENABLE_NBA", "1")
+
+    def get_json(url):
+        raise error
+
+    monkeypatch.setattr(feed_ingest, "_get_json", get_json)
+    assert nba.lambda_handler({}, None) == {"stored": 0, "failed": []}
+    assert "NBA" in caplog.text
+    assert signal.getitimer(signal.ITIMER_REAL) == (0, 0)
+
+
+def test_nba_handler_uses_bounded_client_without_changing_nfl_client(api, monkeypatch):
+    import feed_ingest
+    import nba
+    import store
+
+    monkeypatch.setenv("AFC_ENABLE_NBA", "1")
+    nfl_client = store._dynamodb()
+    nfl_config = nfl_client.meta.client.meta.config
+    monkeypatch.setattr(feed_ingest, "_get_json", lambda url:
+                        _load("scoreboard.json" if url.endswith("scoreboard") else "summary.json"))
+    assert nba.lambda_handler({}, None) == {"stored": 3, "failed": []}
+    rows = api.table("PlayerStats").scan()["Items"]
+    assert {row["athleteId"] for row in rows} == {"9100001", "9100002", "9100003"}
+    assert all(row["gameId"] == "401999101" for row in rows)
+    nba_client = store._dynamodb(nba._write_config())
+    config = nba_client.meta.client.meta.config
+    assert config.connect_timeout == config.read_timeout == 1
+    assert config.retries["total_max_attempts"] == 1
+    assert nba_client is not nfl_client
+    assert store._dynamodb() is nfl_client
+    assert nfl_client.meta.client.meta.config is nfl_config
+
+
+def test_nba_schedule_targets_only_the_separate_function():
+    import nba
+    from conftest import document
+
+    template = document("template.yaml")
+    resources = template["Resources"]
+    function = resources["NbaIngestFunction"]["Properties"]
+    assert function["Handler"] == "nba.lambda_handler"
+    assert function["Timeout"] > nba._RUN_SECONDS
+    schedule = resources["NbaIngestSchedule"]["Properties"]
+    assert schedule["ScheduleExpression"] == "rate(1 minute)"
+    assert schedule["State"] == {"Ref": "NbaIngestScheduleState"}
+    assert template["Parameters"]["NbaIngestScheduleState"]["Default"] == "DISABLED"
+    assert schedule["Target"]["Arn"] == {"Fn::GetAtt": "NbaIngestFunction.Arn"}
+    assert schedule["Target"]["RoleArn"] == {"Fn::GetAtt": "NbaIngestScheduleRole.Arn"}
+    role = resources["NbaIngestScheduleRole"]["Properties"]["Policies"]
+    assert role[0]["PolicyDocument"]["Statement"] == [{
+        "Effect": "Allow", "Action": "lambda:InvokeFunction",
+        "Resource": {"Fn::GetAtt": "NbaIngestFunction.Arn"}}]

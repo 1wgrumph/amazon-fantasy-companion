@@ -36,18 +36,10 @@ def _max_bytes():
 
 
 _REQUEST_SECONDS = 10  # _get_json timeout; deadline guards reserve it per request
-# One NBA poll, well under the 60s IngestFunction timeout. A request can run
-# for _REQUEST_SECONDS, so this fits one hung request and refuses a second.
-_NBA_POLL_BUDGET_SECONDS = 15
-_nba_consumed = 0.0
 
 # shortcut: warm-container counts only, upgrade to a durable store when
 # IngestFunction gains a state-table grant (a cold start resets the count).
 _FAILURES = {}
-
-
-def _nba_enabled():
-    return os.environ.get("AFC_ENABLE_NBA", "").lower() in ("1", "true", "yes")
 
 
 def _fixtures():
@@ -132,103 +124,17 @@ def _captured_relevant(profiles):
     return relevant
 
 
-def _nba_allowance(remaining_now, nfl_cost):
-    """Seconds NBA may spend without dropping a later NFL poll.
-
-    The handler continues only while remaining() > interval + poll_seconds,
-    sleeps `interval`, then spends about `nfl_cost` on the next poll. The
-    spare is the slack on the tightest of those checks. On the last poll the
-    leftover cannot fund another NFL poll, so it is all spare.
-    """
-    poll_seconds = max(_REQUEST_SECONDS, nfl_cost)
-    try:
-        interval = int(os.environ.get("FEED_POLL_INTERVAL_SECONDS", "15"))
-    except (TypeError, ValueError):
-        interval = 15
-    if interval <= 0:
-        interval = 15
-    threshold = interval + poll_seconds
-    if remaining_now <= threshold:
-        return remaining_now
-    rem = remaining_now
-    tightest = rem
-    while rem > threshold:
-        tightest = rem
-        rem -= interval + nfl_cost
-    return tightest - threshold
-
-
-def _nba_fetch(remaining, started, allowance, budget_mark, url):
-    """One ESPN GET, refused once the NBA budget or the NFL reserve is gone.
-
-    A refusal is an OSError so nba.poll records that game as unavailable and
-    moves on. One started request still cannot exceed `_REQUEST_SECONDS`:
-    `_get_json` passes that as the urlopen timeout. This stays a module
-    function: a nested def is a DynamoDB-inventory failure.
-    """
-    spent = time.monotonic() - started
-    if budget_mark is not None and remaining is not None:
-        spent = max(spent, budget_mark - remaining())
-    if _NBA_POLL_BUDGET_SECONDS - spent < _REQUEST_SECONDS:
-        raise OSError("NBA poll budget exhausted")
-    # Strict: a full timeout must leave every later NFL check still passing.
-    if allowance is not None and spent + _REQUEST_SECONDS >= allowance:
-        raise OSError("NBA request would crowd out a later NFL poll")
-    if remaining is not None and remaining() <= _REQUEST_SECONDS:
-        raise OSError("NBA request does not fit the invocation time left")
-    return _get_json(url)
-
-
-def _nba_getter(remaining, started, allowance):
-    budget_mark = remaining() if remaining is not None else None
-    return functools.partial(_nba_fetch, remaining, started, allowance, budget_mark)
-
-
-def _run_nba(result, remaining, nfl_mark):
-    """Run NBA after NFL. Its failures stay out of the NFL result."""
-    global _nba_consumed
-    started = time.monotonic()
-    before = None
-    try:
-        if remaining is not None:
-            before = remaining()
-        import nba
-
-        allowance = None
-        if before is not None and nfl_mark is not None:
-            allowance = _nba_allowance(before, max(0.0, nfl_mark - before))
-        nba_result = nba.poll(_nba_getter(remaining, started, allowance))
-    except Exception as exc:
-        # An NBA failure must not discard the NFL result already in `result`.
-        logging.getLogger(__name__).warning("NBA poll failed: %.200s", exc)
-        return
-    finally:
-        if before is not None and remaining is not None:
-            _nba_consumed = max(0.0, before - remaining())
-    # `failed` is NFL fallback state. NBA game ids stay out of it, and so does
-    # any extra key: lambda_handler copies every non-stored key into the
-    # invocation result. A successful NBA count is the existing hook contract.
-    stored = nba_result.get("stored") if isinstance(nba_result, dict) else None
-    if type(stored) is int and stored > 0:
-        result["stored"] += stored
-
-
 def poll(failures=None, remaining=None):
     """Isolate each monitored game's failures; counts outlive one invocation.
 
     `remaining`, when given, returns the invocation seconds left; no request
     starts unless its ten-second bound fits inside them.
     """
-    global _nba_consumed
-    _nba_consumed = 0.0
     if failures is None:
         failures = _FAILURES
     result = {"stored": 0, "failed": []}
-    nfl_mark = None
-    if remaining is not None:
-        nfl_mark = remaining()
-        if nfl_mark <= _REQUEST_SECONDS:
-            return result
+    if remaining is not None and remaining() <= _REQUEST_SECONDS:
+        return result
     try:
         scoreboard = _get_json(_feed() + "scoreboard")
     except OSError:
@@ -259,8 +165,6 @@ def poll(failures=None, remaining=None):
             continue
         failures[game_id] = 0
         result["stored"] += len(events)
-    if _nba_enabled():  # AFC_ENABLE_NBA stretch spike; inert when the flag is off
-        _run_nba(result, remaining, nfl_mark)
     return result
 
 
@@ -279,9 +183,8 @@ def lambda_handler(event, context):
         before = remaining()
         result = poll(_FAILURES, remaining if context is not None else None)
         if before is not None:
-            # Bound the next poll by the NFL cost only. NBA time is excluded so
-            # it cannot inflate poll_seconds and cancel a later NFL poll.
-            poll_seconds = max(_REQUEST_SECONDS, before - remaining() - _nba_consumed)
+            # The last poll's observed cost bounds the next one (same games).
+            poll_seconds = max(_REQUEST_SECONDS, before - remaining())
         total["stored"] += result["stored"]
         for key, game_ids in result.items():
             if key == "stored":
