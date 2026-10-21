@@ -26,6 +26,19 @@ phone/browser confirm. Both are afc-dev writes outside the Stage 2
 authority, and origin/main has no synthetic-token fixture. Owner options are
 in the [stage 2 summary](../../m14-vega-i7/stage2/stage2-summary.md#owner-options-pick-one-to-unblock-the-four-features).
 
+## Stage 2b result (2026-10-21)
+
+The owner allowed the app's afc-dev writes for one synthetic profile
+(DEC-AFC-M14-STAGE2-WRITES-20261021), and the afc-dev host was added to the
+sandbox proxy allowlist. The app still cannot reach afc-dev from the VVD.
+The guest's network goes through QEMU user-mode networking, not the proxy,
+and the VVD launcher has no proxy option (0 afc-dev CONNECTs, network error
+observed again). No synthetic profile was created and no backend write
+occurred. The four features stay unobserved on device. Alerts, Watch and
+panel rows are additionally limited: no public API writes a lineup, so a
+synthetic profile cannot receive an alert or panel rows. The owner options
+are in the [stage 2b summary](../../m14-vega-i7/stage2b/stage2b-summary.md#owner-options).
+
 ## Environment state behind the earlier verdicts
 
 - `.vpkg` x86_64 built from commit `8c1e4b4` with the aws-afc-dev ApiUrl
