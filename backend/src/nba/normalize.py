@@ -1,0 +1,120 @@
+"""ESPN NBA scoreboard/summary bodies to the NFL statistics seam shape.
+
+Scoreboard validation reuses the pinned NFL scoreboard schema, whose read
+fields (events[].id/status, competitors[].team, leaders) are the same ESPN
+site API shape for basketball/nba (verified against a live capture).
+shortcut: summary validation is hand-checked pinned fields, not a pinned
+JSON Schema file; add schema/nba-summary.json if NBA leaves spike scope.
+"""
+
+from decimal import Decimal, InvalidOperation
+import logging
+import re
+
+from feed_ingest.validation import validate_scoreboard
+
+# ESPN NBA boxscore keys that score under nba.scoring; all other keys
+# (minutes, splits like "8-15", plusMinus, ...) are deliberately unmapped.
+SCORING_KEYS = ("points", "rebounds", "assists", "turnovers", "steals", "blocks")
+_SOURCES = ("live", "replay")
+_MAX_ATHLETES = 200  # same bound as feed_ingest.normalize.MAX_BOXSCORE_ATHLETES
+
+
+def scoreboard_games(payload):
+    """One descriptor per scoreboard event, after pinned-schema validation."""
+    validate_scoreboard(payload)
+    games = []
+    for game in payload["events"]:
+        teams, players = [], []
+        for competition in game.get("competitions", []):
+            for competitor in competition.get("competitors", []):
+                team = competitor["team"]
+                teams.extend(team[key] for key in ("id", "abbreviation") if key in team)
+            for category in competition.get("leaders", []):
+                players.extend(leader["athlete"]["id"] for leader in category["leaders"])
+        games.append({"gameId": game["id"],
+                      "state": game.get("status", {}).get("type", {}).get("state"),
+                      "teamIds": teams, "playerIds": players})
+    return games
+
+
+def _status(payload):
+    try:
+        return payload["header"]["competitions"][0]["status"]["type"]
+    except (KeyError, IndexError, TypeError, AttributeError):
+        return None
+
+
+def validate_nba_summary(payload, game_id):
+    """None when `payload` is a usable NBA summary for `game_id`; ValueError otherwise."""
+    if not isinstance(payload, dict) or (payload.get("header") or {}).get("id") != game_id:
+        raise ValueError("ESPN NBA summary is for another game")
+    status = _status(payload)
+    if not isinstance(status, dict) or status.get("state") not in ("pre", "in", "post"):
+        raise ValueError("ESPN NBA summary has no usable game state")
+    players = (payload.get("boxscore") or {}).get("players")
+    if not isinstance(players, list):
+        raise ValueError("ESPN NBA summary has no boxscore players")
+
+
+def _stat_value(value):
+    """A DynamoDB-safe Decimal for one untrusted boxscore value, or None."""
+    if isinstance(value, bool) or not isinstance(value, (str, int, float, Decimal)):
+        return None
+    text = value if isinstance(value, str) else str(value)
+    if len(text) > 16:
+        return None
+    try:
+        number = Decimal(text)
+    except (InvalidOperation, ArithmeticError, ValueError):
+        return None
+    if number.is_finite() and abs(number) <= 99999 and -4 <= number.as_tuple().exponent <= 0:
+        return number
+    return None
+
+
+def boxscore_statistics_nba(payload, game_id, source="live"):
+    """Per-athlete scoring stats from a validated NBA summary's boxscore.
+
+    Same record shape as feed_ingest.normalize.boxscore_statistics, so the
+    stored records flow through store.put_player_statistics and the panel
+    player_statistics seam unchanged. asOf is the latest play wallclock.
+    """
+    if source not in _SOURCES:
+        raise ValueError(f"Feed events must be labeled live or replay, not {source!r}")
+    validate_nba_summary(payload, game_id)
+    status = _status(payload)
+    detail = status.get("shortDetail") or status.get("detail")
+    clocks = [play.get("wallclock") for play in payload.get("plays") or []
+              if isinstance(play, dict)]
+    clocks = [clock for clock in clocks if isinstance(clock, str) and clock]
+    by_athlete, invalid = {}, 0
+    for team in payload["boxscore"]["players"]:
+        if not isinstance(team, dict):
+            continue
+        for category in team.get("statistics") or []:
+            if not isinstance(category, dict) or not isinstance(category.get("keys"), list):
+                continue
+            for entry in category.get("athletes") or []:
+                if not isinstance(entry, dict) or not isinstance(entry.get("stats"), list):
+                    continue
+                athlete_id = (entry.get("athlete") or {}).get("id")
+                if not (isinstance(athlete_id, str)
+                        and re.fullmatch(r"[0-9]{1,20}", athlete_id)):
+                    invalid += 1
+                    continue
+                if athlete_id not in by_athlete and len(by_athlete) >= _MAX_ATHLETES:
+                    continue
+                stats = by_athlete.setdefault(athlete_id, {})
+                for key, value in zip(category["keys"], entry["stats"]):
+                    if key in SCORING_KEYS:
+                        number = _stat_value(value)
+                        if number is not None:
+                            stats[key] = number
+    if invalid:
+        logging.getLogger(__name__).warning(
+            "NBA boxscore %.40s: skipped %d entries with invalid athleteId", game_id, invalid)
+    return [{"athleteId": athlete_id, "gameId": game_id, "gameState": status["state"],
+             "gameStatus": detail if isinstance(detail, str) else None,
+             "source": source, "asOf": max(clocks) if clocks else None, "stats": stats}
+            for athlete_id, stats in by_athlete.items() if stats]

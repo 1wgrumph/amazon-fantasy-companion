@@ -8,8 +8,10 @@ points, total and progress at read time from the stored Lineup, the profile
 Settings and the statistics seam, so a settings or starter change shows on
 the next read with a higher revision and no panel write on the read path.
 project() records a fingerprint of the lineup it projected; snapshot()
-spends the revision's low bit when the current lineup differs from that
-fingerprint, so a starter change outruns the last projected revision.
+spends a low revision field when the current lineup differs from that
+fingerprint, so a starter change outruns the last projected revision,
+and another low field counts finals expired at read time, so expiration
+also outruns the revision a consumer already holds.
 The revision also carries the store-allocated lineupVersion, which
 advances on every lineup content change (including a change back and an
 empty/removal row), so distinct content never reuses a revision and a
@@ -26,6 +28,7 @@ the per-athlete boxscore records feed_ingest stores at ingest.
 
 import hashlib
 import json
+import os
 from datetime import datetime, timezone
 from decimal import Decimal
 from pathlib import Path
@@ -35,6 +38,7 @@ import store
 from lineup import presets
 
 STALE_AFTER = 60
+FINAL_RECORD_WINDOW = 12 * 60 * 60  # a final record older than this is a previous game's
 MAX_ROWS = 32  # frozen panel row bound the TV decoder enforces
 _PRESETS = {"ppr": "PPR", "halfPpr": "Half-PPR"}
 
@@ -68,12 +72,53 @@ def _settings(profile_id):
     return profile, profile.get("settings") or {}
 
 
+def _nba_enabled():
+    """AFC_ENABLE_NBA is the only switch; off is the shipped default."""
+    return os.environ.get("AFC_ENABLE_NBA", "").lower() in ("1", "true", "yes")
+
+
+def _nba_lineup(lineup):
+    return bool(lineup) and lineup.get("sport") == "nba" and _nba_enabled()
+
+
+def _sport_off(lineup, settings):
+    """Flag on: this lineup's sport was set False, so snapshot serves no rows.
+
+    The lineup sport defaults to nfl. A missing sports field or key stays on.
+    Flag off ignores a stored sports value.
+    """
+    if not lineup or not _nba_enabled():
+        return False
+    sport = lineup.get("sport") or "nfl"
+    sports = settings.get("sports")
+    if type(sports) is not dict:
+        return False
+    return sports.get(sport) is False
+
+
+def _nba_table():
+    from nba.scoring import NBA_POINTS_TABLE
+
+    return "nbaPoints", dict(NBA_POINTS_TABLE)
+
+
 def _basis(lineup, settings):
-    """(wire basis, scoring table); an unknown stored preset is refused."""
+    """(wire basis, scoring table); an unknown stored preset is refused.
+
+    An NBA lineup (sport nba, flag on) uses its Yahoo league table when that
+    table mapped, and nbaPoints for a manual lineup or a category league.
+    NFL lineups keep the preset or yahooLeague path they had before.
+    """
     if lineup and lineup.get("source") == "yahoo":
         modifiers = (lineup.get("scoring") or {}).get("stat_modifiers") or {}
-        return "yahooLeague", {k: float(v) for k, v in modifiers.items()}
+        if modifiers or not _nba_lineup(lineup):
+            return "yahooLeague", {k: float(v) for k, v in modifiers.items()}
+        return _nba_table()
+    if _nba_lineup(lineup):
+        return _nba_table()
     preset = settings.get("scoringPreset") or "halfPpr"
+    if preset == "nbaPoints" and _nba_enabled():
+        return _nba_table()
     if preset not in _PRESETS:
         raise ValueError(f"Unknown scoring preset: {preset!r}")
     return preset, presets.TABLES[_PRESETS[preset]]
@@ -92,6 +137,20 @@ def _espn_id(starter):
     return str(entries[0]["espn_athlete_id"]) if len(entries) == 1 else None
 
 
+def _age_seconds(as_of):
+    """Seconds since an asOf stamp, or None when it is missing, unparseable
+    or timezone-naive, so a malformed date never reaches an uncaught parser."""
+    if not isinstance(as_of, str):
+        return None
+    try:
+        parsed = _parse(as_of)
+    except ValueError:
+        return None
+    if parsed.utcoffset() is None:
+        return None
+    return (_parse(now()) - parsed).total_seconds()
+
+
 def _value(record, table):
     """One points value object from a statistics record (or unknown)."""
     if record is None:
@@ -100,9 +159,20 @@ def _value(record, table):
     points = sum(table[s] * float(v) for s, v in (record.get("stats") or {}).items()
                  if s in table)
     as_of = record.get("asOf")
-    stale = as_of is None or (_parse(now()) - _parse(as_of)).total_seconds() >= STALE_AFTER
+    age = _age_seconds(as_of)
+    stale = age is None or age >= STALE_AFTER
     return {"value": round(points, 2), "reason": None, "source": record.get("source"),
             "asOf": as_of, "stale": stale}
+
+
+def _stale_final(record):
+    """A final record older than the window belongs to a previous game (#94):
+    no schedule source names the starter's next game before an event does.
+    A final with no usable asOf cannot be shown to be current: fail closed."""
+    if record.get("gameState") != "post" and not str(record.get("gameStatus") or "").startswith("Final"):
+        return False
+    age = _age_seconds(record.get("asOf"))
+    return age is None or age > FINAL_RECORD_WINDOW
 
 
 def _oldest(points):
@@ -120,6 +190,9 @@ def _fingerprint(lineup):
         return ""
     content = {"source": lineup.get("source"), "starters": lineup.get("starters") or [],
                "scoring": lineup.get("scoring")}
+    # Absent on every NFL lineup, so those fingerprints stay what they were.
+    if lineup.get("sport") is not None:
+        content["sport"] = lineup.get("sport")
     return hashlib.sha256(json.dumps(content, sort_keys=True, default=str).encode()).hexdigest()
 
 
@@ -188,6 +261,7 @@ def snapshot(profile_id, team_league):
     basis, table = _basis(lineup, settings)
     games, counter, projected = _stored(profile_id, team_league)
     rows, states, source_ids = [], [], []
+    expired_finals = 0
     if lineup and _pair(lineup) == team_league:
         if len(lineup.get("starters") or []) > MAX_ROWS:
             raise InvalidLineupError(
@@ -212,6 +286,9 @@ def snapshot(profile_id, team_league):
                             if mine else None)
             wrong_game = bool(record and current_game
                               and record.get("gameId") != current_game)
+            if record and not wrong_game and _stale_final(record):
+                wrong_game = True
+                expired_finals += 1
             value = _value(None if wrong_game else record, table)
             if wrong_game:
                 record, value = None, dict(value, reason="no statistics for current game")
@@ -227,6 +304,10 @@ def snapshot(profile_id, team_league):
             or len(set(ids)) != len(ids)):
         raise InvalidLineupError(
             "stored lineup violates the panel row contract (count, blank or duplicate id)")
+    # Hide after the row contract check so a bad lineup still fails closed.
+    # Empty rows make the team total unknown; the profile revision still rises.
+    if _sport_off(lineup, settings):
+        rows, states = [], []
     known = [r["points"] for r in rows if r["points"]["value"] is not None]
     if rows and len(known) == len(rows):
         source, as_of = _oldest(known)
@@ -250,19 +331,24 @@ def snapshot(profile_id, team_league):
                     "asOf": None, "stale": True}
     # lineupVersion (allocated by store.put_lineup at the write boundary)
     # makes every lineup content change strictly advance this sum, so the
-    # low fingerprint bit can never reuse or regress a revision. The x2
-    # keeps every bump strictly above a spent low bit.
+    # low fields can never reuse or regress a revision. The x128 keeps
+    # every bump strictly above the fingerprint field (64) plus the
+    # expired-final count (at most MAX_ROWS), so read-time expiration
+    # advances the revision the TV consumes and stable rereads do not.
     current = _fingerprint(lineup) if lineup and _pair(lineup) == team_league else ""
-    revision = (2 * ((counter or 0) + int(profile.get("revision", 0))
-                     + lineup_version)
-                + (current != projected))
+    revision = (128 * ((counter or 0) + int(profile.get("revision", 0))
+                       + lineup_version)
+                + 64 * (current != projected) + expired_finals)
+    data = {"teamLeague": team_league, "scoringBasis": basis,
+            "visible": bool((settings.get("panelPrefs") or {}).get("visible", True)),
+            "rows": rows, "teamTotal": total, "progress": progress,
+            "games": {gid: {"eventId": f["eventId"], "revision": f["revision"],
+                             "score": f["score"], "source": f["source"]}
+                      for gid, f in games.items()}}
+    if _nba_lineup(lineup):
+        data["sport"] = "nba"
     return {"schemaVersion": 1, "id": f"panel/{profile_id}/{team_league}",
             "revision": revision,
             "source": lineup.get("source", "manual") if lineup else "manual",
             "updatedAt": now(),
-            "data": {"teamLeague": team_league, "scoringBasis": basis,
-                     "visible": bool((settings.get("panelPrefs") or {}).get("visible", True)),
-                     "rows": rows, "teamTotal": total, "progress": progress,
-                     "games": {gid: {"eventId": f["eventId"], "revision": f["revision"],
-                                      "score": f["score"], "source": f["source"]}
-                               for gid, f in games.items()}}}
+            "data": data}

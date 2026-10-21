@@ -1,0 +1,39 @@
+{
+ "slice": "P2-A04",
+ "kind": "device-receipt-fixture-rerun",
+ "executed_at": "2026-10-20",
+ "role": "Product Implementer",
+ "route": "Muse Code / muse-wonder-full-1.0-contributor / medium",
+ "base": "origin/main 20def00 (branch afc/m06-m12-fixture-walkthrough); fixture steps on found APK, see apk",
+ "binding_sha256_claimed": "72ebe994e8713ce98b614e46a7dec37bc537ef36a3aa9eae82cb58e47060f784",
+ "device": {
+  "model": "AFTKM",
+  "fire_os": "Fire OS 8.1.8.5 (RS8185/3891)",
+  "android_release": "11",
+  "api_level": 30,
+  "display": "physical 3840x2160, override 1920x1080, density 320",
+  "serial": "<stick_serial>"
+ },
+ "steps": [
+  {
+   "id": "On-stick Watch attempt per provider through the app (AFC-PR-030/-031)",
+   "index": 1,
+   "prior_result": "GAP FIXTURE_AWS_SESSION_EXPIRED",
+   "result": "PASS (Prime Video route; other providers stay REGISTRY_ROUTE_GAP at index 3, unchanged)",
+   "evidence": "From the fixture alert card (P2-A03 rerun), D-pad OK on Watch with Confirm before switching on first armed 'Press OK again to switch apps' (evidence/visual/P2-A04/fixture-rerun-confirm-switch.png sha256 0a885fda910acd1444be3190a06a1c47cdd6056ab03c2008b4e51bab42611cb3); second OK left AFC fullscreen: dumpsys foreground candidates ['com.amazon.firebat'] (metadata only, no provider capture). On return the panel showed exactly the truthful outcome 'Watch: could not confirm the game is playing.' (fixture-rerun-watch-outcome.png sha256 c57ed46b01212dab5dded27e6230fea6a43a6fb2e3cd552f30be97321b124331), i.e. accessUnknown; no gameOpened, searchOpened-now, entitlement or playback claim for this attempt."
+  },
+  {
+   "id": "PROC-VISUAL-REVIEW/confirm-switch, outcome-shown, fullscreen-leaves",
+   "index": 4,
+   "prior_result": "GAP FIXTURE_AWS_SESSION_EXPIRED",
+   "result": "PASS",
+   "evidence": "confirm-switch: fixture-rerun-confirm-switch.png; outcome-shown: fixture-rerun-watch-outcome.png ('Watch: could not confirm the game is playing.'); fullscreen-leaves: dumpsys foreground com.amazon.firebat after the confirmed launch, AFC relaunched immediately after (no provider screenshot taken)."
+  }
+ ],
+ "device_state_before": "com.afc.companion 0.1.0 (versionCode 1) sha256 1d80c6822182399794bbe4cec27198a0a31da58e3533ebcb9acf431a2729b988 (BUG-A02-1 session build, its evidence/visual/BUG-A02-1/native-apk-sha256.txt value); foreground screensaver over AFC; Prime Video (com.amazon.firebat) process running (pidof exit 0), as the orchestrator pre-check found; no test packages; Panel: no team/league selected; Profile: no team/league, PlayerScore alerts on, Show panel on new alert on, Panel visible on, Confirm before switching on; own alerts []; own lineup absent; stats athlete 9000001 absent",
+ "device_state_after": "found APK reinstalled, pulled base.apk sha256 identical (1d80c6822182399794bbe4cec27198a0a31da58e3533ebcb9acf431a2729b988); Panel frame byte-identical to the before capture (sha256 469e13e6951c1b2b3ff00cc1e3da432b8c8ecd034028755644bacf620f8f4e19 both); profile saved with no team/league (PlayerScore on as found); panel ON; own alert deleted (cursors []), lineup tombstone restored (get_lineup None, match=True), stats 9000001 deleted (restored match=True); only com.afc.companion installed; /sdcard/afc_dump.xml removed; Prime Video force-stopped last (pidof exit 1 at final check; it had self-respawned once mid-restore, matching the pre-check observation). Residue from normal app use only: profile revision advanced by the two TV saves, one routing-outcome record (accessUnknown) from the Watch attempt, a new link session for the same synthetic profile from the D03 relink, panel derived state from reads",
+ "apk": {
+  "variant": "configured (afc-dev ApiUrl), as found on the stick",
+  "sha256": "1d80c6822182399794bbe4cec27198a0a31da58e3533ebcb9acf431a2729b988"
+ }
+}

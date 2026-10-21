@@ -38,6 +38,7 @@ EXPECTED = {
                        "ProfilesTable": {"GetItem", "Scan"},
                        "LineupsTable": {"GetItem"},
                        "PlayerStatsTable": {"PutItem"}},
+    "NbaIngestFunction": {"PlayerStatsTable": {"PutItem"}},
     "PolicyFunction": {"ProfilesTable": {"GetItem"},
                        "EventsTable": {"GetItem"},
                        "AlertsTable": {"PutItem", "Query"},

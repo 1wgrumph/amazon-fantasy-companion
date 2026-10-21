@@ -13,7 +13,7 @@ from conftest import BACKEND, document
 
 pytestmark = pytest.mark.contract
 TABLES = {"Profiles", "Links", "Events", "Alerts", "Lineups", "Panels", "PlayerStats"}
-FUNCTIONS = {"ApiFunction", "IngestFunction", "PolicyFunction"}
+FUNCTIONS = {"ApiFunction", "IngestFunction", "NbaIngestFunction", "PolicyFunction"}
 ALLOWED_RESOURCES = {
     "AWS::Serverless::Function", "AWS::Serverless::HttpApi", "AWS::DynamoDB::Table",
     "AWS::Scheduler::Schedule", "AWS::Scheduler::ScheduleGroup",

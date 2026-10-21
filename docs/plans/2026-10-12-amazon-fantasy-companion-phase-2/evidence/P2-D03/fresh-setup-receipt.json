@@ -1,0 +1,133 @@
+{
+ "slice": "P2-D03",
+ "kind": "fresh-setup-receipt",
+ "executed_at": "2026-10-20",
+ "procedure": "PROC-README-FRESH-SETUP / SEIT-AFC-P2-SUB-01",
+ "role": "Product Implementer",
+ "route": "Muse Code / muse-wonder-full-1.0-contributor / medium",
+ "candidate": "origin/main 44a7e0695441034b7749d9d32c5f58121e071f91 via git archive (clean checkout)",
+ "binding_sha256_claimed": "72ebe994e8713ce98b614e46a7dec37bc537ef36a3aa9eae82cb58e47060f784",
+ "device": {
+  "model": "AFTKM",
+  "fire_os": "Fire OS 8.1.8.5 (RS8185/3891)",
+  "serial": "<stick_serial>"
+ },
+ "apk": {
+  "fresh_build_sha256": "01cc1be16d5353bd43eb871fc6855a9d31d9757b2bf723c72dc7162c42ad71d3",
+  "found_and_restored_sha256": "1d80c6822182399794bbe4cec27198a0a31da58e3533ebcb9acf431a2729b988"
+ },
+ "steps": [
+  {
+   "id": "prerequisites",
+   "result": "PASS",
+   "evidence": "git 2.53.0, Python 3.12.3, JDK 17 + Android SDK present"
+  },
+  {
+   "id": "hygiene-yaml",
+   "result": "PASS",
+   "evidence": "python3 import yaml OK (6.0.3); fresh-host download not exercised"
+  },
+  {
+   "id": "backend-venv-install",
+   "result": "PASS (limited)",
+   "evidence": "venv exit 0; pip --require-hashes exit 0, all already satisfied (venv pre-existed); fresh download NOT proven"
+  },
+  {
+   "id": "gate-backend",
+   "result": "PASS",
+   "evidence": "1029 passed, 3 skipped; gate PASS"
+  },
+  {
+   "id": "aws-login",
+   "result": "OWNER_STEP",
+   "evidence": "not run; existing afc-dev session valid (sts user afc-dev)"
+  },
+  {
+   "id": "sam-deploy",
+   "result": "OWNER_STEP",
+   "evidence": "deploy step: verified against the existing stack, not re-run; afc-dev UPDATE_COMPLETE, ApiUrl present, GitCommit tag 7da6187b5a57ee80887ef84301ff99a3592bacb6; sam 1.169.0 present"
+  },
+  {
+   "id": "ssm-parameters",
+   "result": "OWNER_STEP",
+   "evidence": "owner-written; values not read or written"
+  },
+  {
+   "id": "gate-tvapp",
+   "result": "PASS",
+   "evidence": "gate: tvapp: PASS checks completed"
+  },
+  {
+   "id": "apk-build-configured",
+   "result": "PASS",
+   "evidence": "app-debug.apk sha256 01cc1be16d5353bd43eb871fc6855a9d31d9757b2bf723c72dc7162c42ad71d3"
+  },
+  {
+   "id": "adb-connect",
+   "result": "PASS",
+   "evidence": "stick listed as device (<stick_serial>)"
+  },
+  {
+   "id": "adb-install",
+   "result": "PASS",
+   "evidence": "install -r Success; README fixed from plain install to install -r"
+  },
+  {
+   "id": "firstrun-code-shown",
+   "result": "PASS",
+   "evidence": "after pm clear, Link screen showed code + expiry (capture private)"
+  },
+  {
+   "id": "firstrun-link-confirm",
+   "result": "PASS",
+   "evidence": "GET /link 200 'Link your TV'; POST /v1/link/confirm 200 {state: linked} for synthetic dev profile; TV loaded profile. Browser form not driven; endpoint + TV poll were"
+  },
+  {
+   "id": "firstrun-profile-controls",
+   "result": "PASS",
+   "evidence": "Profile loaded; controls + Save exercised, restored"
+  },
+  {
+   "id": "firstrun-show-panel-default",
+   "result": "PASS",
+   "evidence": "Show panel on new alert: on (this TV only) on fresh install"
+  },
+  {
+   "id": "lineup-unavailable-statement",
+   "result": "PASS",
+   "evidence": "no lineup-write route in openapi/handler; statement accurate"
+  },
+  {
+   "id": "gate-docs-hygiene",
+   "result": "PASS",
+   "evidence": "both PASS in fresh checkout, private TMPDIR"
+  },
+  {
+   "id": "license",
+   "result": "PASS",
+   "evidence": "Apache-2.0 LICENSE present"
+  },
+  {
+   "id": "judge-access-publication",
+   "result": "OWNER_STEP",
+   "evidence": "Devpost/demo/access route owner-supplied, retention through 2026-11-20 as documented"
+  }
+ ],
+ "readme_changes": [
+  {
+   "before": "adb install tv-app/app/build/outputs/apk/debug/app-debug.apk",
+   "after": "adb install -r tv-app/app/build/outputs/apk/debug/app-debug.apk",
+   "why": "plain install fails over an existing install on the stick"
+  },
+  {
+   "before": "GAP PROC_README_FRESH_SETUP_NOT_RUN paragraph (walkthrough not executed)",
+   "after": "walkthrough record dated 2026-10-20 with not-proven items explicit",
+   "why": "the gap statement became false when this walkthrough ran"
+  }
+ ],
+ "gaps": [
+  "OWNER_STEP: aws login, sam deploy execution, SSM writes, Yahoo app creation, judge-access publication",
+  "FRESH_HOST_DOWNLOAD_NOT_PROVEN: documented venv and PyYAML pre-existed on the walkthrough host"
+ ],
+ "restoration": "found APK reinstalled (pulled sha256 identical); final Panel frame byte-identical to before; profile no team/league; own alert/lineup/statistics removed; Prime Video force-stopped last"
+}

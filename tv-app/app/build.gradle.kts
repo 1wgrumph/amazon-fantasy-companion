@@ -22,6 +22,7 @@ android {
         versionName = "0.1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "AFC_API_BASE_URL", "\"$afcApiBaseUrl\"")
+        buildConfigField("boolean", "AFC_ENABLE_NBA", providers.gradleProperty("afcEnableNba").getOrElse("true"))
     }
     buildFeatures {
         compose = true

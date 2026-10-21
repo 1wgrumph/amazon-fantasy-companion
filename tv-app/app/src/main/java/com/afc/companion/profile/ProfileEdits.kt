@@ -4,6 +4,14 @@ package com.afc.companion.profile
 
 enum class SelectionKind { Leagues, Teams, Players, FavoriteTeams }
 
+fun ProfileState.toggledSport(sport: Sport): ProfileState =
+    copy(sports = Sport.entries.associateWith { if (it == sport) !sportEnabled(it) else sportEnabled(it) })
+
+fun sportToggles(state: ProfileState, nbaEnabled: Boolean): List<Pair<Sport, String>> =
+    if (!nbaEnabled) emptyList() else Sport.entries.map {
+        it to "${it.label} alerts: ${if (state.sportEnabled(it)) "on" else "off"}"
+    }
+
 /** Adds the trimmed value when absent, removes it when present; blank input changes nothing. */
 fun FantasySelections.toggled(kind: SelectionKind, raw: String): FantasySelections {
     val value = raw.trim()
