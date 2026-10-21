@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add manual NBA lineups ([PR #138](https://github.com/1wgrumph/amazon-fantasy-companion/pull/138)).
 - Add a per-sport NFL/NBA notification toggle ([PR #138](https://github.com/1wgrumph/amazon-fantasy-companion/pull/138)).
 - Turn NBA on by default in the shipped TV build and the deployed backend, and keep AFC_ENABLE_NBA as a kill switch ([PR #138](https://github.com/1wgrumph/amazon-fantasy-companion/pull/138)).
+- Add a deterministic ffmpeg demo-cut pipeline under `tools/demo/` that builds the main demo, a 30 s teaser, alerts/Watch/panel/linking feature clips, and trimmed labelled raw clips from the S1–S7 shot list, with silent audio and on-screen captions ([PR #144](https://github.com/1wgrumph/amazon-fantasy-companion/pull/144)).
 
 ### Changed
 
