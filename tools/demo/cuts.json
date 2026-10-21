@@ -1,0 +1,230 @@
+{
+  "shot_list": "docs/submission/demo-plan.md",
+  "resolution": {"width": 1920, "height": 1080},
+  "frame_rate": 30,
+  "audio": "silent",
+  "shots": [
+    {
+      "id": "S1",
+      "file": "S1.mp4",
+      "planned_duration_s": 12,
+      "in_s": 0,
+      "out_s": 12,
+      "align": "start",
+      "caption": [
+        "Fire OS is the primary target.",
+        "Vega is a paused stretch, not delivered."
+      ],
+      "labels": [],
+      "title_card": null,
+      "synthetic_color": "0x1B3A4B"
+    },
+    {
+      "id": "S2",
+      "file": "S2.mp4",
+      "planned_duration_s": 22,
+      "in_s": 0,
+      "out_s": 22,
+      "align": "start",
+      "caption": [
+        "Lineup is labeled manual entry. No live Yahoo data.",
+        "Manual values are not presented as Yahoo values."
+      ],
+      "labels": [],
+      "title_card": null,
+      "synthetic_color": "0x1F3D2B"
+    },
+    {
+      "id": "S3",
+      "file": "S3.mp4",
+      "planned_duration_s": 28,
+      "in_s": 0,
+      "out_s": 28,
+      "align": "start",
+      "caption": [
+        "Replay. A followed starter raises a panel-only alert.",
+        "No heads-up banner on this device; panel-only is the fallback."
+      ],
+      "labels": ["REPLAY"],
+      "title_card": null,
+      "synthetic_color": "0x3D2B1F"
+    },
+    {
+      "id": "S4",
+      "file": "S4.mp4",
+      "planned_duration_s": 30,
+      "in_s": 0,
+      "out_s": 22,
+      "align": "end",
+      "caption": [
+        "Watch opens the correct provider at the hand-off.",
+        "gameOpened is not proven, so the outcome is not relabeled."
+      ],
+      "labels": [],
+      "title_card": "searchOpened",
+      "synthetic_color": "0x2B1F3D"
+    },
+    {
+      "id": "S5",
+      "file": "S5.mp4",
+      "planned_duration_s": 32,
+      "in_s": 0,
+      "out_s": 32,
+      "align": "start",
+      "caption": [
+        "Full-screen panel: starters, points, status, total, progress.",
+        "Stale or unavailable values stay labeled, never zero."
+      ],
+      "labels": [],
+      "title_card": null,
+      "synthetic_color": "0x1F2B3D"
+    },
+    {
+      "id": "S6",
+      "file": "S6.mp4",
+      "planned_duration_s": 18,
+      "in_s": 0,
+      "out_s": 18,
+      "align": "start",
+      "caption": [
+        "No verified route: Watch reports accessUnknown.",
+        "An installed app alone does not make access known."
+      ],
+      "labels": [],
+      "title_card": null,
+      "synthetic_color": "0x3D1F2B"
+    },
+    {
+      "id": "S7",
+      "file": "S7.mp4",
+      "planned_duration_s": 14,
+      "in_s": 0,
+      "out_s": 14,
+      "align": "start",
+      "caption": [
+        "An alert-type setting is changed and takes effect.",
+        "Limits: panel-only, full-screen, manual lineup, no voice.",
+        "Vega is a paused stretch, not delivered."
+      ],
+      "labels": [],
+      "title_card": null,
+      "synthetic_color": "0x2B3D1F"
+    }
+  ],
+  "cards": [
+    {
+      "id": "searchOpened",
+      "duration_s": 8,
+      "color": "0x14202B",
+      "lines": [
+        "Prime Video opens its search screen (searchOpened).",
+        "Provider video is not shown, to respect copyright."
+      ]
+    },
+    {
+      "id": "linking",
+      "duration_s": 8,
+      "color": "0x1A2430",
+      "lines": [
+        "Device-code linking.",
+        "Confirm only a code shown on your own TV.",
+        "No passphrase is stored. No code is shown in this cut."
+      ],
+      "note": "The filmable-today shot list has no device-linking capture. Linking confirmation is owner-only, and this cut must not show a code."
+    }
+  ],
+  "outputs": [
+    {
+      "id": "main",
+      "group": "main",
+      "file": "demo-main.mp4",
+      "segments": [
+        {"shot": "S1"},
+        {"shot": "S2"},
+        {"shot": "S3"},
+        {"shot": "S4", "card": "searchOpened"},
+        {"shot": "S5"},
+        {"shot": "S6"},
+        {"shot": "S7"}
+      ]
+    },
+    {
+      "id": "teaser",
+      "group": "teaser",
+      "file": "demo-teaser.mp4",
+      "segments": [
+        {"shot": "S1", "in_s": 0, "out_s": 5},
+        {"shot": "S3", "in_s": 0, "out_s": 7},
+        {"shot": "S4", "in_s": 0, "out_s": 4, "card": "searchOpened", "card_duration_s": 6},
+        {"shot": "S5", "in_s": 0, "out_s": 5},
+        {"shot": "S7", "in_s": 0, "out_s": 3}
+      ]
+    },
+    {
+      "id": "alerts",
+      "group": "feature",
+      "file": "feature-alerts.mp4",
+      "segments": [{"shot": "S3"}]
+    },
+    {
+      "id": "watch",
+      "group": "feature",
+      "file": "feature-watch.mp4",
+      "segments": [{"shot": "S4", "card": "searchOpened"}]
+    },
+    {
+      "id": "panel",
+      "group": "feature",
+      "file": "feature-panel.mp4",
+      "segments": [{"shot": "S5"}]
+    },
+    {
+      "id": "linking",
+      "group": "feature",
+      "file": "feature-linking.mp4",
+      "segments": [{"card": "linking"}]
+    },
+    {
+      "id": "raw-S1",
+      "group": "raw",
+      "file": "raw-S1.mp4",
+      "segments": [{"shot": "S1"}]
+    },
+    {
+      "id": "raw-S2",
+      "group": "raw",
+      "file": "raw-S2.mp4",
+      "segments": [{"shot": "S2"}]
+    },
+    {
+      "id": "raw-S3",
+      "group": "raw",
+      "file": "raw-S3.mp4",
+      "segments": [{"shot": "S3"}]
+    },
+    {
+      "id": "raw-S4",
+      "group": "raw",
+      "file": "raw-S4.mp4",
+      "segments": [{"shot": "S4"}]
+    },
+    {
+      "id": "raw-S5",
+      "group": "raw",
+      "file": "raw-S5.mp4",
+      "segments": [{"shot": "S5"}]
+    },
+    {
+      "id": "raw-S6",
+      "group": "raw",
+      "file": "raw-S6.mp4",
+      "segments": [{"shot": "S6"}]
+    },
+    {
+      "id": "raw-S7",
+      "group": "raw",
+      "file": "raw-S7.mp4",
+      "segments": [{"shot": "S7"}]
+    }
+  ]
+}
