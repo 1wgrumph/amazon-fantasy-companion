@@ -9,6 +9,7 @@ import base64
 import binascii
 import json
 import logging
+import os
 import re
 import time
 from decimal import Decimal
@@ -176,14 +177,33 @@ def _profile_get(profile_id, query, body):
     return _respond(200, _profile(profile_id, store.get_profile(profile_id)))
 
 
+def _nba_enabled():
+    """AFC_ENABLE_NBA is the only switch; off is the shipped default."""
+    return os.environ.get("AFC_ENABLE_NBA", "").lower() in ("1", "true", "yes")
+
+
+def _valid_sports(sports):
+    """Settings.sports keys are a subset of nfl/nba and every value is a JSON boolean.
+
+    {} is valid. A missing field or key means on, so this check never fills defaults.
+    """
+    return (type(sports) is dict and set(sports) <= {"nfl", "nba"}
+            and all(type(value) is bool for value in sports.values()))
+
+
 def _profile_put(profile_id, query, body):
     revision, settings = body.get("revision"), body.get("data")
     fields = {"fantasySelections", "teamLeague", "alertTypes", "frequency", "quietHours",
               "gameDayPeriods", "spoilerDelay", "presentation", "voice", "excitement",
               "providerPref", "switchingConfirm", "panelPrefs", "detectionOptIn", "scoringPreset"}
+    # openapi Settings is frozen (additionalProperties false). sports is accepted
+    # only while the flag is on; off, it stays an unknown field.
+    if _nba_enabled():
+        fields.add("sports")
     if (type(revision) is not int or revision < 0 or not isinstance(settings, dict)
             or not set(settings) <= fields
-            or settings.get("scoringPreset", "ppr") not in ("ppr", "halfPpr")):
+            or settings.get("scoringPreset", "ppr") not in ("ppr", "halfPpr")
+            or ("sports" in settings and not _valid_sports(settings["sports"]))):
         raise ApiError(400, "invalid_request", "Profile needs revision and valid Settings data.")
     now = _now()
     envelope = json.dumps(_profile(profile_id, {"revision": revision + 1, "updatedAt": now,

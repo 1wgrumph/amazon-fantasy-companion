@@ -11,7 +11,7 @@ Executed: installed/absent inventory (`pm path`), leanback resolution for
 Prime Video, and a cold intent-level re-probe of the registered Prime
 Video search URI (foreground readback `IgnitionActivity`; first frame
 black while loading, second frame the search screen,
-`evidence/visual/P2-A04/prime-video-search.png`). Prime Video was
+`evidence/visual/PRIVATE-EVIDENCE.md` (Prime Video search screen, provider UI, withheld)). Prime Video was
 force-stopped afterwards; nothing was installed, uninstalled, signed in,
 or purchased.
 

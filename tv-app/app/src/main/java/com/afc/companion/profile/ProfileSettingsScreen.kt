@@ -37,6 +37,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
+import com.afc.companion.BuildConfig
 import com.afc.companion.net.ApiClient
 import com.afc.companion.net.ScoringPreset
 import com.afc.companion.ui.theme.TvButton as Button
@@ -137,6 +138,7 @@ fun ProfileSettingsScreen(client: ApiClient, modifier: Modifier = Modifier) {
                 }
             }
         }
+        SportTogglesEditor(current, stateHolder)
         Button(onClick = {
             scope.launch {
                 var saved = store.save(current)
@@ -156,6 +158,13 @@ fun ProfileSettingsScreen(client: ApiClient, modifier: Modifier = Modifier) {
                 }
             }
         }) { Text("Save profile") }
+    }
+}
+
+@Composable
+private fun SportTogglesEditor(current: ProfileState, state: MutableState<ProfileState?>) {
+    for ((sport, label) in sportToggles(current, nbaEnabled = BuildConfig.AFC_ENABLE_NBA)) {
+        Button(onClick = { state.value = current.toggledSport(sport) }) { Text(label) }
     }
 }
 

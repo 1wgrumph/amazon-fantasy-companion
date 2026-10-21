@@ -134,7 +134,7 @@ fun LineupPanel(client: ApiClient, mode: PanelMode, modifier: Modifier = Modifie
                 try {
                     // Network and parsing stay off the rendering thread (AFC-PR-063).
                     val decoded = withContext(Dispatchers.Default) {
-                        client.getPanel(controller.teamLeague).value?.let(::decodePanel)
+                        client.getPanel(controller.teamLeague).value?.let { decodePanel(it) }
                     }
                     decoded?.let { controller.onFetched(it, System.currentTimeMillis()) }
                 } catch (cancelled: CancellationException) {
