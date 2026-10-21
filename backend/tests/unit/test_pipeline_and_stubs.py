@@ -65,9 +65,10 @@ def test_stubs_name_their_owning_slice(api, module, function, arity, slice_id):
 SPIKE_ORDER = ["prime_video", "espn", "directv_stream", "youtube_tv", "local_broadcast"]
 ROUTING_OUTCOMES = ("gameOpened", "searchOpened", "appHomeOpened", "appAbsent",
                     "accessUnknown", "playbackDenied")
-# SP-3 desk evidence (spikes/sp3-provider-links/VERDICT.md): Prime Video is the
-# only provider with a verified route; every absent provider stays a gap.
-EVIDENCED_ROUTES = {"prime_video": {"fire_os"}}
+# Verified fire_os routes are only those with on-device evidence: Prime Video
+# (spikes/sp3-provider-links/VERDICT.md) and YouTube TV
+# (evidence/nba/ytv-route/). Every other provider stays a gap.
+EVIDENCED_ROUTES = {"prime_video": {"fire_os"}, "youtube_tv": {"fire_os"}}
 
 
 def _parse_timestamp(value):
