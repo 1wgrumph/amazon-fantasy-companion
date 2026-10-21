@@ -81,6 +81,21 @@ def _nba_lineup(lineup):
     return bool(lineup) and lineup.get("sport") == "nba" and _nba_enabled()
 
 
+def _sport_off(lineup, settings):
+    """Flag on: this lineup's sport was set False, so snapshot serves no rows.
+
+    The lineup sport defaults to nfl. A missing sports field or key stays on.
+    Flag off ignores a stored sports value.
+    """
+    if not lineup or not _nba_enabled():
+        return False
+    sport = lineup.get("sport") or "nfl"
+    sports = settings.get("sports")
+    if type(sports) is not dict:
+        return False
+    return sports.get(sport) is False
+
+
 def _nba_table():
     from nba.scoring import NBA_POINTS_TABLE
 
@@ -289,6 +304,10 @@ def snapshot(profile_id, team_league):
             or len(set(ids)) != len(ids)):
         raise InvalidLineupError(
             "stored lineup violates the panel row contract (count, blank or duplicate id)")
+    # Hide after the row contract check so a bad lineup still fails closed.
+    # Empty rows make the team total unknown; the profile revision still rises.
+    if _sport_off(lineup, settings):
+        rows, states = [], []
     known = [r["points"] for r in rows if r["points"]["value"] is not None]
     if rows and len(known) == len(rows):
         source, as_of = _oldest(known)
