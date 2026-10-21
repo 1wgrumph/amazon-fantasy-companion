@@ -26,11 +26,11 @@ Hypothesis 2 was added to the sandbox `outer.py` and switched on by a
 containment proofs pass:
 
 - A resolver on `127.0.0.1:53` inside the namespace. It answers an A query
-  for the afc-dev host with `10.254.0.1`, the namespace's existing dummy
+  for the afc-dev host with `<private-ip>`, the namespace's existing dummy
   address. AAAA gets an empty answer, and every other name gets NXDOMAIN.
   The emulator's slirp DNS (`-dns-server auto`) already reads this resolver
   from the sandbox `resolv.conf`.
-- A listener on `10.254.0.1:443` that sends each connection to the proxy
+- A listener on `<private-ip>:443` that sends each connection to the proxy
   as `CONNECT <afc-dev host>:443`. TLS stays end to end between the app
   and afc-dev.
 - No route, interface or allowlist entry was added. `outer.py` asserts that
@@ -39,7 +39,7 @@ containment proofs pass:
 
 Smoke run (2026-10-21T02:51:39Z, exit 0), using the sandboxed SDK node:
 `example.com` returned ENOTFOUND, the afc-dev host resolved to
-`10.254.0.1`, and a read-only `GET /link` returned 200 through
+`<private-ip>`, and a read-only `GET /link` returned 200 through
 `CONNECT afc-dev:443` ([guest-forward.txt](guest-forward.txt)).
 
 ## Run C1 (2026-10-21T02:52:41Z to 03:00:18Z, exit 0, no abort)
@@ -122,7 +122,7 @@ relaunch defect.
   were connected.
 - strace ([strace-connects.txt](strace-connects.txt)): the only
   non-loopback connects were the two proof ENETUNREACH probes and two
-  connects to `10.254.0.1:443` (the in-namespace forwarder).
+  connects to `<private-ip>:443` (the in-namespace forwarder).
 - VVD `running:true` before stop and `running:false` after stop
   ([vvd-status.txt](vvd-status.txt)). `.vpkg` sha256 `7093fd58…f33044`
   is unchanged.

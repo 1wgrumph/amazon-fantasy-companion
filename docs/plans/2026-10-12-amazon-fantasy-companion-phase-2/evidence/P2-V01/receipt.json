@@ -22,7 +22,7 @@
     "jest": "29.7.0",
     "node": "v22.23.3",
     "npm": "11.15.0",
-    "api_base_url": "https://le3r79003f.execute-api.us-east-2.amazonaws.com (aws-afc-dev ApiUrl from evidence/P2-L02/receipt-resume-2.md; non-secret stack output)"
+    "api_base_url": "https://<development-api-host> (aws-afc-dev ApiUrl from evidence/P2-L02/receipt-resume-2.md; non-secret stack output)"
   },
   "verification": [
     {"id": "CMD-VEGA-UNIT", "command": "npm --prefix vega-app test -- --ci (via vega-sandbox.sh)", "exit": 0, "result": "19 suites, 162 passed, 0 failed (red baseline was 139 red of 162)", "evidence": "cmd-vega-unit.txt"},
@@ -68,5 +68,11 @@
       {"id": "DF-V01-05", "tool": "Vega CLI device shell", "observation": "vega device shell --help takes no command argument; scripted device commands and input need vega device run-cmd --command, and file retrieval is copy-from (its --help swaps host/device wording for source/destination).", "evidence": "vega device shell/run-cmd/copy-from --help during this slice"},
       {"id": "DF-V01-06", "tool": "Vega SDK screencap", "observation": "gwsi-tool-screenshooter is documented but unqualified here: VDA exit 139 (c16) and QMP uniform black frames (c17 helper exits 78). No supported capture path on the Ubuntu VVD was found.", "evidence": "vvd-run2.txt HOST-SCREENCAP-HELPER rc=78; c16 lifecycle-summary.json in the m03-m05 recovery evidence"}
     ]
+  },
+  "review_repair_provenance": {
+    "round": "R-1 through R-6",
+    "note": "Published artifact/source/check digest tables refer to the repaired public files. executed_* fields preserve the source/check hashes used by the historical run. Runtime results and vpkg hashes are historical; no new device build/run is claimed.",
+    "evidence_redacted": true,
+    "originals": "Exact original evidence retained privately; public endpoint regions and environment identifiers redacted."
   }
 }

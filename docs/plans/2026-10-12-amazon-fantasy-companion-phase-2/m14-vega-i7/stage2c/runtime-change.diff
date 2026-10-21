@@ -12,7 +12,7 @@
 + # d0:443 then sends each connection to the allowlisting proxy as CONNECT <that host>:443. No route or interface is added.
 + gf=cfg.get('guest_forward')
 + if gf:
-+  GH,GA=gf['host'],gf['address'];assert GH in cfg['allowlist'] and GA=='10.254.0.1'
++  GH,GA=gf['host'],gf['address'];assert GH in cfg['allowlist'] and GA=='<private-ip>'
 +  def glog(name,row):
 +   with (run/name).open('a') as f:f.write(json.dumps({'UTC':utc(),**row})+'\n')
 +  def dns_loop(s):
@@ -63,5 +63,5 @@
 1283a1285,1288
 >     },
 >     "guest_forward": {
->         "host": "le3r79003f.execute-api.us-east-2.amazonaws.com",
->         "address": "10.254.0.1"
+>         "host": "<development-api-host>",
+>         "address": "<private-ip>"

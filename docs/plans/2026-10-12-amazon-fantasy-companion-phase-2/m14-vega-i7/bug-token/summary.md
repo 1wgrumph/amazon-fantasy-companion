@@ -2,7 +2,7 @@
 
 **CREDENTIAL FINDINGS:** Three generic-key scan matches were verified source/evidence SHA-256 values, not credentials. Discard as false positives; [classification](credential-findings.json). No real credentials found.
 
-Result: **PASS** for the packet objective. Observer: Codex implementer, 2026-10-21 UTC. Return to Claude Code session amazon-fantasy-companion-47. No other agents started; no commits, pushes, PR edits, or issue mutations.
+Result: **PASS** for the packet objective. Observer: Codex implementer, 2026-10-21 UTC. Return to Claude Code session <orchestrator-session>. No other agents started; no commits, pushes, PR edits, or issue mutations.
 
 `appTokenStore()` now lazily loads the default export of the supported app-private AsyncStorage package. The `TokenStore` interface, session key, and read/write/clear behavior are unchanged. The misleading mmkv comment is corrected. The package is pinned to `2.1.9000000001`.
 

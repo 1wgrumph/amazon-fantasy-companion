@@ -368,22 +368,27 @@ function MainScreen({client}: {client: ApiClient}) {
   const [banner, setBanner] = useState<{alert: Alert; notification: PostedNotification} | null>(null);
   const [watchMessage, setWatchMessage] = useState<string | null>(null);
 
-  const load = useCallback(async () => {
-    const loaded = await profileStore.current.load();
-    if (loaded === null) {
-      setMessage('Profile unavailable');
-      return;
-    }
+  const applyProfile = useCallback((loaded: ProfileState) => {
     setProfile(loaded);
-    setMessage('');
     const combos = [...loaded.selections.leagues].flatMap(league =>
       [...loaded.selections.teams].map(team => `${league}/${team}`),
     );
     const initial = loaded.teamLeague !== null ? `${loaded.teamLeague.league}/${loaded.teamLeague.team}` : (combos[0] ?? '');
     const teamLeagues = [...new Set([initial, ...combos])].filter(value => value !== '');
     controller.current = new PanelController(teamLeagues, initial, loaded.panel.visible);
+    setSnapshot(null);
     setPanelTick(value => value + 1);
   }, []);
+
+  const load = useCallback(async () => {
+    const loaded = await profileStore.current.load();
+    if (loaded === null) {
+      setMessage('Profile unavailable');
+      return;
+    }
+    applyProfile(loaded);
+    setMessage('');
+  }, [applyProfile]);
 
   useEffect(() => {
     load();
@@ -391,11 +396,18 @@ function MainScreen({client}: {client: ApiClient}) {
 
   // Panel refresh: on show and every panel_refresh (30 s) while visible, per the controller.
   useEffect(() => {
+    let inFlight = false;
+    let stopped = false;
     const timer = setInterval(async () => {
       const current = controller.current;
-      if (current === null || !current.shouldFetch(Date.now())) return;
+      if (stopped || current === null || !current.visible) return;
+      // Held values age even when the network is pending or unavailable.
+      if (current.snapshot !== null) setPanelTick(value => value + 1);
+      if (inFlight || !current.shouldFetch(Date.now())) return;
+      inFlight = true;
       try {
         const result = await client.getPanel(current.teamLeague !== '' ? current.teamLeague : undefined);
+        if (stopped || controller.current !== current) return;
         const decoded = result.value !== null ? decodePanel(result.value) : null;
         if (decoded !== null) {
           current.onFetched(decoded, Date.now());
@@ -404,9 +416,14 @@ function MainScreen({client}: {client: ApiClient}) {
         }
       } catch {
         // A failed fetch leaves the held snapshot and its stale labels in place.
+      } finally {
+        inFlight = false;
       }
     }, 1_000);
-    return () => clearInterval(timer);
+    return () => {
+      stopped = true;
+      clearInterval(timer);
+    };
   }, [client]);
 
   // Alert long poll; delivery on Vega is the in-app banner (no verified notification route).
@@ -445,7 +462,7 @@ function MainScreen({client}: {client: ApiClient}) {
       setMessage('Save failed; the profile changed elsewhere or is unavailable');
       return;
     }
-    setProfile(saved);
+    applyProfile(saved);
     setMessage('Saved');
     if (saved.detectionOptIn) {
       const detector = new AppDetector(

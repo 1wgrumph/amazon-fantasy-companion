@@ -54,7 +54,7 @@
     },
     {
       "path": "vega-app/vvd-checks/drive-vvd.sh",
-      "sha256": "6c480d69e5e8c1ff92717f31da1006d4a809f56fdb7cee15fd32530a80465660"
+      "sha256": "d92051a7590644a94377abcc57812cf51708005e0a5805a1112254aff9e7d984"
     },
     {
       "path": "vega-app/vvd-checks/lib.sh",
@@ -66,7 +66,11 @@
     },
     {
       "path": "vega-app/vvd-checks/verify-link-online.py",
-      "sha256": "d2948e28bc811110f25ea771d50d4e7486f826465c90efaf8bc5d603b6c5c614"
+      "sha256": "19ef666a85e9a182649e3caabb81648b0e0dcde3a0afdd0513ac5877f677ac89"
+    },
+    {
+      "path": "vega-app/vvd-checks/link-online-reference.json",
+      "sha256": "0f72101dfa05a20b5dd88d5be9f3a0603124244fea13689deef885702e67e97c"
     }
   ],
   "artifacts_sha256": [
@@ -172,7 +176,7 @@
     },
     {
       "path": "summary.md",
-      "sha256": "cd0c1e5016911c5963b6ce7eced70f709d3a382eb5a7fe5be589552759abc7c8"
+      "sha256": "8fd1ace04d75bd258864e62d97c0fe92b19724e1ba407e0b4cb5f42d7c559683"
     },
     {
       "path": "supply-chain-artifacts.json",
@@ -280,5 +284,45 @@
     "Inherited dependency audit findings are recorded with runtime reachability analysis.",
     "Independent review and acceptance are the orchestrator responsibility; no commit/push/PR changes authorized."
   ],
-  "prevention": "Retain production-factory binding regression and VVD terminate/launch persistence check; fake-storage tests alone do not cover the native adapter."
+  "prevention": "Retain production-factory binding regression and VVD terminate/launch persistence check; fake-storage tests alone do not cover the native adapter.",
+  "executed_source_sha256": [
+    {
+      "path": "vega-app/src/auth/tokenStore.ts",
+      "sha256": "652af7066e9239069deae448ab8a20a8e88adc565f353bf093927952fa9858d1"
+    },
+    {
+      "path": "vega-app/package.json",
+      "sha256": "cd708947598d7c29f98118679448529de4e29b1b584ea430c3965882965c65de"
+    },
+    {
+      "path": "vega-app/package-lock.json",
+      "sha256": "b3239b851dfdd5d1333ed58a310983008814a30a5bf52820ebb5544f0dfbb579"
+    },
+    {
+      "path": "vega-app/__tests__/auth/appTokenStore.test.ts",
+      "sha256": "f7d31135613879bc53d3f3b3fa86cfa1b83fbd8e91e50ca55e35ec1a6a81e40d"
+    },
+    {
+      "path": "vega-app/vvd-checks/drive-vvd.sh",
+      "sha256": "6c480d69e5e8c1ff92717f31da1006d4a809f56fdb7cee15fd32530a80465660"
+    },
+    {
+      "path": "vega-app/vvd-checks/lib.sh",
+      "sha256": "bebc0a97369bbb90e243b8419b0aa12a34ee3fdddd88c567f7e2b208ee370190"
+    },
+    {
+      "path": "vega-app/vvd-checks/confirm-link.sh",
+      "sha256": "af86391e74d9a14ed0f61ed1698ca8336f9616ef79bb51ee58e7908e71804432"
+    },
+    {
+      "path": "vega-app/vvd-checks/verify-link-online.py",
+      "sha256": "d2948e28bc811110f25ea771d50d4e7486f826465c90efaf8bc5d603b6c5c614"
+    }
+  ],
+  "review_repair_provenance": {
+    "round": "R-1 through R-6",
+    "note": "Published artifact/source/check digest tables refer to the repaired public files. executed_* fields preserve the source/check hashes used by the historical run. Runtime results and vpkg hashes are historical; no new device build/run is claimed.",
+    "evidence_redacted": true,
+    "originals": "Exact original evidence retained privately; public endpoint regions and environment identifiers redacted."
+  }
 }

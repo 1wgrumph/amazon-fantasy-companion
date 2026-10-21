@@ -1,23 +1,20 @@
-# P2-V01 visual evidence — none captured (typed gap)
+# P2-V01 visual evidence
 
-No PNG captures exist for P2-V01. Two independent blockers, both recorded in
-`docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-V01/`:
+Guest captures are committed under the milestone evidence directory. Current
+feature verdicts are in [feature-verdicts.md](../../../docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-V01/feature-verdicts.md).
 
-1. The Vega Virtual Device does not boot in this environment right now.
-   Three sandbox attempts (`vvd-run.txt`, `vvd-run2.txt`, `vvd-run3.txt`)
-   all end with the emulator exiting immediately:
-   `A snapshot operation for '<build>' is pending and timeout has expired`
-   (`virtual_device.err.txt`). The same lifecycle booted `running:true`
-   twice at 10:53/10:56 UTC (c16 preparation evidence); instance files
-   changed at 11:09–11:10 UTC during the parallel screen-capture work.
-   Repairing the snapshot state means writing under the SDK instance
-   directory, outside this slice's write set.
-2. Screen capture itself is not qualified: the host helper
-   `vvd-screencap.sh` exits 78 with `NEEDS_MORE_EVIDENCE` (c17: QMP
-   returned uniform black frames; SDK screencap lookup failed), and c16
-   recorded `gwsi-tool-screenshooter` failing with VDA exit 139.
+| State | Evidence | Current interpretation |
+| --- | --- | --- |
+| Link requesting, network error and focused retry | [Stage 2](../../../docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/stage2/stage2-summary.md) | Negative network path observed; no successful-link claim from these screens. |
+| Link code and the original relaunch failure | [Stage 2c](../../../docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/stage2c/stage2c-summary.md) | Historical token-persistence defect. The two link-code PNG endpoint regions are blanked for public hygiene; exact originals are retained privately. |
+| Profile/Settings, saved RedZone and linked relaunch | [bug-token repair](../../../docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/bug-token/summary.md) | Current persistence verdict PASS: saved state restored after terminate/launch without requesting a new code. |
+| Default lineup panel and held state | [bug-panel repair](../../../docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/bug-panel/summary.md) | Current empty-state verdict PASS: server identity, Half-PPR, no rows, Total: Unavailable. |
+| Review repairs for saved-panel settings, pending requests and stale labels | [review repair](../../../docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/review-repair/summary.md) | Source regressions only; no new device captures in this round. |
 
-Per PROC-VISUAL-REVIEW this is a typed evidence gap, never a PASS. The
-changed states (Backend not configured, Link code/network error,
-Profile/Settings, Panel, alert banner) remain unverified on screen until
-the VVD instance is repaired and capture is qualified.
+The captures are 1920x1080 VVD root windows containing the guest surface and
+simulator chrome. Matching checks require the recorded viewport, focus and
+converter. Initial boot/capture gaps were superseded by these guest captures;
+populated lineup rows, live-value aging on screen, alert banners over playback,
+provider Watch playback, app detection and physical Vega remain unverified.
+The empty synthetic profile cannot establish those capabilities. Native
+data-root messages remain unresolved despite working persistence.

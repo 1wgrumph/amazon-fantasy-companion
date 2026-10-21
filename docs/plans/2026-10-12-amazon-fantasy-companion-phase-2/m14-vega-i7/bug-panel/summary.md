@@ -2,7 +2,7 @@
 
 Credential scan: the scan before adding the hash receipt passed. The subsequent generic-key findings were all verified digest-only JSON values, not credentials; see [classification](credential-findings.json). No real credential was found.
 
-Result: **PASS** (implementer verification). Observer: Codex implementer, 2026-10-21 UTC. Return to Claude Code session amazon-fantasy-companion-47. No agents started; no commits, pushes, PR edits, issue mutations, or independent review performed.
+Result: **PASS** (implementer verification). Observer: Codex implementer, 2026-10-21 UTC. Return to Claude Code session <orchestrator-session>. No agents started; no commits, pushes, PR edits, issue mutations, or independent review performed.
 
 BUG_ROUTE: frozen-lifecycle-profile owner 2026-10-16 hackathon bug fixes use the opensource-hackathon implementer.
 

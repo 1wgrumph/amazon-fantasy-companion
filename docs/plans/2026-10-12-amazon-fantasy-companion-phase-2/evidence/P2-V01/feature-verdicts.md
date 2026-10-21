@@ -2,23 +2,24 @@
 
 Vega is a compatibility target on the Vega Virtual Device only. Fire OS is
 primary. Physical Vega (AC-AFC-P2-VEGA-05 / OA-12) is NOT_APPLICABLE by
-owner decision; no armv7 or physical path was attempted. M14 Stage 2
-(2026-10-21) ran the app on the VVD inside the sandbox. The offline Link
-path was observed working. Every other feature needs a session token,
-which only the link write flow issues, so those features are
-`NEEDS_OWNER_DECISION` ([stage 2 summary](../../m14-vega-i7/stage2/stage2-summary.md)). Every feature is proven
-by the frozen Jest suite (162/162 green, CMD-VEGA-UNIT) against the
-unchanged backend contract; on-device behavior stays unverified.
+owner decision; no armv7 or physical path was attempted. Current VVD verdicts
+include the [token-persistence repair](../../m14-vega-i7/bug-token/summary.md)
+and [default-panel repair](../../m14-vega-i7/bug-panel/summary.md), both
+observed on 2026-10-21. Earlier Stage 2/2b/2c results below are historical;
+the token-persistence defect and missing default panel were subsequently
+repaired. The [review repair](../../m14-vega-i7/review-repair/summary.md)
+covers saved-panel wiring, pending requests and stale labels with source
+regressions; that round did not rerun the VVD.
 
 | Feature | Verdict | Fire OS register UIDs mirrored | Evidence | Limit |
 |---|---|---|---|---|
-| Device linking | REPAIRABLE_FAILURE: online link observed (Stage 2c); token lost on relaunch | AFC-PR-038, AC-AFC-P2-VEGA-04 | `vega-app/__tests__/link/linkScreen.test.ts`, `auth/tokenStore.test.ts`, `cmd-vega-unit.txt` | Code shown/expired/linked and token persistence are unit-proven over a real loopback HTTP peer. On the VVD: launch, "Requesting a code…", the network-error state with Get code focused, and the Get code retry were observed ([`01`](../../m14-vega-i7/stage2/01-link-requesting.png)–[`04`](../../m14-vega-i7/stage2/04-link-error-again.png), `vega-app/vvd-checks/check-link-offline.sh` exit 0, `verify-link-offline.py` 4/4). Stage 2c observed the online flow (`drive-vvd.sh`, `confirm-link.sh`, `verify-link-online.py` 4/5). The token is not persisted across a relaunch, which is an app defect. |
-| Profile settings with detection | PASS on the VVD for load/change/save/reload (Stage 2c); detection not exercised | AFC-PR-002, -003, -005, -009, -010, -015..-023, -057, -066, AFC-PR-037 | `__tests__/profile/*.test.ts`, `__tests__/detect/appDetector.test.ts` | Every control round-trips and persists across a simulated restart. Detection is `Linking.canOpenURL('pkg://…')`, a documented candidate only — never observed on the VVD; provider availability truth is not established there. Voice is hidden with a stated limit (no verified voice route, AFC-PR-022). |
+| Device linking | PASS on the VVD: online linking and persistence after relaunch (bug-token) | AFC-PR-038, AC-AFC-P2-VEGA-04 | [repair run](../../m14-vega-i7/bug-token/summary.md), [receipt](../../m14-vega-i7/bug-token/receipt.json), [relaunch](../../m14-vega-i7/bug-token/09-reload-top.png); `__tests__/auth/appTokenStore.test.ts` | Replacement storage binding retained the session after terminate/launch without a new code, and the saved RedZone state reloaded. The Stage 2 offline requesting/error/retry captures remain valid negative-state evidence. Native data-root messages remain unexplained (F-055); no clean-log claim. |
+| Profile settings with detection | PASS on the VVD for load/change/save/reload (bug-token); detection not exercised | AFC-PR-002, -003, -005, -009, -010, -015..-023, -057, -066, AFC-PR-037 | [repair run](../../m14-vega-i7/bug-token/summary.md), [saved state](../../m14-vega-i7/bug-token/saved.png), `__tests__/profile/*.test.ts`, `__tests__/detect/appDetector.test.ts` | Every control round-trips and persists across a simulated restart. Detection is `Linking.canOpenURL('pkg://…')`, a documented candidate only — never observed on the VVD; provider availability truth is not established there. Voice is hidden with a stated limit (no verified voice route, AFC-PR-022). |
 | Alerts | limited (backend/data), Stage 2c | AFC-PR-015, -021, -027, -028, -032, -033, -061, -062 | `__tests__/alerts/*.test.ts` | Long-poll feed, presenter and notifier content are unit-proven. RN 0.83 has no verified local-notification route on Vega, so delivery is an in-app banner; heads-up display over provider playback is not supported on the VVD and was never observed. |
 | Watch | limited (backend/data), Stage 2c | AFC-PR-030, -031, -035, -036, -048 | `__tests__/watch/watchLauncher.test.ts` | Only a verified `platform_routes.vega` launch executes, exactly one outcome is reported, and a started launch is honestly `accessUnknown`. Provider apps, DRM and entitlement are not supported/unknown on the VVD, so no playback claim exists; the launch itself was never observed on device. |
-| Lineup panel | NEEDS_MORE_EVIDENCE: "Panel unavailable" observed (Stage 2c); rows limited (backend/data) | AFC-PR-039..-048, -061, -062 | `__tests__/panel/*.test.ts` | Decode, text/stale labels, focus, refresh and change-only updates are unit-proven. modeB composition is not supported on Vega (DES-AFC-P2-VEGA); the shipped mode is fullScreen. On-screen legibility at 1080p (AFC-PR-045 pixel measurement) needs a working capture path, which is unqualified (c17). |
+| Lineup panel | PASS on the VVD for the empty default state (bug-panel); populated rows limited (backend/data) | AFC-PR-039..-048, -061, -062 | [repair run](../../m14-vega-i7/bug-panel/summary.md), [receipt](../../m14-vega-i7/bug-panel/receipt.json), [default](../../m14-vega-i7/bug-panel/panel-default.png), [held](../../m14-vega-i7/bug-panel/panel-default-held.png); `__tests__/panel/*.test.ts` | The no-selection profile shows the server identity, Half-PPR and Total: Unavailable, with no fabricated rows. Saved settings, serialized refresh and stale labels are additionally covered by `appPanelIntegration.test.ts` in the [review repair](../../m14-vega-i7/review-repair/summary.md); those new changes have no fresh device confirmation. Populated rows, live values and pixel-size qualification remain unobserved. modeB is not supported; fullScreen is used. |
 
-## Stage 2 blocker (2026-10-21)
+## Historical Stage 2 blocker (2026-10-21)
 
 The main screen (profile, alerts, Watch, panel) renders only with a stored
 session token. A token comes only from `POST /v1/link` plus the
@@ -26,7 +27,7 @@ phone/browser confirm. Both are afc-dev writes outside the Stage 2
 authority, and origin/main has no synthetic-token fixture. Owner options are
 in the [stage 2 summary](../../m14-vega-i7/stage2/stage2-summary.md#owner-options-pick-one-to-unblock-the-four-features).
 
-## Stage 2b result (2026-10-21)
+## Historical Stage 2b result (2026-10-21)
 
 The owner allowed the app's afc-dev writes for one synthetic profile
 (DEC-AFC-M14-STAGE2-WRITES-20261021), and the afc-dev host was added to the
@@ -39,7 +40,7 @@ panel rows are additionally limited: no public API writes a lineup, so a
 synthetic profile cannot receive an alert or panel rows. The owner options
 are in the [stage 2b summary](../../m14-vega-i7/stage2b/stage2b-summary.md#owner-options).
 
-## Stage 2c result (2026-10-21)
+## Historical Stage 2c result (2026-10-21)
 
 The guest's afc-dev traffic now goes through the allowlisting proxy: a
 sandbox resolver answers only the afc-dev host with the namespace's dummy

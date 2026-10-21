@@ -21,7 +21,7 @@ both are backend writes outside this packet's authority. Those features are
 
 ## Why the afc-dev host was not allowlisted
 
-The packet allowed adding `le3r79003f.execute-api.us-east-2.amazonaws.com`
+The packet allowed adding `<development-api-host>`
 to the proxy allowlist. With no token stored, the app's first request on
 launch is `POST /v1/link`, a write. Allowlisting the host would have let the
 unauthorised write happen on the first launch, so `config.json` was left

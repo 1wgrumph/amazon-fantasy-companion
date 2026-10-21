@@ -20,7 +20,7 @@ synthetic profile or device was created. No app defect was found.
   proxy. strace shows no non-loopback connect apart from the sandbox's two
   network proofs (ENETUNREACH).
 - Guest view ([guest-network.txt](guest-network.txt)): `resolv.conf` lists
-  `127.0.0.1` and the QEMU slirp resolver `10.0.2.3`. The guest has no proxy
+  `127.0.0.1` and the QEMU slirp resolver `<private-ip>`. The guest has no proxy
   variable. Slirp forwards guest DNS and TCP from the emulator process
   itself. In the sandbox namespace that means the sandbox `resolv.conf`
   (`127.0.0.1`) and direct connects with no route, never the proxy.
