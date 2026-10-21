@@ -1,9 +1,12 @@
 // DES-AFC-P2-PANEL host logic. Panel state from the API is untrusted: identity/basis/bounds
 // violations reject the whole state, while a malformed value becomes unavailable, never zero.
+import {AFC_ENABLE_NBA} from '../config';
 import {isRecord} from '../net/dto';
 import type {Envelope} from '../net/dto';
 
-export type ScoringBasis = 'yahooLeague' | 'ppr' | 'halfPpr';
+export type ScoringBasis = 'yahooLeague' | 'ppr' | 'halfPpr' | 'nbaPoints';
+
+export type PanelSport = 'NBA' | 'NFL';
 
 /** Unknown is a null value with a reason, never zero. */
 export interface PanelValue {
@@ -27,6 +30,8 @@ export interface PanelSnapshot {
   rows: PanelRow[];
   teamTotal: PanelValue;
   progress: PanelValue;
+  /** Null when the panel carries no sport label. */
+  sport: PanelSport | null;
 }
 
 const PANEL_ROWS_MAX = 32;
@@ -60,13 +65,32 @@ function panelValue(obj: unknown): PanelValue {
     : {value: null, reason: reason ?? 'unavailable', source, asOfMs};
 }
 
+/**
+ * Sport label for an enabled NBA build. Absent is no label, except nbaPoints, which is NBA.
+ * Returns undefined when the field is present and not the wire tags "nba" or "nfl", or when
+ * nbaPoints is tagged nfl. The flag-off path never calls this: sport is ignored.
+ */
+function sportLabel(data: Record<string, unknown>, basis: ScoringBasis): PanelSport | null | undefined {
+  let tagged: PanelSport | null = null;
+  if (Object.prototype.hasOwnProperty.call(data, 'sport')) {
+    if (data.sport === 'nba') tagged = 'NBA';
+    else if (data.sport === 'nfl') tagged = 'NFL';
+    else return undefined;
+  }
+  if (basis === 'nbaPoints' && tagged === 'NFL') return undefined;
+  return basis === 'nbaPoints' ? 'NBA' : tagged;
+}
+
 /** Decodes GET /v1/panel data; null when malformed, oversized or missing its scoring basis. */
-export function decodePanel(state: Envelope): PanelSnapshot | null {
+export function decodePanel(state: Envelope, nbaEnabled: boolean = AFC_ENABLE_NBA): PanelSnapshot | null {
   const data = state.data as Record<string, unknown>;
   const teamLeague = typeof data.teamLeague === 'string' && data.teamLeague.trim() !== '' ? data.teamLeague : null;
   if (teamLeague === null) return null;
   const basis = data.scoringBasis;
-  if (basis !== 'yahooLeague' && basis !== 'ppr' && basis !== 'halfPpr') return null;
+  if (basis !== 'yahooLeague' && basis !== 'ppr' && basis !== 'halfPpr' && basis !== 'nbaPoints') return null;
+  if (basis === 'nbaPoints' && !nbaEnabled) return null;
+  const sport = nbaEnabled ? sportLabel(data, basis) : null;
+  if (sport === undefined) return null;
   const rawRows = data.rows;
   if (!Array.isArray(rawRows) || rawRows.length > PANEL_ROWS_MAX) return null;
   const seen = new Set<string>();
@@ -91,6 +115,7 @@ export function decodePanel(state: Envelope): PanelSnapshot | null {
     rows,
     teamTotal: panelValue(data.teamTotal),
     progress,
+    sport,
   };
 }
 
@@ -119,6 +144,8 @@ export const PanelText = {
         return 'PPR';
       case 'halfPpr':
         return 'Half-PPR';
+      case 'nbaPoints':
+        return 'Points';
     }
   },
 };

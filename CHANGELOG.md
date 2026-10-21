@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Prepare the Devpost paste package and deadline-email review with current repository evidence, per-tool feedback, explicit owner/form/video gaps, and a timed OA-7 procedure; no upload, submission or publication performed ([PR #153](https://github.com/1wgrumph/amazon-fantasy-companion/pull/153)).
+- Vega app decodes NBA panels (`nbaPoints` basis, `sport` field) and labels them "NBA", matching Fire OS ([PR #152](https://github.com/1wgrumph/amazon-fantasy-companion/pull/152)).
 - Add a verified Fire OS Watch route for YouTube TV ([PR #148](https://github.com/1wgrumph/amazon-fantasy-companion/pull/148)).
 - Add `PUT /v1/lineup/manual`: a linked device writes its own labeled manual NFL or NBA lineup, so lineups work while Yahoo access is pending (AC-AFC-PROF-04) ([PR #147](https://github.com/1wgrumph/amazon-fantasy-companion/pull/147)).
 - Add ESPN NBA ingest and scoring ([PR #138](https://github.com/1wgrumph/amazon-fantasy-companion/pull/138)).
@@ -31,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- A stored lineup without a league or team no longer crashes the panel; it serves the existing no-lineup state ([PR #154](https://github.com/1wgrumph/amazon-fantasy-companion/pull/154)).
 - Fix the Vega contract-mirror test after `PUT /v1/lineup/manual`, and run the TV and Vega gates whenever `backend/src/api/openapi.yaml` changes ([PR #151](https://github.com/1wgrumph/amazon-fantasy-companion/pull/151)).
 - Manual NBA lineups from `nba.manual.build` carry league and team, so the panel renders them when the profile's selected teamLeague matches ([PR #149](https://github.com/1wgrumph/amazon-fantasy-companion/pull/149)).
 - An NBA feed failure can no longer discard or delay the NFL poll: NBA ingest runs in its own scheduled function with bounded requests and writes ([PR #138](https://github.com/1wgrumph/amazon-fantasy-companion/pull/138)).
