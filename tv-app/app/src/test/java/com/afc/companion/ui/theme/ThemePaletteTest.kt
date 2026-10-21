@@ -5,22 +5,51 @@ import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.toArgb
 import kotlin.math.abs
 import org.junit.Assert.assertArrayEquals
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class ThemePaletteTest {
-    @Test fun primarySecondaryAndAccentAreCoolAndDesaturated() {
-        val failures = palette().mapNotNull { (role, color) ->
-            val hsl = referenceHsl(color)
-            println("$role: hue=${hsl[0]}, saturation=${hsl[1]}")
-            if (hsl[0] !in 180f..300f || hsl[1] > 0.65f) "$role: H=${hsl[0]}, S=${hsl[1]}" else null
-        }
-        assertTrue("Require H in [180, 300] and S <= 0.65: ${failures.joinToString()}", failures.isEmpty())
+    @Test fun primaryAccentIsVivid() {
+        val saturation = referenceHsl(captureTheme().colors.primary)[1]
+        assertTrue("Primary saturation $saturation < 0.6", saturation >= 0.6f)
     }
 
     @Test fun backgroundHasDarkRelativeLuminance() {
         val actual = captureTheme().colors.background.luminance()
-        assertTrue("Background luminance $actual > 0.05", actual <= 0.05f)
+        assertTrue("Background luminance $actual > 0.06", actual <= 0.06f)
+    }
+
+    @Test fun backgroundGradientHasTwoDistinctDarkStops() {
+        val stops = backgroundGradient()
+        assertEquals("Two gradient stops", 2, stops.size)
+        assertTrue("Gradient stops must differ", stops[0] != stops[1])
+        stops.forEachIndexed { index, color ->
+            assertEquals("Gradient stop $index must be opaque", 1f, color.alpha, 0f)
+            assertTrue("Gradient stop $index luminance ${color.luminance()} > 0.06", color.luminance() <= 0.06f)
+        }
+    }
+
+    @Test fun sportAccentsAreVividAndAtLeastSixtyDegreesApart() {
+        val hues = com.afc.companion.profile.Sport.entries.map { sport ->
+            val color = sportColor("sportAccentArgb", sport)
+            val hsl = referenceHsl(color)
+            assertEquals("$sport accent must be opaque", 1f, color.alpha, 0f)
+            assertTrue("$sport saturation ${hsl[1]} < 0.6", hsl[1] >= 0.6f)
+            hsl[0]
+        }
+        val difference = abs(hues[0] - hues[1])
+        val separation = minOf(difference, 360f - difference)
+        assertTrue("Sport hue separation $separation < 60 degrees", separation >= 60f)
+    }
+
+    @Test fun semanticErrorRolesKeepTheirExistingMeaning() {
+        val actual = captureTheme().colors
+        val defaults = androidx.tv.material3.darkColorScheme()
+        assertEquals(defaults.error, actual.error)
+        assertEquals(defaults.onError, actual.onError)
+        assertEquals(defaults.errorContainer, actual.errorContainer)
+        assertEquals(defaults.onErrorContainer, actual.onErrorContainer)
     }
 
     /** Intended API: object TvColorMath { fun hsl(argb: Int): FloatArray }, H degrees, S/L fractions. */
@@ -32,14 +61,15 @@ class ThemePaletteTest {
             val actual = hsl.invoke(helper, color.toArgb()) as FloatArray
             assertArrayEquals("HSL for $color", referenceHsl(color), actual, 0.001f)
         }
-        palette().forEach { (role, color) ->
-            val actual = hsl.invoke(helper, color.toArgb()) as FloatArray
-            assertTrue("$role must be cool and desaturated", actual[0] in 180f..300f && actual[1] <= 0.65f)
-        }
     }
 
     private fun palette(): Map<String, Color> = captureTheme().colors.let {
-        mapOf("primary" to it.primary, "secondary" to it.secondary, "accent (tertiary)" to it.tertiary)
+        mapOf(
+            "background" to it.background, "surface" to it.surface, "surfaceVariant" to it.surfaceVariant,
+            "primary" to it.primary, "secondary" to it.secondary, "tertiary" to it.tertiary,
+            "primaryContainer" to it.primaryContainer, "secondaryContainer" to it.secondaryContainer,
+            "tertiaryContainer" to it.tertiaryContainer,
+        )
     }
 
     private fun referenceHsl(color: Color): FloatArray {

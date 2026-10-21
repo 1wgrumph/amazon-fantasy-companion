@@ -13,6 +13,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import com.afc.companion.net.Alert
 import com.afc.companion.watch.WatchActivity
+import com.afc.companion.ui.theme.TvPalette
 import org.json.JSONObject
 import java.net.URLEncoder
 import java.security.MessageDigest
@@ -47,6 +48,7 @@ class AlertNotifier(private val context: Context) {
         val body = listOfNotNull(text.context.ifEmpty { null }, text.access, text.commentary).joinToString("\n")
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(android.R.drawable.ic_dialog_info)
+            .setColor(TvPalette.alertArgb)
             .setContentTitle(text.headline)
             .setContentText(text.context)
             .setStyle(NotificationCompat.BigTextStyle().bigText(body))
