@@ -1,0 +1,103 @@
+{
+  "outcome": "OWNER_DECISION_REQUIRED",
+  "lifecycle": "AFC-2026-10-11",
+  "milestone": "M14",
+  "issue": "59",
+  "gate": "P2-V01",
+  "bug_route": "not-a-bug planned verification slice of P2-V01",
+  "role": "test_implementer",
+  "host": "<i7>",
+  "sdk": "0.24.12112",
+  "vpkg_x86_64_sha256": "7093fd5842dfa13af24aabb2aad871dbc89cc71a37c9143718af2f530af33044",
+  "vpkg_build_commit": "8c1e4b4",
+  "vega_app_changed_since_build": false,
+  "proxy_allowlist_change": "none; adding the afc-dev host would let the tokenless launch issue POST /v1/link (a backend write)",
+  "wall_time": {
+    "agent_start_utc": "2026-10-21T00:13:13Z",
+    "run_of_record_utc": [
+      "2026-10-21T00:16:56Z",
+      "2026-10-21T00:18:05Z"
+    ]
+  },
+  "runs": [
+    {
+      "id": "A1",
+      "script": "check-link-offline.sh (before the log fix)",
+      "utc_start": "2026-10-20T23:51:37Z",
+      "exit": 0,
+      "note": "captures 01-04 byte-identical to A2; guest log step used journalctl and got the dev-shell refusal"
+    },
+    {
+      "id": "P1",
+      "script": "probe-guest-storage.sh",
+      "utc_start": "2026-10-21T00:15:41Z",
+      "exit": 0,
+      "note": "guest shell is uid app_user; no app storage visible; discovery only"
+    },
+    {
+      "id": "A2",
+      "script": "check-link-offline.sh",
+      "utc_start": "2026-10-21T00:16:56Z",
+      "exit": 0,
+      "verify_exit": 0,
+      "verify": "4/4 PASS"
+    }
+  ],
+  "verdicts": {
+    "device_linking": {
+      "verdict": "NEEDS_OWNER_DECISION",
+      "observed": "offline path works: requesting -> network error with Get code focused -> retry repeats",
+      "blocked_request": "POST /v1/link {}, GET /v1/link?handle=, POST /v1/link/confirm"
+    },
+    "profile_settings_detection": {
+      "verdict": "NEEDS_OWNER_DECISION",
+      "blocked_request": "needs session token; GET/PUT /v1/profile, POST /v1/installed-apps"
+    },
+    "alerts": {
+      "verdict": "NEEDS_OWNER_DECISION",
+      "blocked_request": "needs session token; GET /v1/alerts"
+    },
+    "watch": {
+      "verdict": "NEEDS_OWNER_DECISION",
+      "blocked_request": "needs session token and an alert; POST /v1/routing-outcome"
+    },
+    "lineup_panel": {
+      "verdict": "NEEDS_OWNER_DECISION",
+      "blocked_request": "needs session token; GET /v1/panel"
+    }
+  },
+  "app_defects": [],
+  "containment": {
+    "proxy_allowed_hosts": [
+      "k-artifactory-external.labcollab.net",
+      "kepler-static-artifacts.kepler.labcollab.net"
+    ],
+    "afc_dev_connects": 0,
+    "non_loopback_connects": "2, both sandbox network proofs, ENETUNREACH",
+    "containment_proofs_exit": 0
+  },
+  "files": {
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/stage2/00-vvd-home.png": "b899aba837748bcaf8e12f31b2402fe1d5193388ff541956bf2770c3e1b0dae9",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/stage2/01-link-requesting.png": "0280b570cc065384743fcf043fdc795cbbfd2bf061ba5eb78e325e3f4eb4f44d",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/stage2/02-link-network-error.png": "5a6ba0e55de47ea16eaa5676b6aa39a66e44be558c0418f66c61448e0c5b57f3",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/stage2/03-link-after-get-code.png": "0280b570cc065384743fcf043fdc795cbbfd2bf061ba5eb78e325e3f4eb4f44d",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/stage2/04-link-error-again.png": "5a6ba0e55de47ea16eaa5676b6aa39a66e44be558c0418f66c61448e0c5b57f3",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/stage2/05-after-stop.png": "3c6e80127b06d5819408fe3a7d6c09d2bf5b95b2a4cf129ece2958c898f850ed",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/stage2/app-log-excerpt.txt": "d2583eefd592364fbb8a1e9382284a59f915ea76fdac11ba5a21ad4afa61d287",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/stage2/check-link-offline-steps.txt": "47d53ce3d9af2fdc3f0a6ecb782dde979b784be9037265120055fc687eb809da",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/stage2/proxy-connects.txt": "3ac9071186c522b6102ea545a8b338f944a6a98c0a7aabc8be4ceb6037383dce",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/stage2/stage2-summary.md": "354cb6be7272afd589594dc9caffc222e8c05d8e7bc73c460eac985090e24836",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/stage2/verify-link-offline.txt": "3cbd452321f7b488a097afd0b168692c0903a076e2bcbd98042b158ec8df559c",
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/stage2/vvd-status.txt": "10959889800a8590cc4d03d58992378a6ed98de1debb5371a6d0f8a2b8ca6420",
+    "vega-app/vvd-checks/check-link-offline.sh": "ef4c3207ffd44e1dde71e7fe360ea28521c19f7803b37cf93ca1ea458bd55f32",
+    "vega-app/vvd-checks/lib.sh": "bebc0a97369bbb90e243b8419b0aa12a34ee3fdddd88c567f7e2b208ee370190",
+    "vega-app/vvd-checks/probe-guest-storage.sh": "da4609c8c5b8d4723be6c812af1866516933dc2ab4ad6e059be3015cdfdbc79f",
+    "vega-app/vvd-checks/verify-link-offline.py": "e7a36d90c23221efd0e2123ca0266805b3d9d1638099db1cd3f14f09059bd7da"
+  },
+  "review_repair_provenance": {
+    "round": "R-1 through R-6",
+    "note": "Published artifact/source/check digest tables refer to the repaired public files. executed_* fields preserve the source/check hashes used by the historical run. Runtime results and vpkg hashes are historical; no new device build/run is claimed.",
+    "evidence_redacted": true,
+    "originals": "Exact original evidence retained privately; public endpoint regions and environment identifiers redacted."
+  }
+}

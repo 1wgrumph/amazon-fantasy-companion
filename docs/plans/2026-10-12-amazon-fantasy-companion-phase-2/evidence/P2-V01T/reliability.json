@@ -1,0 +1,78 @@
+{
+  "rule": "COE-ELSD-137 (A): 5 sequential + 1 run of two concurrent copies",
+  "command": "npx jest --ci --json (inside vega-sandbox.sh, vega-app/)",
+  "resource_group": "none shared; each LocalApi listens on port 0",
+  "runs": [
+    {
+      "run": "conc-1",
+      "mode": "concurrent (2 copies)",
+      "jest_exit": 1,
+      "tests": 162,
+      "failed": 139,
+      "passed": 23,
+      "identical_to_receipt_run": true,
+      "raw_sha256": "f59a5cc0fb314f8cae8695f4220b8156bd25a08bca003ca1443cb5814463207e"
+    },
+    {
+      "run": "conc-2",
+      "mode": "concurrent (2 copies)",
+      "jest_exit": 1,
+      "tests": 162,
+      "failed": 139,
+      "passed": 23,
+      "identical_to_receipt_run": true,
+      "raw_sha256": "40db1432c8b4e4d68dbb837245054487e6e4f071ac36b669641e9e6bf3791940"
+    },
+    {
+      "run": "seq-1",
+      "mode": "sequential",
+      "jest_exit": 1,
+      "tests": 162,
+      "failed": 139,
+      "passed": 23,
+      "identical_to_receipt_run": true,
+      "raw_sha256": "6b423983f6be0490404e4d3f66aeb8a9a805191f5a78a9691c1c2b1cd3e571dd"
+    },
+    {
+      "run": "seq-2",
+      "mode": "sequential",
+      "jest_exit": 1,
+      "tests": 162,
+      "failed": 139,
+      "passed": 23,
+      "identical_to_receipt_run": true,
+      "raw_sha256": "608141678ec71c8bb05b06a7e501bfd8a72f762b4dd01ec32696439492756f59"
+    },
+    {
+      "run": "seq-3",
+      "mode": "sequential",
+      "jest_exit": 1,
+      "tests": 162,
+      "failed": 139,
+      "passed": 23,
+      "identical_to_receipt_run": true,
+      "raw_sha256": "3ff6c52ba46612e898b39c7f156c0df3f141ab3b7fcf4dd34f91408cfb91be78"
+    },
+    {
+      "run": "seq-4",
+      "mode": "sequential",
+      "jest_exit": 1,
+      "tests": 162,
+      "failed": 139,
+      "passed": 23,
+      "identical_to_receipt_run": true,
+      "raw_sha256": "2e4373c168e020a3d8c00e76677a41206cc4014de32a11296094366765a81e6d"
+    },
+    {
+      "run": "seq-5",
+      "mode": "sequential",
+      "jest_exit": 1,
+      "tests": 162,
+      "failed": 139,
+      "passed": 23,
+      "identical_to_receipt_run": true,
+      "raw_sha256": "0a85370f52344fc1232c2f19d4b7f43a505948de4a21455060a1931e2b70cad3"
+    }
+  ],
+  "raw_files": "not committed (absolute paths); digests above"
+}

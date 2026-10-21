@@ -1,0 +1,29 @@
+{
+  "verdict": "PASS",
+  "artifact": "afc-companion_x86_64.vpkg",
+  "sha256": "85edb928a969c11055ada00fdae208504d457a5beec7c443233fa69516a7c1d5",
+  "producer": "SDK 0.24.12112 sandboxed npm run build:app, exit 0",
+  "archive_safety": "12 relative regular files, no links or special files",
+  "payload_digest_check": {
+    "algorithm": "sha384",
+    "verified_non_stub_entries": [
+      "bundle/assets/app.json",
+      "assets/asset-index.bin",
+      "assets/raw/keplerscript-app-config.json",
+      "bundle/index.hermes.bundle",
+      "bundle/index.bundle",
+      "assets/kepler-sdk-version"
+    ],
+    "sdk_stub_entries": [
+      "manifest.toml",
+      "meta-info/build-info.json"
+    ]
+  },
+  "malware": "ClamAV 1.5.4, DB 28159: 12 files, 0 infected, exit 0",
+  "credentials": "gitleaks 8.30.1, redact: no leaks, exit 0",
+  "static_review": "Manifest needs supported IAsyncStorage__AsyncStorage_1; app config selects async-storage system bundle. No appLibraries, linkDynamic, linkLaunch, or development mode. JS source hashes preserved in receipt. External package artifacts already admitted.",
+  "limits": [
+    "Cryptographic SDK signature validation deferred to native device installation",
+    "SDK stub metadata digests not reinterpreted as content hashes"
+  ]
+}

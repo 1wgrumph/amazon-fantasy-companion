@@ -376,6 +376,256 @@ credentials, local paths) are replaced by `<owner-account>`, `<device>` and
 - **Actionable suggestion:** FR-021, and diagnose the black guest display before any further run.
 - **Time cost:** not observed in available evidence.
 
+## Vega SDK and Virtual Device (supported host)
+
+F-025 is the earlier attempt, paused on an unsupported host. These entries are
+the later virtual-device run on a supported host (2026-10-20 to 2026-10-21).
+The same friction in more than one stage summary is one entry. Tool and
+version, unless an entry says otherwise: Kepler SDK 0.24.12112, Vega CLI
+1.4.5 (NOT_ADMITTED), Vega Virtual Device.
+
+### F-037 — `vega virtual-device start` exits 0 when the device stays unresponsive (2026-10-20)
+- **Tool/version:** Kepler SDK 0.24.12112, Vega CLI 1.4.5 (NOT_ADMITTED), Vega Virtual Device on Ubuntu 24.04.4.
+- **Task attempted:** boot the virtual device and use the command exit as success or failure.
+- **Steps taken:** `vega virtual-device start --timeout 600`.
+- **Expected vs actual:** expected a non-zero exit when the device is still unresponsive after the deadline; actual: the command exits 0.
+- **Severity:** Major (a script that checks only the exit code treats a dead device as success).
+- **Workaround:** read the status JSON for `running:true` and confirm a rendered guest frame.
+- **Actionable suggestion:** exit non-zero when the device is not running after the deadline.
+- **Time cost:** not observed in available evidence.
+- **Source:** [Stage 1 summary](../plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/stage1/stage1-summary.md).
+
+### F-038 — Absent `vvman` prints a different version than the SDK (2026-10-20)
+- **Tool/version:** Kepler SDK 0.24.12112, Vega CLI 1.4.5 (NOT_ADMITTED).
+- **Task attempted:** record the SDK version.
+- **Steps taken:** `vvman` is absent, so the CLI falls through to `kepler --v`. `vega --version` was also read.
+- **Expected vs actual:** expected one SDK version; actual: `kepler --v` prints 0.200.0 while `vega --version` prints SDK 0.24.12112.
+- **Severity:** Minor.
+- **Workaround:** use `vega --version` for the SDK version.
+- **Actionable suggestion:** print the SDK version from the fallback command, or document the two numbers.
+- **Time cost:** not observed in available evidence.
+- **Source:** [Stage 1 summary](../plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/stage1/stage1-summary.md).
+
+### F-039 — A copied emulator lock names a pid a new pid namespace can reuse (2026-10-20)
+- **Tool/version:** Vega Virtual Device emulator, `hardware-qemu.ini.lock`, fresh pid namespace.
+- **Task attempted:** start the virtual device inside a fresh pid namespace.
+- **Steps taken:** first start, with a copied lock file that holds a pid.
+- **Expected vs actual:** expected the lock to refer to an emulator in this namespace; actual: that pid can belong to a live unrelated process, and the emulator exits. The next start, after both lock files were removed, did not fail on the lock; it then died with SIGSEGV (F-040).
+- **Severity:** Major (the device does not start).
+- **Workaround:** remove both lock files before starting in a fresh pid namespace.
+- **Actionable suggestion:** treat a lock pid that is not an emulator in this namespace as stale.
+- **Time cost:** not observed in available evidence.
+- **Source:** [Stage 1 summary](../plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/stage1/stage1-summary.md).
+
+### F-040 — Default GPU mode dies with SIGSEGV when the Mesa driver closure is absent (2026-10-20)
+- **Tool/version:** Kepler SDK 0.24.12112, Vega Virtual Device, default GUI and gl-accel, host GLVND without the Mesa driver closure, Ubuntu 24.04.4.
+- **Task attempted:** boot with the default graphics flags.
+- **Steps taken:** `vega virtual-device start` without the llvmpipe environment.
+- **Expected vs actual:** expected a painted guest, or a fall back to software rendering; actual: the emulator dies with SIGSEGV and does not fall back.
+- **Severity:** Major (no guest display on that host configuration).
+- **Workaround:** `LIBGL_ALWAYS_SOFTWARE=1`, `GALLIUM_DRIVER=llvmpipe`, and `MESA_LOADER_DRIVER_OVERRIDE=llvmpipe`, with the host Mesa llvmpipe driver closure mounted read-only. GUI and gl-accel stay at their defaults.
+- **Actionable suggestion:** fall back to software rendering when the host GL driver closure is missing.
+- **Time cost:** not observed in available evidence.
+- **Source:** [Stage 1 summary](../plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/stage1/stage1-summary.md).
+
+### F-041 — `--no-gl-accel` leaves the guest black and cannot name llvmpipe (2026-10-20)
+- **Tool/version:** Kepler SDK 0.24.12112, Vega Virtual Device, `--no-gl-accel`.
+- **Task attempted:** force software rendering with a CLI flag.
+- **Steps taken:** started the device with `--no-gl-accel` and captured the guest.
+- **Expected vs actual:** expected a painted guest; actual: `running:true` with `library_mode swiftshader_indirect`, a black guest (`sPrepareTexImage2D` validation), and only the emulator skin in the screenshots. There is no CLI flag that names llvmpipe.
+- **Severity:** Major (the guest surface is unusable on this flag).
+- **Workaround:** leave gl-accel at the default and set the llvmpipe environment in F-040. That attempt painted the guest.
+- **Actionable suggestion:** a flag that selects llvmpipe, or a software mode that paints the guest rather than only the skin.
+- **Time cost:** not observed in available evidence.
+- **Source:** [Stage 1 summary](../plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/stage1/stage1-summary.md).
+
+### F-042 — "Virtual device ready" is printed during the splash, and input then drops the device (2026-10-20)
+- **Tool/version:** Vega Virtual Device, `inputd-cli`.
+- **Task attempted:** send input once the CLI reports the device ready.
+- **Steps taken:** `inputd-cli button_press` while the splash was still on screen.
+- **Expected vs actual:** expected the ready message to mean input works; actual: `inputd-cli` throws `Cannot read properties of undefined (reading 'trim')`, exits 253, and the device is gone for the next command.
+- **Severity:** Major (the device has to be started again).
+- **Workaround:** wait until the ready UI is visible. The successful attempt waited 12 seconds; `KEY_RIGHT` and `KEY_ENTER` then exited 0.
+- **Actionable suggestion:** print ready only when input works, and keep the device up when input arrives during the splash.
+- **Time cost:** not observed in available evidence.
+- **Source:** [Stage 1 summary](../plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/stage1/stage1-summary.md).
+
+### F-043 — The virtual-device screenshooter writes an empty file for a frame `xwd` shows (2026-10-20)
+- **Tool/version:** `gwsi-tool-screenshooter` and `xwd` on the Vega Virtual Device display.
+- **Task attempted:** capture the guest UI with the SDK screenshooter.
+- **Steps taken:** ran the screenshooter and copy-from on a frame that `xwd` shows as a full guest UI.
+- **Expected vs actual:** expected the guest UI; actual: the screenshooter returns Incomplete, and copy-from writes a 0-byte file, on a frame that `xwd` shows as a full guest UI.
+- **Severity:** Minor.
+- **Workaround:** capture with `xwd`.
+- **Actionable suggestion:** write the frame `xwd` already shows.
+- **Time cost:** not observed in available evidence.
+- **Source:** [Stage 1 summary](../plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/stage1/stage1-summary.md).
+
+### F-044 — Stop exits 0 while the emulator process group dies with SIGSEGV (2026-10-20)
+- **Tool/version:** Vega Virtual Device emulator, crashpad.
+- **Task attempted:** stop the virtual device after a rendered session.
+- **Steps taken:** stop, then read the next status.
+- **Expected vs actual:** expected a clean stop; actual: stop exits 0 and the next status is `running:false`, while the emulator process group still dies with SIGSEGV and crashpad logs `ptrace: Operation not permitted`.
+- **Severity:** Minor (status does reach `running:false`).
+- **Workaround:** none for the crash. Treat `running:false` as the stop signal and record the SIGSEGV.
+- **Actionable suggestion:** stop without SIGSEGV, or document the signal.
+- **Time cost:** not observed in available evidence.
+- **Source:** [Stage 1 summary](../plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/stage1/stage1-summary.md).
+
+### F-045 — The telemetry helper still starts when opt-in is false (2026-10-20)
+- **Tool/version:** Vega CLI 1.4.5 telemetry helper, `optIn` false.
+- **Task attempted:** boot the virtual device with telemetry opted out.
+- **Steps taken:** the successful boot, with the home mount marked noexec.
+- **Expected vs actual:** expected no telemetry helper when opt-in is false; actual: the helper is spawned (28 times on the successful run). Every exec returned EACCES because the home mount is noexec. The CLI still connects to the SDK artifact host that is already on the allowlist.
+- **Severity:** Minor.
+- **Workaround:** none in the CLI. The noexec mount made the helper exec fail.
+- **Actionable suggestion:** do not spawn the helper when opt-in is false.
+- **Time cost:** not observed in available evidence.
+- **Source:** [Stage 1 summary](../plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/stage1/stage1-summary.md).
+
+### F-046 — The crash reporter is launched with an off-allowlist URL (2026-10-20)
+- **Tool/version:** `crashpad_handler` spawned by the Vega Virtual Device emulator.
+- **Task attempted:** boot under an allowlisting network policy.
+- **Steps taken:** the successful run. The handler was exec'd with an off-allowlist crash-report URL.
+- **Expected vs actual:** expected no crash reporter aimed outside the allowlist; actual: it is launched with that URL. This run recorded no connect from that process.
+- **Severity:** Minor (no connection was made).
+- **Workaround:** none stated.
+- **Actionable suggestion:** do not point the crash reporter outside the developer allowlist, or document that launch.
+- **Time cost:** not observed in available evidence.
+- **Source:** [Stage 1 summary](../plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/stage1/stage1-summary.md).
+
+### F-047 — Fontconfig, character conversion, pulse, and Vulkan fail closed on boot (2026-10-20)
+- **Tool/version:** Vega Virtual Device boot with llvmpipe.
+- **Task attempted:** boot the virtual device with software rendering.
+- **Steps taken:** the successful llvmpipe boot.
+- **Expected vs actual:** expected those subsystems either to work or to stay quiet; actual: fontconfig, iconv/gconv, and pulse fail closed, and Vulkan instance creation fails. The failures are non-fatal. GLES through llvmpipe still paints.
+- **Severity:** Minor.
+- **Workaround:** none needed for the display. The guest UI painted.
+- **Actionable suggestion:** document these messages as non-fatal when llvmpipe is in use.
+- **Time cost:** not observed in available evidence.
+- **Source:** [Stage 1 summary](../plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/stage1/stage1-summary.md).
+
+### F-048 — Host DRM nodes stay unusable from the sandbox account (2026-10-20)
+- **Tool/version:** Vega Virtual Device on Ubuntu 24.04.4. The sandbox account is not in the video or render groups.
+- **Task attempted:** judge whether a DRM node was required to paint the guest.
+- **Steps taken:** DRM, shared-memory, and pulse passthrough was not run. llvmpipe painted the guest with no DRM device node.
+- **Expected vs actual:** expected the account to be able to open host DRM nodes, or software rendering to need none; actual: the nodes stay inaccessible. No group change was requested.
+- **Severity:** Minor.
+- **Workaround:** the llvmpipe environment in F-040. No DRM node was required.
+- **Actionable suggestion:** document that llvmpipe paints the guest without membership in the video or render groups.
+- **Time cost:** not observed in available evidence.
+- **Source:** [Stage 1 summary](../plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/stage1/stage1-summary.md).
+
+### F-049 — `journalctl` is rejected in the developer-mode shell (2026-10-21)
+- **Tool/version:** Vega Virtual Device developer-mode shell, Kepler SDK 0.24.12112.
+- **Task attempted:** read the app log with `journalctl`.
+- **Steps taken:** `vega device run-cmd` of `journalctl`.
+- **Expected vs actual:** expected the journal; actual: rejected, "journalctl is not supported in developer mode shell".
+- **Severity:** Minor.
+- **Workaround:** `loggingctl log -v <package>`.
+- **Actionable suggestion:** document `loggingctl` as the developer-mode log command.
+- **Time cost:** not observed in available evidence.
+- **Source:** [Stage 2 summary](../plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/stage2/stage2-summary.md).
+
+### F-050 — Release-device logs omit app output and leave commit times unformatted (2026-10-21)
+- **Tool/version:** Kepler SDK 0.24.12112, Vega Virtual Device, release bundle.
+- **Task attempted:** read app and request logs from the virtual device.
+- **Steps taken:** read the app log on the offline link run and on the online run.
+- **Expected vs actual:** expected React Native `console` output, including requests; actual: the log carries only KeplerScript surface telemetry. `commitTime={:.2f}ms` fields are unformatted placeholders, a logging bug in the runtime. `console` output from the release bundle does not appear, so the app logs no requests.
+- **Severity:** Major (a UI failure cannot be tied to an API status from the log).
+- **Workaround:** none stated for release `console` output. The runs used screen captures and the proxy connect log.
+- **Actionable suggestion:** format the commit-time fields and show release-bundle `console` output on the virtual device.
+- **Time cost:** not observed in available evidence.
+- **Source:** [Stage 2 summary](../plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/stage2/stage2-summary.md), [Stage 2c summary](../plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/stage2c/stage2c-summary.md).
+
+### F-051 — The developer shell cannot read or seed an app's private storage (2026-10-21)
+- **Tool/version:** Vega Virtual Device developer shell, user `app_user`.
+- **Task attempted:** seed or inspect AsyncStorage so a check can start from a linked session.
+- **Steps taken:** probed the app's private storage from the developer shell.
+- **Expected vs actual:** expected a supported way to read or seed that storage; actual: `app_user` cannot see it. Placing a session in app storage from the shell is not possible.
+- **Severity:** Major (every session-gated check has to go through the real link flow).
+- **Workaround:** none.
+- **Actionable suggestion:** document a supported way to seed and inspect app-private storage on the virtual device.
+- **Time cost:** not observed in available evidence.
+- **Source:** [Stage 2 summary](../plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/stage2/stage2-summary.md).
+
+### F-052 — The link code and settings can only be read from screen captures (2026-10-21)
+- **Tool/version:** Vega app on the Vega Virtual Device.
+- **Task attempted:** read the on-screen link code and the saved settings without watching the framebuffer.
+- **Steps taken:** the online link and settings run. The code and the settings were read from captures.
+- **Expected vs actual:** expected an app-side state dump or screen text recognition; actual: neither exists. The code and every setting are only on the screen.
+- **Severity:** Major (someone has to read the code off the capture and drive the screen).
+- **Workaround:** read the code and the settings from the captures.
+- **Actionable suggestion:** an app-side dump of the link code and the settings under test.
+- **Time cost:** not observed in available evidence.
+- **Source:** [Stage 2c summary](../plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/stage2c/stage2c-summary.md).
+
+### F-053 — The virtual device cannot send a host-name CONNECT through an allowlist proxy (2026-10-21)
+- **Tool/version:** Kepler SDK 0.24.12112, `vega virtual-device start`, QEMU user-mode networking.
+- **Task attempted:** reach the deployed backend from the guest through an allowlisting CONNECT proxy.
+- **Steps taken:** allowlisted the backend and launched. The guest made no proxy request. The guest shell (`app_user`) has no proxy variable and no supported proxy or DNS setting. `vega virtual-device start` has no proxy or emulator-argument option. The emulator can take an HTTP proxy, but that connector sends CONNECT with the guest's numeric destination address, which a host-name allowlist denies. In that sandbox the guest also cannot resolve names, so it never reaches a TCP connect.
+- **Expected vs actual:** expected the guest to use the allowlist proxy; actual: traffic stays on user-mode networking (the emulator's own resolver and direct connects). The proxy log showed no connection to the backend. Online linking, profile, alerts, Watch, and the panel could not run until the guest had another path.
+- **Severity:** Major (those features stay unobservable from the guest until a host-name path to the proxy exists).
+- **Workaround:** a resolver inside the sandbox namespace that answers only the deployed backend name, and a forwarder that sends each connection to the proxy as a host-name CONNECT. TLS stays end to end between the app and the backend. The emulator HTTP proxy was not enabled.
+- **Actionable suggestion:** a virtual-device option that proxies by host name, so a host-name allowlist can accept it.
+- **Time cost:** not observed in available evidence.
+- **Source:** [Stage 2b summary](../plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/stage2b/stage2b-summary.md), [Stage 2c summary](../plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/stage2c/stage2c-summary.md).
+
+### F-054 — Save is about 30 DOWN presses from the top, and text fields take focus silently (2026-10-21)
+- **Tool/version:** Vega app Profile/Settings on the Vega Virtual Device, remote-key input.
+- **Task attempted:** change one setting and save it.
+- **Steps taken:** DOWN from the top of the screen to Save.
+- **Expected vs actual:** expected focus to start on the first control, and a text field to show that it took focus; actual: focus starts on nothing, text inputs take focus silently, and Save is about 30 DOWN presses from the top.
+- **Severity:** Minor (Save is reachable).
+- **Workaround:** about 30 DOWN presses from the top of the screen.
+- **Actionable suggestion:** start focus on the first control, and show when a text field has focus.
+- **Time cost:** not observed in available evidence.
+- **Source:** [Stage 2c summary](../plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/stage2c/stage2c-summary.md).
+
+### F-055 — Legacy AsyncStorage does not keep the session across relaunch (2026-10-21)
+- **Tool/version:** Kepler SDK 0.24.12112, Vega Virtual Device. The app called `require('react-native').AsyncStorage`. The supported package later pinned is `@amazon-devices/react-native-async-storage__async-storage` 2.1.9000000001.
+- **Task attempted:** stay on Profile/Settings after the app restarts.
+- **Steps taken:** linked on the device, saved a setting, then terminated and launched the app. The unit test ran over an in-memory fake. The module header described the store as react-native-mmkv. A later build loaded the supported package's default export and repeated the relaunch.
+- **Expected vs actual:** expected Profile/Settings after relaunch. On the legacy binding the Link screen returned and a new code was issued. Every read and write logged that legacy AsyncStorage is on a deprecation path, then `Application data root path is not set.` The session stayed usable until the relaunch. After the supported package, relaunch stayed on Profile/Settings with no second confirmation, and the legacy deprecation line was gone. The native data-root messages still occur; persistence still passes; what emits those messages is not established.
+- **Severity:** Major (on the legacy binding, relaunch drops the linked session).
+- **Workaround:** load the supported app-private AsyncStorage package. An in-memory unit test does not show this failure.
+- **Actionable suggestion:** document the supported storage package, and explain the data-root message that remains after persistence works.
+- **Time cost:** not observed in available evidence.
+- **Source:** [Stage 2c summary](../plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/stage2c/stage2c-summary.md), [token-persistence summary](../plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/bug-token/summary.md).
+
+### F-056 — The panel drops the server's default state when the profile has no selection (2026-10-21)
+- **Tool/version:** Vega app on the Vega Virtual Device, `GET /v1/panel` with no team or league.
+- **Task attempted:** show the lineup panel for a linked profile with no team or league selected.
+- **Steps taken:** on the device the panel showed "Panel unavailable". A later read of that profile returned no team or league and empty selections. `GET /v1/panel` with no query, which is what the app sends, returned the server's default empty state. Replaying those bodies through the app's own decode kept the snapshot only when the controller already held the server's team and league. With the controller's empty selection, decode accepts the body and the controller drops it because the two team/league strings differ.
+- **Expected vs actual:** expected the panel to show the server's default state for a profile with no selection. Actual: the section renders "Panel unavailable", the snapshot stays empty, and the app requests the panel again every second while the panel is visible. No decode rule rejects the body.
+- **Severity:** Major (a state the server returned is not shown).
+- **Resolution:** the controller now adopts the server's identity when no team or league is selected. The [bug-panel repair run](../plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/bug-panel/summary.md) rechecked this on the VVD: default identity, Half-PPR and Total: Unavailable were shown and held. Empty rows, totals, and progress for this profile remain F-057. The [review repair](../plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/review-repair/summary.md) additionally binds saved settings, pending-request serialization and stale labels to MainScreen regressions; those wiring changes were not rerun on the VVD.
+- **Actionable suggestion:** show the server's default state for a profile with no selection.
+- **Time cost:** not observed in available evidence.
+- **Source:** [Panel summary](../plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/panel/panel-summary.md), [Stage 2c summary](../plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/stage2c/stage2c-summary.md).
+
+### F-057 — No public API writes a lineup, so alerts, Watch, and panel rows cannot appear (2026-10-21)
+- **Tool/version:** deployed backend, observed from the Vega Virtual Device with a synthetic profile.
+- **Task attempted:** show an alert banner, Watch, and lineup rows on the virtual device.
+- **Steps taken:** linked the synthetic profile and watched the panel and alerts. The backend has no caller of `store.put_lineup`.
+- **Expected vs actual:** expected a way to put a lineup on a test profile; actual: no public API writes a lineup, so the profile cannot match an event. No alert banner appeared in about 6 linked minutes. Watch is reached only from an alert banner. The panel's rows for this profile can only be the empty state.
+- **Severity:** Major (alerts, Watch, and panel rows stay untestable on a synthetic profile).
+- **Workaround:** none in the product. An owner-supplied lineup fixture would be a separate grant.
+- **Actionable suggestion:** a public lineup write for a test profile, or a documented fixture, so a virtual-device check can show an alert and rows.
+- **Time cost:** not observed in available evidence.
+- **Source:** [Stage 2b summary](../plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/stage2b/stage2b-summary.md), [Stage 2c summary](../plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/stage2c/stage2c-summary.md).
+
+### F-058 — The guest image has no `getent` or `ip` (2026-10-21)
+- **Tool/version:** Vega Virtual Device guest shell.
+- **Task attempted:** read guest name resolution and addresses while probing the network path.
+- **Steps taken:** `getent` and `ip` inside the guest network probe.
+- **Expected vs actual:** expected both commands to run; actual: both exit 1 because the tools are absent. The app and virtual-device steps of that probe still exited 0.
+- **Severity:** Minor.
+- **Workaround:** none stated for those two commands.
+- **Actionable suggestion:** ship `getent` and `ip` in the developer guest image, or document that they are absent.
+- **Time cost:** not observed in available evidence.
+- **Source:** [Stage 2b summary](../plans/2026-10-12-amazon-fantasy-companion-phase-2/m14-vega-i7/stage2b/stage2b-summary.md).
+
 ## Internal process frictions (owner decision pending)
 
 These are project-workflow frictions, not product feedback. They are recorded for

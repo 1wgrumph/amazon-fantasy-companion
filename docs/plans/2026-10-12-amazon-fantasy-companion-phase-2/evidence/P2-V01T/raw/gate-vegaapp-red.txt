@@ -1,0 +1,128 @@
+test_absent_tree_passes_with_exact_no_tree_detail (test_gate_vegaapp.VegaAppGate.test_absent_tree_passes_with_exact_no_tree_detail) ... FAIL
+test_changed_paths_select_vegaapp (test_gate_vegaapp.VegaAppGate.test_changed_paths_select_vegaapp) ...
+  test_changed_paths_select_vegaapp (test_gate_vegaapp.VegaAppGate.test_changed_paths_select_vegaapp) (changed='vega-app/src/a.ts') ... FAIL
+  test_changed_paths_select_vegaapp (test_gate_vegaapp.VegaAppGate.test_changed_paths_select_vegaapp) (changed='tools/ci/gate.sh') ... FAIL
+test_ci_workflow_runs_a_path_filtered_vegaapp_job (test_gate_vegaapp.VegaAppGate.test_ci_workflow_runs_a_path_filtered_vegaapp_job) ... FAIL
+test_empty_tree_never_claims_no_tree_or_passes (test_gate_vegaapp.VegaAppGate.test_empty_tree_never_claims_no_tree_or_passes) ... FAIL
+test_failing_jest_is_fail_not_gap (test_gate_vegaapp.VegaAppGate.test_failing_jest_is_fail_not_gap) ...
+  test_failing_jest_is_fail_not_gap (test_gate_vegaapp.VegaAppGate.test_failing_jest_is_fail_not_gap) (npm=1) ... FAIL
+  test_failing_jest_is_fail_not_gap (test_gate_vegaapp.VegaAppGate.test_failing_jest_is_fail_not_gap) (npm=3) ... FAIL
+test_list_includes_vegaapp (test_gate_vegaapp.VegaAppGate.test_list_includes_vegaapp) ... FAIL
+test_missing_node_or_npm_is_named_gap_exit_3 (test_gate_vegaapp.VegaAppGate.test_missing_node_or_npm_is_named_gap_exit_3) ...
+  test_missing_node_or_npm_is_named_gap_exit_3 (test_gate_vegaapp.VegaAppGate.test_missing_node_or_npm_is_named_gap_exit_3) (tool='node') ... FAIL
+  test_missing_node_or_npm_is_named_gap_exit_3 (test_gate_vegaapp.VegaAppGate.test_missing_node_or_npm_is_named_gap_exit_3) (tool='npm') ... FAIL
+test_runs_npm_ci_then_jest_ci (test_gate_vegaapp.VegaAppGate.test_runs_npm_ci_then_jest_ci) ... FAIL
+
+======================================================================
+FAIL: test_absent_tree_passes_with_exact_no_tree_detail (test_gate_vegaapp.VegaAppGate.test_absent_tree_passes_with_exact_no_tree_detail)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-v01t/tools/ci/tests/test_gate_vegaapp.py", line 59, in test_absent_tree_passes_with_exact_no_tree_detail
+    self.assertEqual(rc, 0, out)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: 2 != 0 : usage: gate.sh [--changed[=<base>|<base>..<tip>] [--staged]] [--list] [<area>...]
+
+
+======================================================================
+FAIL: test_changed_paths_select_vegaapp (test_gate_vegaapp.VegaAppGate.test_changed_paths_select_vegaapp) (changed='vega-app/src/a.ts')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-v01t/tools/ci/tests/test_gate_vegaapp.py", line 111, in test_changed_paths_select_vegaapp
+    self.assertEqual('gate: vegaapp:' in out, selected, out)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False != True : usage: gate.sh [--changed[=<base>|<base>..<tip>] [--staged]] [--list] [<area>...]
+
+
+======================================================================
+FAIL: test_changed_paths_select_vegaapp (test_gate_vegaapp.VegaAppGate.test_changed_paths_select_vegaapp) (changed='tools/ci/gate.sh')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-v01t/tools/ci/tests/test_gate_vegaapp.py", line 111, in test_changed_paths_select_vegaapp
+    self.assertEqual('gate: vegaapp:' in out, selected, out)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False != True : usage: gate.sh [--changed[=<base>|<base>..<tip>] [--staged]] [--list] [<area>...]
+
+
+======================================================================
+FAIL: test_ci_workflow_runs_a_path_filtered_vegaapp_job (test_gate_vegaapp.VegaAppGate.test_ci_workflow_runs_a_path_filtered_vegaapp_job)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-v01t/tools/ci/tests/test_gate_vegaapp.py", line 119, in test_ci_workflow_runs_a_path_filtered_vegaapp_job
+    self.assertIn('vegaapp', changes['outputs'])
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'vegaapp' not found in {'spec': '${{ steps.filter.outputs.spec }}', 'docs': '${{ steps.filter.outputs.docs }}', 'tvapp': '${{ steps.filter.outputs.tvapp }}', 'backend': '${{ steps.filter.outputs.backend }}'}
+
+======================================================================
+FAIL: test_empty_tree_never_claims_no_tree_or_passes (test_gate_vegaapp.VegaAppGate.test_empty_tree_never_claims_no_tree_or_passes)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-v01t/tools/ci/tests/test_gate_vegaapp.py", line 98, in test_empty_tree_never_claims_no_tree_or_passes
+    self.assertIn(rc, (1, 3), out)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+AssertionError: 2 not found in (1, 3) : usage: gate.sh [--changed[=<base>|<base>..<tip>] [--staged]] [--list] [<area>...]
+
+
+======================================================================
+FAIL: test_failing_jest_is_fail_not_gap (test_gate_vegaapp.VegaAppGate.test_failing_jest_is_fail_not_gap) (npm=1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-v01t/tools/ci/tests/test_gate_vegaapp.py", line 75, in test_failing_jest_is_fail_not_gap
+    self.assertEqual(rc, 1, out)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: 2 != 1 : usage: gate.sh [--changed[=<base>|<base>..<tip>] [--staged]] [--list] [<area>...]
+
+
+======================================================================
+FAIL: test_failing_jest_is_fail_not_gap (test_gate_vegaapp.VegaAppGate.test_failing_jest_is_fail_not_gap) (npm=3)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-v01t/tools/ci/tests/test_gate_vegaapp.py", line 75, in test_failing_jest_is_fail_not_gap
+    self.assertEqual(rc, 1, out)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: 2 != 1 : usage: gate.sh [--changed[=<base>|<base>..<tip>] [--staged]] [--list] [<area>...]
+
+
+======================================================================
+FAIL: test_list_includes_vegaapp (test_gate_vegaapp.VegaAppGate.test_list_includes_vegaapp)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-v01t/tools/ci/tests/test_gate_vegaapp.py", line 54, in test_list_includes_vegaapp
+    self.assertIn('vegaapp', out.split())
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'vegaapp' not found in ['spec', 'docs', 'hygiene', 'tvapp', 'backend']
+
+======================================================================
+FAIL: test_missing_node_or_npm_is_named_gap_exit_3 (test_gate_vegaapp.VegaAppGate.test_missing_node_or_npm_is_named_gap_exit_3) (tool='node')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-v01t/tools/ci/tests/test_gate_vegaapp.py", line 88, in test_missing_node_or_npm_is_named_gap_exit_3
+    self.assertEqual(rc, 3, out)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: 2 != 3 : usage: gate.sh [--changed[=<base>|<base>..<tip>] [--staged]] [--list] [<area>...]
+
+
+======================================================================
+FAIL: test_missing_node_or_npm_is_named_gap_exit_3 (test_gate_vegaapp.VegaAppGate.test_missing_node_or_npm_is_named_gap_exit_3) (tool='npm')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-v01t/tools/ci/tests/test_gate_vegaapp.py", line 88, in test_missing_node_or_npm_is_named_gap_exit_3
+    self.assertEqual(rc, 3, out)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: 2 != 3 : usage: gate.sh [--changed[=<base>|<base>..<tip>] [--staged]] [--list] [<area>...]
+
+
+======================================================================
+FAIL: test_runs_npm_ci_then_jest_ci (test_gate_vegaapp.VegaAppGate.test_runs_npm_ci_then_jest_ci)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "$HOME/alphazede/worktrees/amazon-fantasy-companion-p2-v01t/tools/ci/tests/test_gate_vegaapp.py", line 65, in test_runs_npm_ci_then_jest_ci
+    self.assertEqual(rc, 0, out)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: 2 != 0 : usage: gate.sh [--changed[=<base>|<base>..<tip>] [--staged]] [--list] [<area>...]
+
+
+----------------------------------------------------------------------
+Ran 8 tests in 11.283s
+
+FAILED (failures=11)
+gate_red_rc=1
