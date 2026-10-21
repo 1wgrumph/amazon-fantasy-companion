@@ -1,0 +1,18 @@
+Command: TMPDIR=~/.cache/afc-gate-tmp bash tools/ci/gate.sh hygiene
+.github/workflows/ci.yml: PASS
+...............fatal: not a git repository (or any of the parent directories): .git
+........fatal: not a git repository (or any of the parent directories): .git
+...............................................................................................
+----------------------------------------------------------------------
+Ran 118 tests in 205.023s
+
+OK
+mutation adapter exit=3: ['GAP REPORT_INCOMPLETE: mutmut stats absent']
+mutation adapter exit=0: ['PASS mutation score 100.00% (threshold 70%)']
+coverage adapter exit=0: ['PASS changed-line coverage 100% (threshold 90%)']
+coverage adapter exit=3: ['GAP REPORT_INCOMPLETE: unmapped changed files: backend/src/control.py']
+gate: hygiene: PASS checks completed
+
+Exit code: 0
+
+Prior attempt: exit 1, WS-CHECK on the evidence file while it was being written with a blank line at EOF. Harness capture corrected by buffering output until completion.

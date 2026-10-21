@@ -7,6 +7,27 @@ import org.junit.Test
 
 /** Enabled text must meet WCAG 1.4.3, including inherited content and TV button states. */
 class ThemeContrastTest {
+    @Test fun textOnBothGradientStopsMeetsBodyContrast() {
+        val theme = captureTheme()
+        backgroundGradient().forEachIndexed { index, background ->
+            assertPairs(4.5f, mapOf(
+                "Inherited text / gradient $index" to (theme.contentColor to background),
+                "onBackground / gradient $index" to (theme.colors.onBackground to background),
+                "onSurface / gradient $index" to (theme.colors.onSurface to background),
+                "onSurfaceVariant / gradient $index" to (theme.colors.onSurfaceVariant to background),
+                "Panel values / gradient $index" to (Color.White to background),
+            ))
+        }
+    }
+
+    @Test fun textOnEachSportAccentMeetsBodyContrast() {
+        com.afc.companion.profile.Sport.entries.forEach { sport ->
+            assertPairs(4.5f, mapOf(
+                "$sport accent text" to (sportColor("onSportAccentArgb", sport) to sportColor("sportAccentArgb", sport)),
+            ))
+        }
+    }
+
     @Test fun inheritedTextOnAppBackgroundMeetsBodyContrast() {
         val theme = captureTheme()
         val scheme = theme.colors

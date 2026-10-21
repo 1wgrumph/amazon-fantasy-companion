@@ -206,6 +206,7 @@ def _check_starters(item):
 
 
 def put_lineup(lineup):
+    """Store a lineup and return the content version allocated by its successful CAS."""
     item = _shaped(dict(lineup), _LINEUP_FIELDS | {"lineupVersion"})
     item.pop("lineupVersion", None)  # allocated here, never caller-supplied
     _check_starters(item)
@@ -223,7 +224,7 @@ def put_lineup(lineup):
         else:
             condition = Attr("lineupVersion").not_exists()
         if _written(table.put_item, Item=item, ConditionExpression=condition):
-            return
+            return item["lineupVersion"]
     raise RuntimeError(f"lineup write for {item['profileId']} kept losing races")
 
 

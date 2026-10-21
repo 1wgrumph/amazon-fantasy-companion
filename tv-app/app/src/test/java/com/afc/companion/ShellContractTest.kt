@@ -12,7 +12,7 @@ class ShellContractTest {
         assertEquals("Missing behavior: shell navigation without social surfaces", setOf("Link", "Profile/Settings", "Panel"), Shell().destinations())
     }
     @Test fun noMessagingEndpointsInFrozenContract() {
-        assertEquals(setOf("/v1/link", "/v1/link/confirm", "/link", "/v1/profile", "/v1/alerts", "/v1/panel", "/v1/providers", "/v1/routing-outcome", "/v1/installed-apps"), node("paths").keys)
+        assertEquals(setOf("/v1/link", "/v1/link/confirm", "/link", "/v1/profile", "/v1/alerts", "/v1/panel", "/v1/providers", "/v1/routing-outcome", "/v1/installed-apps", "/v1/lineup/manual"), node("paths").keys)
     }
     @Test fun committedTestTokensDoNotMatchCredentialShapes() {
         val assignment = "[\\\"']?\\s*[:=]\\s*[\\\"']?"
