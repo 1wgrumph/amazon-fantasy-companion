@@ -27,7 +27,7 @@ run or decision).
 | OA-6 | William | Review the ESPN unofficial JSON terms for public submission (C3). | Before P2-D04 write-up final; M12 documents due 2026-10-22T16:00:00Z | Final write-up wording (P2-D04) | **Outstanding.** No owner terms determination is recorded in the tree. The write-up must not finalize ESPN wording ahead of this review. |
 | OA-7 | William | Create the Devpost project draft, upload the public demo video (YouTube or Vimeo), and submit with the Fire TV track and AWS Builder fields before the deadline; keep judge access through 2026-11-20. | Before 2026-10-23T19:00:00Z; judge access through 2026-11-20 | The submission itself | **Outstanding.** The Devpost draft is NOT STARTED (issue #1 readiness table: empty project list). No video exists yet; capture is P2-X12 on the final APK. No agent creates, uploads, or submits anything. |
 | OA-8 | William | Authorize each release publication (P2-R1 through P2-R5) and any external feedback sending. | At each technical-wave release checkpoint; final release authorization before 2026-10-23T19:00:00Z | Each release stays a prepared draft until authorized | **Outstanding.** No owner release-publication or external-feedback authorization is recorded in the tree. Agents prepare drafts only; nothing is published or sent. |
-| OA-9 — conditional | William | Camera capture of the TV screen for demo shots where provider video is protected (RISK-AFC-P2-09). Applies **only if** the protected-video decision below resolves to camera capture (option A). | At P2-X12 capture (W5, M13), after the final APK exists and before video upload | Only those demo shots that would show provider video | **PENDING evidence / conditional.** The governing decision (`OD-AFC-P2-02`) is not recorded as decided — see the owner decisions section. If option B is chosen instead, this action does not arise and the demo uses companion-UI captures only. SP-3 confirms the underlying fact: on-device capture of provider playback returns a black secure surface (PR #110). |
+| OA-9 — not needed | William | Camera capture of the TV screen for protected-video demo shots (RISK-AFC-P2-09). | — | — | **Does not apply.** `OD-AFC-P2-02` resolved to option B on 2026-10-20 (DEC-AFC-OD-P2-02-B-20261020): the demo uses companion-UI captures only. Provider video is not shown in the demo, to respect copyright. |
 | OA-10 | William | Device linking in its settled form (DEC-AFC-SD-048, TV code only): **no passphrase is stored anywhere.** When a linked device is needed — P2-L02 link smoke, the X09/X10 live runs, or a data-clearing rollback — confirm the code shown on the TV on the `/link` page from a phone or browser. Confirm only a code shown on your own TV. | On demand; next expected for the live runs starting 2026-10-23T00:15:00Z, if linking is needed there | Deployed link confirmation; linked-device live runs | **Settled form; confirmation outstanding on demand.** The code-only form is decided and implemented (short code expiry, one-time confirmation; PR #68). Owner confirmation is performed when a linked device is needed; agents cannot confirm codes. |
 | OA-11 — optional | William | Optionally supply a release signing keystore for the submitted APK. | Before P2-L05 final APK build (W5, M13) | Nothing hard: without it, the debug signing configuration is used | **Outstanding (optional).** No keystore has been supplied. P2-L05 proceeds with debug signing unless the owner supplies one; the APK sha256 and Reverify record are P2-L05 evidence either way (AC-AFC-P2-APK-01). |
 
@@ -50,15 +50,11 @@ side; they are listed so none is missed. Agents perform none of them.
 
 ## Owner decisions this checklist needs
 
-- **`OD-AFC-P2-02` (protected provider video capture).** Option A:
-  owner films the TV for shots showing provider video, with on-device
-  captures for the companion UI. Option B: demo and evidence use
-  companion-UI captures only, with provider video described, not shown.
-  The technical plan recommends A but **no owner decision is recorded
-  in the tree**. This checklist does not choose. The decision is due
-  before P2-X12 capture; it decides whether the conditional camera row
-  above arises and how the PENDING live-Watch shot in the
-  [demo plan](demo-plan.md) is sourced.
+- **`OD-AFC-P2-02` (protected provider video capture): decided, option
+  B** (owner, 2026-10-20, DEC-AFC-OD-P2-02-B-20261020). The demo and
+  evidence use companion-UI captures only, with provider video
+  described, not shown, to respect copyright. Option A (owner filming
+  the TV) was declined, so the OA-9 camera row does not arise.
 - **Alexa disposition (X11)** remains open. Until a voice route is
   implemented and verified on the device, voice is not offered
   (AFC-PR-022, AFC-PR-036) and the demo shows no voice interaction.
@@ -85,7 +81,7 @@ current facts are recorded only as issue #1 states them.
   that run lands; demo shots depending on them are PENDING in the
   demo plan. Device-link confirmation may be needed on demand there.
 - The final APK (P2-L05) and demo capture (P2-X12) are M13. The
-  optional signing row and the conditional camera row above are due
+  optional signing row above is due
   around those slices, before the owner's upload and submission.
 - Vega is PAUSED by owner direction (2026-10-20). It appears in
   submission material only as a paused stretch compatibility target

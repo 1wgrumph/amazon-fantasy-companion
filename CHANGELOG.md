@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Record v0.1.0 in the changelog ([PR #139](https://github.com/1wgrumph/amazon-fantasy-companion/pull/139)).
+- Record the v0.1.0 merge commit in the release receipt ([PR #142](https://github.com/1wgrumph/amazon-fantasy-companion/pull/142)).
+
+## [0.1.0] - 2026-10-20
+
 ### Fixed
 
 - Admit the Unified Test Platform artifacts (201 files, each checksum-verified against its official repository and supply-chain scanned) into `tv-app/gradle/verification-metadata.xml` so `./gradlew -p tv-app :app:connectedDebugAndroidTest` passes on the Fire TV stick under STRICT dependency verification, replacing the `adb install` + `am instrument` workaround (BUG-38-UTP, evidence `BUG-38-UTP/`, [#134](https://github.com/1wgrumph/amazon-fantasy-companion/pull/134)).
@@ -24,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+- Remove twenty provider-screen captures from the public tree and record only their hashes, capture times and descriptions in `evidence/visual/PRIVATE-EVIDENCE.md`. The hygiene check rejects those basenames and content hashes if they are committed again (BUG-PROVIDER-ART, [PR #141](https://github.com/1wgrumph/amazon-fantasy-companion/pull/141)).
 - Bound ESPN boxscore statistics ingest against denial-of-service inputs: validate numeric `athleteId` keys (`1..20` ASCII digits) before any DynamoDB write, cap boxscore athletes per payload (`MAX_BOXSCORE_ATHLETES = 200`) and stats per athlete (`MAX_ATHLETE_STATS = 64`) with deterministic truncation, reject oversize (`MAX_STAT_VALUE_LENGTH = 16`) and subnormal stat strings before `Decimal` conversion, and isolate single-record `PlayerStats` write failures so valid records, `GameEvent`s, and alerts keep ingesting. Review repair: cap play `id` and `wallclock` at 64 characters in the summary schema and treat a DynamoDB `ValidationException` on any feed write as a failure of that game only; skip only payload-rejected `PlayerStats` writes (`ValidationException`, `decimal` signals) so access, table, throttling and endpoint failures surface; aggregate hostile-input warnings into one length-bounded line per payload and batch; reject positive-exponent stat values such as `0E+999`; expose the bounds as plain module constants; and check recorded-fixture statistics against a frozen pre-fix snapshot ([PR #103](https://github.com/1wgrumph/amazon-fantasy-companion/pull/103)).
 - Remove unused Yahoo SSM read access from the public API function and warn
   users to confirm only a code on their own TV; preserve code-only linking,
@@ -31,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Record DEC-AFC-OD-P2-02-B-20261020 in the demo plan, write-up and owner checklist: companion-UI captures only, no provider video or provider app screens, OA-9 not needed; provider video is not shown, to respect copyright ([PR #140](https://github.com/1wgrumph/amazon-fantasy-companion/pull/140)).
 - Publish specification revision 0.4 (P2-D02): record landed SP-1 to SP-8 verdicts and close the provider, panel, notification and lineup contract constants; Fire OS primary with Vega paused stretch; pending live checks stay pending ([#46](https://github.com/1wgrumph/amazon-fantasy-companion/issues/46), [PR #124](https://github.com/1wgrumph/amazon-fantasy-companion/pull/124)).
 
 ### Added
@@ -170,13 +179,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   HEAD, so a correctly regenerated staged output passes before commit
   ([PR](https://github.com/1wgrumph/amazon-fantasy-companion/pull/14)).
 
-## [0.1.0] - DRAFT (not released)
-
-> **DRAFT preparation only.** This section prepares a possible v0.1.0 and is not a release record. No git tag, release, publication or new customer path exists or is implied. R1 ships the Fire OS APK; Vega is VVD compatibility evidence reported with the release and does not gate it (physical Vega checks are NOT_APPLICABLE, not PASS). Contents are limited to the entries already recorded under [Unreleased] above (including [PR #108](https://github.com/1wgrumph/amazon-fantasy-companion/pull/108), [PR #113](https://github.com/1wgrumph/amazon-fantasy-companion/pull/113) and [PR #115](https://github.com/1wgrumph/amazon-fantasy-companion/pull/115)); no additional features are claimed.
-
-- Planned version metadata: tv-app `versionCode` 1, `versionName` "0.1.0" (read back unchanged).
-- Planned tag `v0.1.0`; tag target not set.
-
 ## 2026-10-12
 
 ### Added
@@ -191,3 +193,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Phase 1 plan delta SD-026..028 and Wave 1 receipt ([PR #4](https://github.com/1wgrumph/amazon-fantasy-companion/pull/4)).
 - docs: add Phase 1 Vnv guidance tree ([PR #3](https://github.com/1wgrumph/amazon-fantasy-companion/pull/3)).
 - Add approved Phase 1 planning package (AFC-2026-10-11) ([PR #2](https://github.com/1wgrumph/amazon-fantasy-companion/pull/2)).
+
+[Unreleased]: https://github.com/1wgrumph/amazon-fantasy-companion/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/1wgrumph/amazon-fantasy-companion/compare/2c13a6bf560e87d11864cc6234f48e40dd9cf529...v0.1.0
