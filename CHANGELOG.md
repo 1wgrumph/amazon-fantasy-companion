@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Describe NBA support in the README and submission writeup ([PR #138](https://github.com/1wgrumph/amazon-fantasy-companion/pull/138)).
 - Record v0.1.0 in the changelog ([PR #139](https://github.com/1wgrumph/amazon-fantasy-companion/pull/139)).
 - Record the v0.1.0 merge commit in the release receipt ([PR #142](https://github.com/1wgrumph/amazon-fantasy-companion/pull/142)).
 

@@ -1,18 +1,27 @@
 # Amazon Fantasy Companion
 
-A Fire TV fantasy-football companion built for the Build, Ship, Shape:
-Amazon Developer Hackathon 2026. While NFL games are on, it follows the
-viewer's fantasy starters, shows a lineup panel with live fantasy points,
-and raises alerts for moments that matter to those starters (red-zone
-trips, player scores, close late games), with a Watch action that hands
-off to a verified provider app route where one exists.
+A Fire TV fantasy companion built for the Build, Ship, Shape: Amazon
+Developer Hackathon 2026. NFL is the primary story. While NFL games are
+on, it follows the viewer's fantasy starters, shows a lineup panel with
+live fantasy points, and raises alerts for moments that matter to those
+starters (red-zone trips, player scores, close late games), with a Watch
+action that hands off to a verified provider app route where one exists.
+NBA is included beside that story (owner decision, 2026-10-21; repository
+evidence on [PR #138](https://github.com/1wgrumph/amazon-fantasy-companion/pull/138),
+not a device-spike verdict). A separate scheduled function ingests the
+ESPN NBA scoreboard and game summaries and stores player statistics, and
+the TV panel can show NBA rows with the sport label "NBA" and the scoring
+basis "Points". Amazon carries both NFL and NBA on Prime Video (sources
+in the [submission write-up](docs/submission/writeup.md)). Game-event
+alerts stay NFL-only; this README does not claim NBA alerts.
 
 The system has two parts:
 
 - `tv-app/` — the Fire TV (Android/Kotlin) app: device linking, profile
   and settings, the full-screen lineup panel, and the alert presentation.
 - `backend/` — an AWS SAM backend (Python 3.12 Lambda, HTTP API,
-  DynamoDB): ESPN feed ingest, player matching, alert policy, the panel
+  DynamoDB): ESPN NFL feed ingest, a separate ESPN NBA statistics ingest
+  (`NbaIngestFunction`), player matching, alert policy, the panel
   service (`GET /v1/panel`), the alert feed (`GET /v1/alerts`), and the
   provider resolver (`GET /v1/providers`).
 
@@ -22,24 +31,50 @@ The system has two parts:
   page from a phone or browser (code only; no password on the TV).
 - Serves a lineup panel with one row per starter: fantasy points under
   the selected PPR or Half-PPR preset (Half-PPR is the default), game
-  status, team total and progress. Unavailable values are shown as
-  unavailable, never as zero, and values older than 60 seconds are
-  labeled stale.
-- Generates alerts only for the linked profile's starters, gated by
-  enabled alert types, game-day periods, quiet hours, a per-game
-  minimum gap, and a spoiler delay.
+  status, team total and progress. A manual NBA lineup shows the
+  sport label "NBA" and the basis "Points" instead of a PPR preset.
+  Unavailable values are shown as unavailable, never as zero, and
+  values older than 60 seconds are labeled stale.
+- Generates alerts only for the linked profile's starters on NFL game
+  events, gated by enabled alert types, game-day periods, quiet hours,
+  a per-game minimum gap, and a spoiler delay. NBA game-event alerts
+  are not generated. NBA ingest stores player statistics for panel
+  rows.
 - Presents alerts inside the companion app (panel-only; see the
   limitations below), newest first, each with Watch and Dismiss.
   Dismissals and the alert cursor persist on the device.
 - Launches Watch only through a verified Fire OS provider-registry
   route, honors the viewer's switching confirmation, and reports
   exactly one routing outcome per attempt.
+- Includes NBA beside NFL ([PR #138](https://github.com/1wgrumph/amazon-fantasy-companion/pull/138)).
+  `NbaIngestFunction` reads the ESPN NBA scoreboard and each game
+  summary and stores player statistics. The panel scores those
+  statistics on the NBA points table. The NFL ingest path is
+  unchanged. The backend can build a manual NBA lineup
+  (source manual, sport `nba`). It can also import a Yahoo NBA lineup.
+  That import is built and tested on synthetic data only. Live Yahoo
+  Fantasy API access is pending Yahoo's approval and is expected on or
+  after 2026-10-23. No live Yahoo NBA data is used.
+- Offers a per-sport notification toggle in Profile/Settings: "NFL
+  alerts" on or off, and "NBA alerts" on or off. Turning a sport off
+  suppresses that sport's alerts and clears that sport's panel rows.
+  Both sports default on. NBA itself defaults on. `AFC_ENABLE_NBA`
+  (the backend environment variable, template parameter `EnableNba`)
+  and the Gradle property `afcEnableNba` are the kill switches. Pass
+  `EnableNba=false` on deploy, or `-PafcEnableNba=false` on the TV
+  build, to turn NBA off. With the TV kill switch off, the sport
+  toggles are not shown.
 
 ## What it deliberately does not do
 
 - It does not place bets, sell anything, or act on the viewer's behalf.
-- It does not write to Yahoo Fantasy; any Yahoo access is read-only,
-  and the selected lineup source today is manual entry (see SP-6).
+- It does not write to Yahoo Fantasy; any Yahoo access is read-only.
+  Live Yahoo Fantasy API access is not available (see SP-6). The
+  selected live lineup source is manual entry. The Yahoo NBA import
+  in this repository is tested on synthetic data only.
+- It does not generate NBA alerts. NBA ingest stores player
+  statistics for panel rows. Red-zone, player-score, and close-game
+  alerts are NFL game events only.
 - It does not guess: unmatched or ambiguous players are never matched,
   provider access is never inferred from an app merely being installed,
   and unverified provider routes are reported as gaps, not launched.
@@ -59,13 +94,34 @@ Verdicts below use the spike record's own words. A `PARTIAL` or
 | SP-3 provider links | PARTIAL | Prime Video's search route opened its search screen on the stick; a live Prime Video Thursday Night Football `gameOpened` check is still pending, so `gameOpened` is not claimed for any provider. ESPN, DirecTV Stream and YouTube TV were not installed on the stick, and their routes remain gaps. See `spikes/sp3-provider-links/VERDICT.md` ([PR #110](https://github.com/1wgrumph/amazon-fantasy-companion/pull/110)). |
 | SP-4 panel beside video | FAILS | No picture-in-picture or split composition works over Prime Video on the tested stick. The panel is full-screen inside the app. See `spikes/sp4-panel-video/VERDICT.md` ([PR #106](https://github.com/1wgrumph/amazon-fantasy-companion/pull/106)). |
 | SP-5 ESPN feed | PARTIAL | ESPN endpoints, the capture tool, and historical replay fixtures are proven. Live update timing is not yet proven. See `spikes/sp5-espn-feed/VERDICT.md` ([PR #63](https://github.com/1wgrumph/amazon-fantasy-companion/pull/63)). |
-| SP-6 Yahoo Fantasy | FAILS | The Yahoo Fantasy API returns HTTP 403 for this unapproved app even though OAuth succeeds. The selected lineup source is manual entry. See `spikes/sp6-yahoo/VERDICT.md` ([PR #100](https://github.com/1wgrumph/amazon-fantasy-companion/pull/100)). |
+| SP-6 Yahoo Fantasy | FAILS | The Yahoo Fantasy API returns HTTP 403 for this unapproved app even though OAuth succeeds. The selected live lineup source is manual entry. Yahoo NBA import in this tree is synthetic-only and does not change this verdict. See `spikes/sp6-yahoo/VERDICT.md` ([PR #100](https://github.com/1wgrumph/amazon-fantasy-companion/pull/100)). |
 | SP-7 installed-app detection | PARTIAL | Shell-level installed/absent detection works on the tested stick; the disabled-state probe is unsupported from the ADB shell, and the product keeps detection off behind its support flag. See `spikes/sp7-detection/VERDICT.md`. |
+
+NBA support on [PR #138](https://github.com/1wgrumph/amazon-fantasy-companion/pull/138)
+is repository evidence, not a spike verdict and not a device
+observation. No observer has recorded an on-stick NBA panel. The
+separate `NbaIngestFunction` stores ESPN NBA player statistics; the
+NFL ingest function is unchanged. The panel can show NBA rows labeled
+"NBA" with the basis "Points". Manual NBA lineups are a backend
+builder (`nba.manual.build`). Yahoo NBA import
+(`nba.yahoo.import_lineup`) is exercised on synthetic fixtures only.
+Profile/Settings can turn NFL or NBA off, which suppresses that
+sport's alerts and clears its panel rows. No NBA alert is produced.
+The NBA ingest schedule (`NbaIngestScheduleState`) defaults to
+disabled, as the NFL schedule does. `EnableNba` and `afcEnableNba`
+default on; that is the feature switch, not a measured live poll.
 
 Pending, not yet proven (do not read these as results):
 
 - PENDING — X09 live end-to-end run and X10 live hardening have not
   run yet. The live flow is scheduled for the next live game window.
+- PENDING — live Yahoo Fantasy API access for the NBA import, actor
+  Yahoo. Approval is expected on or after 2026-10-23. No live Yahoo
+  NBA result is claimed.
+- PENDING — on-stick NBA panel capture for the 2026-10-21 ESPN games,
+  actor William, AFC UI only (see the
+  [demo plan](docs/submission/demo-plan.md)). Not filmed here; no
+  capture result is claimed.
 - PENDING — SP-3 PR 2 (live Prime Video `gameOpened`) and SP-5 PR 2
   (live ESPN timing) checks are still outstanding.
 - Vega OS is a paused stretch compatibility target only. It is not
@@ -166,7 +222,9 @@ defaults):
 
 Because the Yahoo app is unapproved (SP-6, FAILS), these parameters
 do not make Yahoo lineups live. Leave the lineup source manual until
-a later change selects Yahoo after approval.
+Yahoo approves API access. That approval is expected on or after
+2026-10-23 and is Yahoo's action. The Yahoo NBA import in this tree
+stays on synthetic data until then.
 
 ### TV app: build, test, and install
 
@@ -188,8 +246,12 @@ adb connect <stick-address>
 adb install -r tv-app/app/build/outputs/apk/debug/app-debug.apk
 ```
 
-The stick address is owner-supplied. Accept the RSA prompt on the TV
-after matching the host key fingerprint, and confirm the stick shows
+NBA is included in that APK by default. `-PafcEnableNba=false` is the
+TV kill switch. The backend kill switch is the template parameter
+`EnableNba` (environment variable `AFC_ENABLE_NBA`), which also
+defaults on. The stick address is owner-supplied. Accept the RSA
+prompt on the TV after matching the host key fingerprint, and confirm
+the stick shows
 as `device` in `adb devices` before installing.
 
 ### First run: link the TV (lineup entry unavailable)
@@ -201,8 +263,12 @@ as `device` in `adb devices` before installing.
    own TV.
 3. In Profile/Settings, pick the scoring preset (PPR or Half-PPR;
    Half-PPR is the default), the alert types, quiet hours, and
-   spoiler delay, then save the profile. These controls update
-   profile selections only.
+   spoiler delay, then save the profile. With NBA enabled (the
+   default), the same screen has "NFL alerts: on" or "NFL alerts:
+   off", and the same pair for NBA. Turning a sport off suppresses
+   that sport's alerts and clears its panel rows. These controls
+   update profile selections only. NBA game-event alerts are not
+   generated, so the NBA control's present effect is the panel rows.
 4. Optionally enable "Show panel on new alert" (default on) so a new
    alert re-shows a hidden panel.
 
@@ -213,9 +279,15 @@ There is therefore no supported first-run procedure that
 populates a lineup from a fresh install, and the panel and alerts
 have no starters to follow until a lineup-write route is built.
 SP-6 selected manual entry as the lineup source, but that source
-is not yet enterable through the product. Do not work around this
-by hand-editing stored data; no such procedure is supported or
-documented here.
+is not yet enterable through the product. The same gap covers NBA.
+`nba.manual.build` can build a manual NBA lineup.
+`nba.yahoo.import_lineup` can store a Yahoo NBA lineup from
+synthetic test data. The panel can score a stored NBA lineup.
+Neither path is a TV screen or a public lineup-write route, so a
+fresh install still has no supported way to populate starters.
+Live Yahoo NBA access remains pending Yahoo's approval, expected
+on or after 2026-10-23. Do not work around this by hand-editing
+stored data; no such procedure is supported or documented here.
 
 ## Judge access
 
@@ -251,6 +323,14 @@ Real limits, stated plainly:
   the evidence.
 - Yahoo Fantasy lineups are not live (SP-6, FAILS), and lineup
   entry is unavailable in this revision (see First run above).
+  Yahoo NBA import is tested on synthetic data only. Live Yahoo
+  Fantasy API access is pending Yahoo's approval, expected on or
+  after 2026-10-23.
+- NBA panel rows and NBA points scoring are in this revision
+  ([PR #138](https://github.com/1wgrumph/amazon-fantasy-companion/pull/138)).
+  NBA game-event alerts are not generated. No on-stick NBA capture
+  is claimed; William's planned capture is the 2026-10-21 ESPN
+  games, AFC UI only, and it has not been filmed.
 - The demo video is still PENDING: it is an owner upload linked
   from the Devpost submission once the owner publishes it. That
   pending item does not change the judge-access route above,
@@ -283,7 +363,10 @@ fresh-host download of the pinned backend dependencies (the
 documented virtual environment already existed on the walkthrough
 host, so the hash-pinned install resolved as already satisfied),
 and the owner-only steps (`aws login`, SSM parameter writes,
-Yahoo app creation). The per-step
+Yahoo app creation). That walkthrough did not exercise NBA ingest,
+NBA panel rows, or the sport toggles. Those are later repository
+changes ([PR #138](https://github.com/1wgrumph/amazon-fantasy-companion/pull/138))
+and are not walkthrough-proven here. The per-step
 record is in
 `docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-D03/fresh-setup-walkthrough.md`.
 
