@@ -8,7 +8,6 @@ import copy
 import json
 from decimal import Decimal
 from pathlib import Path
-from types import SimpleNamespace
 
 import pytest
 
@@ -191,12 +190,13 @@ def test_ingest_summary_scores_each_athlete():
 
 @pytest.fixture
 def nfl_poll(monkeypatch):
-    """NFL poll() with an empty monitored set and a spy NBA module."""
+    """NFL poll() with an empty monitored set and a spy on the NBA poll."""
     import feed_ingest
+    import nba
 
     calls = []
-    fake_nba = SimpleNamespace(poll=lambda get_json: calls.append(get_json) or {"stored": 2, "failed": []})
-    monkeypatch.setitem(__import__("sys").modules, "nba", fake_nba)
+    monkeypatch.setattr(nba, "poll", lambda get_json, store_records=None:
+                        calls.append(get_json) or {"stored": 2, "failed": []})
     monkeypatch.setattr(feed_ingest, "_get_json", lambda url: load("scoreboard.json"))
     monkeypatch.setattr(feed_ingest.store, "monitoring_profiles", lambda: [])
     return feed_ingest, calls
@@ -209,10 +209,12 @@ def test_feed_hook_does_not_run_nba_with_flag_off(monkeypatch, nfl_poll):
     assert calls == []
 
 
-def test_feed_hook_runs_nba_poll_with_flag_on(monkeypatch, nfl_poll):
-    feed_ingest, calls = nfl_poll
+def test_scheduled_handler_runs_nba_poll_with_flag_on(monkeypatch, nfl_poll):
+    import nba
+
+    _, calls = nfl_poll
     monkeypatch.setenv("AFC_ENABLE_NBA", "true")
-    result = feed_ingest.poll({})
+    result = nba.lambda_handler({}, None)
     assert len(calls) == 1
     assert result["stored"] == 2 and result["failed"] == []
 

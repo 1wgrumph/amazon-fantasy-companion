@@ -31,7 +31,7 @@ def rejected_item(exc):
     return isinstance(exc, ClientError) and exc.response.get("Error", {}).get("Code") == "ValidationException"
 
 
-def store_player_statistics(records):
+def store_player_statistics(records, *, config=None):
     """Overwrite each athlete's stored boxscore with the latest summary's.
 
     Only an item rejected for its own content is skipped; any other failure
@@ -40,7 +40,10 @@ def store_player_statistics(records):
     skipped, first = 0, None
     for record in records:
         try:
-            store.put_player_statistics(record)
+            if config is None:
+                store.put_player_statistics(record)
+            else:
+                store.put_player_statistics(record, config=config)
         except (ClientError, ArithmeticError) as exc:
             if isinstance(exc, ClientError) and not rejected_item(exc):
                 raise

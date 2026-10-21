@@ -17,12 +17,15 @@ from botocore.exceptions import ClientError
 
 
 @functools.cache
-def _dynamodb():
+def _dynamodb(config=None):
+    if config is not None:
+        return boto3.resource("dynamodb", config=config)
     return boto3.resource("dynamodb")
 
 
-def _table(variable):
-    return _dynamodb().Table(os.environ[variable])
+def _table(variable, config=None):
+    dynamodb = _dynamodb(config) if config is not None else _dynamodb()
+    return dynamodb.Table(os.environ[variable])
 
 
 def _shaped(item, fields):
@@ -281,7 +284,7 @@ def get_panel(profile_id, team_league):
 # Player statistics: latest stored boxscore per ESPN athlete (panel seam).
 # One record per athlete; the panel refuses a record from another game than
 # the starter's latest projected game, so no gameId range key is needed.
-def put_player_statistics(record):
+def put_player_statistics(record, *, config=None):
     """Store unless a newer (or live, vs replay) record for the game exists.
 
     Conditional PutItem only: IngestFunction has no GetItem grant on this
@@ -303,7 +306,9 @@ def put_player_statistics(record):
         fresh += " OR attribute_not_exists(asOf) OR asOf <= :asOf"
     condition = (f"({fresh}) AND (attribute_not_exists(athleteId) OR NOT "
                  "(gameId = :gameId AND #source = :live AND :source = :replay))")
-    return _written(_table("PLAYER_STATS_TABLE").put_item, Item=item,
+    table = (_table("PLAYER_STATS_TABLE") if config is None
+             else _table("PLAYER_STATS_TABLE", config))
+    return _written(table.put_item, Item=item,
                     ConditionExpression=condition,
                     ExpressionAttributeNames={"#source": "source"},
                     ExpressionAttributeValues=values)

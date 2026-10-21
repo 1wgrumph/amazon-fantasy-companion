@@ -31,6 +31,11 @@ Parameters:
     Default: DISABLED
     AllowedValues: [ENABLED, DISABLED]
     Description: The ingest schedule runs only while a profile-relevant game is in progress.
+  NbaIngestScheduleState:
+    Type: String
+    Default: DISABLED
+    AllowedValues: [ENABLED, DISABLED]
+    Description: Independent NBA ingest schedule; the handler also requires AFC_ENABLE_NBA.
 
 Globals:
   Function:
@@ -124,6 +129,18 @@ Resources:
               Action: [dynamodb:PutItem]
               Resource: [!GetAtt PlayerStatsTable.Arn]
 
+  NbaIngestFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: nba.lambda_handler
+      Description: Independent flag-gated ESPN NBA statistics ingest.
+      Timeout: 30
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action: [dynamodb:PutItem]
+              Resource: [!GetAtt PlayerStatsTable.Arn]
+
   PolicyFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -193,6 +210,44 @@ Resources:
         Arn: !GetAtt IngestFunction.Arn
         RoleArn: !GetAtt IngestScheduleRole.Arn
         RetryPolicy: {MaximumRetryAttempts: 0}
+
+  NbaIngestScheduleRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal: {Service: scheduler.amazonaws.com}
+            Action: sts:AssumeRole
+            Condition:
+              StringEquals: {aws:SourceAccount: !Ref AWS::AccountId}
+      Policies:
+        - PolicyName: invoke-nba-ingest
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: lambda:InvokeFunction
+                Resource: !GetAtt NbaIngestFunction.Arn
+
+  NbaIngestSchedule:
+    Type: AWS::Scheduler::Schedule
+    Properties:
+      Description: Independent NBA poll each minute when enabled.
+      ScheduleExpression: rate(1 minute)
+      FlexibleTimeWindow: {Mode: "OFF"}
+      State: !Ref NbaIngestScheduleState
+      Target:
+        Arn: !GetAtt NbaIngestFunction.Arn
+        RoleArn: !GetAtt NbaIngestScheduleRole.Arn
+        RetryPolicy: {MaximumRetryAttempts: 0}
+
+  NbaIngestLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${NbaIngestFunction}
+      RetentionInDays: 7
 
   ApiLogGroup:
     Type: AWS::Logs::LogGroup
