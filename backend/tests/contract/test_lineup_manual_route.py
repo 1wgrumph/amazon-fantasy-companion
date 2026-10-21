@@ -262,3 +262,27 @@ def test_l3_identical_rewrite_preserves_the_allocated_revision(api):
     second_status, second = api.request("PUT", PATH, body(), token=token)
     assert first_status == second_status == 200
     assert first["revision"] == second["revision"] == 1
+
+
+NBA_ROSTER = [{"athlete_id": "4000001", "name": "Sample Guard", "team": "BOS"},
+              {"athlete_id": "4000002", "name": "Sample Center", "team": "BOS"}]
+NBA_ENTRIES = [{"athlete_id": "4000001", "slot": "G"}, {"athlete_id": "4000002", "slot": "C"}]
+
+
+def test_nba_manual_write_carries_the_team_league_pair_to_the_panel(api, monkeypatch):
+    # The request's team/league pair reaches the stored row and the panel (#149 integration).
+    import store
+    monkeypatch.setenv("AFC_ENABLE_NBA", "true")
+    _, token = link_device(api)
+    request = body(sport="nba", preset=None, roster=NBA_ROSTER, entries=NBA_ENTRIES)
+    status, data = api.request("PUT", PATH, request, token=token)
+    assert status == 200, data
+    stored = store.get_lineup("owner")
+    assert (stored["league"], stored["team"], stored["sport"]) == ("league-a", "team-7", "nba")
+    status, panel = api.request("GET", "/v1/panel", token=token,
+                                query={"teamLeague": "league-a/team-7"})
+    assert status == 200, panel
+    assert panel["data"]["teamLeague"] == "league-a/team-7"
+    assert panel["data"]["scoringBasis"] == "nbaPoints"
+    assert [(r["playerId"], r["name"]) for r in panel["data"]["rows"]] == [
+        ("4000001", "Sample Guard"), ("4000002", "Sample Center")]
