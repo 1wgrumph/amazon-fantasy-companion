@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add a verified Fire OS Watch route for YouTube TV ([PR #148](https://github.com/1wgrumph/amazon-fantasy-companion/pull/148)).
 - Add ESPN NBA ingest and scoring ([PR #138](https://github.com/1wgrumph/amazon-fantasy-companion/pull/138)).
 - Add NBA panel rows and the sport label on TV ([PR #138](https://github.com/1wgrumph/amazon-fantasy-companion/pull/138)).
 - Add Yahoo NBA lineup import ([PR #138](https://github.com/1wgrumph/amazon-fantasy-companion/pull/138)).
@@ -28,7 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Manual NBA lineups from `nba.manual.build` carry league and team, so the panel renders them when the profile's selected teamLeague matches (PR TBD).
+- Manual NBA lineups from `nba.manual.build` carry league and team, so the panel renders them when the profile's selected teamLeague matches ([PR #149](https://github.com/1wgrumph/amazon-fantasy-companion/pull/149)).
 - An NBA feed failure can no longer discard or delay the NFL poll: NBA ingest runs in its own scheduled function with bounded requests and writes ([PR #138](https://github.com/1wgrumph/amazon-fantasy-companion/pull/138)).
 
 ## [0.1.0] - 2026-10-20
