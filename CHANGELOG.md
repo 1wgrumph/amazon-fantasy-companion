@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Manual NBA lineups from `nba.manual.build` carry league and team, so the panel renders them when the profile's selected teamLeague matches ([PR #149](https://github.com/1wgrumph/amazon-fantasy-companion/pull/149)).
 - An NBA feed failure can no longer discard or delay the NFL poll: NBA ingest runs in its own scheduled function with bounded requests and writes ([PR #138](https://github.com/1wgrumph/amazon-fantasy-companion/pull/138)).
 
 ## [0.1.0] - 2026-10-20
