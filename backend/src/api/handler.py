@@ -265,7 +265,10 @@ def _build_manual(sport, body):
             raise ValueError("NBA manual lineups are disabled")
         from nba.manual import build
         return build(roster, entries)
-    return build_manual_lineup(roster, entries, body.get("preset"))
+    preset = body.get("preset")
+    if not isinstance(preset, str):
+        raise ValueError("NFL manual lineups need a scoring preset")
+    return build_manual_lineup(roster, entries, preset)
 
 
 def _lineup_manual(profile_id, query, body):
@@ -291,7 +294,10 @@ def _lineup_manual(profile_id, query, body):
     if built.get("sport"):
         row["sport"] = built["sport"]
         data["sport"] = built["sport"]
-    store.put_lineup(row)
+    # Reserve half the 64 KiB envelope for the panel's per-player values and metadata.
+    if len(json.dumps(data).encode()) > 32768:
+        raise ApiError(400, "payload_too_large", "Manual lineup output exceeds its size limit.")
+    revision = store.put_lineup(row)
     return _respond(200, {"schemaVersion": 1, "id": profile_id,
-                          "revision": store.get_lineup_version(profile_id),
+                          "revision": revision,
                           "source": "manual", "updatedAt": now, "data": data})

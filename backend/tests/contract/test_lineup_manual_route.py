@@ -9,6 +9,7 @@ Request body: {"sport"?: "nfl"|"nba", "league", "team", "preset" (nfl only),
 "roster": [{athlete_id, name, team}], "entries": [{athlete_id, slot}]}.
 """
 
+import json
 import re
 
 import pytest
@@ -186,3 +187,78 @@ def test_openapi_declares_the_bearer_protected_manual_lineup_put():
     security = operation.get("security", doc.get("security", []))
     assert security and all(set(option) & bearer for option in security)
     assert {"200", "400", "401", "403"} <= set(map(str, operation["responses"]))
+
+
+@pytest.mark.parametrize("preset", [[], {}])
+def test_l1_collection_preset_is_400_without_a_write(api, preset):
+    _, token = link_device(api)
+    status, data = api.request("PUT", PATH, body(preset=preset), token=token)
+    assert_error(status, data, 400, "invalid_request")
+    assert lineups(api) == []
+
+
+@pytest.mark.parametrize("sport", ["nfl", "nba"])
+@pytest.mark.parametrize("name,count", [("é" * 12000, 1), ("N" * 1900, 32)],
+                         ids=["expanded-json", "panel-overhead"])
+def test_l2_unservable_output_is_rejected_before_replacing_the_lineup(
+        api, monkeypatch, sport, name, count):
+    monkeypatch.setenv("AFC_ENABLE_NBA", "true")
+    _, token = link_device(api)
+    assert api.request("PUT", PATH, body(), token=token)[0] == 200
+    before = lineups(api)
+    roster = [{"athlete_id": str(9000001 + i), "name": name, "team": "PHI"}
+              for i in range(count)]
+    entries = [{"athlete_id": p["athlete_id"], "slot": "WR"} for p in roster]
+    raw = json.dumps(body(sport=sport, roster=roster, entries=entries), ensure_ascii=False)
+    assert len(raw.encode()) < 65536
+    status, data = api.request("PUT", PATH, token=token, raw=raw)
+    assert_error(status, data, 400, "payload_too_large")
+    assert lineups(api) == before
+    status, data = api.request("GET", "/v1/panel", token=token)
+    assert status == 200, data
+    assert [row["name"] for row in data["data"]["rows"]] == [p["name"] for p in ROSTER[:2]]
+
+
+def test_l2_bounded_32_starter_output_is_accepted_and_served(api):
+    _, token = link_device(api)
+    roster = [{"athlete_id": str(9000001 + i), "name": "N" * 900, "team": "PHI"}
+              for i in range(32)]
+    entries = [{"athlete_id": p["athlete_id"], "slot": "WR"} for p in roster]
+    status, data = api.request("PUT", PATH, body(roster=roster, entries=entries), token=token)
+    assert status == 200, data
+    status, data = api.request("GET", "/v1/panel", token=token)
+    assert status == 200, data
+    assert len(data["data"]["rows"]) == 32
+    assert all(row["name"] == "N" * 900 for row in data["data"]["rows"])
+
+
+def test_l3_each_write_response_keeps_its_allocated_revision(api, monkeypatch):
+    import store
+    _, token = link_device(api)
+    put_lineup = store.put_lineup
+    interleaved = []
+
+    def write_then_compete(row):
+        version = put_lineup(row)
+        if not interleaved:
+            interleaved.append(None)
+            interleaved[0] = api.request("PUT", PATH, body(entries=[]), token=token)
+        return version
+
+    monkeypatch.setattr(store, "put_lineup", write_then_compete)
+    status, first = api.request("PUT", PATH, body(), token=token)
+    second_status, second = interleaved[0]
+    assert status == second_status == 200
+    assert first["data"]["starters"] and second["data"]["starters"] == []
+    assert first["revision"] == 1
+    assert second["revision"] == 2
+    assert store.get_lineup_version("owner") == 2
+    assert store.get_lineup("owner")["starters"] == []
+
+
+def test_l3_identical_rewrite_preserves_the_allocated_revision(api):
+    _, token = link_device(api)
+    first_status, first = api.request("PUT", PATH, body(), token=token)
+    second_status, second = api.request("PUT", PATH, body(), token=token)
+    assert first_status == second_status == 200
+    assert first["revision"] == second["revision"] == 1
