@@ -1,0 +1,11 @@
+Run C1 d0:443 forwarder connections (each sent to the proxy as CONNECT <afc-dev host>:443)
+{"UTC": "2026-10-21T02:58:11.206537+00:00", "host": "<development-api-host>", "up": 48636, "down": 230346, "proxy_status": "HTTP/1.1 200 Connection Established"}
+{"UTC": "2026-10-21T03:00:13.993201+00:00", "host": "<development-api-host>", "up": 10901, "down": 50265, "proxy_status": "HTTP/1.1 200 Connection Established"}
+
+Smoke run (sandboxed node, read-only GET /link): DNS then forward
+{"UTC": "2026-10-21T02:51:41.222028+00:00", "name": "example.com", "qtype": 1, "answer": "NXDOMAIN"}
+{"UTC": "2026-10-21T02:51:41.222243+00:00", "name": "example.com", "qtype": 28, "answer": "NXDOMAIN"}
+{"UTC": "2026-10-21T02:51:41.223981+00:00", "name": "<development-api-host>", "qtype": 1, "answer": "<private-ip>"}
+{"UTC": "2026-10-21T02:51:41.229636+00:00", "name": "<development-api-host>", "qtype": 1, "answer": "<private-ip>"}
+{"UTC": "2026-10-21T02:51:41.229837+00:00", "name": "<development-api-host>", "qtype": 28, "answer": "NOERROR-empty"}
+{"UTC": "2026-10-21T02:51:42.501237+00:00", "host": "<development-api-host>", "up": 581, "down": 6954, "proxy_status": "HTTP/1.1 200 Connection Established"}

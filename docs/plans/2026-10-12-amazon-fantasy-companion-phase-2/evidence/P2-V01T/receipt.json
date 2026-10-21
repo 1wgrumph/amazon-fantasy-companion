@@ -1,0 +1,375 @@
+{
+  "slice": "P2-V01T",
+  "role": "Test Implementer",
+  "issue": 59,
+  "milestone": "M14",
+  "outcome": "OWNER_DECISION_REQUIRED",
+  "outcome_meaning": "red verified (Jest suite and gate tests); the Jest red suite, harness, scaffolding and evidence are committed; tools/ci/tests/test_gate_vegaapp.py is frozen (hash in frozen-hashes.json) but not committed",
+  "route": {
+    "packet_binding": "Claude Code / claude-opus-5-5 / high (frozen primary route per dispatch packet)",
+    "note": "implementation.json P2-V01T.model_route lists Muse Code / Muse WonderFull / high as primary and Claude Opus 5.5 / medium as fallback 2; the dispatch packet states the frozen profile-binding.json route, which this session followed. Recorded for the orchestrator to reconcile.",
+    "BUG_ROUTE": "not-a-bug Planned slice P2-V01T (Test Implementer, TDD red phase); no defect repair."
+  },
+  "branch": "afc/p2-v01t",
+  "base_commit": "350ef51a6f10e89f257134642cfd67410bdd73fd",
+  "authority": "AUTH-AFC-2026-10-12-P2-001; dispatch packet write set",
+  "environment": {
+    "sandbox": "$HOME/.local/share/afc-tools/vega-sandbox.sh (worktree rw, allowlisted HTTPS incl. registry.npmjs.org)",
+    "prep_receipt_sha256_as_given": "015843c92206fa566e5ffc93db1008295ddbffc8681438ad663be94acfb0a1a2 (from the packet; the file was not located by this session)",
+    "vega_sdk": "0.24.12112",
+    "vega_cli": "1.4.5",
+    "node": "v22.23.3",
+    "npm": "11.15.0",
+    "vvd": "not used (not runnable, not needed for this slice)"
+  },
+  "template_decision": {
+    "templates_available": "helloWorld (RN 0.83), helloWorld-rn72 (RN 0.72), basic-turbo-module, idl-turbo-module, vegaWebview",
+    "selected": "helloWorld (RN 0.83)",
+    "reason": "`vega project generate --help` uses helloWorld as its example and helloWorld-rn72 is the suffixed variant; only the 0.83 template pins Jest ^29.7.0 (the rn72 template pins Jest ^28), and the slice requires Jest 29.7.0. DES-AFC-P2-VEGA: \"0.72 unless 0.83 is the default\".",
+    "generated_scratch": "both templates generated with `vega project generate` in the sandbox preparation directory, outside the repository; only package/jest/babel/tsconfig/manifest/.gitignore shapes were taken",
+    "resolved_versions": {
+      "jest": "29.7.0",
+      "babel-jest": "29.7.0",
+      "jest-environment-node": "29.7.0",
+      "@amazon-devices/react-native-kepler": "4.0.1+rn0.83.0",
+      "react-native": "0.83.0",
+      "react": "19.2.0",
+      "@react-native/babel-preset": "0.83.0",
+      "@amazon-devices/kepler-cli-platform": "0.22.14",
+      "typescript": "5.8.3",
+      "js-yaml": "4.3.2",
+      "@types/jest": "29.5.14"
+    },
+    "jest_preset": "@amazon-devices/react-native-kepler (template preset; testEnvironment jest-environment-node 29.7.0 subclass)",
+    "template_deviations": "testing-library, eslint, prettier, ts-jest and react-test-renderer devDependencies dropped (unused by the red suite; P2-V01 may add what it needs); watchman:false and testTimeout 60 s added; tests under __tests__/ per the write set; js-yaml added to read the committed openapi.yaml"
+  },
+  "commands": [
+    {
+      "id": "TEMPLATE-GENERATE",
+      "command": "vega project generate -t helloWorld|helloWorld-rn72 (sandbox, scratch dir)",
+      "exit": 0
+    },
+    {
+      "id": "NPM-INSTALL",
+      "command": "npm install --ignore-scripts --no-audit --no-fund (sandbox, vega-app/)",
+      "exit": 0,
+      "note": "797 packages, lockfileVersion 3 with sha512 integrity for each; install scripts disabled"
+    },
+    {
+      "id": "TYPECHECK",
+      "command": "npx tsc --noEmit (sandbox, vega-app/)",
+      "exit": 0,
+      "log": "raw/tsc.txt"
+    },
+    {
+      "id": "CMD-RED-VEGA",
+      "command": "npm --prefix vega-app test -- --ci --json --outputFile=<evidence>/raw/jest-red.json __tests__; afc_rc=$?; printf \"exit=%s\\n\" \"$afc_rc\"; sha256sum <test_files>; git rev-parse HEAD; git status --porcelain; exit \"$afc_rc\"",
+      "exit": 1,
+      "log": "raw/cmd-red-vega.txt",
+      "json": "raw/jest-red.json",
+      "note": "the sandbox has no sha256sum or git (command not found in the log); the same three commands ran on the host against the unchanged tree right after: raw/cmd-red-vega-host-tail.txt"
+    },
+    {
+      "id": "GATE-VEGAAPP-RED",
+      "command": "python3 -m unittest discover -s tools/ci/tests -p test_gate_vegaapp.py -v",
+      "exit": 1,
+      "log": "raw/gate-vegaapp-red.txt"
+    },
+    {
+      "id": "PROC-VEGA-PARITY",
+      "command": "python3 -I docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-V01T/parity.py --self-test",
+      "exit": 0,
+      "outputs": [
+        "parity.md",
+        "parity.json"
+      ]
+    },
+    {
+      "id": "RELIABILITY",
+      "command": "5x sequential + 2 concurrent `npx jest --ci --json` (sandbox)",
+      "exit": "1 each (red)",
+      "result": "all 7 runs identical per-test outcome to the receipt run",
+      "record": "reliability.json"
+    },
+    {
+      "id": "NPM-AUDIT",
+      "command": "npm audit --json (sandbox, vega-app/)",
+      "exit": 1,
+      "record": "raw/npm-audit.json"
+    },
+    {
+      "id": "GATE-DOCS",
+      "command": "bash tools/ci/gate.sh docs",
+      "exit": 0,
+      "log": "gate-docs.txt"
+    },
+    {
+      "id": "GATE-HYGIENE",
+      "command": "bash tools/ci/gate.sh hygiene",
+      "exit": 1,
+      "log": "gate-hygiene.txt",
+      "note": "WS-CHECK, check_paths and check_workflows pass; unittest discovery runs 99 tests and the only failures are the 11 intended red subtests of test_gate_vegaapp.py"
+    },
+    {
+      "id": "COMMIT-ATTEMPT-1",
+      "command": "git commit (whole write set)",
+      "exit": "blocked by ci-gate-hook (gate --changed: spec/docs/tvapp/backend PASS, hygiene FAIL on the 11 intended red gate subtests)"
+    }
+  ],
+  "harness_attempts": [
+    {
+      "attempt": 1,
+      "error": "fb-watchman: failed to create /usr/local/var/run/watchman/probe-state: Read-only file system (Jest crawl via watchman)",
+      "class": "harness",
+      "hypothesis": "one-shot Jest runs need no watcher",
+      "fix": "jest.config.js watchman: false",
+      "result": "suite runs"
+    },
+    {
+      "attempt": 2,
+      "error": "tsc: spread lost index type; DOM vs @types/node AbortSignal overload clash in fixtureCalibration",
+      "class": "harness (typecheck only, runtime unaffected)",
+      "fix": "explicit Record type; calibration fetch without signal (bounded by Jest testTimeout)",
+      "result": "tsc exit 0"
+    },
+    {
+      "attempt": 3,
+      "error": "PanelDecodeTest rowCountIsBoundedByTheDeclaredLimit: \"Matcher error: received value must have a length property\" on a null decode",
+      "class": "test shape (matcher misuse, not red evidence)",
+      "fix": "assert not-null before toHaveLength (two decode tests, one controller test)",
+      "result": "every failure is a matcher assertion"
+    }
+  ],
+  "counts": {
+    "collected": 162,
+    "failed": 139,
+    "passed": 23,
+    "skipped": 0,
+    "suite_errors": 0,
+    "gate_tests": {
+      "tests": 8,
+      "subtest_failures": 11
+    }
+  },
+  "classification": "139/139 failures are Jest matcher assertions (behavioral_red); 0 harness errors; parity.py rejects any other failure kind",
+  "passing_at_red": [
+    {
+      "v01t_id": "EnvelopeRequiredFieldTest rejectsIncompleteEnvelopeWithoutPartialUpdate[missing schemaVersion]",
+      "fire_os_id": "EnvelopeRequiredFieldTest.rejectsIncompleteEnvelopeWithoutPartialUpdate[missing schemaVersion]",
+      "reason": "negative-path case: the inert scaffold returns null/[]/false, which equals the rejected outcome; it passed at Fire OS red under the same ID."
+    },
+    {
+      "v01t_id": "EnvelopeRequiredFieldTest rejectsIncompleteEnvelopeWithoutPartialUpdate[missing id]",
+      "fire_os_id": "EnvelopeRequiredFieldTest.rejectsIncompleteEnvelopeWithoutPartialUpdate[missing id]",
+      "reason": "negative-path case: the inert scaffold returns null/[]/false, which equals the rejected outcome; it passed at Fire OS red under the same ID."
+    },
+    {
+      "v01t_id": "EnvelopeRequiredFieldTest rejectsIncompleteEnvelopeWithoutPartialUpdate[missing revision]",
+      "fire_os_id": "EnvelopeRequiredFieldTest.rejectsIncompleteEnvelopeWithoutPartialUpdate[missing revision]",
+      "reason": "negative-path case: the inert scaffold returns null/[]/false, which equals the rejected outcome; it passed at Fire OS red under the same ID."
+    },
+    {
+      "v01t_id": "EnvelopeRequiredFieldTest rejectsIncompleteEnvelopeWithoutPartialUpdate[missing source]",
+      "fire_os_id": "EnvelopeRequiredFieldTest.rejectsIncompleteEnvelopeWithoutPartialUpdate[missing source]",
+      "reason": "negative-path case: the inert scaffold returns null/[]/false, which equals the rejected outcome; it passed at Fire OS red under the same ID."
+    },
+    {
+      "v01t_id": "EnvelopeRequiredFieldTest rejectsIncompleteEnvelopeWithoutPartialUpdate[missing updatedAt]",
+      "fire_os_id": "EnvelopeRequiredFieldTest.rejectsIncompleteEnvelopeWithoutPartialUpdate[missing updatedAt]",
+      "reason": "negative-path case: the inert scaffold returns null/[]/false, which equals the rejected outcome; it passed at Fire OS red under the same ID."
+    },
+    {
+      "v01t_id": "EnvelopeRequiredFieldTest rejectsIncompleteEnvelopeWithoutPartialUpdate[missing data]",
+      "fire_os_id": "EnvelopeRequiredFieldTest.rejectsIncompleteEnvelopeWithoutPartialUpdate[missing data]",
+      "reason": "negative-path case: the inert scaffold returns null/[]/false, which equals the rejected outcome; it passed at Fire OS red under the same ID."
+    },
+    {
+      "v01t_id": "EnvelopeTest rejectsUnknownSource",
+      "fire_os_id": "EnvelopeTest.rejectsUnknownSource",
+      "reason": "negative-path case: the inert scaffold returns null/[]/false, which equals the rejected outcome; it passed at Fire OS red under the same ID."
+    },
+    {
+      "v01t_id": "EnvelopeTest rejectsUnknownSchemaVersion",
+      "fire_os_id": "EnvelopeTest.rejectsUnknownSchemaVersion",
+      "reason": "negative-path case: the inert scaffold returns null/[]/false, which equals the rejected outcome; it passed at Fire OS red under the same ID."
+    },
+    {
+      "v01t_id": "EnvelopeTest rejectsNegativeRevision",
+      "fire_os_id": "EnvelopeTest.rejectsNegativeRevision",
+      "reason": "negative-path case: the inert scaffold returns null/[]/false, which equals the rejected outcome; it passed at Fire OS red under the same ID."
+    },
+    {
+      "v01t_id": "EnvelopeTest rejectsInvalidFreshnessTimestamp",
+      "fire_os_id": "EnvelopeTest.rejectsInvalidFreshnessTimestamp",
+      "reason": "negative-path case: the inert scaffold returns null/[]/false, which equals the rejected outcome; it passed at Fire OS red under the same ID."
+    },
+    {
+      "v01t_id": "EnvelopeTest rejectsWrongFieldTypes",
+      "fire_os_id": "EnvelopeTest.rejectsWrongFieldTypes",
+      "reason": "negative-path case: the inert scaffold returns null/[]/false, which equals the rejected outcome; it passed at Fire OS red under the same ID."
+    },
+    {
+      "v01t_id": "EnvelopeTest rejectsOlderRevision",
+      "fire_os_id": "EnvelopeTest.rejectsOlderRevision",
+      "reason": "negative-path case: the inert scaffold returns null/[]/false, which equals the rejected outcome; it passed at Fire OS red under the same ID."
+    },
+    {
+      "v01t_id": "FixtureCalibrationTest realHttpPeerProducesOpenApiEnvelopeAndStructuredError",
+      "fire_os_id": "FixtureCalibrationTest.realHttpPeerProducesOpenApiEnvelopeAndStructuredError",
+      "reason": "real-dependency calibration of the loopback peer and fetch; must pass at red (same as Fire OS)."
+    },
+    {
+      "v01t_id": "ShellContractTest manifestDeclaresMinimumVegaOsVersion",
+      "fire_os_id": "ShellContractTest.buildDeclaresMinSdk25",
+      "reason": "repository contract on manifest.toml authored in this slice (Fire OS buildDeclaresMinSdk25 also passed at red)."
+    },
+    {
+      "v01t_id": "ShellContractTest noMessagingEndpointsInFrozenContract",
+      "fire_os_id": "ShellContractTest.noMessagingEndpointsInFrozenContract",
+      "reason": "frozen OpenAPI contract check; passed at Fire OS red."
+    },
+    {
+      "v01t_id": "ShellContractTest committedTestTokensDoNotMatchCredentialShapes",
+      "fire_os_id": "ShellContractTest.committedTestTokensDoNotMatchCredentialShapes",
+      "reason": "hygiene guard over committed tests; passed at Fire OS red."
+    },
+    {
+      "v01t_id": "AppDetectorTest optedOutSendsNoReport",
+      "fire_os_id": "detect.AppDetectorTest#optedOutSendsNoReport",
+      "reason": "negative-path case: the inert scaffold returns null/[]/false, which equals the rejected outcome; it passed at Fire OS red under the same ID."
+    },
+    {
+      "v01t_id": "AppDetectorTest optedOutPerformsNoReads",
+      "fire_os_id": "detect.AppDetectorTest#optedOutPerformsNoReads",
+      "reason": "negative-path case: the inert scaffold returns null/[]/false, which equals the rejected outcome; it passed at Fire OS red under the same ID."
+    },
+    {
+      "v01t_id": "ProfileCodecTest wrongTypedControlIsRejected",
+      "fire_os_id": "profile.ProfileCodecTest#wrongTypedControlIsRejected",
+      "reason": "negative-path case: the inert scaffold returns null/[]/false, which equals the rejected outcome; it passed at Fire OS red under the same ID."
+    },
+    {
+      "v01t_id": "ProfilePersistenceTest invalidStoredProfileIsNotApplied",
+      "fire_os_id": "profile.ProfilePersistenceTest#invalidStoredProfileIsNotApplied",
+      "reason": "negative-path case: the inert scaffold returns null/[]/false, which equals the rejected outcome; it passed at Fire OS red under the same ID."
+    },
+    {
+      "v01t_id": "AlertPresenterTest alertWithoutTriggeringContextIsNotRendered",
+      "fire_os_id": "alerts.AlertPresenterTest#alertWithoutTriggeringContextIsNotRendered",
+      "reason": "negative-path case: the inert scaffold returns null/[]/false, which equals the rejected outcome; it passed at Fire OS red under the same ID."
+    },
+    {
+      "v01t_id": "WatchLauncherTest alexaTuningHiddenWithoutVerifiedRoute",
+      "fire_os_id": "watch.WatchLauncherTest#alexaTuningHiddenWithoutVerifiedRoute",
+      "reason": "negative-path case: the inert scaffold returns null/[]/false, which equals the rejected outcome; it passed at Fire OS red under the same ID."
+    },
+    {
+      "v01t_id": "TokenStoreTest onlyTheTokenStoreModuleUsesPersistentStorage",
+      "fire_os_id": null,
+      "reason": "negative guard: no module but tokenStore imports a storage library; inert scaffolding imports none."
+    }
+  ],
+  "parity": {
+    "fire_os_ids": 156,
+    "v01t_tests": 162,
+    "mapped": 156,
+    "vega_specific": 6,
+    "behavioral_red": 139,
+    "passing_at_red": 23,
+    "errors": []
+  },
+  "frozen_tests": "frozen-hashes.json (sha256 42bffc87f5400e5eac0a5567cc46c7404bfbf24fdcb587d0dea6eddff4f6d343)",
+  "scaffolding": "src/ holds types, constant enumerations and inert functions (null, [], false, {}); no tested behavior. PanelController constructor stores nothing.",
+  "typed_gaps": [
+    {
+      "id": "VVD_NOT_RUN",
+      "scope": "no .vpkg build or VVD run",
+      "reason": "not needed for P2-V01T; VVD not yet runnable"
+    },
+    {
+      "id": "NOTIFICATION_ROUTE_UNVERIFIED",
+      "scope": "AlertNotifierDeviceTest maps to a Jest test of notifier content only",
+      "reason": "expo-notifications is RN 0.72-only per supported-libraries; RN 0.83 delivery route over playback is unverified; display stays with PROC-VISUAL-REVIEW"
+    },
+    {
+      "id": "DETECTION_ROUTE_UNVERIFIED",
+      "scope": "AppDetector query is an injected async Linking.canOpenURL seam",
+      "reason": "no installed-apps library on Vega; real canOpenURL behavior needs the VVD"
+    },
+    {
+      "id": "LAUNCH_PLATFORM_UNVERIFIED",
+      "scope": "WatchLauncher uses a recording LaunchPlatform seam",
+      "reason": "provider apps and DRM playback are not available on the Ubuntu VVD"
+    },
+    {
+      "id": "NPM_TREE_NOT_SUPPLY_SCANNED",
+      "scope": "797 npm packages from registry.npmjs.org (dev/test tooling and SDK template deps)",
+      "reason": "scan-software-supply-chain not run on the npm tree; lockfile integrity verified by npm and install scripts disabled; npm audit: 52 high / 14 moderate / 0 critical, all transitive through Jest 29.7.0 (plan-pinned), the RN 0.83 / react-native-kepler template set or @react-native-community/cli (lodash, minimatch, braces, js-yaml 3.x via istanbul, toml, ajv, sprintf-js, fast-xml-parser); the direct js-yaml was raised 4.1.0 -> 4.3.2 to clear its own advisories",
+      "owner_decision": "whether these test-only advisories need a scan verdict or acceptance before P2-V01 lands"
+    }
+  ],
+  "remaining_risks": [
+    "tools/ci/tests/test_product_gate.py test_list_includes_exact_product_and_legacy_areas asserts the exact area set {spec, docs, hygiene, tvapp, backend}; adding vegaapp in P2-V01 will fail it, and that file is outside the P2-V01 write set (needs a write-set amendment).",
+    "Until P2-V01 lands, gate hygiene (and so the pre-push gate when core.hooksPath=.githooks is set) fails on the intended red test_gate_vegaapp.py; core.hooksPath is not set in this worktree, so the push was not gated.",
+    "The Vega ProfileCodec Settings wire layout must match the Fire OS codec because both clients read the same backend profile; no cross-client wire test exists in A02T, so none was added.",
+    "RN 0.83 is early access in SDK 0.24 (release notes S4); if P2-V01 must fall back to RN 0.72 the Jest pin (29.7.0) conflicts with that template (Jest ^28).",
+    "TVTypes.d.ts documents rewind/forward in its comment but the type union names skip_backward/skip_forward; remote-key binding should be confirmed on the VVD.",
+    "One read-only `node -p` version query ran on the host outside the sandbox before the rule was applied; no install or test ran outside the sandbox."
+  ],
+  "developer_feedback": {
+    "requirement_id": "AC-AFC-P2-DX-01",
+    "observations": [
+      {
+        "id": "DX-V01T-01",
+        "tool": "Vega CLI 1.4.5",
+        "observation": "`vega project generate` has no default template; --template is required and the help example uses helloWorld (RN 0.83).",
+        "evidence": "command help in this session"
+      },
+      {
+        "id": "DX-V01T-02",
+        "tool": "Vega SDK 0.24.12112 templates",
+        "observation": "helloWorld-rn72 pins Jest ^28 while the supported-libraries page names Jest 29.7.0; only the RN 0.83 template matches.",
+        "evidence": "generated package.json of both templates"
+      },
+      {
+        "id": "DX-V01T-03",
+        "tool": "Jest preset @amazon-devices/react-native-kepler",
+        "observation": "Jest crawls with watchman by default and aborts when watchman state is not writable (sandbox/CI); watchman: false is needed.",
+        "evidence": "harness attempt 1"
+      },
+      {
+        "id": "DX-V01T-04",
+        "tool": "react-native-kepler 4.0.1 TVTypes.d.ts",
+        "observation": "HWEvent doc comment lists rewind/forward; the eventType union lists skip_backward/skip_forward.",
+        "evidence": "node_modules/@amazon-devices/react-native-kepler/Libraries/TV/TVTypes.d.ts"
+      },
+      {
+        "id": "DX-V01T-05",
+        "tool": "Vega Virtual Device",
+        "observation": "not exercised in this slice.",
+        "evidence": "none"
+      }
+    ]
+  },
+  "review_capabilities": {
+    "coverage_assist": "review_path requires OCR delegate mode at IE-P2-V01; not run by this author slice (typed gap for the reviewer packet, not a pass)",
+    "reverify": "Reverify: not applicable — this slice authors red tests and receipts, not a compiled binary"
+  },
+  "handoff_note": "The SessionStart HANDOFF.md (docs/plans/2026-10-11-amazon-fantasy-companion/HANDOFF.md) is an older planning checkpoint outside this write set; it was neither acted on nor deleted.",
+  "gate_logs_raw_sha256": {
+    "gate-docs.txt": "804776a7c4ad51b5672c81824b9b35e2ef3d43d61ee372966fc868555f135c6f"
+  },
+  "red_verified": true,
+  "commit_state": {
+    "committed": "vega-app/ (tests, support, scaffolding, configs, lockfile) and evidence/P2-V01T/",
+    "not_committed": "tools/ci/tests/test_gate_vegaapp.py (left untracked in the worktree at its frozen hash)",
+    "blocker": "Alphazedehq/hooks/ci-gate-hook.sh runs `tools/ci/gate.sh --changed` before every agent `git commit`; hygiene discovers tools/ci/tests, so the intended red gate tests fail the gate (11 subtests) and the hook blocks any commit while the file is present. The packet authorizes a normal commit only; P2-G01T committed its red gate tests with `git commit --no-verify` under an explicit dispatch authorization.",
+    "owner_decision": "Authorize a `--no-verify` red commit of tools/ci/tests/test_gate_vegaapp.py (P2-G01T precedent), or move it to P2-V01 to land with the vegaapp area.",
+    "method": "The file was moved out of the worktree for the commit and restored unchanged afterwards; the committed tree passes the gate on its own content."
+  },
+  "changed_paths": [
+    "docs/plans/2026-10-12-amazon-fantasy-companion-phase-2/evidence/P2-V01T/",
+    "tools/ci/tests/test_gate_vegaapp.py (uncommitted)",
+    "vega-app/"
+  ]
+}

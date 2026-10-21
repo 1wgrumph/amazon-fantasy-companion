@@ -1,0 +1,31 @@
+
+> @amazon-devices/afc-companion@0.0.1 test
+> jest --runInBand __tests__/panel/panelServerDefault.test.ts
+
+FAIL __tests__/panel/panelServerDefault.test.ts
+  PanelServerDefaultTest
+    ✕ noSelectionControllerHoldsTheServerDefaultSnapshot (3 ms)
+    ✓ explicitSelectionStillIgnoresASnapshotForAnotherTeamLeague (1 ms)
+
+  ● PanelServerDefaultTest › noSelectionControllerHoldsTheServerDefaultSnapshot
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "unassigned/unassigned"
+    Received: null
+
+      25 |     expect(c.shouldFetch(0)).toBe(true);
+      26 |     c.onFetched(body, 0);
+    > 27 |     expect(c.snapshot?.teamLeague ?? null).toBe('unassigned/unassigned');
+         |                                            ^
+      28 |     expect(c.shouldFetch(1_000)).toBe(false);
+      29 |     expect(c.shouldFetch(REFRESH_MS - 1)).toBe(false);
+      30 |     expect(c.shouldFetch(REFRESH_MS)).toBe(true);
+
+      at Object.toBe (__tests__/panel/panelServerDefault.test.ts:27:44)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 1 passed, 2 total
+Snapshots:   0 total
+Time:        0.163 s, estimated 1 s
+Ran all test suites matching /__tests__\/panel\/panelServerDefault.test.ts/i.

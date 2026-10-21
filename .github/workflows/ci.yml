@@ -17,6 +17,7 @@ jobs:
       docs: ${{ steps.filter.outputs.docs }}
       tvapp: ${{ steps.filter.outputs.tvapp }}
       backend: ${{ steps.filter.outputs.backend }}
+      vegaapp: ${{ steps.filter.outputs.vegaapp }}
     steps:
       - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
         with:
@@ -47,6 +48,11 @@ jobs:
               - '.github/workflows/**'
             backend:
               - 'backend/**'
+              - 'tools/ci/**'
+              - '.githooks/**'
+              - '.github/workflows/**'
+            vegaapp:
+              - 'vega-app/**'
               - 'tools/ci/**'
               - '.githooks/**'
               - '.github/workflows/**'
@@ -106,6 +112,17 @@ jobs:
           python-version: '3.12'
       - run: python3.12 -m pip install --require-hashes -r backend/requirements-dev.txt
       - run: bash tools/ci/gate.sh backend
+  vegaapp:
+    name: gate / vegaapp
+    needs: changes
+    if: ${{ needs.changes.outputs.vegaapp == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+        with:
+          persist-credentials: false
+      # Node and npm come from the GitHub-hosted runner image; the gate GAPs by name if either is absent.
+      - run: bash tools/ci/gate.sh vegaapp
   hygiene:
     name: gate / hygiene
     runs-on: ubuntu-latest

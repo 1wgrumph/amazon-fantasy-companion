@@ -12,12 +12,13 @@ unset GIT_DIR GIT_WORK_TREE GIT_INDEX_FILE GIT_PREFIX GIT_COMMON_DIR \
     GIT_GRAFT_FILE GIT_SHALLOW_FILE GIT_INTERNAL_SUPER_PREFIX
 
 # Extend these definitions together from the repository's check inventory.
-areas=(spec docs hygiene tvapp backend)
+areas=(spec docs hygiene tvapp backend vegaapp)
 # Product areas pass with a fixed detail only while their tree does not exist.
 area_tree() {
     case "$1" in
         tvapp) printf 'tv-app' ;;
         backend) printf 'backend' ;;
+        vegaapp) printf 'vega-app' ;;
     esac
 }
 area_matches() {
@@ -27,9 +28,15 @@ area_matches() {
             case "$2" in
                 tools/ci/*|.github/workflows/*|.githooks/*) return 0 ;;
             esac ;;
+        # The vegaapp check is defined by gate.sh alone; Python gate-test
+        # changes are covered by hygiene and must not select the Jest run.
+        vegaapp)
+            case "$2" in
+                tools/ci/gate.sh|.github/workflows/*|.githooks/*) return 0 ;;
+            esac ;;
     esac
     case "$1:$2" in
-        spec:spec/*|spec:tools/spec/*|docs:docs/*|docs:*.md|tvapp:tv-app/*|backend:backend/*) return 0 ;;
+        spec:spec/*|spec:tools/spec/*|docs:docs/*|docs:*.md|tvapp:tv-app/*|backend:backend/*|vegaapp:vega-app/*) return 0 ;;
     esac
     return 1
 }
@@ -182,6 +189,13 @@ PYBASE
             # Deployed tests run against AWS as SEIT procedures, never in the gate.
             python3.12 -m pytest backend/tests/unit backend/tests/contract || return 1
             cfn-lint backend/template.yaml || return 1 ;;
+        vegaapp)
+            need node || return "$?"
+            need npm || return "$?"
+            # Subcheck exits are normalized so a tool's own exit 3 never reads as GAP.
+            # .vpkg builds and VVD runs are SEIT procedures, never gate checks.
+            npm --prefix vega-app ci || return 1
+            npm --prefix vega-app test -- --ci || return 1 ;;
         spec)
             local source output found=0
             for source in spec_build.py spec_lint.py diagram.py; do

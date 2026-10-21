@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add a verified Fire OS Watch route for YouTube TV ([PR #148](https://github.com/1wgrumph/amazon-fantasy-companion/pull/148)).
+- Add `PUT /v1/lineup/manual`: a linked device writes its own labeled manual NFL or NBA lineup, so lineups work while Yahoo access is pending (AC-AFC-PROF-04) ([PR #147](https://github.com/1wgrumph/amazon-fantasy-companion/pull/147)).
 - Add ESPN NBA ingest and scoring ([PR #138](https://github.com/1wgrumph/amazon-fantasy-companion/pull/138)).
 - Add NBA panel rows and the sport label on TV ([PR #138](https://github.com/1wgrumph/amazon-fantasy-companion/pull/138)).
 - Add Yahoo NBA lineup import ([PR #138](https://github.com/1wgrumph/amazon-fantasy-companion/pull/138)).
@@ -16,9 +18,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add a per-sport NFL/NBA notification toggle ([PR #138](https://github.com/1wgrumph/amazon-fantasy-companion/pull/138)).
 - Turn NBA on by default in the shipped TV build and the deployed backend, and keep AFC_ENABLE_NBA as a kill switch ([PR #138](https://github.com/1wgrumph/amazon-fantasy-companion/pull/138)).
 - Add a deterministic ffmpeg demo-cut pipeline under `tools/demo/` that builds the main demo, a 30 s teaser, alerts/Watch/panel/linking feature clips, and trimmed labelled raw clips from the S1–S7 shot list, with silent audio and on-screen captions ([PR #144](https://github.com/1wgrumph/amazon-fantasy-companion/pull/144)).
+- The Vega port was verified on the Vega Virtual Device on a supported host (Kepler SDK 0.24.12112). This change includes the token-persistence fix, the panel fix that shows the server's default state for a profile with no selection, and the on-device check scripts. Virtual-device frictions from that run are F-037 through F-058 ([PR #118](https://github.com/1wgrumph/amazon-fantasy-companion/pull/118)).
 
 ### Changed
 
+- Describe NBA support in the README and submission writeup ([PR #146](https://github.com/1wgrumph/amazon-fantasy-companion/pull/146)).
 - Restyle the TV screens with a charcoal and cool-blue palette, shared five-percent safe zone, readable type, and consistent focus rings and scale. Preserve existing D-pad navigation and app behavior. ([PR #143](https://github.com/1wgrumph/amazon-fantasy-companion/pull/143))
 - Record the Yahoo Fantasy API approval history and the app in use (`md4Tp1VN`) in the AWS and Yahoo setup guide, replacing the outdated "keep the original app" instruction ([PR #145](https://github.com/1wgrumph/amazon-fantasy-companion/pull/145)).
 - Record v0.1.0 in the changelog ([PR #139](https://github.com/1wgrumph/amazon-fantasy-companion/pull/139)).
@@ -26,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Manual NBA lineups from `nba.manual.build` carry league and team, so the panel renders them when the profile's selected teamLeague matches ([PR #149](https://github.com/1wgrumph/amazon-fantasy-companion/pull/149)).
 - An NBA feed failure can no longer discard or delay the NFL poll: NBA ingest runs in its own scheduled function with bounded requests and writes ([PR #138](https://github.com/1wgrumph/amazon-fantasy-companion/pull/138)).
 
 ## [0.1.0] - 2026-10-20

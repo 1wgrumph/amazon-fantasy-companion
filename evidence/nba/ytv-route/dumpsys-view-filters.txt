@@ -1,0 +1,42 @@
+YouTube TV VIEW intent filters
+Package: com.amazon.firetv.youtube.tv
+Device: AFTKM, Fire OS 8.1.8.5 (RS8185/3891)
+Source: dumpsys package com.amazon.firetv.youtube.tv, 2026-10-21
+Stick address redacted; this excerpt is the Activity Resolver Table only.
+
+Activity Resolver Table:
+  Schemes:
+      http:
+        com.amazon.firetv.youtube.tv/dev.cobalt.app.MainActivity
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Category: "android.intent.category.BROWSABLE"
+          Scheme: "http"
+          Scheme: "https"
+          Authority: "tv.youtube.com": -1
+          Path: "PatternMatcher{GLOB: .*}"
+      https:
+        com.amazon.firetv.youtube.tv/dev.cobalt.app.MainActivity
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Category: "android.intent.category.BROWSABLE"
+          Scheme: "http"
+          Scheme: "https"
+          Authority: "tv.youtube.com": -1
+          Path: "PatternMatcher{GLOB: .*}"
+      youtubetv:
+        com.amazon.firetv.youtube.tv/dev.cobalt.app.MainActivity
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Category: "android.intent.category.BROWSABLE"
+          Scheme: "youtubetv"
+          Authority: "search": -1
+          Authority: "play": -1
+
+  Non-Data Actions:
+      android.intent.action.MAIN:
+        com.amazon.firetv.youtube.tv/dev.cobalt.app.MainActivity
+          Action: "android.intent.action.MAIN"
+          Category: "android.intent.category.LAUNCHER"
+          Category: "android.intent.category.LEANBACK_LAUNCHER"
+          Category: "android.intent.category.DEFAULT"

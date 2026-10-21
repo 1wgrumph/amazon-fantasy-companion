@@ -1,0 +1,56 @@
+M16 YouTube TV Fire OS Watch route. Text only. Stick address redacted as <stick>.
+No screenshot was taken. No package was installed or removed.
+
+Device: AFTKM, Fire OS 8.1.8.5 (RS8185/3891)
+Package: com.amazon.firetv.youtube.tv versionName=25.30.r1.v170.0
+Activity: com.amazon.firetv.youtube.tv/dev.cobalt.app.MainActivity
+Session clock: connect check 2026-10-21T13:28:26Z (already connected to <stick>).
+
+== Before probes ==
+Resumed activity: com.amazon.tv.launcher/.ui.HomeActivity_vNext
+VIEW filters: evidence/nba/ytv-route/dumpsys-view-filters.txt
+Accepted VIEW data:
+- http and https, authority tv.youtube.com, path PatternMatcher GLOB .*
+- scheme youtubetv, authorities search and play
+The launcher accepts a registry uri as ACTION_VIEW. A bare MAIN intent is not a route.
+
+== Probe 1 warm, 2026-10-21T13:29:31Z (not the route proof) ==
+CMD: adb shell am start -W -a android.intent.action.VIEW -d https://tv.youtube.com/ com.amazon.firetv.youtube.tv
+Starting: Intent { act=android.intent.action.VIEW dat=https://tv.youtube.com/... pkg=com.amazon.firetv.youtube.tv }
+Warning: Activity not started, its current task has been brought to the front
+Status: ok
+LaunchState: HOT
+Activity: com.amazon.firetv.youtube.tv/dev.cobalt.app.MainActivity
+TotalTime: 332
+WaitTime: 345
+Complete
+ResumedActivity: com.amazon.firetv.youtube.tv/dev.cobalt.app.MainActivity
+The existing task was resumed, so this pass does not show that the URI navigated.
+
+== Probe 1 cold, 2026-10-21T13:30:07Z (route proof) ==
+CMD: adb shell am force-stop com.amazon.firetv.youtube.tv
+CMD: adb shell am start -W -a android.intent.action.VIEW -d https://tv.youtube.com/ com.amazon.firetv.youtube.tv
+Starting: Intent { act=android.intent.action.VIEW dat=https://tv.youtube.com/... pkg=com.amazon.firetv.youtube.tv }
+Status: ok
+LaunchState: COLD
+Activity: com.amazon.firetv.youtube.tv/dev.cobalt.app.MainActivity
+TotalTime: 1191
+WaitTime: 1203
+Complete
+ResumedActivity: ActivityRecord{ad470ed u0 com.amazon.firetv.youtube.tv/dev.cobalt.app.MainActivity t342}
+mCurrentFocus=Window{2bb91fd u0 com.amazon.firetv.youtube.tv/dev.cobalt.app.MainActivity}
+mFocusedApp=ActivityRecord{ad470ed u0 com.amazon.firetv.youtube.tv/dev.cobalt.app.MainActivity t342}
+Observed: a cold ACTION_VIEW of https://tv.youtube.com/ started YouTube TV MainActivity.
+The accessibility hierarchy exposed no screen text and no sign-in prompt (Cobalt draws its own UI).
+No further URI was probed. youtubetv://search and youtubetv://play were not needed.
+verified_outcome: appHomeOpened
+verified_at: 2026-10-21T13:30:07Z
+currentAttemptObservation: none
+
+== Channel carried ==
+https://tv.youtube.com/learn/faq/ retrieved 2026-10-21 names ESPN in the YouTube TV membership channel list ("85+ channels including ABC, CBS, FOX, NBC, ESPN, HGTV, TNT, and more" and "Memberships include your local ABC, CBS, FOX, and NBC streams, ESPN, regional sports networks, and more"). channels_carried is ["ESPN"] only. A ZIP-specific lineup was not read on the device.
+
+== Restore, 2026-10-21T13:31:56Z ==
+KEYCODE_HOME, then am force-stop com.amazon.firetv.youtube.tv (the cold launch had left a playing media session), then KEYCODE_HOME again.
+Resumed activity: com.amazon.tv.launcher/.ui.HomeActivity_vNext
+YouTube TV media session was not active afterward. No temporary file was left on the device. The AFC profile and lineup were not changed.

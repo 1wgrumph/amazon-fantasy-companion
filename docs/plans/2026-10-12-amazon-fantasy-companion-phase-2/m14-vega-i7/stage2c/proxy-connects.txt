@@ -1,0 +1,13 @@
+Run C1 proxy log: allowlist k-artifactory-external.labcollab.net, kepler-static-artifacts.kepler.labcollab.net, <development-api-host>, registry.npmjs.org
+abort: []
+   1 DENIED   example.com:443
+ 122 ALLOWED  k-artifactory-external.labcollab.net:443
+   1 ALLOWED  kepler-static-artifacts.kepler.labcollab.net:443
+   2 ALLOWED  <development-api-host>:443
+   1 ERROR    None:None
+
+afc-dev CONNECTs:
+  2026-10-21T02:53:05.512432+00:00 -> 2026-10-21T02:58:11.206271+00:00 up 48636 down 230346 ALLOWED
+  2026-10-21T02:58:14.307757+00:00 -> 2026-10-21T03:00:13.992694+00:00 up 10901 down 50265 ALLOWED
+
+The host-less ERROR row is one incomplete CONNECT rejected before a host was parsed (seen in Stage 2 too).
