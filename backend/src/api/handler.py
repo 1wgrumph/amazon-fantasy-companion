@@ -20,6 +20,7 @@ import device_auth
 import panel
 import provider_resolver
 import store
+from lineup.manual import build as build_manual_lineup
 
 
 class ApiError(Exception):
@@ -77,6 +78,7 @@ def _routes():
         ("GET", "/v1/providers"): _providers,
         ("POST", "/v1/routing-outcome"): _routing_outcome,
         ("POST", "/v1/installed-apps"): _installed_apps,
+        ("PUT", "/v1/lineup/manual"): _lineup_manual,
     }
 
 
@@ -250,3 +252,46 @@ def _installed_apps(profile_id, query, body):
         raise ApiError(400, "invalid_request", "Field packages must list package names.")
     provider_resolver.record_installed_apps(profile_id, packages)
     return _respond(200, {"profileId": profile_id})
+
+
+def _build_manual(sport, body):
+    """NFL uses lineup.manual; NBA uses nba.manual and is refused while the flag is off.
+
+    nba stays unimported until the flag is on, matching the package's own rule.
+    """
+    roster, entries = body.get("roster"), body.get("entries")
+    if sport == "nba":
+        if not _nba_enabled():
+            raise ValueError("NBA manual lineups are disabled")
+        from nba.manual import build
+        return build(roster, entries)
+    return build_manual_lineup(roster, entries, body.get("preset"))
+
+
+def _lineup_manual(profile_id, query, body):
+    # The session profile is the only write key. Dispatch already refused a
+    # body or query profileId that names anyone else.
+    sport = body.get("sport", "nfl")
+    if sport not in ("nfl", "nba"):
+        raise ApiError(400, "invalid_request", "Field sport is missing or invalid.")
+    league, team = _text(body, "league"), _text(body, "team")
+    try:
+        built = _build_manual(sport, body)
+    except ValueError:
+        raise ApiError(400, "invalid_request", "Manual lineup is invalid.")
+    now = _now()
+    starters = [dict(starter) for starter in built["starters"]]
+    row = {"profileId": profile_id, "source": "manual", "league": league, "team": team,
+           "starters": starters, "updatedAt": now}
+    data = {"label": "Manual lineup", "source": "manual", "starters": starters}
+    if "scoring" in built:
+        scoring = dict(built["scoring"])
+        row["scoring"] = scoring
+        data["scoring"] = scoring
+    if built.get("sport"):
+        row["sport"] = built["sport"]
+        data["sport"] = built["sport"]
+    store.put_lineup(row)
+    return _respond(200, {"schemaVersion": 1, "id": profile_id,
+                          "revision": store.get_lineup_version(profile_id),
+                          "source": "manual", "updatedAt": now, "data": data})

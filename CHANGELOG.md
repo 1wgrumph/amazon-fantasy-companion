@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add `PUT /v1/lineup/manual`: a linked device writes its own labeled manual NFL or NBA lineup, so lineups work while Yahoo access is pending (AC-AFC-PROF-04).
 - Add ESPN NBA ingest and scoring ([PR #138](https://github.com/1wgrumph/amazon-fantasy-companion/pull/138)).
 - Add NBA panel rows and the sport label on TV ([PR #138](https://github.com/1wgrumph/amazon-fantasy-companion/pull/138)).
 - Add Yahoo NBA lineup import ([PR #138](https://github.com/1wgrumph/amazon-fantasy-companion/pull/138)).
