@@ -22,6 +22,10 @@ area_tree() {
     esac
 }
 area_matches() {
+    # Both client shellContract mirror tests read this schema.
+    case "$1:$2" in
+        tvapp:backend/src/api/openapi.yaml|vegaapp:backend/src/api/openapi.yaml) return 0 ;;
+    esac
     case "$1" in
         hygiene) return 0 ;;
         spec|docs|tvapp|backend)
