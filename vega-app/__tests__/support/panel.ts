@@ -62,5 +62,6 @@ export function snap({
     rows,
     teamTotal: {value: total, reason: total === null ? 'feed withheld' : null, source: 'live', asOfMs: AS_OF_MS},
     progress: {value: 0.5, reason: null, source: 'live', asOfMs: AS_OF_MS},
+    sport: null,
   };
 }
