@@ -1,5 +1,6 @@
 package com.afc.companion.net
 
+import com.afc.companion.BuildConfig
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -87,10 +88,14 @@ enum class ScoringPreset(val wire: String) {
 }
 
 /** Settings: additionalProperties false; scoringPreset defaults to Half-PPR. Other controls stay opaque until P2-A02. */
-class Settings(val scoringPreset: ScoringPreset = ScoringPreset.HalfPpr, controls: JSONObject = JSONObject()) {
+class Settings(
+    val scoringPreset: ScoringPreset = ScoringPreset.HalfPpr,
+    controls: JSONObject = JSONObject(),
+    nbaEnabled: Boolean = BuildConfig.AFC_ENABLE_NBA,
+) {
     val controls: JSONObject = JSONObject(controls.toString())
 
-    init { require(this.controls.keys().asSequence().all { it in CONTROLS }) { "Unknown settings field" } }
+    init { require(this.controls.keys().asSequence().all { it in CONTROLS || (nbaEnabled && it == "sports") }) { "Unknown settings field" } }
 
     fun toJson(): JSONObject = JSONObject(controls.toString()).put("scoringPreset", scoringPreset.wire)
 
@@ -100,11 +105,11 @@ class Settings(val scoringPreset: ScoringPreset = ScoringPreset.HalfPpr, control
             "presentation", "voice", "excitement", "providerPref", "switchingConfirm", "panelPrefs", "detectionOptIn",
         )
 
-        fun from(json: JSONObject): Settings? {
+        fun from(json: JSONObject, nbaEnabled: Boolean = BuildConfig.AFC_ENABLE_NBA): Settings? {
             val preset = if (json.has("scoringPreset")) ScoringPreset.of(json.opt("scoringPreset")) ?: return null else ScoringPreset.HalfPpr
             val controls = JSONObject(json.toString()).apply { remove("scoringPreset") }
-            if (!controls.keys().asSequence().all { it in CONTROLS }) return null
-            return Settings(preset, controls)
+            if (!controls.keys().asSequence().all { it in CONTROLS || (nbaEnabled && it == "sports") }) return null
+            return Settings(preset, controls, nbaEnabled)
         }
     }
 }
