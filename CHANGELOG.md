@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- The Vega port was verified on the Vega Virtual Device on a supported host (Kepler SDK 0.24.12112). This change includes the token-persistence fix, the panel fix that shows the server's default state for a profile with no selection, and the on-device check scripts. Virtual-device frictions from that run are F-037 through F-058 ([PR #118](https://github.com/1wgrumph/amazon-fantasy-companion/pull/118)).
+
 ### Changed
 
 - Record v0.1.0 in the changelog ([PR #139](https://github.com/1wgrumph/amazon-fantasy-companion/pull/139)).
