@@ -106,3 +106,18 @@ test('R-3 held values render stale after a refresh fails', async () => {
   app.render();
   expect(JSON.stringify(app.PanelSection(app.section().props))).toContain('stale 61s');
 });
+
+test('NBA panel headers show sport and basis while an untagged NFL header stays basis-only', async () => {
+  const app = await loadedScreen();
+  await app.intervals[0](); await app.flush(); app.render();
+  const props = app.section().props;
+  for (const [basis, sport, expected] of [
+    ['nbaPoints', 'NBA', 'NBA · Points'],
+    ['yahooLeague', 'NBA', 'NBA · Yahoo league scoring'],
+    ['halfPpr', null, 'Half-PPR'],
+  ]) {
+    const rendered = app.PanelSection({...props, snapshot: {...props.snapshot, basis, sport}});
+    const header = rendered.props.children[2].props.children[0];
+    expect(header.props.children).toEqual([expected]);
+  }
+});

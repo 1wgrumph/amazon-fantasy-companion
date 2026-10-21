@@ -64,6 +64,9 @@ def _parse(stamp):
 
 
 def _pair(lineup):
+    """Team/league key, or None when a stored row lacks either half."""
+    if not lineup or not lineup.get("league") or not lineup.get("team"):
+        return None
     return f"{lineup['league']}/{lineup['team']}"
 
 
@@ -223,6 +226,8 @@ def project(game_event, matches):
         if not lineup:
             continue
         team_league = _pair(lineup)
+        if not team_league:
+            continue  # no pair, no panel key
         fingerprint = _fingerprint(lineup)
         # Conditional write on the counter we read: a lost race re-reads and
         # re-decides against the winner's games instead of erasing them.
@@ -257,7 +262,7 @@ def snapshot(profile_id, team_league):
         selected = settings.get("teamLeague") or {}
         team_league = (f"{selected['league']}/{selected['team']}"
                        if selected.get("league") and selected.get("team")
-                       else _pair(lineup) if lineup else "unassigned/unassigned")
+                       else _pair(lineup) or "unassigned/unassigned")
     basis, table = _basis(lineup, settings)
     games, counter, projected = _stored(profile_id, team_league)
     rows, states, source_ids = [], [], []
