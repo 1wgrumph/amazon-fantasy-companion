@@ -31,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Fix the Vega contract-mirror test after `PUT /v1/lineup/manual`, and run the TV and Vega gates whenever `backend/src/api/openapi.yaml` changes ([PR #151](https://github.com/1wgrumph/amazon-fantasy-companion/pull/151)).
 - Manual NBA lineups from `nba.manual.build` carry league and team, so the panel renders them when the profile's selected teamLeague matches ([PR #149](https://github.com/1wgrumph/amazon-fantasy-companion/pull/149)).
 - An NBA feed failure can no longer discard or delay the NFL poll: NBA ingest runs in its own scheduled function with bounded requests and writes ([PR #138](https://github.com/1wgrumph/amazon-fantasy-companion/pull/138)).
 

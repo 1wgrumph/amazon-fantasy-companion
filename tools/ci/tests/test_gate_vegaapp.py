@@ -113,6 +113,30 @@ class VegaAppGate(unittest.TestCase):
                     self.assertEqual(rc, 0, out)
                     self.assertIn('gate: vegaapp: PASS checks completed', out.splitlines())
 
+    def test_openapi_change_selects_both_client_contract_mirrors(self):
+        # Both shellContract mirror tests read backend/src/api/openapi.yaml.
+        cases = (('backend/src/api/openapi.yaml', {'tvapp', 'vegaapp'}),
+                 ('backend/src/api/handler.py', set()))
+        for index, (changed, selected) in enumerate(cases):
+            with self.subTest(changed=changed):
+                repo = self.repo(f'openapi-{index}')
+                base = git_output(repo, 'rev-parse', 'HEAD')
+                path = repo / changed
+                write(repo, {changed: (path.read_text() if path.exists() else '') + '# fixture\n'})
+                commit_all(repo, 'change')
+                rc, out = run_gate(self, repo, f'--changed={base}..HEAD', 'tvapp', 'vegaapp',
+                                   env=self.protocol(repo))
+                self.assertEqual(rc, 0, out)
+                for area in ('tvapp', 'vegaapp'):
+                    self.assertEqual(f'gate: {area}:' in out, area in selected, out)
+        workflow = yaml.safe_load((REPO / '.github/workflows/ci.yml').read_text())
+        filters = yaml.safe_load(next(s['with']['filters'] for s in workflow['jobs']['changes']['steps']
+                                      if s.get('id') == 'filter'))
+        for area in ('tvapp', 'vegaapp'):
+            with self.subTest(filter=area):
+                self.assertIn('backend/src/api/openapi.yaml', filters[area])
+                self.assertNotIn('backend/src/api/handler.py', filters[area])
+
     def test_ci_workflow_runs_a_path_filtered_vegaapp_job(self):
         workflow = yaml.safe_load((REPO / '.github/workflows/ci.yml').read_text())
         changes = workflow['jobs']['changes']
