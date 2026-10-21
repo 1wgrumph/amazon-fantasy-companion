@@ -1,6 +1,5 @@
 package com.afc.companion.profile
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,11 +19,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
@@ -35,15 +33,16 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-import androidx.tv.material3.Button
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import com.afc.companion.BuildConfig
 import com.afc.companion.net.ApiClient
 import com.afc.companion.net.ScoringPreset
+import com.afc.companion.ui.theme.TvButton as Button
+import com.afc.companion.ui.theme.tvFocusStyle
+import com.afc.companion.ui.theme.tvSafeZonePadding
 import kotlinx.coroutines.launch
 
 /**
@@ -69,7 +68,7 @@ fun ProfileSettingsScreen(client: ApiClient, modifier: Modifier = Modifier) {
     }
 
     Column(
-        modifier.padding(48.dp).verticalScroll(rememberScrollState()),
+        modifier.tvSafeZonePadding().padding(8.dp).verticalScroll(rememberScrollState()).padding(8.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         Text("Profile/Settings", style = MaterialTheme.typography.headlineMedium)
@@ -203,7 +202,7 @@ private fun ProfileTextField(value: String, onValueChange: (String) -> Unit) {
                 focused = it.isFocused
                 if (!it.isFocused) editing = false
             }
-            .border(2.dp, if (focused) MaterialTheme.colorScheme.onSurface else Color.Transparent)
+            .tvFocusStyle(focused).padding(horizontal = 12.dp, vertical = 8.dp)
             .onPreInterceptKeyBeforeSoftKeyboard { event ->
                 if (event.type != KeyEventType.KeyDown) {
                     false
@@ -223,7 +222,7 @@ private fun ProfileTextField(value: String, onValueChange: (String) -> Unit) {
                     else -> false
                 }
         },
-        textStyle = TextStyle(color = MaterialTheme.colorScheme.onSurface),
+        textStyle = MaterialTheme.typography.bodyLarge.copy(color = MaterialTheme.colorScheme.onSurface),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
         keyboardActions = KeyboardActions(
             onNext = {
