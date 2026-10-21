@@ -1,0 +1,160 @@
+Command: cd tv-app && ./gradlew :app:testDebugUnitTest --tests 'com.afc.companion.ui.theme.*'
+Exit code: 1
+Environment: existing repository JDK 17 and Android SDK via JAVA_HOME and ANDROID_HOME.
+Compilation succeeded; expected red assertions follow.
+PASS com.afc.companion.ui.theme.ThemeContrastTest.inheritedTextOnAppBackgroundMeetsBodyContrast
+PASS com.afc.companion.ui.theme.ThemeContrastTest.allThemeTextRolesMeetBodyContrast
+PASS com.afc.companion.ui.theme.ThemeContrastTest.largeLinkCodeAndScreenHeadingsMeetLargeTextContrast
+FAIL com.afc.companion.ui.theme.ThemeLayoutAndFocusTest.sharedSafeZoneIsFivePercentOfEachDimension
+  java.lang.AssertionError: java.lang.AssertionError: Missing shared design API: object TvSafeZone in ui.theme
+FAIL com.afc.companion.ui.theme.ThemeLayoutAndFocusTest.sharedFocusOutlineIsAtLeastTwoDpAndChangesContrastByThreeToOne
+  java.lang.AssertionError: java.lang.AssertionError: Missing shared design API: object TvFocusStyle in ui.theme
+FAIL com.afc.companion.ui.theme.ThemeLayoutAndFocusTest.everyTopLevelScreenReferencesSharedSafeZone
+  java.lang.AssertionError: java.lang.AssertionError: link must apply tvSafeZonePadding() or TvSafeZone.insets(...); profile settings must apply tvSafeZonePadding() or TvSafeZone.insets(...); panel and its alert cards must apply tvSafeZonePadding() or TvSafeZone.insets(...); panel loading must apply tvSafeZonePadding() or TvSafeZone.insets(...); watch confirmation must apply tvSafeZonePadding() or TvSafeZone.insets(...); unconfigured must apply tvSafeZonePadding() or TvSafeZone.insets(...); shell navigation must apply tvSafeZonePadding() or TvSafeZone.insets(...)
+PASS com.afc.companion.ui.theme.ThemePaletteTest.backgroundHasDarkRelativeLuminance
+FAIL com.afc.companion.ui.theme.ThemePaletteTest.primarySecondaryAndAccentAreCoolAndDesaturated
+  java.lang.AssertionError: java.lang.AssertionError: Require H in [180, 300] and S <= 0.65: primary: H=257.91046, S=0.99999976, accent (tertiary): H=342.54544, S=0.6321838
+FAIL com.afc.companion.ui.theme.ThemePaletteTest.sharedPureKotlinColorHelperMeasuresTheActualPalette
+  java.lang.AssertionError: java.lang.AssertionError: Missing shared design API: object TvColorMath in ui.theme
+PASS com.afc.companion.ui.theme.ThemeTypographyTest.bodyTextResolvesToAtLeast24PixelsAt1080p
+PASS com.afc.companion.ui.theme.ThemeTypographyTest.entireTypeScaleUsesNormalOrHeavierWeight
+
+Acceptance gap: items 1 (contrast) and 5 (typography) already pass the stated thresholds on the baseline; they cannot honestly be made red without changing the requirement or product code.
+Evidence location: kept inside the authorized test write set; requested root evidence path needs an authority exception.
+
+Gradle output (repository and home paths replaced):
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preDebugBuild UP-TO-DATE
+> Task :app:generateDebugBuildConfig UP-TO-DATE
+> Task :app:generateDebugResources UP-TO-DATE
+> Task :app:packageDebugResources UP-TO-DATE
+> Task :app:processDebugNavigationResources UP-TO-DATE
+> Task :app:parseDebugLocalResources UP-TO-DATE
+> Task :app:generateDebugRFile UP-TO-DATE
+> Task :app:compileDebugKotlin UP-TO-DATE
+> Task :app:javaPreCompileDebug UP-TO-DATE
+> Task :app:compileDebugJavaWithJavac UP-TO-DATE
+> Task :app:checkDebugAarMetadata UP-TO-DATE
+> Task :app:mapDebugSourceSetPaths UP-TO-DATE
+> Task :app:compileDebugNavigationResources UP-TO-DATE
+> Task :app:mergeDebugResources UP-TO-DATE
+> Task :app:createDebugCompatibleScreenManifests UP-TO-DATE
+> Task :app:extractDeepLinksDebug UP-TO-DATE
+> Task :app:processDebugMainManifest UP-TO-DATE
+> Task :app:processDebugManifest UP-TO-DATE
+> Task :app:processDebugManifestForPackage UP-TO-DATE
+> Task :app:processDebugResources UP-TO-DATE
+> Task :app:bundleDebugClassesToRuntimeJar UP-TO-DATE
+> Task :app:bundleDebugClassesToCompileJar UP-TO-DATE
+> Task :app:preDebugUnitTestBuild UP-TO-DATE
+> Task :app:javaPreCompileDebugUnitTest UP-TO-DATE
+> Task :app:processDebugJavaRes UP-TO-DATE
+> Task :app:compileDebugUnitTestKotlin
+> Task :app:compileDebugUnitTestJavaWithJavac UP-TO-DATE
+> Task :app:processDebugUnitTestJavaRes UP-TO-DATE
+
+> Task :app:testDebugUnitTest FAILED
+
+ThemeLayoutAndFocusTest > sharedSafeZoneIsFivePercentOfEachDimension FAILED
+    java.lang.AssertionError: Missing shared design API: object TvSafeZone in ui.theme
+        at com.afc.companion.ui.theme.ThemeTestSupportKt.designObject(ThemeTestSupport.kt:50)
+        at com.afc.companion.ui.theme.ThemeLayoutAndFocusTest.sharedSafeZoneIsFivePercentOfEachDimension(ThemeLayoutAndFocusTest.kt:13)
+
+ThemeLayoutAndFocusTest > sharedFocusOutlineIsAtLeastTwoDpAndChangesContrastByThreeToOne FAILED
+    java.lang.AssertionError: Missing shared design API: object TvFocusStyle in ui.theme
+        at com.afc.companion.ui.theme.ThemeTestSupportKt.designObject(ThemeTestSupport.kt:50)
+        at com.afc.companion.ui.theme.ThemeLayoutAndFocusTest.sharedFocusOutlineIsAtLeastTwoDpAndChangesContrastByThreeToOne(ThemeLayoutAndFocusTest.kt:61)
+
+ThemeLayoutAndFocusTest > everyTopLevelScreenReferencesSharedSafeZone FAILED
+    java.lang.AssertionError: link must apply tvSafeZonePadding() or TvSafeZone.insets(...); profile settings must apply tvSafeZonePadding() or TvSafeZone.insets(...); panel and its alert cards must apply tvSafeZonePadding() or TvSafeZone.insets(...); panel loading must apply tvSafeZonePadding() or TvSafeZone.insets(...); watch confirmation must apply tvSafeZonePadding() or TvSafeZone.insets(...); unconfigured must apply tvSafeZonePadding() or TvSafeZone.insets(...); shell navigation must apply tvSafeZonePadding() or TvSafeZone.insets(...)
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at com.afc.companion.ui.theme.ThemeLayoutAndFocusTest.everyTopLevelScreenReferencesSharedSafeZone(ThemeLayoutAndFocusTest.kt:56)
+
+ThemePaletteTest > backgroundHasDarkRelativeLuminance PASSED
+
+ThemePaletteTest > primarySecondaryAndAccentAreCoolAndDesaturated FAILED
+    java.lang.AssertionError: Require H in [180, 300] and S <= 0.65: primary: H=257.91046, S=0.99999976, accent (tertiary): H=342.54544, S=0.6321838
+        at org.junit.Assert.fail(Assert.java:89)
+        at org.junit.Assert.assertTrue(Assert.java:42)
+        at com.afc.companion.ui.theme.ThemePaletteTest.primarySecondaryAndAccentAreCoolAndDesaturated(ThemePaletteTest.kt:18)
+
+ThemePaletteTest > sharedPureKotlinColorHelperMeasuresTheActualPalette FAILED
+    java.lang.AssertionError: Missing shared design API: object TvColorMath in ui.theme
+        at com.afc.companion.ui.theme.ThemeTestSupportKt.designObject(ThemeTestSupport.kt:50)
+        at com.afc.companion.ui.theme.ThemePaletteTest.sharedPureKotlinColorHelperMeasuresTheActualPalette(ThemePaletteTest.kt:28)
+
+ThemeContrastTest > inheritedTextOnAppBackgroundMeetsBodyContrast PASSED
+
+ThemeContrastTest > allThemeTextRolesMeetBodyContrast PASSED
+
+ThemeContrastTest > largeLinkCodeAndScreenHeadingsMeetLargeTextContrast PASSED
+
+ThemeTypographyTest > bodyTextResolvesToAtLeast24PixelsAt1080p PASSED
+
+ThemeTypographyTest > entireTypeScaleUsesNormalOrHeavierWeight PASSED
+
+11 tests completed, 5 failed
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:testDebugUnitTest'.
+> There were failing tests. See the report at: file://<repo>/tv-app/app/build/reports/tests/testDebugUnitTest/index.html
+
+* Try:
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+
+BUILD FAILED in 2s
+27 actionable tasks: 2 executed, 25 up-to-date
+
+Measured baseline values from JUnit system-out:
+TEST-com.afc.companion.ui.theme.ThemeContrastTest.xml
+Inherited text (NotConfigured, Link, Settings, panel headings) = 15.97518:1 (minimum 4.5:1)
+Settings input = 15.97518:1 (minimum 4.5:1)
+Panel values and alert body = 20.624395:1 (minimum 4.5:1)
+Button = 6.3519793:1 (minimum 4.5:1)
+Focused button = 10.158843:1 (minimum 4.5:1)
+Pressed button = 10.158843:1 (minimum 4.5:1)
+onPrimary / primary = 7.7147746:1 (minimum 4.5:1)
+onPrimaryContainer / primaryContainer = 7.2322006:1 (minimum 4.5:1)
+onSecondary / secondary = 7.735047:1 (minimum 4.5:1)
+onSecondaryContainer / secondaryContainer = 7.1870766:1 (minimum 4.5:1)
+onTertiary / tertiary (accent) = 7.7544127:1 (minimum 4.5:1)
+onTertiaryContainer / tertiaryContainer = 7.198602:1 (minimum 4.5:1)
+onBackground / background = 15.97518:1 (minimum 4.5:1)
+onSurface / surface = 13.268341:1 (minimum 4.5:1)
+onSurfaceVariant / surfaceVariant = 5.480933:1 (minimum 4.5:1)
+inverseOnSurface / inverseSurface = 10.158843:1 (minimum 4.5:1)
+onError / error = 7.663316:1 (minimum 4.5:1)
+onErrorContainer / errorContainer = 7.1656837:1 (minimum 4.5:1)
+Link code and screen headings = 15.97518:1 (minimum 3.0:1)
+Panel scores and alert headline = 20.624395:1 (minimum 3.0:1)
+TEST-com.afc.companion.ui.theme.ThemeLayoutAndFocusTest.xml
+TEST-com.afc.companion.ui.theme.ThemePaletteTest.xml
+primary: hue=257.91046, saturation=0.99999976
+secondary: hue=263.07693, saturation=0.27083334
+accent (tertiary): hue=342.54544, saturation=0.6321838
+TEST-com.afc.companion.ui.theme.ThemeTypographyTest.xml
+bodyLarge: 32.0 px at 1080p
+bodyMedium: 28.0 px at 1080p
+bodySmall: 24.0 px at 1080p
+displayLarge: weight=400
+displayMedium: weight=400
+displaySmall: weight=400
+headlineLarge: weight=400
+headlineMedium: weight=400
+headlineSmall: weight=400
+titleLarge: weight=400
+titleMedium: weight=500
+titleSmall: weight=500
+bodyLarge: weight=400
+bodyMedium: weight=400
+bodySmall: weight=400
+labelLarge: weight=500
+labelMedium: weight=500
+labelSmall: weight=500
+
+Hygiene command: bash tools/ci/gate.sh hygiene
+Exit code: 0
+Ran 91 tests in 187.172s; OK; gate: hygiene: PASS checks completed
