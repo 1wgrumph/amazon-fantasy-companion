@@ -10,6 +10,7 @@ OPERATIONS = {
     "/v1/profile": {"get", "put"}, "/v1/alerts": {"get"},
     "/v1/panel": {"get"}, "/v1/providers": {"get"},
     "/v1/routing-outcome": {"post"}, "/v1/installed-apps": {"post"},
+    "/v1/lineup/manual": {"put"},
 }
 
 

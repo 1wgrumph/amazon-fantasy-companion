@@ -2,9 +2,7 @@ package com.afc.companion.watch
 
 import android.app.Activity
 import android.app.AlertDialog
-import android.graphics.Color
 import android.graphics.Typeface
-import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.StateListDrawable
 import android.os.Bundle
@@ -18,6 +16,7 @@ import com.afc.companion.net.SessionStore
 import com.afc.companion.panel.panelModeFor
 import com.afc.companion.profile.ProfileStore
 import com.afc.companion.ui.theme.TvFocusStyle
+import com.afc.companion.ui.theme.TvPalette
 import com.afc.companion.ui.theme.TvSafeZone
 import kotlin.coroutines.resume
 import kotlinx.coroutines.CancellableContinuation
@@ -65,24 +64,24 @@ class WatchActivity : Activity() {
         val metrics = resources.displayMetrics
         val (horizontal, vertical) = TvSafeZone.insets(metrics.widthPixels / metrics.density, metrics.heightPixels / metrics.density)
         dialog.window?.apply {
-            setBackgroundDrawable(ColorDrawable(Color.rgb(16, 20, 24)))
+            setBackgroundDrawable(GradientDrawable(GradientDrawable.Orientation.TL_BR, TvPalette.backgroundGradientArgb.toIntArray()))
             setLayout((metrics.widthPixels - 2 * horizontal * metrics.density).toInt(), ViewGroup.LayoutParams.WRAP_CONTENT)
             decorView.setPadding(24, (vertical * metrics.density).toInt(), 24, (vertical * metrics.density).toInt())
         }
         dialog.findViewById<TextView>(android.R.id.message)?.apply {
-            setTextColor(Color.rgb(229, 233, 237))
+            setTextColor(TvPalette.onSurfaceArgb)
             textSize = 18f
             typeface = Typeface.DEFAULT
         }
         for (which in listOf(AlertDialog.BUTTON_POSITIVE, AlertDialog.BUTTON_NEGATIVE)) {
             dialog.getButton(which).apply {
-                setTextColor(Color.rgb(229, 233, 237))
+                setTextColor(TvPalette.onSurfaceArgb)
                 textSize = 16f
                 typeface = Typeface.DEFAULT_BOLD
                 background = StateListDrawable().apply {
                     for (focused in listOf(true, false)) {
                         addState(if (focused) intArrayOf(android.R.attr.state_focused) else intArrayOf(), GradientDrawable().apply {
-                            setColor(Color.rgb(26, 32, 39))
+                            setColor(if (focused) TvPalette.primaryContainerArgb else TvPalette.surfaceArgb)
                             cornerRadius = 8 * metrics.density
                             setStroke((TvFocusStyle.borderWidthDp * metrics.density).toInt(),
                                 if (focused) TvFocusStyle.focusedBorderArgb else TvFocusStyle.unfocusedBorderArgb)

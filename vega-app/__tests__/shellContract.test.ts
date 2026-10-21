@@ -35,6 +35,7 @@ describe('ShellContractTest', () => {
         '/v1/providers',
         '/v1/routing-outcome',
         '/v1/installed-apps',
+        '/v1/lineup/manual',
       ]),
     );
   });

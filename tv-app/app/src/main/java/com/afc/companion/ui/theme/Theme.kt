@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalConfiguration
@@ -29,6 +30,7 @@ import androidx.tv.material3.LocalContentColor
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Typography
 import androidx.tv.material3.darkColorScheme
+import com.afc.companion.profile.Sport
 import kotlin.math.abs
 
 object TvColorMath {
@@ -67,19 +69,47 @@ fun Modifier.tvSafeZonePadding(): Modifier {
     return padding(horizontal = horizontal.dp, vertical = vertical.dp)
 }
 
+/** Stadium at night: an indigo-to-plum sky, a floodlight-gold accent and one vivid colour per sport. */
+object TvPalette {
+    val backgroundGradientArgb = listOf(0xFF0E1030.toInt(), 0xFF2A0E3F.toInt())
+    val surfaceArgb = 0xFF1B1E4B.toInt()
+    val onSurfaceArgb = 0xFFF4F2FF.toInt()
+    val primaryArgb = 0xFFFFD23F.toInt()
+    val primaryContainerArgb = 0xFF4A3A12.toInt()
+    val alertArgb = 0xFFFF6FB5.toInt()
+
+    fun sportAccentArgb(sport: Sport): Int = when (sport) {
+        Sport.Nfl -> 0xFF2FE39A.toInt()
+        Sport.Nba -> 0xFFFF6A3D.toInt()
+    }
+
+    fun onSportAccentArgb(sport: Sport): Int = when (sport) {
+        Sport.Nfl -> 0xFF00281A.toInt()
+        Sport.Nba -> 0xFF2A0A00.toInt()
+    }
+}
+
+/** The app backdrop: the palette's two gradient stops, corner to corner. */
+fun Modifier.afcBackground(): Modifier = background(Brush.linearGradient(TvPalette.backgroundGradientArgb.map(::Color)))
+
 object TvFocusStyle {
-    val borderWidthDp = 2f
-    val focusedBorderArgb = 0xFF8AB4D6.toInt()
-    val unfocusedBorderArgb = 0xFF303945.toInt()
-    val scale = 1.02f
+    val borderWidthDp = 4f
+    val focusedBorderArgb = TvPalette.primaryArgb
+    val unfocusedBorderArgb = 0xFF3A3E78.toInt()
+    val scale = 1.1f
+    // Dense rows (panel rows, alert cards, text fields) mark focus by outline and fill only.
+    val denseScale = 1f
 }
 
 @Composable
 fun Modifier.tvFocusStyle(focused: Boolean): Modifier =
     graphicsLayer {
-        scaleX = if (focused) TvFocusStyle.scale else 1f
-        scaleY = if (focused) TvFocusStyle.scale else 1f
-    }.background(MaterialTheme.colorScheme.surface, RoundedCornerShape(8.dp))
+        scaleX = if (focused) TvFocusStyle.denseScale else 1f
+        scaleY = if (focused) TvFocusStyle.denseScale else 1f
+    }.background(
+        if (focused) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface,
+        RoundedCornerShape(8.dp),
+    )
         .border(TvFocusStyle.borderWidthDp.dp,
             Color(if (focused) TvFocusStyle.focusedBorderArgb else TvFocusStyle.unfocusedBorderArgb),
             RoundedCornerShape(8.dp))
@@ -89,7 +119,7 @@ fun TvButton(onClick: () -> Unit, modifier: Modifier = Modifier, content: @Compo
     Button(
         onClick = onClick,
         modifier = modifier,
-        shape = ButtonDefaults.shape(shape = RoundedCornerShape(8.dp)),
+        shape = ButtonDefaults.shape(shape = RoundedCornerShape(50)),
         colors = ButtonDefaults.colors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant,
             contentColor = MaterialTheme.colorScheme.onSurface,
@@ -100,7 +130,7 @@ fun TvButton(onClick: () -> Unit, modifier: Modifier = Modifier, content: @Compo
         ),
         border = ButtonDefaults.border(focusedBorder = Border(
             BorderStroke(TvFocusStyle.borderWidthDp.dp, Color(TvFocusStyle.focusedBorderArgb)),
-            shape = RoundedCornerShape(8.dp),
+            shape = RoundedCornerShape(50),
         )),
         scale = ButtonDefaults.scale(focusedScale = TvFocusStyle.scale),
         content = content,
@@ -108,16 +138,16 @@ fun TvButton(onClick: () -> Unit, modifier: Modifier = Modifier, content: @Compo
 }
 
 private val AfcColors = darkColorScheme(
-    primary = Color(TvFocusStyle.focusedBorderArgb), onPrimary = Color(0xFF101820),
-    primaryContainer = Color(0xFF273F53), onPrimaryContainer = Color(0xFFD5E6F4),
-    secondary = Color(0xFFA6B7C8), onSecondary = Color(0xFF101820),
-    secondaryContainer = Color(0xFF303E4B), onSecondaryContainer = Color(0xFFDDE5ED),
-    tertiary = Color(0xFF9DBBC5), onTertiary = Color(0xFF101820),
-    tertiaryContainer = Color(0xFF293F47), onTertiaryContainer = Color(0xFFD9E8ED),
-    background = Color(0xFF101418), onBackground = Color(0xFFE5E9ED),
-    surface = Color(0xFF1A2027), onSurface = Color(0xFFE5E9ED),
-    surfaceVariant = Color(0xFF29323C), onSurfaceVariant = Color(0xFFB8C2CC),
-    inverseSurface = Color(0xFFE5E9ED), inverseOnSurface = Color(0xFF1A2027),
+    primary = Color(TvPalette.primaryArgb), onPrimary = Color(0xFF1E1400),
+    primaryContainer = Color(TvPalette.primaryContainerArgb), onPrimaryContainer = Color(0xFFFFE9A8),
+    secondary = Color(0xFF7CE8FF), onSecondary = Color(0xFF00202A),
+    secondaryContainer = Color(0xFF0F3A4A), onSecondaryContainer = Color(0xFFC4F3FF),
+    tertiary = Color(TvPalette.alertArgb), onTertiary = Color(0xFF2A0018),
+    tertiaryContainer = Color(0xFF5A1A40), onTertiaryContainer = Color(0xFFFFD6EA),
+    background = Color(TvPalette.backgroundGradientArgb[0]), onBackground = Color(TvPalette.onSurfaceArgb),
+    surface = Color(TvPalette.surfaceArgb), onSurface = Color(TvPalette.onSurfaceArgb),
+    surfaceVariant = Color(0xFF2B2E66), onSurfaceVariant = Color(0xFFC9C6EC),
+    inverseSurface = Color(TvPalette.onSurfaceArgb), inverseOnSurface = Color(TvPalette.surfaceArgb),
 )
 
 // Couch UI: body text stays at or above 28 px at 1080p with regular or medium weight.
@@ -126,7 +156,7 @@ private fun tvText(size: Int, lineHeight: Int, weight: FontWeight = FontWeight.N
 )
 
 private val AfcTypography = Typography(
-    displayMedium = tvText(44, 52, FontWeight.Medium),
+    displayMedium = tvText(32, 40, FontWeight.Medium),
     headlineMedium = tvText(28, 36, FontWeight.Medium),
     titleLarge = tvText(22, 30, FontWeight.Medium),
     bodyLarge = tvText(16, 24),
