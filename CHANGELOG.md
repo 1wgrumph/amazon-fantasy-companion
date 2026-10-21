@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Add a deterministic ffmpeg demo-cut pipeline under `tools/demo/` that builds the main demo, a 30 s teaser, alerts/Watch/panel/linking feature clips, and trimmed labelled raw clips from the S1–S7 shot list, with silent audio and on-screen captions.
+- Add a deterministic ffmpeg demo-cut pipeline under `tools/demo/` that builds the main demo, a 30 s teaser, alerts/Watch/panel/linking feature clips, and trimmed labelled raw clips from the S1–S7 shot list, with silent audio and on-screen captions ([PR #144](https://github.com/1wgrumph/amazon-fantasy-companion/pull/144)).
 
 ### Changed
 
