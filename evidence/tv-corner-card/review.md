@@ -1,6 +1,7 @@
 # Independent corner-card review receipt
 
-The original review below describes `5f8073a` before repair authorization. Current partial-repair status, verification and remaining F01 contract decision are recorded in the Repair section.
+**Current repair verdict: PASS under the owner-amended shared-hold contract.** All F01–F06 repair targets are closed within the accepted scope; verification and residual limits are in the final repair section.
+The original review below describes `5f8073a` before repair authorization. The partial repair is superseded by the owner’s shared-hold amendment and the final repair section below. Original review findings and red evidence remain historical.
 
 **Verdict: REPAIR_REQUIRED — F01–F06.** Candidate `5f8073a539a90cad3ac74b92c33b5166de501e3c` remains unchanged. No product/test-source edits, repairs, commits, pushes, issue filing, stick access, provider launches or publication were performed. The reviewer stops at this receipt under `reviewer-repairs-own-findings`; proposed write sets below are for the dispatching orchestrator, not authority exercised by this session.
 
@@ -266,9 +267,9 @@ No Fire TV stick, provider playback/Amazon behavior or physical remote was check
 
 ## Repair — same-session transition authorized 2026-10-22
 
-The orchestrator accepted F01–F06 and their bounded write sets, including behavioral regressions. This is Repair Implementer work by Codex, following the frozen review/repair route. It is not a second independent review or a new PASS verdict. The original review above remains the immutable description of candidate `5f8073a`.
+The orchestrator accepted F01–F06 and their bounded write sets, including behavioral regressions. This is Repair Implementer work by Codex, following the frozen review/repair route. It is not a second independent review; the final repair disposition below applies the owner-amended contract. The original review above remains the immutable description of candidate `5f8073a`.
 
-### F01 contract gap (decision pending)
+### F01 contract gap (historical; resolved by owner below)
 
 F01's accepted target requires both unchanged short presses and exclusive global ownership of a 700 ms hold. A key-only AccessibilityService cannot implement that combination: each event requires an immediate consume/pass result, and the Android 14 dispatcher times out that result after 500 ms. A service cannot modify the forwarded event or replay a consumed short press through this API. See [Android's onKeyEvent contract](https://developer.android.com/reference/android/accessibilityservice/AccessibilityService#onKeyEvent(android.view.KeyEvent)), [Android 14 dispatcher source](https://android.googlesource.com/platform/frameworks/base/+/refs/tags/android-14.0.0_r1/services/accessibility/java/com/android/server/accessibility/KeyEventDispatcher.java), and the [pinned timing excerpt](review/android14-key-filter-timeout.txt).
 
@@ -332,3 +333,72 @@ Affected screenshots and actual window records are in `review/corner-repair/`: `
 **Partial repair disposition: REPAIR_REQUIRED.** F02, F03, F04 and F06 are implemented and verified as described. F05 has real native oracles and five rejected mutations, but its key-ownership expectations and F01 cannot be closed until the owner amends the impossible input contract. Existing pure-filter tests that assert consumed held up are not acceptance of that behavior. This remains the same open repair round; no review/repair budget is reset. The local repair commit contains the unblocked changes, evidence and a deliberately failing native regression for the still-present F01; it is not a completed repair or authority to land a passing claim. No push, stick check, provider launch, backend change or publication was performed. Fire OS behavior and provider reactions remain unverified.
 
 An extra post-capture rebuild completed with exit 0 but an added exact-hash comparison exited 1: it did not reproduce the captured APK bytes. The capture hashes are retained; later rebuilt hashes are separately labeled as not executed in `repair-artifacts.json`. Those later outputs were never installed or substituted for runtime evidence. Source hashes still match all 15 repair source files. Binary reproducibility was not established and is not a requirement claimed by this packet. The original native capture build remains the provenance for screenshots and device results.
+
+## Final repair — owner shared-hold decision 13:22Z
+
+Observer/implementer: Codex in the same frontend frozen-profile repair session, 2026-10-22 UTC. Parent partial-repair commit: `7439ee05ee01058f745b9989ed6c43b9d8aa963b`. This continues the accepted F01–F06 write sets and regression allowance; no new review round, route, profile import or budget reset occurs. Final verification is complete; the repair verdict is PASS under the amended owner contract.
+
+### Owner decision and F01 design
+
+The owner explicitly chose **“Share the hold”** (real UTC 13:22Z). This supersedes the original exclusive-hold repair target: the accessibility filter **never consumes Menu**, including initial down, repeats and up. It sends no input. The foreground app may also respond to a long Menu press; the owner accepts that behavior. A short press retains normal foreground behavior and causes no AFC action.
+
+`MenuHoldFilter` returns false for every event and observes each seen Menu sequence once: event-relative 700 ms timeout, a late repeat/up at the threshold, or the platform long-press flag can fire it. Repeated flags, repeats and the timer cannot double-handle the sequence. Up, interruption and service destruction clear held state; the service removes its timer on release and cleanup. Off → Card and Card → Menu remain the AFC actions. Companion’s own foreground Menu handler can also react, as can any playing app; exclusive foreground suppression is no longer claimed.
+
+Write set for this completion: `access/MenuHoldFilter.kt`, `MenuHoldService.kt`, `res/values/strings.xml`, `MenuHoldFilterTest.kt`, `CornerCardLifecycleTest.kt`, `AlertCardMappingTest.kt`, two synthetic alert assets, changelog/handoff, this receipt and its review evidence. Manifest/exported flags and accessibility capabilities remain as verified in the preceding repair: key filter only, no screen content or event subscription.
+
+The amended pass-through oracles fail against the old implementation: **10 tests, three failures, exit 1**, [red result](review/final-red-menu.txt). Updated timing/flag tests cover 699/700 ms, late timer, authoritative long flag, one callback, cleanup, orphan repeats and a short press after a hold. The native flow observes the foreground activity’s actual dispatch log through uinput, leaving the remote connected four seconds after physical release; it checks an initial down, one up near 1000 ms, no events after up, no AFC short action, card after one hold and menu after the next.
+
+### F06 exact deployed-envelope cross-check
+
+The owner-supplied sibling report `alert-e2e/report.md` identifies two independent blockers in its synthetic NFL run: absent sport and absent fresh PlayerStats. This repair fixes sport inference. Missing/stale/mismatched points still fail closed; it does not invent scores or promise a card when the original synthetic lineup has no fresh stats.
+
+Only the exact `.alert` wire objects from `alert-e2e/nfl/fire-e1.json` and `alert-e2e/nba/fire-e1.json` were copied into test assets. Neither object has `triggerContext.sport` or inline starter points; the outer report’s sport and backend log are not part of the alert wire. [Fixture comparison](review/final-alert-fixture-proof.json) confirms object equality with the owner-supplied envelopes. Unit and native tests load those same assets unchanged. Fresh matching panel rows supply the authoritative number; NFL panel uses `halfPpr` with no sport, NBA uses `nbaPoints` and `sport=nba`, matching the reported backend shapes. Both produce the actual alert label and NFL/NBA badge; a stale-row unit counterpart still returns null. The original general mapping fixture no longer forces `sport="NFL"`. Replacing the repaired alert fallback with the old sport-only lookup makes the exact-envelope regression fail at its required non-null NFL notice ([mutation result](review/final-alert-mutation.txt), exit 1); the source was restored immediately afterward.
+
+The selected API still has no pair-listing field: F02’s documented listing API/client follow-up remains. League is hidden for the one known explicit profile pair. No backend change, fake pairing, provider app, stick, push or publication is part of this completion. BRAN remains unavailable (no native policy); ordinary repository discovery was used. Reverify remains not applicable under the packet: these APKs are built from the reviewed source, not supplied binary claims.
+
+### Final native result and visuals
+
+The combined [native runner](review/final-native.txt) exits **0: OK (6 tests), 116.366 s**. Both new behavioral tests and all four existing #157 lifecycle tests pass in one instrumentation process. The foreground [dispatch trace](review/corner-repair/menu-events.txt) contains short down/up at **150 ms**, then held down, every repeat (first repeat carries the platform long-press flag at 401 ms on this AVD), and held up at **1000 ms**. No event follows release during the four-second connected-remote observation. Native assertions reject a consumed short sequence, missing held up, post-release repeat, duplicate hold action, or failed Card → Menu. The platform flag is an owner-accepted alternative to the 700 ms timer; this is not a claim that this AVD waits 700 ms before flagging a long press.
+
+Re-captured and visually inspected on owned `afc-tv-review2`, Android TV 34, 1920×1080, port 5630:
+
+| Flow | Evidence/result |
+| --- | --- |
+| Service off | [Card](review/corner-repair/repair-01-service-off-card.png), [D-pad Expand](review/corner-repair/repair-02-service-off-expand.png); actual buttons and Back focus assertions pass |
+| Card | [Bright](review/corner-repair/repair-04-card-bright.png), [dark](review/corner-repair/repair-05-card-dark.png); nonfocusable, translucent, rendered text contrast **6.053:1** |
+| Menu / expand / Back | [Menu](review/corner-repair/repair-06-menu.png), [expanded](review/corner-repair/repair-07-expanded.png), [game](review/corner-repair/repair-08-back-to-game.png); exact overlay/game focus assertions pass |
+| Card plus alert | [Composition](review/corner-repair/repair-09-card-plus-alert.png); live WindowManager frames disjoint and inside safe zone; [expiry](review/corner-repair/repair-10-alert-expired.png) passes |
+| Exact deployed NFL envelope | [Runner 20 · NFL](review/corner-repair/repair-11-exact-nfl-alert.png); real AlertCardOverlay rendered from untagged halfPpr panel authority |
+| Exact deployed NBA envelope | [Guard 20 · NBA](review/corner-repair/repair-12-exact-nba-alert.png); real AlertCardOverlay rendered from nbaPoints/NBA panel authority |
+
+The screenshots show clear labels/badges with the expected translucent surfaces, no card/alert overlap and visible menu focus. [Build/source hashes](review/final-artifacts.json) identify the APKs installed for this run, taken at installation before the ordinary gate changes the API build property. The `corner-repair/` filenames now hold these final recaptures; their earlier partial-repair versions remain in parent commit `7439ee0`. The historical `repair-artifacts.json` describes that earlier run, while `final-artifacts.json` identifies these current captures. All raw input injection uses the test-owned uinput remote; `input keyevent` is not substituted for the accessibility path.
+
+### Per-finding closure under the amended target
+
+| ID | Final repair result |
+| --- | --- |
+| F01 | Shared hold: every Menu event passes, one AFC hold action; physical release reaches foreground at 1000 ms with no later repeats. Original exclusive-hold target explicitly superseded by owner. |
+| F02 | Real pairs only; one known pair hides League; distinct-pair controller cycle/refetch regression passes. Listing API/client integration remains the documented follow-up. |
+| F03 | Accessibility-off in-app Expand opens shared expanded overlay and Back restores game focus. |
+| F04 | Semi-transparent final composition retains ~72% background opacity and 6.053:1 rendered text contrast, with API-dependent window alpha compensated. |
+| F05 | Real native input, focus, geometry, service-off and pixel oracles pass; prior five behavioral mutations and the new old-fallback mutation are rejected. The same-author test exception remains owner-authorized. |
+| F06 | Untagged NFL scoring basis and NBA authoritative context supply card/alert sport. Exact deployed NFL/NBA alert payloads render with fresh matching points; stale/missing points still fail closed. |
+
+### Final commands and disposition
+
+All three requested gates ran with `TMPDIR=~/.cache/afc-gate-tmp ANDROID_HOME=~/.local/share/afc-tools/android-sdk`:
+
+| Command | Exit/result | Evidence |
+| --- | --- | --- |
+| `bash tools/ci/gate.sh tvapp` | **0**, unit tests, build and lint pass | [log](review/final-gate-tvapp.txt) |
+| `bash tools/ci/gate.sh hygiene` | **0**, 119 fixture tests pass | [log](review/final-gate-hygiene.txt) |
+| `bash tools/ci/gate.sh docs` | **0** | [log](review/final-gate-docs.txt) |
+| `./tv-app/gradlew -p tv-app -PafcApiBaseUrl=https://review.invalid :app:assembleDebug :app:assembleDebugAndroidTest testDebugUnitTest` (JDK 17) | **0**, 385 host tests, zero failures/errors/skips | [log](review/final-build-unit.txt) |
+| `ANDROID_HOME=~/.local/share/afc-tools/android-sdk python3 evidence/tv-corner-card/review/run-native.py com.afc.companion.panel.CornerCardLifecycleTest,com.afc.companion.panel.OverlayLifecycleTest` | **0**, six device tests | [log](review/final-native.txt) |
+| `python3 evidence/tv-corner-card/review/check-rendered-card.py` | **0**, effective opacity 72.16–72.30% across RGB channels | [result](review/final-native-opacity.json) |
+
+Hygiene's printed negative-fixture `fatal`/`GAP` messages are expected assertions inside the passing 119-test suite; they are not capability results for this repair. Evidence text is normalized and has no trailing blank lines. The final [SHA256SUMS](review/SHA256SUMS) covers all review artifacts and this receipt; capture APK/source hashes are in [final-artifacts.json](review/final-artifacts.json).
+
+**Final repair verdict: PASS.** F01–F06 satisfy the accepted repair targets, with F01 explicitly amended to shared foreground input. This is the repair implementer’s completed receipt in the same frozen review/repair round, not a fresh independent assessment. The intended commit uses Codex `<1wgrumph+codex@gmail.com>`, normal hooks and no Co-Authored-By line. No push was performed.
+
+Residual limits: no stick/Fire OS/provider-app qualification was requested or run; foreground apps may react to a hold by owner decision. The pair-listing API/client follow-up remains, and an alert without fresh matching authoritative points still does not render. The owned review AVD was shut down after capture. No live runtime, backend, credentials or provider paths were changed.

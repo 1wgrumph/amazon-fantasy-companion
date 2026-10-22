@@ -6,7 +6,7 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-/** The accessibility key filter consumes only a held ≡; everything else reaches the playing app untouched. */
+/** Shared hold: every key reaches the playing app; AFC observes each hold once. */
 class MenuHoldFilterTest {
     private var holds = 0
     private val filter = MenuHoldFilter { holds++ }
@@ -27,31 +27,48 @@ class MenuHoldFilterTest {
 
     @Test fun pressJustUnderTheHoldPassesItsUp() {
         assertFalse(filter.onKey(menu, down, 0, 0))
-        assertTrue("auto-repeat is part of the hold sequence", filter.onKey(menu, down, 1, 500))
+        assertFalse("pre-threshold repeat passes", filter.onKey(menu, down, 1, 500))
         assertFalse("released at 699 ms: the app still sees down and up", filter.onKey(menu, up, 0, 699))
         assertEquals(0, holds)
     }
 
-    @Test fun longMenuPressFiresOnceWhileHeldAndConsumesTheRestOfTheSequence() {
+    @Test fun longMenuPressFiresOnceWhileEveryEventPassesThrough() {
         assertFalse("the down cannot be known as long yet, so it passes", filter.onKey(menu, down, 0, 10_000))
         filter.onHoldTimeout(10_700)
         assertEquals("fires at 700 ms, before release", 1, holds)
-        assertTrue("repeat consumed", filter.onKey(menu, down, 1, 10_750))
-        assertTrue("repeat consumed", filter.onKey(menu, down, 2, 10_800))
+        assertFalse("repeat passes", filter.onKey(menu, down, 1, 10_750))
+        assertFalse("repeat passes", filter.onKey(menu, down, 2, 10_800))
         filter.onHoldTimeout(10_900)
-        assertTrue("up consumed", filter.onKey(menu, up, 0, 11_200))
+        assertFalse("up passes", filter.onKey(menu, up, 0, 11_200))
         assertEquals("one hold, one action", 1, holds)
     }
 
     @Test fun lateTimerStillFiresFromTheRepeatOrTheUp() {
         filter.onKey(menu, down, 0, 0)
-        assertTrue(filter.onKey(menu, down, 5, 720))
+        assertFalse(filter.onKey(menu, down, 5, 720))
         assertEquals(1, holds)
-        assertTrue(filter.onKey(menu, up, 0, 900))
+        assertFalse(filter.onKey(menu, up, 0, 900))
 
         filter.onKey(menu, down, 0, 5_000)
-        assertTrue("held 800 ms without any timer or repeat", filter.onKey(menu, up, 0, 5_800))
+        assertFalse("held 800 ms without any timer or repeat", filter.onKey(menu, up, 0, 5_800))
         assertEquals(2, holds)
+    }
+
+    @Test fun exactThresholdAndLongPressFlagFireOnceWithoutConsuming() {
+        assertFalse(filter.onKey(menu, down, 0, 0))
+        filter.onHoldTimeout(699)
+        assertEquals(0, holds)
+        assertFalse(filter.onKey(menu, up, 0, 700))
+        filter.onHoldTimeout(900)
+        assertEquals(1, holds)
+
+        assertFalse(filter.onKey(menu, down, 0, 2_000))
+        assertFalse(filter.onKey(menu, down, 1, 2_500, isLongPress = true))
+        assertEquals("platform long-press flag is authoritative", 2, holds)
+        assertFalse(filter.onKey(menu, down, 2, 2_800, isLongPress = true))
+        assertFalse(filter.onKey(menu, up, 0, 2_900))
+        filter.onHoldTimeout(3_000)
+        assertEquals("flag and timeout cannot double-handle", 2, holds)
     }
 
     @Test fun nextShortPressAfterAHoldPassesAgain() {

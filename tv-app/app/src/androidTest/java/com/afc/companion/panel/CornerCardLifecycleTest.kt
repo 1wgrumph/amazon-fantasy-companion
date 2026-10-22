@@ -43,6 +43,7 @@ class CornerCardLifecycleTest {
     private val out by lazy { File(ctx.getExternalFilesDir(null), "corner-repair").apply { mkdirs() } }
     private val requests = Collections.synchronizedList(ArrayList<String>())
     @Volatile private var page = JSONObject().put("cursor", "start").put("alerts", JSONArray())
+    @Volatile private var exactAlertSport: String? = null
     private val now get() = Instant.now().toString()
     private fun value(v: Double?) = JSONObject().put("value", v ?: JSONObject.NULL).put("source", "manual").put("asOf", now)
     private fun envelope(data: JSONObject, id: String = "review") = JSONObject().put("schemaVersion",1).put("id",id).put("revision",1).put("source","manual").put("updatedAt",now).put("data",data)
@@ -55,6 +56,14 @@ class CornerCardLifecycleTest {
             "/v1/panel" -> {
                 val key = url.query?.substringAfter("teamLeague=")?.let { URLDecoder.decode(it,"UTF-8") } ?: "LeagueA/TeamA"
                 val known = key == "LeagueA/TeamA" || key == "LeagueB/TeamB"
+                val sport = exactAlertSport
+                if (sport != null) return envelope(JSONObject().put("teamLeague", key)
+                    .put("scoringBasis", if (sport == "nba") "nbaPoints" else "halfPpr")
+                    .apply { if (sport == "nba") put("sport", "nba") }
+                    .put("rows", JSONArray().put(JSONObject().put("playerId", "e2e-synth-ath-$sport-1")
+                        .put("name", if (sport == "nfl") "Synth Runner" else "Synth Guard")
+                        .put("points", value(20.0)).put("gameStatus", "Live")))
+                    .put("teamTotal", value(20.0)).put("progress", value(0.5)))
                 envelope(JSONObject().put("teamLeague",key).put("scoringBasis","halfPpr")
                     .put("rows",if (known) JSONArray((1..9).map { i -> JSONObject().put("playerId","p$i").put("name","Sample Receiver $i").put("points",value(i * 2.5)).put("gameStatus","Q2 08:14") }) else JSONArray())
                     .put("teamTotal",value(if (known) 112.5 else null)).put("progress",value(if(known) 0.5 else null)))
@@ -179,6 +188,14 @@ class CornerCardLifecycleTest {
                 assertTrue("card never steals game focus", gameFocused())
                 val heldEvents = keyEvents().drop(shortEvents.size)
                 val ups = heldEvents.filter { it.startsWith("action=1") }
+                assertTrue("initial held down reaches the game unchanged", heldEvents.first().startsWith("action=0 repeat=0"))
+                assertEquals("one initial down", 1, heldEvents.count { it.startsWith("action=0 repeat=0 ") })
+                assertEquals("one release while remote is still present", 1, ups.size)
+                val releaseAt = ups.single().substringAfter("held=").toLong()
+                assertTrue("release delivered at physical up, not device disconnect: $releaseAt", releaseAt in 900..1600)
+                assertTrue("no repeats after release during four-second observation", heldEvents.last().startsWith("action=1"))
+                assertTrue("intermediate events remain downs", heldEvents.dropLast(1).all { it.startsWith("action=0") })
+                assertFalse("one hold cannot also open the menu", hasText("Expand"))
                 File(out, "menu-events.txt").writeText(keyEvents().joinToString("\n"))
                 screenshot("repair-04-card-bright"); assertBrightContrast("repair-04-card-bright")
                 game(true); screenshot("repair-05-card-dark")
@@ -209,13 +226,35 @@ class CornerCardLifecycleTest {
                 for (r in frames) assertTrue("safe zone: $r", r[0] >= 96 && r[1] >= 54 && r[2] <= 1824 && r[3] <= 1026)
                 await("alert expires") { !hasText("Receiver 2.5") }
                 screenshot("repair-10-alert-expired")
-                assertEquals("one release while remote is still present", 1, ups.size)
-                val releaseAt = ups.single().substringAfter("held=").toLong()
-                assertTrue("release delivered at physical up, not device disconnect: $releaseAt", releaseAt in 900..1600)
-                assertTrue("no repeats after release", heldEvents.last().startsWith("action=1"))
             }
         } finally {
             ctx.stopService(Intent(ctx, OverlayService::class.java)); AlertInbox.attach(null); access(false)
         }
     }
+    @Test fun deployedNflAndNbaAlertEnvelopesRenderActualCards() {
+        installPeer(); SessionStore(ctx).save("synthetic-review-session")
+        val feed = AlertFeed(ApiClient("https://review.invalid"))
+        try {
+            device.executeShellCommand("appops set com.afc.companion SYSTEM_ALERT_WINDOW allow")
+            access(false); game()
+            ctx.stopService(Intent(ctx, OverlayService::class.java)); settle()
+            AlertInbox.attach(feed); settle()
+            OverlayServiceControl(ctx).startAlerts(); settle()
+            for ((index, sport) in listOf("nfl", "nba").withIndex()) {
+                exactAlertSport = sport
+                val wire = JSONObject(ins.context.assets.open("alert-e2e/$sport-fire-e1.json").bufferedReader().use { it.readText() })
+                assertFalse("exact deployed alert has no sport", wire.getJSONObject("data").getJSONObject("triggerContext").has("sport"))
+                page = JSONObject().put("cursor", wire.getString("id")).put("alerts", JSONArray().put(wire))
+                runBlocking { assertEquals(1, feed.poll().size) }; AlertInbox.publish()
+                val label = if (sport == "nfl") "Runner 20" else "Guard 20"
+                await("actual $sport AlertCardOverlay from deployed envelope") { hasText(label) && hasText(sport.uppercase()) }
+                assertTrue("alert does not steal game focus", gameFocused())
+                screenshot("repair-${11 + index}-exact-$sport-alert")
+                await("$sport card expires") { !hasText(label) }
+            }
+        } finally {
+            ctx.stopService(Intent(ctx, OverlayService::class.java)); AlertInbox.attach(null); exactAlertSport = null
+        }
+    }
+
 }

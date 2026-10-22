@@ -10,7 +10,7 @@ import com.afc.companion.panel.OverlayServiceControl
 
 /**
  * Held ≡ over any app: the user turns this on once in Settings > Accessibility. It only filters
- * keys (res/xml/menu_hold_service.xml); [MenuHoldFilter] decides what is consumed, and a hold is
+ * keys (res/xml/menu_hold_service.xml); [MenuHoldFilter] passes every event through, and a hold is
  * sent to the overlay host. It reads no screen content and sends no input of its own.
  */
 class MenuHoldService : AccessibilityService() {
@@ -25,7 +25,7 @@ class MenuHoldService : AccessibilityService() {
             handler.postAtTime(timeout, event.eventTime + MenuHoldFilter.HOLD_MS)
         }
         if (event.keyCode == KeyEvent.KEYCODE_MENU && event.action == KeyEvent.ACTION_UP) handler.removeCallbacks(timeout)
-        return filter.onKey(event.keyCode, event.action, event.repeatCount, event.eventTime)
+        return filter.onKey(event.keyCode, event.action, event.repeatCount, event.eventTime, event.isLongPress)
     }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent?) = Unit
@@ -37,6 +37,7 @@ class MenuHoldService : AccessibilityService() {
 
     override fun onDestroy() {
         handler.removeCallbacks(timeout)
+        filter.reset()
         super.onDestroy()
     }
 }

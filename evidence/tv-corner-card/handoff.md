@@ -3,8 +3,10 @@
 Historical implementer record for `5f8073a`; its SUCCESS is not current acceptance.
 The independent review found F01–F06. The same-session repair status and current
 behavioral evidence are in [review.md](review.md#repair--same-session-transition-authorized-2026-10-22).
-F01 requires a contract decision; the original design, screenshots and claims below
-must not be used as proof of a completed repair.
+The owner amended F01 to a shared hold at 13:22Z: every Menu event passes
+unchanged; AFC observes a hold once and the playing app may also react. The
+original consumed-up design below is superseded. Final verification is recorded
+in [the final repair receipt](review.md#final-repair--owner-shared-hold-decision-1322z).
 Observer: Implementer (Claude Code / Claude Opus 5.5 / high), 2026-10-22 UTC.
 Base: `main` at `a22031f`, branch `afc/tv-corner-card`. No Fire TV stick,
 provider app, live data, push or backend change was used.
