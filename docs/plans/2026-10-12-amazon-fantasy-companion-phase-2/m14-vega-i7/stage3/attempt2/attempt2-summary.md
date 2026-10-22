@@ -42,7 +42,8 @@ each time:
 
 The longest stale labels (265 s to 285 s) appeared only while the backend's
 own `asOf` stood still (ESPN gaps around quarter breaks and timeouts). The
-age shown matches the backend's `asOf` within 1 s.
+ages shown broadly follow the backend's `asOf`; capture and display timing
+uncertainty prevents a one-second accuracy claim.
 
 ## R-3 fault (repeated once)
 

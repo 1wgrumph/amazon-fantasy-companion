@@ -44,6 +44,7 @@ checks["backend: changed panel rows carry a higher revision"] = all(
     if [r[:2] for r in a["panel"]["rows"]] != [r[:2] for r in b["panel"]["rows"]])
 checks["device: every capture shows NBA · Points"] = bool(readings) and all(
     r["label"] == "NBA · Points" for r in readings)
+refresh_covered = False
 for session in sorted({r["session"] for r in readings}):
     start, end = window(session)
     backend = {value(t["panel"]["total"], t["panel"]["rows"]) for t in live if start <= t["utc"] <= end}
@@ -51,12 +52,14 @@ for session in sorted({r["session"] for r in readings}):
     shown = {value(r["total"]) for r in own}
     stale = [r["stale_s"] or 0 for r in own]
     if len(backend) > 1:
+        refresh_covered = True
         checks[f"device {session}: shown total changes while the backend total changes ({len(backend)} values)"] = \
             len(shown) > 1 and any(b < a for a, b in zip(stale, stale[1:]))
+if not refresh_covered:
+    checks["device: live refresh coverage"] = False
 fault = [r for r in readings if r.get("fault")]
-if fault:
-    checks["device: during refused refreshes the held value re-renders with a growing stale label (R-3)"] = all(
-        b["stale_s"] > a["stale_s"] and b["total"] == a["total"] for a, b in zip(fault, fault[1:]))
+checks["device: during refused refreshes the held value re-renders with a growing stale label (R-3)"] = len(fault) >= 2 and all(
+    b["stale_s"] > a["stale_s"] and b["total"] == a["total"] for a, b in zip(fault, fault[1:]))
 for name, ok in checks.items():
     print(("PASS " if ok else "FAIL ") + name)
 sys.exit(0 if all(checks.values()) else 1)
