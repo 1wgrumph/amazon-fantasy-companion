@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- On-stick review evidence for the corner card, held Menu control, 90 s auto-close and AZ Fantasy branding on Fire OS 8 ([PR #163](https://github.com/1wgrumph/amazon-fantasy-companion/pull/163)).
 - Add on-stick NBA panel evidence for MIN@MIA and GS@LAL on 2026-10-21: live rows, freshness labels, the team total, the refresh before and after the panel revision fix, typed Watch gaps and a verified restore ([PR #159](https://github.com/1wgrumph/amazon-fantasy-companion/pull/159)).
 - Fire TV overlay: a compact lineup side panel over the playing game, toggled by the "Show over game" button in Companion, and a small top-right alert card ("Stone 20", NBA/NFL mark) that disappears after 5 s, queues, never takes remote focus and never overlaps the panel; without the overlay permission Companion opens Android's switch and shows the manual steps ([PR #157](https://github.com/1wgrumph/amazon-fantasy-companion/pull/157)).
 - Add live Vega Virtual Device evidence for P2-V01 (#59): populated NBA panel, live refresh after #155, saved settings and stale labels, with new `vega-app/vvd-checks` live checks ([PR #158](https://github.com/1wgrumph/amazon-fantasy-companion/pull/158)).
