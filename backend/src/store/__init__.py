@@ -144,7 +144,8 @@ def get_session(session_hash):
 def put_event(event):
     _table("EVENTS_TABLE").put_item(Item=_shaped(event, {
         "gameId", "eventId", "revision", "source", "score", "fieldPosition", "possession",
-        "playerIds", "eventTime", "correctionOf", "period", "scoringPlay", "matchup", "channel"}))
+        "playerIds", "eventTime", "correctionOf", "period", "scoringPlay", "matchup",
+        "channel", "sport"}))
 
 
 def get_event(game_id, event_id):
@@ -354,27 +355,25 @@ MAX_STATS_VERSION = (1 << 24) - 1
 _STATS_FIELDS = {"athleteId", "gameId", "gameState", "gameStatus", "source", "asOf", "stats"}
 
 
-def put_player_statistics(record, *, config=None):
-    """CAS a content sequence without granting ingest a separate read operation.
-
-    A failed conditional PutItem returns the current row, including its sequence.
-    Identical, older or replay-over-live writes keep that row and return False.
-    """
+def _statistics_item(record):
     item = {key: value for key, value in _shaped(record, _STATS_FIELDS).items()
             if not (key == "asOf" and value is None)}
     athlete_id = item.get("athleteId")
     if not isinstance(athlete_id, str) or not re.fullmatch(r"[0-9]{1,20}", athlete_id):
         logging.getLogger(__name__).warning(
             "Skipping player statistics write with invalid athleteId: %.40r", athlete_id)
-        return False
-    table = (_table("PLAYER_STATS_TABLE") if config is None
-             else _table("PLAYER_STATS_TABLE", config))
-    previous = {}
-    for _attempt in range(4):  # initial conditional probe, then at most three CAS attempts
+        return None
+    return item
+
+
+def _put_statistics(item, table, previous, commit, *, require_clock=False, channel=None):
+    """Allocate one bounded content version; a lost CAS recomputes the transition."""
+    for _attempt in range(4):
         if previous:
             old_stamp, new_stamp = previous.get("asOf"), item.get("asOf")
-            if (old_stamp is not None and (not isinstance(new_stamp, str)
-                    or not isinstance(old_stamp, str) or old_stamp > new_stamp)):
+            if ((require_clock and not isinstance(new_stamp, str))
+                    or (old_stamp is not None and (not isinstance(new_stamp, str)
+                        or not isinstance(old_stamp, str) or old_stamp > new_stamp))):
                 return False
             if (previous.get("gameId") == item.get("gameId")
                     and previous.get("source") == "live" and item.get("source") == "replay"):
@@ -384,21 +383,85 @@ def put_player_statistics(record, *, config=None):
         version = int(previous.get("statsVersion", 0)) + 1
         if version > MAX_STATS_VERSION:
             raise RuntimeError("player statistics content sequence exhausted")
-        if not previous:
-            condition = Attr("athleteId").not_exists()
-        elif "statsVersion" in previous:
-            condition = Attr("statsVersion").eq(previous["statsVersion"])
-        else:
-            condition = Attr("athleteId").exists() & Attr("statsVersion").not_exists()
-        try:
-            table.put_item(Item=dict(item, statsVersion=version), ConditionExpression=condition,
-                           ReturnValuesOnConditionCheckFailure="ALL_OLD")
+        previous = commit(table, item, previous, version, channel=channel)
+        if previous is None:
             return True
-        except ClientError as exc:
-            if exc.response["Error"]["Code"] != "ConditionalCheckFailedException":
-                raise
-            previous = TypeDeserializer().deserialize({"M": exc.response.get("Item", {})})
     raise RuntimeError("player statistics write kept losing races")
+
+
+def _statistics_condition(previous):
+    if not previous:
+        return {"ConditionExpression": "attribute_not_exists(athleteId)"}
+    names, values, conditions = {}, {}, []
+    # Include absent fields so legacy and versioned writers share the same CAS.
+    for index, key in enumerate(sorted(_STATS_FIELDS | {"statsVersion", "nbaMilestones"})):
+        name, value = f"#f{index}", f":v{index}"
+        names[name] = key
+        if key in previous:
+            conditions.append(f"{name} = {value}")
+            values[value] = previous[key]
+        else:
+            conditions.append(f"attribute_not_exists({name})")
+    return {"ConditionExpression": " AND ".join(conditions),
+            "ExpressionAttributeNames": names, "ExpressionAttributeValues": values}
+
+
+def _commit_statistics(table, item, previous, version, *, channel=None):
+    try:
+        accepted = dict(item, statsVersion=version)
+        if previous.get("gameId") == item.get("gameId") and "nbaMilestones" in previous:
+            accepted["nbaMilestones"] = previous["nbaMilestones"]
+        table.put_item(Item=accepted, **_statistics_condition(previous),
+                       ReturnValuesOnConditionCheckFailure="ALL_OLD")
+        return None
+    except ClientError as exc:
+        if exc.response["Error"]["Code"] != "ConditionalCheckFailedException":
+            raise
+        return TypeDeserializer().deserialize({"M": exc.response.get("Item", {})})
+
+
+def put_player_statistics(record, *, config=None):
+    """CAS a content sequence using only PutItem and its conflict response."""
+    item = _statistics_item(record)
+    if item is None:
+        return False
+    table = (_table("PLAYER_STATS_TABLE") if config is None
+             else _table("PLAYER_STATS_TABLE", config))
+    return _put_statistics(item, table, {}, _commit_statistics)
+
+
+def _commit_nba_statistics(table, item, previous, version, *, channel):
+    from nba.alerts import game_events, milestones
+
+    same_game = previous.get("gameId") == item.get("gameId")
+    seen = (set(previous.get("nbaMilestones", [])) | milestones(previous)) if same_game else set()
+    accepted = dict(item, statsVersion=version, nbaMilestones=sorted(seen | milestones(item)))
+    events = game_events(item, previous, channel=channel, version=version)
+    request = {"TableName": table.name, "Item": accepted}
+    request.update(_statistics_condition(previous))
+    try:
+        table.meta.client.transact_write_items(TransactItems=[{"Put": request}] + [
+            {"Put": {"TableName": os.environ["EVENTS_TABLE"], "Item": event}} for event in events])
+        return None
+    except ClientError as exc:
+        if (exc.response["Error"]["Code"] != "TransactionCanceledException"
+                or not any(reason.get("Code") in ("ConditionalCheckFailed", "TransactionConflict")
+                           for reason in exc.response.get("CancellationReasons", []))):
+            raise
+        return table.get_item(Key={"athleteId": item["athleteId"]},
+                              ConsistentRead=True).get("Item", {})
+
+
+def put_nba_statistics(record, *, config=None, channel=None):
+    """Commit the shared accepted version and its immutable NBA events atomically."""
+    item = _statistics_item(record)
+    if item is None:
+        return False
+    table = _table("PLAYER_STATS_TABLE", config)
+    previous = table.get_item(Key={"athleteId": item["athleteId"]},
+                              ConsistentRead=True).get("Item", {})
+    return _put_statistics(item, table, previous, _commit_nba_statistics,
+                           require_clock=True, channel=channel)
 
 
 def get_player_statistics(athlete_id):
