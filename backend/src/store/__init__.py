@@ -13,6 +13,7 @@ import re
 
 import boto3
 from boto3.dynamodb.conditions import Attr, Key
+from boto3.dynamodb.types import TypeDeserializer
 from botocore.exceptions import ClientError
 
 
@@ -285,36 +286,57 @@ def get_panel(profile_id, team_league):
 # Player statistics: latest stored boxscore per ESPN athlete (panel seam).
 # One record per athlete; the panel refuses a record from another game than
 # the starter's latest projected game, so no gameId range key is needed.
-def put_player_statistics(record, *, config=None):
-    """Store unless a newer (or live, vs replay) record for the game exists.
+MAX_STATS_VERSION = (1 << 24) - 1
+_STATS_FIELDS = {"athleteId", "gameId", "gameState", "gameStatus", "source", "asOf", "stats"}
 
-    Conditional PutItem only: IngestFunction has no GetItem grant on this
-    table. Returns False when the stored record was kept.
+
+def put_player_statistics(record, *, config=None):
+    """CAS a content sequence without granting ingest a separate read operation.
+
+    A failed conditional PutItem returns the current row, including its sequence.
+    Identical, older or replay-over-live writes keep that row and return False.
     """
-    item = {key: value for key, value in _shaped(record, {
-        "athleteId", "gameId", "gameState", "gameStatus", "source", "asOf",
-        "stats"}).items() if not (key == "asOf" and value is None)}
+    item = {key: value for key, value in _shaped(record, _STATS_FIELDS).items()
+            if not (key == "asOf" and value is None)}
     athlete_id = item.get("athleteId")
     if not isinstance(athlete_id, str) or not re.fullmatch(r"[0-9]{1,20}", athlete_id):
         logging.getLogger(__name__).warning(
             "Skipping player statistics write with invalid athleteId: %.40r", athlete_id)
         return False
-    values = {":gameId": item.get("gameId"), ":live": "live",
-              ":source": item.get("source"), ":replay": "replay"}
-    fresh = "attribute_not_exists(athleteId)"
-    if isinstance(item.get("asOf"), str):
-        values[":asOf"] = item["asOf"]
-        fresh += " OR attribute_not_exists(asOf) OR asOf <= :asOf"
-    condition = (f"({fresh}) AND (attribute_not_exists(athleteId) OR NOT "
-                 "(gameId = :gameId AND #source = :live AND :source = :replay))")
     table = (_table("PLAYER_STATS_TABLE") if config is None
              else _table("PLAYER_STATS_TABLE", config))
-    return _written(table.put_item, Item=item,
-                    ConditionExpression=condition,
-                    ExpressionAttributeNames={"#source": "source"},
-                    ExpressionAttributeValues=values)
+    previous = {}
+    for _attempt in range(4):  # initial conditional probe, then at most three CAS attempts
+        if previous:
+            old_stamp, new_stamp = previous.get("asOf"), item.get("asOf")
+            if (old_stamp is not None and (not isinstance(new_stamp, str)
+                    or not isinstance(old_stamp, str) or old_stamp > new_stamp)):
+                return False
+            if (previous.get("gameId") == item.get("gameId")
+                    and previous.get("source") == "live" and item.get("source") == "replay"):
+                return False
+            if all(previous.get(key) == item.get(key) for key in _STATS_FIELDS):
+                return False
+        version = int(previous.get("statsVersion", 0)) + 1
+        if version > MAX_STATS_VERSION:
+            raise RuntimeError("player statistics content sequence exhausted")
+        if not previous:
+            condition = Attr("athleteId").not_exists()
+        elif "statsVersion" in previous:
+            condition = Attr("statsVersion").eq(previous["statsVersion"])
+        else:
+            condition = Attr("athleteId").exists() & Attr("statsVersion").not_exists()
+        try:
+            table.put_item(Item=dict(item, statsVersion=version), ConditionExpression=condition,
+                           ReturnValuesOnConditionCheckFailure="ALL_OLD")
+            return True
+        except ClientError as exc:
+            if exc.response["Error"]["Code"] != "ConditionalCheckFailedException":
+                raise
+            previous = TypeDeserializer().deserialize({"M": exc.response.get("Item", {})})
+    raise RuntimeError("player statistics write kept losing races")
 
 
 def get_player_statistics(athlete_id):
     return _table("PLAYER_STATS_TABLE").get_item(
-        Key={"athleteId": athlete_id}).get("Item")
+        Key={"athleteId": athlete_id}, ConsistentRead=True).get("Item")
