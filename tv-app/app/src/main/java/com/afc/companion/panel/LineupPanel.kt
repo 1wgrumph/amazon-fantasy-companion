@@ -90,7 +90,7 @@ fun LineupPanel(client: ApiClient, mode: PanelMode, modifier: Modifier = Modifie
         return
     }
     val current = profile
-    val teamLeague = current?.teamLeague?.let { "${it.league}/${it.team}" }
+    val teamLeague = panelTeamLeague(current)
     val context = LocalContext.current
     val revealOnNewAlert = remember(mode) { revealsOnNewAlert(DeviceSettings(context).showPanelOnNewAlert, mode) }
     val controller = remember(client, teamLeague) {
@@ -140,25 +140,8 @@ fun LineupPanel(client: ApiClient, mode: PanelMode, modifier: Modifier = Modifie
 
     LaunchedEffect(controller) {
         runCatching { focusRequester.requestFocus() }
-        while (true) {
-            if (controller.teamLeague != null && controller.shouldFetch(System.currentTimeMillis())) {
-                try {
-                    // Network and parsing stay off the rendering thread (AFC-PR-063).
-                    val decoded = withContext(Dispatchers.Default) {
-                        client.getPanel(controller.teamLeague).value?.let { decodePanel(it) }
-                    }
-                    decoded?.let { controller.onFetched(it, System.currentTimeMillis()) }
-                } catch (cancelled: CancellationException) {
-                    throw cancelled
-                } catch (_: Exception) {
-                    // A failed or malformed fetch shows as unavailable, never as stale zeros.
-                }
-                fetchAttempted = true
-                tick++
-            }
-            delay(1_000)
-            // Invalidate every second while composed so a value crossing the 60 s
-            // stale boundary re-renders stale without waiting for the 30 s fetch.
+        runPanelUpdates(client, controller) { fetched ->
+            if (fetched) fetchAttempted = true
             tick++
         }
     }
@@ -223,8 +206,37 @@ fun LineupPanel(client: ApiClient, mode: PanelMode, modifier: Modifier = Modifie
     }
 }
 
+/** The profile's one team/league pair as the panel key, or null when none is selected. */
+fun panelTeamLeague(profile: ProfileState?): String? = profile?.teamLeague?.let { "${it.league}/${it.team}" }
+
+/**
+ * The one panel update owner, shared by [LineupPanel] and the overlay: fetches the selected
+ * team/league while [controller] is visible. [onTick] runs after each fetch attempt (true) and
+ * every second (false), so a value crossing the 60 s stale boundary re-renders without a fetch.
+ */
+suspend fun runPanelUpdates(client: ApiClient, controller: PanelController, onTick: (fetched: Boolean) -> Unit): Nothing {
+    while (true) {
+        if (controller.teamLeague != null && controller.shouldFetch(System.currentTimeMillis())) {
+            try {
+                // Network and parsing stay off the rendering thread (AFC-PR-063).
+                val decoded = withContext(Dispatchers.Default) {
+                    client.getPanel(controller.teamLeague).value?.let { decodePanel(it) }
+                }
+                decoded?.let { controller.onFetched(it, System.currentTimeMillis()) }
+            } catch (cancelled: CancellationException) {
+                throw cancelled
+            } catch (_: Exception) {
+                // A failed or malformed fetch shows as unavailable, never as stale zeros.
+            }
+            onTick(true)
+        }
+        delay(1_000)
+        onTick(false)
+    }
+}
+
 @Composable
-private fun PanelContent(
+internal fun PanelContent(
     alerts: List<PanelAlert>,
     armedWatch: String?,
     watchOutcome: String?,
@@ -233,6 +245,7 @@ private fun PanelContent(
     focused: FocusTarget?,
     fetchAttempted: Boolean,
     nowMs: Long,
+    compact: Boolean = false,
 ) {
     val loading = snapshot == null && teamLeague != null && !fetchAttempted
     Box(Modifier.fillMaxSize()) {
@@ -250,8 +263,9 @@ private fun PanelContent(
             watchOutcome?.let {
                 Text(it, style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = MaterialTheme.colorScheme.onSurface))
             }
-            alerts.forEach { alert -> AlertCard(alert, armedWatch == alert.id, focused, revealWholeCard = !loading) }
-            FocusableRow(focused == FocusTarget.TeamLeagueSwitch) {
+            alerts.forEach { alert -> AlertCard(alert, armedWatch == alert.id, focused, revealWholeCard = !loading, compact = compact) }
+            // The overlay cannot take focus, so its compact form leaves out the team/league switch.
+            if (!compact) FocusableRow(focused == FocusTarget.TeamLeagueSwitch) {
                 Text(
                     "Team/league: ${teamLeague ?: "Unavailable"}",
                     style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = MaterialTheme.colorScheme.onSurface),
@@ -277,23 +291,25 @@ private fun PanelContent(
             snapshot.rows.forEach { row ->
                 key(row.playerId) {
                     FocusableRow(focused == FocusTarget.Row(row.playerId)) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(24.dp),
-                        ) {
-                            Text(
-                                row.name,
-                                modifier = Modifier.weight(1f),
-                                style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = MaterialTheme.colorScheme.onSurface),
-                            )
-                            Text(
-                                PanelText.gameStatus(row.gameStatus),
-                                style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = MaterialTheme.colorScheme.onSurface),
-                            )
-                            Text(
-                                PanelText.value(row.points, nowMs),
-                                style = TextStyle(fontSize = PanelTextSizes.scoreSp.sp, color = MaterialTheme.colorScheme.onSurface),
-                            )
+                        val body = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = MaterialTheme.colorScheme.onSurface)
+                        // Compact: the name gets its own line, so a long stale label cannot squeeze it out.
+                        Column {
+                            if (compact) Text(row.name, style = body)
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(24.dp),
+                            ) {
+                                if (!compact) Text(row.name, modifier = Modifier.weight(1f), style = body)
+                                Text(
+                                    PanelText.gameStatus(row.gameStatus),
+                                    modifier = if (compact) Modifier.weight(1f) else Modifier,
+                                    style = body,
+                                )
+                                Text(
+                                    PanelText.value(row.points, nowMs),
+                                    style = TextStyle(fontSize = PanelTextSizes.scoreSp.sp, color = MaterialTheme.colorScheme.onSurface),
+                                )
+                            }
                         }
                     }
                 }
@@ -315,7 +331,7 @@ private fun PanelContent(
 }
 
 @Composable
-private fun AlertCard(alert: PanelAlert, armed: Boolean, focused: FocusTarget?, revealWholeCard: Boolean) {
+private fun AlertCard(alert: PanelAlert, armed: Boolean, focused: FocusTarget?, revealWholeCard: Boolean, compact: Boolean = false) {
     // Reveal the whole card when it fits; loading leaves the focused action to scroll into view.
     val cardFocused = focused == FocusTarget.AlertWatch(alert.id) || focused == FocusTarget.AlertDismiss(alert.id)
     val flare = MaterialTheme.colorScheme.tertiary
@@ -331,6 +347,11 @@ private fun AlertCard(alert: PanelAlert, armed: Boolean, focused: FocusTarget?, 
     ) {
         val body = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = MaterialTheme.colorScheme.onSurface)
         Text(alert.text.headline, style = TextStyle(fontSize = PanelTextSizes.scoreSp.sp, color = MaterialTheme.colorScheme.onSurface))
+        // Compact (overlay): headline and player only; access, commentary, Watch and Dismiss stay in Companion, which can take focus.
+        if (compact) {
+            alert.text.context.ifEmpty { null }?.let { Text(it, style = body) }
+            return@Column
+        }
         listOfNotNull(alert.text.context.ifEmpty { null }, alert.text.access, alert.text.commentary).forEach { Text(it, style = body) }
         // Stacked, matching the UP/DOWN focus order.
         if (alert.watchable) {

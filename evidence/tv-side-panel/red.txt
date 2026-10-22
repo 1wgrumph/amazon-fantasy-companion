@@ -1,0 +1,110 @@
+Base: a82157f
+Classification: expected TDD assertion failures for planned side-panel and alert-card features
+Command: cd tv-app && JAVA_HOME=~/.local/share/afc-tools/jdk-17.0.20.1+1 TMPDIR=~/.cache/afc-gate-tmp ANDROID_HOME=~/.local/share/afc-tools/android-sdk ./gradlew :app:testDebugUnitTest
+Exit code: 1
+
+Filtered Gradle output: tasks, failing names, assertion messages and summary.
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preDebugBuild UP-TO-DATE
+> Task :app:generateDebugBuildConfig UP-TO-DATE
+> Task :app:generateDebugResources UP-TO-DATE
+> Task :app:packageDebugResources UP-TO-DATE
+> Task :app:processDebugNavigationResources UP-TO-DATE
+> Task :app:parseDebugLocalResources UP-TO-DATE
+> Task :app:generateDebugRFile UP-TO-DATE
+> Task :app:compileDebugKotlin UP-TO-DATE
+> Task :app:javaPreCompileDebug UP-TO-DATE
+> Task :app:compileDebugJavaWithJavac UP-TO-DATE
+> Task :app:checkDebugAarMetadata UP-TO-DATE
+> Task :app:mapDebugSourceSetPaths UP-TO-DATE
+> Task :app:compileDebugNavigationResources UP-TO-DATE
+> Task :app:mergeDebugResources UP-TO-DATE
+> Task :app:createDebugCompatibleScreenManifests UP-TO-DATE
+> Task :app:extractDeepLinksDebug UP-TO-DATE
+> Task :app:processDebugMainManifest UP-TO-DATE
+> Task :app:processDebugManifest UP-TO-DATE
+> Task :app:processDebugManifestForPackage UP-TO-DATE
+> Task :app:processDebugResources UP-TO-DATE
+> Task :app:bundleDebugClassesToRuntimeJar UP-TO-DATE
+> Task :app:bundleDebugClassesToCompileJar UP-TO-DATE
+> Task :app:preDebugUnitTestBuild UP-TO-DATE
+> Task :app:javaPreCompileDebugUnitTest UP-TO-DATE
+> Task :app:processDebugJavaRes UP-TO-DATE
+> Task :app:compileDebugUnitTestKotlin
+> Task :app:compileDebugUnitTestJavaWithJavac UP-TO-DATE
+> Task :app:processDebugUnitTestJavaRes UP-TO-DATE
+> Task :app:testDebugUnitTest
+AlertCardContractTest > cardIsAnExactCompactSquareAtTheSafeTopRightCorner FAILED
+    java.lang.AssertionError: Missing overlay API: AlertCardGeometry in com.afc.companion.panel
+AlertCardContractTest > firstAlertAppearsImmediatelyAndRetainsItsSmallSportMarkAndWatchReference FAILED
+    java.lang.AssertionError: Missing overlay API: AlertCardQueue in com.afc.companion.panel
+AlertCardContractTest > duplicateCurrentIdDoesNotRestartTheTimeoutOrDisplayAgain FAILED
+    java.lang.AssertionError: Missing overlay API: AlertCardQueue in com.afc.companion.panel
+AlertCardContractTest > rightSidePanelMovesBelowTheCardWithAGapAndStaysInsideItsSafeZone FAILED
+    java.lang.AssertionError: Missing overlay API: AlertCardGeometry in com.afc.companion.panel
+AlertCardContractTest > cardAutoDismissesAtFiveSecondsWithoutInput FAILED
+    java.lang.AssertionError: Missing overlay API: AlertCardQueue in com.afc.companion.panel
+AlertCardContractTest > duplicateQueuedIdDoesNotProduceASecondCard FAILED
+    java.lang.AssertionError: Missing overlay API: AlertCardQueue in com.afc.companion.panel
+AlertCardContractTest > delayedTimerStillGivesTheNextQueuedCardFiveSeconds FAILED
+    java.lang.AssertionError: Missing overlay API: AlertCardQueue in com.afc.companion.panel
+AlertCardContractTest > clearingTheSessionRemovesCurrentAndQueuedCardsAndResetsDeduplication FAILED
+    java.lang.AssertionError: Missing overlay API: AlertCardQueue in com.afc.companion.panel
+AlertCardContractTest > severalNbaAndNflAlertsQueueInArrivalOrderOneAtATime FAILED
+    java.lang.AssertionError: Missing overlay API: AlertCardQueue in com.afc.companion.panel
+AlertCardContractTest > unsafeTextAndUnknownNumbersCannotBecomeAnAuthoritativeCardLabel FAILED
+    java.lang.AssertionError: Missing overlay API: AlertCardText in com.afc.companion.panel
+AlertCardContractTest > labelContainsOnlyThePlayerAndCompactNumber FAILED
+    java.lang.AssertionError: Missing overlay API: AlertCardText in com.afc.companion.panel
+AlertCardIntegrationContractTest > monitoringStartsTheCardHostWithoutShowingTheSidePanel FAILED
+    java.lang.AssertionError: Missing overlay integration: panel/OverlayService.kt
+AlertCardIntegrationContractTest > cardRendersOnlyPlayerNumberAndASmallSportMark FAILED
+    java.lang.AssertionError: Missing overlay integration: panel/AlertCardOverlay.kt
+AlertCardIntegrationContractTest > hostRunsTheQueueOnAMonotonicTimerAndRepositionsTheSidePanel FAILED
+    java.lang.AssertionError: Missing overlay integration: panel/AlertCardOverlay.kt
+AlertCardIntegrationContractTest > separateCardWindowIsNonFocusableAndNeverStartsOrControlsPlayback FAILED
+    java.lang.AssertionError: Missing overlay integration: panel/AlertCardOverlay.kt
+AlertCardIntegrationContractTest > autoDismissRetainsTheAlertForTheRemoteWatchPathInCompanion FAILED
+    java.lang.AssertionError: Missing overlay integration: panel/AlertCardOverlay.kt
+OverlayControllerTest > deniedToggleUsesTheSamePermissionPathAsShow FAILED
+    java.lang.AssertionError: Missing overlay API: OverlayController in com.afc.companion.panel
+OverlayControllerTest > toggleShowsHidesAndShowsWithoutDuplicateWindows FAILED
+    java.lang.AssertionError: Missing overlay API: OverlayController in com.afc.companion.panel
+OverlayControllerTest > repeatedShowAddsExactlyOneWindow FAILED
+    java.lang.AssertionError: Missing overlay API: OverlayController in com.afc.companion.panel
+OverlayControllerTest > deniedShowReturnsPermissionNeededAndRoutesWithoutAddingAWindow FAILED
+    java.lang.AssertionError: Missing overlay API: OverlayController in com.afc.companion.panel
+OverlayControllerTest > arrivingNbaScoreAlertIsShownWithItsTitleAndWatchReference FAILED
+    java.lang.AssertionError: Missing overlay API: OverlayController in com.afc.companion.panel
+OverlayControllerTest > repeatedHideRemovesExactlyOneWindowAndStopsRefresh FAILED
+    java.lang.AssertionError: Missing overlay API: OverlayController in com.afc.companion.panel
+OverlayControllerTest > overlayUsesTheSameSnapshotAndFormattingForNflAndNba FAILED
+    java.lang.AssertionError: Missing overlay API: OverlayController in com.afc.companion.panel
+OverlayControllerTest > geometryFitsOneSideWithinThirtyPercentAndTheFivePercentSafeZone FAILED
+    java.lang.AssertionError: Missing overlay API: OverlayGeometry in com.afc.companion.panel
+OverlayControllerTest > arrivingNflAlertIsShownWithItsTitleAndWatchReference FAILED
+    java.lang.AssertionError: Missing overlay API: OverlayController in com.afc.companion.panel
+OverlayControllerTest > showRechecksPermissionAfterTheUserGrantsIt FAILED
+    java.lang.AssertionError: Missing overlay API: OverlayController in com.afc.companion.panel
+OverlayIntegrationContractTest > destroyingTheHostHidesItsWindowAndCancelsItsCollectors FAILED
+    java.lang.AssertionError: Missing overlay integration: panel/OverlayService.kt
+OverlayIntegrationContractTest > overlaySubscribesToTheExistingInboxAndRetainsWatchIdentity FAILED
+    java.lang.AssertionError: Missing overlay integration: panel/OverlayService.kt
+OverlayIntegrationContractTest > actualWindowUsesNonFocusableOverlayTypeAndTestedGeometry FAILED
+    java.lang.AssertionError: Missing overlay integration: panel/OverlayService.kt
+OverlayIntegrationContractTest > manifestDeclaresAnAppPrivateForegroundOverlayService FAILED
+    java.lang.AssertionError: Missing foreground overlay host: .panel.OverlayService
+OverlayIntegrationContractTest > manifestRequestsSystemAlertWindowPermission FAILED
+    java.lang.AssertionError: Missing SYSTEM_ALERT_WINDOW permission
+OverlayIntegrationContractTest > overlayAndFullScreenRenderTheSamePanelContentWithoutANewFeed FAILED
+    java.lang.AssertionError: Missing overlay integration: panel/OverlayService.kt
+OverlayIntegrationContractTest > androidHostChecksPermissionAndProvidesTheManageOverlayPermissionRoute FAILED
+    java.lang.AssertionError: Missing overlay integration: panel/OverlayService.kt
+OverlayIntegrationContractTest > remoteReachableInAppActionSendsTheToggleIntentThenReturnsToTheGame FAILED
+    java.lang.AssertionError: Missing overlay integration: panel/OverlayService.kt
+344 tests completed, 34 failed
+> Task :app:testDebugUnitTest FAILED
+Execution failed for task ':app:testDebugUnitTest'.
+> There were failing tests. See the report at: file://<repo>/tv-app/app/build/reports/tests/testDebugUnitTest/index.html
+BUILD FAILED in 14s
+27 actionable tasks: 2 executed, 25 up-to-date
