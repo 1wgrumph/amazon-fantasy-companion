@@ -137,6 +137,16 @@ class MenuHoldFilterTest {
         assertEquals(0, taps)
     }
 
+    @Test fun resetDropsTheFirstTapAndTheNextPressStartsFresh() {
+        press(0, 100)
+        tapFilter.reset()
+        press(200, 300)
+        assertEquals("one press after a service reset is not a double-tap", 0, taps)
+        press(400, 500)
+        assertEquals("two presses after reset still form a double-tap", 1, taps)
+        assertEquals(0, holds)
+    }
+
     @Test fun aHoldIsNeverPartOfADoubleTap() {
         press(0, 100)
         press(300, 1_100) // held 800 ms

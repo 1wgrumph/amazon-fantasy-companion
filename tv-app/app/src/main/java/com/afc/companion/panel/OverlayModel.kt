@@ -81,6 +81,10 @@ class OverlayController(
         OverlayMode.Menu, OverlayMode.Expanded -> { mode = OverlayMode.Card; OverlayOutcome.Shown }
     }
 
+    fun doubleTap() {
+        if (mode == OverlayMode.Card || mode == OverlayMode.Menu) panel.perform(PanelAction.NextTeamLeague, 0)
+    }
+
     fun select(item: OverlayMenuItem) {
         when (item) {
             OverlayMenuItem.Hide -> hide()
@@ -185,6 +189,8 @@ object CornerCardStyle {
 
 /** The card's few words: the team total, how fresh it is, the sport, and the switch hint. */
 object CornerCardText {
+    fun label(teamLeague: String?): String = teamLeague ?: "No team selected"
+
     fun total(snapshot: PanelSnapshot?): String = snapshot?.teamTotal?.value?.toString() ?: "Unavailable"
 
     fun status(snapshot: PanelSnapshot?, teamLeague: String?, nowMs: Long): String {

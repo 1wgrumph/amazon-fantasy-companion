@@ -125,11 +125,9 @@ class OverlayService : Service() {
             }
             ACTION_NEXT_TEAM_LEAGUE -> {
                 // Double-tapped ≡ only switches a card already showing; local display, no profile write.
-                if (controller.mode != OverlayMode.Off) {
-                    controller.panel.perform(PanelAction.NextTeamLeague, 0)
-                    tick++
-                    render()
-                }
+                controller.doubleTap()
+                tick++
+                render()
                 stopIfIdle()
             }
             ACTION_ALERTS -> { cards.start(); stopIfIdle() }

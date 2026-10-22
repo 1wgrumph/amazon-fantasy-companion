@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Switch the TV between a profile's lineup pairs (NBA and NFL): `GET /v1/panel` lists them in `teamLeagues`, and a double-tap on ≡ while the corner card shows cycles to the next pair (local display only; alerts still come from every pair).
+- Switch the TV between a profile's lineup pairs (NBA and NFL): `GET /v1/panel` lists them in `teamLeagues`, and a double-tap on ≡ while the corner card shows cycles to the next pair (local display only; alerts still come from every pair). The selected pair stays labeled after loading; service resets clear pending taps, and double-tap does nothing while the overlay is hidden or expanded.
 - On-stick review evidence for the corner card, held Menu control, 90 s auto-close and AZ Fantasy branding on Fire OS 8 ([PR #163](https://github.com/1wgrumph/amazon-fantasy-companion/pull/163)).
 - Add on-stick NBA panel evidence for MIN@MIA and GS@LAL on 2026-10-21: live rows, freshness labels, the team total, the refresh before and after the panel revision fix, typed Watch gaps and a verified restore ([PR #159](https://github.com/1wgrumph/amazon-fantasy-companion/pull/159)).
 - Fire TV overlay: a compact lineup side panel over the playing game, toggled by the "Show over game" button in Companion, and a small top-right alert card ("Stone 20", NBA/NFL mark) that disappears after 5 s, queues, never takes remote focus and never overlaps the panel; without the overlay permission Companion opens Android's switch and shows the manual steps ([PR #157](https://github.com/1wgrumph/amazon-fantasy-companion/pull/157)).
