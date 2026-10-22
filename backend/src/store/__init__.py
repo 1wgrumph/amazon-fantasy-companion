@@ -14,6 +14,7 @@ from datetime import datetime, timezone
 
 import boto3
 from boto3.dynamodb.conditions import Attr, Key
+from boto3.dynamodb.types import TypeDeserializer
 from botocore.exceptions import ClientError
 
 
@@ -288,30 +289,58 @@ def get_panel(profile_id, team_league):
 # cannot overwrite it and a player lookup cannot read it.
 _PREGAME_ID = "pregame"
 _PREGAME_TEAM = re.compile(r"[A-Z0-9]{2,4}")
+NBA_PREGAME_WINDOW = 12 * 60 * 60
 
 
 def put_nba_pregame(teams, *, config=None):
-    """Replace the current NBA pregame slate. Empty input writes nothing."""
-    if not isinstance(teams, dict) or not teams:
+    """Replace even an empty slate, allocating a sequence with PutItem-only IAM."""
+    if not isinstance(teams, dict):
         return False
     clean = {}
     for abbr, detail in teams.items():
         if (isinstance(abbr, str) and _PREGAME_TEAM.fullmatch(abbr)
                 and isinstance(detail, str) and detail.strip() and len(detail) <= 80):
             clean[abbr] = detail
-    if not clean:
+    if teams and not clean:
         return False
-    item = {"athleteId": _PREGAME_ID,
-            "asOf": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-            "teams": clean}
     table = (_table("PLAYER_STATS_TABLE", config) if config is not None
              else _table("PLAYER_STATS_TABLE"))
-    table.put_item(Item=item)
-    return True
+    previous = None
+    for _ in range(16):
+        moment = datetime.now(timezone.utc)
+        sequence = 1
+        condition = Attr("athleteId").not_exists()
+        if previous is not None:
+            try:
+                stamp = datetime.fromisoformat(previous.get("asOf", "").replace("Z", "+00:00"))
+                expired = (moment - stamp).total_seconds() > NBA_PREGAME_WINDOW
+            except (ValueError, TypeError, AttributeError):
+                expired = True
+            sequence = int(previous.get("sequence", 0))
+            # Refreshing an expired slate must outrun the panel's expiry bit.
+            sequence += int(previous.get("teams") != clean or expired or not sequence)
+            condition = Attr("athleteId").exists()
+            for field in ("sequence", "asOf", "teams"):
+                condition &= (Attr(field).eq(previous[field]) if field in previous
+                              else Attr(field).not_exists())
+        item = {"athleteId": _PREGAME_ID, "sequence": sequence, "teams": clean,
+                "asOf": moment.strftime("%Y-%m-%dT%H:%M:%SZ")}
+        try:
+            table.put_item(Item=item, ConditionExpression=condition,
+                           ReturnValuesOnConditionCheckFailure="ALL_OLD")
+            return True
+        except ClientError as exc:
+            if exc.response["Error"]["Code"] != "ConditionalCheckFailedException":
+                raise
+            previous = {key: TypeDeserializer().deserialize(value)
+                        for key, value in exc.response.get("Item", {}).items()} or None
+            conflict = exc
+    raise conflict
 
 
 def get_nba_pregame():
-    return _table("PLAYER_STATS_TABLE").get_item(Key={"athleteId": _PREGAME_ID}).get("Item")
+    return _table("PLAYER_STATS_TABLE").get_item(
+        Key={"athleteId": _PREGAME_ID}, ConsistentRead=True).get("Item")
 
 
 # Player statistics: latest stored boxscore per ESPN athlete (panel seam).

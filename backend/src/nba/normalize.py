@@ -7,6 +7,7 @@ shortcut: summary validation is hand-checked pinned fields, not a pinned
 JSON Schema file; add schema/nba-summary.json if NBA leaves spike scope.
 """
 
+from datetime import datetime
 from decimal import Decimal, InvalidOperation
 import logging
 import re
@@ -39,7 +40,7 @@ def scoreboard_games(payload):
 
 
 def pregame_status_by_team(payload):
-    """ESPN pregame shortDetail keyed by team abbreviation. Started games omitted."""
+    """ESPN text for each team's earliest dated pregame; started games omitted."""
     validate_scoreboard(payload)
     found = {}
     for game in payload["events"]:
@@ -49,12 +50,20 @@ def pregame_status_by_team(payload):
         detail = status.get("shortDetail") or status.get("detail")
         if not isinstance(detail, str) or not detail.strip() or len(detail) > 80:
             continue
+        try:
+            tip = datetime.fromisoformat(game.get("date", "").replace("Z", "+00:00"))
+        except (ValueError, AttributeError):
+            continue
+        if tip.utcoffset() is None:
+            continue
+        order = (tip, game["id"])
         for competition in game.get("competitions", []):
             for competitor in competition.get("competitors", []):
                 abbr = competitor["team"].get("abbreviation")
                 if isinstance(abbr, str) and re.fullmatch(r"[A-Z0-9]{2,4}", abbr):
-                    found[abbr] = detail
-    return found
+                    if abbr not in found or order < found[abbr][0]:
+                        found[abbr] = (order, detail)
+    return {abbr: detail for abbr, (_, detail) in found.items()}
 
 
 def _status(payload):

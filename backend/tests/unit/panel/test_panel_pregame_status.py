@@ -95,3 +95,47 @@ def test_nfl_row_ignores_the_nba_pregame_slate(api, monkeypatch):
     data = _snapshot(monkeypatch, profile="fan", team_league="nfl-league/team-9")
     assert data["rows"][0]["gameStatus"] is None
     assert "sport" not in data
+
+
+def test_pregame_changes_and_clear_advance_revision_without_other_writes(api, monkeypatch):
+    import panel
+    import store
+
+    _lineup(store, [{"athlete_id": "9100001", "name": "Sample Guard", "team": "GS", "slot": "PG"}], sport="nba")
+    _snapshot(monkeypatch)
+    read = lambda: panel.snapshot("hoops", PAIR)
+    before = read()
+    for teams, status in [({"GS": TIP}, TIP), ({"GS": "new tip"}, "new tip"), ({}, None)]:
+        assert store.put_nba_pregame(teams)
+        after = read()
+        assert after["data"]["rows"][0]["gameStatus"] == status
+        assert after["revision"] > before["revision"]
+        assert read()["revision"] == after["revision"]
+        before = after
+
+
+def test_pregame_expiration_and_refresh_never_regress_revision(api, monkeypatch):
+    import panel
+    import store
+
+    _lineup(store, [{"athlete_id": "9100001", "name": "Sample Guard", "team": "GS", "slot": "PG"}], sport="nba")
+    monkeypatch.setenv("AFC_ENABLE_NBA", "true")
+    assert store.put_nba_pregame({"GS": TIP})
+    stamp = store.get_nba_pregame()["asOf"]
+    moment = datetime.fromisoformat(stamp.replace("Z", "+00:00"))
+    monkeypatch.setattr(panel, "now", lambda: stamp)
+    fresh = panel.snapshot("hoops", PAIR)
+    expired_at = moment + timedelta(hours=13)
+    monkeypatch.setattr(panel, "now", lambda: expired_at.isoformat())
+    expired = panel.snapshot("hoops", PAIR)
+    assert expired["data"]["rows"][0]["gameStatus"] is None
+    assert expired["revision"] > fresh["revision"]
+    class Clock(datetime):
+        @classmethod
+        def now(cls, tz=None):
+            return expired_at
+    monkeypatch.setattr(store, "datetime", Clock)
+    assert store.put_nba_pregame({"GS": TIP})
+    refreshed = panel.snapshot("hoops", PAIR)
+    assert refreshed["data"]["rows"][0]["gameStatus"] == TIP
+    assert refreshed["revision"] > expired["revision"]

@@ -85,17 +85,19 @@ def _nba_lineup(lineup):
 
 
 def _nba_pregame(lineup):
-    """Team abbreviation to ESPN pregame text, or {} when the slate is stale."""
+    """Pregame text and monotonic revision contribution, including expiry."""
     if not _nba_lineup(lineup):
-        return {}
+        return {}, 0
     item = store.get_nba_pregame()
     if not item:
-        return {}
+        return {}, 0
     age = _age_seconds(item.get("asOf"))
-    if age is None or age > FINAL_RECORD_WINDOW:
-        return {}
+    expired = age is None or age > store.NBA_PREGAME_WINDOW
+    pregame_seq = 2 * int(item.get("sequence", 0)) + int(expired)
+    if expired:
+        return {}, pregame_seq
     teams = item.get("teams")
-    return teams if isinstance(teams, dict) else {}
+    return (teams if isinstance(teams, dict) else {}), pregame_seq
 
 
 def _sport_off(lineup, settings):
@@ -281,7 +283,8 @@ def snapshot(profile_id, team_league):
     games, counter, projected = _stored(profile_id, team_league)
     rows, states, source_ids = [], [], []
     expired_finals = 0
-    pregame = _nba_pregame(lineup) if lineup and _pair(lineup) == team_league else {}
+    pregame, pregame_seq = (_nba_pregame(lineup) if lineup and _pair(lineup) == team_league
+                            else ({}, 0))
     if lineup and _pair(lineup) == team_league:
         if len(lineup.get("starters") or []) > MAX_ROWS:
             raise InvalidLineupError(
@@ -361,9 +364,10 @@ def snapshot(profile_id, team_league):
     # every bump strictly above the fingerprint field (64) plus the
     # expired-final count (at most MAX_ROWS), so read-time expiration
     # advances the revision the TV consumes and stable rereads do not.
+    # pregame_seq carries the slate sequence plus its read-time expiry bit.
     current = _fingerprint(lineup) if lineup and _pair(lineup) == team_league else ""
     revision = (128 * ((counter or 0) + int(profile.get("revision", 0))
-                       + lineup_version)
+                       + lineup_version + pregame_seq)
                 + 64 * (current != projected) + expired_finals)
     data = {"teamLeague": team_league, "scoringBasis": basis,
             "visible": bool((settings.get("panelPrefs") or {}).get("visible", True)),

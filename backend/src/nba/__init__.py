@@ -12,7 +12,7 @@ import time
 from contextlib import contextmanager
 
 from botocore.config import Config
-from botocore.exceptions import ClientError
+from botocore.exceptions import BotoCoreError, ClientError
 
 FEED = "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/"
 _TRUE = ("1", "true", "yes")
@@ -96,19 +96,14 @@ def enabled():
 
 
 def _store_pregame(teams):
-    """Persist the pregame slate. A write failure must not drop boxscores.
-
-    shortcut: an empty slate is not written (this role has no DeleteItem, and
-    an in-progress poll must not add a row). A team drops off on the next
-    non-empty pregame write, or when the panel's 12h window expires.
-    """
-    if not teams or not os.environ.get("PLAYER_STATS_TABLE"):
+    """Persist even an empty slate; a write failure must not drop boxscores."""
+    if not os.environ.get("PLAYER_STATS_TABLE"):
         return
     from store import put_nba_pregame
 
     try:
         put_nba_pregame(teams, config=_write_config())
-    except ClientError as exc:
+    except (BotoCoreError, ClientError) as exc:
         logging.getLogger(__name__).warning("NBA pregame status not stored: %.200s", exc)
 
 
