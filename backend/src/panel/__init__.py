@@ -400,7 +400,8 @@ def snapshot(profile_id, team_league):
             "rows": rows, "teamTotal": total, "progress": progress,
             "games": {gid: {"eventId": f["eventId"], "revision": f["revision"],
                              "score": f["score"], "source": f["source"]}
-                      for gid, f in games.items()}}
+                      for gid, f in games.items()},
+            "teamLeagues": sorted(key for key in lineups if key)}
     if _nba_lineup(lineup):
         data["sport"] = "nba"
     return {"schemaVersion": 1, "id": f"panel/{profile_id}/{team_league}",

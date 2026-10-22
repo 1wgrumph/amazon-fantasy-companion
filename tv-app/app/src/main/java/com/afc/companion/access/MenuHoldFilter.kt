@@ -3,12 +3,15 @@ package com.afc.companion.access
 import android.view.KeyEvent
 
 /**
- * Observes a shared Menu hold without consuming any event. The foreground receives the original
- * balanced sequence and may also act on the hold, as the owner chose. Times are event uptimes.
+ * Observes a shared Menu hold and a Menu double-tap without consuming any event. The foreground
+ * receives the original balanced sequence and may also act on them, as the owner chose. A
+ * double-tap is two short presses whose second down comes within [DOUBLE_TAP_MS] of the first up.
+ * Times are event uptimes.
  */
-class MenuHoldFilter(private val onHold: () -> Unit) {
+class MenuHoldFilter(private val onDoubleTap: () -> Unit = {}, private val onHold: () -> Unit) {
     private var downAtMs: Long? = null
     private var fired = false
+    private var shortUpAtMs: Long? = null
 
     /** Always false: this observer never consumes or injects input. */
     fun onKey(keyCode: Int, action: Int, repeatCount: Int, eventTimeMs: Long, isLongPress: Boolean = false): Boolean {
@@ -19,7 +22,15 @@ class MenuHoldFilter(private val onHold: () -> Unit) {
         }
         if (action == KeyEvent.ACTION_DOWN || action == KeyEvent.ACTION_UP) {
             if (downAtMs != null && isLongPress) fire() else onHoldTimeout(eventTimeMs)
-            if (action == KeyEvent.ACTION_UP) reset()
+            if (action == KeyEvent.ACTION_UP) {
+                val down = downAtMs
+                val firstUp = shortUpAtMs
+                shortUpAtMs = null
+                if (down != null && !fired) {
+                    if (firstUp != null && down - firstUp in 0..DOUBLE_TAP_MS) onDoubleTap() else shortUpAtMs = eventTimeMs
+                }
+                reset()
+            }
         }
         return false
     }
@@ -41,7 +52,10 @@ class MenuHoldFilter(private val onHold: () -> Unit) {
         fired = false
     }
 
-    companion object { const val HOLD_MS = 700L }
+    companion object {
+        const val HOLD_MS = 700L
+        const val DOUBLE_TAP_MS = 400L
+    }
 }
 
 object MenuHold {

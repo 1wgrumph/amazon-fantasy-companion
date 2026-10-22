@@ -119,7 +119,7 @@ class CornerCardTest {
         val withheld = snap(total = null)
         assertEquals("Unavailable", CornerCardText.total(withheld))
         assertEquals("Unavailable", CornerCardText.total(null))
-        assertEquals("Loading", CornerCardText.status(null, TL, 0))
+        assertEquals("names the pair it is loading", "Loading ${TL.substringAfter('/')}", CornerCardText.status(null, TL, 0))
         assertEquals("No team selected", CornerCardText.status(null, null, 0))
     }
 

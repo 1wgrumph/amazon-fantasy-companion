@@ -71,6 +71,20 @@ class PanelControllerTest {
         assertEquals(TL, c.teamLeague)
     }
 
+    @Test fun pairsListedByThePanelJoinTheSwitchAndCycle() {
+        val nba = "demo-nba/cle-phi-tonight"
+        val nfl = "demo-nfl/ne-chi-tonight"
+        val c = PanelController(listOf(nba), nba, true)
+        assertFalse("one known pair: nothing to switch to yet", c.canSwitchTeamLeague)
+        c.onFetched(snap(teamLeague = nba).copy(teamLeagues = listOf(nba, nfl)), 0)
+        assertTrue(c.canSwitchTeamLeague)
+        c.perform(PanelAction.NextTeamLeague, 1_000)
+        assertEquals(nfl, c.teamLeague)
+        c.onFetched(snap(teamLeague = nfl).copy(teamLeagues = listOf(nba, nfl)), 1_000)
+        c.perform(PanelAction.NextTeamLeague, 2_000)
+        assertEquals(nba, c.teamLeague)
+    }
+
     @Test fun lateResponseForTheOldTeamIsDiscarded() {
         val c = loaded()
         c.perform(PanelAction.NextTeamLeague, 1_000)
