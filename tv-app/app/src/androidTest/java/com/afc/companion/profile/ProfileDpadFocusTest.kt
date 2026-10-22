@@ -50,7 +50,7 @@ class ProfileDpadFocusTest {
     @Test fun dpadDownLeavesLeagueFieldAndUpReturns() {
         val league = rule.onNode(hasText("LeagueOne"))
         val team = rule.onNode(hasText("TeamOne"))
-        val beforeLeague = rule.onNode(hasClickAction() and hasAnyDescendant(hasText("Add to FavoriteTeams")), useUnmergedTree = true)
+        val beforeLeague = rule.onNode(hasClickAction() and hasAnyDescendant(hasText("Add favorite team")), useUnmergedTree = true)
         league.performScrollTo()
         beforeLeague.performScrollTo()
         beforeLeague.requestFocus()

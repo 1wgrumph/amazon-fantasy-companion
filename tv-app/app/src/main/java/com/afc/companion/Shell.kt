@@ -4,7 +4,7 @@ import com.afc.companion.net.ApiClient
 import com.afc.companion.profile.ProfileState
 
 /** SHELL: Link, Profile/Settings and Panel only; no social or messaging surfaces (AFC-PR-057). */
-enum class Destination(val label: String) { Link("Link"), ProfileSettings("Profile/Settings"), Panel("Panel") }
+enum class Destination(val label: String) { Link("Connect"), ProfileSettings("My setup"), Panel("My lineup") }
 
 /** Starts and stops the AlertService long poll. */
 interface MonitorControl {
