@@ -112,6 +112,40 @@ class MenuHoldFilterTest {
         assertEquals(0, holds)
     }
 
+    private var taps = 0
+    private val tapFilter = MenuHoldFilter(onDoubleTap = { taps++ }, onHold = { holds++ })
+
+    private fun press(downMs: Long, upMs: Long) {
+        assertFalse("down passes", tapFilter.onKey(menu, down, 0, downMs))
+        tapFilter.onHoldTimeout(upMs)
+        assertFalse("up passes", tapFilter.onKey(menu, up, 0, upMs))
+    }
+
+    @Test fun twoShortPressesWithin400MillisecondsAreADoubleTap() {
+        press(0, 100)
+        assertEquals("one press is not a double-tap", 0, taps)
+        press(500, 600) // second down 400 ms after the first up
+        assertEquals(1, taps)
+        assertEquals("a double-tap is not a hold", 0, holds)
+        press(700, 800)
+        assertEquals("a third press starts a new pair", 1, taps)
+    }
+
+    @Test fun pressesFiveHundredMillisecondsApartAreNotADoubleTap() {
+        press(0, 100)
+        press(600, 700)
+        assertEquals(0, taps)
+    }
+
+    @Test fun aHoldIsNeverPartOfADoubleTap() {
+        press(0, 100)
+        press(300, 1_100) // held 800 ms
+        assertEquals(1, holds)
+        assertEquals(0, taps)
+        press(1_200, 1_300)
+        assertEquals("a short press right after a hold starts fresh", 0, taps)
+    }
+
     @Test fun serviceOffFallbackReadsTheSecureSettingList() {
         assertFalse("no services", MenuHold.enabled(null))
         assertFalse(MenuHold.enabled(""))

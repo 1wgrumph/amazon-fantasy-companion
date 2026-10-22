@@ -123,6 +123,15 @@ class OverlayService : Service() {
                 render()
                 stopIfIdle()
             }
+            ACTION_NEXT_TEAM_LEAGUE -> {
+                // Double-tapped ≡ only switches a card already showing; local display, no profile write.
+                if (controller.mode != OverlayMode.Off) {
+                    controller.panel.perform(PanelAction.NextTeamLeague, 0)
+                    tick++
+                    render()
+                }
+                stopIfIdle()
+            }
             ACTION_ALERTS -> { cards.start(); stopIfIdle() }
             ACTION_STOP_ALERTS -> { cards.stop(); cardSnapshot = null; stopIfIdle() }
             else -> stopIfIdle()
@@ -308,6 +317,7 @@ class OverlayService : Service() {
         const val ACTION_STOP_ALERTS = "com.afc.companion.panel.STOP_ALERT_CARDS"
         const val ACTION_ALERTS = "com.afc.companion.panel.START_ALERT_CARDS"
         const val ACTION_HOLD = "com.afc.companion.panel.HOLD_OVERLAY"
+        const val ACTION_NEXT_TEAM_LEAGUE = "com.afc.companion.panel.NEXT_TEAM_LEAGUE"
         private const val CHANNEL_ID = "afc-overlay"
         private const val NOTIFICATION_ID = 2
         // Injectable monotonic clock lets device tests expire real windows without waiting 90 seconds.
@@ -318,8 +328,8 @@ class OverlayService : Service() {
 }
 
 /**
- * Starts the overlay host: [toggle] from Companion's "Show over game" button, [hold] from the held-≡
- * accessibility service, [startAlerts] from monitoring.
+ * Starts the overlay host: [toggle] from Companion's "Show over game" button, [hold] and
+ * [nextTeamLeague] from the ≡ accessibility service, [startAlerts] from monitoring.
  */
 class OverlayServiceControl(private val context: Context) {
     fun toggle() {
@@ -332,6 +342,10 @@ class OverlayServiceControl(private val context: Context) {
 
     fun hold() {
         ContextCompat.startForegroundService(context, Intent(context, OverlayService::class.java).setAction(OverlayService.ACTION_HOLD))
+    }
+
+    fun nextTeamLeague() {
+        ContextCompat.startForegroundService(context, Intent(context, OverlayService::class.java).setAction(OverlayService.ACTION_NEXT_TEAM_LEAGUE))
     }
 
     fun stopAlerts() {

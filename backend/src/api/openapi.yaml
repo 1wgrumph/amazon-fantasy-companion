@@ -404,6 +404,10 @@ components:
       required: [teamLeague, scoringBasis, visible, rows, teamTotal, progress, games]
       properties:
         teamLeague: {type: string, minLength: 1}
+        teamLeagues:
+          description: The profile's lineup pairs, sorted; the TV cycles through them.
+          type: array
+          items: {type: string, minLength: 1}
         scoringBasis: {type: string, enum: [yahooLeague, ppr, halfPpr]}
         visible: {type: boolean}
         rows:

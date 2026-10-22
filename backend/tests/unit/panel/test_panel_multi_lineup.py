@@ -71,6 +71,17 @@ def test_each_pair_snapshot_shows_only_its_rows_and_revision_never_drops(panel_e
     assert nfl3["revision"] > nfl2["revision"] and nba3["revision"] >= nba2["revision"]
 
 
+def test_every_pair_snapshot_lists_all_the_profile_pairs(panel_env):
+    seed_profile("fan")
+    seed_lineup("fan", [RECEIVER])
+    nfl_only = panel_env.snapshot("fan", TEAM_LEAGUE)
+    assert nfl_only["data"]["teamLeagues"] == [TEAM_LEAGUE]
+    seed_nba([GUARD])
+    both = sorted([TEAM_LEAGUE, NBA_PAIR])
+    for pair in (TEAM_LEAGUE, NBA_PAIR, None):
+        assert panel_env.snapshot("fan", pair)["data"]["teamLeagues"] == both
+
+
 def test_default_uses_settings_then_sole_pair_then_unassigned(panel_env):
     import store
 
@@ -113,7 +124,8 @@ def test_sole_nfl_yahoo_absent_pair_keeps_entire_envelope(panel_env, monkeypatch
         "schemaVersion": 1, "id": f"panel/fan/{pair}",
         "revision": 128 * (1 + 3 * panel_env.module.LINEUP_REVISION_SCALE),
         "source": "yahoo", "updatedAt": at(5),
-        "data": {"teamLeague": pair, "scoringBasis": "yahooLeague", "visible": True,
+        "data": {"teamLeague": pair, "teamLeagues": [TEAM_LEAGUE],
+                 "scoringBasis": "yahooLeague", "visible": True,
                  "rows": [], "games": {},
                  "teamTotal": dict(unknown, reason="no lineup for this team/league"),
                  "progress": dict(unknown, reason="game progress unavailable")},

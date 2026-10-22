@@ -101,9 +101,8 @@ fun LineupPanel(client: ApiClient, mode: PanelMode, modifier: Modifier = Modifie
     val context = LocalContext.current
     val revealOnNewAlert = remember(mode) { revealsOnNewAlert(DeviceSettings(context).showPanelOnNewAlert, mode) }
     val controller = remember(client, teamLeague) {
-        // The profile stores exactly one team/league pair (ProfileState.teamLeague);
-        // its leagues/teams selection sets are unpaired, so the switch cycles this
-        // one actual selection and a one-choice switch is a no-op in the controller.
+        // Starts on the profile's selected pair; the other lineup pairs arrive with
+        // the first panel fetch (PanelSnapshot.teamLeagues) and join the switch.
         PanelController(listOfNotNull(teamLeague), teamLeague, current?.panel?.visible ?: true, revealOnNewAlert)
     }
     var tick by remember(controller) { mutableIntStateOf(0) }
