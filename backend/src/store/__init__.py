@@ -10,6 +10,7 @@ import functools
 import logging
 import os
 import re
+from datetime import datetime, timezone
 
 import boto3
 from boto3.dynamodb.conditions import Attr, Key
@@ -280,6 +281,37 @@ def get_panel(profile_id, team_league):
     # Strongly consistent: freshness.counter feeds the panel revision, which never decreases.
     return _table("PANELS_TABLE").get_item(
         Key={"profileId": profile_id, "teamLeague": team_league}, ConsistentRead=True).get("Item")
+
+
+# Pregame slate: one reserved PlayerStats item, replaced on each pregame poll.
+# "pregame" is not an athlete id (those are numeric), so a statistics write
+# cannot overwrite it and a player lookup cannot read it.
+_PREGAME_ID = "pregame"
+_PREGAME_TEAM = re.compile(r"[A-Z0-9]{2,4}")
+
+
+def put_nba_pregame(teams, *, config=None):
+    """Replace the current NBA pregame slate. Empty input writes nothing."""
+    if not isinstance(teams, dict) or not teams:
+        return False
+    clean = {}
+    for abbr, detail in teams.items():
+        if (isinstance(abbr, str) and _PREGAME_TEAM.fullmatch(abbr)
+                and isinstance(detail, str) and detail.strip() and len(detail) <= 80):
+            clean[abbr] = detail
+    if not clean:
+        return False
+    item = {"athleteId": _PREGAME_ID,
+            "asOf": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "teams": clean}
+    table = (_table("PLAYER_STATS_TABLE", config) if config is not None
+             else _table("PLAYER_STATS_TABLE"))
+    table.put_item(Item=item)
+    return True
+
+
+def get_nba_pregame():
+    return _table("PLAYER_STATS_TABLE").get_item(Key={"athleteId": _PREGAME_ID}).get("Item")
 
 
 # Player statistics: latest stored boxscore per ESPN athlete (panel seam).

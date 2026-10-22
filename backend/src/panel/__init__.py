@@ -84,6 +84,20 @@ def _nba_lineup(lineup):
     return bool(lineup) and lineup.get("sport") == "nba" and _nba_enabled()
 
 
+def _nba_pregame(lineup):
+    """Team abbreviation to ESPN pregame text, or {} when the slate is stale."""
+    if not _nba_lineup(lineup):
+        return {}
+    item = store.get_nba_pregame()
+    if not item:
+        return {}
+    age = _age_seconds(item.get("asOf"))
+    if age is None or age > FINAL_RECORD_WINDOW:
+        return {}
+    teams = item.get("teams")
+    return teams if isinstance(teams, dict) else {}
+
+
 def _sport_off(lineup, settings):
     """Flag on: this lineup's sport was set False, so snapshot serves no rows.
 
@@ -267,6 +281,7 @@ def snapshot(profile_id, team_league):
     games, counter, projected = _stored(profile_id, team_league)
     rows, states, source_ids = [], [], []
     expired_finals = 0
+    pregame = _nba_pregame(lineup) if lineup and _pair(lineup) == team_league else {}
     if lineup and _pair(lineup) == team_league:
         if len(lineup.get("starters") or []) > MAX_ROWS:
             raise InvalidLineupError(
@@ -280,6 +295,7 @@ def snapshot(profile_id, team_league):
             source_ids.append(raw_id)
             espn_id = _espn_id(starter)
             record = player_statistics(espn_id) if espn_id else None
+            missing = record is None
             # The starter's current game is the latest projected game whose
             # events concern them (Panels games map). A statistics record
             # from an earlier game is not this game's points: fail closed.
@@ -299,9 +315,14 @@ def snapshot(profile_id, team_league):
                 record, value = None, dict(value, reason="no statistics for current game")
             if espn_id is None:
                 value = dict(value, reason="no matching ESPN athlete")
+            status = record.get("gameStatus") if record else None
+            if missing:
+                text = pregame.get(starter.get("team")) if isinstance(starter, dict) else None
+                if isinstance(text, str) and text.strip():
+                    status = text
             rows.append({"playerId": espn_id or str(starter.get("player_key") or ""),
                          "name": starter.get("name") or "", "points": value,
-                         "gameStatus": record.get("gameStatus") if record else None})
+                         "gameStatus": status})
             states.append(record.get("gameState") if record else None)
     ids = [row["playerId"] for row in rows]
     if (len(rows) > MAX_ROWS or len(set(source_ids)) != len(source_ids)

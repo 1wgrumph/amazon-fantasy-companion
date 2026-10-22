@@ -38,6 +38,25 @@ def scoreboard_games(payload):
     return games
 
 
+def pregame_status_by_team(payload):
+    """ESPN pregame shortDetail keyed by team abbreviation. Started games omitted."""
+    validate_scoreboard(payload)
+    found = {}
+    for game in payload["events"]:
+        status = game.get("status", {}).get("type", {})
+        if status.get("state") != "pre":
+            continue
+        detail = status.get("shortDetail") or status.get("detail")
+        if not isinstance(detail, str) or not detail.strip() or len(detail) > 80:
+            continue
+        for competition in game.get("competitions", []):
+            for competitor in competition.get("competitors", []):
+                abbr = competitor["team"].get("abbreviation")
+                if isinstance(abbr, str) and re.fullmatch(r"[A-Z0-9]{2,4}", abbr):
+                    found[abbr] = detail
+    return found
+
+
 def _status(payload):
     try:
         return payload["header"]["competitions"][0]["status"]["type"]
