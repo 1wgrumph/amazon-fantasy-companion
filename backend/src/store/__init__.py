@@ -290,10 +290,6 @@ def put_lineup(lineup):
         row = {"profileId": item["profileId"], "lineupVersion": new_version}
         if stored:
             row["lineups"] = stored
-        if pair:
-            # Last write picks the default panel when several pairs exist and
-            # settings name none. An unchanged rewrite still moves it.
-            row["activePair"] = pair
         updated_at = item.get("updatedAt") or (current or {}).get("updatedAt")
         if updated_at and stored:
             row["updatedAt"] = updated_at
@@ -308,36 +304,30 @@ def put_lineup(lineup):
     raise RuntimeError(f"lineup write for {item['profileId']} kept losing races")
 
 
-def _lineup_view(profile_id):
-    """One consistent read: (lineups, lineupVersion, last written pair or None)."""
-    row = _lineup_row(profile_id)
-    if not row:
-        return {}, 0, None
-    return _lineups(row), int(row.get("lineupVersion", 0)), row.get("activePair")
-
-
 def get_lineups(profile_id):
     """One consistent read: ({"<league>/<team>": lineup}, lineupVersion)."""
-    lineups, version, _active = _lineup_view(profile_id)
-    return lineups, version
+    row = _lineup_row(profile_id)
+    if not row:
+        return {}, 0
+    return _lineups(row), int(row.get("lineupVersion", 0))
 
 
 def get_lineup(profile_id, team_league=None):
     """One pair, or the sole lineup when team_league is omitted."""
-    lineups, _version, _active = _lineup_view(profile_id)
+    lineups, _version = get_lineups(profile_id)
     entry = lineups.get(team_league) if team_league is not None else _sole_entry(lineups)
     return _public_lineup(profile_id, entry)
 
 
 def get_lineup_version(profile_id):
     """Monotonic lineup content version; 0 for no row or a legacy row."""
-    _lineups_map, version, _active = _lineup_view(profile_id)
+    _lineups_map, version = get_lineups(profile_id)
     return version
 
 
 def get_lineup_with_version(profile_id, team_league=None):
     """Single-read (lineup or None, monotonic lineupVersion) so snapshot never tears."""
-    lineups, version, _active = _lineup_view(profile_id)
+    lineups, version = get_lineups(profile_id)
     entry = lineups.get(team_league) if team_league is not None else _sole_entry(lineups)
     return _public_lineup(profile_id, entry), version
 

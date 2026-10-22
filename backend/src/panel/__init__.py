@@ -288,7 +288,7 @@ def project(game_event, matches):
 def snapshot(profile_id, team_league):
     """GET /v1/panel body: enveloped PanelState with scoring basis."""
     profile, settings = _settings(profile_id)
-    lineups, lineup_version, active_pair = store._lineup_view(profile_id)
+    lineups, lineup_version = store.get_lineups(profile_id)
     if team_league is None:
         selected = settings.get("teamLeague") or {}
         real = [key for key in lineups if key]
@@ -296,11 +296,10 @@ def snapshot(profile_id, team_league):
             team_league = f"{selected['league']}/{selected['team']}"
         elif len(real) == 1:
             team_league = real[0]
-        elif active_pair in lineups:
-            team_league = active_pair
         else:
             team_league = "unassigned/unassigned"
-    entry = lineups.get(team_league)
+    # Preserve sole-lineup metadata for empty selections; rows still require a matching pair.
+    entry = lineups.get(team_league) or store._sole_entry(lineups)
     lineup = dict(entry, profileId=profile_id) if entry else None
     basis, table = _basis(lineup, settings)
     games, counter, projected = _stored(profile_id, team_league)
