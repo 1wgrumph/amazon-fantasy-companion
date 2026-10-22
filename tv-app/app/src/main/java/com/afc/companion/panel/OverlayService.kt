@@ -177,8 +177,15 @@ class OverlayService : Service() {
 
     /** A showing card reserves the top-right slot; the panel moves below it and back when it goes. */
     private fun onCard(box: Box?) {
+        if (cardBox == box) return
         cardBox = box
-        panelWindow?.let { window -> runCatching { windows.updateViewLayout(window.view, panelParams()) } }
+        panelWindow?.let { window ->
+            // Reattach at the final rectangle: moving a live window animates through the card on older Android.
+            runCatching {
+                windows.removeViewImmediate(window.view)
+                windows.addView(window.view, panelParams())
+            }.onFailure { removePanel() }
+        }
     }
 
     private fun panelParams(): WindowManager.LayoutParams {

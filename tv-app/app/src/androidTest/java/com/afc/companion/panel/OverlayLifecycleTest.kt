@@ -97,6 +97,46 @@ class OverlayLifecycleTest {
         OverlayServiceControl(context).toggle()
         await("last overlay owner stopped") { !services().contains(".panel.OverlayService}") }
     }
+    /** F04: sample actual compositor rectangles, including the observed window-move animation. */
+    @Test fun cardArrivalReplacementAndExpiryNeverOverlapThePanel() {
+        OverlayServiceControl(context).toggle()
+        await("panel rendered") { hasText("Team total: 112.5") }
+        OverlayServiceControl(context).startAlerts()
+        device.pressHome()
+        val feed = AlertFeed(ApiClient("https://review.invalid"))
+        AlertInbox.attach(feed)
+        val frames = ArrayList<String>()
+        val ownFrame = Regex("com\\.afc\\.companion, frame=\\[(-?\\d+),(-?\\d+),(-?\\d+),(-?\\d+)\\]")
+        val began = SystemClock.elapsedRealtime()
+        var sawCard = false
+        var restored = false
+        try {
+            publish(feed, "arrival")
+            publish(feed, "replacement")
+            while (SystemClock.elapsedRealtime() - began < 20_000) {
+                val rects = ownFrame.findAll(device.executeShellCommand("dumpsys window"))
+                    .map { match -> match.groupValues.drop(1).map(String::toInt) }.distinct().toList()
+                val elapsed = SystemClock.elapsedRealtime() - began
+                frames.add("$elapsed ms: $rects")
+                if (rects.size == 2) {
+                    sawCard = true
+                    val (a, b) = rects
+                    val overlap = a[0] < b[2] && b[0] < a[2] && a[1] < b[3] && b[1] < a[3]
+                    if (overlap) device.takeScreenshot(File(context.getExternalFilesDir(null), "f04-overlap.png"))
+                    assertFalse("card/panel compositor overlap: ${frames.last()}", overlap)
+                }
+                // Observe both five-second cards, rather than ending at a replacement's transient remove.
+                if (sawCard && elapsed >= 2 * AlertCardQueue.SHOW_MS && rects.size == 1 && rects[0][1] == 54) {
+                    restored = true
+                    break
+                }
+            }
+            assertTrue("no two-window compositor frame was observed", sawCard)
+            assertTrue("panel did not restore after both cards expired; last=${frames.lastOrNull()}", restored)
+        } finally {
+            File(context.getExternalFilesDir(null), "f04-frames.txt").writeText(frames.joinToString("\n"))
+        }
+    }
     companion object {
         @Volatile private var team = "ReviewTeam"
         @Volatile private var sport = "nfl"

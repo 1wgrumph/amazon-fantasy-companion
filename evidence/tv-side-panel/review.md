@@ -1,5 +1,7 @@
 # Independent side-panel review receipt
 
+**Latest implementation status: F01–F04 REPAIR_IMPLEMENTED; pending independent/orchestrator and Fire OS acceptance.** The original review and intermediate stops below are preserved as historical evidence.
+
 What this change does: adds a remote-reachable side panel over another app and a separate top-right alert card. Both use app-private foreground-service commands and nonfocusable overlay windows.
 
 **Original independent verdict: REPAIR_REQUIRED — F01, F02 and F03.** At the review stop, no repair, product/test-source edit, commit, push, issue filing or device activation was performed. This receipt freezes the findings; the reviewer stops here under `reviewer-repairs-own-findings`. The dispatching orchestrator must accept the reproductions and authorize any repair transition.
@@ -244,7 +246,7 @@ The reviewer-created emulator was stopped after collection. Screenshot hashes an
 
 Owner/orchestrator acceptance dated 2026-10-22 approximately 02:25Z explicitly accepted F01, F02 and F03, included the regression tests under `tv-app/app/src/{test,androidTest}/` and `AlertService.kt`, and authorized this same reviewer session to transition to **Repair Implementer**. That transition is now exercised. The frozen frontend binding and spent review budget remain unchanged; backend/API remain excluded. This section is implementation evidence, not a new independent-review PASS. No push or stick operation is authorized or performed.
 
-**Implementation outcome: F01–F03 REPAIR_IMPLEMENTED. Overall disposition: REPAIR_REQUIRED for newly observed F04, pending orchestrator acceptance.** The historical review findings above remain intact for independent acceptance of the repair. F04 is the additional observed transition case below; no extra product repair was undertaken.
+**Prior stop at `e23a71c`: F01–F03 REPAIR_IMPLEMENTED; REPAIR_REQUIRED for newly observed F04.** See the authorized F04 continuation below for the latest implementation status. The historical review findings above remain intact for independent acceptance of the repair. F04 is the additional observed transition case below; no extra product repair was undertaken.
 
 | Finding | Implemented repair | Regression proof |
 | --- | --- | --- |
@@ -292,7 +294,7 @@ BRAN is unavailable (no repository policy); ordinary repository discovery was us
 
 **Repair target:** Coordinate card presentation and panel placement so every visible transition frame remains disjoint, including card replacement and dismissal. Verify frame-level arrival/expiry geometry in addition to settled screenshots. Preserve the visible total, safe zone and nonfocusability.
 
-**Proposed bounded write set:** `tv-app/app/src/main/java/com/afc/companion/panel/{OverlayService,AlertCardOverlay}.kt`, direct panel/alert tests under `tv-app/app/src/{test,androidTest}/`, and this slice's evidence. Backend/API remain excluded. No F04 product repair is included in the current accepted round; it requires the orchestrator's next disposition. Accepted F01–F03 repairs and their green results remain delivered.
+**Proposed bounded write set:** `tv-app/app/src/main/java/com/afc/companion/panel/{OverlayService,AlertCardOverlay}.kt`, direct panel/alert tests under `tv-app/app/src/{test,androidTest}/`, and this slice's evidence. Backend/API remain excluded. At the `e23a71c` stop, F04 had not yet been accepted for repair. The orchestrator accepted it into the same round at approximately 03:18Z; the authorized continuation is below. Accepted F01–F03 repairs and their green results remain delivered.
 
 
 ### Final repair captures and checksums
@@ -318,4 +320,54 @@ d3ed913eaeaba07670fa90db1e5cd6231ccb7ac45199052218dfdf86a54231fb  side-panel-ove
 
 Evidence logs were scrubbed of absolute home/worktree paths. No credentials, profile binding copy, raw agent session or provider data were added. Gate hygiene's printed negative-fixture GAP examples are expected assertions inside its 119 passing tests, not unresolved gate outcomes. Original review evidence hashes remain intact; new repair evidence has its own `repair/SHA256SUMS`. Commit identity is Codex, with no Co-Authored-By trailer; normal configured hooks apply. No push was performed. The owned emulator is stopped after collection.
 
-**Repair stop disposition:** F01–F03 implementation and regressions delivered for orchestrator acceptance. Newly observed F04 remains REPAIR_REQUIRED under the finding hold; no fourth repair was started. Fire OS/stick acceptance remains pending with the separately authorized operator.
+**Historical repair stop at `e23a71c`:** F01–F03 implementation and regressions were delivered for orchestrator acceptance. At that stop, newly observed F04 remained REPAIR_REQUIRED under the finding hold; no fourth repair had started. The accepted continuation below supersedes that implementation status. Fire OS/stick acceptance remains pending with the separately authorized operator.
+
+
+## Repair continuation — F04 accepted in the same round
+
+**Authority:** Orchestrator acceptance, 2026-10-22 approximately 03:18Z, explicitly accepts F04 and its recorded bounded write set. The same frozen frontend review/repair pair continues as Repair Implementer; this is not a new review, profile selection or review-budget reset. No push or stick access is authorized or performed.
+
+**Current implementation status: F04 REPAIR_IMPLEMENTED; all requested gates exit 0.** The independent-review stop and earlier evidence remain historical records; this continuation supplies repair implementation evidence for orchestrator acceptance.
+
+**Fix:** `AlertCardOverlay.showCard` reserves the card rectangle before adding the card. `OverlayService.onCard` immediately removes and reattaches the existing nonfocusable panel view at its final rectangle, avoiding a move animation through the card's area. Replacement keeps the slot reserved and skips an unnecessary panel reattachment. Final expiry removes the card immediately before restoring the panel. Permission denial/add failure releases the reservation and destroys an uninstalled Compose owner; a panel reattachment failure uses the existing panel cleanup path. The existing view, lifecycle/saved-state owner, panel controller and data-update job are reused. No hidden API, timer delay, animation-scale setting or new resource/dependency is used. The full-screen renderer and input flags are unchanged.
+
+Why reattachment is used: the public movement-animation switch is only available from API 34, while the app also supports older Fire OS versions ([Android LayoutParams API](https://developer.android.com/reference/android/view/WindowManager.LayoutParams#setCanPlayMoveAnimation(boolean))). A synchronous remove/add sequence avoids relying on that newer API or a guessed animation duration.
+
+**Regression:** Added `OverlayLifecycleTest#cardArrivalReplacementAndExpiryNeverOverlapThePanel` to the existing native test class. It uses the real services, selected-profile/current-alert fixtures and the owned API 34 TV compositor, samples only this app's overlay rectangles, injects two queued alerts and follows arrival, replacement and final expiry under a bounded 20 s deadline. It asserts disjoint rectangles and restoration after both five-second cards. Actual owned-frame samples and the baseline failure screenshot are retained. The existing source wiring assertion now recognizes panel reattachment rather than requiring the unsafe live-window move.
+
+**Red proof on pinned `e23a71c05a8aafff8e16c3e2714436de3c239709`:** Product code was unchanged when the regression was built and run. At 503 ms it failed with `card/panel compositor overlap: [[1344, 185, 1824, 966], [1644, 54, 1824, 234]]`. This reproduces accepted F04 using actual compositor output, not an expected negative fixture or network/configuration failure. [Assertion output](repair-f04/red-native.txt), [frame trace](repair-f04/red-frames.txt), [baseline screenshot](repair-f04/red-overlap.png).
+
+**Green proof:** The repair passes all five native panel/layout/lifecycle regressions. The F04 trace contains 357 samples over approximately 10.5 s: 344 two-window samples, all disjoint; six one-window samples and seven samples during surface replacement with no visible owned rectangle. The restored full panel is `[1344,54,1824,1026]`; the card-visible panel remains `[1344,245,1824,1026]` below `[1644,54,1824,234]`. Reattachment can briefly refresh the panel surface during a transition; the test does not claim frame-by-frame video proof or zero rendering interruption. [Native result](repair-f04/green-native.txt), [sample trace](repair-f04/green-frames.txt).
+
+| Command/check | Exit/result |
+| --- | --- |
+| Baseline build: `./gradlew -PafcApiBaseUrl=https://review.invalid :app:assembleDebug :app:assembleDebugAndroidTest` | **0**; [baseline build](repair-f04/red-build.txt). |
+| Baseline instrumentation: `adb -s emulator-5596 shell am instrument -w -r -e class 'com.afc.companion.panel.OverlayLifecycleTest#cardArrivalReplacementAndExpiryNeverOverlapThePanel' com.afc.companion.test/androidx.test.runner.AndroidJUnitRunner` | Shell **0**, JUnit **1 assertion failure** (expected red). |
+| Repair build: `./gradlew -I ../evidence/tv-side-panel/repair/capture.init.gradle -PafcApiBaseUrl=https://review.invalid :app:testDebugUnitTest :app:assembleDebug :app:assembleDebugAndroidTest` | **0**, 348 unit tests passed; [build](repair-f04/green-build.txt). |
+| Repair instrumentation: `adb -s emulator-5596 shell am instrument -w -r -e class com.afc.companion.panel.CompactPanelLayoutTest,com.afc.companion.panel.OverlayLifecycleTest com.afc.companion.test/androidx.test.runner.AndroidJUnitRunner` | Shell/parsing **0**, `OK (5 tests)`. |
+| `TMPDIR=~/.cache/afc-gate-tmp ANDROID_HOME=~/.local/share/afc-tools/android-sdk bash tools/ci/gate.sh tvapp` | **0**; [TV gate](repair-f04/gate-tvapp.txt). |
+| Same environment, `bash tools/ci/gate.sh docs` | **0**; [docs gate](repair-f04/gate-docs.txt). |
+| Same environment, `bash tools/ci/gate.sh hygiene` | **0**, 119 host tests; [hygiene gate](repair-f04/gate-hygiene.txt). |
+
+Write set used: `panel/{OverlayService,AlertCardOverlay}.kt`, existing `panel/AlertCardIntegrationContractTest.kt` and `panel/OverlayLifecycleTest.kt`, plus the slice's receipt and visual/repair evidence. No backend/API, manifest, configuration, dependency or full-screen source changes.
+
+Fire OS 8 and real-provider/stick acceptance remain pending with the separate operator. The existing selected-profile-load toggle race, long-session soak and permission/display-loss fault cases remain outside this bounded continuation. Missing/stale card authority retains the earlier typed-gap behavior. BRAN remains unavailable; ordinary repository discovery was used. Reverify remains not applicable to the source-built APK, and no additional independent OCR review is claimed for this repair continuation.
+
+
+### F04 capture and artifact identity
+
+`SidePanelRepairCapture#repairedOverlay` passed (`OK (1 test)`, shell/parsing exit **0**), using the same owned AVD, synthetic non-provider game, real remote button and current-envelope number fallback as the preceding round. [Capture output](repair-f04/capture-native.txt). `evidence/visual/tv-side-panel/card-and-panel.png` was pulled again and the complete visual `SHA256SUMS` was recomputed and checked. Its settled pixels are byte-identical to the prior correct settled frame; the F04 change removes the in-flight overlap rather than changing the final layout.
+
+- Re-captured `card-and-panel.png` SHA256: `a715fdcacc7a26e61c8271488534d44ced08f6d26ca97bb567186cf79c7c92f6`.
+- Installed repair source APK SHA256: `3684110e1eff2c5fc08a752e292bd537722a89b8ce21193dba4979defb8b0168`; `apksigner verify` exit **0** ([APK receipt](repair-f04/apk.txt)).
+- Fresh settled [card/panel compositor output](repair-f04/card-and-panel-window.txt) and [restored panel output](repair-f04/panel-restored-window.txt) accompany the sampled transition trace. Team total `112.5` remains visible.
+
+No permission/provider/device behavior is inferred from this source-built emulator result. Original review and earlier repair evidence are retained with their existing checksums. The continuation evidence is separately covered by `repair-f04/SHA256SUMS` after sanitizing absolute home/worktree paths. No raw session, credential, private binding or unrelated evidence is included.
+
+
+### F04 evidence preparation checks
+
+The first full hygiene attempt failed three isolated-fixture tests because their `git ls-files` copies omitted newly untracked evidence linked by this tracked receipt. An initial targeted retry then detected absolute home paths in the retained failed-run tracebacks. These are evidence preparation failures, not product findings. The new evidence was staged and its paths sanitized; the same three tests then passed (exit **0**, `Ran 3 tests`, `OK`). No gate/test implementation or policy was changed. The full gate is rerun on the prepared evidence; failed attempts remain visible as [initial full run](repair-f04/gate-hygiene-attempt1.txt) and [initial targeted run](repair-f04/hygiene-fixture-recheck-attempt1.txt), alongside the [passing targeted recheck](repair-f04/hygiene-fixture-recheck.txt). No failed run is counted as passing.
+
+
+**F04 repair stop disposition:** REPAIR_IMPLEMENTED for orchestrator acceptance in the same repair round. The full hygiene retry passed all 119 tests (exit **0**); its printed negative-fixture GAP examples are expected assertions, not unresolved outcomes. TV and docs gates also exit **0**. The continuation uses the accepted bounded write set and normal configured commit hooks, with Codex author/committer identity and no Co-Authored-By trailer. No push was performed. The owned AVD is stopped; no stick was accessed. Fire OS 8/provider acceptance and the brief panel surface refresh remain the stated residual limits, not a self-issued independent PASS.

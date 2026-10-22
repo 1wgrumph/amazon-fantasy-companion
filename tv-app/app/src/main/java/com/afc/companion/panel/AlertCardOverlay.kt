@@ -99,9 +99,12 @@ class AlertCardOverlay(
     }
 
     private fun showCard(notice: AlertCardNotice) {
-        hideCard()
+        hideCard(releaseSpace = false)
         shownId = notice.alertId
-        if (!Settings.canDrawOverlays(context)) return
+        if (!Settings.canDrawOverlays(context)) {
+            onCard(null)
+            return
+        }
         val (width, height) = screenSize(windows)
         val box = AlertCardGeometry.layout(width, height)
         val params = WindowManager.LayoutParams(
@@ -115,20 +118,26 @@ class AlertCardOverlay(
             y = box.top
         }
         val card = OverlayView(context) { AlertCardContent(notice) }
+        // Place the panel before exposing the card; a replacement keeps the same reserved slot.
+        onCard(box)
         // A revoked permission or a gone display shows nothing rather than crashing the host.
         if (runCatching { windows.addView(card.view, params) }.isSuccess) {
             view = card
-            onCard(box)
+        } else {
+            card.destroy()
+            onCard(null)
         }
     }
 
-    private fun hideCard() {
+    private fun hideCard(releaseSpace: Boolean = true) {
         shownId = null
-        val card = view ?: return
+        val card = view
         view = null
-        runCatching { windows.removeView(card.view) }
-        card.destroy()
-        onCard(null)
+        if (card != null) {
+            runCatching { windows.removeViewImmediate(card.view) }
+            card.destroy()
+        }
+        if (releaseSpace) onCard(null)
     }
 }
 

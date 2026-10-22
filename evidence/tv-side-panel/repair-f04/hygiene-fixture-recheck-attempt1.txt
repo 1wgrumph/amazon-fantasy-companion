@@ -1,0 +1,53 @@
+FFF
+======================================================================
+FAIL: test_hook_git_env_does_not_reach_sentinel_repo (test_gate_isolation.D1_HookEnvironmentIsolation.test_hook_git_env_does_not_reach_sentinel_repo)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/tools/ci/tests/test_gate_isolation.py", line 61, in test_hook_git_env_does_not_reach_sentinel_repo
+    self.assertEqual(rc, 0, out)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: 1 != 0 : gate: spec: PASS checks completed
+gate: docs: PASS checks completed
+evidence/tv-side-panel/repair-f04/gate-hygiene.txt:9:PATH-HOME-POSIX
+evidence/tv-side-panel/repair-f04/gate-hygiene.txt:42:PATH-HOME-POSIX
+evidence/tv-side-panel/repair-f04/gate-hygiene.txt:69:PATH-HOME-POSIX
+gate: hygiene: FAIL check exit 1
+gate: tvapp: PASS no tv-app/ tree
+gate: backend: PASS no backend/ tree
+Installed 1 package in 1ms
+Installed 1 package in 1ms
+Installed 1 package in 1ms
+
+
+======================================================================
+FAIL: test_already_pushed_commits_are_not_rechecked (test_gate_scope.PrePushScope.test_already_pushed_commits_are_not_rechecked)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/tools/ci/tests/test_gate_scope.py", line 186, in test_already_pushed_commits_are_not_rechecked
+    self.assertEqual(rc, 0, out)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: 1 != 0 : gate: docs: PASS checks completed
+evidence/tv-side-panel/repair-f04/gate-hygiene.txt:9:PATH-HOME-POSIX
+evidence/tv-side-panel/repair-f04/gate-hygiene.txt:42:PATH-HOME-POSIX
+evidence/tv-side-panel/repair-f04/gate-hygiene.txt:69:PATH-HOME-POSIX
+gate: hygiene: FAIL check exit 1
+
+
+======================================================================
+FAIL: test_staged_docs_only_change_ignores_unstaged_and_untracked_product_files (test_gate_scope.StagedScope.test_staged_docs_only_change_ignores_unstaged_and_untracked_product_files)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/tools/ci/tests/test_gate_scope.py", line 113, in test_staged_docs_only_change_ignores_unstaged_and_untracked_product_files
+    self.assertEqual(rc, 0, out)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: 1 != 0 : gate: docs: PASS checks completed
+evidence/tv-side-panel/repair-f04/gate-hygiene.txt:9:PATH-HOME-POSIX
+evidence/tv-side-panel/repair-f04/gate-hygiene.txt:42:PATH-HOME-POSIX
+evidence/tv-side-panel/repair-f04/gate-hygiene.txt:69:PATH-HOME-POSIX
+gate: hygiene: FAIL check exit 1
+
+
+----------------------------------------------------------------------
+Ran 3 tests in 18.229s
+
+FAILED (failures=3)
