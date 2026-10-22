@@ -90,6 +90,7 @@ class AlertService : Service() {
     override fun onDestroy() {
         scope.cancel()
         AlertInbox.attach(null)
+        runCatching { OverlayServiceControl(this).stopAlerts() }
         super.onDestroy()
     }
 

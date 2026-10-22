@@ -77,7 +77,7 @@ object AlertCardGeometry {
     }
 }
 
-/** What one alert card shows; [value] is NaN when no authoritative number is known. */
+/** One card with an authoritative finite value and known sport. */
 data class AlertCardNotice(
     val alertId: String,
     val player: String,
@@ -136,7 +136,7 @@ class AlertCardQueue {
  * Optional backend fields win when present: `triggerContext.sport` ("nba"/"nfl"),
  * `starters[0].shortName` and `starters[0].points` (fantasy points on the profile's basis).
  * Without them the player is the starter's last name, and the number and sport come only from the
- * matching row of the overlay's own [panel] snapshot; otherwise the number is unknown (NaN), never invented.
+ * fresh matching row of the selected profile's [panel] snapshot; otherwise no card is emitted.
  */
 fun alertCardNotice(alert: Alert, panel: PanelSnapshot?): AlertCardNotice? {
     if (AlertPresenter.text(alert) == null) return null // the panel's safety gate: unsafe names never reach a card
@@ -145,13 +145,15 @@ fun alertCardNotice(alert: Alert, panel: PanelSnapshot?): AlertCardNotice? {
     val player = ((starter.opt("shortName") as? String)?.trim()?.takeIf { it.isNotEmpty() }
         ?: (starter.opt("name") as? String)?.trim()?.substringAfterLast(' '))
         ?.take(MAX_CARD_NAME)?.takeIf { AlertCardText.label(it, 0.0) != null } ?: return null
-    val row = panel?.rows?.firstOrNull { it.playerId == starter.opt("athlete_id") }
-    val value = (starter.opt("points") as? Number)?.toDouble()?.takeIf { it.isFinite() } ?: row?.points?.value ?: Double.NaN
-    val sport = when (trigger.opt("sport")) {
-        "nba" -> "NBA"
-        "nfl" -> "NFL"
-        else -> panel?.sport.takeIf { row != null }.orEmpty()
+    val declaredSport = when (trigger.opt("sport")) { "nba" -> "NBA"; "nfl" -> "NFL"; else -> null }
+    val row = panel?.rows?.firstOrNull {
+        it.playerId == starter.opt("athlete_id") && (declaredSport == null || declaredSport == panel.sport)
     }
+    val freshPoints = row?.points?.takeIf { points ->
+        points.asOfMs?.let { System.currentTimeMillis() - it in 0..60_000 } == true
+    }?.value?.takeIf { it.isFinite() }
+    val value = (starter.opt("points") as? Number)?.toDouble()?.takeIf { it.isFinite() } ?: freshPoints ?: return null
+    val sport = declaredSport ?: panel?.sport?.takeIf { row != null && it in listOf("NBA", "NFL") } ?: return null
     return AlertCardNotice(alert.envelope.id, player, value, sport, AlertNotifier.watchEventId(alert).orEmpty())
 }
 

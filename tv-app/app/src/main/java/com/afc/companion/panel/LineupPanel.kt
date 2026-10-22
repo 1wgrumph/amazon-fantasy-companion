@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -42,6 +43,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.tv.material3.MaterialTheme
@@ -219,9 +221,7 @@ suspend fun runPanelUpdates(client: ApiClient, controller: PanelController, onTi
         if (controller.teamLeague != null && controller.shouldFetch(System.currentTimeMillis())) {
             try {
                 // Network and parsing stay off the rendering thread (AFC-PR-063).
-                val decoded = withContext(Dispatchers.Default) {
-                    client.getPanel(controller.teamLeague).value?.let { decodePanel(it) }
-                }
+                val decoded = controller.teamLeague?.let { loadPanelSnapshot(client, it) }
                 decoded?.let { controller.onFetched(it, System.currentTimeMillis()) }
             } catch (cancelled: CancellationException) {
                 throw cancelled
@@ -233,6 +233,19 @@ suspend fun runPanelUpdates(client: ApiClient, controller: PanelController, onTi
         delay(1_000)
         onTick(false)
     }
+}
+
+/** The existing panel endpoint and decoder also supply cards while the panel window is hidden. */
+private suspend fun loadPanelSnapshot(client: ApiClient, teamLeague: String): PanelSnapshot? =
+    withContext(Dispatchers.Default) { client.getPanel(teamLeague).value?.let { decodePanel(it) } }
+
+internal suspend fun alertCardPanel(client: ApiClient): PanelSnapshot? = try {
+    val selected = panelTeamLeague(ProfileStore(client).load())
+    selected?.let { loadPanelSnapshot(client, it)?.takeIf { snapshot -> snapshot.teamLeague == selected } }
+} catch (cancelled: CancellationException) {
+    throw cancelled
+} catch (_: Exception) {
+    null
 }
 
 @Composable
@@ -247,6 +260,10 @@ internal fun PanelContent(
     nowMs: Long,
     compact: Boolean = false,
 ) {
+    if (compact && snapshot != null && teamLeague != null) {
+        CompactPanelContent(snapshot, alerts, nowMs)
+        return
+    }
     val loading = snapshot == null && teamLeague != null && !fetchAttempted
     Box(Modifier.fillMaxSize()) {
         if (snapshot == null) {
@@ -327,6 +344,39 @@ internal fun PanelContent(
                 }
             }
         }
+    }
+}
+
+/** A fixed total and timed lineup pages: this window cannot receive remote scrolling. */
+@Composable
+private fun CompactPanelContent(snapshot: PanelSnapshot, alerts: List<PanelAlert>, nowMs: Long) {
+    val body = TextStyle(fontSize = 22.sp, color = MaterialTheme.colorScheme.onSurface)
+    Column(Modifier.fillMaxSize().padding(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        PanelHeader(snapshot)
+        alerts.take(1).forEach { Text(it.text.headline, style = body) }
+        BoxWithConstraints(Modifier.weight(1f).fillMaxWidth()) {
+            val pageSize = (maxHeight.value / 120f).toInt().coerceAtLeast(1)
+            val pages = snapshot.rows.chunked(pageSize)
+            var page by remember(snapshot.teamLeague, pageSize) { mutableIntStateOf(0) }
+            LaunchedEffect(pages.size) {
+                page = 0
+                while (pages.size > 1) {
+                    delay(5_000)
+                    page = (page + 1) % pages.size
+                }
+            }
+            Column {
+                pages.getOrNull(page)?.forEach { row ->
+                    Column(Modifier.height(120.dp)) {
+                        Text(row.name, style = body, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                        Text(PanelText.gameStatus(row.gameStatus), style = body)
+                        Text(PanelText.value(row.points, nowMs), style = body)
+                    }
+                }
+            }
+        }
+        Text("Team total: ${PanelText.value(snapshot.teamTotal, nowMs)}", style = body)
+        Text("Progress: ${PanelText.value(snapshot.progress, nowMs)}", style = body)
     }
 }
 

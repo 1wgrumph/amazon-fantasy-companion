@@ -57,7 +57,8 @@ class OverlayService : Service() {
     private val windows by lazy { getSystemService(WindowManager::class.java) }
     private val client by lazy { Shell().client(BuildConfig.AFC_API_BASE_URL, SessionStore(this)::token) }
     private var controller = overlay(null)
-    private val cards by lazy { AlertCardOverlay(this, windows, { controller.panel.snapshot }, ::onCard) }
+    private var cardSnapshot: PanelSnapshot? = null
+    private val cards by lazy { AlertCardOverlay(this, windows, { cardSnapshot }, ::onCard) }
     private var panelWindow: OverlayView? = null
     private var cardBox: Box? = null
     private var updates: Job? = null
@@ -68,9 +69,11 @@ class OverlayService : Service() {
 
     override fun onCreate() {
         super.onCreate()
+        cards.onAlerts(AlertInbox.alerts.value)
         scope.launch {
             AlertInbox.alerts.collect { alerts ->
                 controller.panel.onAlerts(panelAlerts(alerts))
+                if (cards.active && alerts.isNotEmpty()) cardSnapshot = client?.let { alertCardPanel(it) }
                 cards.onAlerts(alerts)
                 tick++
             }
@@ -93,6 +96,7 @@ class OverlayService : Service() {
                 stopIfIdle()
             }
             ACTION_ALERTS -> { cards.start(); stopIfIdle() }
+            ACTION_STOP_ALERTS -> { cards.stop(); cardSnapshot = null; stopIfIdle() }
             else -> stopIfIdle()
         }
         return START_NOT_STICKY
@@ -210,6 +214,7 @@ class OverlayService : Service() {
 
     companion object {
         const val ACTION_TOGGLE = "com.afc.companion.panel.TOGGLE_OVERLAY"
+        const val ACTION_STOP_ALERTS = "com.afc.companion.panel.STOP_ALERT_CARDS"
         const val ACTION_ALERTS = "com.afc.companion.panel.START_ALERT_CARDS"
         private const val CHANNEL_ID = "afc-overlay"
         private const val NOTIFICATION_ID = 2
@@ -222,6 +227,10 @@ class OverlayService : Service() {
 class OverlayServiceControl(private val context: Context) {
     fun toggle() {
         ContextCompat.startForegroundService(context, Intent(context, OverlayService::class.java).setAction(OverlayService.ACTION_TOGGLE))
+    }
+
+    fun stopAlerts() {
+        context.startService(Intent(context, OverlayService::class.java).setAction(OverlayService.ACTION_STOP_ALERTS))
     }
 
     fun startAlerts() {

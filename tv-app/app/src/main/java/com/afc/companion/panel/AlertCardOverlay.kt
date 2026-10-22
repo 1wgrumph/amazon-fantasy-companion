@@ -5,6 +5,7 @@ import android.graphics.PixelFormat
 import android.os.SystemClock
 import android.provider.Settings
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
@@ -72,7 +73,11 @@ class AlertCardOverlay(
         val old = retained ?: alerts.map { it.envelope.id }.toSet().also { retained = it }
         if (!started) return
         val now = SystemClock.elapsedRealtime()
-        alerts.filter { it.envelope.id !in old }.mapNotNull { alertCardNotice(it, panel()) }.forEach { queue.offer(it, now) }
+        alerts.filter { it.envelope.id !in old }.forEach { alert ->
+            val notice = alertCardNotice(alert, panel())
+            if (notice != null) queue.offer(notice, now)
+            else Log.w("AlertCardOverlay", "AUTHORITATIVE_NUMBER_SOURCE_UNCONNECTED")
+        }
         render()
     }
 
@@ -83,6 +88,7 @@ class AlertCardOverlay(
 
     fun stop() {
         started = false
+        retained = null
         queue.clear()
         hideCard()
     }
