@@ -58,6 +58,13 @@ class PanelTextTest {
     }
 
     // 1 sp >= 1 px at any 1080p density >= mdpi; the on-stick screencap measurement is P2-A05's CMD-TEXT-SIZE-MEASURE.
+    @Test fun progressShowsAWholePercentAndKeepsItsLabels() {
+        assertEquals("50%", progressText(v(0.5), AS_OF_MS))
+        assertEquals("33% (stale 75s)", progressText(v(0.333), AS_OF_MS + 75_000))
+        assertEquals("100% (replay)", progressText(PanelValue(1.0, null, "replay", AS_OF_MS), AS_OF_MS))
+        assertEquals("Unavailable", progressText(v(null), AS_OF_MS))
+    }
+
     @Test fun textSizesMeetTheCouchFloor() {
         assertTrue("body text >= 24 px at 1080p: ${PanelTextSizes.bodySp} sp", PanelTextSizes.bodySp >= 24f)
         assertTrue("scores >= 32 px at 1080p: ${PanelTextSizes.scoreSp} sp", PanelTextSizes.scoreSp >= 32f)

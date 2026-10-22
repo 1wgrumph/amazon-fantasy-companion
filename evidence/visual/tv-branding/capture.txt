@@ -1,0 +1,25 @@
+tv-branding visual capture (2026-10-22, Claude Code / Claude Opus 5.5)
+
+Host: local Android TV emulator AVD afc-tv-branding (system-images;android-34;android-tv;x86,
+1920x1080, density 320), serial emulator-5610. No Fire TV stick was used.
+Build: ./tv-app/gradlew -p tv-app -I evidence/visual/tv-branding/capture.init.gradle
+       assembleDebug assembleDebugAndroidTest -PafcApiBaseUrl=<deployed API URL>
+Run:   adb -s emulator-5610 shell am instrument -w -e class com.afc.companion.review.BrandingCapture
+       com.afc.companion.test/androidx.test.runner.AndroidJUnitRunner   (capture-native.txt: OK, 1 test)
+Data:  synthetic only. BrandingCapture serves /v1/profile and /v1/panel in-process
+       (SampleLeague/SampleTeam, Sample Player 1-6); no network call reaches the API.
+       The overlay sits over ReviewGameActivity, a plain-text stand-in app (no provider video).
+Rail navigation in the harness focuses the button and sends its semantic OnClick.
+
+Screens (1920x1080 unless noted):
+  loading.png               My setup while the profile loads (animation unchanged)
+  my-setup.png              title, helper, device toggle and scope note, labelled Leagues and Teams fields
+  my-setup-sports.png       NFL alerts toggle with the football glyph
+  my-lineup.png             My lineup with synthetic rows
+  my-lineup-empty.png       empty state with the illustration
+  side-panel-over-game.png  compact overlay: My lineup heading, team total and "Lineup progress: 50%" visible
+  launcher-banner-tile.png  370x254 crop of the Android TV Apps tab showing the AZ Fantasy banner and label;
+                            cropped so no other app's marks are kept
+
+Instrumented tests on the same emulator: ProfileDpadFocusTest (3) and CompactPanelLayoutTest (1),
+instrumented.txt: OK (4 tests).
