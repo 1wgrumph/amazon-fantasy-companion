@@ -11,11 +11,12 @@ import org.junit.Test
 /** Held-≡ state machine: card, small menu, expanded side panel; only the menu and panel take focus. */
 class OverlayModeTest {
     private class Host(leagues: List<String> = listOf("league-a/team-7", "league-b/team-8"), var permitted: Boolean = true) {
+        var nowMs = 1_000L
         val panel = PanelController(leagues, leagues.firstOrNull(), false)
         var added = 0
         var removed = 0
         var permissionRequests = 0
-        val controller = OverlayController(panel, { permitted }, { permissionRequests++ }, { added++ }, { removed++ })
+        val controller = OverlayController(panel, { permitted }, { permissionRequests++ }, { added++ }, { removed++ }, { nowMs })
     }
 
     @Test fun firstHoldShowsTheNonFocusableCard() {
@@ -159,4 +160,67 @@ class OverlayModeTest {
         assertEquals(emptyList<String>(), overlayTeamLeagues(null))
         assertEquals("first entry is the existing panel key", panelTeamLeague(profile), overlayTeamLeagues(profile).first())
     }
+    @Test fun menuAndExpandedCollapseAtNinetySecondsWithoutHidingTheCardOrFeed() {
+        for (expanded in listOf(false, true)) {
+            val h = Host()
+            h.controller.show(); h.controller.hold()
+            if (expanded) h.controller.select(OverlayMenuItem.Expand)
+            assertTrue(h.controller.focusable)
+            h.nowMs += 89_999
+            assertFalse(h.controller.tick())
+            assertEquals(if (expanded) OverlayMode.Expanded else OverlayMode.Menu, h.controller.mode)
+            h.nowMs++
+            assertTrue("expires exactly at 90 seconds", h.controller.tick())
+            assertEquals(OverlayMode.Card, h.controller.mode)
+            assertFalse("game regains the remote", h.controller.focusable)
+            assertTrue("corner card keeps receiving data", h.panel.visible)
+            assertEquals(0, h.removed)
+            h.nowMs += 900_000
+            assertFalse("card does not auto-close", h.controller.tick())
+            assertEquals(OverlayMode.Card, h.controller.mode)
+        }
+    }
+
+    @Test fun everyFocusedKeyIncludingUnhandledKeysResetsTheSingleDeadline() {
+        for (expanded in listOf(false, true)) {
+            for (key in listOf(KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_VOLUME_UP, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE)) {
+                val h = Host()
+                h.controller.show(); h.controller.hold()
+                if (expanded) h.controller.select(OverlayMenuItem.Expand)
+                val expected = h.controller.mode
+                h.nowMs += 80_000
+                h.controller.onFocusedKey(key)
+                h.nowMs += 10_000
+                assertFalse("old deadline was reset by $key in $expected", h.controller.tick())
+                h.nowMs += 79_999
+                assertFalse(h.controller.tick())
+                assertEquals(expected, h.controller.mode)
+                h.nowMs++
+                assertTrue(h.controller.tick())
+                assertEquals(OverlayMode.Card, h.controller.mode)
+            }
+        }
+    }
+
+    @Test fun closingAndReopeningDropsTheOldDeadlineAndStartsANewOne() {
+        val h = Host()
+        assertFalse("off has no deadline", h.controller.tick())
+        h.controller.show(); h.controller.hold()
+        h.nowMs += 80_000
+        h.controller.onFocusedKey(KeyEvent.KEYCODE_BACK)
+        h.nowMs += 100_000
+        assertFalse(h.controller.tick())
+        h.controller.hold()
+        h.nowMs += 89_999
+        assertFalse(h.controller.tick())
+        h.controller.hide()
+        h.nowMs++
+        assertFalse("hidden overlay cannot collapse back into view", h.controller.tick())
+        assertEquals(OverlayMode.Off, h.controller.mode)
+        h.controller.show(); h.controller.select(OverlayMenuItem.Expand)
+        h.nowMs += 90_000
+        assertTrue(h.controller.tick())
+        assertEquals(OverlayMode.Card, h.controller.mode)
+    }
+
 }

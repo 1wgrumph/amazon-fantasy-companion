@@ -11,6 +11,7 @@ import android.hardware.input.InputManager
 import android.net.Uri
 import android.os.Build
 import android.os.IBinder
+import android.os.SystemClock
 import android.provider.Settings
 import android.view.Gravity
 import android.view.KeyEvent
@@ -92,6 +93,10 @@ class OverlayService : Service() {
             while (true) {
                 delay(CARD_TICK_MS)
                 cards.tick()
+                if (controller.tick()) {
+                    tick++
+                    render()
+                }
             }
         }
     }
@@ -139,7 +144,7 @@ class OverlayService : Service() {
     private fun overlay(profile: ProfileState?): OverlayController {
         val panel = PanelController(overlayTeamLeagues(profile), panelTeamLeague(profile), false)
         panel.onAlerts(panelAlerts(AlertInbox.alerts.value))
-        return OverlayController(panel, { Settings.canDrawOverlays(this) }, ::requestPermission, ::startUpdates, ::stopUpdates)
+        return OverlayController(panel, { Settings.canDrawOverlays(this) }, ::requestPermission, ::startUpdates, ::stopUpdates, clock)
     }
 
     /** Opens this app's "Display over other apps" switch; Companion shows the manual steps if Fire OS has no such screen. */
@@ -305,6 +310,8 @@ class OverlayService : Service() {
         const val ACTION_HOLD = "com.afc.companion.panel.HOLD_OVERLAY"
         private const val CHANNEL_ID = "afc-overlay"
         private const val NOTIFICATION_ID = 2
+        // Injectable monotonic clock lets device tests expire real windows without waiting 90 seconds.
+        internal var clock: () -> Long = SystemClock::elapsedRealtime
         private const val CARD_TICK_MS = 250L
         private const val PANEL_SCALE = 0.65f
     }

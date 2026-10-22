@@ -33,9 +33,14 @@ class OverlayController(
     private val requestPermission: () -> Unit,
     private val addWindow: () -> Unit,
     private val removeWindow: () -> Unit,
+    private val nowMs: () -> Long = { System.nanoTime() / 1_000_000 },
 ) {
+    private var idleDeadlineMs: Long? = null
     var mode = OverlayMode.Off
-        private set
+        private set(value) {
+            field = value
+            idleDeadlineMs = if (focusable) nowMs() + IDLE_MS else null
+        }
     var menuFocus = OverlayMenuItem.entries.first()
         private set
 
@@ -86,6 +91,7 @@ class OverlayController(
 
     /** A key delivered to a focused menu or panel window (key down only); false leaves it unhandled. */
     fun onFocusedKey(keyCode: Int): Boolean {
+        if (focusable) idleDeadlineMs = nowMs() + IDLE_MS
         val items = menuItems
         return when (mode) {
             OverlayMode.Menu -> when (keyCode) {
@@ -104,6 +110,14 @@ class OverlayController(
         }
     }
 
+    /** Called by the host's existing tick; expiry uses the same Card transition as Back. */
+    fun tick(): Boolean {
+        val deadline = idleDeadlineMs ?: return false
+        if (nowMs() < deadline) return false
+        mode = OverlayMode.Card
+        return true
+    }
+
     private fun openMenu(): OverlayOutcome {
         menuFocus = OverlayMenuItem.entries.first()
         mode = OverlayMode.Menu
@@ -111,6 +125,7 @@ class OverlayController(
     }
 
     private companion object {
+        const val IDLE_MS = 90_000L
         val OK_KEYS = setOf(KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER, KeyEvent.KEYCODE_NUMPAD_ENTER, KeyEvent.KEYCODE_BUTTON_A)
     }
 }

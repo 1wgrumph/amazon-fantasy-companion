@@ -257,4 +257,29 @@ class CornerCardLifecycleTest {
         }
     }
 
+    @Test fun idleMenuAndExpandedReturnRealFocusToGameWithInjectedTime() {
+        val time = java.util.concurrent.atomic.AtomicLong(1_000)
+        val previousClock = OverlayService.clock
+        OverlayService.clock = time::get
+        try {
+            installPeer(); SessionStore(ctx).save("synthetic-review-session")
+            device.executeShellCommand("appops set com.afc.companion SYSTEM_ALERT_WINDOW allow")
+            ctx.startActivity(Intent().setComponent(ComponentName("com.afc.companion.test", "com.afc.companion.panel.CornerGameActivity"))
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP))
+            compose.waitUntil(timeoutMillis = 20_000) { gameFocused() }
+            OverlayServiceControl(ctx).expand()
+            compose.waitUntil(timeoutMillis = 20_000) { hasText("Team total: 112.5") && overlayFocused() }
+            time.addAndGet(90_000)
+            compose.waitUntil(timeoutMillis = 20_000) { hasText("112.5") && !hasText("Team total: 112.5") && gameFocused() }
+            OverlayServiceControl(ctx).hold()
+            compose.waitUntil(timeoutMillis = 20_000) { hasText("Expand") && overlayFocused() }
+            time.addAndGet(90_000)
+            compose.waitUntil(timeoutMillis = 20_000) { hasText("112.5") && !hasText("Expand") && gameFocused() }
+        } finally {
+            ctx.stopService(Intent(ctx, OverlayService::class.java))
+            ins.waitForIdleSync()
+            OverlayService.clock = previousClock
+        }
+    }
+
 }
