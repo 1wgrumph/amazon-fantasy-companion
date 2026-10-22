@@ -73,11 +73,14 @@ class CornerCardTest {
         val surface = Color(TvPalette.surfaceArgb)
         val text = Color(CornerCardStyle.TEXT_ARGB)
         for (video in listOf(Color.White, Color(0xFFFFF4C0), Color(0xFF7FD8FF), Color(0xFF2FE39A), Color.Black)) {
-            for (alpha in listOf(CornerCardStyle.BACKGROUND_ALPHA, CornerCardStyle.MENU_ALPHA)) {
-                val behind = surface.copy(alpha = alpha).compositeOver(video)
-                val ratio = contrast(text, behind)
-                assertTrue("text over $video at $alpha: $ratio", ratio >= 4.5f)
+            for (windowAlpha in listOf(1f, 0.8f)) {
+                val behind = surface.copy(alpha = CornerCardStyle.backgroundAlpha(windowAlpha) * windowAlpha).compositeOver(video)
+                val ink = text.copy(alpha = windowAlpha).compositeOver(video)
+                val ratio = contrast(ink, behind)
+                assertTrue("composited text over $video at window alpha $windowAlpha: $ratio", ratio >= 4.5f)
             }
+            val menu = surface.copy(alpha = CornerCardStyle.MENU_ALPHA).compositeOver(video)
+            assertTrue(contrast(text, menu) >= 4.5f)
         }
         for (sport in Sport.entries) {
             val ratio = contrast(Color(TvPalette.onSportAccentArgb(sport)), Color(TvPalette.sportAccentArgb(sport)))
@@ -95,7 +98,21 @@ class CornerCardTest {
         assertEquals("Stale", CornerCardText.status(undated, TL, AS_OF_MS))
         val replay = fresh.copy(teamTotal = fresh.teamTotal.copy(source = "replay"))
         assertEquals("Replay, updated 1s ago", CornerCardText.status(replay, TL, AS_OF_MS + 1_000))
-        assertEquals("no basis-free sport mark", null, CornerCardText.sport(fresh.copy(sport = null)))
+        for (basis in listOf(ScoringBasis.YahooLeague, ScoringBasis.Ppr, ScoringBasis.HalfPpr)) {
+            assertEquals("current NFL wire omits sport", "NFL", CornerCardText.sport(fresh.copy(sport = null, basis = basis)))
+        }
+        assertEquals("NBA", CornerCardText.sport(fresh.copy(sport = null, basis = ScoringBasis.NbaPoints)))
+        assertNull(CornerCardText.sport(null))
+    }
+
+    @Test fun currentNflAndNbaWireShapesSupplyTheSport() {
+        for (basis in listOf("yahooLeague", "ppr", "halfPpr")) {
+            val decoded = requireNotNull(decodePanel(state(panelData(basis = basis)), nbaEnabled = true))
+            assertNull("NFL backend omits the optional sport field", decoded.sport)
+            assertEquals("NFL", CornerCardText.sport(decoded))
+        }
+        val nba = requireNotNull(decodePanel(state(panelData(basis = "nbaPoints").put("sport", "nba")), nbaEnabled = true))
+        assertEquals("NBA", CornerCardText.sport(nba))
     }
 
     @Test fun unknownTotalsAreLabeledNeverZero() {

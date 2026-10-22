@@ -23,6 +23,15 @@ class AlertCardMappingTest {
         assertEquals("NFL", notice.sport)
         assertEquals("401999001771", notice.watchEventId)
     }
+    @Test fun untaggedNflSnapshotUsesItsScoringBasisForAlertSport() {
+        val panel = snapshot().copy(sport = null)
+        val notice = requireNotNull(alertCardNotice(alert(), panel))
+        assertEquals("NFL", notice.sport)
+        assertEquals(6.5, notice.value, 0.0)
+        val declared = json().apply { getJSONObject("data").getJSONObject("triggerContext").put("sport", "nfl") }
+        assertEquals("NFL", requireNotNull(alertCardNotice(alert(declared), panel)).sport)
+    }
+
     @Test fun optionalBackendFieldsWorkWithoutAnyPanel() {
         val json = json()
         json.getJSONObject("data").getJSONObject("triggerContext").apply {

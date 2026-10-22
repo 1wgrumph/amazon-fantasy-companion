@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ServiceInfo
 import android.graphics.PixelFormat
+import android.hardware.input.InputManager
 import android.net.Uri
 import android.os.Build
 import android.os.IBinder
@@ -59,6 +60,9 @@ import kotlinx.coroutines.launch
 class OverlayService : Service() {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
     private val windows by lazy { getSystemService(WindowManager::class.java) }
+    private val cardWindowAlpha by lazy {
+        if (Build.VERSION.SDK_INT >= 31) getSystemService(InputManager::class.java).maximumObscuringOpacityForTouch else 1f
+    }
     private val client by lazy { Shell().client(BuildConfig.AFC_API_BASE_URL, SessionStore(this)::token) }
     private var controller = overlay(null)
     private var cardSnapshot: PanelSnapshot? = null
@@ -99,6 +103,12 @@ class OverlayService : Service() {
                 // Each show re-reads the profile, so a team/league changed in Settings is picked up.
                 if (controller.mode == OverlayMode.Off) controller = overlay(client?.let { ProfileStore(it).load() })
                 controller.toggle()
+                render()
+                stopIfIdle()
+            }
+            ACTION_EXPAND -> scope.launch {
+                if (controller.mode == OverlayMode.Off) controller = overlay(client?.let { ProfileStore(it).load() })
+                if (controller.show() == OverlayOutcome.Shown) controller.select(OverlayMenuItem.Expand)
                 render()
                 stopIfIdle()
             }
@@ -165,11 +175,11 @@ class OverlayService : Service() {
         cardWindow = sync(cardWindow, mode == OverlayMode.Card || mode == OverlayMode.Menu, ::cardParams, null) {
             @Suppress("UNUSED_EXPRESSION") tick // reads tick so controller mutations and the clock recompose
             val enabled = MenuHold.enabled(Settings.Secure.getString(contentResolver, Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES))
-            CornerCardContent(controller.panel.snapshot, controller.panel.teamLeague, System.currentTimeMillis(), enabled)
+            CornerCardContent(controller.panel.snapshot, controller.panel.teamLeague, System.currentTimeMillis(), enabled, cardWindowAlpha)
         }
         menuWindow = sync(menuWindow, mode == OverlayMode.Menu, ::menuParams, ::onFocusedKey) {
             @Suppress("UNUSED_EXPRESSION") tick
-            OverlayMenuContent(controller.menuFocus, controller.panel.teamLeague)
+            OverlayMenuContent(controller.menuFocus, controller.panel.teamLeague, controller.menuItems)
         }
         panelWindow = sync(panelWindow, mode == OverlayMode.Expanded, ::panelParams, ::onFocusedKey) {
             @Suppress("UNUSED_EXPRESSION") tick
@@ -244,7 +254,10 @@ class OverlayService : Service() {
 
     private fun cardParams(): WindowManager.LayoutParams {
         val (width, height) = screenSize(windows)
-        return windowParams(OverlayGeometry.cornerCard(width, height, cardBox), overlayWindowFlags(focusable = false))
+        return windowParams(OverlayGeometry.cornerCard(width, height, cardBox), overlayWindowFlags(focusable = false)).apply {
+            // Android 12+ caps untrusted, untouchable windows; compensate the surface, not the text.
+            alpha = cardWindowAlpha
+        }
     }
 
     private fun menuParams(): WindowManager.LayoutParams {
@@ -285,6 +298,7 @@ class OverlayService : Service() {
     }
 
     companion object {
+        const val ACTION_EXPAND = "com.afc.companion.panel.EXPAND_OVERLAY"
         const val ACTION_TOGGLE = "com.afc.companion.panel.TOGGLE_OVERLAY"
         const val ACTION_STOP_ALERTS = "com.afc.companion.panel.STOP_ALERT_CARDS"
         const val ACTION_ALERTS = "com.afc.companion.panel.START_ALERT_CARDS"
@@ -303,6 +317,10 @@ class OverlayService : Service() {
 class OverlayServiceControl(private val context: Context) {
     fun toggle() {
         ContextCompat.startForegroundService(context, Intent(context, OverlayService::class.java).setAction(OverlayService.ACTION_TOGGLE))
+    }
+
+    fun expand() {
+        ContextCompat.startForegroundService(context, Intent(context, OverlayService::class.java).setAction(OverlayService.ACTION_EXPAND))
     }
 
     fun hold() {

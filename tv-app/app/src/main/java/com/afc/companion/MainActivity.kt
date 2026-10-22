@@ -67,12 +67,12 @@ private fun NotConfigured() {
 }
 
 /**
- * Toggles the side panel over the game, then returns to the app that was playing. Without the
+ * Shows the card or expanded lineup over the game, then returns to the app that was playing. Without the
  * overlay permission it stays here: Android's switch opens, and the manual steps show in case
  * Fire OS has no such screen.
  */
 @Composable
-private fun ShowOverGame() {
+private fun ShowOverGame(canExpand: Boolean) {
     val context = LocalContext.current
     val overlay = remember(context) { OverlayServiceControl(context) }
     var needsPermission by remember { mutableStateOf(false) }
@@ -81,9 +81,16 @@ private fun ShowOverGame() {
         needsPermission = !Settings.canDrawOverlays(context)
         if (!needsPermission) (context as? Activity)?.moveTaskToBack(true)
     }) { Text("Show over game") }
+    if (canExpand) {
+        Button(onClick = {
+            overlay.expand()
+            needsPermission = !Settings.canDrawOverlays(context)
+            if (!needsPermission) (context as? Activity)?.moveTaskToBack(true)
+        }) { Text("Expand over game") }
+    }
     if (needsPermission) {
         Text(
-            "Allow Companion to display over other apps, then press Show over game again.\n" +
+            "Allow Companion to display over other apps, then try again.\n" +
                 "Settings > Applications > Special app access > Display over other apps.",
             modifier = Modifier.widthIn(max = 280.dp),
             style = MaterialTheme.typography.bodyMedium,
@@ -106,7 +113,7 @@ private fun AppShell(shell: Shell, client: ApiClient, sessions: SessionStore) {
             Destination.entries.forEach { target ->
                 Button(onClick = { destination = target }) { Text(target.label) }
             }
-            ShowOverGame()
+            ShowOverGame(canExpand = destination == Destination.Panel)
         }
         Box(Modifier.weight(1f).fillMaxSize()) {
             CompositionLocalProvider(LocalTvSafeZoneApplied provides true) {

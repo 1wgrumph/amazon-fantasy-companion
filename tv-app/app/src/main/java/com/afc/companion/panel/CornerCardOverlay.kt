@@ -35,13 +35,13 @@ private val onSurface = Color(CornerCardStyle.TEXT_ARGB)
  * translucent theme surface, with a sport-colour edge. Without [holdEnabled] it adds the one-line accessibility-switch hint.
  */
 @Composable
-fun CornerCardContent(snapshot: PanelSnapshot?, teamLeague: String?, nowMs: Long, holdEnabled: Boolean) {
+fun CornerCardContent(snapshot: PanelSnapshot?, teamLeague: String?, nowMs: Long, holdEnabled: Boolean, windowAlpha: Float = 1f) {
     val sport = Sport.entries.find { it.label == CornerCardText.sport(snapshot) }
     val accent = sport?.let { Color(TvPalette.sportAccentArgb(it)) } ?: Color(TvPalette.primaryArgb)
     val hint = CornerCardText.hint(holdEnabled)
     Row(
         Modifier.fillMaxSize().clip(RoundedCornerShape(12.dp))
-            .background(Color(TvPalette.surfaceArgb).copy(alpha = CornerCardStyle.BACKGROUND_ALPHA)),
+            .background(Color(TvPalette.surfaceArgb).copy(alpha = CornerCardStyle.backgroundAlpha(windowAlpha))),
     ) {
         Box(Modifier.width(4.dp).fillMaxHeight().background(accent))
         Column(
@@ -65,15 +65,15 @@ fun CornerCardContent(snapshot: PanelSnapshot?, teamLeague: String?, nowMs: Long
     }
 }
 
-/** The held-≡ menu below the card: three rows, the focused one in the theme's gold focus style. */
+/** The held-≡ menu below the card: available rows, the focused one in the theme's gold focus style. */
 @Composable
-fun OverlayMenuContent(focus: OverlayMenuItem, teamLeague: String?) {
+fun OverlayMenuContent(focus: OverlayMenuItem, teamLeague: String?, items: List<OverlayMenuItem>) {
     Column(
         Modifier.fillMaxSize().clip(RoundedCornerShape(12.dp))
             .background(Color(TvPalette.surfaceArgb).copy(alpha = CornerCardStyle.MENU_ALPHA)).padding(6.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
-        OverlayMenuItem.entries.forEach { item ->
+        items.forEach { item ->
             val focused = item == focus
             val label = when (item) {
                 OverlayMenuItem.Expand -> "Expand"

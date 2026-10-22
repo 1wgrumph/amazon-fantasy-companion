@@ -158,15 +158,6 @@ class OverlayLifecycleTest {
             "/v1/alerts" -> page
             else -> JSONObject()
         }
-        @BeforeClass @JvmStatic fun syntheticPeer() {
-            URL.setURLStreamHandlerFactory { protocol -> if (protocol == "https") object : URLStreamHandler() {
-                override fun openConnection(url: URL): URLConnection = object : HttpURLConnection(url) {
-                    override fun connect() {}; override fun disconnect() {}; override fun usingProxy() = false
-                    override fun getResponseCode() = 200
-                    override fun getOutputStream(): OutputStream = ByteArrayOutputStream()
-                    override fun getInputStream(): InputStream = ByteArrayInputStream(response(url).toString().toByteArray())
-                }
-            } else null }
-        }
+        @BeforeClass @JvmStatic fun syntheticPeer() = OverlayTestPeer.respondWith(::response)
     }
 }

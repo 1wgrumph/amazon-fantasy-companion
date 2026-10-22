@@ -10,7 +10,7 @@ import org.junit.Test
 
 /** Held-≡ state machine: card, small menu, expanded side panel; only the menu and panel take focus. */
 class OverlayModeTest {
-    private class Host(leagues: List<String> = listOf("league-a/team-7", "league-b/team-7"), var permitted: Boolean = true) {
+    private class Host(leagues: List<String> = listOf("league-a/team-7", "league-b/team-8"), var permitted: Boolean = true) {
         val panel = PanelController(leagues, leagues.firstOrNull(), false)
         var added = 0
         var removed = 0
@@ -42,8 +42,17 @@ class OverlayModeTest {
         assertEquals(0, h.removed)
     }
 
-    @Test fun menuOffersHideExpandAndTheLeagueSwitcher() {
-        assertEquals(setOf(OverlayMenuItem.Hide, OverlayMenuItem.Expand, OverlayMenuItem.League), OverlayMenuItem.entries.toSet())
+    @Test fun leagueEntryRequiresTwoDistinctKnownPairsAndNavigationSkipsItOtherwise() {
+        for (pairs in listOf(emptyList(), listOf("a/t"), listOf("a/t", "a/t"))) {
+            val h = Host(pairs)
+            h.controller.hold(); h.controller.hold()
+            assertEquals(listOf(OverlayMenuItem.Expand, OverlayMenuItem.Hide), h.controller.menuItems)
+            h.controller.onFocusedKey(KeyEvent.KEYCODE_DPAD_DOWN)
+            assertEquals(OverlayMenuItem.Hide, h.controller.menuFocus)
+            h.controller.onFocusedKey(KeyEvent.KEYCODE_DPAD_UP)
+            assertEquals(OverlayMenuItem.Expand, h.controller.menuFocus)
+        }
+        assertEquals(OverlayMenuItem.entries, Host(listOf("a/t", "b/u")).controller.menuItems)
     }
 
     @Test fun dpadMovesMenuFocusWithinBoundsAndOkSelects() {
@@ -125,11 +134,11 @@ class OverlayModeTest {
     }
 
     @Test fun leagueSwitcherCyclesTheProfileLeaguesThroughThePanelAndWraps() {
-        val h = Host(listOf("league-a/team-7", "league-b/team-7", "league-c/team-7"))
+        val h = Host(listOf("league-a/team-7", "league-b/team-8", "league-c/team-9"))
         h.controller.hold(); h.controller.hold()
         h.panel.onFetched(snap(teamLeague = "league-a/team-7"), 0)
         h.controller.select(OverlayMenuItem.League)
-        assertEquals("league-b/team-7", h.panel.teamLeague)
+        assertEquals("league-b/team-8", h.panel.teamLeague)
         assertEquals("switching drops the other league's rows", null, h.panel.snapshot)
         assertTrue("and refetches immediately", h.panel.shouldFetch(1))
         assertEquals("the menu stays open for another press", OverlayMode.Menu, h.controller.mode)
@@ -138,13 +147,13 @@ class OverlayModeTest {
         assertEquals("league-a/team-7", h.panel.teamLeague)
     }
 
-    @Test fun overlayLeaguesComeFromTheProfileSelectedPairFirst() {
+    @Test fun unpairedProfileListsNeverInventTeamLeagueAssociations() {
         val base = customized()
         val profile = base.copy(
             teamLeague = TeamLeague("league-b", "team-7"),
             selections = base.selections.copy(leagues = setOf("league-c", "league-a", "league-b")),
         )
-        assertEquals(listOf("league-b/team-7", "league-a/team-7", "league-c/team-7"), overlayTeamLeagues(profile))
+        assertEquals(listOf("league-b/team-7"), overlayTeamLeagues(profile))
         assertEquals("selected pair only", listOf("league-b/team-7"), overlayTeamLeagues(profile.copy(selections = profile.selections.copy(leagues = emptySet()))))
         assertEquals("no pair, no switcher", emptyList<String>(), overlayTeamLeagues(profile.copy(teamLeague = null)))
         assertEquals(emptyList<String>(), overlayTeamLeagues(null))

@@ -20,7 +20,7 @@ enum class OverlayOutcome { Shown, Hidden, PermissionNeeded }
 /** Off; the corner card; the card with its small menu; the expanded side panel. */
 enum class OverlayMode { Off, Card, Menu, Expanded }
 
-/** Menu rows in D-pad order; League cycles the profile's leagues. */
+/** Menu rows in D-pad order; League is offered only for known real pairs. */
 enum class OverlayMenuItem { Expand, League, Hide }
 
 /**
@@ -38,6 +38,9 @@ class OverlayController(
         private set
     var menuFocus = OverlayMenuItem.entries.first()
         private set
+
+    val menuItems: List<OverlayMenuItem> get() = if (panel.canSwitchTeamLeague) OverlayMenuItem.entries
+        else listOf(OverlayMenuItem.Expand, OverlayMenuItem.Hide)
 
     /** Only the menu and the expanded panel take the remote; the plain card leaves it with the game. */
     val focusable: Boolean get() = mode == OverlayMode.Menu || mode == OverlayMode.Expanded
@@ -77,17 +80,17 @@ class OverlayController(
         when (item) {
             OverlayMenuItem.Hide -> hide()
             OverlayMenuItem.Expand -> mode = OverlayMode.Expanded
-            OverlayMenuItem.League -> panel.perform(PanelAction.NextTeamLeague, 0)
+            OverlayMenuItem.League -> if (panel.canSwitchTeamLeague) panel.perform(PanelAction.NextTeamLeague, 0)
         }
     }
 
     /** A key delivered to a focused menu or panel window (key down only); false leaves it unhandled. */
     fun onFocusedKey(keyCode: Int): Boolean {
-        val items = OverlayMenuItem.entries
+        val items = menuItems
         return when (mode) {
             OverlayMode.Menu -> when (keyCode) {
-                KeyEvent.KEYCODE_DPAD_UP -> { menuFocus = items[(menuFocus.ordinal - 1).coerceAtLeast(0)]; true }
-                KeyEvent.KEYCODE_DPAD_DOWN -> { menuFocus = items[(menuFocus.ordinal + 1).coerceAtMost(items.lastIndex)]; true }
+                KeyEvent.KEYCODE_DPAD_UP -> { menuFocus = items[(items.indexOf(menuFocus) - 1).coerceAtLeast(0)]; true }
+                KeyEvent.KEYCODE_DPAD_DOWN -> { menuFocus = items[(items.indexOf(menuFocus) + 1).coerceAtMost(items.lastIndex)]; true }
                 in OK_KEYS -> { select(menuFocus); true }
                 KeyEvent.KEYCODE_BACK -> { mode = OverlayMode.Card; true }
                 else -> false
@@ -112,14 +115,8 @@ class OverlayController(
     }
 }
 
-/**
- * Switcher order: the profile's selected pair first, then its other leagues with the same team.
- * shortcut: the profile stores one team, so every league reuses it; pair each league with its own team once Settings stores one per league.
- */
-fun overlayTeamLeagues(profile: ProfileState?): List<String> {
-    val selected = profile?.teamLeague ?: return emptyList()
-    return (listOf(selected.league) + (profile.selections.leagues.sorted() - selected.league)).map { "$it/${selected.team}" }
-}
+/** Unpaired league/team selection sets do not establish associations; only the selected pair is known. */
+fun overlayTeamLeagues(profile: ProfileState?): List<String> = listOfNotNull(panelTeamLeague(profile))
 
 /** Window flags: the card never takes focus or touch; the menu and panel take focus and pass outside touches on. */
 fun overlayWindowFlags(focusable: Boolean): Int =
@@ -164,8 +161,9 @@ object OverlayGeometry {
 
 /** Corner card and menu look: the theme surface, translucent so the game shows through, with full-strength text. */
 object CornerCardStyle {
-    /** 72%: the lowest opacity that keeps body text at 4.5:1 over white video. */
+    /** Effective surface opacity, after WindowManager's untrusted-overlay alpha. */
     const val BACKGROUND_ALPHA = 0.72f
+    fun backgroundAlpha(windowAlpha: Float): Float = (BACKGROUND_ALPHA / windowAlpha).coerceAtMost(1f)
     const val MENU_ALPHA = 0.90f
     val TEXT_ARGB = TvPalette.onSurfaceArgb
 }
@@ -183,7 +181,12 @@ object CornerCardText {
         return if (total.source == "replay") "Replay, ${age.replaceFirstChar { it.lowercase() }}" else age
     }
 
-    fun sport(snapshot: PanelSnapshot?): String? = snapshot?.sport
+    fun sport(snapshot: PanelSnapshot?): String? = snapshot?.let {
+        it.sport ?: when (it.basis) {
+            ScoringBasis.NbaPoints -> "NBA"
+            ScoringBasis.YahooLeague, ScoringBasis.Ppr, ScoringBasis.HalfPpr -> "NFL"
+        }
+    }
 
     fun hint(serviceEnabled: Boolean): String? = if (serviceEnabled) null else "Hold ≡ needs Accessibility"
 
@@ -257,7 +260,7 @@ class AlertCardQueue {
  * Optional backend fields win when present: `triggerContext.sport` ("nba"/"nfl"),
  * `starters[0].shortName` and `starters[0].points` (fantasy points on the profile's basis).
  * Without them the player is the starter's last name, and the number and sport come only from the
- * fresh matching row of the selected profile's [panel] snapshot; otherwise no card is emitted.
+ * fresh matching row and sport/scoring basis of the selected profile's [panel] snapshot; otherwise no card is emitted.
  */
 fun alertCardNotice(alert: Alert, panel: PanelSnapshot?): AlertCardNotice? {
     if (AlertPresenter.text(alert) == null) return null // the panel's safety gate: unsafe names never reach a card
@@ -268,13 +271,13 @@ fun alertCardNotice(alert: Alert, panel: PanelSnapshot?): AlertCardNotice? {
         ?.take(MAX_CARD_NAME)?.takeIf { AlertCardText.label(it, 0.0) != null } ?: return null
     val declaredSport = when (trigger.opt("sport")) { "nba" -> "NBA"; "nfl" -> "NFL"; else -> null }
     val row = panel?.rows?.firstOrNull {
-        it.playerId == starter.opt("athlete_id") && (declaredSport == null || declaredSport == panel.sport)
+        it.playerId == starter.opt("athlete_id") && (declaredSport == null || declaredSport == CornerCardText.sport(panel))
     }
     val freshPoints = row?.points?.takeIf { points ->
         points.asOfMs?.let { System.currentTimeMillis() - it in 0..60_000 } == true
     }?.value?.takeIf { it.isFinite() }
     val value = (starter.opt("points") as? Number)?.toDouble()?.takeIf { it.isFinite() } ?: freshPoints ?: return null
-    val sport = declaredSport ?: panel?.sport?.takeIf { row != null && it in listOf("NBA", "NFL") } ?: return null
+    val sport = declaredSport ?: CornerCardText.sport(panel)?.takeIf { row != null && it in listOf("NBA", "NFL") } ?: return null
     return AlertCardNotice(alert.envelope.id, player, value, sport, AlertNotifier.watchEventId(alert).orEmpty())
 }
 
