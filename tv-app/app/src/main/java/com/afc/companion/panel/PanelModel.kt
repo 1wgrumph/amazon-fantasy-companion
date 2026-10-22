@@ -276,6 +276,7 @@ class PanelController(
     private var lastFetchMs: Long? = null
     private var needsFetch = true
 
+    val canSwitchTeamLeague: Boolean get() = teamLeagues.distinct().size >= 2
     val visible: Boolean get() = shown
     val teamLeague: String? get() = currentTeamLeague
     val snapshot: PanelSnapshot? get() = held

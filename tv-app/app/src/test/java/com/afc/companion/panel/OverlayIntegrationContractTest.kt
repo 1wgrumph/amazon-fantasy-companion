@@ -49,7 +49,8 @@ class OverlayIntegrationContractTest {
         val source = service()
         val parameters = sourceBlock(source, Regex("(?:WindowManager\\.)?LayoutParams\\s*\\("))
         assertTrue("overlay window type", source.contains("TYPE_APPLICATION_OVERLAY"))
-        assertTrue("game keeps D-pad input", source.contains("FLAG_NOT_FOCUSABLE"))
+        // The default corner card uses the tested non-focusable flags (CornerCardIntegrationContractTest).
+        assertTrue("game keeps D-pad input", source.contains("overlayWindowFlags(focusable = false)"))
         assertTrue("tested pixel geometry", Regex("OverlayGeometry\\.layout\\s*\\(").containsMatchIn(source))
         for (field in listOf("left", "top")) assertTrue("window uses Box.$field", parameters.contains(".$field"))
         for (field in listOf("width", "height")) assertTrue("window uses tested $field", source.contains(".$field"))
