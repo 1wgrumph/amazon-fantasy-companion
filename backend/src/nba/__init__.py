@@ -63,12 +63,14 @@ def _write_config():
                   retries={"mode": "standard", "total_max_attempts": 1})
 
 
-def _write_records(deadline, records):
+def _write_records(records, channel=None):
+    import store
     from feed_ingest.ingest import store_player_statistics
 
+    write = functools.partial(store.put_nba_statistics, channel=channel)
     for record in records:
-        with _deadline(min(_WRITE_SECONDS, deadline - time.monotonic())):
-            store_player_statistics([record], config=_write_config())
+        with _deadline(_WRITE_SECONDS):
+            store_player_statistics([record], config=_write_config(), write=write)
 
 
 def lambda_handler(event, context):
@@ -84,8 +86,7 @@ def lambda_handler(event, context):
     try:
         with _deadline(seconds):
             deadline = time.monotonic() + seconds
-            return poll(functools.partial(_fetch, deadline),
-                        functools.partial(_write_records, deadline))
+            return poll(functools.partial(_fetch, deadline))
     except Exception as exc:
         logging.getLogger(__name__).warning("NBA poll failed: %.200s", exc)
         return result
@@ -120,8 +121,6 @@ def poll(get_json, store_records=None):
         return result
     from nba.normalize import boxscore_statistics_nba, pregame_status_by_team, scoreboard_games
 
-    if store_records is None:
-        from feed_ingest.ingest import store_player_statistics as store_records
     try:
         board = get_json(FEED + "scoreboard")
         games = scoreboard_games(board)
@@ -137,6 +136,10 @@ def poll(get_json, store_records=None):
         except (ValueError, OSError):
             result["failed"].append(game_id)
             continue
-        store_records(records)
+        if store_records is None:
+            from feed_ingest.normalize import _channel
+            _write_records(records, channel=_channel(summary))
+        else:
+            store_records(records)
         result["stored"] += len(records)
     return result

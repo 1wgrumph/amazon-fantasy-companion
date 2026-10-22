@@ -154,19 +154,28 @@ def required_actions(root, handler, environment):
         if isinstance(node, ast.Attribute):
             receivers = evaluate(node.value, module, scope, resolving, lookup)
             if node.attr in OPERATIONS:
-                assert all(r[0] in {"table", "batch"} for r in receivers), \
+                assert all(r[0] in {"table", "batch", "client"} for r in receivers), \
                     f"Unknown DynamoDB table resolution: {module}: {ast.unparse(node)}"
             values = []
             for receiver in receivers:
                 if receiver[0] == "module":
                     values.append(member(receiver[1], node.attr, resolving))
                 elif receiver[0] in {"table", "batch"}:
+                    if node.attr in {"name", "meta"}:
+                        values.append(one("table-name" if node.attr == "name" else "meta", receiver[1]))
+                        continue
                     assert node.attr in OPERATIONS or node.attr == "batch_writer", \
                         f"Unknown DynamoDB table method: {node.attr}"
                     if node.attr in OPERATIONS:
                         action = "BatchWriteItem" if receiver[0] == "batch" else OPERATIONS[node.attr]
                         required.setdefault(receiver[1], set()).add(action)
                     values.append(one("method", receiver[1], node.attr, receiver[0]))
+                elif receiver[0] == "meta":
+                    assert node.attr == "client", f"Unknown DynamoDB metadata: {node.attr}"
+                    values.append(one("client", receiver[1]))
+                elif receiver[0] == "client":
+                    assert node.attr == "transact_write_items", f"Unknown DynamoDB client method: {node.attr}"
+                    values.append(one("transaction-method", receiver[1]))
             return union(values)
         if isinstance(node, ast.Call):
             arguments = [evaluate(n, module, scope, resolving, lookup) for n in node.args]
@@ -184,7 +193,7 @@ def required_actions(root, handler, environment):
                 return frozenset(tables)
             callees = evaluate(node.func, module, scope, resolving, lookup)
             if (isinstance(node.func, ast.Attribute) and node.func.attr in OPERATIONS):
-                assert all(c[0] == "method" for c in callees), \
+                assert all(c[0] in {"method", "transaction-method"} for c in callees), \
                     f"Unknown DynamoDB table resolution: {module}: {ast.unparse(node)}"
             # External higher-order calls may invoke supplied local callbacks.
             if ("unknown",) in callees:
@@ -196,6 +205,12 @@ def required_actions(root, handler, environment):
             for callee in callees:
                 if callee[0] == "function":
                     values.append(invoke(callee[1], callee[2], arguments, keywords))
+                elif callee[0] == "transaction-method":
+                    items = keywords.get("TransactItems", UNKNOWN)
+                    assert items and all(item[0] == "transaction-action" for item in items), \
+                        f"Unknown DynamoDB transaction payload: {ast.unparse(node)}"
+                    for _, table, action in items:
+                        required.setdefault(table, set()).add(action)
                 elif callee[0] == "method":
                     _, table, method, kind = callee
                     if method == "batch_writer":
@@ -206,7 +221,36 @@ def required_actions(root, handler, environment):
                           for v in evaluate(node.slice, module, scope, resolving, lookup)])
         if isinstance(node, (ast.List, ast.Tuple, ast.Set)):
             return union([evaluate(n, module, scope, resolving, lookup) for n in node.elts])
+        if isinstance(node, (ast.ListComp, ast.GeneratorExp)):
+            return evaluate(node.elt, module, scope, resolving, lookup)
+        if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Add):
+            return union([evaluate(n, module, scope, resolving, lookup) for n in (node.left, node.right)])
+        if isinstance(node, ast.BoolOp):
+            return union([evaluate(n, module, scope, resolving, lookup) for n in node.values])
         if isinstance(node, ast.Dict):
+            entries = {key.value: value for key, value in zip(node.keys, node.values)
+                       if isinstance(key, ast.Constant) and isinstance(key.value, str)}
+            if "TableName" in entries:
+                tables = evaluate(entries["TableName"], module, scope, resolving, lookup)
+                resolved = set()
+                for table in tables:
+                    if table[0] == "table-name":
+                        resolved.add(("transaction-table", table[1]))
+                    else:
+                        assert table[0] == "environment" and table[1] in environment, \
+                            "Unknown DynamoDB table resolution in transaction"
+                        ref = environment[table[1]]
+                        assert set(ref) == {"Ref"}, f"Unknown DynamoDB table reference: {ref}"
+                        resolved.add(("transaction-table", ref["Ref"]))
+                return frozenset(resolved)
+            actions = {"Put": "PutItem", "Update": "UpdateItem", "Delete": "DeleteItem",
+                       "ConditionCheck": "ConditionCheckItem"}
+            if len(entries) == 1 and set(entries) <= set(actions):
+                [(operation, payload)] = entries.items()
+                tables = evaluate(payload, module, scope, resolving, lookup)
+                assert all(t[0] == "transaction-table" for t in tables), \
+                    "Unknown DynamoDB transaction table"
+                return frozenset(("transaction-action", t[1], actions[operation]) for t in tables)
             return union([evaluate(n, module, scope, resolving, lookup) for n in node.values])
         # shortcut: reflection and computed dispatch are outside this static
         # inventory; extend resolution before introducing them for persistence.
