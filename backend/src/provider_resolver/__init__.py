@@ -32,6 +32,7 @@ CANONICAL_UTC = re.compile(r"[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{
 
 
 ESPN_PLAY_ID = re.compile(r"([0-9]{9})[0-9]{1,23}")
+NBA_ALERT_ID = re.compile(r"([0-9]{9})[0-9]{8}[0-9]{1,20}(?:05|10|20|30|40)")
 CHANNEL = re.compile(r"[A-Za-z0-9](?:[A-Za-z0-9 .&'+/-]{0,30}[A-Za-z0-9+])?")
 
 
@@ -43,7 +44,8 @@ def event_channel(event_id):
     the play id's prefix: every recorded ESPN play id is its game id plus a sequence.
     shortcut: assumes 9-digit ESPN game ids, revisit if ESPN widens its event ids.
     """
-    match = ESPN_PLAY_ID.fullmatch(event_id) if isinstance(event_id, str) else None
+    match = (ESPN_PLAY_ID.fullmatch(event_id) or NBA_ALERT_ID.fullmatch(event_id)) if (
+        isinstance(event_id, str)) else None
     if match is None:
         return None
     item = store.get_event(match.group(1), event_id) or {}

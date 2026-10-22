@@ -160,7 +160,7 @@ def test_f3_slow_write_is_interrupted_by_deadline(monkeypatch, caplog, run_secon
         threading.Event().wait(.6)
 
     monkeypatch.setattr(feed_ingest, "_get_json", get_json)
-    monkeypatch.setattr(feed_ingest.store, "put_player_statistics", slow_write)
+    monkeypatch.setattr(feed_ingest.store, "put_nba_statistics", slow_write)
     started = time.monotonic()
     result = _entry(nba)({}, None)
     elapsed = time.monotonic() - started
@@ -181,7 +181,7 @@ def test_nba_handler_flag_off_does_no_io(monkeypatch):
         raise AssertionError("Disabled NBA handler attempted I/O")
 
     monkeypatch.setattr(feed_ingest, "_get_json", forbidden)
-    monkeypatch.setattr(feed_ingest.store, "put_player_statistics", forbidden)
+    monkeypatch.setattr(feed_ingest.store, "put_nba_statistics", forbidden)
     assert nba.lambda_handler({}, None) == {"stored": 0, "failed": []}
 
 

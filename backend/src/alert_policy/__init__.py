@@ -83,8 +83,18 @@ def _in_window(minute, window):
     return minute >= start or minute < end
 
 
-def _commentary(level, alert_type, game_event):
+def _commentary(level, alert_type, game_event, starters=()):
     if level not in ("Mild", "Hype"):
+        return None
+    if game_event.get("sport") == "nba":
+        # The NFL play template would claim a score that did not happen.
+        phrase = game_event.get("matchup")
+        name = next((starter.get("name") for starter in starters
+                     if isinstance(starter, dict) and isinstance(starter.get("name"), str)
+                     and starter["name"].strip()), None)
+        if (alert_type == "PlayerScore" and isinstance(phrase, str) and phrase.strip()
+                and name is not None):
+            return f"{name} {phrase.strip()}"
         return None
     score = game_event.get("score") or {}
     away, home = _int(score.get("away")), _int(score.get("home"))
@@ -228,7 +238,7 @@ def _alert(profile_id, match, game_event, settings, starters, enabled, score, re
         "eventId": game_event.get("eventId"),
         "revision": _int(game_event.get("revision"), _int(match.get("revision"), 1)),
         "alertType": enabled[0], "triggerContext": context,
-        "commentary": _commentary(settings.get("excitement"), enabled[0], game_event),
+        "commentary": _commentary(settings.get("excitement"), enabled[0], game_event, starters),
         "emittedAt": emitted_at}
 
 
