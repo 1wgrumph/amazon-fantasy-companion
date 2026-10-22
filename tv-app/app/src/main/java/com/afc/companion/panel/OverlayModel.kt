@@ -81,6 +81,10 @@ class OverlayController(
         OverlayMode.Menu, OverlayMode.Expanded -> { mode = OverlayMode.Card; OverlayOutcome.Shown }
     }
 
+    fun doubleTap() {
+        if (mode == OverlayMode.Card || mode == OverlayMode.Menu) panel.perform(PanelAction.NextTeamLeague, 0)
+    }
+
     fun select(item: OverlayMenuItem) {
         when (item) {
             OverlayMenuItem.Hide -> hide()
@@ -185,11 +189,14 @@ object CornerCardStyle {
 
 /** The card's few words: the team total, how fresh it is, the sport, and the switch hint. */
 object CornerCardText {
+    fun label(teamLeague: String?): String = teamLeague ?: "No team selected"
+
     fun total(snapshot: PanelSnapshot?): String = snapshot?.teamTotal?.value?.toString() ?: "Unavailable"
 
     fun status(snapshot: PanelSnapshot?, teamLeague: String?, nowMs: Long): String {
         if (teamLeague == null) return "No team selected"
-        val total = snapshot?.teamTotal ?: return "Loading"
+        // Names the pair while it loads, so a double-tapped switch shows where it went.
+        val total = snapshot?.teamTotal ?: return "Loading ${teamLeague.substringAfter('/')}"
         val asOf = total.asOfMs ?: return "Stale"
         val ageS = (nowMs - asOf) / 1_000
         val age = if (nowMs - asOf >= STALE_MS) "Stale ${ageS}s" else "Updated ${ageS}s ago"

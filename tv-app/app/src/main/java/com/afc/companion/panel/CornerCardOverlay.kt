@@ -48,6 +48,7 @@ fun CornerCardContent(snapshot: PanelSnapshot?, teamLeague: String?, nowMs: Long
             Modifier.weight(1f).fillMaxHeight().padding(horizontal = 10.dp, vertical = 5.dp),
             verticalArrangement = Arrangement.Center,
         ) {
+            Line(CornerCardText.label(teamLeague), 12.sp, FontWeight.Bold)
             Line(CornerCardText.total(snapshot), 22.sp, FontWeight.Bold)
             Row(verticalAlignment = Alignment.CenterVertically) {
                 if (sport != null) {

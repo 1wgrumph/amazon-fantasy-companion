@@ -115,11 +115,25 @@ class CornerCardTest {
         assertEquals("NBA", CornerCardText.sport(nba))
     }
 
+    @Test fun switchedPairLabelStaysVisibleAfterItsSnapshotLoads() {
+        val pairs = listOf("league-a/team-7", "league-b/team-8")
+        val panel = PanelController(pairs, pairs.first(), true)
+        for (pair in pairs) {
+            assertNull("the new pair starts loading", panel.snapshot)
+            assertEquals(pair, CornerCardText.label(panel.teamLeague))
+            panel.onFetched(snap(teamLeague = pair, total = 42.0), 0)
+            assertEquals("the label survives loading", pair, CornerCardText.label(panel.teamLeague))
+            assertEquals("the total is still shown separately", "42.0", CornerCardText.total(panel.snapshot))
+            panel.perform(PanelAction.NextTeamLeague, 0)
+        }
+        assertEquals("No team selected", CornerCardText.label(null))
+    }
+
     @Test fun unknownTotalsAreLabeledNeverZero() {
         val withheld = snap(total = null)
         assertEquals("Unavailable", CornerCardText.total(withheld))
         assertEquals("Unavailable", CornerCardText.total(null))
-        assertEquals("Loading", CornerCardText.status(null, TL, 0))
+        assertEquals("names the pair it is loading", "Loading ${TL.substringAfter('/')}", CornerCardText.status(null, TL, 0))
         assertEquals("No team selected", CornerCardText.status(null, null, 0))
     }
 
