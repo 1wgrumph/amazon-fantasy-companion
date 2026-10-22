@@ -1,0 +1,10 @@
+allprojects {
+    afterEvaluate {
+        if (path == ':app') {
+            def capture = rootProject.file('../evidence/tv-corner-card/review/capture')
+            android.sourceSets.androidTest.java.srcDir(capture)
+            android.sourceSets.androidTest.kotlin.srcDir(capture)
+            android.sourceSets.androidTest.manifest.srcFile(new File(capture, 'AndroidManifest.xml'))
+        }
+    }
+}

@@ -1,0 +1,28 @@
+.github/workflows/ci.yml: PASS
+...............fatal: not a git repository (or any of the parent directories): .git
+........fatal: not a git repository (or any of the parent directories): .git
+.........................F......................................................................
+======================================================================
+FAIL: test_copy_repo_preserves_spec_linked_documents_and_omits_untracked_files (test_gate.AC_AFC_CI_01.test_copy_repo_preserves_spec_linked_documents_and_omits_untracked_files)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/tools/ci/tests/test_gate.py", line 228, in test_copy_repo_preserves_spec_linked_documents_and_omits_untracked_files
+    self.assertEqual(rc, 0, out)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: 1 != 0 : evidence/tv-corner-card/review.md:275:DOC-LINK
+evidence/tv-corner-card/review.md:275:DOC-LINK
+evidence/tv-corner-card/review.md:297:DOC-LINK
+evidence/tv-corner-card/review.md:299:DOC-LINK
+evidence/tv-corner-card/review.md:299:DOC-LINK
+gate: docs: FAIL check exit 1
+
+
+----------------------------------------------------------------------
+Ran 119 tests in 373.518s
+
+FAILED (failures=1)
+mutation adapter exit=3: ['GAP REPORT_INCOMPLETE: mutmut stats absent']
+mutation adapter exit=0: ['PASS mutation score 100.00% (threshold 70%)']
+coverage adapter exit=0: ['PASS changed-line coverage 100% (threshold 90%)']
+coverage adapter exit=3: ['GAP REPORT_INCOMPLETE: unmapped changed files: backend/src/control.py']
+gate: hygiene: FAIL check exit 1
