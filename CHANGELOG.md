@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add on-stick NBA panel evidence for MIN@MIA and GS@LAL on 2026-10-21: live rows, freshness labels, the team total, the refresh before and after the panel revision fix, typed Watch gaps and a verified restore ([PR #159](https://github.com/1wgrumph/amazon-fantasy-companion/pull/159)).
 - Fire TV overlay: a compact lineup side panel over the playing game, toggled by the "Show over game" button in Companion, and a small top-right alert card ("Stone 20", NBA/NFL mark) that disappears after 5 s, queues, never takes remote focus and never overlaps the panel; without the overlay permission Companion opens Android's switch and shows the manual steps ([PR #157](https://github.com/1wgrumph/amazon-fantasy-companion/pull/157)).
 - Add live Vega Virtual Device evidence for P2-V01 (#59): populated NBA panel, live refresh after #155, saved settings and stale labels, with new `vega-app/vvd-checks` live checks ([PR #158](https://github.com/1wgrumph/amazon-fantasy-companion/pull/158)).
 - NBA starter alerts when a boxscore crosses 10, 20 or 30 points, a double-double, or a fantasy-point rise of 5 or more ([PR #156](https://github.com/1wgrumph/amazon-fantasy-companion/pull/156)).
@@ -28,6 +29,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- One profile keeps every league lineup in its Lineups row, keyed by team/league, so a write for one league leaves the others in place ([PR #161](https://github.com/1wgrumph/amazon-fantasy-companion/pull/161)).
+- Rename the Fire TV app to "AZ Fantasy" and replace the starter launcher art with original artwork: a TV-with-lineup-panel icon (adaptive and legacy), a 320x180 "AZ FANTASY" banner, sport glyphs and an empty-lineup illustration. Friendlier copy: Connect / My setup / My lineup navigation under an "AZ Fantasy" wordmark, "Your fantasy setup" settings with labelled fields and Add/Remove buttons, "Open lineup on alerts: On/Off", a "My lineup" heading and "Lineup progress" as a percent ([PR #160](https://github.com/1wgrumph/amazon-fantasy-companion/pull/160)).
 - Restyle the TV screens bold and colourful: a dark indigo-to-plum gradient backdrop, a floodlight-gold accent and 4 dp focus outlines, a distinct accent for NFL (green) and NBA (orange) on the panel header and sport toggles, a pink alert stripe, and a tighter type ramp. Loading states now show a centred animated loop with their label. Navigation and behavior are unchanged ([#150](https://github.com/1wgrumph/amazon-fantasy-companion/pull/150)).
 - Describe NBA support in the README and submission writeup ([PR #146](https://github.com/1wgrumph/amazon-fantasy-companion/pull/146)).
 - Restyle the TV screens with a charcoal and cool-blue palette, shared five-percent safe zone, readable type, and consistent focus rings and scale. Preserve existing D-pad navigation and app behavior. ([PR #143](https://github.com/1wgrumph/amazon-fantasy-companion/pull/143))

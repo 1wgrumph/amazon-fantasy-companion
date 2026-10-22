@@ -21,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
 import androidx.tv.material3.MaterialTheme
@@ -83,7 +84,7 @@ private fun ShowOverGame() {
     }) { Text("Show over game") }
     if (needsPermission) {
         Text(
-            "Allow Companion to display over other apps, then press Show over game again.\n" +
+            "Allow AZ Fantasy to display over other apps, then press Show over game again.\n" +
                 "Settings > Applications > Special app access > Display over other apps.",
             modifier = Modifier.widthIn(max = 280.dp),
             style = MaterialTheme.typography.bodyMedium,
@@ -103,6 +104,12 @@ private fun AppShell(shell: Shell, client: ApiClient, sessions: SessionStore) {
     }
     Row(Modifier.fillMaxSize().tvSafeZonePadding()) {
         Column(Modifier.padding(horizontal = 12.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+            Text(
+                "AZ Fantasy",
+                modifier = Modifier.padding(horizontal = 4.dp),
+                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                color = MaterialTheme.colorScheme.primary,
+            )
             Destination.entries.forEach { target ->
                 Button(onClick = { destination = target }) { Text(target.label) }
             }

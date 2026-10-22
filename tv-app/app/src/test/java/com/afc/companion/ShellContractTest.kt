@@ -9,7 +9,7 @@ class ShellContractTest {
         assertTrue("AFC-PR-053", Regex("minSdk\\s*=\\s*25\\b").containsMatchIn(Files.readAllBytes(repo.resolve("tv-app/app/build.gradle.kts")).toString(Charsets.UTF_8)))
     }
     @Test fun exposesOnlyLinkProfileAndPanelNavigation() {
-        assertEquals("Missing behavior: shell navigation without social surfaces", setOf("Link", "Profile/Settings", "Panel"), Shell().destinations())
+        assertEquals("Missing behavior: shell navigation without social surfaces", setOf("Connect", "My setup", "My lineup"), Shell().destinations())
     }
     @Test fun noMessagingEndpointsInFrozenContract() {
         assertEquals(setOf("/v1/link", "/v1/link/confirm", "/link", "/v1/profile", "/v1/alerts", "/v1/panel", "/v1/providers", "/v1/routing-outcome", "/v1/installed-apps", "/v1/lineup/manual"), node("paths").keys)

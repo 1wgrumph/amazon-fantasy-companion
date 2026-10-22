@@ -165,7 +165,7 @@ class ProfileRepairTest {
         private val store = ProfileStore(client)
         private val before: ProfileState = runBlocking { store.load() } ?: error("Profile fixture did not load")
         val state = mutableStateOf<ProfileState?>(before)
-        private val message = mutableStateOf("Profile loaded.")
+        private val message = mutableStateOf("Manage your teams, players and alert preferences.")
 
         fun startSave() {
             delayConnection.set(true)
@@ -182,7 +182,7 @@ class ProfileRepairTest {
 
         fun awaitMessage(): String {
             val deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(10)
-            while (message.value == "Profile loaded." && System.nanoTime() < deadline) Thread.sleep(10)
+            while (message.value == "Manage your teams, players and alert preferences." && System.nanoTime() < deadline) Thread.sleep(10)
             return message.value
         }
 

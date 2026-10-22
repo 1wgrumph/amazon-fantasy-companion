@@ -1,0 +1,14 @@
+# Multi-sport lineups red run, base a22031f (afc/multisport-lineups), 2026-10-22
+# cmd: env -u CI python -m pytest -q -p no:warnings <3 new files>  (cwd backend/)
+=========================== short test summary info ============================
+PASSED tests/unit/store/test_multi_lineup.py::test_nfl_unchanged_legacy_row_through_manual_put_panel_and_matcher
+FAILED tests/unit/store/test_multi_lineup.py::test_put_nfl_then_nba_keeps_both_and_nfl_byte_equal
+FAILED tests/unit/store/test_multi_lineup.py::test_re_put_nba_leaves_nfl_untouched_and_bumps_version_by_one
+FAILED tests/unit/store/test_multi_lineup.py::test_legacy_row_reads_as_one_lineup_and_next_write_keeps_both
+FAILED tests/unit/store/test_multi_lineup.py::test_legacy_row_reads_through_get_lineups_as_its_one_pair
+FAILED tests/unit/store/test_multi_lineup.py::test_monitoring_profiles_returns_the_union_of_starters
+FAILED tests/unit/matcher/test_matcher_multi_lineup.py::test_nfl_and_nba_events_each_match_their_own_starter
+FAILED tests/unit/matcher/test_matcher_multi_lineup.py::test_shared_athlete_across_lineups_is_reported_once
+FAILED tests/unit/panel/test_panel_multi_lineup.py::test_nfl_event_projects_only_to_the_nfl_pair
+FAILED tests/unit/panel/test_panel_multi_lineup.py::test_each_pair_snapshot_shows_only_its_rows_and_revision_never_drops
+9 failed, 1 passed in 1.67s

@@ -58,7 +58,8 @@ class PanelRevealTest {
     }
 
     @Test fun panelSettingLabelStatesItsStateAndThatItStaysOnThisTv() {
-        assertEquals("Show panel on new alert: on (this TV only)", DeviceSettings.label(true))
-        assertEquals("Show panel on new alert: off (this TV only)", DeviceSettings.label(false))
+        assertEquals("Open lineup on alerts: On", DeviceSettings.label(true))
+        assertEquals("Open lineup on alerts: Off", DeviceSettings.label(false))
+        assertEquals("Applies immediately on this TV.", DeviceSettings.SCOPE_NOTE)
     }
 }
