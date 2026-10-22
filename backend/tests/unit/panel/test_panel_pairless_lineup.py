@@ -39,6 +39,7 @@ def test_pairless_lineup_with_no_selection_serves_the_default_pair(panel_env, pa
     seed_pairless(panel_env, pair)
     data = check_envelope(panel_env.snapshot("fan"))
     assert data["teamLeague"] == "unassigned/unassigned"
+    assert data["teamLeagues"] == [], "a pairless lineup is not a switchable pair"
     assert data["rows"] == []
     assert data["teamTotal"]["reason"] == "no lineup for this team/league"
 

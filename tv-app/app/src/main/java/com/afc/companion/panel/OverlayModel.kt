@@ -189,7 +189,8 @@ object CornerCardText {
 
     fun status(snapshot: PanelSnapshot?, teamLeague: String?, nowMs: Long): String {
         if (teamLeague == null) return "No team selected"
-        val total = snapshot?.teamTotal ?: return "Loading"
+        // Names the pair while it loads, so a double-tapped switch shows where it went.
+        val total = snapshot?.teamTotal ?: return "Loading ${teamLeague.substringAfter('/')}"
         val asOf = total.asOfMs ?: return "Stale"
         val ageS = (nowMs - asOf) / 1_000
         val age = if (nowMs - asOf >= STALE_MS) "Stale ${ageS}s" else "Updated ${ageS}s ago"

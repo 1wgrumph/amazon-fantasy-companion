@@ -35,6 +35,8 @@ data class PanelSnapshot(
     /** Envelope lineup source (manual/yahoo), kept separate from per-value live/replay source. */
     val source: String = "live",
     val sport: String? = null,
+    /** The profile's lineup pairs the remote can cycle through; empty from older backends. */
+    val teamLeagues: List<String> = emptyList(),
 )
 
 /** Declared bound on rows accepted from one PanelState (AFC-PR-062). */
@@ -97,6 +99,9 @@ fun decodePanel(state: PanelState, nbaEnabled: Boolean = BuildConfig.AFC_ENABLE_
         progress = progress,
         source = state.envelope.source,
         sport = sport,
+        teamLeagues = (data.opt("teamLeagues") as? JSONArray)
+            ?.let { pairs -> (0 until pairs.length()).mapNotNull { (pairs.opt(it) as? String)?.takeIf(String::isNotBlank) } }
+            .orEmpty(),
     )
 }
 
@@ -265,7 +270,7 @@ class PanelController(
     visible: Boolean,
     private val revealOnNewAlert: Boolean = false,
 ) {
-    private val teamLeagues = teamLeagues.toList()
+    private var teamLeagues = teamLeagues.toList()
     private var shown = visible
     private var currentTeamLeague: String? = selected ?: this.teamLeagues.firstOrNull()
     private var held: PanelSnapshot? = null
@@ -383,6 +388,8 @@ class PanelController(
     fun onFetched(snapshot: PanelSnapshot, nowMs: Long): PanelDelta {
         if (!shown) return PanelDelta.NONE
         if (snapshot.teamLeague != currentTeamLeague) return PanelDelta.NONE
+        // The panel lists every pair the profile holds, so NextTeamLeague can reach them all.
+        teamLeagues = (teamLeagues + snapshot.teamLeagues).distinct()
         lastFetchMs = nowMs
         needsFetch = false
         val previous = held

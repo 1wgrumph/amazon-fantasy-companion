@@ -33,6 +33,13 @@ class PanelDecodeTest {
         assertEquals(0.5, s.progress.value!!, 1e-9)
     }
 
+    @Test fun teamLeaguesIsOptionalAndDecodesWhenPresent() {
+        assertEquals("an older backend sends no list", emptyList<String>(), decoded().teamLeagues)
+        val pairs = org.json.JSONArray(listOf("demo-nba/cle-phi-tonight", "demo-nfl/ne-chi-tonight"))
+        assertEquals(listOf("demo-nba/cle-phi-tonight", "demo-nfl/ne-chi-tonight"),
+            decoded(panelData().put("teamLeagues", pairs)).teamLeagues)
+    }
+
     @Test fun eachScoringBasisDecodes() {
         val expected = mapOf("yahooLeague" to ScoringBasis.YahooLeague, "ppr" to ScoringBasis.Ppr, "halfPpr" to ScoringBasis.HalfPpr)
         for ((wire, basis) in expected) assertEquals(wire, basis, decodePanel(state(panelData(basis = wire)))?.basis)

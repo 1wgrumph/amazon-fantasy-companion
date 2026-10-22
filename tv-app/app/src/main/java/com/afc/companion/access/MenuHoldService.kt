@@ -10,12 +10,15 @@ import com.afc.companion.panel.OverlayServiceControl
 
 /**
  * Held ≡ over any app: the user turns this on once in Settings > Accessibility. It only filters
- * keys (res/xml/menu_hold_service.xml); [MenuHoldFilter] passes every event through, and a hold is
- * sent to the overlay host. It reads no screen content and sends no input of its own.
+ * keys (res/xml/menu_hold_service.xml); [MenuHoldFilter] passes every event through, and a hold or
+ * a double-tap (next team/league) is sent to the overlay host. It reads no screen content and sends no input of its own.
  */
 class MenuHoldService : AccessibilityService() {
     private val handler = Handler(Looper.getMainLooper())
-    private val filter = MenuHoldFilter { runCatching { OverlayServiceControl(this).hold() } }
+    private val filter = MenuHoldFilter(
+        onDoubleTap = { runCatching { OverlayServiceControl(this).nextTeamLeague() } },
+        onHold = { runCatching { OverlayServiceControl(this).hold() } },
+    )
     private val timeout = Runnable { filter.onHoldTimeout(SystemClock.uptimeMillis()) }
 
     override fun onKeyEvent(event: KeyEvent): Boolean {
