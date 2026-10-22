@@ -125,7 +125,7 @@ def test_milestone_and_swing_events_alert_the_lineup_starter(crossed, api):
                        "reaches a double-double"]
     assert {event["sport"] for event in crossed} == {"nba"}
     assert all(event["scoringPlay"] is True for event in crossed)
-    guard_ids = {f"{GAME}00000001{GUARD}{code}" for code in ("10", "20", "40", "05")}
+    guard_ids = {f"{GAME}00000002{GUARD}{code}" for code in ("10", "20", "40", "05")}
     assert guard_ids <= {event["eventId"] for event in crossed}
     alerts = _alerts(api, "hoops")
     assert _phrases(alerts) == phrases
@@ -150,7 +150,7 @@ def test_nba_off_suppresses_and_a_non_lineup_athlete_does_not_alert(crossed, api
     assert _alerts(api, "hoops"), "lineup starter must alert when NBA is on"
     assert _alerts(api, "nba-off") == []
     wing_ids = {event["eventId"] for event in crossed if WING in event["eventId"]}
-    assert wing_ids == {f"{GAME}00000001{WING}30"}
+    assert wing_ids == {f"{GAME}00000002{WING}30"}
     alerted = {alert["eventId"] for alert in _alerts(api, "hoops")}
     assert wing_ids.isdisjoint(alerted)
 
