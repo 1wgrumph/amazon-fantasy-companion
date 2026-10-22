@@ -285,7 +285,15 @@ def test_combined_maximum_contributions_survive_selection_changes(panel_env, mon
     else:
         assert after["data"]["visible"] is False
     # Returning to the old selection must allocate another distinct revision.
-    if change.startswith("lineup"):
+    if change == "lineup_pair":
+        lineups, version = store.get_lineups("fan")
+        assert set(lineups) == {LEAGUE + "/" + TEAM, LEAGUE + "/other"}
+        assert lineups[LEAGUE + "/" + TEAM]["starters"] == starters
+        assert after["data"]["teamLeague"] == "unassigned/unassigned"
+        assert store.put_lineup(lineup) == version
+        assert panel_env.snapshot("fan") == after
+        assert store.put_profile("fan", {"teamLeague": {"league": LEAGUE, "team": TEAM}}, 1, at(2))
+    elif change.startswith("lineup"):
         store.put_lineup(lineup)
     else:
         assert store.put_profile("fan", {}, 2, at(2))
