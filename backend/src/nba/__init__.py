@@ -62,12 +62,14 @@ def _write_config():
                   retries={"mode": "standard", "total_max_attempts": 1})
 
 
-def _write_records(deadline, records):
+def _write_records(records, channel=None):
+    import store
     from feed_ingest.ingest import store_player_statistics
 
+    write = functools.partial(store.put_nba_statistics, channel=channel)
     for record in records:
-        with _deadline(min(_WRITE_SECONDS, deadline - time.monotonic())):
-            store_player_statistics([record], config=_write_config())
+        with _deadline(_WRITE_SECONDS):
+            store_player_statistics([record], config=_write_config(), write=write)
 
 
 def lambda_handler(event, context):
@@ -83,8 +85,7 @@ def lambda_handler(event, context):
     try:
         with _deadline(seconds):
             deadline = time.monotonic() + seconds
-            return poll(functools.partial(_fetch, deadline),
-                        functools.partial(_write_records, deadline))
+            return poll(functools.partial(_fetch, deadline))
     except Exception as exc:
         logging.getLogger(__name__).warning("NBA poll failed: %.200s", exc)
         return result
@@ -105,8 +106,6 @@ def poll(get_json, store_records=None):
         return result
     from nba.normalize import boxscore_statistics_nba, scoreboard_games
 
-    if store_records is None:
-        from feed_ingest.ingest import store_player_statistics as store_records
     try:
         games = scoreboard_games(get_json(FEED + "scoreboard"))
     except (ValueError, OSError):
@@ -120,25 +119,10 @@ def poll(get_json, store_records=None):
         except (ValueError, OSError):
             result["failed"].append(game_id)
             continue
-        _emit_alerts(records, summary)
-        store_records(records)
+        if store_records is None:
+            from feed_ingest.normalize import _channel
+            _write_records(records, channel=_channel(summary))
+        else:
+            store_records(records)
         result["stored"] += len(records)
     return result
-
-
-def _emit_alerts(records, summary):
-    """Write milestone and swing GameEvents before the boxscore overwrite."""
-    if not records or not os.environ.get("EVENTS_TABLE"):
-        return
-    import store
-    from feed_ingest.ingest import store_events
-    from feed_ingest.normalize import _channel
-    from nba.alerts import game_events
-
-    channel = _channel(summary)
-    events = []
-    for record in records:
-        previous = store.get_player_statistics(record["athleteId"])
-        events.extend(game_events(record, previous, channel=channel))
-    if events:
-        store_events(events)

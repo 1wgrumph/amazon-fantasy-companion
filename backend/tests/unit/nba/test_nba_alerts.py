@@ -43,7 +43,7 @@ def _set(summary, athlete_id, **stats):
 def _summary():
     """Guard crosses 10, 20, a double-double and +13.2 fantasy; wing hits 30."""
     summary = _set(_load(), GUARD, points=20, rebounds=10)
-    summary = _set(summary, WING, points=35, rebounds=2, assists=1, steals=0, blocks=0)
+    summary = _set(summary, WING, points=30, rebounds=2, assists=1, steals=0, blocks=0)
     return _set(summary, CENTER, points=4, rebounds=3, assists=1, steals=0, blocks=1)
 
 
@@ -104,12 +104,13 @@ def _phrases(alerts):
 
 @pytest.fixture
 def crossed(api, monkeypatch):
-    """Prior guard boxscore is same game and below the lines; wing's is another game."""
+    """Both athletes have observed same-game baselines, but only guard is a starter."""
     _seed("hoops", sports={"nba": True, "nfl": True})
     _seed("nba-off", sports={"nba": False, "nfl": True})
     _prior(GUARD, GAME, {"points": 8, "rebounds": 9, "assists": 4, "steals": 1,
                          "blocks": 0, "turnovers": 2})
-    _prior(WING, "401999100", {"points": 40, "rebounds": 12})
+    _prior(WING, GAME, {"points": 29, "rebounds": 2, "assists": 1, "steals": 0,
+                       "blocks": 0, "turnovers": 3})
     summary = _summary()
     assert _poll(monkeypatch, summary)["stored"] == 3
     stored = _events(api)
@@ -124,7 +125,7 @@ def test_milestone_and_swing_events_alert_the_lineup_starter(crossed, api):
                        "reaches a double-double"]
     assert {event["sport"] for event in crossed} == {"nba"}
     assert all(event["scoringPlay"] is True for event in crossed)
-    guard_ids = {f"{GAME}{GUARD}{code}" for code in ("10", "20", "40", "05")}
+    guard_ids = {f"{GAME}00000001{GUARD}{code}" for code in ("10", "20", "40", "05")}
     assert guard_ids <= {event["eventId"] for event in crossed}
     alerts = _alerts(api, "hoops")
     assert _phrases(alerts) == phrases
@@ -149,7 +150,7 @@ def test_nba_off_suppresses_and_a_non_lineup_athlete_does_not_alert(crossed, api
     assert _alerts(api, "hoops"), "lineup starter must alert when NBA is on"
     assert _alerts(api, "nba-off") == []
     wing_ids = {event["eventId"] for event in crossed if WING in event["eventId"]}
-    assert wing_ids == {f"{GAME}{WING}{code}" for code in ("10", "20", "30")}
+    assert wing_ids == {f"{GAME}00000001{WING}30"}
     alerted = {alert["eventId"] for alert in _alerts(api, "hoops")}
     assert wing_ids.isdisjoint(alerted)
 
@@ -192,5 +193,174 @@ def test_nba_ingest_can_read_prior_stats_and_write_events():
                 return True
         return False
 
-    assert allows("EventsTable", ["dynamodb:GetItem", "dynamodb:PutItem"])
+    assert allows("EventsTable", ["dynamodb:PutItem"])
     assert allows("PlayerStatsTable", ["dynamodb:GetItem", "dynamodb:PutItem"])
+
+
+def _observation(points, second, **stats):
+    summary = _load()
+    for athlete in (GUARD, WING, CENTER):
+        _set(summary, athlete, points=0, rebounds=0, assists=0, steals=0,
+             blocks=0, turnovers=0)
+    _set(summary, GUARD, points=points, **stats)
+    for play in summary["plays"]:
+        play["wallclock"] = f"2026-10-21T00:00:{second:02d}Z"
+    return summary
+
+
+def _guard_events(api):
+    return [event for event in _events(api) if event["playerIds"] == [GUARD]]
+
+
+@pytest.mark.parametrize("same_clock", [False, True])
+def test_r01_distinct_swings_are_deliverable_after_a_milestone(api, monkeypatch, same_clock):
+    import alert_policy
+    import provider_resolver
+    _seed("hoops", sports={"nba": True})
+    _poll(monkeypatch, _observation(0, 0))
+    for points, second in ((5, 1), (10, 2)):
+        _poll(monkeypatch, _observation(points, 1 if same_clock else second))
+        _deliver(_events(api))
+    cursor = max(alert["cursor"] for alert in _alerts(api, "hoops"))
+    latest = _observation(15, 1 if same_clock else 3)
+    _poll(monkeypatch, latest)
+    _deliver(_events(api))
+    swings = [alert for alert in _alerts(api, "hoops")
+              if "fantasy" in alert["commentary"]]
+    assert len(swings) == 3
+    assert len({alert["eventId"] for alert in swings}) == 3
+    assert all(alert["revision"] == 1 for alert in swings)
+    assert all(provider_resolver.event_channel(event["eventId"]) == "SAMPLE-TV"
+               for event in _guard_events(api))
+    pending = alert_policy.pending("hoops", cursor)["alerts"]
+    assert len(pending) == 1
+    assert pending[0]["data"]["commentary"] == "Sample Guard +5 fantasy pts"
+    before = _events(api)
+    _poll(monkeypatch, latest)
+    assert sorted(_events(api), key=lambda e: e["eventId"]) == sorted(before, key=lambda e: e["eventId"])
+
+
+def test_r02_stale_boxscore_does_not_publish_events(api, monkeypatch):
+    import store
+    _prior(GUARD, GAME, {"points": 9}, "2026-10-21T00:00:03Z")
+    _poll(monkeypatch, _observation(20, 2))
+    assert store.get_player_statistics(GUARD)["stats"]["points"] == 9
+    assert _guard_events(api) == []
+
+
+def test_r02_interleaved_ingest_uses_the_accepted_previous_record(api, monkeypatch):
+    import store
+    _poll(monkeypatch, _observation(0, 0))
+    get_table = store._table
+    fired = False
+
+    class InterleavedTable:
+        def __init__(self, table):
+            self.table = table
+
+        def __getattr__(self, name):
+            return getattr(self.table, name)
+
+        def get_item(self, **request):
+            nonlocal fired
+            previous = self.table.get_item(**request)
+            if request["Key"] == {"athleteId": GUARD} and not fired:
+                fired = True
+                _poll(monkeypatch, _observation(5, 1))
+            return previous
+
+    def table(variable, *args, **kwargs):
+        result = get_table(variable, *args, **kwargs)
+        return InterleavedTable(result) if variable == "PLAYER_STATS_TABLE" else result
+
+    monkeypatch.setattr(store, "_table", table)
+    _poll(monkeypatch, _observation(7, 2))
+    assert fired
+    events = _guard_events(api)
+    assert [event["matchup"] for event in events] == ["+5 fantasy pts"]
+    assert events[0]["revision"] == 1
+    assert store.get_player_statistics(GUARD)["stats"]["points"] == 7
+
+
+@pytest.mark.parametrize("double_double", [False, True])
+@pytest.mark.parametrize("turn_off", [False, True])
+def test_r03_milestone_recovery_never_republishes(api, monkeypatch, double_double, turn_off):
+    import store
+    _seed("hoops", sports={"nba": True})
+    low = {"points": 10, "rebounds": 9} if double_double else {"points": 9}
+    high = {"points": 10, "rebounds": 10} if double_double else {"points": 10}
+    _poll(monkeypatch, _observation(second=0, **low))
+    _poll(monkeypatch, _observation(second=1, **high))
+    _deliver(_events(api))
+    before_events, before_alerts = _events(api), _alerts(api, "hoops")
+    assert len(before_events) == len(before_alerts) == 1
+    _poll(monkeypatch, _observation(second=2, **low))
+    if turn_off:
+        profile = store.get_profile("hoops")
+        settings = dict(SETTINGS, sports={"nba": False})
+        assert store.put_profile("hoops", settings, int(profile["revision"]), WHEN)
+    _poll(monkeypatch, _observation(second=3, **high))
+    _deliver(_events(api))
+    assert _events(api) == before_events
+    assert _alerts(api, "hoops") == before_alerts
+    if turn_off:
+        _poll(monkeypatch, _observation(15, 4, rebounds=high.get("rebounds", 0)))
+        _deliver(_events(api))
+        assert any(event["matchup"] == "+5 fantasy pts" for event in _guard_events(api))
+        assert all(event["revision"] == 1 for event in _guard_events(api))
+        assert _alerts(api, "hoops") == before_alerts
+
+
+@pytest.mark.parametrize("previous_game", [None, "401999100"])
+def test_cold_start_only_sets_baseline_even_after_downward_correction(api, monkeypatch, previous_game):
+    if previous_game:
+        _prior(GUARD, previous_game, {"points": 0})
+    _seed("hoops", sports={"nba": True})
+    _poll(monkeypatch, _observation(30, 1, rebounds=10))
+    assert _guard_events(api) == []
+    _poll(monkeypatch, _observation(9, 2, rebounds=9))
+    _poll(monkeypatch, _observation(10, 3, rebounds=10))
+    assert _guard_events(api) == []
+
+
+def test_missing_clock_keeps_the_baseline_until_the_crossing_can_be_published(api, monkeypatch):
+    import store
+    baseline = _observation(0, 0)
+    baseline.pop("plays")
+    _poll(monkeypatch, baseline)
+    changed = _observation(5, 1)
+    changed.pop("plays")
+    _poll(monkeypatch, changed)
+    assert store.get_player_statistics(GUARD)["stats"]["points"] == 0
+    _poll(monkeypatch, _observation(5, 2))
+    assert [event["matchup"] for event in _guard_events(api)] == ["+5 fantasy pts"]
+
+
+@pytest.mark.parametrize("after_commit", [False, True])
+def test_r02_transaction_failure_or_lost_ack_recovers_on_retry(api, monkeypatch, after_commit):
+    import store
+    from botocore.client import BaseClient
+    _poll(monkeypatch, _observation(0, 0))
+    call = BaseClient._make_api_call
+    fired = False
+
+    def fail_once(client, operation, params):
+        nonlocal fired
+        if operation == "TransactWriteItems" and not fired:
+            fired = True
+            if after_commit:
+                call(client, operation, params)
+            raise OSError("synthetic lost transaction response" if after_commit else "synthetic write outage")
+        return call(client, operation, params)
+
+    monkeypatch.setattr(BaseClient, "_make_api_call", fail_once)
+    latest = _observation(5, 1)
+    with pytest.raises(OSError, match="synthetic"):
+        _poll(monkeypatch, latest)
+    assert fired
+    assert store.get_player_statistics(GUARD)["stats"]["points"] == (5 if after_commit else 0)
+    assert len(_guard_events(api)) == int(after_commit)
+    _poll(monkeypatch, latest)
+    assert store.get_player_statistics(GUARD)["stats"]["points"] == 5
+    assert len(_guard_events(api)) == 1
+    assert _guard_events(api)[0]["revision"] == 1
