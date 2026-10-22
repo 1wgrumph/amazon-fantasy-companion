@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- One profile keeps every league lineup in its Lineups row, keyed by team/league, so a write for one league leaves the others in place ([PR #161](https://github.com/1wgrumph/amazon-fantasy-companion/pull/161)).
 - Rename the Fire TV app to "AZ Fantasy" and replace the starter launcher art with original artwork: a TV-with-lineup-panel icon (adaptive and legacy), a 320x180 "AZ FANTASY" banner, sport glyphs and an empty-lineup illustration. Friendlier copy: Connect / My setup / My lineup navigation under an "AZ Fantasy" wordmark, "Your fantasy setup" settings with labelled fields and Add/Remove buttons, "Open lineup on alerts: On/Off", a "My lineup" heading and "Lineup progress" as a percent ([PR #160](https://github.com/1wgrumph/amazon-fantasy-companion/pull/160)).
 - Restyle the TV screens bold and colourful: a dark indigo-to-plum gradient backdrop, a floodlight-gold accent and 4 dp focus outlines, a distinct accent for NFL (green) and NBA (orange) on the panel header and sport toggles, a pink alert stripe, and a tighter type ramp. Loading states now show a centred animated loop with their label. Navigation and behavior are unchanged ([#150](https://github.com/1wgrumph/amazon-fantasy-companion/pull/150)).
 - Describe NBA support in the README and submission writeup ([PR #146](https://github.com/1wgrumph/amazon-fantasy-companion/pull/146)).
