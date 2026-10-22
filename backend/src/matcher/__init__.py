@@ -65,6 +65,16 @@ def _espn_id(starter, players):
     return str(entries[0]["espn_athlete_id"]) if len(entries) == 1 else None
 
 
+def _row_starters(row):
+    """Starters across every stored lineup. A legacy row has them at the top level."""
+    if "lineups" in row:
+        starters = []
+        for entry in row["lineups"].values():
+            starters.extend((entry or {}).get("starters") or [])
+        return starters
+    return row.get("starters") or []
+
+
 def resolve(game_event):
     """Profiles and starters the GameEvent concerns, at most one match per (profile, event id)."""
     event_id = game_event["eventId"]
@@ -85,11 +95,13 @@ def resolve(game_event):
         stored = _alert_for(profile_id, event_id)
         if stored is not None and int(stored.get("revision", 0)) >= revision:
             continue
-        concerned = []
-        for starter in lineup.get("starters") or []:
+        concerned, seen = [], set()
+        for starter in _row_starters(lineup):
             espn_id = _espn_id(starter, players)
-            if espn_id is not None and espn_id in player_ids:
-                concerned.append(dict(starter, athlete_id=espn_id))
+            if espn_id is None or espn_id not in player_ids or espn_id in seen:
+                continue
+            seen.add(espn_id)
+            concerned.append(dict(starter, athlete_id=espn_id))
         if stored is None and not concerned:
             continue
         matches.append({"profileId": profile_id, "eventId": event_id,
