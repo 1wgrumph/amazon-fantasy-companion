@@ -1,0 +1,10 @@
+$ python3 vega-app/vvd-checks/verify-panel-live.py api-poll.jsonl device-readings.json
+PASS backend: in-game panel reads are 200, NBA, nbaPoints and the total changes
+FAIL backend: changed panel rows carry a higher revision
+PASS device: every capture shows NBA · Points
+FAIL device L1: shown total changes while the backend total changes [6.5, 12.0, 15.5, 21.5, 26.2, 29.4, 30.4, 34.4, 36.4]
+FAIL device L2a: shown total changes while the backend total changes [42.0, 46.2]
+FAIL device L2b: shown total changes while the backend total changes [47.2, 48.2]
+FAIL device L3: shown total changes while the backend total changes [55.6, 56.6, 57.6, 65.6]
+PASS device: during refused refreshes the held value re-renders with a growing stale label (R-3)
+exit=1
