@@ -10,9 +10,11 @@ import functools
 import logging
 import os
 import re
+from datetime import datetime, timezone
 
 import boto3
 from boto3.dynamodb.conditions import Attr, Key
+from boto3.dynamodb.types import TypeDeserializer
 from botocore.exceptions import ClientError
 
 
@@ -142,7 +144,8 @@ def get_session(session_hash):
 def put_event(event):
     _table("EVENTS_TABLE").put_item(Item=_shaped(event, {
         "gameId", "eventId", "revision", "source", "score", "fieldPosition", "possession",
-        "playerIds", "eventTime", "correctionOf", "period", "scoringPlay", "matchup", "channel"}))
+        "playerIds", "eventTime", "correctionOf", "period", "scoringPlay", "matchup",
+        "channel", "sport"}))
 
 
 def get_event(game_id, event_id):
@@ -282,39 +285,185 @@ def get_panel(profile_id, team_league):
         Key={"profileId": profile_id, "teamLeague": team_league}, ConsistentRead=True).get("Item")
 
 
+# Pregame slate: one reserved PlayerStats item, replaced on each pregame poll.
+# "pregame" is not an athlete id (those are numeric), so a statistics write
+# cannot overwrite it and a player lookup cannot read it.
+_PREGAME_ID = "pregame"
+_PREGAME_TEAM = re.compile(r"[A-Z0-9]{2,4}")
+NBA_PREGAME_WINDOW = 12 * 60 * 60
+MAX_PREGAME_SEQUENCE = (1 << 24) - 1
+
+
+def put_nba_pregame(teams, *, config=None):
+    """Replace even an empty slate, allocating a sequence with PutItem-only IAM."""
+    if not isinstance(teams, dict):
+        return False
+    clean = {}
+    for abbr, detail in teams.items():
+        if (isinstance(abbr, str) and _PREGAME_TEAM.fullmatch(abbr)
+                and isinstance(detail, str) and detail.strip() and len(detail) <= 80):
+            clean[abbr] = detail
+    if teams and not clean:
+        return False
+    table = (_table("PLAYER_STATS_TABLE", config) if config is not None
+             else _table("PLAYER_STATS_TABLE"))
+    previous = None
+    for _ in range(16):
+        moment = datetime.now(timezone.utc)
+        sequence = 1
+        condition = Attr("athleteId").not_exists()
+        if previous is not None:
+            try:
+                stamp = datetime.fromisoformat(previous.get("asOf", "").replace("Z", "+00:00"))
+                expired = (moment - stamp).total_seconds() > NBA_PREGAME_WINDOW
+            except (ValueError, TypeError, AttributeError):
+                expired = True
+            sequence = int(previous.get("sequence", 0))
+            # Refreshing an expired slate must outrun the panel's expiry bit.
+            sequence += int(previous.get("teams") != clean or expired or not sequence)
+            condition = Attr("athleteId").exists()
+            for field in ("sequence", "asOf", "teams"):
+                condition &= (Attr(field).eq(previous[field]) if field in previous
+                              else Attr(field).not_exists())
+        if sequence > MAX_PREGAME_SEQUENCE:
+            raise ClientError({"Error": {"Code": "SequenceExhausted",
+                                         "Message": "NBA pregame sequence exhausted"}}, "PutItem")
+        item = {"athleteId": _PREGAME_ID, "sequence": sequence, "teams": clean,
+                "asOf": moment.strftime("%Y-%m-%dT%H:%M:%SZ")}
+        try:
+            table.put_item(Item=item, ConditionExpression=condition,
+                           ReturnValuesOnConditionCheckFailure="ALL_OLD")
+            return True
+        except ClientError as exc:
+            if exc.response["Error"]["Code"] != "ConditionalCheckFailedException":
+                raise
+            previous = {key: TypeDeserializer().deserialize(value)
+                        for key, value in exc.response.get("Item", {}).items()} or None
+            conflict = exc
+    raise conflict
+
+
+def get_nba_pregame():
+    return _table("PLAYER_STATS_TABLE").get_item(
+        Key={"athleteId": _PREGAME_ID}, ConsistentRead=True).get("Item")
+
+
 # Player statistics: latest stored boxscore per ESPN athlete (panel seam).
 # One record per athlete; the panel refuses a record from another game than
 # the starter's latest projected game, so no gameId range key is needed.
-def put_player_statistics(record, *, config=None):
-    """Store unless a newer (or live, vs replay) record for the game exists.
+MAX_STATS_VERSION = (1 << 24) - 1
+_STATS_FIELDS = {"athleteId", "gameId", "gameState", "gameStatus", "source", "asOf", "stats"}
 
-    Conditional PutItem only: IngestFunction has no GetItem grant on this
-    table. Returns False when the stored record was kept.
-    """
-    item = {key: value for key, value in _shaped(record, {
-        "athleteId", "gameId", "gameState", "gameStatus", "source", "asOf",
-        "stats"}).items() if not (key == "asOf" and value is None)}
+
+def _statistics_item(record):
+    item = {key: value for key, value in _shaped(record, _STATS_FIELDS).items()
+            if not (key == "asOf" and value is None)}
     athlete_id = item.get("athleteId")
     if not isinstance(athlete_id, str) or not re.fullmatch(r"[0-9]{1,20}", athlete_id):
         logging.getLogger(__name__).warning(
             "Skipping player statistics write with invalid athleteId: %.40r", athlete_id)
+        return None
+    return item
+
+
+def _put_statistics(item, table, previous, commit, *, require_clock=False, channel=None):
+    """Allocate one bounded content version; a lost CAS recomputes the transition."""
+    for _attempt in range(4):
+        if previous:
+            old_stamp, new_stamp = previous.get("asOf"), item.get("asOf")
+            if ((require_clock and not isinstance(new_stamp, str))
+                    or (old_stamp is not None and (not isinstance(new_stamp, str)
+                        or not isinstance(old_stamp, str) or old_stamp > new_stamp))):
+                return False
+            if (previous.get("gameId") == item.get("gameId")
+                    and previous.get("source") == "live" and item.get("source") == "replay"):
+                return False
+            if all(previous.get(key) == item.get(key) for key in _STATS_FIELDS):
+                return False
+        version = int(previous.get("statsVersion", 0)) + 1
+        if version > MAX_STATS_VERSION:
+            raise RuntimeError("player statistics content sequence exhausted")
+        previous = commit(table, item, previous, version, channel=channel)
+        if previous is None:
+            return True
+    raise RuntimeError("player statistics write kept losing races")
+
+
+def _statistics_condition(previous):
+    if not previous:
+        return {"ConditionExpression": "attribute_not_exists(athleteId)"}
+    names, values, conditions = {}, {}, []
+    # Include absent fields so legacy and versioned writers share the same CAS.
+    for index, key in enumerate(sorted(_STATS_FIELDS | {"statsVersion", "nbaMilestones"})):
+        name, value = f"#f{index}", f":v{index}"
+        names[name] = key
+        if key in previous:
+            conditions.append(f"{name} = {value}")
+            values[value] = previous[key]
+        else:
+            conditions.append(f"attribute_not_exists({name})")
+    return {"ConditionExpression": " AND ".join(conditions),
+            "ExpressionAttributeNames": names, "ExpressionAttributeValues": values}
+
+
+def _commit_statistics(table, item, previous, version, *, channel=None):
+    try:
+        accepted = dict(item, statsVersion=version)
+        if previous.get("gameId") == item.get("gameId") and "nbaMilestones" in previous:
+            accepted["nbaMilestones"] = previous["nbaMilestones"]
+        table.put_item(Item=accepted, **_statistics_condition(previous),
+                       ReturnValuesOnConditionCheckFailure="ALL_OLD")
+        return None
+    except ClientError as exc:
+        if exc.response["Error"]["Code"] != "ConditionalCheckFailedException":
+            raise
+        return TypeDeserializer().deserialize({"M": exc.response.get("Item", {})})
+
+
+def put_player_statistics(record, *, config=None):
+    """CAS a content sequence using only PutItem and its conflict response."""
+    item = _statistics_item(record)
+    if item is None:
         return False
-    values = {":gameId": item.get("gameId"), ":live": "live",
-              ":source": item.get("source"), ":replay": "replay"}
-    fresh = "attribute_not_exists(athleteId)"
-    if isinstance(item.get("asOf"), str):
-        values[":asOf"] = item["asOf"]
-        fresh += " OR attribute_not_exists(asOf) OR asOf <= :asOf"
-    condition = (f"({fresh}) AND (attribute_not_exists(athleteId) OR NOT "
-                 "(gameId = :gameId AND #source = :live AND :source = :replay))")
     table = (_table("PLAYER_STATS_TABLE") if config is None
              else _table("PLAYER_STATS_TABLE", config))
-    return _written(table.put_item, Item=item,
-                    ConditionExpression=condition,
-                    ExpressionAttributeNames={"#source": "source"},
-                    ExpressionAttributeValues=values)
+    return _put_statistics(item, table, {}, _commit_statistics)
+
+
+def _commit_nba_statistics(table, item, previous, version, *, channel):
+    from nba.alerts import game_events, milestones
+
+    same_game = previous.get("gameId") == item.get("gameId")
+    seen = (set(previous.get("nbaMilestones", [])) | milestones(previous)) if same_game else set()
+    accepted = dict(item, statsVersion=version, nbaMilestones=sorted(seen | milestones(item)))
+    events = game_events(item, previous, channel=channel, version=version)
+    request = {"TableName": table.name, "Item": accepted}
+    request.update(_statistics_condition(previous))
+    try:
+        table.meta.client.transact_write_items(TransactItems=[{"Put": request}] + [
+            {"Put": {"TableName": os.environ["EVENTS_TABLE"], "Item": event}} for event in events])
+        return None
+    except ClientError as exc:
+        if (exc.response["Error"]["Code"] != "TransactionCanceledException"
+                or not any(reason.get("Code") in ("ConditionalCheckFailed", "TransactionConflict")
+                           for reason in exc.response.get("CancellationReasons", []))):
+            raise
+        return table.get_item(Key={"athleteId": item["athleteId"]},
+                              ConsistentRead=True).get("Item", {})
+
+
+def put_nba_statistics(record, *, config=None, channel=None):
+    """Commit the shared accepted version and its immutable NBA events atomically."""
+    item = _statistics_item(record)
+    if item is None:
+        return False
+    table = _table("PLAYER_STATS_TABLE", config)
+    previous = table.get_item(Key={"athleteId": item["athleteId"]},
+                              ConsistentRead=True).get("Item", {})
+    return _put_statistics(item, table, previous, _commit_nba_statistics,
+                           require_clock=True, channel=channel)
 
 
 def get_player_statistics(athlete_id):
     return _table("PLAYER_STATS_TABLE").get_item(
-        Key={"athleteId": athlete_id}).get("Item")
+        Key={"athleteId": athlete_id}, ConsistentRead=True).get("Item")

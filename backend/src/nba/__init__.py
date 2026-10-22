@@ -12,6 +12,7 @@ import time
 from contextlib import contextmanager
 
 from botocore.config import Config
+from botocore.exceptions import BotoCoreError, ClientError
 
 FEED = "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/"
 _TRUE = ("1", "true", "yes")
@@ -62,12 +63,14 @@ def _write_config():
                   retries={"mode": "standard", "total_max_attempts": 1})
 
 
-def _write_records(deadline, records):
+def _write_records(records, channel=None):
+    import store
     from feed_ingest.ingest import store_player_statistics
 
+    write = functools.partial(store.put_nba_statistics, channel=channel)
     for record in records:
-        with _deadline(min(_WRITE_SECONDS, deadline - time.monotonic())):
-            store_player_statistics([record], config=_write_config())
+        with _deadline(_WRITE_SECONDS):
+            store_player_statistics([record], config=_write_config(), write=write)
 
 
 def lambda_handler(event, context):
@@ -83,8 +86,7 @@ def lambda_handler(event, context):
     try:
         with _deadline(seconds):
             deadline = time.monotonic() + seconds
-            return poll(functools.partial(_fetch, deadline),
-                        functools.partial(_write_records, deadline))
+            return poll(functools.partial(_fetch, deadline))
     except Exception as exc:
         logging.getLogger(__name__).warning("NBA poll failed: %.200s", exc)
         return result
@@ -94,24 +96,38 @@ def enabled():
     return os.environ.get("AFC_ENABLE_NBA", "").lower() in _TRUE
 
 
+def _store_pregame(teams):
+    """Persist even an empty slate; a write failure must not drop boxscores."""
+    if not os.environ.get("PLAYER_STATS_TABLE"):
+        return
+    from store import put_nba_pregame
+
+    try:
+        put_nba_pregame(teams, config=_write_config())
+    except (BotoCoreError, ClientError) as exc:
+        logging.getLogger(__name__).warning("NBA pregame status not stored: %.200s", exc)
+
+
 def poll(get_json, store_records=None):
     """Fetch the NBA scoreboard and store each game's boxscore statistics.
 
-    `get_json` is an allowlisted ESPN getter. A scoreboard failure is logged
-    and returns the empty result. One game's failure never blocks the others.
+    A not-yet-started game also stores its ESPN status text per team
+    abbreviation. `get_json` is an allowlisted ESPN getter. A scoreboard
+    failure is logged and returns the empty result. One game's failure
+    never blocks the others.
     """
     result = {"stored": 0, "failed": []}
     if not enabled():
         return result
-    from nba.normalize import boxscore_statistics_nba, scoreboard_games
+    from nba.normalize import boxscore_statistics_nba, pregame_status_by_team, scoreboard_games
 
-    if store_records is None:
-        from feed_ingest.ingest import store_player_statistics as store_records
     try:
-        games = scoreboard_games(get_json(FEED + "scoreboard"))
+        board = get_json(FEED + "scoreboard")
+        games = scoreboard_games(board)
     except (ValueError, OSError):
         logging.getLogger(__name__).warning("NBA scoreboard unavailable")
         return result
+    _store_pregame(pregame_status_by_team(board))
     for game in games:
         game_id = game["gameId"]
         try:
@@ -120,6 +136,10 @@ def poll(get_json, store_records=None):
         except (ValueError, OSError):
             result["failed"].append(game_id)
             continue
-        store_records(records)
+        if store_records is None:
+            from feed_ingest.normalize import _channel
+            _write_records(records, channel=_channel(summary))
+        else:
+            store_records(records)
         result["stored"] += len(records)
     return result

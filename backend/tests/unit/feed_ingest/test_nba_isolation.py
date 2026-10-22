@@ -160,7 +160,7 @@ def test_f3_slow_write_is_interrupted_by_deadline(monkeypatch, caplog, run_secon
         threading.Event().wait(.6)
 
     monkeypatch.setattr(feed_ingest, "_get_json", get_json)
-    monkeypatch.setattr(feed_ingest.store, "put_player_statistics", slow_write)
+    monkeypatch.setattr(feed_ingest.store, "put_nba_statistics", slow_write)
     started = time.monotonic()
     result = _entry(nba)({}, None)
     elapsed = time.monotonic() - started
@@ -181,7 +181,7 @@ def test_nba_handler_flag_off_does_no_io(monkeypatch):
         raise AssertionError("Disabled NBA handler attempted I/O")
 
     monkeypatch.setattr(feed_ingest, "_get_json", forbidden)
-    monkeypatch.setattr(feed_ingest.store, "put_player_statistics", forbidden)
+    monkeypatch.setattr(feed_ingest.store, "put_nba_statistics", forbidden)
     assert nba.lambda_handler({}, None) == {"stored": 0, "failed": []}
 
 
@@ -215,6 +215,8 @@ def test_nba_handler_uses_bounded_client_without_changing_nfl_client(api, monkey
                         _load("scoreboard.json" if url.endswith("scoreboard") else "summary.json"))
     assert nba.lambda_handler({}, None) == {"stored": 3, "failed": []}
     rows = api.table("PlayerStats").scan()["Items"]
+    assert [row["teams"] for row in rows if row["athleteId"] == "pregame"] == [{}]
+    rows = [row for row in rows if row["athleteId"] != "pregame"]
     assert {row["athleteId"] for row in rows} == {"9100001", "9100002", "9100003"}
     assert all(row["gameId"] == "401999101" for row in rows)
     nba_client = store._dynamodb(nba._write_config())

@@ -17,6 +17,8 @@ advances on every lineup content change (including a change back and an
 empty/removal row), so distinct content never reuses a revision and a
 served revision never goes backwards for one profile/pair (every revision
 input is read strongly consistent, so no lagging replica serves an older one).
+The same high term adds each row's store-allocated statistics content version,
+so corrections advance even when the source timestamp is unchanged or missing.
 Projections write conditionally on the stored counter and re-read and
 merge on a lost race, so overlapping games never erase each other.
 
@@ -40,6 +42,12 @@ from lineup import presets
 STALE_AFTER = 60
 FINAL_RECORD_WINDOW = 12 * 60 * 60  # a final record older than this is a previous game's
 MAX_ROWS = 32  # frozen panel row bound the TV decoder enforces
+MAX_PROJECTION_COUNTER = (1 << 24) - 1
+LINEUP_REVISION_SCALE = (
+    MAX_ROWS * store.MAX_STATS_VERSION
+    + 2 * store.MAX_PREGAME_SEQUENCE + 1
+    + MAX_PROJECTION_COUNTER + 1
+)
 _PRESETS = {"ppr": "PPR", "halfPpr": "Half-PPR"}
 
 
@@ -56,7 +64,7 @@ def player_statistics(athlete_id):
     if record is None:
         return None
     return {key: record.get(key)
-            for key in ("gameId", "gameState", "gameStatus", "source", "asOf", "stats")}
+            for key in ("gameId", "gameState", "gameStatus", "source", "asOf", "stats", "statsVersion")}
 
 
 def _parse(stamp):
@@ -64,6 +72,9 @@ def _parse(stamp):
 
 
 def _pair(lineup):
+    """Team/league key, or None when a stored row lacks either half."""
+    if not lineup or not lineup.get("league") or not lineup.get("team"):
+        return None
     return f"{lineup['league']}/{lineup['team']}"
 
 
@@ -79,6 +90,22 @@ def _nba_enabled():
 
 def _nba_lineup(lineup):
     return bool(lineup) and lineup.get("sport") == "nba" and _nba_enabled()
+
+
+def _nba_pregame(lineup):
+    """Pregame text and monotonic revision contribution, including expiry."""
+    if not _nba_lineup(lineup):
+        return {}, 0
+    item = store.get_nba_pregame()
+    if not item:
+        return {}, 0
+    age = _age_seconds(item.get("asOf"))
+    expired = age is None or age > store.NBA_PREGAME_WINDOW
+    pregame_seq = 2 * int(item.get("sequence", 0)) + int(expired)
+    if expired:
+        return {}, pregame_seq
+    teams = item.get("teams")
+    return (teams if isinstance(teams, dict) else {}), pregame_seq
 
 
 def _sport_off(lineup, settings):
@@ -223,6 +250,8 @@ def project(game_event, matches):
         if not lineup:
             continue
         team_league = _pair(lineup)
+        if not team_league:
+            continue  # no pair, no panel key
         fingerprint = _fingerprint(lineup)
         # Conditional write on the counter we read: a lost race re-reads and
         # re-decides against the winner's games instead of erasing them.
@@ -239,6 +268,8 @@ def project(game_event, matches):
             if current is not None:  # a starter stays linked to the game all game long
                 facts = dict(facts, playerIds=sorted(
                     set(facts["playerIds"]) | {str(p) for p in current.get("playerIds") or []}))
+            if (counter or 0) >= MAX_PROJECTION_COUNTER:
+                raise RuntimeError("panel projection counter exhausted")
             panel = {"profileId": profile_id, "teamLeague": team_league,
                      "freshness": {"games": dict(games, **{game_event["gameId"]: facts}),
                                    "counter": (counter or 0) + 1, "lineup": fingerprint},
@@ -257,11 +288,14 @@ def snapshot(profile_id, team_league):
         selected = settings.get("teamLeague") or {}
         team_league = (f"{selected['league']}/{selected['team']}"
                        if selected.get("league") and selected.get("team")
-                       else _pair(lineup) if lineup else "unassigned/unassigned")
+                       else _pair(lineup) or "unassigned/unassigned")
     basis, table = _basis(lineup, settings)
     games, counter, projected = _stored(profile_id, team_league)
     rows, states, source_ids = [], [], []
     expired_finals = 0
+    stats_version_sum = 0
+    pregame, pregame_seq = (_nba_pregame(lineup) if lineup and _pair(lineup) == team_league
+                            else ({}, 0))
     if lineup and _pair(lineup) == team_league:
         if len(lineup.get("starters") or []) > MAX_ROWS:
             raise InvalidLineupError(
@@ -275,6 +309,9 @@ def snapshot(profile_id, team_league):
             source_ids.append(raw_id)
             espn_id = _espn_id(starter)
             record = player_statistics(espn_id) if espn_id else None
+            if record is not None:
+                stats_version_sum += int(record.get("statsVersion") or 0)
+            missing = record is None
             # The starter's current game is the latest projected game whose
             # events concern them (Panels games map). A statistics record
             # from an earlier game is not this game's points: fail closed.
@@ -294,9 +331,14 @@ def snapshot(profile_id, team_league):
                 record, value = None, dict(value, reason="no statistics for current game")
             if espn_id is None:
                 value = dict(value, reason="no matching ESPN athlete")
+            status = record.get("gameStatus") if record else None
+            if missing:
+                text = pregame.get(starter.get("team")) if isinstance(starter, dict) else None
+                if isinstance(text, str) and text.strip():
+                    status = text
             rows.append({"playerId": espn_id or str(starter.get("player_key") or ""),
                          "name": starter.get("name") or "", "points": value,
-                         "gameStatus": record.get("gameStatus") if record else None})
+                         "gameStatus": status})
             states.append(record.get("gameState") if record else None)
     ids = [row["playerId"] for row in rows]
     if (len(rows) > MAX_ROWS or len(set(source_ids)) != len(source_ids)
@@ -329,15 +371,17 @@ def snapshot(profile_id, team_league):
     else:
         progress = {"value": None, "reason": "game progress unavailable", "source": None,
                     "asOf": None, "stale": True}
-    # lineupVersion (allocated by store.put_lineup at the write boundary)
-    # makes every lineup content change strictly advance this sum, so the
-    # low fields can never reuse or regress a revision. The x128 keeps
-    # every bump strictly above the fingerprint field (64) plus the
-    # expired-final count (at most MAX_ROWS), so read-time expiration
-    # advances the revision the TV consumes and stable rereads do not.
+    # A profile or lineup step outruns losing all stats, pregame (2*seq + expiry),
+    # and the selected pair's counter. Keep raw stats versions through filtering.
+    # The +1 generation beats the deployed formula even for legacy lineup v0;
+    # x128 outruns all 96 low-field units. With lineupVersion + profile revision
+    # <=100,000 and bounded inputs, revision <=7,516,267,507,523,552 < 2^53.
+    # shortcut: migrate before 2^24-1 per-record/pair writes or 100,000 combined
+    # lineup/profile changes; exhausted counters preserve their last stored row.
     current = _fingerprint(lineup) if lineup and _pair(lineup) == team_league else ""
-    revision = (128 * ((counter or 0) + int(profile.get("revision", 0))
-                       + lineup_version)
+    revision = (128 * (1 + (counter or 0)
+                       + (int(profile.get("revision", 0)) + lineup_version) * LINEUP_REVISION_SCALE
+                       + stats_version_sum + pregame_seq)
                 + 64 * (current != projected) + expired_finals)
     data = {"teamLeague": team_league, "scoringBasis": basis,
             "visible": bool((settings.get("panelPrefs") or {}).get("visible", True)),
