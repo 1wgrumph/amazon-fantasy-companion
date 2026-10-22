@@ -1,6 +1,6 @@
 # Independent side-panel review receipt
 
-**Latest implementation status: F01–F04 REPAIR_IMPLEMENTED; pending independent/orchestrator and Fire OS acceptance.** The original review and intermediate stops below are preserved as historical evidence.
+**Latest implementation status: F01–F04 REPAIR_IMPLEMENTED; Fire OS overlay mechanics verified; required physical protected-video observation remains pending (G01 below).** The original review and intermediate stops below are preserved as historical evidence.
 
 What this change does: adds a remote-reachable side panel over another app and a separate top-right alert card. Both use app-private foreground-service commands and nonfocusable overlay windows.
 
@@ -371,3 +371,49 @@ The first full hygiene attempt failed three isolated-fixture tests because their
 
 
 **F04 repair stop disposition:** REPAIR_IMPLEMENTED for orchestrator acceptance in the same repair round. The full hygiene retry passed all 119 tests (exit **0**); its printed negative-fixture GAP examples are expected assertions, not unresolved outcomes. TV and docs gates also exit **0**. The continuation uses the accepted bounded write set and normal configured commit hooks, with Codex author/committer identity and no Co-Authored-By trailer. No push was performed. The owned AVD is stopped; no stick was accessed. Fire OS 8/provider acceptance and the brief panel surface refresh remain the stated residual limits, not a self-issued independent PASS.
+
+
+## On-stick visual continuation — PR #157 at `d4fd965`
+
+**Observer and authority:** Codex, same frontend Reviewer session, 2026-10-22 UTC. The orchestrator requested this on-stick continuation of the existing review/repair pair, not a new code-review round. Subject: `d4fd96574f33ab113ba7176c1dd0fefff1d6066c` (the accepted repair plus main). No product or test source was changed for this step.
+
+**Typed outcome: OWNER_DECISION_REQUIRED — G01, required physical protected-video observation unavailable.** The completed Fire OS overlay checks below pass and no new product defect was reproduced. A full visual PASS is withheld because the owner explicitly requested a by-eye check of live video on the physical TV. Fire OS did **not** block overlays: both the panel and alert card rendered, including the panel over YouTube TV. This disposition concerns the remaining observation, not an overlay prohibition.
+
+### Device, lease and preservation
+
+AFTKM / API 30 were read from the stick; Fire OS 8 is the owner-provided platform identity. Its existing 1920×1080 display override and density 320 were retained. The lease was acquired with exclusive creation and a conflict check at **04:21:40Z**, expiry **05:36:40Z**, and released at **04:44:18Z**, well before the 19:30Z hard stop. The active lease was renamed to `stick-lease-sidepanel-review-released.json`, with release time and restoration note. No further stick access followed release.
+
+Before replacement, `pm path` and `dumpsys package` were recorded privately and the installed base APK was pulled to the authorized local restore cache. Installed version: **0.1.0**, versionCode **1**. Its SHA256 was `0a9bc06b019252278719c2a3bae557ae2d00d6b04f487eae81c692cf53342d78`. Original overlay app-op: **default / ungranted**; the original alert monitoring service was running. No account credential, profile or lineup was exported or changed.
+
+The pinned source was built using `-PafcApiBaseUrl=https://review.invalid`. An isolated, locally held instrumentation fixture intercepts HTTPS in memory, using the same synthetic panel/current-alert data as the earlier review; it forwards no request to the real backend and invokes no profile/lineup save. It uses a separate test-only application ID, `com.afc.companion.sidepanel.review`, and the independent synthetic game Activity. The real remote button, overlay service, renderer, queue and timeout remain the source-built candidate's implementations.
+
+Candidate APK SHA256: `f455713c7ac141d76b21f3a2cd34795f1c47537b65b172f1522d4bc624b7f97e`. `apksigner verify --print-certs` succeeded, and both original and candidate signer SHA256 digests matched: `24ba72469642c32f76d0e1ac293817117e6466835b5e75ebe33e38f53eba2d77`. Replacement used `adb install -r`; the owner's app was never uninstalled. Reverify remains **not applicable — source-built candidate verified by signature, pinned hash and native execution**; the preserved original APK is a restoration artifact, not a review subject.
+
+### Observed flows
+
+| Check | Observation |
+| --- | --- |
+| Permission, before any grant | The real D-pad focused and pressed “Show over game”. Companion remained responsive and showed the manual permission instructions. Fire OS resolved `android.settings.action.MANAGE_OVERLAY_PERMISSION` to `com.amazon.tv.settings.v2/.compliance.CTSDummyIntentHandler`; no “Display over other apps” UI appeared. The native Applications menu had no “Special app access” entry. No crash or grant occurred. [Permission fallback](../visual/tv-side-panel/stick/permission-request.png). |
+| Grant | The authorized fallback `appops set com.afc.companion SYSTEM_ALERT_WINDOW allow` worked. The native `Settings.canDrawOverlays` check then passed. This device requires permission provisioning outside the displayed standard Android settings route; UI granting was not demonstrated. |
+| Panel over a non-provider app | The actual button returned to the synthetic game with a compact panel at `[1344,54,1824,1026]`. Team total **112.5** remained visible. [Panel](../visual/tv-side-panel/stick/side-panel-over-game.png). |
+| Remote input | The foreground game's key counter advanced from 0 to 1 with the panel visible, then to 2 with the card visible. Window focus remained on the game. Both overlay windows had `NOT_FOCUSABLE` and `NOT_TOUCHABLE`. [Panel remote](../visual/tv-side-panel/stick/panel-remote-focus.png), [card remote](../visual/tv-side-panel/stick/card-remote-focus.png). |
+| Synthetic alert | An in-memory current-envelope alert, with no optional backend points fields and no production event, displayed **Receiver 2.5 / NFL**. Card rect `[1644,54,1824,234]`; panel rect `[1344,245,1824,1026]`; 11 px gap, inside the safe zone. The total remained visible. No overlap appeared in the captured arrival/coexistence states. [Card and panel](../visual/tv-side-panel/stick/card-and-panel.png). |
+| Timeout | The card disappeared **4822 ms after first observed visible**, consistent with its five-second queue timeout. The panel returned to its full compact height without a remote action. [Expired card](../visual/tv-side-panel/stick/card-expired.png). |
+| YouTube TV | Opened the existing signed-in viewer, navigated Home → Live guide and opened an available live channel. The panel remained visible over the guide and live player; the D-pad moved the provider selection and opened player controls. No account settings, subscriptions or purchase controls were changed. All provider frames, including the account chooser, remain private and are excluded from this repository. |
+| Playback evidence and limit | With the panel over the live player, YouTube TV reported playback state 3 / speed 1.0. SurfaceView presentation samples advanced from `491368321593747` to `491374415606300` ns over approximately six seconds. Protected video was black in ADB captures; these observations support continued playback but do not establish the requested physical by-eye judgment. **G01 remains pending.** |
+
+### G01 — required physical video observation pending
+
+**Classification:** verification gap, not a product repair finding. **Location:** this receipt's YouTube TV playback row; owner-requested on-stick check 5. **Reproducer:** open a live YouTube TV channel with the panel visible and capture through ADB; the panel/player controls are visible but protected video pixels are black. No physical observer supplied a confirmation during this run. The reviewer requested that observation while the live player and panel were on screen; no response was available before restoration.
+
+**Completion target and actor:** the owner/orchestrator arranges a separately leased physical-TV observation confirming that live video continues normally under the panel, or explicitly amends the acceptance method. MediaSession and presentation timestamps are retained as supporting evidence, not silently substituted for the owner's by-eye requirement. **Write set:** this receipt and, if needed, owner-safe non-provider visual evidence only; no product/test/backend/API change is indicated. No repair budget or new review round is claimed.
+
+### Execution validity and restoration
+
+The final `SidePanelStickReview#onStick` instrumentation run parsed **`OK (1 test)`**, 409.336 s, shell exit **0**. It used real D-pad focus through the button's focusable ancestor, actual service-owned windows via the public API-30 `WindowInspector`, and independent screenshot judgment. Early setup probes were excluded: the initially sleeping display, a competing UI Automation connection, checking focus on a text child instead of its button, and a foreground-only accessibility text lookup for a nonfocusable overlay. They are not product failures or passing evidence. The final native window count, screenshots and remote counter establish the panel/card results; the JUnit result does not close G01.
+
+`assembleDebug` / `assembleDebugAndroidTest`, APK signature verification, installation, final instrumentation and restoration all exited **0**. `TMPDIR=~/.cache/afc-gate-tmp ANDROID_HOME=~/.local/share/afc-tools/android-sdk bash tools/ci/gate.sh docs` exited **0** after receipt finalization. Normal configured commit checks apply. The original per-file OCR delegation remains the source-review evidence; this is the separately requested physical-device visual continuation. BRAN remains unavailable (no native repository policy), so ordinary discovery and the documentation review checklist were used. The added prose identifies its observer, pending actor and UTC dates; commands/links and terminology were checked, and public evidence was checked for account identities, credentials, private paths and device addresses.
+
+Restoration used `adb install -r -d` with the exact pulled original APK. A second pull of the restored installation matched SHA256 `0a9bc06b019252278719c2a3bae557ae2d00d6b04f487eae81c692cf53342d78`; versionName **0.1.0** / versionCode **1** matched BEFORE. Overlay app-op was restored to **default / ungranted**. The original monitoring service was resumed and confirmed running. The review-only APK and generated app-private review files were removed; the owner's app, profile and lineup were retained. Home was confirmed with no overlay window before the lease release. No push was performed.
+
+Public additions are limited to these six non-provider PNGs and their [SHA256SUMS](../visual/tv-side-panel/stick/SHA256SUMS), plus this receipt. Provider images, raw device output, the original APK and the private harness are not committed. No device network address appears in committed evidence.
