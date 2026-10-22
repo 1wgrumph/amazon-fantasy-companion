@@ -29,12 +29,12 @@ internal class OverlayHarness(var permitted: Boolean = true) {
     private val controller: Any by lazy {
         val type = overlayType("OverlayController")
         val constructor = type.constructors.singleOrNull {
-            it.parameterTypes.toList() == listOf(PanelController::class.java) + List(4) { Function0::class.java }
+            it.parameterTypes.toList() == listOf(PanelController::class.java) + List(5) { Function0::class.java }
         } ?: throw AssertionError(
             "Missing overlay API: OverlayController(panel, hasPermission: () -> Boolean, " +
-                "requestPermission: () -> Unit, addWindow: () -> Unit, removeWindow: () -> Unit)",
+                "requestPermission: () -> Unit, addWindow: () -> Unit, removeWindow: () -> Unit, nowMs: () -> Long)",
         )
-        constructor.newInstance(panel, { permitted }, { permissionRequests++; Unit }, { added++; Unit }, { removed++; Unit })
+        constructor.newInstance(panel, { permitted }, { permissionRequests++; Unit }, { added++; Unit }, { removed++; Unit }, { 0L })
     }
 
     fun call(name: String): Any? = overlayCall(controller, name)

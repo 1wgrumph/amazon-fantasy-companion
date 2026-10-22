@@ -2,51 +2,141 @@ package com.afc.companion.panel
 
 import com.afc.companion.alerts.AlertNotifier
 import com.afc.companion.alerts.AlertPresenter
+import android.view.KeyEvent
+import android.view.WindowManager
 import com.afc.companion.net.Alert
+import com.afc.companion.profile.ProfileState
+import com.afc.companion.ui.theme.TvPalette
 import kotlin.math.ceil
 import kotlin.math.floor
 import kotlin.math.min
 import org.json.JSONObject
 
-// JVM-pure overlay logic: the side panel over the game and the top-right alert card. Android windows live in
-// OverlayService and AlertCardOverlay; everything they place or decide comes from here.
+// JVM-pure overlay logic: the corner card, its held-≡ menu, the side panel and the top-right alert card. Android
+// windows live in OverlayService, CornerCardOverlay and AlertCardOverlay; everything they place or decide comes from here.
 
 enum class OverlayOutcome { Shown, Hidden, PermissionNeeded }
 
-/** One overlay window over the existing [panel] state; [hasPermission] is rechecked on every show. */
+/** Off; the corner card; the card with its small menu; the expanded side panel. */
+enum class OverlayMode { Off, Card, Menu, Expanded }
+
+/** Menu rows in D-pad order; League is offered only for known real pairs. */
+enum class OverlayMenuItem { Expand, League, Hide }
+
+/**
+ * One overlay surface over the existing [panel] state; [hasPermission] is rechecked on every show.
+ * [addWindow] and [removeWindow] run when the surface turns on and off; the host re-reads [mode] after each call.
+ */
 class OverlayController(
     val panel: PanelController,
     private val hasPermission: () -> Boolean,
     private val requestPermission: () -> Unit,
     private val addWindow: () -> Unit,
     private val removeWindow: () -> Unit,
+    private val nowMs: () -> Long = { System.nanoTime() / 1_000_000 },
 ) {
-    private var shown = false
+    private var idleDeadlineMs: Long? = null
+    var mode = OverlayMode.Off
+        private set(value) {
+            field = value
+            idleDeadlineMs = if (focusable) nowMs() + IDLE_MS else null
+        }
+    var menuFocus = OverlayMenuItem.entries.first()
+        private set
+
+    val menuItems: List<OverlayMenuItem> get() = if (panel.canSwitchTeamLeague) OverlayMenuItem.entries
+        else listOf(OverlayMenuItem.Expand, OverlayMenuItem.Hide)
+
+    /** Only the menu and the expanded panel take the remote; the plain card leaves it with the game. */
+    val focusable: Boolean get() = mode == OverlayMode.Menu || mode == OverlayMode.Expanded
 
     fun show(): OverlayOutcome {
-        if (shown) return OverlayOutcome.Shown
+        if (mode != OverlayMode.Off) return OverlayOutcome.Shown
         if (!hasPermission()) {
             requestPermission()
             return OverlayOutcome.PermissionNeeded
         }
         // ToggleVisibility on a hidden panel also marks it for an immediate fetch.
         if (!panel.visible) panel.perform(PanelAction.ToggleVisibility, 0)
+        mode = OverlayMode.Card
         addWindow()
-        shown = true
         return OverlayOutcome.Shown
     }
 
     fun hide(): OverlayOutcome {
         if (panel.visible) panel.perform(PanelAction.ToggleVisibility, 0)
-        if (shown) {
-            shown = false
+        if (mode != OverlayMode.Off) {
+            mode = OverlayMode.Off
             removeWindow()
         }
         return OverlayOutcome.Hidden
     }
 
-    fun toggle(): OverlayOutcome = if (shown) hide() else show()
+    fun toggle(): OverlayOutcome = if (mode != OverlayMode.Off) hide() else show()
+
+    /** Held ≡: show the card, open its menu, or close the menu or panel back to the card. */
+    fun hold(): OverlayOutcome = when (mode) {
+        OverlayMode.Off -> show()
+        OverlayMode.Card -> openMenu()
+        OverlayMode.Menu, OverlayMode.Expanded -> { mode = OverlayMode.Card; OverlayOutcome.Shown }
+    }
+
+    fun select(item: OverlayMenuItem) {
+        when (item) {
+            OverlayMenuItem.Hide -> hide()
+            OverlayMenuItem.Expand -> mode = OverlayMode.Expanded
+            OverlayMenuItem.League -> if (panel.canSwitchTeamLeague) panel.perform(PanelAction.NextTeamLeague, 0)
+        }
+    }
+
+    /** A key delivered to a focused menu or panel window (key down only); false leaves it unhandled. */
+    fun onFocusedKey(keyCode: Int): Boolean {
+        if (focusable) idleDeadlineMs = nowMs() + IDLE_MS
+        val items = menuItems
+        return when (mode) {
+            OverlayMode.Menu -> when (keyCode) {
+                KeyEvent.KEYCODE_DPAD_UP -> { menuFocus = items[(items.indexOf(menuFocus) - 1).coerceAtLeast(0)]; true }
+                KeyEvent.KEYCODE_DPAD_DOWN -> { menuFocus = items[(items.indexOf(menuFocus) + 1).coerceAtMost(items.lastIndex)]; true }
+                in OK_KEYS -> { select(menuFocus); true }
+                KeyEvent.KEYCODE_BACK -> { mode = OverlayMode.Card; true }
+                else -> false
+            }
+            OverlayMode.Expanded -> when (keyCode) {
+                in OK_KEYS -> { openMenu(); true }
+                KeyEvent.KEYCODE_BACK -> { mode = OverlayMode.Card; true }
+                else -> false
+            }
+            OverlayMode.Off, OverlayMode.Card -> false
+        }
+    }
+
+    /** Called by the host's existing tick; expiry uses the same Card transition as Back. */
+    fun tick(): Boolean {
+        val deadline = idleDeadlineMs ?: return false
+        if (nowMs() < deadline) return false
+        mode = OverlayMode.Card
+        return true
+    }
+
+    private fun openMenu(): OverlayOutcome {
+        menuFocus = OverlayMenuItem.entries.first()
+        mode = OverlayMode.Menu
+        return OverlayOutcome.Shown
+    }
+
+    private companion object {
+        const val IDLE_MS = 90_000L
+        val OK_KEYS = setOf(KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER, KeyEvent.KEYCODE_NUMPAD_ENTER, KeyEvent.KEYCODE_BUTTON_A)
+    }
 }
+
+/** Unpaired league/team selection sets do not establish associations; only the selected pair is known. */
+fun overlayTeamLeagues(profile: ProfileState?): List<String> = listOfNotNull(panelTeamLeague(profile))
+
+/** Window flags: the card never takes focus or touch; the menu and panel take focus and pass outside touches on. */
+fun overlayWindowFlags(focusable: Boolean): Int =
+    if (focusable) WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+    else WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
 
 private fun safeLeft(width: Int) = ceil(width * 0.05).toInt()
 private fun safeTop(height: Int) = ceil(height * 0.05).toInt()
@@ -67,6 +157,55 @@ object OverlayGeometry {
         val top = maxOf(panel.top, card.bottom + ceil(screenHeight * 0.01).toInt())
         return panel.copy(top = top, height = safeBottom(screenHeight) - top)
     }
+
+    /** Corner card: 16% wide, 12% tall, at the safe top-right; a showing [alert] keeps the corner and the card sits below it. */
+    fun cornerCard(screenWidth: Int, screenHeight: Int, alert: Box?): Box {
+        val width = floor(screenWidth * 0.16).toInt()
+        val top = alert?.let { it.bottom + gap(screenHeight) } ?: safeTop(screenHeight)
+        return Box(safeRight(screenWidth) - width, top, width, floor(screenHeight * 0.12).toInt())
+    }
+
+    /** The small menu: right-aligned just below the [card], wherever the card currently sits. */
+    fun menu(screenWidth: Int, screenHeight: Int, card: Box): Box {
+        val width = floor(screenWidth * 0.20).toInt()
+        return Box(safeRight(screenWidth) - width, card.bottom + gap(screenHeight), width, floor(screenHeight * 0.24).toInt())
+    }
+
+    private fun gap(height: Int) = ceil(height * 0.01).toInt()
+}
+
+/** Corner card and menu look: the theme surface, translucent so the game shows through, with full-strength text. */
+object CornerCardStyle {
+    /** Effective surface opacity, after WindowManager's untrusted-overlay alpha. */
+    const val BACKGROUND_ALPHA = 0.72f
+    fun backgroundAlpha(windowAlpha: Float): Float = (BACKGROUND_ALPHA / windowAlpha).coerceAtMost(1f)
+    const val MENU_ALPHA = 0.90f
+    val TEXT_ARGB = TvPalette.onSurfaceArgb
+}
+
+/** The card's few words: the team total, how fresh it is, the sport, and the switch hint. */
+object CornerCardText {
+    fun total(snapshot: PanelSnapshot?): String = snapshot?.teamTotal?.value?.toString() ?: "Unavailable"
+
+    fun status(snapshot: PanelSnapshot?, teamLeague: String?, nowMs: Long): String {
+        if (teamLeague == null) return "No team selected"
+        val total = snapshot?.teamTotal ?: return "Loading"
+        val asOf = total.asOfMs ?: return "Stale"
+        val ageS = (nowMs - asOf) / 1_000
+        val age = if (nowMs - asOf >= STALE_MS) "Stale ${ageS}s" else "Updated ${ageS}s ago"
+        return if (total.source == "replay") "Replay, ${age.replaceFirstChar { it.lowercase() }}" else age
+    }
+
+    fun sport(snapshot: PanelSnapshot?): String? = snapshot?.let {
+        it.sport ?: when (it.basis) {
+            ScoringBasis.NbaPoints -> "NBA"
+            ScoringBasis.YahooLeague, ScoringBasis.Ppr, ScoringBasis.HalfPpr -> "NFL"
+        }
+    }
+
+    fun hint(serviceEnabled: Boolean): String? = if (serviceEnabled) null else "Hold ≡ needs Accessibility"
+
+    private const val STALE_MS = 60_000L
 }
 
 /** Alert card: a square of one-sixth of the short side at the safe top-right corner (180 px at 1080p). */
@@ -136,7 +275,7 @@ class AlertCardQueue {
  * Optional backend fields win when present: `triggerContext.sport` ("nba"/"nfl"),
  * `starters[0].shortName` and `starters[0].points` (fantasy points on the profile's basis).
  * Without them the player is the starter's last name, and the number and sport come only from the
- * fresh matching row of the selected profile's [panel] snapshot; otherwise no card is emitted.
+ * fresh matching row and sport/scoring basis of the selected profile's [panel] snapshot; otherwise no card is emitted.
  */
 fun alertCardNotice(alert: Alert, panel: PanelSnapshot?): AlertCardNotice? {
     if (AlertPresenter.text(alert) == null) return null // the panel's safety gate: unsafe names never reach a card
@@ -147,13 +286,13 @@ fun alertCardNotice(alert: Alert, panel: PanelSnapshot?): AlertCardNotice? {
         ?.take(MAX_CARD_NAME)?.takeIf { AlertCardText.label(it, 0.0) != null } ?: return null
     val declaredSport = when (trigger.opt("sport")) { "nba" -> "NBA"; "nfl" -> "NFL"; else -> null }
     val row = panel?.rows?.firstOrNull {
-        it.playerId == starter.opt("athlete_id") && (declaredSport == null || declaredSport == panel.sport)
+        it.playerId == starter.opt("athlete_id") && (declaredSport == null || declaredSport == CornerCardText.sport(panel))
     }
     val freshPoints = row?.points?.takeIf { points ->
         points.asOfMs?.let { System.currentTimeMillis() - it in 0..60_000 } == true
     }?.value?.takeIf { it.isFinite() }
     val value = (starter.opt("points") as? Number)?.toDouble()?.takeIf { it.isFinite() } ?: freshPoints ?: return null
-    val sport = declaredSport ?: panel?.sport?.takeIf { row != null && it in listOf("NBA", "NFL") } ?: return null
+    val sport = declaredSport ?: CornerCardText.sport(panel)?.takeIf { row != null && it in listOf("NBA", "NFL") } ?: return null
     return AlertCardNotice(alert.envelope.id, player, value, sport, AlertNotifier.watchEventId(alert).orEmpty())
 }
 
