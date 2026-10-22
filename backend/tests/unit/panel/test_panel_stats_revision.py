@@ -189,9 +189,13 @@ def test_r02_lagging_replica_cannot_lower_the_revision(panel_env, monkeypatch, m
 
 
 @pytest.mark.parametrize("version", [0, 11])
-def test_r03_deploy_dominates_old_formula_even_for_legacy_zero(panel_env, version):
+@pytest.mark.parametrize("profile_version", [0, 1])
+def test_r03_deploy_dominates_old_formula_even_for_legacy_zero(panel_env, version, profile_version):
     seed_profile("fan")
     seed_lineup("fan", [RECEIVER])
+    profile_table = panel_env.api.table("Profiles")
+    profile_row = profile_table.get_item(Key={"profileId": "fan"})["Item"]
+    profile_table.put_item(Item=dict(profile_row, revision=profile_version))
     table = panel_env.api.table("Lineups")
     row = table.get_item(Key={"profileId": "fan"})["Item"]
     if version:
@@ -201,7 +205,8 @@ def test_r03_deploy_dominates_old_formula_even_for_legacy_zero(panel_env, versio
     table.put_item(Item=row)
     panel_env.api.table("Panels").put_item(Item={"profileId": "fan", "teamLeague": LEAGUE + "/" + TEAM,
                                                  "freshness": {"counter": 50000}})
-    deployed_revision = 128 * (50000 + 1 + version) + 64
+    # Include the conservative maximum of all old low fields, even with no stats now.
+    deployed_revision = 128 * (50000 + profile_version + version) + 96
     assert panel_env.snapshot("fan")["revision"] > deployed_revision
 
 
@@ -229,16 +234,112 @@ def test_maximum_sequence_drop_and_documented_js_history_bound(panel_env):
     seed_lineup("fan", starters)
     table = panel_env.api.table("Lineups")
     row = table.get_item(Key={"profileId": "fan"})["Item"]
-    table.put_item(Item=dict(row, lineupVersion=99999))
+    table.put_item(Item=dict(row, lineupVersion=99998))
     for starter in starters:
         panel_env.api.table("PlayerStats").put_item(Item=dict(
             statistics(receptions=2), athleteId=starter["athlete_id"], statsVersion=(1 << 24) - 1))
-    # Include the documented billion profile/projection writes in the bound.
+    # Include the maximum pair counter; the final lineup + profile sum is 100,000.
     panel_env.api.table("Panels").put_item(Item={"profileId": "fan", "teamLeague": LEAGUE + "/" + TEAM,
-                                                 "freshness": {"counter": 999999999}})
+                                                 "freshness": {"counter": (1 << 24) - 1}})
     before = panel_env.snapshot("fan")
     seed_lineup("fan", [])
     after = panel_env.snapshot("fan")
     assert after["revision"] > before["revision"]
     assert after["revision"] <= (1 << 53) - 1
     assert int(float(after["revision"])) == after["revision"]
+
+
+@pytest.mark.parametrize("change", ["lineup_sport", "lineup_pair", "profile_pair", "profile_visibility"])
+def test_combined_maximum_contributions_survive_selection_changes(panel_env, monkeypatch, change):
+    import store
+    monkeypatch.setenv("AFC_ENABLE_NBA", "1")
+    monkeypatch.setattr(panel_env.module, "now", lambda: at(43201))
+    seed_profile("fan")
+    starters = [dict(WING, athlete_id=str(9000001 + i)) for i in range(32)]
+    lineup = {"profileId": "fan", "source": "manual", "sport": "nba", "team": TEAM,
+              "league": LEAGUE, "starters": starters, "updatedAt": at(0)}
+    store.put_lineup(lineup)
+    cap = (1 << 24) - 1
+    for starter in starters:
+        panel_env.api.table("PlayerStats").put_item(Item=dict(
+            statistics(state="post", status="Final", points=2),
+            athleteId=starter["athlete_id"], statsVersion=cap))
+    panel_env.api.table("PlayerStats").put_item(Item={
+        "athleteId": "pregame", "sequence": cap, "teams": {"MIN": "tip"}, "asOf": at(0)})
+    panel_env.api.table("Panels").put_item(Item={"profileId": "fan", "teamLeague": LEAGUE + "/" + TEAM,
+                                                 "freshness": {"counter": cap}})
+    before = panel_env.snapshot("fan")
+    if change == "lineup_sport":
+        store.put_lineup(dict(lineup, sport="nfl", starters=[]))
+    elif change == "lineup_pair":
+        store.put_lineup(dict(lineup, team="other", sport="nfl", starters=[]))
+    else:
+        settings = ({"teamLeague": {"league": LEAGUE, "team": "other"}}
+                    if change == "profile_pair" else {"panelPrefs": {"visible": False}})
+        assert store.put_profile("fan", settings, 1, at(1))
+    after = panel_env.snapshot("fan")
+    assert after["revision"] > before["revision"]
+    assert panel_env.snapshot("fan")["revision"] == after["revision"]
+    if change.endswith("pair") or change == "lineup_sport":
+        assert after["data"]["rows"] == []
+    else:
+        assert after["data"]["visible"] is False
+    # Returning to the old selection must allocate another distinct revision.
+    if change.startswith("lineup"):
+        store.put_lineup(lineup)
+    else:
+        assert store.put_profile("fan", {}, 2, at(2))
+    restored = panel_env.snapshot("fan")
+    assert restored["revision"] > after["revision"]
+    assert panel_env.snapshot("fan")["revision"] == restored["revision"]
+
+
+def test_combined_documented_js_bound_includes_profile_and_pregame(panel_env, monkeypatch):
+    import store
+    monkeypatch.setenv("AFC_ENABLE_NBA", "1")
+    monkeypatch.setattr(panel_env.module, "now", lambda: at(43201))
+    seed_profile("fan")
+    starters = [dict(WING, athlete_id=str(9000001 + i)) for i in range(32)]
+    store.put_lineup({"profileId": "fan", "source": "manual", "sport": "nba", "team": TEAM,
+                      "league": LEAGUE, "starters": starters, "updatedAt": at(0)})
+    for table_name, key, field, value in [
+        ("Lineups", {"profileId": "fan"}, "lineupVersion", 90000),
+        ("Profiles", {"profileId": "fan"}, "revision", 10000),
+    ]:
+        table = panel_env.api.table(table_name)
+        row = table.get_item(Key=key)["Item"]
+        table.put_item(Item=dict(row, **{field: value}))
+    cap = (1 << 24) - 1
+    for starter in starters:
+        panel_env.api.table("PlayerStats").put_item(Item=dict(
+            statistics(state="post", status="Final", points=2),
+            athleteId=starter["athlete_id"], statsVersion=cap))
+    panel_env.api.table("PlayerStats").put_item(Item={
+        "athleteId": "pregame", "sequence": cap, "teams": {}, "asOf": at(0)})
+    panel_env.api.table("Panels").put_item(Item={"profileId": "fan", "teamLeague": LEAGUE + "/" + TEAM,
+                                                 "freshness": {"counter": cap}})
+    value = panel_env.snapshot("fan")["revision"]
+    # 32 statistic sequences, twice the slate sequence plus expiry, and pair counter.
+    scale = 35 * cap + 2
+    assert value == 128 * (1 + 100000 * scale + 35 * cap + 1) + 96
+    assert value <= (1 << 53) - 1
+    assert int(float(value)) == value
+    assert int(float(value + 1)) == value + 1
+
+
+def test_projection_counter_exhaustion_preserves_last_snapshot(panel_env):
+    from panel_support import game_event, match
+    seed_profile("fan")
+    seed_lineup("fan", [RECEIVER])
+    cap = (1 << 24) - 1
+    panel_env.api.table("Panels").put_item(Item={"profileId": "fan", "teamLeague": LEAGUE + "/" + TEAM,
+                                                 "freshness": {"counter": cap - 1}})
+    event = game_event("first")
+    panel_env.module.project(event, [match("fan", event)])
+    before = panel_env.snapshot("fan")
+    panel_env.module.project(event, [match("fan", event)])
+    assert panel_env.snapshot("fan")["revision"] == before["revision"]
+    correction = dict(event, revision=2)
+    with pytest.raises(RuntimeError, match="projection.*exhausted"):
+        panel_env.module.project(correction, [match("fan", correction)])
+    assert panel_env.snapshot("fan") == before
