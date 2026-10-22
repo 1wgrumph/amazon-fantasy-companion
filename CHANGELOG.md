@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- NBA starter alerts when a boxscore crosses 10, 20 or 30 points, a double-double, or a fantasy-point rise of 5 or more (PR TBD).
 - Prepare the Devpost paste package and deadline-email review with current repository evidence, per-tool feedback, explicit owner/form/video gaps, and a timed OA-7 procedure; no upload, submission or publication performed ([PR #153](https://github.com/1wgrumph/amazon-fantasy-companion/pull/153)).
 - Vega app decodes NBA panels (`nbaPoints` basis, `sport` field) and labels them "NBA", matching Fire OS ([PR #152](https://github.com/1wgrumph/amazon-fantasy-companion/pull/152)).
 - Add a verified Fire OS Watch route for YouTube TV ([PR #148](https://github.com/1wgrumph/amazon-fantasy-companion/pull/148)).

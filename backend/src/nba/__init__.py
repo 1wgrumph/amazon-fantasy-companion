@@ -120,6 +120,25 @@ def poll(get_json, store_records=None):
         except (ValueError, OSError):
             result["failed"].append(game_id)
             continue
+        _emit_alerts(records, summary)
         store_records(records)
         result["stored"] += len(records)
     return result
+
+
+def _emit_alerts(records, summary):
+    """Write milestone and swing GameEvents before the boxscore overwrite."""
+    if not records or not os.environ.get("EVENTS_TABLE"):
+        return
+    import store
+    from feed_ingest.ingest import store_events
+    from feed_ingest.normalize import _channel
+    from nba.alerts import game_events
+
+    channel = _channel(summary)
+    events = []
+    for record in records:
+        previous = store.get_player_statistics(record["athleteId"])
+        events.extend(game_events(record, previous, channel=channel))
+    if events:
+        store_events(events)

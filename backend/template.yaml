@@ -146,8 +146,11 @@ Resources:
       Policies:
         - Statement:
             - Effect: Allow
-              Action: [dynamodb:PutItem]
+              Action: [dynamodb:GetItem, dynamodb:PutItem]
               Resource: [!GetAtt PlayerStatsTable.Arn]
+            - Effect: Allow
+              Action: [dynamodb:GetItem, dynamodb:PutItem]
+              Resource: [!GetAtt EventsTable.Arn]
 
   PolicyFunction:
     Type: AWS::Serverless::Function
