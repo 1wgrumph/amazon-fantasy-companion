@@ -31,10 +31,12 @@ SOFTWARE.
 ## Fire TV starter (tv-app/)
 
 Source: https://github.com/AmazonAppDev/hello-world-fire-tv at commit
-50108f4fc4a9dc054be86d851286355df027524a (scanned in P2-X01). tv-app/ keeps its
-launcher icons, adaptive-icon resources and the Compose for TV theme adapted in
+50108f4fc4a9dc054be86d851286355df027524a (scanned in P2-X01). tv-app/ keeps the
+Compose for TV theme adapted in
 tv-app/app/src/main/java/com/afc/companion/ui/theme/Theme.kt; the package is
-renamed to com.afc.companion. Provided under the MIT No Attribution license below.
+renamed to com.afc.companion. The starter's launcher icons and adaptive-icon
+resources are no longer used (replaced 2026-10-22; see "AZ Fantasy artwork"
+below). Provided under the MIT No Attribution license below.
 
 MIT No Attribution
 
@@ -52,6 +54,18 @@ FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
 COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+## AZ Fantasy artwork (tv-app/app/src/main/res/)
+
+The launcher icon (`drawable/ic_launcher_foreground.xml`, `values/ic_launcher_background.xml`,
+the five `mipmap-*/ic_launcher.webp` files), the TV banner (`drawable/tv_banner.xml`), the
+empty-lineup illustration (`drawable/ic_lineup_empty.xml`) and the sport glyphs
+(`drawable/ic_sport_football.xml`, `drawable/ic_sport_basketball.xml`) are original work drawn
+for this project on 2026-10-22. They are not third-party material and are covered by the
+repository's Apache License 2.0. The banner letters are hand-built polygons
+(`evidence/visual/tv-branding/tools/block_letters.py`), not a font, and the legacy webp files
+are rendered from the same geometry by `evidence/visual/tv-branding/tools/render_legacy_icons.py`.
+No downloaded assets, photos, fonts, league marks or provider marks are used.
 
 ## Vega app template (vega-app/)
 

@@ -1,6 +1,7 @@
 package com.afc.companion.panel
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
@@ -29,6 +30,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
@@ -41,6 +43,7 @@ import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -48,6 +51,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
+import com.afc.companion.R
 import com.afc.companion.alerts.AlertInbox
 import com.afc.companion.alerts.AlertNotifier
 import com.afc.companion.net.ApiClient
@@ -66,6 +70,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.math.roundToInt
 
 /** PanelMode fixed by the P2-X04 verdict: modeB side-by-side route or fullScreen in this app. */
 enum class PanelMode { ModeB, FullScreen }
@@ -187,7 +192,7 @@ fun LineupPanel(client: ApiClient, mode: PanelMode, modifier: Modifier = Modifie
         ) {
             if (!controller.visible) {
                 Text(
-                    "Panel hidden. Press Menu to show it.",
+                    "My lineup is hidden. Press Menu to show it.",
                     style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = MaterialTheme.colorScheme.onSurface),
                 )
             } else {
@@ -277,6 +282,7 @@ internal fun PanelContent(
                 .verticalScroll(rememberScrollState()).padding(8.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
+            if (!compact) LineupHeading()
             watchOutcome?.let {
                 Text(it, style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = MaterialTheme.colorScheme.onSurface))
             }
@@ -289,10 +295,14 @@ internal fun PanelContent(
                 )
             }
             if (teamLeague == null) {
-                Text(
-                    "Panel unavailable: no team/league is selected in Profile/Settings.",
-                    style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = MaterialTheme.colorScheme.onSurface),
-                )
+                Row(horizontalArrangement = Arrangement.spacedBy(24.dp), verticalAlignment = Alignment.CenterVertically) {
+                    // Decorative: the sentence beside it carries the meaning.
+                    Image(painterResource(R.drawable.ic_lineup_empty), contentDescription = null, modifier = Modifier.size(160.dp, 120.dp))
+                    Text(
+                        "No lineup yet. Choose a team and league in My setup.",
+                        style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = MaterialTheme.colorScheme.onSurface),
+                    )
+                }
                 return@Column
             }
             if (snapshot == null) {
@@ -338,7 +348,7 @@ internal fun PanelContent(
                         style = TextStyle(fontSize = PanelTextSizes.scoreSp.sp, color = MaterialTheme.colorScheme.onSurface),
                     )
                     Text(
-                        "Progress: ${PanelText.value(snapshot.progress, nowMs)}",
+                        "Lineup progress: ${progressText(snapshot.progress, nowMs)}",
                         style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = MaterialTheme.colorScheme.onSurface),
                     )
                 }
@@ -352,6 +362,7 @@ internal fun PanelContent(
 private fun CompactPanelContent(snapshot: PanelSnapshot, alerts: List<PanelAlert>, nowMs: Long) {
     val body = TextStyle(fontSize = 22.sp, color = MaterialTheme.colorScheme.onSurface)
     Column(Modifier.fillMaxSize().padding(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        LineupHeading()
         PanelHeader(snapshot)
         alerts.take(1).forEach { Text(it.text.headline, style = body) }
         BoxWithConstraints(Modifier.weight(1f).fillMaxWidth()) {
@@ -376,7 +387,7 @@ private fun CompactPanelContent(snapshot: PanelSnapshot, alerts: List<PanelAlert
             }
         }
         Text("Team total: ${PanelText.value(snapshot.teamTotal, nowMs)}", style = body)
-        Text("Progress: ${PanelText.value(snapshot.progress, nowMs)}", style = body)
+        Text("Lineup progress: ${progressText(snapshot.progress, nowMs)}", style = body)
     }
 }
 
@@ -433,6 +444,18 @@ private fun Modifier.bringIntoViewWhen(focused: Boolean): Modifier {
     return bringIntoViewRequester(requester)
 }
 
+@Composable
+private fun LineupHeading() {
+    Text("My lineup", style = MaterialTheme.typography.headlineMedium, color = MaterialTheme.colorScheme.onSurface)
+}
+
+/** Progress (0..1, the lineup's mean game state) as a whole percent, keeping PanelText's replay/stale labels. */
+internal fun progressText(progress: PanelValue, nowMs: Long): String {
+    val text = PanelText.value(progress, nowMs)
+    val number = progress.value ?: return text
+    return "${(number * 100).roundToInt()}%" + text.removePrefix(number.toString())
+}
+
 /** Scoring basis and lineup source; a tagged sport gets its accent as a chip. */
 @Composable
 private fun PanelHeader(snapshot: PanelSnapshot) {
@@ -454,7 +477,7 @@ private fun PanelHeader(snapshot: PanelSnapshot) {
 @Composable
 private fun PanelMessage(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
     Box(modifier.fillMaxSize().tvSafeZonePadding().padding(8.dp)) {
-        Text("Panel", style = MaterialTheme.typography.headlineMedium)
+        Text("My lineup", style = MaterialTheme.typography.headlineMedium)
         content()
     }
 }
