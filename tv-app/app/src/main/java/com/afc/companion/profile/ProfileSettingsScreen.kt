@@ -1,6 +1,6 @@
 package com.afc.companion.profile
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -28,6 +27,8 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
@@ -46,6 +47,7 @@ import androidx.compose.ui.unit.dp
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import com.afc.companion.BuildConfig
+import com.afc.companion.R
 import com.afc.companion.net.ApiClient
 import com.afc.companion.net.ScoringPreset
 import com.afc.companion.ui.theme.AfcLoadingIndicator
@@ -75,14 +77,14 @@ fun ProfileSettingsScreen(client: ApiClient, modifier: Modifier = Modifier) {
 
     LaunchedEffect(store) {
         state = store.load()
-        message = if (state == null) "Profile is unavailable. Check the connection and try again." else "Profile loaded."
+        message = if (state == null) "Profile is unavailable. Check the connection and try again." else "Manage your teams, players and alert preferences."
     }
     val shown = message
     if (shown != null) Column(
         modifier.tvSafeZonePadding().padding(8.dp).verticalScroll(rememberScrollState()).padding(8.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        Text("Profile/Settings", style = MaterialTheme.typography.headlineMedium)
+        Text("Your fantasy setup", style = MaterialTheme.typography.headlineMedium)
         Text(shown, style = MaterialTheme.typography.bodyLarge)
         DeviceSettingsControls()
         val current = state ?: return@Column
@@ -174,7 +176,8 @@ fun ProfileSettingsScreen(client: ApiClient, modifier: Modifier = Modifier) {
         Box(modifier.fillMaxSize().tvSafeZonePadding()) {
             AfcLoadingIndicator("Loading profile…")
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                Text("Profile/Settings", style = MaterialTheme.typography.headlineMedium)
+                Text("Your fantasy setup", style = MaterialTheme.typography.headlineMedium)
+                Text("Your teams, players and alert preferences.", style = MaterialTheme.typography.bodyLarge)
                 DeviceSettingsControls()
             }
         }
@@ -185,7 +188,18 @@ fun ProfileSettingsScreen(client: ApiClient, modifier: Modifier = Modifier) {
 private fun SportTogglesEditor(current: ProfileState, state: MutableState<ProfileState?>) {
     for ((sport, label) in sportToggles(current, nbaEnabled = BuildConfig.AFC_ENABLE_NBA)) {
         Button(onClick = { state.value = current.toggledSport(sport) }) {
-            Box(Modifier.size(16.dp).background(Color(TvPalette.sportAccentArgb(sport)), CircleShape))
+            // Decorative: the label beside it names the sport, so the glyph has no description and no focus.
+            Image(
+                painterResource(
+                    when (sport) {
+                        Sport.Nfl -> R.drawable.ic_sport_football
+                        Sport.Nba -> R.drawable.ic_sport_basketball
+                    },
+                ),
+                contentDescription = null,
+                modifier = Modifier.size(24.dp),
+                colorFilter = ColorFilter.tint(Color(TvPalette.sportAccentArgb(sport))),
+            )
             Spacer(Modifier.width(12.dp))
             Text(label)
         }
@@ -202,6 +216,7 @@ private fun DeviceSettingsControls() {
         showPanelOnNewAlert = !showPanelOnNewAlert
         settings.showPanelOnNewAlert = showPanelOnNewAlert
     }) { Text(DeviceSettings.label(showPanelOnNewAlert)) }
+    Text(DeviceSettings.SCOPE_NOTE, style = MaterialTheme.typography.bodyMedium)
 }
 
 private fun onOff(value: Boolean): String = if (value) "on" else "off"
@@ -261,21 +276,22 @@ private fun ProfileTextField(value: String, onValueChange: (String) -> Unit) {
 
 private fun minuteOfDay(minute: Int): String = "${(minute / 60).toString().padStart(2, '0')}:${(minute % 60).toString().padStart(2, '0')}"
 
-/** One remote-editable name list: type a name and add it, or remove an entry. */
+/** One remote-editable name list: type a name and add it, or remove an entry. A null [label] hides the list line. */
 @Composable
-private fun NameListEditor(label: String, values: List<String>, onToggle: (String) -> Unit) {
-    var draft by remember(label) { mutableStateOf("") }
+private fun NameListEditor(label: String?, fieldLabel: String, addLabel: String, values: List<String>, onToggle: (String) -> Unit) {
+    var draft by remember(fieldLabel) { mutableStateOf("") }
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text("$label: ${values.joinToString().ifBlank { "none" }}", style = MaterialTheme.typography.bodyLarge)
+        if (label != null) Text("$label: ${values.joinToString().ifBlank { "None added" }}", style = MaterialTheme.typography.bodyLarge)
         for (value in values) {
-            Button(onClick = { onToggle(value) }) { Text("Remove $value from $label") }
+            Button(onClick = { onToggle(value) }) { Text("Remove $value") }
         }
+        Text(fieldLabel, style = MaterialTheme.typography.bodyMedium)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             ProfileTextField(value = draft, onValueChange = { draft = it })
             Button(onClick = {
                 onToggle(draft)
                 draft = ""
-            }) { Text("Add to $label") }
+            }) { Text(addLabel) }
         }
     }
 }
@@ -302,8 +318,15 @@ private fun WindowListEditor(label: String, windows: List<TimeWindow>, default: 
 @Composable
 private fun SelectionsEditor(current: ProfileState, state: MutableState<ProfileState?>) {
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        Text("Press OK to type, choose Add, then Save profile.", style = MaterialTheme.typography.bodyMedium)
         for (kind in SelectionKind.entries) {
-            NameListEditor(kind.name, current.selections.values(kind).sorted()) { value ->
+            val (label, noun) = when (kind) {
+                SelectionKind.Leagues -> "Leagues" to "league"
+                SelectionKind.Teams -> "Teams" to "team"
+                SelectionKind.Players -> "Players" to "player"
+                SelectionKind.FavoriteTeams -> "Favorite teams" to "favorite team"
+            }
+            NameListEditor(label, "${noun.replaceFirstChar { it.uppercase() }} name", "Add $noun", current.selections.values(kind).sorted()) { value ->
                 state.value = current.copy(selections = current.selections.toggled(kind, value))
             }
         }
@@ -372,7 +395,7 @@ private fun ProviderPreferenceEditor(current: ProfileState, state: MutableState<
                 Button(onClick = { update(pref.removeProvider(provider)) }) { Text("Remove") }
             }
         }
-        NameListEditor("New provider", emptyList()) { value -> update(pref.addProvider(value)) }
+        NameListEditor(null, "Provider name", "Add provider", emptyList()) { value -> update(pref.addProvider(value)) }
         Text("Detected-app overrides (automatic / installed / not installed)", style = MaterialTheme.typography.bodyLarge)
         for ((packageName, installed) in pref.appOverrides.toSortedMap()) {
             Button(onClick = { update(pref.cycleAppOverride(packageName)) }) {

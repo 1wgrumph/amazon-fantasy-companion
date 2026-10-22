@@ -16,7 +16,10 @@ class DeviceSettings(private val prefs: SharedPreferences) {
     companion object {
         private const val SHOW_PANEL_ON_NEW_ALERT = "showPanelOnNewAlert"
 
+        /** Shown under the toggle: the setting stays on this TV and needs no Save. */
+        const val SCOPE_NOTE = "Applies immediately on this TV."
+
         fun label(showPanelOnNewAlert: Boolean): String =
-            "Show panel on new alert: ${if (showPanelOnNewAlert) "on" else "off"} (this TV only)"
+            "Open lineup on alerts: ${if (showPanelOnNewAlert) "On" else "Off"}"
     }
 }
