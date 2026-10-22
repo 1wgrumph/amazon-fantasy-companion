@@ -38,7 +38,8 @@ EXPECTED = {
                        "ProfilesTable": {"GetItem", "Scan"},
                        "LineupsTable": {"GetItem"},
                        "PlayerStatsTable": {"PutItem"}},
-    "NbaIngestFunction": {"PlayerStatsTable": {"PutItem"}},
+    "NbaIngestFunction": {"PlayerStatsTable": {"GetItem", "PutItem"},
+                          "EventsTable": {"PutItem"}},
     "PolicyFunction": {"ProfilesTable": {"GetItem"},
                        "EventsTable": {"GetItem"},
                        "AlertsTable": {"PutItem", "Query"},
@@ -215,3 +216,25 @@ def test_table_and_operation_aliases_keep_valid_grants(monkeypatch):
     monkeypatch.setattr(type(path), "read_text",
                         lambda self, *a, **kw: changed if self == path else read_text(self, *a, **kw))
     test_policy_grants_matcher_operations_on_exact_table_arns()
+
+
+@pytest.mark.parametrize("replacement,expected", [
+    ('{"Delete": {"TableName": os.environ["EVENTS_TABLE"], "Item": event}}', "DeleteItem"),
+    ('{"Put": {"TableName": os.environ["ALERTS_TABLE"], "Item": event}}', "AlertsTable"),
+    ('{"Put": {"TableName": dynamic_table, "Item": event}}', "Unknown DynamoDB table resolution"),
+])
+def test_nba_transaction_inventory_rejects_operation_or_table_drift(monkeypatch, replacement, expected):
+    path = BACKEND / "src/store/__init__.py"
+    original = path.read_text()
+    before = '{"Put": {"TableName": os.environ["EVENTS_TABLE"], "Item": event}}'
+    assert original.count(before) == 1
+    changed = original.replace(before, replacement)
+    read_text = type(path).read_text
+    monkeypatch.setattr(type(path), "read_text",
+                        lambda self, *a, **kw: changed if self == path else read_text(self, *a, **kw))
+    template = document("template.yaml")
+    properties = template["Resources"]["NbaIngestFunction"]["Properties"]
+    environment = template["Globals"]["Function"]["Environment"]["Variables"]
+    with pytest.raises(AssertionError, match=expected):
+        required = required_actions(BACKEND / "src", properties["Handler"], environment)
+        assert_required_grants(grants(properties["Policies"])[0], required, "NbaIngestFunction")
