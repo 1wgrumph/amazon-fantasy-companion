@@ -75,7 +75,7 @@ class OverlayLifecycleTest {
         sport = "nba"; points = 20.0
         publish(feed, "new-sport")
         await("new selected sport supplies fresh points and mark") { hasText("Receiver 20") && hasText("NBA") }
-        assertFalse("card-only action must not create a panel", hasText("Team total: 112.5"))
+        assertFalse("card-only action must not create a panel or corner card", hasText("112.5") || hasText("Team total: 112.5"))
     }
     @Test fun stoppingMonitoringRemovesCardsAndTheHiddenHost() {
         context.startForegroundService(Intent(context, AlertService::class.java))
@@ -88,19 +88,19 @@ class OverlayLifecycleTest {
     }
     @Test fun stoppingMonitoringPreservesVisiblePanelUntilItIsToggledOff() {
         OverlayServiceControl(context).toggle()
-        await("panel rendered") { hasText("Team total: 112.5") }
+        await("corner card rendered") { hasText("112.5") }
         context.startForegroundService(Intent(context, AlertService::class.java))
         await("monitor started") { services().contains(".alerts.AlertService}") }
         AlertServiceControl(context).stop()
         await("monitor stopped") { !services().contains(".alerts.AlertService}") }
-        assertTrue(hasText("Team total: 112.5"))
+        assertTrue(hasText("112.5"))
         OverlayServiceControl(context).toggle()
         await("last overlay owner stopped") { !services().contains(".panel.OverlayService}") }
     }
     /** F04: sample actual compositor rectangles, including the observed window-move animation. */
     @Test fun cardArrivalReplacementAndExpiryNeverOverlapThePanel() {
         OverlayServiceControl(context).toggle()
-        await("panel rendered") { hasText("Team total: 112.5") }
+        await("corner card rendered") { hasText("112.5") }
         OverlayServiceControl(context).startAlerts()
         device.pressHome()
         val feed = AlertFeed(ApiClient("https://review.invalid"))

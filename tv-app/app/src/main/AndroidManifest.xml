@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
     <!-- AlertNotifier: heads-up notification on a high-importance channel (AFC-PR-015). -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <!-- OverlayService: side panel and alert card drawn over the playing game. -->
+    <!-- OverlayService: corner card, its menu, side panel and alert card drawn over the playing game. -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <uses-feature android:name="android.software.leanback" android:required="true" />
@@ -55,5 +55,18 @@
             android:name=".panel.OverlayService"
             android:exported="false"
             android:foregroundServiceType="dataSync" />
+        <!-- Held Menu over any app: the user turns it on in Settings > Accessibility; key filtering only. -->
+        <service
+            android:name=".access.MenuHoldService"
+            android:exported="false"
+            android:label="@string/menu_hold_service_label"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/menu_hold_service" />
+        </service>
     </application>
 </manifest>

@@ -7,8 +7,10 @@ import android.provider.Settings
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.Gravity
+import android.view.KeyEvent
 import android.view.View
 import android.view.WindowManager
+import android.widget.FrameLayout
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -179,17 +181,32 @@ internal fun screenSize(windows: WindowManager): Pair<Int, Int> {
     return metrics.widthPixels to metrics.heightPixels
 }
 
-/** A ComposeView for a service-owned window, which has no activity to supply its lifecycle and saved state. */
-internal class OverlayView(context: Context, content: @Composable () -> Unit) : LifecycleOwner, SavedStateRegistryOwner {
+/**
+ * A ComposeView for a service-owned window, which has no activity to supply its lifecycle and saved state.
+ * A focusable window passes its keys to [onKey] first; true consumes the key.
+ */
+internal class OverlayView(
+    context: Context,
+    onKey: ((KeyEvent) -> Boolean)? = null,
+    content: @Composable () -> Unit,
+) : LifecycleOwner, SavedStateRegistryOwner {
     private val registry = LifecycleRegistry(this)
     private val saved = SavedStateRegistryController.create(this)
     override val lifecycle: Lifecycle get() = registry
     override val savedStateRegistry: SavedStateRegistry get() = saved.savedStateRegistry
 
-    val view: View = ComposeView(context).apply {
+    private val compose = ComposeView(context).apply {
         setViewTreeLifecycleOwner(this@OverlayView)
         setViewTreeSavedStateRegistryOwner(this@OverlayView)
         setContent { AfcTheme(content) }
+    }
+
+    val view: View = if (onKey == null) compose else object : FrameLayout(context) {
+        override fun dispatchKeyEvent(event: KeyEvent): Boolean = onKey(event) || super.dispatchKeyEvent(event)
+    }.apply {
+        setViewTreeLifecycleOwner(this@OverlayView)
+        setViewTreeSavedStateRegistryOwner(this@OverlayView)
+        addView(compose)
     }
 
     init {

@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Fire TV overlay: "Show over game" now shows a small semi-transparent top-right card (team total, freshness, sport) instead of the full-height side panel; with the new "Fantasy remote: hold Menu" accessibility switch on, holding ≡ for 0.7 s shows the card or opens a small menu (Expand to the side panel, switch league, Hide), while a short ≡ and every other key still go to the playing app (PR TBD).
 - Restyle the TV screens bold and colourful: a dark indigo-to-plum gradient backdrop, a floodlight-gold accent and 4 dp focus outlines, a distinct accent for NFL (green) and NBA (orange) on the panel header and sport toggles, a pink alert stripe, and a tighter type ramp. Loading states now show a centred animated loop with their label. Navigation and behavior are unchanged ([#150](https://github.com/1wgrumph/amazon-fantasy-companion/pull/150)).
 - Describe NBA support in the README and submission writeup ([PR #146](https://github.com/1wgrumph/amazon-fantasy-companion/pull/146)).
 - Restyle the TV screens with a charcoal and cool-blue palette, shared five-percent safe zone, readable type, and consistent focus rings and scale. Preserve existing D-pad navigation and app behavior. ([PR #143](https://github.com/1wgrumph/amazon-fantasy-companion/pull/143))
