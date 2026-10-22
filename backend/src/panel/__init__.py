@@ -17,6 +17,8 @@ advances on every lineup content change (including a change back and an
 empty/removal row), so distinct content never reuses a revision and a
 served revision never goes backwards for one profile/pair (every revision
 input is read strongly consistent, so no lagging replica serves an older one).
+The same high term adds each row's statistics asOf (epoch seconds), so a
+stats change advances the revision with no panel write on the read path.
 Projections write conditionally on the stored counter and re-read and
 merge on a lost race, so overlapping games never erase each other.
 
@@ -61,6 +63,26 @@ def player_statistics(athlete_id):
 
 def _parse(stamp):
     return datetime.fromisoformat(stamp.replace("Z", "+00:00"))
+
+
+def _asof_epoch(stamp):
+    """UTC epoch seconds inside the lineup scale, else 0.
+
+    The scale is 32 bits (through 2106-02-07). A stamp outside that range
+    cannot take part in the sum, or one lineup change could not outrun it.
+    """
+    if not isinstance(stamp, str):
+        return 0
+    try:
+        parsed = _parse(stamp)
+    except ValueError:
+        return 0
+    if parsed.utcoffset() is None:
+        return 0
+    epoch = int(parsed.timestamp())
+    if epoch < 0 or epoch >= 1 << 32:
+        return 0
+    return epoch
 
 
 def _pair(lineup):
@@ -267,6 +289,7 @@ def snapshot(profile_id, team_league):
     games, counter, projected = _stored(profile_id, team_league)
     rows, states, source_ids = [], [], []
     expired_finals = 0
+    asof_sum = 0
     if lineup and _pair(lineup) == team_league:
         if len(lineup.get("starters") or []) > MAX_ROWS:
             raise InvalidLineupError(
@@ -280,6 +303,8 @@ def snapshot(profile_id, team_league):
             source_ids.append(raw_id)
             espn_id = _espn_id(starter)
             record = player_statistics(espn_id) if espn_id else None
+            if record is not None:
+                asof_sum += _asof_epoch(record.get("asOf"))
             # The starter's current game is the latest projected game whose
             # events concern them (Panels games map). A statistics record
             # from an earlier game is not this game's points: fail closed.
@@ -334,15 +359,23 @@ def snapshot(profile_id, team_league):
     else:
         progress = {"value": None, "reason": "game progress unavailable", "source": None,
                     "asOf": None, "stale": True}
-    # lineupVersion (allocated by store.put_lineup at the write boundary)
-    # makes every lineup content change strictly advance this sum, so the
-    # low fields can never reuse or regress a revision. The x128 keeps
-    # every bump strictly above the fingerprint field (64) plus the
-    # expired-final count (at most MAX_ROWS), so read-time expiration
-    # advances the revision the TV consumes and stable rereads do not.
+    # High term (x128): counter, profile revision, lineupVersion and the
+    # sum of each row's statistics asOf in epoch seconds. asOf only moves
+    # forward on a record, and every row is in the sum, so any row's newer
+    # stamp advances the revision with no lineup, profile or counter change.
+    # The x128 keeps every +1 of that sum strictly above the fingerprint
+    # field (64) plus the expired-final count (at most MAX_ROWS), so
+    # read-time expiration still advances the revision and stable rereads
+    # do not. A lineup swap can replace every row with an older stamp and
+    # drop the sum by at most MAX_ROWS epochs. Epoch seconds fit in 32 bits
+    # through 2106-02-07, so lineupVersion is scaled by MAX_ROWS<<32 and
+    # one content change outruns that drop.
+    # shortcut: same-second stat edits and asOf outside 1970..2106-02-07 do not
+    # move the sum, raise the scale or store a high-water if those writes must advance
     current = _fingerprint(lineup) if lineup and _pair(lineup) == team_league else ""
     revision = (128 * ((counter or 0) + int(profile.get("revision", 0))
-                       + lineup_version)
+                       + lineup_version * (MAX_ROWS << 32)
+                       + asof_sum)
                 + 64 * (current != projected) + expired_finals)
     data = {"teamLeague": team_league, "scoringBasis": basis,
             "visible": bool((settings.get("panelPrefs") or {}).get("visible", True)),
