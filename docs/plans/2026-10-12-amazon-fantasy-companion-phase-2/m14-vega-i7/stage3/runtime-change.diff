@@ -1,0 +1,70 @@
+# run.py
+--- before/run.py.before	2026-10-21 13:39:47.920084569 -0500
++++ run.py	2026-10-21 13:40:24.420560914 -0500
+@@ -5,7 +5,8 @@
+ cfg=json.loads((B/'config.json').read_text());H=Path(cfg['home']);Q=Path(cfg['quarantine'])
+ def sha(p):
+  with Path(p).open('rb') as f:return hashlib.file_digest(f,'sha256').hexdigest()
+-def allowed_worktree(p):return p==H/'preparation-worktree' or p.is_relative_to(Path('<worktrees>')) and p!=Path('<worktrees>')
++W=Path(cfg['work_root'])
++def allowed_worktree(p):return p==H/'preparation-worktree' or p.is_relative_to(W) and p!=W or p.is_relative_to(Path('<worktrees>')) and p!=Path('<worktrees>')
+ assert not allowed_worktree(Path('/')) and not allowed_worktree(Path('<home>')) and allowed_worktree(H/'preparation-worktree')
+ if sys.argv[1:]==['--help']:
+  print('Usage: vega-sandbox.sh <worktree> -- <command...>\nRuns with a dedicated HOME, KVM, the worktree bound read-write at its original path, and an allowlisted HTTPS proxy. Logs: '+str(B.parent)+'/run-*/ (CONNECT and execve). No host credentials or real HOME are mounted.');sys.exit(0)
+@@ -20,7 +21,7 @@
+ exec(compile((B/'proxy.inc').read_text(),str(B/'proxy.inc'),'exec'))
+ listener=socket.socket(socket.AF_UNIX,socket.SOCK_STREAM);sock=Q/('p'+str(os.getpid())+'.sock');assert len(os.fsencode(sock))<108
+ listener.bind(str(sock));sock.chmod(0o600);listener.listen(32);threading.Thread(target=serve,args=(listener,),daemon=True).start()
+-argv=['/usr/bin/strace','-f','--kill-on-exit','-tt','-s','256','-e','trace=execve,execveat,connect,openat,unlink,unlinkat,rename,renameat','-o',str(run/'full.strace'),'/usr/bin/unshare','--user','--map-root-user','--net','--mount','--fork','/usr/bin/python3','-I','-S',str(B/'outer.py'),str(B),str(run),str(sock),str(worktree),json.dumps(sys.argv[3:])]
++argv=(['/usr/bin/aa-exec','-p',cfg['userns_apparmor_profile'],'--'] if cfg.get('userns_apparmor_profile') else [])+['/usr/bin/strace','-f','--kill-on-exit','-tt','-s','256','-e','trace=execve,execveat,connect,openat,unlink,unlinkat,rename,renameat','-o',str(run/'full.strace'),'/usr/bin/unshare','--user','--map-root-user','--net','--mount','--fork','/usr/bin/python3','-I','-S',str(B/'outer.py'),str(B),str(run),str(sock),str(worktree),json.dumps(sys.argv[3:])]
+ process=None
+ try:
+  with (run/'supervisor.stdout.jsonl').open('wb') as out,(run/'supervisor.stderr.txt').open('wb') as err:
+# outer.py
+--- before/outer.py.before	2026-10-21 13:53:04.314878560 -0500
++++ outer.py	2026-10-21 13:53:04.330721435 -0500
+@@ -118,6 +118,8 @@
+      s.sendto(q[:2]+struct.pack('!HHHHH',0x8180 if hit else 0x8183,1,1 if ans else 0,0,0)+qd+ans,peer)
+      glog('guest-dns.jsonl',{'name':name,'qtype':qtype,'answer':GA if ans else ('NOERROR-empty' if hit else 'NXDOMAIN')})
+     except Exception as error:glog('guest-dns.jsonl',{'error':type(error).__name__,'bytes':len(q)})
++  # Stage 3 fault switch: while run/tmp/afc-guest-forward-off exists (the inner /tmp), guest connections are refused and open ones closed.
++  FAULT=run/'tmp'/'afc-guest-forward-off'
+   def guest_forward(client):
+    up=socket.socket(socket.AF_UNIX,socket.SOCK_STREAM);row={'host':GH,'up':0,'down':0}
+    try:
+@@ -128,9 +130,15 @@
+      head+=b
+     row['proxy_status']=head.split(b'\r\n',1)[0].decode('ascii','replace')
+     if not head.startswith(b'HTTP/1.1 200'):return
++    idle=0
+     while True:
+-     ready,_,_=select.select([client,up],[],[],120)
+-     if not ready:return
++     ready,_,_=select.select([client,up],[],[],1)
++     if FAULT.exists():row['fault']='closed';return
++     if not ready:
++      idle+=1
++      if idle>=120:return
++      continue
++     idle=0
+      for src in ready:
+       data=src.recv(65536)
+       if not data:return
+@@ -139,7 +147,9 @@
+    finally:client.close();up.close();glog('guest-forward.jsonl',row)
+   def gf_accept(listener):
+    while True:
+-    client,_=listener.accept();threading.Thread(target=guest_forward,args=(client,),daemon=True).start()
++    client,_=listener.accept()
++    if FAULT.exists():client.close();glog('guest-forward.jsonl',{'host':GH,'fault':'refused'});continue
++    threading.Thread(target=guest_forward,args=(client,),daemon=True).start()
+   dns=socket.socket(socket.AF_INET,socket.SOCK_DGRAM);dns.bind(('127.0.0.1',53));threading.Thread(target=dns_loop,args=(dns,),daemon=True).start()
+   gl=socket.socket();gl.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1);gl.bind((GA,443));gl.listen(32);threading.Thread(target=gf_accept,args=(gl,),daemon=True).start()
+   report('guest_forward',host=GH,address=GA,dns='127.0.0.1:53')
+# sha256
+f64c562b6c864506bd3a9a197e9b23fba7f73d584c78792fd9837f659623222d  before/run.py.before
+8c3aca75aa726f35d6c143f998f5ccfa70a12a45114fe810760251cdccd4ad3d  run.py
+9f7d44c46e72cc318d0e65659e12019631c402c78d362ca51311540f6f006b43  before/outer.py.before
+7a48b1faf6290787bfc79da251ebb13867e003c84a3fc09f252a39c47793471c  outer.py
+b105500587b53917195d3c8bf8e0db364be48115ba256d1c120c0394357fb0f9  config.json
+fde6a4bf8d0562f7751d1a2d6cb9b417c4cfe107bbcb0aa3e9a24e125e348f48  ~/afc-tools/bin/node

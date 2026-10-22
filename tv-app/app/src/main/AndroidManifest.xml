@@ -7,6 +7,8 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
     <!-- AlertNotifier: heads-up notification on a high-importance channel (AFC-PR-015). -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- OverlayService: side panel and alert card drawn over the playing game. -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <uses-feature android:name="android.software.leanback" android:required="true" />
     <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
@@ -46,6 +48,11 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <service
             android:name=".alerts.AlertService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
+        <!-- Overlay host: refreshes the panel feed while its windows are over another app. -->
+        <service
+            android:name=".panel.OverlayService"
             android:exported="false"
             android:foregroundServiceType="dataSync" />
     </application>

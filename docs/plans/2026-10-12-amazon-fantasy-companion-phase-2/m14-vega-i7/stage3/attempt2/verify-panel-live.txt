@@ -1,0 +1,19 @@
+$ python3 vega-app/vvd-checks/verify-panel-live.py api-poll.jsonl device-readings.json
+PASS backend: in-game panel reads are 200, NBA, nbaPoints and the total changes
+PASS backend: changed panel rows carry a higher revision
+PASS device: every capture shows NBA · Points
+PASS device A1: shown total changes while the backend total changes (8 values)
+PASS device A2: shown total changes while the backend total changes (7 values)
+PASS device: during refused refreshes the held value re-renders with a growing stale label (R-3)
+exit=0
+
+$ python3 vega-app/vvd-checks/verify-panel-live.py ../api-poll.jsonl ../device-readings.json  (attempt 1, unchanged)
+PASS backend: in-game panel reads are 200, NBA, nbaPoints and the total changes
+FAIL backend: changed panel rows carry a higher revision
+PASS device: every capture shows NBA · Points
+FAIL device L1: shown total changes while the backend total changes (9 values)
+FAIL device L2a: shown total changes while the backend total changes (2 values)
+FAIL device L2b: shown total changes while the backend total changes (2 values)
+FAIL device L3: shown total changes while the backend total changes (4 values)
+PASS device: during refused refreshes the held value re-renders with a growing stale label (R-3)
+exit=1

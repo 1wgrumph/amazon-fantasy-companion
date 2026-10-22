@@ -1,0 +1,9 @@
+allprojects {
+    afterEvaluate {
+        if (path == ':app') {
+            android.sourceSets.androidTest.java.srcDir(rootProject.file('../evidence/tv-side-panel/repair/capture'))
+            android.sourceSets.androidTest.kotlin.srcDir(rootProject.file('../evidence/tv-side-panel/repair/capture'))
+            android.sourceSets.androidTest.manifest.srcFile(rootProject.file('../evidence/tv-side-panel/repair/capture/AndroidManifest.xml'))
+        }
+    }
+}

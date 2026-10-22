@@ -1,0 +1,12 @@
+Sandbox run: CONNECT destination class, proxy status, count. afc-dev = the one allowlisted API host; sdk-allowlisted-host = the existing SDK allowlist entries; example.com = the expected negative canary during the proofs.
+run-20261021T183953-e3bf6a63 | proof attempt 1 (user namespace denied before the aa-exec wrapper was restored) | no CONNECT (run ended before the proxy was used)
+run-20261021T184024-3ac6a799 | proof attempt 2 (node mount source missing) | no CONNECT (run ended before the proxy was used)
+run-20261021T184100-27d4c97d | containment proof | example.com DENIED x1, sdk-allowlisted-host ALLOWED x2
+run-20261021T184208-6a268723 | sandbox build | example.com DENIED x1, sdk-allowlisted-host ALLOWED x3
+run-20261021T184349-c97885fe | S1 first try (no Xvfb; stopped by the author) | no CONNECT (run ended before the proxy was used)
+run-20261021T184633-48583b6b | S1 link, pre-game panel, R-1 | afc-dev ALLOWED x1, example.com DENIED x1, incomplete-connect ERROR x1, sdk-allowlisted-host ALLOWED x62 | guest forwarder: {'forwarded': 1}
+run-20261021T185146-6e42cc8b | S2 guest-shell probe | afc-dev ALLOWED x2, example.com DENIED x1, incomplete-connect ERROR x1, sdk-allowlisted-host ALLOWED x13 | guest forwarder: {'forwarded': 2}
+run-20261021T185335-12e3d33f | S3 fault-switch rehearsal | afc-dev ALLOWED x3, example.com DENIED x1, incomplete-connect ERROR x1, sdk-allowlisted-host ALLOWED x13 | guest forwarder: {'closed': 2, 'refused': 476, 'forwarded': 1}
+run-20261021T231454-f61ad35b | L1 live Q1 + R-3 fault | afc-dev ALLOWED x4, example.com DENIED x1, incomplete-connect ERROR x1, sdk-allowlisted-host ALLOWED x48, sdk-allowlisted-host ERROR x1 | guest forwarder: {'forwarded': 3, 'closed': 1, 'refused': 740}
+run-20261021T232726-149425e6 | L2 live Q1, Save and relaunch | afc-dev ALLOWED x4, example.com DENIED x1, incomplete-connect ERROR x1, sdk-allowlisted-host ALLOWED x92 | guest forwarder: {'forwarded': 4}
+run-20261021T234912-3ef2c045 | L3 live Q2 | afc-dev ALLOWED x2, example.com DENIED x1, incomplete-connect ERROR x1, sdk-allowlisted-host ALLOWED x47 | guest forwarder: {'forwarded': 2}

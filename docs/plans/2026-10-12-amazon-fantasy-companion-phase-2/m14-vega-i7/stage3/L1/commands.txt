@@ -1,0 +1,67 @@
+sleep 20
+cap l1-00-top
+key DOWN 0.1
+key DOWN 0.1
+key DOWN 0.1
+key DOWN 0.1
+key DOWN 0.1
+key DOWN 0.1
+key DOWN 0.1
+key DOWN 0.1
+key DOWN 0.1
+key DOWN 0.1
+key DOWN 0.1
+key DOWN 0.1
+key DOWN 0.1
+key DOWN 0.1
+key DOWN 0.1
+key DOWN 0.1
+key DOWN 0.1
+key DOWN 0.1
+key DOWN 0.1
+key DOWN 0.1
+key DOWN 0.1
+key DOWN 0.1
+key DOWN 0.1
+key DOWN 0.1
+key DOWN 0.1
+key DOWN 0.1
+key DOWN 0.1
+key DOWN 0.1
+key DOWN 0.1
+key DOWN 0.1
+key DOWN 0.1
+key DOWN 0.1
+key DOWN 0.1
+key PAGEDOWN 2
+cap l1-01-live
+sleep 60
+cap l1-02-live
+sleep 60
+cap l1-03-live
+sleep 60
+cap l1-04-live
+sleep 60
+cap l1-05-live
+sleep 60
+cap l1-06-live
+sleep 60
+cap l1-07-live
+sleep 60
+cap l1-08-live
+sleep 60
+log l1-live
+cap l1-09-prefault
+netfault on
+sleep 40
+cap l1-10-fault40
+sleep 30
+cap l1-11-fault70
+sleep 30
+cap l1-12-fault100
+log l1-fault
+netfault off
+sleep 45
+cap l1-13-recovered
+log l1-recovered
+end
