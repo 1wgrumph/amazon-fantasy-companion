@@ -1,0 +1,102 @@
+.github/workflows/ci.yml: PASS
+...............fatal: not a git repository (or any of the parent directories): .git
+........fatal: not a git repository (or any of the parent directories): .git
+...........................................F.F......F...........................................
+======================================================================
+FAIL: test_hook_git_env_does_not_reach_sentinel_repo (test_gate_isolation.D1_HookEnvironmentIsolation.test_hook_git_env_does_not_reach_sentinel_repo)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/tools/ci/tests/test_gate_isolation.py", line 61, in test_hook_git_env_does_not_reach_sentinel_repo
+    self.assertEqual(rc, 0, out)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: 1 != 0 : gate: spec: PASS checks completed
+evidence/tv-side-panel/review.md:336:DOC-LINK
+evidence/tv-side-panel/review.md:336:DOC-LINK
+evidence/tv-side-panel/review.md:336:DOC-LINK
+evidence/tv-side-panel/review.md:338:DOC-LINK
+evidence/tv-side-panel/review.md:338:DOC-LINK
+evidence/tv-side-panel/review.md:342:DOC-LINK
+evidence/tv-side-panel/review.md:344:DOC-LINK
+evidence/tv-side-panel/review.md:346:DOC-LINK
+evidence/tv-side-panel/review.md:347:DOC-LINK
+evidence/tv-side-panel/review.md:348:DOC-LINK
+gate: docs: FAIL check exit 1
+.github/workflows/ci.yml: PASS
+gate: hygiene: PASS checks completed
+gate: tvapp: PASS no tv-app/ tree
+gate: backend: PASS no backend/ tree
+Installed 1 package in 1ms
+Installed 1 package in 2ms
+Installed 1 package in 2ms
+..
+----------------------------------------------------------------------
+Ran 2 tests in 0.011s
+
+OK
+
+
+======================================================================
+FAIL: test_already_pushed_commits_are_not_rechecked (test_gate_scope.PrePushScope.test_already_pushed_commits_are_not_rechecked)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/tools/ci/tests/test_gate_scope.py", line 186, in test_already_pushed_commits_are_not_rechecked
+    self.assertEqual(rc, 0, out)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: 1 != 0 : evidence/tv-side-panel/review.md:336:DOC-LINK
+evidence/tv-side-panel/review.md:336:DOC-LINK
+evidence/tv-side-panel/review.md:336:DOC-LINK
+evidence/tv-side-panel/review.md:338:DOC-LINK
+evidence/tv-side-panel/review.md:338:DOC-LINK
+evidence/tv-side-panel/review.md:342:DOC-LINK
+evidence/tv-side-panel/review.md:344:DOC-LINK
+evidence/tv-side-panel/review.md:346:DOC-LINK
+evidence/tv-side-panel/review.md:347:DOC-LINK
+evidence/tv-side-panel/review.md:348:DOC-LINK
+gate: docs: FAIL check exit 1
+.github/workflows/ci.yml: PASS
+gate: hygiene: PASS checks completed
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+OK
+
+
+======================================================================
+FAIL: test_staged_docs_only_change_ignores_unstaged_and_untracked_product_files (test_gate_scope.StagedScope.test_staged_docs_only_change_ignores_unstaged_and_untracked_product_files)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/tools/ci/tests/test_gate_scope.py", line 113, in test_staged_docs_only_change_ignores_unstaged_and_untracked_product_files
+    self.assertEqual(rc, 0, out)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: 1 != 0 : evidence/tv-side-panel/review.md:336:DOC-LINK
+evidence/tv-side-panel/review.md:336:DOC-LINK
+evidence/tv-side-panel/review.md:336:DOC-LINK
+evidence/tv-side-panel/review.md:338:DOC-LINK
+evidence/tv-side-panel/review.md:338:DOC-LINK
+evidence/tv-side-panel/review.md:342:DOC-LINK
+evidence/tv-side-panel/review.md:344:DOC-LINK
+evidence/tv-side-panel/review.md:346:DOC-LINK
+evidence/tv-side-panel/review.md:347:DOC-LINK
+evidence/tv-side-panel/review.md:348:DOC-LINK
+gate: docs: FAIL check exit 1
+.github/workflows/ci.yml: PASS
+gate: hygiene: PASS checks completed
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+OK
+
+
+----------------------------------------------------------------------
+Ran 119 tests in 332.673s
+
+FAILED (failures=3)
+mutation adapter exit=3: ['GAP REPORT_INCOMPLETE: mutmut stats absent']
+mutation adapter exit=0: ['PASS mutation score 100.00% (threshold 70%)']
+coverage adapter exit=0: ['PASS changed-line coverage 100% (threshold 90%)']
+coverage adapter exit=3: ['GAP REPORT_INCOMPLETE: unmapped changed files: backend/src/control.py']
+gate: hygiene: FAIL check exit 1
+
+EXIT_CODE=1

@@ -1,6 +1,8 @@
 package com.afc.companion
 
+import android.app.Activity
 import android.os.Bundle
+import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
@@ -9,6 +11,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -28,6 +31,7 @@ import com.afc.companion.link.LinkView
 import com.afc.companion.net.ApiClient
 import com.afc.companion.net.SessionStore
 import com.afc.companion.panel.LineupPanel
+import com.afc.companion.panel.OverlayServiceControl
 import com.afc.companion.panel.panelModeFor
 import com.afc.companion.profile.ProfileSettingsScreen
 import com.afc.companion.profile.ProfileStore
@@ -62,6 +66,31 @@ private fun NotConfigured() {
     }
 }
 
+/**
+ * Toggles the side panel over the game, then returns to the app that was playing. Without the
+ * overlay permission it stays here: Android's switch opens, and the manual steps show in case
+ * Fire OS has no such screen.
+ */
+@Composable
+private fun ShowOverGame() {
+    val context = LocalContext.current
+    val overlay = remember(context) { OverlayServiceControl(context) }
+    var needsPermission by remember { mutableStateOf(false) }
+    Button(onClick = {
+        overlay.toggle()
+        needsPermission = !Settings.canDrawOverlays(context)
+        if (!needsPermission) (context as? Activity)?.moveTaskToBack(true)
+    }) { Text("Show over game") }
+    if (needsPermission) {
+        Text(
+            "Allow Companion to display over other apps, then press Show over game again.\n" +
+                "Settings > Applications > Special app access > Display over other apps.",
+            modifier = Modifier.widthIn(max = 280.dp),
+            style = MaterialTheme.typography.bodyMedium,
+        )
+    }
+}
+
 @Composable
 private fun AppShell(shell: Shell, client: ApiClient, sessions: SessionStore) {
     var destination by remember { mutableStateOf(shell.start(sessions.token() != null)) }
@@ -77,6 +106,7 @@ private fun AppShell(shell: Shell, client: ApiClient, sessions: SessionStore) {
             Destination.entries.forEach { target ->
                 Button(onClick = { destination = target }) { Text(target.label) }
             }
+            ShowOverGame()
         }
         Box(Modifier.weight(1f).fillMaxSize()) {
             CompositionLocalProvider(LocalTvSafeZoneApplied provides true) {

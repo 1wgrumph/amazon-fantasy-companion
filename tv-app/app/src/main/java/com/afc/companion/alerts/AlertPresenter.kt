@@ -101,7 +101,7 @@ object AlertPresenter {
     private const val MAX_CONTEXT_LENGTH = 80
     private const val MAX_COMMENTARY_LENGTH = 240
 
-    private fun isUnsafe(value: String): Boolean = unsafeClaim.containsMatchIn(
+    internal fun isUnsafe(value: String): Boolean = unsafeClaim.containsMatchIn(
         value.replace(Regex("[^\\p{L}\\p{N}]+"), " ").trim(),
     )
 

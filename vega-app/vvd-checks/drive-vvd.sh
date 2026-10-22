@@ -1,7 +1,7 @@
 #!/bin/bash
 # Remote-driven VVD session for the online features (Stage 2c). Starts the VVD, installs and launches the app, then runs
 # the lines appended to <evidence-dir>/commands.txt, one per line:
-#   key NAME [SECONDS] | cap NAME | log NAME | sleep SECONDS | relaunch | panel | end
+#   key NAME [SECONDS] | cap NAME | log NAME | sleep SECONDS | guest NAME SHELL-TEXT | netfault on|off | relaunch | panel | end
 # "panel" scrolls below Save profile, then captures twice and logs; verify with verify-panel-default.py on the host.
 # Each executed line goes to done.txt. Ends on "end" or after 600 s without a new line, then stops the VVD.
 . "$(dirname "$0")/lib.sh" "$1"
@@ -24,6 +24,11 @@ while [ "$idle" -lt 600 ]; do
       sleep 10
       cap panel-default-held
       logs panel-default ;;
+    guest) # guest NAME SHELL-TEXT: one guest dev-shell command (Stage 3 uses it to take guest networking down and up)
+      step "guest-$n-$arg" vega device run-cmd -d "$DEV" --command "$extra" ;;
+    netfault) # netfault on|off: the sandbox guest forwarder refuses afc-dev while /tmp/afc-guest-forward-off exists
+      if [ "$arg" = on ]; then step "netfault-$n-on" touch /tmp/afc-guest-forward-off
+      else step "netfault-$n-off" rm -f /tmp/afc-guest-forward-off; fi ;;
     relaunch)
       step "terminate-$n" vega device terminate-app -d "$DEV" -a "$APP"
       sleep 2

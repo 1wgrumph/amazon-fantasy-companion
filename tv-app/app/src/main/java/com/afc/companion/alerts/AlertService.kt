@@ -17,6 +17,7 @@ import com.afc.companion.MonitorControl
 import com.afc.companion.net.Alert
 import com.afc.companion.net.ApiClient
 import com.afc.companion.net.SessionStore
+import com.afc.companion.panel.OverlayServiceControl
 import com.afc.companion.profile.Presentation
 import com.afc.companion.profile.ProfileState
 import com.afc.companion.profile.ProfileStore
@@ -61,6 +62,8 @@ class AlertService : Service() {
             stopSelf(startId)
             return START_NOT_STICKY
         }
+        // Alert cards appear over the game even when the side panel was never opened; never fatal to monitoring.
+        runCatching { OverlayServiceControl(this).startAlerts() }
         if (polling?.isActive == true) return START_STICKY
         startForeground()
         val activeFeed = AlertFeed(client, alertFeedMemory(this)).also { feed = it }
@@ -87,6 +90,7 @@ class AlertService : Service() {
     override fun onDestroy() {
         scope.cancel()
         AlertInbox.attach(null)
+        runCatching { OverlayServiceControl(this).stopAlerts() }
         super.onDestroy()
     }
 
