@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- One profile keeps every league lineup in its Lineups row, keyed by team/league, so a write for one league leaves the others in place (PR TBD).
 - Restyle the TV screens bold and colourful: a dark indigo-to-plum gradient backdrop, a floodlight-gold accent and 4 dp focus outlines, a distinct accent for NFL (green) and NBA (orange) on the panel header and sport toggles, a pink alert stripe, and a tighter type ramp. Loading states now show a centred animated loop with their label. Navigation and behavior are unchanged ([#150](https://github.com/1wgrumph/amazon-fantasy-companion/pull/150)).
 - Describe NBA support in the README and submission writeup ([PR #146](https://github.com/1wgrumph/amazon-fantasy-companion/pull/146)).
 - Restyle the TV screens with a charcoal and cool-blue palette, shared five-percent safe zone, readable type, and consistent focus rings and scale. Preserve existing D-pad navigation and app behavior. ([PR #143](https://github.com/1wgrumph/amazon-fantasy-companion/pull/143))

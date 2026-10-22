@@ -62,9 +62,9 @@ def monitoring_profiles():
     while True:
         page = _table("PROFILES_TABLE").scan(**scan)
         for profile in page["Items"]:
-            lineup = get_lineup(profile["profileId"]) or {}
+            lineups, _version = get_lineups(profile["profileId"])
             profiles.append({"settings": profile.get("settings", {}),
-                             "starters": lineup.get("starters", [])})
+                             "starters": _union_starters(lineups)})
         if "LastEvaluatedKey" not in page:
             return profiles
         scan["ExclusiveStartKey"] = page["LastEvaluatedKey"]
@@ -173,12 +173,13 @@ def list_alerts(profile_id, after, limit, include_after=False):
     return _table("ALERTS_TABLE").query(KeyConditionExpression=condition, Limit=limit)["Items"]
 
 
-# Lineups: profile, source, starters, scoring basis.
-# lineupVersion is a store-allocated monotonic content version: it advances
-# on every content change (including a change back and an empty/removal
-# row, which is the retained tombstone) and is preserved on an identical
-# rewrite. get_lineup hides it so the stored Lineup shape is unchanged;
-# panel reads it through get_lineup_version.
+# Lineups: one row per profile. `lineups` is keyed by "<league>/<team>".
+# lineupVersion stays one row-level CAS counter: it advances when any pair's
+# content changes (including a change back and an empty-starter pair) and is
+# preserved on an identical rewrite of that pair. A legacy top-level row reads
+# as its one lineup and migrates into the map on the next paired write.
+# A write with no league/team is the existing removal row: it clears the map.
+# A paired write never drops another pair. get_lineup hides lineupVersion.
 _LINEUP_FIELDS = {"profileId", "source", "sport", "team", "league", "starters", "scoring",
                   "updatedAt"}
 _LINEUP_CONTENT = ("source", "sport", "team", "league", "starters", "scoring")
@@ -188,6 +189,58 @@ def _lineup_row(profile_id):
     # Strongly consistent: a lagging replica would serve a lower lineupVersion.
     return _table("LINEUPS_TABLE").get_item(
         Key={"profileId": profile_id}, ConsistentRead=True).get("Item")
+
+
+def _pair_key(item):
+    league, team = item.get("league"), item.get("team")
+    if league and team:
+        return f"{league}/{team}"
+    return ""
+
+
+def _lineups(row):
+    """Pair -> lineup content. A legacy row is one pair, "" when it has no pair."""
+    if not row:
+        return {}
+    if "lineups" in row:
+        return {key: dict(value) for key, value in row["lineups"].items()}
+    content = {key: value for key, value in row.items()
+               if key not in ("profileId", "lineupVersion")}
+    if not (set(content) - {"updatedAt"}):
+        return {}
+    return {_pair_key(row): content}
+
+
+def _content_view(entry):
+    return tuple(None if entry is None else entry.get(field) for field in _LINEUP_CONTENT)
+
+
+def _sole_entry(lineups):
+    real = [value for key, value in lineups.items() if key]
+    if len(real) == 1:
+        return real[0]
+    if not real and len(lineups) == 1:
+        return next(iter(lineups.values()))
+    return None
+
+
+def _public_lineup(profile_id, entry):
+    if not entry or not (set(entry) - {"updatedAt"}):
+        return None
+    return {"profileId": profile_id, **entry}
+
+
+def _union_starters(lineups):
+    starters, seen = [], set()
+    for entry in lineups.values():
+        for starter in entry.get("starters") or []:
+            key = starter.get("athlete_id") or starter.get("player_key") if isinstance(starter, dict) else None
+            if key is not None:
+                if key in seen:
+                    continue
+                seen.add(key)
+            starters.append(starter)
+    return starters
 
 
 MAX_STARTERS = 32  # frozen panel row bound the TV decoder enforces
@@ -209,48 +262,84 @@ def _check_starters(item):
 
 
 def put_lineup(lineup):
-    """Store a lineup and return the content version allocated by its successful CAS."""
+    """Store one pair and return the row content version allocated by its CAS.
+
+    A paired write leaves every other pair as stored. A write with no league
+    and team is the existing removal row and clears the map.
+    """
     item = _shaped(dict(lineup), _LINEUP_FIELDS | {"lineupVersion"})
     item.pop("lineupVersion", None)  # allocated here, never caller-supplied
     _check_starters(item)
+    pair = _pair_key(item)
     table = _table("LINEUPS_TABLE")
     for _attempt in range(3):
         current = _lineup_row(item["profileId"])
         version = int(current.get("lineupVersion", 0)) if current else 0
-        unchanged = (current is not None and "lineupVersion" in current and all(
-            current.get(field) == item.get(field) for field in _LINEUP_CONTENT))
-        item["lineupVersion"] = version if unchanged else version + 1
+        stored = _lineups(current)
+        stored.pop("", None)  # a paired write drops the legacy pairless entry
+        if pair:
+            entry = {key: value for key, value in item.items() if key != "profileId"}
+            unchanged = (current is not None and "lineupVersion" in current
+                         and _content_view(stored.get(pair)) == _content_view(entry))
+            if not unchanged:
+                stored[pair] = entry
+        else:
+            unchanged = current is not None and "lineupVersion" in current and not stored
+            stored = {}
+        new_version = version if unchanged else version + 1
+        row = {"profileId": item["profileId"], "lineupVersion": new_version}
+        if stored:
+            row["lineups"] = stored
+        if pair:
+            # Last write picks the default panel when several pairs exist and
+            # settings name none. An unchanged rewrite still moves it.
+            row["activePair"] = pair
+        updated_at = item.get("updatedAt") or (current or {}).get("updatedAt")
+        if updated_at and stored:
+            row["updatedAt"] = updated_at
         if current is None:
             condition = Attr("profileId").not_exists()
         elif "lineupVersion" in current:
             condition = Attr("lineupVersion").eq(version)
         else:
             condition = Attr("lineupVersion").not_exists()
-        if _written(table.put_item, Item=item, ConditionExpression=condition):
-            return item["lineupVersion"]
+        if _written(table.put_item, Item=row, ConditionExpression=condition):
+            return new_version
     raise RuntimeError(f"lineup write for {item['profileId']} kept losing races")
 
 
-def _without_version(row):
-    if row is None or not (set(row) - {"profileId", "lineupVersion", "updatedAt"}):
-        return None
-    return {key: value for key, value in row.items() if key != "lineupVersion"}
+def _lineup_view(profile_id):
+    """One consistent read: (lineups, lineupVersion, last written pair or None)."""
+    row = _lineup_row(profile_id)
+    if not row:
+        return {}, 0, None
+    return _lineups(row), int(row.get("lineupVersion", 0)), row.get("activePair")
 
 
-def get_lineup(profile_id):
-    return _without_version(_lineup_row(profile_id))
+def get_lineups(profile_id):
+    """One consistent read: ({"<league>/<team>": lineup}, lineupVersion)."""
+    lineups, version, _active = _lineup_view(profile_id)
+    return lineups, version
+
+
+def get_lineup(profile_id, team_league=None):
+    """One pair, or the sole lineup when team_league is omitted."""
+    lineups, _version, _active = _lineup_view(profile_id)
+    entry = lineups.get(team_league) if team_league is not None else _sole_entry(lineups)
+    return _public_lineup(profile_id, entry)
 
 
 def get_lineup_version(profile_id):
     """Monotonic lineup content version; 0 for no row or a legacy row."""
-    row = _lineup_row(profile_id)
-    return int(row.get("lineupVersion", 0)) if row else 0
+    _lineups_map, version, _active = _lineup_view(profile_id)
+    return version
 
 
-def get_lineup_with_version(profile_id):
+def get_lineup_with_version(profile_id, team_league=None):
     """Single-read (lineup or None, monotonic lineupVersion) so snapshot never tears."""
-    row = _lineup_row(profile_id)
-    return _without_version(row), (int(row.get("lineupVersion", 0)) if row else 0)
+    lineups, version, _active = _lineup_view(profile_id)
+    entry = lineups.get(team_league) if team_league is not None else _sole_entry(lineups)
+    return _public_lineup(profile_id, entry), version
 
 
 # Panels: profile, team/league, PanelState.

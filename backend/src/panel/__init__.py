@@ -242,53 +242,66 @@ def project(game_event, matches):
              # Internal only (never in the wire games map): which starters this
              # game concerns, so snapshot can tell a starter's current game.
              "playerIds": [str(p) for p in game_event.get("playerIds") or []]}
+    event_sport = game_event.get("sport") or "nfl"
     for match in matches:
         profile_id = match["profileId"]
         _, settings = _settings(profile_id)
-        lineup = store.get_lineup(profile_id)
-        _basis(lineup, settings)  # refuse an unknown preset before storing anything
-        if not lineup:
-            continue
-        team_league = _pair(lineup)
-        if not team_league:
-            continue  # no pair, no panel key
-        fingerprint = _fingerprint(lineup)
-        # Conditional write on the counter we read: a lost race re-reads and
-        # re-decides against the winner's games instead of erasing them.
-        for _attempt in range(3):
-            games, counter, _projected = _stored(profile_id, team_league)
-            current = games.get(game_event["gameId"])
-            replace = (current is None
-                       or (current["eventId"] == facts["eventId"]
-                           and facts["revision"] > int(current["revision"]))
-                       or (current["eventId"] != facts["eventId"]
-                           and str(facts["eventTime"] or "") > str(current.get("eventTime") or "")))
-            if not replace:
-                break
-            if current is not None:  # a starter stays linked to the game all game long
-                facts = dict(facts, playerIds=sorted(
-                    set(facts["playerIds"]) | {str(p) for p in current.get("playerIds") or []}))
-            if (counter or 0) >= MAX_PROJECTION_COUNTER:
-                raise RuntimeError("panel projection counter exhausted")
-            panel = {"profileId": profile_id, "teamLeague": team_league,
-                     "freshness": {"games": dict(games, **{game_event["gameId"]: facts}),
-                                   "counter": (counter or 0) + 1, "lineup": fingerprint},
-                     "updatedAt": now()}
-            if store.put_panel_conditional(panel, counter):
-                break
-        else:
-            raise RuntimeError(f"panel projection for {profile_id} kept losing races")
+        lineups, _version = store.get_lineups(profile_id)
+        targets = []
+        for team_league, entry in lineups.items():
+            if not team_league:
+                continue  # no pair, no panel key
+            lineup = dict(entry, profileId=profile_id)
+            if (lineup.get("sport") or "nfl") != event_sport:
+                continue
+            _basis(lineup, settings)  # refuse an unknown preset before storing anything
+            targets.append((team_league, _fingerprint(lineup)))
+        for team_league, fingerprint in targets:
+            # Conditional write on the counter we read: a lost race re-reads and
+            # re-decides against the winner's games instead of erasing them.
+            pair_facts = dict(facts)
+            for _attempt in range(3):
+                games, counter, _projected = _stored(profile_id, team_league)
+                current = games.get(game_event["gameId"])
+                replace = (current is None
+                           or (current["eventId"] == pair_facts["eventId"]
+                               and pair_facts["revision"] > int(current["revision"]))
+                           or (current["eventId"] != pair_facts["eventId"]
+                               and str(pair_facts["eventTime"] or "") > str(current.get("eventTime") or "")))
+                if not replace:
+                    break
+                if current is not None:  # a starter stays linked to the game all game long
+                    pair_facts = dict(pair_facts, playerIds=sorted(
+                        set(pair_facts["playerIds"]) | {str(p) for p in current.get("playerIds") or []}))
+                if (counter or 0) >= MAX_PROJECTION_COUNTER:
+                    raise RuntimeError("panel projection counter exhausted")
+                panel = {"profileId": profile_id, "teamLeague": team_league,
+                         "freshness": {"games": dict(games, **{game_event["gameId"]: pair_facts}),
+                                       "counter": (counter or 0) + 1, "lineup": fingerprint},
+                         "updatedAt": now()}
+                if store.put_panel_conditional(panel, counter):
+                    break
+            else:
+                raise RuntimeError(f"panel projection for {profile_id} kept losing races")
 
 
 def snapshot(profile_id, team_league):
     """GET /v1/panel body: enveloped PanelState with scoring basis."""
     profile, settings = _settings(profile_id)
-    lineup, lineup_version = store.get_lineup_with_version(profile_id)
+    lineups, lineup_version, active_pair = store._lineup_view(profile_id)
     if team_league is None:
         selected = settings.get("teamLeague") or {}
-        team_league = (f"{selected['league']}/{selected['team']}"
-                       if selected.get("league") and selected.get("team")
-                       else _pair(lineup) or "unassigned/unassigned")
+        real = [key for key in lineups if key]
+        if selected.get("league") and selected.get("team"):
+            team_league = f"{selected['league']}/{selected['team']}"
+        elif len(real) == 1:
+            team_league = real[0]
+        elif active_pair in lineups:
+            team_league = active_pair
+        else:
+            team_league = "unassigned/unassigned"
+    entry = lineups.get(team_league)
+    lineup = dict(entry, profileId=profile_id) if entry else None
     basis, table = _basis(lineup, settings)
     games, counter, projected = _stored(profile_id, team_league)
     rows, states, source_ids = [], [], []

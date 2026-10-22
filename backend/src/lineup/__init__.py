@@ -1,6 +1,7 @@
 """DES-AFC-P2-LINEUP lineup sources (Yahoo read-only or labeled manual) and scoring presets.
 
-One stored Lineups row per profile is the one active source (AFC-PR-007).
+One stored Lineups row per profile holds one active source per team/league
+(AFC-PR-007). With no pair, the sole stored lineup is that source.
 Manual rows score under the profile's preset (default Half-PPR); Yahoo rows
 carry the Yahoo league scoring verbatim (AFC-PR-065).
 """
@@ -16,11 +17,11 @@ def _preset_label(stored):
     return labels[stored]
 
 
-def active_lineup(profile_id):
-    """The profile's one active Lineup (source, team, league, starters, scoring), or None."""
+def active_lineup(profile_id, team_league=None):
+    """One pair's Lineup, or the sole Lineup when team_league is omitted. None if absent."""
     if not isinstance(profile_id, str) or not profile_id:
         raise ValueError("profile_id must be a non-empty string")
-    row = store.get_lineup(profile_id)
+    row = store.get_lineup(profile_id, team_league)
     if row is None:
         return None
     source = row.get("source")
