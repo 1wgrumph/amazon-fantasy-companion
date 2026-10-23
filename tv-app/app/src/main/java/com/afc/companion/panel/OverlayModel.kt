@@ -279,7 +279,7 @@ class AlertCardQueue {
         shownAtMs = nowMs
     }
 
-    companion object { const val SHOW_MS = 5_000L }
+    companion object { const val SHOW_MS = 10_000L } // owner 2026-10-23: alert cards stay up 10 s
 }
 
 /**

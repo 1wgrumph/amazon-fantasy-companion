@@ -84,12 +84,12 @@ class AlertCardContractTest {
         assertEquals("event-nba-1", overlayCall(card, "getWatchEventId"))
     }
 
-    @Test fun cardAutoDismissesAtFiveSecondsWithoutInput() {
+    @Test fun cardAutoDismissesAtTenSecondsWithoutInput() {
         val q = queue()
         offer(q, notice(), 10_000)
-        advance(q, 14_999)
+        advance(q, 19_999)
         assertEquals("nba-1", id(q))
-        advance(q, 15_000)
+        advance(q, 20_000)
         assertNull(current(q))
     }
 
@@ -99,16 +99,16 @@ class AlertCardContractTest {
         offer(q, notice("nfl-2", "Receiver", 6.5, "NFL"), 1_000)
         offer(q, notice("nba-3"), 2_000)
         assertEquals("nba-1", id(q))
-        advance(q, 4_999)
+        advance(q, 9_999)
         assertEquals("nba-1", id(q))
-        advance(q, 5_000)
+        advance(q, 10_000)
         assertEquals("nfl-2", id(q))
         assertEquals("NFL", overlayCall(checkNotNull(current(q)), "getSport"))
-        advance(q, 9_999)
+        advance(q, 19_999)
         assertEquals("nfl-2", id(q))
-        advance(q, 10_000)
+        advance(q, 20_000)
         assertEquals("nba-3", id(q))
-        advance(q, 15_000)
+        advance(q, 30_000)
         assertNull(current(q))
     }
 
@@ -116,9 +116,9 @@ class AlertCardContractTest {
         val q = queue()
         offer(q, notice(), 0)
         offer(q, notice(value = 21.0), 4_000)
-        advance(q, 5_000)
+        advance(q, 10_000)
         assertNull(current(q))
-        offer(q, notice(value = 22.0), 6_000)
+        offer(q, notice(value = 22.0), 11_000)
         assertNull("same ID stays deduplicated after dismissal", current(q))
     }
 
@@ -127,21 +127,21 @@ class AlertCardContractTest {
         offer(q, notice("first"), 0)
         offer(q, notice("second"), 1_000)
         offer(q, notice("second"), 2_000)
-        advance(q, 5_000)
-        assertEquals("second", id(q))
         advance(q, 10_000)
+        assertEquals("second", id(q))
+        advance(q, 20_000)
         assertNull(current(q))
     }
 
-    @Test fun delayedTimerStillGivesTheNextQueuedCardFiveSeconds() {
+    @Test fun delayedTimerStillGivesTheNextQueuedCardTenSeconds() {
         val q = queue()
         offer(q, notice("first"), 0)
         offer(q, notice("second"), 1_000)
         advance(q, 100_000)
         assertEquals("second", id(q))
-        advance(q, 104_999)
+        advance(q, 109_999)
         assertEquals("second", id(q))
-        advance(q, 105_000)
+        advance(q, 110_000)
         assertNull(current(q))
     }
 

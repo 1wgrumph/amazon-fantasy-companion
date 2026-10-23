@@ -326,13 +326,12 @@ internal fun PanelContent(
     }
 }
 
-/** "Total 121.8" in the brand gold with the game clock beside it. */
+/** "Total 121.8" in the brand gold with the game clock on its own line below, so a wide total never overlaps it. */
 @Composable
 private fun ScoreLine(snapshot: PanelSnapshot, clock: String?, size: Float) {
-    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+    Column(Modifier.fillMaxWidth()) {
         Text(
             "Total ${PanelText.points(snapshot.teamTotal)}",
-            modifier = Modifier.weight(1f),
             maxLines = 1,
             softWrap = false,
             style = TextStyle(fontSize = size.sp, fontWeight = FontWeight.Black, color = Color(TvPalette.primaryArgb), fontFeatureSettings = "tnum"),
