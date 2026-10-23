@@ -1,150 +1,20 @@
-# Demo video plan — Amazon Fantasy Companion
+# AZ Fantasy — demo voiceover
 
-Slice P2-D05, issue [#50](https://github.com/1wgrumph/amazon-fantasy-companion/issues/50).
-Governing criterion: `AC-AFC-P2-SUB-02` (technical plan §Submission).
-Capture itself is P2-X12 (M13, on the final APK from P2-L05); this document
-is the plan. M12 documents are due 2026-10-22T16:00:00Z (RISK-AFC-P2-14).
-Submission deadline `T_deadline` is 2026-10-23T19:00:00Z; judge access runs
-through `T_judge_access` 2026-11-20.
+Target runtime: **2:20**. Read the narration column aloud; allow pauses for the alerts and remote actions. Live examples are from October 22, 2026, with manual lineups. The owner films the remote controls and records the narration, then assembles and submits the video. The remote shots below are planned captures, not claims that those shots are already recorded.
 
-## Duration
+| Time | On-screen shot | Narration |
+|---|---|---|
+| 0:00–0:12 | Hook: AZ Fantasy title, then the clean corner card over the watching scene. | I'm watching football, but my fantasy teams aren't all playing in this game. AZ Fantasy keeps them here on the TV with me. |
+| 0:12–0:35 | Watching with the small card. Hold on the legible “NE @ CHI” card, fourth-quarter clock, total 90.0 and D. Maye 26.6. Caption: “Live run · October 22, 2026 · Manual lineup.” | This is our Fire TV companion. The small card shows my fantasy team while the game stays on. I can check the total and a player's points without reaching for my phone. These lineups are entered manually today. |
+| 0:35–0:55 | D. Maye alert. Keep “D. Maye · SCORE” legible. Caption: “NFL alert · Live run.” | Here's Drake Maye's scoring alert during Thursday Night Football on Prime Video. This came from the live run, recorded on the stick itself. Right now, alerts arrive about seventy to ninety seconds after the play. Reducing that delay is next. |
+| 0:55–1:23 | Cross-sport moment: “C. Holmgren · SCORE” from DEN @ OKC while the NFL game remains the watching context. Caption: “NBA alert during NFL · Live run.” | Now watch the next alert. That's Chet Holmgren, playing basketball for Oklahoma City, while I'm still watching football. AZ Fantasy follows the players on my fantasy teams across NFL and NBA, whatever game is on screen. This is the moment we built it for: an update from another sport without leaving the game I'm watching. |
+| 1:23–1:41 | Owner films a double-tap of ≡ and the resulting team switch. Keep both the input and changed card clear. | To switch teams, I double-tap the menu button on the remote. The card changes teams, and I stay with the game. |
+| 1:41–1:51 | Owner films holding ≡. Show the menu with Expand / League / Hide. | Holding that same button opens the menu. I can expand the card, choose a league, or hide it. |
+| 1:51–2:10 | Owner selects Expand. Show the larger lineup panel; use the “NBA · CLE @ PHI · Total 195.3” view if available in the new capture. | Expand gives me a larger view of the lineup when I want more detail. The controls are on the remote, and the game stays part of the experience. We're still refining the UI after testing it during the live game. |
+| 2:10–2:20 | Close on the corner card, then AZ Fantasy title. | AZ Fantasy: watch the game, keep your fantasy team in view. Next, we're reducing the delay and finishing the approved Yahoo connection setup. |
 
-Filmable-today shot list: 12 + 22 + 28 + 30 + 32 + 18 + 14 = **156 s**
-(2 min 36 s). That is 14 s under the 170 s (2 min 50 s) plan limit and
-24 s under the under-3-minute public-video rule. PENDING swap-ins below
-reuse the duration of the shot they replace, so those versions stay at
-156 s. One further segment is planned, not filmed today: an on-stick NBA
-panel capture for the 2026-10-21 ESPN games, at most 14 s, AFC UI only.
-Including it reaches at most 170 s and stays under 3 minutes. No other
-shot is added.
+The private clip list holds the source filenames, offsets and visual checks. It also includes the A. Gordon alert as an alternate NBA shot. Keep it and all source media outside the public repository.
 
-## Rules for every shot
+For the edit, retain the alert long enough to read it and label cuts between different moments; the two alerts were not seconds apart. Keep provider footage private; use a crop or mask to isolate the companion UI over a neutral background for the submission edit, with the watching context described in narration and captions. Never imply that a masked or black provider surface means playback stopped. Prime Video blocks screenshots on some frames.
 
-- Source is one of exactly: **on-device capture** or **labeled replay**.
-  A labeled replay is labeled on screen as replay; it never stands in
-  for live notification or provider behavior evidence.
-- No shot claims behavior with no passing evidence. Where the target
-  behavior failed its spike, the shot shows the honest fallback and the
-  narration states the limit.
-- No live Yahoo API data is shown or implied; the lineup source on screen
-  is manual entry, labeled manual (SP-6 FAILS). The planned NBA panel
-  segment follows the same rule.
-- No account details, credentials, or device addresses appear on screen.
-- Fire OS on the owner's stick (AFTKM, Fire OS 8.1.8.5 / API 30) is the
-  primary target. Vega is a paused stretch compatibility target only
-  (owner direction, 2026-10-20; RISK-AFC-P2-14): it is named in the
-  closing narration as a paused stretch with stated limits, never shown
-  as delivered, and no Vega footage is planned.
-
-## Protected-video limitation (RISK-AFC-P2-09)
-
-Provider video uses secure surfaces. On-device `adb` screencap or
-screenrecord of provider playback may return black or blank frames, so
-**this plan does not claim capturable provider video**. SP-3 desk
-evidence shows exactly this: playback state is evidenced, the picture
-itself is a black secure surface (`spikes/sp3-provider-links/VERDICT.md`).
-
-`OD-AFC-P2-02` is decided as option B (DEC-AFC-OD-P2-02-B-20261020,
-2026-10-20). The demo and evidence use companion-UI captures only.
-Option A was declined for copyright, and OA-9 does not apply. Provider
-video is not shown in the demo, to respect copyright. Where a shot
-would show provider video, it is a title card or a described hand-off.
-
-The filmable-today list below needs no provider-video shot. Provider
-app screens (title art, thumbnails, logos) are not shown either: S4's
-on-device capture ends at the companion's Watch hand-off, and a title
-card states the proven outcome (Prime Video opens its search screen,
-`searchOpened`). PENDING shot P-X09-2 keeps the same limit if its live
-run lands.
-
-## Shot list — filmable today (156 s)
-
-| Shot | Duration | What is shown | Source | Register UIDs shown | Evidence |
-|---|---|---|---|---|---|
-| S1 | 12 s | Problem statement; companion app launches on the Fire TV stick (AFTKM, Fire OS 8.1.8.5 / API 30). Narration: Fire OS is primary; Vega is a paused stretch compatibility target, not delivered. | on-device capture | AFC-PR-052, AFC-PR-053 | SP-1 WORKS, `spikes/sp1-device/VERDICT.md` (PR #89) |
-| S2 | 22 s | Lineup setup by labeled manual entry built from ESPN rosters. Narration states the Yahoo route is not approved and no live Yahoo data is used; manual values are never presented as Yahoo values. | on-device capture | AFC-PR-006, AFC-PR-007 | SP-6 FAILS (Yahoo route), `spikes/sp6-yahoo/VERDICT.md` (PR #100); manual is the single active source |
-| S3 | 28 s | A replay event involving a followed starter produces an alert, rendered panel-only in the companion app. On-screen label: replay. Narration states there is no heads-up banner over other apps on this device, so panel-only presentation is the selected fallback. | labeled replay | AFC-PR-013, AFC-PR-021, AFC-PR-027 | SP-2 FAILS (heads-up), `spikes/sp2-notify/VERDICT.md` (PR #109); AFC-PR-021 panel-only fallback; replay per AFC-PR-013 |
-| S4 | 30 s | **Required moment (a), at proven strength:** alert → D-pad **Watch** → Prime Video opens at its search screen (outcome `searchOpened`). Narration states this honestly: the correct provider opens; a direct-to-game open (`gameOpened`) is not proven for any provider, and no outcome is relabeled. Ends at the companion's hand-off with a title card stating the outcome; neither provider video nor the Prime Video app screen is shown. | on-device capture | AFC-PR-029, AFC-PR-030, AFC-PR-031, AFC-PR-048 | SP-3 PARTIAL, `spikes/sp3-provider-links/VERDICT.md` (PR #110): Prime Video `searchOpened` is the registered route; `gameOpened` unproven |
-| S5 | 32 s | **Required moment (b), at proven strength:** the lineup panel moment — followed team's starters, points, game status, team total and progress, with stale or unavailable values labeled as such, never zero. The panel is full-screen in the companion app. Narration states the panel does not sit beside playing video on this device; full-screen is the selected fallback. | on-device capture | AFC-PR-039, AFC-PR-040, AFC-PR-047 | SP-4 FAILS (panel beside video), `spikes/sp4-panel-video/VERDICT.md` (PR #106); `PanelMode.fullScreen` per AFC-PR-047 |
-| S6 | 18 s | Honest unavailable route: Watch for a game carried by a provider with no verified registry route launches nothing and reports `accessUnknown`; unverifiable game access is shown as unknown — never promised from an installed app alone. Narration distinguishes the two facts: SP-3 observed ESPN, DirecTV Stream and YouTube TV absent on the stick, but the app does not report `appAbsent` for them — with no verified route there is no installation check to report from, so the reported outcome is `accessUnknown`. | on-device capture | AFC-PR-031, AFC-PR-032, AFC-PR-033 | SP-3 PARTIAL (PR #110) observed ESPN, DirecTV Stream and YouTube TV not installed on the stick and local broadcast with no carrying app; the registry holds no verified `fire_os` route for them (`REGISTRY_ROUTE_GAP`), so `WatchLauncher` returns `accessUnknown` before any installation check (`appAbsent` is reported only for a verified route whose package is not installed) |
-| S7 | 14 s | Customer control takes effect: an alert-type setting is changed and the changed behavior is stated; closing summary repeats the limits — panel-only alerts, full-screen panel, manual lineup, no voice offer, Vega paused stretch only. | on-device capture | AFC-PR-016, AFC-PR-021 | Alert policy gated by enabled types (PR #85); presentation choice per AFC-PR-021 |
-
-Total: 12 + 22 + 28 + 30 + 32 + 18 + 14 = **156 s** ≤ 170 s.
-Margin: 14 s under the plan limit, 24 s under 3 minutes.
-
-Required-moment coverage (issue #1 §Judging alignment):
-(a) alert → Watch → correct game or channel is S3 + S4, filmed only up to
-the proven `searchOpened` outcome; (b) the lineup panel moment is S5,
-filmed as the proven full-screen panel.
-
-## NBA panel segment — planned 2026-10-21 (not filmed)
-
-William films this only for the 2026-10-21 ESPN NBA games, and only as
-an on-stick capture of the companion UI. It is not required moment (a)
-or (b). NFL stays the primary story. Duration is at most 14 s, which is
-the margin under the 170 s plan limit. Until this capture happens, the
-156 s list above is what is shot. No footage of this segment exists,
-and none is claimed.
-
-What is shown: the companion's full-screen panel with NBA rows, the
-sport label "NBA", and the scoring basis "Points". Narration states
-that this is the NBA panel, that game-event alerts remain NFL-only, and
-that the lineup on screen is manual.
-
-- Source: on-device capture of the AFC UI. No provider video, no
-  provider app screen, and no broadcast picture.
-- No NBA alert is shown or described as existing. NBA ingest stores
-  player statistics for panel rows. Game-event alerts are NFL-only
-  (PR #138).
-- No live Yahoo data. A lineup on screen is labeled manual. The Yahoo
-  NBA import is synthetic-test only. Live Yahoo Fantasy API access is
-  pending Yahoo's approval and expected on or after 2026-10-23.
-- Evidence for the panel behavior is the repository implementation
-  (PR #138). There is no device observer and no spike verdict for this
-  segment. It does not claim a live-timing result.
-
-## PENDING swap-ins — not filmable today
-
-Each PENDING shot replaces the named filmable shot at the same duration
-if and only if its dependency lands passing evidence before P2-X12
-capture. Until then the filmable version above is what is shot. Nothing
-here is filmed speculatively.
-
-| Shot | Replaces | Dependency (owner) | What would change | Honest fallback filmed today |
-|---|---|---|---|---|
-| P-X09-1 | S3 | X09/X10 live end-to-end run, C3 window 2026-10-23T00:15Z (Integration Engineer) | Alert produced from a live event instead of a replay fixture, still panel-only. Source becomes on-device capture; the replay label drops only for genuinely live values. | S3 as written: labeled replay, clearly labeled as replay. |
-| P-X09-2 | S4 | X09/X10 live run 2026-10-23T00:15Z (Integration Engineer) | Watch during a live Prime Video game, to whatever outcome the live evidence proves — `gameOpened` only if actually observed, otherwise the strongest observed outcome. Source: on-device capture of the companion UI only. Where the shot would show provider video, it is a title card or a described hand-off. UIDs: AFC-PR-029, AFC-PR-030, AFC-PR-031, AFC-PR-048. | S4 as written: on-device capture ending at the companion's hand-off plus the `searchOpened` title card; no provider video or provider screen shown. |
-| P-X09-3 | S5 | X09/X10 live run 2026-10-23T00:15Z (Integration Engineer) | Panel values updating from live events, still full-screen. Source stays on-device capture. | S5 as written: full-screen panel on current data, stale or unavailable values labeled. |
-| P-X11 | S7 segment | X11 Alexa disposition, still open (owner, William, on P2-X11 evidence) | A verified voice interaction could be shown only if X11 verifies an implemented route on the device (AFC-PR-022, AFC-PR-036 pass by not offering voice without one). | No Alexa or voice offer is shown or implied; S7 narration states voice is not offered. |
-| P-M13 | S1–S7 (recapture) | P2-L05 final APK and P2-X12 demo capture, M13 (Implementer / Integration Engineer) | All shots are captured on the final submitted APK; no clip from a differing product candidate is used. Same shots, sources, UIDs, and durations. | This plan; no footage exists yet and none is claimed. |
-
-## Never to be filmed (not pending)
-
-These have failing evidence or no evidence. They are not PENDING and no
-future evidence in this Lifecycle is expected to reverse them:
-
-- A heads-up notification banner over third-party playback
-  (SP-2 FAILS; AFC-PR-015 positive case not unblocked).
-- The lineup panel beside playing provider video, picture-in-picture,
-  split, or overlay composition (SP-4 FAILS; AFC-PR-041 positive case
-  not unblocked). The panel shown is `fullScreen`.
-- Live Yahoo lineup data or a Yahoo account flow (SP-6 FAILS; manual
-  entry is the active source).
-- Provider video captured on-device as if the secure surface were
-  readable (RISK-AFC-P2-09).
-- Vega running the companion (paused stretch compatibility target only).
-- Hardware performance, latency, or RAM claims (excluded by owner
-  direction in issue #1).
-
-## Capture notes for P2-X12
-
-- Capture on the final APK only (P-M13). Clips from a differing product
-  candidate fail `SEIT-AFC-P2-SUB-02`.
-- Replay shots carry a visible replay label for their full duration.
-- Capture steps are on-stick AFC UI captures only. Where a shot would
-  show provider video, it is a title card or a described hand-off. S4
-  ends at the companion's hand-off with a `searchOpened` title card;
-  provider app screens with title art are not shown.
-- Confirm the exported video runtime is under 3 minutes before handover
-  to the owner for upload. Upload itself is an owner-only action (see
-  the [owner checklist](owner-checklist.md)); no agent uploads or posts.
+The owner still needs to film the double-tap, hold and Expand sequence, record the voiceover and check the finished runtime. Do not show account details, link codes, device addresses or Yahoo data. The Watch flow was not tested live and is outside this storyboard.
