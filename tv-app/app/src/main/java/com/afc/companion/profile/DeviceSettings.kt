@@ -8,9 +8,9 @@ import androidx.core.content.edit
 class DeviceSettings(private val prefs: SharedPreferences) {
     constructor(context: Context) : this(context.getSharedPreferences("afc_device", Context.MODE_PRIVATE))
 
-    /** A new alert re-shows a hidden fullScreen panel; on unless the customer turns it off. */
+    /** A new alert re-shows a hidden fullScreen panel; off unless the customer turns it on (owner, 2026-10-23). */
     var showPanelOnNewAlert: Boolean
-        get() = prefs.getBoolean(SHOW_PANEL_ON_NEW_ALERT, true)
+        get() = prefs.getBoolean(SHOW_PANEL_ON_NEW_ALERT, false)
         set(value) = prefs.edit { putBoolean(SHOW_PANEL_ON_NEW_ALERT, value) }
 
     companion object {

@@ -55,6 +55,15 @@ COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+## QR Code generator (tv-app/app/src/main/java/io/nayuki/qrcodegen/)
+
+Source: https://github.com/nayuki/QR-Code-generator tag v1.8.0, commit
+720f62bddb7226106071d4728c292cb1df519ceb, `java/src/main/java/io/nayuki/qrcodegen/`
+(`QrCode.java`, `QrSegment.java`, `BitBuffer.java`, `DataTooLongException.java`;
+scanned 2026-10-23). Trailing whitespace is stripped and `/**` doc comments
+are plain `/*` comments (AGP 9.3.1 lint crashes parsing Javadoc on JDK 17); the
+code is otherwise unchanged. Copyright (c) Project Nayuki, MIT License; each file keeps its license header.
+
 ## AZ Fantasy artwork (tv-app/app/src/main/res/)
 
 The launcher icon (`drawable/ic_launcher_foreground.xml`, `values/ic_launcher_background.xml`,

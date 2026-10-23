@@ -81,8 +81,9 @@ class OverlayController(
         OverlayMode.Menu, OverlayMode.Expanded -> { mode = OverlayMode.Card; OverlayOutcome.Shown }
     }
 
+    /** Double-tapped ≡ switches the pair in whichever view is open: card, menu or expanded panel. */
     fun doubleTap() {
-        if (mode == OverlayMode.Card || mode == OverlayMode.Menu) panel.perform(PanelAction.NextTeamLeague, 0)
+        if (mode != OverlayMode.Off) panel.perform(PanelAction.NextTeamLeague, 0)
     }
 
     fun select(item: OverlayMenuItem) {
@@ -187,20 +188,26 @@ object CornerCardStyle {
     val TEXT_ARGB = TvPalette.onSurfaceArgb
 }
 
-/** The card's few words: the team total, how fresh it is, the sport, and the switch hint. */
+/** The card's few words: matchup and clock; the total; the top two players. */
 object CornerCardText {
-    fun label(teamLeague: String?): String = teamLeague ?: "No team selected"
-
-    fun total(snapshot: PanelSnapshot?): String = snapshot?.teamTotal?.value?.toString() ?: "Unavailable"
-
-    fun status(snapshot: PanelSnapshot?, teamLeague: String?, nowMs: Long): String {
+    fun label(snapshot: PanelSnapshot?, teamLeague: String?): String {
         if (teamLeague == null) return "No team selected"
-        // Names the pair while it loads, so a double-tapped switch shows where it went.
-        val total = snapshot?.teamTotal ?: return "Loading ${teamLeague.substringAfter('/')}"
-        val asOf = total.asOfMs ?: return "Stale"
-        val ageS = (nowMs - asOf) / 1_000
-        val age = if (nowMs - asOf >= STALE_MS) "Stale ${ageS}s" else "Updated ${ageS}s ago"
-        return if (total.source == "replay") "Replay, ${age.replaceFirstChar { it.lowercase() }}" else age
+        if (snapshot == null) return PanelText.matchup(teamLeague)
+        return listOfNotNull(PanelText.matchup(snapshot.teamLeague, sport(snapshot)), PanelText.clock(snapshot)).joinToString("  ")
+    }
+
+    fun total(snapshot: PanelSnapshot?): String = snapshot?.let { PanelText.points(it.teamTotal) } ?: "–"
+
+    /** One top-two line: short name, points, and whether the points rose since the [prior] refresh of the same pair. */
+    data class Leader(val name: String, val points: String, val rose: Boolean, val slot: String? = null)
+
+    fun leaders(snapshot: PanelSnapshot?, prior: PanelSnapshot? = null): List<Leader> {
+        val snap = snapshot ?: return emptyList()
+        val before = prior?.takeIf { it.teamLeague == snap.teamLeague }?.rows?.associate { it.playerId to it.points.value }.orEmpty()
+        return PanelText.byPoints(snap.rows).filter { it.points.value != null }.take(2).map { row ->
+            val was = before[row.playerId]
+            Leader(PanelText.shortName(row.name), PanelText.points(row.points), was != null && row.points.value!! > was, row.slot)
+        }
     }
 
     fun sport(snapshot: PanelSnapshot?): String? = snapshot?.let {
@@ -211,8 +218,6 @@ object CornerCardText {
     }
 
     fun hint(serviceEnabled: Boolean): String? = if (serviceEnabled) null else "Hold ≡ needs Accessibility"
-
-    private const val STALE_MS = 60_000L
 }
 
 /** Alert card: a square of one-sixth of the short side at the safe top-right corner (180 px at 1080p). */
@@ -227,17 +232,18 @@ object AlertCardGeometry {
 data class AlertCardNotice(
     val alertId: String,
     val player: String,
-    val value: Double,
+    val value: Double?,
     val sport: String,
     val watchEventId: String,
 )
 
 object AlertCardText {
-    /** "Edwards 20": the player and a compact number; null for a non-finite number or an unsafe claim. */
-    fun label(player: String, value: Double): String? {
-        if (player.isBlank() || !value.isFinite() || AlertPresenter.isUnsafe(player)) return null
+    /** "D. Mitchell · 30 PTS", or "D. Mitchell · SCORE" when no fresh number is known; null for an unsafe claim. */
+    fun label(player: String, value: Double?): String? {
+        if (player.isBlank() || AlertPresenter.isUnsafe(player)) return null
+        if (value == null || !value.isFinite()) return "$player · SCORE"
         val number = if (value == floor(value)) value.toLong().toString() else value.toString()
-        return "$player $number"
+        return "$player · $number PTS"
     }
 }
 
@@ -274,23 +280,23 @@ class AlertCardQueue {
         shownAtMs = nowMs
     }
 
-    companion object { const val SHOW_MS = 5_000L }
+    companion object { const val SHOW_MS = 10_000L } // owner 2026-10-23: alert cards stay up 10 s
 }
 
 /**
  * Card notice from one inbox alert, or null when the alert has no safe first starter.
  * Optional backend fields win when present: `triggerContext.sport` ("nba"/"nfl"),
  * `starters[0].shortName` and `starters[0].points` (fantasy points on the profile's basis).
- * Without them the player is the starter's last name, and the number and sport come only from the
- * fresh matching row and sport/scoring basis of the selected profile's [panel] snapshot; otherwise no card is emitted.
+ * Without them the player is the starter's short name ("D. Mitchell"), and the number and sport come only from the
+ * fresh matching row of the selected [panel] snapshot; with no fresh number the card reads "SCORE" (never dropped).
  */
 fun alertCardNotice(alert: Alert, panel: PanelSnapshot?): AlertCardNotice? {
     if (AlertPresenter.text(alert) == null) return null // the panel's safety gate: unsafe names never reach a card
     val trigger = alert.envelope.data.opt("triggerContext") as? JSONObject ?: return null
     val starter = trigger.optJSONArray("starters")?.opt(0) as? JSONObject ?: return null
     val player = ((starter.opt("shortName") as? String)?.trim()?.takeIf { it.isNotEmpty() }
-        ?: (starter.opt("name") as? String)?.trim()?.substringAfterLast(' '))
-        ?.take(MAX_CARD_NAME)?.takeIf { AlertCardText.label(it, 0.0) != null } ?: return null
+        ?: (starter.opt("name") as? String)?.let(PanelText::shortName))
+        ?.takeIf { AlertCardText.label(it, 0.0) != null } ?: return null
     val declaredSport = when (trigger.opt("sport")) { "nba" -> "NBA"; "nfl" -> "NFL"; else -> null }
     val row = panel?.rows?.firstOrNull {
         it.playerId == starter.opt("athlete_id") && (declaredSport == null || declaredSport == CornerCardText.sport(panel))
@@ -298,9 +304,9 @@ fun alertCardNotice(alert: Alert, panel: PanelSnapshot?): AlertCardNotice? {
     val freshPoints = row?.points?.takeIf { points ->
         points.asOfMs?.let { System.currentTimeMillis() - it in 0..60_000 } == true
     }?.value?.takeIf { it.isFinite() }
-    val value = (starter.opt("points") as? Number)?.toDouble()?.takeIf { it.isFinite() } ?: freshPoints ?: return null
-    val sport = declaredSport ?: CornerCardText.sport(panel)?.takeIf { row != null && it in listOf("NBA", "NFL") } ?: return null
+    // Owner 2026-10-23: an alert always shows, even for a player outside the pair on screen (cross-sport);
+    // without a fresh number it reads "SCORE". An unknown sport ("") gets the neutral alert colour.
+    val value = (starter.opt("points") as? Number)?.toDouble()?.takeIf { it.isFinite() } ?: freshPoints
+    val sport = declaredSport ?: CornerCardText.sport(panel)?.takeIf { row != null && it in listOf("NBA", "NFL") } ?: ""
     return AlertCardNotice(alert.envelope.id, player, value, sport, AlertNotifier.watchEventId(alert).orEmpty())
 }
-
-private const val MAX_CARD_NAME = 14

@@ -33,6 +33,17 @@ class PanelDecodeTest {
         assertEquals(0.5, s.progress.value!!, 1e-9)
     }
 
+    @Test fun slotDecodesWhenSentAndIsNullFromAnOlderBackend() {
+        val s = decoded(panelData(rows = listOf(
+            row("p-11", "Player Eleven", value(12.3)).put("slot", "QB"),
+            row("p-23", "Player Twenty-Three", value(4.0)),
+            row("p-31", "Player Thirty-One", value(1.0)).put("slot", JSONObject.NULL),
+        )))
+        assertEquals("QB", s.rows[0].slot)
+        assertNull("a row without a slot renders as before", s.rows[1].slot)
+        assertNull(s.rows[2].slot)
+    }
+
     @Test fun teamLeaguesIsOptionalAndDecodesWhenPresent() {
         assertEquals("an older backend sends no list", emptyList<String>(), decoded().teamLeagues)
         val pairs = org.json.JSONArray(listOf("demo-nba/cle-phi-tonight", "demo-nfl/ne-chi-tonight"))

@@ -217,9 +217,13 @@ def test_r04_final_expiry_survives_js_number_round_trip_at_v512(panel_env, monke
     row = table.get_item(Key={"profileId": "fan"})["Item"]
     table.put_item(Item=dict(row, lineupVersion=512))
     assert write_statistics("9000001", statistics(state="post", status="Final", receptions=2))
-    monkeypatch.setattr(panel_env.module, "now", lambda: at(43200))
+    # An NFL final expires when the fantasy week rolls over (owner 2026-10-23).
+    from datetime import timedelta
+    from panel_support import KICKOFF, iso
+    rollover = panel_env.module._nfl_week_start(KICKOFF + timedelta(days=7))
+    monkeypatch.setattr(panel_env.module, "now", lambda: iso(rollover - timedelta(seconds=1)))
     before = panel_env.snapshot("fan")
-    monkeypatch.setattr(panel_env.module, "now", lambda: at(43201))
+    monkeypatch.setattr(panel_env.module, "now", lambda: iso(rollover + timedelta(seconds=1)))
     after = panel_env.snapshot("fan")
     assert before["data"]["teamTotal"]["value"] == 1.0
     assert after["data"]["teamTotal"]["value"] is None

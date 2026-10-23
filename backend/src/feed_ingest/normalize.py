@@ -28,11 +28,52 @@ def _plays(payload):
     return [play for drive in payload["drives"]["previous"] for play in drive.get("plays", [])]
 
 
+_SUFFIXES = {"Jr.", "Jr", "Sr.", "Sr", "II", "III", "IV", "V"}
+# ESPN play text: "D.Swift", "J.Hines-Allen", "A.St. Brown", "P.O'Connell".
+_PLAY_NAME = re.compile(
+    r"(?<![A-Za-z.])([A-Z]\.(?:[A-Za-z]+\. )?[A-Za-z]+(?:[-'][A-Za-z]+)*)(?![A-Za-z'-])")
+
+
+def _abbrev(display_name, last_name=None):
+    if not isinstance(display_name, str):
+        return None
+    parts = display_name.split()
+    if len(parts) < 2 or not parts[0][:1].isalpha():
+        return None
+    if parts[-1] in _SUFFIXES and len(parts) > 2:
+        parts = parts[:-1]
+    surname = last_name.split() if isinstance(last_name, str) else []
+    surname = surname or parts[-1:]
+    if len(surname) > 1 and surname[-1] in _SUFFIXES:
+        surname = surname[:-1]
+    return f"{parts[0][0].upper()}.{' '.join(surname)}"
+
+
 def _athletes(payload):
-    return {entry["athlete"]["id"]
-            for team in payload.get("boxscore", {}).get("players", [])
-            for stat in team.get("statistics", [])
-            for entry in stat.get("athletes", [])}
+    known, owners = set(), {}
+    for team in payload.get("boxscore", {}).get("players", []):
+        for stat in team.get("statistics", []):
+            for entry in stat.get("athletes", []):
+                athlete = entry["athlete"]
+                athlete_id = athlete["id"]
+                known.add(athlete_id)
+                abbrev = _abbrev(athlete.get("displayName"), athlete.get("lastName"))
+                if abbrev:
+                    owners.setdefault(abbrev, set()).add(athlete_id)
+    # shortcut: two athletes sharing F.Last are skipped, upgrade when the play names the team
+    names = {abbrev: next(iter(ids)) for abbrev, ids in owners.items() if len(ids) == 1}
+    return known, names
+
+
+def _ids_from_text(text, names, known):
+    if not isinstance(text, str) or not names:
+        return []
+    found = []
+    for match in _PLAY_NAME.finditer(text):
+        athlete_id = names.get(match.group(1))
+        if athlete_id in known and athlete_id not in found:
+            found.append(athlete_id)
+    return found
 
 
 MAX_MATCHUP_LENGTH = 80  # the TV alert context bound
@@ -91,10 +132,13 @@ def _offense(play):
                  if team.get("type") == "offense"), None)
 
 
-def _facts(play, known, source):
-    # Participants are usually $ref links; only inline ids naming a boxscore athlete count.
-    players = [entry["athlete"]["id"] for entry in play.get("participants", [])
-               if entry.get("athlete", {}).get("id") in known]
+def _facts(play, known, names, source):
+    # Inline ids win. ESPN live often sends participants null and names the players in text.
+    participants = play.get("participants") or []
+    players = [entry["athlete"]["id"] for entry in participants
+               if isinstance(entry, dict) and (entry.get("athlete") or {}).get("id") in known]
+    if not players:
+        players = _ids_from_text(play.get("text"), names, known)
     return {"source": source, "score": {"away": play["awayScore"], "home": play["homeScore"]},
             "fieldPosition": play["start"]["yardsToEndzone"], "possession": _offense(play),
             "playerIds": players, "eventTime": play.get("wallclock"),
@@ -110,12 +154,12 @@ def normalize_summary(payload, game_id, source="live", prior=None):
     if source not in _sources():
         raise ValueError(f"Feed events must be labeled live or replay, not {source!r}")
     prior = prior or {}
-    known = _athletes(payload)
+    known, names = _athletes(payload)
     matchup = _matchup(payload)
     channel = _channel(payload)
     events = []
     for play in _plays(payload):
-        facts = _facts(play, known, source)
+        facts = _facts(play, known, names, source)
         before = prior.get(play["id"])
         if before is None:
             revision, correction_of = 1, None

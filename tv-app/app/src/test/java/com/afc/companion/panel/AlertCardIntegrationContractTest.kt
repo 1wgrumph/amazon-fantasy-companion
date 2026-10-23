@@ -50,12 +50,12 @@ class AlertCardIntegrationContractTest {
         }
     }
 
-    @Test fun cardRendersOnlyPlayerNumberAndASmallSportMark() {
+    @Test fun cardRendersOnlyPlayerAndNumberOnOneLineUnderASportBand() {
         val content = sourceBlock(cardHost(), Regex("fun\\s+AlertCardContent\\s*\\("))
         assertTrue("compact label formatter", content.contains("AlertCardText.label(notice.player, notice.value)"))
-        assertTrue("NBA/NFL mark", content.contains("notice.sport"))
-        assertTrue("small sport mark, 14 sp", Regex("fontSize\\s*=\\s*14\\.sp").containsMatchIn(content))
-        org.junit.Assert.assertEquals("two text nodes: label and mark only", 2, Regex("\\bText\\s*\\(").findAll(content).count())
+        assertTrue("NBA/NFL colour band", content.contains("sportAccentArgb") && content.contains("notice.sport"))
+        assertTrue("one line", content.contains("maxLines = 1"))
+        org.junit.Assert.assertEquals("one text node: the label only", 1, Regex("\\bText\\s*\\(").findAll(content).count())
         for (verbose in listOf("headline", "commentary", "matchup", "PanelContent(", "AlertCard(")) {
             assertFalse("separate minimal card, no $verbose", content.contains(verbose))
         }

@@ -1,6 +1,7 @@
 package com.afc.companion
 
 import com.afc.companion.link.LinkScreen
+import io.nayuki.qrcodegen.QrCode
 import java.util.UUID
 import org.json.JSONObject
 import org.junit.Assert.*
@@ -8,6 +9,20 @@ import org.junit.Test
 
 /** AFC-PR-038: host presentation contract, followed by separate on-stick demonstration. */
 class LinkScreenTest {
+    @Test fun qrPayloadPrefillsTheCodeOnThePhoneLinkPage() {
+        val screen = LinkScreen("https://api.example.test/link")
+        assertEquals("https://api.example.test/link?code=ABCD1234", screen.qrPayload("ABCD1234"))
+        assertEquals("https://api.example.test/link?code=AB+C%26D%3D%2F%3F%23", screen.qrPayload("AB C&D=/?#"))
+    }
+    @Test fun qrMatrixForThePayloadIsAWellFormedSymbol() {
+        val qr = QrCode.encodeText(LinkScreen("https://api.example.test/link").qrPayload("ABCD1234"), QrCode.Ecc.MEDIUM)
+        assertTrue("Payload must fit a small, phone-scannable symbol", qr.version in 1..6)
+        assertEquals(qr.version * 4 + 17, qr.size)
+        // Finder patterns: dark outer ring, light inner ring, dark 3x3 core, in three corners.
+        for ((ox, oy) in listOf(0 to 0, qr.size - 7 to 0, 0 to qr.size - 7)) {
+            assertTrue(qr.getModule(ox, oy)); assertFalse(qr.getModule(ox + 1, oy + 1)); assertTrue(qr.getModule(ox + 3, oy + 3))
+        }
+    }
     @Test fun codeShownWithItsExpiry() {
         val response = JSONObject().put("code", "ABCD2345").put("expires", "2026-10-14T12:10:00Z").put("handle", "fixture")
         val required = node("components", "schemas", "DeviceCode")["required"] as List<*>
@@ -15,7 +30,11 @@ class LinkScreenTest {
         val shown = LinkScreen().present(response)
         assertNotNull("Missing behavior: present issued device code", shown)
         assertEquals("codePending", shown!!.state); assertEquals("ABCD2345", shown.code)
-        assertTrue("Expiry must remain visible", shown.message.contains(response.getString("expires")))
+        val label = LinkScreen.expiryLabel(response.getString("expires"))
+        assertNotEquals("Expiry must read as minutes left, not the raw timestamp", response.getString("expires"), label)
+        assertEquals("in 10 min", LinkScreen.expiryLabel("2026-10-14T12:10:00Z", java.time.Instant.parse("2026-10-14T12:00:00Z").toEpochMilli()))
+        assertTrue("Expiry must remain visible", shown.message.contains(label))
+        assertTrue(shown.message.startsWith("Scan with your phone camera"))
         assertFalse(shown.showProfile)
     }
     @Test fun pendingPollKeepsLinkFlowOpen() {

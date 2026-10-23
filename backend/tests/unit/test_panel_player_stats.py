@@ -233,12 +233,13 @@ def _pin_now(panel, monkeypatch, stamp):
 
 
 def test_stale_final_record_not_served_as_current(api, monkeypatch):
-    # #94: only stored record is a Final from 13h ago (asOf 2026-10-11T17:13:41Z);
-    # no new-game event mentions the starter, so the panel must start unknown.
+    # #94: only stored record is a Final from a previous NFL fantasy week (asOf Sunday
+    # 2026-10-11T17:13:41Z, now after the Tuesday 09:00Z rollover); no new-game event
+    # mentions the starter, so the panel must start unknown.
     import panel
     seed(api)
     ingest_summary(fresh_summary(), GAME, source="replay")
-    _pin_now(panel, monkeypatch, "2026-10-12T06:13:42Z")
+    _pin_now(panel, monkeypatch, "2026-10-13T09:00:00Z")
     data = panel.snapshot("owner", "league-a/team-7")["data"]
     row = data["rows"][0]
     assert row["points"]["value"] is None
@@ -246,6 +247,18 @@ def test_stale_final_record_not_served_as_current(api, monkeypatch):
     assert row["gameStatus"] is None
     assert data["teamTotal"]["value"] is None
     assert data["progress"]["value"] is None
+
+
+def test_nfl_final_lasts_the_fantasy_week(api, monkeypatch):
+    # Owner 2026-10-23: NFL points last Thursday to Monday night; a Sunday final is
+    # still current on Monday night, 13h and more after the game.
+    import panel
+    seed(api)
+    ingest_summary(fresh_summary(), GAME, source="replay")
+    _pin_now(panel, monkeypatch, "2026-10-13T08:59:59Z")
+    row = panel.snapshot("owner", "league-a/team-7")["data"]["rows"][0]
+    assert row["points"]["value"] == 13.0
+    assert row["gameStatus"] == "Final"
 
 
 def test_final_record_inside_window_still_served(api, monkeypatch):
@@ -288,7 +301,7 @@ def test_expiration_advances_panel_revision(api, monkeypatch):
     before = panel.snapshot("owner", "league-a/team-7")
     assert before["data"]["rows"][0]["points"]["value"] == 13.0
     assert panel.snapshot("owner", "league-a/team-7")["revision"] == before["revision"]
-    _pin_now(panel, monkeypatch, "2026-10-12T05:13:42Z")  # 12h + 1s: expired
+    _pin_now(panel, monkeypatch, "2026-10-13T09:00:01Z")  # NFL week rolled over: expired
     after = panel.snapshot("owner", "league-a/team-7")
     assert after["data"]["rows"][0]["points"]["value"] is None
     assert after["revision"] > before["revision"], "consumer ignores equal/older revisions"
