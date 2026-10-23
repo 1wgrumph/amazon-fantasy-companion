@@ -59,10 +59,10 @@ class AlertCardContractTest {
 
     @Test fun labelContainsOnlyThePlayerAndCompactNumber() {
         val text = checkNotNull(overlayType("AlertCardText").getField("INSTANCE").get(null))
-        assertEquals("Edwards 20", overlayCall(text, "label", "Edwards", 20.0))
-        assertEquals("Edwards 6.5", overlayCall(text, "label", "Edwards", 6.5))
-        assertEquals("Edwards -1.5", overlayCall(text, "label", "Edwards", -1.5))
-        assertEquals("Edwards 0", overlayCall(text, "label", "Edwards", 0.0))
+        assertEquals("Edwards · 20 PTS", overlayCall(text, "label", "Edwards", 20.0))
+        assertEquals("Edwards · 6.5 PTS", overlayCall(text, "label", "Edwards", 6.5))
+        assertEquals("Edwards · -1.5 PTS", overlayCall(text, "label", "Edwards", -1.5))
+        assertEquals("Edwards · 0 PTS", overlayCall(text, "label", "Edwards", 0.0))
     }
 
     @Test fun unsafeTextAndUnknownNumbersCannotBecomeAnAuthoritativeCardLabel() {

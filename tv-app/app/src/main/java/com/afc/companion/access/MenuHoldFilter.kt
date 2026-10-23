@@ -29,7 +29,8 @@ class MenuHoldFilter(private val onDoubleTap: () -> Unit = {}, private val onHol
                 if (down != null && !fired) {
                     if (firstUp != null && down - firstUp in 0..DOUBLE_TAP_MS) onDoubleTap() else shortUpAtMs = eventTimeMs
                 }
-                reset()
+                downAtMs = null
+                fired = false
             }
         }
         return false
@@ -50,6 +51,7 @@ class MenuHoldFilter(private val onDoubleTap: () -> Unit = {}, private val onHol
     fun reset() {
         downAtMs = null
         fired = false
+        shortUpAtMs = null
     }
 
     companion object {

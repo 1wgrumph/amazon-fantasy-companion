@@ -293,7 +293,9 @@ def test_unmatched_starter_keeps_a_row_without_points(monkeypatch, nba_store):
     assert rookie["name"] == "Sample Rookie"
     assert rookie["points"]["value"] is None
     assert rookie["points"]["reason"] == "no matching ESPN athlete"
-    assert data["teamTotal"]["value"] is None
+    # Owner design 2026-10-23: the total sums the known values and says it is partial.
+    assert data["teamTotal"]["value"] is not None
+    assert data["teamTotal"]["reason"] == "partial total"
 
 
 def link(api, profile_id):

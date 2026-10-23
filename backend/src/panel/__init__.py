@@ -93,10 +93,16 @@ def _nba_lineup(lineup):
 
 
 def _nba_pregame(lineup):
-    """Pregame text and monotonic revision contribution, including expiry."""
-    if not _nba_lineup(lineup):
+    """Team game status text ({team: text}), its asOf, and the monotonic revision
+    contribution, including expiry. NBA (flag on) and NFL lineups each read their sport's slate."""
+    if not lineup:
         return {}, 0
-    item = store.get_nba_pregame()
+    if _nba_lineup(lineup):
+        item = store.get_nba_pregame()
+    elif (lineup.get("sport") or "nfl") == "nfl":
+        item = store.get_nba_pregame(store.NFL_STATUS_ID)
+    else:
+        return {}, 0
     if not item:
         return {}, 0
     age = _age_seconds(item.get("asOf"))
@@ -105,7 +111,20 @@ def _nba_pregame(lineup):
     if expired:
         return {}, pregame_seq
     teams = item.get("teams")
-    return (teams if isinstance(teams, dict) else {}), pregame_seq
+    return (dict(teams, **{_SLATE_AS_OF: item.get("asOf")}) if isinstance(teams, dict) else {}), pregame_seq
+
+
+_SLATE_AS_OF = "asOf"  # not a team abbreviation (those are upper case)
+_NOT_LIVE = ("Tips ", "Kicks ", "Final")
+
+
+def _pair_rank(lineup, slate):
+    """0 when a starter's game is live, 1 when one is still to start, else 2."""
+    texts = [slate.get(s.get("team")) for s in lineup.get("starters") or [] if isinstance(s, dict)]
+    texts = [t for t in texts if isinstance(t, str) and t.strip()]
+    if any(not t.startswith(_NOT_LIVE) for t in texts):
+        return 0
+    return 1 if any(t.startswith(_NOT_LIVE[:2]) for t in texts) else 2
 
 
 def _sport_off(lineup, settings):
@@ -285,6 +304,21 @@ def project(game_event, matches):
                 raise RuntimeError(f"panel projection for {profile_id} kept losing races")
 
 
+def _ordered_pairs(lineups, profile_id):
+    """Pairs for the remote's cycle: live games first, then upcoming, then the rest."""
+    slates = {}
+    ranked = []
+    for key, entry in lineups.items():
+        if not key:
+            continue
+        lineup = dict(entry, profileId=profile_id)
+        sport = "nba" if _nba_lineup(lineup) else (lineup.get("sport") or "nfl")
+        if sport not in slates:
+            slates[sport] = _nba_pregame(lineup)[0]
+        ranked.append((_pair_rank(lineup, slates[sport]), key))
+    return [key for _, key in sorted(ranked)]
+
+
 def snapshot(profile_id, team_league):
     """GET /v1/panel body: enveloped PanelState with scoring basis."""
     profile, settings = _settings(profile_id)
@@ -323,7 +357,6 @@ def snapshot(profile_id, team_league):
             record = player_statistics(espn_id) if espn_id else None
             if record is not None:
                 stats_version_sum += int(record.get("statsVersion") or 0)
-            missing = record is None
             # The starter's current game is the latest projected game whose
             # events concern them (Panels games map). A statistics record
             # from an earlier game is not this game's points: fail closed.
@@ -341,13 +374,19 @@ def snapshot(profile_id, team_league):
             value = _value(None if wrong_game else record, table)
             if wrong_game:
                 record, value = None, dict(value, reason="no statistics for current game")
-            if espn_id is None:
-                value = dict(value, reason="no matching ESPN athlete")
             status = record.get("gameStatus") if record else None
-            if missing:
-                text = pregame.get(starter.get("team")) if isinstance(starter, dict) else None
+            if record is None:
+                # No stats for the team's game today: 0.0 with that game's status.
+                text = pregame.get(starter.get("team"))
                 if isinstance(text, str) and text.strip():
                     status = text
+                    if espn_id is not None:
+                        age = _age_seconds(pregame.get(_SLATE_AS_OF))
+                        value = {"value": 0.0, "reason": None, "source": None,
+                                 "asOf": pregame.get(_SLATE_AS_OF),
+                                 "stale": age is None or age >= STALE_AFTER}
+            if espn_id is None:
+                value = dict(value, reason="no matching ESPN athlete")
             rows.append({"playerId": espn_id or str(starter.get("player_key") or ""),
                          "name": starter.get("name") or "", "points": value,
                          "gameStatus": status})
@@ -363,9 +402,12 @@ def snapshot(profile_id, team_league):
     if _sport_off(lineup, settings):
         rows, states = [], []
     known = [r["points"] for r in rows if r["points"]["value"] is not None]
-    if rows and len(known) == len(rows):
+    # The total sums what is known; one player without a value never hides it.
+    if known:
         source, as_of = _oldest(known)
-        total = {"value": round(sum(p["value"] for p in known), 2), "reason": None,
+        # A sum that leaves out a player says so; the TV shows the number either way.
+        total = {"value": round(sum(p["value"] for p in known), 2),
+                 "reason": None if len(known) == len(rows) else "partial total",
                  "source": source, "asOf": as_of,
                  "stale": any(p["stale"] for p in known)}
     else:
@@ -401,7 +443,7 @@ def snapshot(profile_id, team_league):
             "games": {gid: {"eventId": f["eventId"], "revision": f["revision"],
                              "score": f["score"], "source": f["source"]}
                       for gid, f in games.items()},
-            "teamLeagues": sorted(key for key in lineups if key)}
+            "teamLeagues": _ordered_pairs(lineups, profile_id)}
     if _nba_lineup(lineup):
         data["sport"] = "nba"
     return {"schemaVersion": 1, "id": f"panel/{profile_id}/{team_league}",
