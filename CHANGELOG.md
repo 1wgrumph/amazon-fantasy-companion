@@ -45,6 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- NFL scoring plays with no inline participants now take player ids from the play text (`D.Swift`), so a starter touchdown can alert when ESPN leaves `participants` null ([PR #164](https://github.com/1wgrumph/amazon-fantasy-companion/pull/164)).
 - The panel revision advances on statistics corrections even with unchanged or missing source timestamps, using consistent reads and bounded content sequences that preserve lineup, profile/team selection, pregame, deployment and final-expiry ordering on TV and Vega ([PR #155](https://github.com/1wgrumph/amazon-fantasy-companion/pull/155)).
 - A stored lineup without a league or team no longer crashes the panel; it serves the existing no-lineup state ([PR #154](https://github.com/1wgrumph/amazon-fantasy-companion/pull/154)).
 - Fix the Vega contract-mirror test after `PUT /v1/lineup/manual`, and run the TV and Vega gates whenever `backend/src/api/openapi.yaml` changes ([PR #151](https://github.com/1wgrumph/amazon-fantasy-companion/pull/151)).
