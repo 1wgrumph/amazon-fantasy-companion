@@ -115,7 +115,8 @@ def _nba_pregame(lineup):
 
 
 _SLATE_AS_OF = "asOf"  # not a team abbreviation (those are upper case)
-_NOT_LIVE = ("Tips ", "Kicks ", "Final")
+_UPCOMING = ("Tips ", "Kicks ", "Mon ", "Tue ", "Wed ", "Thu ", "Fri ", "Sat ", "Sun ")
+_NOT_LIVE = _UPCOMING + ("Final",)
 
 
 def _pair_rank(lineup, slate):
@@ -124,7 +125,7 @@ def _pair_rank(lineup, slate):
     texts = [t for t in texts if isinstance(t, str) and t.strip()]
     if any(not t.startswith(_NOT_LIVE) for t in texts):
         return 0
-    return 1 if any(t.startswith(_NOT_LIVE[:2]) for t in texts) else 2
+    return 1 if any(t.startswith(_UPCOMING) for t in texts) else 2
 
 
 def _sport_off(lineup, settings):

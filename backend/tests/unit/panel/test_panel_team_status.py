@@ -64,7 +64,7 @@ def test_pairs_cycle_live_then_upcoming_then_final(api, monkeypatch):
     _lineup(store, "aa-done", [{"athlete_id": "9200011", "name": "A", "team": "BUF", "positions": ["QB"]}])
     _lineup(store, "bb-later", [{"athlete_id": "9200012", "name": "B", "team": "DAL", "positions": ["QB"]}])
     _lineup(store, "cc-live", [{"athlete_id": "9200013", "name": "C", "team": "NE", "positions": ["QB"]}])
-    _slate(store, {"BUF": "Final", "DAL": "Kicks 7:15 PM", "NE": "1st 11:30"})
+    _slate(store, {"BUF": "Final", "DAL": "Mon 7:15 PM", "NE": "1st 11:30"})
     monkeypatch.setattr(panel, "now", lambda: NOW)
     data = panel.snapshot("fan", "demo-nfl/aa-done")["data"]
     assert data["teamLeagues"] == ["demo-nfl/cc-live", "demo-nfl/bb-later", "demo-nfl/aa-done"]
@@ -112,3 +112,36 @@ def test_nfl_team_missing_from_the_week_slate_reads_bye(api, monkeypatch):
     assert rows["9200011"]["gameStatus"] == "BYE"
     assert rows["9200011"]["points"]["value"] == 0.0
     assert rows["9200012"]["gameStatus"] == "Sun 12:00 PM"
+
+
+def test_weekday_uses_central_calendar_after_dst_ends(monkeypatch):
+    from datetime import datetime, timezone
+    import nba.normalize as normalize
+
+    class SundayNight(datetime):
+        @classmethod
+        def now(cls, tz=None):
+            return datetime(2026, 11, 2, 5, 30, tzinfo=timezone.utc).astimezone(tz)
+
+    monkeypatch.setattr(normalize, "datetime", SundayNight)
+    monday = {"id": "3", "date": "2026-11-03T01:15Z",
+              "status": {"type": {"state": "pre", "shortDetail": "11/2 - 8:15 PM EST"}},
+              "competitions": [{"competitors": [{"team": {"abbreviation": "DAL"}}]}]}
+    assert normalize.team_status_by_team([monday], "Kicks") == {"DAL": "Mon 7:15 PM"}
+
+
+def test_empty_or_expired_nfl_slate_does_not_imply_bye(api, monkeypatch):
+    import panel
+    import store
+
+    store.put_profile("fan", {}, 0, NOW)
+    _lineup(store, "my-lineup", [
+        {"athlete_id": "9200011", "name": "Bye Receiver", "team": "GB", "positions": ["WR"]},
+    ])
+    monkeypatch.setattr(panel, "now", lambda: NOW)
+    for teams, as_of in (({}, NOW), ({"NE": "Sun 12:00 PM"}, "2026-10-22T12:29:59Z")):
+        api.table("PlayerStats").put_item(Item={
+            "athleteId": store.NFL_STATUS_ID, "sequence": 1, "asOf": as_of, "teams": teams})
+        row = panel.snapshot("fan", "demo-nfl/my-lineup")["data"]["rows"][0]
+        assert row["gameStatus"] is None
+        assert row["points"]["value"] is None

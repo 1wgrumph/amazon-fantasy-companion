@@ -7,7 +7,8 @@ shortcut: summary validation is hand-checked pinned fields, not a pinned
 JSON Schema file; add schema/nba-summary.json if NBA leaves spike scope.
 """
 
-from datetime import datetime, timedelta, timezone
+from datetime import datetime
+from zoneinfo import ZoneInfo
 from decimal import Decimal, InvalidOperation
 import logging
 import re
@@ -79,14 +80,14 @@ def _central(detail, verb):
 
 
 def _today():
-    return (datetime.now(timezone.utc) - timedelta(hours=5)).date()
+    return datetime.now(ZoneInfo("America/Chicago")).date()
 
 
 def _weekday(start, text, verb):
     """Owner 2026-10-23: a start on another day names it ("Sun 12:00 PM"); today's keeps the verb.
-    Central is taken as UTC-5, the same fixed offset _central assumes."""
+    Use the Central calendar on both sides of daylight-saving changes."""
     try:
-        when = datetime.fromisoformat(str(start).replace("Z", "+00:00")) - timedelta(hours=5)
+        when = datetime.fromisoformat(str(start).replace("Z", "+00:00")).astimezone(ZoneInfo("America/Chicago"))
     except ValueError:
         return text
     if when.date() == _today() or not text.startswith(verb + " "):

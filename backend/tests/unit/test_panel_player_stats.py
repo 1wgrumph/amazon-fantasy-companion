@@ -239,7 +239,7 @@ def test_stale_final_record_not_served_as_current(api, monkeypatch):
     import panel
     seed(api)
     ingest_summary(fresh_summary(), GAME, source="replay")
-    _pin_now(panel, monkeypatch, "2026-10-13T09:00:01Z")
+    _pin_now(panel, monkeypatch, "2026-10-13T09:00:00Z")
     data = panel.snapshot("owner", "league-a/team-7")["data"]
     row = data["rows"][0]
     assert row["points"]["value"] is None
