@@ -42,6 +42,12 @@ AZ Fantasy is a Fire TV companion built around that idea. A small corner card ke
 
 ### What it does
 
+Start in the app before returning to the game. In Connect, link the TV from your phone. Typed-code linking works today: open the link page, enter the TV's code and confirm. QR linking is being built now for today's release: the TV will show a QR code to scan, the phone will ask you to confirm, and the TV will become linked. The typed code remains the fallback.
+
+In My setup, turn NFL and NBA alerts on or off, choose alert types, set quiet hours and streaming-provider preferences, and choose whether new alerts open the full lineup with “Open lineup on alerts.”
+
+My lineup lets you switch among your teams across leagues and sports, with live points per player and a team total. Choose Show over game to start the corner card and return to watching. From My lineup, Expand over game opens the larger overlay instead.
+
 While you watch any live game, AZ Fantasy shows your fantasy team in a corner card. It supports NFL and NBA, so the sport on the television does not have to match the sport that produces an alert. A basketball player scoring can matter to your fantasy team even while you are watching football.
 
 The remote handles the main controls. Double-tap the menu button, ≡, to switch teams. Hold it to open a menu with Expand, League and Hide. Choose Expand for a larger view of your lineup. These interactions keep you with the game.
@@ -58,11 +64,28 @@ We use ESPN public feeds for live NFL and NBA statistics. The backend connects t
 
 ### Challenges we ran into
 
-The live run exposed a timing problem: alerts reached the TV about 70–90 seconds after the play. That is the observed delay, and reducing it is planned work. Parsing player names from play text is another limitation; the feed does not give us player identifiers on those plays.
+**Vega and its virtual device.** We ported the companion to Vega OS (Kepler SDK 0.24) and tested it on the Vega Virtual Device. That took the most debugging of the project:
+- The VVD booted only with a specific lock and graphics setup.
+- It reported "ready" before input actually worked.
+- Its screenshot tool produced empty captures, and release-app logs were missing.
+- Networking did not work behind a host-name allowlist proxy until we built a workaround.
+- The documentation disagreed with itself on supported hosts and versions.
+- A legacy storage binding lost the signed-in session on every relaunch.
 
-Fire OS does not list our accessibility switch, which makes setup harder. Prime Video also blocks screenshots on some frames, so a screen capture does not always show the whole viewing experience. We had to distinguish a capture limitation from what was visible on the television.
+We repaired our own bugs along the way (session storage, the default panel selection). In the end the Vega build showed live NBA alerts and a refreshing panel on the VVD. We could not test it on physical Vega hardware.
 
-We rebuilt the UI during the live game in response to feedback from the person using it. The Watch flow was not tested live, and we do not claim that it opened a live game.
+**Getting an alert onto the TV during a game.** Standard Fire OS notifications posted, but never appeared over the video with actions. Placing a panel beside uncropped video was not possible either. We built our own overlay instead: a small corner card plus alert cards that never take focus from the game. They are driven by the remote's ≡ button through an accessibility key filter. Fire OS does not list that service in Settings, so setup needs adb, and the overlay permission has no settings screen at all.
+
+**Fantasy data access.** Yahoo's Fantasy API returned 403 for unapproved apps even after OAuth succeeded. We applied for access, signed the agreement and registered a new app, then shipped manual lineups so the product works today.
+
+**Live sports data.** ESPN's live NFL feed leaves the player off scoring plays. The first live game produced touchdowns by our own lineup and no alerts. We found the cause during the game and now read the player from the play text.
+
+**The first live night.** It exposed more problems, all fixed during the game:
+- The TV dropped alerts for players outside the team on screen, which removed the cross-sport moment.
+- Raw debug labels appeared on the card.
+- Players with no stats showed "Unavailable".
+
+Two problems remain: alerts reached the TV about 70–90 seconds after the play, and the Watch flow was not tested live. Prime Video also blocks screenshots on some frames, so we recorded the stick's own screen to prove what viewers saw.
 
 ### Accomplishments we're proud of
 
@@ -103,8 +126,8 @@ Video: publicly visible YouTube/Vimeo, under three minutes, showing the app
 functioning on Fire TV hardware or a permitted simulator. English captions;
 clear manual/replay labels. These follow the [rules](https://amazonappdev2026.devpost.com/rules)
 and [FAQ](https://amazonappdev2026.devpost.com/details/faqs).
-The current voiceover plan targets 140 seconds (2:20), including NFL and NBA
-alerts. The owner still needs to film the remote controls, record the narration
+The current voiceover plan targets 170 seconds (2:50), including app setup and NFL and NBA
+alerts. The owner still needs to film the phone and TV setup and remote controls, record the narration
 and check the finished runtime. Exclude provider frames, music without permission, Yahoo data,
 link codes, personal information and device addresses. Synthetic color plates
 are pipeline tests, not acceptable app-demonstration footage.
@@ -177,12 +200,17 @@ The current optional paste bodies are in
 
 William completes these steps:
 
-1. Record the voiceover from [demo-plan.md](demo-plan.md) and film the
-   double-tap ≡ team switch and hold ≡ → Expand sequence.
-2. Assemble the video using the live-run companion UI and the new control
-   shots. Check the finished runtime, English captions and manual-lineup
+1. Verify the QR build on the TV and phone after it lands today. Film the
+   phone scanning the TV QR code and the phone confirm page, followed by the
+   TV becoming linked. Capture My setup, My lineup and Show over game.
+   Record the voiceover from [demo-plan.md](demo-plan.md) and film the
+   double-tap ≡ team switch and hold ≡ → Expand sequence. Do not present the
+   QR flow as delivered until it has been verified; typed-code linking exists today.
+2. Assemble the video using the live-run companion UI and the new setup and
+   control shots. Check the finished runtime, English captions and manual-lineup
    labels. Keep provider footage, Yahoo data, link codes, personal information
-   and device addresses out of the submission edit.
+   and device addresses out of the submission edit. Mask QR contents in the
+   phone shots while keeping the scan and confirmation actions clear.
 3. Upload the finished video as a **public YouTube or Vimeo video**, confirm
    that it plays publicly, and paste its URL into §5.
 4. Compare this package with the signed-in form. Paste the story, AWS answer
