@@ -1,4 +1,4 @@
-# Developer feedback — Amazon Fantasy Companion
+# Developer feedback — AZ Fantasy
 
 Prepared from the project running log and the project owner's live-night report,
 2026-10-22. Primary track: **Fire TV** (Fire OS 8 / Android 11). Mini challenge:
