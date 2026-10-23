@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add live Vega Virtual Device evidence for NBA alerts and Watch (P2-V01, #59): two NBA PlayerScore alerts shown as the in-app banner and one `accessUnknown` Watch outcome, with a fail-closed `verify-alerts-live.py` check ([PR #165](https://github.com/1wgrumph/amazon-fantasy-companion/pull/165)).
 - Switch the TV between a profile's lineup pairs (NBA and NFL): `GET /v1/panel` lists them in `teamLeagues`, and a double-tap on ≡ while the corner card shows cycles to the next pair (local display only; alerts still come from every pair). The selected pair stays labeled after loading; service resets clear pending taps, and double-tap does nothing while the overlay is hidden or expanded ([PR #164](https://github.com/1wgrumph/amazon-fantasy-companion/pull/164)).
 - On-stick review evidence for the corner card, held Menu control, 90 s auto-close and AZ Fantasy branding on Fire OS 8 ([PR #163](https://github.com/1wgrumph/amazon-fantasy-companion/pull/163)).
 - Add on-stick NBA panel evidence for MIN@MIA and GS@LAL on 2026-10-21: live rows, freshness labels, the team total, the refresh before and after the panel revision fix, typed Watch gaps and a verified restore ([PR #159](https://github.com/1wgrumph/amazon-fantasy-companion/pull/159)).

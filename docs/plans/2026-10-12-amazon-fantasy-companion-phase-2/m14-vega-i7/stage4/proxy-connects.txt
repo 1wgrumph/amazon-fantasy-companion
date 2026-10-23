@@ -1,0 +1,7 @@
+Sandbox run: CONNECT destination class, proxy status, count; guest forwarder outcomes. afc-dev = the one allowlisted API host; sdk-allowlisted-host = existing SDK allowlist entries; example.com = expected negative canary during the proofs.
+run-20261022T203430-97cf8125 | containment proof | example.com DENIED x1, sdk-allowlisted-host ALLOWED x2 | guest forwarder: {}
+run-20261022T203452-3fc4b0c4 | sandbox build | example.com DENIED x1, sdk-allowlisted-host ALLOWED x3 | guest forwarder: {}
+run-20261022T203633-bbd66197 | S1 link + pre-game panel | afc-dev ALLOWED x1, example.com DENIED x1, incomplete-connect ERROR x1, sdk-allowlisted-host ALLOWED x2 | guest forwarder: {'forwarded': 1}
+run-20261022T231445-6e8bed81 | L1 Q1 top-of-screen (stage4 path: 300 s wall clock) | afc-dev ALLOWED x2, example.com DENIED x1, incomplete-connect ERROR x1, sdk-allowlisted-host ALLOWED x2 | guest forwarder: {'forwarded': 1}
+run-20261022T232505-68d81e61 | L2 banner, Watch, panel + R-3 fault | afc-dev ALLOWED x3, example.com DENIED x1, incomplete-connect ERROR x1, sdk-allowlisted-host ALLOWED x2 | guest forwarder: {'forwarded': 2, 'closed': 1, 'refused': 768}
+run-20261022T234253-b4478048 | L3 mid-session alert delivery | afc-dev ALLOWED x2, example.com DENIED x1, incomplete-connect ERROR x1, sdk-allowlisted-host ALLOWED x2 | guest forwarder: {'forwarded': 2}
