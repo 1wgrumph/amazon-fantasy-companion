@@ -29,13 +29,12 @@ def _plays(payload):
 
 
 _SUFFIXES = {"Jr.", "Jr", "Sr.", "Sr", "II", "III", "IV", "V"}
-# ESPN play text: "D.Swift", "J.Hines-Allen", "C.Rodriguez Jr."
+# ESPN play text: "D.Swift", "J.Hines-Allen", "A.St. Brown", "P.O'Connell".
 _PLAY_NAME = re.compile(
-    r"(?<![A-Za-z])([A-Z]\.[A-Za-z]+(?:-[A-Za-z]+)?)(?: Jr\.)?(?![A-Za-z])")
+    r"(?<![A-Za-z.])([A-Z]\.(?:[A-Za-z]+\. )?[A-Za-z]+(?:[-'][A-Za-z]+)*)(?![A-Za-z'-])")
 
 
-def _abbrev(display_name):
-    # shortcut: a multi-word last name keeps its final token, upgrade for "A.St. Brown"
+def _abbrev(display_name, last_name=None):
     if not isinstance(display_name, str):
         return None
     parts = display_name.split()
@@ -43,7 +42,11 @@ def _abbrev(display_name):
         return None
     if parts[-1] in _SUFFIXES and len(parts) > 2:
         parts = parts[:-1]
-    return f"{parts[0][0].upper()}.{parts[-1]}"
+    surname = last_name.split() if isinstance(last_name, str) else []
+    surname = surname or parts[-1:]
+    if len(surname) > 1 and surname[-1] in _SUFFIXES:
+        surname = surname[:-1]
+    return f"{parts[0][0].upper()}.{' '.join(surname)}"
 
 
 def _athletes(payload):
@@ -54,7 +57,7 @@ def _athletes(payload):
                 athlete = entry["athlete"]
                 athlete_id = athlete["id"]
                 known.add(athlete_id)
-                abbrev = _abbrev(athlete.get("displayName"))
+                abbrev = _abbrev(athlete.get("displayName"), athlete.get("lastName"))
                 if abbrev:
                     owners.setdefault(abbrev, set()).add(athlete_id)
     # shortcut: two athletes sharing F.Last are skipped, upgrade when the play names the team

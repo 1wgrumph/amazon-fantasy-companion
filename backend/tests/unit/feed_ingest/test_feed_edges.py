@@ -131,6 +131,9 @@ def test_null_participants_take_player_ids_from_play_text():
     _only_athletes(summary, [(SWIFT_ID, "D'Andre Swift")])
     assert normalize.normalize_summary(summary, GAME)[0]["playerIds"] == [SWIFT_ID]
 
+    del play["participants"]
+    assert normalize.normalize_summary(summary, GAME)[0]["playerIds"] == [SWIFT_ID]
+
     play["text"] = "Z.Nobody left end for 4 yards, TOUCHDOWN."
     assert normalize.normalize_summary(summary, GAME)[0]["playerIds"] == []
 
@@ -144,6 +147,45 @@ def test_null_participants_take_player_ids_from_play_text():
     _only_athletes(summary, [
         ("1", "Josh Hines-Allen"), ("2", "Chris Rodriguez Jr.")])
     assert normalize.normalize_summary(summary, GAME)[0]["playerIds"] == ["1", "2"]
+
+
+@pytest.mark.parametrize("game_id,token,athlete_id", [
+    ("401872991", "A.St. Brown", "4374302"),
+    ("401872992", "P.O'Connell", "4364623"),
+    ("401872982", "T.Slaton", "4240612"),
+    ("401872990", "J.Sturdivant", "4635009"),
+])
+def test_null_participants_keep_complete_names_from_captured_plays(game_id, token, athlete_id):
+    summary = fresh_summary(game_id)
+    play = next(play for play in plays_in(summary) if token in play.get("text", ""))
+    play["participants"] = None
+    events = {event["eventId"]: event for event in normalize.normalize_summary(summary, game_id)}
+    assert athlete_id in events[play["id"]]["playerIds"]
+
+
+@pytest.mark.parametrize("text,athletes,expected", [
+    ("J.Hurts pass to A.Brown for 20 yards, TOUCHDOWN.",
+     [("1", "Jalen Hurts"), ("2", "A.J. Brown")], ["1", "2"]),
+    ("T.Hockenson for 4 yards, TOUCHDOWN.", [("1", "T.J. Hockenson")], ["1"]),
+    ("J.Hines-Allen INTERCEPTED, returned for a TOUCHDOWN.",
+     [("1", "Josh Hines-Allen")], ["1"]),
+    ("C.Rodriguez Jr. rush for a TOUCHDOWN.", [("1", "Chris Rodriguez Jr.")], ["1"]),
+    ("R.Griffin pass to S.Smith for a TOUCHDOWN.",
+     [("1", "Robert Griffin III"), ("2", "Steve Smith Sr.")], ["1", "2"]),
+    ("J.Williams for a TOUCHDOWN.",
+     [("1", "Javonte Williams"), ("2", "Jameson Williams")], []),
+    ("C.Rodriguez Jr. for a TOUCHDOWN.",
+     [("1", "Chris Rodriguez Jr."), ("2", "Chris Rodriguez")], []),
+    ("J.Hines-Allen for a TOUCHDOWN.", [("1", "Josh Hines")], []),
+    ("J.Hurts pass to J.Hurts for a TOUCHDOWN.", [("1", "Jalen Hurts")], ["1"]),
+])
+def test_text_player_ids_resolve_only_unambiguous_roster_names(text, athletes, expected):
+    summary = fresh_summary()
+    play = plays_in(summary)[0]
+    play["participants"] = None
+    play["text"] = text
+    _only_athletes(summary, athletes)
+    assert normalize.normalize_summary(summary, GAME)[0]["playerIds"] == expected
 
 
 def test_inline_participants_count_only_when_they_name_a_boxscore_athlete():
