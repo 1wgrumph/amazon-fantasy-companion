@@ -112,6 +112,40 @@ def test_validation_messages_name_the_failure():
         validation.validate_summary(fresh_summary(), OTHER_GAME)
 
 
+SWIFT_ID = "4259545"
+SWIFT_TEXT = "D.Swift left end for 4 yards, TOUCHDOWN. C.Santos extra point is GOOD."
+
+
+def _only_athletes(summary, athletes):
+    summary["boxscore"]["players"] = [{
+        "statistics": [{"athletes": [
+            {"athlete": {"id": athlete_id, "displayName": name}}
+            for athlete_id, name in athletes]}]}]
+
+
+def test_null_participants_take_player_ids_from_play_text():
+    summary = fresh_summary()
+    play = plays_in(summary)[0]
+    play["participants"] = None
+    play["text"] = SWIFT_TEXT
+    _only_athletes(summary, [(SWIFT_ID, "D'Andre Swift")])
+    assert normalize.normalize_summary(summary, GAME)[0]["playerIds"] == [SWIFT_ID]
+
+    play["text"] = "Z.Nobody left end for 4 yards, TOUCHDOWN."
+    assert normalize.normalize_summary(summary, GAME)[0]["playerIds"] == []
+
+    play["text"] = SWIFT_TEXT
+    _only_athletes(summary, [(SWIFT_ID, "D'Andre Swift"), ("111", "Other Back")])
+    play["participants"] = [{"athlete": {"id": "111"}}]
+    assert normalize.normalize_summary(summary, GAME)[0]["playerIds"] == ["111"]
+
+    play["participants"] = None
+    play["text"] = "J.Hines-Allen and C.Rodriguez Jr. for a score."
+    _only_athletes(summary, [
+        ("1", "Josh Hines-Allen"), ("2", "Chris Rodriguez Jr.")])
+    assert normalize.normalize_summary(summary, GAME)[0]["playerIds"] == ["1", "2"]
+
+
 def test_inline_participants_count_only_when_they_name_a_boxscore_athlete():
     summary = fresh_summary()
     known = sorted(athlete["athlete"]["id"] for team in summary["boxscore"]["players"]
@@ -120,7 +154,8 @@ def test_inline_participants_count_only_when_they_name_a_boxscore_athlete():
         {"athlete": {"id": known[0]}}, {"athlete": {"id": "invented"}}, {"type": "x"}]
     events = normalize.normalize_summary(summary, GAME)
     assert events[0]["playerIds"] == [known[0]]
-    assert all(event["playerIds"] == [] for event in events[1:])
+    # Later plays have no inline ids; text may name boxscore athletes, never anyone else.
+    assert all(set(event["playerIds"]) <= set(known) for event in events[1:])
 
 
 def test_a_summary_without_boxscore_names_no_players():
