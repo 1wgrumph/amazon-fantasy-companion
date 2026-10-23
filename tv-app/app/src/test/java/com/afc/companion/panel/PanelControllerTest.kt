@@ -85,6 +85,30 @@ class PanelControllerTest {
         assertEquals(nba, c.teamLeague)
     }
 
+    @Test fun sportTabStripSwitchesWithLeftRightAndOkInAFixedOrder() {
+        val nba = "demo-nba/my-lineup"
+        val nfl = "demo-nfl/my-lineup"
+        val c = PanelController(listOf(nfl), nfl, true)
+        c.onFetched(snap(teamLeague = nfl).copy(teamLeagues = listOf(nfl, nba)), 0)
+        assertEquals("tabs keep one order whatever the live-first cycle says", listOf(nba, nfl), c.teamLeagueTabs)
+        assertEquals(listOf("NBA", "NFL"), c.teamLeagueTabs.map { PanelText.matchup(it) })
+        assertFalse("past the last tab RIGHT passes on", c.onKey(KeyEvent.KEYCODE_DPAD_RIGHT, 0))
+        assertTrue(c.onKey(KeyEvent.KEYCODE_DPAD_LEFT, 0))
+        assertEquals("focusing a tab selects it", nba, c.teamLeague)
+        assertNull(c.snapshot)
+        assertTrue("the switch fetches at once", c.shouldFetch(0))
+        assertEquals(FocusTarget.TeamLeagueSwitch, c.focused)
+        assertFalse("before the first tab LEFT passes on", c.onKey(KeyEvent.KEYCODE_DPAD_LEFT, 0))
+        assertTrue(c.onKey(KeyEvent.KEYCODE_DPAD_RIGHT, 0))
+        assertEquals(nfl, c.teamLeague)
+        assertNull("OK on the strip moves to the next tab", c.select(confirmSwitch = true))
+        assertEquals(nba, c.teamLeague)
+        c.onFetched(snap(teamLeague = nba).copy(teamLeagues = listOf(nba, nfl)), 1)
+        c.perform(PanelAction.FocusNext, 0)
+        assertFalse("off the strip LEFT/RIGHT do not switch", c.onKey(KeyEvent.KEYCODE_DPAD_RIGHT, 0))
+        assertEquals(nba, c.teamLeague)
+    }
+
     @Test fun lateResponseForTheOldTeamIsDiscarded() {
         val c = loaded()
         c.perform(PanelAction.NextTeamLeague, 1_000)
@@ -104,9 +128,9 @@ class PanelControllerTest {
 
     @Test fun everyElementIsFocusableAndReachableByDpad() {
         val c = loaded()
-        // The total sits above the rows, which are in points order (owner design, 2026-10-23).
-        val expected = listOf(FocusTarget.TeamLeagueSwitch, FocusTarget.Total, FocusTarget.Row("p-11"), FocusTarget.Row("p-31"),
-            FocusTarget.Row("p-23"))
+        // The total sits above the rows, which keep roster order (QB first; owner 2026-10-23).
+        val expected = listOf(FocusTarget.TeamLeagueSwitch, FocusTarget.Total, FocusTarget.Row("p-11"), FocusTarget.Row("p-23"),
+            FocusTarget.Row("p-31"))
         assertEquals(expected, c.focusTargets())
         assertEquals("focus starts on the first element", expected.first(), c.focused)
         val down = keyFor(c, PanelAction.FocusNext)
@@ -114,14 +138,14 @@ class PanelControllerTest {
         repeat(expected.size - 1) { assertTrue(c.onKey(down, 0)); visited += c.focused }
         assertEquals("D-pad reaches every element in order", expected, visited)
         c.onKey(down, 0)
-        assertEquals("focus stays on the last element", FocusTarget.Row("p-23"), c.focused)
+        assertEquals("focus stays on the last element", FocusTarget.Row("p-31"), c.focused)
         c.onKey(keyFor(c, PanelAction.FocusPrevious), 0)
-        assertEquals(FocusTarget.Row("p-31"), c.focused)
+        assertEquals(FocusTarget.Row("p-23"), c.focused)
     }
 
     @Test fun focusMovesOffARemovedRow() {
         val c = loaded()
-        repeat(3) { c.perform(PanelAction.FocusNext, 0) }
+        repeat(4) { c.perform(PanelAction.FocusNext, 0) }
         assertEquals(FocusTarget.Row("p-31"), c.focused)
         c.onFetched(snap(revision = 8, rows = listOf(prow("p-11", 12.3), prow("p-23", -1.5))), 1)
         assertTrue("focus never points at a missing element: ${c.focused}", c.focused in c.focusTargets())

@@ -8,6 +8,7 @@ import com.afc.companion.alerts.AlertText
 import com.afc.companion.net.Alert
 import com.afc.companion.net.PanelState
 import com.afc.companion.net.RoutingOutcome
+import com.afc.companion.profile.Sport
 import java.util.Calendar
 import java.util.TimeZone
 import org.json.JSONArray
@@ -189,24 +190,36 @@ object PanelText {
     /** Points for a TV screen: one decimal, or a dash when there is no number. */
     fun points(value: PanelValue): String = value.value?.let { String.format(java.util.Locale.US, "%.1f", it) } ?: "–"
 
-    /** "demo-nba/cle-phi-tonight" -> "CLE @ PHI"; any other team key is shown as it is. */
-    fun matchup(teamLeague: String): String {
-        val team = teamLeague.substringAfter('/')
-        val parts = team.split('-')
-        return if (parts.size >= 2 && parts.take(2).all { it.length in 2..4 && it.all(Char::isLetter) }) {
-            "${parts[0].uppercase()} @ ${parts[1].uppercase()}"
-        } else team
+    /** The sport named in the league key ("demo-nfl" -> "NFL"); null when the key names none. */
+    fun sport(teamLeague: String): String? {
+        val tokens = teamLeague.substringBefore('/').lowercase().split(Regex("[^a-z]+"))
+        return Sport.entries.firstOrNull { it.wire in tokens }?.label
     }
 
-    /** Sport and matchup: "NBA · CLE @ PHI". */
-    fun title(snapshot: PanelSnapshot): String =
-        listOfNotNull(CornerCardText.sport(snapshot), matchup(snapshot.teamLeague)).joinToString(" · ")
+    /**
+     * "demo-nba/cle-phi-tonight" -> "CLE @ PHI"; any other key shows only its [sport] ("NFL"),
+     * never the raw key. shortcut: "Lineup" when neither key nor snapshot names a sport.
+     */
+    fun matchup(teamLeague: String, sport: String? = sport(teamLeague)): String {
+        val parts = teamLeague.substringAfter('/').split('-')
+        return if (parts.size == 3 && parts[2] == "tonight" && parts.take(2).all { it.length in 2..4 && it.all(Char::isLetter) }) {
+            "${parts[0].uppercase()} @ ${parts[1].uppercase()}"
+        } else sport ?: "Lineup"
+    }
+
+    /** Sport and matchup: "NBA · CLE @ PHI"; a key without a matchup is the sport alone ("NFL"). */
+    fun title(snapshot: PanelSnapshot): String {
+        val sport = CornerCardText.sport(snapshot)
+        return listOfNotNull(sport, matchup(snapshot.teamLeague, sport)).distinct().joinToString(" · ")
+    }
 
     /** The game clock: a live status first, else a start time, else a final. */
     fun clock(snapshot: PanelSnapshot): String? {
         val statuses = snapshot.rows.mapNotNull { it.gameStatus?.takeIf(String::isNotBlank) }
-        return statuses.firstOrNull { !it.startsWith("Tips ") && !it.startsWith("Kicks ") && !it.startsWith("Final") }
-            ?: statuses.firstOrNull { it.startsWith("Tips ") || it.startsWith("Kicks ") }
+        val upcoming = Regex("^(Tips|Kicks|Mon|Tue|Wed|Thu|Fri|Sat|Sun) ")
+        return statuses.firstOrNull { !upcoming.containsMatchIn(it) && !it.startsWith("Final") && it != "BYE" }
+            ?: statuses.firstOrNull { upcoming.containsMatchIn(it) }
+            ?: statuses.firstOrNull { it.startsWith("Final") }
             ?: statuses.firstOrNull()
     }
 
@@ -217,6 +230,7 @@ object PanelText {
     }
 
     /** Highest points first; a player without a number goes last. */
+    /** Corner-card leaders only; lineup screens keep roster order (QB first, PG first), owner 2026-10-23. */
     fun byPoints(rows: List<PanelRow>): List<PanelRow> = rows.sortedByDescending { it.points.value ?: Double.NEGATIVE_INFINITY }
 
     /** The reported outcome of the last Watch attempt, shown to the customer (AFC-PR-031). */
@@ -317,6 +331,8 @@ class PanelController(
     private var needsFetch = true
 
     val canSwitchTeamLeague: Boolean get() = teamLeagues.distinct().size >= 2
+    /** The sport tab strip's pills in a fixed order, so live-first reordering never moves a tab. */
+    val teamLeagueTabs: List<String> get() = teamLeagues.distinct().sorted()
     val visible: Boolean get() = shown
     val teamLeague: String? get() = currentTeamLeague
     val snapshot: PanelSnapshot? get() = held
@@ -329,8 +345,9 @@ class PanelController(
         val alertTargets = alerts.flatMap { alert ->
             listOfNotNull(FocusTarget.AlertWatch(alert.id).takeIf { alert.watchable }, FocusTarget.AlertDismiss(alert.id))
         }
-        val snap = held ?: return alertTargets + FocusTarget.TeamLeagueSwitch
-        return alertTargets + FocusTarget.TeamLeagueSwitch + FocusTarget.Total + PanelText.byPoints(snap.rows).map { FocusTarget.Row(it.playerId) }
+        // The sport tab strip sits at the top, above the alerts (owner, 2026-10-23).
+        val snap = held ?: return listOf(FocusTarget.TeamLeagueSwitch) + alertTargets
+        return listOf(FocusTarget.TeamLeagueSwitch) + alertTargets + FocusTarget.Total + snap.rows.map { FocusTarget.Row(it.playerId) }
     }
 
     fun onAlerts(next: List<PanelAlert>) = keepFocus {
@@ -356,6 +373,8 @@ class PanelController(
                 armed = null
                 AlertCommand.Watch(target.alertId)
             }
+            // OK on the sport tab strip moves to the next tab, the same switch as the remote's next key.
+            FocusTarget.TeamLeagueSwitch -> { perform(PanelAction.NextTeamLeague, 0); null }
             else -> null
         }
     }
@@ -373,6 +392,15 @@ class PanelController(
     )
 
     fun onKey(keyCode: Int, nowMs: Long): Boolean {
+        // LEFT/RIGHT on the strip focus the neighbouring tab, which selects it; at either end the key passes on.
+        if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT || keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
+            if (!shown || focus != FocusTarget.TeamLeagueSwitch) return false
+            val tabs = teamLeagueTabs
+            val next = tabs.getOrNull(tabs.indexOf(currentTeamLeague) + if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) 1 else -1)
+                ?: return false
+            switchTo(next)
+            return true
+        }
         val action = bindings()[keyCode] ?: return false
         if (!shown && action != PanelAction.ToggleVisibility) return false
         perform(action, nowMs)
@@ -388,18 +416,22 @@ class PanelController(
             PanelAction.NextTeamLeague -> {
                 if (teamLeagues.isEmpty()) return
                 val index = teamLeagues.indexOf(currentTeamLeague)
-                val next = teamLeagues[(index + 1).mod(teamLeagues.size)]
-                // One choice (the profile's single pair): keep the held rows, no refetch.
-                if (next == currentTeamLeague) return
-                currentTeamLeague = next
-                held = null
-                focus = FocusTarget.TeamLeagueSwitch
-                needsFetch = true
+                switchTo(teamLeagues[(index + 1).mod(teamLeagues.size)])
             }
             PanelAction.FocusNext -> moveFocus(1)
             PanelAction.FocusPrevious -> moveFocus(-1)
             PanelAction.Select -> Unit // the host runs select(), which needs the profile's switching confirmation
         }
+    }
+
+    /** The one team/league switch path: the remote's next key, double-tapped ≡, OK and the tab strip all land here. */
+    private fun switchTo(next: String) {
+        // One choice (the profile's single pair): keep the held rows, no refetch.
+        if (next == currentTeamLeague) return
+        currentTeamLeague = next
+        held = null
+        focus = FocusTarget.TeamLeagueSwitch
+        needsFetch = true
     }
 
     private fun moveFocus(delta: Int) {

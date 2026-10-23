@@ -127,13 +127,13 @@ class CornerCardTest {
     }
 
     @Test fun switchedPairLabelStaysVisibleAfterItsSnapshotLoads() {
-        val pairs = listOf("league-a/team-7", "league-b/team-8")
+        val pairs = listOf("demo-nfl/my-lineup", "demo-nba/my-lineup")
         val panel = PanelController(pairs, pairs.first(), true)
-        for (pair in pairs) {
+        for ((pair, sport) in pairs.zip(listOf("NFL", "NBA"))) {
             assertNull("the new pair starts loading", panel.snapshot)
-            assertEquals(pair.substringAfter('/'), CornerCardText.label(panel.snapshot, panel.teamLeague))
-            panel.onFetched(snap(teamLeague = pair, total = 42.0), 0)
-            assertTrue("the label survives loading", CornerCardText.label(panel.snapshot, panel.teamLeague).contains(pair.substringAfter('/')))
+            assertEquals("the sport, never the raw key", sport, CornerCardText.label(panel.snapshot, panel.teamLeague))
+            panel.onFetched(snap(teamLeague = pair, total = 42.0).copy(sport = sport), 0)
+            assertEquals("the label survives loading: sport plus clock", "$sport  Q2 08:14", CornerCardText.label(panel.snapshot, panel.teamLeague))
             assertEquals("the total is still shown separately", "42.0", CornerCardText.total(panel.snapshot))
             panel.perform(PanelAction.NextTeamLeague, 0)
         }
