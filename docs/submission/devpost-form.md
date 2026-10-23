@@ -38,6 +38,8 @@ Your fantasy team over the live game, for every sport you play.
 
 About 50 million American adults played fantasy sports in 2022: [FSGA reports 50.4 million U.S. players aged 18+](https://thefsga.org/fantasy-sports-gaming-industry/). About half of partnered U.S. adults said their partner was often or sometimes distracted by their phone during conversation: [Pew Research Center reported 51% in May 2020, from its October 2019 survey](https://www.pewresearch.org/internet/2020/05/08/dating-and-relationships-in-the-digital-age/).
 
+Amazon has been [Thursday Night Football's exclusive home since 2022 under an 11-year NFL deal](https://ir.aboutamazon.com/news-release/news-release-details/2022/Amazon.com-Announces-Fourth-Quarter-Results/), and 2025–26 began its [new 11-year NBA agreement](https://pr.nba.com/nba-walt-disney-company-nbcuniversal-amazon-prime-video-media-agreements/), with [NBA media-deal coverage](https://www.nbcsportsbayarea.com/nba/nba-viewership-up-last-season-new-media-rights-deal/1931466/) and [first-season reporting](https://www.advanced-television.com/2026/07/03/nba-on-prime-sees-significant-global-audience-growth/) providing context. Fantasy players follow both sports; AZ Fantasy puts their teams where they watch.
+
 I'm one of those people. I want to be in the moment with family and friends and still follow my fantasy team. That's why I built AZ Fantasy: a Fire TV companion that keeps my team in view and brings scoring alerts to the screen, even when the player is in a different sport from the game I'm watching.
 
 ### What it does
@@ -61,6 +63,8 @@ The TV app uses Kotlin and Jetpack Compose on Fire OS. Its corner card, alert ca
 The backend is defined with AWS SAM. AWS Lambda runs the application logic, Amazon API Gateway HTTP API connects the TV to the backend, and Amazon DynamoDB stores the application data. Amazon EventBridge Scheduler triggers feed polling. AWS Systems Manager Parameter Store is part of the backend configuration.
 
 We use ESPN public feeds for live NFL and NBA statistics. The backend connects those updates to the players in a manual fantasy lineup and sends the relevant information to the TV. ESPN's live play feed omits player identifiers, so matching scoring plays requires parsing the play text.
+
+**Security.** Linking uses a random, one-time 8-character code that expires; the TV never handles a password. The server stores only SHA-256 hashes of the TV's session tokens and polling handles, never their raw values. The phone link page warns users not to enter a code sent by someone else and is served with a strict Content-Security-Policy and frame blocking. Yahoo credentials stay out of source in SSM Parameter Store, and IAM permissions are scoped per function.
 
 ### Challenges we ran into
 
@@ -103,7 +107,7 @@ We also learned to separate useful live behavior from finished behavior. Seeing 
 
 First, reduce the observed alert delay and check the result during another live game. Improve play-text matching, make the accessibility setup clearer, and test the Watch flow live. We also need another live pass through the rebuilt UI and a capture approach that accounts for Prime Video's blocked frames.
 
-Next, complete Yahoo access and connection setup so we can move beyond manual lineups, then add more leagues and sports. The next version should make the experience easier to set up and faster to follow while preserving the simple corner card and remote controls.
+Next, add real accounts and sign-in, complete Yahoo access and connection setup so we can move beyond manual lineups, then add more leagues and sports. The next version should make the experience easier to set up and faster to follow while preserving the simple corner card and remote controls.
 
 Prime Video already offers FanDuel bet tracking during Thursday Night Football, as [reported in September 2026](https://www.covers.com/industry/fanduel-adds-live-bet-tracking-to-prime-video-thursday-night-football-sept-16-2026). AZ Fantasy could eventually show your bets next to your fantasy team on any game you watch. This is a future idea for tracking only, never placing bets; no partnership with Amazon, Prime Video or FanDuel is implied.
 
