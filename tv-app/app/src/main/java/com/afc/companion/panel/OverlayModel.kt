@@ -193,7 +193,7 @@ object CornerCardText {
     fun label(snapshot: PanelSnapshot?, teamLeague: String?): String {
         if (teamLeague == null) return "No team selected"
         if (snapshot == null) return PanelText.matchup(teamLeague)
-        return listOfNotNull(PanelText.matchup(snapshot.teamLeague), PanelText.clock(snapshot)).joinToString("  ")
+        return listOfNotNull(PanelText.matchup(snapshot.teamLeague, sport(snapshot)), PanelText.clock(snapshot)).joinToString("  ")
     }
 
     fun total(snapshot: PanelSnapshot?): String = snapshot?.let { PanelText.points(it.teamTotal) } ?: "–"

@@ -134,8 +134,8 @@ class OverlayControllerTest {
         assertEquals(expectedTitle, shown.text.headline)
         assertEquals(alert.envelope.id, shown.id)
         assertTrue("Watch retains the alert identity, resolved via AlertInbox.find", shown.watchable)
-        h.sharedPanel().perform(PanelAction.FocusPrevious, 0)
-        h.sharedPanel().perform(PanelAction.FocusPrevious, 0)
+        // The sport tab strip is on top; Watch is the next element down.
+        h.sharedPanel().perform(PanelAction.FocusNext, 0)
         val watch = h.sharedPanel().select(confirmSwitch = false)
         assertEquals(AlertCommand.Watch(alert.envelope.id), watch)
         val referenced = listOf(alert).single { it.envelope.id == (watch as AlertCommand.Watch).alertId }

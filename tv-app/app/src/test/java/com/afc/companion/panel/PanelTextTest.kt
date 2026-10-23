@@ -60,7 +60,13 @@ class PanelTextTest {
     // 1 sp >= 1 px at any 1080p density >= mdpi; the on-stick screencap measurement is P2-A05's CMD-TEXT-SIZE-MEASURE.
     @Test fun tvTextShowsMatchupPointsAndNoInternalLabels() {
         assertEquals("CLE @ PHI", PanelText.matchup("demo-nba/cle-phi-tonight"))
-        assertEquals("team-9", PanelText.matchup("nba-league/team-9"))
+        assertEquals("a lineup key shows only its sport, never the raw key", "NFL", PanelText.matchup("demo-nfl/my-lineup"))
+        assertEquals("NBA", PanelText.matchup("demo-nba/my-lineup"))
+        assertEquals("NBA", PanelText.matchup("nba-league/team-9"))
+        assertEquals("a snapshot's sport names a key that has none", "NFL", PanelText.matchup("league-a/team-7", "NFL"))
+        assertEquals("Lineup", PanelText.matchup("league-a/team-7"))
+        assertEquals("NFL", PanelText.title(snap(teamLeague = "demo-nfl/my-lineup")))
+        assertEquals("NBA · CLE @ PHI", PanelText.title(snap(teamLeague = "demo-nba/cle-phi-tonight").copy(sport = "NBA")))
         assertEquals("121.8", PanelText.points(v(121.75)))
         assertEquals("0.0", PanelText.points(v(0.0)))
         assertEquals("–", PanelText.points(v(null)))

@@ -109,6 +109,7 @@ class OverlayIntegrationContractTest {
             "demo-nba/cle-phi-tonight" to "CLE @ PHI",
             "demo-nfl/ne-chi-tonight" to "NE @ CHI",
             "demo-nba/den-okc-tonight" to "DEN @ OKC",
+            "demo-nfl/my-lineup" to "NFL",
         )) assertEquals(expected, CornerCardText.label(null, pair))
     }
 

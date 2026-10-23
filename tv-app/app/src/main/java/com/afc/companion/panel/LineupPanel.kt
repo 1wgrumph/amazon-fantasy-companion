@@ -3,6 +3,7 @@ package com.afc.companion.panel
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -203,6 +204,7 @@ fun LineupPanel(client: ApiClient, mode: PanelMode, modifier: Modifier = Modifie
                     watchOutcome = watchOutcome,
                     snapshot = controller.snapshot,
                     teamLeague = controller.teamLeague,
+                    tabs = controller.teamLeagueTabs,
                     focused = controller.focused,
                     fetchAttempted = fetchAttempted,
                     nowMs = System.currentTimeMillis(),
@@ -261,6 +263,7 @@ internal fun PanelContent(
     teamLeague: String?,
     focused: FocusTarget?,
     fetchAttempted: Boolean,
+    tabs: List<String> = listOfNotNull(teamLeague),
     nowMs: Long,
     compact: Boolean = false,
 ) {
@@ -281,18 +284,15 @@ internal fun PanelContent(
                 .verticalScroll(rememberScrollState()).padding(8.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            if (!compact) LineupHeading()
+            // The overlay cannot take focus, so its compact form leaves out the sport tab strip.
+            if (!compact) {
+                LineupHeading()
+                SportTabs(tabs, teamLeague, snapshot, focused == FocusTarget.TeamLeagueSwitch)
+            }
             watchOutcome?.let {
                 Text(it, style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = MaterialTheme.colorScheme.onSurface))
             }
             alerts.forEach { alert -> AlertCard(alert, armedWatch == alert.id, focused, revealWholeCard = !loading, compact = compact) }
-            // The overlay cannot take focus, so its compact form leaves out the team/league switch.
-            if (!compact) FocusableRow(focused == FocusTarget.TeamLeagueSwitch) {
-                Text(
-                    "Team: ${teamLeague?.let(PanelText::matchup) ?: "none"}",
-                    style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = MaterialTheme.colorScheme.onSurface),
-                )
-            }
             if (teamLeague == null) {
                 Row(horizontalArrangement = Arrangement.spacedBy(24.dp), verticalAlignment = Alignment.CenterVertically) {
                     // Decorative: the sentence beside it carries the meaning.
@@ -313,7 +313,8 @@ internal fun PanelContent(
                 }
                 return@Column
             }
-            PanelHeader(snapshot)
+            // The selected tab already names the sport; the header adds only a real matchup.
+            if (PanelText.title(snapshot) != CornerCardText.sport(snapshot)) PanelHeader(snapshot)
             val clock = PanelText.clock(snapshot)
             FocusableRow(focused == FocusTarget.Total) { ScoreLine(snapshot, clock, PanelTextSizes.scoreSp * 1.5f) }
             PanelText.byPoints(snapshot.rows).forEach { row ->
@@ -447,6 +448,40 @@ private fun Modifier.bringIntoViewWhen(focused: Boolean): Modifier {
 @Composable
 private fun LineupHeading() {
     Text("My lineup", style = MaterialTheme.typography.headlineMedium, color = MaterialTheme.colorScheme.onSurface)
+}
+
+/**
+ * One pill per lineup, labelled by sport: the selected one filled with its sport accent, the others
+ * outlined in theirs. Focusing a tab selects it, so the gold focus ring sits on the selected pill.
+ */
+@Composable
+private fun SportTabs(tabs: List<String>, selected: String?, snapshot: PanelSnapshot?, focused: Boolean) {
+    Row(Modifier.bringIntoViewWhen(focused), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+        if (tabs.isEmpty()) {
+            Text("No team", style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)))
+        }
+        tabs.forEach { tab ->
+            val label = PanelText.sport(tab) ?: CornerCardText.sport(snapshot?.takeIf { it.teamLeague == tab }) ?: "Lineup"
+            val sport = Sport.entries.find { it.label == label }
+            val accent = sport?.let { Color(TvPalette.sportAccentArgb(it)) } ?: Color(TvPalette.primaryArgb)
+            val isSelected = tab == selected
+            val pill = RoundedCornerShape(50)
+            Text(
+                label,
+                modifier = Modifier
+                    .then(if (isSelected && focused) Modifier.border(TvFocusStyle.borderWidthDp.dp, Color(TvFocusStyle.focusedBorderArgb), pill).padding(TvFocusStyle.borderWidthDp.dp) else Modifier)
+                    .then(if (isSelected) Modifier.background(accent, pill) else Modifier.border(2.dp, accent, pill))
+                    .padding(horizontal = 28.dp, vertical = 8.dp),
+                maxLines = 1,
+                softWrap = false,
+                style = TextStyle(
+                    fontSize = PanelTextSizes.scoreSp.sp,
+                    fontWeight = if (isSelected) FontWeight.Black else FontWeight.SemiBold,
+                    color = if (isSelected) sport?.let { Color(TvPalette.onSportAccentArgb(it)) } ?: Color(TvPalette.surfaceArgb) else accent,
+                ),
+            )
+        }
+    }
 }
 
 /** Sport and matchup; a tagged sport gets its accent as a chip. */

@@ -85,6 +85,30 @@ class PanelControllerTest {
         assertEquals(nba, c.teamLeague)
     }
 
+    @Test fun sportTabStripSwitchesWithLeftRightAndOkInAFixedOrder() {
+        val nba = "demo-nba/my-lineup"
+        val nfl = "demo-nfl/my-lineup"
+        val c = PanelController(listOf(nfl), nfl, true)
+        c.onFetched(snap(teamLeague = nfl).copy(teamLeagues = listOf(nfl, nba)), 0)
+        assertEquals("tabs keep one order whatever the live-first cycle says", listOf(nba, nfl), c.teamLeagueTabs)
+        assertEquals(listOf("NBA", "NFL"), c.teamLeagueTabs.map { PanelText.matchup(it) })
+        assertFalse("past the last tab RIGHT passes on", c.onKey(KeyEvent.KEYCODE_DPAD_RIGHT, 0))
+        assertTrue(c.onKey(KeyEvent.KEYCODE_DPAD_LEFT, 0))
+        assertEquals("focusing a tab selects it", nba, c.teamLeague)
+        assertNull(c.snapshot)
+        assertTrue("the switch fetches at once", c.shouldFetch(0))
+        assertEquals(FocusTarget.TeamLeagueSwitch, c.focused)
+        assertFalse("before the first tab LEFT passes on", c.onKey(KeyEvent.KEYCODE_DPAD_LEFT, 0))
+        assertTrue(c.onKey(KeyEvent.KEYCODE_DPAD_RIGHT, 0))
+        assertEquals(nfl, c.teamLeague)
+        assertNull("OK on the strip moves to the next tab", c.select(confirmSwitch = true))
+        assertEquals(nba, c.teamLeague)
+        c.onFetched(snap(teamLeague = nba).copy(teamLeagues = listOf(nba, nfl)), 1)
+        c.perform(PanelAction.FocusNext, 0)
+        assertFalse("off the strip LEFT/RIGHT do not switch", c.onKey(KeyEvent.KEYCODE_DPAD_RIGHT, 0))
+        assertEquals(nba, c.teamLeague)
+    }
+
     @Test fun lateResponseForTheOldTeamIsDiscarded() {
         val c = loaded()
         c.perform(PanelAction.NextTeamLeague, 1_000)

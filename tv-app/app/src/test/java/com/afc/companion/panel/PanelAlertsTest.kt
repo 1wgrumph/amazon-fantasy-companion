@@ -45,12 +45,13 @@ class PanelAlertsTest {
     @Test fun watchAndDismissAreReachableByDpadAboveTheLineup() {
         val c = controller(alertOf("a1"))
         assertEquals(
-            listOf(FocusTarget.AlertWatch("a1"), FocusTarget.AlertDismiss("a1"), FocusTarget.TeamLeagueSwitch,
+            "the sport tab strip sits on top, then the alerts, then the lineup",
+            listOf(FocusTarget.TeamLeagueSwitch, FocusTarget.AlertWatch("a1"), FocusTarget.AlertDismiss("a1"),
                 FocusTarget.Total, FocusTarget.Row("p-11"), FocusTarget.Row("p-31"), FocusTarget.Row("p-23")),
             c.focusTargets(),
         )
         assertEquals("focus is not stolen by an arriving alert", FocusTarget.TeamLeagueSwitch, c.focused)
-        press(c, KeyEvent.KEYCODE_DPAD_UP)
+        press(c, KeyEvent.KEYCODE_DPAD_DOWN, 2)
         assertEquals(FocusTarget.AlertDismiss("a1"), c.focused)
         assertEquals(AlertCommand.Dismiss("a1"), c.select(confirmSwitch = true))
         press(c, KeyEvent.KEYCODE_DPAD_UP)
@@ -60,7 +61,7 @@ class PanelAlertsTest {
 
     @Test fun alertsAreReachableWithoutATeamLeague() {
         val c = PanelController(emptyList(), null, true).apply { onAlerts(panelAlerts(listOf(alertOf("a1")))) }
-        press(c, KeyEvent.KEYCODE_DPAD_UP)
+        press(c, KeyEvent.KEYCODE_DPAD_DOWN, 2)
         assertEquals(FocusTarget.AlertDismiss("a1"), c.focused)
     }
 
@@ -73,7 +74,7 @@ class PanelAlertsTest {
 
     @Test fun switchingConfirmationNeedsASecondPressAndFocusMoveCancelsIt() {
         val c = controller(alertOf("a1"))
-        press(c, KeyEvent.KEYCODE_DPAD_UP, 2)
+        press(c, KeyEvent.KEYCODE_DPAD_DOWN)
         assertNull("first press only asks for confirmation (AFC-PR-035)", c.select(confirmSwitch = true))
         assertEquals("a1", c.armedWatch)
         press(c, KeyEvent.KEYCODE_DPAD_DOWN)
@@ -87,12 +88,12 @@ class PanelAlertsTest {
     @Test fun alertWithoutAnEventOffersDismissOnly() {
         val c = controller(alertOf("a1", eventId = false))
         assertEquals("no event id means no attempt can be reported, so no Watch",
-            listOf(FocusTarget.AlertDismiss("a1"), FocusTarget.TeamLeagueSwitch), c.focusTargets().take(2))
+            listOf(FocusTarget.TeamLeagueSwitch, FocusTarget.AlertDismiss("a1"), FocusTarget.Total), c.focusTargets().take(3))
     }
 
     @Test fun dismissedAlertMovesFocusToAnExistingElement() {
         val c = controller(alertOf("a1"), alertOf("a2"))
-        press(c, KeyEvent.KEYCODE_DPAD_UP)
+        press(c, KeyEvent.KEYCODE_DPAD_DOWN, 4)
         assertEquals(FocusTarget.AlertDismiss("a1"), c.focused)
         c.onAlerts(panelAlerts(listOf(alertOf("a2"))))
         assertTrue("focus never points at a dismissed alert: ${c.focused}", c.focused in c.focusTargets())
@@ -100,7 +101,7 @@ class PanelAlertsTest {
 
     @Test fun hiddenPanelSelectsNothing() {
         val c = controller(alertOf("a1"))
-        press(c, KeyEvent.KEYCODE_DPAD_UP)
+        press(c, KeyEvent.KEYCODE_DPAD_DOWN)
         c.perform(PanelAction.ToggleVisibility, 0)
         assertNull(c.select(confirmSwitch = false))
         assertFalse(c.onKey(KeyEvent.KEYCODE_DPAD_CENTER, 0))
