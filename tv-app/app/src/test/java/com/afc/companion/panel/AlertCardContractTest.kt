@@ -13,7 +13,7 @@ class AlertCardContractTest {
     private fun notice(id: String = "nba-1", player: String = "Edwards", value: Double = 20.0, sport: String = "NBA"): Any {
         val type = overlayType("AlertCardNotice")
         val constructor = type.constructors.singleOrNull {
-            it.parameterTypes.toList() == listOf(String::class.java, String::class.java, Double::class.javaPrimitiveType, String::class.java, String::class.java)
+            it.parameterTypes.toList() == listOf(String::class.java, String::class.java, Double::class.javaObjectType, String::class.java, String::class.java)
         } ?: throw AssertionError("Missing overlay API: AlertCardNotice(alertId: String, player: String, value: Double, sport: String, watchEventId: String)")
         return constructor.newInstance(id, player, value, sport, "event-$id")
     }
@@ -71,7 +71,7 @@ class AlertCardContractTest {
             assertNull("reuse the existing claim boundary", overlayCall(text, "label", player, 20.0))
         }
         for (number in listOf(Double.NaN, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY)) {
-            assertNull("no fabricated number", overlayCall(text, "label", "Edwards", number))
+            assertEquals("no fabricated number", "Edwards · SCORE", overlayCall(text, "label", "Edwards", number))
         }
     }
 

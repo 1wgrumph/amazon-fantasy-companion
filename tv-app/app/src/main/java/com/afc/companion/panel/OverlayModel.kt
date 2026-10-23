@@ -232,15 +232,16 @@ object AlertCardGeometry {
 data class AlertCardNotice(
     val alertId: String,
     val player: String,
-    val value: Double,
+    val value: Double?,
     val sport: String,
     val watchEventId: String,
 )
 
 object AlertCardText {
-    /** "D. Mitchell · 30 PTS": the player and a compact number; null for a non-finite number or an unsafe claim. */
-    fun label(player: String, value: Double): String? {
-        if (player.isBlank() || !value.isFinite() || AlertPresenter.isUnsafe(player)) return null
+    /** "D. Mitchell · 30 PTS", or "D. Mitchell · SCORE" when no fresh number is known; null for an unsafe claim. */
+    fun label(player: String, value: Double?): String? {
+        if (player.isBlank() || AlertPresenter.isUnsafe(player)) return null
+        if (value == null || !value.isFinite()) return "$player · SCORE"
         val number = if (value == floor(value)) value.toLong().toString() else value.toString()
         return "$player · $number PTS"
     }
@@ -287,7 +288,7 @@ class AlertCardQueue {
  * Optional backend fields win when present: `triggerContext.sport` ("nba"/"nfl"),
  * `starters[0].shortName` and `starters[0].points` (fantasy points on the profile's basis).
  * Without them the player is the starter's short name ("D. Mitchell"), and the number and sport come only from the
- * fresh matching row and sport/scoring basis of the selected profile's [panel] snapshot; otherwise no card is emitted.
+ * fresh matching row of the selected [panel] snapshot; with no fresh number the card reads "SCORE" (never dropped).
  */
 fun alertCardNotice(alert: Alert, panel: PanelSnapshot?): AlertCardNotice? {
     if (AlertPresenter.text(alert) == null) return null // the panel's safety gate: unsafe names never reach a card
@@ -303,7 +304,9 @@ fun alertCardNotice(alert: Alert, panel: PanelSnapshot?): AlertCardNotice? {
     val freshPoints = row?.points?.takeIf { points ->
         points.asOfMs?.let { System.currentTimeMillis() - it in 0..60_000 } == true
     }?.value?.takeIf { it.isFinite() }
-    val value = (starter.opt("points") as? Number)?.toDouble()?.takeIf { it.isFinite() } ?: freshPoints ?: return null
-    val sport = declaredSport ?: CornerCardText.sport(panel)?.takeIf { row != null && it in listOf("NBA", "NFL") } ?: return null
+    // Owner 2026-10-23: an alert always shows, even for a player outside the pair on screen (cross-sport);
+    // without a fresh number it reads "SCORE". An unknown sport ("") gets the neutral alert colour.
+    val value = (starter.opt("points") as? Number)?.toDouble()?.takeIf { it.isFinite() } ?: freshPoints
+    val sport = declaredSport ?: CornerCardText.sport(panel)?.takeIf { row != null && it in listOf("NBA", "NFL") } ?: ""
     return AlertCardNotice(alert.envelope.id, player, value, sport, AlertNotifier.watchEventId(alert).orEmpty())
 }
