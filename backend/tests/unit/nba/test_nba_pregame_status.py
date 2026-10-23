@@ -48,11 +48,12 @@ def test_poll_stores_pregame_status_for_a_not_started_game(api, monkeypatch):
     result = nba.poll(get_json)
     assert result["failed"] == []
     item = api.table("PlayerStats").get_item(Key={"athleteId": "pregame"}).get("Item")
-    assert item is not None and item.get("teams") == {"SHO": TIP, "SAW": TIP}
+    # Owner design 2026-10-23: the start time is shown in Central as "Tips h:mm".
+    assert item is not None and item.get("teams") == {"SHO": "Tips 9:00 PM", "SAW": "Tips 9:00 PM"}
     assert isinstance(item.get("asOf"), str) and item["asOf"]
 
 
-def test_poll_writes_an_empty_slate_for_an_in_progress_scoreboard(api, monkeypatch):
+def test_poll_stores_the_live_clock_for_an_in_progress_scoreboard(api, monkeypatch):
     import nba
 
     monkeypatch.setenv("AFC_ENABLE_NBA", "true")
@@ -63,13 +64,15 @@ def test_poll_writes_an_empty_slate_for_an_in_progress_scoreboard(api, monkeypat
         return board if url.endswith("scoreboard") else summary
 
     assert nba.poll(get_json)["stored"] == 3
-    assert api.table("PlayerStats").get_item(Key={"athleteId": "pregame"})["Item"]["teams"] == {}
+    # Owner design 2026-10-23: a started game's status is stored too.
+    assert api.table("PlayerStats").get_item(Key={"athleteId": "pregame"})["Item"]["teams"] == {
+        "SHO": "10:00 - 3rd", "SAW": "10:00 - 3rd"}
     ids = {row["athleteId"] for row in api.table("PlayerStats").scan()["Items"]}
     assert ids == {"pregame", "9100001", "9100002", "9100003"}
 
 
 @pytest.mark.parametrize("state", ["in", "post", "empty"])
-def test_successful_poll_clears_the_previous_pregame_slate(api, monkeypatch, state):
+def test_successful_poll_replaces_the_previous_pregame_slate(api, monkeypatch, state):
     import nba
     import store
 
@@ -80,12 +83,14 @@ def test_successful_poll_clears_the_previous_pregame_slate(api, monkeypatch, sta
     get = lambda url: board if url.endswith("scoreboard") else summary
     nba.poll(get)
     assert store.get_nba_pregame()["teams"]
+    status = {"in": "Q1 12:00", "post": "Final"}.get(state)
     if state == "empty":
         board["events"] = []
     else:
-        board["events"][0]["status"]["type"]["state"] = state
+        board["events"][0]["status"]["type"].update(state=state, shortDetail=status)
     nba.poll(get)
-    assert store.get_nba_pregame()["teams"] == {}
+    # Owner design 2026-10-23: a started or finished game replaces the start time with its status.
+    assert store.get_nba_pregame()["teams"] == ({"SHO": status, "SAW": status} if status else {})
 
 
 @pytest.mark.parametrize("error", [

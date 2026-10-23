@@ -95,10 +95,18 @@ class PanelControllerTest {
         assertEquals(setOf("p-11", "p-23", "p-31"), delta.changedRows)
     }
 
+    @Test fun cycleFollowsTheBackendOrderLiveGamesFirst() {
+        val c = PanelController(listOf("l/done"), "l/done", true)
+        c.onFetched(snap(teamLeague = "l/done").copy(teamLeagues = listOf("l/live", "l/later", "l/done")), 0)
+        c.perform(PanelAction.NextTeamLeague, 0)
+        assertEquals("double-tap goes to the live game", "l/live", c.teamLeague)
+    }
+
     @Test fun everyElementIsFocusableAndReachableByDpad() {
         val c = loaded()
-        val expected = listOf(FocusTarget.TeamLeagueSwitch, FocusTarget.Row("p-11"), FocusTarget.Row("p-23"),
-            FocusTarget.Row("p-31"), FocusTarget.Total)
+        // The total sits above the rows, which are in points order (owner design, 2026-10-23).
+        val expected = listOf(FocusTarget.TeamLeagueSwitch, FocusTarget.Total, FocusTarget.Row("p-11"), FocusTarget.Row("p-31"),
+            FocusTarget.Row("p-23"))
         assertEquals(expected, c.focusTargets())
         assertEquals("focus starts on the first element", expected.first(), c.focused)
         val down = keyFor(c, PanelAction.FocusNext)
@@ -106,7 +114,7 @@ class PanelControllerTest {
         repeat(expected.size - 1) { assertTrue(c.onKey(down, 0)); visited += c.focused }
         assertEquals("D-pad reaches every element in order", expected, visited)
         c.onKey(down, 0)
-        assertEquals("focus stays on the last element", FocusTarget.Total, c.focused)
+        assertEquals("focus stays on the last element", FocusTarget.Row("p-23"), c.focused)
         c.onKey(keyFor(c, PanelAction.FocusPrevious), 0)
         assertEquals(FocusTarget.Row("p-31"), c.focused)
     }

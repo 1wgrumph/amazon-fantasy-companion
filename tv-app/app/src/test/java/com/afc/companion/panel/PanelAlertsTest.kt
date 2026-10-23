@@ -46,7 +46,7 @@ class PanelAlertsTest {
         val c = controller(alertOf("a1"))
         assertEquals(
             listOf(FocusTarget.AlertWatch("a1"), FocusTarget.AlertDismiss("a1"), FocusTarget.TeamLeagueSwitch,
-                FocusTarget.Row("p-11"), FocusTarget.Row("p-23"), FocusTarget.Row("p-31"), FocusTarget.Total),
+                FocusTarget.Total, FocusTarget.Row("p-11"), FocusTarget.Row("p-31"), FocusTarget.Row("p-23")),
             c.focusTargets(),
         )
         assertEquals("focus is not stolen by an arriving alert", FocusTarget.TeamLeagueSwitch, c.focused)

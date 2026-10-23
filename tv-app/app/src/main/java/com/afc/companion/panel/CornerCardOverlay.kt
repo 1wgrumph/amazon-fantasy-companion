@@ -31,37 +31,26 @@ import com.afc.companion.ui.theme.TvPalette
 private val onSurface = Color(CornerCardStyle.TEXT_ARGB)
 
 /**
- * The default over-the-game surface: the team total, its freshness and an opaque sport mark on a
- * translucent theme surface, with a sport-colour edge. Without [holdEnabled] it adds the one-line accessibility-switch hint.
+ * The default over-the-game surface, read from the couch: sport, matchup and clock; the team total
+ * large in the brand gold; the two top scorers. Translucent theme surface with a sport-colour edge.
+ * Without [holdEnabled] the one-line accessibility-switch hint replaces the scorers.
  */
 @Composable
 fun CornerCardContent(snapshot: PanelSnapshot?, teamLeague: String?, nowMs: Long, holdEnabled: Boolean, windowAlpha: Float = 1f) {
     val sport = Sport.entries.find { it.label == CornerCardText.sport(snapshot) }
     val accent = sport?.let { Color(TvPalette.sportAccentArgb(it)) } ?: Color(TvPalette.primaryArgb)
-    val hint = CornerCardText.hint(holdEnabled)
     Row(
         Modifier.fillMaxSize().clip(RoundedCornerShape(12.dp))
             .background(Color(TvPalette.surfaceArgb).copy(alpha = CornerCardStyle.backgroundAlpha(windowAlpha))),
     ) {
-        Box(Modifier.width(4.dp).fillMaxHeight().background(accent))
+        Box(Modifier.width(5.dp).fillMaxHeight().background(accent))
         Column(
-            Modifier.weight(1f).fillMaxHeight().padding(horizontal = 10.dp, vertical = 5.dp),
+            Modifier.weight(1f).fillMaxHeight().padding(horizontal = 10.dp, vertical = 4.dp),
             verticalArrangement = Arrangement.Center,
         ) {
-            Line(CornerCardText.label(teamLeague), 12.sp, FontWeight.Bold)
-            Line(CornerCardText.total(snapshot), 22.sp, FontWeight.Bold)
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                if (sport != null) {
-                    Text(
-                        sport.label,
-                        Modifier.clip(RoundedCornerShape(4.dp)).background(accent).padding(horizontal = 4.dp),
-                        style = TextStyle(fontSize = 11.sp, lineHeight = 14.sp, fontWeight = FontWeight.Bold, color = Color(TvPalette.onSportAccentArgb(sport))),
-                    )
-                    Box(Modifier.width(6.dp))
-                }
-                Line(CornerCardText.status(snapshot, teamLeague, nowMs), 12.sp)
-            }
-            if (hint != null) Line(hint, 10.sp)
+            Line(CornerCardText.label(snapshot, teamLeague), 12.sp, FontWeight.SemiBold)
+            Line(CornerCardText.total(snapshot), 24.sp, FontWeight.Black, Color(TvPalette.primaryArgb))
+            Line(CornerCardText.hint(holdEnabled) ?: CornerCardText.leaders(snapshot), 12.sp)
         }
     }
 }
@@ -95,12 +84,12 @@ fun OverlayMenuContent(focus: OverlayMenuItem, teamLeague: String?, items: List<
 }
 
 @Composable
-private fun Line(text: String, size: TextUnit, weight: FontWeight = FontWeight.Normal) {
+private fun Line(text: String, size: TextUnit, weight: FontWeight = FontWeight.Normal, color: Color = onSurface) {
     Text(
         text,
         maxLines = 1,
         softWrap = false,
         overflow = TextOverflow.Ellipsis,
-        style = TextStyle(fontSize = size, lineHeight = size * 1.2f, fontWeight = weight, color = onSurface),
+        style = TextStyle(fontSize = size, lineHeight = size * 1.2f, fontWeight = weight, color = color),
     )
 }

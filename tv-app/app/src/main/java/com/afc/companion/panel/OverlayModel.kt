@@ -81,8 +81,9 @@ class OverlayController(
         OverlayMode.Menu, OverlayMode.Expanded -> { mode = OverlayMode.Card; OverlayOutcome.Shown }
     }
 
+    /** Double-tapped ≡ switches the pair in whichever view is open: card, menu or expanded panel. */
     fun doubleTap() {
-        if (mode == OverlayMode.Card || mode == OverlayMode.Menu) panel.perform(PanelAction.NextTeamLeague, 0)
+        if (mode != OverlayMode.Off) panel.perform(PanelAction.NextTeamLeague, 0)
     }
 
     fun select(item: OverlayMenuItem) {
@@ -187,21 +188,21 @@ object CornerCardStyle {
     val TEXT_ARGB = TvPalette.onSurfaceArgb
 }
 
-/** The card's few words: the team total, how fresh it is, the sport, and the switch hint. */
+/** The card's few words: sport, matchup and clock; the total; the top two players. */
 object CornerCardText {
-    fun label(teamLeague: String?): String = teamLeague ?: "No team selected"
-
-    fun total(snapshot: PanelSnapshot?): String = snapshot?.teamTotal?.value?.toString() ?: "Unavailable"
-
-    fun status(snapshot: PanelSnapshot?, teamLeague: String?, nowMs: Long): String {
+    fun label(snapshot: PanelSnapshot?, teamLeague: String?): String {
         if (teamLeague == null) return "No team selected"
-        // Names the pair while it loads, so a double-tapped switch shows where it went.
-        val total = snapshot?.teamTotal ?: return "Loading ${teamLeague.substringAfter('/')}"
-        val asOf = total.asOfMs ?: return "Stale"
-        val ageS = (nowMs - asOf) / 1_000
-        val age = if (nowMs - asOf >= STALE_MS) "Stale ${ageS}s" else "Updated ${ageS}s ago"
-        return if (total.source == "replay") "Replay, ${age.replaceFirstChar { it.lowercase() }}" else age
+        if (snapshot == null) return PanelText.matchup(teamLeague)
+        return listOfNotNull(PanelText.title(snapshot), PanelText.clock(snapshot)).joinToString("  ")
     }
+
+    fun total(snapshot: PanelSnapshot?): String = snapshot?.let { "${PanelText.points(it.teamTotal)} pts" } ?: "–"
+
+    /** "Mitchell 32.5   Maxey 28.0": last names of the two top scorers. */
+    fun leaders(snapshot: PanelSnapshot?): String = snapshot?.let { snap ->
+        PanelText.byPoints(snap.rows).filter { it.points.value != null }.take(2)
+            .joinToString("   ") { "${it.name.trim().substringAfterLast(' ')} ${PanelText.points(it.points)}" }
+    }.orEmpty()
 
     fun sport(snapshot: PanelSnapshot?): String? = snapshot?.let {
         it.sport ?: when (it.basis) {
@@ -211,8 +212,6 @@ object CornerCardText {
     }
 
     fun hint(serviceEnabled: Boolean): String? = if (serviceEnabled) null else "Hold ≡ needs Accessibility"
-
-    private const val STALE_MS = 60_000L
 }
 
 /** Alert card: a square of one-sixth of the short side at the safe top-right corner (180 px at 1080p). */

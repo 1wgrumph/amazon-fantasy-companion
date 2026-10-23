@@ -111,15 +111,15 @@ def _store_pregame(teams):
 def poll(get_json, store_records=None):
     """Fetch the NBA scoreboard and store each game's boxscore statistics.
 
-    A not-yet-started game also stores its ESPN status text per team
-    abbreviation. `get_json` is an allowlisted ESPN getter. A scoreboard
+    Each team's game status today (start time, clock or final) is also
+    stored per team abbreviation. `get_json` is an allowlisted ESPN getter. A scoreboard
     failure is logged and returns the empty result. One game's failure
     never blocks the others.
     """
     result = {"stored": 0, "failed": []}
     if not enabled():
         return result
-    from nba.normalize import boxscore_statistics_nba, pregame_status_by_team, scoreboard_games
+    from nba.normalize import boxscore_statistics_nba, scoreboard_games, team_status_by_team
 
     try:
         board = get_json(FEED + "scoreboard")
@@ -127,7 +127,7 @@ def poll(get_json, store_records=None):
     except (ValueError, OSError):
         logging.getLogger(__name__).warning("NBA scoreboard unavailable")
         return result
-    _store_pregame(pregame_status_by_team(board))
+    _store_pregame(team_status_by_team(board["events"], "Tips"))
     for game in games:
         game_id = game["gameId"]
         try:

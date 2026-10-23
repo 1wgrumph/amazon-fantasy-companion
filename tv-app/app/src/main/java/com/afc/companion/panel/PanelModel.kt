@@ -184,6 +184,33 @@ object PanelText {
         return snapshot.sport?.let { "$it · $base" } ?: base
     }
 
+    /** Points for a TV screen: one decimal, or a dash when there is no number. */
+    fun points(value: PanelValue): String = value.value?.let { String.format(java.util.Locale.US, "%.1f", it) } ?: "–"
+
+    /** "demo-nba/cle-phi-tonight" -> "CLE @ PHI"; any other team key is shown as it is. */
+    fun matchup(teamLeague: String): String {
+        val team = teamLeague.substringAfter('/')
+        val parts = team.split('-')
+        return if (parts.size >= 2 && parts.take(2).all { it.length in 2..4 && it.all(Char::isLetter) }) {
+            "${parts[0].uppercase()} @ ${parts[1].uppercase()}"
+        } else team
+    }
+
+    /** Sport and matchup: "NBA · CLE @ PHI". */
+    fun title(snapshot: PanelSnapshot): String =
+        listOfNotNull(CornerCardText.sport(snapshot), matchup(snapshot.teamLeague)).joinToString(" · ")
+
+    /** The game clock: a live status first, else a start time, else a final. */
+    fun clock(snapshot: PanelSnapshot): String? {
+        val statuses = snapshot.rows.mapNotNull { it.gameStatus?.takeIf(String::isNotBlank) }
+        return statuses.firstOrNull { !it.startsWith("Tips ") && !it.startsWith("Kicks ") && !it.startsWith("Final") }
+            ?: statuses.firstOrNull { it.startsWith("Tips ") || it.startsWith("Kicks ") }
+            ?: statuses.firstOrNull()
+    }
+
+    /** Highest points first; a player without a number goes last. */
+    fun byPoints(rows: List<PanelRow>): List<PanelRow> = rows.sortedByDescending { it.points.value ?: Double.NEGATIVE_INFINITY }
+
     /** The reported outcome of the last Watch attempt, shown to the customer (AFC-PR-031). */
     fun watchOutcome(outcome: RoutingOutcome): String = when (outcome) {
         RoutingOutcome.GameOpened -> "Watch: game opened."
@@ -295,7 +322,7 @@ class PanelController(
             listOfNotNull(FocusTarget.AlertWatch(alert.id).takeIf { alert.watchable }, FocusTarget.AlertDismiss(alert.id))
         }
         val snap = held ?: return alertTargets + FocusTarget.TeamLeagueSwitch
-        return alertTargets + FocusTarget.TeamLeagueSwitch + snap.rows.map { FocusTarget.Row(it.playerId) } + FocusTarget.Total
+        return alertTargets + FocusTarget.TeamLeagueSwitch + FocusTarget.Total + PanelText.byPoints(snap.rows).map { FocusTarget.Row(it.playerId) }
     }
 
     fun onAlerts(next: List<PanelAlert>) = keepFocus {
@@ -388,8 +415,8 @@ class PanelController(
     fun onFetched(snapshot: PanelSnapshot, nowMs: Long): PanelDelta {
         if (!shown) return PanelDelta.NONE
         if (snapshot.teamLeague != currentTeamLeague) return PanelDelta.NONE
-        // The panel lists every pair the profile holds, so NextTeamLeague can reach them all.
-        teamLeagues = (teamLeagues + snapshot.teamLeagues).distinct()
+        // The panel lists every pair the profile holds, live games first, so NextTeamLeague reaches them all in that order.
+        teamLeagues = (snapshot.teamLeagues + teamLeagues).distinct()
         lastFetchMs = nowMs
         needsFetch = false
         val previous = held

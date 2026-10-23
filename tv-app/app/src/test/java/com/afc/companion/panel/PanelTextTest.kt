@@ -58,11 +58,18 @@ class PanelTextTest {
     }
 
     // 1 sp >= 1 px at any 1080p density >= mdpi; the on-stick screencap measurement is P2-A05's CMD-TEXT-SIZE-MEASURE.
-    @Test fun progressShowsAWholePercentAndKeepsItsLabels() {
-        assertEquals("50%", progressText(v(0.5), AS_OF_MS))
-        assertEquals("33% (stale 75s)", progressText(v(0.333), AS_OF_MS + 75_000))
-        assertEquals("100% (replay)", progressText(PanelValue(1.0, null, "replay", AS_OF_MS), AS_OF_MS))
-        assertEquals("Unavailable", progressText(v(null), AS_OF_MS))
+    @Test fun tvTextShowsMatchupPointsAndNoInternalLabels() {
+        assertEquals("CLE @ PHI", PanelText.matchup("demo-nba/cle-phi-tonight"))
+        assertEquals("team-9", PanelText.matchup("nba-league/team-9"))
+        assertEquals("121.8", PanelText.points(v(121.75)))
+        assertEquals("0.0", PanelText.points(v(0.0)))
+        assertEquals("–", PanelText.points(v(null)))
+    }
+
+    @Test fun rowsSortByPointsHighestFirst() {
+        fun row(id: String, points: Double?) = PanelRow(id, id, v(points), null)
+        val sorted = PanelText.byPoints(listOf(row("a", 3.0), row("b", null), row("c", 12.5), row("d", 0.0)))
+        assertEquals(listOf("c", "a", "d", "b"), sorted.map { it.playerId })
     }
 
     @Test fun textSizesMeetTheCouchFloor() {

@@ -88,16 +88,19 @@ class CornerCardTest {
         }
     }
 
-    @Test fun cardTextIsTheTotalStatusAndSport() {
-        val fresh = snap(total = 112.5).copy(sport = "NFL")
-        assertEquals("112.5", CornerCardText.total(fresh))
-        assertEquals("Updated 12s ago", CornerCardText.status(fresh, TL, AS_OF_MS + 12_000))
-        assertEquals("Stale 75s", CornerCardText.status(fresh, TL, AS_OF_MS + 75_000))
-        assertEquals("NFL", CornerCardText.sport(fresh))
-        val undated = fresh.copy(teamTotal = fresh.teamTotal.copy(asOfMs = null))
-        assertEquals("Stale", CornerCardText.status(undated, TL, AS_OF_MS))
-        val replay = fresh.copy(teamTotal = fresh.teamTotal.copy(source = "replay"))
-        assertEquals("Replay, updated 1s ago", CornerCardText.status(replay, TL, AS_OF_MS + 1_000))
+    @Test fun cardTextIsSportMatchupClockTotalAndLeaders() {
+        val fresh = snap(teamLeague = "demo-nba/cle-phi-tonight", total = 121.75).copy(
+            sport = "NBA",
+            rows = listOf(
+                PanelRow("1", "Donovan Mitchell", PanelValue(32.5, null, "live", AS_OF_MS), "Q3 4:12"),
+                PanelRow("2", "Tyrese Maxey", PanelValue(28.0, null, "live", AS_OF_MS), "Q3 4:12"),
+                PanelRow("3", "Joel Embiid", PanelValue(0.0, null, null, AS_OF_MS), "Q3 4:12"),
+            ),
+        )
+        assertEquals("NBA · CLE @ PHI  Q3 4:12", CornerCardText.label(fresh, fresh.teamLeague))
+        assertEquals("121.8 pts", CornerCardText.total(fresh))
+        assertEquals("Mitchell 32.5   Maxey 28.0", CornerCardText.leaders(fresh))
+        assertEquals("NBA", CornerCardText.sport(fresh))
         for (basis in listOf(ScoringBasis.YahooLeague, ScoringBasis.Ppr, ScoringBasis.HalfPpr)) {
             assertEquals("current NFL wire omits sport", "NFL", CornerCardText.sport(fresh.copy(sport = null, basis = basis)))
         }
@@ -120,21 +123,19 @@ class CornerCardTest {
         val panel = PanelController(pairs, pairs.first(), true)
         for (pair in pairs) {
             assertNull("the new pair starts loading", panel.snapshot)
-            assertEquals(pair, CornerCardText.label(panel.teamLeague))
+            assertEquals(pair.substringAfter('/'), CornerCardText.label(panel.snapshot, panel.teamLeague))
             panel.onFetched(snap(teamLeague = pair, total = 42.0), 0)
-            assertEquals("the label survives loading", pair, CornerCardText.label(panel.teamLeague))
-            assertEquals("the total is still shown separately", "42.0", CornerCardText.total(panel.snapshot))
+            assertTrue("the label survives loading", CornerCardText.label(panel.snapshot, panel.teamLeague).contains(pair.substringAfter('/')))
+            assertEquals("the total is still shown separately", "42.0 pts", CornerCardText.total(panel.snapshot))
             panel.perform(PanelAction.NextTeamLeague, 0)
         }
-        assertEquals("No team selected", CornerCardText.label(null))
+        assertEquals("No team selected", CornerCardText.label(null, null))
     }
 
-    @Test fun unknownTotalsAreLabeledNeverZero() {
-        val withheld = snap(total = null)
-        assertEquals("Unavailable", CornerCardText.total(withheld))
-        assertEquals("Unavailable", CornerCardText.total(null))
-        assertEquals("names the pair it is loading", "Loading ${TL.substringAfter('/')}", CornerCardText.status(null, TL, 0))
-        assertEquals("No team selected", CornerCardText.status(null, null, 0))
+    @Test fun unknownTotalsShowADashNeverUnavailable() {
+        assertEquals("– pts", CornerCardText.total(snap(total = null)))
+        assertEquals("–", CornerCardText.total(null))
+        assertEquals("", CornerCardText.leaders(null))
     }
 
     @Test fun serviceOffShowsAOneLineHintAndServiceOnShowsNone() {

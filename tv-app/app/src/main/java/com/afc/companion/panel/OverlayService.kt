@@ -124,7 +124,7 @@ class OverlayService : Service() {
                 stopIfIdle()
             }
             ACTION_NEXT_TEAM_LEAGUE -> {
-                // Double-tapped ≡ only switches a card already showing; local display, no profile write.
+                // Double-tapped ≡ switches the pair in the open card, menu or panel; local display, no profile write.
                 controller.doubleTap()
                 tick++
                 render()
