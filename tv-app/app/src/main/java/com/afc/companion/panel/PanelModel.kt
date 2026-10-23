@@ -23,7 +23,8 @@ enum class ScoringBasis { YahooLeague, Ppr, HalfPpr, NbaPoints }
 /** One displayed number from the untrusted PanelState: unknown is a null value with a reason, never zero. */
 data class PanelValue(val value: Double?, val reason: String?, val source: String?, val asOfMs: Long?)
 
-data class PanelRow(val playerId: String, val name: String, val points: PanelValue, val gameStatus: String?)
+/** [slot] is the lineup position (QB, FLEX, UTIL); null from a backend that does not send one. */
+data class PanelRow(val playerId: String, val name: String, val points: PanelValue, val gameStatus: String?, val slot: String? = null)
 
 data class PanelSnapshot(
     val teamLeague: String,
@@ -83,7 +84,8 @@ fun decodePanel(state: PanelState, nbaEnabled: Boolean = BuildConfig.AFC_ENABLE_
         if (!seen.add(playerId)) return null
         val name = row.opt("name") as? String ?: return null
         val status = row.opt("gameStatus").let { if (it == JSONObject.NULL) null else it as? String }
-        rows += PanelRow(playerId, name, panelValue(row.opt("points") as? JSONObject), status)
+        val slot = (row.opt("slot") as? String)?.takeIf { it.isNotBlank() }
+        rows += PanelRow(playerId, name, panelValue(row.opt("points") as? JSONObject), status, slot)
     }
     var progress = panelValue(data.opt("progress") as? JSONObject)
     val progressValue = progress.value

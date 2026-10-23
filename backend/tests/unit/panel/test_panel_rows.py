@@ -46,6 +46,18 @@ def test_rows_carry_game_status(panel_env):
     assert row(data, "9000005")["gameStatus"] == "Q2 08:14"
 
 
+def test_rows_carry_the_starter_slot(panel_env):
+    data = seeded(panel_env)
+    assert row(data, "9000001")["slot"] == "WR"
+    assert row(data, "9000005")["slot"] == "QB"
+
+
+def test_row_without_a_stored_slot_serves_null(panel_env):
+    seed_profile("fan")
+    seed_lineup("fan", [{k: v for k, v in RECEIVER.items() if k != "slot"}])
+    assert row(panel_env.data("fan"), "9000001")["slot"] is None
+
+
 def test_team_total_is_the_sum_of_row_points(panel_env):
     data = seeded(panel_env)
     total = data["teamTotal"]

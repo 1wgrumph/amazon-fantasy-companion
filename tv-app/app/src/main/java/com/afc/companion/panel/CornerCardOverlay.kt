@@ -93,12 +93,15 @@ fun OverlayMenuContent(focus: OverlayMenuItem, teamLeague: String?, items: List<
     }
 }
 
-/** "D. Mitchell ▲      34.1": name left, points right in tabular figures. */
+/** "PG D. Mitchell ▲      34.1": muted slot, name left, points right in tabular figures. */
 @Composable
 private fun LeaderLine(leader: CornerCardText.Leader) {
     val style = TextStyle(fontSize = 11.sp, lineHeight = 12.sp, fontWeight = FontWeight.SemiBold, color = onSurface)
     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
         Row(Modifier.weight(1f)) {
+            leader.slot?.let {
+                Text(it, Modifier.width(32.dp), maxLines = 1, softWrap = false, style = style.copy(fontWeight = FontWeight.Normal, color = onSurface.copy(alpha = 0.7f)))
+            }
             Text(leader.name, Modifier.weight(1f, fill = false), maxLines = 1, softWrap = false, overflow = TextOverflow.Ellipsis, style = style)
             if (leader.rose) Text(" ▲", maxLines = 1, style = style.copy(color = Color(TvPalette.primaryArgb)))
         }

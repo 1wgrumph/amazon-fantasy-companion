@@ -389,7 +389,9 @@ def snapshot(profile_id, team_league):
                 value = dict(value, reason="no matching ESPN athlete")
             rows.append({"playerId": espn_id or str(starter.get("player_key") or ""),
                          "name": starter.get("name") or "", "points": value,
-                         "gameStatus": status})
+                         "gameStatus": status,
+                         # Lineup position (QB, FLEX, UTIL); null for a legacy row without one.
+                         "slot": starter.get("slot") if isinstance(starter.get("slot"), str) else None})
             states.append(record.get("gameState") if record else None)
     ids = [row["playerId"] for row in rows]
     if (len(rows) > MAX_ROWS or len(set(source_ids)) != len(source_ids)

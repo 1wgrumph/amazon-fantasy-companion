@@ -199,14 +199,14 @@ object CornerCardText {
     fun total(snapshot: PanelSnapshot?): String = snapshot?.let { PanelText.points(it.teamTotal) } ?: "–"
 
     /** One top-two line: short name, points, and whether the points rose since the [prior] refresh of the same pair. */
-    data class Leader(val name: String, val points: String, val rose: Boolean)
+    data class Leader(val name: String, val points: String, val rose: Boolean, val slot: String? = null)
 
     fun leaders(snapshot: PanelSnapshot?, prior: PanelSnapshot? = null): List<Leader> {
         val snap = snapshot ?: return emptyList()
         val before = prior?.takeIf { it.teamLeague == snap.teamLeague }?.rows?.associate { it.playerId to it.points.value }.orEmpty()
         return PanelText.byPoints(snap.rows).filter { it.points.value != null }.take(2).map { row ->
             val was = before[row.playerId]
-            Leader(PanelText.shortName(row.name), PanelText.points(row.points), was != null && row.points.value!! > was)
+            Leader(PanelText.shortName(row.name), PanelText.points(row.points), was != null && row.points.value!! > was, row.slot)
         }
     }
 
