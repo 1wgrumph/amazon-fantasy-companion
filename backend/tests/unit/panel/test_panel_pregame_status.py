@@ -1,6 +1,6 @@
 """GET /v1/panel shows the ESPN pregame text for an NBA starter with no stats.
 
-Points stay unavailable, a team with no game today stays blank, and an NFL
+Points are 0.0 with that status, a team with no game today stays blank, and an NFL
 row never reads the NBA slate. A stored statistics record still wins.
 """
 
@@ -39,7 +39,7 @@ def _snapshot(monkeypatch, profile="hoops", team_league=PAIR):
     return panel.snapshot(profile, team_league)["data"]
 
 
-def test_unstarted_nba_starter_shows_pregame_status_and_keeps_points_unknown(api, monkeypatch):
+def test_unstarted_nba_starter_shows_pregame_status_with_zero_points(api, monkeypatch):
     import store
 
     _lineup(store, [
@@ -49,12 +49,15 @@ def test_unstarted_nba_starter_shows_pregame_status_and_keeps_points_unknown(api
     _slate(api, {"GS": TIP, "LAL": TIP})
     data = _snapshot(monkeypatch)
     rows = {row["playerId"]: row for row in data["rows"]}
+    # Owner design 2026-10-23: a starter whose team game has a status shows 0.0 with it;
+    # a team with no game today stays unknown, and the total sums what is known.
     assert rows["9100001"]["gameStatus"] == TIP
-    assert rows["9100001"]["points"]["value"] is None
-    assert rows["9100001"]["points"]["reason"] == "statistics unavailable"
+    assert rows["9100001"]["points"]["value"] == 0.0
+    assert rows["9100001"]["points"]["reason"] is None
     assert rows["9100009"]["gameStatus"] is None
-    assert data["teamTotal"]["value"] is None
-    assert data["teamTotal"]["reason"] == "team total unavailable"
+    assert rows["9100009"]["points"]["value"] is None
+    assert data["teamTotal"]["value"] == 0.0
+    assert data["teamTotal"]["reason"] == "partial total"
     assert data["progress"]["value"] is None
 
 

@@ -368,12 +368,13 @@ def get_panel(profile_id, team_league):
 # "pregame" is not an athlete id (those are numeric), so a statistics write
 # cannot overwrite it and a player lookup cannot read it.
 _PREGAME_ID = "pregame"
+NFL_STATUS_ID = "pregame-nfl"  # the NFL team-status slate, same shape
 _PREGAME_TEAM = re.compile(r"[A-Z0-9]{2,4}")
 NBA_PREGAME_WINDOW = 12 * 60 * 60
 MAX_PREGAME_SEQUENCE = (1 << 24) - 1
 
 
-def put_nba_pregame(teams, *, config=None):
+def put_nba_pregame(teams, *, config=None, item_id=_PREGAME_ID):
     """Replace even an empty slate, allocating a sequence with PutItem-only IAM."""
     if not isinstance(teams, dict):
         return False
@@ -407,7 +408,7 @@ def put_nba_pregame(teams, *, config=None):
         if sequence > MAX_PREGAME_SEQUENCE:
             raise ClientError({"Error": {"Code": "SequenceExhausted",
                                          "Message": "NBA pregame sequence exhausted"}}, "PutItem")
-        item = {"athleteId": _PREGAME_ID, "sequence": sequence, "teams": clean,
+        item = {"athleteId": item_id, "sequence": sequence, "teams": clean,
                 "asOf": moment.strftime("%Y-%m-%dT%H:%M:%SZ")}
         try:
             table.put_item(Item=item, ConditionExpression=condition,
@@ -422,9 +423,9 @@ def put_nba_pregame(teams, *, config=None):
     raise conflict
 
 
-def get_nba_pregame():
+def get_nba_pregame(item_id=_PREGAME_ID):
     return _table("PLAYER_STATS_TABLE").get_item(
-        Key={"athleteId": _PREGAME_ID}, ConsistentRead=True).get("Item")
+        Key={"athleteId": item_id}, ConsistentRead=True).get("Item")
 
 
 # Player statistics: latest stored boxscore per ESPN athlete (panel seam).

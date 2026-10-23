@@ -104,6 +104,20 @@ class OverlayModeTest {
         assertEquals(OverlayMode.Card, h.controller.mode)
     }
 
+    @Test fun doubleTapSwitchesThePairInEveryOpenView() {
+        for (mode in OverlayMode.entries) {
+            val h = Host()
+            if (mode != OverlayMode.Off) h.controller.show()
+            if (mode == OverlayMode.Menu) h.controller.hold()
+            if (mode == OverlayMode.Expanded) h.controller.select(OverlayMenuItem.Expand)
+            h.controller.doubleTap()
+            // Owner, 2026-10-23: the expanded panel switches too; only Off ignores it.
+            val expectedPair = if (mode != OverlayMode.Off) "league-b/team-8" else "league-a/team-7"
+            assertEquals("double-tap in $mode", expectedPair, h.panel.teamLeague)
+            assertEquals("double-tap never changes the overlay mode", mode, h.controller.mode)
+        }
+    }
+
     @Test fun hideRemovesTheSurfaceAndStopsTheFeed() {
         val h = Host()
         h.controller.hold(); h.controller.hold()

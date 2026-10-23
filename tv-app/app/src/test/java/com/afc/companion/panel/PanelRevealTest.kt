@@ -42,13 +42,13 @@ class PanelRevealTest {
         assertFalse(c.visible)
     }
 
-    @Test fun settingDefaultsOnAndPersistsOnThisDeviceAcrossRestart() {
+    @Test fun settingDefaultsOffAndPersistsOnThisDeviceAcrossRestart() {
         val prefs = MemoryPrefs()
-        assertTrue("default on", DeviceSettings(prefs).showPanelOnNewAlert)
-        DeviceSettings(prefs).showPanelOnNewAlert = false
-        assertFalse("a new instance over the same file reads the stored choice", DeviceSettings(prefs).showPanelOnNewAlert)
+        assertFalse("default off: alerts never take over the screen", DeviceSettings(prefs).showPanelOnNewAlert)
         DeviceSettings(prefs).showPanelOnNewAlert = true
-        assertTrue(DeviceSettings(prefs).showPanelOnNewAlert)
+        assertTrue("a new instance over the same file reads the stored choice", DeviceSettings(prefs).showPanelOnNewAlert)
+        DeviceSettings(prefs).showPanelOnNewAlert = false
+        assertFalse(DeviceSettings(prefs).showPanelOnNewAlert)
     }
 
     @Test fun onlyAFullScreenPanelIsReShown() {

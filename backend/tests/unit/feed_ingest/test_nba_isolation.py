@@ -215,7 +215,9 @@ def test_nba_handler_uses_bounded_client_without_changing_nfl_client(api, monkey
                         _load("scoreboard.json" if url.endswith("scoreboard") else "summary.json"))
     assert nba.lambda_handler({}, None) == {"stored": 3, "failed": []}
     rows = api.table("PlayerStats").scan()["Items"]
-    assert [row["teams"] for row in rows if row["athleteId"] == "pregame"] == [{}]
+    # The slate now carries each team's live game status, not only pregame text.
+    assert [row["teams"] for row in rows if row["athleteId"] == "pregame"] == [
+        {"SHO": "10:00 - 3rd", "SAW": "10:00 - 3rd"}]
     rows = [row for row in rows if row["athleteId"] != "pregame"]
     assert {row["athleteId"] for row in rows} == {"9100001", "9100002", "9100003"}
     assert all(row["gameId"] == "401999101" for row in rows)

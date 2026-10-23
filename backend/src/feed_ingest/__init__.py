@@ -8,7 +8,7 @@ import time
 from pathlib import Path
 from urllib import parse, request
 
-from botocore.exceptions import ClientError
+from botocore.exceptions import BotoCoreError, ClientError
 
 import store
 from feed_ingest.ingest import ingest_summary, rejected_item, store_events, store_player_statistics
@@ -124,6 +124,18 @@ def _captured_relevant(profiles):
     return relevant
 
 
+def _store_team_status(events):
+    """Each team's game status for the panel; a write failure must not drop the poll."""
+    if not os.environ.get("PLAYER_STATS_TABLE"):
+        return
+    from nba.normalize import team_status_by_team
+
+    try:
+        store.put_nba_pregame(team_status_by_team(events, "Kicks"), item_id=store.NFL_STATUS_ID)
+    except (BotoCoreError, ClientError) as exc:
+        logging.getLogger(__name__).warning("NFL team status not stored: %.200s", exc)
+
+
 def poll(failures=None, remaining=None):
     """Isolate each monitored game's failures; counts outlive one invocation.
 
@@ -142,6 +154,7 @@ def poll(failures=None, remaining=None):
             _fallback(game_id, failures, result)
         return result
     validate_scoreboard(scoreboard)
+    _store_team_status(scoreboard["events"])
     profiles = store.monitoring_profiles()
     for game in scoreboard["events"]:
         if not _monitored(game, profiles):
