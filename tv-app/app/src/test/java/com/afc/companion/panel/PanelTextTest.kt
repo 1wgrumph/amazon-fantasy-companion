@@ -66,6 +66,13 @@ class PanelTextTest {
         assertEquals("–", PanelText.points(v(null)))
     }
 
+    @Test fun shortNameIsFirstInitialAndLastName() {
+        assertEquals("D. Mitchell", PanelText.shortName("Donovan Mitchell"))
+        assertEquals("S. Gilgeous-Alexander", PanelText.shortName("Shai Gilgeous-Alexander"))
+        assertEquals("K. Williams Jr.", PanelText.shortName("Kenrich Williams Jr."))
+        assertEquals("Nene", PanelText.shortName(" Nene "))
+    }
+
     @Test fun rowsSortByPointsHighestFirst() {
         fun row(id: String, points: Double?) = PanelRow(id, id, v(points), null)
         val sorted = PanelText.byPoints(listOf(row("a", 3.0), row("b", null), row("c", 12.5), row("d", 0.0)))

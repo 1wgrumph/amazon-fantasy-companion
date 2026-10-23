@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,26 +32,35 @@ import com.afc.companion.ui.theme.TvPalette
 private val onSurface = Color(CornerCardStyle.TEXT_ARGB)
 
 /**
- * The default over-the-game surface, read from the couch: sport, matchup and clock; the team total
- * large in the brand gold; the two top scorers. Translucent theme surface with a sport-colour edge.
- * Without [holdEnabled] the one-line accessibility-switch hint replaces the scorers.
+ * The default over-the-game surface, read from the couch: matchup and clock small; the team total
+ * large in the brand gold; the two top scorers, a ▲ on one whose points rose since the last refresh.
+ * Translucent theme surface with a sport-colour edge. Without [holdEnabled] the accessibility-switch hint replaces the scorers.
  */
 @Composable
 fun CornerCardContent(snapshot: PanelSnapshot?, teamLeague: String?, nowMs: Long, holdEnabled: Boolean, windowAlpha: Float = 1f) {
     val sport = Sport.entries.find { it.label == CornerCardText.sport(snapshot) }
     val accent = sport?.let { Color(TvPalette.sportAccentArgb(it)) } ?: Color(TvPalette.primaryArgb)
+    // The window outlives each refresh, so the snapshot it showed last is the one to compare against.
+    val seen = remember { arrayOfNulls<PanelSnapshot>(1) }
+    val prior = remember(snapshot) { seen[0].also { seen[0] = snapshot } }
     Row(
         Modifier.fillMaxSize().clip(RoundedCornerShape(12.dp))
             .background(Color(TvPalette.surfaceArgb).copy(alpha = CornerCardStyle.backgroundAlpha(windowAlpha))),
     ) {
         Box(Modifier.width(5.dp).fillMaxHeight().background(accent))
         Column(
-            Modifier.weight(1f).fillMaxHeight().padding(horizontal = 10.dp, vertical = 4.dp),
+            Modifier.weight(1f).fillMaxHeight().padding(horizontal = 10.dp, vertical = 2.dp),
             verticalArrangement = Arrangement.Center,
         ) {
-            Line(CornerCardText.label(snapshot, teamLeague), 12.sp, FontWeight.SemiBold)
-            Line(CornerCardText.total(snapshot), 24.sp, FontWeight.Black, Color(TvPalette.primaryArgb))
-            Line(CornerCardText.hint(holdEnabled) ?: CornerCardText.leaders(snapshot), 12.sp)
+            Line(CornerCardText.label(snapshot, teamLeague), 11.sp, FontWeight.SemiBold, onSurface.copy(alpha = 0.8f))
+            Text(
+                CornerCardText.total(snapshot),
+                maxLines = 1,
+                softWrap = false,
+                style = TextStyle(fontSize = 22.sp, lineHeight = 24.sp, fontWeight = FontWeight.Black, color = Color(TvPalette.primaryArgb), fontFeatureSettings = "tnum"),
+            )
+            val hint = CornerCardText.hint(holdEnabled)
+            if (hint != null) Line(hint, 11.sp) else CornerCardText.leaders(snapshot, prior).forEach { LeaderLine(it) }
         }
     }
 }
@@ -80,6 +90,19 @@ fun OverlayMenuContent(focus: OverlayMenuItem, teamLeague: String?, items: List<
                 Line(label, 15.sp, if (focused) FontWeight.Bold else FontWeight.Normal)
             }
         }
+    }
+}
+
+/** "D. Mitchell ▲      34.1": name left, points right in tabular figures. */
+@Composable
+private fun LeaderLine(leader: CornerCardText.Leader) {
+    val style = TextStyle(fontSize = 11.sp, lineHeight = 12.sp, fontWeight = FontWeight.SemiBold, color = onSurface)
+    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+        Row(Modifier.weight(1f)) {
+            Text(leader.name, Modifier.weight(1f, fill = false), maxLines = 1, softWrap = false, overflow = TextOverflow.Ellipsis, style = style)
+            if (leader.rose) Text(" ▲", maxLines = 1, style = style.copy(color = Color(TvPalette.primaryArgb)))
+        }
+        Text(leader.points, Modifier.padding(start = 6.dp), maxLines = 1, softWrap = false, style = style.copy(fontWeight = FontWeight.Bold, fontFeatureSettings = "tnum"))
     }
 }
 

@@ -333,7 +333,9 @@ private fun ScoreLine(snapshot: PanelSnapshot, clock: String?, size: Float) {
         Text(
             "Total ${PanelText.points(snapshot.teamTotal)}",
             modifier = Modifier.weight(1f),
-            style = TextStyle(fontSize = size.sp, fontWeight = FontWeight.Black, color = Color(TvPalette.primaryArgb)),
+            maxLines = 1,
+            softWrap = false,
+            style = TextStyle(fontSize = size.sp, fontWeight = FontWeight.Black, color = Color(TvPalette.primaryArgb), fontFeatureSettings = "tnum"),
         )
         clock?.let {
             Text(it, style = TextStyle(fontSize = (size * 0.55f).sp, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurface))
@@ -346,7 +348,7 @@ private fun ScoreLine(snapshot: PanelSnapshot, clock: String?, size: Float) {
 private fun PlayerLine(row: PanelRow, clock: String?, nameSp: Float, pointsSp: Float) {
     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
         Text(
-            row.name,
+            PanelText.shortName(row.name),
             modifier = Modifier.weight(1f),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
@@ -357,7 +359,7 @@ private fun PlayerLine(row: PanelRow, clock: String?, nameSp: Float, pointsSp: F
         }
         Text(
             PanelText.points(row.points),
-            style = TextStyle(fontSize = pointsSp.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface),
+            style = TextStyle(fontSize = pointsSp.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface, fontFeatureSettings = "tnum"),
         )
     }
 }

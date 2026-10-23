@@ -97,9 +97,15 @@ class CornerCardTest {
                 PanelRow("3", "Joel Embiid", PanelValue(0.0, null, null, AS_OF_MS), "Q3 4:12"),
             ),
         )
-        assertEquals("NBA · CLE @ PHI  Q3 4:12", CornerCardText.label(fresh, fresh.teamLeague))
-        assertEquals("121.8 pts", CornerCardText.total(fresh))
-        assertEquals("Mitchell 32.5   Maxey 28.0", CornerCardText.leaders(fresh))
+        assertEquals("CLE @ PHI  Q3 4:12", CornerCardText.label(fresh, fresh.teamLeague))
+        assertEquals("121.8", CornerCardText.total(fresh))
+        assertEquals(
+            listOf(CornerCardText.Leader("D. Mitchell", "32.5", false), CornerCardText.Leader("T. Maxey", "28.0", false)),
+            CornerCardText.leaders(fresh),
+        )
+        val earlier = fresh.copy(rows = fresh.rows.map { if (it.playerId == "1") it.copy(points = it.points.copy(value = 30.0)) else it })
+        assertEquals("▲ only for a player whose points rose", listOf(true, false), CornerCardText.leaders(fresh, earlier).map { it.rose })
+        assertEquals("no ▲ against another pair", listOf(false, false), CornerCardText.leaders(fresh, earlier.copy(teamLeague = "x/y")).map { it.rose })
         assertEquals("NBA", CornerCardText.sport(fresh))
         for (basis in listOf(ScoringBasis.YahooLeague, ScoringBasis.Ppr, ScoringBasis.HalfPpr)) {
             assertEquals("current NFL wire omits sport", "NFL", CornerCardText.sport(fresh.copy(sport = null, basis = basis)))
@@ -126,16 +132,16 @@ class CornerCardTest {
             assertEquals(pair.substringAfter('/'), CornerCardText.label(panel.snapshot, panel.teamLeague))
             panel.onFetched(snap(teamLeague = pair, total = 42.0), 0)
             assertTrue("the label survives loading", CornerCardText.label(panel.snapshot, panel.teamLeague).contains(pair.substringAfter('/')))
-            assertEquals("the total is still shown separately", "42.0 pts", CornerCardText.total(panel.snapshot))
+            assertEquals("the total is still shown separately", "42.0", CornerCardText.total(panel.snapshot))
             panel.perform(PanelAction.NextTeamLeague, 0)
         }
         assertEquals("No team selected", CornerCardText.label(null, null))
     }
 
     @Test fun unknownTotalsShowADashNeverUnavailable() {
-        assertEquals("– pts", CornerCardText.total(snap(total = null)))
+        assertEquals("–", CornerCardText.total(snap(total = null)))
         assertEquals("–", CornerCardText.total(null))
-        assertEquals("", CornerCardText.leaders(null))
+        assertEquals(emptyList<CornerCardText.Leader>(), CornerCardText.leaders(null))
     }
 
     @Test fun serviceOffShowsAOneLineHintAndServiceOnShowsNone() {

@@ -48,7 +48,7 @@ class AlertCardMappingTest {
             val notice = requireNotNull(alertCardNotice(alert(wire), panel))
             assertEquals(sport.uppercase(), notice.sport)
             assertEquals(20.0, notice.value, 0.0)
-            assertEquals(if (sport == "nfl") "Runner 20" else "Guard 20", AlertCardText.label(notice.player, notice.value))
+            assertEquals("${PanelText.shortName(starter.getString("name"))} · 20 PTS", AlertCardText.label(notice.player, notice.value))
             assertNull("same exact envelope without fresh points must still fail closed", alertCardNotice(alert(wire),
                 panel.copy(rows = panel.rows.map { it.copy(points = it.points.copy(asOfMs = now - 60_001)) })))
         }
@@ -61,7 +61,7 @@ class AlertCardMappingTest {
             getJSONArray("starters").getJSONObject(0).put("shortName", "Guard").put("points", 20.0)
         }
         val notice = requireNotNull(alertCardNotice(alert(json), null))
-        assertEquals("Guard 20", AlertCardText.label(notice.player, notice.value))
+        assertEquals("Guard · 20 PTS", AlertCardText.label(notice.player, notice.value))
         assertEquals("NBA", notice.sport)
     }
     @Test fun absentOrMismatchedAuthorityNeverCreatesANameOnlyCard() {

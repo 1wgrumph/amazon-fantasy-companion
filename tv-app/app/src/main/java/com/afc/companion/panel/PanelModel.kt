@@ -208,6 +208,12 @@ object PanelText {
             ?: statuses.firstOrNull()
     }
 
+    /** "Donovan Mitchell" -> "D. Mitchell", keeping suffixes ("K. Williams Jr."); a one-word name stays. */
+    fun shortName(name: String): String {
+        val parts = name.trim().split(Regex("\\s+"))
+        return if (parts.size < 2) name.trim() else "${parts[0].first()}. ${parts.drop(1).joinToString(" ")}"
+    }
+
     /** Highest points first; a player without a number goes last. */
     fun byPoints(rows: List<PanelRow>): List<PanelRow> = rows.sortedByDescending { it.points.value ?: Double.NEGATIVE_INFINITY }
 
