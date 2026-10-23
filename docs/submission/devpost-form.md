@@ -36,9 +36,9 @@ Your fantasy team over the live game, for every sport you play.
 
 ### Inspiration
 
-Fantasy sports spread your attention across games. You can be watching one game while a player on your fantasy team scores somewhere else. We wanted to keep that connection on the TV, where we were already watching, instead of making another screen part of every play.
+About 50 million American adults played fantasy sports in 2022: [FSGA reports 50.4 million U.S. players aged 18+](https://thefsga.org/fantasy-sports-gaming-industry/). About half of partnered U.S. adults said their partner was often or sometimes distracted by their phone during conversation: [Pew Research Center reported 51% in May 2020, from its October 2019 survey](https://www.pewresearch.org/internet/2020/05/08/dating-and-relationships-in-the-digital-age/).
 
-AZ Fantasy is a Fire TV companion built around that idea. A small corner card keeps your fantasy team in view over the broadcast. Alerts bring your players' scoring moments to you, including moments from a different sport. The game stays on screen while you check your team.
+I'm one of those people. I want to be in the moment with family and friends and still follow my fantasy team. That's why I built AZ Fantasy: a Fire TV companion that keeps my team in view and brings scoring alerts to the screen, even when the player is in a different sport from the game I'm watching.
 
 ### What it does
 
@@ -52,7 +52,7 @@ While you watch any live game, AZ Fantasy shows your fantasy team in a corner ca
 
 The remote handles the main controls. Double-tap the menu button, ≡, to switch teams. Hold it to open a menu with Expand, League and Hide. Choose Expand for a larger view of your lineup. These interactions keep you with the game.
 
-Lineups are entered manually today. Yahoo Fantasy API access has been approved, but connection setup is still pending. The live demonstration uses manual lineups.
+Lineups are entered manually today. Yahoo Fantasy API approval did not arrive in time for the submission, so the live demonstration uses manual lineups.
 
 ### How we built it
 
@@ -76,7 +76,7 @@ We repaired our own bugs along the way (session storage, the default panel selec
 
 **Getting an alert onto the TV during a game.** Standard Fire OS notifications posted, but never appeared over the video with actions. Placing a panel beside uncropped video was not possible either. We built our own overlay instead: a small corner card plus alert cards that never take focus from the game. They are driven by the remote's ≡ button through an accessibility key filter. Fire OS does not list that service in Settings, so setup needs adb, and the overlay permission has no settings screen at all.
 
-**Fantasy data access.** Yahoo's Fantasy API returned 403 for unapproved apps even after OAuth succeeded. We applied for access, signed the agreement and registered a new app, then shipped manual lineups so the product works today.
+**Fantasy data access.** Yahoo's Fantasy API returned 403 for unapproved apps even after OAuth succeeded. We applied for access, signed the agreement and registered a new app, then shipped manual lineups so the product works today. Yahoo's Fantasy API access approval did not arrive before the submission deadline, so the product ships with manual lineups.
 
 **Live sports data.** ESPN's live NFL feed leaves the player off scoring plays. The first live game produced touchdowns by our own lineup and no alerts. We found the cause during the game and now read the player from the play text.
 
@@ -103,7 +103,9 @@ We also learned to separate useful live behavior from finished behavior. Seeing 
 
 First, reduce the observed alert delay and check the result during another live game. Improve play-text matching, make the accessibility setup clearer, and test the Watch flow live. We also need another live pass through the rebuilt UI and a capture approach that accounts for Prime Video's blocked frames.
 
-Then finish the pending Yahoo connection setup so we can move beyond manual lineups. The next version should make the experience easier to set up and faster to follow while preserving the simple corner card and remote controls.
+Next, complete Yahoo access and connection setup so we can move beyond manual lineups, then add more leagues and sports. The next version should make the experience easier to set up and faster to follow while preserving the simple corner card and remote controls.
+
+Prime Video already offers FanDuel bet tracking during Thursday Night Football, as [reported in September 2026](https://www.covers.com/industry/fanduel-adds-live-bet-tracking-to-prime-video-thursday-night-football-sept-16-2026). AZ Fantasy could eventually show your bets next to your fantasy team on any game you watch. This is a future idea for tracking only, never placing bets; no partnership with Amazon, Prime Video or FanDuel is implied.
 
 ## 4. Built-with tags
 
@@ -126,7 +128,7 @@ Video: publicly visible YouTube/Vimeo, under three minutes, showing the app
 functioning on Fire TV hardware or a permitted simulator. English captions;
 clear manual/replay labels. These follow the [rules](https://amazonappdev2026.devpost.com/rules)
 and [FAQ](https://amazonappdev2026.devpost.com/details/faqs).
-The current voiceover plan targets 170 seconds (2:50), including app setup and NFL and NBA
+The current voiceover plan targets 150 seconds (2:30), including app setup and NFL and NBA
 alerts. The owner still needs to film the phone and TV setup and remote controls, record the narration
 and check the finished runtime. Exclude provider frames, music without permission, Yahoo data,
 link codes, personal information and device addresses. Synthetic color plates
@@ -167,8 +169,9 @@ by parsing play text when the feed omits play participants. The live TV run
 captured NFL and NBA scoring alert cards over Prime Video. Alerts reached the
 TV about 70–90 seconds after the play; reducing that delay remains planned work.
 
-Lineups are manual today. Yahoo Fantasy API access has been approved, but
-connection setup remains pending; no live Yahoo data is used in this package.
+Lineups are manual today. Yahoo Fantasy API approval did not arrive before
+the submission deadline; connection setup remains pending, and no live Yahoo
+data is used in this package.
 The function and resource inventory above comes from the repository template.
 The live-night schedule state and deployment results come from the owner's
 October 22 report, rather than from the template defaults.

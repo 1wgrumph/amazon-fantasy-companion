@@ -127,12 +127,12 @@ experience; no onboarding duration is inferred from a deployment or test pass.
 
 - **What we used it for:** registering the application and navigating access approval for a proposed lineup integration. This feedback does not claim a working live Yahoo import or include live Yahoo data.
 - **What worked well:** the earlier setup record shows successful OAuth refresh responses. That success was distinguishable from authorization to use the Fantasy API.
-- **What needs work:** earlier unapproved-app reads returned HTTP 403 despite OAuth success. HTTPS redirect and description constraints were discovered through rejected console inputs. Approval timing and a verified end-to-end data-access result are not established by this feedback's sources.
+- **What needs work:** earlier unapproved-app reads returned HTTP 403 despite OAuth success. HTTPS redirect and description constraints were discovered through rejected console inputs. The owner reports that approval did not arrive before the submission deadline; the product ships manual lineups. A verified end-to-end Yahoo data-access result is not established.
 - **Onboarding from zero to hello world:** app registration, OAuth setup, and approval work occupied an approximately 1.5-hour spike on October 16, largely console setup and diagnosis. That attempt did not reach a Fantasy data hello world.
 - **Would we build again? No, for a deadline-critical dependency without verified access first.** We would revisit after onboarding and data authorization are proven; manual lineups provide the current alternative.
 - **AWS services used and how:** SSM Parameter Store supports the integration configuration. No credential or Yahoo payload is reproduced here.
 
-<!-- Evidence: observations OBS-080..082; product-feedback Yahoo section; CHANGELOG PRs #145, #147. -->
+<!-- Evidence: observations OBS-080..082; product-feedback Yahoo section; CHANGELOG PRs #145, #147; owner submission update, October 23, 2026. -->
 
 ### PF-12 — Prime Video playback surface
 
@@ -342,11 +342,11 @@ not provide a workaround or command sequence, that absence is explicit.
 - **Task attempted:** Complete onboarding for the planned lineup source.
 - **Steps taken:** The October 16 setup attempted refresh and read authorization with and without the read scope, then applied for access.
 - **Expected result:** An approved read-only integration can access leagues and rosters.
-- **Actual result:** The earlier refresh responses were HTTP 200 while Fantasy reads returned HTTP 403 for the unapproved app. This feedback establishes neither later live data access nor import success.
+- **Actual result:** The earlier refresh responses were HTTP 200 while Fantasy reads returned HTTP 403 for the unapproved app. Yahoo Fantasy API access approval did not arrive before the submission deadline, according to the owner's October 23 update. This feedback establishes neither live data access nor import success.
 - **Severity:** Major
-- **Workaround used:** Used labeled manual lineups; a manual-lineup API was subsequently added.
+- **Workaround used:** Shipped manual lineups for the submission; a manual-lineup API lets the owner enter teams without waiting for Yahoo approval.
 - **Actionable suggestion:** Show API authorization status separately from OAuth success and publish approval criteria and timing.
-- **Evidence:** Project Yahoo setup spike, October 16: OBS-080/082, source F-008; CHANGELOG PR #147. No live Yahoo data is reproduced.
+- **Evidence:** Project Yahoo setup spike, October 16: OBS-080/082, source F-008; CHANGELOG PR #147; owner submission update, October 23, 2026. No live Yahoo data is reproduced.
 
 ### FL-15 — Yahoo registration constraints appeared after rejection
 
