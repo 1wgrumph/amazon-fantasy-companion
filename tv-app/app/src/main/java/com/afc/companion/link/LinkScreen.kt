@@ -33,6 +33,9 @@ import com.afc.companion.ui.theme.tvSafeZonePadding
 import io.nayuki.qrcodegen.QrCode
 import java.io.IOException
 import java.net.URLEncoder
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.Locale
 import kotlinx.coroutines.delay
 import org.json.JSONObject
 
@@ -41,11 +44,18 @@ class LinkScreen(private val linkPage: String = "the link page") {
     /** Phone link page with the code pre-filled; the TV shows it as a QR code. */
     fun qrPayload(code: String) = "$linkPage?code=${URLEncoder.encode(code, Charsets.UTF_8.name())}"
 
+    companion object {
+        /** Owner 2026-10-23: the expiry reads as local time ("9:30 AM"), not a UTC timestamp; unparseable values show as sent. */
+        fun expiryLabel(iso: String): String = runCatching {
+            DateFormat.getTimeInstance(DateFormat.SHORT).format(SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX", Locale.US).parse(iso)!!)
+        }.getOrDefault(iso)
+    }
+
     fun present(response: JSONObject): LinkPresentation? {
         if (response.has("code")) {
             val code = DeviceCode.from(response) ?: return null
             return LinkPresentation(LinkStatus.CodePending.wire, code.code,
-                "On your phone, open $linkPage and enter this code before ${code.expires}", false)
+                "Scan with your phone camera to link this TV.\nOr open $linkPage and enter the code. Expires at ${expiryLabel(code.expires)}.", false)
         }
         val state = LinkState.from(response) ?: return null
         return when (state.state) {

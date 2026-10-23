@@ -30,7 +30,10 @@ class LinkScreenTest {
         val shown = LinkScreen().present(response)
         assertNotNull("Missing behavior: present issued device code", shown)
         assertEquals("codePending", shown!!.state); assertEquals("ABCD2345", shown.code)
-        assertTrue("Expiry must remain visible", shown.message.contains(response.getString("expires")))
+        val label = LinkScreen.expiryLabel(response.getString("expires"))
+        assertNotEquals("Expiry must read as local time, not the raw timestamp", response.getString("expires"), label)
+        assertTrue("Expiry must remain visible", shown.message.contains(label))
+        assertTrue(shown.message.startsWith("Scan with your phone camera"))
         assertFalse(shown.showProfile)
     }
     @Test fun pendingPollKeepsLinkFlowOpen() {
