@@ -264,7 +264,7 @@ internal fun PanelContent(
     compact: Boolean = false,
 ) {
     if (compact && snapshot != null && teamLeague != null) {
-        CompactPanelContent(snapshot, alerts, nowMs)
+        CompactPanelContent(snapshot)
         return
     }
     val loading = snapshot == null && teamLeague != null && !fetchAttempted
@@ -326,13 +326,12 @@ internal fun PanelContent(
     }
 }
 
-/** "Total 121.8" in the brand gold with the game clock beside it. */
+/** "Total 121.8" in the brand gold with the game clock on its own line below, so a wide total never overlaps it. */
 @Composable
 private fun ScoreLine(snapshot: PanelSnapshot, clock: String?, size: Float) {
-    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+    Column(Modifier.fillMaxWidth()) {
         Text(
             "Total ${PanelText.points(snapshot.teamTotal)}",
-            modifier = Modifier.weight(1f),
             maxLines = 1,
             softWrap = false,
             style = TextStyle(fontSize = size.sp, fontWeight = FontWeight.Black, color = Color(TvPalette.primaryArgb), fontFeatureSettings = "tnum"),
@@ -366,14 +365,11 @@ private fun PlayerLine(row: PanelRow, clock: String?, nameSp: Float, pointsSp: F
 
 /** Matchup, total and clock, then every player by points; a fresh window or pair starts at the top. */
 @Composable
-private fun CompactPanelContent(snapshot: PanelSnapshot, alerts: List<PanelAlert>, nowMs: Long) {
+private fun CompactPanelContent(snapshot: PanelSnapshot) {
     val clock = PanelText.clock(snapshot)
     Column(Modifier.fillMaxSize().padding(horizontal = 12.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
         PanelHeader(snapshot)
         ScoreLine(snapshot, clock, 44f)
-        alerts.take(1).forEach {
-            Text(it.text.headline, maxLines = 1, overflow = TextOverflow.Ellipsis, style = TextStyle(fontSize = 20.sp, color = MaterialTheme.colorScheme.onSurface))
-        }
         key(snapshot.teamLeague) {
             Column(Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 PanelText.byPoints(snapshot.rows).forEach { PlayerLine(it, clock, 24f, 28f) }
@@ -398,8 +394,10 @@ private fun AlertCard(alert: PanelAlert, armed: Boolean, focused: FocusTarget?, 
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         val body = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = MaterialTheme.colorScheme.onSurface)
-        Text(alert.text.headline, style = TextStyle(fontSize = PanelTextSizes.scoreSp.sp, color = MaterialTheme.colorScheme.onSurface))
-        // Compact (overlay): headline and player only; access, commentary, Watch and Dismiss stay in Companion, which can take focus.
+        if (alert.text.headline != "Score update") {
+            Text(alert.text.headline, style = TextStyle(fontSize = PanelTextSizes.scoreSp.sp, color = MaterialTheme.colorScheme.onSurface))
+        }
+        // Compact overlay leaves access, commentary, Watch and Dismiss in Companion, which can take focus.
         if (compact) {
             alert.text.context.ifEmpty { null }?.let { Text(it, style = body) }
             return@Column

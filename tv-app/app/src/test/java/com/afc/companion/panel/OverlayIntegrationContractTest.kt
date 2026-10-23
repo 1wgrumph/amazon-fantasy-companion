@@ -92,6 +92,26 @@ class OverlayIntegrationContractTest {
         assertTrue("existing Watch resolver", panel.contains("AlertInbox.find(command.alertId)"))
     }
 
+    @Test fun bothPanelDisplayPathsOmitTheGenericScoreUpdateHeadline() {
+        val panel = productSource("panel/LineupPanel.kt")
+        val compact = sourceBlock(panel, Regex("fun\\s+CompactPanelContent\\s*\\("))
+        assertFalse("expanded sports overlay omits generic alert headlines", compact.contains(".text.headline"))
+        val card = sourceBlock(panel, Regex("fun\\s+AlertCard\\s*\\("))
+        assertTrue("full panel also omits Score update while retaining other alert titles",
+            card.contains("if (alert.text.headline != \"Score update\")"))
+    }
+
+    @Test fun leagueMenuDisplaysTheTestedMatchupLabelInsteadOfTheLeagueKey() {
+        val menu = sourceBlock(productSource("panel/CornerCardOverlay.kt"), Regex("fun\\s+OverlayMenuContent\\s*\\("))
+        assertTrue("menu uses the shared customer label", menu.contains("OverlayMenuItem.League -> CornerCardText.label(null, teamLeague)"))
+        assertFalse("menu never exposes the raw league key", menu.contains("substringBefore("))
+        for ((pair, expected) in listOf(
+            "demo-nba/cle-phi-tonight" to "CLE @ PHI",
+            "demo-nfl/ne-chi-tonight" to "NE @ CHI",
+            "demo-nba/den-okc-tonight" to "DEN @ OKC",
+        )) assertEquals(expected, CornerCardText.label(null, pair))
+    }
+
     @Test fun remoteReachableInAppActionSendsTheToggleIntentThenReturnsToTheGame() {
         val source = service()
         assertTrue("stable intent action", source.contains("com.afc.companion.panel.TOGGLE_OVERLAY"))
