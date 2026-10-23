@@ -9,7 +9,7 @@ QR linking is being built for today's release and was absent from the inspected 
 **On screen:** AZ Fantasy title, then the clean corner card. Brief source captions: “FSGA · 2022 · U.S. adults 18+” and “Pew · May 2020 report · 2019 survey.”
 
 - About 50 million U.S. adults play fantasy sports — FSGA, 2022.
-- Half of partnered adults report phone distraction during conversation — Pew.
+- Half of partnered adults prefer that their partner was on the phone less — Pew.
 - “I'm one of those people.” Family, friends and my fantasy team.
 - “That's why I built AZ Fantasy Companion.”
 
@@ -18,8 +18,6 @@ QR linking is being built for today's release and was absent from the inspected 
 **On screen:** Fire TV app: Connect, My setup and My lineup. Caption: “Kotlin · Python · AWS.” Cut to the live-run companion UI over the watching context, labeled “Thursday Night Football · Prime Video · October 22, 2026.”
 
 - Fire TV companion over whatever I watch: Kotlin app; Python on AWS.
-- Prime: TNF's exclusive home since 2022; 11-year NFL deal.
-- 2025–26: first NBA season under the new 11-year media deal — about $76 billion across all partners.
 - “Amazon now carries two of America's most popular sports, and fantasy players follow both. AZ Fantasy puts their fantasy teams right where they watch.”
 - Fire TV today; Vega virtual device tested; physical Vega hardware untested.
 
@@ -27,7 +25,7 @@ QR linking is being built for today's release and was absent from the inspected 
 
 **On screen:** Owner films phone scanning the TV QR, phone confirm page and confirmation action, then TV becoming linked. Quick cuts through My setup (NFL/NBA toggles, alert types, quiet hours, Open lineup on alerts and provider preferences), My lineup, then Show over game. Mask QR contents and link codes in the edit.
 
-- Scan QR; confirm on my phone; connected.
+- You start by Scan QR; confirm on my phone; connected.
 - Linking uses a one-time code that expires, so the TV never sees a password.
 - My setup; My lineup; Show over game.
 - Built toward Yahoo's Fantasy API; approval missed the deadline. Manual lineups for now.
