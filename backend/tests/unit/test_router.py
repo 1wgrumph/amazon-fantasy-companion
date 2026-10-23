@@ -335,7 +335,7 @@ def test_link_page_is_framed_by_strict_headers(api):
     assert headers["cache-control"] == "no-store" and headers["x-frame-options"] == "DENY"
     assert headers["referrer-policy"] == "no-referrer"
     assert headers["content-security-policy"] == (
-        "default-src 'none'; script-src 'sha256-r5vvOH35j5Xp1ecjHhZ7oNRmS7/Xlp/C7RNPviHqeT8='; "
+        "default-src 'none'; script-src 'sha256-fwE+Cpu1ZhZ0tUWr8Y9yE23dzrz+wfwjiZep8M7PWAs='; "
         "style-src 'unsafe-inline'; connect-src 'self'; form-action 'self'; "
         "frame-ancestors 'none'")
     script_src = [d for d in headers["content-security-policy"].split("; ")

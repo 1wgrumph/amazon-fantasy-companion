@@ -1,8 +1,12 @@
 package com.afc.companion.link
 
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -10,7 +14,13 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
@@ -20,12 +30,17 @@ import com.afc.companion.net.LinkState
 import com.afc.companion.net.LinkStatus
 import com.afc.companion.ui.theme.TvButton as Button
 import com.afc.companion.ui.theme.tvSafeZonePadding
+import io.nayuki.qrcodegen.QrCode
 import java.io.IOException
+import java.net.URLEncoder
 import kotlinx.coroutines.delay
 import org.json.JSONObject
 
 /** AFC-PR-038 TV side: presentation of device-code and link-poll responses. Never carries the session token. */
 class LinkScreen(private val linkPage: String = "the link page") {
+    /** Phone link page with the code pre-filled; the TV shows it as a QR code. */
+    fun qrPayload(code: String) = "$linkPage?code=${URLEncoder.encode(code, Charsets.UTF_8.name())}"
+
     fun present(response: JSONObject): LinkPresentation? {
         if (response.has("code")) {
             val code = DeviceCode.from(response) ?: return null
@@ -81,10 +96,11 @@ class LinkFlow(
 fun LinkView(client: ApiClient, onLinked: (String) -> Unit, modifier: Modifier = Modifier) {
     var attempt by remember { mutableIntStateOf(0) }
     var shown by remember { mutableStateOf<LinkPresentation?>(null) }
+    val screen = remember(client) { LinkScreen("${client.baseUrl.trimEnd('/')}/link") }
     LaunchedEffect(attempt) {
         shown = null
         try {
-            LinkFlow(client, LinkScreen("${client.baseUrl.trimEnd('/')}/link")).run({ shown = it }, onLinked)
+            LinkFlow(client, screen).run({ shown = it }, onLinked)
         } catch (e: IOException) {
             shown = LinkPresentation("networkError", null, "Network error. Check the connection, then select Get code.", false)
         } catch (e: IllegalArgumentException) {
@@ -97,11 +113,29 @@ fun LinkView(client: ApiClient, onLinked: (String) -> Unit, modifier: Modifier =
         if (current == null) {
             Text("Requesting a code…", style = MaterialTheme.typography.bodyLarge)
         } else {
-            current.code?.let { Text(it, color = MaterialTheme.colorScheme.primary, style = MaterialTheme.typography.displayMedium) }
-            Text(current.message, color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.bodyLarge)
+            Row(horizontalArrangement = Arrangement.spacedBy(32.dp), verticalAlignment = Alignment.CenterVertically) {
+                current.code?.let { LinkQr(screen.qrPayload(it)) }
+                Column(verticalArrangement = Arrangement.spacedBy(24.dp)) {
+                    current.code?.let { Text(it, color = MaterialTheme.colorScheme.primary, style = MaterialTheme.typography.displayMedium) }
+                    Text(current.message, color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.bodyLarge)
+                }
+            }
             if (current.state != LinkStatus.CodePending.wire && !current.showProfile) {
                 Button(onClick = { attempt++ }) { Text("Get code") }
             }
+        }
+    }
+}
+
+/** Dark-on-white QR with the standard 4-module quiet zone, snapped to whole pixels so modules do not blur. */
+@Composable
+private fun LinkQr(payload: String) {
+    val qr = remember(payload) { QrCode.encodeText(payload, QrCode.Ecc.MEDIUM) }
+    Canvas(Modifier.size(220.dp).background(Color.White).semantics { contentDescription = "QR code to link this TV" }) {
+        val cell = kotlin.math.floor(size.minDimension / (qr.size + 8))
+        val origin = (size.minDimension - cell * qr.size) / 2
+        for (y in 0 until qr.size) for (x in 0 until qr.size) {
+            if (qr.getModule(x, y)) drawRect(Color.Black, Offset(origin + x * cell, origin + y * cell), Size(cell, cell))
         }
     }
 }

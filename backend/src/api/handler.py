@@ -163,7 +163,7 @@ def _link_page(profile_id, query, body):
             "headers": {"content-type": "text/html; charset=utf-8", "cache-control": "no-store",
                         "x-frame-options": "DENY", "referrer-policy": "no-referrer",
                         "content-security-policy": "default-src 'none'; script-src "
-                        "'sha256-r5vvOH35j5Xp1ecjHhZ7oNRmS7/Xlp/C7RNPviHqeT8='; "
+                        "'sha256-fwE+Cpu1ZhZ0tUWr8Y9yE23dzrz+wfwjiZep8M7PWAs='; "
                         "style-src 'unsafe-inline'; connect-src 'self'; form-action 'self'; "
                         "frame-ancestors 'none'"},
             "body": Path(__file__).with_name("link.html").read_text()}
