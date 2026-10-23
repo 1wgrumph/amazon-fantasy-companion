@@ -317,7 +317,7 @@ internal fun PanelContent(
             if (PanelText.title(snapshot) != CornerCardText.sport(snapshot)) PanelHeader(snapshot)
             val clock = PanelText.clock(snapshot)
             FocusableRow(focused == FocusTarget.Total) { ScoreLine(snapshot, clock, PanelTextSizes.scoreSp * 1.5f) }
-            PanelText.byPoints(snapshot.rows).forEach { row ->
+            snapshot.rows.forEach { row ->
                 key(row.playerId) {
                     FocusableRow(focused == FocusTarget.Row(row.playerId)) {
                         PlayerLine(row, clock, PanelTextSizes.bodySp, PanelTextSizes.scoreSp)
@@ -365,7 +365,7 @@ private fun PlayerLine(row: PanelRow, clock: String?, nameSp: Float, pointsSp: F
             overflow = TextOverflow.Ellipsis,
             style = TextStyle(fontSize = nameSp.sp, color = MaterialTheme.colorScheme.onSurface),
         )
-        row.gameStatus?.takeIf { it.isNotBlank() && it != clock }?.let {
+        row.gameStatus?.takeIf { it.isNotBlank() }?.let {
             Text(it, maxLines = 1, style = TextStyle(fontSize = (nameSp * 0.7f).sp, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)))
         }
         Text(
@@ -384,7 +384,7 @@ private fun CompactPanelContent(snapshot: PanelSnapshot) {
         ScoreLine(snapshot, clock, 44f)
         key(snapshot.teamLeague) {
             Column(Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                PanelText.byPoints(snapshot.rows).forEach { PlayerLine(it, clock, 24f, 28f) }
+                snapshot.rows.forEach { PlayerLine(it, clock, 24f, 28f) }
             }
         }
     }

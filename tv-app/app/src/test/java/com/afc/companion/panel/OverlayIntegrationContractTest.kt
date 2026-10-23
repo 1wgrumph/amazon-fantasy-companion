@@ -68,7 +68,7 @@ class OverlayIntegrationContractTest {
         assertFalse("shared renderer callable by overlay", Regex("private\\s+fun\\s+PanelContent\\b").containsMatchIn(panel))
         assertTrue("shared snapshot", Regex("snapshot\\s*=\\s*controller\\.panel\\.snapshot").containsMatchIn(source))
         val content = sourceBlock(panel, Regex("fun\\s+PanelContent\\s*\\("))
-        assertTrue(content.contains("PanelText.byPoints(snapshot.rows).forEach"))
+        assertTrue(content.contains("snapshot.rows.forEach"))
         assertTrue(sourceBlock(panel, Regex("fun\\s+PlayerLine\\s*\\(")).contains("PanelText.points(row.points)"))
         assertTrue(sourceBlock(panel, Regex("fun\\s+ScoreLine\\s*\\(")).contains("PanelText.points(snapshot.teamTotal)"))
         assertTrue(content.contains("PanelHeader(snapshot)"))

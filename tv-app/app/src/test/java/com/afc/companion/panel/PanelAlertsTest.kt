@@ -47,7 +47,7 @@ class PanelAlertsTest {
         assertEquals(
             "the sport tab strip sits on top, then the alerts, then the lineup",
             listOf(FocusTarget.TeamLeagueSwitch, FocusTarget.AlertWatch("a1"), FocusTarget.AlertDismiss("a1"),
-                FocusTarget.Total, FocusTarget.Row("p-11"), FocusTarget.Row("p-31"), FocusTarget.Row("p-23")),
+                FocusTarget.Total, FocusTarget.Row("p-11"), FocusTarget.Row("p-23"), FocusTarget.Row("p-31")),
             c.focusTargets(),
         )
         assertEquals("focus is not stolen by an arriving alert", FocusTarget.TeamLeagueSwitch, c.focused)

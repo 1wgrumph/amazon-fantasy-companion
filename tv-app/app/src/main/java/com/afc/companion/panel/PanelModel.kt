@@ -228,6 +228,7 @@ object PanelText {
     }
 
     /** Highest points first; a player without a number goes last. */
+    /** Corner-card leaders only; lineup screens keep roster order (QB first, PG first), owner 2026-10-23. */
     fun byPoints(rows: List<PanelRow>): List<PanelRow> = rows.sortedByDescending { it.points.value ?: Double.NEGATIVE_INFINITY }
 
     /** The reported outcome of the last Watch attempt, shown to the customer (AFC-PR-031). */
@@ -344,7 +345,7 @@ class PanelController(
         }
         // The sport tab strip sits at the top, above the alerts (owner, 2026-10-23).
         val snap = held ?: return listOf(FocusTarget.TeamLeagueSwitch) + alertTargets
-        return listOf(FocusTarget.TeamLeagueSwitch) + alertTargets + FocusTarget.Total + PanelText.byPoints(snap.rows).map { FocusTarget.Row(it.playerId) }
+        return listOf(FocusTarget.TeamLeagueSwitch) + alertTargets + FocusTarget.Total + snap.rows.map { FocusTarget.Row(it.playerId) }
     }
 
     fun onAlerts(next: List<PanelAlert>) = keepFocus {
