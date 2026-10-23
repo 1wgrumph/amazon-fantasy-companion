@@ -25,6 +25,8 @@ button { margin-top: 1.5rem; }
 </form>
 <p id="result" role="status" aria-live="polite"></p>
 <script>
+const prefill = new URLSearchParams(location.search).get("code");
+if (prefill) document.getElementById("code").value = prefill.toUpperCase().slice(0, 16);
 document.getElementById("link-form").addEventListener("submit", async (event) => {
   event.preventDefault();
   const form = new FormData(event.target);

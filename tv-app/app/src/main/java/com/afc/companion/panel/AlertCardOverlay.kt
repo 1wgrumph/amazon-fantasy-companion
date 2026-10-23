@@ -12,7 +12,6 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.FrameLayout
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -29,7 +28,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
@@ -143,7 +141,7 @@ class AlertCardOverlay(
     }
 }
 
-/** Two text nodes: the "Edwards 20" label and a 14 sp sport mark, on a sport-accent band. */
+/** One line, "D. Mitchell · 30 PTS", under a sport-accent band; the band alone marks the sport. */
 @Composable
 fun AlertCardContent(notice: AlertCardNotice) {
     val sport = Sport.entries.find { it.label == notice.sport }
@@ -152,24 +150,17 @@ fun AlertCardContent(notice: AlertCardNotice) {
         Modifier.fillMaxSize().clip(RoundedCornerShape(14.dp)).background(Color(TvPalette.surfaceArgb).copy(alpha = 0.94f)),
     ) {
         Box(Modifier.fillMaxWidth().height(6.dp).background(accent))
-        Column(
-            Modifier.fillMaxSize().padding(horizontal = 10.dp, vertical = 8.dp),
-            verticalArrangement = Arrangement.SpaceBetween,
-        ) {
+        BoxWithConstraints(Modifier.fillMaxSize().padding(horizontal = 8.dp), contentAlignment = Alignment.CenterStart) {
             // An unknown number shows the name alone; the presenter already cleared the name as safe.
             val label = AlertCardText.label(notice.player, notice.value) ?: notice.player
-            BoxWithConstraints {
-                // Shrink so the longest word fits one line: wrapping happens between name and number, never inside a name.
-                val longest = label.split(' ').maxOf { it.length }.coerceAtLeast(1)
-                val size = minOf(22f, maxWidth.value / (longest * 0.56f))
-                Text(
-                    label,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
-                    style = TextStyle(fontSize = size.sp, lineHeight = (size * 1.15f).sp, fontWeight = FontWeight.Bold, color = Color(TvPalette.onSurfaceArgb)),
-                )
-            }
-            Text(notice.sport, modifier = Modifier.align(Alignment.End), style = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.Bold, color = accent))
+            // Shrink so the whole line fits: never wrapped, never cut.
+            val size = minOf(22f, maxWidth.value / (label.length.coerceAtLeast(1) * 0.56f))
+            Text(
+                label,
+                maxLines = 1,
+                softWrap = false,
+                style = TextStyle(fontSize = size.sp, lineHeight = (size * 1.15f).sp, fontWeight = FontWeight.Bold, color = Color(TvPalette.onSurfaceArgb)),
+            )
         }
     }
 }

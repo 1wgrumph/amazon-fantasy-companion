@@ -174,6 +174,8 @@ def test_openapi_panel_response_schema_is_concrete():
     assert {"playerId", "name", "points", "gameStatus"} <= row_required
     assert dereference(doc, row_props["playerId"]).get("minLength") == 1
     assert dereference(doc, row_props["gameStatus"]).get("nullable") is True
+    assert "slot" not in row_required, "older backends serve rows without a slot"
+    assert dereference(doc, row_props["slot"]).get("nullable") is True
     value_props, value_required = properties(doc, schemas["PanelValue"])
     assert {"value", "reason", "source", "asOf", "stale"} <= value_required
     assert dereference(doc, value_props["value"]).get("nullable") is True

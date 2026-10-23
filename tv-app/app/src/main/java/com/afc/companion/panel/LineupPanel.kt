@@ -3,6 +3,7 @@ package com.afc.companion.panel
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.relocation.BringIntoViewRequester
 import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.rememberScrollState
@@ -70,7 +72,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlin.math.roundToInt
 
 /** PanelMode fixed by the P2-X04 verdict: modeB side-by-side route or fullScreen in this app. */
 enum class PanelMode { ModeB, FullScreen }
@@ -203,6 +204,7 @@ fun LineupPanel(client: ApiClient, mode: PanelMode, modifier: Modifier = Modifie
                     watchOutcome = watchOutcome,
                     snapshot = controller.snapshot,
                     teamLeague = controller.teamLeague,
+                    tabs = controller.teamLeagueTabs,
                     focused = controller.focused,
                     fetchAttempted = fetchAttempted,
                     nowMs = System.currentTimeMillis(),
@@ -261,11 +263,12 @@ internal fun PanelContent(
     teamLeague: String?,
     focused: FocusTarget?,
     fetchAttempted: Boolean,
+    tabs: List<String> = listOfNotNull(teamLeague),
     nowMs: Long,
     compact: Boolean = false,
 ) {
     if (compact && snapshot != null && teamLeague != null) {
-        CompactPanelContent(snapshot, alerts, nowMs)
+        CompactPanelContent(snapshot)
         return
     }
     val loading = snapshot == null && teamLeague != null && !fetchAttempted
@@ -281,18 +284,15 @@ internal fun PanelContent(
                 .verticalScroll(rememberScrollState()).padding(8.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            if (!compact) LineupHeading()
+            // The overlay cannot take focus, so its compact form leaves out the sport tab strip.
+            if (!compact) {
+                LineupHeading()
+                SportTabs(tabs, teamLeague, snapshot, focused == FocusTarget.TeamLeagueSwitch)
+            }
             watchOutcome?.let {
                 Text(it, style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = MaterialTheme.colorScheme.onSurface))
             }
             alerts.forEach { alert -> AlertCard(alert, armedWatch == alert.id, focused, revealWholeCard = !loading, compact = compact) }
-            // The overlay cannot take focus, so its compact form leaves out the team/league switch.
-            if (!compact) FocusableRow(focused == FocusTarget.TeamLeagueSwitch) {
-                Text(
-                    "Team/league: ${teamLeague ?: "Unavailable"}",
-                    style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = MaterialTheme.colorScheme.onSurface),
-                )
-            }
             if (teamLeague == null) {
                 Row(horizontalArrangement = Arrangement.spacedBy(24.dp), verticalAlignment = Alignment.CenterVertically) {
                     // Decorative: the sentence beside it carries the meaning.
@@ -307,86 +307,86 @@ internal fun PanelContent(
             if (snapshot == null) {
                 if (fetchAttempted) {
                     Text(
-                        "Panel data unavailable.",
+                        "Scores didn't load. Retrying.",
                         style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = MaterialTheme.colorScheme.onSurface),
                     )
                 }
                 return@Column
             }
-            PanelHeader(snapshot)
+            // The selected tab already names the sport; the header adds only a real matchup.
+            if (PanelText.title(snapshot) != CornerCardText.sport(snapshot)) PanelHeader(snapshot)
+            val clock = PanelText.clock(snapshot)
+            FocusableRow(focused == FocusTarget.Total) { ScoreLine(snapshot, clock, PanelTextSizes.scoreSp * 1.5f) }
             snapshot.rows.forEach { row ->
                 key(row.playerId) {
                     FocusableRow(focused == FocusTarget.Row(row.playerId)) {
-                        val body = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = MaterialTheme.colorScheme.onSurface)
-                        // Compact: the name gets its own line, so a long stale label cannot squeeze it out.
-                        Column {
-                            if (compact) Text(row.name, style = body)
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.spacedBy(24.dp),
-                            ) {
-                                if (!compact) Text(row.name, modifier = Modifier.weight(1f), style = body)
-                                Text(
-                                    PanelText.gameStatus(row.gameStatus),
-                                    modifier = if (compact) Modifier.weight(1f) else Modifier,
-                                    style = body,
-                                )
-                                Text(
-                                    PanelText.value(row.points, nowMs),
-                                    style = TextStyle(fontSize = PanelTextSizes.scoreSp.sp, color = MaterialTheme.colorScheme.onSurface),
-                                )
-                            }
-                        }
+                        PlayerLine(row, clock, PanelTextSizes.bodySp, PanelTextSizes.scoreSp)
                     }
-                }
-            }
-            FocusableRow(focused == FocusTarget.Total) {
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text(
-                        "Team total: ${PanelText.value(snapshot.teamTotal, nowMs)}",
-                        style = TextStyle(fontSize = PanelTextSizes.scoreSp.sp, color = MaterialTheme.colorScheme.onSurface),
-                    )
-                    Text(
-                        "Lineup progress: ${progressText(snapshot.progress, nowMs)}",
-                        style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = MaterialTheme.colorScheme.onSurface),
-                    )
                 }
             }
         }
     }
 }
 
-/** A fixed total and timed lineup pages: this window cannot receive remote scrolling. */
+/** "Total 121.8" in the brand gold with the game clock on its own line below, so a wide total never overlaps it. */
 @Composable
-private fun CompactPanelContent(snapshot: PanelSnapshot, alerts: List<PanelAlert>, nowMs: Long) {
-    val body = TextStyle(fontSize = 22.sp, color = MaterialTheme.colorScheme.onSurface)
-    Column(Modifier.fillMaxSize().padding(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        LineupHeading()
+private fun ScoreLine(snapshot: PanelSnapshot, clock: String?, size: Float) {
+    Column(Modifier.fillMaxWidth()) {
+        Text(
+            "Total ${PanelText.points(snapshot.teamTotal)}",
+            maxLines = 1,
+            softWrap = false,
+            style = TextStyle(fontSize = size.sp, fontWeight = FontWeight.Black, color = Color(TvPalette.primaryArgb), fontFeatureSettings = "tnum"),
+        )
+        clock?.let {
+            Text(it, style = TextStyle(fontSize = (size * 0.55f).sp, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurface))
+        }
+    }
+}
+
+/** One player on one line: muted slot, name, their own game's status when it differs from the header clock, points. */
+@Composable
+private fun PlayerLine(row: PanelRow, clock: String?, nameSp: Float, pointsSp: Float) {
+    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+        row.slot?.let {
+            // Fixed column wide enough for "UTIL"/"FLEX" so names align under each other.
+            Text(
+                it,
+                modifier = Modifier.width((nameSp * 2.2f).dp),
+                maxLines = 1,
+                softWrap = false,
+                style = TextStyle(fontSize = (nameSp * 0.7f).sp, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)),
+            )
+        }
+        Text(
+            PanelText.shortName(row.name),
+            modifier = Modifier.weight(1f),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            style = TextStyle(fontSize = nameSp.sp, color = MaterialTheme.colorScheme.onSurface),
+        )
+        row.gameStatus?.takeIf { it.isNotBlank() }?.let {
+            Text(it, maxLines = 1, style = TextStyle(fontSize = (nameSp * 0.7f).sp, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)))
+        }
+        Text(
+            PanelText.points(row.points),
+            style = TextStyle(fontSize = pointsSp.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface, fontFeatureSettings = "tnum"),
+        )
+    }
+}
+
+/** Matchup, total and clock, then every player by points; a fresh window or pair starts at the top. */
+@Composable
+private fun CompactPanelContent(snapshot: PanelSnapshot) {
+    val clock = PanelText.clock(snapshot)
+    Column(Modifier.fillMaxSize().padding(horizontal = 12.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
         PanelHeader(snapshot)
-        alerts.take(1).forEach { Text(it.text.headline, style = body) }
-        BoxWithConstraints(Modifier.weight(1f).fillMaxWidth()) {
-            val pageSize = (maxHeight.value / 120f).toInt().coerceAtLeast(1)
-            val pages = snapshot.rows.chunked(pageSize)
-            var page by remember(snapshot.teamLeague, pageSize) { mutableIntStateOf(0) }
-            LaunchedEffect(pages.size) {
-                page = 0
-                while (pages.size > 1) {
-                    delay(5_000)
-                    page = (page + 1) % pages.size
-                }
-            }
-            Column {
-                pages.getOrNull(page)?.forEach { row ->
-                    Column(Modifier.height(120.dp)) {
-                        Text(row.name, style = body, maxLines = 2, overflow = TextOverflow.Ellipsis)
-                        Text(PanelText.gameStatus(row.gameStatus), style = body)
-                        Text(PanelText.value(row.points, nowMs), style = body)
-                    }
-                }
+        ScoreLine(snapshot, clock, 44f)
+        key(snapshot.teamLeague) {
+            Column(Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                snapshot.rows.forEach { PlayerLine(it, clock, 24f, 28f) }
             }
         }
-        Text("Team total: ${PanelText.value(snapshot.teamTotal, nowMs)}", style = body)
-        Text("Lineup progress: ${progressText(snapshot.progress, nowMs)}", style = body)
     }
 }
 
@@ -406,8 +406,10 @@ private fun AlertCard(alert: PanelAlert, armed: Boolean, focused: FocusTarget?, 
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         val body = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = MaterialTheme.colorScheme.onSurface)
-        Text(alert.text.headline, style = TextStyle(fontSize = PanelTextSizes.scoreSp.sp, color = MaterialTheme.colorScheme.onSurface))
-        // Compact (overlay): headline and player only; access, commentary, Watch and Dismiss stay in Companion, which can take focus.
+        if (alert.text.headline != "Score update") {
+            Text(alert.text.headline, style = TextStyle(fontSize = PanelTextSizes.scoreSp.sp, color = MaterialTheme.colorScheme.onSurface))
+        }
+        // Compact overlay leaves access, commentary, Watch and Dismiss in Companion, which can take focus.
         if (compact) {
             alert.text.context.ifEmpty { null }?.let { Text(it, style = body) }
             return@Column
@@ -448,14 +450,41 @@ private fun LineupHeading() {
     Text("My lineup", style = MaterialTheme.typography.headlineMedium, color = MaterialTheme.colorScheme.onSurface)
 }
 
-/** Progress (0..1, the lineup's mean game state) as a whole percent, keeping PanelText's replay/stale labels. */
-internal fun progressText(progress: PanelValue, nowMs: Long): String {
-    val text = PanelText.value(progress, nowMs)
-    val number = progress.value ?: return text
-    return "${(number * 100).roundToInt()}%" + text.removePrefix(number.toString())
+/**
+ * One pill per lineup, labelled by sport: the selected one filled with its sport accent, the others
+ * outlined in theirs. Focusing a tab selects it, so the gold focus ring sits on the selected pill.
+ */
+@Composable
+private fun SportTabs(tabs: List<String>, selected: String?, snapshot: PanelSnapshot?, focused: Boolean) {
+    Row(Modifier.bringIntoViewWhen(focused), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+        if (tabs.isEmpty()) {
+            Text("No team", style = TextStyle(fontSize = PanelTextSizes.bodySp.sp, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)))
+        }
+        tabs.forEach { tab ->
+            val label = PanelText.sport(tab) ?: CornerCardText.sport(snapshot?.takeIf { it.teamLeague == tab }) ?: "Lineup"
+            val sport = Sport.entries.find { it.label == label }
+            val accent = sport?.let { Color(TvPalette.sportAccentArgb(it)) } ?: Color(TvPalette.primaryArgb)
+            val isSelected = tab == selected
+            val pill = RoundedCornerShape(50)
+            Text(
+                label,
+                modifier = Modifier
+                    .then(if (isSelected && focused) Modifier.border(TvFocusStyle.borderWidthDp.dp, Color(TvFocusStyle.focusedBorderArgb), pill).padding(TvFocusStyle.borderWidthDp.dp) else Modifier)
+                    .then(if (isSelected) Modifier.background(accent, pill) else Modifier.border(2.dp, accent, pill))
+                    .padding(horizontal = 28.dp, vertical = 8.dp),
+                maxLines = 1,
+                softWrap = false,
+                style = TextStyle(
+                    fontSize = PanelTextSizes.scoreSp.sp,
+                    fontWeight = if (isSelected) FontWeight.Black else FontWeight.SemiBold,
+                    color = if (isSelected) sport?.let { Color(TvPalette.onSportAccentArgb(it)) } ?: Color(TvPalette.surfaceArgb) else accent,
+                ),
+            )
+        }
+    }
 }
 
-/** Scoring basis and lineup source; a tagged sport gets its accent as a chip. */
+/** Sport and matchup; a tagged sport gets its accent as a chip. */
 @Composable
 private fun PanelHeader(snapshot: PanelSnapshot) {
     val sport = Sport.entries.find { it.label == snapshot.sport }
@@ -463,11 +492,11 @@ private fun PanelHeader(snapshot: PanelSnapshot) {
         Modifier.background(Color(TvPalette.sportAccentArgb(sport)), RoundedCornerShape(50)).padding(horizontal = 20.dp, vertical = 6.dp)
     }
     Text(
-        PanelText.header(snapshot),
+        PanelText.title(snapshot),
         modifier = modifier,
         style = TextStyle(
             fontSize = PanelTextSizes.bodySp.sp,
-            fontWeight = FontWeight.Medium,
+            fontWeight = FontWeight.Bold,
             color = sport?.let { Color(TvPalette.onSportAccentArgb(it)) } ?: MaterialTheme.colorScheme.onSurface,
         ),
     )

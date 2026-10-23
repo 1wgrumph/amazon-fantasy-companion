@@ -19,7 +19,7 @@ class AlertCardMappingTest {
 
     @Test fun committedEnvelopeUsesMatchingPanelValueSportAndEvent() {
         val notice = requireNotNull(alertCardNotice(alert(), snapshot()))
-        assertEquals(6.5, notice.value, 0.0)
+        assertEquals(6.5, notice.value!!, 0.0)
         assertEquals("NFL", notice.sport)
         assertEquals("401999001771", notice.watchEventId)
     }
@@ -27,7 +27,7 @@ class AlertCardMappingTest {
         val panel = snapshot().copy(sport = null)
         val notice = requireNotNull(alertCardNotice(alert(), panel))
         assertEquals("NFL", notice.sport)
-        assertEquals(6.5, notice.value, 0.0)
+        assertEquals(6.5, notice.value!!, 0.0)
         val declared = json().apply { getJSONObject("data").getJSONObject("triggerContext").put("sport", "nfl") }
         assertEquals("NFL", requireNotNull(alertCardNotice(alert(declared), panel)).sport)
     }
@@ -47,10 +47,10 @@ class AlertCardMappingTest {
             if (sport == "nfl") assertNull(panel.sport)
             val notice = requireNotNull(alertCardNotice(alert(wire), panel))
             assertEquals(sport.uppercase(), notice.sport)
-            assertEquals(20.0, notice.value, 0.0)
-            assertEquals(if (sport == "nfl") "Runner 20" else "Guard 20", AlertCardText.label(notice.player, notice.value))
-            assertNull("same exact envelope without fresh points must still fail closed", alertCardNotice(alert(wire),
-                panel.copy(rows = panel.rows.map { it.copy(points = it.points.copy(asOfMs = now - 60_001)) })))
+            assertEquals(20.0, notice.value!!, 0.0)
+            assertEquals("${PanelText.shortName(starter.getString("name"))} · 20 PTS", AlertCardText.label(notice.player, notice.value))
+            assertNull("same exact envelope without fresh points shows no number", requireNotNull(alertCardNotice(alert(wire),
+                panel.copy(rows = panel.rows.map { it.copy(points = it.points.copy(asOfMs = now - 60_001)) }))).value)
         }
     }
 
@@ -61,20 +61,44 @@ class AlertCardMappingTest {
             getJSONArray("starters").getJSONObject(0).put("shortName", "Guard").put("points", 20.0)
         }
         val notice = requireNotNull(alertCardNotice(alert(json), null))
-        assertEquals("Guard 20", AlertCardText.label(notice.player, notice.value))
+        assertEquals("Guard · 20 PTS", AlertCardText.label(notice.player, notice.value))
         assertEquals("NBA", notice.sport)
     }
-    @Test fun absentOrMismatchedAuthorityNeverCreatesANameOnlyCard() {
-        assertNull("missing panel must remain an explicit unresolved notice", alertCardNotice(alert(), null))
-        assertNull("different starter cannot supply a number", alertCardNotice(alert(), snapshot().copy(rows = listOf(prow("other", 9.0)))))
+
+    @Test fun fullAlertMappingPreservesLongSurnamesAndSuffixes() {
+        for ((name, expected) in listOf(
+            "Shai Gilgeous-Alexander" to "S. Gilgeous-Alexander",
+            "Kenrich Williams Jr." to "K. Williams Jr.",
+        )) {
+            for (inlineName in listOf(false, true)) {
+                val wire = json()
+                val trigger = wire.getJSONObject("data").getJSONObject("triggerContext")
+                val starter = trigger.getJSONArray("starters").getJSONObject(0).put("name", name)
+                if (inlineName) starter.put("shortName", expected)
+                val notice = requireNotNull(alertCardNotice(alert(wire), snapshot()))
+                assertEquals(expected, notice.player)
+                assertEquals("$expected · 6.5 PTS", AlertCardText.label(notice.player, notice.value))
+            }
+        }
+    }
+    @Test fun alertOutsideTheShownPairStillShowsAScoreCardWithoutANumber() {
+        // Owner 2026-10-23: cross-sport alerts must appear; without panel authority the card reads "SCORE".
+        val missing = requireNotNull(alertCardNotice(alert(), null))
+        assertNull(missing.value)
+        assertEquals("", missing.sport)
+        assertEquals("${missing.player} · SCORE", AlertCardText.label(missing.player, missing.value))
+        assertNull("different starter cannot supply a number",
+            requireNotNull(alertCardNotice(alert(), snapshot().copy(rows = listOf(prow("other", 9.0))))).value)
         val json = json()
         json.getJSONObject("data").getJSONObject("triggerContext").put("sport", "nba")
-        assertNull("NFL points must not be relabeled as NBA", alertCardNotice(alert(json), snapshot()))
+        val nba = requireNotNull(alertCardNotice(alert(json), snapshot()))
+        assertNull("NFL points must not be relabeled as NBA", nba.value)
+        assertEquals("NBA", nba.sport)
     }
     @Test fun staleAndUndatedPanelPointsCannotBePresentedAsCurrent() {
         val panel = snapshot()
         for (asOf in listOf(now - 60_001, null)) {
-            assertNull(alertCardNotice(alert(), panel.copy(rows = panel.rows.map { it.copy(points = it.points.copy(asOfMs = asOf)) })))
+            assertNull(requireNotNull(alertCardNotice(alert(), panel.copy(rows = panel.rows.map { it.copy(points = it.points.copy(asOfMs = asOf)) }))).value)
         }
     }
 }

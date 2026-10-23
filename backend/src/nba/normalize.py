@@ -8,6 +8,7 @@ JSON Schema file; add schema/nba-summary.json if NBA leaves spike scope.
 """
 
 from datetime import datetime
+from zoneinfo import ZoneInfo
 from decimal import Decimal, InvalidOperation
 import logging
 import re
@@ -64,6 +65,62 @@ def pregame_status_by_team(payload):
                     if abbr not in found or order < found[abbr][0]:
                         found[abbr] = (order, detail)
     return {abbr: detail for abbr, (_, detail) in found.items()}
+
+
+_ESPN_TIME = re.compile(r"(\d{1,2}):(\d{2}) (AM|PM) E[DS]T")
+
+
+def _central(detail, verb):
+    """ESPN "10/21 - 8:30 PM EDT" becomes "Tips 7:30 PM": Central is an hour behind Eastern."""
+    found = _ESPN_TIME.search(detail)
+    if not found:
+        return detail
+    hour = int(found[1]) % 12 + (12 if found[3] == "PM" else 0) - 1
+    return f"{verb} {(hour % 12) or 12}:{found[2]} {'PM' if hour % 24 >= 12 else 'AM'}"
+
+
+def _today():
+    return datetime.now(ZoneInfo("America/Chicago")).date()
+
+
+def _weekday(start, text, verb):
+    """Owner 2026-10-23: a start on another day names it ("Sun 12:00 PM"); today's keeps the verb.
+    Use the Central calendar on both sides of daylight-saving changes."""
+    try:
+        when = datetime.fromisoformat(str(start).replace("Z", "+00:00")).astimezone(ZoneInfo("America/Chicago"))
+    except ValueError:
+        return text
+    if when.date() == _today() or not text.startswith(verb + " "):
+        return text
+    return when.strftime("%a") + text[len(verb):]
+
+
+def team_status_by_team(events, verb):
+    """Each team's game status today: a live clock beats a start time, which beats a final.
+
+    Takes scoreboard `events` from either sport; `verb` names a start ("Tips" or "Kicks").
+    """
+    rank = {"in": 0, "pre": 1, "post": 2}
+    found = {}
+    for game in events if isinstance(events, list) else []:
+        status = (game.get("status") or {}).get("type") or {}
+        state = status.get("state")
+        detail = status.get("shortDetail") or status.get("detail")
+        if state not in rank or not isinstance(detail, str) or not detail.strip():
+            continue
+        text = _central(detail, verb) if state == "pre" else detail
+        if state == "pre":
+            text = _weekday(game.get("date"), text, verb)
+        if len(text) > 80:
+            continue
+        order = (rank[state], str(game.get("date") or ""))
+        for competition in game.get("competitions", []):
+            for competitor in competition.get("competitors", []):
+                abbr = (competitor.get("team") or {}).get("abbreviation")
+                if isinstance(abbr, str) and re.fullmatch(r"[A-Z0-9]{2,4}", abbr):
+                    if abbr not in found or order < found[abbr][0]:
+                        found[abbr] = (order, text)
+    return {abbr: text for abbr, (_, text) in found.items()}
 
 
 def _status(payload):
