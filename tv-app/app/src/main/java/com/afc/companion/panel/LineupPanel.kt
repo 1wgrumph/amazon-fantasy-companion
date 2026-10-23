@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.relocation.BringIntoViewRequester
 import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.rememberScrollState
@@ -342,10 +343,20 @@ private fun ScoreLine(snapshot: PanelSnapshot, clock: String?, size: Float) {
     }
 }
 
-/** One player on one line: name, their own game's status when it differs from the header clock, points. */
+/** One player on one line: muted slot, name, their own game's status when it differs from the header clock, points. */
 @Composable
 private fun PlayerLine(row: PanelRow, clock: String?, nameSp: Float, pointsSp: Float) {
     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+        row.slot?.let {
+            // Fixed column wide enough for "UTIL"/"FLEX" so names align under each other.
+            Text(
+                it,
+                modifier = Modifier.width((nameSp * 2.2f).dp),
+                maxLines = 1,
+                softWrap = false,
+                style = TextStyle(fontSize = (nameSp * 0.7f).sp, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)),
+            )
+        }
         Text(
             PanelText.shortName(row.name),
             modifier = Modifier.weight(1f),

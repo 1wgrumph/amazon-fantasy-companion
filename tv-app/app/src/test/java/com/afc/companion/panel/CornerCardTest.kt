@@ -103,6 +103,8 @@ class CornerCardTest {
             listOf(CornerCardText.Leader("D. Mitchell", "32.5", false), CornerCardText.Leader("T. Maxey", "28.0", false)),
             CornerCardText.leaders(fresh),
         )
+        val slotted = fresh.copy(rows = fresh.rows.map { if (it.playerId == "1") it.copy(slot = "PG") else it })
+        assertEquals("leaders carry the slot when the row has one", listOf("PG", null), CornerCardText.leaders(slotted).map { it.slot })
         val earlier = fresh.copy(rows = fresh.rows.map { if (it.playerId == "1") it.copy(points = it.points.copy(value = 30.0)) else it })
         assertEquals("▲ only for a player whose points rose", listOf(true, false), CornerCardText.leaders(fresh, earlier).map { it.rose })
         assertEquals("no ▲ against another pair", listOf(false, false), CornerCardText.leaders(fresh, earlier.copy(teamLeague = "x/y")).map { it.rose })
