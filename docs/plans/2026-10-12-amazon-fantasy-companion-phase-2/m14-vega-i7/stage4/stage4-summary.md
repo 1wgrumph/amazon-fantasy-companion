@@ -1,13 +1,16 @@
 # M14 Stage 4 — NBA alerts and Watch on the VVD during a live game (P2-V01, attempt 1)
 
 Outcome: PASS. An NBA alert from #156 reached the VVD as the in-app banner.
-Watch from that banner reported one routing outcome, and the panel kept
-refreshing live.
+Watch from that banner showed one local `accessUnknown` result, and the panel
+kept refreshing live. The routing-outcome POST was attempted per code trace;
+backend receipt is unverified (no read-back).
 
 Observer: Claude Code (Test Implementer, M14 frozen route), 2026-10-22.
 Game: ESPN 401909093, CLE @ PHI, tip 23:00Z (ESPN went in progress at
 23:14Z). Observed on the VVD from 23:15Z to 23:47Z (1st quarter). Backend:
-afc-dev at `c12f3ac` (#156). App: built in the sandbox from this worktree
+afc-dev at `86065a6` (contains `c12f3ac`/#156), per the orchestrator's
+CloudFormation tag check (`GitCommit=86065a6`, stack updated 2026-10-22T22:36:19Z,
+before tip). App: built in the sandbox from this worktree
 (`vega-app/src` unchanged since `a89b2b2`). The x86_64 `.vpkg` sha256 is in
 the [receipt](stage4-receipt.json).
 
@@ -37,7 +40,7 @@ the [receipt](stage4-receipt.json).
 | Feature | Verdict | Evidence |
 |---|---|---|
 | Alerts | PASS | [verify-alerts-live.txt](verify-alerts-live.txt) exit 0. On the Stage 3 zero-alert log the same check exits 1 (fails closed). |
-| Watch | PASS (`accessUnknown`, no playback) | [L2 03](L2/l2-03-watch-armed.png), [L2 04](L2/l2-04-watch-outcome.png) |
+| Watch | PASS for the on-device routing outcome (`accessUnknown`, no playback); backend receipt unverified (no read-back) | [L2 03](L2/l2-03-watch-armed.png), [L2 04](L2/l2-04-watch-outcome.png) |
 | Panel live | PASS | [verify-panel-live.txt](verify-panel-live.txt) exit 0, all 5 checks, R-3 included |
 
 ### Alerts
@@ -63,12 +66,12 @@ With Watch focused ([L2 02](L2/l2-02-focus.png)), the first press showed
 "Press Watch again to switch apps." (switching confirmation on). The second
 press showed "Watch: could not confirm the game is playing.", which the app
 shows for `accessUnknown`. The alert's route has no verified
-`platform_routes.vega` entry, so the launcher started nothing and reported
-`accessUnknown` through `POST /v1/routing-outcome`. Watch was pressed only
-for this one alert, so exactly one outcome was reported. The message held
-unchanged to [23:32:48](L2/l2-top-10.png). The backend has no read-back for
-stored outcomes, so the on-device message is the evidence. No playback is
-claimed.
+`platform_routes.vega` entry, so the launcher started nothing. One local
+`accessUnknown` result was observed; the routing-outcome POST was attempted
+per code trace. Backend receipt is unverified (no read-back): the launcher
+returns the local outcome even if reporting fails. Watch was used only for
+this one alert, and the message held unchanged to [23:32:48](L2/l2-top-10.png).
+The on-device message is evidence for the local outcome. No playback is claimed.
 
 ### Panel live
 
@@ -87,8 +90,10 @@ Profile `afc-vega-vvd-synthetic` only. The writes were:
 
 - 1 × `PUT /v1/lineup/manual`;
 - 1 × `PUT /v1/profile` (teamLeague and alertTypes);
-- the app's `POST /v1/link` and its confirm for code `LXE4RY7C`;
-- the app's 1 × `POST /v1/routing-outcome`.
+- the app's `POST /v1/link` and its confirm for code `LXE4RY7C`.
+
+The app also attempted one `POST /v1/routing-outcome` per code trace;
+backend receipt is unverified, so it is not counted as a proven write.
 
 The workstation reused the Stage 3 session, so it made no new link. No
 other profile, league, team or endpoint was written.
@@ -121,3 +126,4 @@ No VVD process remained at the end.
 - A heads-up banner over provider playback (the VVD has no provider apps).
 - Alerts for PHI starters. Before tip, their rows had no `gameStatus` while
   the CLE rows showed the tip time. In game, both teams had values.
+  The missing pre-game status for players without a stats record is a known bug, fixed by the orchestrator's minimal-panel change.

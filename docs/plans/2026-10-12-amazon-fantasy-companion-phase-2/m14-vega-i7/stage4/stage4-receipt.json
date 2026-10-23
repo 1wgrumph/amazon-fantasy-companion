@@ -10,8 +10,9 @@
   "observed_to": "2026-10-22T23:46:41Z"
  },
  "backend": {
-  "afc_dev_sha": "c12f3ac",
-  "pr": 156
+  "afc_dev_sha": "86065a6",
+  "pr": 156,
+  "verification": "Orchestrator CloudFormation GitCommit tag check; stack LastUpdatedTime 2026-10-22T22:36:19Z before tip; contains c12f3ac/#156"
  },
  "source_commit": "7503770",
  "app_source_unchanged_since": "a89b2b2",
@@ -32,14 +33,16 @@
  },
  "verdicts": {
   "Alerts": "PASS",
-  "Watch": "PASS (accessUnknown; no playback claimed)",
+  "Watch": "PASS for the on-device routing outcome (local accessUnknown; no playback claimed); backend receipt unverified (no read-back)",
   "Panel live": "PASS"
  },
  "routing_outcome": {
-  "count": 1,
   "outcome": "accessUnknown",
   "eventId": "40190909300000008390880905",
-  "source": "on-device message; no backend read-back endpoint"
+  "source": "on-device message",
+  "local_result_count": 1,
+  "report": "POST /v1/routing-outcome attempted per code trace",
+  "backend_receipt": "unverified (no read-back)"
  },
  "check_exits": {
   "put-lineup.sh": 0,
@@ -66,7 +69,8 @@
   "vega-app/vvd-checks/put-lineup.sh": "d39aae68006e22bbb857aaab8cd2f8df0d81b732611bd2300de1882c3e842270",
   "vega-app/vvd-checks/poll-live-api.py": "2d6a7bbd953e140ae14daa726c6932ad0f99698f020a6aea5aff43bbbb66d45f",
   "vega-app/vvd-checks/verify-panel-live.py": "019a30aa122f215456d4c372e8df1db2184368184431ce34cc268cc51b03762d",
-  "vega-app/vvd-checks/verify-alerts-live.py": "ff79d3e3f25012d9c988c1b4141495922b2fd30d63722ee59c46e3d0b9d5389b"
+  "vega-app/vvd-checks/verify-alerts-live.py": "ae3cfa5d6151e36e97ba8ce42b274356d508983917722692002b1b32acbad882",
+  "vega-app/vvd-checks/__tests__/test_verify_alerts_live.py": "71707e74a4fefb836a47a60a9b96d3d8d152b8cd80b965a7a8906580541f2c4e"
  },
  "artifacts_sha256": {
   "alert-readings.json": "6f5accb9d7cb28ac84077627d47f0921a4b97669c9b368fc98588011ab401d51",
@@ -76,8 +80,8 @@
   "device-readings.json": "c705168cb0b7a0f46409b4d32741146d36ed9d4448ede502caf4fc06db0f25bf",
   "lineup.json": "35303e7bc45432476db4d43ec7e04513560a615838ad2ec32562873924324216",
   "proxy-connects.txt": "9a562f8ed860a0521f3b3cc5913418ff38daf4c80a6204304694452daf65fa5c",
-  "stage4-summary.md": "53e74ed9beeb5fdd83304fecb776e04c488837e94defe82f99b762916d9bbc1f",
-  "verify-alerts-live.txt": "59d2dd1c3a8038686152b2e4c5e4b6bea752a1f7d1f35e67331133ebc914ca55",
+  "stage4-summary.md": "f5c7bffe02437ba304b9191ee1f4cfc91aa6df159e65b0c0c9ca1944e207d8cd",
+  "verify-alerts-live.txt": "d5bf1b4a9c4f04c83e888ea16d0dbb98da01765c0a8bfe3e4182c305e4318db7",
   "verify-panel-live.txt": "c62afcde8c969f2c7278539736e2c5a0a43aab7b5c7611f77dc2b48bc72b9d98",
   "L1/commands.txt": "1a556f79181788939485365eecb09059de07844a22d39fc928ce8cf2de613959",
   "L1/l1-00-top.png": "1a557d199ccde0ccd7cb84c23fb296f36713189208c69d57b92c6613a0317c59",
@@ -137,6 +141,7 @@
   "L2/l2-top-08.png": "8bc569c1b94af602da28b105827cc5339a13d65ade33d2107bf5cc9812e13842",
   "L2/l2-top-09.png": "8bc569c1b94af602da28b105827cc5339a13d65ade33d2107bf5cc9812e13842",
   "L2/l2-top-10.png": "8bc569c1b94af602da28b105827cc5339a13d65ade33d2107bf5cc9812e13842",
-  "L2/steps.txt": "65e78de94c6900e0d9bb7553f91adef102f1f8eea533b782fbdc842c81da9e5e"
+  "L2/steps.txt": "65e78de94c6900e0d9bb7553f91adef102f1f8eea533b782fbdc842c81da9e5e",
+  "../../evidence/P2-V01/feature-verdicts.md": "2921d5d0d541a25a98163c57837cd28f965ec66e64aa12b605623f121383822d"
  }
 }
