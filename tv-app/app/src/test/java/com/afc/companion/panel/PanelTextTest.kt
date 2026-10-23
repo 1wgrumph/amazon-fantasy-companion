@@ -72,6 +72,17 @@ class PanelTextTest {
         assertEquals("–", PanelText.points(v(null)))
     }
 
+    @Test fun weekdayStartsAndByesDoNotHideTheLiveClock() {
+        val live = PanelRow("live", "Live Player", v(3.0), "Q2 08:14")
+        for (status in listOf("Sun 12:00 PM", "Mon 7:15 PM", "BYE")) {
+            val snapshot = snap(teamLeague = "demo-nfl/my-lineup").copy(rows = listOf(
+                PanelRow("waiting", "Waiting Player", v(0.0), status), live,
+            ))
+            assertEquals("Q2 08:14", PanelText.clock(snapshot))
+            assertEquals("NFL  Q2 08:14", CornerCardText.label(snapshot, snapshot.teamLeague))
+        }
+    }
+
     @Test fun shortNameIsFirstInitialAndLastName() {
         assertEquals("D. Mitchell", PanelText.shortName("Donovan Mitchell"))
         assertEquals("S. Gilgeous-Alexander", PanelText.shortName("Shai Gilgeous-Alexander"))

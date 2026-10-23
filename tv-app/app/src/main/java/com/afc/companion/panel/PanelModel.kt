@@ -216,8 +216,10 @@ object PanelText {
     /** The game clock: a live status first, else a start time, else a final. */
     fun clock(snapshot: PanelSnapshot): String? {
         val statuses = snapshot.rows.mapNotNull { it.gameStatus?.takeIf(String::isNotBlank) }
-        return statuses.firstOrNull { !it.startsWith("Tips ") && !it.startsWith("Kicks ") && !it.startsWith("Final") }
-            ?: statuses.firstOrNull { it.startsWith("Tips ") || it.startsWith("Kicks ") }
+        val upcoming = Regex("^(Tips|Kicks|Mon|Tue|Wed|Thu|Fri|Sat|Sun) ")
+        return statuses.firstOrNull { !upcoming.containsMatchIn(it) && !it.startsWith("Final") && it != "BYE" }
+            ?: statuses.firstOrNull { upcoming.containsMatchIn(it) }
+            ?: statuses.firstOrNull { it.startsWith("Final") }
             ?: statuses.firstOrNull()
     }
 
