@@ -26,6 +26,16 @@ def get(url, token=None):
         return f"error:{type(error).__name__}", None
 
 
+def alert_row(alert):
+    """The fields the alert verdict needs: id, revision, type, sport-bearing event, starters, phrase, route basis."""
+    data = alert.get("data") or {}
+    context = data.get("triggerContext") or {}
+    return {"id": alert.get("id"), "revision": alert.get("revision"), "updatedAt": alert.get("updatedAt"),
+            "alertType": data.get("alertType"), "gameId": context.get("gameId"), "eventId": context.get("eventId"),
+            "starters": [s.get("name") for s in context.get("starters") or []], "matchup": context.get("matchup"),
+            "accessBasis": (data.get("route") or {}).get("accessBasis")}
+
+
 def tick(base, token, pair, event):
     row = {"utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
     status, summary = get(ESPN + event)
@@ -41,7 +51,8 @@ def tick(base, token, pair, event):
     status, alerts = get(f"{base}/v1/alerts", token)
     items = (alerts or {}).get("alerts") or []
     row["alerts"] = {"http": status, "count": len(items),
-                     "types": [((a.get("data") or {}).get("alertType"), a.get("updatedAt")) for a in items]}
+                     "types": [((a.get("data") or {}).get("alertType"), a.get("updatedAt")) for a in items],
+                     "items": [alert_row(a) for a in items]}
     return row
 
 

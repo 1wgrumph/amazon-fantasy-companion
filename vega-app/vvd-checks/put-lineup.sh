@@ -1,10 +1,11 @@
 #!/bin/bash
 # Stage 3 workstation side: link a session for one synthetic profile, write its manual NBA lineup and point the
 # profile's panel at that team/league. Runs on the workstation, not in the sandbox.
-# usage: put-lineup.sh <base-url> <profile-id> <lineup.json> <league/team> <evidence-dir> <private-dir>
+# usage: put-lineup.sh <base-url> <profile-id> <lineup.json> <league/team> <evidence-dir> <private-dir> [alert-types]
+# [alert-types] is an optional comma list (Stage 4: RedZone,PlayerScore) written as the profile's alertTypes.
 # The session token stays in <private-dir>/session (mode 600) and is never printed. Evidence gets status codes and bodies.
 set -u
-B=${1%/} PROFILE=$2 LINEUP=$3 PAIR=$4 E=$5 P=$6
+B=${1%/} PROFILE=$2 LINEUP=$3 PAIR=$4 E=$5 P=$6 TYPES=${7:-}
 mkdir -p "$E" "$P"
 umask 077
 api() { # api NAME METHOD PATH [BODY-FILE] : status to NAME.status, body to NAME.json
@@ -29,11 +30,13 @@ if [ ! -s "$P/session" ]; then
 fi
 api 04-lineup PUT /v1/lineup/manual "$LINEUP"
 api 05-profile-before GET /v1/profile
-python3 - "$E/05-profile-before.json" "$PAIR" "$P/profile-put.json" <<'EOF'
+python3 - "$E/05-profile-before.json" "$PAIR" "$P/profile-put.json" "$TYPES" <<'EOF'
 import json, sys
-profile, pair, out = json.load(open(sys.argv[1])), sys.argv[2], sys.argv[3]
+profile, pair, out, types = json.load(open(sys.argv[1])), sys.argv[2], sys.argv[3], sys.argv[4]
 league, team = pair.split("/", 1)
 data = dict(profile["data"], teamLeague={"league": league, "team": team})
+if types:
+    data["alertTypes"] = types.split(",")
 json.dump({"revision": profile["revision"], "data": data}, open(out, "w"))
 EOF
 api 06-profile PUT /v1/profile "$P/profile-put.json"

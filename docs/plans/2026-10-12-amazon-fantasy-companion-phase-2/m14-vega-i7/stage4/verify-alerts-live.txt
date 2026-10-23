@@ -1,0 +1,13 @@
+$ python3 vega-app/vvd-checks/verify-alerts-live.py api-poll.jsonl alert-readings.json 401909093
+PASS backend: alert polls 200 and >= 1 NBA PlayerScore alert for this game (zero fails)
+PASS device: a capture shows the Score update banner for a logged alert
+PASS device: Watch reports exactly one routing outcome, app-absent or access-unknown
+alerts: 2 logged, 2 NBA PlayerScore; banner captures: ['L2/l2-01-launch.png', 'L2/l2-02-focus.png', 'L2/l2-03-watch-armed.png', 'L2/l2-04-watch-outcome.png', 'L2/l2-top-10.png', 'L3/l3-01-launch.png', 'L3/l3-top-03.png', 'L3/l3-top-04.png', 'L3/l3-10-new-alert.png', 'L3/l3-11-new-alert-held.png']; outcome: ['accessUnknown']
+exit=0
+
+$ python3 vega-app/vvd-checks/verify-alerts-live.py ../stage3/attempt2/api-poll.jsonl alert-readings.json 401909092  (Stage 3 log, zero alerts: must fail closed)
+FAIL backend: alert polls 200 and >= 1 NBA PlayerScore alert for this game (zero fails)
+FAIL device: a capture shows the Score update banner for a logged alert
+FAIL device: Watch reports exactly one routing outcome, app-absent or access-unknown
+alerts: 0 logged, 0 NBA PlayerScore; banner captures: []; outcome: ['accessUnknown']
+exit=1
