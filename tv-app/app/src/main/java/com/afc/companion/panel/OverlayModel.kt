@@ -295,7 +295,7 @@ fun alertCardNotice(alert: Alert, panel: PanelSnapshot?): AlertCardNotice? {
     val starter = trigger.optJSONArray("starters")?.opt(0) as? JSONObject ?: return null
     val player = ((starter.opt("shortName") as? String)?.trim()?.takeIf { it.isNotEmpty() }
         ?: (starter.opt("name") as? String)?.let(PanelText::shortName))
-        ?.take(MAX_CARD_NAME)?.takeIf { AlertCardText.label(it, 0.0) != null } ?: return null
+        ?.takeIf { AlertCardText.label(it, 0.0) != null } ?: return null
     val declaredSport = when (trigger.opt("sport")) { "nba" -> "NBA"; "nfl" -> "NFL"; else -> null }
     val row = panel?.rows?.firstOrNull {
         it.playerId == starter.opt("athlete_id") && (declaredSport == null || declaredSport == CornerCardText.sport(panel))
@@ -307,5 +307,3 @@ fun alertCardNotice(alert: Alert, panel: PanelSnapshot?): AlertCardNotice? {
     val sport = declaredSport ?: CornerCardText.sport(panel)?.takeIf { row != null && it in listOf("NBA", "NFL") } ?: return null
     return AlertCardNotice(alert.envelope.id, player, value, sport, AlertNotifier.watchEventId(alert).orEmpty())
 }
-
-private const val MAX_CARD_NAME = 14

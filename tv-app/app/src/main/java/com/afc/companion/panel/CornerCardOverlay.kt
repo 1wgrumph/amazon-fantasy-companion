@@ -77,7 +77,7 @@ fun OverlayMenuContent(focus: OverlayMenuItem, teamLeague: String?, items: List<
             val focused = item == focus
             val label = when (item) {
                 OverlayMenuItem.Expand -> "Expand"
-                OverlayMenuItem.League -> "League: ${teamLeague?.substringBefore('/') ?: "none"}"
+                OverlayMenuItem.League -> CornerCardText.label(null, teamLeague)
                 OverlayMenuItem.Hide -> "Hide"
             }
             Box(

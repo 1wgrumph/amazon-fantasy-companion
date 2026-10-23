@@ -64,6 +64,23 @@ class AlertCardMappingTest {
         assertEquals("Guard · 20 PTS", AlertCardText.label(notice.player, notice.value))
         assertEquals("NBA", notice.sport)
     }
+
+    @Test fun fullAlertMappingPreservesLongSurnamesAndSuffixes() {
+        for ((name, expected) in listOf(
+            "Shai Gilgeous-Alexander" to "S. Gilgeous-Alexander",
+            "Kenrich Williams Jr." to "K. Williams Jr.",
+        )) {
+            for (inlineName in listOf(false, true)) {
+                val wire = json()
+                val trigger = wire.getJSONObject("data").getJSONObject("triggerContext")
+                val starter = trigger.getJSONArray("starters").getJSONObject(0).put("name", name)
+                if (inlineName) starter.put("shortName", expected)
+                val notice = requireNotNull(alertCardNotice(alert(wire), snapshot()))
+                assertEquals(expected, notice.player)
+                assertEquals("$expected · 6.5 PTS", AlertCardText.label(notice.player, notice.value))
+            }
+        }
+    }
     @Test fun absentOrMismatchedAuthorityNeverCreatesANameOnlyCard() {
         assertNull("missing panel must remain an explicit unresolved notice", alertCardNotice(alert(), null))
         assertNull("different starter cannot supply a number", alertCardNotice(alert(), snapshot().copy(rows = listOf(prow("other", 9.0)))))
