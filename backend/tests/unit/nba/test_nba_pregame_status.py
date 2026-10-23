@@ -41,6 +41,11 @@ def test_poll_stores_pregame_status_for_a_not_started_game(api, monkeypatch):
     monkeypatch.setenv("AFC_ENABLE_NBA", "true")
     board = _board("pre")
     summary = json.loads((FIXTURES / "summary.json").read_text())
+    # The fixture tips off today in Central time, so the start keeps "Tips" rather than a weekday.
+    from datetime import datetime, timedelta
+    import nba.normalize as normalize
+    start = datetime.fromisoformat(board["events"][0]["date"].replace("Z", "+00:00")) - timedelta(hours=5)
+    monkeypatch.setattr(normalize, "_today", lambda: start.date())
 
     def get_json(url):
         return board if url.endswith("scoreboard") else summary

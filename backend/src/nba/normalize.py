@@ -7,7 +7,7 @@ shortcut: summary validation is hand-checked pinned fields, not a pinned
 JSON Schema file; add schema/nba-summary.json if NBA leaves spike scope.
 """
 
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from decimal import Decimal, InvalidOperation
 import logging
 import re
@@ -78,6 +78,22 @@ def _central(detail, verb):
     return f"{verb} {(hour % 12) or 12}:{found[2]} {'PM' if hour % 24 >= 12 else 'AM'}"
 
 
+def _today():
+    return (datetime.now(timezone.utc) - timedelta(hours=5)).date()
+
+
+def _weekday(start, text, verb):
+    """Owner 2026-10-23: a start on another day names it ("Sun 12:00 PM"); today's keeps the verb.
+    Central is taken as UTC-5, the same fixed offset _central assumes."""
+    try:
+        when = datetime.fromisoformat(str(start).replace("Z", "+00:00")) - timedelta(hours=5)
+    except ValueError:
+        return text
+    if when.date() == _today() or not text.startswith(verb + " "):
+        return text
+    return when.strftime("%a") + text[len(verb):]
+
+
 def team_status_by_team(events, verb):
     """Each team's game status today: a live clock beats a start time, which beats a final.
 
@@ -92,6 +108,8 @@ def team_status_by_team(events, verb):
         if state not in rank or not isinstance(detail, str) or not detail.strip():
             continue
         text = _central(detail, verb) if state == "pre" else detail
+        if state == "pre":
+            text = _weekday(game.get("date"), text, verb)
         if len(text) > 80:
             continue
         order = (rank[state], str(game.get("date") or ""))

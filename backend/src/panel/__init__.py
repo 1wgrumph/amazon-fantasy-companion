@@ -31,7 +31,7 @@ the per-athlete boxscore records feed_ingest stores at ingest.
 import hashlib
 import json
 import os
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from decimal import Decimal
 from pathlib import Path
 
@@ -211,14 +211,26 @@ def _value(record, table):
             "asOf": as_of, "stale": stale}
 
 
-def _stale_final(record):
+def _nfl_week_start(now_at):
+    """Start of the current NFL fantasy week: the latest Tuesday 09:00 UTC, after Monday night's game."""
+    start = (now_at - timedelta(days=(now_at.weekday() - 1) % 7)).replace(hour=9, minute=0, second=0, microsecond=0)
+    return start if start <= now_at else start - timedelta(days=7)
+
+
+def _stale_final(record, weekly=False):
     """A final record older than the window belongs to a previous game (#94):
     no schedule source names the starter's next game before an event does.
+    Owner 2026-10-23: NFL fantasy points last the fantasy week (Thursday to Monday
+    night), so an NFL final stays current until the week rolls over on Tuesday.
     A final with no usable asOf cannot be shown to be current: fail closed."""
     if record.get("gameState") != "post" and not str(record.get("gameStatus") or "").startswith("Final"):
         return False
     age = _age_seconds(record.get("asOf"))
-    return age is None or age > FINAL_RECORD_WINDOW
+    if age is None:
+        return True
+    if weekly:
+        return _parse(record["asOf"]) < _nfl_week_start(_parse(now()))
+    return age > FINAL_RECORD_WINDOW
 
 
 def _oldest(points):
@@ -368,7 +380,7 @@ def snapshot(profile_id, team_league):
                             if mine else None)
             wrong_game = bool(record and current_game
                               and record.get("gameId") != current_game)
-            if record and not wrong_game and _stale_final(record):
+            if record and not wrong_game and _stale_final(record, weekly=not _nba_lineup(lineup)):
                 wrong_game = True
                 expired_finals += 1
             value = _value(None if wrong_game else record, table)
@@ -380,6 +392,15 @@ def snapshot(profile_id, team_league):
                 text = pregame.get(starter.get("team"))
                 if isinstance(text, str) and text.strip():
                     status = text
+                    if espn_id is not None:
+                        age = _age_seconds(pregame.get(_SLATE_AS_OF))
+                        value = {"value": 0.0, "reason": None, "source": None,
+                                 "asOf": pregame.get(_SLATE_AS_OF),
+                                 "stale": age is None or age >= STALE_AFTER}
+                elif (not _nba_lineup(lineup) and starter.get("team")
+                      and any(key != _SLATE_AS_OF for key in pregame)):
+                    # Owner 2026-10-23: an NFL team missing from the week's slate is on bye.
+                    status = "BYE"
                     if espn_id is not None:
                         age = _age_seconds(pregame.get(_SLATE_AS_OF))
                         value = {"value": 0.0, "reason": None, "source": None,

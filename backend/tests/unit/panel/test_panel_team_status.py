@@ -70,11 +70,45 @@ def test_pairs_cycle_live_then_upcoming_then_final(api, monkeypatch):
     assert data["teamLeagues"] == ["demo-nfl/cc-live", "demo-nfl/bb-later", "demo-nfl/aa-done"]
 
 
-def test_start_time_is_central():
+def test_start_time_is_central(monkeypatch):
+    from datetime import date
+    import nba.normalize as normalize
     from nba.normalize import team_status_by_team
+    monkeypatch.setattr(normalize, "_today", lambda: date(2026, 10, 22))
 
     game = {"id": "1", "date": "2026-10-23T00:30Z",
             "status": {"type": {"state": "pre", "shortDetail": "10/22 - 8:30 PM EDT"}},
             "competitions": [{"competitors": [{"team": {"abbreviation": "CLE"}},
                                               {"team": {"abbreviation": "PHI"}}]}]}
     assert team_status_by_team([game], "Tips") == {"CLE": "Tips 7:30 PM", "PHI": "Tips 7:30 PM"}
+
+
+def test_start_on_another_day_names_the_weekday(monkeypatch):
+    from datetime import date
+    import nba.normalize as normalize
+    monkeypatch.setattr(normalize, "_today", lambda: date(2026, 10, 23))
+    sunday = {"id": "2", "date": "2026-10-25T17:00Z",
+              "status": {"type": {"state": "pre", "shortDetail": "10/25 - 1:00 PM EDT"}},
+              "competitions": [{"competitors": [{"team": {"abbreviation": "CIN"}}]}]}
+    monday = {"id": "3", "date": "2026-10-27T00:15Z",
+              "status": {"type": {"state": "pre", "shortDetail": "10/26 - 8:15 PM EDT"}},
+              "competitions": [{"competitors": [{"team": {"abbreviation": "DAL"}}]}]}
+    assert normalize.team_status_by_team([sunday, monday], "Kicks") == {"CIN": "Sun 12:00 PM", "DAL": "Mon 7:15 PM"}
+
+
+def test_nfl_team_missing_from_the_week_slate_reads_bye(api, monkeypatch):
+    # Owner 2026-10-23: a starter whose team has no game this week shows "BYE" and 0.0.
+    import panel
+    import store
+
+    store.put_profile("fan", {}, 0, "2026-10-22T22:00:00Z")
+    _lineup(store, "my-lineup", [
+        {"athlete_id": "9200011", "name": "Bye Receiver", "team": "GB", "positions": ["WR"]},
+        {"athlete_id": "9200012", "name": "Sunday Back", "team": "NE", "positions": ["RB"]},
+    ])
+    _slate(store, {"NE": "Sun 12:00 PM", "CHI": "Sun 12:00 PM"})
+    monkeypatch.setattr(panel, "now", lambda: NOW)
+    rows = {row["playerId"]: row for row in panel.snapshot("fan", "demo-nfl/my-lineup")["data"]["rows"]}
+    assert rows["9200011"]["gameStatus"] == "BYE"
+    assert rows["9200011"]["points"]["value"] == 0.0
+    assert rows["9200012"]["gameStatus"] == "Sun 12:00 PM"
