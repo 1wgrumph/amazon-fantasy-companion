@@ -133,7 +133,7 @@ private fun LinkQr(payload: String) {
     val qr = remember(payload) { QrCode.encodeText(payload, QrCode.Ecc.MEDIUM) }
     Canvas(Modifier.size(220.dp).background(Color.White).semantics { contentDescription = "QR code to link this TV" }) {
         val cell = kotlin.math.floor(size.minDimension / (qr.size + 8))
-        val origin = (size.minDimension - cell * qr.size) / 2
+        val origin = kotlin.math.floor((size.minDimension - cell * qr.size) / 2)
         for (y in 0 until qr.size) for (x in 0 until qr.size) {
             if (qr.getModule(x, y)) drawRect(Color.Black, Offset(origin + x * cell, origin + y * cell), Size(cell, cell))
         }
