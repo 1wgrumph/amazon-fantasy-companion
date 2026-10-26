@@ -1,17 +1,22 @@
 # Devpost paste package — AZ Fantasy
 
 Updated October 23, 2026 from the October 22 live run, the current backend
-template and the submission feedback package. Video production and submission
-remain owner actions; this document is not a submission or an eligibility
-determination. Follow the owner preflight in §10.
+template and the submission feedback package. William submitted the project on
+October 23, 2026 with the video linked in §5. This document records the paste
+package and historical preflight, not an eligibility determination.
+
+Evidence observers: William supplied the October 22 live-run observations and
+the October 23 QR-linking and submission confirmations. Codex inspected the
+repository sources for this documentation review on October 23, 2026; that
+inspection is not a new device test.
 
 **Form visibility:** the public [My projects page](https://devpost.com/submit-to/30992-build-ship-shape-amazon-developer-hackathon/manage/submissions)
 shows a registration/sign-in boundary, not the entry editor. Actual field order,
 labels, limits, required image sizes, dropdown values and conditional questions
 are **UNKNOWN_FORM_FIELDS**. The sequence below follows the owner's requested
-field sequence; it is not represented as an observed Devpost form. William must
-compare it with the signed-in form before submitting. Copy field bodies, not
-preparation notes or HTML evidence comments. Bracketed placeholders must be
+field sequence; it is not represented as an observed Devpost form. This reviewer
+did not observe the signed-in form; William handled the submission. Copy field
+bodies, not preparation notes or HTML evidence comments. Bracketed placeholders must be
 resolved, never pasted as final answers.
 
 Public [overview](https://amazonappdev2026.devpost.com/),
@@ -44,7 +49,7 @@ I'm one of those people. I want to be in the moment with family and friends and 
 
 ### What it does
 
-Start in the app before returning to the game. In Connect, link the TV from your phone. Typed-code linking works today: open the link page, enter the TV's code and confirm. QR linking is being built now for today's release: the TV will show a QR code to scan, the phone will ask you to confirm, and the TV will become linked. The typed code remains the fallback.
+Start in the app before returning to the game. In Connect, link the TV from your phone. QR linking shipped and William verified it on the TV stick and phone on October 23, 2026: scan the TV's QR code, confirm on the phone, and the TV becomes linked. Typed-code linking remains the fallback: open the link page, enter the TV's code and confirm.
 
 In My setup, turn NFL and NBA alerts on or off, choose alert types, set quiet hours and streaming-provider preferences, and choose whether new alerts open the full lineup with “Open lineup on alerts.”
 
@@ -89,7 +94,7 @@ We repaired our own bugs along the way (session storage, the default panel selec
 - Raw debug labels appeared on the card.
 - Players with no stats showed "Unavailable".
 
-Two problems remain: alerts reached the TV about 70–90 seconds after the play, and the Watch flow was not tested live. Prime Video also blocks screenshots on some frames, so we recorded the stick's own screen to prove what viewers saw.
+Two problems remain: William estimated that alerts reached the TV about 70–90 seconds after the play, and the Watch flow was not tested live. That end-to-end estimate is not an isolated EventBridge or Lambda measurement. Prime Video also blocks screenshots on some frames, so we recorded the stick's own screen to prove what viewers saw.
 
 ### Accomplishments we're proud of
 
@@ -101,7 +106,7 @@ That cross-sport moment is the clearest demonstration of the idea: the viewer st
 
 A live game answers questions that a static layout cannot. The card has to be readable without taking over the picture, and the remote controls have to be simple enough to use while following play. Rebuilding the UI during the game made those choices concrete.
 
-We also learned to separate useful live behavior from finished behavior. Seeing the right player's alert arrive proved the connection from a scoring event to the TV. The 70–90 second delay showed why that connection still needs work. Capturing an alert and testing the Watch flow are separate checks; one does not prove the other.
+We also learned to separate useful live behavior from finished behavior. Seeing the right player's alert arrive proved the connection from a scoring event to the TV. William's roughly 70–90 second end-to-end estimate showed why that connection still needs work, but it does not attribute the delay to any one component. Capturing an alert and testing the Watch flow are separate checks; one does not prove the other.
 
 ### What's next
 
@@ -121,20 +126,20 @@ Fire TV, Fire OS, Kotlin, Jetpack Compose, Python, AWS SAM, AWS Lambda, Amazon A
 |---|---|
 | GitHub repository | https://github.com/1wgrumph/amazon-fantasy-companion |
 | Setup / testing instructions, if separate | https://github.com/1wgrumph/amazon-fantasy-companion#judge-access |
-| Demo video | **[OWNER: public YouTube or Vimeo URL after upload and processing]** |
+| Demo video | https://youtu.be/-K53tzSCKC4 |
 | Live website, if requested | No public demo endpoint. Use the repository setup and demo video; do not paste the development API endpoint or credentials. |
 | Thumbnail / image gallery, if required | **UNKNOWN_FORM_FIELDS**. William selects an existing clean AZ Fantasy-only image or a plain text title card; no Amazon/AWS logos or provider screens. Required size and count are unknown. |
-| Devpost project URL | **[OWNER: record the URL after creating the entry]** |
+| Devpost project URL | **[OWNER: record the submitted project URL; not supplied in this review]** |
 
-<!-- Evidence: README.md (Judge access); demo-plan.md. Public video upload and the Devpost project URL remain owner actions as of October 23, 2026. -->
+<!-- Evidence: README.md (Judge access); demo-plan.md. William confirmed submission on October 23, 2026 with https://youtu.be/-K53tzSCKC4; the Devpost project URL was not supplied. -->
 
 Video: publicly visible YouTube/Vimeo, under three minutes, showing the app
 functioning on Fire TV hardware or a permitted simulator. English captions;
 clear manual/replay labels. These follow the [rules](https://amazonappdev2026.devpost.com/rules)
 and [FAQ](https://amazonappdev2026.devpost.com/details/faqs).
-The current voiceover plan targets 150 seconds (2:30), including app setup and NFL and NBA
-alerts. The owner still needs to film the phone and TV setup and remote controls, record the narration
-and check the finished runtime. Exclude provider frames, music without permission, Yahoo data,
+The pre-submission voiceover plan targeted 150 seconds (2:30), including app setup
+and NFL and NBA alerts. Its shot list is a plan, not this reviewer's verification
+of the submitted video or its finished runtime. Exclude provider frames, music without permission, Yahoo data,
 link codes, personal information and device addresses. Synthetic color plates
 are pipeline tests, not acceptable app-demonstration footage.
 
@@ -149,8 +154,8 @@ The current [feedback package](developer-feedback.md) identifies:
 - Open Source mini-challenge: **not selected** in this package.
 - Priority category: **sports**, if the form offers a category selector.
 
-William confirms the final form selections. No Alexa+, Bee or Ring entry is
-supported by this package. The category selector itself has not been observed.
+William handled the final form selections at submission; this reviewer has not
+verified them. No Alexa+, Bee or Ring entry is supported by this package. The category selector itself has not been observed.
 
 <!-- Evidence: developer-feedback.md opening scope; backend/template.yaml; historical public event overview. -->
 
@@ -170,8 +175,10 @@ rate(1 minute). Both template parameters default to DISABLED. For the October 22
 2026 live run, both schedules were ENABLED on afc-dev at that one-minute rate.
 The deployed ingest fixes use team-level game status and resolve NFL player IDs
 by parsing play text when the feed omits play participants. The live TV run
-captured NFL and NBA scoring alert cards over Prime Video. Alerts reached the
-TV about 70–90 seconds after the play; reducing that delay remains planned work.
+captured NFL and NBA scoring alert cards over Prime Video. William estimated that
+alerts reached the TV about 70–90 seconds after the play; this was an end-to-end
+observation, not an isolated EventBridge or Lambda measurement. Reducing that
+delay remains planned work.
 
 Lineups are manual today. Yahoo Fantasy API approval did not arrive before
 the submission deadline; connection setup remains pending, and no live Yahoo
@@ -203,16 +210,18 @@ The current optional paste bodies are in
 [developer-feedback.md — Friction Log](developer-feedback.md#friction-log)
 (32 entries). Use those sections for the form's optional fields.
 
-## 10. Owner preflight — do not paste unchecked assertions
+## 10. Historical owner preflight — do not paste unchecked assertions
 
-William completes these steps:
+William submitted on October 23, 2026. The checklist below records the
+pre-submission instructions; it is not a list of pending submission actions
+or evidence that this reviewer observed each step:
 
-1. Verify the QR build on the TV and phone after it lands today. Film the
-   phone scanning the TV QR code and the phone confirm page, followed by the
+1. QR linking shipped and William verified it on the TV and phone on
+   October 23, 2026. Film the phone scanning the TV QR code and the phone confirm page, followed by the
    TV becoming linked. Capture My setup, My lineup and Show over game.
    Record the voiceover from [demo-plan.md](demo-plan.md) and film the
-   double-tap ≡ team switch and hold ≡ → Expand sequence. Do not present the
-   QR flow as delivered until it has been verified; typed-code linking exists today.
+   double-tap ≡ team switch and hold ≡ → Expand sequence. Typed-code linking
+   remains available.
 2. Assemble the video using the live-run companion UI and the new setup and
    control shots. Check the finished runtime, English captions and manual-lineup
    labels. Keep provider footage, Yahoo data, link codes, personal information
@@ -228,8 +237,10 @@ William completes these steps:
 5. Submit by **2026-10-23 19:00Z (2:00 PM CDT)** and record the resulting
    Devpost project URL.
 
-The video and submission remain pending owner actions. The Watch flow was not
-tested live; do not describe it as a verified live-game launch. Yahoo connection
-setup remains pending, and the current live examples use manual lineups.
+The video and submission were completed by William on October 23, 2026. The
+Devpost project URL remains for William to record. The Watch flow was not
+tested live; do not describe it as a verified live-game launch. William still
+needs to complete Yahoo connection setup after Yahoo grants access; the
+recorded live examples use manual lineups.
 
 <!-- Evidence: owner submission instructions, October 23, 2026; demo-plan.md; developer-feedback.md. -->

@@ -1,7 +1,8 @@
 # Developer feedback — AZ Fantasy
 
 Prepared from the project running log and the project owner's live-night report,
-2026-10-22. Primary track: **Fire TV** (Fire OS 8 / Android 11). Mini challenge:
+2026-10-22, with the owner's submission update on 2026-10-23. Primary track:
+**Fire TV** (Fire OS 8 / Android 11). Mini challenge:
 **AWS Builder**. Vega OS was also exercised on the Vega Virtual Device (VVD);
 that evidence does not establish physical Vega hardware or provider playback.
 The Open Source mini challenge is not selected in the supplied feedback record.
@@ -83,7 +84,7 @@ experience; no onboarding duration is inferred from a deployment or test pass.
 
 - **What we used it for:** scheduled backend polling of ESPN feeds, with separate NFL and NBA ingestion functions in the later backend.
 - **What worked well:** the schedule-to-Lambda arrangement is expressed in the SAM template. A standalone reliability measurement is not recorded.
-- **What needs work:** the October 22 live-night report identifies the one-minute minimum as a limit on polling frequency; this is unsuitable for a tighter polling interval without another mechanism. Actual end-to-end alert latency is not supplied by that report.
+- **What needs work:** the October 22 live-night report identifies the one-minute minimum as a limit on polling frequency; this is unsuitable for a tighter polling interval without another mechanism. William separately estimated about 70–90 seconds from a play to its alert during the live run. That end-to-end observation does not isolate EventBridge Scheduler or Lambda latency.
 - **Onboarding from zero to hello world:** schedules and invocation roles were configured in the backend template; independent setup time was not recorded.
 - **Would we build again? Yes.** It fits minute-scale polling; a faster cadence would require a different design.
 - **AWS services used and how:** EventBridge Scheduler invokes the Lambda ingest functions using an invocation role; ingestion persists events/statistics in DynamoDB.
@@ -547,6 +548,13 @@ not provide a workaround or command sequence, that absence is explicit.
 - **Evidence:** Project Vega app log, October 21: source F-057; CHANGELOG PRs #147/#158/#165 supersede the earlier blocked state.
 
 ## Source notes
+
+Observers: William is the observer named for the supplied October 22 live-night
+report and October 23 submission update. Earlier entries are attributed to the
+project test authors through the cited running-log records; where those records
+do not name an individual observer or an exact date, this assembly does not
+supply one. Vendor-directed suggestions are requests to the named tool provider;
+requests about our app are assigned to the project developer.
 
 The project running log is the evidence source for this assembly; these entries
 are not new independent reproductions. Some original receipts were marked

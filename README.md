@@ -12,8 +12,9 @@ not a device-spike verdict). A separate scheduled function ingests the
 ESPN NBA scoreboard and game summaries and stores player statistics, and
 the TV panel can show NBA rows with the sport label "NBA" and the scoring
 basis "Points". Amazon carries both NFL and NBA on Prime Video (sources
-in the [submission write-up](docs/submission/writeup.md)). Game-event
-alerts stay NFL-only; this README does not claim NBA alerts.
+in the [submission write-up](docs/submission/writeup.md)). NBA box-score
+transitions can produce player-score alerts; NBA red-zone and close-game
+alerts remain unsupported.
 
 The system has two parts:
 
@@ -35,14 +36,16 @@ The system has two parts:
   sport label "NBA" and the basis "Points" instead of a PPR preset.
   Unavailable values are shown as unavailable, never as zero, and
   values older than 60 seconds are labeled stale.
-- Generates alerts only for the linked profile's starters on NFL game
-  events, gated by enabled alert types, game-day periods, quiet hours,
-  a per-game minimum gap, and a spoiler delay. NBA game-event alerts
-  are not generated. NBA ingest stores player statistics for panel
+- Generates alerts only for the linked profile's starters, gated by
+  enabled alert types, sport, game-day periods, quiet hours, a per-game
+  minimum gap, and a spoiler delay. NFL events produce red-zone,
+  player-score, and close-game alerts. NBA box-score transitions produce
+  player-score alerts; NBA ingest also stores player statistics for panel
   rows.
-- Presents alerts inside the companion app (panel-only; see the
-  limitations below), newest first, each with Watch and Dismiss.
-  Dismissals and the alert cursor persist on the device.
+- Presents alerts in the custom corner overlay and in the companion
+  panel, newest first, each with Watch and Dismiss. The overlay requires
+  the documented overlay and accessibility setup. Dismissals and the
+  alert cursor persist on the device.
 - Launches Watch only through a verified Fire OS provider-registry
   route, honors the viewer's switching confirmation, and reports
   exactly one routing outcome per attempt.
@@ -72,15 +75,17 @@ The system has two parts:
   Live Yahoo Fantasy API access is not available (see SP-6). The
   selected live lineup source is manual entry. The Yahoo NBA import
   in this repository is tested on synthetic data only.
-- It does not generate NBA alerts. NBA ingest stores player
-  statistics for panel rows. Red-zone, player-score, and close-game
-  alerts are NFL game events only.
+- It does not generate NBA red-zone or close-game alerts. NBA box-score
+  transitions can generate player-score alerts; NBA ingest also stores
+  player statistics for panel rows.
 - It does not guess: unmatched or ambiguous players are never matched,
   provider access is never inferred from an app merely being installed,
   and unverified provider routes are reported as gaps, not launched.
-- It does not interrupt or cover provider playback with notifications
-  or a picture-in-picture panel; both routes failed on the tested
-  device (see SP-2 and SP-4).
+- It does not resize provider playback or use a standard heads-up
+  notification, picture-in-picture, or split-screen panel; those routes
+  failed on the tested device (see SP-2 and SP-4). The later custom
+  overlay covers a small part of the picture and requires overlay and
+  accessibility setup.
 
 ## Status and known limitations
 
@@ -90,40 +95,42 @@ Verdicts below use the spike record's own words. A `PARTIAL` or
 | Spike | Verdict | What it means for this product |
 |---|---|---|
 | SP-1 device baseline | WORKS | The app installs and launches on the tested Fire TV stick (model AFTKM, Fire OS 8.1.8.5, API 30). See `spikes/sp1-device/VERDICT.md` ([PR #89](https://github.com/1wgrumph/amazon-fantasy-companion/pull/89)). |
-| SP-2 heads-up notifications | FAILS | No heads-up banner appears over provider playback on the tested stick. Alerts are panel-only inside the app. See `spikes/sp2-notify/VERDICT.md` ([PR #109](https://github.com/1wgrumph/amazon-fantasy-companion/pull/109)). |
+| SP-2 heads-up notifications | FAILS | No standard heads-up banner appears over provider playback on the tested stick. The later product uses its own small overlay alert card instead; this verdict still applies to the standard notification route. See `spikes/sp2-notify/VERDICT.md` ([PR #109](https://github.com/1wgrumph/amazon-fantasy-companion/pull/109)). |
 | SP-3 provider links | PARTIAL | Prime Video's search route opened its search screen on the stick; a live Prime Video Thursday Night Football `gameOpened` check is still pending, so `gameOpened` is not claimed for any provider. ESPN, DirecTV Stream and YouTube TV were not installed on the stick, and their routes remain gaps. See `spikes/sp3-provider-links/VERDICT.md` ([PR #110](https://github.com/1wgrumph/amazon-fantasy-companion/pull/110)). |
-| SP-4 panel beside video | FAILS | No picture-in-picture or split composition works over Prime Video on the tested stick. The panel is full-screen inside the app. See `spikes/sp4-panel-video/VERDICT.md` ([PR #106](https://github.com/1wgrumph/amazon-fantasy-companion/pull/106)). |
+| SP-4 panel beside video | FAILS | No picture-in-picture, split composition, or uncropped beside-video panel works over Prime Video on the tested stick. The later custom overlay covers a corner of the picture rather than resizing it; this verdict still applies to the tested windowing routes. See `spikes/sp4-panel-video/VERDICT.md` ([PR #106](https://github.com/1wgrumph/amazon-fantasy-companion/pull/106)). |
 | SP-5 ESPN feed | PARTIAL | ESPN endpoints, the capture tool, and historical replay fixtures are proven. Live update timing is not yet proven. See `spikes/sp5-espn-feed/VERDICT.md` ([PR #63](https://github.com/1wgrumph/amazon-fantasy-companion/pull/63)). |
 | SP-6 Yahoo Fantasy | FAILS | The Yahoo Fantasy API returns HTTP 403 for this unapproved app even though OAuth succeeds. The selected live lineup source is manual entry. Yahoo NBA import in this tree is synthetic-only and does not change this verdict. See `spikes/sp6-yahoo/VERDICT.md` ([PR #100](https://github.com/1wgrumph/amazon-fantasy-companion/pull/100)). |
 | SP-7 installed-app detection | PARTIAL | Shell-level installed/absent detection works on the tested stick; the disabled-state probe is unsupported from the ADB shell, and the product keeps detection off behind its support flag. See `spikes/sp7-detection/VERDICT.md`. |
 
-NBA support on [PR #138](https://github.com/1wgrumph/amazon-fantasy-companion/pull/138)
-is repository evidence, not a spike verdict and not a device
-observation. No observer has recorded an on-stick NBA panel. The
-separate `NbaIngestFunction` stores ESPN NBA player statistics; the
-NFL ingest function is unchanged. The panel can show NBA rows labeled
-"NBA" with the basis "Points". Manual NBA lineups are a backend
-builder (`nba.manual.build`). Yahoo NBA import
+NBA support began as repository evidence on
+[PR #138](https://github.com/1wgrumph/amazon-fantasy-companion/pull/138),
+not a spike verdict. William later observed the corner card, an NBA
+lineup in the expanded panel, and NBA player-score alert cards during
+the October 22, 2026 live run. The separate `NbaIngestFunction` stores
+ESPN NBA player statistics and emits box-score transitions for the
+alert policy; the NFL ingest function is separate. The panel shows NBA
+rows labeled "NBA" with the basis "Points". Manual NBA lineups are a
+backend builder (`nba.manual.build`). Yahoo NBA import
 (`nba.yahoo.import_lineup`) is exercised on synthetic fixtures only.
 Profile/Settings can turn NFL or NBA off, which suppresses that
-sport's alerts and clears its panel rows. No NBA alert is produced.
+sport's alerts and clears its panel rows. NBA produces player-score
+alerts, not red-zone or close-game alerts.
 The NBA ingest schedule (`NbaIngestScheduleState`) defaults to
 disabled, as the NFL schedule does. `EnableNba` and `afcEnableNba`
 default on; that is the feature switch, not a measured live poll.
 
-Pending, not yet proven (do not read these as results):
+Live observations and remaining gaps:
 
-- PENDING — X09 live end-to-end run and X10 live hardening have not
-  run yet. The live flow is scheduled for the next live game window.
+- COMPLETE AT OWNER-OBSERVATION STRENGTH — William recorded the October
+  22 live overlay, corner card, NFL and NBA player-score alerts, and
+  expanded NBA lineup. This does not establish a live Watch handoff or
+  isolate backend component latency.
 - PENDING — live Yahoo Fantasy API access for the NBA import, actor
   Yahoo. Approval is expected on or after 2026-10-23. No live Yahoo
   NBA result is claimed.
-- PENDING — on-stick NBA panel capture for the 2026-10-21 ESPN games,
-  actor William, AFC UI only (see the
-  [demo plan](docs/submission/demo-plan.md)). Not filmed here; no
-  capture result is claimed.
 - PENDING — SP-3 PR 2 (live Prime Video `gameOpened`) and SP-5 PR 2
-  (live ESPN timing) checks are still outstanding.
+  (isolated live ESPN timing) checks are still outstanding. The October
+  22 alert observation does not close either scoped spike check.
 - Vega OS is a paused stretch compatibility target only. It is not
   delivered, and no Vega capability is claimed here. Fire OS is the
   primary target.
@@ -267,8 +274,8 @@ as `device` in `adb devices` before installing.
    default), the same screen has "NFL alerts: on" or "NFL alerts:
    off", and the same pair for NBA. Turning a sport off suppresses
    that sport's alerts and clears its panel rows. These controls
-   update profile selections only. NBA game-event alerts are not
-   generated, so the NBA control's present effect is the panel rows.
+   update profile selections only. NBA box-score transitions can produce
+   player-score alerts; NBA red-zone and close-game alerts are not generated.
 4. Optionally enable "Show panel on new alert" (default on) so a new
    alert re-shows a hidden panel.
 
@@ -305,10 +312,9 @@ Without the owner's Fire TV stick, a judge can:
   `docs/plans/`, and the change history in `CHANGELOG.md`.
 - Run every host check from a clean checkout with the commands in
   this README (backend gate, TV gate, docs and hygiene gates).
-- PENDING — watch the demo video from the Devpost submission once
-  the owner publishes it (owner upload; shots of protected
-  provider video may be owner-filmed and are marked as such in
-  the demo plan).
+- Watch the [submitted demo video](https://youtu.be/-K53tzSCKC4). William
+  submitted the project on 2026-10-23; the [submission record](docs/submission/devpost-form.md)
+  separates owner observations from source inspection and unverified captures.
 
 Real limits, stated plainly:
 
@@ -317,24 +323,25 @@ Real limits, stated plainly:
 - The deployed backend is reachable only at the `ApiUrl` recorded at
   deploy time, and only while the owner keeps the dev stack up. It
   is not a public demo endpoint, and no credentials are provided.
-- Live-game behavior (live ESPN timing, live Prime Video handoff,
-  the X09 end-to-end run) can only be observed during a live game
-  window; outside one, the recorded verdicts and replay fixtures are
-  the evidence.
+- William observed the corner card and NFL/NBA player-score alert cards
+  during the October 22 live game window. Live Prime Video Watch handoff
+  and isolated ESPN timing remain unverified; outside a game window,
+  the dated owner observation, recorded verdicts, and replay fixtures
+  are the evidence.
 - Yahoo Fantasy lineups are not live (SP-6, FAILS), and lineup
   entry is unavailable in this revision (see First run above).
   Yahoo NBA import is tested on synthetic data only. Live Yahoo
   Fantasy API access is pending Yahoo's approval, expected on or
   after 2026-10-23.
-- NBA panel rows and NBA points scoring are in this revision
+- NBA panel rows, NBA points scoring, and NBA player-score alerts are in this revision
   ([PR #138](https://github.com/1wgrumph/amazon-fantasy-companion/pull/138)).
-  NBA game-event alerts are not generated. No on-stick NBA capture
-  is claimed; William's planned capture is the 2026-10-21 ESPN
-  games, AFC UI only, and it has not been filmed.
-- The demo video is still PENDING: it is an owner upload linked
-  from the Devpost submission once the owner publishes it. That
-  pending item does not change the judge-access route above,
-  which is this public repository, kept through 2026-11-20.
+  NBA red-zone and close-game alerts are not generated. William observed
+  an NBA lineup and NBA player-score alert cards on the stick during the
+  October 22 live run; that observation does not verify the final demo edit.
+- William supplied the [demo video](https://youtu.be/-K53tzSCKC4) and confirmed
+  submission on 2026-10-23. The submitted Devpost project URL and final-video
+  verification remain unresolved in the [submission record](docs/submission/devpost-form.md).
+  This public repository remains the judge-access route through 2026-11-20.
 
 ## Verification
 
